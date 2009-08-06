@@ -86,7 +86,7 @@ public class ShoppingCart implements Serializable {
     private String agreementId = null;
     private String quoteId = null;
     private String workEffortId = null;
-    private long nextItemSeq = 1;
+    protected long nextItemSeq = 1;
     private String productStoreShipMethId = null;
 
     private String defaultItemDeliveryDate = null;
@@ -105,7 +105,7 @@ public class ShoppingCart implements Serializable {
     private boolean orderTermSet = false;
     private List orderTerms = new LinkedList();
 
-    private List<ShoppingCartItem> cartLines = FastList.newInstance();
+    protected List<ShoppingCartItem> cartLines = FastList.newInstance();
     private Map itemGroupByNumberMap = FastMap.newInstance();
     protected long nextGroupNumber = 1;
     private List paymentInfo = FastList.newInstance();
@@ -3343,7 +3343,7 @@ public class ShoppingCart implements Serializable {
         return result;
     }
 
-    private void explodeItems(LocalDispatcher dispatcher) {
+    protected void explodeItems(LocalDispatcher dispatcher) {
         if (dispatcher == null) return;
         synchronized (cartLines) {
             List cartLineItems = new LinkedList(cartLines);
