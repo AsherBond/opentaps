@@ -147,9 +147,9 @@ public final class UtilOrder {
 
         // get all required product data
         ProductContentWrapper content = new ProductContentWrapper(product, request);
-        String imageUrl = content.get("SMALL_IMAGE_URL");
-        String productName = content.get("PRODUCT_NAME");
-        String productDescription = content.get("DESCRIPTION");
+        String imageUrl = content.get("SMALL_IMAGE_URL").toString();
+        String productName = content.get("PRODUCT_NAME").toString();
+        String productDescription = content.get("DESCRIPTION").toString();
         Map priceInfo = getPriceInfo(request, product);
 
         // and make a new Map out of all the useful fields
@@ -378,15 +378,15 @@ public final class UtilOrder {
 
     @SuppressWarnings("unchecked")
     public static BigDecimal getOrderOpenAmount(OrderReadHelper orh) throws GenericEntityException {
-        BigDecimal total = orh.getOrderGrandTotalBd();
+        BigDecimal total = orh.getOrderGrandTotal();
         BigDecimal openAmount = ZERO;
 
         GenericDelegator delegator = orh.getOrderHeader().getDelegator();
-        List cond = UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orh.getOrderId()),
+        List<EntityExpr> cond = UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orh.getOrderId()),
                                     new EntityExpr("paymentCurrencyUomId", EntityOperator.EQUALS, orh.getCurrency()),
                                     new EntityExpr("paymentStatusId", EntityOperator.IN, UtilMisc.toList("PMNT_SENT", "PMNT_CONFIRMED", "PMNT_RECEIVED")),
                                     new EntityExpr("paymentPaymentTypeId", EntityOperator.IN, UtilMisc.toList("CUSTOMER_PAYMENT", "CUSTOMER_DEPOSIT", "CUSTOMER_REFUND")));
-        List prefsAndPayments = delegator.findByCondition("OrderPaymentPrefAndPayment", new EntityConditionList(cond, EntityOperator.AND), null, null);
+        List<GenericValue> prefsAndPayments = delegator.findByCondition("OrderPaymentPrefAndPayment", new EntityConditionList(cond, EntityOperator.AND), null, null);
         Iterator papit = prefsAndPayments.iterator();
         while (papit.hasNext()) {
             GenericValue prefAndPayment = (GenericValue) papit.next();
@@ -504,7 +504,7 @@ public final class UtilOrder {
      */
     public static BigDecimal getQuantityToPack(GenericValue orderItem, String shipGroupSeqId, String facilityId, PackingSession packingSession) throws GenericEntityException {
         BigDecimal itemQuantity = getQuantityToPack(orderItem, shipGroupSeqId, facilityId);
-        itemQuantity = itemQuantity.subtract(BigDecimal.valueOf(packingSession.getPackedQuantity(orderItem.getString("orderId"), orderItem.getString("orderItemSeqId"), shipGroupSeqId)));
+        itemQuantity = itemQuantity.subtract(packingSession.getPackedQuantity(orderItem.getString("orderId"), orderItem.getString("orderItemSeqId"), shipGroupSeqId, orderItem.getString("productId")));
         return itemQuantity;
     }
 
