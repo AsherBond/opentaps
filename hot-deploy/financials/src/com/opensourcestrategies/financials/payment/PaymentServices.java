@@ -283,7 +283,12 @@ public final class PaymentServices {
 
         // get parameters
         String paymentId = (String) context.get("paymentId");
-        Double amountApplied = (Double) context.get("amountApplied");
+        Double amountAppliedDbl = (Double) context.get("amountApplied");
+        BigDecimal amountApplied = BigDecimal.ZERO;
+        if (amountAppliedDbl != null) {
+            amountApplied = BigDecimal.valueOf(amountAppliedDbl);
+        }
+
         // optional parameters
         String invoiceId = (String) context.get("invoiceId");
         String billingAccountId = (String) context.get("billingAccountId");
@@ -303,7 +308,7 @@ public final class PaymentServices {
         }
 
         // validate that the amountApplied is > 0
-        if (amountApplied <= 0) {
+        if (amountApplied.signum() <= 0) {
             return UtilMessage.createAndLogServiceError("OpentapsError_PaymentApplicationMustBePositive", locale, MODULE);
         }
 
@@ -321,15 +326,15 @@ public final class PaymentServices {
 
         if (UtilValidate.isEmpty(billingAccountId)) {
             // get amount not yet applied from that payment
-            double notAppliedPayment = PaymentWorker.getPaymentNotApplied(payment);
+            BigDecimal notAppliedPayment = PaymentWorker.getPaymentNotApplied(payment);
             // validate that amountApplied <= notAppliedPayment
-            if (amountApplied > notAppliedPayment) {
+            if (amountApplied.compareTo(notAppliedPayment) > 0) {
                 return UtilMessage.createAndLogServiceError("FinancialsError_PaymentApplicationExceedPaymentRemainingAmount", UtilMisc.toMap("paymentId", paymentId, "amountApplied", amountApplied, "notAppliedPayment", notAppliedPayment), locale, MODULE);
             }
         } else {
             // when applying to billing accounts, only check against the total payment amount
-            double paymentAmount = payment.getDouble("amount");
-            if (amountApplied > paymentAmount) {
+            BigDecimal paymentAmount = payment.getBigDecimal("amount");
+            if (amountApplied.compareTo(paymentAmount) > 0) {
                 return UtilMessage.createAndLogServiceError("FinancialsError_PaymentApplicationExceedPaymentTotalAmount", UtilMisc.toMap("paymentId", paymentId, "amountApplied", amountApplied, "paymentAmount", paymentAmount), locale, MODULE);
             }
         }
@@ -342,11 +347,11 @@ public final class PaymentServices {
                 // get amount not yet applied from that invoice, including those payments which are not yet received or sent (ie, not paid)
                 // this is so we prevent several applications of unreceived payments from exceeding the total invoice value
                 Debug.logInfo("** checking amount to apply: " + amountApplied + " against pending open amount for invoice: " + invoice.getPendingOpenAmount(), MODULE);
-                if (invoice.getPendingOpenAmount().compareTo(BigDecimal.valueOf(amountApplied)) < 0) {
+                if (invoice.getPendingOpenAmount().compareTo(amountApplied) < 0) {
                     if (checkForOverApplication) {
                         return UtilMessage.createAndLogServiceError("FinancialsError_PaymentApplicationExceedInvoiceRemainingAmount", UtilMisc.toMap("invoiceId", invoiceId, "amountApplied", amountApplied, "notAppliedInvoice", invoice.getOpenAmount()), locale, MODULE);
                     } else {
-                        amountApplied = invoice.getOpenAmount().doubleValue();
+                        amountApplied = invoice.getOpenAmount();
                     }
                 }
 
