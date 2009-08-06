@@ -1136,4 +1136,55 @@ public class UtilDateTime {
         Calendar cal = UtilDateTime.toCalendar(stamp, timeZone, locale);
         return cal.get(Calendar.YEAR);
     }
+
+    public static Date getEarliestDate() {
+        Calendar cal = getCalendarInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
+        cal.set(Calendar.YEAR, cal.getActualMinimum(Calendar.YEAR));
+        cal.set(Calendar.MONTH, cal.getActualMinimum(Calendar.MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+
+    public static Date getLatestDate() {
+        Calendar cal = getCalendarInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
+        cal.set(Calendar.YEAR, cal.getActualMaximum(Calendar.YEAR));
+        cal.set(Calendar.MONTH, cal.getActualMaximum(Calendar.MONTH));
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        return cal.getTime();
+    }
+
+    /**
+     * Returns appropriate date format string.
+     * @deprecated was removed from ofbiz, re-added for backward compatibility
+     * @param locale User's locale, may be <code>null</code>
+     * @return Date format string
+     */
+    @Deprecated public static String getDateFormat(Locale locale) {
+        if (locale == null)
+            locale = Locale.getDefault();
+
+        int dateStyle = -1;
+
+        if (DATE_FORMAT == null || "DEFAULT".equals(DATE_FORMAT) || "SHORT".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.SHORT;
+        } else if ("MEDIUM".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.MEDIUM;
+        } else if ("LONG".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.LONG;
+        } else {
+            return DATE_FORMAT;
+        }
+
+        SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateInstance(dateStyle, locale);
+        return df.toPattern();
+    }
+
 }
