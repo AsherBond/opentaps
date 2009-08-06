@@ -169,7 +169,7 @@ public abstract class FreemarkerUtil {
         Configuration cfg = null;
         errorMessage = UtilProperties.getMessage(errorResource, "OpentapsError_FreemarkerUtilParseError", UtilMisc.toMap("location", location), locale);
         try {
-            cfg = FreeMarkerWorker.makeDefaultOfbizConfig();
+            cfg = FreeMarkerWorker.getDefaultOfbizConfig();
             template = new Template(templateName, locationReader, cfg);
             if (env != null) {
                 env.importLib(template, templateName);  // env is the current executing template, and importLib will import the template into it and will map namespace -> macro.
