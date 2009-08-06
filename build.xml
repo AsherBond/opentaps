@@ -132,10 +132,10 @@ under the License.
     <target name="clean-gwt" depends="">
         <subant inheritall="false" target="clean-gwt">
             <filelist dir="." files="hot-deploy/opentaps-common"/>
-            <filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
+            <!--filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
             <filelist dir="." files="hot-deploy/financials/build.xml"/>
             <filelist dir="." files="hot-deploy/purchasing/build.xml"/>
-            <filelist dir="." files="hot-deploy/warehouse/build.xml"/>
+            <filelist dir="." files="hot-deploy/warehouse/build.xml"/-->
         </subant>
     </target>
 
@@ -170,11 +170,11 @@ under the License.
         <echo message="[gwt code] ========== Start Building GWT Code (Compile) =========="/>
         <subant inheritall="false" target="gwt-code">
             <filelist dir="." files="hot-deploy/opentaps-common/build.xml"/>
-            <filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
+            <!--filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
             <filelist dir="." files="hot-deploy/financials/build.xml"/>
             <filelist dir="." files="hot-deploy/purchasing/build.xml"/>
             <filelist dir="." files="hot-deploy/warehouse/build.xml"/>
-            <filelist dir="." files="hot-deploy/analytics/build.xml"/>
+            <filelist dir="." files="hot-deploy/analytics/build.xml"/-->
         </subant>
         <echo message="[gwt code] ========== Done Building GWT Code (Compile) =========="/>
     </target>
