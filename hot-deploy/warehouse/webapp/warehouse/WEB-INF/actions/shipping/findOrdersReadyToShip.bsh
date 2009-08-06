@@ -1,0 +1,42 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+    Assumptions:
+    - The logic of whether an order is ready to ship is governed by the OISGIR
+    - Any shipGroup ready to ship will have an OISGIR
+    - shipGroups ready to ship are those where:
+        - if maySplit: Total readyToShipQty (OISGIR.quantity - OISGIR.quantityNotAvailable) for all OISGIRs relating to the shipGroup and facility is > 0
+        - if !maySplit: Total shortfall (OISGIR.quantityNotAvailable) for all OISGIRs relating to the shipGroup and facility == 0
+    - A given shipGroup will not be split across more than one facility
+    
+*/
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+
+import org.opentaps.warehouse.shipment.ShippingHelper;
+
+facilityId = parameters.get("facilityId");
+
+if (UtilValidate.isEmpty(facilityId)) {
+    return;
+}
+
+shippinghelper = new ShippingHelper(delegator, facilityId);
+
+context.put("orders", shippinghelper.findOrdersReadyToShip(viewIndex.intValue(), viewSize.intValue()));
+context.put("ordersTotalSize", shippinghelper.getOrdersTotalSize());

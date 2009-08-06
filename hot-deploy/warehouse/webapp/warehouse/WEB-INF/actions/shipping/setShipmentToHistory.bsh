@@ -1,0 +1,41 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ import org.ofbiz.base.util.UtilMisc;
+ import org.opentaps.common.util.UtilMessage;
+ import org.opentaps.common.util.UtilCommon;
+ 
+ shipmentId = context.get("shipmentId");
+ toPerson = context.get("toPerson");
+ toGroup = context.get("toPartyGroup");
+ fromPerson = context.get("fromPerson");
+ fromPartyGroup = context.get("fromPartyGroup");
+ 
+ fromParty = null;
+ if (fromPartyGroup != null) {
+     fromParty = fromPartyGroup.get("groupName");
+ } else if (fromPerson != null) {
+     fromParty = fromPerson.get("firstName") + " " + fromPerson.get("lastName");
+ };
+ 
+ toParty = null;
+ if (toPartyGroup != null) {
+     toParty = toPartyGroup.get("groupName");
+ } else if (toPerson != null) {
+     toParty = toPerson.get("firstName") + " " + toPerson.get("lastName");
+ };
+
+ context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("WarehouseNavHistoryShipment", locale, UtilMisc.toMap("shipmentId", shipmentId, "fromParty", fromParty, "toParty", toParty)));
+ 

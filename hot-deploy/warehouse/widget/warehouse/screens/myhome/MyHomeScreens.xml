@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="myHome" global="true"/>
+                <set field="sectionStyle" value="singleColumn"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="myHome">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsMyHome"/>  
+                <set field="sectionHeaderUiLabel" value="OpentapsMyHome"/>
+                <set field="facilityId" from-field="parameters.facilityId"/>
+                <set field="refresh" from-field="parameters.refresh"/>
+
+                <!-- data required by dashboard -->
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/myhome/myHome.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/myhome/myHome.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

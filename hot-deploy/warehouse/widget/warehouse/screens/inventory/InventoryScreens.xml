@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file may have been based on one or more Apache OFBIZ files but has been modified -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="warehousegwt/org.opentaps.gwt.warehouse.inventory.inventory" global="true"/>
+                <set field="sectionName" value="inventory" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Receive Purchase Order -->
+    <screen name="ReceiveInventoryAgainstPurchaseOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseReceivePurchaseOrder"/>  
+                <set field="sectionHeaderUiLabel" value="WarehouseReceivePurchaseOrder"/>  
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/ReceiveInventoryAgainstPurchaseOrder.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/inventory/ReceiveInventoryAgainstPurchaseOrder.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <!-- Receive Purchase Order -->
+    <screen name="findShipmentReceipt">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseFindShipmentReceipts"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseFindShipmentReceipts"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/findShipmentReceipt.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                         <container style="subSectionBlock">
+                            <container style="form">
+                              <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/findShipmentReceipt.ftl"/></html>
+                              </platform-specific>
+                            </container>
+                         </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="receiveInventoryItem">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseReceiveInventoryItem"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseReceiveInventoryItem"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/receiveInventoryItem.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                         <container style="subSectionBlock">
+                            <container style="form">
+                              <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/ReceiveInventoryItem.ftl"/></html>
+                              </platform-specific>
+                            </container>
+                          </container>
+                    </decorator-section>                      
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Physical Inventory -->
+    <screen name="physicalInventory">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseInventoryAdjustQuantitiesAvailableOnHand"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseInventoryAdjustQuantitiesAvailableOnHand"/>  
+                <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <section>
+                            <actions>
+                                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/FindFacilityPhysicalInventoryGood.bsh"/>
+                            </actions>
+                            <widgets>
+                                <decorator-screen name="CommonFacilityDecorator" location="${parameters.commonFacilityDecoratorLocation}">
+                                    <decorator-section name="body">
+                                      <container style="subSectionBlock">
+                                        <container style="form">
+                                          <platform-specific>
+                                            <html><html-template location="component://warehouse/webapp/warehouse/inventory/FindPhysicalInventory.ftl"/></html>
+                                          </platform-specific>
+                                        </container>
+                                      </container>
+                                      <platform-specific>
+                                        <html><html-template location="component://warehouse/webapp/warehouse/inventory/ListPhysicalInventory.ftl"/></html>
+                                      </platform-specific>
+                                    </decorator-section>
+                                </decorator-screen>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Stock Moves -->
+    <screen name="stockMoves">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseStockMoves"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseStockMoves"/>  
+                <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="PickMoveStock" location="component://product/widget/facility/FacilityScreens.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PickMoveStockSimple">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseStockMoves"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseStockMoves"/>  
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label>TODO: this should be a simple blank page using a print-decorator without tabs or anything.  There should be a [print] button to trigger printing.</label>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Inventory Transfer -->
+    <screen name="FindFacilityTransfers">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseInventoryTransfer"/>  
+                <set field="sectionHeaderUiLabel" value="WarehouseInventoryTransfer"/>  
+                <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/FindFacilityTransfers.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/inventory/FindFacilityTransfers.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="TransferInventoryItem">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseInventoryTransfer"/>  
+                <set field="sectionHeaderUiLabel" value="WarehouseInventoryTransfer"/>  
+                <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/inventory/TransferInventoryItem.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/inventory/TransferInventoryItem.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Inventory Item -->
+    <screen name="findInventoryItem">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseFindInventoryItem"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseFindInventoryItem"/>  
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/findInventoryItem.bsh"/>
+           </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                         <container style="subSectionBlock">
+                            <container style="form">
+                              <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/FindInventoryItem.ftl"/></html>
+                              </platform-specific>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.ProductInventoryItems}</label></container>
+                            <platform-specific>
+                              <html><html-template location="component://warehouse/webapp/warehouse/inventory/ListInventoryItems.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditInventoryItem">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseEditInventoryItem"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseEditInventoryItem"/>  
+                <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/EditInventoryItem.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/setInventoryItemToHistory.bsh"/>
+                <entity-condition entity-name="OrderItemShipGrpInvRes" list-name="inventoryItemReservations">
+                    <condition-list combine="and">
+                        <condition-expr field-name="inventoryItemId" operator="equals" env-name="inventoryItemId"/>
+                    </condition-list>
+                    <order-by field-name="reservedDatetime"/>
+                </entity-condition>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/inventory/EditInventoryItem.ftl"/></html>
+                        </platform-specific>
+                        <container>
+                            <label style="head2">${uiLabelMap.WarehouseInventoryItemReservations}</label>
+                        </container>
+                        <include-form name="InventoryItemReservations" location="component://product/webapp/facility/inventory/InventoryForms.xml"/>
+                        <section> 
+                            <condition>
+                                <if-compare field-name="inventoryItem.inventoryItemTypeId" operator="equals" value="NON_SERIAL_INV_ITEM"/>
+                            </condition>
+                            <widgets>
+                                <container>
+                                    <label style="head2">${uiLabelMap.WarehousePhysicalInventoryVariances}</label>
+                                </container>
+                                <include-form name="CreatePhysicalInventoryAndVariance" location="component://product/webapp/facility/inventory/InventoryForms.xml"/>
+                                <include-form name="ViewPhysicalInventoryAndVariance" location="component://product/webapp/facility/inventory/InventoryForms.xml"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="ViewInventoryItemDetail">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseEditInventoryItem"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseEditInventoryItem"/>  
+                <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="ViewInventoryItemDetail" location="component://product/widget/facility/FacilityScreens.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="manageLots">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseManageLots"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseManageLots"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/manageLots.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/lots/findLots.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="lotDetails">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseLotDetails"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseLotDetails"/>
+                <set field="edit" value="N"/>
+                <set field="toHistory" value="true" type="Boolean"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/lotInfo.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/lotDetails.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <!-- Lot details -->
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/lots/lotDetails.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <!-- Inventory items -->
+                        <platform-specific><html><html-template location="component://warehouse/webapp/warehouse/includes/lotDetailsInventoryItemsHeader.ftl"/></html></platform-specific>
+                        <container style="subSectionBlock">
+                            <include-form location="component://warehouse/widget/warehouse/forms/inventory/InventoryForms.xml" name="ListInventoryItems"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createLotForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseCreateNewLot"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseCreateNewLot"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/lotModify.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/lots/editLot.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="editLotForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseEditLot"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseEditLot"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/lotModify.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/lots/editLot.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="lotDetailsPopup">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseLotDetails"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseLotDetails"/>
+                <set field="edit" value="N"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/lotInfo.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/lotDetails.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/setPopupFlag.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup" location="component://opentaps-common/widget/screens/common/LookupScreens.xml">
+                    <decorator-section name="lookup-body">
+                        <!-- Lot details -->
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/lots/lotDetails.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createLotPopupForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseCreateNewLot"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseCreateNewLot"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/lotModify.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/setPopupFlag.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup" location="component://opentaps-common/widget/screens/common/LookupScreens.xml">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/lots/editLot.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="backOrderedItems">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseBackOrderedItems"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseBackOrderedItems"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/backOrderedItems.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/backOrderedItems.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- TODO: this screen needs to be fixed to conform to our fo.ftl code style. -->
+    <screen name="fulfilledBackOrders.pdf">
+        <section>
+            <actions>
+                <!-- 
+                <set field="defaultFontFamily" value="DejaVuSans"/>
+                -->
+                <set field="title" value="Order"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/companyHeader.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderview.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/fulfilledBackOrders.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="FoReportDecorator" location="component://common/widget/CommonScreens.xml">
+                    <!-- at the top left of every page we put the logo and company information -->
+                    <decorator-section name="topLeft">
+                        <section>
+                            <widgets>
+                                <platform-specific>
+                                    <html><html-template location="component://warehouse/webapp/warehouse/includes/simpleLogo.fo.ftl"/></html>
+                                </platform-specific>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                    <!-- at the top right of every page we put the order information -->
+                    <decorator-section name="topRight">
+                        <section>
+                            <widgets>
+                                <platform-specific>
+                                    <html><html-template location="component://warehouse/webapp/warehouse/inventory/fulfilledBackOrdersHeader.fo.ftl"/></html>
+                                </platform-specific>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <!-- order items and fulfilled back orders -->
+                                <platform-specific>
+                                    <html><html-template location="component://warehouse/webapp/warehouse/inventory/fulfilledBackOrders.fo.ftl"/></html>
+                                </platform-specific>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="traceInventory">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseInventoryTracking"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseInventoryTracking"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/traceInventory.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/inventory/traceInventory.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

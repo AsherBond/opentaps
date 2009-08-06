@@ -1,0 +1,101 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file has been modified by Open Source Strategies, Inc. */
+
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.service.ServiceUtil;
+import org.ofbiz.widget.html.HtmlFormWrapper;
+
+// since this script is invoked after viewProductionRun.bsh, we can access some resources from context
+productionRun = context.get("productionRun");
+productionRunId = productionRun.get("workEffortId");
+
+// we can only issue to confirmed production runs
+canIssue = "PRUN_DOC_PRINTED".equals(productionRun.get("currentStatusId")) || "PRUN_RUNNING".equals(productionRun.get("currentStatusId"));
+
+issuableMaterials = 0;
+for (component : productionRunComponentsData) { // note that productionRunComponentsData comes from ViewProductionRun.bsh
+    Iterator issuances = (delegator.findByAnd("WorkEffortAndInventoryAssign", UtilMisc.toMap("workEffortId", component.get("workEffortId"), "productId", component.get("productId")))).iterator();
+    lotQuantities = new HashMap();
+    while (issuances.hasNext()) {
+        GenericValue issuance = (GenericValue)issuances.next();
+        Double issued = issuance.getDouble("quantity");
+        inventoryItem = delegator.findByPrimaryKey("InventoryItem", UtilMisc.toMap("inventoryItemId", issuance.get("inventoryItemId")));
+        String lotId = inventoryItem.getString("lotId");
+        if (lotId == null) continue;
+        Double issuedFromLot = lotQuantities.containsKey(lotId) ? (Double) lotQuantities.get(lotId) : new Double(0);
+        issuedFromLot = new Double(issuedFromLot.doubleValue() + issued.doubleValue());
+        lotQuantities.put(lotId, issuedFromLot);
+    }
+    component.put("quantitiesByLot", lotQuantities);
+
+    productId = component.get("productId");
+    facilityId = productionRun.get("facilityId");
+    results = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("userLogin", userLogin, "facilityId", facilityId, "productId", productId));
+    if (ServiceUtil.isError(results)) {
+        UtilMessage.addError(request, ServiceUtil.getErrorMessage(results));
+        return;
+    }
+    component.put("qoh", results.get("quantityOnHandTotal"));
+
+    // the amount remaining is the estimated quantity of the WEGS if it is not completed yet
+    if (canIssue && ("PRUN_RUNNING".equals(component.get("currentStatusId")) || "PRUN_OUTSRC_PEND".equals(component.get("currentStatusId")))) {
+        estimated = (component.get("estimatedQuantity") == null ? 0.0 : component.get("estimatedQuantity").doubleValue());
+
+        if ("WEGS_CREATED".equals(component.get("statusId")) && estimated > 0) {
+            component.put("remainingQuantity", new Double(estimated));
+            issuableMaterials += 1;
+        }
+    }
+}
+context.put("hasIssuableMaterials", canIssue && issuableMaterials > 0);
+
+hasRunningTasks = false;
+for (task : productionRunRoutingTasks) {
+    if ("PRUN_RUNNING".equals(task.get("currentStatusId")) || "PRUN_OUTSRC_PEND".equals(task.get("currentStatusId"))) {
+        hasRunningTasks = true;
+        break;
+    }
+}
+context.put("hasRunningTasks", hasRunningTasks);

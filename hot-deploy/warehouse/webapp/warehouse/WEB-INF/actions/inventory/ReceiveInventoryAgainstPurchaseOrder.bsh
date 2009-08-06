@@ -1,0 +1,387 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file has been altered from the version included with the Apache-licensed OFBiz product application */
+/* This file has been modified by Open Source Strategies, Inc. */
+        
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.service.ServiceUtil;
+import org.ofbiz.base.util.*;
+import org.ofbiz.order.order.OrderReadHelper;
+
+import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.product.Product;
+import org.opentaps.domain.product.ProductRepositoryInterface;
+import org.opentaps.domain.product.ProductDomainInterface;
+
+delegator = request.getAttribute("delegator");
+dispatcher = request.getAttribute("dispatcher");
+userLogin = session.getAttribute("userLogin");
+facilityId = session.getAttribute("facilityId");
+
+orderId = request.getParameter("purchaseOrderId");
+context.put("orderId", orderId);
+shipGroupSeqId = request.getParameter("shipGroupSeqId");
+context.put("shipGroupSeqId", shipGroupSeqId);
+
+if (UtilValidate.isEmpty(orderId)) {
+    return;
+}
+
+// Check to make sure the order (and possibly ship group) exist
+conditions = UtilMisc.toMap("orderId", orderId);
+if (UtilValidate.isNotEmpty(shipGroupSeqId)) {
+    conditions.put("shipGroupSeqId", shipGroupSeqId);
+}
+orderItemShipGroups = delegator.findByAnd("OrderItemShipGroup", conditions, UtilMisc.toList("shipGroupSeqId"));
+orderItemShipGroup = EntityUtil.getFirst(orderItemShipGroups);
+if (UtilValidate.isEmpty(orderItemShipGroup)) {
+    return;
+}
+
+orderHeader = orderItemShipGroup.getRelatedOne("OrderHeader");
+context.put("orderHeader", orderHeader);
+
+// Check order type
+if (! "PURCHASE_ORDER".equals(orderHeader.getString("orderTypeId"))) {
+    return;
+}
+
+// Check order status
+if ((! "ORDER_APPROVED".equals(orderHeader.getString("statusId"))) && (! "ORDER_COMPLETED".equals(orderHeader.getString("statusId")))) {
+    return;
+}
+
+orh = new OrderReadHelper(orderHeader);
+supplierParty = orh.getBillFromParty();
+supplierPartyId = null;
+if (UtilValidate.isNotEmpty(supplierParty)) {
+    supplierPartyId = supplierParty.get("partyId");    
+}
+
+// load up the org domain
+dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+orgDomain = dl.loadDomainsDirectory().getOrganizationDomain();
+orgRepos = orgDomain.getOrganizationRepository();
+org = orgRepos.getOrganizationById(orderHeader.get("billToPartyId"));
+
+// get the PartyAcctgPreference for the buyer and check the costingMethodId
+useStandardCost = org.usesStandardCosting();
+if (useStandardCost) {
+    productDomain = dl.loadDomainsDirectory().getProductDomain();
+    productRepository = productDomain.getProductRepository();
+}
+
+// Default to the first ship group
+shipGroupSeqId = orderItemShipGroup.get("shipGroupSeqId");
+context.put("shipGroupSeqId", shipGroupSeqId);
+
+// Retrieve the map resident in session which stores order item quantities to receive
+itemQuantitiesToReceive = session.getAttribute("purchaseOrderItemQuantitiesToReceive");
+if (! UtilValidate.isEmpty(itemQuantitiesToReceive)) {
+    sessionOrderId = itemQuantitiesToReceive.get("_orderId");
+    sessionShipGroupSeqId = itemQuantitiesToReceive.get("_shipGroupSeqId");
+    if ( ((UtilValidate.isNotEmpty(sessionOrderId) && ! sessionOrderId.equals(orderId)))                      ||
+         ((UtilValidate.isNotEmpty(sessionShipGroupSeqId) && ! sessionShipGroupSeqId.equals(shipGroupSeqId))) ||
+         "Y".equals(request.getParameter("clearAll")) ) {
+
+             // Clear the map if the orderId or shipGroupSeqId are different than the current ones, or
+             // if the clearAll parameter is present
+             itemQuantitiesToReceive.clear();
+    }
+}
+
+facility = delegator.findByPrimaryKey("Facility", UtilMisc.toMap("facilityId", facilityId));
+context.put("facility", facility);
+context.put("facilityId", facilityId);
+now = UtilDateTime.nowTimestamp();
+context.put("now", now);
+
+// Get the base currency from the facility owner, for currency conversions
+baseCurrencyUomId = null;
+if (! UtilValidate.isEmpty(facility)) {
+    owner = facility.getRelatedOne("OwnerParty");
+    if (! UtilValidate.isEmpty(owner)) {
+        ownerAcctgPref = owner.getRelatedOne("PartyAcctgPreference");
+    }
+    if (! UtilValidate.isEmpty(ownerAcctgPref)) {
+        baseCurrencyUomId = ownerAcctgPref.get("baseCurrencyUomId");
+    }
+}
+
+inventoryItemTypes = delegator.findAll("InventoryItemType");
+context.put("inventoryItemTypes", inventoryItemTypes);
+
+// Populate the tracking map with shipGroupSeqId and orderId
+if (UtilValidate.isEmpty(itemQuantitiesToReceive)) {
+    itemQuantitiesToReceive = UtilMisc.toMap("_orderId", orderId, "_shipGroupSeqId", shipGroupSeqId);
+}
+
+// avoid receiving fixed assets, contracted manufacturing services, and supplies on this page
+oiasgaLimitMap = UtilMisc.toMap("orderItemTypeId", "PRODUCT_ORDER_ITEM");
+if (! UtilValidate.isEmpty(shipGroupSeqId)) {
+    oiasgaLimitMap.put("shipGroupSeqId", shipGroupSeqId);
+}
+
+orderItemDatas = new TreeMap();
+totalAvailableToReceive = 0;
+itemsAvailableToReceive = false;
+
+// Populate the order item data for the FTL
+orderItems = orderHeader.getRelated("OrderItemAndShipGroupAssoc", oiasgaLimitMap, UtilMisc.toList("shipGroupSeqId", "orderItemSeqId"));
+orderItemIter = orderItems.iterator();
+while (orderItemIter.hasNext()) {
+    orderItemAndShipGroupAssoc = orderItemIter.next();
+    product = orderItemAndShipGroupAssoc.getRelatedOne("Product");
+    
+    // Get the order item, since the orderItemAndShipGroupAssoc's quantity field is manipulated in some cases
+    orderItem = delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemAndShipGroupAssoc.get("orderItemSeqId")));
+    orderItemData = new HashMap();
+
+    // Get the item's ordered quantity
+    totalOrdered = 0;
+    ordered = orderItem.getDouble("quantity");
+    if (ordered != null) {
+        totalOrdered += ordered.doubleValue();
+    }
+    cancelled = orderItem.getDouble("cancelQuantity");
+    if (cancelled != null) {
+        totalOrdered -= cancelled.doubleValue();
+    }
+
+    // Get the item quantity received from all shipments via the ShipmentReceipt entity, and lotIds received into
+    totalReceived = 0.0;
+    receipts = delegator.findByAnd("ShipmentReceipt", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItem.get("orderItemSeqId")));
+    fulfilledReservations = new ArrayList();
+    lotIds = new TreeSet();
+    if (receipts != null && receipts.size() > 0) {
+        recIter = receipts.iterator();
+        while (recIter.hasNext()) {
+            rec = recIter.next();
+            accepted = rec.getDouble("quantityAccepted");
+            rejected = rec.getDouble("quantityRejected");
+            if (accepted != null) {
+                totalReceived += accepted.doubleValue();
+            }
+            if (rejected != null) {
+                totalReceived += rejected.doubleValue();                                            
+            }
+
+            // Get the reservations related to this receipt
+            oisgirs = delegator.findByAnd("OdrItShpGrpHdrInvResAndInvItem", UtilMisc.toMap("inventoryItemId", rec.get("inventoryItemId"), "statusId", "ORDER_APPROVED"));
+            if (UtilValidate.isNotEmpty(oisgirs)) {
+                fulfilledReservations.addAll(oisgirs);
+            }
+            
+            // Get the lot ID from the InventoryItems
+            inventoryItem = rec.getRelatedOne("InventoryItem");
+            if (UtilValidate.isNotEmpty(inventoryItem) && UtilValidate.isNotEmpty(inventoryItem.getString("lotId"))) {
+                lotIds.add(inventoryItem.getString("lotId"));
+            }
+            
+        }            
+    }
+    orderItemData.put("fulfilledOrderIds", EntityUtil.getFieldListFromEntityList(fulfilledReservations, "orderId", true));
+    orderItemData.put("lotIds", UtilMisc.toList(lotIds));
+
+    // Update the unit cost with the converted value, if any. Or if we use standard cost, update it with the item standard cost
+    if (UtilValidate.isNotEmpty(product)) {
+        if (useStandardCost) {
+            domainProduct = Repository.loadFromGeneric(Product.class, product, productRepository);
+            costCurrencyUomId = orderHeader.getString("currencyUom");
+            if (UtilValidate.isEmpty(costCurrencyUomId)) {
+                costCurrencyUomId = baseCurrencyUomId;
+            }
+            if (UtilValidate.isEmpty(costCurrencyUomId)) {
+                Debug.logError("No currency set to get the product standard cost", "");
+            } else {
+               stdCost = domainProduct.getStandardCost(costCurrencyUomId);
+               orderItem.put("unitPrice", stdCost);
+            }
+        } else {
+            if (UtilValidate.isNotEmpty(baseCurrencyUomId) && UtilValidate.isNotEmpty(orderHeader.getString("currencyUom"))) {
+                result = dispatcher.runSync("convertUom", UtilMisc.toMap("uomId", orderHeader.getString("currencyUom"), "uomIdTo", baseCurrencyUomId, "originalValue", orderItem.get("unitPrice")));
+                if (!ServiceUtil.isError(result)) {
+                    orderItem.put("unitPrice", result.get("convertedValue"));
+                }
+            }
+        }
+    }
+
+    // Retrieve the backordered quantity
+    conditions = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, product.get("productId")), new EntityExpr("availableToPromiseTotal", EntityOperator.LESS_THAN, new Double(0)));
+    conditions.add(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
+    
+    negativeInventoryItems = delegator.findByCondition("InventoryItem",  new EntityConditionList(conditions, EntityOperator.AND), null, null);
+    backOrderedQuantity = 0;
+    niit = negativeInventoryItems.iterator();
+    while (niit.hasNext()) {
+        negativeInventoryItem = niit.next();
+        backOrderedQuantity += negativeInventoryItem.getDouble("availableToPromiseTotal").doubleValue();
+    }
+    orderItemData.put("backOrderedQuantity", Math.abs(backOrderedQuantity));
+
+    // Calculate how many units it should be possible to recieve for this purchase order
+    availableToReceive = totalOrdered - totalReceived;
+    if (availableToReceive > 0) itemsAvailableToReceive = true;
+    totalAvailableToReceive += availableToReceive;
+    orderItemData.put("availableToReceive", availableToReceive);
+    orderItemData.put("totalQuantityReceived", totalReceived);
+    orderItemData.put("shipGroupSeqId", orderItemAndShipGroupAssoc.get("shipGroupSeqId"));
+    orderItemData.put("orderItem", orderItem);
+    orderItemData.put("product", product);
+    orderItemData.put("productId", product.get("productId"));
+    
+    // Add the supplier productId and name
+    supplierProducts = delegator.findByAnd("SupplierProduct", UtilMisc.toMap("productId", product.get("productId"), "partyId", supplierPartyId), UtilMisc.toList("lastUpdatedStamp DESC"));
+    supplierProducts = EntityUtil.filterByDate(supplierProducts, now, "availableFromDate", "availableThruDate", true);
+    if (UtilValidate.isNotEmpty(supplierProducts)) {
+        orderItemData.put("supplierProductId", EntityUtil.getFirst(supplierProducts).get("supplierProductId"));
+        orderItemData.put("supplierProductName", EntityUtil.getFirst(supplierProducts).get("supplierProductName"));
+    }
+
+    orderItemDatas.put(orderItem.getString("orderItemSeqId"), orderItemData);
+}
+//orderItemDatas = EntityUtil.orderBy(UtilMisc.toList(orderItemDatas.values()), UtilMisc.toList("supplierProductId", "productId"));
+context.put("orderItemDatas", orderItemDatas);
+
+// Handle any item product quantities to receive by adding to the map in session
+productIdToReceive = request.getParameter("productId");
+productQtyToReceive = request.getParameter("quantity");
+context.put("newQuantity", productQtyToReceive);
+
+    // first find a matching product using a comprehensive search
+if (UtilValidate.isNotEmpty(productIdToReceive)) {
+    results = dispatcher.runSync("getProductByComprehensiveSearch", UtilMisc.toMap("productId", productIdToReceive, "lookupSupplierProducts", Boolean.TRUE));
+    if (ServiceUtil.isError(results) || ServiceUtil.isFailure(results)) {
+        request.setAttribute("_ERROR_MESSAGE_", ServiceUtil.getErrorMessage(results));
+    } else {
+        product = results.get("product");
+        productIdToReceive = results.get("productId");
+    }
+}
+
+if (UtilValidate.isNotEmpty(productIdToReceive)) {
+
+
+    // search existing order items for the matching product (if none was found, this should result in an empty list)
+    List candidateOrderItems = EntityUtil.filterByAnd(orderItems, UtilMisc.toMap("productId", productIdToReceive));
+
+    if (! UtilValidate.isEmpty(candidateOrderItems)) {
+
+        quantity = 0;
+        if (! UtilValidate.isEmpty(productQtyToReceive)) {
+            try {
+                quantity = Double.parseDouble(productQtyToReceive);
+            } catch (Exception e) {
+                // Ignore the quantity update if there's a problem parsing it
+            }
+        }
+
+        totalQuantityUsed = 0;
+        totalQuantityToReceiveBefore = 0;
+        pqit = candidateOrderItems.iterator();
+        while (pqit.hasNext() && totalQuantityUsed < quantity) {
+            candidateOrderItem = pqit.next();
+            orderItemSeqId = candidateOrderItem.getString("orderItemSeqId");
+            qtyBefore = itemQuantitiesToReceive.containsKey(orderItemSeqId) ? itemQuantitiesToReceive.get(orderItemSeqId) : 0;
+            totalQuantityToReceiveBefore += qtyBefore;
+            qtyMaxAvailable = orderItemDatas.get(orderItemSeqId).get("availableToReceive") - qtyBefore;
+            
+            if (qtyMaxAvailable <= 0) {
+                continue;
+            }
+            
+            qtyUsedForItem  = quantity - totalQuantityUsed >= qtyMaxAvailable ? qtyMaxAvailable : quantity - totalQuantityUsed;
+            itemQuantitiesToReceive.put(orderItemSeqId, qtyUsedForItem + qtyBefore);
+            totalQuantityUsed += qtyUsedForItem;
+        }
+        
+        // If there's any quantity to receive left after using as much as possible for every relevant order item, add an error message to the context
+        if (quantity > totalQuantityUsed) {
+            context.put("ProductReceiveInventoryAgainstPurchaseOrderQuantityExceedsAvailableToReceive", true);
+        }
+        
+        // Notify if some or all of the quantity just entered for the product will go to a backorder
+        backOrderedQuantity = orderItemDatas.get(EntityUtil.getFirst(candidateOrderItems).get("orderItemSeqId")).get("backOrderedQuantity") - totalQuantityToReceiveBefore;
+        
+        if (backOrderedQuantity > 0) {
+            totalQtyUsedForBackorders = backOrderedQuantity >= totalQuantityUsed ? totalQuantityUsed : backOrderedQuantity;
+            if (totalQtyUsedForBackorders > 0) {
+                context.put("quantityToReceive", totalQuantityUsed);
+                context.put("quantityToBackOrder", totalQtyUsedForBackorders);
+                context.put("ProductReceiveInventoryAgainstPurchaseOrderQuantityGoesToBackOrder", true);
+            }
+        }
+    } else {
+
+        // Add an error message to the context if the productId doesn't exist in this purchase order
+        context.put("ProductReceiveInventoryAgainstPurchaseOrderProductNotFound", true);
+    }
+}
+
+// Put the tracking map back into the session, in case it has been reconstructed
+session.setAttribute("purchaseOrderItemQuantitiesToReceive", itemQuantitiesToReceive);
+context.put("itemQuantitiesToReceive", itemQuantitiesToReceive);
+context.put("totalAvailableToReceive", totalAvailableToReceive);
+context.put("itemsAvailableToReceive", itemsAvailableToReceive);
+
+// Provide a list of shipments to receive from
+shipmentConditions = new ArrayList();
+shipmentConditions.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PURCH_SHIP_RECEIVED"));
+shipmentConditions.add(new EntityExpr("shipmentTypeId", EntityOperator.EQUALS, "PURCHASE_SHIPMENT"));
+shipmentConditions.add(new EntityExpr("destinationFacilityId", EntityOperator.EQUALS, facilityId));
+if (UtilValidate.isNotEmpty(supplierPartyId)) {
+    shipmentConditions.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, supplierPartyId));
+}
+shipmentConditions.add(new EntityConditionList(
+        UtilMisc.toList(
+            new EntityExpr("currencyUomId", EntityOperator.EQUALS, null),
+            new EntityExpr("currencyUomId", EntityOperator.EQUALS, orh.getCurrency())
+        ), EntityOperator.OR));
+
+shipments = delegator.findByCondition("Shipment", new EntityConditionList(shipmentConditions, EntityOperator.AND), null, UtilMisc.toList("shipmentId"));
+context.put("shipments", shipments);
+primaryShipmentCond = UtilMisc.toList(
+    new EntityExpr("primaryOrderId", EntityOperator.EQUALS, orderId),
+    new EntityExpr("primaryShipGroupSeqId", EntityOperator.EQUALS, shipGroupSeqId));
+primaryShipment = EntityUtil.getFirst(EntityUtil.filterByAnd(shipments, primaryShipmentCond));
+if (UtilValidate.isNotEmpty(primaryShipment)) {
+    context.put("primaryShipmentId", primaryShipment.get("shipmentId"));
+}

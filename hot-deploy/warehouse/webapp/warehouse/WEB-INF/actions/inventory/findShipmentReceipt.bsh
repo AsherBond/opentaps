@@ -1,0 +1,78 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.common.util.UtilMessage;
+
+orderId = parameters.get("orderId");
+productId = parameters.get("productId");
+showAllocatedReceiptsOnly = parameters.get("showAllocatedReceiptsOnly");
+
+// no orderId and no productId - user is not looking for anything
+if (UtilValidate.isEmpty(orderId) && (UtilValidate.isEmpty(productId))) return;
+
+conditionsMap = new HashMap();
+if (UtilValidate.isNotEmpty(orderId)) {
+    conditionsMap = UtilMisc.toMap("orderId", orderId);
+}
+
+// productId is optional but if it is asked for then put it in
+if (UtilValidate.isNotEmpty(productId)) {
+    results = dispatcher.runSync("getProductByComprehensiveSearch", UtilMisc.toMap("productId", productId, "lookupSupplierProducts", Boolean.TRUE));
+    if (ServiceUtil.isError(results) || ServiceUtil.isFailure(results)) {
+        request.setAttribute("_ERROR_MESSAGE_", ServiceUtil.getErrorMessage(results));
+    } else {
+        conditionsMap.put("productId", results.get("productId"));
+    }
+}
+
+// TODO: restrict it to this warehouse.  This can be done by adding InventoryItem to this view-entity and adding facilityId to the conditionsMap
+receipts = delegator.findByAnd("ShipmentReceiptAndProduct", conditionsMap);
+if (UtilValidate.isNotEmpty(receipts)) {
+    receiptsAndBackOrders = new ArrayList();
+    recIter = receipts.iterator();
+    // Loop through each shipment receipt record and find the orders it fulfills
+    while (recIter.hasNext()) {
+        rec = recIter.next();
+
+        // calculate the net received quantity
+        accepted = rec.getDouble("quantityAccepted");
+        rejected = rec.getDouble("quantityRejected");
+        totalReceived = 0;
+        if (accepted != null)
+            totalReceived += accepted.doubleValue();
+        if (rejected != null)
+            totalReceived -= rejected.doubleValue();
+
+            receiptAndBackOrder = rec.getAllFields();
+            // Get a distinct Lits of orderIds for the reservations related to this receipt
+            oisgirs = delegator.findByAnd("OdrItShpGrpHdrInvResAndInvItem", UtilMisc.toMap("inventoryItemId", rec.get("inventoryItemId"), "statusId", "ORDER_APPROVED"));
+            if (UtilValidate.isNotEmpty(oisgirs)) {
+                receiptAndBackOrder.put("fulfilledReservations", EntityUtil.getFieldListFromEntityList(oisgirs, "orderId", true));        //Note this is a List of orderIds
+            }
+
+        // add it to the list to display if user wants to see only allocated receipts and this receipt has orders allocated to it, or if user wanted to see all shipment receipts
+        if (("Y".equals(showAllocatedReceiptsOnly) && UtilValidate.isNotEmpty(oisgirs)) || !("Y".equals(showAllocatedReceiptsOnly))) {
+            receiptsAndBackOrders.add(receiptAndBackOrder);
+        }
+    }
+    context.put("receiptsAndBackOrders", receiptsAndBackOrders);
+} else {
+    UtilMessage.addError(request, "OpentapsError_OrderNotFound", UtilMisc.toMap("orderId", orderId));
+}

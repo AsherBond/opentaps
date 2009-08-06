@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+
+To integrate a screen from OFBiz, 
+
+1)  The screen to be integrated must declare the decorator screen with a location attribute pointing to a variable in parameters map,
+    <decorator-screen name="FooDecorator" location="${parameters.fooDecoratorLocation}">
+
+2)  Our version of this screen should <set> the parameter variable and point to this file
+    <set field="parameters.fooDecoratorLocation" location="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
+
+3)  Our version of the screen should then <include-screen name="TargetScreenName" location="component://path/to/TargetScreen.xml"/>
+
+-->
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <!-- For screens imported from facility that use CommonFacilityDecorator.  Use parameters.commonFacilityDecoratorLocation. -->
+    <screen name="CommonFacilityDecorator">
+        <section>
+            <widgets>
+                <decorator-section-include name="body"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- For screens imported from facility that use CommonJobshopDecorator.  Use parameters.mainDecoratorLocation. -->
+    <screen name="CommonJobshopDecorator">
+        <section>
+            <widgets>
+                <decorator-section-include name="body"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- For screens imported from anywhere that uses main-decorator. Use parameters.mainDecoratorLocation, but check the screen if it uses a different variable name. -->
+    <screen name="main-decorator">
+        <section>
+            <widgets>
+                <decorator-section-include name="body"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- For screens that use calendar decorator.  Use parameters.mainDecoratorLocation. -->
+    <screen name="CommonCalendarDecorator">
+        <section>
+            <widgets>
+                <decorator-section-include name="body"/>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

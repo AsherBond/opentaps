@@ -1,0 +1,76 @@
+<!--
+ *  Copyright (c) 2002-2004 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+
+    <!-- When a production run is scheduled, it should set the estimatedShipDate of orders for which the 
+         item is back ordered based on the scheduled completion date of the production run. -->
+    <eca service="changeProductionRunStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="PRUN_SCHEDULED"/>
+        <action service="setEstimatedDeliveryDates" mode="sync"/>
+    </eca>
+    <eca service="quickChangeProductionRunStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="PRUN_SCHEDULED"/>
+        <action service="setEstimatedDeliveryDates" mode="sync"/>
+    </eca>
+
+    <!-- When a production run is confirmed, approve any outsourced product requirements and mark the outsourced tasks as pending.
+         If the production run has only outsourced tasks, then the status of the production run is upgraded to running.  -->
+    <eca service="changeProductionRunStatus" event="commit">
+        <condition field-name="newStatusId" operator="equals" value="PRUN_DOC_PRINTED"/>
+        <action service="opentaps.approveOutsourcedProductRequirements" mode="sync"/>
+        <action service="opentaps.setOutsourcedTasksToPending" mode="sync"/>
+        <action service="opentaps.runOutsourcedProductionRun" mode="sync"/>
+    </eca>
+
+    <!-- When a production run is started, set the WEGS fromDate -->
+    <eca service="changeProductionRunStatus" event="commit">
+        <condition field-name="newStatusId" operator="equals" value="PRUN_RUNNING"/>
+        <action service="opentaps.resetWegsFromDate" mode="sync"/>
+    </eca>
+
+    <!-- When a production run is canceled, cancel unprocessed outsourced product requirements and orders. -->
+    <eca service="cancelProductionRun" event="commit">
+        <action service="opentaps.cancelProductionRun" mode="sync"/>
+    </eca>
+
+    <!-- When a purchase order is approved, "qualify" any outsourced tasks by setting them to PRUN_OUTSRCD. -->
+    <eca service="changeOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_APPROVED"/>
+        <condition field-name="orderTypeId" operator="equals" value="PURCHASE_ORDER"/>
+        <action service="opentaps.qualifyOutsourcedTasks" mode="sync"/>
+    </eca>
+
+    <!-- When a routing task is added to a production run, create any required data from the routing task template (notably outsourced products) -->
+    <eca service="addProductionRunRoutingTask" event="commit">
+        <action service="opentaps.addProductionRunRoutingTask" mode="sync"/>
+    </eca>
+    
+    <!-- When there is a partial issuance to a routing task, reduce the estimated quantities required so we don't get overissuances. -->
+    <eca service="issueProductionRunTaskComponent" event="commit">
+        <!-- Only invoke when we're run directly, which means not run by the issueProductionRunTask service, which uses the following fields -->
+        <condition field-name="workEffort" operator="is-empty"/>
+        <condition field-name="workEffortGoodStandard" operator="is-empty"/>
+        <action service="opentaps.reduceWorkEffortGoodStandard" mode="sync"/> 
+    </eca> 
+
+</service-eca>

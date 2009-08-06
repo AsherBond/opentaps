@@ -1,0 +1,82 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ 
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilMisc;
+import org.opentaps.warehouse.security.WarehouseSecurity;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.party.party.PartyHelper;
+
+// This security-related code is duplicating the work done in main-decorator.bsh
+// (under component://warehouse/webapp/warehouse/WEB-INF/actions/include), due to
+// they way they screen widgets work in general, and the way they are currently
+// setup in the Warehouse application
+
+facilityId = parameters.get("facilityId");
+warehouseSecurity = session.getAttribute("warehouseSecurity");
+
+if (warehouseSecurity == null) {
+    // For some strange reason, the warehouseSecurity object is not always available as a session
+    // variable; this appears to be related to the main-decorator screen setup problem.  This
+    // (temporary) solution will ensure that this object will always be available, but again,
+    // this is a temporary solution that will be used until the issue with main-decorator is
+    // sorted out.  Again, this is (partly) a duplication of work done in "main-decorator.bsh".
+    warehouseSecurity = new WarehouseSecurity(security, userLogin, facilityId);
+    session.setAttribute("warehouseSecurity", warehouseSecurity);
+}
+
+hasLotViewPermission = warehouseSecurity.hasFacilityPermission("WRHS_INV_LOT_VIEW");
+context.put("hasLotViewPermission", hasLotViewPermission);
+
+if (hasLotViewPermission) {
+    lotId = parameters.get("lotId");
+    supplierPartyId = parameters.get("supplierPartyId");
+    doLookup = parameters.get("doLookup");
+
+    lots = new ArrayList();
+    lotsTotalSize = 0;
+
+    if ("Y".equals(doLookup)) {
+        lookupParams = new ArrayList();
+        if (UtilValidate.isNotEmpty(lotId)) {
+            lookupParams.add(new EntityExpr("lotId", EntityOperator.LIKE, lotId + "%"));
+        }
+        if (UtilValidate.isNotEmpty(supplierPartyId)) {
+            lookupParams.add(new EntityExpr("supplierPartyId", EntityOperator.EQUALS, supplierPartyId));
+        }
+        lotListIt = delegator.findListIteratorByCondition("Lot", new EntityConditionList(lookupParams, EntityOperator.AND), null, null, UtilMisc.toList("lotId"),  UtilCommon.DISTINCT_READ_OPTIONS);
+
+        lotList = lotListIt.getPartialList(viewIndex.intValue(), viewSize.intValue());
+    
+        lotListIt.last();
+        lotsTotalSize = lotListIt.currentIndex();
+        lotListIt.close();
+    
+        lit = lotList.iterator();
+        while (lit.hasNext()) {
+            lot = lit.next().getAllFields();
+            if (UtilValidate.isNotEmpty(lot.get("supplierPartyId"))) {
+                supplierPartyName = PartyHelper.getPartyName(delegator, lot.get("supplierPartyId"), false);
+                lot.put("supplierPartyName", supplierPartyName);
+            }
+            lots.add(lot);
+        }
+    }
+
+    context.put("lotList", lots);
+    context.put("lotsTotalSize", lotsTotalSize);
+}

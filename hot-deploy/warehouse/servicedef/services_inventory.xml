@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+        
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file may contain code which has been modified from that included with the Apache-licensed OFBiz product application -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+        
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Warehouse Inventory Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <service name="checkInventoryItemQOHOverZero" engine="java" 
+            location="org.opentaps.warehouse.inventory.InventoryServices" invoke="checkInventoryItemQOHOverZero">
+        <description>Returns an error if InventoryItem.quantityOnHandTotal is less than zero</description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="warehouse.createLot" engine="java"
+            location="org.opentaps.warehouse.inventory.InventoryServices" invoke="createLot">
+        <description>Creates a new lot</description>
+        <auto-attributes entity-name="Lot" include="pk" mode="IN" optional="true"/>
+        <auto-attributes entity-name="Lot" include="pk" mode="OUT" optional="false"/>
+        <auto-attributes entity-name="Lot" include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="warehouse.updateLot" engine="java"
+            location="org.opentaps.warehouse.inventory.InventoryServices" invoke="updateLot">
+        <description>Creates a new lot</description>
+        <auto-attributes entity-name="Lot" include="pk" mode="INOUT" optional="false"/>
+        <auto-attributes entity-name="Lot" include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="warehouse.issueOrderItemToShipmentAndReceiveAgainstPO" engine="java"
+            location="org.opentaps.warehouse.inventory.InventoryServices" invoke="issueOrderItemToShipmentAndReceiveAgainstPO" transaction-timeout="6000">
+        <description>Issues order item quantity specified to the shipment, then receives inventory for that item and quantity, 
+            creating a new shipment if necessary. Overrides the OFBiz issueOrderItemToShipmentAndReceiveAgainstPO service.
+            If completePurchaseOrder is Y, then this will run the completePurchaseOrder service after receiving any specified
+            inventory.  Unreserved inventory will be cancelled.
+        </description>
+        <attribute name="shipmentId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="purchaseOrderId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="ownerPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderItemSeqIds" type="Map" mode="IN" optional="false" string-map-prefix="orderItemSeqId_o_"/>
+        <attribute name="quantitiesAccepted" type="Map" mode="IN" optional="false" string-map-prefix="quantityAccepted_o_"/>
+        <attribute name="quantitiesRejected" type="Map" mode="IN" optional="true" string-map-prefix="quantityRejected_o_"/>
+        <attribute name="lotIds" type="Map" mode="IN" optional="true" string-map-prefix="lotId_o_"/>
+        <attribute name="productIds" type="Map" mode="IN" optional="false" string-map-prefix="productId_o_"/>
+        <attribute name="unitCosts" type="Map" mode="IN" optional="true" string-map-prefix="unitCost_o_"/>
+        <attribute name="inventoryItemTypeIds" type="Map" mode="IN" optional="false" string-map-prefix="inventoryItemTypeId_o_"/>
+        <attribute name="_rowSubmit" type="Map" mode="IN" optional="false" string-map-prefix="_rowSubmit_o_"/>
+        <attribute name="completePurchaseOrder" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="adjustInventoryQuantity" engine="java" location="org.opentaps.warehouse.inventory.InventoryServices" invoke="adjustInventoryQuantity">
+        <description>Adjust both ATP and QOH by the same given amount.</description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false" />
+        <attribute name="varianceReasonId" type="String" mode="IN" optional="false" />
+        <attribute name="varianceQty" type="Double" mode="IN" optional="true" />
+    </service>
+
+    <service name="getProductInventoryAvailable" engine="pojo" location="org.opentaps.warehouse.domain.inventory.InventoryService" invoke="getProductInventoryAvailable" auth="false" use-transaction="false">
+        <description>Get Inventory Availability for a Product</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantityOnHandTotal" type="Double" mode="OUT" optional="false"/>
+        <attribute name="availableToPromiseTotal" type="Double" mode="OUT" optional="false"/>
+        <attribute name="useCache" type="Boolean" mode="IN" optional="true"/>
+    </service>
+
+    <service name="prepareInventoryTransfer" engine="pojo" location="org.opentaps.warehouse.domain.inventory.InventoryService" invoke="prepareInventoryTransfer" auth="true">
+        <description>Service to prepare an inventory transfer, returns the inventory item id of the destination inventory item.</description>
+        <attribute name="inventoryItemId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="xferQty" type="Double" mode="IN" optional="false"/>
+    </service>
+
+    <service name="cancelInventoryTransfer" engine="pojo"
+            location="org.opentaps.warehouse.domain.inventory.InventoryService" invoke="cancelInventoryTransfer">
+        <description>Cancel the inventory transfer. Override legacy service of the same name.</description>
+        <attribute name="inventoryTransferId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="warehouse.traceInventoryUsage" engine="pojo" location="org.opentaps.warehouse.domain.inventory.TraceInventoryService"
+        invoke="traceInventoryUsage" auth="true">
+        <description>
+            Build and return inventory tracing data for later use in screen. 
+            Wrap calls to other services of the feature
+        </description>
+        <attribute name="lotId" type="String" mode="IN" optional="true"/>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="true"/>
+        <attribute name="traceDirection" mode="IN" type="String"/>
+        <attribute name="usageLog" type="List" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="clearInventoryTrace" engine="pojo" location="org.opentaps.warehouse.domain.inventory.TraceInventoryService"
+        invoke="clearInventoryTrace" auth="true">
+        <description>
+            Clear the InventoryItemTrace and InventoryItemTraceDetail entities. 
+            If no inventoryItemTraceId is supplied, then clear all of them.
+        </description>
+    </service>
+
+    <service name="buildInventoryTrace" engine="pojo" location="org.opentaps.warehouse.domain.inventory.TraceInventoryService"
+        invoke="buildInventoryTrace" auth="true">
+        <description>
+            Builds trace data for an inventoryItemId or a lotId, or a can just do it for all inventory items.
+        </description>
+        <attribute name="lotId" mode="IN" type="String" optional="true"/>
+        <attribute name="inventoryItemId" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="traceInventoryUsageForward" engine="pojo" location="org.opentaps.warehouse.domain.inventory.TraceInventoryService"
+        invoke="traceInventoryUsageForward" auth="true">
+        <description>
+            Trace all the inventory usage of starting with an inventory item or a lot ID in forward direction.
+        </description>
+        <attribute name="inventoryItemId" mode="IN" type="String" optional="true"/>
+        <attribute name="lotId" mode="IN" type="String" optional="true"/>
+        <attribute name="usageLog" mode="OUT" type="List" optional="true"/>
+    </service>
+
+    <service name="traceInventoryUsageBackward" engine="pojo" location="org.opentaps.warehouse.domain.inventory.TraceInventoryService"
+        invoke="traceInventoryUsageBackward">
+        <description>
+            Trace all the inventory usage of starting with an inventory item or a lot ID in backward direction.
+        </description>
+        <attribute name="inventoryItemId" mode="IN" type="String" optional="true"/>
+        <attribute name="lotId" mode="IN" type="String" optional="true"/>
+        <attribute name="usageLog" mode="OUT" type="List" optional="true"/>
+    </service>
+
+</services>
+

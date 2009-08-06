@@ -1,0 +1,169 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+import java.util.TreeMap;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+
+// Groups order items by product
+
+orderId = parameters.get("orderId");
+orderItems = context.get("orderItemList");
+
+if (orderItems == null) return;
+
+productDatas = FastMap.newInstance();
+
+orderItemIter = orderItems.iterator();
+while (orderItemIter.hasNext()) {
+    orderItem = orderItemIter.next();
+    product = orderItem.getRelatedOne("Product");
+    productId = product.getString("productId");
+
+    // get or create a new product line
+    data = productDatas.get(productId);
+    if (data == null) {
+        data = FastMap.newInstance();
+        data.put("productId", productId);
+        data.put("productInternalName", product.getString("internalName"));
+
+        // also get the UPCA
+        upca = delegator.findByPrimaryKeyCache("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "UPCA"));
+        if (upca != null) data.put("upca", upca.get("idValue"));
+    }
+
+    totalReceived = 0.0;
+
+    // this large block is for getting the back orders fulfilled
+    fulfilledOrderDatas = data.get("fulfilledOrderDatas");
+    if (fulfilledOrderDatas == null) fulfilledOrderDatas = new TreeMap();
+    
+    receipts = delegator.findByAnd("ShipmentReceipt", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItem.get("orderItemSeqId")));
+    if (receipts != null && receipts.size() > 0) {
+        recIter = receipts.iterator();
+        while (recIter.hasNext()) {
+            rec = recIter.next();
+
+            accepted = rec.getDouble("quantityAccepted");
+            rejected = rec.getDouble("quantityRejected");
+
+            quantityReceived = 0.0;
+
+            if (accepted != null)
+                quantityReceived += accepted.doubleValue();
+            if (rejected != null)
+                quantityReceived += rejected.doubleValue();
+
+            totalReceived += quantityReceived;
+
+            // Get the lot ID from the InventoryItems
+            inventoryItem = rec.getRelatedOne("InventoryItem");
+
+            // Get the item issuances related to this receipt (this will show back orders
+            // fulfilled for already shipped items)
+            itemIssuances = delegator.findByAnd("ItemIssuance", UtilMisc.toMap("inventoryItemId", rec.get("inventoryItemId")));
+            if (!UtilValidate.isEmpty(itemIssuances)) {
+                itemIssuanceIter = itemIssuances.iterator();
+
+                while (itemIssuanceIter.hasNext()) {
+                    itemIssuance = itemIssuanceIter.next();
+                    itemIssuanceQuantity = itemIssuance.getDouble("quantity") != null? itemIssuance.getDouble("quantity").doubleValue() : 0.0;
+
+                    salesOrderId = itemIssuance.getString("orderId");
+                    salesOrderHeader = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap("orderId", salesOrderId));
+
+                    if ((salesOrderHeader == null) || !"SALES_ORDER".equals(salesOrderHeader.get("orderTypeId")) || !"ORDER_APPROVED".equals(salesOrderHeader.get("statusId"))) {
+                        continue;
+                    }
+
+                    quantity = quantityReceived > itemIssuanceQuantity? itemIssuanceQuantity : quantityReceived;
+
+                    if (quantity > 0.0) {
+                        String orderId = itemIssuance.getString("orderId");
+
+                        fulfilledOrderData = fulfilledOrderDatas.get(orderId);
+                        if (fulfilledOrderData == null) {
+                            fulfilledOrderData = UtilMisc.toMap("salesOrderId", orderId, "quantityFulfilled", new Double(quantity));
+                        } else {
+                            last = (fulfilledOrderData.get("quantityFulfilled") == null ? 0 : fulfilledOrderData.get("quantityFulfilled").doubleValue());
+                            fulfilledOrderData.put("quantityFulfilled", new Double(last + quantity));
+                        }
+                        fulfilledOrderDatas.put(orderId, fulfilledOrderData);
+                    }
+                }
+            }
+
+            // Get the inventory reservations related to this receipt (this will show back orders
+            // fulfilled for yet-to-be-shipped items)
+            oisgrs = delegator.findByAnd("OrderItemShipGrpInvRes", UtilMisc.toMap("inventoryItemId", rec.get("inventoryItemId")));
+            if (!UtilValidate.isEmpty(oisgrs)) {
+                oisgrIter = oisgrs.iterator();
+
+                while (oisgrIter.hasNext()) {
+                    oisgr = oisgrIter.next();
+                    oisgrQuantity = oisgr.getDouble("quantity") != null? oisgr.getDouble("quantity").doubleValue() : 0.0;
+
+                    salesOrderId = oisgr.getString("orderId");
+                    salesOrderHeader = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap("orderId", salesOrderId));
+
+                    if ((salesOrderHeader == null) || !"SALES_ORDER".equals(salesOrderHeader.getString("orderTypeId")) || !"ORDER_APPROVED".equals(salesOrderHeader.get("statusId"))) {
+                        continue;
+                    }
+
+                    quantity = quantityReceived > oisgrQuantity? oisgrQuantity : quantityReceived;
+
+                    if (quantity > 0.0) {
+                        String orderId = oisgr.getString("orderId");
+
+                        fulfilledOrderData = fulfilledOrderDatas.get(orderId);
+                        if (fulfilledOrderData == null) {
+                            fulfilledOrderData = UtilMisc.toMap("salesOrderId", orderId, "quantityFulfilled", new Double(quantity));
+                        } else {
+                            last = (fulfilledOrderData.get("quantityFulfilled") == null ? 0 : fulfilledOrderData.get("quantityFulfilled").doubleValue());
+                            fulfilledOrderData.put("quantityFulfilled", new Double(last + quantity));
+                        }
+                        fulfilledOrderDatas.put(orderId, fulfilledOrderData);
+                    }
+                }
+            }
+        }
+    }
+
+    // group the quantity received
+    totalReceivedGrouped = (data.get("quantityReceived") == null ? 0 : data.get("quantityReceived").doubleValue());
+    totalReceivedGrouped += totalReceived;
+    data.put("quantityReceived", totalReceivedGrouped);
+
+    data.put("fulfilledOrderDatas", fulfilledOrderDatas);
+
+    productDatas.put(productId, data);
+}
+
+// we have to deconstruct the maps and tree maps into a flatter set of data
+rows = new ArrayList(productDatas.values()); // ArrayList for using sort_by in ftl
+for (iter = rows.iterator(); iter.hasNext(); ) {
+    row = iter.next();
+    fulfilledOrderDatas = row.remove("fulfilledOrderDatas");
+    if (fulfilledOrderDatas == null || fulfilledOrderDatas.size() == 0) continue;
+    row.put("fulfilledOrderDatas", fulfilledOrderDatas.values());
+}
+
+context.put("productDatas", rows);

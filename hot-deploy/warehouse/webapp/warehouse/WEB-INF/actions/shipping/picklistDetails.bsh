@@ -1,0 +1,184 @@
+
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.*;
+import org.opentaps.common.order.UtilOrder;
+import org.opentaps.common.product.UtilProduct;
+import java.math.BigDecimal;
+
+
+// facility id
+facilityId = parameters.get("facilityId");
+
+// get the given ID and picklist
+picklistId  = UtilCommon.getParameter(context, "picklistId");
+if (picklistId == null) return;
+
+picklist = delegator.findByPrimaryKey("Picklist", UtilMisc.toMap("picklistId", picklistId));
+if (picklist == null) return;
+context.put("picklist", picklist);
+
+// make history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("WarehousePicklistHistory", locale, UtilMisc.toMap("picklistId", picklistId)), "picklistDetails", UtilMisc.toList("picklistId"));
+
+picklistInfo = picklist.getAllFields();
+if (UtilValidate.isNotEmpty(picklistInfo.get("shipmentMethodTypeId"))) {
+    picklistInfo.put("shipmentMethodTypeDescription", delegator.findByPrimaryKeyCache("ShipmentMethodType", UtilMisc.toMap("shipmentMethodTypeId", picklistInfo.get("shipmentMethodTypeId"))).get("description"));
+}
+context.put("picklistInfo", picklistInfo);
+
+
+// For each valid picklist, get the picklist items
+cond = UtilMisc.toList(new EntityExpr("pPicklistId", EntityOperator.EQUALS, picklistId));
+
+picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+
+
+// Assemble the picklist items into a map of bin# -> {orderId -> {shipGroupSeqId -> [picklist items]}}
+itemsByGroup = new HashMap(); // bin# -> {orderId -> {shipGroupSeqId -> [picklist items]}}
+
+// map bin numbers to their ids
+binIds = new HashMap();
+hasNotPackedOisg = new HashMap();
+context.put("hasNotPackedOisg", hasNotPackedOisg);
+
+for (picklistItem : picklistItems) {
+
+    binNumber = picklistItem.get("pbBinLocationNumber");
+    binId = picklistItem.get("pbPicklistBinId");
+    binIds.put(binNumber, binId);
+    orderId = picklistItem.get("oisgOrderId");
+    shipGroupSeqId = picklistItem.get("oisgShipGroupSeqId");
+    orderItemSeqId = picklistItem.get("oiOrderItemSeqId");
+    inventoryItemId = picklistItem.get("piInventoryItemId");
+    oisgStatusId = picklistItem.get("oisgStatusId");
+    if (!hasNotPackedOisg.containsKey(shipGroupSeqId)) {
+        hasNotPackedOisg.put(shipGroupSeqId, false);
+    }
+    // if the whole ship group is not already packed, check the picklist items
+    if (!"OISG_PACKED".equals(oisgStatusId)) {
+        hasNotPackedOisg.put(shipGroupSeqId, true);
+        // is this picklist item fully issued
+        issuances = delegator.findByAnd("ItemIssuance", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "shipGroupSeqId", shipGroupSeqId, "inventoryItemId", inventoryItemId));
+        BigDecimal quantityIssued = BigDecimal.ZERO;
+        for (issuance : issuances) {
+            quantityIssued = quantityIssued.add(BigDecimal.valueOf(issuance.getDouble("quantity")));
+        }
+
+        BigDecimal piQuantity = BigDecimal.valueOf(picklistItem.getDouble("piQuantity"));
+
+        if (quantityIssued.compareTo(piQuantity) == 0) {
+            hasNotPackedOisg.put(shipGroupSeqId, false);
+        }
+    }
+
+    // {orderId -> {shipGroupSeqId -> [picklist items]}}
+    binOrders = itemsByGroup.containsKey(binNumber) ? itemsByGroup.get(binNumber) : new HashMap();
+    itemsByGroup.put(binNumber, binOrders);
+
+    // {shipGroupSeqId -> [picklist items]}
+    orderShipGroups = binOrders.containsKey(orderId) ? binOrders.get(orderId) : new HashMap();
+    binOrders.put(orderId, orderShipGroups);
+
+    // [picklist items]
+    shipGroupItems = orderShipGroups.containsKey(shipGroupSeqId) ? orderShipGroups.get(shipGroupSeqId) : new ArrayList();
+    orderShipGroups.put(shipGroupSeqId, shipGroupItems);
+    picklistItemMap = picklistItem.getAllFields();
+    productId = picklistItem.get("oiProductId");
+    product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
+    picklistItemMap.put("upc", UtilProduct.getProductUPC(productId, delegator));
+    picklistItemMap.put("internalName", product.get("internalName"));
+    picklistItemMap.put("shipGroupSeqId", shipGroupSeqId);
+    picklistItemMap.put("orderItemSeqId", orderItemSeqId);
+    picklistItemMap.put("inventoryItemId", inventoryItemId);
+    picklistItemMap.put("oisgStatusId", oisgStatusId);
+    shipGroupItems.add(picklistItemMap);
+}
+
+// Walk the structure above and assemble maps of shipGroup/picklistItem and order data
+orderData = new HashMap();
+picklistData = new HashMap();
+
+for (binNumber : itemsByGroup.keySet()) {
+    binShipGroups = picklistData.containsKey(binNumber) ? picklistData.get(binNumber) : new HashMap();
+    picklistData.put(binNumber, binShipGroups);
+    for (orderId : itemsByGroup.get(binNumber).keySet()) {
+
+        // Get the order header and other order data and add it to the map of orderId -> orderData
+        orderHeader = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId)).getAllFields();
+        orderHeader.put("shipToCustomerName", UtilOrder.getShipToCustomerPartyName(delegator, orderId, false));
+        orderHeader.put("poNumber", UtilOrder.getCustomerPoNumber(delegator, orderId));
+        orderData.put(orderId, orderHeader);
+
+        // Get data for each ship group and add it to the map of bin -> {shipGroup -> [picklistItems]}
+        for (shipGroupSeqId : itemsByGroup.get(binNumber).get(orderId).keySet()) {
+            shipGroup = delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderId, "shipGroupSeqId", shipGroupSeqId)).getAllFields();
+            if (UtilValidate.isNotEmpty(shipGroup.get("carrierParytId"))) {
+                shipGroup.put("carrierPartyName", PartyHelper.getPartyName(delegator, shipGroup.get("carrierPartyId"), false));
+            }
+            binShipGroups.put(shipGroup, itemsByGroup.get(binNumber).get(orderId).get(shipGroupSeqId));
+        }
+    }
+}
+
+context.put("orderData", orderData);
+context.put("picklistData", picklistData);
+context.put("binIds", binIds);
+
+picklistInfo = context.get("picklistInfo");
+if (picklistInfo != null) {
+    // get the picklist status
+    status = picklist.getRelatedOneCache("StatusItem");
+    picklistInfo.put("statusDescription", status.get("description", locale));
+    statusId = status.get("statusId");
+
+    // check if the picklist is "open", means we can manage it (move items to other picklists, change status, etc ..)
+    picklistIsOpen = true;
+    if ("PICKLIST_PICKED".equals(statusId)) {
+        context.put("isPicklistPicked", true);
+        picklistIsOpen = false;
+    }
+    if ("PICKLIST_CANCELLED".equals(statusId) || "PICKLIST_COMPLETED".equals(statusId)) {
+        picklistIsOpen = false;
+    }
+
+    if (picklistIsOpen) {
+        context.put("picklistIsOpen", picklistIsOpen);
+        // get list of valid status changes
+        statusValidChangeToDetailList = picklist.getRelated("StatusValidChangeToDetail", UtilMisc.toList("sequenceId"));
+        picklistInfo.put("statusValidChangeToDetailList", statusValidChangeToDetailList);
+        // get list of active picklists, used to reassign picklist item to another picklist
+        invalidStatus = UtilMisc.toList( "PICKLIST_PICKED", "PICKLIST_CANCELLED", "PICKLIST_COMPLETED" );
+        picklistActiveList1 = delegator.findByAnd("Picklist", UtilMisc.toList(
+                                   new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
+                                   new EntityExpr("statusId", EntityOperator.NOT_IN, invalidStatus)
+                                 ), UtilMisc.toList("picklistDate"));
+        // and lookup at their status descriptions
+        picklistActiveList2 = new ArrayList();
+        for (pl: picklistActiveList1) {
+            p = pl.getAllFields();
+            status = pl.getRelatedOneCache("StatusItem");
+            p.put("statusDescription", status.get("description", locale));
+            picklistActiveList2.add( p );
+        }
+        context.put("picklistActiveList", picklistActiveList2);
+    }
+}

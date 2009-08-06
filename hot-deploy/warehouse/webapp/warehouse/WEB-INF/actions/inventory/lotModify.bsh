@@ -1,0 +1,74 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.common.util.*;
+import org.opentaps.warehouse.security.WarehouseSecurity;
+
+// This security-related code is duplicating the work done in main-decorator.bsh
+// (under component://warehouse/webapp/warehouse/WEB-INF/actions/include), due to
+// they way they screen widgets work in general, and the way they are currently
+// setup in the Warehouse application
+
+lotId = parameters.get("lotId");
+lot = delegator.findByPrimaryKey("Lot", UtilMisc.toMap("lotId", lotId));
+
+if (lot != null) {
+    modifyPermissionId = "WRHS_INV_LOT_UPDATE";
+} else {
+    modifyPermissionId = "WRHS_INV_LOT_CREATE";
+}
+
+facilityId = parameters.get("facilityId");
+warehouseSecurity = session.getAttribute("warehouseSecurity");
+
+if (warehouseSecurity == null) {
+    // For some strange reason, the warehouseSecurity object is not always available as a session
+    // variable; this appears to be related to the main-decorator screen setup problem.  This
+    // (temporary) solution will ensure that this object will always be available, but again,
+    // this is a temporary solution that will be used until the issue with main-decorator is
+    // sorted out.  Again, this is (partly) a duplication of work done in "main-decorator.bsh".
+    warehouseSecurity = new WarehouseSecurity(security, userLogin, facilityId);
+    session.setAttribute("warehouseSecurity", warehouseSecurity);
+}
+
+hasLotModifyPermission = warehouseSecurity.hasFacilityPermission(modifyPermissionId);
+context.put("hasLotModifyPermission", hasLotModifyPermission);
+
+if (hasLotModifyPermission) {
+    if (lot != null) {
+        lot.setNonPKFields(parameters); // To make sure that any previously user-entered values are not lost
+        context.put("lot", lot);
+    }
+
+    uomCond = new EntityExpr("uomTypeId", EntityOperator.IN,
+        UtilMisc.toList("WEIGHT_MEASURE", "VOLUME_LIQ_MEASURE", "VOLUME_DRY_MEASURE"));
+    uoms = delegator.findByConditionCache("Uom", uomCond, null, UtilMisc.toList("uomTypeId", "abbreviation"));
+    context.put("uoms", uoms);
+
+    defaultUomId = UtilProperties.getPropertyValue("warehouse", "warehouse.inventory.lots.defaultUomId");
+    if ((lot != null) && (lot.getString("uomId") != null)) {
+        defaultUomId = lot.getString("uomId");
+    }
+    context.put("defaultUomId", defaultUomId);
+
+    defaultExpirationDate = "23:59";
+    if ((lot != null) && (lot.getTimestamp("expirationDate") != null)) {
+        defaultExpirationDate = lot.getTimestamp("expirationDate").toString();
+    }
+    context.put("defaultExpirationDate", defaultExpirationDate);
+}

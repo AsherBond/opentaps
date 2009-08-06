@@ -1,0 +1,153 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file has been modified by Open Source Strategies, Inc. */
+
+
+import javolution.util.FastMap;
+import javolution.util.FastList;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.warehouse.WarehouseHelper;
+
+orderId = parameters.get("orderId");
+if (orderId == null) return;
+
+shipGroupSeqId = parameters.get("shipGroupSeqId");
+facilityId = parameters.get("facilityId");
+
+// if a particular ship group is requested, we will limit ourselves to it
+findMap = UtilMisc.toMap("orderId", orderId);
+if (shipGroupSeqId != null) findMap.put("shipGroupSeqId", shipGroupSeqId);
+
+shipGroups = delegator.findByAnd("OrderItemShipGroup", findMap, UtilMisc.toList("shipGroupSeqId"));
+context.put("shipGroups", shipGroups);
+
+// method to expand the marketing packages
+FastList expandProductGroup(product, quantityInGroup, quantityShipped, quantityOpen) {
+    sublines = FastList.newInstance();
+    associations = product.getRelatedByAnd("MainProductAssoc", UtilMisc.toMap("productAssocTypeId", "MANUF_COMPONENT"));
+    associations = EntityUtil.filterByDate( associations );
+    for (iter = associations.iterator(); iter.hasNext(); ) {
+        association = iter.next();
+        line = FastMap.newInstance();
+        line.put("product", association.getRelatedOne("AssocProduct"));
+
+        // determine the quantities
+        quantityComposed = (association.getDouble("quantity") == null ? 0 : association.getDouble("quantity").doubleValue());
+        line.put("quantityInGroup", quantityInGroup * quantityComposed);
+        line.put("quantityShipped", quantityShipped * quantityComposed);
+        line.put("quantityOpen", quantityOpen * quantityComposed);
+
+        sublines.add(line);
+    }
+    return sublines;
+}
+
+groupData = FastMap.newInstance();
+for (iter = shipGroups.iterator(); iter.hasNext(); ) {
+    shipGroup = iter.next();
+    data = FastMap.newInstance();
+
+    address = shipGroup.getRelatedOne("PostalAddress");
+    data.put("address", address);
+
+    phoneNumber = shipGroup.getRelatedOne("TelecomTelecomNumber");
+    data.put("phoneNumber", phoneNumber);
+
+    carrierShipmentMethod = shipGroup.getRelatedOne("CarrierShipmentMethod");
+    if (carrierShipmentMethod != null) {
+        data.put("carrierShipmentMethod", carrierShipmentMethod);
+        data.put("shipmentMethodType", carrierShipmentMethod.getRelatedOneCache("ShipmentMethodType"));
+    }
+
+    // the lines in a page, each line being a row of data to display
+    lines = FastList.newInstance();
+
+    // process the order item reservations, each being a line item for the group
+    reservationsConditions = UtilMisc.toMap("orderId", orderId, "shipGroupSeqId", shipGroup.get("shipGroupSeqId"));
+    if (UtilValidate.isNotEmpty(facilityId)) {
+        reservationsConditions.put("facilityId", facilityId);
+    }
+
+    reservations = delegator.findByAnd("OrderItemShipGrpInvResAndItem", reservationsConditions, UtilMisc.toList("orderItemSeqId"));
+    for (riter = reservations.iterator(); riter.hasNext(); ) {
+        reservation = riter.next();
+        orderItem = delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", reservation.get("orderId"), "orderItemSeqId", reservation.get("orderItemSeqId")));
+        product = orderItem.getRelatedOne("Product");
+        line = FastMap.newInstance();
+
+        // the quantity shipped
+        quantityShipped = 0.0;
+        List issuances = delegator.findByAnd("ItemIssuance", UtilMisc.toMap("orderId", reservation.get("orderId"), "orderItemSeqId", reservation.get("orderItemSeqId"), "shipGroupSeqId", reservation.get("shipGroupSeqId"), "inventoryItemId", reservation.get("inventoryItemId")));
+        for (iiter = issuances.iterator(); iiter.hasNext(); ) {
+            issuance = iiter.next();
+            quantityShipped += issuance.get("quantity").doubleValue();
+        }
+
+        // the quantity open (ordered - shipped)
+        quantityOpen = reservation.get("quantity").doubleValue();
+        if (reservation.get("quantityNotAvailable") != null) {
+            quantityOpen -= reservation.get("quantityNotAvailable").doubleValue();
+        }
+
+        // the quantity in group
+        quantityInGroup = quantityOpen + quantityShipped;
+        if (reservation.get("quantityNotAvailable") != null) {
+            quantityInGroup += reservation.get("quantityNotAvailable").doubleValue();
+        }
+
+        line.put("orderItem", orderItem);
+        line.put("product", product);
+        line.put("quantityInGroup", quantityInGroup);
+        line.put("quantityShipped", quantityShipped);
+        line.put("quantityOpen", reservation.get("quantity"));
+
+        if ("MARKETING_PKG_AUTO".equals(product.get("productTypeId"))) {
+            sublines = expandProductGroup(product, quantityInGroup, quantityShipped, quantityOpen);
+            line.put("expandedList", sublines);
+        }
+
+        // the lot ID
+        line.put("lotId", reservation.get("lotId"));
+
+        lines.add(line);
+    }
+    data.put("lines", lines);
+    
+    // Order notes
+    orderNotes = new ArrayList();
+    notes = delegator.findByAnd("OrderHeaderNoteView", UtilMisc.toMap("orderId", orderId, "internalNote", "N"), UtilMisc.toList("noteDateTime DESC"));
+    nit = notes.iterator();
+    while (nit.hasNext()) {
+        note = nit.next().getAllFields();
+        notePartyId = note.get("noteParty");
+        if (UtilValidate.isNotEmpty(notePartyId)) {
+            notePartyName = PartyHelper.getPartyName(delegator, notePartyId, false);
+            note.put("notePartyName", notePartyName);
+        }
+        orderNotes.add(note);
+    }
+    data.put("orderNotes", orderNotes);
+    
+    groupData.put(shipGroup.get("shipGroupSeqId"), data);
+}
+context.put("groupData", groupData);

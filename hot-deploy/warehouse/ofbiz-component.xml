@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<ofbiz-component name="warehouse"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+    <resource-loader name="main" type="component"/>
+    <classpath type="jar" location="build/lib/*"/>
+    <classpath type="dir" location="script"/>
+    <classpath type="dir" location="config"/>
+    
+    <!-- seed data which will be loaded on "ant run-install" and "ant run-install-seed" -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/WarehouseSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/WarehouseSecurityData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ContextHelpResourceSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/WarehouseScheduledServices.xml"/>
+
+    <!-- demo data which will be loaded only on "ant run-install" -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/WarehouseShippingData.xml"/>  <!-- must be demo because UPS is a demo Party in OFBIZ -->
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/WarehouseDemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/WarehouseDemoOutsourcedTask.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/WarehouseDemoDisassembly.xml"/>
+    <!-- third party inventory demo -->
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoThirdPartyWarehouse.xml"/>
+
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoConfigurable.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoKeyboardShortcuts.xml"/>
+
+
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+
+    <service-resource type="model" loader="main" location="servicedef/services_configuration.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_facility.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_inventory.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_manufacturing.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_shipping.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_manufacturing.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_shipping.xml"/>
+
+    <webapp name="warehouse"
+        title="Warehouse"
+        server="default-server"
+        location="webapp/warehouse"
+        mount-point="/warehouse"
+        base-permission="WRHS"
+        app-bar-display="true"/>
+
+    <webapp name="warehousegwt"
+        title="GWT Part of Warehouse Application"
+        server="default-server"
+        location="webapp/warehousegwt"
+        mount-point="/warehousegwt"
+        app-bar-display="false"/>
+
+</ofbiz-component>

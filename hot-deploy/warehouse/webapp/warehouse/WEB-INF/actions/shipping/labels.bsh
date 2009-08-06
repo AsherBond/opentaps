@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+// make a list builder of segments to be printed
+
+labelsListBuilder() {
+  entityName = "ShipmentPackageRouteDetail";
+  where = UtilMisc.toList(
+      new EntityConditionList( UtilMisc.toList(
+          new EntityExpr("labelPrinted", EntityOperator.EQUALS, "N"),
+          new EntityExpr("labelPrinted", EntityOperator.EQUALS, null)
+      ), EntityOperator.OR),
+      new EntityExpr("carrierServiceStatusId", EntityOperator.IN, UtilMisc.toList("SHRSCS_ACCEPTED", "SHRSCS_CONFIRMED"))
+  );
+
+  build(page) {
+      newPage = FastList.newInstance();
+      for (row : page) {
+          newRow = FastMap.newInstance();
+          newRow.putAll(row.getAllFields());
+          carrier = delegator.findByPrimaryKeyCache("PartyGroup", UtilMisc.toMap("partyId", row{"carrierPartyId"}));
+          newRow{"carrierName"} = carrier{"groupName"};
+          shipmethod = delegator.findByPrimaryKeyCache("ShipmentMethodType", UtilMisc.toMap("shipmentMethodTypeId", row{"shipmentMethodTypeId"}));
+          if (shipmethod != null) {
+              newRow{"shipmentMethod"} = shipmethod{"description"};
+          }
+          newPage.add(newRow);
+      }
+      return newPage;
+  }
+  
+  return this;
+}
+context{"labelsListBuilder"} = labelsListBuilder();

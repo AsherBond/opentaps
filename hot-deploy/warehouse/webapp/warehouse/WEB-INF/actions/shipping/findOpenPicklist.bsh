@@ -1,0 +1,125 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import java.util.ArrayList;
+import java.sql.Timestamp;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.accounting.invoice.InvoiceWorker;
+import org.ofbiz.shipment.picklist.PickListServices;
+
+// facility id
+facilityId = parameters.get("facilityId");
+
+// the picklist status we do not look for
+invalidStatus = UtilMisc.toList( "PICKLIST_PICKED", "PICKLIST_CANCELLED", "PICKLIST_COMPLETED" );
+validStatus = delegator.findByAnd("StatusItem", UtilMisc.toList(
+  new EntityExpr("statusId", EntityOperator.NOT_IN, invalidStatus),
+  new EntityExpr("statusTypeId", EntityOperator.EQUALS, "PICKLIST_STATUS")
+ ));
+// used in the form to filter search by status
+context.put("validPicklistStatus", validStatus);
+
+// get the search parameters
+picklistId  = UtilCommon.getParameter(context, "picklistId");
+statusId    = UtilCommon.getParameter(context, "statusId");
+performFind = UtilCommon.getParameter(context, "performFind");
+
+// after updating the status of a picklist check if the status is valid for this list else 
+// reset the filters
+if (statusId != null && invalidStatus.contains(statusId)) {
+    Debug.logInfo("Reseting params because we found invlaid status after update", "");
+    statusId = null;
+    picklistId = null;
+    parameters.remove("picklistId");
+    parameters.remove("statusId");
+}
+
+// if any of the parameter is given, force performFind to Y
+/*if (picklistId != null || statusId != null) {
+    performFind = "Y";
+    }*/
+
+// now check if we want to actually do a find, which is triggered by performFind = Y
+//if (!"Y".equals(performFind)) return;
+
+
+// build search conditions
+search = UtilMisc.toList( 
+   new EntityExpr("statusId", EntityOperator.NOT_IN, invalidStatus),
+   new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId)
+ );
+
+// add user given search conditions
+if (picklistId != null) {
+    search.add( new EntityExpr("picklistId", EntityOperator.LIKE, picklistId+'%') );
+}
+if (statusId != null) {
+    search.add( new EntityExpr("statusId", EntityOperator.EQUALS, statusId) );
+}
+
+// Pagination
+picklistListBuilder() {
+    entityName = "Picklist";
+    where = search;
+    orderBy = UtilMisc.toList("-picklistDate");
+
+    build( page ) {
+        newPage = FastList.newInstance();
+        for (pl: page) {
+            newRow = FastMap.newInstance();
+            newRow.putAll(pl.getAllFields());
+            
+            status = pl.getRelatedOneCache("StatusItem");
+            newRow{"statusDescription"} = status.get("description", locale);
+            
+            picklistInfo = new HashMap();
+            picklistInfo.put("picklist", pl);
+            picklistInfo.put("statusItem", status);
+            shipmentMethodTypeId = pl.get("shipmentMethodTypeId");
+            if (UtilValidate.isNotEmpty(shipmentMethodTypeId)) {
+                newRow{"shipmentMethodTypeDescription"} = delegator.findByPrimaryKeyCache("ShipmentMethodType", UtilMisc.toMap("shipmentMethodTypeId", shipmentMethodTypeId)).get("description");
+            }
+
+            orders = new HashSet();
+            picklistBinList = pl.getRelated("PicklistBin", UtilMisc.toList("+binLocationNumber"));
+            picklistItemCount = 0;
+            for (plb: picklistBinList) {
+                picklistItemList = plb.getRelated("PicklistItem");
+                for (pli: picklistItemList) {
+                    orders.add(pli.get("orderId"));
+                    picklistItemCount ++;
+                }
+            }
+            picklistInfo.put("picklistItemCount", picklistItemCount);
+            picklistInfo.put("picklistOrderCount", orders.size());
+            newRow{"picklistInfo"} = picklistInfo;
+            newPage.add(newRow);
+        }
+        return newPage;
+    }
+
+    return this;
+}
+context.put("picklistListBuilder", picklistListBuilder());

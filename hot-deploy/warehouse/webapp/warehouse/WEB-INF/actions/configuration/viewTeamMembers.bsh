@@ -1,0 +1,39 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+
+// check for facility configuration permission
+userLogin = request.getAttribute("userLogin");
+warehouseSecurity = session.getAttribute("warehouseSecurity");
+hasConfigPermission = warehouseSecurity.hasFacilityPermission("WRHS_CONFIG");
+context.put("hasConfigPermission", hasConfigPermission);
+
+// get the facility team members
+UtilMisc.toMap("facilityId", session.getAttribute("facilityId"));
+conditions = UtilMisc.toList(
+        new EntityExpr("facilityId", EntityOperator.EQUALS, session.getAttribute("facilityId")),
+        EntityUtil.getFilterByDateExpr()
+        );
+teamMembers = delegator.findByAnd("FacilityPartyPermissionDetail", conditions);
+context.put("teamMembers", teamMembers);
+
+// get the security group roles for the team members
+roles = delegator.findAllCache("FacilityTeamRoleSecurity", UtilMisc.toList("sequenceNum"));
+context.put("roles", roles);

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entity-engine-xml>
+
+    <!-- Some sample warehouse users.  Security configuration note:
+     Every user of the warehouse application must have WRHS_VIEW permission which means he/she must be configured in Party Manager to have a WRHS_ security permission group.
+     In addition, he/she must be configured to be a user of a particular warehouse in Warehouse > Configuration >> Team Member.
+
+     By default, DemoEmployee1 is configured to be admin of WebStoreWarehouse, DemoEmployee2 is configured to be admin of MyRetailStore,
+     DemoEmployee3 has login to warehouse app but no rights to any warehouse, and DemoShipper1 is a shipper in WebStoreWarehouse -->
+
+    <Party partyId="DemoEmployee1" partyTypeId="PERSON"/>
+    <Person partyId="DemoEmployee1" firstName="Demo" lastName="Employee One"/>
+    <UserLogin partyId="DemoEmployee1" userLoginId="demowarehouse1" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
+    <UserLoginSecurityGroup userLoginId="demowarehouse1" groupId="WRHS_ADMIN" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="830" fromDate="2005-12-01 00:00:00" userLoginId="demowarehouse1"/>
+
+    <Party partyId="DemoEmployee2" partyTypeId="PERSON"/>
+    <Person partyId="DemoEmployee2" firstName="Demo" lastName="Employee Two"/>
+    <UserLogin partyId="DemoEmployee2" userLoginId="demowarehouse2" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
+    <UserLoginSecurityGroup userLoginId="demowarehouse2" groupId="WRHS_USER" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="831" fromDate="2005-12-01 00:00:00" userLoginId="demowarehouse2"/>
+
+    <Party partyId="DemoShipper1" partyTypeId="PERSON"/>
+    <Person partyId="DemoShipper1" firstName="Demo" lastName="Shipper One"/>
+    <UserLogin partyId="DemoShipper1" userLoginId="demoshipper1" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
+    <UserLoginSecurityGroup userLoginId="demoshipper1" groupId="WRHS_USER" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="832" fromDate="2005-12-01 00:00:00" userLoginId="demoshipper1"/>
+
+    <Party partyId="DemoEmployee3" partyTypeId="PERSON"/>
+    <Person partyId="DemoEmployee3" firstName="Demo" lastName="Employee Three"/>
+    <UserLogin partyId="DemoEmployee3" userLoginId="demowarehouse3" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
+    <UserLoginSecurityGroup userLoginId="demowarehouse3" groupId="WRHS_USER" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="833" fromDate="2005-12-01 00:00:00" userLoginId="demowarehouse3"/>
+
+    <FacilityPartyPermission facilityId="WebStoreWarehouse" partyId="DemoEmployee1" securityGroupId="WRHS_MANAGER" fromDate="2007-01-01 00:00:00"/>
+    <FacilityPartyPermission facilityId="MyRetailStore" partyId="DemoEmployee2" securityGroupId="WRHS_MANAGER" fromDate="2007-01-01 00:00:00"/>
+    <FacilityPartyPermission facilityId="WebStoreWarehouse" partyId="DemoShipper1" securityGroupId="WRHS_SHIPPER" fromDate="2007-01-01 00:00:00"/>
+
+    <!-- an expired relationship for testing -->
+    <FacilityPartyPermission facilityId="MyRetailStore" partyId="DemoEmployee1" securityGroupId="WRHS_MANAGER" fromDate="2006-01-01 00:00:00" thruDate="2007-01-01 00:00:00"/>
+
+    <!-- also add in admin and flexadmin for ofbiz demo purposes -->
+    <UserLoginSecurityGroup userLoginId="admin" groupId="WRHS_ADMIN" fromDate="2007-01-01 00:00:00"/>
+    <UserLoginSecurityGroup userLoginId="flexadmin" groupId="WRHS_ADMIN" fromDate="2007-01-01 00:00:00"/>
+
+    <!-- Here are the roles required to perform various actions -->
+    <PartyRole partyId="DemoEmployee1" roleTypeId="PICKER"/>
+    <PartyRole partyId="DemoEmployee2" roleTypeId="PICKER"/>
+
+    <!-- Some sample lot level data -->
+    <Lot lotId="1000" creationDate="2007-05-21 10:00:00" supplierPartyId="DemoSupplier" comments="A sample lot"/>
+    <Lot lotId="1001" creationDate="2007-05-21 10:00:00" supplierPartyId="DemoSupplier" comments="Another sample lot"/>
+
+    <InventoryItem inventoryItemId="9000" lotId="1000"/>
+    <InventoryItem inventoryItemId="9001" lotId="1001"/>
+    <InventoryItem inventoryItemId="9002" lotId="1000"/>
+    <InventoryItem inventoryItemId="9003" lotId="1001"/>
+
+    <!-- Here's a product which is manufactured internally.  It has several cost components and which should be credited
+    against WIP inventory when it's received in warehouse -->
+    <Product productTypeId="FINISHED_GOOD" productId="demowip" internalName="Internally Manufactured Product" productName="Internally Manufactured Product" description="This product is internally manufactured"/>
+    <CostComponent costComponentId="7001" costComponentTypeId="EST_STD_MAT_COST" productId="demowip" fromDate="2007-01-01 00:00:00" cost="0.765" costUomId="USD"/>
+    <CostComponent costComponentId="7002" costComponentTypeId="EST_STD_ROUTE_COST" productId="demowip" fromDate="2007-01-01 00:00:00" cost="0.550" costUomId="USD"/>
+    <CostComponent costComponentId="7003" costComponentTypeId="EST_STD_LABOR_COST" productId="demowip" fromDate="2007-01-01 00:00:00" cost="2.395" costUomId="USD"/>
+    <CostComponent costComponentId="7004" costComponentTypeId="EST_STD_OTHER_COST" productId="demowip" fromDate="2007-01-01 00:00:00" cost="1.285" costUomId="USD"/>
+    <ProductGlAccount productId="demowip" organizationPartyId="Company" glAccountTypeId="UNINVOICED_SHIP_RCPT" glAccountId="142000"/>
+    <ProductPrice productId="demowip" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" price="25.00" productStoreGroupId="_NA_" fromDate="2007-01-01 00:00:00"/>
+    <ProductPrice productId="demowip" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" price="30.00" productStoreGroupId="_NA_" fromDate="2007-01-01 00:00:00"/>
+
+    <!-- A product manufactured internally that have multiple BOMs -->
+    <Product productTypeId="FINISHED_GOOD" productId="MULTIBOM" internalName="Internally Manufactured Product with Multiple BOM" productName="Internally Manufactured Product with Multiple BOM" description="This product is internally manufactured and has multiple BOM"/>
+    <ProductPrice productId="MULTIBOM" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" price="25.00" productStoreGroupId="_NA_" fromDate="2007-01-01 00:00:00"/>
+    <ProductPrice productId="MULTIBOM" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" price="30.00" productStoreGroupId="_NA_" fromDate="2007-01-01 00:00:00"/>
+    <!-- materials -->
+    <Product productTypeId="RAW_MATERIAL" productId="MULTIBOM-MAT1" internalName="Material for Product with Multiple BOM" productName="Material for Product with Multiple BOM" description="Material for Product with Multiple BOM"/>
+    <Product productTypeId="RAW_MATERIAL" productId="MULTIBOM-MAT2" internalName="Material for Product with Multiple BOM" productName="Material for Product with Multiple BOM" description="Material for Product with Multiple BOM"/>
+    <Product productTypeId="RAW_MATERIAL" productId="MULTIBOM-MAT3" internalName="Material for Product with Multiple BOM" productName="Material for Product with Multiple BOM" description="Material for Product with Multiple BOM"/>
+    <Product productTypeId="RAW_MATERIAL" productId="MULTIBOM-MAT4" internalName="Material for Product with Multiple BOM" productName="Material for Product with Multiple BOM" description="Material for Product with Multiple BOM"/>
+    <!-- a default routing -->
+    <WorkEffort workEffortId="P_MULTIBOM" workEffortTypeId="ROUTING" currentStatusId="ROU_ACTIVE" workEffortName="Default Production Run MULTIBOM" description="Default Production Run Template for MULTIBOM" revisionNumber="1" quantityToProduce="0"/>
+    <WorkEffort workEffortId="T_MULTIBOM" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_ASSEMBLING" currentStatusId="ROU_ACTIVE" workEffortName="Main task" description="Main Task for the default routing of MULTIBOM" revisionNumber="1" fixedAssetId="WORKCENTER_COST" estimatedMilliSeconds="2000000" estimatedSetupMillis="50000"/>
+    <WorkEffortAssoc workEffortIdFrom="P_MULTIBOM" workEffortIdTo="T_MULTIBOM" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="10" fromDate="2005-12-31 00:01:00.0"/>
+    <WorkEffortGoodStandard workEffortId="P_MULTIBOM" productId="MULTIBOM" workEffortGoodStdTypeId="ROU_PROD_TEMPLATE" statusId="WEGS_CREATED" fromDate="2005-12-31 00:01:00.0"/>
+    <!-- an alternate routing -->
+    <WorkEffort workEffortId="P_MULTIBOM2" workEffortTypeId="ROUTING" currentStatusId="ROU_ACTIVE" workEffortName="Alternate Production Run MULTIBOM" description="Alternate Production Run Template for MULTIBOM" revisionNumber="1" quantityToProduce="0"/>
+    <WorkEffort workEffortId="T_MULTIBOM2" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_ASSEMBLING" currentStatusId="ROU_ACTIVE" workEffortName="Main task" description="Main Task for the alternate routing of MULTIBOM" revisionNumber="1" fixedAssetId="WORKCENTER_COST" estimatedMilliSeconds="2000000" estimatedSetupMillis="50000"/>
+    <WorkEffortAssoc workEffortIdFrom="P_MULTIBOM2" workEffortIdTo="T_MULTIBOM2" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="10" fromDate="2005-12-31 00:01:00.0"/>
+    <WorkEffortGoodStandard workEffortId="P_MULTIBOM2" productId="MULTIBOM" workEffortGoodStdTypeId="ROU_PROD_TEMPLATE" statusId="WEGS_CREATED" fromDate="2005-12-31 00:01:00.0"/>
+    <!-- default BOM -->
+    <ProductAssoc productId="MULTIBOM" productIdTo="MULTIBOM-MAT1" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="10" quantity="2.0"/>
+    <ProductAssoc productId="MULTIBOM" productIdTo="MULTIBOM-MAT2" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="11" quantity="3.0"/>
+    <ProductAssoc productId="MULTIBOM" productIdTo="MULTIBOM-MAT3" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="12" quantity="4.0" specificRoutingWorkEffortId="P_MULTIBOM2"/>
+    <ProductAssoc productId="MULTIBOM" productIdTo="MULTIBOM-MAT4" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="13" quantity="5.0" specificRoutingWorkEffortId="P_MULTIBOM2"/>
+
+    <!-- add facility configuration to make it work with MRP -->
+    <ProductFacility productId="MULTIBOM" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="1" daysToShip="1"/>
+    <ProductFacility productId="MULTIBOM-MAT1" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <ProductFacility productId="MULTIBOM-MAT2" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <ProductFacility productId="MULTIBOM-MAT3" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <ProductFacility productId="MULTIBOM-MAT4" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+
+    <!-- Default shipping boxes -->
+    <WarehouseDefaultBoxType facilityId="WebStoreWarehouse" partyId="FEDEX" shipmentBoxTypeId="YOURPACKNG" />
+    <WarehouseDefaultBoxType facilityId="WebStoreWarehouse" partyId="UPS" shipmentBoxTypeId="YOURPACKNG" />
+    
+    <!-- allow demo ofbiz admin users to login to warehouse -->
+    <UserLoginSecurityGroup userLoginId="admin" groupId="WRHS_ADMIN" fromDate="2007-01-01 00:00:00"/>
+    <UserLoginSecurityGroup userLoginId="flexadmin" groupId="WRHS_ADMIN" fromDate="2007-01-01 00:00:00"/>
+    <UserLoginSecurityGroup userLoginId="ltdadmin" groupId="WRHS_ADMIN" fromDate="2007-01-01 00:00:00"/>
+
+</entity-engine-xml>

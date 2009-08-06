@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+ * Because productionRunId and workEffortId are the same, the ShowProductionRun screen has to check both.
+ *
+ * This script is different from ShowProductionRun.bsh in that it's a simple get/set script for
+ * the ShowProductionRun screen.  The other script is called from within the controller as an event 
+ * bsh script to control the workflow.
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.manufacturing.jobshopmgt.ProductionRun;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.manufacturing.OpentapsProductionRun;
+
+workEffortId = parameters.get("productionRunId");
+if (workEffortId == null) {
+    workEffortId = parameters.get("workEffortId");
+    parameters.put("productionRunId", workEffortId);
+}
+if (workEffortId == null) return;
+
+opentapsProductionRun = new OpentapsProductionRun(workEffortId, dispatcher);
+context.put("opentapsProductionRun", opentapsProductionRun);
+context.put("product", opentapsProductionRun.getProductOfProductionRun());
+// identify a possible missing WEGS problem
+if (opentapsProductionRun.exist() &&opentapsProductionRun.getProductProduced() == null) {
+    context.put("productProducedMissing", "Y");
+}
+
+productionRun = opentapsProductionRun.getProductionRun();
+context.put("productionRun", productionRun);
+
+statusId = productionRun.get("currentStatusId");
+statusItem = delegator.findByPrimaryKeyCache("StatusItem", UtilMisc.toMap("statusId", statusId));
+context.put("statusItem", statusItem);
+
+Iterator producedIt = (delegator.findByAnd("WorkEffortAndInventoryProduced", UtilMisc.toMap("workEffortId", workEffortId))).iterator();
+lotQuantities = new HashMap();
+while (producedIt.hasNext()) {
+    produced = producedIt.next();
+    inventoryItemId = produced.get("inventoryItemId");
+    Iterator detailIt = (delegator.findByAnd("InventoryItemDetail", UtilMisc.toMap("workEffortId", workEffortId, "inventoryItemId", inventoryItemId))).iterator();
+    while (detailIt.hasNext()) {
+        detail = detailIt.next();
+        inventoryItem = detail.getRelatedOne("InventoryItem");
+        String lotId = inventoryItem.getString("lotId");
+        Double producedToLot = lotQuantities.containsKey(lotId) ? (Double) lotQuantities.get(lotId) : new Double(0);
+        producedToLot = new Double(producedToLot.doubleValue() + detail.getDouble("quantityOnHandDiff").doubleValue());
+        lotQuantities.put(lotId, producedToLot);
+    }
+}
+context.put("quantitiesByLot", lotQuantities);
+context.put("inventoryItemTypes", delegator.findAll("InventoryItemType", UtilMisc.toList("description")));
+
+// until we refactor the atrocious screen layout, we have to do this
+if ("WEPT_PRODUCTION_RUN".equals(productionRun.get("workEffortPurposeTypeId"))) {
+    context.put("pageTitleLabel", UtilMessage.expandLabel("WarehouseEditProductionRun", locale));
+    context.put("sectionHeaderUiLabel", UtilMessage.expandLabel("WarehouseEditProductionRun", locale));
+} else {
+    context.put("pageTitleLabel", UtilMessage.expandLabel("WarehouseReverseAssembly", locale));
+    context.put("sectionHeaderUiLabel", UtilMessage.expandLabel("WarehouseReverseAssembly", locale));
+}
+
+// put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("WarehouseProductionRunHistory", locale, UtilMisc.toMap("productionRunId", workEffortId)), "ShowProductionRun", UtilMisc.toList("productionRunId"));

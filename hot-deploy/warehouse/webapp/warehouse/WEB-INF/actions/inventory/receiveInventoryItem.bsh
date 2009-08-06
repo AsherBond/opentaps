@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.ServiceUtil;
+import org.ofbiz.entity.condition.*;
+
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.warehouse.security.WarehouseSecurity;
+
+facilityId = session.getAttribute("facilityId");
+facility = delegator.findByPrimaryKeyCache("Facility", UtilMisc.toMap("facilityId", facilityId));
+context.put("facility", facility);
+context.put("facilityId", facilityId);
+
+// need this for the drop down of inventory item types
+context.put("inventoryItemTypes", delegator.findAllCache("InventoryItemType"));
+
+// we should only set up the product receiving page if there is a productId
+productId = parameters.get("productId");
+if (UtilValidate.isNotEmpty(productId)) {
+    svcResult = dispatcher.runSync("getProductByComprehensiveSearch", UtilMisc.toMap("productId", productId));
+    if (ServiceUtil.isError(svcResult) || ServiceUtil.isFailure(svcResult)) {
+        UtilMessage.addError(request, ServiceUtil.getErrorMessage(svcResult));
+        return "error";
+    } else {
+        product = svcResult.get("product");
+        if (product == null) {
+            UtilMessage.addError(request, "ProductErrorProductNotFound");
+            return "error";
+        }
+        context.put("product", product);
+    }
+    List goodIdentifications = delegator.findByAndCache("GoodIdentification", UtilMisc.toMap("productId", product.get("productId")));
+    context.put("goodIdentifications", goodIdentifications);
+
+    // does not seem like reject & reject reason work, so I'm commenting it out for now.   Comment it back if it ever works in OFBIZ.   SC
+    // context.put("rejectReasons", delegator.findAllCache("RejectionReason"));
+
+    // do something about costs - should this be run as "system"?
+    facilityOwnerAcctgPref = delegator.findByPrimaryKeyCache("PartyAcctgPreference", UtilMisc.toMap("partyId", facility.getString("ownerPartyId")));
+    svcResult = dispatcher.runSync("getProductCost", UtilMisc.toMap("productId", product.getString("productId"),
+                    "costComponentTypePrefix", "EST_STD", "currencyUomId", facilityOwnerAcctgPref.get("baseCurrencyUomId"),
+                    "userLogin", userLogin));
+    if (!ServiceUtil.isError(svcResult)) {
+        context.put("unitCost", svcResult.get("productCost"));
+    }
+
+    // get the accounting tags for the facility owner
+    acctgTags = UtilAccountingTags.getAccountingTagsForOrganization(facility.getString("ownerPartyId"), UtilAccountingTags.PURCHASE_ORDER_TAG, delegator);
+    context.put("acctgTags", acctgTags);
+
+    context.put("inventoryItemTypeId", parameters.get("inventoryItemTypeId"));
+
+    warehouseSecurity = new WarehouseSecurity(security, userLogin, parameters.get("facilityId"));
+    context.put("hasSetCostPermission", warehouseSecurity.hasFacilityPermission("WRHS_INV_SETCOST"));
+
+    // find back ordered items
+    // use product.productId in case the productId passed in parameters was a goodId which was used to look up the product
+    fieldsToSelect = UtilMisc.toList("orderId", "orderItemSeqId", "quantity", "quantityNotAvailable", "reservedDatetime", "sequenceId");
+    backOrderedItems = delegator.findByCondition("OrderItemShipGrpInvResAndItem",
+            new EntityConditionList(UtilMisc.toList(
+                new EntityExpr("productId", EntityOperator.EQUALS, product.get("productId")),
+                new EntityExpr("facilityId", EntityOperator.EQUALS, parameters.get("facilityId")),
+                new EntityExpr("quantityNotAvailable", EntityOperator.NOT_EQUAL, null)
+            ), EntityOperator.AND),
+            fieldsToSelect,
+            UtilMisc.toList("reservedDatetime", "sequenceId"));
+    context.put("backOrderedItems", backOrderedItems);
+}

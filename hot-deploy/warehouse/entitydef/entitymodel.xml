@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Entity definitions for the Opentaps Warehouse Application</title>
+    <copyright>Copyright (c) 2005 - 2006 Open Source Strategies Inc.</copyright>
+
+    <extend-entity entity-name="ProductAssoc">
+        <field name="specificRoutingWorkEffortId" type="id-ne" col-name="SPEC_ROU_WEFF_ID"/>
+        <relation type="one" rel-entity-name="WorkEffort" fk-name="PA_SPE_WE">
+            <key-map field-name="specificRoutingWorkEffortId" rel-field-name="workEffortId"/>
+        </relation>
+    </extend-entity>
+
+    <view-entity entity-name="ProductionRunAndGoods" package-name="org.ofbiz.workeffort.workeffort" 
+        title="WorkEffort and related WorkEffortGoodStandard">
+      <description>WorkEffort and its WorkEffortGoodStandard</description>
+      <member-entity entity-alias="WE" entity-name="WorkEffort"></member-entity>
+      <member-entity entity-alias="WEGS" entity-name="WorkEffortGoodStandard"></member-entity>
+      <alias entity-alias="WE" name="workEffortId" group-by="true" />
+      <alias entity-alias="WE" name="facilityId" group-by="true" />
+      <alias entity-alias="WE" name="workEffortTypeId" group-by="true" />
+      <alias entity-alias="WE" name="workEffortName" group-by="true" />
+      <alias entity-alias="WE" name="workEffortPurposeTypeId" group-by="true" />
+      <alias entity-alias="WE" name="currentStatusId" group-by="true" />
+      <alias entity-alias="WE" name="estimatedStartDate" group-by="true" />
+      <alias entity-alias="WEGS" name="productId" group-by="true"/>
+      <alias entity-alias="WEGS" name="workEffortGoodStdTypeId"/>
+      <alias entity-alias="WEGS" name="statusId"/>
+      <alias entity-alias="WEGS" name="estimatedQuantity" function="max"/>
+      <view-link entity-alias="WE" rel-entity-alias="WEGS">
+        <key-map field-name="workEffortId"/>
+      </view-link>
+    </view-entity>
+
+    <extend-entity entity-name="Lot">
+        <field name="comments" type="very-long"/>
+        <field name="uomId" type="id-ne"/>
+        <field name="supplierPartyId" type="id-ne"/>
+        <relation type="one" rel-entity-name="Party" fk-name="LOT_SUP_PARTY">
+            <key-map field-name="supplierPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Uom" fk-name="LOT_UOM">
+            <key-map field-name="uomId"/>
+        </relation>
+    </extend-entity>
+
+    <!-- org.opentaps.warehouse.facility -->
+
+    <entity entity-name="FacilityPartyPermission"
+            package-name="org.opentaps.warehouse.facility"
+            title="Allows security to be checked on a per facility basis for parties.">
+        <field name="facilityId" type="id-ne"></field>
+        <field name="partyId" type="id-ne"></field>
+        <field name="securityGroupId" type="id-ne"></field>
+        <field name="fromDate" type="date-time"></field>
+        <field name="thruDate" type="date-time"></field>
+        <prim-key field="facilityId"/>
+        <prim-key field="partyId"/>
+        <prim-key field="fromDate"/>
+        <relation fk-name="FPP_FAC" rel-entity-name="Facility" type="one">
+            <key-map field-name="facilityId"/>
+        </relation>
+        <relation fk-name="FPP_PTY" rel-entity-name="Party" type="one">
+            <key-map field-name="partyId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="FacilityPartyPermissionDetail"
+        package-name="org.opentaps.warehouse.facility"
+        title="Join of FacilityPartyPermission and Facility to list facilities a party has security access to.">
+        <member-entity entity-alias="F" entity-name="Facility"/>
+        <member-entity entity-alias="FPP" entity-name="FacilityPartyPermission"/>
+        <alias-all entity-alias="F"/>
+        <alias-all entity-alias="FPP"/>
+        <view-link entity-alias="F" rel-entity-alias="FPP">
+            <key-map field-name="facilityId"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="FacilityPartySecurityPermission"
+        package-name="org.opentaps.warehouse.facility"
+        title="Join of FacilityPartyPermission and SecurityGroupPermission to list permissions for facilities a party has security access to.">
+        <member-entity entity-alias="FPP" entity-name="FacilityPartyPermission"/>
+        <member-entity entity-alias="SGP" entity-name="SecurityGroupPermission"/>
+        <alias-all entity-alias="FPP"/>
+        <alias-all entity-alias="SGP"/>
+        <view-link entity-alias="FPP" rel-entity-alias="SGP">
+            <key-map field-name="securityGroupId" rel-field-name="groupId"/>
+        </view-link>
+    </view-entity>
+
+    <entity entity-name="FacilityTeamRoleSecurity"
+            package-name="org.opentaps.warehouse.facility"
+            title="Convenience entity to associate security permission groups and descriptions of team roles">
+        <field name="securityGroupId" type="id-ne"/>
+        <field name="roleDescription" type="description"/>
+        <field name="sequenceNum" type="numeric"/>
+        <prim-key field="securityGroupId"/>
+        <relation fk-name="FTEAM_SECGROUP" rel-entity-name="SecurityGroup" type="one">
+            <key-map field-name="securityGroupId" rel-field-name="groupId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="WarehouseSummaryData"
+            package-name="org.opentaps.warehouse.facility"
+            title="Convenience entity to save the home dashboard data">
+        <field name="facilityId" type="id-ne"/>
+        <field name="RequiredStockMoves" type="numeric"/>
+        <field name="RequestedInventoryTransfers" type="numeric"/>
+        <field name="NumberBackOrders" type="numeric"/>
+        <field name="NumberProductsBackOrdered" type="numeric"/>
+        <field name="OrdersReadyShip" type="numeric"/>
+        <field name="OpenPicklists" type="numeric"/>
+        <field name="PicklistsShipped" type="numeric"/>
+        <field name="NewProductRuns" type="numeric"/>
+        <field name="ScheduledProductionRuns" type="numeric"/>
+        <field name="ConfirmedProductionRuns" type="numeric"/>
+        <field name="ActiveProductionRuns" type="numeric"/>
+        <prim-key field="facilityId"/>
+    </entity>
+
+    <entity entity-name="WarehouseSummaryPickMove"
+            package-name="org.opentaps.warehouse.facility"
+            title="Convenience entity to save the home dashboard data">
+        <field name="wspickmoveId" type="id-long-ne"/>
+        <field name="facilityId" type="id-ne"/>
+        <field name="shipmentMethodType" type="description"/>
+        <field name="orderReadyToPickInfo" type="numeric"/>
+        <prim-key field="wspickmoveId"/>
+    </entity>
+
+    <view-entity entity-name="OdrItShpGrpHdrInvResAndInvItem"
+        package-name="org.opentaps.warehouse.orders"
+        title="View of OrderItemShipGroup, OrderHeader, OrderItemShipGrpInvRes and InventoryItem">
+        <member-entity entity-alias="OISG" entity-name="OrderItemShipGroup"/>
+        <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+        <member-entity entity-alias="OISGIR" entity-name="OrderItemShipGrpInvRes"/>
+        <member-entity entity-alias="II" entity-name="InventoryItem"/>
+        <alias-all entity-alias="OISG">
+            <exclude field="statusId"/>
+        </alias-all>            
+        <alias-all entity-alias="OH"/>
+        <alias-all entity-alias="OISGIR"/>
+        <alias-all entity-alias="II">
+            <exclude field="statusId"/>
+        </alias-all>
+        <view-link entity-alias="OISG" rel-entity-alias="OH">
+          <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="OISG" rel-entity-alias="OISGIR">
+          <key-map field-name="orderId"/>
+          <key-map field-name="shipGroupSeqId"/>
+        </view-link>
+        <view-link entity-alias="OISGIR" rel-entity-alias="II">
+          <key-map field-name="inventoryItemId"/>
+        </view-link>
+        <relation type="one" rel-entity-name="OrderHeader" fk-name="OISGAIR_OH">
+            <key-map field-name="orderId"/>
+        </relation>
+        <relation type="one" rel-entity-name="InventoryItem" fk-name="OISGAIR_II">
+            <key-map field-name="inventoryItemId"/>
+        </relation>
+        <relation type="one" rel-entity-name="ShipmentMethodType" fk-name="OISGAIR_SMT">
+            <key-map field-name="shipmentMethodTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Party" fk-name="OISGAIR_P">
+            <key-map field-name="carrierPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="PostalAddress" fk-name="OISGAIR_PA">
+            <key-map field-name="contactMechId"/>
+        </relation>
+    </view-entity>
+    
+    <view-entity entity-name="CarrierShipmentBoxAndType"
+        package-name="org.opentaps.warehouse.shipping"
+        title="View of CarrierShipmentBoxType and ShipmentBoxType">
+        <member-entity entity-alias="CSBT" entity-name="CarrierShipmentBoxType"/>
+        <member-entity entity-alias="SBT" entity-name="ShipmentBoxType"/>
+        <alias-all entity-alias="CSBT"/>
+        <alias-all entity-alias="SBT"/>
+        <view-link entity-alias="CSBT" rel-entity-alias="SBT">
+            <key-map field-name="shipmentBoxTypeId"/>
+        </view-link>
+    </view-entity>
+
+    <entity entity-name="WarehouseDefaultBoxType"
+            package-name="org.opentaps.warehouse.shipping"
+            title="Configures the default CarrierShipmentBoxType used when packing an order">
+        <field name="facilityId" type="id-ne"/>
+        <field name="partyId" type="id-ne"/>
+        <field name="shipmentBoxTypeId" type="id-ne"/>
+        <prim-key field="facilityId"/>
+        <prim-key field="partyId"/>
+        <relation type="one" fk-name="WDBT_CSBT" rel-entity-name="CarrierShipmentBoxType">
+            <key-map field-name="shipmentBoxTypeId"/>
+            <key-map field-name="partyId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="ShipmentAndItemIssuanceAndInventory"
+        package-name="org.opentaps.warehouse.shipping"
+        title="View that associates shipments with inventory items via item issuances">
+        <member-entity entity-alias="SHP" entity-name="Shipment"/>
+        <member-entity entity-alias="II" entity-name="ItemIssuance"/>
+        <member-entity entity-alias="INV" entity-name="InventoryItem"/>
+        <alias-all entity-alias="SHP"/>
+        <alias-all entity-alias="II"/>
+        <alias-all entity-alias="INV"/>
+        <view-link entity-alias="SHP" rel-entity-alias="II">
+            <key-map field-name="shipmentId"/>
+        </view-link>
+        <view-link entity-alias="II" rel-entity-alias="INV">
+            <key-map field-name="inventoryItemId"/>
+        </view-link>
+        <relation type="one" fk-name="SHPMNT_TYPE_SIII" rel-entity-name="ShipmentType">
+            <key-map field-name="shipmentTypeId"/>
+        </relation>
+        <relation type="one" fk-name="SHPMNT_STTS_SIII" rel-entity-name="StatusItem">
+            <key-map field-name="statusId"/>
+        </relation>
+        <relation type="one" fk-name="SHPMNT_OFAC_SIII" title="Origin" rel-entity-name="Facility">
+            <key-map field-name="originFacilityId" rel-field-name="facilityId"/>
+        </relation>
+        <relation type="one" fk-name="SHPMNT_DFAC_SIII" title="Destination" rel-entity-name="Facility">
+            <key-map field-name="destinationFacilityId" rel-field-name="facilityId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="ShipmentReceiptAndProduct" package-name="org.opentaps.warehouse.shipping"
+        title="Shipment Receipt and related Product">
+        <member-entity entity-alias="SHRCP" entity-name="ShipmentReceipt"/>
+        <member-entity entity-alias="PR" entity-name="Product"/>
+        <alias-all entity-alias="SHRCP"/>
+        <alias-all entity-alias="PR"/>
+        <view-link entity-alias="SHRCP" rel-entity-alias="PR">
+            <key-map field-name="productId"/>
+        </view-link>
+
+    </view-entity>
+
+    <view-entity entity-name="ShipmentAndReceiptAndInventory"
+        package-name="org.opentaps.warehouse.shipping"
+        title="View that associates shipments with inventory items via shipment receipts">
+        <member-entity entity-alias="SHP" entity-name="Shipment"/>
+        <member-entity entity-alias="SHRCP" entity-name="ShipmentReceipt"/>
+        <member-entity entity-alias="INV" entity-name="InventoryItem"/>
+        <alias-all entity-alias="SHP"/>
+        <alias-all entity-alias="SHRCP"/>
+        <alias-all entity-alias="INV"/>
+        <view-link entity-alias="SHP" rel-entity-alias="SHRCP">
+            <key-map field-name="shipmentId"/>
+        </view-link>
+        <view-link entity-alias="SHRCP" rel-entity-alias="INV">
+            <key-map field-name="inventoryItemId"/>
+        </view-link>
+        <relation type="one" fk-name="SHPMNT_TYPE_SRI" rel-entity-name="ShipmentType">
+            <key-map field-name="shipmentTypeId"/>
+        </relation>
+        <relation type="one" fk-name="SHPMNT_STTS_SRI" rel-entity-name="StatusItem">
+            <key-map field-name="statusId"/>
+        </relation>
+        <relation type="one" fk-name="SHPMNT_OFAC_SRI" title="Origin" rel-entity-name="Facility">
+            <key-map field-name="originFacilityId" rel-field-name="facilityId"/>
+        </relation>
+        <relation type="one" fk-name="SHPMNT_DFAC_SRI" title="Destination" rel-entity-name="Facility">
+            <key-map field-name="destinationFacilityId" rel-field-name="facilityId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="ShipmentPackageItemIssuance"
+        package-name="org.opentaps.warehouse.shipping"
+        title="View that associates ShipmentPackageContent with InventoryItem, via ShipmentItem -> ItemIssuance">
+        <member-entity entity-alias="SPC" entity-name="ShipmentPackageContent"/>
+        <member-entity entity-alias="SI" entity-name="ShipmentItem"/>
+        <member-entity entity-alias="IT" entity-name="ItemIssuance"/>
+        <member-entity entity-alias="II" entity-name="InventoryItem"/>
+        <alias-all entity-alias="SPC">
+            <exclude field="quantity"/>
+        </alias-all>
+        <alias-all entity-alias="SI">
+            <exclude field="quantity"/>
+        </alias-all>
+        <alias-all entity-alias="IT">
+            <exclude field="quantity"/>
+        </alias-all>
+        <alias-all entity-alias="II">
+            <exclude field="quantity"/>
+        </alias-all>
+        <alias name="packageContentQuantity" entity-alias="SPC" field="quantity"/>
+        <alias name="itemIssuanceQuantity" entity-alias="IT" field="quantity"/>
+        <view-link entity-alias="SPC" rel-entity-alias="SI">
+            <key-map field-name="shipmentId"/>
+            <key-map field-name="shipmentItemSeqId"/>
+        </view-link>
+        <view-link entity-alias="SI" rel-entity-alias="IT">
+            <key-map field-name="shipmentId"/>
+            <key-map field-name="shipmentItemSeqId"/>
+        </view-link>
+        <view-link entity-alias="IT" rel-entity-alias="II">
+            <key-map field-name="inventoryItemId"/>
+        </view-link>
+        <relation type="one" rel-entity-name="ShipmentItem">
+            <key-map field-name="shipmentId"/>
+            <key-map field-name="shipmentItemSeqId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="WorkOrderAndOrderItem" package-name="org.opentaps.warehouse.manufacturing"
+        title="Joins WorkOrderItemFulfillment, OrderHeader, OrderItem">
+        <member-entity entity-alias="WOIF" entity-name="WorkOrderItemFulfillment"/>
+        <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+        <member-entity entity-alias="OI" entity-name="OrderItem"/>
+        <alias-all entity-alias="WOIF"/>
+        <alias name="orderTypeId" entity-alias="OH"/>
+        <alias name="orderStatusId" field="statusId" entity-alias="OH"/>
+        <alias name="itemStatusId" field="statusId" entity-alias="OI"/>
+        <alias name="orderItemTypeId" entity-alias="OI"/>
+        <alias name="quantity" entity-alias="OI"/>
+        <alias name="unitPrice" entity-alias="OI"/>
+        <view-link entity-alias="WOIF" rel-entity-alias="OI">
+            <key-map field-name="orderId"/>
+            <key-map field-name="orderItemSeqId"/>
+        </view-link>
+        <view-link entity-alias="WOIF" rel-entity-alias="OH">
+            <key-map field-name="orderId"/>
+        </view-link>
+       <relation type="one" rel-entity-name="OrderItem">
+            <key-map field-name="orderId"/>
+            <key-map field-name="orderItemSeqId"/>
+        </relation>
+        <relation type="one" rel-entity-name="OrderHeader">
+            <key-map field-name="orderId"/>
+        </relation>
+        <relation type="one" rel-entity-name="WorkEffort">
+            <key-map field-name="workEffortId"/>
+        </relation>
+
+    </view-entity>
+
+    <view-entity entity-name="ProductGoodInventoryItem" package-name="org.opentaps.warehouse.inventory"
+        title="Joins ProductInventoryItem and GoodIdentification">
+        <member-entity entity-alias="GI" entity-name="GoodIdentification"/>
+        <member-entity entity-alias="PI" entity-name="ProductInventoryItem"/>
+        <alias-all entity-alias="PI"/>
+        <alias name="goodIdentificationTypeId" entity-alias="GI"/>
+        <alias name="idValue" entity-alias="GI"/>
+        <view-link entity-alias="PI" rel-entity-alias="GI">
+            <key-map field-name="productId"/>
+        </view-link>
+        <relation type="one" rel-entity-name="Product">
+            <key-map field-name="productId"/>
+        </relation>
+    </view-entity>
+
+    <extend-entity entity-name="ProductFacility">
+        <field name="replenishMethodEnumId" type="id"/>
+        <field name="replenishFromFacilityId" type="id-ne"/>
+        <relation type="one" rel-entity-name="Facility" fk-name="PF_R_FAC" title="ResplenishFromFacility">
+            <key-map field-name="facilityId"/>
+        </relation>
+        <relation title="ResplenishMethod" fk-name="PF_R_METH" rel-entity-name="Enumeration" type="one">
+            <key-map field-name="replenishMethodEnumId" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
+
+    <extend-entity entity-name="Facility">
+        <field name="inventoryReserveOrderEnumId" col-name="RESERVE_ORDER_ENUM_ID" type="id"/>
+        <relation type="one" fk-name="FCLT_RORDENUM" rel-entity-name="Enumeration">
+            <key-map field-name="inventoryReserveOrderEnumId" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
+
+    <extend-entity entity-name="InventoryItem">
+        <field name="parentInventoryItemId" type="id"/>
+        <relation type="one" fk-name="II_PARENT" rel-entity-name="InventoryItem">
+            <key-map field-name="parentInventoryItemId" rel-field-name="inventoryItemId"/>
+        </relation>
+    </extend-entity>
+
+    <entity entity-name="FacilityPartyPermission"
+            package-name="org.opentaps.warehouse.facility"
+            title="Allows security to be checked on a per facility basis for parties.">
+        <field name="facilityId" type="id-ne"></field>
+        <field name="partyId" type="id-ne"></field>
+        <field name="securityGroupId" type="id-ne"></field>
+        <field name="fromDate" type="date-time"></field>
+        <field name="thruDate" type="date-time"></field>
+        <prim-key field="facilityId"/>
+        <prim-key field="partyId"/>
+        <prim-key field="fromDate"/>
+        <relation fk-name="FPP_FAC" rel-entity-name="Facility" type="one">
+            <key-map field-name="facilityId"/>
+        </relation>
+        <relation fk-name="FPP_PTY" rel-entity-name="Party" type="one">
+            <key-map field-name="partyId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="InventoryItemTrace" 
+        package-name="org.opentaps.warehouse.inventory" 
+        title="Temporary store information about inventory item usage.">
+        <field name="inventoryItemTraceId" type="id-ne"/>
+        <field name="runDatetime" type="date-time"/>
+        <field name="runByUserLogin" type="id-vlong-ne"/>
+        <field name="inventoryItemId" type="id"/>
+        <field name="lotId" type="id"/>
+        <field name="comments" type="comment"/>
+        <prim-key field="inventoryItemTraceId"/>
+        <relation rel-entity-name="InventoryItem" type="one" fk-name="IIT_II">
+            <key-map field-name="inventoryItemId"/>
+        </relation>
+        <relation rel-entity-name="UserLogin" type="one" fk-name="IIT_UL">
+            <key-map field-name="runByUserLogin" rel-field-name="userLoginId"/>
+        </relation>
+        <relation rel-entity-name="Lot" type="one-nofk" fk-name="IIT_LOT">
+            <key-map field-name="lotId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="InventoryItemTraceDetail" 
+        package-name="org.opentaps.warehouse.inventory" 
+        title="Store the results of each trace job">
+        <field name="inventoryItemTraceId" type="id-ne"/>
+        <field name="inventoryItemTraceSeqId" type="id-ne"/>
+        <field name="traceLevel" type="numeric"/>
+        <field name="inventoryItemId" type="id"/>
+        <field name="inventoryItemUsageTypeId" type="id"/>
+        <field name="usageDatetime" type="date-time"/>
+        <field name="toInventoryItemId" type="id"/>
+        <field name="quantity" type="floating-point"/>
+        <field name="receiptId" type="id"/>
+        <field name="inventoryTransferId" type="id"/>
+        <field name="itemIssuanceId" type="id"/>
+        <!-- next three fields are for OrderItemShipGrpInvRes -->
+        <field name="orderId" type="id"/>
+        <field name="shipGroupSeqId" type="id"/>
+        <field name="orderItemSeqId" type="id"/>
+
+        <field name="assignWorkEffortId" type="id"/>
+        <field name="producedWorkEffortId" type="id"/>
+        <field name="physicalInventoryId" type="id"/>
+        <field name="varianceReasonId" type="id"/>
+        <prim-key field="inventoryItemTraceId"/>
+        <prim-key field="inventoryItemTraceSeqId"/>
+        <relation rel-entity-name="InventoryItemTrace" type="one" fk-name="IITD_IIT">
+            <key-map field-name="inventoryItemTraceId"/>
+        </relation>
+        <relation rel-entity-name="InventoryItem" type="one" fk-name="IITD_II">
+            <key-map field-name="inventoryItemId"/>
+        </relation>
+        <relation rel-entity-name="InventoryItem" type="one" fk-name="IITD_TOII" title="To">
+            <key-map field-name="toInventoryItemId" rel-field-name="inventoryItemId"/>
+        </relation>
+        <relation rel-entity-name="InventoryItemUsageType" type="one" fk-name="IIUSGT">
+            <key-map field-name="inventoryItemUsageTypeId"/>
+        </relation>
+        <relation rel-entity-name="ItemIssuance" type="one-nofk">
+            <key-map field-name="itemIssuanceId"/>
+        </relation>
+        <relation rel-entity-name="WorkEffortInventoryProduced" type="one-nofk">
+            <key-map field-name="producedWorkEffortId" rel-field-name="workEffortId"/>
+            <key-map field-name="inventoryItemId"/>
+        </relation>
+        <relation rel-entity-name="InventoryItemVariance" type="one-nofk">
+            <key-map field-name="inventoryItemId"/>
+            <key-map field-name="physicalInventoryId"/>
+        </relation>
+        <relation rel-entity-name="VarianceReason" type="one-nofk">
+            <key-map field-name="varianceReasonId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="InventoryItemUsageType" package-name="org.opentaps.warehouse.inventory">
+        <field name="inventoryItemUsageTypeId" type="id-ne"/>
+        <field name="description" type="description"/>
+        <prim-key field="inventoryItemUsageTypeId"/>
+    </entity>
+
+</entitymodel>

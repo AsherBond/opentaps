@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- Demo template for disassembling PROD_COST with extra arbitrary task.  Use this as a guide to define more templates in XML or to write services that create the templates.  -->
+                                           
+<entity-engine-xml>
+
+
+    <!-- Define a demo disassembly template, which is used to populate a disassembly production run. -->
+    <WorkEffort workEffortId="DemoDisasmblTempl" workEffortTypeId="ROUTING" workEffortPurposeTypeId="ROU_DISASSEMBLY" currentStatusId="ROU_ACTIVE" workEffortName="Demo disassembly of PROD_COST" description="Disassembly production run for PROD_COST which should produce MAT_A_COST and MAT_B_COST in the quantities specified by the Bill of Materials."/>
+
+    <!-- Link the product to be disassembled to this disassembly template -->
+    <WorkEffortGoodStandard workEffortId="DemoDisasmblTempl" productId="PROD_COST" workEffortGoodStdTypeId="ROU_DISASMBL_TEMPL" fromDate="2007-01-01 00:00:00.000"/>
+
+    <!-- Define a template task to consume the PROD_COST as a material issuance. -->
+    <WorkEffort workEffortId="DemoDismblTskTmpl" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_DISASSEMBLY" currentStatusId="ROU_ACTIVE" workEffortName="Disassemble the PROD_COST" description="This task is to disassemble the PROD_COST.  The materials are PROD_COST and are issued to complete the task."/>
+
+    <!-- It is identified as the task to issue the material using a special association type.  This also adds the task as a routing component.  -->
+    <WorkEffortAssoc workEffortIdFrom="DemoDisasmblTempl" workEffortIdTo="DemoDismblTskTmpl" workEffortAssocTypeId="ROUTING_DISASSEMBLY" sequenceNum="10" fromDate="2007-01-01 00:00:00.000"/>
+
+    <!-- Tasks specific to this disassembly can be added later or defined in seed data.  Here we define another template task for transporting the material to the disassembly workbench. -->
+    <WorkEffort workEffortId="DemoMoveTaskTempl" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_DISASSEMBLY" currentStatusId="ROU_ACTIVE" workEffortName="Move PROD_COST to disassembly workbench." description="Move the specified quantity of PROD_COST over to the disassembly workbench."/>
+    <WorkEffortAssoc workEffortIdFrom="DemoDisasmblTempl" workEffortIdTo="DemoMoveTaskTempl" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="01" fromDate="2007-01-01 00:00:00.000"/>
+
+</entity-engine-xml>

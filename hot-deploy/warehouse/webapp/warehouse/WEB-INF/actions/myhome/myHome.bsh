@@ -1,0 +1,109 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// @author Leon Torres (leon@opensourcestrategies.com)
+// @author Fabien Carrion
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.common.util.UtilMessage;
+import java.text.SimpleDateFormat;
+
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.AxisLocation;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.servlet.ServletUtilities;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.RectangleInsets;
+
+context.put("totalStockMoves", 0);
+context.put("totalInventoryTransfers", 0);
+context.put("backOrderedOrders", 0);
+context.put("backOrderedProducts", 0);
+context.put("totalReadyOrders", 0);
+context.put("totalReadyToPick", 0);
+context.put("totalOpenPicklists", 0);
+context.put("totalPickedPicklistIds", 0);
+context.put("totalCreatedProdRuns", 0);
+context.put("totalScheduledProdRuns", 0);
+context.put("totalConfirmedProdRuns", 0);
+context.put("totalRunningProdRuns", 0);
+context.put("lastUpdatedStamp", "none");
+
+if (UtilValidate.isEmpty(facilityId)) return;
+
+if (!UtilValidate.isEmpty(refresh)) {
+    dispatcher.runSync("populateWarehouseSummaryData", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
+}
+
+summaryDashboards = delegator.findByAnd("WarehouseSummaryData", UtilMisc.toMap("facilityId", facilityId));
+if (summaryDashboards == null) return;
+
+summary = EntityUtil.getFirst(summaryDashboards);
+if (summary == null) return;
+
+sdf = new SimpleDateFormat(UtilDateTime.getDateTimeFormat(UtilHttp.getLocale(request)));
+
+context.put("totalStockMoves", summary.getLong("RequiredStockMoves"));
+context.put("totalInventoryTransfers", summary.getLong("RequestedInventoryTransfers"));
+context.put("backOrderedOrders", summary.getLong("NumberBackOrders"));
+context.put("backOrderedProducts", summary.getLong("NumberProductsBackOrdered"));
+context.put("totalReadyOrders", summary.getLong("OrdersReadyShip"));
+context.put("totalOpenPicklists", summary.getLong("OpenPicklists"));
+context.put("totalPickedPicklistIds", summary.getLong("PicklistsShipped"));
+context.put("totalCreatedProdRuns", summary.getLong("NewProductRuns"));
+context.put("totalScheduledProdRuns", summary.getLong("ScheduledProductionRuns"));
+context.put("totalConfirmedProdRuns", summary.getLong("ConfirmedProductionRuns"));
+context.put("totalRunningProdRuns", summary.getLong("ActiveProductionRuns"));
+context.put("lastUpdatedStamp", sdf.format(summary.getTimestamp("lastUpdatedStamp")));
+
+summaryDashboards = delegator.findByAnd("WarehouseSummaryPickMove", UtilMisc.toMap("facilityId", facilityId));
+if (summaryDashboards == null) return;
+
+context.put("pickMoveByShipmentMethodInfoList", summaryDashboards);
+
+uiLabelMap = UtilMessage.getUiLabels(locale);
+
+// create bar chart
+DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+dataset.addValue(summary.getLong("NewProductRuns"), "", uiLabelMap.get("CommonCreated"));
+dataset.addValue(summary.getLong("ConfirmedProductionRuns"), "", uiLabelMap.get("OpentapsConfirmed"));
+dataset.addValue(summary.getLong("ScheduledProductionRuns"), "", uiLabelMap.get("WarehouseScheduled"));
+dataset.addValue(summary.getLong("ActiveProductionRuns"), "", uiLabelMap.get("WarehouseRunning"));
+
+JFreeChart chart = ChartFactory.createBarChart(uiLabelMap.get("WarehouseManufacturingQueue"), null, null, dataset, PlotOrientation.HORIZONTAL, false, true, false);
+chart.setBackgroundPaint(Color.white);
+chart.setBorderVisible(true);
+chart.setPadding(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
+
+// get a reference to the plot for further customisation...
+final CategoryPlot plot = chart.getCategoryPlot();
+plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_LEFT);
+
+// change the auto tick unit selection to integer units only...
+final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+
+chartImage = ServletUtilities.saveChartAsPNG(chart, 500, 200, null);
+context{"chartImage"} = chartImage;

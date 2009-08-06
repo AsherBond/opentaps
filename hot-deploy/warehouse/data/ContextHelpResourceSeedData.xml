@@ -1,0 +1,63 @@
+<entity-engine-xml>
+
+
+    <!--
+     * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the Honest Public License.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * Honest Public License for more details.
+     *
+     * You should have received a copy of the Honest Public License
+     * along with this program; if not, write to Funambol,
+     * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+     *
+    -->
+
+    <ContextHelpResource contextHelpResourceId="4000" screenName="ReceiveInventoryAgainstPurchaseOrder" applicationName="warehouse" remotePageName="Receive_Against_PO" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="4001" screenName="physicalInventory" applicationName="warehouse" remotePageName="Adjust_Quantities_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="4002" screenName="FindFacilityPhysicalInventory" applicationName="warehouse" remotePageName="Adjust_Quantities_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="4003" screenName="FindProductionRun" applicationName="warehouse" remotePageName="Find_Production_Run" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="4004" screenName="CreateProductionRun" applicationName="warehouse" remotePageName="Create_Production_Run" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="4005" screenName="ShowProductionRun" applicationName="warehouse" remotePageName="View_Production_Run" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="4006" screenName="receiveOutsourcedPO" applicationName="warehouse" remotePageName="Receive_Outsourced_PO" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="4007" screenName="backOrderedItems" applicationName="warehouse" remotePageName="Open_Back_Orders" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="4008" screenName="inventoryMain" applicationName="warehouse" remotePageName="Open_Back_Orders" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="4008" screenName="CreateInventoryTransfersForProduction" applicationName="warehouse" remotePageName="Production_Transfers" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="WRHS_FINDRCPT" screenName="findShipmentReceipt" applicationName="warehouse" remotePageName="Find_Receipts_Screen" remotePageVersion="0"/>
+
+    <ContextHelpResource contextHelpResourceId="WRHS_FINDINVITM" screenName="findInventoryItem" applicationName="warehouse" remotePageName="Find_Inventory_Item_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_EDITINVITM" screenName="EditInventoryItem" applicationName="warehouse" remotePageName="Edit_Inventory_Item_Screen" remotePageVersion="0"/>
+
+    <ContextHelpResource contextHelpResourceId="WRHS_STOCKMOVE" screenName="stockMove" applicationName="warehouse" remotePageName="Stock_Moves_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_READY2SHIP" screenName="readyToShip" applicationName="warehouse" remotePageName="Ready_To_Ship_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_SCHEDSHIP" screenName="QuickScheduleShipmentRouteSegment" applicationName="warehouse" remotePageName="Schedule_a_Shipment_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_BATCHSCHED" screenName="ScheduleShipmentRouteSegment" applicationName="warehouse" remotePageName="Batch_Schedule_Shipments_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_PRINTLABEL" screenName="Labels" applicationName="warehouse" remotePageName="Print_Shipping_Labels_Screen" remotePageVersion="0"/>
+
+    <ContextHelpResource contextHelpResourceId="WRHS_VIEWSHIP" screenName="ViewShipment" applicationName="warehouse" remotePageName="View_Shipment_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_EDITSHIP" screenName="EditShipment" applicationName="warehouse" remotePageName="Edit_Shipment_Information_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_EDITSHIPITM" screenName="EditShipmentItems" applicationName="warehouse" remotePageName="Edit_Shipment_Items_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_CREATEPICK" screenName="createPicklist" applicationName="warehouse" remotePageName="Create_Picklist_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_OPENPICK" screenName="openPicklists" applicationName="warehouse" remotePageName="Open_Picklists_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_PICKEDPICK" screenName="pickedPicklists" applicationName="warehouse" remotePageName="Picklists_To_Be_Shipped_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_PICKDETL" screenName="picklistDetails" applicationName="warehouse" remotePageName="Picklist_Details_Screen" remotePageVersion="0"/>
+
+    <!-- TODO to get these to work correctly, they need to link to distinct requests without parameters.  Right now it links to FindShipment which is parametrized.
+    <ContextHelpResource contextHelpResourceId="WRHS_OUTSHIP" screenName="OutgoingShipments" applicationName="warehouse" remotePageName="Outgoing_Shipments_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_INSHIP" screenName="IncomingShipments" applicationName="warehouse" remotePageName="Incoming_Shipments_Screen" remotePageVersion="0"/>
+    -->
+
+    <ContextHelpResource contextHelpResourceId="WRHS_EDITLOT" screenName="editLotForm" applicationName="warehouse" remotePageName="Edit_Lot_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_VIEWLOT" screenName="lotDetails" applicationName="warehouse" remotePageName="View_Lot_Details_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_MANAGELOTS" screenName="manageLots" applicationName="warehouse" remotePageName="Manage_Lots_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_CREATELOT" screenName="createLotForm" applicationName="warehouse" remotePageName="Create_New_Lot_Screen" remotePageVersion="0"/>
+    <ContextHelpResource contextHelpResourceId="WRHS_RECVINVITM" screenName="receiveInventoryItem" applicationName="warehouse" remotePageName="Receive_Inventory_Item_Screen" remotePageVersion="0"/>
+
+</entity-engine-xml>

@@ -1,0 +1,31 @@
+<entity-engine-xml>
+<!--
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+ 
+    <!-- Warehouse Keyboard shortcuts demo data -->
+    <KeyboardShortcut shortcutId="WRH_FIND_INV" sequenceNum="310" shortcut="shift+f1" actionTypeId="KB_URL" actionTarget="findInventoryItem" applicationName="warehouse" description="Find Inventory Items" />
+    <KeyboardShortcut shortcutId="WRH_RECEIVE_INV" sequenceNum="311" shortcut="f1" actionTypeId="KB_URL" actionTarget="receiveInventoryItem" applicationName="warehouse" description="Receive an Inventory Item" />
+    <KeyboardShortcut shortcutId="WRH_RECEIVE_PO" sequenceNum="312" shortcut="ctrl+f1" actionTypeId="KB_URL" actionTarget="ReceiveInventoryAgainstPurchaseOrder" applicationName="warehouse" description="Receive a Purchase Order" />
+
+    <KeyboardShortcut shortcutId="WRH_FIND_RDY_SHIP" sequenceNum="313" shortcut="shift+f2" actionTypeId="KB_URL" actionTarget="shippingMain" applicationName="warehouse" description="Find Orders ready to ship" />
+    <KeyboardShortcut shortcutId="WRH_CREATE_PICKLIST" sequenceNum="314" shortcut="f2" actionTypeId="KB_URL" actionTarget="PackOrder" applicationName="warehouse" description="Pack an Order" />
+    <KeyboardShortcut shortcutId="WRH_FIND_PICKLIST" sequenceNum="315" shortcut="ctrl+f2" actionTypeId="KB_URL" actionTarget="openPicklists" applicationName="warehouse" description="Find open Picklists" />
+
+    <KeyboardShortcut shortcutId="WRH_FIND_PRUN" sequenceNum="316" shortcut="shift+f3" actionTypeId="KB_URL" actionTarget="FindProductionRun" applicationName="warehouse" description="Find Production Runs" />
+    <KeyboardShortcut shortcutId="WRH_CREATE_PRUN" sequenceNum="317" shortcut="f3" actionTypeId="KB_URL" actionTarget="CreateProductionRun" applicationName="warehouse" description="Create a Production Run" />
+
+</entity-engine-xml>

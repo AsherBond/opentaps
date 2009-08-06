@@ -1,0 +1,186 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// @author Fabien Carrion
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.warehouse.facility.UtilWarehouse;
+import org.opentaps.warehouse.security.WarehouseSecurity;
+import org.opentaps.warehouse.shipment.ShippingHelper;
+
+// bshService.bsh
+delegator = dctx.getDelegator();
+dispatcher = dctx.getDispatcher();
+userLogin = context.get("userLogin");
+facilityId = context.get("facilityId");
+List facilities = new ArrayList();
+
+if (UtilValidate.isNotEmpty(facilityId)) {
+    facilities.add(UtilMisc.toMap("facilityId", facilityId));
+} else {
+    facilities.addAll(delegator.findAll("Facility", UtilMisc.toList("facilityId")));
+}
+
+if (UtilValidate.isNotEmpty(facilities)) {
+    facility = facilities.iterator();
+    while (facility.hasNext()) {
+
+        facilityId = facility.next().get("facilityId");
+
+        // Stock moves
+        serviceResult = dispatcher.runSync("findStockMovesNeeded", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
+        moveByOisgirInfoList = serviceResult.get("moveByOisgirInfoList");
+
+        serviceResult = dispatcher.runSync("findStockMovesRecommended", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
+        moveByPflInfoList = serviceResult.get("moveByPflInfoList");
+
+        totalStockMoves = 0;
+        if (moveByOisgirInfoList != null)
+            totalStockMoves += moveByOisgirInfoList.size();
+        if (moveByPflInfoList != null)
+            totalStockMoves += moveByPflInfoList.size();
+
+        // to and from Transfers
+        List toTransfers = UtilWarehouse.findFacilityActiveOnlytoTransfer(facilityId, delegator);
+        List fromTransfers = UtilWarehouse.findFacilityActiveOnlyfromTransfer(facilityId, delegator);
+        totalInventoryTransfers = 0;
+        if (toTransfers != null)
+            totalInventoryTransfers += toTransfers.size();
+        if (fromTransfers != null)
+            totalInventoryTransfers += fromTransfers.size();
+
+        // Back orders
+        serviceResult = dispatcher.runSync("getBackOrderedCounts", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
+        backOrderedOrders = serviceResult.get("backOrderedOrders");
+        backOrderedProducts = serviceResult.get("backOrderedProducts");
+
+        // orders Ready to Ship
+        shippinghelper = new ShippingHelper(delegator, facilityId);
+        ordersTotal = shippinghelper.findAllOrdersReadyToShip();
+        ordersTotalSize = new Integer(shippinghelper.getOrdersTotalSize());
+
+        // Ready to pick
+        delegator.removeAll(delegator.findByAnd("WarehouseSummaryPickMove", UtilMisc.toMap("facilityId", facilityId)));
+
+        // Creation of a Map which associate the different shipmentMethodTypeId and its quantities
+        orderShipment = null;
+        if (UtilValidate.isNotEmpty(ordersTotal)) {
+            ordersI = ordersTotal.iterator();
+            while (ordersI.hasNext()) {
+                order = ordersI.next();
+                shipmentMethodTypeId = order.get("shipmentMethodTypeId");
+
+                if (orderShipment == null) {
+                    orderShipment = UtilMisc.toMap(shipmentMethodTypeId, 1);
+                } else if (orderShipment.containsKey(shipmentMethodTypeId)) {
+                    int total = orderShipment.get(shipmentMethodTypeId) + 1;
+                    orderShipment.put(shipmentMethodTypeId, total);
+                } else {
+                    orderShipment.put(shipmentMethodTypeId, 1);
+                }
+            }
+
+            for (shipmentMethodTypeId : orderShipment.keySet()) {
+                shipmentMethodType = delegator.findByPrimaryKeyCache("ShipmentMethodType", UtilMisc.toMap("shipmentMethodTypeId", shipmentMethodTypeId));
+                shipmentMethodDesc = shipmentMethodType.get("description");
+
+                fields = UtilMisc.toMap("wspickmoveId", facilityId + shipmentMethodTypeId, "facilityId", facilityId, "shipmentMethodType", shipmentMethodDesc, "orderReadyToPickInfo", orderShipment.get(shipmentMethodTypeId));
+                if ((entity = delegator.findByPrimaryKey("WarehouseSummaryPickMove", UtilMisc.toMap("wspickmoveId", facilityId + shipmentMethodTypeId))) == null) {
+                    entity = delegator.create("WarehouseSummaryPickMove", fields);
+                } else {
+                    entity.putAll(fields);
+                    delegator.store(entity);
+                }
+            }
+        }
+
+        // Open picklists
+        serviceResult = dispatcher.runSync("getPicklistDisplayInfo", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
+        picklistInfoList = serviceResult.get("picklistInfoList");
+        totalOpenPicklists = 0;
+        if (picklistInfoList != null)
+            totalOpenPicklists += picklistInfoList.size();
+
+        // Picked Picklists
+        serviceResult = dispatcher.runSync("getPickedPicklists", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
+        pickedPicklistIds = serviceResult.get("pickedPicklistIds");
+        totalPickedPicklistIds = 0;
+        if (pickedPicklistIds != null)
+            totalPickedPicklistIds += pickedPicklistIds.size();
+
+        // Production runs (both assemblies and disassemblies)
+        findConditions = UtilMisc.toList(
+            new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
+            new EntityExpr("workEffortTypeId", EntityOperator.EQUALS, "PROD_ORDER_HEADER"),
+            new EntityConditionList( UtilMisc.toList(
+                new EntityExpr("workEffortPurposeTypeId", EntityOperator.EQUALS, "WEPT_PRODUCTION_RUN"),
+                new EntityConditionList( UtilMisc.toList(
+                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DISASMBL"),
+                    new EntityExpr("workEffortPurposeTypeId", EntityOperator.EQUALS, "WEPT_DISASSEMBLY")
+                ), EntityOperator.AND)
+            ), EntityOperator.OR )
+        );
+        findConditions.add( new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_CREATED") );
+        createdProdRuns = delegator.findByAnd("WorkEffortAndGoods", findConditions);
+
+        findConditions.remove(findConditions.size() - 1);
+        findConditions.add( new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_SCHEDULED") );
+        scheduledProdRuns = delegator.findByAnd("WorkEffortAndGoods", findConditions);
+
+        findConditions.remove(findConditions.size() - 1);
+        findConditions.add( new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_DOC_PRINTED") );
+        confirmedProdRuns = delegator.findByAnd("WorkEffortAndGoods", findConditions);
+
+        findConditions.remove(findConditions.size() - 1);
+        findConditions.add( new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_RUNNING") );
+        runningProdRuns = delegator.findByAnd("WorkEffortAndGoods", findConditions);
+
+        totalCreatedProdRuns = 0;
+        if (createdProdRuns != null)
+            totalCreatedProdRuns += createdProdRuns.size();
+        totalScheduledProdRuns = 0;
+        if (scheduledProdRuns != null)
+            totalScheduledProdRuns += scheduledProdRuns.size();
+        totalConfirmedProdRuns = 0;
+        if (confirmedProdRuns != null)
+            totalConfirmedProdRuns += confirmedProdRuns.size();
+        totalRunningProdRuns = 0;
+        if (runningProdRuns != null)
+            totalRunningProdRuns += runningProdRuns.size();
+
+        fields = UtilMisc.toMap("facilityId", facilityId);
+        fields.putAll(UtilMisc.toMap("RequiredStockMoves", totalStockMoves));
+        fields.putAll(UtilMisc.toMap("RequestedInventoryTransfers", totalInventoryTransfers));
+        fields.putAll(UtilMisc.toMap("NumberBackOrders", backOrderedOrders));
+        fields.putAll(UtilMisc.toMap("NumberProductsBackOrdered", backOrderedProducts));
+        fields.putAll(UtilMisc.toMap("OrdersReadyShip", ordersTotalSize));
+        fields.putAll(UtilMisc.toMap("OpenPicklists", totalOpenPicklists));
+        fields.putAll(UtilMisc.toMap("PicklistsShipped", totalPickedPicklistIds));
+        fields.putAll(UtilMisc.toMap("NewProductRuns", totalCreatedProdRuns));
+        fields.putAll(UtilMisc.toMap("ScheduledProductionRuns", totalScheduledProdRuns));
+        fields.putAll(UtilMisc.toMap("ConfirmedProductionRuns", totalConfirmedProdRuns));
+        fields.putAll(UtilMisc.toMap("ActiveProductionRuns", totalRunningProdRuns));
+
+        if ((entity = delegator.findByPrimaryKey("WarehouseSummaryData", UtilMisc.toMap("facilityId", facilityId))) == null) {
+            entity = delegator.create("WarehouseSummaryData", fields);
+        } else {
+            entity.putAll(fields);
+            delegator.store(entity);
+        }
+    }
+}

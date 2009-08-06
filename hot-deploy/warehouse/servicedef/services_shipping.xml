@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+        
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file may contain code which has been modified from that included with the Apache-licensed OFBiz product application -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+        
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Warehouse Shipping Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>0.9</version>
+
+    <service name="warehouseCompletePack" engine="java" 
+            location="org.opentaps.warehouse.shipment.packing.PackingServices" invoke="warehouseCompletePack">
+        <description>Wrapper for the OFBiz completePack service, plus any additional warehouse-app-specific logic</description>
+        <attribute name="packingSession" type="org.opentaps.warehouse.shipment.packing.PackingSession" mode="IN" optional="false"/>
+        <attribute name="handlingInstructions" type="String" mode="IN" optional="true"/>
+        <attribute name="pickerPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="additionalShippingCharge" type="Double" mode="IN" optional="true"/>
+        <attribute name="additionalShippingChargeDescription" type="String" mode="IN" optional="true"/>
+        <attribute name="forceComplete" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="packageWeights" type="Map" string-map-prefix="packageWeight_" mode="IN" optional="true"/>
+        <attribute name="packageTrackingCodes" type="Map" string-map-prefix="packageTrackingCode_" mode="IN" optional="true"/>
+        <attribute name="packageBoxTypeIds" type="Map" string-map-prefix="packageBoxTypeId_" mode="IN" optional="true"/>
+        <attribute name="weightUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="shipmentId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="warehouse.quickScheduleShipmentRouteSegment" engine="java" 
+            location="org.opentaps.warehouse.shipment.ShippingServices" invoke="quickScheduleShipmentRouteSegmentSynch">
+        <description>
+            Schedules the shipment with a carrier such that the label is generated and the
+            pickup confirmed.  Once this service is completed, the shipment is ready
+            to be labeled and handed over to the carrier.
+            This version runs the carrier confirm service synchronously so that errors from the carrier
+            may be printed to screen.  It is meant to be used when shipping individual route segments.
+        </description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentRouteSegmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="carrierPartyId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="warehouse.quickScheduleShipmentRouteSegmentAsynch" engine="java" 
+            location="org.opentaps.warehouse.shipment.ShippingServices" invoke="quickScheduleShipmentRouteSegmentAsynch">
+        <description>
+            Schedules the shipment with a carrier such that the label is generated and the
+            pickup confirmed.  Once this service is completed, the shipment is ready
+            to be labeled and handed over to the carrier.
+            This version runs the carrier confirm service asynchronously and is meant to be
+            used by a batch scheduling operation.  Messages or errors from the carrier
+            will eventually be logged when the response is processed.
+        </description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentRouteSegmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="carrierPartyId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="upsShipmentConfirmAndAccept" engine="java"
+            location="org.opentaps.warehouse.shipment.ShippingServices" invoke="upsShipmentConfirmAndAccept" auth="true">
+        <description>UPS Shipment Confirm and Accept</description>
+        <auto-attributes entity-name="ShipmentRouteSegment" include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="warehouse.printPackageShippingLabels" engine="java" 
+            location="org.opentaps.warehouse.shipment.ShippingServices" invoke="printPackageShippingLabels">
+        <description>Prints shipping labels for each package of a shipment</description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentRouteSegmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="printerName" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="insurePackedShipment" engine="java" 
+            location="org.opentaps.warehouse.shipment.ShippingServices" invoke="insurePackedShipment">
+        <description>When a shipment is marked packed, this service will set the insured value for packages 
+            that have a value above a certain threshold defined in warehouse.properties.</description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="setShipmentCurrency" engine="java" 
+            location="org.opentaps.warehouse.shipment.ShippingServices" invoke="setShipmentCurrency">
+        <description>Sets shipment currency. Defaults to the baseCurrencyUomId of the PartyAcctgPreference of the owner party of the shipment's origin facility</description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="warehouse.calcPackSessionAdditionalShippingCharge" engine="java"
+            location="org.opentaps.warehouse.shipment.ShippingServices" invoke="calcPackSessionAdditionalShippingCharge" auth="true">
+        <description>Totals package weights and retrieves a shipping estimate via the PackingSession</description>
+        <attribute name="packingSession" type="org.ofbiz.shipment.packing.PackingSession" mode="IN" optional="false"/>
+        <attribute name="packageWeights" type="Map" string-map-prefix="packageWeight_" mode="IN" optional="true"/>
+        <attribute name="weightUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="shippingContactMechId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="carrierPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="carrierRoleTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="additionalShippingCharge" type="Double" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="warehouse.printPicklist" engine="java" 
+            location="org.opentaps.warehouse.picking.PickingServices" invoke="printPicklist">
+        <description>Print a picklist to a physical printer</description>
+        <attribute name="picklistId" type="String" mode="IN" optional="false"/>
+        <attribute name="printerName" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="warehouse.closePicklist" engine="java" 
+            location="org.opentaps.warehouse.picking.PickingServices" invoke="closePicklist">
+        <description>Close off a picklist</description>
+        <attribute name="picklistId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="findOrdersToPickMove" engine="java"
+             location="org.opentaps.warehouse.picking.PickingServices" invoke="findOrdersToPickMove">
+        <description>Gets Picklist Data</description>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="isRushOrder" type="String" mode="IN" optional="true"/>
+        <attribute name="maxNumberOfOrders" type="Long" mode="IN" optional="false"/> <!-- for performance reason, make it mandatory -->
+        <attribute name="orderHeaderList" type="List" mode="IN" optional="true"/>
+        <attribute name="pickMoveByShipmentMethodInfoList" type="List" mode="OUT" optional="true"/>
+        <attribute name="rushOrderInfo" type="Map" mode="OUT" optional="true"/>
+        <attribute name="nReturnedOrders" type="Long" mode="OUT" optional="false"/> <!-- indicates how many orders accounted for -->
+    </service>
+
+</services>
+

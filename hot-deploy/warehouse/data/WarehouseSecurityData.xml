@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entity-engine-xml>
+
+    <!-- This file defines the basic security permissions of the warehouse applications and can be used to set up separate permission roles
+    for inventory, shipping, and manufacturing.  Note that some permissions for backend OFBIZ services are granted here, but as long as the user
+    does not have OFBTOOLS_VIEW permission, he should not be able to login to OFBIZ and modify things -->
+
+    <SecurityPermission description="Admin permission for any operation in any facility" permissionId="WRHS_ADMIN"/>
+
+    <SecurityPermission description="Basic permission to use the Warehouse application" permissionId="WRHS_VIEW"/>
+
+    <SecurityPermission description="Basic permission to use the Inventory tab" permissionId="WRHS_INV_VIEW"/>
+    <SecurityPermission description="Permission to receive Purchase Orders" permissionId="WRHS_INV_RCPO"/>
+    <SecurityPermission description="Permission to modify physical inventory" permissionId="WRHS_INV_PHINV"/>
+    <SecurityPermission description="Permission to perform stock moves" permissionId="WRHS_INV_STKMV"/>
+    <SecurityPermission description="Permission to perform inventory transfers" permissionId="WRHS_INV_XFER"/>
+    <SecurityPermission description="Permission to override calculated unit cost of received inventory" permissionId="WRHS_INV_SETCOST"/>
+    <SecurityPermission description="Permission to view lot level screens" permissionId="WRHS_INV_LOT_VIEW"/>
+    <SecurityPermission description="Permission to create new lot" permissionId="WRHS_INV_LOT_CREATE"/>
+    <SecurityPermission description="Permission to update a lot" permissionId="WRHS_INV_LOT_UPDATE"/>
+
+    <SecurityPermission description="Basic permission to use the Shipment tab" permissionId="WRHS_SHIP_VIEW"/>
+    <SecurityPermission description="Permission to view picklists" permissionId="WRHS_SHIP_PICK_VIEW"/>
+    <SecurityPermission description="Permission to create picklists" permissionId="WRHS_SHIP_PICK_CREATE"/>
+    <SecurityPermission description="Permission to pack orders" permissionId="WRHS_SHIP_PACK"/>
+    <SecurityPermission description="Permission to schedule shipments and print labels" permissionId="WRHS_SHIP_SCHED"/>
+
+    <SecurityPermission description="Permission to view invoices of packed orders" permissionId="WRHS_INVOICE_VIEW"/>
+
+    <SecurityPermission description="Basic permission to use the Manufacturing tab" permissionId="WRHS_MFG_VIEW"/>
+    <SecurityPermission description="Permission to create and update production runs" permissionId="WRHS_MFG_CREATE"/>
+
+    <SecurityPermission description="Permission to use the config tab" permissionId="WRHS_CONFIG_VIEW"/>
+    <SecurityPermission description="Permission to create and configure a warehouse" permissionId="WRHS_CONFIG"/>
+
+    <!-- This permission group is for any user who can work with the warehouse application.  Use the party manager to associate it
+     with the userlogin of the warehouse.  Then configure the permission for each user at each warehouse in Warehouse > Configuration >> Team Member. -->
+    <SecurityGroup groupId="WRHS_USER" description="Warehouse application user.  Configure specific permissions for each warehouse in the Warehouse > Configuration >> Team Member."/>
+    <SecurityGroupPermission groupId="WRHS_USER" permissionId="WRHS_USER"/>
+    <SecurityGroupPermission groupId="WRHS_USER" permissionId="WRHS_VIEW"/>
+
+    <!-- these ofbiz permissions are needed so various services will run -->
+    <SecurityGroupPermission groupId="WRHS_USER" permissionId="FACILITY_ADMIN"/>
+    <SecurityGroupPermission groupId="WRHS_USER" permissionId="ORDERMGR_UPDATE"/>
+    <SecurityGroupPermission groupId="WRHS_USER" permissionId="MANUFACTURING_VIEW"/>
+
+    <!-- Needed to delete production run tasks -->
+    <SecurityGroupPermission groupId="WRHS_USER" permissionId="WORKEFFORTMGR_DELETE"/>
+
+    <!-- Warehouse admin can perform any action in any Warehouse -->
+    <SecurityGroup groupId="WRHS_ADMIN" description="Warehouse Admin with permissions to perform any action in any Warehouse"/>
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="WRHS_ADMIN"/>
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="FACILITY_ADMIN"/>
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ORDERMGR_UPDATE"/>
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="MANUFACTURING_ADMIN"/>
+
+    <!-- Give admin permission to define outsourced tasks, receive outsourced purchase orders and create purchase invoices for them. -->
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ACCOUNTING_ADMIN"/>
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="FINANCIALS_AP_INUPDT"/>
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="CATALOG_CREATE"/>
+
+    <!-- Warehouse manager can perform any action in the Warehouse -->
+    <SecurityGroup groupId="WRHS_MANAGER" description="Warehouse Manager with permissions to perform any action in the Warehouse"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_RCPO"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_PHINV"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_STKMV"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_XFER"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_SETCOST"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_LOT_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_LOT_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INV_LOT_UPDATE"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_SHIP_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_SHIP_PICK_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_SHIP_PICK_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_SHIP_PACK"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_SHIP_SCHED"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_INVOICE_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_MFG_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_MFG_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_CONFIG"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_CONFIG_VIEW"/>
+
+    <!-- For now, grant admin access to OFBiz facility and manufacturing services -->
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="FACILITY_ADMIN"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="MANUFACTURING_ADMIN"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WORKEFFORTMGR_ADMIN"/>
+    
+    
+    <!-- Permissions required by the services called during order packing -->
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ORDERMGR_UPDATE"/>
+
+    <!-- Permissions required by the services called during the receive inventory process -->
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ORDERMGR_CREATE"/>
+
+    <!-- Permissions required by lookup screens -->
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ORDERMGR_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="CATALOG_VIEW"/>
+
+    <!-- Shipping only access permission -->
+    <SecurityGroup groupId="WRHS_SHIPPER" description="Warehouse application shipping only permissions"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="ORDERMGR_UPDATE"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="FACILITY_ADMIN"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_SHIP_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_SHIP_PICK_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_SHIP_PICK_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_SHIP_PACK"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_SHIP_SCHED"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_INVOICE_VIEW"/>
+    
+    <!-- Warehouse team role and related security permissions.  Customize to say whatever you need -->
+    <FacilityTeamRoleSecurity securityGroupId="WRHS_MANAGER" roleDescription="Warehouse Manager" sequenceNum="01"/>
+    <FacilityTeamRoleSecurity securityGroupId="WRHS_SHIPPER" roleDescription="Shipper" sequenceNum="02"/>
+
+</entity-engine-xml>

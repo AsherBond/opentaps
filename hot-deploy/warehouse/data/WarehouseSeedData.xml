@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entity-engine-xml>
+
+    <Enumeration enumId="IID_BOM" description="Issued as part of BOM" enumTypeId="IID_REASON"/>
+    <Enumeration enumId="IID_DEFECT" description="Replace defective part" enumTypeId="IID_REASON"/>
+
+    <!-- New outsourced status for a production run task -->
+    <StatusItem statusId="PRUN_OUTSRC_PEND" statusTypeId="PRODUCTION_RUN" description="PO Pending" statusCode="OUTSOURCE_PENDING"  sequenceId="07"/>
+    <StatusItem statusId="PRUN_OUTSRCD" statusTypeId="PRODUCTION_RUN" description="Outsourced" statusCode="OUTSOURCED"  sequenceId="08"/>
+    <StatusItem statusId="PRUN_REVERTED" statusTypeId="PRODUCTION_RUN" description="Reverted" statusCode="REVERTED"  sequenceId="09"/>
+
+    <StatusValidChange statusId="PRUN_CREATED" statusIdTo="PRUN_OUTSRC_PEND" transitionName="Waiting for PO"/>
+    <StatusValidChange statusId="PRUN_CREATED" statusIdTo="PRUN_OUTSRCD" transitionName="Outsourced"/>
+    <StatusValidChange statusId="PRUN_OUTSRC_PEND" statusIdTo="PRUN_OUTSRCD" transitionName="Outsourced"/>
+    <StatusValidChange statusId="PRUN_OUTSRC_PEND" statusIdTo="PRUN_CANCELLED" transitionName="Cancel"/>
+    <StatusValidChange statusId="PRUN_OUTSRCD" statusIdTo="PRUN_RUNNING" transitionName="Received"/>
+
+    <!-- Otherwise you can't cancel a confirmed production run -->
+    <StatusValidChange statusId="PRUN_DOC_PRINTED" statusIdTo="PRUN_CANCELLED" transitionName="Cancel"/>
+
+    <StatusValidChange statusId="PRUN_DOC_PRINTED" statusIdTo="PRUN_REVERTED" transitionName="Reverted"/>
+    <StatusValidChange statusId="PRUN_RUNNING" statusIdTo="PRUN_REVERTED" transitionName="Reverted"/>
+
+    <!-- In opentaps, we note what products have been produced with records in WorkEffortGoodStandard of the following type. -->
+    <WorkEffortGoodStandardType workEffortGoodStdTypeId="PRUN_PROD_PRODUCED" description="Quantity of product produced in production run."/>
+
+    <!-- Disassembly types -->
+    <WorkEffortPurposeType workEffortPurposeTypeId="WEPT_DISASSEMBLY" description="Disassembly Productin Run"/>
+    <WorkEffortPurposeType workEffortPurposeTypeId="ROU_DISASSEMBLY" description="Disassembly Task"/>
+    <WorkEffortAssocType workEffortAssocTypeId="ROUTING_DISASSEMBLY" description="Identifies which task will receive the material issuances for the disassembly."/>
+    <WorkEffortGoodStandardType workEffortGoodStdTypeId="PRUN_PROD_DISASMBL" description="Product and quantity to disassemble for a production run."/>
+    <WorkEffortGoodStandardType workEffortGoodStdTypeId="ROU_DISASMBL_TEMPL" description="Product and Disassembly Production Run Template (Routing) Association."/>
+
+    <!-- Default template for disassembly (allows disassembly of any product with a Bill of Materials) -->
+    <WorkEffort workEffortId="DEF_DISASMBL_TMP" workEffortTypeId="ROUTING" workEffortPurposeTypeId="ROU_DISASSEMBLY" currentStatusId="ROU_ACTIVE" workEffortName="Disassembly" description=""/>
+    <WorkEffort workEffortId="DEF_DISASMBLTASK_TMP" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_DISASSEMBLY" currentStatusId="ROU_ACTIVE" workEffortName="Disassembly Task" description=""/>
+    <WorkEffortAssoc workEffortIdFrom="DEF_DISASMBL_TMP" workEffortIdTo="DEF_DISASMBLTASK_TMP" workEffortAssocTypeId="ROUTING_DISASSEMBLY" sequenceNum="10" fromDate="2007-01-01 00:00:00.000"/>
+
+    <!-- Enumeration for ProductFacility replenishMethodEnumId -->
+    <EnumerationType enumTypeId="PFAC_RESPL_METHOD" hasTable="N" description="Product Facility Resplenish Methods"/>
+    <Enumeration enumId="PF_RM_NEVER" description="Never transfer" enumTypeId="PFAC_RESPL_METHOD"/>
+    <Enumeration enumId="PF_RM_BACKUP" description="Transfer from backup warehouse if available" enumTypeId="PFAC_RESPL_METHOD"/>
+    <Enumeration enumId="PF_RM_SPECIF" description="Transfer from specified warehouse if available" enumTypeId="PFAC_RESPL_METHOD"/>
+    <Enumeration enumId="PF_RM_BACKUP_ALW" description="Always transfer from backup warehouse" enumTypeId="PFAC_RESPL_METHOD"/>
+    <Enumeration enumId="PF_RM_SPECIF_ALW" description="Always transfer from specified warehouse" enumTypeId="PFAC_RESPL_METHOD"/>
+
+    <!-- Inventory item usage types for tracing purpose -->
+    <InventoryItemUsageType inventoryItemUsageTypeId="RECEIPT" description="Inventory Receipt"/>
+    <InventoryItemUsageType inventoryItemUsageTypeId="TRANSFER" description="Inventory Transfer"/>
+    <InventoryItemUsageType inventoryItemUsageTypeId="MANUF_RAW_MAT" description="Manufacturing"/>
+    <InventoryItemUsageType inventoryItemUsageTypeId="ORDER_RESERVED" description="Reserved for Sales Order"/>
+    <InventoryItemUsageType inventoryItemUsageTypeId="ORDER_ISSUED" description="Shipped to Sales Order"/>
+    <InventoryItemUsageType inventoryItemUsageTypeId="UNKNOWN" description="Unknown"/>
+    <InventoryItemUsageType inventoryItemUsageTypeId="VARIANCE" description="Adjustment"/>
+
+</entity-engine-xml>

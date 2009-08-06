@@ -1,0 +1,1524 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!-- This file may have been based on one or more Apache OFBIZ files but has been modified -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <!-- Include requests for common opentaps features. -->
+    <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
+
+    <description>Warehouse Module Site Configuration File</description>
+    <owner>Open Source Strategies, Inc. (c) 2007 </owner>
+    <errorpage>/error/error.jsp</errorpage>
+
+    <!-- event handlers -->
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+    <handler name="simple" type="request" class="org.ofbiz.webapp.event.SimpleEventHandler"/>
+    <handler name="service" type="request" class="org.ofbiz.webapp.event.ServiceEventHandler"/>
+    <handler name="service-multi" type="request" class="org.ofbiz.webapp.event.ServiceMultiEventHandler"/>
+    <handler name="bsf" type="request" class="org.ofbiz.webapp.event.BsfEventHandler"/>
+
+    <!-- view handlers -->
+    <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
+    <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
+    <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>
+
+    <preprocessor>
+        <!-- Events to run on every request before security (chains exempt) -->
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkExternalLoginKey"/>
+    </preprocessor>
+    <postprocessor>
+        <!-- Events to run on every request after all other processing (chains exempt) -->
+    </postprocessor>
+
+
+    <!-- ================= -->
+    <!-- Security Mappings -->
+    <!-- ================= -->
+
+    <request-map uri="checkLogin" edit="false">
+        <description>Verify a user is logged in.</description>
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkLogin" />
+        <response name="success" type="view" value="myHomeMain" />
+        <response name="error" type="view" value="login" />
+    </request-map>
+    <request-map uri="login">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login" />
+        <response name="success" type="view" value="selectFacilityForm"/>
+        <response name="error" type="view" value="login"/>
+    </request-map>
+    <request-map uri="logout">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="logout"/>
+        <response name="success" type="request" value="checkLogin"/>
+        <response name="error" type="view" value="myHomeMain"/>
+    </request-map>
+
+
+    <!-- ====================== -->
+    <!-- Basic Request Mappings -->
+    <!-- ====================== -->
+
+    <request-map uri="authview">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+
+    <request-map uri="setSessionLocale">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.common.CommonEvents" invoke="setSessionLocale"/>
+        <response name="success" type="request" value="myHomeMain"/>
+        <response name="error" type="request" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="main">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="selectFacilityForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="selectFacilityForm"/>
+    </request-map>
+    <request-map uri="setFacility">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.warehouse.configuration.ConfigurationEvents" invoke="setFacility" />
+        <response name="selectFacility" type="view" value="selectFacilityForm"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+
+
+    <!-- ============================== -->
+    <!-- Configuration Request Mappings -->
+    <!-- ============================== -->
+
+    <!-- Initial create warehouse screen and control chain -->
+    <request-map uri="createWarehouseForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createWarehouseForm"/>
+    </request-map>
+    <request-map uri="createWarehouse">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createFacility" />
+        <response name="success" type="request" value="createFacilityManager"/>
+        <response name="error" type="view" value="createWarehouseForm"/>
+    </request-map>
+    <request-map uri="createFacilityManager">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createFacilityManager" />
+        <response name="success" type="request" value="setFacilityEndInView"/>
+        <response name="error" type="view" value="createWarehouseForm"/>
+    </request-map>
+    <request-map uri="setFacilityEndInView">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.warehouse.configuration.ConfigurationEvents" invoke="setFacility" />
+        <response name="selectFacility" type="view" value="createWarehouseForm"/>
+        <response name="success" type="view" value="viewWarehouse"/>
+    </request-map>
+
+    <!-- View/Edit Warehouse -->
+    <request-map uri="viewWarehouse">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewWarehouse"/>
+    </request-map>
+    <request-map uri="EditFacility">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewWarehouse"/>
+    </request-map>
+    <request-map uri="updateWarehouse">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateFacility"/>
+        <response name="success" type="view" value="viewWarehouse"/>
+        <response name="error" type="view" value="viewWarehouse"/>
+    </request-map>
+
+    <!-- Create/update contact mechs for facility -->
+    <request-map uri="EditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="createContactMechFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createFacilityContactMech"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="updateContactMechFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateFacilityContactMech"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="deleteContactMechFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteFacilityContactMech"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="createPostalAddressAndPurposeFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createFacilityPostalAddress"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="createPostalAddressFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createFacilityPostalAddress"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="updatePostalAddressFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateFacilityPostalAddress"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="createTelecomNumberFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createFacilityTelecomNumber"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="updateTelecomNumberFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateFacilityTelecomNumber"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="createEmailAddressFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createFacilityEmailAddress"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="updateEmailAddressFacility">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateFacilityEmailAddress"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="createFacilityContactMechPurpose">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createFacilityContactMechPurpose"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+    <request-map uri="deleteFacilityContactMechPurpose">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteFacilityContactMechPurpose"/>
+        <response name="success" type="view" value="EditContactMech"/>
+        <response name="error" type="view" value="EditContactMech"/>
+    </request-map>
+
+    <!-- Facility Location -->
+    <request-map uri="EditFacilityLocation">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditFacilityLocation"/>
+    </request-map>
+    <request-map uri="FindFacilityLocation">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindFacilityLocation"/>
+    </request-map>
+    <request-map uri="CreateFacilityLocation">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createFacilityLocation"/>
+        <response name="success" type="view" value="EditFacilityLocation"/>
+        <response name="error" type="view" value="EditFacilityLocation"/>
+    </request-map>
+    <request-map uri="UpdateFacilityLocation">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateFacilityLocation"/>
+        <response name="success" type="view" value="EditFacilityLocation"/>
+        <response name="error" type="view" value="EditFacilityLocation"/>
+    </request-map>
+    <request-map uri="createProductFacilityLocation">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createProductFacilityLocation"/>
+        <response name="success" type="view" value="EditFacilityLocation"/>
+        <response name="error" type="view" value="EditFacilityLocation"/>
+    </request-map>
+    <request-map uri="updateProductFacilityLocation">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateProductFacilityLocation"/>
+        <response name="success" type="view" value="EditFacilityLocation"/>
+        <response name="error" type="view" value="EditFacilityLocation"/>
+    </request-map>
+    <request-map uri="deleteProductFacilityLocation">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteProductFacilityLocation"/>
+        <response name="success" type="view" value="EditFacilityLocation"/>
+        <response name="error" type="view" value="EditFacilityLocation"/>
+    </request-map>
+
+    <!-- Team Members -->
+    <request-map uri="viewTeamMembers">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewTeamMembers"/>
+    </request-map>
+    <request-map uri="removeFacilityTeamMember">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeFacilityTeamMember"/>
+        <response name="success" type="view" value="viewTeamMembers"/>
+        <response name="error" type="view" value="viewTeamMembers"/>
+    </request-map>
+    <request-map uri="addFacilityTeamMember">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="addFacilityTeamMember"/>
+        <response name="success" type="view" value="viewTeamMembers"/>
+        <response name="error" type="view" value="viewTeamMembers"/>
+    </request-map>
+
+
+    <!-- ================== -->
+    <!-- Main Request Maps  -->
+    <!-- ================== -->
+
+    <request-map uri="myHomeMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="inventoryMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="inventoryMain"/>
+    </request-map>
+    <request-map uri="shippingMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="readyToShip"/>
+    </request-map>
+    <request-map uri="manufacturingMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="manufacturingMain"/>
+    </request-map>
+    <request-map uri="configurationMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="configurationMain"/>
+    </request-map>
+
+    <!-- call this request when you have a donePage that you want to go to after finishing a service -->
+    <request-map uri="donePageRequestHelper">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="donePageRequestHelper"/>
+        <response name="myProfile" type="view" value="myProfile"/>
+        <!-- mostly for error redirects -->
+        <response name="myProfileEditContactMech" type="request" value="myProfileEditContactMech"/>
+        <!-- default -->
+        <response name="error" type="view" value="myHomeMain"/>
+        <response name="" type="request" value="myHomeMain"/>
+    </request-map>
+
+    <!-- ======================= -->
+    <!--   Lookup Request Maps   -->
+    <!-- ======================= -->
+
+    <request-map uri="LookupFacilityLocation">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupFacilityLocation"/>
+    </request-map>
+    <request-map uri="LookupOrderHeader">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupOrderHeader"/>
+    </request-map>
+    <request-map uri="LookupOrderHeaderAndShipInfo">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupOrderHeaderAndShipInfo"/>
+    </request-map>
+    <request-map uri="LookupPartyName">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupPartyName"/>
+    </request-map>
+
+
+
+    <!-- ======================= -->
+    <!-- Inventory Request Maps  -->
+    <!-- ======================= -->
+
+    <!-- Receive Purchase Order -->
+    <request-map uri="ReceiveInventoryAgainstPurchaseOrder">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ReceiveInventoryAgainstPurchaseOrder"/>
+    </request-map>
+     <request-map uri="receiveInventoryItem">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="receiveInventoryItem"/>
+    </request-map>
+    <request-map uri="receiveSingleInventoryProduct">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="receiveInventoryProduct"/>
+        <response name="success" type="request-redirect-filterparam" value="EditInventoryItem" allowed-params="inventoryItemId" allowed-attributes="inventoryItemId"/>
+        <response name="error" type="view" value="receiveInventoryItem"/>
+    </request-map>
+    <request-map uri="issueOrderItemToShipmentAndReceiveAgainstPO">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="warehouse.issueOrderItemToShipmentAndReceiveAgainstPO"/>
+        <response name="success" type="request-redirect-filterparam" value="ReceiveInventoryAgainstPurchaseOrder" allowed-params="purchaseOrderId,shipGroupSeqId,clearAll"/>
+        <response name="error" type="view" value="ReceiveInventoryAgainstPurchaseOrder"/>
+    </request-map>
+    <request-map uri="completePurchaseOrder">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="completePurchaseOrder"/>
+        <response name="success" type="view" value="ReceiveInventoryAgainstPurchaseOrder"/>
+        <response name="error" type="view" value="ReceiveInventoryAgainstPurchaseOrder"/>
+    </request-map>
+    <request-map uri="backOrderedItems">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="backOrderedItems"/>
+    </request-map>
+    <request-map uri="fulfilledBackOrders.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="fulfilledBackOrders.pdf"/>
+    </request-map>
+    <request-map uri="findShipmentReceipt">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findShipmentReceipt"/>
+    </request-map>
+
+    <!-- Physical Inventory -->
+    <request-map uri="physicalInventory">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="physicalInventory"/>
+    </request-map>
+    <request-map uri="createPhysicalVariances">
+        <security https="true" auth="true"/>
+        <event type="service-multi" path="" invoke="adjustInventoryQuantity"/>
+        <response name="success" type="request-redirect" value="physicalInventory"/>
+        <response name="error" type="view" value="physicalInventory"/>
+    </request-map>
+
+    <!-- Stock Moves -->
+    <request-map uri="stockMoves">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="stockMoves"/>
+    </request-map>
+    <request-map uri="PickMoveStockSimple">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="PickMoveStockSimple"/>
+    </request-map>
+    <request-map uri="processPhysicalStockMove">
+        <security https="true" auth="true"/>
+        <event type="service-multi" path="" invoke="processPhysicalStockMove"/>
+        <response name="success" type="view" value="stockMoves"/>
+        <response name="error" type="view" value="stockMoves"/>
+    </request-map>
+
+    <!-- Inventory Transfer -->
+    <request-map uri="FindFacilityTransfers">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindFacilityTransfers"/>
+    </request-map>
+    <request-map uri="TransferInventoryItem">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="TransferInventoryItem"/>
+    </request-map>
+    <request-map uri="CreateInventoryTransfer">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createInventoryTransfer"/>
+        <response name="success" type="view" value="FindFacilityTransfers"/>
+        <response name="error" type="view" value="FindFacilityTransfers"/>
+    </request-map>
+    <request-map uri="CheckInventoryForUpdateTransfer">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.warehouse.inventory.InventoryEvents" invoke="checkInventoryForUpdateTransfer"/>
+        <response name="success" type="request" value="UpdateInventoryTransfer"/>
+        <response name="error" type="view" value="TransferInventoryItem"/>
+    </request-map>
+    <request-map uri="UpdateInventoryTransfer">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateInventoryTransfer"/>
+        <response name="success" type="view" value="FindFacilityTransfers"/>
+        <response name="error" type="view" value="FindFacilityTransfers"/>
+    </request-map>
+    <request-map uri="CheckInventoryForCompleteRequestedTransfers">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.warehouse.inventory.InventoryEvents" invoke="checkInventoryForCompleteRequestedTransfers"/>
+        <response name="success" type="request" value="CompleteRequestedTransfers"/>
+        <response name="error" type="view" value="FindFacilityTransfers"/>
+    </request-map>
+    <request-map uri="CompleteRequestedTransfers">
+        <security https="true" auth="true"/>
+        <event type="service-multi" path="" invoke="updateInventoryTransfer"/>
+        <response name="success" type="view" value="FindFacilityTransfers"/>
+        <response name="error" type="view" value="FindFacilityTransfers"/>
+    </request-map>
+
+    <!-- Inventory Item -->
+    <request-map uri="findInventoryItem">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findInventoryItem"/>
+    </request-map>
+    <request-map uri="EditInventoryItem">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditInventoryItem"/>
+    </request-map>
+    <request-map uri="ViewInventoryItemDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ViewInventoryItemDetail"/>
+    </request-map>
+    <request-map uri="CreateInventoryItem">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createInventoryItem"/>
+        <response name="success" type="view" value="EditInventoryItem"/>
+        <response name="error" type="view" value="EditInventoryItem"/>
+    </request-map>
+    <request-map uri="UpdateInventoryItem">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateInventoryItem"/>
+        <response name="success" type="view" value="EditInventoryItem"/>
+        <response name="error" type="view" value="EditInventoryItem"/>
+    </request-map>
+    <request-map uri="DeleteInventoryItem">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteInventoryItem"/>
+        <response name="success" type="view" value="EditInventoryItem"/>
+        <response name="error" type="view" value="EditInventoryItem"/>
+    </request-map>
+    <request-map uri="createPhysicalInventoryAndVariance">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createPhysicalInventoryAndVariance"/>
+        <response name="success" type="view" value="EditInventoryItem"/>
+        <response name="error" type="view" value="EditInventoryItem"/>
+    </request-map>
+
+    <!-- Lots -->
+    <request-map uri="manageLots">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="manageLots"/>
+    </request-map>
+    <request-map uri="lotDetails">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="lotDetails"/>
+    </request-map>
+    <request-map uri="lotDetailsPopup">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="lotDetailsPopup"/>
+    </request-map>
+
+    <request-map uri="createLotForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createLotForm"/>
+    </request-map>
+    <request-map uri="createLot">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="warehouse.createLot"/>
+        <response name="success" type="request-redirect" value="lotDetails"/>
+        <response name="error" type="view" value="createLotForm"/>
+    </request-map>
+
+    <request-map uri="createLotPopupForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createLotPopupForm"/>
+    </request-map>
+    <request-map uri="createLotPopup">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="warehouse.createLot"/>
+        <response name="success" type="request-redirect" value="lotDetailsPopup"/>
+        <response name="error" type="view" value="createLotPopupForm"/>
+    </request-map>
+
+    <request-map uri="editLotForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editLotForm"/>
+    </request-map>
+    <request-map uri="updateLot">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="warehouse.updateLot"/>
+        <response name="success" type="request-redirect" value="lotDetails"/>
+        <response name="error" type="view" value="editLotForm"/>
+    </request-map>
+
+    <request-map uri="traceInventory">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="traceInventory"/>
+    </request-map>
+
+    <!-- OFBIZ compatibility URL requests.  Remove these later -->
+
+    <!-- Physical Inventory -->
+    <request-map uri="FindFacilityPhysicalInventory">  
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="physicalInventory"/>
+    </request-map>
+
+    <!-- ================== -->
+    <!-- Ship Request Maps  -->
+    <!-- ================== -->
+
+    <!-- Ready to Ship -->
+    <request-map uri="readyToShip">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="readyToShip"/>
+    </request-map>
+    <request-map uri="shipGroups.pdf">
+        <security https="true" auth="true"/><response name="success" type="view" value="ShipGroupsPDF"/>
+    </request-map>
+
+    <!-- Incoming and Outgoing Shipments -->
+    <request-map uri="IncomingShipments">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindShipment"/>
+    </request-map>
+    <request-map uri="OutgoingShipments">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindShipment"/>
+    </request-map>
+
+    <!-- Shipment Requests -->
+    <request-map uri="ViewShipment">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ViewShipment"/>
+    </request-map>
+    <request-map uri="EditShipment">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditShipment"/>
+    </request-map>
+    <request-map uri="updateShipment">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateShipment"/>
+        <response name="success" type="request-redirect" value="ViewShipment"/>
+        <response name="error" type="view" value="EditShipment"/>
+    </request-map>
+
+    <!-- Shipment Items Requests -->
+    <request-map uri="EditShipmentItems">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditShipmentItems"/>
+    </request-map>
+    <request-map uri="createShipmentItem">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipmentItem"/>
+        <response name="success" type="request-redirect" value="EditShipmentItems"/>
+        <response name="error" type="view" value="EditShipmentItems"/>
+    </request-map>
+    <request-map uri="deleteShipmentItem">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteShipmentItem"/>
+        <response name="success" type="request-redirect" value="EditShipmentItems"/>
+        <response name="error" type="view" value="EditShipmentItems"/>
+    </request-map>
+    <request-map uri="deleteShipmentItemIssuance">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteItemIssuance"/>
+        <response name="success" type="request-redirect" value="EditShipmentItems"/>
+        <response name="error" type="view" value="EditShipmentItems"/>
+    </request-map>
+    <request-map uri="createShipmentItemPackageContent">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipmentPackageContent"/>
+        <response name="success" type="request-redirect" value="EditShipmentItems"/>
+        <response name="error" type="view" value="EditShipmentItems"/>
+    </request-map>
+    <request-map uri="deleteShipmentItemPackageContent">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteShipmentPackageContent"/>
+        <response name="success" type="request-redirect" value="EditShipmentItems"/>
+        <response name="error" type="view" value="EditShipmentItems"/>
+    </request-map>
+    <request-map uri="ShipmentManifest.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ShipmentManifest.pdf"/>
+    </request-map>
+
+    <!-- Shipment Packages Requests -->
+    <request-map uri="EditShipmentPackages">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditShipmentPackages"/>
+    </request-map>
+    <request-map uri="createShipmentPackage">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipmentPackage"/>
+        <response name="success" type="request-redirect" value="EditShipmentPackages"/>
+        <response name="error" type="view" value="EditShipmentPackages"/>
+    </request-map>
+    <request-map uri="updateShipmentPackage">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateShipmentPackage"/>
+        <response name="success" type="request-redirect" value="EditShipmentPackages"/>
+        <response name="error" type="view" value="EditShipmentPackages"/>
+    </request-map>
+    <request-map uri="deleteShipmentPackage">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteShipmentPackage"/>
+        <response name="success" type="request-redirect" value="EditShipmentPackages"/>
+        <response name="error" type="view" value="EditShipmentPackages"/>
+    </request-map>
+    <request-map uri="createShipmentPackageContent">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipmentPackageContent"/>
+        <response name="success" type="request-redirect" value="EditShipmentPackages"/>
+        <response name="error" type="view" value="EditShipmentPackages"/>
+    </request-map>
+    <request-map uri="deleteShipmentPackageContent">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteShipmentPackageContent"/>
+        <response name="success" type="request-redirect" value="EditShipmentPackages"/>
+        <response name="error" type="view" value="EditShipmentPackages"/>
+    </request-map>
+    <request-map uri="createShipmentPackageRouteSeg">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipmentPackageRouteSeg"/>
+        <response name="success" type="request-redirect" value="EditShipmentPackages"/>
+        <response name="error" type="view" value="EditShipmentPackages"/>
+    </request-map>
+    <request-map uri="updateShipmentPackageRouteSeg">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateShipmentPackageRouteSeg"/>
+        <response name="success" type="request-redirect" value="EditShipmentPackages"/>
+        <response name="error" type="view" value="EditShipmentPackages"/>
+    </request-map>
+    <request-map uri="deleteShipmentPackageRouteSeg">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteShipmentPackageRouteSeg"/>
+        <response name="success" type="request-redirect" value="EditShipmentPackages"/>
+        <response name="error" type="view" value="EditShipmentPackages"/>
+    </request-map>
+
+    <!-- Shipment Route Segments Requests -->
+    <request-map uri="EditShipmentRouteSegments">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="createShipmentRouteSegment">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipmentRouteSegment"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="updateShipmentRouteSegment">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateShipmentRouteSegment"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="deleteShipmentRouteSegment">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteShipmentRouteSegment"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="duplicateShipmentRouteSegment">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="duplicateShipmentRouteSegment"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="createRouteSegmentShipmentPackage">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipmentPackageRouteSeg"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="updateRouteSegmentShipmentPackage">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateShipmentPackageRouteSeg"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="deleteRouteSegmentShipmentPackage">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deleteShipmentPackageRouteSeg"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+
+    <!-- UPS carrier requests -->
+    <request-map uri="upsShipmentConfirm">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="upsShipmentConfirm"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="upsShipmentAccept">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="upsShipmentAccept"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="upsVoidShipment">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="upsVoidShipment"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <request-map uri="upsTrackShipment">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="upsTrackShipment"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+
+    <!-- DHL carrier requests -->
+    <request-map uri="dhlShipmentConfirm">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="dhlShipmentConfirm"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+
+    <request-map uri="viewShipmentPackageRouteSegLabelImage">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.shipment.shipment.ShipmentEvents" invoke="viewShipmentPackageRouteSegLabelImage"/>
+        <response name="success" type="none" value=""/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+    <!-- note: this is an insecure version of above for purposes of rendering via fop, which cannot access over https -->
+    <request-map uri="viewShipmentLabel">
+        <event type="java" path="org.ofbiz.shipment.shipment.ShipmentEvents" invoke="viewShipmentPackageRouteSegLabelImage"/>
+        <response name="success" type="none" value=""/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+
+    <!-- Fedex carrier requests -->
+    <request-map uri="fedexShipmentConfirm">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="fedexShipRequest"/>
+        <response name="success" type="request-redirect" value="EditShipmentRouteSegments"/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+
+    <!-- Open Picklists -->
+    <request-map uri="picklistDetails">  
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="picklistDetails"/>
+    </request-map>
+    <request-map uri="openPicklists">  
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="openPicklists"/>
+    </request-map>
+    <request-map uri="openPicklist">  
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="openPicklist"/>
+    </request-map>
+    <request-map uri="pickedPicklists">  
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="pickedPicklists"/>
+    </request-map>
+    <request-map uri="updatePicklist">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updatePicklist"/>
+        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="error" type="view" value="picklistDetails"/>
+    </request-map>
+    <request-map uri="createPicklistRole">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createPicklistRole"/>
+        <response name="success" type="view" value="picklistDetails"/>
+        <response name="error" type="view" value="picklistDetails"/>
+    </request-map>
+    <request-map uri="updatePicklistBin">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updatePicklistBin"/>
+        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="error" type="view" value="picklistDetails"/>
+    </request-map>
+    <request-map uri="deletePicklistBin">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deletePicklistBin"/>
+        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="error" type="view" value="picklistDetails"/>
+    </request-map>
+    <request-map uri="deletePicklistItem">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="deletePicklistItem"/>
+        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="error" type="view" value="picklistDetails"/>
+    </request-map>
+    <request-map uri="PicklistReport.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="PicklistReport.pdf"/>
+    </request-map>
+
+    <!-- Create Picklist -->
+    <request-map uri="createPicklist">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPicklist"/>
+    </request-map>
+    <request-map uri="createPicklistFromOrders">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createPicklistFromOrders"/>
+        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="error" type="request-redirect" value="createPicklist"/>
+    </request-map>
+    <request-map uri="createAndPrintPicklistFromOrders">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createPicklistFromOrders"/>
+        <response name="success" type="request" value="printPicklist"/>
+        <response name="error" type="request-redirect" value="createPicklist"/>
+    </request-map>
+    <request-map uri="printPicklist">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="warehouse.printPicklist"/>
+        <response name="success" type="request-redirect" value="openPicklists"/>
+        <response name="error" type="request-redirect" value="openPicklists"/>
+    </request-map>
+    <request-map uri="closePicklist">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="warehouse.closePicklist"/>
+        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="error" type="request-redirect" value="picklistDetails"/>
+    </request-map>
+    <request-map uri="closePicklists">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="warehouse.closePicklist"/>
+        <response name="success" type="view" value="pickedPicklists"/>
+        <response name="error" type="view" value="pickedPicklists"/>
+    </request-map>
+    <request-map uri="PicklistOptions"> <!-- compatibility, remove later -->
+        <description>Compatibility request, remove later</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPicklist"/>
+    </request-map>
+
+    <!-- Pack Order -->
+    <request-map uri="PackOrder">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="ProcessPackOrder">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="packSingleItem"/>
+        <response name="success" type="view" value="PackOrder"/>
+        <response name="error" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="ProcessBulkPackOrder">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="packBulkItems"/>
+        <response name="success" type="view" value="PackOrder"/>
+        <response name="error" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="SetNextPackageSeq">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setNextPackageSeq"/>
+        <response name="success" type="view" value="PackOrder"/>
+        <response name="error" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="ClearPackLine">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="clearPackLine"/>
+        <response name="success" type="view" value="PackOrder"/>
+        <response name="error" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="ClearPackAll">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="clearPackAll"/>
+        <response name="success" type="view" value="PackOrder"/>
+        <response name="error" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="calcPackSessionAdditionalShippingCharge">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="warehouse.calcPackSessionAdditionalShippingCharge"/>
+        <response name="success" type="view" value="PackOrder"/>
+        <response name="error" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="CompletePack">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="warehouseCompletePack"/>
+        <response name="success" type="view" value="PackOrder"/>
+        <response name="error" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="PackingSlip.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="PackingSlip.pdf"/>
+    </request-map>    
+    <request-map uri="ShipmentBarCode.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ShipmentBarCode.pdf"/>
+    </request-map>
+
+    <!--  Invoice PDF -->
+    <request-map uri="invoice.pdf">
+        <security https="true" auth="true"/>
+        <event type="java" invoke="checkInvoiceReportPreconditions" path="org.opentaps.warehouse.shipment.ShippingEvents"/>
+        <response name="success" type="request-redirect" value="processInvoicePDF"/>
+        <response name="error" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="processInvoicePDF">
+        <security https="true" auth="true"/>
+        <event type="java" invoke="prepareInvoiceReport" path="org.opentaps.common.invoice.InvoiceEvents"/>
+        <response name="success" type="view" value="InvoiceJR"/>
+        <response name="error" type="view" value="PackOrder"/>
+    </request-map>
+    <request-map uri="InvoiceJR">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="InvoiceJR"/>
+    </request-map>
+
+
+    <!-- Quick-Schedule a Shipment -->
+    <request-map uri="QuickScheduleShipmentRouteSegment">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="QuickScheduleShipmentRouteSegment"/>
+    </request-map>
+
+    <!-- Schedule Shipments -->
+    <request-map uri="ScheduleShipmentRouteSegment">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ScheduleShipmentRouteSegment"/>
+    </request-map>
+
+    <!-- Print Labels -->
+    <request-map uri="Labels">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="Labels"/>
+    </request-map>
+
+    <!-- OFBIZ compatibility URL requests.  Remove these later -->
+
+    <!-- Open Picklists -->
+    <request-map uri="PicklistManage">  
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="openPicklists"/>
+    </request-map>
+    <request-map uri="PickMoveStock">  
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="stockMoves"/>
+    </request-map>
+
+
+    <!-- Schedule Shipments -->
+    <request-map uri="BatchUpdateShipmentRouteSegments">
+        <security https="true" auth="true"/>
+        <event type="service-multi" path="" invoke="updateShipmentRouteSegment"/>
+        <response name="success" type="view" value="Labels"/>
+        <response name="error" type="view" value="Labels"/>
+    </request-map>
+    <request-map uri="BatchScheduleShipmentRouteSegments">
+        <security https="true" auth="true"/>
+        <event type="service-multi" path="" invoke="updateShipmentRouteSegment"/>
+        <response name="error" type="view" value="ScheduleShipmentRouteSegment"/>
+        <response name="success" type="request" value="ScheduleShipmentsWithCarriers"/>
+    </request-map>
+    <request-map uri="BatchUpdateShipmentRouteSegments">
+        <security https="true" auth="true"/>
+        <event type="service-multi" path="" invoke="updateShipmentRouteSegment"/>
+        <response name="success" type="view" value="Labels"/>
+        <response name="error" type="view" value="Labels"/>
+    </request-map>
+    <request-map uri="ScheduleShipmentsWithCarriers">
+        <security https="true" auth="true" direct-request="false"/>
+        <event type="service-multi" path="" invoke="warehouse.quickScheduleShipmentRouteSegmentAsynch"/>
+        <response name="error" type="view" value="ScheduleShipmentRouteSegment"/>
+        <response name="success" type="view" value="Labels"/>
+    </request-map>
+
+    <!-- Print Labels -->
+    <request-map uri="BatchPrintShippingLabels">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="BatchPrintShippingLabels"/>
+    </request-map>
+    <request-map uri="viewShipmentLabel">
+        <event type="java" path="org.ofbiz.shipment.shipment.ShipmentEvents" invoke="viewShipmentPackageRouteSegLabelImage"/>
+        <response name="success" type="none" value=""/>
+        <response name="error" type="view" value="BatchPrintShippingLabels"/>
+    </request-map>
+    <request-map uri="quickScheduleShipmentRouteSegment">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="warehouse.quickScheduleShipmentRouteSegment"/>
+        <response name="success" type="request" value="printPackageShippingLabels"/>
+        <response name="error" type="view" value="QuickScheduleShipmentRouteSegment"/>
+    </request-map>
+    <request-map uri="printPackageShippingLabels">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="warehouse.printPackageShippingLabels"/>
+        <response name="success" type="view" value="QuickScheduleShipmentRouteSegment"/>
+        <response name="error" type="view" value="QuickScheduleShipmentRouteSegment"/>
+    </request-map>
+    <request-map uri="viewShipmentPackageRouteSegLabelImage">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.shipment.shipment.ShipmentEvents" invoke="viewShipmentPackageRouteSegLabelImage"/>
+        <response name="success" type="none" value=""/>
+        <response name="error" type="view" value="EditShipmentRouteSegments"/>
+    </request-map>
+
+    <!-- =========================== -->
+    <!-- Manufacturing Request Maps  -->
+    <!-- =========================== -->
+
+    <!-- Manufacturing Calendar (TODO: might have multiple calendars per application, so might have to make this a bit more sophisticated) -->
+    <request-map uri="manufacturingCalendar">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="manufacturingCalendar"/>
+    </request-map>
+    <request-map uri="EditWorkEffort">
+        <description>
+            This is an override so that the Add New action in calendar creates a production run instead of a work effort
+            This request is actually used for both creating and showing work efforts.  Will have to do something about it.
+        </description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="CreateProductionRun"/>
+    </request-map>
+    <request-map uri="WorkEffortSummary">
+        <description>This is an override so that the WorkEffortSummary action in calendar shows a production run instead of a work effort</description>
+        <security https="true" auth="true"/>
+        <response type="request-redirect" name="success" value="ShowProductionRun"/> 
+    </request-map>
+
+    <!-- Create Production Run-->
+    <request-map uri="CreateProductionRun">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="CreateProductionRun"/>
+    </request-map>
+    <request-map uri="createProductionRun">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createProductionRun"/>
+        <response name="success" type="view" value="ShowProductionRun"/>
+        <response name="error" type="view" value="CreateProductionRun"/>
+    </request-map>
+
+    <!-- View/Edit Production Run -->
+    <request-map uri="ShowProductionRun">
+        <security https="true" auth="true"/>
+        <event type="bsf" path="/WEB-INF/actions/manufacturing/" invoke="ShowProductionRun.bsh"/>
+        <response name="docs_not_printed" type="view" value="ShowProductionRun"/>
+        <response name="docs_printed" type="view" value="ShowProductionRun"/>
+        <response name="error" type="view" value="FindProductionRun"/>
+    </request-map>
+    <request-map uri="ProductionRunDeclaration">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ProductionRunDeclaration"/>
+    </request-map>
+    <request-map uri="EditProductionRun">
+        <security https="true" auth="true"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+    </request-map>
+    <request-map uri="PrintProductionRun.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="PrintProductionRun"/>
+    </request-map>
+    <request-map uri="scheduleProductionRun">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="quickChangeProductionRunStatus"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="changeProductionRunStatusToPrinted">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="changeProductionRunStatus"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="changeProductionRunStatusToClosed">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="changeProductionRunStatus"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="quickChangeProductionRunStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="quickChangeProductionRunStatus"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="cancelProductionRun">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="cancelProductionRun"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="revertProductionRun">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="revertProductionRunAndSaveAllParts"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="productionRunTaskReturnMaterials">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="productionRunTaskReturnMaterial"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="quickRunAllProductionRunTasks">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="quickRunAllProductionRunTasks"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="productionRunProduce">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.productionRunProduce"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="productionRunProduceDisassembly">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="opentaps.productionRunProduce"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+    </request-map>
+    <request-map uri="updateProductionRun">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateProductionRun"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="ProductionRunTasks">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="addProductionRunRoutingTask">
+        <security https="true" auth="true"/>
+        <event type="simple" path="org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="addProductionRunRoutingTask"/>
+        <response name="success" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="updateProductionRunRoutingTask">
+        <security https="true" auth="true"/>
+        <event type="simple" path="org/ofbiz/manufacturing/jobshopmgt/ProductionRunSimpleEvents.xml" invoke="editProductionRunRoutingTask"/>
+        <response name="success" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="deleteProductionRunRoutingTask">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteWorkEffort"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="addProductionRunComponent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="addProductionRunComponent"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="updateProductionRunComponent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateProductionRunComponent"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="deleteProductionRunComponent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeWorkEffortGoodStandard"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="createWorkEffortFixedAssetAssign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createWorkEffortFixedAssetAssign"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="updateWorkEffortFixedAssetAssign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateWorkEffortFixedAssetAssign"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="removeWorkEffortFixedAssetAssign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeWorkEffortFixedAssetAssign"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="changeProductionRunTaskStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="changeProductionRunTaskStatus"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="issueProductionRunTaskComponent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="issueProductionRunTaskComponent"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="updateProductionRunTask">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateProductionRunTask"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="createProductionRunTaskProduct">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="productionRunTaskProduce"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="updateInventoryItemsProdRun">
+        <security https="true" auth="true"/>
+        <event type="service-multi" path="" invoke="updateInventoryItem"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+
+    <!-- Disassembly -->
+    <request-map uri="createReverseAssemblyForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createReverseAssemblyForm"/>
+    </request-map>
+    <request-map uri="createReverseAssembly">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createProductionRun"/>
+        <response name="success" type="view" value="viewReverseAssembly"/>
+        <response name="error" type="view" value="createReverseAssemblyForm"/>
+    </request-map>
+    <request-map uri="viewReverseAssembly">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewReverseAssembly"/>
+    </request-map>
+    <request-map uri="findReverseAssembly">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findReverseAssembly"/>
+    </request-map>
+
+
+    <!-- Find Production Run -->
+    <request-map uri="FindProductionRun">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="FindProductionRun"/>
+    </request-map>
+
+    <!-- Create Inventory Transfers for Production -->
+    <request-map uri="CreateInventoryTransfersForProduction">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="CreateInventoryTransfersForProduction"/>
+    </request-map>
+    <request-map uri="autoCreateInventoryTransfers">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="autoCreateInventoryTransfers"/>
+        <response name="success" type="view" value="CreateInventoryTransfersForProduction"/>
+        <response name="error" type="view" value="CreateInventoryTransfersForProduction"/>
+    </request-map>
+
+    <!-- Outsourced Tasks -->
+    <request-map uri="receiveOutsourcedPO">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="receiveOutsourcedPO"/>
+    </request-map>
+    <request-map uri="createOutsourcedInvoice">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.invoice.InvoiceEvents" invoke="invoiceOrderItems"/>
+        <response name="success" type="request-redirect-noparam" value="receiveOutsourcedPO"/>
+        <response name="error" type="view" value="receiveOutsourcedPO"/>
+    </request-map>
+    <request-map uri="defineOutsourcedTaskForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="defineOutsourcedTaskForm"/>
+    </request-map>
+    <request-map uri="createOutsourcedTaskTemplate">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="opentaps.createOutsourcedTaskTemplate"/>
+        <response name="success" type="request-redirect" value="defineOutsourcedTaskForm"/>
+        <response name="error" type="view" value="defineOutsourcedTaskForm"/>
+    </request-map>
+    <request-map uri="updateOutsourcedTaskTemplate">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="opentaps.updateOutsourcedTaskTemplate"/>
+        <response name="success" type="request-redirect" value="defineOutsourcedTaskForm"/>
+        <response name="error" type="view" value="defineOutsourcedTaskForm"/>
+    </request-map>
+
+    <!-- issuance requests -->
+    <request-map uri="issueAdditionalMaterialForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="issueAdditionalMaterialForm"/>
+    </request-map>
+    <request-map uri="issueAdditionalMaterialCheck">
+        <description>Checks inventory before issuing material from a single form.  This uses the forceComplete behavior.</description>
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.warehouse.inventory.InventoryEvents" invoke="checkInventoryForMaterialIssuances"/>
+        <response name="success" type="request" value="issueAdditionalMaterial"/>
+        <response name="error" type="view" value="issueAdditionalMaterialForm"/>
+        <response name="forceComplete" type="view" value="issueAdditionalMaterialForm"/>
+    </request-map>
+    <request-map uri="issueAdditionalMaterial">
+        <security https="true" auth="true" direct-request="false"/>
+        <event type="service" path="" invoke="issueProductionRunTaskComponent"/>
+        <response name="success" type="request-redirect-filterparam" value="ShowProductionRun" allowed-params="productionRunId,workEffortId"/>
+        <response name="error" type="view" value="issueAdditionalMaterialForm"/>
+    </request-map>
+    <request-map uri="issueMaterialsCheck">
+        <description>Checks inventory before issuing material from a multi form.  This uses the forceComplete behavior.</description>
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.warehouse.inventory.InventoryEvents" invoke="checkInventoryForMaterialIssuances"/>
+        <response name="success" type="request" value="issueMaterials"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+        <response name="forceComplete" type="view" value="ShowProductionRun"/>
+    </request-map>
+    <request-map uri="issueMaterials">
+        <security https="true" auth="true" direct-request="false"/>
+        <event type="service-multi" path="" invoke="issueProductionRunTaskComponent"/>
+        <response name="success" type="view" value="ShowProductionRun"/>
+        <response name="error" type="view" value="ShowProductionRun"/>
+    </request-map>
+
+
+    <!-- ============= -->
+    <!-- View Mappings -->
+    <!-- ============= -->
+
+    <view-map name="error" page="/error/error.jsp"/>
+    <view-map name="login" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#login"/>
+    <view-map name="selectFacilityForm" type="screen" page="component://warehouse/widget/warehouse/screens/common/CommonScreens.xml#selectFacilityForm"/>
+    <view-map name="createWarehouseForm" type="screen" page="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#createWarehouseForm"/>
+
+    <!-- main screens for each section -->
+    <view-map name="myHomeMain" type="screen" page="component://warehouse/widget/warehouse/screens/myhome/MyHomeScreens.xml#myHome"/>
+    <view-map name="inventoryMain" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#backOrderedItems"/>
+    <view-map name="manufacturingMain" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/CalendarScreens.xml#manufacturingCalendar"/>
+    <view-map name="configurationMain" type="screen" page="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#viewWarehouse"/>
+
+    <!-- ==================== -->
+    <!--   Lookup View Maps   -->
+    <!-- ==================== -->
+
+    <view-map name="LookupFacilityLocation" type="screen" page="component://warehouse/widget/warehouse/screens/common/LookupScreens.xml#LookupFacilityLocation"/>
+    <view-map name="LookupOrderHeader" type="screen" page="component://warehouse/widget/warehouse/screens/common/LookupScreens.xml#LookupOrderHeader"/>
+    <view-map name="LookupOrderHeaderAndShipInfo" type="screen" page="component://warehouse/widget/warehouse/screens/common/LookupScreens.xml#LookupOrderHeaderAndShipInfo"/>
+    <view-map name="LookupPartyName" type="screen" page="component://warehouse/widget/warehouse/screens/common/LookupScreens.xml#LookupPartyName"/>
+
+    <!-- ==================== -->
+    <!-- Inventory View Maps  -->
+    <!-- ==================== -->
+
+    <!-- Receive Purchase Order -->
+    <view-map name="ReceiveInventoryAgainstPurchaseOrder" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#ReceiveInventoryAgainstPurchaseOrder"/>
+    <view-map name="receiveInventoryItem" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#receiveInventoryItem"/>
+    <view-map name="findShipmentReceipt" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#findShipmentReceipt"/>
+
+    <!-- Physical Inventory -->
+    <view-map name="physicalInventory" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#physicalInventory"/>
+
+    <!-- Stock Moves -->
+    <view-map name="stockMoves" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#stockMoves"/>
+    <view-map name="PickMoveStockSimple" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#PickMoveStockSimple"/>
+
+    <!-- Inventory Transfers -->
+    <view-map name="FindFacilityTransfers" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#FindFacilityTransfers"/>
+    <view-map name="TransferInventoryItem" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#TransferInventoryItem"/>
+
+    <!-- Edit Inventory Item -->
+    <view-map name="EditInventoryItem" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#EditInventoryItem"/>
+    <view-map name="findInventoryItem" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#findInventoryItem"/>
+    <view-map name="ViewInventoryItemDetail" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#ViewInventoryItemDetail"/>
+
+    <!-- Lot Management -->
+    <view-map name="manageLots" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#manageLots"/>
+    <view-map name="lotDetails" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#lotDetails" />
+    <view-map name="createLotForm" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#createLotForm" />
+    <view-map name="editLotForm" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#editLotForm" />
+    <view-map name="lotDetailsPopup" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#lotDetailsPopup" />
+    <view-map name="createLotPopupForm" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#createLotPopupForm" />
+
+    <!-- Back Ordered Items -->
+    <view-map name="backOrderedItems" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#backOrderedItems"/>
+    <view-map name="fulfilledBackOrders.pdf" type="screenfop" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#fulfilledBackOrders.pdf" content-type="application/pdf" encoding="none"/>
+
+    <view-map name="traceInventory" type="screen" page="component://warehouse/widget/warehouse/screens/inventory/InventoryScreens.xml#traceInventory"/>
+
+    <!-- =================== -->
+    <!-- Shipping View Maps  -->
+    <!-- =================== -->
+    
+    <!-- Ready to Ship -->
+    <view-map name="readyToShip" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#readyToShip"/>
+    <view-map name="ShipGroupsPDF" type="screenfop" page="component://warehouse/widget/warehouse/screens/shipping/OrderPrintForms.xml#ShipGroupsPDF" content-type="application/pdf" encoding="none"/>
+
+    <!-- Find Shipment -->
+    <view-map name="FindShipment" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#FindShipment"/>
+    <view-map name="ViewShipment" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#ViewShipment"/>
+    <view-map name="EditShipment" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#EditShipment"/>
+    <view-map name="EditShipmentItems" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#EditShipmentItems"/>
+    <view-map name="EditShipmentPackages" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#EditShipmentPackages"/>
+    <view-map name="EditShipmentRouteSegments" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#EditShipmentRouteSegments"/>
+    <view-map name="ShipmentManifest.pdf" type="screenfop" page="component://product/widget/facility/ShipmentScreens.xml#ShipmentManifest.fo" content-type="application/pdf" encoding="none"/>
+
+    <!-- Open Picklists -->
+    <view-map name="picklistDetails" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#picklistDetails"/>
+    <view-map name="openPicklists" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#openPicklists"/>
+    <view-map name="pickedPicklists" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#pickedPicklists"/>
+    <view-map name="PicklistReport.pdf" type="screenfop" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#PicklistReportPDF" content-type="application/pdf" encoding="none"/>
+
+    <!-- Create Picklist -->
+    <view-map name="createPicklist" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#createPicklist"/>
+
+    <!-- Pack Order -->
+    <view-map name="PackOrder" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#PackOrder"/>
+    <view-map name="PackingSlip.pdf" type="screenfop" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#PackingSlip.fo" content-type="application/pdf" encoding="none"/>
+    <view-map name="ShipmentBarCode.pdf" type="screenfop" page="component://product/widget/facility/ShipmentScreens.xml#ShipmentBarCode.fo" content-type="application/pdf" encoding="none"/>
+    <view-map name="InvoiceJR" type="jasperreports" page="component://financials/webapp/financials/reports/repository/Invoice.jrxml" content-type="application/pdf" encoding="none"/>
+
+    <!-- Print Labels -->
+    <view-map name="Labels" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#Labels"/>
+    <view-map name="BatchPrintShippingLabels" type="screenfop" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#BatchPrintShippingLabels" content-type="application/pdf" encoding="none"/>
+
+    <!-- Quick-Schedule a Shipment -->
+    <view-map name="QuickScheduleShipmentRouteSegment" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#QuickScheduleShipmentRouteSegment"/>
+
+    <!-- Schedule Shipments -->
+    <view-map name="ScheduleShipmentRouteSegment" type="screen" page="component://warehouse/widget/warehouse/screens/shipping/ShippingScreens.xml#ScheduleShipmentRouteSegment"/>
+    
+    <!-- ======================== -->
+    <!-- Manufacturing View Maps  -->
+    <!-- ======================== -->
+
+    <!-- Manufacturing Calendar -->
+    <view-map name="manufacturingCalendar" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/CalendarScreens.xml#manufacturingCalendar"/>
+
+    <!-- Production Runs -->
+    <view-map name="CreateProductionRun" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#CreateProductionRun"/>
+    <view-map name="FindProductionRun" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#FindProductionRun"/>
+    <view-map name="ShowProductionRun" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#ShowProductionRun"/>
+    <view-map name="PrintProductionRun" type="screenfop" page="component://manufacturing/widget/manufacturing/JobshopScreens.xml#ProductionRunPdf" content-type="application/pdf" encoding="none"/>
+    <view-map name="ProductionRunDeclaration" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#ProductionRunDeclaration"/>
+
+    <!-- These versions are for when the link uses workEffortId instead of productionRunId -->
+    <view-map name="EditProductionRunWorkEffort" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#EditProductionRunWorkEffort"/>
+    <view-map name="ProductionRunDeclarationWorkEffort" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#ProductionRunDeclarationWorkEffort"/>
+
+    <!-- Disassembly -->
+    <view-map name="createReverseAssemblyForm" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#createReverseAssemblyForm"/>
+    <view-map name="viewReverseAssembly" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#viewReverseAssembly"/>
+    <view-map name="findReverseAssembly" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#findReverseAssembly"/>
+
+     <!-- Transfer Inventory for Production -->
+    <view-map name="CreateInventoryTransfersForProduction" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#CreateInventoryTransfersForProduction"/>
+
+    <!-- Outsourced Tasks -->
+    <view-map name="receiveOutsourcedPO" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#receiveOutsourcedPO"/>
+    <view-map name="defineOutsourcedTaskForm" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#defineOutsourcedTaskForm"/>
+
+    <!-- issuance screens -->
+    <view-map name="issueAdditionalMaterialForm" type="screen" page="component://warehouse/widget/warehouse/screens/manufacturing/ManufacturingScreens.xml#issueAdditionalMaterialForm"/>
+
+
+   <!-- ======================== -->
+    <!-- Configuration View Maps  -->
+    <!-- ======================== -->
+
+    <view-map name="viewWarehouse" type="screen" page="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#viewWarehouse"/>
+    <view-map name="EditContactMech" type="screen" page="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#EditContactMech"/>
+    <view-map name="FindFacilityLocation" type="screen" page="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#FindFacilityLocation"/>
+    <view-map name="EditFacilityLocation" type="screen" page="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#EditFacilityLocation"/>
+    <view-map name="viewTeamMembers" type="screen" page="component://warehouse/widget/warehouse/screens/configuration/ConfigurationScreens.xml#viewTeamMembers"/>
+
+</site-conf>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+   <form name="ListTeamMembers" type="list" separate-columns="true" list-name="teamMembers"
+        title="Team Members"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="viewTeamMembers">
+        
+        <field name="partyId" title="${uiLabelMap.OpentapsTeamMember}">
+            <display-entity entity-name="Person" description="${firstName} ${lastName} (${partyId})"/>
+        </field>
+        <field name="securityGroupId" title="${uiLabelMap.PartyRole}">
+            <display-entity entity-name="SecurityGroup" key-field-name="groupId"/>
+        </field>
+        <field name=" " use-when="hasConfigPermission==true" widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeFacilityTeamMember?partyId=${partyId}&amp;facilityId=${facilityId}"/>
+        </field>
+   </form>
+
+</forms>

@@ -1,0 +1,494 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*******************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *******************************************************************************/
+
+/* This file may contain code which has been modified from that included with the Apache-licensed OFBiz product application */
+/* This file has been modified by Open Source Strategies, Inc. */
+
+package org.opentaps.warehouse.shipment;
+
+import javolution.util.FastMap;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ServiceUtil;
+import org.opentaps.warehouse.shipment.packing.PackingSession;
+
+import java.math.BigDecimal;
+import java.util.*;
+
+/**
+ * Services for Warehouse application Shipping section.
+ *
+ * @author     <a href="mailto:cliberty@opensourcestrategies.com">Chris Liberty</a>
+ * @version    $Rev: 8604 $
+ */
+public class ShippingServices {
+
+    public static final String module = ShippingServices.class.getName();
+    public static final String warehouseResource = "warehouse";
+    public static final String errorResource = "OpentapsErrorLabels";
+    public static final String resource = "WarehouseUiLabels";
+
+    /**
+     * Schedules the shipment with a carrier such that the label is generated and the
+     * pickup confirmed.  Once this service is completed, the shipment is ready
+     * to be labeled and handed over to the carrier.
+     *
+     * This version runs the carrier confirm service synchronously so that errors from the carrier
+     * may be printed to screen.  It is meant to be used when shipping individual route segments.
+     *
+     * @param dctx DispatchContext
+     * @param context Map
+     * @return Map
+     */
+    public static Map quickScheduleShipmentRouteSegmentSynch(DispatchContext dctx, Map context) {
+        return quickScheduleShipmentRouteSegment(dctx, context, true);
+    }
+
+    /**
+     * Schedules the shipment with a carrier such that the label is generated and the
+     * pickup confirmed.  Once this service is completed, the shipment is ready
+     * to be labeled and handed over to the carrier.
+     *
+     * This version runs the carrier confirm service asynchronously and is meant to be
+     * used by a batch scheduling operation.  Messages or errors from the carrier
+     * will eventually be logged when the response is processed.
+     *
+     * @param dctx DispatchContext
+     * @param context Map
+     */
+    public static Map quickScheduleShipmentRouteSegmentAsynch(DispatchContext dctx, Map context) {
+        return quickScheduleShipmentRouteSegment(dctx, context, false);
+    }
+
+    // TODO: ideally this can use a FacililtyShipmentSetting where the confirm services can be set up for a facility and carrierPartyId
+    private static Map quickScheduleShipmentRouteSegment(DispatchContext dctx, Map context, boolean runSynchronously) {
+        GenericDelegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Locale locale = (Locale) context.get("locale");
+
+        String shipmentId = (String) context.get("shipmentId");
+        String shipmentRouteSegmentId = (String) context.get("shipmentRouteSegmentId");
+        String carrierPartyId = (String) context.get("carrierPartyId");
+
+        try {
+
+            GenericValue shipment = delegator.findByPrimaryKey("Shipment", UtilMisc.toMap("shipmentId", shipmentId));
+            if (UtilValidate.isEmpty(shipment)) {
+                String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentNotFound", context, locale);
+                Debug.logError(errorMessage, module);
+                return ServiceUtil.returnError(errorMessage);
+            }
+
+            // Check the shipment status
+            if (!"SHIPMENT_PACKED".equals(shipment.getString("statusId"))) {
+                String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentNotPacked", context, locale);
+                Debug.logError(errorMessage, module);
+                return ServiceUtil.returnError(errorMessage);
+            }
+
+            GenericValue shipmentRouteSegment = delegator.findByPrimaryKeyCache("ShipmentRouteSegment", UtilMisc.toMap("shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId));
+            if (UtilValidate.isEmpty(shipmentRouteSegment)) {
+                String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentRouteSegmentNotFound", context, locale);
+                Debug.logError(errorMessage, module);
+                return ServiceUtil.returnError(errorMessage);
+            }
+
+            // Check the shipmentRouteSegment carrierServiceStatus
+            if (!"SHRSCS_NOT_STARTED".equals(shipmentRouteSegment.getString("carrierServiceStatusId"))) {
+                String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentRouteSegmentAlreadyStarted", context, locale);
+                Debug.logError(errorMessage, module);
+                return ServiceUtil.returnError(errorMessage);
+            }
+
+            if (UtilValidate.isEmpty(carrierPartyId)) {
+                carrierPartyId = shipmentRouteSegment.getString("carrierPartyId");
+            }
+
+            // If the carrierPartyId is different, update the shipmentRouteSegment
+            if (!carrierPartyId.equals(shipmentRouteSegment.getString("carrierPartyId"))) {
+
+                // Make sure the carrierPartyId represents a valid carrier party
+                GenericValue carrierPartyRole = delegator.findByPrimaryKey("PartyRole", UtilMisc.toMap("partyId", carrierPartyId, "roleTypeId", "CARRIER"));
+                if (UtilValidate.isEmpty(carrierPartyRole)) {
+                    String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorInvalidCarrier", context, locale);
+                    Debug.logError(errorMessage, module);
+                    return ServiceUtil.returnError(errorMessage);
+                }
+
+                Map updateShipmentRouteSegmentResult = dispatcher.runSync("updateShipmentRouteSegment", UtilMisc.toMap("shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId, "carrierPartyId", carrierPartyId, "userLogin", userLogin));
+                if (ServiceUtil.isError(updateShipmentRouteSegmentResult)) {
+                    return updateShipmentRouteSegmentResult;
+                }
+            }
+
+            // if we're doing this asynchronously, write some helpful info in the log
+            if (!runSynchronously) {
+                Debug.logInfo("Asynchronously confirming " + carrierPartyId + " ShipmentRouteSegment with shipmentId [" + shipmentId + "] shipmentRouteSegmentId [" + shipmentRouteSegmentId + "] ", module);
+            }
+
+            // confirm the shipment with the carrier, which should result in the label being generated and pickup confirmed
+            Map confirmShipmentContext = UtilMisc.toMap("shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId, "userLogin", userLogin);
+            Map confirmShipmentResult = null;
+            if (carrierPartyId.equals("DHL")) {
+                if (runSynchronously) {
+                    confirmShipmentResult = dispatcher.runSync("dhlShipmentConfirm", confirmShipmentContext);
+                } else {
+                    dispatcher.runAsync("dhlShipmentConfirm", confirmShipmentContext);
+                }
+            } else if (carrierPartyId.equals("FEDEX")) {
+                if (runSynchronously) {
+                    confirmShipmentResult = dispatcher.runSync("fedexShipRequest", confirmShipmentContext);
+                } else {
+                    dispatcher.runAsync("fedexShipRequest", confirmShipmentContext);
+                }
+            } else if (carrierPartyId.equals("UPS")) {
+                if (runSynchronously) {
+                    confirmShipmentResult = dispatcher.runSync("upsShipmentConfirmAndAccept", confirmShipmentContext);
+                } else {
+                    dispatcher.runAsync("upsShipmentConfirmAndAccept", confirmShipmentContext);
+                }
+            } else if (carrierPartyId.equals("DemoCarrier")) {
+                if (runSynchronously) {
+                    confirmShipmentResult = dispatcher.runSync("opentaps.demoCarrierConfirmShipment", confirmShipmentContext);
+                } else {
+                    dispatcher.runAsync("opentaps.demoCarrierConfirmShipment", confirmShipmentContext);
+                }
+            } else {
+                return ServiceUtil.returnError("Cannot schedule shipment due to unsupported carrier: " + PartyHelper.getPartyName(delegator, carrierPartyId, false) + "  Only UPS, FEDEX, and DHL are supported");
+            }
+            if (runSynchronously && ServiceUtil.isError(confirmShipmentResult)) {
+                return confirmShipmentResult;
+            }
+
+        } catch (GenericEntityException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        } catch (GenericServiceException se) {
+            Debug.logError(se, se.getMessage(), module);
+        }
+
+        return ServiceUtil.returnSuccess();
+    }
+
+    /**
+     * Service group to run UPS shipment confirm and accept synchronously.  Meant to be called asynchronously by scheduling service above.
+     * Putting this here for now since we don't have a general place to place UPS services in opentaps.
+     */
+    public static Map upsShipmentConfirmAndAccept(DispatchContext dctx, Map context) {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        try {
+            // copy the context to avoid re-using a polluted input map
+            Map context2 = new FastMap();
+            context2.putAll(context);
+
+            // confirm first, check for errors
+            Map results = dispatcher.runSync("upsShipmentConfirm", context);
+            if (ServiceUtil.isError(results)) {
+                return results;
+            }
+
+            // accept second, return error or success
+            return dispatcher.runSync("upsShipmentAccept", context2);
+        } catch (GenericServiceException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        }
+    }
+
+    /**
+     * Prints shipping labels for each package of a shipment.
+     * @param dctx DispatchContext
+     * @param context Map
+     * @return Map
+     */
+    public static Map printPackageShippingLabels(DispatchContext dctx, Map context) {
+        GenericDelegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Locale locale = (Locale) context.get("locale");
+
+        String shipmentId = (String) context.get("shipmentId");
+        String shipmentRouteSegmentId = (String) context.get("shipmentRouteSegmentId");
+        String printerName = (String) context.get("printerName");
+
+        // this field really is required, but I just wanted a custom error message
+        if (UtilValidate.isEmpty(printerName)) {
+            return ServiceUtil.returnError(UtilProperties.getMessage(resource, "WarehouseNoPrinterForLabel", locale));
+        }
+
+        String batchPrintScreenLocation = UtilProperties.getPropertyValue(warehouseResource, "warehouse.shipping.labels.printing.batchPrintingScreenLocation");
+        if (UtilValidate.isEmpty(batchPrintScreenLocation)) {
+            String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorBatchPrintScreenNotConfigured", locale);
+            return ServiceUtil.returnError(errorMessage);
+        }
+
+        try {
+
+            GenericValue shipmentRouteSegment = delegator.findByPrimaryKeyCache("ShipmentRouteSegment", UtilMisc.toMap("shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId));
+            if (UtilValidate.isEmpty(shipmentRouteSegment)) {
+                String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentRouteSegmentNotFound", context, locale);
+                return ServiceUtil.returnError(errorMessage);
+            }
+
+            // Retrieve the shipment packages
+            List cond = UtilMisc.toList(
+                    new EntityExpr("shipmentId", EntityOperator.EQUALS, shipmentId),
+                    new EntityExpr("shipmentRouteSegmentId", EntityOperator.EQUALS, shipmentRouteSegmentId),
+                    new EntityExpr("labelImage", EntityOperator.NOT_EQUAL, null)
+            );
+            List shipmentPackages = delegator.findByCondition("ShipmentPackageRouteSeg", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("shipmentPackageSeqId"));
+
+            // Assemble the parameters for the BatchPrintShippingLabels FO
+            Map parameters = new HashMap();
+            for (int x = 0; x < shipmentPackages.size(); x++) {
+                GenericValue shipmentPackage = (GenericValue) shipmentPackages.get(x);
+                parameters.put("_rowSubmit_o_" + x, "Y");
+                parameters.put("shipmentId_o_" + x, shipmentId);
+                parameters.put("shipmentRouteSegmentId_o_" + x, shipmentRouteSegmentId);
+                parameters.put("shipmentPackageSeqId_o_" + x, shipmentPackage.get("shipmentPackageSeqId"));
+            }
+
+            // Prefix for the label image URLs in the screen
+            String urlPrefix = UtilProperties.getPropertyValue(warehouseResource, "warehouse.shipping.labels.printing.labelImage.urlPrefix");
+
+            // Call the sendPrintFromScreen service on the BatchPrintShippingLabels screen, which will print the aggregated package labels
+            // Service is called synchronously so that the service will fail if the labels fail to print
+            Map sendPrintFromScreenContext = UtilMisc.toMap("screenLocation", batchPrintScreenLocation, "screenContext", UtilMisc.toMap("parameters", parameters, "urlPrefix", urlPrefix), "printerName", printerName, "locale", locale, "userLogin", userLogin);
+            Map sendPrintFromScreenResult = dispatcher.runSync("sendPrintFromScreen", sendPrintFromScreenContext);
+            if (ServiceUtil.isError(sendPrintFromScreenResult)) {
+                return sendPrintFromScreenResult;
+            }
+
+            // Update the labelPrinted flag of the ShipmentPackageRouteSeg
+            for (int x = 0; x < shipmentPackages.size(); x++) {
+                GenericValue shipmentPackage = (GenericValue) shipmentPackages.get(x);
+                Map updateContext = UtilMisc.toMap("labelPrinted", "Y", "shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId, "shipmentPackageSeqId", shipmentPackage.get("shipmentPackageSeqId"), "locale", locale, "userLogin", userLogin);
+                Map updateResult = dispatcher.runSync("updateShipmentPackageRouteSeg", updateContext);
+                if (ServiceUtil.isError(updateResult)) {
+                    return updateResult;
+                }
+            }
+
+        } catch (GenericEntityException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        } catch (GenericServiceException se) {
+            Debug.logError(se, se.getMessage(), module);
+        }
+
+        return ServiceUtil.returnSuccess();
+    }
+
+    public static Map insurePackedShipment(DispatchContext dctx, Map context) {
+        GenericDelegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Locale locale = (Locale) context.get("locale");
+
+        boolean setValues = "true".equals(UtilProperties.getPropertyValue(warehouseResource, "warehouse.package.insured.setPackageInsuredValues"));
+        if (!setValues) {
+            String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetPackageValuesTurnedOff", context, locale);
+            Debug.logInfo(errorMessage, module);
+            return ServiceUtil.returnSuccess();
+        }
+
+        String shipmentId = (String) context.get("shipmentId");
+
+        try {
+
+            GenericValue shipment = delegator.findByPrimaryKey("Shipment", UtilMisc.toMap("shipmentId", shipmentId));
+            if (UtilValidate.isEmpty(shipment)) {
+                String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentNotFound", context, locale);
+                Debug.logError(errorMessage, module);
+                return ServiceUtil.returnError(errorMessage);
+            }
+
+            if (!"SALES_SHIPMENT".equals(shipment.getString("shipmentTypeId"))) {
+                return ServiceUtil.returnSuccess();
+            }
+
+            String currencyUomId = shipment.getString("currencyUomId");
+            if (UtilValidate.isEmpty(currencyUomId)) {
+                String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetPackageValuesNoCurrency", context, locale);
+                Debug.logInfo(errorMessage, module);
+                return ServiceUtil.returnFailure(errorMessage);
+            }
+
+            // first get the threshold
+            String thresholdStr = UtilProperties.getPropertyValue("warehouse.properties", "warehouse.package.insured.threshold");
+            if (thresholdStr == null) {
+                return ServiceUtil.returnSuccess();
+            }
+            BigDecimal threshold = null;
+            try {
+                threshold = new BigDecimal(thresholdStr);
+            } catch (NumberFormatException e) {
+                Debug.logError("Cannot insure package:  warehouse.package.insured.threshold defines unkown currency amount [" + thresholdStr + "]", module);
+                return ServiceUtil.returnSuccess();
+            }
+
+            // get the package values and set the insured value if it is greater than the threshold
+            List packages = delegator.findByAnd("ShipmentPackage", UtilMisc.toMap("shipmentId", shipmentId));
+            Map input = UtilMisc.toMap("userLogin", userLogin, "shipmentId", shipmentId, "currencyUomId", currencyUomId);
+            for (Iterator iter = packages.iterator(); iter.hasNext();) {
+                GenericValue pkg = (GenericValue) iter.next();
+                input.put("shipmentPackageSeqId", pkg.get("shipmentPackageSeqId"));
+                Map results = dispatcher.runSync("getShipmentPackageValueFromOrders", input);
+                if (ServiceUtil.isError(results)) {
+                    return results;
+                }
+                if (UtilValidate.isEmpty(results.get("packageValue"))) {
+                    String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetPackageValueNoValue", context, locale);
+                    Debug.logInfo(errorMessage, module);
+                    return ServiceUtil.returnFailure(errorMessage);
+                }
+                BigDecimal packageValue = (BigDecimal) results.get("packageValue");
+                if (packageValue.compareTo(threshold) < 0) {
+                    String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetPackageValueTooLow", context, locale);
+                    Debug.logInfo(errorMessage, module);
+                    Debug.logInfo("packageValue = " + packageValue + ", threshold = " + threshold, module);
+                    return ServiceUtil.returnSuccess();
+                }
+
+                Map updateShipmentPackageContext = UtilMisc.toMap("shipmentId", shipmentId, "shipmentPackageSeqId", pkg.getString("shipmentPackageSeqId"), "insuredValue", new Double(packageValue.doubleValue()), "userLogin", userLogin, "locale", locale);
+                Map updateShipmentPackageResult = dispatcher.runSync("updateShipmentPackage", updateShipmentPackageContext);
+                if (ServiceUtil.isError(updateShipmentPackageResult)) return updateShipmentPackageResult;
+            }
+
+        } catch (GenericEntityException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        } catch (GenericServiceException e) {
+            Debug.logError(e, e.getMessage(), module);
+            return ServiceUtil.returnError(e.getMessage());
+        }
+
+        return ServiceUtil.returnSuccess();
+    }
+
+    /**
+     * Sets shipment currency. Defaults to the baseCurrencyUomId of the PartyAcctgPreference of the owner party of the shipment's origin facility.
+     * @param dctx DispatchContext
+     * @param context Map
+     * @return Map
+     */
+    public static Map setShipmentCurrency(DispatchContext dctx, Map context) {
+        GenericDelegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Locale locale = (Locale) context.get("locale");
+
+        String shipmentId = (String) context.get("shipmentId");
+        String currencyUomId = (String) context.get("currencyUomId");
+
+        try {
+
+            GenericValue shipment = delegator.findByPrimaryKey("Shipment", UtilMisc.toMap("shipmentId", shipmentId));
+            if (UtilValidate.isEmpty(shipment)) {
+                String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentNotFound", context, locale);
+                Debug.logError(errorMessage, module);
+                return ServiceUtil.returnError(errorMessage);
+            }
+
+            if (UtilValidate.isEmpty(currencyUomId)) {
+                GenericValue originFacility = shipment.getRelatedOne("OriginFacility");
+                if (UtilValidate.isEmpty(originFacility)) {
+                    String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetCurrencyNoFacility", context, locale);
+                    Debug.logInfo(errorMessage, module);
+                    return ServiceUtil.returnFailure(errorMessage);
+                }
+
+                String ownerPartyId = originFacility.getString("ownerPartyId");
+                GenericValue partyAcctgPreference = delegator.findByPrimaryKey("PartyAcctgPreference", UtilMisc.toMap("partyId", ownerPartyId));
+                if (UtilValidate.isEmpty(partyAcctgPreference) || UtilValidate.isEmpty(partyAcctgPreference.getString("baseCurrencyUomId"))) {
+                    String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetCurrencyNoCurrency", context, locale);
+                    Debug.logInfo(errorMessage, module);
+                    return ServiceUtil.returnFailure(errorMessage);
+                }
+                currencyUomId = partyAcctgPreference.getString("baseCurrencyUomId");
+            }
+
+            Map updateShipmentResult = dispatcher.runSync("updateShipment", UtilMisc.toMap("shipmentId", shipmentId, "currencyUomId", currencyUomId, "userLogin", userLogin, "locale", locale));
+            if (ServiceUtil.isError(updateShipmentResult)) {
+                return updateShipmentResult;
+            }
+
+        } catch (GenericEntityException e) {
+            Debug.logError(e, module);
+            return ServiceUtil.returnError(e.getMessage());
+        } catch (GenericServiceException se) {
+            Debug.logError(se, se.getMessage(), module);
+        }
+
+        return ServiceUtil.returnSuccess();
+    }
+
+    public static Map calcPackSessionAdditionalShippingCharge(DispatchContext dctx, Map context) {
+        PackingSession session = (PackingSession) context.get("packingSession");
+        Map packageWeights = (Map) context.get("packageWeights");
+        String weightUomId = (String) context.get("weightUomId");
+        String shippingContactMechId = (String) context.get("shippingContactMechId");
+        String shipmentMethodTypeId = (String) context.get("shipmentMethodTypeId");
+        String carrierPartyId = (String) context.get("carrierPartyId");
+        String carrierRoleTypeId = (String) context.get("carrierRoleTypeId");
+        String productStoreId = (String) context.get("productStoreId");
+
+        double shippableWeight = org.ofbiz.shipment.packing.PackingServices.setSessionPackageWeights(session, packageWeights);
+        session.setWeightUomId(weightUomId);
+        Double estimatedShipCost = session.getShipmentCostEstimate(shippingContactMechId, shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId, productStoreId);
+        if (UtilValidate.isNotEmpty(estimatedShipCost)) {
+            session.setAdditionalShippingCharge(estimatedShipCost);
+        }
+
+        Map result = ServiceUtil.returnSuccess();
+        result.put("additionalShippingCharge", estimatedShipCost);
+        return result;
+    }
+
+
+}

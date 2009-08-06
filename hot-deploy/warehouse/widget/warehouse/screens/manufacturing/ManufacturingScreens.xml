@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+        
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="manufacturing" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- this is an example of how to integrate a screen from manufacturing into opentaps warehouse -->
+    <screen name="CreateProductionRun">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseCreateProductionRun"/>  
+                <set field="sectionHeaderUiLabel" value="WarehouseCreateProductionRun"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/CreateProductionRun.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                          <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/createProductionRun.ftl"/></html>
+                          </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ShowProductionRun">
+        <section>
+            <actions>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="500"/>
+                <set field="assembly" type="Boolean" value="true"/>
+                <set field="disassembly" type="Boolean" value="false"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/viewProductionRun.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/productionRun.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ViewProductionRun">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseViewProductionRun"/>  
+                <set field="sectionHeaderUiLabel" value="WarehouseViewProductionRun"/>  
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/setProductionRunToHistory.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/productionRunMenu.ftl"/></html>
+                </platform-specific>
+                <container style="form">
+                    <platform-specific>
+                        <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/viewProductionRun.ftl"/></html>
+                    </platform-specific>
+                    <platform-specific>
+                        <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/associatedProductionRuns.ftl"/></html>
+                    </platform-specific>
+                </container>
+                <platform-specific>
+                    <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/viewProductionRunProduced.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+                        
+    <screen name="EditProductionRun">
+        <section>
+            <actions>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewProductionRun.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/productionRunMenu.ftl"/></html>
+                </platform-specific>
+                <container style="form">
+                    <include-form name="UpdateProductionRun" location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunForms.xml"/>
+                    <platform-specific>
+                        <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/associatedProductionRuns.ftl"/></html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ProductionRunDeclaration">
+        <section>
+            <actions>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.bsh"/>
+            </actions>
+             <widgets>
+                 <decorator-screen name="main-section-decorator">
+                     <decorator-section name="section-body">
+                         <container style="subSectionHeader">
+                             <label style="subSectionTitle">${uiLabelMap.WarehouseEnterTaskDetails}</label>
+                         </container>
+                         <platform-specific>
+                             <html><html-template location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunDeclaration.ftl"/></html>
+                         </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+             </widgets>
+        </section>
+    </screen>
+    
+    <screen name="ProductionRunTasks">
+        <section>
+            <widgets>
+                <include-form name="ViewListProductionRunRoutingTasks" location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="ProductionRunRoutingTasks">
+        <section>
+            <actions>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/getProductionTaskGoodStandards.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/setIssueComponentTask.bsh"/>                
+            </actions>
+            <widgets>
+                <container style="subSectionHeader">
+                    <container style="subSectionTitle">
+                        <label>${uiLabelMap.ManufacturingListOfProductionRunRoutingTasks}</label>
+                    </container>
+                </container>
+                <platform-specific>
+                    <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/productionRunDeclRoutingTasks.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="ProductionRunMaterials">
+        <section>
+            <actions>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunComponents.bsh"/>
+            </actions>
+            <widgets>
+                <container style="subSectionHeader">
+                    <container style="subSectionTitle">
+                        <label>${uiLabelMap.WarehouseManufacturingMaterials}</label>
+                    </container>
+                </container>
+                <container style="form">
+                    <platform-specific>
+                        <html><html-template location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunTasksInfo.ftl"/></html>
+                    </platform-specific>
+                    <include-form name="AddProductionRunComponent" location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunForms.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="ProductionRunActualMaterials">
+        <section>
+            <actions>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/productionRunActualComponents.bsh"/>
+            </actions>
+            <widgets>
+
+                <platform-specific>
+                    <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/productionRunActualComponents.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="ProductionRunFixedAssets">
+        <section>
+            <actions>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunFixedAssets.bsh"/>
+            </actions>
+            <widgets>
+                <container style="subSectionHeader">
+                    <container style="subSectionTitle">
+                        <label>${uiLabelMap.WarehouseManufacturingFixedAssets}</label>
+                    </container>
+                </container>
+                <container style="form">
+                    <platform-specific>
+                        <html><html-template location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunTasksInfo.ftl"/></html>
+                    </platform-specific>
+                    <include-form name="AddProductionRunTaskFixedAsset" location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunForms.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="ActiveProductionRunFixedAssets">
+        <section>
+            <actions>
+                <set field="productionRunId" from-field="parameters.productionRunId"/>
+                <entity-one entity-name="WorkEffort" value-name="productionRun">
+                    <field-map field-name="workEffortId" env-name="productionRunId"/>
+                </entity-one>
+            </actions>
+            <widgets>
+                <container style="subSectionHeader">
+                    <container style="subSectionTitle">
+                        <label>${uiLabelMap.WarehouseManufacturingFixedAssets}</label>
+                    </container>
+                </container>
+                <container style="form">
+                    <include-form name="ListProductionRunTaskFixedAssets" location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunForms.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+                        
+    <screen name="ProductionRunAssocs">
+        <section>
+            <actions>
+                <entity-condition entity-name="WorkEffortAssoc" list-name="mandatoryWorkEfforts">
+                    <condition-list>
+                        <condition-expr field-name="workEffortIdTo" env-name="productionRunId"/>
+                        <condition-expr field-name="workEffortAssocTypeId" value="WORK_EFF_PRECEDENCY"/>
+                    </condition-list>
+                </entity-condition>
+                <entity-condition entity-name="WorkEffortAssoc" list-name="dependentWorkEfforts">
+                    <condition-list>
+                        <condition-expr field-name="workEffortIdFrom" env-name="productionRunId"/>
+                        <condition-expr field-name="workEffortAssocTypeId" value="WORK_EFF_PRECEDENCY"/>
+                    </condition-list>
+                </entity-condition>
+            </actions>
+            <widgets>
+                <container style="subSectionHeader">
+                    <container style="subSectionTitle">
+                        <label>${uiLabelMap.ManufacturingMandatoryWorkEfforts}</label>
+                    </container>
+                </container>
+                <container style="form">
+                    <include-form name="mandatoryWorkEfforts" location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunForms.xml"/>
+                </container>
+                <container style="subSectionHeader">
+                    <container style="subSectionTitle">
+                        <label>${uiLabelMap.ManufacturingDependentWorkEfforts}</label>
+                    </container>
+                </container>
+                <container style="form">
+                    <include-form name="dependentWorkEfforts" location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunForms.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+                        
+    <screen name="ProductionRunCosts">
+        <section>
+            <actions>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunCosts.bsh"/>
+            </actions>
+            <widgets>
+                <container style="subSectionHeader">
+                    <container style="subSectionTitle">
+                        <label>${uiLabelMap.ManufacturingActualCosts}</label>
+                    </container>
+                </container>
+                <container style="form">
+                    <platform-specific>
+                        <html><html-template location="component://manufacturing/webapp/manufacturing/jobshopmgt/ProductionRunCosts.ftl"/></html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+                        
+    <screen name="ProductionRunSerialNumbers">
+        <section>
+            <actions>
+                <entity-and entity-name="WorkEffortInventoryProduced" list-name="inventoryProduced">
+                    <field-map field-name="workEffortId" env-name="productionRunId"/>
+                    <order-by field-name="inventoryItemId"/>
+                </entity-and>
+            </actions>
+            <widgets>
+                <container style="subSectionHeader">
+                    <container style="subSectionTitle">
+                        <label>${uiLabelMap.WarehouseManufacturingInventoryItemsManufactured}</label>
+                    </container>
+                </container>
+                <container style="form">
+                    <platform-specific>
+                        <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/productionRunSerialNumbers.ftl"/></html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+                        
+    <!-- This version is to transform workEffortId to productionRunId for some links such as WorkEffortSummary. -->
+    <screen name="EditProductionRunWorkEffort">
+        <section>
+            <actions>
+                <set field="parameters.productionRunId" from-field="parameters.workEffortId"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="ShowProductionRun"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- This version is to transform workEffortId to productionRunId for some links such as WorkEffortSummary. -->
+    <screen name="ProductionRunDeclarationWorkEffort">
+        <section>
+            <actions>
+                <set field="parameters.productionRunId" from-field="parameters.workEffortId"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="ViewProductionRun"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FindProductionRun">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseFindProductionRun"/>  
+                <set field="sectionHeaderUiLabel" value="WarehouseFindProductionRun"/>  
+                <set field="parameters.listIteratorToUse" value="productionRunsListIt"/>
+                <set field="listSortTarget" value="FindProductionRun"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/includes/findProductionRun.bsh"/>
+                <set field="workEffortPurposeTypeId" value="WEPT_PRODUCTION_RUN"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                              <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/FindProductionRun.ftl"/></html>
+                              </platform-specific>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.ManufacturingProductionRuns}</label></container>
+                            <include-form name="listFindProductionRun" location="component://warehouse/widget/warehouse/forms/manufacturing/ManufacturingForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Create Inventory Transfers for Production -->
+    <screen name="CreateInventoryTransfersForProduction">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseCreateInventoryTransfersForProduction"/>  
+                <set field="sectionHeaderUiLabel" value="WarehouseCreateInventoryTransfersForProduction"/>  
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/selectTransferFacilities.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/createInventoryTransfersForProduction.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="receiveOutsourcedPO">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseReceiveOutsourcedPO"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseReceiveOutsourcedPO"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/receiveOutsourcedPO.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/receiveOutsourcedPO.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="issueAdditionalMaterialForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseIssueAdditionalMaterial"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseIssueAdditionalMaterial"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/issueAdditionalMaterialForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/issueAdditionalMaterialForm.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- Disassembly Screens -->
+
+    <screen name="createReverseAssemblyForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseCreateReverseAssembly"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseCreateReverseAssembly"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/CreateProductionRun.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="createReverseAssemblyForm" location="component://warehouse/widget/warehouse/forms/manufacturing/ManufacturingForms.xml"></include-form>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewReverseAssembly">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseReverseAssembly"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseReverseAssembly"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="500"/>
+                <set field="assembly" type="Boolean" value="false"/>
+                <set field="disassembly" type="Boolean" value="true"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/viewProductionRun.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/manufacturing/productionRun.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+</screens>

@@ -1,0 +1,54 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.order.UtilOrder;
+import org.opentaps.common.product.UtilProduct;
+
+conditions = new ArrayList();
+conditions.add( new EntityExpr("pFacilityId", EntityOperator.EQUALS, session.getAttribute("facilityId")) );
+conditions.add( new EntityExpr("pStatusId", EntityOperator.EQUALS, "PICKLIST_PICKED") );
+conditions.add( new EntityExpr("piItemStatusId", EntityOperator.EQUALS, "PICKITEM_PENDING") );
+conditions.add( new EntityExpr("piQuantity", EntityOperator.GREATER_THAN, new Double(0)) );
+conditions.add(new EntityConditionList(UtilMisc.toList(new EntityExpr("oisgStatusId", EntityOperator.NOT_EQUAL, "OISG_PACKED"), new EntityExpr("oisgStatusId", EntityOperator.EQUALS, null)), EntityOperator.OR));
+
+toSelect = UtilMisc.toList("pPicklistId");
+
+builder() {
+    entityName = "PicklistItemAndOdrItmShipGrp";
+    orderBy = UtilMisc.toList("pPicklistId");
+    where = conditions;
+    fieldsToSelect = toSelect;
+    options = UtilCommon.DISTINCT_READ_OPTIONS;
+
+    build(page) {
+        newPage = new ArrayList();
+        for (row : page) {
+            picklistInfo = row.getRelatedOne("Picklist").getAllFields();
+            if (UtilValidate.isNotEmpty(picklistInfo.get("shipmentMethodTypeId"))) {
+                picklistInfo.put("shipmentMethodTypeDescription", delegator.findByPrimaryKeyCache("ShipmentMethodType", UtilMisc.toMap("shipmentMethodTypeId", picklistInfo.get("shipmentMethodTypeId"))).get("description"));
+            }
+            newPage.add(picklistInfo);
+        }
+        return newPage;
+    }
+    return this;
+}
+context.put("picklists", builder());

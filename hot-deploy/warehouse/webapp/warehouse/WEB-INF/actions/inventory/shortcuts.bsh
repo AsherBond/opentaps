@@ -1,0 +1,33 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import javolution.util.FastList;
+import org.ofbiz.base.util.UtilMisc;
+
+facilityId = session.getAttribute("facilityId");
+
+shortcuts = FastList.newInstance();
+shortcuts.add( UtilMisc.toMap("uri", "backOrderedItems", "uiLabel", "WarehouseBackOrderedItems") );
+shortcuts.add( UtilMisc.toMap("uri", "findInventoryItem", "uiLabel", "WarehouseFindInventoryItem"));
+shortcuts.add( UtilMisc.toMap("uri", "receiveInventoryItem", "uiLabel", "WarehouseReceiveInventoryItem"));
+shortcuts.add( UtilMisc.toMap("uri", "ReceiveInventoryAgainstPurchaseOrder", "uiLabel", "WarehouseReceivePurchaseOrder") );
+shortcuts.add( UtilMisc.toMap("uri", "findShipmentReceipt", "uiLabel", "WarehouseFindShipmentReceipts"));
+shortcuts.add( UtilMisc.toMap("uri", "physicalInventory", "uiLabel", "WarehouseInventoryAdjustQuantities") );
+shortcuts.add( UtilMisc.toMap("uri", "stockMoves", "uiLabel", "WarehouseStockMoves") );
+shortcuts.add( UtilMisc.toMap("uri", "FindFacilityTransfers", "parameters", "?facilityId=" + facilityId, "uiLabel", "WarehouseInventoryTransfer") );
+shortcuts.add( UtilMisc.toMap("uri", "manageLots", "uiLabel", "WarehouseManageLots") );
+shortcuts.add( UtilMisc.toMap("uri", "traceInventory", "uiLabel", "WarehouseTraceInventory") );
+context.put("shortcuts", shortcuts);

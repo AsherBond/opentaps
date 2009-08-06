@@ -1,0 +1,48 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// @author Fabien Carrion
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+if ( !context.containsKey("facilityId") ) return;
+
+// bshService.bsh
+delegator = dctx.getDelegator();
+
+// Back orders
+conditions = new EntityConditionList( UtilMisc.toList(
+    new EntityExpr("facilityId", EntityOperator.EQUALS, context.get("facilityId")),
+    new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
+    new EntityExpr("quantityNotAvailable", EntityOperator.GREATER_THAN, new Double(0)),
+    new EntityExpr("orderStatusId", EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_ON_HOLD", "ORDER_CREATED")),
+    new EntityExpr("orderItemStatusId", EntityOperator.IN, UtilMisc.toList("ITEM_APPROVED", "ITEM_CREATED"))
+), EntityOperator.AND);
+fields = UtilMisc.toList("orderId");
+backOrderedOrders = EntityUtil.getFirst( delegator.findByCondition("ReservedItemOrderCount", conditions, fields, null) );
+orderCountDouble = (backOrderedOrders == null ? null : backOrderedOrders.getLong("orderId"));
+orderCount = (orderCountDouble == null ? 0 : Math.max(orderCountDouble.doubleValue(), 0));
+context.put("backOrderedOrders", orderCount);
+
+// Back ordered products
+fields = UtilMisc.toList("productId");
+backOrderedProducts = EntityUtil.getFirst( delegator.findByCondition("ReservedItemProductCount", conditions, fields, null) );
+productCountDouble = (backOrderedProducts == null ? null : backOrderedProducts.getLong("productId"));
+productCount = (productCountDouble == null ? 0 : Math.max(productCountDouble.doubleValue(), 0));
+context.put("backOrderedProducts", productCount);

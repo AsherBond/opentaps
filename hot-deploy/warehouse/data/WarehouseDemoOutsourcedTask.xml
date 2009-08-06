@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- this is an example of an outsourced production task at a fixed cost
+    this file requires the financials module's seed data to load correctly -->
+    
+<entity-engine-xml>
+
+    <WorkEffort workEffortId="TASK_OUTSRCD" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_ASSEMBLING" currentStatusId="ROU_ACTIVE" workEffortName="Sample Outsourced Production Task" description="This task is outsourced at a fixed cost"/>
+    <CostComponentCalc costComponentCalcId="COST_TASK_OUTSRCD" description="Sample cost for the outsourced task" currencyUomId="USD" costCustomMethodId="COST_OUTSRCD_TASK"
+        costGlAccountTypeId="MFG_EXPENSE_CONTRACT"/> <!-- by default offsettingGlAccountTypeId is WIP_INVENTORY -->
+    <WorkEffortCostCalc workEffortId="TASK_OUTSRCD" costComponentTypeId="ROUTE_COST" costComponentCalcId="COST_TASK_OUTSRCD" fromDate="2007-01-01 00:01:00.0"/>    
+    
+    <!-- while we're at it, set this to a different GL account -->
+    <CostComponentCalc costComponentCalcId="EXAMPLE_COST" costGlAccountTypeId="MFG_EXPENSE_INTERNAL"/>
+
+    <!-- associate it to a product that we purchase -->
+    <Product productId="OUTSOURCE0001" productTypeId="SERVICE_CONTRACT_MFG" internalName="Sample Outsourced Task" productName="Sample Outsourced Task" description="A production task which is outsourced to another vendor"/>
+    <SupplierProduct productId="OUTSOURCE0001" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" supplierPrefOrderId="10_MAIN_SUPPL" minimumOrderQuantity="0" lastPrice="10" currencyUomId="USD"
+        supplierProductId="TASK0001" supplierProductName="Perform this outsourced task"/>
+    <WorkEffortGoodStandard productId="OUTSOURCE0001" workEffortId="TASK_OUTSRCD" workEffortGoodStdTypeId="ROU_OUTSOURCE_PROD" fromDate="2007-01-01 00:00:00" statusId="WEGS_CREATED"/>
+
+    <!-- Another outsourced task with one product, but quantity 10 -->
+    <WorkEffort workEffortId="TASK_OUTSRCD_TWO" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_ASSEMBLING" currentStatusId="ROU_ACTIVE" workEffortName="Second Sample Outsourced Production Task" description="This task is outsourced at a fixed cost"/>
+
+    <CostComponentCalc costComponentCalcId="COST_TASK_OUTSRCD2" description="Sample cost for second outsourced task" currencyUomId="USD" costCustomMethodId="COST_OUTSRCD_TASK" 
+        costGlAccountTypeId="MFG_EXPENSE_CONTRACT"/>
+    <WorkEffortCostCalc workEffortId="TASK_OUTSRCD_TWO" costComponentTypeId="ROUTE_COST" costComponentCalcId="COST_TASK_OUTSRCD2" fromDate="2007-01-01 00:01:00.0"/>
+
+    <Product productId="OUTSOURCE0002" productTypeId="SERVICE_CONTRACT_MFG" internalName="Second Sample Outsourced Task" productName="Second Sample Outsourced Task" description="Another production task which is outsourced to another vendor"/>
+    <SupplierProduct productId="OUTSOURCE0002" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" supplierPrefOrderId="10_MAIN_SUPPL" minimumOrderQuantity="10" lastPrice="5.85" currencyUomId="USD"
+        supplierProductId="TASK0002" supplierProductName="Perform this outsourced task"/>
+    <WorkEffortGoodStandard productId="OUTSOURCE0002" estimatedQuantity="10" workEffortId="TASK_OUTSRCD_TWO" workEffortGoodStdTypeId="ROU_OUTSOURCE_PROD" fromDate="2007-01-01 00:00:00" statusId="WEGS_CREATED"/>
+
+    <Product productId="PROD_OUT" productTypeId="FINISHED_GOOD" internalName="Product with 1 outsourced task" productName="Product with 1 outsourced task" description="This product is produced with 1 outsourced task"/> 
+    <ProductAssoc productId="PROD_OUT" productIdTo="MAT_A_COST" productAssocTypeId="MANUF_COMPONENT" fromDate="2007-09-01 00:00:00" quantity="2"/>
+    <ProductAssoc productId="PROD_OUT" productIdTo="MAT_B_COST" productAssocTypeId="MANUF_COMPONENT" fromDate="2007-09-01 00:00:00" quantity="3"/>
+
+    <Product productId="PROD_IN_OUT" productTypeId="FINISHED_GOOD" internalName="Product with internal task and 2 outsourced tasks" productName="Product with internal task and 2 outsourced tasks" description="Product with internal task and 2 outsourced tasks"/>
+    <ProductAssoc productId="PROD_IN_OUT" productIdTo="MAT_A_COST" productAssocTypeId="MANUF_COMPONENT" fromDate="2007-09-01 00:00:00" quantity="2"/>
+    <ProductAssoc productId="PROD_IN_OUT" productIdTo="MAT_B_COST" productAssocTypeId="MANUF_COMPONENT" fromDate="2007-09-01 00:00:00" quantity="3"/>
+
+    <Product productId="PROD_OUT_IN_OUT" productTypeId="FINISHED_GOOD" internalName="Product with outsourced, internal, outsourced tasks" productName="Product with outsourced, internal, outsourced tasks" description="Product with outsourced task, internal task, then outsourced tasks"/>
+    <ProductAssoc productId="PROD_OUT_IN_OUT" productIdTo="MAT_A_COST" productAssocTypeId="MANUF_COMPONENT" fromDate="2007-09-01 00:00:00" quantity="2"/>
+    <ProductAssoc productId="PROD_OUT_IN_OUT" productIdTo="MAT_B_COST" productAssocTypeId="MANUF_COMPONENT" fromDate="2007-09-01 00:00:00" quantity="3"/>
+
+    <WorkEffort workEffortId="ROUTING_OUTSRC1" workEffortTypeId="ROUTING" workEffortName="One outsource task routing" description="This routing involves only one outsourced task"
+        currentStatusId="ROU_ACTIVE" quantityToProduce="0"/>
+    <WorkEffortAssoc workEffortIdFrom="ROUTING_OUTSRC1" workEffortIdTo="TASK_OUTSRCD" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="10" fromDate="2007-01-01 00:00:00"/>
+    <WorkEffortGoodStandard productId="PROD_OUT" workEffortId="ROUTING_OUTSRC1" workEffortGoodStdTypeId="ROU_PROD_TEMPLATE" fromDate="2007-01-01 00:00:00" statusId="WEGS_CREATED"/>
+
+    <WorkEffort workEffortId="ROUTING_IN_OUT" workEffortTypeId="ROUTING" workEffortName="Internal task completed by two outsourced tasks" description="Internal task completed by two outsourced tasks"
+            currentStatusId="ROU_ACTIVE" quantityToProduce="0"/>
+    <WorkEffortAssoc workEffortIdFrom="ROUTING_IN_OUT" workEffortIdTo="TASK_COST" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="10" fromDate="2007-01-01 00:00:00.0"/>
+    <WorkEffortAssoc workEffortIdFrom="ROUTING_IN_OUT" workEffortIdTo="TASK_OUTSRCD" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="20" fromDate="2007-01-01 00:00:00.0"/>
+    <WorkEffortAssoc workEffortIdFrom="ROUTING_IN_OUT" workEffortIdTo="TASK_OUTSRCD_TWO" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="30" fromDate="2007-01-01 00:00:00.0"/>
+    <WorkEffortGoodStandard productId="PROD_IN_OUT" workEffortId="ROUTING_IN_OUT" workEffortGoodStdTypeId="ROU_PROD_TEMPLATE" fromDate="2007-01-01 00:00:00" statusId="WEGS_CREATED"/>
+
+    <WorkEffort workEffortId="ROUTING_OUT_IN_OUT" workEffortTypeId="ROUTING" workEffortName="Outsourced, internal, outsourced task" description="Outsourced task first, then internal task, then finished by outsourced task"
+               currentStatusId="ROU_ACTIVE" quantityToProduce="0"/>
+    <WorkEffortAssoc workEffortIdFrom="ROUTING_OUT_IN_OUT" workEffortIdTo="TASK_OUTSRCD" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="10" fromDate="2007-01-01 00:00:00.0"/>
+    <WorkEffortAssoc workEffortIdFrom="ROUTING_OUT_IN_OUT" workEffortIdTo="TASK_COST" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="20" fromDate="2007-01-01 00:00:00.0"/>
+    <WorkEffortAssoc workEffortIdFrom="ROUTING_OUT_IN_OUT" workEffortIdTo="TASK_OUTSRCD_TWO" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="30" fromDate="2007-01-01 00:00:00.0"/>
+    <WorkEffortGoodStandard productId="PROD_OUT_IN_OUT" workEffortId="ROUTING_OUT_IN_OUT" workEffortGoodStdTypeId="ROU_PROD_TEMPLATE" fromDate="2007-01-01 00:00:00" statusId="WEGS_CREATED"/>
+
+</entity-engine-xml>

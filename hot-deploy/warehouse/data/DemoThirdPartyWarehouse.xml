@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- this is an example of third party hostd inventory: inventory is kept by DemoSupplier on our behalf in their facility,
+with a minimum stock of 100,000 units.  We will make purchase orders for it, receive it into their warehouse, and only pay
+for the inventory when it is transferred to our warehouse -->
+
+<entity-engine-xml>
+
+    <!-- First set up a warehouse for the supplier to own and define addresses, or POs cannot be created properly -->
+    <Facility facilityId="Demo3PL" facilityName="Third Party Warehouse" facilityTypeId="WAREHOUSE" ownerPartyId="DemoSupplier" defaultInventoryItemTypeId="NON_SERIAL_INV_ITEM"
+        description="Inventory reserved for our use in the DemoSupplier warehouse"/>
+    <ContactMech contactMechId="Demo3PL-001" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="Demo3PL-001" toName="Demo Supplier" attnName="Devon Demo" address1="100 D Street" city="Dallas" stateProvinceGeoId="TX"
+        postalCode="75201" countryGeoId="USA"/>
+    <FacilityContactMech facilityId="Demo3PL" contactMechId="Demo3PL-001" fromDate="2000-01-01 00:00:00"/>
+    <FacilityContactMechPurpose facilityId="Demo3PL" contactMechId="Demo3PL-001" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2000-01-01 00:00:00"/>
+    <FacilityContactMechPurpose facilityId="Demo3PL" contactMechId="Demo3PL-001" contactMechPurposeTypeId="SHIP_ORIG_LOCATION" fromDate="2000-01-01 00:00:00"/>
+
+    <!-- You MUST have a telecom number configured, or the shipment receipt services in ofbiz will set the telecom number to address and cause a SHIPMENT_DTCN FK exception -->
+    <ContactMech contactMechId="Demo3PL-002" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="Demo3PL-002" countryCode="1" areaCode="214" contactNumber="456-7890"/>
+    <FacilityContactMech facilityId="Demo3PL" contactMechId="Demo3PL-002" fromDate="2000-01-01 00:00:00"/>
+    <FacilityContactMechPurpose facilityId="Demo3PL" contactMechId="Demo3PL-002" contactMechPurposeTypeId="PHONE_SHIPPING" fromDate="2000-01-01 00:00:00"/>
+    <FacilityContactMechPurpose facilityId="Demo3PL" contactMechId="Demo3PL-002" contactMechPurposeTypeId="PHONE_SHIP_ORIG" fromDate="2000-01-01 00:00:00"/>
+
+    <!-- required for the receive inventory screen to work -->
+    <PartyAcctgPreference partyId="DemoSupplier" baseCurrencyUomId="USD"/>
+
+    <!-- Now define a user to have permission to work receive inventory, transfer inventory in the warehouse -->
+    <FacilityPartyPermission facilityId="Demo3PL" partyId="DemoEmployee1" securityGroupId="WRHS_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+    <!-- Now define your organization to be eligible to receive inventory into this warehouse -->
+    <FacilityRole facilityId="Demo3PL" partyId="Company" roleTypeId="RECV_INV_FOR"/>
+
+    <!-- Now define a minimum stock in this warehouse for the products your vendor stocks for you
+    Note that this is in fact now required for any product whose inventory you want to see on the inventory reports -->
+    <ProductFacility productId="GZ-1000" facilityId="Demo3PL" minimumStock="100000" reorderQuantity="25000" daysToShip="180"/>
+    <ProductFacility productId="MAT_A_COST" facilityId="Demo3PL" minimumStock="1000" reorderQuantity="250" daysToShip="180"/>
+    <ProductFacility productId="MAT_B_COST" facilityId="Demo3PL" minimumStock="1000" reorderQuantity="250" daysToShip="180"/>
+
+    <ProductFacility facilityId="WebStoreWarehouse" productId="GZ-1000" minimumStock="25" reorderQuantity="5" daysToShip="10"/>
+    
+    <FacilityAssoc facilityId="Demo3PL" facilityIdTo="WebStoreWarehouse" facilityAssocTypeId="BACKUP_INVENTORY" fromDate="2007-01-01 00:00:00" sequenceNum="1"/>
+
+</entity-engine-xml>

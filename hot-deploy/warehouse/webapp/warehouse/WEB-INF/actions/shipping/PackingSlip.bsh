@@ -1,0 +1,130 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file has been altered from the version included with the Apache-licensed OFBiz product application */
+/* This file has been modified by Open Source Strategies, Inc. */
+
+
+// This script gets shipment items grouped by package for use in the packing slip PDF or any screens that require by-package layout
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.order.order.OrderReadHelper;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.order.UtilOrder;
+import org.opentaps.warehouse.WarehouseHelper;
+
+// Since this script is run after ViewShipment, we will re-use the shipment in the context
+shipment = context.get("shipment");
+if (shipment == null) return;
+
+// get the packages related to this shipment in order of packages
+orderBy = UtilMisc.toList("shipmentPackageSeqId");
+shipmentPackages = shipment.getRelated("ShipmentPackage", orderBy);
+
+// for each package, we want to list the quantities and details of each product
+packages = FastList.newInstance(); // note we assume that the package number is simply the index + 1 of this list
+for (iter = shipmentPackages.iterator(); iter.hasNext(); ) {
+    shipmentPackage = iter.next();
+    contents = delegator.findByAnd("ShipmentPackageItemIssuance",
+        UtilMisc.toMap("shipmentId", shipmentPackage.get("shipmentId"), "shipmentPackageSeqId", shipmentPackage.get("shipmentPackageSeqId")),
+        UtilMisc.toList("shipmentItemSeqId"));
+
+    // each line is one logical Product and the quantities associated with it
+    lines = FastList.newInstance();
+    for (citer = contents.iterator(); citer.hasNext(); ) {
+        content = citer.next();
+        shipmentItem = content.getRelatedOne("ShipmentItem");
+        product = shipmentItem.getRelatedOne("Product");
+
+        line = FastMap.newInstance();
+        line.put("product", product);
+
+        itemIssuanceQuantity = content.getDouble("itemIssuanceQuantity") != null? content.getDouble("itemIssuanceQuantity").doubleValue() : 0.0;
+        packageContentQuantity = content.getDouble("packageContentQuantity") != null? content.getDouble("packageContentQuantity").doubleValue() : 0.0;
+
+        if (itemIssuanceQuantity < packageContentQuantity) {
+            quantity = itemIssuanceQuantity;
+        } else {
+            quantity = packageContentQuantity;
+        }
+
+        if (quantity == 0.0) {
+            continue;
+        }
+
+        quantityShipped = itemIssuanceQuantity;
+        print("quantityShipped = " + quantityShipped);
+
+        // the quantity requested
+        quantityRequested = 0.0;
+        reservations = delegator.findByAnd("OrderItemShipGrpInvRes",
+            UtilMisc.toMap("orderId", content.get("orderId"), "orderItemSeqId", content.get("orderItemSeqId"), "shipGroupSeqId", content.get("shipGroupSeqId"), "inventoryItemId", content.get("inventoryItemId")));
+        for (resiter = reservations.iterator(); resiter.hasNext(); ) {
+            reservation = resiter.next();
+            quantityRequested += reservation.get("quantity").doubleValue();
+        }
+        requestedItemIssuances = delegator.findByAnd("ItemIssuance",
+            UtilMisc.toMap("orderId", content.get("orderId"), "orderItemSeqId", content.get("orderItemSeqId"), "shipGroupSeqId", content.get("shipGroupSeqId"), "inventoryItemId", content.get("inventoryItemId")));
+        for (riiter = requestedItemIssuances.iterator(); riiter.hasNext(); ) {
+            requestedItemIssuance = riiter.next();
+            quantityRequested += requestedItemIssuance.get("quantity").doubleValue();
+        }
+        print("quantityRequested = " + quantityRequested);
+
+        line.put("quantityInPackage", quantity);
+        line.put("quantityShipped", quantityShipped);
+        line.put("quantityRequested", quantityRequested);
+
+        line.put("lotId", content.get("lotId"));
+
+        lines.add(line);
+    }
+    packages.add(lines);
+}
+context.put("packages", packages);
+
+// get some extra information from the primary order
+order = shipment.getRelatedOne("PrimaryOrderHeader");
+if (order != null) {
+    orh = new OrderReadHelper(order);
+    context.put("customerPoNumber", UtilOrder.getCustomerPoNumber(order));
+    context.put("customerName", PartyHelper.getPartyName(orh.getBillToParty()));
+}
+
+// the PDF header requires an organizationPartyId
+facility = context.get("originFacility");
+context.put("organizationPartyId", facility.get("ownerPartyId"));

@@ -1,0 +1,33 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import javolution.util.FastList;
+import org.ofbiz.base.util.UtilMisc;
+
+facilityId = parameters.get("facilityId");
+
+shortcuts = FastList.newInstance();
+shortcuts.add( UtilMisc.toMap("uri", "readyToShip", "uiLabel", "WarehouseReadyToShip") );
+shortcuts.add( UtilMisc.toMap("uri", "IncomingShipments", "parameters", "?lookupFlag=Y&amp;formShipmentTypeId=INCOMING_SHIPMENT", "uiLabel", "WarehouseIncomingShipments") );
+shortcuts.add( UtilMisc.toMap("uri", "OutgoingShipments", "parameters", "?lookupFlag=Y&amp;formShipmentTypeId=OUTGOING_SHIPMENT", "uiLabel", "WarehouseOutgoingShipments") );
+shortcuts.add( UtilMisc.toMap("uri", "createPicklist", "parameters", "?maxNumberOfOrders=30", "uiLabel", "WarehouseCreatePicklist") );
+shortcuts.add( UtilMisc.toMap("uri", "openPicklists", "uiLabel", "WarehouseOpenPicklists") );
+shortcuts.add( UtilMisc.toMap("uri", "pickedPicklists", "uiLabel", "WarehousePickedPicklists") );
+shortcuts.add( UtilMisc.toMap("uri", "PackOrder", "uiLabel", "WarehousePackOrder") );
+shortcuts.add( UtilMisc.toMap("uri", "QuickScheduleShipmentRouteSegment", "uiLabel", "WarehouseScheduleAShipment") );
+shortcuts.add( UtilMisc.toMap("uri", "ScheduleShipmentRouteSegment", "uiLabel", "WarehouseScheduleShipments") );
+shortcuts.add( UtilMisc.toMap("uri", "Labels", "uiLabel", "WarehousePrintLabels") );
+context.put("shortcuts", shortcuts);

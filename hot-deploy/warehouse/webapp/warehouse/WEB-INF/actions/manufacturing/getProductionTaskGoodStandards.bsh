@@ -1,0 +1,66 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+// after the production run routing tasks are retrieved, this script will add the relevant workEffortGoodStdTypeId
+// this is used to determine whether the routing task is outsourced or not.
+tasks = context.get("productionRunRoutingTasks");
+if (tasks == null) return;
+
+// let's rebuild the whole map and add a field for workEffortGoodStdTypeId
+List replacements = FastList.newInstance();
+for (iter = tasks.iterator(); iter.hasNext(); ) {
+    task = iter.next();
+    replacement = FastMap.newInstance();
+    replacement.putAll(task.getAllFields());
+
+    wegs = EntityUtil.getFirst( task.getRelated("WorkEffortGoodStandard") );
+    if (wegs != null) {
+        replacement.put("workEffortGoodStdTypeId", wegs.get("workEffortGoodStdTypeId"));
+    } else {
+        replacement.put("workEffortGoodStdTypeId", "");
+    }
+    replacement.put("statusItem", task.getRelatedOne("CurrentStatusItem"));
+    workEffortId = task.getString("workEffortId");
+
+    conditions = UtilMisc.toList( new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId) );
+    conditions.add( new EntityExpr("comments", EntityOperator.NOT_EQUAL, null) );
+
+    List timeEntries = delegator.findByCondition("TimeEntry", new EntityConditionList(conditions, EntityOperator.AND), UtilMisc.toList("comments"), UtilMisc.toList("createdStamp ASC"));
+    if (UtilValidate.isNotEmpty(timeEntries)) {
+        timeComment = "Comments: ";
+        timeEntriesIterator = timeEntries.iterator();
+        while (timeEntriesIterator.hasNext()) {
+            timeEntry = timeEntriesIterator.next();
+            if (UtilValidate.isNotEmpty(timeEntry.get("comments"))) {
+                timeComment += "<i>" + timeEntry.get("comments") + "</i>";
+                if (timeEntriesIterator.hasNext()) {
+                    timeComment += ", ";
+                }
+            }
+        }
+        replacement.put("timeComment", timeComment);
+    }
+
+    replacements.add(replacement);
+}
+context.put("productionRunRoutingTasks", replacements);

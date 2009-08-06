@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entity-engine-xml>
+  <!--RecurrenceRule recurrenceRuleId="520" untilDateTime="" frequency="HOURLY" intervalNumber="1" byHourList="0,4,8,9,10,11,12,13,14,15,16,17,21" countNumber="-1"/-->
+  <RecurrenceRule recurrenceRuleId="520" untilDateTime="" frequency="HOURLY" intervalNumber="1" countNumber="-1"/>
+  <RecurrenceInfo recurrenceInfoId="520" startDateTime="2000-01-01 22:00:00.000" recurrenceRuleId="520" recurrenceCount="0"/>
+
+  <JobSandbox jobId="9520" jobName="Populate Summary Dashboard Table" runTime="2000-01-01 00:00:00.000" serviceName="populateWarehouseSummaryData" poolId="pool" runAsUser="system" recurrenceInfoId="520"/>
+
+</entity-engine-xml>

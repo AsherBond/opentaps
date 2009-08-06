@@ -1,0 +1,78 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.common.util.*;
+import org.opentaps.warehouse.security.WarehouseSecurity;
+
+// This security-related code is duplicating the work done in main-decorator.bsh
+// (under component://warehouse/webapp/warehouse/WEB-INF/actions/include), due to
+// they way they screen widgets work in general, and the way they are currently
+// setup in the Warehouse application
+
+facilityId = parameters.get("facilityId");
+warehouseSecurity = session.getAttribute("warehouseSecurity");
+
+if (warehouseSecurity == null) {
+    // For some strange reason, the warehouseSecurity object is not always available as a session
+    // variable; this appears to be related to the main-decorator screen setup problem.  This
+    // (temporary) solution will ensure that this object will always be available, but again,
+    // this is a temporary solution that will be used until the issue with main-decorator is
+    // sorted out.  Again, this is (partly) a duplication of work done in "main-decorator.bsh".
+    warehouseSecurity = new WarehouseSecurity(security, userLogin, facilityId);
+    session.setAttribute("warehouseSecurity", warehouseSecurity);
+}
+
+hasLotViewPermission = warehouseSecurity.hasFacilityPermission("WRHS_INV_LOT_VIEW");
+context.put("hasLotViewPermission", hasLotViewPermission);
+
+lotId = parameters.get("lotId");
+
+inventoryItems = new ArrayList();
+if (hasLotViewPermission) {
+    quantityCond = new EntityConditionList(UtilMisc.toList(
+        new EntityExpr("quantityOnHandTotal", EntityOperator.NOT_EQUAL, new Double(0.0)),
+        new EntityExpr("availableToPromiseTotal", EntityOperator.NOT_EQUAL, new Double(0.0))
+    ), EntityOperator.OR);
+
+    serializedItemCond = new EntityConditionList(UtilMisc.toList(
+        new EntityExpr("inventoryItemTypeId", EntityOperator.EQUALS, "NON_SERIAL_INV_ITEM"), quantityCond),
+        EntityOperator.AND);
+
+    itemStatusCond = new EntityConditionList(UtilMisc.toList(
+        new EntityExpr("statusId", EntityOperator.EQUALS, "INV_AVAILABLE"),
+        new EntityExpr("statusId", EntityOperator.EQUALS, "INV_PROMISED")
+    ), EntityOperator.OR);
+
+    nonserializedItemCond = new EntityConditionList(UtilMisc.toList(
+        new EntityExpr("inventoryItemTypeId", EntityOperator.EQUALS, "SERIALIZED_INV_ITEM"), itemStatusCond),
+        EntityOperator.AND);
+
+    itemTypeCond = new EntityConditionList(UtilMisc.toList(serializedItemCond, nonserializedItemCond), EntityOperator.OR);
+
+    itemCond = new EntityConditionList(UtilMisc.toList(
+        new EntityExpr("lotId", EntityOperator.EQUALS, lotId), itemTypeCond),
+        EntityOperator.AND);
+
+    invItems = delegator.findByCondition("InventoryItem", itemCond, null, null);
+    if (UtilValidate.isNotEmpty(invItems)) {
+        inventoryItems.addAll(invItems);
+    }
+}
+context.put("inventoryItems", inventoryItems);

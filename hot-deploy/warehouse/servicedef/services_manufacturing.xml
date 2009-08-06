@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+        
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Warehouse Manufacturing Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="createInventoryTransferForFacilityProduct" engine="java"
+                location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="createInventoryTransferForFacilityProduct">
+            <description>Automatically create inventory item-level inventory transfers requests from one facility to another
+                for a productId and quantity to be transferred.  Inventory items will be chosen based on the following criteria:
+            (a) Pick/pack location items will be chosen first
+            (b) Non serialized items will be chosen before serialized ones
+            (c) They will be ordered by locationSeqId
+            (d) The inventory item with the lowest ATP will be used first
+            Inventory items with ATP less than 0 will not be chosen</description>
+        <attribute name="facilityIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="facilityIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="transferQuantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="sendDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="inventoryTransferIds" type="List" mode="OUT" optional="false"/>
+        <attribute name="quantityTransferred" type="Double" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="autoCreateInventoryTransfers" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="autoCreateInventoryTransfers">
+        <description>Auto create inventory transfers for parts needed by production runs during a time period, taking into account
+            existing ATP inventory at the production facility and planned inventory transfers.  Inventory transfers will be from
+            warehouseFacilityId to productionFacilityId.</description>
+        <attribute name="warehouseFacilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="productionFacilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="thruDate" type="Timestamp" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createProductionRunsForProductBom" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="createProductionRunsForProductBom" auth="true">
+        <description>Explodes a product id and creates all the needed production runs.</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" optional="true" mode="IN" type="Double"/>
+        <attribute name="startDate" type="java.sql.Timestamp" mode="IN" optional="false"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="routingId" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortName" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="productionRuns" optional="true" mode="OUT" type="java.util.List"/><!-- TODO -->
+        <attribute name="productionRunId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="createProductionRun" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="createProductionRunRefactored" auth="true">
+        <description>Overload the original createProductionRun service from manufacturing with a refactored service that allows disassembly.</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="pRQuantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="startDate" type="java.sql.Timestamp" mode="IN" optional="false"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="routingId" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortName" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="disassemble" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="productionRunId" type="String" mode="OUT" optional="false"/>
+        <attribute name="estimatedCompletionDate" type="java.sql.Timestamp" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.createProductionRun" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="createProductionRun">
+        <description>
+            Create a production run.  This handles the creation of outsourced tasks and their requirements.
+            Requires WRHS_MFG_CREATE permission for the facility.
+        </description>
+        <implements service="createProductionRunsForProductBom"/> 
+        <attribute name="disassemble" type="Boolean" mode="IN" optional="true"/>
+    </service>
+
+    <service name="opentaps.approveOutsourcedProductRequirements" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="approveOutsourcedProductRequirements">
+        <description>Approve all outsourced product requirements for the given productionRunId</description>
+        <attribute name="productionRunId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.setOutsourcedTasksToPending" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="setOutsourcedTasksToPending">
+        <description>Marks all outsourced tasks belonging to the production run as PRUN_OUTSRC_PEND</description>
+        <attribute name="productionRunId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.runOutsourcedProductionRun" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="runOutsourcedProductionRun">
+        <description>
+            If all tasks in a production run are outsourced and pending, then this marks the production run as running.
+            This step is required so that the production run can then be completed when the tasks are received.
+        </description>
+        <attribute name="productionRunId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.cancelProductionRun" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="cancelProductionRun">
+        <description>Cancel any unprocessed outsourced product requirements and order items</description>
+        <attribute name="productionRunId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.qualifyOutsourcedTasks" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="qualifyOutsourcedTasks">
+        <description>Sets the status of outsourced production tasks to PRUN_OUTSRCD, which allows them to be completed when the related PO is received.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.addProductionRunRoutingTask" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="addProductionRunRoutingTask">
+        <attribute name="routingTaskId" type="String" mode="INOUT" optional="false"/>
+    </service>
+
+    <service name="opentaps.calcOutSourcedTaskCost" engine="java"
+        location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="calcOutSourcedTaskCost">
+        <attribute name="workEffort" type="GenericValue" mode="IN" optional="false"/>
+        <attribute name="workEffortCostCalc" type="GenericValue" mode="IN" optional="false"/>
+        <attribute name="costComponentCalc" type="GenericValue" mode="IN" optional="false"/>
+        <attribute name="costComponentId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="opentaps.reduceWorkEffortGoodStandard" engine="java"
+        location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="reduceWorkEffortGoodStandard">
+        <description>Reduce the estimated quantity of a production run task component.</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+    </service>
+
+    <service name="getProductRoutingDisassemble" engine="java"
+        location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="getProductRoutingDisassemble">
+        <description>Retrieves the disassembly template for a product, otherwise a default disassembly template.</description>
+        <implements service="getProductRouting"/>
+    </service>
+
+    <service name="opentaps.productionRunProduce" engine="java"
+        location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="productionRunProduceRefactored" auth="true">
+        <description>
+            Refactoring of productionRunProduce.  This service will allocate the given quantity of product
+            to the inventory.  It uses WorkEffortGoodStandard of type PRUN_PROD_PRODUCED to keep track of what
+            was produced and PRUN_PROD_DELIV for what is intended to be produced.  This service allows production
+            runs that have multiple products produced, such as disassemblies.  It is reverse compatible with
+            productionRunProduced, but requires a data migration for existing production runs.
+            If quantity is not specified, then this service will produce remaining for the product.
+        </description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="quantity" type="Double" mode="INOUT" optional="true"/>
+        <attribute name="inventoryItemTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="lotId" type="String" mode="IN" optional="true"/>
+        <attribute name="createLotIfNeeded" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="autoCreateLot" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="inventoryItemIds" type="List" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="createProductionRunForMktgPkg" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="createProductionRunForMktgPkg" auth="true">
+        <description>
+            Creates a production run for a marketing package when the ordered item is out of stock (ATP quantity less than zero.)  
+            The quantity produced is either the quantity ordered or to bring total ATP quantity of the product back up to zero,
+            whichever is less.
+            NOTE: This definition re-directs the service of the same name from an ofbiz implementation to one in opentaps warehouse, 
+            so it uses the opentaps production run services and accounts for inventory properly.
+        </description>
+        <attribute mode="IN" name="orderId" optional="false" type="String"/>
+        <attribute mode="IN" name="orderItemSeqId" optional="false" type="String"/>
+        <attribute mode="IN" name="facilityId" optional="false" type="String"/>
+        <attribute mode="OUT" name="productionRunId" optional="true" type="String"/>
+    </service>
+
+    <service name="revertProductionRunAndSaveAllParts" engine="java"
+        location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="revertProductionRunAndSaveAllParts">
+        <description>Revert a whole production run.</description>
+        <attribute name="productionRunId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="savedParts" type="List" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="revertProductionRun" engine="java"
+        location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="revertProductionRun">
+        <description>Revert only part of the production run.</description>
+        <attribute name="productionRunId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="savedParts" type="List" mode="INOUT" optional="false"/>
+    </service>
+
+    <service name="opentaps.resetWegsFromDate" engine="java"
+            location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="resetWegsFromDate" auth="true">
+        <description>
+          Set the WEGS fromDate from the production run actual start date.
+        </description>
+        <attribute name="productionRunId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="getProductRouting" engine="java"
+                location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="getProductRouting" auth="true">
+        <description>Get the product's routing and routing tasks</description>
+        <attribute mode="IN" name="productId" optional="false" type="String"/>
+        <attribute mode="IN" name="workEffortId" optional="true" type="String"/>
+        <attribute mode="IN" name="applicableDate" optional="true" type="java.sql.Timestamp"/>
+        <attribute mode="IN" name="ignoreDefaultRouting" optional="true" type="String"/><!-- If this is set to Y, the default routing is not returned -->
+        <attribute mode="IN" name="quantity" type="Double" optional="true"/>
+        <attribute mode="OUT" name="routing" type="GenericValue" optional="true"/>
+        <attribute mode="OUT" name="tasks" type="java.util.List" optional="true"/>
+    </service>
+
+    <service name="decomposeInventoryItem" engine="java"
+        location="org.opentaps.warehouse.manufacturing.ProductionRunServices" invoke="decomposeInventoryItem" auth="true">
+        <description>
+            Replace legacy service of the same name. Disassemble product if marketing package order item
+            is canceled. 
+        </description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="true"/>
+        <attribute name="inventoryItemIds" type="List" mode="OUT" optional="false"/>
+    </service>
+
+</services>
+

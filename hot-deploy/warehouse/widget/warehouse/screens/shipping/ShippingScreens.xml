@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+        
+<!-- This file may have been based on one or more Apache OFBIZ files but has been modified -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+        
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+<!-- main decorator of shipping section. a sectionHeader is set for each screen -->
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="shipping" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Ready to Ship -->
+    <screen name="readyToShip">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseReadyToShip"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseReadyToShip"/>  
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="2000"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/findOrdersReadyToShip.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/ordersReadyToShip.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Find Shipment -->
+    <screen name="FindShipment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseFindShipment"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseFindShipment"/>  
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/FindShipment.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/includes/selectFacility.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/FindShipment.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ViewShipment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseViewShipment"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseViewShipment"/>  
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/EditShipmentItems.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentPackages.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentRouteSegments.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/setShipmentToHistory.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/ViewShipmentInformation.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://product/webapp/facility/shipment/ViewShipment.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/shipping/ViewShipmentInfo.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/ViewShipmentItemInfo.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/shipping/ViewShipmentItemInfo.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/ViewShipmentPackageInfo.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/shipping/ViewShipmentPackageInfo.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/ViewShipmentRouteSegmentInfo.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://product/webapp/facility/shipment/ViewShipmentRouteInfo.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditShipment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OrderEditShipmentInfo"/>
+                <set field="sectionHeaderUiLabel" value="ProductEditShipment"/>  
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipment.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/EditShipmentInfo.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://product/webapp/facility/shipment/EditShipment.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditShipmentItems">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PageTitleEditShipmentItems"/>
+                <set field="sectionHeaderUiLabel" value="ProductEditShipment"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentItems.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/EditShipmentItems.ftl"/></html>
+                        </platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://product/webapp/facility/shipment/EditShipmentItems.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditShipmentPackages">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PageTitleEditShipmentPackages"/>
+                <set field="sectionHeaderUiLabel" value="ProductEditShipment"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentPackages.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/EditShipmentPackages.ftl"/></html>
+                        </platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://product/webapp/facility/shipment/EditShipmentPackages.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditShipmentRouteSegments">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PageTitleEditShipmentRouteSegments"/>
+                <set field="sectionHeaderUiLabel" value="ProductEditShipment"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentRouteSegments.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/EditShipmentRouteSegments.ftl"/></html>
+                        </platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://product/webapp/facility/shipment/EditShipmentRouteSegments.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Open Picklists -->
+    <screen name="picklistDetails">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehousePicklistDetails"/>
+                <set field="sectionHeaderUiLabel" value="WarehousePicklistDetails"/>  
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/picklistDetails.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://warehouse/webapp/warehouse/shipping/submenus/picklistDetailsMenu.ftl"/></html></platform-specific>
+                            <platform-specific><html><html-template location="component://warehouse/webapp/warehouse/shipping/picklistDetails.ftl"/></html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="openPicklists">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseOpenPicklists"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseOpenPicklists"/> 
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/findOpenPicklist.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                       <!-- TODO: Revert r7704 if this screen will be moved to opentaps -->
+                       <!-- <include-screen name="PicklistManage" location="component://product/widget/facility/FacilityScreens.xml"/> -->
+                        <container style="subSectionBlock">
+                          <container style="form">
+                            <platform-specific>
+                              <html><html-template location="component://warehouse/webapp/warehouse/shipping/findOpenPicklist.ftl"/></html>
+                            </platform-specific>
+                          </container>
+                        </container>
+                        <platform-specific>
+                          <html><html-template location="component://warehouse/webapp/warehouse/shipping/listOpenPicklist.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pickedPicklists">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehousePickedPicklists"/>
+                <set field="sectionHeaderUiLabel" value="WarehousePickedPicklists"/>  
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/getPickedPicklistInfo.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/pickedPicklists.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Create Picklist -->
+    <screen name="createPicklist">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseCreatePicklist"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseCreatePicklist"/>  
+                <set field="facilityId" from-field="parameters.facilityId"/>
+                <service service-name="findOrdersToPickMove">
+                    <field-map field-name="facilityId"/>
+                </service>
+                <entity-condition entity-name="Picklist" list-name="picklistActiveList">
+                    <condition-list combine="and">
+                        <condition-expr field-name="facilityId" operator="equals" env-name="parameters.facilityId"/>
+                        <condition-expr field-name="statusId" operator="not-equals" value="PICKLIST_PICKED"/>
+                        <condition-expr field-name="statusId" operator="not-equals" value="PICKLIST_PACKED"/>
+                        <condition-expr field-name="statusId" operator="not-equals" value="PICKLIST_CANCELLED"/>
+                    </condition-list>
+                    <order-by field-name="picklistDate"/>
+                </entity-condition>
+                <property-to-field resource="warehouse" property="warehouse.shipping.labels.printing.defaultPrinterName" field="defaultPrinter" default=""/>
+                <script location="component://content/webapp/content/WEB-INF/actions/print/findPrinters.bsh"/>   
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/picklistOptions.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Pack Order -->
+    <screen name="PackOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehousePackOrder"/>
+                <set field="sectionHeaderUiLabel" value="WarehousePackOrder"/>  
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/PackOrder.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/PackOrder.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <!-- Quick-Schedule a Shipment -->
+    <screen name="QuickScheduleShipmentRouteSegment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseScheduleAShipment"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseConfirmShipmentAndPrintLabels"/>  
+                <script location="component://content/webapp/content/WEB-INF/actions/print/findPrinters.bsh"/>
+                <property-to-field resource="warehouse" property="warehouse.shipping.labels.printing.defaultPrinterName" field="defaultPrinter" default=""/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/quickScheduleShipmentRouteSegment.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Schedule Shipments -->
+    <screen name="ScheduleShipmentRouteSegment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehouseScheduleShipments"/>
+                <set field="sectionHeaderUiLabel" value="WarehouseScheduleShipments"/>  
+                <entity-condition entity-name="ShipmentRouteSegmentDetail" list-name="shipmentRouteSegments">
+                    <condition-list combine="and">
+                        <condition-expr field-name="originFacilityId" operator="equals" env-name="parameters.facilityId"/>
+                        <condition-expr field-name="statusId" operator="equals" value="SHIPMENT_PACKED"/>
+                        <condition-expr field-name="carrierServiceStatusId" operator="equals" value="SHRSCS_NOT_STARTED"/>
+                    </condition-list>
+                    <order-by field-name="shipmentId DESC"/>
+                </entity-condition>
+                <entity-one entity-name="Facility" value-name="facility"/>
+                <entity-one entity-name="Uom" value-name="defaultWeightUom" use-cache="true" auto-field-map="false">
+                    <field-map env-name="facility.defaultWeightUomId" field-name="uomId"/>
+                </entity-one>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-form name="SchedulingList" location="component://product/webapp/facility/facility/FacilityForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="BatchPrintShippingLabels">
+        <section>
+            <actions>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/batchPrintShippingLabels.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html>
+                    <html-template location="component://warehouse/webapp/warehouse/shipping/batchPrintShippingLabels.fo.ftl"/>
+                </html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="Labels">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="WarehousePrintLabels"/>
+                <set field="sectionHeaderUiLabel" value="WarehousePrintLabels"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/labels.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/labels.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="PackingSlip.fo">
+        <section>
+            <actions>
+                <!-- 
+                <set field="defaultFontFamily" value="DejaVuSans"/>
+                -->
+                <set field="shipmentId" from-field="parameters.shipmentId"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/PackingSlip.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+            </actions>
+            <widgets>
+                <section>
+                    <condition>
+                        <and>
+                            <not><if-empty field-name="hasPermission"/></not>
+                            <if-compare field-name="hasPermission" operator="equals" type="Boolean" value="true"/>
+                        </and>
+                    </condition>
+                    <widgets>
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/PackingSlip.fo.ftl"/></html>
+                        </platform-specific>
+                    </widgets>
+                    <fail-widgets>
+                        <include-screen name="permissionDeniedPDF" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+                    </fail-widgets>
+                </section>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="PicklistReportPDF">
+        <section>
+            <actions>
+                <!-- 
+                <set field="defaultFontFamily" value="DejaVuSans"/>
+                -->
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/picklistReport.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+            </actions>
+            <widgets>
+                <section>
+                    <condition>
+                        <and>
+                            <not><if-empty field-name="hasViewPermission"/></not>
+                            <if-compare field-name="hasViewPermission" operator="equals" type="Boolean" value="true"/>
+                        </and>
+                    </condition>
+                    <widgets>
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/PicklistReport.fo.ftl"/></html>
+                        </platform-specific>
+                    </widgets>
+                    <fail-widgets>
+                        <include-screen name="permissionDeniedPDF" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+                    </fail-widgets>
+                </section>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

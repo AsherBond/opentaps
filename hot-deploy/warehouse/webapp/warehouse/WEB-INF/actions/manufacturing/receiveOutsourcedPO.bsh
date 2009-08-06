@@ -1,0 +1,97 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import javolution.util.FastList;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.order.UtilOrder;
+
+// this file is a cousin to invoiceSupplies.bsh
+orderId = parameters.get("orderId");
+if (UtilValidate.isEmpty(orderId)) return;
+
+facilityId = session.getAttribute("facilityId");
+facility = delegator.findByPrimaryKey("Facility", UtilMisc.toMap("facilityId", facilityId));
+if (facility == null) return;
+organizationPartyId = facility.get("ownerPartyId");
+
+conditions = UtilMisc.toMap("orderId", orderId);
+order = delegator.findByPrimaryKey("OrderHeader", conditions);
+if (order == null) {
+    UtilMessage.addFieldError(request, "orderId", "OpentapsError_OrderNotFound", conditions);
+    return;
+}
+if (!"PURCHASE_ORDER".equals(order.get("orderTypeId"))) {
+    UtilMessage.addFieldError(request, "orderId", "OpentapsError_OrderNotPurchaseOrder", conditions);
+    return;
+}
+if (!organizationPartyId.equals(order.get("billToPartyId"))) {
+    UtilMessage.addPermissionDeniedError(request);
+    return;
+}
+if (!("ORDER_APPROVED".equals(order.get("statusId"))) && !("ORDER_COMPLETED".equals(order.get("statusId")))) {
+    UtilMessage.addError(request, "OpentapsError_OrderNotApprovedLong",
+        UtilMisc.toMap("orderId", orderId, "statusDescription", order.getRelatedOneCache("StatusItem").get("description")));
+    return;
+}
+context.put("orderId", orderId);
+context.put("order", order);
+
+conditions = UtilMisc.toList(
+    new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
+    new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("ITEM_APPROVED", "ITEM_COMPLETED")),
+    new EntityExpr("orderItemTypeId", EntityOperator.EQUALS, "MFG_CONTRACT")
+);
+orderItems = delegator.findByAnd("OrderItem", conditions, UtilMisc.toList("orderItemSeqId"));
+                 print("********************************" + orderItems);
+rows = FastList.newInstance();
+for (iter = orderItems.iterator(); iter.hasNext(); ) {
+    item = iter.next();
+
+    // there is a one to many relationship of task to order item
+    fulfillment = EntityUtil.getFirst( item.getRelated("WorkOrderItemFulfillment") );
+    if (fulfillment == null) continue;
+
+    quantityFulfilled = 0.0;
+    if (fulfillment != null && fulfillment.get("quantityFulfilled") != null) {
+        quantityFulfilled = fulfillment.get("quantityFulfilled").doubleValue();
+    }
+    
+    // set the orderItem.quantity field to what's actually available (ordered - cancelled - fulfilled)
+    available = item.get("quantity").doubleValue();
+    if (item.get("cancelQuantity") != null) available -= item.get("cancelQuantity").doubleValue();
+    available -= quantityFulfilled;
+    item.set("quantity", available);
+
+    // base row data is the orderItem fields
+    row = item.getAllFields();
+
+    // add the outsourced task workEffortId, which triggers the update of WorkOrderItemFulfillment
+    row.put("workEffortId", fulfillment.get("workEffortId"));
+
+    // add the production run for reference
+    workEffort = fulfillment.getRelatedOneCache("WorkEffort");
+    productionRun = workEffort.getRelatedOneCache("ParentWorkEffort");
+    if (productionRun != null) {
+        row.put("productionRunId", productionRun.get("workEffortId"));
+    }
+    rows.add(row);
+}
+context.put("orderItems", rows);

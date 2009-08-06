@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+        
+<!-- This file may contain code which has been modified from that included with the Apache-licensed OFBiz product application -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+        
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Warehouse Home Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>0.9</version>
+
+    <service name="getBackOrderedCounts" engine="bsh"
+            location="summary/backOrderedService.bsh" invoke="">
+        <description>Get backOrderedOrders from ReservedItemOrderCount
+          and backOrderedProducts from ReservedItemProductCount</description>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="backOrderedOrders" type="Integer" mode="OUT" optional="true"/>
+        <attribute name="backOrderedProducts" type="Integer" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="getPickedPicklists" engine="bsh"
+            location="summary/pickedPicklistsService.bsh" invoke="">
+        <description>Get Picked Picklists from PicklistItemAndOdrItmShipGrp</description>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="pickedPicklistIds" type="List" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="populateWarehouseSummaryData" engine="bsh"
+        location="summary/populateWarehouseSummaryData.bsh" invoke="" transaction-timeout="600">
+        <description>Populate Home Dashboard Table</description>
+        <attribute name="facilityId" type="String" mode="IN" optional="true"/>
+    </service>
+
+</services>

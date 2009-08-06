@@ -1,0 +1,39 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// this script figures out if any of the tasks should have the [Issue Components] button to issue components
+// this follows the pattern in ProductionRunDeclaration.bsh but will basically override it
+
+import org.ofbiz.base.util.*;
+
+tasks = context.get("productionRunRoutingTasks");
+if (tasks == null) return;
+
+issueTaskId = null;
+for (ti = tasks.iterator(); ti.hasNext(); ) {
+    task = ti.next();
+    // find the first outsourced (PO Pending) or running task that has unissued products and make it the task to issue
+    if (("PRUN_OUTSRC_PEND".equals(task.get("currentStatusId"))) ||
+        ("PRUN_RUNNING".equals(task.get("currentStatusId")))) {
+        componentsToIssue = delegator.findByAnd("WorkEffortGoodStandard",
+                UtilMisc.toMap("workEffortId", task.get("workEffortId"), "workEffortGoodStdTypeId", "PRUNT_PROD_NEEDED", "statusId", "WEGS_CREATED"));
+        if (UtilValidate.isNotEmpty(componentsToIssue)) {
+            issueTaskId = task.get("workEffortId");
+             continue;
+        }
+    }
+}
+context.put("issueTaskId", issueTaskId);

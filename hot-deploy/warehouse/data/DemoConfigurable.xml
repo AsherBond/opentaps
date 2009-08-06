@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- This file is for making the configurable product work with MRP, so that requirements created for its parts can be purchased -->
+
+<entity-engine-xml>
+
+    <ProductFacility productId="MOD_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
+    <SupplierProduct productId="MOD_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="10"/>
+    <ProductFacility productId="ETH_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
+    <SupplierProduct productId="ETH_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="15"/>
+    <ProductFacility productId="RAM256_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
+    <SupplierProduct productId="RAM256_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="100"/>
+    <ProductFacility productId="HD2GB_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
+    <SupplierProduct productId="HD2GB_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="190"/>
+    <ProductFacility productId="HD4GB_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
+    <SupplierProduct productId="HD4GB_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="380"/>
+
+
+</entity-engine-xml>

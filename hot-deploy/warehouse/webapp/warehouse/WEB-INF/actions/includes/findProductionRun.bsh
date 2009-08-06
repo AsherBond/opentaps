@@ -1,0 +1,89 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityConditionList;
+
+import org.opentaps.common.util.UtilCommon;
+
+// find valid statuses for the search form
+statuses = delegator.findByAnd("StatusItem", UtilMisc.toMap("statusTypeId", "PRODUCTION_RUN"), UtilMisc.toList("sequenceId"));
+context.put("statuses", statuses);
+
+listIteratorToUse = parameters.get("listIteratorToUse");
+if (UtilValidate.isEmpty(listIteratorToUse)) {
+    return;
+}
+
+// Search parameters
+workEffortTypeId = parameters.get("workEffortTypeId");
+workEffortId = parameters.get("workEffortId");
+productId = parameters.get("productId");
+currentStatusId = parameters.get("currentStatusId");
+workEffortPurposeTypeId = parameters.get("workEffortPurposeTypeId");
+type = parameters.get("type");
+
+performFind = parameters.get("performFind");
+
+searchConditions = new ArrayList();
+if (UtilValidate.isNotEmpty(workEffortId)) {
+    searchConditions.add(new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId));
+}
+if (UtilValidate.isNotEmpty(productId)) {
+    searchConditions.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
+}
+if (UtilValidate.isNotEmpty(currentStatusId)) {
+    searchConditions.add(new EntityExpr("currentStatusId", EntityOperator.EQUALS, currentStatusId));
+}
+
+if ((searchConditions.size() == 0) && !"Y".equals(performFind)) {
+    return;
+}
+
+facilityId = parameters.get("facilityId");
+if (UtilValidate.isNotEmpty(facilityId)) {
+    searchConditions.add(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
+}
+
+searchConditions.add(new EntityExpr("workEffortTypeId", EntityOperator.EQUALS, "PROD_ORDER_HEADER"));
+if ("assembly".equals(type)) {
+    searchConditions.add(new EntityExpr("workEffortPurposeTypeId", EntityOperator.EQUALS, "WEPT_PRODUCTION_RUN"));
+} else if ("disassembly".equals(type)){
+    searchConditions.add(new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DISASMBL"));
+    searchConditions.add(new EntityExpr("workEffortPurposeTypeId", EntityOperator.EQUALS, "WEPT_DISASSEMBLY"));
+} else {
+    eitherConditions = new EntityConditionList( UtilMisc.toList(
+        new EntityExpr("workEffortPurposeTypeId", EntityOperator.EQUALS, "WEPT_PRODUCTION_RUN"),
+        new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DISASMBL"),
+            new EntityExpr("workEffortPurposeTypeId", EntityOperator.EQUALS, "WEPT_DISASSEMBLY")
+        ), EntityOperator.AND)
+    ), EntityOperator.OR );
+    searchConditions.add( eitherConditions );
+}
+
+conditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+listIt = delegator.findListIteratorByCondition("ProductionRunAndGoods", conditionList, null,
+    Arrays.asList(new String[]{"workEffortId", "workEffortName", "productId", "estimatedQuantity", "estimatedStartDate", "currentStatusId", "workEffortPurposeTypeId"}),
+    UtilMisc.toList("estimatedStartDate DESC"),
+    UtilCommon.DISTINCT_READ_OPTIONS);
+context.put(listIteratorToUse, listIt);

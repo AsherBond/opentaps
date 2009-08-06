@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="listFindProductionRun" list-name="productionRunsListIt" title="" type="list" separate-columns="true"
+            default-title-style="tableheadtext" target="" default-widget-style="tabletext"
+            default-tooltip-style="tabletext" default-table-style="listTable"
+            header-row-style="listTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+            paginate-target="${listSortTarget}" paginate-target-anchor="ListProductionRuns"
+            paginate-size-field="productionRunsSize" paginate-index-field="productionRunsIndex">
+        <field name="workEffortName" title="${uiLabelMap.ManufacturingProductionRunName}" widget-style="linktext">
+            <hyperlink target="ShowProductionRun?productionRunId=${workEffortId}" description="${workEffortName} (${workEffortId})" also-hidden="false"/>
+        </field>
+        <field name="type" title="${uiLabelMap.CommonType}" use-when="&quot;WEPT_PRODUCTION_RUN&quot;.equals(workEffortPurposeTypeId)"><display description="${uiLabelMap.WarehouseAssembly}"/></field>
+        <field name="type" title="${uiLabelMap.CommonType}" use-when="&quot;WEPT_DISASSEMBLY&quot;.equals(workEffortPurposeTypeId)"><display description="${uiLabelMap.WarehouseDisassembly}"/></field>
+        <field name="productId" title="${uiLabelMap.ProductProduct}">
+            <display-entity entity-name="Product" key-field-name="productId" description="${internalName} (${productId})"/>
+        </field>
+        <field name="estimatedQuantity" title="${uiLabelMap.ManufacturingQuantity}"><display/></field>
+        <field name="estimatedStartDate" title="${uiLabelMap.ManufacturingStartDate}"><display/></field>
+        <field name="currentStatusId" title="${uiLabelMap.CommonStatus}">
+            <display-entity entity-name="StatusItem" key-field-name="statusId"/>
+        </field>
+    </form>
+
+    <!-- Disassembly -->
+
+    <form name="createReverseAssemblyForm" target="createReverseAssembly" title="" type="single"
+            default-title-style="tableheadtext" default-widget-style="inputbox"
+            default-tooltip-style="tabletext">
+        <field name="productId" title="${uiLabelMap.WarehouseProductIDToDisassemble}" title-style="requiredField"><lookup target-form-name="LookupProduct" size="16"/></field>
+        <field name="quantity" title="${uiLabelMap.ManufacturingQuantity}" title-style="requiredField"><text size="6"/></field>
+        <field name="startDate" title="${uiLabelMap.ManufacturingStartDate}" title-style="requiredField"><date-time/></field>
+        <field name="facilityId">
+            <hidden value="${parameters.facilityId}"/>
+        </field>
+        <field name="routingId" title="${uiLabelMap.ManufacturingRoutingId}"><lookup target-form-name="LookupRouting" size="16"/></field>
+        <field name="workEffortName" title="${uiLabelMap.ManufacturingProductionRunName}"><text size="30"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><text size="50"/></field>
+        <field name="disassemble"><hidden value="true"/></field>
+        <field name="submitButton" title="${uiLabelMap.WarehouseCreateReverseAssembly}">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+</forms>

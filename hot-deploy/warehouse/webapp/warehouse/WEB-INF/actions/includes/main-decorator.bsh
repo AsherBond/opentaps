@@ -1,0 +1,135 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/*
+ *  Copyright (c) 2005-2006 Open Source Strategies, Inc.
+ *  Copyright (c) 2003-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+// @author Leon Torres (leon@opensourcestrategies.com)
+
+// This file is called by main-decorator and is executed for most screens. Its purpose is to retrieve resources common to all screens.
+import javolution.util.FastMap;
+import org.ofbiz.base.util.*;
+import org.opentaps.common.util.UtilConfig;
+import org.opentaps.warehouse.security.WarehouseSecurity;
+
+// default setup screen to choose a facility (if no setup screen is already defined)
+applicationSetupScreen = context.get("applicationSetupScreen");
+if (applicationSetupScreen == null) {
+    context.put("applicationSetupScreen", "component://warehouse/widget/warehouse/screens/common/CommonScreens.xml#selectFacility");
+}
+
+// userLogin
+userLogin = request.getAttribute("userLogin");
+if (userLogin == null) { // this should *never* happen
+    return;
+}
+context.put("userLogin", userLogin);
+
+// security
+security = request.getAttribute("security"); 
+context.put("security", security);
+
+// warehouse-specific security
+facilityId = session.getAttribute("facilityId");
+facility = session.getAttribute("facility");
+if (UtilValidate.isNotEmpty(facility)) {
+    context.put("applicationSetupFacility", facility);
+}
+
+warehouseSecurity = session.getAttribute("warehouseSecurity");
+if (UtilValidate.isEmpty(warehouseSecurity)) {
+    warehouseSecurity = new WarehouseSecurity(security, userLogin, facilityId);
+    session.setAttribute("warehouseSecurity", warehouseSecurity);
+}
+if (UtilValidate.isNotEmpty(facilityId) && ! facilityId.equals(warehouseSecurity.getFacilityId())) {
+    warehouseSecurity.setFacilityId(facilityId);
+}
+globalContext.put("warehouseSecurity", warehouseSecurity);
+
+// external login key
+extLogin = request.getAttribute("externalLoginKey"); 
+if (extLogin != null) {
+    context.put("externalKeyParam", "externalLoginKey=" + requestAttributes.get("externalLoginKey"));
+}
+
+// context path
+context.put("contextPath", request.getContextPath());
+
+
+// tab permissions
+inventoryView = warehouseSecurity.hasFacilityPermission("WRHS_INV_VIEW");
+shippingView = warehouseSecurity.hasFacilityPermission("WRHS_SHIP_VIEW");
+manufacturingView = warehouseSecurity.hasFacilityPermission("WRHS_MFG_VIEW");
+configurationView = warehouseSecurity.hasFacilityPermission("WRHS_CONFIG_VIEW");
+stockMovePermission = warehouseSecurity.hasFacilityPermission("WRHS_INV_STKMV");
+inventoryTransferPermission = warehouseSecurity.hasFacilityPermission("WRHS_INV_XFER");
+picklistViewPermission = warehouseSecurity.hasFacilityPermission("WRHS_SHIP_PICK_VIEW");
+packPermission = warehouseSecurity.hasFacilityPermission("WRHS_SHIP_PACK");
+lotViewPermission = warehouseSecurity.hasFacilityPermission("WRHS_INV_LOT_VIEW");
+lotCreatePermission = warehouseSecurity.hasFacilityPermission("WRHS_INV_LOT_CREATE");
+lotUpdatePermission = warehouseSecurity.hasFacilityPermission("WRHS_INV_LOT_UPDATE");
+
+globalContext.put("hasInventoryViewPermission", inventoryView);
+globalContext.put("hasShippingViewPermission", shippingView);
+globalContext.put("hasManufacturingViewPermission", manufacturingView);
+globalContext.put("hasConfigurationViewPermission", configurationView);
+globalContext.put("hasStockMovePermission", stockMovePermission);
+globalContext.put("hasInventoryTransferPermission", inventoryTransferPermission);
+globalContext.put("hasPicklistViewPermission", picklistViewPermission);
+globalContext.put("hasPackPermission", packPermission);
+globalContext.put("hasLotViewPermission", lotViewPermission);
+globalContext.put("hasLotCreatePermission", lotCreatePermission);
+globalContext.put("hasLotUpdatePermission", lotUpdatePermission);
+
+// define sections
+sections = new ArrayList();
+sections.add(UtilMisc.toMap("uiLabel", "OpentapsMyHome", "uri", "/myHomeMain", "sectionName", "myHome", "hasPermission", true));
+sections.add(UtilMisc.toMap("uiLabel", "WarehouseInventory", "uri", "/inventoryMain", "sectionName", "inventory", "hasPermission", inventoryView));
+sections.add(UtilMisc.toMap("uiLabel", "WarehouseShipping", "uri", "/shippingMain", "sectionName", "shipping", "hasPermission", shippingView));
+sections.add(UtilMisc.toMap("uiLabel", "WarehouseManufacturing", "uri", "/manufacturingMain", "sectionName", "manufacturing", "hasPermission", manufacturingView));
+sections.add(UtilMisc.toMap("uiLabel", "OpentapsConfiguration", "uri", "/configurationMain", "sectionName", "configuration", "hasPermission", configurationView));
+
+// show the ofbiz tab last if so desired
+showOfbizTab = UtilConfig.getPropertyBoolean("warehouse", "warehouse.tab.ofbiz.show", false);
+if (showOfbizTab) {
+    ofbizTabLabel = UtilConfig.getPropertyValue("warehouse", "warehouse.tab.ofbiz.label");
+    ofbizTabTarget = UtilConfig.getPropertyValue("warehouse", "warehouse.tab.ofbiz.target");
+    if (ofbizTabLabel != null && ofbizTabTarget != null) {
+        sections.add(UtilMisc.toMap("uiLabel", ofbizTabLabel, "uri", ofbizTabTarget, "sectionName", "ofbiz", "hasPermission", true, "isExternal", true));
+    }
+}
+
+//NOTE: ModelScreenWidget.java:545 uses context.get("sections"), so this would crash if we put "sections" into the map.  Hence the name "applicationSections"
+context.put("applicationSections", sections);
