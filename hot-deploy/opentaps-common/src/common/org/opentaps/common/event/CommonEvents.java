@@ -42,6 +42,7 @@ import net.sf.jasperreports.engine.export.JRPrintServiceExporter;
 import net.sf.jasperreports.engine.export.JRPrintServiceExporterParameter;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
+import org.ofbiz.base.crypto.HashCrypt;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.ObjectType;
@@ -341,7 +342,7 @@ public final class CommonEvents {
 
         try {
 
-            Map<String, String> parametersType = UtilValidate.isNotEmpty(json) ? (Map) JSONObject.toBean(JSONObject.fromString(json), Map.class) : FastMap.newInstance();
+            Map<String, String> parametersType = UtilValidate.isNotEmpty(json) ? (Map) JSONObject.toBean(JSONObject.fromObject(json), Map.class) : FastMap.newInstance();
 
             Map<String, Object> jrParameters = FastMap.newInstance();
             Map<String, Object> parameters = UtilHttp.getParameterMap(request);
@@ -447,7 +448,7 @@ public final class CommonEvents {
 
                 // multiply by 100,000 to usually make a 5 digit number
                 passwordToSend = "auto" + ((long) (randNum * 100000));
-                supposedUserLogin.set("currentPassword", LoginServices.getPasswordHash(passwordToSend));
+                supposedUserLogin.set("currentPassword", HashCrypt.getDigestHash(passwordToSend, LoginServices.getHashType()));
                 supposedUserLogin.set("passwordHint", "Auto-Generated Password");
             } else {
                 passwordToSend = supposedUserLogin.getString("currentPassword");
