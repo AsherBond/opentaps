@@ -451,9 +451,6 @@ public class FormletFactory {
         TemplateHashModel staticModels = wrapper.getStaticModels();
         context.put("Static", staticModels);
 
-        // add all the ofbiz ftl transforms that are loaded up in that ancient way (TODO this *should* be replaced with a custom system)
-        FreeMarkerWorker.addAllOfbizTransforms(context);
-        
         // Add custom transforms
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
         try {
