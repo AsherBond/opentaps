@@ -167,7 +167,7 @@ public class OrganizationRepository extends PartyRepository implements Organizat
             }
 
             // this does a currency conversion, based on currencyUomId and the party's accounting preferences.  conversionFactor will be used for postings
-            Map<String, Object> tmpResult = getDispatcher().runSync("convertUom", UtilMisc.toMap("originalValue", conversionFactor.doubleValue(),
+            Map<String, Object> tmpResult = getDispatcher().runSync("convertUom", UtilMisc.<String, Object>toMap("originalValue", conversionFactor.doubleValue(),
                                                                                                  "uomId", currencyUomId,
                                                                                                  "uomIdTo", accountingPreference.getBaseCurrencyUomId(),
                                                                                                  "asOfDate", asOfDate), 1, false);  // no transaction for convertUom
