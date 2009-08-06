@@ -182,7 +182,7 @@ public class PaginationEvents {
      */
     public static String doPaginationResponseJSON(HttpServletResponse response, Paginator paginator, List page) {
         JSONObject map = new JSONObject();
-        map.put("pageRows", JSONArray.fromCollection(page).toString());
+        map.put("pageRows", JSONArray.fromObject(page).toString());
         if (paginator != null) {
             map.put("pageNumber", new Long(paginator.getPageNumber()));
             map.put("totalPages", new Long(paginator.getTotalPages()));
