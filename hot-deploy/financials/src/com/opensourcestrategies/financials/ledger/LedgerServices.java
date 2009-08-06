@@ -2605,13 +2605,13 @@ public final class LedgerServices {
         }
 
         // When an item is disassembled, it is usually a finished good and should be credited from the INVENTORY_ACCOUNT
-        GenericValue transEntry = delegator.makeValue("AcctgTransEntry", UtilMisc.toMap("organizationPartyId", ownerPartyId, "productId", productId, "acctgTransEntryTypeId", "_NA_",
+        GenericValue transEntry = delegator.makeValue("AcctgTransEntry", UtilMisc.<String, Object>toMap("organizationPartyId", ownerPartyId, "productId", productId, "acctgTransEntryTypeId", "_NA_",
                 "debitCreditFlag", "C", "amount", transactionAmount.doubleValue(), "glAccountId", UtilAccounting.getProductOrgGlAccountId(productId, "INVENTORY_ACCOUNT", ownerPartyId, delegator)));
         transEntry.put("acctgTransEntrySeqId", Integer.toString(entryCounter++));
         transEntries.add(transEntry);
 
         // then, for each item, debit its WIP inventory at a conservative valuation, and add it to the total tally of debited inventory value
-        Map<String, Double> productsToProduce = productionRunReader.getProductsToProduce();
+        Map<String, BigDecimal> productsToProduce = productionRunReader.getProductsToProduce();
         BigDecimal inventoryValueOfProducts = ZERO;
         for (String nextProductIdProduced : productsToProduce.keySet()) {
             if (productsToProduce.get(nextProductIdProduced) == null) {
@@ -2625,7 +2625,7 @@ public final class LedgerServices {
                 Debug.logWarning("Assumed a conservative inventory value of zero for [" + productId + "]", MODULE);
             }
             // value of this product is the unit conservative value of product * quantity to be produced
-            BigDecimal quantityOfThisProduct = new BigDecimal(productsToProduce.get(nextProductIdProduced).doubleValue());
+            BigDecimal quantityOfThisProduct = productsToProduce.get(nextProductIdProduced);
             BigDecimal valueOfThisProduct = conservativeValue.multiply(quantityOfThisProduct).setScale(decimals, rounding);
             transEntry = delegator.makeValue("AcctgTransEntry", UtilMisc.toMap("organizationPartyId", ownerPartyId, "productId", nextProductIdProduced, "acctgTransEntryTypeId", "_NA_",
                 "debitCreditFlag", "D", "amount", new Double(valueOfThisProduct.doubleValue()), "glAccountId", UtilAccounting.getProductOrgGlAccountId(productId, "WIP_INVENTORY", ownerPartyId, delegator)));
@@ -3087,7 +3087,7 @@ public final class LedgerServices {
                     newAmount = BigDecimal.ZERO;
                 }
                 Debug.logInfo("now getting ready to reset " + glAccount + " to " + newAmount, MODULE);
-                tmpResult = dispatcher.runSync("updateGlAccountOrganization", UtilMisc.toMap("organizationPartyId", organizationPartyId, "glAccountId", glAccount.getString("glAccountId"), "postedBalance", newAmount.doubleValue(), "userLogin", userLogin));
+                tmpResult = dispatcher.runSync("updateGlAccountOrganization", UtilMisc.<String, Object>toMap("organizationPartyId", organizationPartyId, "glAccountId", glAccount.getString("glAccountId"), "postedBalance", newAmount.doubleValue(), "userLogin", userLogin));
             }
 
             // check and make sure accounts are in balance before doing this
@@ -3330,7 +3330,7 @@ public final class LedgerServices {
 
             // get the invoice transaction amount
             BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId"), invoice.getTimestamp("invoiceDate")));
-            BigDecimal invoiceAmount = InvoiceWorker.getInvoiceTotalBd(invoice).multiply(conversionFactor).setScale(decimals, rounding);
+            BigDecimal invoiceAmount = InvoiceWorker.getInvoiceTotal(invoice).multiply(conversionFactor).setScale(decimals, rounding);
 
             // get the invoice payment applications transaction amount
             BigDecimal paymentAmount = ZERO;
