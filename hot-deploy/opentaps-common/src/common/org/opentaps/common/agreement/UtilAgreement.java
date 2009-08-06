@@ -246,7 +246,7 @@ public final class UtilAgreement {
 
         PageBuilder pageBuilder = new PageBuilder() {
             @SuppressWarnings("unchecked")
-            @Override public List<Map<String, Object>> build(List page) throws GenericEntityException {
+            public List<Map<String, Object>> build(List page) throws GenericEntityException {
                 List<Map<String, Object>> newPage = new ArrayList<Map<String, Object>>();
                 for (GenericValue agreement : (List<GenericValue>) page) {
                     Map<String, Object> row = new HashMap<String, Object>();
