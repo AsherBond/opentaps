@@ -365,8 +365,8 @@ public final class OrderEvents {
                 supplierProduct.setProductId(productId);
                 supplierProduct.setSupplierProductId(productId);
                 supplierProduct.setPartyId(cart.getPartyId());
-                supplierProduct.setMinimumOrderQuantity(new BigDecimal(0));
-                supplierProduct.setLastPrice(new BigDecimal(0));
+                supplierProduct.setMinimumOrderQuantity(BigDecimal.ZERO);
+                supplierProduct.setLastPrice(BigDecimal.ZERO);
                 supplierProduct.setCurrencyUomId(cart.getCurrency());
                 supplierProduct.setAvailableFromDate(UtilDateTime.nowTimestamp());
                 supplierProduct.setComments(UtilProperties.getMessage(PURCHASING_LABEL, "PurchOrderCreateSupplierProductByUserLogin", UtilMisc.toMap("userLoginId", userLogin.getString("userLoginId")), locale));
@@ -376,7 +376,22 @@ public final class OrderEvents {
             }
         }
         //using old ofbiz code to add order item
-        int index = cart.addOrIncreaseItem(productId, selectedAmountDbl, quantity, reservStart, reservLengthDbl, reservPersonsDbl,
+        BigDecimal selectedAmount = null;
+        if (selectedAmountDbl != null) {
+            selectedAmount = BigDecimal.valueOf(selectedAmountDbl);
+        }
+        BigDecimal quantityBd = BigDecimal.valueOf(quantity);
+        BigDecimal reservLength = null;
+        if (reservLengthDbl != null) {
+            reservLength = BigDecimal.valueOf(reservLengthDbl);
+        }
+        BigDecimal reservPersons = null;
+        if (reservPersonsDbl != null) {
+            reservPersons = BigDecimal.valueOf(reservPersonsDbl);
+        }
+
+
+        int index = cart.addOrIncreaseItem(productId, selectedAmount, quantityBd, reservStart, reservLength, reservPersons,
                 shipBeforeDate, shipAfterDate, features, attributes, prodCatalogId,
                 configWrapper, itemType, itemGroupNumber, parentProductId, dispatcher);
         return index;
@@ -622,7 +637,7 @@ public final class OrderEvents {
         GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", cart.getProductStoreId()));
         boolean noShipOnDropShipGroups = "Y".equals(productStore.get("noShipOnDropShipGroups"));
 
-        cart.setItemShipGroupEstimate(0, shipGroupSeqId);
+        cart.setItemShipGroupEstimate(BigDecimal.ZERO, shipGroupSeqId);
         Debug.logInfo("updateShipGroup: Setting shipping method [" + shipmentMethodTypeId + "] for shipping group [" + shipGroupSeqId + "]", MODULE);
         cart.setShipmentMethodTypeId(shipGroupSeqId, shipmentMethodTypeId);
         if (noShipOnDropShipGroups && UtilValidate.isNotEmpty(cart.getSupplierPartyId(shipGroupSeqId))) {
@@ -756,7 +771,7 @@ public final class OrderEvents {
             // Update the shipGroup shipping estimate
             Double shipGroupEstimate = shipWrapper.getShippingEstimate(cart.getShipmentMethodTypeId(shipGroupSeqId), cart.getCarrierPartyId(shipGroupSeqId));
             if (UtilValidate.isNotEmpty(shipGroupEstimate)) {
-                cart.setItemShipGroupEstimate(shipGroupEstimate.doubleValue(), shipGroupSeqId);
+                cart.setItemShipGroupEstimate(BigDecimal.valueOf(shipGroupEstimate), shipGroupSeqId);
             }
 
             if (cart instanceof OpentapsShoppingCart) {
@@ -1593,8 +1608,8 @@ public final class OrderEvents {
         Debug.logInfo("getShipEstimate: order [" + orh.getOrderId() + "] isCod = " + isCod, MODULE);
 
         return getShipGroupEstimate(dispatcher, delegator, orh.getOrderTypeId(), shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId,
-                                    contactMechId, orh.getProductStoreId(), supplierPartyId, orh.getShippableItemInfo(shipGroupSeqId), orh.getShippableWeightBd(shipGroupSeqId).doubleValue(),
-                                    orh.getShippableQuantityBd(shipGroupSeqId).doubleValue(), orh.getShippableTotalBd(shipGroupSeqId).doubleValue(), isCod);
+                                    contactMechId, orh.getProductStoreId(), supplierPartyId, orh.getShippableItemInfo(shipGroupSeqId), orh.getShippableWeight(shipGroupSeqId).doubleValue(),
+                                    orh.getShippableQuantity(shipGroupSeqId).doubleValue(), orh.getShippableTotal(shipGroupSeqId).doubleValue(), isCod);
     }
 
     /**
