@@ -129,7 +129,7 @@ public class AccountsEvents {
             OrganizationRepositoryInterface orgRepository = loader.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
 
             // get the partyIds using a handy utility function
-            Collection<Map> params = UtilHttp.parseMultiFormData(UtilHttp.getParameterMap(request));
+            Collection<Map<String, Object>> params = UtilHttp.parseMultiFormData(UtilHttp.getParameterMap(request));
             Set<String> partyIds = FastSet.newInstance();
             for (Map param : params) {
                 partyIds.add((String) param.get("partyId"));
