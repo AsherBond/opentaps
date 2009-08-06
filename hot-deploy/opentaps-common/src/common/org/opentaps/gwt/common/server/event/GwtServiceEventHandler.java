@@ -20,6 +20,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.ofbiz.webapp.control.ConfigXMLReader.Event;
+import org.ofbiz.webapp.control.ConfigXMLReader.RequestMap;
 import org.ofbiz.webapp.event.EventHandler;
 import org.ofbiz.webapp.event.EventHandlerException;
 import org.opentaps.gwt.common.server.HttpInputProvider;
@@ -37,12 +39,12 @@ public class GwtServiceEventHandler implements EventHandler {
     }
 
     /** @{inheritDoc} */
-    public String invoke(String eventPath, String eventMethod, HttpServletRequest request, HttpServletResponse response) throws EventHandlerException {
+    public String invoke(Event event, RequestMap requestMap, HttpServletRequest request, HttpServletResponse response) throws EventHandlerException {
 
         String serviceName = null;
 
         // make sure we have a defined service to call
-        serviceName = eventMethod;
+        serviceName = event.invoke;
         if (serviceName == null) {
             throw new EventHandlerException("Service name (eventMethod) cannot be null");
         }

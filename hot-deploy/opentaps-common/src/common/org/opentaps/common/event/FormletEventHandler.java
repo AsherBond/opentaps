@@ -16,24 +16,26 @@ package org.opentaps.common.event;
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.util.Locale;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import freemarker.template.TemplateException;
-import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.webapp.control.ConfigXMLReader.Event;
+import org.ofbiz.webapp.control.ConfigXMLReader.RequestMap;
 import org.ofbiz.webapp.event.EventHandlerException;
 import org.ofbiz.webapp.event.JavaEventHandler;
 import org.opentaps.common.builder.FormletFactory;
 import org.opentaps.common.builder.ListBuilderException;
 import org.opentaps.common.pagination.Paginator;
 import org.opentaps.common.pagination.PaginatorFactory;
-import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.Writer;
-import java.io.PrintWriter;
-import java.util.Locale;
+import org.opentaps.common.util.UtilMessage;
 
 
 /**
@@ -62,8 +64,9 @@ public class FormletEventHandler extends JavaEventHandler {
     /**
      * Invoke a Java event as usual, then decide what to do with the results.
      */
-    public String invoke(String eventPath, String eventMethod, HttpServletRequest request, HttpServletResponse response) throws EventHandlerException {
-        String result = super.invoke(eventPath, eventMethod, request, response);
+    public String invoke(Event event, RequestMap requestMap, HttpServletRequest request, HttpServletResponse response) throws EventHandlerException {
+        String result = super.invoke(event, requestMap, request, response);
+
         Locale locale = UtilHttp.getLocale(request);
 
         if ("error".equals(result)) return result;
