@@ -1238,6 +1238,29 @@ public class UtilDateTime {
         return DATE_FORMAT + " " + df.toPattern();
     }
 
+    protected static TimeZone defaultTimeZone = null;
 
+    /**
+     * @deprecated
+     * TODO: for upgrade ofbiz to new version only, refactor the code later.
+     * Returns the OFBiz default TimeZone object. The default time zone is configured in
+     * the <code>general.properties</code> file (<code>timeZone.default</code>).
+     * @see java.util.TimeZone
+     */
+    public static TimeZone getDefaultTimeZone() {
+        if (defaultTimeZone == null) {
+            synchronized(UtilDateTime.class) {
+                if (defaultTimeZone == null) {
+                    String tzId = UtilProperties.getPropertyValue("framework/common/config/general.properties", "timeZone.default");
+                    if (UtilValidate.isNotEmpty(tzId)) {
+                        defaultTimeZone = TimeZone.getTimeZone(tzId);
+                    } else {
+                        defaultTimeZone = TimeZone.getDefault();
+                    }
+                }
+            }
+        }
+        return defaultTimeZone;
+    }
 
 }

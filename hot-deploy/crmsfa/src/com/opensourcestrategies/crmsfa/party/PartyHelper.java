@@ -559,11 +559,11 @@ public class PartyHelper {
                     templateContext.put("orderBillingFullName", org.ofbiz.party.party.PartyHelper.getPartyName(billingParty, false));
                 }
 
-                templateContext.put("orderSubtotal", orh.getOrderItemsSubTotalBd());
-                templateContext.put("orderTaxTotal", orh.getTaxTotalBd());
-                templateContext.put("orderShippingTotal", orh.getShippingTotalBd());
-                templateContext.put("orderGrandTotal", orh.getOrderGrandTotalBd());
-                templateContext.put("orderPaymentTotal", orh.getOrderGrandTotalBd().subtract(UtilOrder.getOrderOpenAmount(orh)));
+                templateContext.put("orderSubtotal", orh.getOrderItemsSubTotal());
+                templateContext.put("orderTaxTotal", orh.getTaxTotal());
+                templateContext.put("orderShippingTotal", orh.getShippingTotal());
+                templateContext.put("orderGrandTotal", orh.getOrderGrandTotal());
+                templateContext.put("orderPaymentTotal", orh.getOrderGrandTotal().subtract(UtilOrder.getOrderOpenAmount(orh)));
 
                 GenericValue shippingParty = orh.getShipToParty();
                 if (UtilValidate.isNotEmpty(shippingParty)) {

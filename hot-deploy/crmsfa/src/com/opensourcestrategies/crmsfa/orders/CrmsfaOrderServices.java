@@ -18,13 +18,15 @@
 package com.opensourcestrategies.crmsfa.orders;
 
 import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.*;
 
 import org.ofbiz.base.util.*;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
-import org.ofbiz.content.email.NotificationServices;
+import org.ofbiz.common.email.NotificationServices;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -580,7 +582,7 @@ public class CrmsfaOrderServices {
             String orderPaymentPreferenceId = delegator.getNextSeqId("OrderPaymentPreference");
             Timestamp now = UtilDateTime.nowTimestamp();
 
-            GenericValue orderHeader = delegator.makeValue("OrderHeader", null);
+            GenericValue orderHeader = delegator.makeValue("OrderHeader");
             orderHeader.set("orderId", orderId);
             orderHeader.set("orderTypeId", "SALES_ORDER");
             orderHeader.set("orderDate", now);
@@ -595,7 +597,7 @@ public class CrmsfaOrderServices {
             orderHeader.set("billToPartyId", billToPartyId);
             orderHeader.create();
 
-            GenericValue orderItem = delegator.makeValue("OrderItem", null);
+            GenericValue orderItem = delegator.makeValue("OrderItem");
             orderItem.set("orderId", orderId);
             orderItem.set("orderItemSeqId", orderItemSeqId);
             orderItem.set("orderItemTypeId", "PRODUCT_ORDER_ITEM");
@@ -609,7 +611,7 @@ public class CrmsfaOrderServices {
             orderItem.set("statusId", "ITEM_CREATED");
             orderItem.create();
 
-            GenericValue vendorRole = delegator.makeValue("OrderRole", null);
+            GenericValue vendorRole = delegator.makeValue("OrderRole");
             vendorRole.set("orderId", orderId);
             vendorRole.set("partyId", productStore.get("payToPartyId"));
             vendorRole.set("roleTypeId", "BILL_FROM_VENDOR");
@@ -621,7 +623,7 @@ public class CrmsfaOrderServices {
                 partyRole = delegator.makeValue("PartyRole", input);
                 partyRole.create();
             }
-            GenericValue orderRole = delegator.makeValue("OrderRole", null);
+            GenericValue orderRole = delegator.makeValue("OrderRole");
             orderRole.set("orderId", orderId);
             orderRole.set("partyId", billToPartyId);
             orderRole.set("roleTypeId", "BILL_TO_CUSTOMER");
@@ -634,7 +636,7 @@ public class CrmsfaOrderServices {
                 partyRole = delegator.makeValue("PartyRole", input);
                 partyRole.create();
             }
-            orderRole = delegator.makeValue("OrderRole", null);
+            orderRole = delegator.makeValue("OrderRole");
             orderRole.set("orderId", orderId);
             orderRole.set("partyId", billToPartyId);
             orderRole.set("roleTypeId", "PLACING_CUSTOMER");
@@ -642,7 +644,7 @@ public class CrmsfaOrderServices {
 
             // TODO: create END_USER_CUSTOMER
 
-            GenericValue paymentPref = delegator.makeValue("OrderPaymentPreference", null);
+            GenericValue paymentPref = delegator.makeValue("OrderPaymentPreference");
             paymentPref.set("orderPaymentPreferenceId", orderPaymentPreferenceId);
             paymentPref.set("orderId", orderId);
             paymentPref.set("presentFlag", "N");
@@ -688,7 +690,7 @@ public class CrmsfaOrderServices {
                 return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
             }
 
-            double amount = orh.getOrderOpenAmount();
+            double amount = orh.getOrderOpenAmount().doubleValue();
             if (amount == 0) {
                 return UtilMessage.createAndLogServiceError("CrmError_OrderHasNoValue", UtilMisc.toMap("orderId", orderId), locale, module);
             }

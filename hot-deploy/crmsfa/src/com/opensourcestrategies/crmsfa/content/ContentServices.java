@@ -213,12 +213,12 @@ public final class ContentServices {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
         try {
-            GenericValue value = delegator.makeValue("PartyContent", null);
+            GenericValue value = delegator.makeValue("PartyContent");
             value.setPKFields(context);
             value.setNonPKFields(context);
             value.create();
 
-            value = delegator.makeValue("ContentRole", null);
+            value = delegator.makeValue("ContentRole");
             value.setPKFields(context);
             value.setNonPKFields(context);
             value.set("fromDate", context.get("fromDate") == null ? UtilDateTime.nowTimestamp() : context.get("fromDate"));
@@ -240,7 +240,7 @@ public final class ContentServices {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
         try {
-            GenericValue value = delegator.makeValue("CustRequestContent", null);
+            GenericValue value = delegator.makeValue("CustRequestContent");
             value.setPKFields(context);
             value.setNonPKFields(context);
             if (context.get("fromDate") == null) {
@@ -264,7 +264,7 @@ public final class ContentServices {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
         try {
-            GenericValue value = delegator.makeValue("SalesOpportunityContent", null);
+            GenericValue value = delegator.makeValue("SalesOpportunityContent");
             value.setPKFields(context);
             value.setNonPKFields(context);
             if (context.get("fromDate") == null) {
@@ -520,7 +520,7 @@ public final class ContentServices {
             List relationships = delegator.findByAnd("OrderHeaderContent", conditions);
             if (relationships.size() == 0) {
                 // if not exist the OrderHeaderContent, then create one.
-                GenericValue value = delegator.makeValue("OrderHeaderContent", null);
+                GenericValue value = delegator.makeValue("OrderHeaderContent");
                 value.setPKFields(context);
                 value.setNonPKFields(context);
                 if (context.get("fromDate") == null) {
@@ -623,7 +623,7 @@ public final class ContentServices {
             List<GenericValue> relationships = delegator.findByAnd("QuoteContent", conditions);
             if (UtilValidate.isEmpty(relationships)) {
                 // create if not exist.
-                GenericValue value = delegator.makeValue("QuoteContent", null);
+                GenericValue value = delegator.makeValue("QuoteContent");
                 value.setPKFields(context);
                 value.setNonPKFields(context);
                 if (context.get("fromDate") == null) {

@@ -63,4 +63,12 @@ public class CrmsfaMergeFormsFopViewHandler extends MergeFormsFopViewHandler {
         String filename = UtilProperties.getMessage(crmsfaResource, "crmsfa.formMerge.fileName", UtilMisc.toMap("targetPartyId", targetPartyId, "partyId", partyId), locale);    
         return (UtilValidate.isNotEmpty(filename)) ? filename : MergeFormsFopViewHandler.defaultFileName;
     }
+
+    public String getName() {
+        return null;
+    }
+
+    public void setName(String name) {
+ 
+    }
 }

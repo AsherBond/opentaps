@@ -404,20 +404,20 @@ public class LeadsServices {
                 contentRole.set("thruDate", UtilDateTime.nowTimestamp());
                 contentRole.store();
 
-                GenericValue contactContentRole = delegator.makeValue("ContentRole", null);
+                GenericValue contactContentRole = delegator.makeValue("ContentRole");
                 contactContentRole.set("partyId", leadPartyId);
                 contactContentRole.set("contentId", contentRole.get("contentId"));
                 contactContentRole.set("roleTypeId", "CONTACT");
                 contactContentRole.set("fromDate", UtilDateTime.nowTimestamp());
                 contactContentRole.create();
 
-                GenericValue accountContent = delegator.makeValue("PartyContent", null);
+                GenericValue accountContent = delegator.makeValue("PartyContent");
                 accountContent.set("partyId", accountPartyId);
                 accountContent.set("contentId", contentRole.get("contentId"));
                 accountContent.set("contentPurposeEnumId", "PTYCNT_CRMSFA");
                 accountContent.create();
 
-                GenericValue accountContentRole = delegator.makeValue("ContentRole", null);
+                GenericValue accountContentRole = delegator.makeValue("ContentRole");
                 accountContentRole.set("partyId", accountPartyId);
                 accountContentRole.set("contentId", contentRole.get("contentId"));
                 accountContentRole.set("roleTypeId", "ACCOUNT");

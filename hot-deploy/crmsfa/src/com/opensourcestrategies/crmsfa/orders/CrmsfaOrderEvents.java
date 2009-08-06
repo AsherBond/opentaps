@@ -16,6 +16,7 @@
 
 package com.opensourcestrategies.crmsfa.orders;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.HashMap;
@@ -290,12 +291,12 @@ public final class CrmsfaOrderEvents {
 
         // parse quantity
         String quantityStr = request.getParameter("quantity");
-        Double quantity = 1.0;
+        BigDecimal quantity = new BigDecimal(1.0);
         if ((quantityStr != null) && (quantityStr.trim().length() > 0)) {
             try {
-                quantity = Double.parseDouble(quantityStr);
+                quantity = new BigDecimal(quantityStr);
             } catch (NumberFormatException e) {
-                quantity = 1.0;
+                quantity = new BigDecimal(1.0);
             }
         }
         // add 1.0 of productId to cart if given
@@ -493,7 +494,7 @@ public final class CrmsfaOrderEvents {
         ShoppingCart.CartShipInfo shipInfo = null;
         for (Iterator iter = cart.getShipGroups().iterator(); iter.hasNext();) {
             ShoppingCart.CartShipInfo candidateInfo = (ShoppingCart.CartShipInfo) iter.next();
-            if (candidateInfo.contactMechId != null && candidateInfo.contactMechId.equals(contactMechId)
+            if (candidateInfo.getContactMechId() != null && candidateInfo.getContactMechId().equals(contactMechId)
                     && candidateInfo.carrierPartyId != null && candidateInfo.carrierPartyId.equals(carrierPartyId)
                     && candidateInfo.shipmentMethodTypeId != null && candidateInfo.shipmentMethodTypeId.equals(shipmentMethodTypeId)) {
                 shipInfo = candidateInfo;
@@ -505,7 +506,7 @@ public final class CrmsfaOrderEvents {
         if (shipInfo == null) {
             shipInfo = new ShoppingCart.CartShipInfo();
             shipInfo.carrierPartyId = carrierPartyId;
-            shipInfo.contactMechId = contactMechId;
+            shipInfo.setContactMechId(contactMechId);
             shipInfo.shipmentMethodTypeId = shipmentMethodTypeId;
             cart.getShipGroups().add(shipInfo);
         }
@@ -557,8 +558,8 @@ public final class CrmsfaOrderEvents {
                 shipInfo = cart.getShipInfo(shipGrpIndex.intValue());
                 break;
             }
-            if ((shipInfo != null) && (shipInfo.contactMechId != null) && (shipInfo.carrierPartyId != null) && (shipInfo.shipmentMethodTypeId != null)) {
-                selectedContactMechIds.put(new Integer(index), shipInfo.contactMechId);
+            if ((shipInfo != null) && (shipInfo.getContactMechId() != null) && (shipInfo.carrierPartyId != null) && (shipInfo.shipmentMethodTypeId != null)) {
+                selectedContactMechIds.put(new Integer(index), shipInfo.getContactMechId());
                 selectedCarrierMethods.put(new Integer(index), shipInfo.carrierPartyId + "^" + shipInfo.shipmentMethodTypeId);
                 numAssignedToGroups += 1;
             }
@@ -681,7 +682,7 @@ public final class CrmsfaOrderEvents {
     @SuppressWarnings("unchecked")
     public static void clearCheckoutInfo(ShoppingCart cart, LocalDispatcher dispatcher) {
         cart.clearPayments();
-        cart.setBillingAccount(null, 0);
+        cart.setBillingAccount(null, new BigDecimal(0));
         for (Iterator iter = cart.items().iterator(); iter.hasNext();) {
             ShoppingCartItem item = (ShoppingCartItem) iter.next();
             cart.clearItemShipInfo(item);

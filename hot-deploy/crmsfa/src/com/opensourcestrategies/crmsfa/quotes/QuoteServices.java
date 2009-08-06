@@ -136,7 +136,7 @@ public final class QuoteServices {
                 // set the first valid quantity as the main quantity / unitPrice
                 // unless there are multiple options
                 if (!hasMultipleOptions && optionToSet != null) {
-                    Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+                    Map input = UtilMisc.toMap("userLogin", userLogin);
                     input.put("quoteId", quoteId);
                     input.put("quoteItemSeqId", quoteItemSeqId);
                     input.put("quoteItemOptionSeqId", optionToSet.get("quoteItemOptionSeqId"));
@@ -472,7 +472,7 @@ public final class QuoteServices {
 
             // unset the current values if the option has been changed
             if (!found) {
-                Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+                Map input = UtilMisc.toMap("userLogin", userLogin);
                 input.put("quoteId", quoteId);
                 input.put("quoteItemSeqId", quoteItemSeqId);
                 dispatcher.runSync("unsetQuoteItemOption", input);
@@ -525,7 +525,7 @@ public final class QuoteServices {
 
             // unset the current values if the option has been removed
             if (!found) {
-                Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+                Map input = UtilMisc.toMap("userLogin", userLogin);
                 input.put("quoteId", quoteId);
                 input.put("quoteItemSeqId", quoteItemSeqId);
                 dispatcher.runSync("unsetQuoteItemOption", input);
@@ -565,7 +565,7 @@ public final class QuoteServices {
             }
 
             // create a new Quote
-            Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+            Map input = UtilMisc.toMap("userLogin", userLogin);
             input.putAll(quote.getAllFields());
             if (UtilValidate.isNotEmpty(quote.get("quoteName"))) {
                 input.put("quoteName", "Copy of " + quote.get("quoteName"));
@@ -693,7 +693,7 @@ public final class QuoteServices {
             }
 
             // create a new Quote
-            Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+            Map input = UtilMisc.toMap("userLogin", userLogin);
             input.putAll(quoteItem.getAllFields());
             for (String str : STAMPS) {
                 input.remove(str);
@@ -821,7 +821,7 @@ public final class QuoteServices {
         String quoteId = (String) context.get("quoteId");
         String internalNote = (String) context.get("internalNote");
 
-        Map<String, Object> noteCtx = UtilMisc.toMap("note", note, "userLogin", userLogin);
+        Map noteCtx = UtilMisc.toMap("note", note, "userLogin", userLogin);
 
         try {
             Map<String, ?> noteRes = dispatcher.runSync("createNote", noteCtx);

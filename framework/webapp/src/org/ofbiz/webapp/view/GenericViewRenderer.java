@@ -52,7 +52,7 @@ import org.jpublish.view.ViewRenderer;
 /**
  * Generic JPublish View Renderer - This is in testing; for use in wrapping other renderers
  */
-public class GenericViewRenderer extends AbstractViewRenderer {
+public class GenericViewRenderer implements ViewRenderer {
 
     public static final String module = GenericViewRenderer.class.getName();
     public static final String DEFAULT_RENDERER = "freemarker";

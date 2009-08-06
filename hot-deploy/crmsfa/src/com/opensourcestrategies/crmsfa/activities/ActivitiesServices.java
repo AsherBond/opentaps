@@ -535,8 +535,8 @@ public class ActivitiesServices {
             List validRoleTypeIds = new ArrayList(PartyHelper.TEAM_MEMBER_ROLES);
             validRoleTypeIds.addAll(PartyHelper.CLIENT_PARTY_ROLES);
 
-            Set<String> partyIds = new HashSet<String>(EntityUtil.getFieldListFromEntityList(partyAndContactMechs, "partyId", true));
-            Set<String> emailAddresses = new HashSet<String>(EntityUtil.getFieldListFromEntityList(partyAndContactMechs, "infoString", true));      // for looking for the owner of this activity against an email
+            Set<String> partyIds = new HashSet(EntityUtil.getFieldListFromEntityList(partyAndContactMechs, "partyId", true));
+            Set<String> emailAddresses = new HashSet(EntityUtil.getFieldListFromEntityList(partyAndContactMechs, "infoString", true));      // for looking for the owner of this activity against an email
 
             for (String partyId : partyIds) {
 
@@ -715,7 +715,7 @@ public class ActivitiesServices {
 
                 // looks through list of accounts and assign the workEffort to all of them
                 for (Account account : accounts) {
-                    Map<String, Object> callCtxt = UtilMisc.toMap("workEffortId", workEffortId, "partyId", account.getPartyId(), "statusId", "PRTYASGN_ASSIGNED", "roleTypeId", "ACCOUNT", "userLogin", userLogin);
+                    Map callCtxt = UtilMisc.toMap("workEffortId", workEffortId, "partyId", account.getPartyId(), "statusId", "PRTYASGN_ASSIGNED", "roleTypeId", "ACCOUNT", "userLogin", userLogin);
                     dispatcher.runSync("assignPartyToWorkEffort", callCtxt);
                 }
 

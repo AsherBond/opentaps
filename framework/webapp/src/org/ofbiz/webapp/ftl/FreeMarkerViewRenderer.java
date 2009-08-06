@@ -62,7 +62,7 @@ public class FreeMarkerViewRenderer extends org.jpublish.view.freemarker.FreeMar
         BeansWrapper wrapper = BeansWrapper.getDefaultInstance();
         WrappingTemplateModel.setDefaultObjectWrapper(wrapper);
         Map contextMap = new HashMap();
-        SimpleHash root = new SimpleHash(wrapper);
+        Map<String, Object> root = new HashMap<String, Object>();
         try {
             Object[] keys = context.getKeys();
             for (int i = 0; i < keys.length; i++) {
