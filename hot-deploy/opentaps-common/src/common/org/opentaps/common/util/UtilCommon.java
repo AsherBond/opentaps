@@ -1465,7 +1465,7 @@ public abstract class UtilCommon {
         while (it.hasNext()) {
             GenericValue s = it.next();
             if (lastShortcut != null && lastShortcut.equalsIgnoreCase(s.getString("shortcut"))) {
-                Debug.logWarning("Ignored masked shortcut: [" + lastShortcut + "] with action [" + s.getString("actionTypeId") + " -> " + s.getString("actionTarget") + "] in screen " + applicationName + "/" + screenName + ", for user [" + userLoginId + "]", MODULE);
+                Debug.logWarning("Ignored masked shortcut: [" + lastShortcut + "] with action [" + s.getString("actionTypeId") + " -> " + s.getString("actionTarget") + "] in screen " + applicationName + "/" + screenName + ", for user [" + userLogin.getString("userLoginId") + "]", MODULE);
                 it.remove();
             }
             lastShortcut = s.getString("shortcut");
