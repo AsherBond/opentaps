@@ -72,7 +72,7 @@ public class UtilAutoComplete {
                 for (String key : map.keySet()) {
                     jsonObject.put(key, map.get(key));
                 }
-                jsonArray.put(jsonObject.toString());
+                jsonArray.element(jsonObject.toString());
             }
         }
 
@@ -80,7 +80,7 @@ public class UtilAutoComplete {
         retval.put("items", jsonArray);
         retval.put("identifier", objectKey);
 
-        return AjaxEvents.doJSONResponse(response, JSONObject.fromMap(retval));
+        return AjaxEvents.doJSONResponse(response, JSONObject.fromObject(retval));
     }
 
 }
