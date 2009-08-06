@@ -978,7 +978,7 @@ public abstract class UtilCommon {
              // normalize to % - ie 0.577 to 57.7
              othersTotal = othersTotal.multiply(new BigDecimal(100)).setScale(decimals, RoundingMode.HALF_UP);
              if (othersTotal.signum() > 0) {
-                 list.add(UtilMisc.toMap(UtilMessage.expandLabel("CommonOther", locale) + String.format(" (%1$s%%)", othersTotal.toString()), othersTotal));
+                 list.add(UtilMisc.<String, Number>toMap(UtilMessage.expandLabel("CommonOther", locale) + String.format(" (%1$s%%)", othersTotal.toString()), othersTotal));
              }
          }
 
@@ -1347,15 +1347,25 @@ public abstract class UtilCommon {
     /**
      * Parse a comma-delimited string of email addresses and validate each.
      * @param emailAddressString comma-delimited string of email addresses
-     * @param requireDot if a dot is required in the email address to consider it valid
      * @return <code>Set</code> of valid email addresses
      */
-    public static Set<String> getValidEmailAddressesFromString(String emailAddressString, boolean requireDot) {
+    public static Set<String> getValidEmailAddressesFromString(String emailAddressString) {
+        return getValidEmailAddressesFromString(emailAddressString, false);
+    }
+
+    /**
+     * Parse a comma-delimited string of email addresses and validate each.
+     * @param emailAddressString comma-delimited string of email addresses
+     * @param requireDot if a dot is required in the email address to consider it valid
+     * @return <code>Set</code> of valid email addresses
+     * @deprecated <code>UtilValidate</code> removed requireDot, so this parameter is now ignored
+     */
+    @Deprecated public static Set<String> getValidEmailAddressesFromString(String emailAddressString, boolean requireDot) {
         Set<String> emailAddresses = new TreeSet<String>();
         if (UtilValidate.isNotEmpty(emailAddressString)) {
             String[] emails = emailAddressString.split(",");
             for (int x = 0; x < emails.length; x++) {
-                if (!UtilValidate.isEmail(emails[x], requireDot)) {
+                if (!UtilValidate.isEmail(emails[x])) {
                     Debug.logInfo("Ignoring invalid email address: " + emails[x], MODULE);
                     continue;
                 }
