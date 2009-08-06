@@ -172,7 +172,7 @@ public final class CommonServices {
             dispatcher.disableEcas();
             startAt[0] = UtilDateTime.nowTimestamp();
             for (int i = 0; i < iterations.intValue(); i++) {
-                dispatcher.runSync("opentaps.testEmptyService", FastMap.newInstance());
+                dispatcher.runSync("opentaps.testEmptyService", new FastMap<String, Object>());
             }
             finishAt[0] = UtilDateTime.nowTimestamp();
             duration[0] = UtilDateTime.getInterval(startAt[0], finishAt[0]);
@@ -181,7 +181,7 @@ public final class CommonServices {
             startAt[1] = UtilDateTime.nowTimestamp();
             for (int i = 0; i < iterations.intValue(); i++) {
                 TransactionUtil.begin();
-                dispatcher.runSync("opentaps.testEmptyService", FastMap.newInstance());
+                dispatcher.runSync("opentaps.testEmptyService", new FastMap<String, Object>());
                 TransactionUtil.commit();
             }
             finishAt[1] = UtilDateTime.nowTimestamp();
@@ -191,7 +191,7 @@ public final class CommonServices {
             dispatcher.enableEcas();
             startAt[2] = UtilDateTime.nowTimestamp();
             for (int i = 0; i < iterations.intValue(); i++) {
-                dispatcher.runSync("opentaps.testEmptyService", FastMap.newInstance());
+                dispatcher.runSync("opentaps.testEmptyService", new FastMap<String, Object>());
             }
             finishAt[2] = UtilDateTime.nowTimestamp();
             duration[2] = UtilDateTime.getInterval(startAt[2], finishAt[2]);
@@ -200,7 +200,7 @@ public final class CommonServices {
             startAt[3] = UtilDateTime.nowTimestamp();
             for (int i = 0; i < iterations.intValue(); i++) {
                 TransactionUtil.begin();
-                dispatcher.runSync("opentaps.testEmptyService", FastMap.newInstance());
+                dispatcher.runSync("opentaps.testEmptyService", new FastMap<String, Object>());
                 TransactionUtil.commit();
             }
             finishAt[3] = UtilDateTime.nowTimestamp();
@@ -220,33 +220,33 @@ public final class CommonServices {
                 dispatcher.enableEcas();
 
                 // iterate over TestEntity + getRelated("Enumeration")
-                returns = dispatcher.runSync("opentaps.testIterateTestEntity", FastMap.newInstance());
+                returns = dispatcher.runSync("opentaps.testIterateTestEntity", new FastMap<String, Object>());
                 startAt[5] = (Timestamp) returns.get("startAt");
                 finishAt[5] = (Timestamp) returns.get("finishAt");
                 duration[5] = UtilDateTime.getInterval(startAt[5], finishAt[5]);
 
                 // iterate over TestEntity + getRelatedCache("Enumeration")
-                returns = dispatcher.runSync("opentaps.testIterateTestEntityCache", FastMap.newInstance());
+                returns = dispatcher.runSync("opentaps.testIterateTestEntityCache", new FastMap<String, Object>());
                 startAt[6] = (Timestamp) returns.get("startAt");
                 finishAt[6] = (Timestamp) returns.get("finishAt");
                 duration[6] = UtilDateTime.getInterval(startAt[6], finishAt[6]);
 
                 // query TestEntity w/ DynamicViewEntity
-                returns = dispatcher.runSync("opentaps.testQueryTestEntity", FastMap.newInstance());
+                returns = dispatcher.runSync("opentaps.testQueryTestEntity", new FastMap<String, Object>());
                 startAt[7] = (Timestamp) returns.get("startAt");
                 finishAt[7] = (Timestamp) returns.get("finishAt");
                 duration[7] = UtilDateTime.getInterval(startAt[7], finishAt[7]);
 
                 // updates TestEntity w/ random values, w/o EECA
                 dispatcher.disableEcas();
-                returns = dispatcher.runSync("opentaps.testUpdateTestEntity", FastMap.newInstance());
+                returns = dispatcher.runSync("opentaps.testUpdateTestEntity", new FastMap<String, Object>());
                 startAt[8] = (Timestamp) returns.get("startAt");
                 finishAt[8] = (Timestamp) returns.get("finishAt");
                 duration[8] = UtilDateTime.getInterval(startAt[8], finishAt[8]);
 
                 dispatcher.enableEcas();
                 // updates TestEntity w/ random values, w/ EECA
-                returns = dispatcher.runSync("opentaps.testUpdateTestEntity", FastMap.newInstance());
+                returns = dispatcher.runSync("opentaps.testUpdateTestEntity", new FastMap<String, Object>());
                 startAt[9] = (Timestamp) returns.get("startAt");
                 finishAt[9] = (Timestamp) returns.get("finishAt");
                 duration[9] = UtilDateTime.getInterval(startAt[9], finishAt[9]);
