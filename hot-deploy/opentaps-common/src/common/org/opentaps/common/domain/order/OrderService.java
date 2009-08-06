@@ -195,13 +195,13 @@ public class OrderService extends Service implements OrderServiceInterface {
                 orderItem.initRepository(repository);
                 orderItem.setOrderId(orderId);
                 orderItem.setOrderItemTypeId(item.getItemType());
-                orderItem.setSelectedAmount(BigDecimal.valueOf(item.getSelectedAmount()));
-                orderItem.setUnitPrice(BigDecimal.valueOf(item.getBasePrice()));
-                orderItem.setUnitListPrice(BigDecimal.valueOf(item.getListPrice()));
+                orderItem.setSelectedAmount(item.getSelectedAmount());
+                orderItem.setUnitPrice(item.getBasePrice());
+                orderItem.setUnitListPrice(item.getListPrice());
                 orderItem.setItemDescription(item.getName());
                 orderItem.setStatusId(item.getStatusId());
                 orderItem.setProductId(item.getProductId());
-                orderItem.setQuantity(BigDecimal.valueOf(item.getQuantity()));
+                orderItem.setQuantity(item.getQuantity());
                 orderItem.setIsModifiedPrice("N");
                 orderItem.setIsPromo("Y");
                 if (UtilValidate.isEmpty(orderItem.getStatusId())) {
@@ -587,7 +587,7 @@ public class OrderService extends Service implements OrderServiceInterface {
 
             // calculate subTotal as grandTotal - returnsTotal - (tax + shipping of items not returned)
             OrderReadHelper orh = new OrderReadHelper(Repository.genericValueFromEntity(order));
-            BigDecimal remainingSubTotal = updatedTotal.subtract(orh.getOrderReturnedTotalBd()).subtract(orh.getOrderNonReturnedTaxAndShippingBd());
+            BigDecimal remainingSubTotal = updatedTotal.subtract(orh.getOrderReturnedTotal()).subtract(orh.getOrderNonReturnedTaxAndShipping());
 
             Debug.logInfo("resetGrandTotal: order [" + orderId + "] grand total: " + currentTotal + " >> " + updatedTotal + ", remainingSubTotal: " + currentSubTotal + " >> " + remainingSubTotal, MODULE);
 
