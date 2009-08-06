@@ -105,7 +105,7 @@ public final class FinancialReports {
                 thruDate = UtilDateTime.adjustTimestamp(UtilDateTime.getTimestamp(((Date) timePeriod.get("thruDate")).getTime()), Calendar.MILLISECOND, -1, timeZone, locale);
             }
 
-            Map<String, String> groupMarkers = UtilMisc.toMap(
+            Map<String, String> groupMarkers = UtilMisc.<String, String>toMap(
                     "REVENUE", uiLabelMap.get("FinancialsGrossProfit"), "COGS", uiLabelMap.get("FinancialsGrossProfit"),
                     "OPERATING_EXPENSE", uiLabelMap.get("FinancialsOperatingIncome"),
                     "OTHER_EXPENSE", uiLabelMap.get("FinancialsPretaxIncome"), "OTHER_INCOME", uiLabelMap.get("FinancialsPretaxIncome"),
