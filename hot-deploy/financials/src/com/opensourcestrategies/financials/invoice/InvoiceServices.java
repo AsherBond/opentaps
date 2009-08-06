@@ -1871,7 +1871,7 @@ return results;
             }
 
             // get the invoice total in the currency of the invoice
-            BigDecimal invoiceTotal = InvoiceWorker.getInvoiceTotalBd(invoice);
+            BigDecimal invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
 
             // We need to subtract from invoice total what will be captured.  The only way to do this at this
             // stage is to sum up the authorized payments towards this invoice.
@@ -2043,7 +2043,7 @@ return results;
                 List<GenericValue> billings = delegator.findByAnd("ShipmentItemBilling", conditions);
                 List<String> invoices = EntityUtil.getFieldListFromEntityList(billings, "invoiceId", true);
                 for (String invoiceId : invoices) {
-                    Map<String, Object> input = UtilMisc.toMap("invoiceId", invoiceId);
+                    Map<String, Object> input = UtilMisc.<String, Object>toMap("invoiceId", invoiceId);
                     input.put("contactMechId", contactMechId);
                     input.put("userLogin", userLogin);
                     input.put("contactMechPurposeTypeId", "SHIPPING_LOCATION");
@@ -2490,11 +2490,11 @@ return results;
             String billFromVendorPartyId = orh.getBillFromParty().getString("partyId");
 
             // get some quantity totals
-            BigDecimal totalItemsInOrder = orh.getTotalOrderItemsQuantityBd();
+            BigDecimal totalItemsInOrder = orh.getTotalOrderItemsQuantity();
 
             // get some price totals
-            BigDecimal shippableAmount = orh.getShippableTotalBd(null);
-            BigDecimal orderSubTotal = orh.getOrderItemsSubTotalBd();
+            BigDecimal shippableAmount = orh.getShippableTotal(null);
+            BigDecimal orderSubTotal = orh.getOrderItemsSubTotal();
 
             // these variables are for pro-rating order amounts across invoices, so they should not be rounded off for maximum accuracy
             BigDecimal invoiceShipProRateAmount = ZERO;
@@ -3027,7 +3027,7 @@ return results;
                     Iterator cpi = currentPayments.iterator();
                     while (cpi.hasNext()) {
                         GenericValue payment = (GenericValue) cpi.next();
-                        BigDecimal notApplied = PaymentWorker.getPaymentNotAppliedBd(payment);
+                        BigDecimal notApplied = PaymentWorker.getPaymentNotApplied(payment);
                         if (notApplied.signum() > 0) {
                             Map appl = new HashMap();
                             appl.put("paymentId", payment.get("paymentId"));
