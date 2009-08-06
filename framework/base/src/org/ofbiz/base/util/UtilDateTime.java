@@ -1137,30 +1137,6 @@ public class UtilDateTime {
         return cal.get(Calendar.YEAR);
     }
 
-    public static Date getEarliestDate() {
-        Calendar cal = getCalendarInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
-        cal.set(Calendar.YEAR, cal.getActualMinimum(Calendar.YEAR));
-        cal.set(Calendar.MONTH, cal.getActualMinimum(Calendar.MONTH));
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
-    }
-
-    public static Date getLatestDate() {
-        Calendar cal = getCalendarInstance(TimeZone.getTimeZone("GMT"), Locale.getDefault());
-        cal.set(Calendar.YEAR, cal.getActualMaximum(Calendar.YEAR));
-        cal.set(Calendar.MONTH, cal.getActualMaximum(Calendar.MONTH));
-        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
-        cal.set(Calendar.HOUR_OF_DAY, 23);
-        cal.set(Calendar.MINUTE, 59);
-        cal.set(Calendar.SECOND, 59);
-        cal.set(Calendar.MILLISECOND, 999);
-        return cal.getTime();
-    }
-
     /**
      * Returns appropriate date format string.
      * @deprecated was removed from ofbiz, re-added for backward compatibility

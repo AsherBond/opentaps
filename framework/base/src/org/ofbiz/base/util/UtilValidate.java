@@ -24,7 +24,6 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import com.ibm.icu.util.Calendar;
 import org.apache.commons.validator.EmailValidator;
 import org.apache.commons.validator.routines.CalendarValidator;
 

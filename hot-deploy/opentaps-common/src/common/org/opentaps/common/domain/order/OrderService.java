@@ -150,7 +150,7 @@ public class OrderService extends Service implements OrderServiceInterface {
 
             // only recreate promotions items if the order was not billed
             Set<String> newPromoItems = new HashSet<String>();
-            for (ShoppingCartItem item : cart.items()) {
+            for (ShoppingCartItem item : (List<ShoppingCartItem>) cart.items()) {
                 // skip existing items
                 if (UtilValidate.isNotEmpty(item.getOrderItemSeqId())) {
                     continue;
