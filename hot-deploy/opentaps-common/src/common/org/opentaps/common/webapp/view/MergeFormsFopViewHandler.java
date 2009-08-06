@@ -144,7 +144,6 @@ public abstract class MergeFormsFopViewHandler implements ViewHandler {
                     Source source = new StreamSource(new StringReader(UtilXml.writeXmlDocument(xslfo)));
                     Result result = new SAXResult(fop.getDefaultHandler());
                     transformer.transform(source, result);
-                    fopFac.getImageFactory().clearCaches();
 
                 } else {
 

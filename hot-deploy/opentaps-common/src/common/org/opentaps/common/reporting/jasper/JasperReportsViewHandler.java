@@ -88,7 +88,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.party.PartyHelper;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.webapp.control.ContextFilter;
-import org.ofbiz.webapp.view.ViewHandler;
+import org.ofbiz.webapp.view.AbstractViewHandler;
 import org.ofbiz.webapp.view.ViewHandlerException;
 import org.opentaps.common.reporting.UtilReports;
 import org.opentaps.common.reporting.UtilReports.ContentType;
@@ -101,7 +101,7 @@ import com.lowagie.text.pdf.BaseFont;
 /**
  * Class renders Jasper Reports of any supported content type.
  */
-public class JasperReportsViewHandler implements ViewHandler {
+public class JasperReportsViewHandler extends AbstractViewHandler {
 
     protected ServletContext context;
     public static final String MODULE = JasperReportsViewHandler.class.getName();

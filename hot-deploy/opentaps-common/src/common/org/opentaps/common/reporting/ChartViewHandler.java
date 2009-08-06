@@ -35,7 +35,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.webapp.view.ViewHandler;
+import org.ofbiz.webapp.view.AbstractViewHandler;
 import org.ofbiz.webapp.view.ViewHandlerException;
 import org.opentaps.common.util.UtilCommon;
 
@@ -43,7 +43,7 @@ import org.opentaps.common.util.UtilCommon;
  * This view handler helps to include chart image to page
  * using tag <img/>
  */
-public class ChartViewHandler implements ViewHandler {
+public class ChartViewHandler extends AbstractViewHandler {
 
     public static String module = ChartViewHandler.class.getName();
 
@@ -55,7 +55,7 @@ public class ChartViewHandler implements ViewHandler {
 
     /**
      * Encode chart as image/png and send it to browser
-     * 
+     *
      * @param chartContext
      * @param response
      * @throws IOException
@@ -75,7 +75,7 @@ public class ChartViewHandler implements ViewHandler {
             } else {
                 ChartUtilities.writeChartAsPNG(response.getOutputStream(), chartObject, width, height);
             }
-        } 
+        }
     }
 
     /* (non-Javadoc)
@@ -85,7 +85,7 @@ public class ChartViewHandler implements ViewHandler {
 
         /*
          * Looks for parameter "chart" first. Send this temporary image files
-         * to client if it exists and return.   
+         * to client if it exists and return.
          */
         String chartFileName = UtilCommon.getParameter(request, "chart");
         if (UtilValidate.isNotEmpty(chartFileName)) {
@@ -124,7 +124,7 @@ public class ChartViewHandler implements ViewHandler {
         }
 
         /*
-         * Prepare context for next options 
+         * Prepare context for next options
          */
         Map<String, Object> callContext = FastMap.newInstance();
         callContext.put("parameters", UtilHttp.getParameterMap(request));
@@ -152,8 +152,8 @@ public class ChartViewHandler implements ViewHandler {
         }
 
         /*
-         * As last resort we can decide that "page" attribute contains class name and "info" 
-         * contains method Map<String, Object> getSomeChart(Map<String, Object> context). 
+         * As last resort we can decide that "page" attribute contains class name and "info"
+         * contains method Map<String, Object> getSomeChart(Map<String, Object> context).
          * There are parameters, delegator, dispatcher, userLogin and locale in the context.
          * Should return chartContext.
          */
