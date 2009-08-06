@@ -76,7 +76,7 @@ public class AgreementServices {
                 List itemMappings = delegator.findByAnd("AgreementToItemMap", UtilMisc.toMap("autoCreate", "Y", "agreementTypeId", agreement.get("agreementTypeId")), UtilMisc.toList("sequenceNum"));
                 for (Iterator iter = itemMappings.iterator(); iter.hasNext(); ) {
                     GenericValue mapping = (GenericValue) iter.next();
-                    GenericValue item = delegator.makeValue("AgreementItem", null);
+                    GenericValue item = delegator.makeValue("AgreementItem");
                     item.set("agreementId", agreementId);
                     item.set("agreementItemTypeId", mapping.get("agreementItemTypeId"));
                     item.set("currencyUomId", agreement.get("defaultCurrencyUomId"));
@@ -93,7 +93,7 @@ public class AgreementServices {
                     return UtilMessage.createAndLogServiceError("OpentapsError_AgreementItemNotValid", UtilMisc.toMap("agreementItemTypeId", agreementItemTypeId, "agreementId", agreementId), locale, module);
                 }
 
-                GenericValue item = delegator.makeValue("AgreementItem", null);
+                GenericValue item = delegator.makeValue("AgreementItem");
                 item.set("agreementId", agreementId);
                 item.set("agreementItemTypeId", agreementItemTypeId);
                 item.set("currencyUomId", currencyUomId);
@@ -110,7 +110,7 @@ public class AgreementServices {
                 List mappings = delegator.findByAnd("AgreementItemToTermMap", UtilMisc.toMap("autoCreate", "Y", "agreementItemTypeId", item.get("agreementItemTypeId")), UtilMisc.toList("sequenceNum"));
                 for (Iterator termIt = mappings.iterator(); termIt.hasNext(); ) {
                     GenericValue mapping = (GenericValue) termIt.next();
-                    GenericValue term = delegator.makeValue("AgreementTerm", null);
+                    GenericValue term = delegator.makeValue("AgreementTerm");
                     term.set("agreementTermId", delegator.getNextSeqId("AgreementTerm"));
                     term.set("agreementId", agreementId);
                     term.set("termTypeId", mapping.get("termTypeId"));

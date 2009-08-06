@@ -92,7 +92,7 @@ public class PartyServices {
             }
         }
         try {
-            GenericValue pref = delegator.makeValue("ViewPreference", null);
+            GenericValue pref = delegator.makeValue("ViewPreference");
             pref.setPKFields(context);
             pref.setNonPKFields(context);
             pref.create();

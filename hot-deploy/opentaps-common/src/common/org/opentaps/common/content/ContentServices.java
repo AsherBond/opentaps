@@ -238,7 +238,7 @@ public class ContentServices {
         String contentName = (String) context.get("contentName");
         if (contentName == null || contentName.trim().length() == 0) contentName = (String) dataResource.get("dataResourceName");
 
-        GenericValue content = delegator.makeValue("Content", null);
+        GenericValue content = delegator.makeValue("Content");
         String contentId = delegator.getNextSeqId("Content");
         content.set("contentId", contentId);
         content.set("createdDate", dataResource.get("createdDate")); 

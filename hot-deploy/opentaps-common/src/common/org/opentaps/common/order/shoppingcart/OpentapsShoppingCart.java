@@ -372,7 +372,7 @@ public class OpentapsShoppingCart extends ShoppingCart {
                     status = initialStatus;
                 }
 
-                GenericValue orderItem = getDelegator().makeValue("OrderItem", null);
+                GenericValue orderItem = getDelegator().makeValue("OrderItem");
                 orderItem.set("orderItemSeqId", item.getOrderItemSeqId());
                 orderItem.set("externalId", item.getExternalId());
                 orderItem.set("orderItemTypeId", item.getItemType());

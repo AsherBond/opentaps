@@ -180,7 +180,7 @@ public final class ShoppingCartServices {
                 orderAdjsMap.put(quoteAdj.get("quoteItemSeqId"), orderAdjs);
             }
             // convert quote adjustments to order adjustments
-            GenericValue orderAdj = delegator.makeValue("OrderAdjustment", null);
+            GenericValue orderAdj = delegator.makeValue("OrderAdjustment");
             orderAdj.put("orderAdjustmentId", quoteAdj.get("quoteAdjustmentId"));
             orderAdj.put("orderAdjustmentTypeId", quoteAdj.get("quoteAdjustmentTypeId"));
             orderAdj.put("orderItemSeqId", quoteAdj.get("quoteItemSeqId"));
