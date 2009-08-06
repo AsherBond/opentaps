@@ -1268,7 +1268,7 @@ public final class InvoiceServices {
                 cal.set(Calendar.DAY_OF_MONTH, days.intValue());
                 dueDate = UtilDateTime.getDayEnd(new Timestamp(cal.getTime().getTime()), timeZone, locale);
             } else if (UtilValidate.isNotEmpty(days)) {
-                dueDate = UtilDateTime.getDayEnd(UtilDateTime.nowTimestamp(), days.intValue(), timeZone, locale);
+                dueDate = UtilDateTime.getDayEnd(UtilDateTime.nowTimestamp(), days, timeZone, locale);
             }
 
             if (UtilValidate.isNotEmpty(dueDate)) {
@@ -2510,7 +2510,7 @@ return results;
             Long orderTermNetDays = orh.getOrderTermNetDays();
             Timestamp dueDate = null;
             if (orderTermNetDays != null) {
-                dueDate = UtilDateTime.getDayEnd(invoiceDate, orderTermNetDays.intValue());
+                dueDate = UtilDateTime.getDayEnd(invoiceDate, orderTermNetDays);
             }
 
             // create the invoice record
