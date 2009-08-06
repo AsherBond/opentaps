@@ -641,7 +641,7 @@ public final class OrderServices {
                 serviceParams.put("billToPartyId", orh.getBillToParty().getString("partyId"));
             }
             serviceParams.put("itemShippingList", UtilMisc.toList(new BigDecimal(0.0)));   // since we're not changing shipping, just pass a zero
-            serviceParams.put("orderShippingAmount", orh.getShippingTotalBd()); // yes, I know, this will break on the current ofbiz svn, but maybe they'll fix it for us before we upgrade :)
+            serviceParams.put("orderShippingAmount", orh.getShippingTotal()); // yes, I know, this will break on the current ofbiz svn, but maybe they'll fix it for us before we upgrade :)
             tmpResult = dispatcher.runSync("calcTax", serviceParams);
             if (ServiceUtil.isFailure(tmpResult)) {
                 return tmpResult;
@@ -919,7 +919,7 @@ public final class OrderServices {
         }
 
         // go through the item map and obtain the totals per item
-        Map<String, Double> itemTotals = new HashMap<String, Double>();
+        Map<String, BigDecimal> itemTotals = new HashMap<String, BigDecimal>();
         Map tmp = getItemTotalsFromItemQtyMap(itemTotals, itemQtyMap);
         if (tmp != null) {
             return tmp;
@@ -930,14 +930,14 @@ public final class OrderServices {
             ShoppingCartItem cartItem = cart.findCartItem(itemSeqId);
 
             if (cartItem != null) {
-                Double qty = itemTotals.get(itemSeqId);
+                BigDecimal qty = itemTotals.get(itemSeqId);
 
                 Debug.logWarning("Set cart item qty for item : " + itemSeqId + " = " + qty, MODULE);
-                double priceSave = cartItem.getBasePrice();
+                BigDecimal priceSave = cartItem.getBasePrice();
 
                 // set quantity
                 try {
-                    cartItem.setQuantity(qty.doubleValue(), dispatcher, cart, true, false); // trigger external ops, don't reset ship groups (and update prices for both PO and SO items)
+                    cartItem.setQuantity(qty, dispatcher, cart, true, false); // trigger external ops, don't reset ship groups (and update prices for both PO and SO items)
                 } catch (CartItemModifyException e) {
                     Debug.logError(e, MODULE);
                     return ServiceUtil.returnError(e.getMessage());
@@ -952,7 +952,7 @@ public final class OrderServices {
                 if (overridePriceMap.containsKey(itemSeqId)) {
                     String priceStr = (String) itemPriceMap.get(itemSeqId);
                     if (UtilValidate.isNotEmpty(priceStr)) {
-                        double price = -1;
+                        BigDecimal price = BigDecimal.ZERO;
                         //parse the price
                         NumberFormat nf = null;
                         if (locale != null) {
@@ -961,7 +961,7 @@ public final class OrderServices {
                             nf = NumberFormat.getNumberInstance();
                         }
                         try {
-                            price = nf.parse(priceStr).doubleValue();
+                            price = BigDecimal.valueOf(nf.parse(priceStr).doubleValue());
                         } catch (ParseException e) {
                             return UtilMessage.createAndLogServiceError(e, MODULE);
                         }
@@ -991,9 +991,9 @@ public final class OrderServices {
         while (gai.hasNext()) {
             String key = (String) gai.next();
             String quantityStr = (String) itemQtyMap.get(key);
-            double groupQty = 0.0;
+            BigDecimal groupQty = BigDecimal.ZERO;
             try {
-                groupQty = Double.parseDouble(quantityStr);
+                groupQty = new BigDecimal(quantityStr);
             } catch (NumberFormatException e) {
                 return UtilMessage.createAndLogServiceError(e, MODULE);
             }
@@ -1187,12 +1187,12 @@ public final class OrderServices {
         String productId = (String) context.get("productId");
         String prodCatalogId = (String) context.get("prodCatalogId");
         BigDecimal basePrice = (BigDecimal) context.get("basePrice");
-        Double quantity = (Double) context.get("quantity");
-        Double amount = (Double) context.get("amount");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
+        BigDecimal amount = (BigDecimal) context.get("amount");
         String overridePrice = (String) context.get("overridePrice");
 
         if (amount == null) {
-            amount = new Double(0.00);
+            amount = BigDecimal.ZERO;
         }
 
         int shipGroupIdx = -1;
@@ -1220,13 +1220,13 @@ public final class OrderServices {
 
         // add in the new product
         try {
-            ShoppingCartItem item = ShoppingCartItem.makeItem(null, productId, null, quantity.doubleValue(), null, null, null, null, null, null, null, null, prodCatalogId, null, null, null, dispatcher, cart, null, null, null, Boolean.FALSE, Boolean.FALSE);
+            ShoppingCartItem item = ShoppingCartItem.makeItem(null, productId, null, quantity, null, null, null, null, null, null, null, null, prodCatalogId, null, null, null, dispatcher, cart, null, null, null, Boolean.FALSE, Boolean.FALSE);
             if (basePrice != null && overridePrice != null) {
-                item.setBasePrice(basePrice.doubleValue());
+                item.setBasePrice(basePrice);
                 // special hack to make sure we re-calc the promos after a price change
-                item.setQuantity(quantity.doubleValue() + 1, dispatcher, cart, false);
-                item.setQuantity(quantity.doubleValue(), dispatcher, cart, false);
-                item.setBasePrice(basePrice.doubleValue());
+                item.setQuantity(quantity.add(new BigDecimal("1")), dispatcher, cart, false);
+                item.setQuantity(quantity, dispatcher, cart, false);
+                item.setBasePrice(basePrice);
                 item.setIsModifiedPrice(true);
             }
 
@@ -1440,12 +1440,12 @@ public final class OrderServices {
                 throw new GeneralException(ServiceUtil.getErrorMessage(result));
             }
 
-            Double shippingTotal = (Double) result.get("shippingTotal");
+            BigDecimal shippingTotal = (BigDecimal) result.get("shippingTotal");
             if (shippingTotal == null) {
-                shippingTotal = new Double(0.00);
+                shippingTotal = BigDecimal.ZERO;
             }
             Debug.logInfo("Setting ship estimate for group #" + gi + " [" + shipmentMethodTypeId + " / " + carrierPartyId + "] isCod (" + cart.getCOD(gi) + ") = " + shippingTotal, MODULE);
-            cart.setItemShipGroupEstimate(shippingTotal.doubleValue(), gi);
+            cart.setItemShipGroupEstimate(shippingTotal, gi);
         }
 
         // calc the sales tax
@@ -1723,8 +1723,8 @@ public final class OrderServices {
                     Debug.log("New Shipping Total [" + orderId + " / " + shipGroupSeqId + "] : " + shippingTotal, MODULE);
                 }
 
-                BigDecimal currentShipping = OrderReadHelper.getAllOrderItemsAdjustmentsTotalBd(orh.getOrderItemAndShipGroupAssoc(shipGroupSeqId), orh.getAdjustments(), false, false, true);
-                currentShipping = currentShipping.add(OrderReadHelper.calcOrderAdjustmentsBd(orh.getOrderHeaderAdjustments(shipGroupSeqId), orh.getOrderItemsSubTotalBd(), false, false, true));
+                BigDecimal currentShipping = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orh.getOrderItemAndShipGroupAssoc(shipGroupSeqId), orh.getAdjustments(), false, false, true);
+                currentShipping = currentShipping.add(OrderReadHelper.calcOrderAdjustments(orh.getOrderHeaderAdjustments(shipGroupSeqId), orh.getOrderItemsSubTotal(), false, false, true));
 
                 if (Debug.infoOn()) {
                     Debug.log("Old Shipping Total [" + orderId + " / " + shipGroupSeqId + "] : " + currentShipping, MODULE);
@@ -1807,7 +1807,7 @@ public final class OrderServices {
         }
 
         // go through the item map and obtain the totals per item
-        Map<String, Double> itemTotals = new HashMap<String, Double>();
+        Map<String, BigDecimal> itemTotals = new HashMap<String, BigDecimal>();
         Map tmp = getItemTotalsFromItemQtyMap(itemTotals, itemQtyMap);
         if (tmp != null) {
             return tmp;
@@ -1819,9 +1819,9 @@ public final class OrderServices {
             for (OrderItem orderItem : order.getItems()) {
                 boolean update = false;
                 if (itemTotals.containsKey(orderItem.getOrderItemSeqId())) {
-                    Double qty = itemTotals.get(orderItem.getOrderItemSeqId());
-                    qty += orderItem.getCancelQuantity().doubleValue();
-                    orderItem.setQuantity(orderItem.convertToBigDecimal(qty));
+                    BigDecimal qty = itemTotals.get(orderItem.getOrderItemSeqId());
+                    qty = qty.add(orderItem.getCancelQuantity());
+                    orderItem.setQuantity(qty);
                     Debug.logVerbose("Set item quantity: [" + orderItem.getOrderItemSeqId() + "] " + qty, MODULE);
                     update = true;
                 }
@@ -1964,26 +1964,26 @@ public final class OrderServices {
      * @return <code>null</code>, or a service error response <code>Map</code> if an error occurred
      */
     @SuppressWarnings("unchecked")
-    private static Map getItemTotalsFromItemQtyMap(Map<String, Double> itemTotals, Map<String, String> itemQtyMap) {
+    private static Map getItemTotalsFromItemQtyMap(Map<String, BigDecimal> itemTotals, Map<String, String> itemQtyMap) {
         for (String key : itemQtyMap.keySet()) {
             String quantityStr = itemQtyMap.get(key);
-            double groupQty = 0.0;
+            BigDecimal groupQty = BigDecimal.ZERO;
             try {
-                groupQty = Double.parseDouble(quantityStr);
+                groupQty = new BigDecimal(quantityStr);
             } catch (NumberFormatException e) {
                 return UtilMessage.createAndLogServiceError(e, MODULE);
             }
 
-            if (groupQty == 0) {
+            if (groupQty.signum() == 0) {
                 return UtilMessage.createAndLogServiceError("Quantity must be >0, use cancel item to cancel completely!", MODULE);
             }
 
             String[] itemInfo = key.split(":");
-            Double tally = itemTotals.get(itemInfo[0]);
+            BigDecimal tally = itemTotals.get(itemInfo[0]);
             if (tally == null) {
-                tally = new Double(groupQty);
+                tally = groupQty;
             } else {
-                tally = new Double(tally.doubleValue() + groupQty);
+                tally = tally.add(groupQty);
             }
             // the first String in itemInfo is the orderItemSeqId
             itemTotals.put(itemInfo[0], tally);

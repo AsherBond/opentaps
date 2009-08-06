@@ -1608,8 +1608,8 @@ public final class OrderEvents {
         Debug.logInfo("getShipEstimate: order [" + orh.getOrderId() + "] isCod = " + isCod, MODULE);
 
         return getShipGroupEstimate(dispatcher, delegator, orh.getOrderTypeId(), shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId,
-                                    contactMechId, orh.getProductStoreId(), supplierPartyId, orh.getShippableItemInfo(shipGroupSeqId), orh.getShippableWeight(shipGroupSeqId).doubleValue(),
-                                    orh.getShippableQuantity(shipGroupSeqId).doubleValue(), orh.getShippableTotal(shipGroupSeqId).doubleValue(), isCod);
+                                    contactMechId, orh.getProductStoreId(), supplierPartyId, orh.getShippableItemInfo(shipGroupSeqId), orh.getShippableWeight(shipGroupSeqId),
+                                    orh.getShippableQuantity(shipGroupSeqId), orh.getShippableTotal(shipGroupSeqId), isCod);
     }
 
     /**
@@ -1660,8 +1660,8 @@ public final class OrderEvents {
     @SuppressWarnings("unchecked")
     public static Map getShipGroupEstimate(LocalDispatcher dispatcher, GenericDelegator delegator, String orderTypeId,
             String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId, String shippingContactMechId,
-            String productStoreId, String supplierPartyId, List itemInfo, double shippableWeight, double shippableQuantity,
-            double shippableTotal, boolean isCod) {
+            String productStoreId, String supplierPartyId, List itemInfo, BigDecimal shippableWeight, BigDecimal shippableQuantity,
+            BigDecimal shippableTotal, boolean isCod) {
 
         String standardMessage = "A problem occurred calculating shipping. Fees will be calculated offline.";
         List errorMessageList = new ArrayList();
@@ -1699,7 +1699,7 @@ public final class OrderEvents {
         }
 
         // no shippable items; we won't change any shipping at all
-        if (shippableQuantity == 0) {
+        if (shippableQuantity.signum() == 0) {
             Map result = ServiceUtil.returnSuccess();
             result.put("shippingTotal", new Double(0));
             return result;
@@ -1714,14 +1714,14 @@ public final class OrderEvents {
         }
 
         // the initial amount before manual estimates
-        double shippingTotal = 0.00;
+        BigDecimal shippingTotal = BigDecimal.ZERO;
 
         // prepare the service invocation fields
         Map serviceFields = new HashMap();
-        serviceFields.put("initialEstimateAmt", new Double(shippingTotal));
-        serviceFields.put("shippableTotal", new Double(shippableTotal));
-        serviceFields.put("shippableQuantity", new Double(shippableQuantity));
-        serviceFields.put("shippableWeight", new Double(shippableWeight));
+        serviceFields.put("initialEstimateAmt", shippingTotal.doubleValue());
+        serviceFields.put("shippableTotal", shippableTotal.doubleValue());
+        serviceFields.put("shippableQuantity", shippableQuantity.doubleValue());
+        serviceFields.put("shippableWeight", shippableWeight.doubleValue());
         serviceFields.put("shippableItemInfo", itemInfo);
         serviceFields.put("productStoreId", productStoreId);
         serviceFields.put("carrierRoleTypeId", "CARRIER");
@@ -1732,22 +1732,22 @@ public final class OrderEvents {
 
         // call the external shipping service
         try {
-            Double externalAmt = ShippingEvents.getExternalShipEstimate(dispatcher, storeShipMethod, serviceFields);
+            BigDecimal externalAmt = ShippingEvents.getExternalShipEstimate(dispatcher, storeShipMethod, serviceFields);
             if (externalAmt != null) {
-                shippingTotal += externalAmt.doubleValue();
+                shippingTotal = shippingTotal.add(externalAmt);
             }
         } catch (GeneralException e) {
             return ServiceUtil.returnError(standardMessage);
         }
 
         // update the initial amount
-        serviceFields.put("initialEstimateAmt", new Double(shippingTotal));
+        serviceFields.put("initialEstimateAmt", shippingTotal.doubleValue());
 
         // call the generic estimate service
         try {
-            Double genericAmt = ShippingEvents.getGenericShipEstimate(dispatcher, storeShipMethod, serviceFields);
+            BigDecimal genericAmt = ShippingEvents.getGenericShipEstimate(dispatcher, storeShipMethod, serviceFields);
             if (genericAmt != null) {
-                shippingTotal += genericAmt.doubleValue();
+                shippingTotal = shippingTotal.add(genericAmt);
             }
         } catch (GeneralException e) {
             return ServiceUtil.returnError(standardMessage);
@@ -1755,15 +1755,15 @@ public final class OrderEvents {
 
         // add COD surcharges
         if (isCod) {
-            Double codSurcharge = storeShipMethod.getDouble("codSurcharge");
+            BigDecimal codSurcharge = storeShipMethod.getBigDecimal("codSurcharge");
             if (UtilValidate.isNotEmpty(codSurcharge)) {
-                shippingTotal += codSurcharge;
+                shippingTotal = shippingTotal.add(codSurcharge);
             }
         }
 
         // return the totals
         Map responseResult = ServiceUtil.returnSuccess();
-        responseResult.put("shippingTotal", new Double(shippingTotal));
+        responseResult.put("shippingTotal", shippingTotal.doubleValue());
         return responseResult;
     }
 }
