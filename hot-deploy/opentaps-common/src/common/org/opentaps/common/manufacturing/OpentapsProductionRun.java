@@ -17,7 +17,6 @@
 package org.opentaps.common.manufacturing;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +27,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.manufacturing.jobshopmgt.ProductionRun;
@@ -310,9 +309,9 @@ public class OpentapsProductionRun extends ProductionRun {
      */
     public GenericValue getDisassemblyWegs() throws GenericEntityException {
         GenericDelegator delegator = productionRun.getDelegator();
-        List<EntityExpr> conditions = Arrays.asList(
-            new EntityExpr("workEffortId", EntityOperator.EQUALS, productionRun.get("workEffortId")),
-            new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DISASMBL")
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+            EntityCondition.makeCondition("workEffortId", productionRun.get("workEffortId")),
+            EntityCondition.makeCondition("workEffortGoodStdTypeId", "PRUN_PROD_DISASMBL")
         );
         GenericValue wegs = EntityUtil.getFirst(delegator.findByAnd("WorkEffortGoodStandard", conditions));
         if (wegs == null) {

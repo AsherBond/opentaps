@@ -27,7 +27,6 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityFieldMap;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.EntityFindOptions;
@@ -207,7 +206,6 @@ public class Repository implements RepositoryInterface {
      * @return the domain object
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static <T extends EntityInterface> T loadFromGeneric(Class<T> entityClass, GenericValue generic) throws RepositoryException {
         try {
             return (T) FoundationUtils.loadFromMap(entityClass, generic.getAllFields());
@@ -241,7 +239,6 @@ public class Repository implements RepositoryInterface {
      * @return the list of domain objects
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static <T extends EntityInterface> T loadFromGeneric(Class<T> entityClass, GenericValue generic, RepositoryInterface repository) throws RepositoryException {
         if (generic == null) {
             return null;
@@ -727,7 +724,6 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findAll(Class<T> entityName, String genericValueName, List<String> orderBy) throws RepositoryException {
         try {
             List<GenericValue> gv = getDelegator().findAll(genericValueName, orderBy);
@@ -758,7 +754,6 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findAllCache(Class<T> entityName, String genericValueName, List<String> orderBy) throws RepositoryException {
         try {
             List<GenericValue> gv = getDelegator().findAllCache(genericValueName, orderBy);
@@ -811,7 +806,6 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findList(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy) throws RepositoryException {
         try {
             List<GenericValue> gv = getDelegator().findByAnd(genericValueName, toSimpleMap(conditions), orderBy);
@@ -832,10 +826,9 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findList(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> fields, List<String> orderBy) throws RepositoryException {
         try {
-            List<GenericValue> gv = getDelegator().findByCondition(genericValueName, new EntityFieldMap(toSimpleMap(conditions), EntityOperator.AND), null, fields, orderBy, DISTINCT_FIND_OPTIONS);
+            List<GenericValue> gv = getDelegator().findByCondition(genericValueName, EntityCondition.makeCondition(toSimpleMap(conditions)), null, fields, orderBy, DISTINCT_FIND_OPTIONS);
             return Repository.loadFromGeneric(entityName, gv, this);
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
@@ -878,7 +871,6 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findListCache(Class<T> entityName, String genericValueName, Map<? extends EntityFieldInterface<? super T>, Object> conditions, List<String> orderBy) throws RepositoryException {
         try {
             List<GenericValue> gv = getDelegator().findByAndCache(genericValueName, toSimpleMap(conditions), orderBy);
@@ -929,7 +921,6 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findList(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, List<String> orderBy) throws RepositoryException {
         try {
             List<GenericValue> gv = getDelegator().findByAnd(genericValueName, conditions, orderBy);
@@ -950,10 +941,9 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findList(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, List<String> fields, List<String> orderBy) throws RepositoryException {
         try {
-            EntityConditionList ecl = new EntityConditionList(conditions, EntityOperator.AND);
+            EntityConditionList<? extends EntityCondition> ecl = EntityCondition.makeCondition(conditions, EntityOperator.AND);
             List<GenericValue> gv = getDelegator().findByCondition(genericValueName, ecl, null, fields, orderBy, DISTINCT_FIND_OPTIONS);
             return Repository.loadFromGeneric(entityName, gv, this);
         } catch (GenericEntityException e) {
@@ -997,10 +987,9 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findListCache(Class<T> entityName, String genericValueName, List<? extends EntityCondition> conditions, List<String> orderBy) throws RepositoryException {
         try {
-            EntityConditionList ecl = new EntityConditionList(conditions, EntityOperator.AND);
+            EntityConditionList<? extends EntityCondition> ecl = EntityCondition.makeCondition(conditions, EntityOperator.AND);
             List<GenericValue> gv = getDelegator().findByConditionCache(genericValueName, ecl, null, orderBy);
             return Repository.loadFromGeneric(entityName, gv, this);
         } catch (GenericEntityException e) {
@@ -1049,7 +1038,6 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findList(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> orderBy) throws RepositoryException {
         try {
             List<GenericValue> gv = getDelegator().findByCondition(genericValueName, condition, null, orderBy);
@@ -1070,7 +1058,6 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findList(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> fields, List<String> orderBy) throws RepositoryException {
         try {
             List<GenericValue> gv = getDelegator().findByCondition(genericValueName, condition, null, fields, orderBy, DISTINCT_FIND_OPTIONS);
@@ -1116,7 +1103,6 @@ public class Repository implements RepositoryInterface {
      * @return the list of entities found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private <T extends EntityInterface> List<T> findListCache(Class<T> entityName, String genericValueName, EntityCondition condition, List<String> orderBy) throws RepositoryException {
         try {
             List<GenericValue> gv = getDelegator().findByConditionCache(genericValueName, condition, null, orderBy);
@@ -1215,7 +1201,6 @@ public class Repository implements RepositoryInterface {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelated(Class<T> entityName, String relation, T2 entity) throws RepositoryException {
         try {
             GenericValue gv = genericValueFromEntity(getDelegator(), entity);
@@ -1227,7 +1212,6 @@ public class Repository implements RepositoryInterface {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelated(Class<T> entityName, String relation, T2 entity, List<String> orderBy) throws RepositoryException {
         try {
             GenericValue gv = genericValueFromEntity(getDelegator(), entity);
@@ -1256,7 +1240,6 @@ public class Repository implements RepositoryInterface {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public <T extends EntityInterface, T2 extends EntityInterface> List<T> getRelatedCache(Class<T> entityName, String relation, T2 entity) throws RepositoryException {
         try {
             GenericValue gv = genericValueFromEntity(getDelegator(), entity);

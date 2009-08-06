@@ -27,8 +27,7 @@ import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.ConvertMapToString;
 import org.opentaps.common.util.ICompositeValue;
@@ -443,11 +442,11 @@ public abstract class EntityLookupService {
     protected <T extends EntityInterface> List<T> findListWithFilters(Class<T> entityName, List<EntityCondition> conds, List<String> filters) {
         for (String filter : filters) {
             if (provider.parameterIsPresent(filter)) {
-                conds.add(new EntityExpr(filter, true, EntityOperator.LIKE, "%" + provider.getParameter(filter) + "%", true));
+                conds.add(EntityCondition.makeCondition(EntityFunction.UPPER(filter), EntityOperator.LIKE, EntityFunction.UPPER("%" + provider.getParameter(filter) + "%")));
             }
         }
 
-        return findList(entityName, new EntityConditionList(conds, EntityOperator.AND));
+        return findList(entityName, EntityCondition.makeCondition(conds, EntityOperator.AND));
     }
 
     // some common find methods

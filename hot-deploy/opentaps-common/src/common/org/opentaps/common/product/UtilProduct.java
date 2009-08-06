@@ -53,6 +53,7 @@ import org.opentaps.common.util.UtilCommon;
 
 import java.math.BigDecimal;
 import java.util.*;
+import org.ofbiz.entity.condition.EntityCondition;
 
 /**
  * Utility methods for working with products.
@@ -102,9 +103,9 @@ public final class UtilProduct {
         try {
             // get all product warnings
             List productFeatureAndApplList = delegator.findByAnd("ProductFeatureAndAppl",
-                    UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                                    new EntityExpr("productFeatureApplTypeId", EntityOperator.EQUALS, "STANDARD_FEATURE"),
-                                    new EntityExpr("productFeatureTypeId", EntityOperator.EQUALS, "WARNING"),
+                    UtilMisc.toList(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                                    EntityCondition.makeCondition("productFeatureApplTypeId", EntityOperator.EQUALS, "STANDARD_FEATURE"),
+                                    EntityCondition.makeCondition("productFeatureTypeId", EntityOperator.EQUALS, "WARNING"),
                                     EntityUtil.getFilterByDateExpr()), orderBy);
             warnings = EntityUtil.getFieldListFromEntityList(productFeatureAndApplList, "description", true);
         } catch (GenericEntityException ex) {
@@ -172,10 +173,11 @@ public final class UtilProduct {
     @SuppressWarnings("unchecked")
     public static String getProductUPC(String productId, GenericDelegator delegator) throws GenericEntityException {
         String upc = null;
-        List cond = UtilMisc.toList(new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                                    new EntityExpr("goodIdentificationTypeId", EntityOperator.IN, UtilMisc.toList("UPCA", "UPCE")),
-                                    new EntityExpr("idValue", EntityOperator.NOT_EQUAL, ""));
-        GenericValue upcValue = EntityUtil.getFirst(delegator.findByCondition("GoodIdentification", new EntityConditionList(cond, EntityOperator.AND), null, Arrays.asList("lastUpdatedStamp DESC")));
+        EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                    EntityCondition.makeCondition("productId", productId),
+                                    EntityCondition.makeCondition("goodIdentificationTypeId", EntityOperator.IN, UtilMisc.toList("UPCA", "UPCE")),
+                                    EntityCondition.makeCondition("idValue", EntityOperator.NOT_EQUAL, ""));
+        GenericValue upcValue = EntityUtil.getFirst(delegator.findByCondition("GoodIdentification", cond, null, Arrays.asList("lastUpdatedStamp DESC")));
         if (UtilValidate.isNotEmpty(upcValue)) {
             upc = upcValue.getString("idValue");
         }
@@ -434,13 +436,12 @@ public final class UtilProduct {
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List getProductStoreIdsFromGroup(String productStoreGroupId, GenericDelegator delegator) throws GenericEntityException {
-        List productStoreIds = null;
+    public static List<String> getProductStoreIdsFromGroup(String productStoreGroupId, GenericDelegator delegator) throws GenericEntityException {
+        List<String> productStoreIds = null;
         if (UtilValidate.isNotEmpty(productStoreGroupId)) {
-            List productStoreGroupConditions = UtilMisc.toList(new EntityExpr("productStoreGroupId", EntityOperator.EQUALS, productStoreGroupId));
-            List productStoreGroupFieldsToSelect = UtilMisc.toList("productStoreId");
-            List productStoreGroups = delegator.findByCondition("ProductStoreGroupAndProductStore",
-                                        new EntityConditionList(productStoreGroupConditions, EntityOperator.OR),
+            List<String> productStoreGroupFieldsToSelect = UtilMisc.toList("productStoreId");
+            List<GenericValue> productStoreGroups = delegator.findByCondition("ProductStoreGroupAndProductStore",
+                                        EntityCondition.makeCondition(EntityOperator.OR, EntityCondition.makeCondition("productStoreGroupId", productStoreGroupId)),
                                         null,
                                         productStoreGroupFieldsToSelect,
                                         null,
@@ -457,12 +458,10 @@ public final class UtilProduct {
     * @return the <code>List</code> of productStoreIds from the given payToPartyId
     * @throws GenericEntityException if an error occurs
     */
-    @SuppressWarnings("unchecked")
-    public static List getProductStoresFromPayToPartyId(String payToPartyId, GenericDelegator delegator) throws GenericEntityException {
-        List searchConditions = UtilMisc.toList(new EntityExpr("payToPartyId", EntityOperator.EQUALS, payToPartyId));
-        List fieldsToSelect = UtilMisc.toList("productStoreId", "storeName");
-        List productStores = delegator.findByCondition("ProductStore",
-                                new EntityConditionList(searchConditions, EntityOperator.AND),
+    public static List<GenericValue> getProductStoresFromPayToPartyId(String payToPartyId, GenericDelegator delegator) throws GenericEntityException {
+        List<String> fieldsToSelect = UtilMisc.toList("productStoreId", "storeName");
+        List<GenericValue> productStores = delegator.findByCondition("ProductStore",
+                                EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("payToPartyId", payToPartyId)),
                                 null,
                                 fieldsToSelect,
                                 UtilMisc.toList("storeName"),
@@ -478,19 +477,18 @@ public final class UtilProduct {
      * @return List of open Requirement
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static List getOpenRequirements(String productId, String productStoreId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getOpenRequirements(String productId, String productStoreId, GenericDelegator delegator) throws GenericEntityException {
         GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
         String facilityId = productStore.getString("inventoryFacilityId");
-        List conditions = UtilMisc.toList(
-            new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-            new EntityExpr("productId", EntityOperator.EQUALS, productId),
-            new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT"),
-            new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "REQ_CLOSED"),
-            new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "REQ_REJECTED")
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+            EntityCondition.makeCondition("facilityId", facilityId),
+            EntityCondition.makeCondition("productId", productId),
+            EntityCondition.makeCondition("requirementTypeId", "PRODUCT_REQUIREMENT"),
+            EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "REQ_CLOSED"),
+            EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "REQ_REJECTED")
         );
 
-        List openRequirements = delegator.findByAnd("Requirement", conditions);
+        List<GenericValue> openRequirements = delegator.findByAnd("Requirement", conditions);
         return openRequirements;
     }
 

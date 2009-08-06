@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.domain.base.entities.PartyRole;
 import org.opentaps.domain.base.entities.PartyRolePk;
@@ -94,7 +94,7 @@ public class ContactSearchService extends SearchService implements ContactSearch
 
         try {
             if (!contactIds.isEmpty()) {
-                return repository.findList(Contact.class, new EntityExpr(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds));
+                return repository.findList(Contact.class, EntityCondition.makeCondition(Contact.Fields.partyId.name(), EntityOperator.IN, contactIds));
             } else {
                 return new ArrayList<Contact>();
             }

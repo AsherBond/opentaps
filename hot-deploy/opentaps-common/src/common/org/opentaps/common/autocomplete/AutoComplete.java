@@ -1,37 +1,54 @@
+/*
+ * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
 package org.opentaps.common.autocomplete;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
-import static org.opentaps.common.autocomplete.UtilAutoComplete.*;
 import org.opentaps.common.party.PartyReader;
 import org.opentaps.common.util.UtilCommon;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import static org.opentaps.common.autocomplete.UtilAutoComplete.*;
 
 /**
  * Catch all location for static auto complete methods.
  */
-public class AutoComplete {
+public final class AutoComplete {
 
-    public static final String module = AutoComplete.class.getName();
+    private AutoComplete() { }
+
+    private static final String MODULE = AutoComplete.class.getName();
 
     /**
      * Retrieves the auto complete clients party IDs with a given keyword.
@@ -41,10 +58,9 @@ public class AutoComplete {
      */
     public static String getAutoCompleteClientPartyIds(HttpServletRequest request, HttpServletResponse response) {
         // get active clients (but can be related to another user)
-        EntityCondition condition = new EntityConditionList(UtilMisc.toList(
+        EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
                                    EntityUtil.getFilterByDateExpr(),
-                                   ac_clientRoleCondition
-                                   ), EntityOperator.AND);
+                                   ac_clientRoleCondition);
         return autocompletePartyIdsByCondition(condition, "PartyFromSummaryByRelationship", request, response);
     }
 
@@ -56,10 +72,9 @@ public class AutoComplete {
      */
     public static String getAutoCompleteAccountPartyIds(HttpServletRequest request, HttpServletResponse response) {
         // get active accounts (but can be related to another user)
-        EntityCondition condition = new EntityConditionList(UtilMisc.toList(
+        EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
                                    EntityUtil.getFilterByDateExpr(),
-                                   ac_accountRoleCondition
-                                   ), EntityOperator.AND);
+                                   ac_accountRoleCondition);
         return autocompletePartyIdsByCondition(condition, "PartyFromSummaryByRelationship", request, response);
     }
 
@@ -71,10 +86,8 @@ public class AutoComplete {
      */
     public static String getAutoCompleteSupplierPartyIds(HttpServletRequest request, HttpServletResponse response) {
         // get suppliers (but can be related to another user)
-        EntityCondition condition = new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("roleTypeId", EntityOperator.EQUALS, "SUPPLIER")
-                ), EntityOperator.AND
-            );
+        EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("roleTypeId", "SUPPLIER"));
         return autocompletePartyIdsByCondition(condition, "PartyRoleNameDetail", request, response);
     }
 
@@ -93,7 +106,7 @@ public class AutoComplete {
 
         GenericValue userLogin = UtilCommon.getUserLogin(request);
         if (userLogin == null) {
-            Debug.logError("Failed to retrieve the login user from the session.", module);
+            Debug.logError("Failed to retrieve the login user from the session.", MODULE);
             return "error";
         }
 
@@ -101,7 +114,7 @@ public class AutoComplete {
 
         String keyword = UtilCommon.getUTF8Parameter(request, "keyword");
         if (keyword == null) {
-            Debug.log("Ignored the empty keyword string.", module);
+            Debug.log("Ignored the empty keyword string.", MODULE);
             return "success";
         }
         keyword = keyword.trim();
@@ -119,7 +132,7 @@ public class AutoComplete {
             iterator.close();
             TransactionUtil.commit();
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return "error";
         }
 
@@ -169,7 +182,7 @@ public class AutoComplete {
     public static String getAutoCompleteGlAccounts(HttpServletRequest request, HttpServletResponse response) {
         GenericValue userLogin = UtilCommon.getUserLogin(request);
         if (userLogin == null) {
-            Debug.logError("Failed to retrieve the login user from the session.", module);
+            Debug.logError("Failed to retrieve the login user from the session.", MODULE);
             return "error";
         }
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
@@ -179,7 +192,7 @@ public class AutoComplete {
 
         String keyword = UtilCommon.getUTF8Parameter(request, "keyword");
         if (keyword == null) {
-            Debug.log("Ignored the empty keyword string.", module);
+            Debug.log("Ignored the empty keyword string.", MODULE);
             return "success";
         }
         keyword = keyword.trim();
@@ -189,17 +202,15 @@ public class AutoComplete {
             keyword = keyword.toUpperCase();
 
             // make the condition
-            EntityCondition orCondition = new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("glAccountId", EntityOperator.LIKE, "%" + keyword + "%"),
-                    new EntityExpr("accountCode", EntityOperator.LIKE, "%" + keyword + "%"),
-                    new EntityExpr("accountName", true, EntityOperator.LIKE, "%" + keyword + "%", false)
-                ), EntityOperator.OR
-            );
-            EntityCondition condition = new EntityConditionList(UtilMisc.toList(
+            EntityCondition orCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("glAccountId", EntityOperator.LIKE, "%" + keyword + "%"),
+                    EntityCondition.makeCondition("accountCode", EntityOperator.LIKE, "%" + keyword + "%"),
+                    EntityCondition.makeCondition(EntityFunction.UPPER("accountName"), EntityOperator.LIKE, "%" + keyword + "%")
+                );
+            EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
                     orCondition,
-                    new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                    EntityUtil.getFilterByDateExpr()
-            ), EntityOperator.AND);
+                    EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                    EntityUtil.getFilterByDateExpr());
 
 
             // get result as a list iterator (transaction block is to work around a bug in entity engine)
@@ -213,7 +224,7 @@ public class AutoComplete {
             iterator.close();
             TransactionUtil.commit();
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return "error";
         }
 
@@ -231,14 +242,14 @@ public class AutoComplete {
     public static String getAutoCompleteProduct(HttpServletRequest request, HttpServletResponse response) {
         GenericValue userLogin = UtilCommon.getUserLogin(request);
         if (userLogin == null) {
-            Debug.logError("Failed to retrieve the login user from the session.", module);
+            Debug.logError("Failed to retrieve the login user from the session.", MODULE);
             return "error";
         }
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
 
         String keyword = UtilCommon.getUTF8Parameter(request, "keyword");
         if (keyword == null) {
-            Debug.log("Ignored the empty keyword string.", module);
+            Debug.log("Ignored the empty keyword string.", MODULE);
             return "success";
         }
         keyword = keyword.trim();
@@ -248,24 +259,20 @@ public class AutoComplete {
             keyword = keyword.toUpperCase();
 
             // make the condition
-            EntityCondition keywordCondition = new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("productId", EntityOperator.LIKE, keyword + "%"),
-                    new EntityExpr("idValue", EntityOperator.LIKE, keyword + "%"),
-                    new EntityExpr("internalName", true, EntityOperator.LIKE, "%" + keyword + "%", false)
-                ), EntityOperator.OR
-            );
+            EntityCondition keywordCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("productId", EntityOperator.LIKE, keyword + "%"),
+                    EntityCondition.makeCondition("idValue", EntityOperator.LIKE, keyword + "%"),
+                    EntityCondition.makeCondition(EntityFunction.UPPER("internalName"), EntityOperator.LIKE, "%" + keyword + "%")
+                );
 
-            EntityCondition dateCondition = new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("salesDiscontinuationDate", EntityOperator.EQUALS, null),
-                    new EntityExpr("salesDiscontinuationDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.nowTimestamp())
-                ), EntityOperator.OR
-            );
+            EntityCondition dateCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, null),
+                    EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.nowTimestamp())
+                );
 
-            EntityCondition condition = new EntityConditionList(UtilMisc.toList(
+            EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
                     keywordCondition,
-                    dateCondition
-                ), EntityOperator.AND
-            );
+                    dateCondition);
 
             // get result as a list iterator (transaction block is to work around a bug in entity engine)
             TransactionUtil.begin();
@@ -278,7 +285,7 @@ public class AutoComplete {
             iterator.close();
             TransactionUtil.commit();
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return "error";
         }
 

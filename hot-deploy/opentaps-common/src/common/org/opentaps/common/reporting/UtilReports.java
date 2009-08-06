@@ -27,13 +27,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
 import javax.print.PrintService;
 import javax.servlet.http.HttpServletRequest;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporter;
 import net.sf.jasperreports.engine.JRExporterParameter;
@@ -41,6 +39,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import net.sf.jasperreports.engine.design.JRValidationFault;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.export.JExcelApiExporter;
@@ -57,7 +56,6 @@ import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-
 import org.ofbiz.base.crypto.HashCrypt;
 import org.ofbiz.base.location.ComponentLocationResolver;
 import org.ofbiz.base.util.Debug;
@@ -66,12 +64,10 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.cache.UtilCache;
-import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.reporting.jasper.JRResourceBundle;
@@ -159,7 +155,7 @@ public final class UtilReports {
         supportedTypes.add(ContentType.XLS.toString());
         supportedTypes.add(ContentType.XML.toString());
 
-        return delegator.findByCondition("MimeType", new EntityExpr("mimeTypeId", EntityOperator.IN, supportedTypes), null, UtilMisc.toList("description"));
+        return delegator.findByCondition("MimeType", EntityCondition.makeCondition("mimeTypeId", EntityOperator.IN, supportedTypes), null, UtilMisc.toList("description"));
     }
 
     /**
@@ -426,12 +422,9 @@ public final class UtilReports {
     @SuppressWarnings("unchecked")
     public static List<Map<String, Object>>getManagedReports(String componentName, GenericDelegator delegator, Locale locale) {
         try {
-            EntityConditionList conditions = new EntityConditionList(
-                    UtilMisc.toList(
-                            new EntityExpr("application", EntityOperator.EQUALS, componentName),
-                            new EntityExpr("showInSelect", EntityOperator.EQUALS, "Y")
-                    ), EntityOperator.AND
-            );
+            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                            EntityCondition.makeCondition("application", componentName),
+                            EntityCondition.makeCondition("showInSelect", "Y"));
 
             List<GenericValue> applicationGroups = delegator.findByCondition("ReportGroup", conditions, null, null , UtilMisc.toList("sequenceNum", "description"), null); 
             if (UtilValidate.isEmpty(applicationGroups)) {

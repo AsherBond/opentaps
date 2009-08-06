@@ -42,10 +42,9 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.order.shoppingcart.CartItemModifyException;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
@@ -169,7 +168,7 @@ public final class AjaxEvents {
                     resp.put("enumTitle", UtilValidate.isNotEmpty(enumTitle) ? enumTitle : "Enumeration Value");
 
                     // Enumeration values
-                    List<GenericValue> values = delegator.findByCondition("Enumeration", new EntityExpr("enumTypeId", EntityOperator.EQUALS, termTypeToEnumMap.getString("enumTypeId")), Arrays.asList("enumId", "description"), Arrays.asList("sequenceId"));
+                    List<GenericValue> values = delegator.findByCondition("Enumeration", EntityCondition.makeCondition("enumTypeId", termTypeToEnumMap.getString("enumTypeId")), Arrays.asList("enumId", "description"), Arrays.asList("sequenceId"));
                     List<Map<String, String>> enumValues = new ArrayList<Map<String, String>>();
                     for (GenericValue value : values) {
                         Map<String, String> enumValue = new HashMap<String, String>();
@@ -273,10 +272,10 @@ public final class AjaxEvents {
         try {
 
             agreements = delegator.findByAnd("Agreement", UtilMisc.toList(
-                    new EntityExpr("agreementTypeId", EntityOperator.EQUALS, "PURCHASE_AGREEMENT"),
-                    new EntityExpr("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),
-                    new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
-                    new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyId),
+                    EntityCondition.makeCondition("agreementTypeId", "PURCHASE_AGREEMENT"),
+                    EntityCondition.makeCondition("statusId", "AGR_ACTIVE"),
+                    EntityCondition.makeCondition("partyIdFrom", organizationPartyId),
+                    EntityCondition.makeCondition("partyIdTo", partyId),
                     EntityUtil.getFilterByDateExpr())
             );
 

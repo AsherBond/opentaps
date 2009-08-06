@@ -68,6 +68,7 @@ import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
@@ -438,7 +439,8 @@ public abstract class UtilCommon {
      */
     @SuppressWarnings("unchecked")
     public static List<String> getFacilityContactMechIds(String facilityId, GenericDelegator delegator) throws GenericEntityException {
-        List facilityContactMechs = delegator.findByAnd("FacilityContactMech", UtilMisc.toList(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
+        List<GenericValue> facilityContactMechs = delegator.findByAnd("FacilityContactMech", EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("facilityId", facilityId),
                 EntityUtil.getFilterByDateExpr()));
         return EntityUtil.getFieldListFromEntityList(facilityContactMechs, "contactMechId", true);
     }
@@ -493,7 +495,7 @@ public abstract class UtilCommon {
         // SELECT * FROM FACILITY WHERE FACILITY_ID IN (SELECT * FROM FACILITY_ROLE WHERE ROLE_TYPE_ID = 'RECV_INV_FOR' AND PARTY_ID = organizationPartyId))
         List<GenericValue> additionalFacilities = delegator.findByAnd("FacilityRole", UtilMisc.toMap("roleTypeId", "RECV_INV_FOR", "partyId", organizationPartyId));
         if (UtilValidate.isNotEmpty(additionalFacilities)) {
-            facilities.addAll(delegator.findByAnd("Facility", UtilMisc.toList(new EntityExpr("facilityId", EntityOperator.IN, EntityUtil.getFieldListFromEntityList(additionalFacilities, "facilityId", true)))));
+            facilities.addAll(delegator.findByAnd("Facility", UtilMisc.toList(EntityCondition.makeCondition("facilityId", EntityOperator.IN, EntityUtil.getFieldListFromEntityList(additionalFacilities, "facilityId", true)))));
         }
         return facilities;
     }
@@ -761,7 +763,7 @@ public abstract class UtilCommon {
         GenericValue parent = delegator.findByPrimaryKeyCache(entityName, UtilMisc.toMap(pkFieldName, parentId));
         if (parent == null) {
             Debug.logWarning("Cannot find " + entityName + " [" + parentId + "]", MODULE);
-            return new EntityExpr("1", EntityOperator.EQUALS, "1");
+            return EntityCondition.makeCondition("1", EntityOperator.EQUALS, "1");
         }
 
         // recursively build the list of ids that are of this type
@@ -769,7 +771,7 @@ public abstract class UtilCommon {
         recurseGetEntityChildrenSet(parent, ids, pkFieldName);
 
         // make a WHERE paymentTypeId IN (list of ids) expression or NOT_IN for complement search
-        return new EntityExpr(pkFieldName, (isComplement ? EntityOperator.NOT_IN : EntityOperator.IN), ids);
+        return EntityCondition.makeCondition(pkFieldName, (isComplement ? EntityOperator.NOT_IN : EntityOperator.IN), ids);
     }
 
     /**
@@ -1464,9 +1466,10 @@ public abstract class UtilCommon {
         userLoginId = userLogin.getString("userLoginId");
 
         List<GenericValue> shortcuts = delegator.findByAnd("KeyboardShortcutAndHandler", UtilMisc.toList(
-            new EntityExpr(new EntityExpr("userLoginId", EntityOperator.EQUALS, userLoginId), EntityOperator.OR, new EntityExpr("userLoginId", EntityOperator.EQUALS, null)),
-            new EntityExpr(new EntityExpr("applicationName", EntityOperator.EQUALS, applicationName), EntityOperator.OR, new EntityExpr("applicationName", EntityOperator.EQUALS, null)),
-            new EntityExpr(new EntityExpr("screenName", EntityOperator.EQUALS, screenName), EntityOperator.OR, new EntityExpr("screenName", EntityOperator.EQUALS, null))
+            EntityCondition.makeCondition(EntityOperator.AND,
+              EntityCondition.makeCondition("userLoginId", userLoginId), EntityOperator.OR, EntityCondition.makeCondition("userLoginId", null)),
+              EntityCondition.makeCondition(EntityCondition.makeCondition("applicationName", applicationName), EntityOperator.OR, EntityCondition.makeCondition("applicationName", null)),
+              EntityCondition.makeCondition(EntityCondition.makeCondition("screenName", screenName), EntityOperator.OR, EntityCondition.makeCondition("screenName", null))
          ), UtilMisc.toList("shortcut", "userLoginId", "screenName", "applicationName")); // nulls are returned last
 
         // remove global shortcuts masked / overridden by more specific ones

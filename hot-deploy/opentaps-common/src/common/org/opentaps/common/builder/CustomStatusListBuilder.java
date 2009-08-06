@@ -16,19 +16,18 @@ package org.opentaps.common.builder;
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
 
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
-
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 
 /**
  * An example of creating a custom list builder.  This is a list
@@ -46,7 +45,7 @@ public class CustomStatusListBuilder extends EntityListBuilder {
     public CustomStatusListBuilder(GenericDelegator delegator) {
         this.delegator = delegator;
         this.entityName = "StatusItem";
-        this.where = new EntityExpr("statusId", EntityOperator.NOT_LIKE, "%CANCELLED%");
+        this.where = EntityCondition.makeCondition("statusId", EntityOperator.NOT_LIKE, "%CANCELLED%");
         this.orderBy = UtilMisc.toList("statusTypeId", "description"); // this defines a default order by
         this.options = DISTINCT_READ_OPTIONS;
     }
@@ -56,13 +55,15 @@ public class CustomStatusListBuilder extends EntityListBuilder {
      * fine the way they are.  We need only to overload this method.
      */
     public List getPartialList(long viewSize, long cursorIndex) throws ListBuilderException {
-        if (! isInitialized()) initialize();
+        if (!isInitialized()) {
+            initialize();
+        }
         try {
             List results = FastList.newInstance();
             List statusItems = iterator.getPartialList((int) cursorIndex, (int) viewSize);
 
-            for (Iterator iter = statusItems.iterator(); iter.hasNext(); ) {
-                GenericValue item = (GenericValue) iter.next();
+            for (Iterator<GenericValue> iter = statusItems.iterator(); iter.hasNext();) {
+                GenericValue item = iter.next();
                 GenericValue type = item.getRelatedOneCache("StatusType");
 
                 Map result = FastMap.newInstance();

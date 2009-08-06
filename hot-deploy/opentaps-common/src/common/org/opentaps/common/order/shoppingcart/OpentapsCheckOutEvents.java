@@ -44,8 +44,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.CheckOutEvents;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
@@ -96,7 +95,7 @@ public final class OpentapsCheckOutEvents {
         try {
             //get AgreementTerm List by agreementId
             List<GenericValue> agreementTerms = delegator.findByAnd("AgreementTerm", UtilMisc.toList(
-                            new EntityExpr("agreementId", EntityOperator.EQUALS, agreementId),
+                            EntityCondition.makeCondition("agreementId", agreementId),
                             EntityUtil.getFilterByDateExpr()));
             for (GenericValue agreementTerm : agreementTerms) {
                 //put them into cart
@@ -164,8 +163,8 @@ public final class OpentapsCheckOutEvents {
             // update facilityId by shippingContactMechId
             try {
                 List<GenericValue> facilityContactMechs = delegator.findByAnd("FacilityContactMech", UtilMisc.toList(
-                                 new EntityExpr("contactMechId", EntityOperator.EQUALS, contactMechId)
-                                 , EntityUtil.getFilterByDateExpr()));
+                                 EntityCondition.makeCondition("contactMechId", contactMechId),
+                                 EntityUtil.getFilterByDateExpr()));
                 if (facilityContactMechs.size() > 0) {
                     GenericValue facilityContactMechValue = facilityContactMechs.get(0);
                     cart.setFacilityId(facilityContactMechValue.getString("facilityId"));

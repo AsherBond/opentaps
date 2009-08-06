@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.gwt.common.client.lookup.UtilLookup;
@@ -90,9 +89,9 @@ public abstract class EntityLookupAndSuggestService extends EntityLookupService 
 
         List<EntityCondition> suggestConds = new ArrayList<EntityCondition>();
         for (String field : fields) {
-            suggestConds.add(new EntityExpr(field, true, EntityOperator.LIKE, "%" + query + "%", true));
+            suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER(field), EntityOperator.LIKE, EntityFunction.UPPER("%" + query + "%")));
         }
-        return findList(entity, new EntityConditionList(suggestConds, EntityOperator.OR));
+        return findList(entity, EntityCondition.makeCondition(suggestConds, EntityOperator.OR));
     }
 
     /**

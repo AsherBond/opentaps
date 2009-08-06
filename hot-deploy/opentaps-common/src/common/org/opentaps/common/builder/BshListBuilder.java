@@ -1,5 +1,3 @@
-package org.opentaps.common.builder;
-
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  *
@@ -15,6 +13,7 @@ package org.opentaps.common.builder;
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
+package org.opentaps.common.builder;
 
 import bsh.NameSpace;
 import bsh.Primitive;
@@ -23,7 +22,6 @@ import bsh.UtilEvalError;
 import javolution.util.FastList;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.GenericDelegator;
@@ -48,7 +46,7 @@ import java.util.Map;
  *     // a page of data, which in this case is a list of OrderHeader
  *     build(page) {
  *         newPage = FastList.newInstance();
- * 
+ *
  *         for (order : page) {
  *
  *             // make a new map for the row to replace the OrderHeader
@@ -73,7 +71,7 @@ import java.util.Map;
  */
 public class BshListBuilder extends EntityListBuilder {
 
-    private static final String err = "Cannot set up pagination from bsh closure:  ";
+    private static final String ERR = "Cannot set up pagination from bsh closure:  ";
 
     public BshListBuilder(This closure, GenericDelegator delegator) throws ListBuilderException {
         this.delegator = delegator;
@@ -93,14 +91,18 @@ public class BshListBuilder extends EntityListBuilder {
             this.options = getOptions(ns, "options");
 
             // now validate what we need
-            if (entityName == null) throw new ListBuilderException(err + "Field 'entityName' must be defined.  Please make sure it is.");
-            if (where == null) throw new ListBuilderException(err + "Field 'where' must be defined.  Please make sure it is.");
+            if (entityName == null) {
+                throw new ListBuilderException(ERR + "Field 'entityName' must be defined.  Please make sure it is.");
+            }
+            if (where == null) {
+                throw new ListBuilderException(ERR + "Field 'where' must be defined.  Please make sure it is.");
+            }
 
             // collect the closure since we don't need it anymore
             closure = null;
 
         } catch (UtilEvalError e) {
-            throw new ListBuilderException(err + e.getMessage());
+            throw new ListBuilderException(ERR + e.getMessage());
         }
     }
 
@@ -118,55 +120,77 @@ public class BshListBuilder extends EntityListBuilder {
 
     private Object getVariable(NameSpace ns, String name) throws UtilEvalError {
         Object var = ns.getVariable(name);
-        if (var == null || var == Primitive.VOID) return null;
+        if (var == null || var == Primitive.VOID) {
+            return null;
+        }
         return var;
     }
 
     private String getString(NameSpace ns, String name) throws ListBuilderException, UtilEvalError {
         Object obj = getVariable(ns, "entityName");
-        if (obj == null) return null;
-        if (obj instanceof String) return (String) obj;
-        throw new ListBuilderException(err + "Field '" + name + "' must be a String.  I was passed " + obj.getClass().getName() + ".");
+        if (obj == null) {
+            return null;
+        }
+        if (obj instanceof String) {
+            return (String) obj;
+        }
+        throw new ListBuilderException(ERR + "Field '" + name + "' must be a String.  I was passed " + obj.getClass().getName() + ".");
     }
 
     private EntityCondition getCondition(NameSpace ns, String name) throws ListBuilderException, UtilEvalError {
         Object obj = getVariable(ns, name);
-        if (obj == null) return null;
-        if (obj instanceof EntityCondition) return (EntityCondition) obj;
+        if (obj == null) {
+            return null;
+        }
+        if (obj instanceof EntityCondition) {
+            return (EntityCondition) obj;
+        }
         if (obj instanceof List) {
             return new EntityConditionList((List) obj, EntityOperator.AND);
         }
         if (obj instanceof Map) {
             Map map = (Map) obj;
-            List conditions = FastList.newInstance();
-            for (Iterator iter = map.keySet().iterator(); iter.hasNext(); ) {
-                Object key = iter.next();
+            List<EntityCondition> conditions = FastList.newInstance();
+            for (Iterator iter = map.keySet().iterator(); iter.hasNext();) {
+                String key = (String) iter.next();
                 Object value = map.get(key);
-                conditions.add( new EntityExpr(key, EntityOperator.EQUALS, value) );
+                conditions.add(EntityCondition.makeCondition(key, value));
             }
-            return new EntityConditionList(conditions, EntityOperator.AND);
+            return EntityCondition.makeCondition(conditions, EntityOperator.AND);
         }
-        throw new ListBuilderException(err + "Field '" + name + "' must be an EntityCondition, a Map representation of one, or a List representation of one.  I was passed " + obj.getClass().getName() + ".");
+        throw new ListBuilderException(ERR + "Field '" + name + "' must be an EntityCondition, a Map representation of one, or a List representation of one.  I was passed " + obj.getClass().getName() + ".");
     }
 
     private List getList(NameSpace ns, String name) throws ListBuilderException, UtilEvalError {
         Object obj = getVariable(ns, name);
-        if (obj == null) return null;
-        if (obj instanceof List) return (List) obj;
-        throw new ListBuilderException(err + "Field '" + name + "' must be a List.  I was passed " + obj.getClass().getName() + ".");
+        if (obj == null) {
+            return null;
+        }
+        if (obj instanceof List) {
+            return (List) obj;
+        }
+        throw new ListBuilderException(ERR + "Field '" + name + "' must be a List.  I was passed " + obj.getClass().getName() + ".");
     }
 
     private Collection getCollection(NameSpace ns, String name) throws ListBuilderException, UtilEvalError {
         Object obj = getVariable(ns, name);
-        if (obj == null) return null;
-        if (obj instanceof Collection) return (Collection) obj;
-        throw new ListBuilderException(err + "Field '" + name + "' must be a Collection.  I was passed " + obj.getClass().getName() + ".");
+        if (obj == null) {
+            return null;
+        }
+        if (obj instanceof Collection) {
+            return (Collection) obj;
+        }
+        throw new ListBuilderException(ERR + "Field '" + name + "' must be a Collection.  I was passed " + obj.getClass().getName() + ".");
     }
 
     private EntityFindOptions getOptions(NameSpace ns, String name) throws ListBuilderException, UtilEvalError {
         Object obj = getVariable(ns, name);
-        if (obj == null) return DISTINCT_READ_OPTIONS;
-        if (obj instanceof EntityFindOptions) return (EntityFindOptions) obj;
-        throw new ListBuilderException(err + "Field '" + name + "' must be an EntityFindOption.  I was passed " + obj.getClass().getName() + ".");
+        if (obj == null) {
+            return DISTINCT_READ_OPTIONS;
+        }
+        if (obj instanceof EntityFindOptions) {
+            return (EntityFindOptions) obj;
+        }
+        throw new ListBuilderException(ERR + "Field '" + name + "' must be an EntityFindOption.  I was passed " + obj.getClass().getName() + ".");
     }
 }

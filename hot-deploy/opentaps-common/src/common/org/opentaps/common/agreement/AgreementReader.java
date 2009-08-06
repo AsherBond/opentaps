@@ -15,19 +15,17 @@
  */
 package org.opentaps.common.agreement;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.util.EntityUtil;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Arrays;
 
 /**
  * Agreement Reader.  This object follows the Reader pattern, which provides a convenience API
@@ -36,17 +34,19 @@ import java.util.Arrays;
  */
 public class AgreementReader {
 
-    public static String module = AgreementReader.class.getName();
+    private static final String MODULE = AgreementReader.class.getName();
 
     protected GenericValue agreement = null;
     protected String agreementId = null;
     protected List<GenericValue> agreementTerms = null;
     protected GenericDelegator delegator = null;
 
-    protected AgreementReader() {}
+    protected AgreementReader() { }
 
     public AgreementReader(GenericValue agreement) throws GenericEntityException {
-        if (agreement == null) throw new GenericEntityException("Agreement not found.");
+        if (agreement == null) {
+            throw new GenericEntityException("Agreement not found.");
+        }
 
         this.delegator = agreement.getDelegator();
         if ("Agreement".equals(agreement.getEntityName())) {
@@ -55,7 +55,7 @@ public class AgreementReader {
             this.agreement = delegator.findByPrimaryKey("Agreement", UtilMisc.toMap("agreementId", agreement.get("agreementId")));
         }
         this.agreementId = agreement.getString("agreementId");
-        this.agreementTerms = EntityUtil.filterByDate( this.agreement.getRelated("AgreementTerm") );
+        this.agreementTerms = EntityUtil.filterByDate(this.agreement.getRelated("AgreementTerm"));
     }
 
     public AgreementReader(String agreementId, GenericDelegator delegator) throws GenericEntityException {
@@ -76,9 +76,13 @@ public class AgreementReader {
 
     /** Gets a term from the agreement, if it exists.  Otherwise returns null. */
     public GenericValue getTerm(String termTypeId) {
-        if (UtilValidate.isEmpty(termTypeId)) throw new IllegalArgumentException("Called AgreementReader.hasTerm(termTypeId) with null or empty termTypeId.");
+        if (UtilValidate.isEmpty(termTypeId)) {
+            throw new IllegalArgumentException("Called AgreementReader.hasTerm(termTypeId) with null or empty termTypeId.");
+        }
         for (GenericValue term : agreementTerms) {
-            if (termTypeId.equals(term.get("termTypeId"))) return term;
+            if (termTypeId.equals(term.get("termTypeId"))) {
+                return term;
+            }
         }
         return null;
     }
@@ -86,7 +90,9 @@ public class AgreementReader {
     /** Gets the term by termTypeId, otherwise throws IllegalArgumentException if it doesn't exist. */
     public GenericValue getTermOrFail(String termTypeId) {
         GenericValue term = getTerm(termTypeId);
-        if (term == null) throw new IllegalArgumentException("No such agreement term ["+termTypeId+"] exists in agreement ["+agreementId+"].");
+        if (term == null) {
+            throw new IllegalArgumentException("No such agreement term [" + termTypeId + "] exists in agreement [" + agreementId + "].");
+        }
         return term;
     }
 
@@ -111,7 +117,7 @@ public class AgreementReader {
     }
 
     /**
-     * Finds agreement for any status
+     * Finds agreement for any status.
      */
     public static AgreementReader findAgreement(String partyIdFrom, String partyIdTo, String agreementTypeId, String termTypeId, GenericDelegator delegator) throws GenericEntityException {
         return findAgreement(partyIdFrom, partyIdTo, agreementTypeId, termTypeId, null, delegator);
@@ -123,20 +129,22 @@ public class AgreementReader {
      * TODO: this doesn't enforce agreement roles.
      */
     public static AgreementReader findAgreement(String partyIdFrom, String partyIdTo, String agreementTypeId, String termTypeId, String statusId, GenericDelegator delegator) throws GenericEntityException {
-        List conditions = UtilMisc.toList( 
-                new EntityExpr("agreementTypeId", EntityOperator.EQUALS, agreementTypeId),
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyIdFrom),
-                new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyIdTo),
-                new EntityExpr("termTypeId", EntityOperator.EQUALS, termTypeId),
+        List<EntityCondition> conditions = UtilMisc.toList(
+                EntityCondition.makeCondition("agreementTypeId", agreementTypeId),
+                EntityCondition.makeCondition("partyIdFrom", partyIdFrom),
+                EntityCondition.makeCondition("partyIdTo", partyIdTo),
+                EntityCondition.makeCondition("termTypeId", termTypeId),
                 EntityUtil.getFilterByDateExpr()
         );
         if (statusId != null) {
-            conditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
+            conditions.add(EntityCondition.makeCondition("statusId", statusId));
         }
-        List agreements = delegator.findByAnd("AgreementAndItemAndTerm", conditions, UtilMisc.toList("fromDate ASC"));
-        if (agreements.size() == 0) return null;
+        List<GenericValue> agreements = delegator.findByAnd("AgreementAndItemAndTerm", conditions, UtilMisc.toList("fromDate ASC"));
+        if (agreements.size() == 0) {
+            return null;
+        }
         if (agreements.size() > 1) {
-            Debug.logWarning("Duplicate agreements found:  Agreement type ["+agreementTypeId+"] from ["+partyIdFrom+"] to ["+partyIdTo+"] and term type ["+termTypeId+"]", module);
+            Debug.logWarning("Duplicate agreements found:  Agreement type [" + agreementTypeId + "] from [" + partyIdFrom + "] to [" + partyIdTo + "] and term type [" + termTypeId + "]", MODULE);
         }
         return new AgreementReader(EntityUtil.getFirst(agreements));
     }

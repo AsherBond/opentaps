@@ -28,8 +28,6 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.ConvertMapToString;
@@ -51,11 +49,11 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
 
     private static final String MODULE = PartyLookupService.class.getName();
 
-    private static final EntityCondition CONTACT_CONDITIONS = new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT");
-    private static final EntityCondition ACCOUNT_CONDITIONS = new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT");
-    private static final EntityCondition LEAD_CONDITIONS = new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT");
-    private static final EntityCondition PARTNER_CONDITIONS = new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "PARTNER");
-    private static final EntityCondition SUPPLIER_CONDITIONS = new EntityExpr("roleTypeId", EntityOperator.EQUALS, "SUPPLIER");
+    private static final EntityCondition CONTACT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "CONTACT");
+    private static final EntityCondition ACCOUNT_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT");
+    private static final EntityCondition LEAD_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PROSPECT");
+    private static final EntityCondition PARTNER_CONDITIONS = EntityCondition.makeCondition("roleTypeIdFrom", "PARTNER");
+    private static final EntityCondition SUPPLIER_CONDITIONS = EntityCondition.makeCondition("roleTypeId", "SUPPLIER");
 
     private static List<String> BY_ID_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_PARTY_ID);
     private static List<String> BY_NAME_FILTERS = Arrays.asList(PartyLookupConfiguration.INOUT_GROUP_NAME,
@@ -269,7 +267,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
             if (activeOnly) {
                 conditions.add(EntityUtil.getFilterByDateExpr());
             }
-            List<PartyFromByRelnAndContactInfoAndPartyClassification> r = getRepository().findList(PartyFromByRelnAndContactInfoAndPartyClassification.class, new EntityConditionList(conditions, EntityOperator.AND), getFields(), getPager().getSortList());
+            List<PartyFromByRelnAndContactInfoAndPartyClassification> r = getRepository().findList(PartyFromByRelnAndContactInfoAndPartyClassification.class, EntityCondition.makeCondition(conditions, EntityOperator.AND), getFields(), getPager().getSortList());
 
             List<PartyFromByRelnAndContactInfoAndPartyClassification> parties = new ArrayList<PartyFromByRelnAndContactInfoAndPartyClassification>();
 
@@ -417,21 +415,21 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
                 String viewPref = getProvider().getParameter(PartyLookupConfiguration.IN_RESPONSIBILTY);
                 if (PartyLookupConfiguration.MY_VALUES.equals(viewPref)) {
                     // my parties
-                    condition = new EntityConditionList(
+                    condition = EntityCondition.makeCondition(
                             Arrays.asList(
                                     condition,
-                                    new EntityExpr("partyIdTo", EntityOperator.EQUALS, userId),
-                                    new EntityExpr("partyRelationshipTypeId", EntityOperator.IN, Arrays.asList("RESPONSIBLE_FOR"))
+                                    EntityCondition.makeCondition("partyIdTo", userId),
+                                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.IN, Arrays.asList("RESPONSIBLE_FOR"))
                             ),
                             EntityOperator.AND
                     );
                 } else if (PartyLookupConfiguration.TEAM_VALUES.equals(viewPref)) {
                     // my teams parties
-                    condition = new EntityConditionList(
+                    condition = EntityCondition.makeCondition(
                             Arrays.asList(
                                     condition,
-                                    new EntityExpr("partyIdTo", EntityOperator.EQUALS, userId),
-                                    new EntityExpr("partyRelationshipTypeId", EntityOperator.IN, Arrays.asList("RESPONSIBLE_FOR", "ASSIGNED_TO"))
+                                    EntityCondition.makeCondition("partyIdTo", userId),
+                                    EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.IN, Arrays.asList("RESPONSIBLE_FOR", "ASSIGNED_TO"))
                             ),
                             EntityOperator.AND
                     );
@@ -465,7 +463,7 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
         if (activeOnly) {
             conditions.add(EntityUtil.getFilterByDateExpr());
         }
-        return findList(entity, new EntityConditionList(conditions, EntityOperator.AND));
+        return findList(entity, EntityCondition.makeCondition(conditions, EntityOperator.AND));
     }
 
     private <T extends EntityInterface> List<T> findPartiesBy(Class<T> entity, EntityCondition roleCondition, List<String> filters) {

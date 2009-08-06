@@ -53,7 +53,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
@@ -73,10 +73,9 @@ import org.ofbiz.service.ServiceUtil;
 public class OpentapsShippingEstimateWrapper implements Serializable {
 
     private static final String MODULE = OpentapsShippingEstimateWrapper.class.getName();
-    public static final String resource = "shipment";
 
-    public static final int decimals = UtilNumber.getBigDecimalScale("order.decimals");
-    public static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
+    private static final int DECIMALS = UtilNumber.getBigDecimalScale("order.decimals");
+    private static final int ROUNDING = UtilNumber.getBigDecimalRoundingMode("order.rounding");
 
     protected String dispatcherName = null;
     protected Map shippingEstimates = null;
@@ -141,7 +140,7 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
             // Replace ProductStoreShipMethodView with extended ProductStoreShipMethAndCarrier records to make it easier to get the carrierServiceCodes
             if (UtilValidate.isNotEmpty(this.shippingMethods)) {
                 List<GenericValue> prodStoreShipMethIds = EntityUtil.getFieldListFromEntityList(this.shippingMethods, "productStoreShipMethId", true);
-                this.shippingMethods = this.cart.getDelegator().findByCondition("ProductStoreShipMethAndCarrier", new EntityExpr("productStoreShipMethId", EntityOperator.IN, prodStoreShipMethIds), null,  UtilMisc.toList("sequenceNumber"));
+                this.shippingMethods = this.cart.getDelegator().findByCondition("ProductStoreShipMethAndCarrier", EntityCondition.makeCondition("productStoreShipMethId", EntityOperator.IN, prodStoreShipMethIds), null,  UtilMisc.toList("sequenceNumber"));
             }
         } catch (Throwable t) {
             Debug.logError(t, MODULE);
@@ -152,7 +151,7 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
         List<String> carrierPartyIds = EntityUtil.getFieldListFromEntityList(this.shippingMethods, "partyId", true);
         for (String carrierPartyId : carrierPartyIds) {
             List<GenericValue> carrierProdStoreShipMethods = EntityUtil.filterByAnd(this.shippingMethods, UtilMisc.toMap("partyId", carrierPartyId));
-            carrierProdStoreShipMethods = EntityUtil.filterByCondition(carrierProdStoreShipMethods, new EntityExpr("carrierServiceCode", EntityOperator.NOT_EQUAL, null));
+            carrierProdStoreShipMethods = EntityUtil.filterByCondition(carrierProdStoreShipMethods, EntityCondition.makeCondition("carrierServiceCode", EntityOperator.NOT_EQUAL, null));
             availableCarrierServices.put(carrierPartyId, EntityUtil.getFieldListFromEntityList(carrierProdStoreShipMethods, "carrierServiceCode", true));
         }
     }
@@ -317,7 +316,7 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
         if (UtilValidate.isEmpty(est)) {
             return null;
         }
-        BigDecimal estBd = new BigDecimal(est.doubleValue()).setScale(decimals, rounding);
+        BigDecimal estBd = new BigDecimal(est.doubleValue()).setScale(DECIMALS, ROUNDING);
         return new Double(estBd.doubleValue());
     }
 

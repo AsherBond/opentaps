@@ -88,9 +88,11 @@ import freemarker.template.TemplateException;
 /**
  * Common product services.
  */
-public class ProductServices {
+public final class ProductServices {
 
-    public static final String module = ProductServices.class.getName();
+    private ProductServices() { }
+
+    private static final String MODULE = ProductServices.class.getName();
     public static final String errorResource = "OpentapsErrorLabels";
 
     public static Map getProductByComprehensiveSearch(DispatchContext dctx, Map context) {
@@ -111,10 +113,10 @@ public class ProductServices {
                 if (goodIdentifications.size() > 1) {
                     // check if all goodIdentifications are for the same product
                     String firstProductId = goodIdentification.getString("productId");
-                    for (int i=1; i<goodIdentifications.size(); i++) {
+                    for (int i = 1; i < goodIdentifications.size(); i++) {
                         if (!firstProductId.equals(goodIdentifications.get(i).getString("productId"))) {
                             // if more than one match and not the same product, then this is an error we should report (use failure, since we don't want to cause rollback)
-                            Map map = UtilMisc.toMap("idValue", productId);
+                            Map<String, String> map = UtilMisc.toMap("idValue", productId);
                             String msg = UtilProperties.getMessage(errorResource, "OpentapsError_GoodIdentificationDupe", map, locale);
                             return ServiceUtil.returnFailure(msg);
                         }
@@ -128,11 +130,11 @@ public class ProductServices {
 
             // still no product, check supplier products
             if (product == null && lookupSupplierProducts) {
-                List conditions = UtilMisc.toList(
-                        new EntityExpr("supplierProductId", EntityOperator.EQUALS, productId),
+                EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("supplierProductId", productId),
                         EntityUtil.getFilterByDateExpr("availableFromDate", "availableThruDate")
                 );
-                List supplierProducts = delegator.findByAnd("SupplierProduct", conditions);
+                List<GenericValue> supplierProducts = delegator.findByAnd("SupplierProduct", conditions);
                 if (supplierProducts.size() == 1) {
                     // TODO: do we also flag an error if more than one result?
                     product = EntityUtil.getFirst(supplierProducts).getRelatedOne("Product");
@@ -141,8 +143,10 @@ public class ProductServices {
             }
 
             // return the productId and product we found
-            if (product == null) productId = null;
-            Map results = ServiceUtil.returnSuccess();
+            if (product == null) {
+                productId = null;
+            }
+            Map<String, Object> results = ServiceUtil.returnSuccess();
             results.put("product", product);
             results.put("productId", productId);
             return results;
@@ -157,12 +161,12 @@ public class ProductServices {
         Security security = dctx.getSecurity();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        if (! security.hasEntityPermission("CATALOG", "_ADMIN", userLogin)) {
+        if (!security.hasEntityPermission("CATALOG", "_ADMIN", userLogin)) {
             return ServiceUtil.returnError("You do not have permission to remove a product.  CATALOG_ADMIN permission is required.");
         }
 
         String productId = (String) context.get("productId");
-        Map removeParams = UtilMisc.toMap("productId", productId);
+        Map<String, Object> removeParams = UtilMisc.<String, Object>toMap("productId", productId);
         try {
             // WARNING: DO NOT ADD MORE ENTITIES TO THIS LIST WITHOUT THINKING AND ASKING ABOUT ITS IMPLICATIONS
             delegator.removeByAnd("InventoryEventPlanned", removeParams);
@@ -198,12 +202,12 @@ public class ProductServices {
         Security security = dctx.getSecurity();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        if (! security.hasEntityPermission("CATALOG", "_ADMIN", userLogin)) {
+        if (!security.hasEntityPermission("CATALOG", "_ADMIN", userLogin)) {
             return ServiceUtil.returnError("You do not have permission to remove a product category.  CATALOG_ADMIN permission is required.");
         }
 
         String productCategoryId = (String) context.get("productCategoryId");
-        Map removeParams = UtilMisc.toMap("productCategoryId", productCategoryId);
+        Map<String, Object> removeParams = UtilMisc.<String, Object>toMap("productCategoryId", productCategoryId);
         try {
             // WARNING: DO NOT ADD MORE ENTITIES TO THIS LIST WITHOUT THINKING AND ASKING ABOUT ITS IMPLICATIONS
             delegator.removeByAnd("ProductCategoryContent", removeParams);
@@ -221,7 +225,7 @@ public class ProductServices {
     }
 
     /**
-     * Return error message in case when user tries assign to product not unique identifier
+     * Return error message in case when user tries assign to product not unique identifier.
      *
      * @param dctx
      * @param context
@@ -229,30 +233,30 @@ public class ProductServices {
      */
     public static Map checkGoodIdentifierUniqueness(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale)context.get("locale");
+        Locale locale = (Locale) context.get("locale");
 
-        String goodIdentificationTypeId = (String)context.get("goodIdentificationTypeId");
-        String productId = (String)context.get("productId");
-        String idValue = (String)context.get("idValue");
+        String goodIdentificationTypeId = (String) context.get("goodIdentificationTypeId");
+        String productId = (String) context.get("productId");
+        String idValue = (String) context.get("idValue");
 
-        if (Arrays.asList("UPCA", "UPCE").contains(goodIdentificationTypeId) && ! UtilProduct.isValidUPC(idValue)) {
-            return UtilMessage.createAndLogServiceError("OpentapsError_ProductUpcCodeNotValid", UtilMisc.toMap("idValue", idValue), locale, module);
+        if (Arrays.asList("UPCA", "UPCE").contains(goodIdentificationTypeId) && !UtilProduct.isValidUPC(idValue)) {
+            return UtilMessage.createAndLogServiceError("OpentapsError_ProductUpcCodeNotValid", UtilMisc.toMap("idValue", idValue), locale, MODULE);
         }
 
         try {
-            List conditions = UtilMisc.toList(
-                        new EntityExpr("goodIdentificationTypeId", EntityOperator.EQUALS, goodIdentificationTypeId),
-                        new EntityExpr("idValue", EntityOperator.EQUALS, idValue),
-                        new EntityExpr("productId", EntityOperator.NOT_EQUAL, productId)
+            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("goodIdentificationTypeId", goodIdentificationTypeId),
+                        EntityCondition.makeCondition("idValue", idValue),
+                        EntityCondition.makeCondition("productId", EntityOperator.NOT_EQUAL, productId)
                     );
-            List<GenericValue> products = delegator.findByCondition("GoodIdentification", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+            List<GenericValue> products = delegator.findByCondition("GoodIdentification", conditions, null, null);
             if (UtilValidate.isNotEmpty(products)) {
                 GenericValue product = EntityUtil.getFirst(products);
-                return UtilMessage.createAndLogServiceError("OpentapsError_ProductUpcCodeNotUnique", UtilMisc.toMap("goodIdentificationTypeId", goodIdentificationTypeId, "idValue", idValue, "productId", product.getString("productId")), locale, module);
+                return UtilMessage.createAndLogServiceError("OpentapsError_ProductUpcCodeNotUnique", UtilMisc.toMap("goodIdentificationTypeId", goodIdentificationTypeId, "idValue", idValue, "productId", product.getString("productId")), locale, MODULE);
             }
 
         } catch (GenericEntityException gee) {
-            return UtilMessage.createAndLogServiceError(gee, locale, module);
+            return UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
@@ -271,17 +275,18 @@ public class ProductServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
 
-        String productStoreId = (String)context.get("productStoreId");;
+        String productStoreId = (String) context.get("productStoreId");;
         Locale outputLocale = UtilMisc.ensureLocale(context.get("outputLocale"));
-        Boolean excludeProducts = (Boolean)context.get("excludeProducts");
-        if (excludeProducts == null)
+        Boolean excludeProducts = (Boolean) context.get("excludeProducts");
+        if (excludeProducts == null) {
             excludeProducts = Boolean.FALSE;
-        String templateLocation = (String)context.get("templateLocation");
+        }
+        String templateLocation = (String) context.get("templateLocation");
         if (UtilValidate.isEmpty(templateLocation)) {
             templateLocation = UtilConfig.getPropertyValue("opentaps", "opentaps.sitemap.default.template");
         }
 
-        String fileOutputLocation = (String)context.get("fileOutputLocation");
+        String fileOutputLocation = (String) context.get("fileOutputLocation");
         if (UtilValidate.isEmpty(fileOutputLocation)) {
             String defaultDir = UtilConfig.getPropertyValue("opentaps", "opentaps.sitemap.default.output.dir");
             fileOutputLocation = String.format("%1$s%2$s%3$s%4$shtml",
@@ -298,7 +303,7 @@ public class ProductServices {
 
             List<GenericValue> storeCatalogs = CatalogWorker.getStoreCatalogs(delegator, productStoreId);
             if (UtilValidate.isEmpty(storeCatalogs)) {
-                return UtilMessage.createAndLogServiceError("OpentapsError_ProductStoreHaveNoCatalogs", UtilMisc.toMap("productStoreId", productStoreId), locale, module);
+                return UtilMessage.createAndLogServiceError("OpentapsError_ProductStoreHaveNoCatalogs", UtilMisc.toMap("productStoreId", productStoreId), locale, MODULE);
             }
 
             Document catalogXMLMap = UtilXml.makeEmptyXmlDocument("ProductCatalog");
@@ -320,7 +325,7 @@ public class ProductServices {
                 List<GenericValue> prodCatalogCategories = CatalogWorker.getProdCatalogCategories(delegator, currentCatalog.getString("prodCatalogId"), "PCCT_BROWSE_ROOT");
                 String rootCategoryId = null;
                 if (UtilValidate.isNotEmpty(prodCatalogCategories)) {
-                    rootCategoryId = (String)(EntityUtil.getFirst(prodCatalogCategories).get("productCategoryId"));
+                    rootCategoryId = EntityUtil.getFirst(prodCatalogCategories).getString("productCategoryId");
                 }
 
                 // recursive call writeChildCategories to go over product catalog. A result XML document
@@ -348,13 +353,13 @@ public class ProductServices {
             FreeMarkerWorker.renderTemplateAtLocation(templateLocation, templateContext, writer);
 
         } catch (MalformedURLException mue) {
-            return UtilMessage.createAndLogServiceError(mue, locale, module);
+            return UtilMessage.createAndLogServiceError(mue, locale, MODULE);
         } catch (TemplateException te) {
-            return UtilMessage.createAndLogServiceError(te, locale, module);
+            return UtilMessage.createAndLogServiceError(te, locale, MODULE);
         } catch (IOException ioe) {
-            return UtilMessage.createAndLogServiceError(ioe, locale, module);
+            return UtilMessage.createAndLogServiceError(ioe, locale, MODULE);
         } catch (GenericEntityException gee) {
-            return UtilMessage.createAndLogServiceError(gee, locale, module);
+            return UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
@@ -379,16 +384,23 @@ public class ProductServices {
         // collect IDs for categories which are child of parentCategoryId
         Set<String> childCategoryIds = new LinkedHashSet<String>();
 
-        List<GenericValue> productCategoryRollups = delegator.findByCondition("ProductCategoryRollup", new EntityConditionList(UtilMisc.toList(new EntityExpr("parentProductCategoryId", EntityOperator.EQUALS, parentCategoryId), EntityUtil.getFilterByDateExpr()), EntityOperator.AND), Arrays.asList("productCategoryId"), Arrays.asList("sequenceNum"));
+        List<GenericValue> productCategoryRollups = delegator.findByCondition("ProductCategoryRollup", EntityCondition.makeCondition(EntityOperator.AND,
+                                                                     EntityCondition.makeCondition("parentProductCategoryId", EntityOperator.EQUALS, parentCategoryId),
+                                                                     EntityUtil.getFilterByDateExpr()),
+                                                                              Arrays.asList("productCategoryId"), Arrays.asList("sequenceNum"));
         childCategoryIds.addAll(EntityUtil.<String>getFieldListFromEntityList(productCategoryRollups, "productCategoryId", true));
 
         List<GenericValue> productCategories = delegator.findByAnd("ProductCategory", UtilMisc.toMap("productCategoryTypeId", "CATALOG_CATEGORY", "primaryParentCategoryId", parentCategoryId));
         childCategoryIds.addAll(EntityUtil.<String>getFieldListFromEntityList(productCategories, "productCategoryId", true));
-        if (UtilValidate.isEmpty(childCategoryIds)) return;
+        if (UtilValidate.isEmpty(childCategoryIds)) {
+            return;
+        }
 
         // get all categories
-        List<GenericValue> neighbourCategories = delegator.findByCondition("ProductCategory", new EntityExpr("productCategoryId", EntityOperator.IN, Arrays.asList(childCategoryIds.toArray())), null, Arrays.asList("categoryName"));
-        if (UtilValidate.isEmpty(neighbourCategories)) return;
+        List<GenericValue> neighbourCategories = delegator.findByCondition("ProductCategory", EntityCondition.makeCondition("productCategoryId", EntityOperator.IN, Arrays.asList(childCategoryIds.toArray())), null, Arrays.asList("categoryName"));
+        if (UtilValidate.isEmpty(neighbourCategories)) {
+            return;
+        }
 
         for (GenericValue currentCategory : neighbourCategories) {
 
@@ -440,22 +452,29 @@ public class ProductServices {
 
         // collect IDs of category products
         Set<String> productIds = new LinkedHashSet<String>();
-        List<GenericValue> productCategoryMembers = delegator.findByCondition("ProductCategoryMember", new EntityConditionList(Arrays.asList(new EntityExpr("productCategoryId", EntityOperator.EQUALS, productCategoryId), EntityUtil.getFilterByDateExpr()), EntityOperator.AND), Arrays.asList("productId"), null);
+        List<GenericValue> productCategoryMembers = delegator.findByCondition("ProductCategoryMember", EntityCondition.makeCondition(EntityOperator.AND,
+                                                                                EntityCondition.makeCondition("productCategoryId", productCategoryId),
+                                                                                EntityUtil.getFilterByDateExpr()),
+                                                                              Arrays.asList("productId"), null);
         productIds.addAll(EntityUtil.<String>getFieldListFromEntityList(productCategoryMembers, "productId", true));
         List<GenericValue> products = delegator.findByAnd("Product", UtilMisc.toMap("primaryProductCategoryId", productCategoryId));
         productIds.addAll(EntityUtil.<String>getFieldListFromEntityList(products, "productId", true));
-        if (UtilValidate.isEmpty(productIds)) return productsCount;
+        if (UtilValidate.isEmpty(productIds)) {
+            return productsCount;
+        }
 
         // get list of products
-        List<EntityCondition> conditions = new ArrayList<EntityCondition>();
-        conditions.add(new EntityExpr("productId", EntityOperator.IN, new ArrayList<String>(productIds)));
-        conditions.add(new EntityExpr("isVirtual", EntityOperator.EQUALS, "N"));
-        conditions.add(EntityUtil.getFilterByDateExpr(UtilDateTime.nowTimestamp(), "introductionDate", "salesDiscontinuationDate"));
-        EntityConditionList conditionList = new EntityConditionList(conditions, EntityOperator.AND);
-        if (excludeProducts)
-            return (int)delegator.findCountByCondition("Product", conditionList, null);
-        List<GenericValue> categoryProducts = delegator.findByCondition("Product", conditionList, null, Arrays.asList("productName"));
-        if (UtilValidate.isEmpty(categoryProducts)) return productsCount;
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                                                   EntityCondition.makeCondition("productId", EntityOperator.IN, new ArrayList<String>(productIds)),
+                                                                   EntityCondition.makeCondition("isVirtual", "N"),
+                                                                   EntityUtil.getFilterByDateExpr(UtilDateTime.nowTimestamp(), "introductionDate", "salesDiscontinuationDate"));
+        if (excludeProducts) {
+            return (int) delegator.findCountByCondition("Product", conditions, null);
+        }
+        List<GenericValue> categoryProducts = delegator.findByCondition("Product", conditions, null, Arrays.asList("productName"));
+        if (UtilValidate.isEmpty(categoryProducts)) {
+            return productsCount;
+        }
 
         productsCount = categoryProducts.size();
 
@@ -500,7 +519,7 @@ public class ProductServices {
         try {
             result = dispatcher.runSync("calculateProductPrice", context, 0, false);
         } catch (GenericServiceException e) {
-            Debug.logError(e, "Problems calculating product price with ofbiz method", module);
+            Debug.logError(e, "Problems calculating product price with ofbiz method", MODULE);
             return ServiceUtil.returnError(e.getMessage());
         }
 
@@ -515,7 +534,7 @@ public class ProductServices {
             productStore = delegator.findByPrimaryKeyCache("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
         } catch (GenericEntityException e) {
             String errMsg = "Error getting product store info from the database while calculating price" + e.toString();
-            Debug.logError(e, errMsg, module);
+            Debug.logError(e, errMsg, MODULE);
             return ServiceUtil.returnError(errMsg);
         }
         if (UtilValidate.isEmpty(productStoreGroupId)) {
@@ -525,7 +544,7 @@ public class ProductServices {
                         productStoreGroupId = productStore.getString("primaryStoreGroupId");
                     } else {
                         // no ProductStore.primaryStoreGroupId, try ProductStoreGroupMember
-                        List productStoreGroupMemberList = delegator.findByAndCache("ProductStoreGroupMember", UtilMisc.toMap("productStoreId", productStoreId), UtilMisc.toList("sequenceNum", "-fromDate"));
+                        List<GenericValue> productStoreGroupMemberList = delegator.findByAndCache("ProductStoreGroupMember", UtilMisc.toMap("productStoreId", productStoreId), UtilMisc.toList("sequenceNum", "-fromDate"));
                         productStoreGroupMemberList = EntityUtil.filterByDate(productStoreGroupMemberList, true);
                         if (productStoreGroupMemberList.size() > 0) {
                             GenericValue productStoreGroupMember = EntityUtil.getFirst(productStoreGroupMemberList);
@@ -534,7 +553,7 @@ public class ProductServices {
                     }
                 } catch (GenericEntityException e) {
                     String errMsg = "Error getting product store info from the database while calculating price" + e.toString();
-                    Debug.logError(e, errMsg, module);
+                    Debug.logError(e, errMsg, MODULE);
                     return ServiceUtil.returnError(errMsg);
                 }
             }
@@ -568,64 +587,69 @@ public class ProductServices {
                 virtualProductId = ProductWorker.getVariantVirtualId(product);
             } catch (GenericEntityException e) {
                 String errMsg = "Error getting virtual product id from the database while calculating price" + e.toString();
-                Debug.logError(e, errMsg, module);
+                Debug.logError(e, errMsg, MODULE);
                 return ServiceUtil.returnError(errMsg);
             }
         }
 
         // get prices for virtual product if one is found; get all ProductPrice entities for this productId and currencyUomId
-        List virtualProductPrices = null;
+        List<GenericValue> virtualProductPrices = null;
         if (virtualProductId != null) {
             try {
                 virtualProductPrices = delegator.findByAndCache("ProductPrice", UtilMisc.toMap("productId", virtualProductId, "currencyUomId", currencyUomId, "productStoreGroupId", productStoreGroupId), UtilMisc.toList("-fromDate"));
             } catch (GenericEntityException e) {
-                Debug.logError(e, "An error occurred while getting the product prices", module);
+                Debug.logError(e, "An error occurred while getting the product prices", MODULE);
             }
             virtualProductPrices = EntityUtil.filterByDate(virtualProductPrices, true);
         }
 
-        List productPriceEcList = FastList.newInstance();
-        productPriceEcList.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
+        List<EntityCondition> productPriceEcList = FastList.newInstance();
+        productPriceEcList.add(EntityCondition.makeCondition("productId", productId));
         // this funny statement is for backward compatibility purposes; the productPricePurposeId is a new pk field on the ProductPrice entity and in order databases may not be populated, until the pk is updated and such; this will ease the transition somewhat
         if ("PURCHASE".equals(productPricePurposeId)) {
-            productPriceEcList.add(new EntityExpr(
-                    new EntityExpr("productPricePurposeId", EntityOperator.EQUALS, productPricePurposeId),
+            productPriceEcList.add(EntityCondition.makeCondition(
+                    EntityCondition.makeCondition("productPricePurposeId", EntityOperator.EQUALS, productPricePurposeId),
                     EntityOperator.OR,
-                    new EntityExpr("productPricePurposeId", EntityOperator.EQUALS, null)));
+                    EntityCondition.makeCondition("productPricePurposeId", EntityOperator.EQUALS, null)));
         } else {
-            productPriceEcList.add(new EntityExpr("productPricePurposeId", EntityOperator.EQUALS, productPricePurposeId));
+            productPriceEcList.add(EntityCondition.makeCondition("productPricePurposeId", EntityOperator.EQUALS, productPricePurposeId));
         }
-        productPriceEcList.add(new EntityExpr("currencyUomId", EntityOperator.EQUALS, currencyUomId));
-        productPriceEcList.add(new EntityExpr("productStoreGroupId", EntityOperator.EQUALS, productStoreGroupId));
+        productPriceEcList.add(EntityCondition.makeCondition("currencyUomId", EntityOperator.EQUALS, currencyUomId));
+        productPriceEcList.add(EntityCondition.makeCondition("productStoreGroupId", EntityOperator.EQUALS, productStoreGroupId));
         if (UtilValidate.isNotEmpty(termUomId)) {
-            productPriceEcList.add(new EntityExpr("termUomId", EntityOperator.EQUALS, termUomId));
+            productPriceEcList.add(EntityCondition.makeCondition("termUomId", EntityOperator.EQUALS, termUomId));
         }
-        productPriceEcList.add(new EntityExpr("productPriceTypeId", EntityOperator.EQUALS, "MIN_ADV_PRICE"));
-        EntityCondition productPriceEc = new EntityConditionList(productPriceEcList, EntityOperator.AND);
+        productPriceEcList.add(EntityCondition.makeCondition("productPriceTypeId", EntityOperator.EQUALS, "MIN_ADV_PRICE"));
+        EntityCondition productPriceEc = EntityCondition.makeCondition(productPriceEcList, EntityOperator.AND);
 
         // for prices, get all MIN_ADV_PRICE ProductPrice entities for this productId and currencyUomId
-        List minAdvPrices = null;
+        List<GenericValue> minAdvPrices = null;
         try {
             minAdvPrices = delegator.findByConditionCache("ProductPrice", productPriceEc, null, UtilMisc.toList("-fromDate"));
         } catch (GenericEntityException e) {
-            Debug.logError(e, "An error occurred while getting the MIN_ADV_PRICE product prices", module);
+            Debug.logError(e, "An error occurred while getting the MIN_ADV_PRICE product prices", MODULE);
         }
         minAdvPrices = EntityUtil.filterByDate(minAdvPrices, true);
-        if (minAdvPrices == null)
+        if (minAdvPrices == null) {
             return result;
+        }
 
         GenericValue minAdvPriceValue = EntityUtil.getFirst(minAdvPrices);
         if (minAdvPrices != null && minAdvPrices.size() > 1) {
-            if (Debug.infoOn()) Debug.logInfo("There is more than one MIN_ADV_PRICE with the currencyUomId " + currencyUomId + " and productId " + productId + ", using the latest found with price: " + minAdvPriceValue.getDouble("price"), module);
+            if (Debug.infoOn()) {
+                Debug.logInfo("There is more than one MIN_ADV_PRICE with the currencyUomId " + currencyUomId + " and productId " + productId + ", using the latest found with price: " + minAdvPriceValue.getDouble("price"), MODULE);
+            }
         }
 
         // if any of these prices is missing and this product is a variant, default to the corresponding price on the virtual product
         if (virtualProductPrices != null && virtualProductPrices.size() > 0) {
             if (minAdvPriceValue == null) {
-                List virtualTempPrices = EntityUtil.filterByAnd(virtualProductPrices, UtilMisc.toMap("productPriceTypeId", "MIN_ADV_PRICE"));
+                List<GenericValue> virtualTempPrices = EntityUtil.filterByAnd(virtualProductPrices, UtilMisc.toMap("productPriceTypeId", "MIN_ADV_PRICE"));
                 minAdvPriceValue = EntityUtil.getFirst(virtualTempPrices);
                 if (virtualTempPrices != null && virtualTempPrices.size() > 1) {
-                    if (Debug.infoOn()) Debug.logInfo("There is more than one MIN_ADV_PRICE with the currencyUomId " + currencyUomId + " and productId " + virtualProductId + ", using the latest found with price: " + minAdvPriceValue.getDouble("price"), module);
+                    if (Debug.infoOn()) {
+                        Debug.logInfo("There is more than one MIN_ADV_PRICE with the currencyUomId " + currencyUomId + " and productId " + virtualProductId + ", using the latest found with price: " + minAdvPriceValue.getDouble("price"), MODULE);
+                    }
                 }
             }
         }
@@ -635,20 +659,20 @@ public class ProductServices {
         if ("Y".equals(product.getString("isVirtual"))) {
             // only do this if there is no default price, consider the others optional for performance reasons
             if (minAdvPriceValue == null) {
-                // Debug.logInfo("Product isVirtual and there is no default price for ID " + productId + ", trying variant prices", module);
+                // Debug.logInfo("Product isVirtual and there is no default price for ID " + productId + ", trying variant prices", MODULE);
 
                 //use the cache to find the variant with the lowest min adv price
                 try {
-                    List variantAssocList = EntityUtil.filterByDate(delegator.findByAndCache("ProductAssoc", UtilMisc.toMap("productId", product.get("productId"), "productAssocTypeId", "PRODUCT_VARIANT"), UtilMisc.toList("-fromDate")));
-                    Iterator variantAssocIter = variantAssocList.iterator();
+                    List<GenericValue> variantAssocList = EntityUtil.filterByDate(delegator.findByAndCache("ProductAssoc", UtilMisc.toMap("productId", product.get("productId"), "productAssocTypeId", "PRODUCT_VARIANT"), UtilMisc.toList("-fromDate")));
+                    Iterator<GenericValue> variantAssocIter = variantAssocList.iterator();
                     double minDefaultPrice = Double.MAX_VALUE;
-                    List variantProductPrices = null;
+                    List<GenericValue> variantProductPrices = null;
                     String variantProductId = null;
                     while (variantAssocIter.hasNext()) {
-                        GenericValue variantAssoc = (GenericValue) variantAssocIter.next();
+                        GenericValue variantAssoc = variantAssocIter.next();
                         String curVariantProductId = variantAssoc.getString("productIdTo");
-                        List curVariantPriceList = EntityUtil.filterByDate(delegator.findByAndCache("ProductPrice", UtilMisc.toMap("productId", curVariantProductId), UtilMisc.toList("-fromDate")), nowTimestamp);
-                        List tempDefaultPriceList = EntityUtil.filterByAnd(curVariantPriceList, UtilMisc.toMap("productPriceTypeId", "MIN_ADV_PRICE"));
+                        List<GenericValue> curVariantPriceList = EntityUtil.filterByDate(delegator.findByAndCache("ProductPrice", UtilMisc.toMap("productId", curVariantProductId), UtilMisc.toList("-fromDate")), nowTimestamp);
+                        List<GenericValue> tempDefaultPriceList = EntityUtil.filterByAnd(curVariantPriceList, UtilMisc.toMap("productPriceTypeId", "MIN_ADV_PRICE"));
                         GenericValue curDefaultPriceValue = EntityUtil.getFirst(tempDefaultPriceList);
                         if (curDefaultPriceValue != null) {
                             Double curDefaultPrice = curDefaultPriceValue.getDouble("price");
@@ -661,7 +685,7 @@ public class ProductServices {
                                         minDefaultPrice = curDefaultPrice.doubleValue();
                                         variantProductPrices = curVariantPriceList;
                                         variantProductId = curVariantProductId;
-                                        // Debug.logInfo("Found new lowest price " + minDefaultPrice + " for variant with ID " + variantProductId, module);
+                                        // Debug.logInfo("Found new lowest price " + minDefaultPrice + " for variant with ID " + variantProductId, MODULE);
                                     }
                                 }
                             }
@@ -671,15 +695,17 @@ public class ProductServices {
                     if (variantProductPrices != null) {
                         // we have some other options, give 'em a go...
                         if (minAdvPriceValue == null) {
-                            List virtualTempPrices = EntityUtil.filterByAnd(variantProductPrices, UtilMisc.toMap("productPriceTypeId", "MIN_ADV_PRICE"));
+                            List<GenericValue> virtualTempPrices = EntityUtil.filterByAnd(variantProductPrices, UtilMisc.toMap("productPriceTypeId", "MIN_ADV_PRICE"));
                             minAdvPriceValue = EntityUtil.getFirst(virtualTempPrices);
                             if (virtualTempPrices != null && virtualTempPrices.size() > 1) {
-                                if (Debug.infoOn()) Debug.logInfo("There is more than one MIN_ADV_PRICE with the currencyUomId " + currencyUomId + " and productId " + variantProductId + ", using the latest found with price: " + minAdvPriceValue.getDouble("price"), module);
+                                if (Debug.infoOn()) {
+                                    Debug.logInfo("There is more than one MIN_ADV_PRICE with the currencyUomId " + currencyUomId + " and productId " + variantProductId + ", using the latest found with price: " + minAdvPriceValue.getDouble("price"), MODULE);
+                                }
                             }
                         }
                     }
                 } catch (GenericEntityException e) {
-                    Debug.logError(e, "An error occurred while getting the product prices", module);
+                    Debug.logError(e, "An error occurred while getting the product prices", MODULE);
                 }
             }
         }

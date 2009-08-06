@@ -16,37 +16,36 @@
 
 package org.opentaps.common.order;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import javolution.util.FastMap;
+import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilNumber;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
+import org.ofbiz.party.party.PartyHelper;
 import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-import org.ofbiz.party.party.PartyHelper;
-import org.ofbiz.accounting.util.UtilAccounting;
-import org.opentaps.common.product.UtilProduct;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
-import java.util.*;
-import java.math.BigDecimal;
 import org.ofbiz.shipment.packing.PackingSession;
+import org.opentaps.common.product.UtilProduct;
 
 /**
  * UtilOrder - A place for common crmsfa helper methods.
@@ -225,7 +224,6 @@ public final class UtilOrder {
      * @exception GenericEntityException if an error occurs
      * @deprecated Use the Order domain class instead
      */
-    @SuppressWarnings("unchecked")
     @Deprecated public static double getInvoicedQuantity(GenericValue orderItem) throws GenericEntityException {
         double quantity = 0;
         List<GenericValue> billings = orderItem.getRelatedCache("OrderItemBilling");
@@ -338,28 +336,27 @@ public final class UtilOrder {
         return partyName;
     }
 
-    @SuppressWarnings("unchecked")
     public static String getCurrentCashDrawerId(GenericValue userLogin, String currencyUomId) throws GenericEntityException {
         String cashDrawerId = null;
-        List cond = UtilMisc.toList(new EntityExpr("closeTimestamp", EntityOperator.EQUALS, null),
-                                    new EntityExpr("operatorUserLoginId", EntityOperator.EQUALS, userLogin.get("userLoginId")),
-                                    new EntityExpr("currencyUomId", EntityOperator.EQUALS, currencyUomId));
-        List currentCashDrawers = userLogin.getDelegator().findByCondition("CashDrawer", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("createdStamp DESC"));
+        EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                    EntityCondition.makeCondition("closeTimestamp", EntityOperator.EQUALS, null),
+                                    EntityCondition.makeCondition("operatorUserLoginId", EntityOperator.EQUALS, userLogin.get("userLoginId")),
+                                    EntityCondition.makeCondition("currencyUomId", EntityOperator.EQUALS, currencyUomId));
+        List<GenericValue> currentCashDrawers = userLogin.getDelegator().findByCondition("CashDrawer", cond, null, UtilMisc.toList("createdStamp DESC"));
         if (UtilValidate.isNotEmpty(currentCashDrawers)) {
             cashDrawerId = EntityUtil.getFirst(currentCashDrawers).getString("cashDrawerId");
         }
         return cashDrawerId;
     }
 
-    @SuppressWarnings("unchecked")
     public static BigDecimal calculateCashDrawerBalance(GenericValue cashDrawer) throws GenericEntityException {
         BigDecimal netCash = cashDrawer.getBigDecimal("initialAmount").setScale(decimals, rounding);
 
         // Only CASH transactions count toward the balance
-        List drawerCashTrans = cashDrawer.getDelegator().findByAnd("CashDrawerTransPaymentAndMType", UtilMisc.toMap("cashDrawerId", cashDrawer.get("cashDrawerId"), "paymentMethodTypeId", "CASH"));
-        Iterator dtit = drawerCashTrans.iterator();
+        List<GenericValue> drawerCashTrans = cashDrawer.getDelegator().findByAnd("CashDrawerTransPaymentAndMType", UtilMisc.toMap("cashDrawerId", cashDrawer.get("cashDrawerId"), "paymentMethodTypeId", "CASH"));
+        Iterator<GenericValue> dtit = drawerCashTrans.iterator();
         while (dtit.hasNext()) {
-            GenericValue drawerTransaction = (GenericValue) dtit.next();
+            GenericValue drawerTransaction = dtit.next();
             boolean isDisbursement = UtilAccounting.isDisbursement(drawerTransaction);
             if (isDisbursement) {
                 netCash = netCash.subtract(drawerTransaction.getBigDecimal("amount"));
@@ -370,26 +367,25 @@ public final class UtilOrder {
         return netCash.setScale(decimals, rounding);
     }
 
-    @SuppressWarnings("unchecked")
     public static BigDecimal getOrderOpenAmount(GenericDelegator delegator, String orderId) throws GenericEntityException {
         OrderReadHelper orh = new OrderReadHelper(delegator, orderId);
         return getOrderOpenAmount(orh);
     }
 
-    @SuppressWarnings("unchecked")
     public static BigDecimal getOrderOpenAmount(OrderReadHelper orh) throws GenericEntityException {
         BigDecimal total = orh.getOrderGrandTotal();
         BigDecimal openAmount = ZERO;
 
         GenericDelegator delegator = orh.getOrderHeader().getDelegator();
-        List<EntityExpr> cond = UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orh.getOrderId()),
-                                    new EntityExpr("paymentCurrencyUomId", EntityOperator.EQUALS, orh.getCurrency()),
-                                    new EntityExpr("paymentStatusId", EntityOperator.IN, UtilMisc.toList("PMNT_SENT", "PMNT_CONFIRMED", "PMNT_RECEIVED")),
-                                    new EntityExpr("paymentPaymentTypeId", EntityOperator.IN, UtilMisc.toList("CUSTOMER_PAYMENT", "CUSTOMER_DEPOSIT", "CUSTOMER_REFUND")));
-        List<GenericValue> prefsAndPayments = delegator.findByCondition("OrderPaymentPrefAndPayment", new EntityConditionList(cond, EntityOperator.AND), null, null);
-        Iterator papit = prefsAndPayments.iterator();
+        EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                    EntityCondition.makeCondition("orderId", orh.getOrderId()),
+                                    EntityCondition.makeCondition("paymentCurrencyUomId", orh.getCurrency()),
+                                    EntityCondition.makeCondition("paymentStatusId", EntityOperator.IN, UtilMisc.toList("PMNT_SENT", "PMNT_CONFIRMED", "PMNT_RECEIVED")),
+                                    EntityCondition.makeCondition("paymentPaymentTypeId", EntityOperator.IN, UtilMisc.toList("CUSTOMER_PAYMENT", "CUSTOMER_DEPOSIT", "CUSTOMER_REFUND")));
+        List<GenericValue> prefsAndPayments = delegator.findByCondition("OrderPaymentPrefAndPayment", cond, null, null);
+        Iterator<GenericValue> papit = prefsAndPayments.iterator();
         while (papit.hasNext()) {
-            GenericValue prefAndPayment = (GenericValue) papit.next();
+            GenericValue prefAndPayment = papit.next();
             BigDecimal amount = prefAndPayment.getBigDecimal("paymentAmount");
             if (UtilValidate.isEmpty(amount)) {
                 continue;
@@ -403,7 +399,6 @@ public final class UtilOrder {
         return total.subtract(openAmount).setScale(decimals, rounding);
     }
 
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getShipmentOrderShipGroups(GenericDelegator delegator, String shipmentId) throws GenericEntityException {
         Set<GenericValue> orderShipGroups = new LinkedHashSet<GenericValue>();
         List<GenericValue> shipmentOrderShipGroups = delegator.findByAnd("ShipmentAndOrderItemShipGroup", UtilMisc.toMap("shipmentId", shipmentId));
@@ -455,7 +450,6 @@ public final class UtilOrder {
      * @return a <code>List</code> of shippable <code>OrderItemShipGrpInvResAndItem</code>
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getShippableItems(GenericValue order, String facilityId, String shipGroupSeqId) throws GenericEntityException {
         GenericDelegator delegator = order.getDelegator();
         // get list matching the order, ship group and facilityId
@@ -481,7 +475,6 @@ public final class UtilOrder {
      * @return the quantity to pack of the item in the given facility
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static BigDecimal getQuantityToPack(GenericValue orderItem, String shipGroupSeqId, String facilityId) throws GenericEntityException {
         GenericDelegator delegator = orderItem.getDelegator();
         BigDecimal itemQuantity = BigDecimal.ZERO;
@@ -518,7 +511,6 @@ public final class UtilOrder {
      * @return the quantity shipped for the given order item and ship group
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static BigDecimal getQuantityShippedForItemAndShipGroup(GenericValue orderItem, String shipGroupSeqId) throws GenericEntityException {
         BigDecimal shipped = BigDecimal.ZERO;
         GenericDelegator delegator = orderItem.getDelegator();

@@ -23,7 +23,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.ofbiz.base.util.UtilHttp;
@@ -31,6 +30,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.domain.organization.OrganizationRepository;
@@ -183,9 +183,9 @@ public final class UtilAccountingTags {
                 if ("ANY".equals(value)) {
                     continue;
                 } else if ("NONE".equals(value)) {
-                    conditions.add(new EntityExpr("acctgTagEnumId" + index, EntityOperator.EQUALS, null));
+                    conditions.add(EntityCondition.makeCondition("acctgTagEnumId" + index, EntityOperator.EQUALS, null));
                 } else {
-                    conditions.add(new EntityExpr("acctgTagEnumId" + index, EntityOperator.EQUALS, value));
+                    conditions.add(EntityCondition.makeCondition("acctgTagEnumId" + index, EntityOperator.EQUALS, value));
                 }
 
             }
@@ -234,9 +234,9 @@ public final class UtilAccountingTags {
                 if ("ANY".equals(value)) {
                     continue;
                 } else if ("NONE".equals(value)) {
-                    conditions.add(new EntityExpr("acctgTagEnumId" + index, EntityOperator.EQUALS, null));
+                    conditions.add(EntityCondition.makeCondition("acctgTagEnumId" + index, EntityOperator.EQUALS, null));
                 } else {
-                    conditions.add(new EntityExpr("acctgTagEnumId" + index, EntityOperator.EQUALS, value));
+                    conditions.add(EntityCondition.makeCondition("acctgTagEnumId" + index, EntityOperator.EQUALS, value));
                 }
             }
         }
@@ -509,7 +509,7 @@ public final class UtilAccountingTags {
                 if (counter == i) {
                     if ("ANY".equals(reportTag)) {
                         sb.append(tagDesc.getDescription()).append(": ");
-                        sb.append(uiLabelMap.get("CommonAny")).append('\n');;
+                        sb.append(uiLabelMap.get("CommonAny")).append('\n');
                         break;
                     } else if ("NONE".equals(reportTag)) {
                         sb.append(tagDesc.getDescription()).append(": ");
@@ -535,7 +535,6 @@ public final class UtilAccountingTags {
                     break;
                 }
             }
-            
         }
 
         if (sb.length() > 0) {
@@ -553,7 +552,7 @@ public final class UtilAccountingTags {
     public static Map<EnumerationType, List<Enumeration>> getAllAccoutingTagEnumerations(GenericDelegator delegator) throws RepositoryException {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         List<EnumerationType> enumerationTypes = getAllAccoutingTagEnumerationTypes(delegator);
-        List<Enumeration> enumerations = repository.findList(Enumeration.class, new EntityExpr(Enumeration.Fields.enumTypeId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(enumerationTypes, EnumerationType.Fields.enumTypeId)), Arrays.asList(Enumeration.Fields.sequenceId.asc()));
+        List<Enumeration> enumerations = repository.findList(Enumeration.class, EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(enumerationTypes, EnumerationType.Fields.enumTypeId)), Arrays.asList(Enumeration.Fields.sequenceId.asc()));
         return Entity.groupByFieldValues(EnumerationType.class, enumerations, Enumeration.Fields.enumTypeId, enumerationTypes, EnumerationType.Fields.enumTypeId);
     }
 
@@ -572,8 +571,8 @@ public final class UtilAccountingTags {
     public static Map<EnumerationType, List<Enumeration>> getAllAccoutingTagEnumerationsForOrganization(String organizationPartyId, GenericDelegator delegator) throws RepositoryException {
         OrganizationRepository repository = new OrganizationRepository(delegator);
         LinkedHashSet<String> typeIds = getAllAccoutingTagEnumerationTypeIdsForOrganization(organizationPartyId, delegator);
-        List<EnumerationType> enumerationTypes = repository.findList(EnumerationType.class, new EntityExpr(EnumerationType.Fields.enumTypeId.name(), EntityOperator.IN, typeIds));
-        List<Enumeration> enumerations = repository.findList(Enumeration.class, new EntityExpr(Enumeration.Fields.enumTypeId.name(), EntityOperator.IN, typeIds), Arrays.asList(Enumeration.Fields.sequenceId.asc()));
+        List<EnumerationType> enumerationTypes = repository.findList(EnumerationType.class, EntityCondition.makeCondition(EnumerationType.Fields.enumTypeId.name(), EntityOperator.IN, typeIds));
+        List<Enumeration> enumerations = repository.findList(Enumeration.class, EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), EntityOperator.IN, typeIds), Arrays.asList(Enumeration.Fields.sequenceId.asc()));
         return Entity.groupByFieldValues(EnumerationType.class, enumerations, Enumeration.Fields.enumTypeId, enumerationTypes, EnumerationType.Fields.enumTypeId);
     }
 }

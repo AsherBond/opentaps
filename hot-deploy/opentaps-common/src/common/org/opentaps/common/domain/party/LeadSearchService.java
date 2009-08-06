@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.domain.base.entities.PartyRole;
 import org.opentaps.domain.base.entities.PartyRolePk;
@@ -94,7 +94,7 @@ public class LeadSearchService extends SearchService implements LeadSearchServic
 
         try {
             if (!leadIds.isEmpty()) {
-                return repository.findList(Lead.class, new EntityExpr(Lead.Fields.partyId.name(), EntityOperator.IN, leadIds));
+                return repository.findList(Lead.class, EntityCondition.makeCondition(Lead.Fields.partyId.name(), EntityOperator.IN, leadIds));
             } else {
                 return new ArrayList<Lead>();
             }

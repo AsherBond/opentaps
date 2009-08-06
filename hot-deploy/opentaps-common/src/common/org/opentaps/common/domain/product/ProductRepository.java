@@ -15,12 +15,10 @@
  */
 package org.opentaps.common.domain.product;
 
-import javolution.util.FastList;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
@@ -105,13 +103,12 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
 
     /** {@inheritDoc} */
     public List<Product> getVariants(Product product) throws RepositoryException {
-        List<EntityCondition> conditions = new FastList<EntityCondition>();
-        conditions.add(new EntityExpr("productId", EntityOperator.EQUALS, product.getProductId()));
-        conditions.add(new EntityExpr("productAssocTypeId", EntityOperator.EQUALS, "PRODUCT_VARIANT"));
-        conditions.add(EntityUtil.getFilterByDateExpr());
-        EntityConditionList conditionList = new EntityConditionList(conditions, EntityOperator.AND);
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition(ProductAssoc.Fields.productId.name(), product.getProductId()),
+                        EntityCondition.makeCondition(ProductAssoc.Fields.productAssocTypeId.name(), "PRODUCT_VARIANT"),
+                        EntityUtil.getFilterByDateExpr());
 
-        List<ProductAssoc> variants = findList(ProductAssoc.class, conditionList);
-        return findList(Product.class, new EntityExpr("productId", EntityOperator.IN, Entity.getDistinctFieldValues(variants, ProductAssoc.Fields.productIdTo)));
+        List<ProductAssoc> variants = findList(ProductAssoc.class, conditions);
+        return findList(Product.class, EntityCondition.makeCondition(Product.Fields.productId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(variants, ProductAssoc.Fields.productIdTo)));
     }
 }

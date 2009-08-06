@@ -30,7 +30,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
@@ -101,9 +101,9 @@ public class OrderService extends Service implements OrderServiceInterface {
 
             // remove all adjustments related to promotions that are not billed yet
             List<OrderAdjustment> promoAdjustments = repository.findList(OrderAdjustment.class, Arrays.asList(
-                new EntityExpr(OrderAdjustment.Fields.orderId.name(), EntityOperator.EQUALS, orderId),
-                new EntityExpr(OrderAdjustment.Fields.orderAdjustmentTypeId.name(), EntityOperator.EQUALS, "PROMOTION_ADJUSTMENT"),
-                new EntityExpr(OrderAdjustment.Fields.productPromoId.name(), EntityOperator.NOT_EQUAL, null)));
+                EntityCondition.makeCondition(OrderAdjustment.Fields.orderId.name(), EntityOperator.EQUALS, orderId),
+                EntityCondition.makeCondition(OrderAdjustment.Fields.orderAdjustmentTypeId.name(), EntityOperator.EQUALS, "PROMOTION_ADJUSTMENT"),
+                EntityCondition.makeCondition(OrderAdjustment.Fields.productPromoId.name(), EntityOperator.NOT_EQUAL, null)));
             List<OrderAdjustment> promoAdjustmentsToRemove = new ArrayList();
 
             // account the amount removed from each order item and the order
@@ -150,7 +150,7 @@ public class OrderService extends Service implements OrderServiceInterface {
 
             // only recreate promotions items if the order was not billed
             Set<String> newPromoItems = new HashSet<String>();
-            for (ShoppingCartItem item : (Iterable<ShoppingCartItem>) cart.items()) {
+            for (ShoppingCartItem item : cart.items()) {
                 // skip existing items
                 if (UtilValidate.isNotEmpty(item.getOrderItemSeqId())) {
                     continue;
@@ -162,14 +162,14 @@ public class OrderService extends Service implements OrderServiceInterface {
                     String equivalentItemSeqId = null;
                     Debug.logInfo("Looking for equivalentItem in [" + existingPromoItemsPotentials + "] with product [" + item.getProductId() + "], quantity = " + item.getQuantity() + ", unitPrice = " + item.getBasePrice() + ", listPrice = " + item.getListPrice(), MODULE);
                     List<OrderItem> equivalentItems = repository.findList(OrderItem.class, Arrays.asList(
-                               new EntityExpr(OrderItem.Fields.orderId.name(), EntityOperator.EQUALS, orderId),
-                               new EntityExpr(OrderItem.Fields.orderItemSeqId.name(), EntityOperator.IN, existingPromoItemsPotentials),
-                               new EntityExpr(OrderItem.Fields.productId.name(), EntityOperator.EQUALS, item.getProductId()),
-                               new EntityExpr(OrderItem.Fields.isPromo.name(), EntityOperator.EQUALS, "Y"),
-                               new EntityExpr(OrderItem.Fields.isModifiedPrice.name(), EntityOperator.EQUALS, "N"),
-                               new EntityExpr(OrderItem.Fields.quantity.name(), EntityOperator.EQUALS, item.getQuantity()),
-                               new EntityExpr(OrderItem.Fields.unitPrice.name(), EntityOperator.EQUALS, item.getBasePrice()),
-                               new EntityExpr(OrderItem.Fields.unitListPrice.name(), EntityOperator.EQUALS, item.getListPrice())
+                               EntityCondition.makeCondition(OrderItem.Fields.orderId.name(), EntityOperator.EQUALS, orderId),
+                               EntityCondition.makeCondition(OrderItem.Fields.orderItemSeqId.name(), EntityOperator.IN, existingPromoItemsPotentials),
+                               EntityCondition.makeCondition(OrderItem.Fields.productId.name(), EntityOperator.EQUALS, item.getProductId()),
+                               EntityCondition.makeCondition(OrderItem.Fields.isPromo.name(), EntityOperator.EQUALS, "Y"),
+                               EntityCondition.makeCondition(OrderItem.Fields.isModifiedPrice.name(), EntityOperator.EQUALS, "N"),
+                               EntityCondition.makeCondition(OrderItem.Fields.quantity.name(), EntityOperator.EQUALS, item.getQuantity()),
+                               EntityCondition.makeCondition(OrderItem.Fields.unitPrice.name(), EntityOperator.EQUALS, item.getBasePrice()),
+                               EntityCondition.makeCondition(OrderItem.Fields.unitListPrice.name(), EntityOperator.EQUALS, item.getListPrice())
                               ));
                     if (equivalentItems.isEmpty()) {
                         // no equivalent item found, could be a new promotion, not adding
@@ -229,7 +229,7 @@ public class OrderService extends Service implements OrderServiceInterface {
             //  because the cart does not load promotion items, for example an order total
             //  discount won't apply on the amount of those items
             if (orderIsBilled) {
-                for (OrderItem item : repository.findList(OrderItem.class, Arrays.asList(new EntityExpr(OrderItem.Fields.orderId.name(), EntityOperator.EQUALS, orderId), new EntityExpr(OrderItem.Fields.orderItemSeqId.name(), EntityOperator.IN, existingPromoItemsPotentials)))) {
+                for (OrderItem item : repository.findList(OrderItem.class, Arrays.asList(EntityCondition.makeCondition(OrderItem.Fields.orderId.name(), EntityOperator.EQUALS, orderId), EntityCondition.makeCondition(OrderItem.Fields.orderItemSeqId.name(), EntityOperator.IN, existingPromoItemsPotentials)))) {
                     boolean billedAdjustments = false;
                     for (OrderAdjustment adj : item.getOrderAdjustments()) {
                         if (!adj.getOrderAdjustmentBillings().isEmpty()) {

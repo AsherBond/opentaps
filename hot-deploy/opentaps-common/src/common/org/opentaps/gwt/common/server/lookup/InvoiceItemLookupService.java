@@ -21,16 +21,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.opentaps.domain.base.entities.InvoiceItemAndDescriptions;
+import org.opentaps.domain.billing.invoice.Invoice;
 import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.foundation.exception.FoundationException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.gwt.common.client.lookup.configuration.InvoiceItemLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
-import org.opentaps.foundation.exception.FoundationException;
-import org.opentaps.domain.billing.invoice.Invoice;
 
 /**
  * The RPC service used to populate the InvoiceItemListEditor.
@@ -80,7 +79,7 @@ public class InvoiceItemLookupService extends EntityLookupService {
         Invoice invoice = repository.getInvoiceById(invoiceId);
         getGlobalPermissions().setAll(invoice.isModifiable());
 
-        return findList(InvoiceItemAndDescriptions.class, new EntityExpr("invoiceId", EntityOperator.EQUALS, invoiceId));
+        return findList(InvoiceItemAndDescriptions.class, EntityCondition.makeCondition("invoiceId", invoiceId));
     }
 }
 

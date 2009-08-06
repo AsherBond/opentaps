@@ -49,18 +49,18 @@ public class EntityListBuilder extends AbstractListBuilder {
     protected String entityName = null;
     protected EntityCondition where = null;
     protected EntityCondition having = null;
-    protected Collection fieldsToSelect = null;
-    protected List orderBy = null;
+    protected Collection<String> fieldsToSelect = null;
+    protected List<String> orderBy = null;
     protected EntityFindOptions options = null;
     protected EntityListIterator iterator = null;
     protected GenericDelegator delegator = null;
     protected boolean transactionOpen = false;
     protected int size = 0;
 
-    protected EntityListBuilder() {};
+    protected EntityListBuilder() { };
 
     /** Full constructor containing all possible fields. */
-    public EntityListBuilder(String entityName, EntityCondition where, EntityCondition having, Collection fieldsToSelect, List orderBy, EntityFindOptions options) {
+    public EntityListBuilder(String entityName, EntityCondition where, EntityCondition having, Collection<String> fieldsToSelect, List<String> orderBy, EntityFindOptions options) {
         this.entityName = entityName;
         this.where = where;
         this.having = having;
@@ -70,12 +70,12 @@ public class EntityListBuilder extends AbstractListBuilder {
     }
 
     /** Distinct readonly lookup. */
-    public EntityListBuilder(String entityName, EntityCondition where, List orderBy) {
+    public EntityListBuilder(String entityName, EntityCondition where, List<String> orderBy) {
         this(entityName, where, null, null, orderBy, DISTINCT_READ_OPTIONS);
     }
 
     /** Distinct readonly lookup limited to certain fields. */
-    public EntityListBuilder(String entityName, EntityCondition where, Collection fieldsToSelect, List orderBy) {
+    public EntityListBuilder(String entityName, EntityCondition where, Collection<String> fieldsToSelect, List<String> orderBy) {
         this(entityName, where, null, fieldsToSelect, orderBy, DISTINCT_READ_OPTIONS);
     }
 
@@ -94,7 +94,9 @@ public class EntityListBuilder extends AbstractListBuilder {
     }
 
     public void initialize() throws ListBuilderException {
-        if (isInitialized()) return;
+        if (isInitialized()) {
+            return;
+        }
         try {
             transactionOpen = TransactionUtil.begin();
             iterator = delegator.findListIteratorByCondition(entityName, where, having, fieldsToSelect, orderBy, options);
@@ -103,8 +105,7 @@ public class EntityListBuilder extends AbstractListBuilder {
             // if one of the fields is not correct, then try throwing away orderBy and fieldsToSelect and try again
             // ideally we should use ModelEntity to validate in the constructor of EntityListBuilder but in real life this is ok
             try {
-                Debug.logWarning("Exception while trying to query [" + entityName + "] with where conditions [" + where +
-                        "] having conditions [" + having + "] fields to select [" + fieldsToSelect + "] order by [" + orderBy + "]: " + e.getMessage(), module);
+                Debug.logWarning("Exception while trying to query [" + entityName + "] with where conditions [" + where + "] having conditions [" + having + "] fields to select [" + fieldsToSelect + "] order by [" + orderBy + "]: " + e.getMessage(), module);
                 iterator = delegator.findListIteratorByCondition(entityName, where, having, null, null, options);
                 determineSize();
             } catch (GenericEntityException ex) {
@@ -146,7 +147,9 @@ public class EntityListBuilder extends AbstractListBuilder {
      * in a row should be safe.
      */
     public long getListSize() throws ListBuilderException {
-        if (! isInitialized()) initialize();
+        if (!isInitialized()) {
+            initialize();
+        }
         return size;
     }
 
@@ -162,7 +165,9 @@ public class EntityListBuilder extends AbstractListBuilder {
      * accept ints.
      */
     public List getPartialList(long viewSize, long cursorIndex) throws ListBuilderException {
-        if (! isInitialized()) initialize();
+        if (!isInitialized()) {
+            initialize();
+        }
         try {
             // XXX Note:  EntityListIterator is a 1 based list, so we must add 1 to index
             List results = iterator.getPartialList((int) cursorIndex + 1, (int) viewSize);
@@ -178,7 +183,7 @@ public class EntityListBuilder extends AbstractListBuilder {
      * This is done by closing the existing iterator and then changing the
      * orderBy variable.  The iterator will be re-initialized during a later operation.
      */
-    public void changeOrderBy(List orderBy) {
+    public void changeOrderBy(List<String> orderBy) {
         close();
         this.orderBy = orderBy;
     }

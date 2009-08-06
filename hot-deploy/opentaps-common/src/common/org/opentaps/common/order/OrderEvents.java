@@ -54,6 +54,7 @@ import javax.servlet.http.HttpSession;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -62,11 +63,10 @@ import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
@@ -75,6 +75,7 @@ import org.ofbiz.order.shoppingcart.ItemNotFoundException;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
+import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
 import org.ofbiz.party.party.PartyHelper;
 import org.ofbiz.product.config.ProductConfigWrapper;
 import org.ofbiz.product.store.ProductStoreSurveyWrapper;
@@ -116,7 +117,6 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
 
 /**
  * Common order events such as destroying the cart, etc.
@@ -1596,9 +1596,9 @@ public final class OrderEvents {
         boolean isCod = false;
         try {
             List<GenericValue> codPaymentPrefs = delegator.findByAnd("OrderPaymentPreference",
-                                                                     UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orh.getOrderId()),
-                                                                                     new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "EXT_COD"),
-                                                                                     new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")));
+                                                                     UtilMisc.toList(EntityCondition.makeCondition("orderId", orh.getOrderId()),
+                                                                                     EntityCondition.makeCondition("paymentMethodTypeId", "EXT_COD"),
+                                                                                     EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")));
 
             isCod = UtilValidate.isNotEmpty(codPaymentPrefs);
         } catch (GeneralException e) {

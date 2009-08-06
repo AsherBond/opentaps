@@ -25,17 +25,17 @@ import java.util.List;
  * the code that generates lists of data.
  *
  * This builder is a 0 based list, which means the first element
- * will have index 0. 
+ * will have index 0.
  *
- * It is hoped that this will replace the traditional process 
- * where we would define a lookup in a beanshell script or 
- * in a service service and then are forced to refactor it into 
+ * It is hoped that this will replace the traditional process
+ * where we would define a lookup in a beanshell script or
+ * in a service service and then are forced to refactor it into
  * a Java util method in some random package.  Thus, this
  * can also be viewed as an effort to simplify the management
  * of data building code.
  *
  * The degenerate example would be an EntityListBuilder, which
- * encapsulates the common process of setting up a lookup 
+ * encapsulates the common process of setting up a lookup
  * on an entity or view entity using
  * GenericDelegator.findListIteratorByCondition().
  *
@@ -51,15 +51,15 @@ import java.util.List;
  * to get a real-time list of currency exchange rates.  You might design
  * a RemoteCurrencyExchangeBuilder to intelligently poll the service
  * for data and cache it, then serve the data using the interface methods
- * defined here.  
+ * defined here.
  *
- * You can then use this builder from within a service that runs at regular 
- * intervals and translates the remote data and stores it in the database.  
+ * You can then use this builder from within a service that runs at regular
+ * intervals and translates the remote data and stores it in the database.
  *
  * As an alternative, you might present a user with the current exchange
  * values in the database and the remote values so that she may compare
- * them and decide whether to update the database values.* In this case, 
- * you would use the RemoteCurrencyExchangeBuilder and an EntityListBuilder 
+ * them and decide whether to update the database values.* In this case,
+ * you would use the RemoteCurrencyExchangeBuilder and an EntityListBuilder
  * to generate the two views.  The update service can also use the
  * RemoteCurrencyExchangeBuilder to get the data.
  */
@@ -128,7 +128,7 @@ public interface ListBuilder {
      * This method handles anything that needs to happen when
      * the order of a list changes.
      */
-    void changeOrderBy(List orderBy);
+    void changeOrderBy(List<String> orderBy);
 
     /**
      * Whether the list builder has a page builder or not.  Requires only one implementation.

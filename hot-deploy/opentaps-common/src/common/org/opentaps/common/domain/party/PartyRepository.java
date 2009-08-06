@@ -15,7 +15,6 @@
  */
 package org.opentaps.common.domain.party;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +33,6 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
@@ -105,7 +103,7 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
     /** {@inheritDoc} */
     public Set<Party> getPartyByIds(List<String> partyIds) throws RepositoryException {
         Set<Party> resultSet = new FastSet<Party>();
-        resultSet.addAll(findList(Party.class, new EntityExpr("partyId", EntityOperator.IN, partyIds)));
+        resultSet.addAll(findList(Party.class, EntityCondition.makeCondition(Party.Fields.partyId.name(), EntityOperator.IN, partyIds)));
         return resultSet;
     }
 
@@ -133,19 +131,18 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
 
         Set<Account> resultSet = new FastSet<Account>();
 
-        List<EntityCondition> conditions = new FastList<EntityCondition>();
-        conditions.add(new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT"));
-        conditions.add(new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, "ACCOUNT"));
-        conditions.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, contact.getPartyId()));
-        conditions.add(EntityUtil.getFilterByDateExpr());
-        EntityConditionList conditionList = new EntityConditionList(conditions, EntityOperator.AND);
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                  EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdFrom.name(), "CONTACT"),
+                  EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdTo.name(), "ACCOUNT"),
+                  EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.partyIdFrom.name(), contact.getPartyId()),
+            EntityUtil.getFilterByDateExpr());
 
-        List<PartyFromSummaryByRelationship> accountValues = findList(PartyFromSummaryByRelationship.class, conditionList, Arrays.asList("partyIdTo"));
+        List<PartyFromSummaryByRelationship> accountValues = findList(PartyFromSummaryByRelationship.class, conditions, Arrays.asList("partyIdTo"));
         if (UtilValidate.isEmpty(accountValues)) {
             return null;
         }
 
-        resultSet.addAll(findList(Account.class, new EntityExpr("partyId", EntityOperator.IN, Entity.getDistinctFieldValues(accountValues, PartyFromSummaryByRelationship.Fields.partyIdTo))));
+        resultSet.addAll(findList(Account.class, EntityCondition.makeCondition(Account.Fields.partyId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(accountValues, PartyFromSummaryByRelationship.Fields.partyIdTo))));
 
         if (resultSet.size() > 0) {
             return resultSet;
@@ -159,12 +156,11 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
         Set<Account> resultSet = new FastSet<Account>();
         // find all PartySummaryCRMView where the given account is the parent account
         List<PartySummaryCRMView> parties = findList(PartySummaryCRMView.class, map(PartySummaryCRMView.Fields.parentPartyId, account.getPartyId()));
-        resultSet.addAll(findList(Account.class, new EntityExpr(Account.Fields.partyId.getName(), EntityOperator.IN, Entity.getDistinctFieldValues(parties, PartySummaryCRMView.Fields.partyId))));
+        resultSet.addAll(findList(Account.class, EntityCondition.makeCondition(Account.Fields.partyId.getName(), EntityOperator.IN, Entity.getDistinctFieldValues(parties, PartySummaryCRMView.Fields.partyId))));
         return resultSet;
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public Set<Contact> getContacts(Account parentAccount) throws RepositoryException {
         Set<Contact> resultSet = new FastSet<Contact>();
 
@@ -172,19 +168,18 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
             return null;
         }
 
-        List<EntityCondition> conditions = new FastList();
-        conditions.add(new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT"));
-        conditions.add(new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, "ACCOUNT"));
-        conditions.add(new EntityExpr("partyIdTo", EntityOperator.EQUALS, parentAccount.getPartyId()));
-        conditions.add(EntityUtil.getFilterByDateExpr());
-        EntityConditionList conditionList = new EntityConditionList(conditions, EntityOperator.AND);
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                       EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdFrom.name(), "CONTACT"),
+                       EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.roleTypeIdTo.name(), "ACCOUNT"),
+                       EntityCondition.makeCondition(PartyFromSummaryByRelationship.Fields.partyIdTo.name(), parentAccount.getPartyId()),
+                       EntityUtil.getFilterByDateExpr());
 
-        List<PartyFromSummaryByRelationship> contactValues = findList(PartyFromSummaryByRelationship.class, conditionList, Arrays.asList("partyIdFrom"));
+        List<PartyFromSummaryByRelationship> contactValues = findList(PartyFromSummaryByRelationship.class, conditions, Arrays.asList(PartyFromSummaryByRelationship.Fields.partyIdFrom.name()));
         if (UtilValidate.isEmpty(contactValues)) {
             return null;
         }
 
-        resultSet.addAll(findList(Contact.class, new EntityExpr("partyId", EntityOperator.IN, Entity.getDistinctFieldValues(contactValues, PartyFromSummaryByRelationship.Fields.partyIdFrom))));
+        resultSet.addAll(findList(Contact.class, EntityCondition.makeCondition("partyId", EntityOperator.IN, Entity.getDistinctFieldValues(contactValues, PartyFromSummaryByRelationship.Fields.partyIdFrom))));
 
         if (resultSet.size() > 0) {
             return resultSet;
@@ -213,7 +208,7 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
         try {
             List<GenericValue> purposes = PartyContactHelper.getContactMechsByPurpose(party.getPartyId(), "POSTAL_ADDRESS", purposeId, true, getDelegator());
             List contactList = EntityUtil.getFieldListFromEntityList(purposes, "contactMechId", true);
-            return findList(PostalAddress.class, Arrays.asList(new EntityExpr("contactMechId", EntityOperator.IN, contactList)));
+            return findList(PostalAddress.class, Arrays.asList(EntityCondition.makeCondition("contactMechId", EntityOperator.IN, contactList)));
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
         }
@@ -221,15 +216,14 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
 
     /** {@inheritDoc} */
     public List<TelecomNumber>  getPhoneNumbers(Party party) throws RepositoryException {
-        List<EntityCondition> conditions = new FastList<EntityCondition>();
-        conditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, party.getPartyId()));
-        conditions.add(new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, "TELECOM_NUMBER"));
-        conditions.add(EntityUtil.getFilterByDateExpr());
-        conditions.add(EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate"));
-        EntityConditionList conditionList = new EntityConditionList(conditions, EntityOperator.AND);
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition(PartyContactDetailByPurpose.Fields.partyId.name(), party.getPartyId()),
+                        EntityCondition.makeCondition(PartyContactDetailByPurpose.Fields.contactMechTypeId.name(), "TELECOM_NUMBER"),
+                        EntityUtil.getFilterByDateExpr(),
+                        EntityUtil.getFilterByDateExpr(PartyContactDetailByPurpose.Fields.purposeFromDate.name(), PartyContactDetailByPurpose.Fields.purposeThruDate.name()));
 
-        List<PartyContactDetailByPurpose> partyContactPurposes = findList(PartyContactDetailByPurpose.class, conditionList);
-        return findList(TelecomNumber.class, Arrays.asList(new EntityExpr("contactMechId", EntityOperator.IN, Entity.getDistinctFieldValues(partyContactPurposes, PartyContactDetailByPurpose.Fields.contactMechId))));
+        List<PartyContactDetailByPurpose> partyContactPurposes = findList(PartyContactDetailByPurpose.class, conditions);
+        return findList(TelecomNumber.class, Arrays.asList(EntityCondition.makeCondition("contactMechId", EntityOperator.IN, Entity.getDistinctFieldValues(partyContactPurposes, PartyContactDetailByPurpose.Fields.contactMechId))));
     }
 
     /** {@inheritDoc} */
@@ -244,14 +238,13 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
         try {
             List<GenericValue> purposes = PartyContactHelper.getContactMechsByPurpose(party.getPartyId(), "TELECOM_NUMBER", purposeId, true, getDelegator());
             List contactList = EntityUtil.getFieldListFromEntityList(purposes, "contactMechId", true);
-            return findList(TelecomNumber.class, Arrays.asList(new EntityExpr("contactMechId", EntityOperator.IN, contactList)));
+            return findList(TelecomNumber.class, Arrays.asList(EntityCondition.makeCondition("contactMechId", EntityOperator.IN, contactList)));
         } catch (GenericEntityException e) {
             throw new RepositoryException(e);
         }
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public Map<String, Object> getPartyNameForDate(Party party, Timestamp date) throws RepositoryException {
         try {
             return getDispatcher().runSync("getPartyNameForDate", UtilMisc.toMap("userLogin", getUser().getOfbizUserLogin(), "partyId", party.getPartyId(), "compareDate", date));
@@ -334,11 +327,10 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
 
     /** {@inheritDoc} */
     public UserLogin getUserLoginByExtension(String extension) throws RepositoryException {
-        List<EntityCondition> conditions = new FastList<EntityCondition>();
-        conditions.add(new EntityExpr("extension", EntityOperator.EQUALS, extension));
-        conditions.add(EntityUtil.getFilterByDateExpr());
-        EntityConditionList conditionList = new EntityConditionList(conditions, EntityOperator.AND);
-        List<AsteriskUser> asteriskUsers = findList(AsteriskUser.class, conditionList);
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                         EntityCondition.makeCondition(AsteriskUser.Fields.extension.name(), extension),
+                         EntityUtil.getFilterByDateExpr());
+        List<AsteriskUser> asteriskUsers = findList(AsteriskUser.class, conditions);
 
         // if not found, return null
         if (asteriskUsers.size() < 0) {
@@ -356,11 +348,10 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
 
     /** {@inheritDoc} */
     public AsteriskUser getAsteriskUserForUser(User user) throws RepositoryException, InfrastructureException {
-        List<EntityCondition> conditions = new FastList<EntityCondition>();
-        conditions.add(new EntityExpr("userLoginId", EntityOperator.EQUALS, user.getUserId()));
-        conditions.add(EntityUtil.getFilterByDateExpr());
-        EntityConditionList conditionList = new EntityConditionList(conditions, EntityOperator.AND);
-        List<AsteriskUser> asteriskUsers = findList(AsteriskUser.class, conditionList);
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition(AsteriskUser.Fields.userLoginId.name(), user.getUserId()),
+                        EntityUtil.getFilterByDateExpr());
+        List<AsteriskUser> asteriskUsers = findList(AsteriskUser.class, conditions);
 
         // if not found, return null
         if (asteriskUsers.size() < 0) {
@@ -389,7 +380,6 @@ public class PartyRepository extends Repository implements PartyRepositoryInterf
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public PostalAddress getSupplierPostalAddress(Party party) throws RepositoryException, EntityNotFoundException {
         try {
             GenericValue supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(party.getPartyId(), "GENERAL_LOCATION", true, getDelegator());

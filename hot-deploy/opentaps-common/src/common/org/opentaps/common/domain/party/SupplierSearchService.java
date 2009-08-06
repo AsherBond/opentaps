@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.domain.base.entities.PartyGroup;
 import org.opentaps.domain.base.entities.PartyRole;
@@ -94,7 +94,7 @@ public class SupplierSearchService extends SearchService implements SupplierSear
 
         try {
             if (!supplierIds.isEmpty()) {
-                return repository.findList(PartyGroup.class, new EntityExpr(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds));
+                return repository.findList(PartyGroup.class, EntityCondition.makeCondition(PartyGroup.Fields.partyId.name(), EntityOperator.IN, supplierIds));
             } else {
                 return new ArrayList<PartyGroup>();
             }

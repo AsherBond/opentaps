@@ -21,9 +21,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -53,18 +53,17 @@ import java.util.TreeSet;
 
 import javolution.util.FastMap;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.ByteWrapper;
 import org.ofbiz.entity.util.EntityFindOptions;
@@ -105,9 +104,11 @@ import org.opentaps.foundation.repository.RepositoryException;
  * Common email services such as send quote email, etc.
  *
  */
-public class EmailServices {
+public final class EmailServices {
 
-    public static String MODULE = EmailServices.class.getName();
+    private EmailServices() { }
+
+    private static String MODULE = EmailServices.class.getName();
     public static List TEAM_MEMBER_ROLES = UtilMisc.toList("ACCOUNT_MANAGER", "ACCOUNT_REP", "CUST_SERVICE_REP");
     public static List CLIENT_PARTY_ROLES = UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER");
     public static String QUOTE_JRXML_REPORT_ID = "SALESQUOTE";
@@ -128,6 +129,7 @@ public class EmailServices {
      * @throws SQLException if an error occurs
      * @return jrxml location
      */
+    @SuppressWarnings("unchecked")
     public static String getJrxmlLocation(LocalDispatcher dispatcher, String reportId) throws InfrastructureException, SQLException {
         // open a session
         Infrastructure infrastructure = new Infrastructure(dispatcher);
@@ -149,6 +151,7 @@ public class EmailServices {
      * @param context a <code>Map</code> instance
      * @return a <code>Map</code> instance
      */
+    @SuppressWarnings("unchecked")
     public static Map prepareQuoteEmail(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
@@ -208,6 +211,7 @@ public class EmailServices {
      * @param context a <code>Map</code> instance
      * @return a <code>Map</code> instance
      */
+    @SuppressWarnings("unchecked")
     public static Map prepareInvoiceEmail(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
@@ -278,12 +282,14 @@ public class EmailServices {
             return UtilMessage.createAndLogServiceError(e, INVOICE_ERROR_LABEL, locale, MODULE);
         }
     }
+
     /**
      * create pend email for send sales order.
      * @param dctx a <code>DispatchContext</code> instance
      * @param context a <code>Map</code> instance
      * @return a <code>Map</code> instance
      */
+    @SuppressWarnings("unchecked")
     public static Map prepareSalesOrderEmail(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
@@ -366,6 +372,7 @@ public class EmailServices {
      * @param context a <code>Map</code> instance
      * @return a <code>Map</code> instance
      */
+    @SuppressWarnings("unchecked")
     public static Map preparePurchasingOrderEmail(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
@@ -452,6 +459,7 @@ public class EmailServices {
      * @throws GenericServiceException if an error occurs
      * @throws GenericEntityException if an error occurs
      */
+    @SuppressWarnings("unchecked")
     private static void associateWorkEffortAndOrder(LocalDispatcher dispatcher, GenericDelegator delegator, GenericValue userLogin, String orderId, String workEffortId) throws GenericEntityException, GenericServiceException {
         // Associate the work effort any orders
         if (UtilValidate.isNotEmpty(orderId)) {
@@ -481,8 +489,8 @@ public class EmailServices {
      * @throws IOException if an error occurs
      * @throws PartyNotFoundException if an error occurs
      */
-    public static Map createPendEmail(DispatchContext dctx, Map context, String jrxml, String reportName
-            , Map<String, Object> jrParameters, JRMapCollectionDataSource jrDataSource, String toPartyId, String sendTo, String subject, String content) throws GenericEntityException, GenericServiceException, JRException, IOException, PartyNotFoundException {
+    @SuppressWarnings("unchecked")
+    public static Map createPendEmail(DispatchContext dctx, Map context, String jrxml, String reportName, Map<String, Object> jrParameters, JRMapCollectionDataSource jrDataSource, String toPartyId, String sendTo, String subject, String content) throws GenericEntityException, GenericServiceException, JRException, IOException, PartyNotFoundException {
         Map<String, Object> parameters = FastMap.newInstance();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
@@ -514,11 +522,11 @@ public class EmailServices {
         }
 
         // Search for contactMechIdTo using the passed in To email addresses - use the first found
-        List conditions = UtilMisc.toList(
-                new EntityExpr("infoString", EntityOperator.IN, UtilMisc.toList(toAddresses))
-                , new EntityExpr("partyId", EntityOperator.EQUALS, toPartyId));
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                         EntityCondition.makeCondition("infoString", EntityOperator.IN, UtilMisc.toList(toAddresses)),
+                         EntityCondition.makeCondition("partyId", toPartyId));
 
-        GenericValue partyContactMechTo = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByCondition("PartyAndContactMech", new EntityConditionList(conditions, EntityOperator.AND), null, null)));
+        GenericValue partyContactMechTo = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByCondition("PartyAndContactMech", conditions, null, null)));
         if (UtilValidate.isNotEmpty(partyContactMechTo)) {
             input.put("contactMechIdTo", partyContactMechTo.getString("contactMechId"));
             input.put("partyIdTo", partyContactMechTo.getString("partyId"));
@@ -599,11 +607,11 @@ public class EmailServices {
 
         // Get all the current partyContactMech records related to any of the involved email addresses
         List emailAddresses = new ArrayList(toAddresses);
-        List partyAndContactMechs = delegator.findByCondition("PartyAndContactMech", new EntityConditionList(UtilMisc.toList(new EntityExpr("infoString", EntityOperator.IN, emailAddresses)), EntityOperator.AND), null, UtilMisc.toList("fromDate"));
+        List partyAndContactMechs = delegator.findByCondition("PartyAndContactMech", EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("infoString", EntityOperator.IN, emailAddresses)), null, UtilMisc.toList("fromDate"));
         partyAndContactMechs = EntityUtil.filterByDate(partyAndContactMechs, true);
 
         // Create separate lists for the to, CC and BCC addresses
-        EntityConditionList filterConditions = new EntityConditionList(UtilMisc.toList(new EntityExpr("infoString", EntityOperator.IN, toAddresses)), EntityOperator.AND);
+        EntityCondition filterConditions = EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("infoString", EntityOperator.IN, toAddresses));
         List partyAndContactMechsTo = EntityUtil.filterByCondition(partyAndContactMechs, filterConditions);
         associateCommunicationEventWorkEffortAndParties(partyAndContactMechsTo, communicationEventId, "EMAIL_RECIPIENT_TO", workEffortId, delegator, dispatcher, userLogin);
         return parameters;
@@ -617,8 +625,8 @@ public class EmailServices {
      * @param requireDot if require dot, ignored, not supported by <code>UtilValidate</code> anymore, TODO: see if that breaks anything
      * @return Set of valid email addresses
      */
-    @Deprecated private static Set getValidEmailAddressesFromString(String emailAddressString, boolean requireDot) {
-        Set emailAddresses = new TreeSet();
+    @Deprecated private static Set<String> getValidEmailAddressesFromString(String emailAddressString, boolean requireDot) {
+        Set<String> emailAddresses = new TreeSet<String>();
         if (UtilValidate.isNotEmpty(emailAddressString)) {
             String[] emails = emailAddressString.split(",");
             for (int x = 0; x < emails.length; x++) {
@@ -649,8 +657,9 @@ public class EmailServices {
         ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
         byte[] b = new byte[1024];
         int n;
-        while ((n = stream.read(b)) != -1)
+        while ((n = stream.read(b)) != -1) {
             out.write(b, 0, n);
+        }
         stream.close();
         out.close();
         return out.toByteArray();
@@ -668,9 +677,9 @@ public class EmailServices {
      * @throws GenericServiceException if an error occurs
      * @throws GenericEntityException if an error occurs
      */
-    private static void associateCommunicationEventWorkEffortAndParties(List partyAndContactMechs, String communicationEventId, String roleTypeId, String workEffortId, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin) 
+    private static void associateCommunicationEventWorkEffortAndParties(List partyAndContactMechs, String communicationEventId, String roleTypeId, String workEffortId, GenericDelegator delegator, LocalDispatcher dispatcher, GenericValue userLogin)
                    throws GenericEntityException, GenericServiceException {
-        if(!UtilValidate.isEmpty(partyAndContactMechs)) {
+        if (UtilValidate.isNotEmpty(partyAndContactMechs)) {
 
             Map serviceResults = null;
             Map input = null;
@@ -695,7 +704,9 @@ public class EmailServices {
                     }
 
                     // Use the first PartyAndContactMech for that partyId in the partyAndContactMech list
-                    EntityConditionList filterConditions = new EntityConditionList(UtilMisc.toList(new EntityExpr("partyId", EntityOperator.EQUALS, partyId), new EntityExpr("contactMechId", EntityOperator.NOT_EQUAL, null)), EntityOperator.AND);
+                    EntityCondition filterConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                                                                     EntityCondition.makeCondition("partyId", partyId),
+                                                                                     EntityCondition.makeCondition("contactMechId", EntityOperator.NOT_EQUAL, null));
                     GenericValue partyAndContactMech = EntityUtil.getFirst(EntityUtil.filterByCondition(partyAndContactMechs, filterConditions));
 
                     // Create the communicationEventRole
@@ -721,7 +732,7 @@ public class EmailServices {
                             // note that this means the activity can only have one owner at a time
                             if (TEAM_MEMBER_ROLES.contains(crmRoleTypeId) && (UtilValidate.isEmpty(getActivityOwner(workEffortId, delegator)))) {
                                 if (UtilValidate.isNotEmpty(org.opentaps.common.party.PartyHelper.getCurrentContactMechsForParty(partyId, "EMAIL_ADDRESS", "RECEIVE_EMAIL_OWNER",
-                                        UtilMisc.toList(new EntityExpr("infoString", EntityOperator.IN, emailAddresses)), delegator))) {
+                                        UtilMisc.toList(EntityCondition.makeCondition("infoString", EntityOperator.IN, emailAddresses)), delegator))) {
                                     crmRoleTypeId = "CAL_OWNER";
                                     Debug.logInfo("Will be assigning [" + partyId + "] as owner of [" + workEffortId + "]", MODULE);
                                 }
@@ -768,27 +779,26 @@ public class EmailServices {
      * @return relate parties for activity
      * @throws GenericEntityException if an error occurs
      */
-    private static List getActivityParties(GenericDelegator delegator, String workEffortId, List partyRoles) throws GenericEntityException {
+    private static List<GenericValue> getActivityParties(GenericDelegator delegator, String workEffortId, List partyRoles) throws GenericEntityException {
         // add each role type id (ACCOUNT, CONTACT, etc) to an OR condition list
-        List roleCondList = new ArrayList();
-        for (Iterator iter = partyRoles.iterator(); iter.hasNext(); ) {
-            String roleTypeId = (String) iter.next();
-            roleCondList.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, roleTypeId));
+        List<EntityCondition> roleCondList = new ArrayList<EntityCondition>();
+        for (Iterator<String> iter = partyRoles.iterator(); iter.hasNext();) {
+            String roleTypeId = iter.next();
+            roleCondList.add(EntityCondition.makeCondition("roleTypeId", roleTypeId));
         }
-        EntityConditionList roleEntityCondList = new EntityConditionList(roleCondList, EntityOperator.OR);
+        EntityCondition roleEntityCondList = EntityCondition.makeCondition(roleCondList, EntityOperator.OR);
 
         // roleEntityCondList AND workEffortId = ${workEffortId} AND filterByDateExpr
-        EntityConditionList mainCondList = new EntityConditionList(UtilMisc.toList(
+        EntityCondition mainCondList = EntityCondition.makeCondition(EntityOperator.AND,
                     roleEntityCondList,
-                    new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId),
-                    EntityUtil.getFilterByDateExpr()
-                    ), EntityOperator.AND);
+                    EntityCondition.makeCondition("workEffortId", workEffortId),
+                    EntityUtil.getFilterByDateExpr());
 
         EntityListIterator partiesIt = delegator.findListIteratorByCondition("WorkEffortPartyAssignment", mainCondList, null,
                 null,
                 null, // fields to order by (unimportant here)
                 new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
-        List parties = partiesIt.getCompleteList();
+        List<GenericValue> parties = partiesIt.getCompleteList();
         partiesIt.close();
 
         return parties;

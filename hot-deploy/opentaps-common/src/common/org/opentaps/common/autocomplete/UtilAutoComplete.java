@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
 package org.opentaps.common.autocomplete;
 
 import net.sf.json.JSONArray;
@@ -5,8 +20,6 @@ import net.sf.json.JSONObject;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityUtil;
@@ -21,10 +34,13 @@ import java.util.Map;
 import java.sql.ResultSet;
 
 /**
- * Auto Complete constants and utility methods
+ * Auto Complete constants and utility methods.
  */
-public class UtilAutoComplete {
+public final class UtilAutoComplete {
 
+    private UtilAutoComplete() { }
+
+    /** Common EntityFindOptions for distinct search. */
     public static EntityFindOptions AC_FIND_OPTIONS = new EntityFindOptions(true, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY, true);
 
     /** How many results to show in the autocomplete list. */
@@ -43,19 +59,18 @@ public class UtilAutoComplete {
     public static EntityCondition ac_accountRoleCondition, ac_contactRoleCondition, ac_prospectRoleCondition, ac_clientRoleCondition;
     public static EntityCondition ac_accountOrProspectRoleCondition;
     static {
-        ac_accountRoleCondition = new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT");
-        ac_contactRoleCondition = new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT");
-        ac_prospectRoleCondition = new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT");
-        ac_clientRoleCondition = new EntityExpr("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT"));
-        ac_accountOrProspectRoleCondition = new EntityExpr("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "PROSPECT"));
+        ac_accountRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT");
+        ac_contactRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT");
+        ac_prospectRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT");
+        ac_clientRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT"));
+        ac_accountOrProspectRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "PROSPECT"));
     }
 
     public static EntityCondition getActiveRelationshipCondition(GenericValue party, EntityCondition otherConditions) {
-        return new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("partyIdTo", EntityOperator.EQUALS, party.get("partyId")),
+        return EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("partyIdTo", party.get("partyId")),
                     EntityUtil.getFilterByDateExpr(),
-                    otherConditions
-                    ), EntityOperator.AND);
+                    otherConditions);
     }
 
     /**

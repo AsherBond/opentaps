@@ -51,7 +51,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.DynamicViewEntity;
 import org.ofbiz.entity.model.ModelKeyMap;
@@ -78,12 +78,15 @@ public final class CommonServices {
 
     private CommonServices() { }
 
-    public static final String module = CommonServices.class.getName();
-    public static final String resource = "OpentapsUiLabels";
-    public static final String errorResource = "OpentapsErrorLabels";
+    private static final String MODULE = CommonServices.class.getName();
+    private static final String resource = "OpentapsUiLabels";
+    private static final String errorResource = "OpentapsErrorLabels";
 
     /**
      * Save a rendered FO screen to a PDF file.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
     public static Map saveFOScreenToPDFFile(DispatchContext dctx, Map context) {
@@ -101,7 +104,7 @@ public final class CommonServices {
             writer.write(foText);
             baos = FopRenderer.render(writer);
         } catch (Exception e) {
-            return UtilMessage.createAndLogServiceError(e.getMessage(), module);
+            return UtilMessage.createAndLogServiceError(e.getMessage(), MODULE);
         }
 
         // Make sure the directories exist to save the file
@@ -120,7 +123,7 @@ public final class CommonServices {
             fileOut.flush();
             fileOut.close();
         } catch (IOException e) {
-            return UtilMessage.createAndLogServiceError(e.getMessage(), module);
+            return UtilMessage.createAndLogServiceError(e.getMessage(), MODULE);
         }
 
         return ServiceUtil.returnSuccess();
@@ -140,13 +143,19 @@ public final class CommonServices {
 
         try {
             Timestamp now = UtilDateTime.nowTimestamp();
-            delegator.removeByCondition("ViewHistory", new EntityExpr("expireAt", EntityOperator.LESS_THAN, now));
+            delegator.removeByCondition("ViewHistory", EntityCondition.makeCondition("expireAt", now));
         } catch (GenericEntityException gee) {
-            UtilMessage.createAndLogServiceError(gee, locale, module);
+            UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
+    /**
+     * Service prints back the given timestamp.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
     @SuppressWarnings("unchecked")
     public static Map testDateTimeInput(DispatchContext dctx, Map context) {
         Timestamp sample = (Timestamp) context.get("sampleTimestamp");
@@ -155,6 +164,12 @@ public final class CommonServices {
         return ServiceUtil.returnSuccess("Your sent timestamp: " + result.toString());
     }
 
+    /**
+     * Service to test the service engine.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
     @SuppressWarnings("unchecked")
     public static Map runServiceEngineTests(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -252,38 +267,56 @@ public final class CommonServices {
                 duration[9] = UtilDateTime.getInterval(startAt[9], finishAt[9]);
             }
 
-            Debug.logInfo(">>> Test results:", module);
-            Debug.logInfo(String.format(">>> Run empty service w/o transaction & SECA support %1$d times, test time %2$.2f ms (%3$e ms per call)", iterations.intValue(), duration[0], duration[0] / iterations.intValue()), module);
-            Debug.logInfo(String.format(">>> Run empty service w/ transaction support, w/o SECA %1$d times, test time %2$.2f ms (%3$e ms per call)", iterations.intValue(), duration[1], duration[1] / iterations.intValue()), module);
-            Debug.logInfo(String.format(">>> Run empty service w/o transaction support, w/ SECA %1$d times, test time %2$.2f ms (%3$e ms per call)", iterations.intValue(), duration[2], duration[2] / iterations.intValue()), module);
-            Debug.logInfo(String.format(">>> Run empty service w/ transaction & SECA support %1$d times, test time %2$.2f ms (%3$e ms per call)", iterations.intValue(), duration[3], duration[3] / iterations.intValue()), module);
-            Debug.logInfo(String.format(">>> Create %1$d records in TestEntity, test time %2$.2f ms", records.intValue(), duration[4]), module);
-            Debug.logInfo(String.format(">>> Iterate over all records using getRelated(), test time %1$.2f ms", duration[5]), module);
-            Debug.logInfo(String.format(">>> Iterate over all records using getRelatedCache(), test time %1$.2f ms", duration[6]), module);
-            Debug.logInfo(String.format(">>> Query all records using DynamicViewEntity, test time %1$.2f ms", duration[7]), module);
-            Debug.logInfo(String.format(">>> Update all records w/ random values w/o EECA, test time %1$.2f ms", duration[8]), module);
-            Debug.logInfo(String.format(">>> Update all records w/ random values w/ EECA, test time %1$.2f ms", duration[9]), module);
+            Debug.logInfo(">>> Test results:", MODULE);
+            Debug.logInfo(String.format(">>> Run empty service w/o transaction & SECA support %1$d times, test time %2$.2f ms (%3$e ms per call)", iterations.intValue(), duration[0], duration[0] / iterations.intValue()), MODULE);
+            Debug.logInfo(String.format(">>> Run empty service w/ transaction support, w/o SECA %1$d times, test time %2$.2f ms (%3$e ms per call)", iterations.intValue(), duration[1], duration[1] / iterations.intValue()), MODULE);
+            Debug.logInfo(String.format(">>> Run empty service w/o transaction support, w/ SECA %1$d times, test time %2$.2f ms (%3$e ms per call)", iterations.intValue(), duration[2], duration[2] / iterations.intValue()), MODULE);
+            Debug.logInfo(String.format(">>> Run empty service w/ transaction & SECA support %1$d times, test time %2$.2f ms (%3$e ms per call)", iterations.intValue(), duration[3], duration[3] / iterations.intValue()), MODULE);
+            Debug.logInfo(String.format(">>> Create %1$d records in TestEntity, test time %2$.2f ms", records.intValue(), duration[4]), MODULE);
+            Debug.logInfo(String.format(">>> Iterate over all records using getRelated(), test time %1$.2f ms", duration[5]), MODULE);
+            Debug.logInfo(String.format(">>> Iterate over all records using getRelatedCache(), test time %1$.2f ms", duration[6]), MODULE);
+            Debug.logInfo(String.format(">>> Query all records using DynamicViewEntity, test time %1$.2f ms", duration[7]), MODULE);
+            Debug.logInfo(String.format(">>> Update all records w/ random values w/o EECA, test time %1$.2f ms", duration[8]), MODULE);
+            Debug.logInfo(String.format(">>> Update all records w/ random values w/ EECA, test time %1$.2f ms", duration[9]), MODULE);
 
         } catch (GenericServiceException gse) {
-            UtilMessage.createAndLogServiceError(gse, module);
+            UtilMessage.createAndLogServiceError(gse, MODULE);
         } catch (GenericTransactionException gte) {
-            UtilMessage.createAndLogServiceError(gte, module);
+            UtilMessage.createAndLogServiceError(gte, MODULE);
         }
 
         Map results = ServiceUtil.returnSuccess();
         return results;
     }
 
+    /**
+     * Service in the simplest form possible, does nothing.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
     @SuppressWarnings("unchecked")
     public static Map testEmptyService(DispatchContext dctx, Map context) {
         return ServiceUtil.returnSuccess();
     }
 
+    /**
+     * ECA service in the simplest form possible, does nothing.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
     @SuppressWarnings("unchecked")
     public static Map testEmptySeca(DispatchContext dctx, Map context) {
         return ServiceUtil.returnSuccess();
     }
 
+    /**
+     * Service to test iterating over a result list.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
     @SuppressWarnings("unchecked")
     public static Map testIterateTestEntity(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
@@ -309,6 +342,12 @@ public final class CommonServices {
         return results;
     }
 
+    /**
+     * Service to test the entity cache.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
     @SuppressWarnings("unchecked")
     public static Map testIterateTestEntityCache(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
@@ -334,6 +373,12 @@ public final class CommonServices {
         return results;
     }
 
+    /**
+     * Service to test the query.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
     @SuppressWarnings("unchecked")
     public static Map testQueryTestEntity(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
@@ -368,6 +413,12 @@ public final class CommonServices {
         return results;
     }
 
+    /**
+     * Service to test updating an entity.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
     @SuppressWarnings("unchecked")
     public static Map testUpdateTestEntity(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
@@ -401,6 +452,12 @@ public final class CommonServices {
         return results;
     }
 
+    /**
+     * Service to test creating an entity.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
+     */
     @SuppressWarnings("unchecked")
     public static Map testCreateTestEntity(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
@@ -419,7 +476,7 @@ public final class CommonServices {
             List<String> ids = EntityUtil.getFieldListFromEntityList(enums, "enumId", false);
             int count = ids.size();
 
-            delegator.removeByCondition("TestEntity", new EntityExpr("testId", EntityOperator.LIKE, "%"));
+            delegator.removeByCondition("TestEntity", EntityCondition.makeCondition("testId", EntityOperator.LIKE, "%"));
 
             startAt = UtilDateTime.nowTimestamp();
             for (int i = 0; i < iterationCount; i++) {

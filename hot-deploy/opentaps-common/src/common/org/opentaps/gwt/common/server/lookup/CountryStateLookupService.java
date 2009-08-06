@@ -23,24 +23,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.domain.base.entities.Geo;
+import org.opentaps.domain.base.entities.GeoAssocAndGeoTo;
+import org.opentaps.foundation.entity.EntityInterface;
+import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.gwt.common.client.lookup.configuration.CountryStateLookupConfiguration;
 import org.opentaps.gwt.common.server.HttpInputProvider;
 import org.opentaps.gwt.common.server.InputProviderInterface;
-import org.opentaps.foundation.infrastructure.InfrastructureException;
-import org.opentaps.foundation.entity.EntityInterface;
-import org.opentaps.domain.base.entities.Geo;
-import org.opentaps.domain.base.entities.GeoAssocAndGeoTo;
 
 /**
  * The RPC service used to populate the Country and State autocompleters widgets.
  */
 public class CountryStateLookupService extends EntityLookupAndSuggestService {
 
-    private static final EntityCondition COUNTRY_CONDITIONS = new EntityExpr("geoTypeId", EntityOperator.EQUALS, "COUNTRY");
-    private static final EntityCondition STATE_CONDITIONS = new EntityExpr("geoTypeId", EntityOperator.EQUALS, "STATE");
+    private static final EntityCondition COUNTRY_CONDITIONS = EntityCondition.makeCondition("geoTypeId", "COUNTRY");
+    private static final EntityCondition STATE_CONDITIONS = EntityCondition.makeCondition("geoTypeId", "STATE");
 
     private String geoIdFrom;
 
@@ -108,27 +107,27 @@ public class CountryStateLookupService extends EntityLookupAndSuggestService {
         conds.add(geoCondition);
         if (getSuggestQuery() != null) {
             List<EntityCondition> suggestConds = new ArrayList<EntityCondition>();
-            suggestConds.add(new EntityExpr("geoName", true, EntityOperator.LIKE, "%" + getSuggestQuery() + "%", true));
-            suggestConds.add(new EntityExpr("geoCode", true, EntityOperator.LIKE, "%" + getSuggestQuery() + "%", true));
-            suggestConds.add(new EntityExpr("abbreviation", true, EntityOperator.LIKE, "%" + getSuggestQuery() + "%", true));
-            conds.add(new EntityConditionList(suggestConds, EntityOperator.OR));
+            suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER("geoName"), EntityOperator.LIKE, EntityFunction.UPPER("%" + getSuggestQuery() + "%")));
+            suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER("geoCode"), EntityOperator.LIKE, EntityFunction.UPPER("%" + getSuggestQuery() + "%")));
+            suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER("abbreviation"), EntityOperator.LIKE, EntityFunction.UPPER("%" + getSuggestQuery() + "%")));
+            conds.add(EntityCondition.makeCondition(suggestConds, EntityOperator.OR));
         }
-        return findList(Geo.class, new EntityConditionList(conds, EntityOperator.AND));
+        return findList(Geo.class, EntityCondition.makeCondition(conds, EntityOperator.AND));
     }
 
     private List<GeoAssocAndGeoTo> suggestGeoAssocAndGeoTo(EntityCondition geoCondition) {
 
         List<EntityCondition> conds = new ArrayList<EntityCondition>();
-        conds.add(new EntityExpr("geoAssocTypeId", EntityOperator.EQUALS, "REGIONS"));
-        conds.add(new EntityExpr("geoIdFrom", EntityOperator.EQUALS, geoIdFrom));
+        conds.add(EntityCondition.makeCondition("geoAssocTypeId", "REGIONS"));
+        conds.add(EntityCondition.makeCondition("geoIdFrom", geoIdFrom));
         if (getSuggestQuery() != null) {
             List<EntityCondition> suggestConds = new ArrayList<EntityCondition>();
-            suggestConds.add(new EntityExpr("geoName", true, EntityOperator.LIKE, "%" + getSuggestQuery() + "%", true));
-            suggestConds.add(new EntityExpr("geoCode", true, EntityOperator.LIKE, "%" + getSuggestQuery() + "%", true));
-            suggestConds.add(new EntityExpr("abbreviation", true, EntityOperator.LIKE, "%" + getSuggestQuery() + "%", true));
-            conds.add(new EntityConditionList(suggestConds, EntityOperator.OR));
+            suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER("geoName"), EntityOperator.LIKE, EntityFunction.UPPER("%" + getSuggestQuery() + "%")));
+            suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER("geoCode"), EntityOperator.LIKE, EntityFunction.UPPER("%" + getSuggestQuery() + "%")));
+            suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER("abbreviation"), EntityOperator.LIKE, EntityFunction.UPPER("%" + getSuggestQuery() + "%")));
+            conds.add(EntityCondition.makeCondition(suggestConds, EntityOperator.OR));
         }
-        return findList(GeoAssocAndGeoTo.class, new EntityConditionList(conds, EntityOperator.AND));
+        return findList(GeoAssocAndGeoTo.class, EntityCondition.makeCondition(conds, EntityOperator.AND));
     }
 
     @Override

@@ -60,8 +60,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
@@ -1294,7 +1292,7 @@ public final class OrderServices {
 
         try {
 
-            delegator.storeByCondition("OrderItemBilling", UtilMisc.toMap("quantity", Double.valueOf("0.0")), new EntityExpr("invoiceId", EntityOperator.EQUALS, invoiceId));
+            delegator.storeByCondition("OrderItemBilling", UtilMisc.toMap("quantity", Double.valueOf("0.0")), EntityCondition.makeCondition("invoiceId", invoiceId));
 
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, locale, MODULE);
@@ -1405,9 +1403,9 @@ public final class OrderServices {
         boolean isCod = false;
         try {
             List<GenericValue> codPaymentPrefs = delegator.findByAnd("OrderPaymentPreference",
-                                                                     UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                                                                                     new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "EXT_COD"),
-                                                                                     new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")));
+                                                                     UtilMisc.toList(EntityCondition.makeCondition("orderId", orderId),
+                                                                                     EntityCondition.makeCondition("paymentMethodTypeId", "EXT_COD"),
+                                                                                     EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")));
 
             isCod = UtilValidate.isNotEmpty(codPaymentPrefs);
         } catch (GeneralException e) {
@@ -1575,13 +1573,13 @@ public final class OrderServices {
         // cancel other (non-completed and non-cancelled) payments
         List paymentPrefsToCancel = null;
         try {
-            List exprs = UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId));
-            exprs.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_RECEIVED"));
-            exprs.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED"));
-            exprs.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_DECLINED"));
-            exprs.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_SETTLED"));
-            exprs.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_REFUNDED"));
-            EntityCondition cond = new EntityConditionList(exprs, EntityOperator.AND);
+            EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                 EntityCondition.makeCondition("orderId", orderId),
+                 EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_RECEIVED"),
+                 EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED"),
+                 EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_DECLINED"),
+                 EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_SETTLED"),
+                 EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_REFUNDED"));
             paymentPrefsToCancel = delegator.findByCondition("OrderPaymentPreference", cond, null, null);
         } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
@@ -1603,14 +1601,12 @@ public final class OrderServices {
 
         // remove the adjustments
         try {
-            List adjExprs = new LinkedList();
-            adjExprs.add(new EntityExpr("orderId", EntityOperator.EQUALS, orderId));
-            List exprs = new LinkedList();
-            exprs.add(new EntityExpr("orderAdjustmentTypeId", EntityOperator.EQUALS, "PROMOTION_ADJUSTMENT"));
-            exprs.add(new EntityExpr("orderAdjustmentTypeId", EntityOperator.EQUALS, "SHIPPING_CHARGES"));
-            exprs.add(new EntityExpr("orderAdjustmentTypeId", EntityOperator.EQUALS, "SALES_TAX"));
-            adjExprs.add(new EntityConditionList(exprs, EntityOperator.OR));
-            EntityCondition cond = new EntityConditionList(adjExprs, EntityOperator.AND);
+            EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
+                                                                 EntityCondition.makeCondition("orderId", orderId),
+                                                                 EntityCondition.makeCondition(EntityOperator.OR,
+                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"),
+                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "SHIPPING_CHARGES"),
+                                                                                               EntityCondition.makeCondition("orderAdjustmentTypeId", "SALES_TAX")));
             delegator.removeByCondition("OrderAdjustment", cond);
         } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
@@ -1716,7 +1712,7 @@ public final class OrderServices {
                     shippingTotal = BigDecimal.ZERO;
                     Debug.log("No valid order items found - " + shippingTotal, MODULE);
                 } else {
-                    shippingTotal = UtilValidate.isEmpty(shippingEstMap.get("shippingTotal")) ? BigDecimal.ZERO : new BigDecimal(((Double) shippingEstMap.get("shippingTotal")).doubleValue());
+                    shippingTotal = UtilValidate.isEmpty(shippingEstMap.get("shippingTotal")) ? BigDecimal.ZERO : BigDecimal.valueOf(((Double) shippingEstMap.get("shippingTotal")).doubleValue());
                     shippingTotal = shippingTotal.setScale(decimals, rounding);
                 }
                 if (Debug.infoOn()) {

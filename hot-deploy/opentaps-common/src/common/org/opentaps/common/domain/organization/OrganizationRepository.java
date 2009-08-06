@@ -16,7 +16,6 @@
 package org.opentaps.common.domain.organization;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +28,8 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
@@ -108,23 +107,19 @@ public class OrganizationRepository extends PartyRepository implements Organizat
 
     /** {@inheritDoc} */
     public List<CustomTimePeriod> getOpenFiscalTimePeriods(String organizationPartyId, Timestamp asOfDate) throws RepositoryException {
-    	return getOpenFiscalTimePeriods(organizationPartyId, FISCAL_PERIOD_TYPES, asOfDate);
+        return getOpenFiscalTimePeriods(organizationPartyId, FISCAL_PERIOD_TYPES, asOfDate);
     }
-    
+
     /** {@inheritDoc} */
     public List<CustomTimePeriod> getOpenFiscalTimePeriods(String organizationPartyId, List<String> fiscalPeriodTypes, Timestamp asOfDate) throws RepositoryException {
-    	
-    	// isClosed must either be null or N.  This or conditions prevents an issue where rows with null values are not selected
-        EntityConditionList conditions = new EntityConditionList(Arrays.asList(
-              new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-              new EntityExpr("periodTypeId", EntityOperator.IN, fiscalPeriodTypes),
-              EntityUtil.getFilterByDateExpr(asOfDate),
-              new EntityConditionList(Arrays.asList(
-                       new EntityExpr("isClosed", EntityOperator.EQUALS, null),
-                       new EntityExpr("isClosed", EntityOperator.EQUALS, "N")
-                  ), EntityOperator.OR)
-              ), EntityOperator.AND
-        );
+        // isClosed must either be null or N.  This or conditions prevents an issue where rows with null values are not selected
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                  EntityCondition.makeCondition(CustomTimePeriod.Fields.organizationPartyId.name(), organizationPartyId),
+                  EntityCondition.makeCondition(CustomTimePeriod.Fields.periodTypeId.name(), EntityOperator.IN, fiscalPeriodTypes),
+                  EntityUtil.getFilterByDateExpr(asOfDate),
+                  EntityCondition.makeCondition(EntityOperator.OR,
+                           EntityCondition.makeCondition(CustomTimePeriod.Fields.isClosed.name(), null),
+                           EntityCondition.makeCondition(CustomTimePeriod.Fields.isClosed.name(), "N")));
         return findList(CustomTimePeriod.class, conditions);
     }
 
@@ -144,7 +139,6 @@ public class OrganizationRepository extends PartyRepository implements Organizat
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public BigDecimal determineUomConversionFactor(String organizationPartyId, String currencyUomId, Timestamp asOfDate) throws RepositoryException {
         try {
             Organization organization = getOrganizationById(organizationPartyId);
@@ -225,11 +219,10 @@ public class OrganizationRepository extends PartyRepository implements Organizat
             // filter out disabled tags
             tag.setTagValues(findListCache(Enumeration.class,
                                            Arrays.asList(
-                                               new EntityExpr(Enumeration.Fields.enumTypeId.name(), EntityOperator.EQUALS, type),
-                                               new EntityConditionList(Arrays.asList(
-                                                   new EntityExpr(Enumeration.Fields.disabled.name(), EntityOperator.EQUALS, "N"),
-                                                   new EntityExpr(Enumeration.Fields.disabled.name(), EntityOperator.EQUALS, null)),
-                                                   EntityOperator.OR)),
+                                               EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), type),
+                                               EntityCondition.makeCondition(EntityOperator.OR,
+                                                   EntityCondition.makeCondition(Enumeration.Fields.disabled.name(), "N"),
+                                                   EntityCondition.makeCondition(Enumeration.Fields.disabled.name(), null))),
                                            Arrays.asList(Enumeration.Fields.sequenceId.asc())));
             // add if required property for tag
             tag.setIsRequired(isRequired);
@@ -253,7 +246,7 @@ public class OrganizationRepository extends PartyRepository implements Organizat
 
     /** {@inheritDoc} */
     public List<TermType> getValidTermTypes(String documentTypeId) throws RepositoryException {
-        return findListCache(TermType.class, new EntityExpr(TermType.Fields.termTypeId.name(), EntityOperator.IN, getValidTermTypeIds(documentTypeId)));
+        return findListCache(TermType.class, EntityCondition.makeCondition(TermType.Fields.termTypeId.name(), EntityOperator.IN, getValidTermTypeIds(documentTypeId)));
     }
 
     /** {@inheritDoc} */
@@ -264,7 +257,7 @@ public class OrganizationRepository extends PartyRepository implements Organizat
             Session session = getInfrastructure().getSession();
             Query query = session.createQuery(hql);
             List<Party> parties = query.list();
-            return findList(Organization.class, Arrays.asList(new EntityExpr("partyId", EntityOperator.IN, Entity.getDistinctFieldValues(parties, Party.Fields.partyId))));
+            return findList(Organization.class, Arrays.asList(EntityCondition.makeCondition(Party.Fields.partyId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(parties, Party.Fields.partyId))));
         } catch (InfrastructureException e) {
             throw new RepositoryException(e);
         }

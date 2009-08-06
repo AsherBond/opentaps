@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.hibernate.search.FullTextQuery;
 import org.ofbiz.base.util.GeneralException;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.domain.party.PartySearch;
 import org.opentaps.domain.base.entities.SalesOpportunity;
@@ -113,7 +113,7 @@ public class SalesOpportunitySearchService extends SearchService implements Sale
 
         try {
             if (!salesOpportunityIds.isEmpty()) {
-                return repository.findList(SalesOpportunity.class, new EntityExpr(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds));
+                return repository.findList(SalesOpportunity.class, EntityCondition.makeCondition(SalesOpportunity.Fields.salesOpportunityId.name(), EntityOperator.IN, salesOpportunityIds));
             } else {
                 return new ArrayList<SalesOpportunity>();
             }

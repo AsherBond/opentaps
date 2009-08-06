@@ -63,10 +63,10 @@ public final class InvoiceHelper {
 
     /**
      * Joins invoice item with data required for simplified presentation.
-     *
+     * @param invoiceItem the invoice item <code>GenericValue</code>
      * @return Map of all invoice item data and joined in fields.
+     * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> joinInvoiceItemForPresentation(GenericValue invoiceItem) throws GenericEntityException {
         Map<String, Object> data = FastMap.newInstance();
         data.putAll(invoiceItem.getAllFields());
@@ -99,6 +99,10 @@ public final class InvoiceHelper {
      * <p>For items that have identical amounts, the isUniform flag may be set to true.
      * If so done, the quantity field will be aggregated and placed in the line, along with
      * the amount.  These may be displayed as quantity and unit cost.</p>
+     * @param invoiceItemList the <code>List</code> of invoice item <code>GenericValue</code> to aggregate
+     * @param isUniform see description
+     * @return the aggregated data
+     * @throws GenericEntityException if an error occurs
      */
     public static Map<String, Object> aggregateInvoiceItemsForPresentation(List<GenericValue> invoiceItemList, boolean isUniform) throws GenericEntityException {
         if (invoiceItemList.size() == 0) {
@@ -160,9 +164,9 @@ public final class InvoiceHelper {
      * </ul>
      * @param delegator a <code>GenericDelegator</code> value
      * @param invoiceId a <code>String</code> value
+     * @return the invoice lines
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<Map<String, Object>> getInvoiceLinesForPresentation(GenericDelegator delegator, String invoiceId) throws GenericEntityException {
         List<Map<String, Object>> invoiceLines = FastList.newInstance();
         List<GenericValue> invoiceItems = delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoiceId), UtilMisc.toList("invoiceItemSeqId"));
@@ -229,7 +233,7 @@ public final class InvoiceHelper {
             BigDecimal backOrdered = ordered.subtract(shipped);
             invoiceLine.put("backOrdered", backOrdered);
 
-            List<EntityExpr> oppFields = UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orderItem.getString("orderId")), new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED"));
+            List<EntityExpr> oppFields = UtilMisc.toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderItem.getString("orderId")), EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED"));
             invoiceLine.put("orderPaymentList", delegator.findByAnd("OrderPaymentPreference", oppFields));
 
             // shipment ID and tracking codes
@@ -245,8 +249,8 @@ public final class InvoiceHelper {
                     invoiceLine.put("carrierPartyId", shipmentRouteSegment.get("carrierPartyId"));
                     invoiceLine.put("shipmentMethodTypeId", shipmentRouteSegment.get("shipmentMethodTypeId"));
                     List<EntityExpr> conditions = Arrays.asList(
-                        new EntityExpr("shipmentId", EntityOperator.EQUALS, issuance.get("shipmentId")),
-                        new EntityExpr("trackingCode", EntityOperator.NOT_EQUAL, null)
+                        EntityCondition.makeCondition("shipmentId", EntityOperator.EQUALS, issuance.get("shipmentId")),
+                        EntityCondition.makeCondition("trackingCode", EntityOperator.NOT_EQUAL, null)
                     );
                     List<GenericValue> codes = delegator.findByAnd("ShipmentPackageRouteSeg", conditions, UtilMisc.toList("shipmentPackageSeqId", "shipmentRouteSegmentId"));
                     List<String> trackingCodes = FastList.newInstance();
@@ -316,11 +320,11 @@ public final class InvoiceHelper {
 
         // Get any agreements between the parties and retrieve the AgreementTerms
         List<EntityCondition> conditions = UtilMisc.toList(
-            new EntityExpr("agreementTypeId", EntityOperator.EQUALS, agreementTypeId),
-            new EntityExpr("partyIdFrom", EntityOperator.EQUALS, invoice.get(isReceipt ? "partyIdFrom" : "partyId")),
-            new EntityExpr("partyIdTo", EntityOperator.EQUALS, invoice.get(isReceipt ? "partyId" : "partyIdFrom")),
-            new EntityExpr("agreementItemTypeId", EntityOperator.IN, validItemTypeIds),
-            new EntityExpr("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),
+            EntityCondition.makeCondition("agreementTypeId", agreementTypeId),
+            EntityCondition.makeCondition("partyIdFrom", invoice.get(isReceipt ? "partyIdFrom" : "partyId")),
+            EntityCondition.makeCondition("partyIdTo", invoice.get(isReceipt ? "partyId" : "partyIdFrom")),
+            EntityCondition.makeCondition("agreementItemTypeId", EntityOperator.IN, validItemTypeIds),
+            EntityCondition.makeCondition("statusId", "AGR_ACTIVE"),
             dateFilter
             );
         // currency is not supported right now--it will be moved from AgreementItem.currencyUomId to an AgreementTerm at some point
@@ -330,7 +334,7 @@ public final class InvoiceHelper {
         TreeMap termUpdatedStamps = new TreeMap();
 
         if (UtilValidate.isNotEmpty(agreementTermIds)) {
-            List agreementTerms = delegator.findByCondition("AgreementTerm", new EntityExpr("agreementTermId", EntityOperator.IN, agreementTermIds), null, UtilMisc.toList("lastUpdatedStamp DESC"));
+            List agreementTerms = delegator.findByCondition("AgreementTerm", EntityCondition.makeCondition("agreementTermId", EntityOperator.IN, agreementTermIds), null, UtilMisc.toList("lastUpdatedStamp DESC"));
 
             // Construct a sorted map of lists, keyed to the time when the records were last updated
             Iterator tit = agreementTerms.iterator();
@@ -344,10 +348,10 @@ public final class InvoiceHelper {
         }
 
         // Get the partyClassificationGroupIds of the invoice's parties
-        List fromPartyClassifications = delegator.findByAnd("PartyClassification", UtilMisc.toList(new EntityExpr("partyId", EntityOperator.EQUALS, invoice.get(isReceipt ? "partyIdFrom" : "partyId")), dateFilter), UtilMisc.toList("lastUpdatedStamp DESC"));
-        List fromPartyClassGroupIds = EntityUtil.getFieldListFromEntityList(fromPartyClassifications, "partyClassificationGroupId", true);
-        List toPartyClassifications = delegator.findByAnd("PartyClassification", UtilMisc.toList(new EntityExpr("partyId", EntityOperator.EQUALS, invoice.get(isReceipt ? "partyId" : "partyIdFrom")), dateFilter), UtilMisc.toList("lastUpdatedStamp DESC"));
-        List toPartyClassGroupIds = EntityUtil.getFieldListFromEntityList(toPartyClassifications, "partyClassificationGroupId", true);
+        List<GenericValue> fromPartyClassifications = delegator.findByAnd("PartyClassification", UtilMisc.toList(EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, invoice.get(isReceipt ? "partyIdFrom" : "partyId")), dateFilter), UtilMisc.toList("lastUpdatedStamp DESC"));
+        List<GenericValue> fromPartyClassGroupIds = EntityUtil.getFieldListFromEntityList(fromPartyClassifications, "partyClassificationGroupId", true);
+        List<GenericValue> toPartyClassifications = delegator.findByAnd("PartyClassification", UtilMisc.toList(EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, invoice.get(isReceipt ? "partyId" : "partyIdFrom")), dateFilter), UtilMisc.toList("lastUpdatedStamp DESC"));
+        List<String> toPartyClassGroupIds = EntityUtil.getFieldListFromEntityList(toPartyClassifications, "partyClassificationGroupId", true);
 
         List classAgreementTerms = new ArrayList();
         List classConditions = null;
@@ -355,8 +359,8 @@ public final class InvoiceHelper {
         // Add any agreements where both the from- and to- partyClassificationGroupId match one of the classifications for the respective parties
         if (UtilValidate.isNotEmpty(fromPartyClassGroupIds) && UtilValidate.isNotEmpty(toPartyClassGroupIds)) {
             classConditions = UtilMisc.toList(
-                new EntityExpr("fromPartyClassGroupId", EntityOperator.IN, fromPartyClassGroupIds),
-                new EntityExpr("toPartyClassGroupId", EntityOperator.IN, toPartyClassGroupIds)
+                EntityCondition.makeCondition("fromPartyClassGroupId", EntityOperator.IN, fromPartyClassGroupIds),
+                EntityCondition.makeCondition("toPartyClassGroupId", EntityOperator.IN, toPartyClassGroupIds)
             );
             classAgreementTerms.addAll(delegator.findByAnd("Agreement", classConditions));
         }
@@ -365,8 +369,8 @@ public final class InvoiceHelper {
         //  null (applies to all parties)
         if (UtilValidate.isNotEmpty(fromPartyClassGroupIds)) {
             classConditions = UtilMisc.toList(
-                new EntityExpr("fromPartyClassGroupId", EntityOperator.IN, fromPartyClassGroupIds),
-                new EntityExpr("toPartyClassGroupId", EntityOperator.EQUALS, null)
+                EntityCondition.makeCondition("fromPartyClassGroupId", EntityOperator.IN, fromPartyClassGroupIds),
+                EntityCondition.makeCondition("toPartyClassGroupId", EntityOperator.EQUALS, null)
             );
             classAgreementTerms.addAll(delegator.findByAnd("Agreement", classConditions));
         }
@@ -375,17 +379,17 @@ public final class InvoiceHelper {
         //  one of the to party's classifications
         if (UtilValidate.isNotEmpty(toPartyClassGroupIds)) {
             classConditions = UtilMisc.toList(
-                new EntityExpr("fromPartyClassGroupId", EntityOperator.EQUALS, null),
-                new EntityExpr("toPartyClassGroupId", EntityOperator.IN, toPartyClassGroupIds)
+                EntityCondition.makeCondition("fromPartyClassGroupId", EntityOperator.EQUALS, null),
+                EntityCondition.makeCondition("toPartyClassGroupId", EntityOperator.IN, toPartyClassGroupIds)
             );
             classAgreementTerms.addAll(delegator.findByAnd("AgreementAndItemAndTerm", classConditions));
         }
 
         // Filter the partyClassification-based agreements by AgreementType, AgreementItemType, currency and date
         classAgreementTerms = EntityUtil.filterByAnd(classAgreementTerms, UtilMisc.toList(
-                new EntityExpr("agreementTypeId", EntityOperator.EQUALS, agreementTypeId),
-                new EntityExpr("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),
-                new EntityExpr("agreementItemTypeId", EntityOperator.IN, validItemTypeIds)
+                EntityCondition.makeCondition("agreementTypeId", EntityOperator.EQUALS, agreementTypeId),
+                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),
+                EntityCondition.makeCondition("agreementItemTypeId", EntityOperator.IN, validItemTypeIds)
             ));
         classAgreementTerms = EntityUtil.filterByDate(classAgreementTerms); // Not using dateFilter here because it filters out seemingly valid agreements
 
@@ -446,7 +450,6 @@ public final class InvoiceHelper {
      * @return a <code>BigDecimal</code> value
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static BigDecimal getInvoiceAuthorizedAmount(GenericValue invoice) throws GeneralException {
         GenericDelegator delegator = invoice.getDelegator();
         String invoiceCurrencyUomId = invoice.getString("currencyUomId");
@@ -461,8 +464,8 @@ public final class InvoiceHelper {
             return ZERO;
         }
         List<EntityExpr> conditions = UtilMisc.toList(
-                new EntityExpr("orderId", EntityOperator.IN, orderIds),
-                new EntityExpr("paymentStatusId", EntityOperator.EQUALS, "PAYMENT_AUTHORIZED")
+                EntityCondition.makeCondition("orderId", EntityOperator.IN, orderIds),
+                EntityCondition.makeCondition("paymentStatusId", EntityOperator.EQUALS, "PAYMENT_AUTHORIZED")
         );
         List<GenericValue> prefs = delegator.findByAnd("OrderHeaderAndPaymentPref", conditions);
 

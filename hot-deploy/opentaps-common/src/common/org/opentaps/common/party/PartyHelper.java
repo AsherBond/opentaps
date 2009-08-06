@@ -47,7 +47,6 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 import javolution.util.FastList;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilFormatOut;
@@ -56,8 +55,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
@@ -75,9 +73,11 @@ import org.opentaps.foundation.repository.RepositoryException;
  * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
  * @version    $Rev: 548 $
  */
-public class PartyHelper {
+public final class PartyHelper {
 
-    public static final String module = PartyHelper.class.getName();
+    private PartyHelper() { }
+
+    private static final String MODULE = PartyHelper.class.getName();
     public static List<String> CLIENT_PARTY_ROLES = Arrays.asList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER");
 
     /**
@@ -173,6 +173,19 @@ public class PartyHelper {
 
     /**
      * Same as above except uses a default of now for the timestamp.
+     * @param partyIdTo a <code>String</code> value
+     * @param partyIdFrom a <code>String</code> value
+     * @param roleTypeIdFrom a <code>String</code> value
+     * @param partyRelationshipTypeId a <code>String</code> value
+     * @param securityGroupId a <code>String</code> value
+     * @param validToPartyRoles a <code>List</code> value
+     * @param expireExistingRelationships a <code>boolean</code> value
+     * @param userLogin a <code>GenericValue</code> value
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param dispatcher a <code>LocalDispatcher</code> value
+     * @return a <code>boolean</code> value
+     * @exception GenericEntityException if an error occurs
+     * @exception GenericServiceException if an error occurs
      */
     @SuppressWarnings("unchecked")
     public static boolean createNewPartyToRelationship(String partyIdTo, String partyIdFrom, String roleTypeIdFrom,
@@ -237,7 +250,7 @@ public class PartyHelper {
 
         // if none are found, log a message about this and return null
         if (activeRelationships.size() == 0) {
-            Debug.logInfo("No active PartyRelationships found with relationship [" + partyRelationshipTypeId + "] for party [" + partyIdFrom + "] in role [" + roleTypeIdFrom + "]", module);
+            Debug.logInfo("No active PartyRelationships found with relationship [" + partyRelationshipTypeId + "] for party [" + partyIdFrom + "] in role [" + roleTypeIdFrom + "]", MODULE);
             return null;
         }
 
@@ -379,19 +392,19 @@ public class PartyHelper {
     @SuppressWarnings("unchecked")
     public static List getCurrentContactMechsForParty(String partyId, String contactMechTypeId, String contactMechPurposeTypeId, List additionalConditions, GenericDelegator delegator) throws GenericEntityException {
         Timestamp now = UtilDateTime.nowTimestamp();
-        List conditions = UtilMisc.toList(
-                new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
-                new EntityExpr("contactMechPurposeTypeId", EntityOperator.EQUALS, contactMechPurposeTypeId),
-                new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, contactMechTypeId));
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                EntityCondition.makeCondition("partyId", partyId),
+                EntityCondition.makeCondition("contactMechPurposeTypeId", contactMechPurposeTypeId),
+                EntityCondition.makeCondition("contactMechTypeId", contactMechTypeId));
         if ("EMAIL_ADDRESS".equals(contactMechTypeId)) {
-            conditions.add(new EntityExpr("infoString", EntityOperator.NOT_EQUAL, null));
+            conditions.add(EntityCondition.makeCondition("infoString", EntityOperator.NOT_EQUAL, null));
         }
         if (UtilValidate.isNotEmpty(additionalConditions)) {
             conditions.addAll(additionalConditions);
         }
 
         // TODO: Put the filter by dates in the conditions list
-        List contactMechs = delegator.findByCondition("PartyContactWithPurpose", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("-purposeFromDate"));
+        List contactMechs = delegator.findByCondition("PartyContactWithPurpose", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("-purposeFromDate"));
         contactMechs = EntityUtil.filterByDate(contactMechs, now, "contactFromDate", "contactThruDate", true);
         contactMechs = EntityUtil.filterByDate(contactMechs, now, "purposeFromDate", "purposeThruDate", true);
 
@@ -455,7 +468,7 @@ public class PartyHelper {
         try {
             return getEmailForPartyByPurpose(partyId, "PRIMARY_EMAIL", delegator);
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Unable to retrieve primary email address for partyId: " + partyId, module);
+            Debug.logError(e, "Unable to retrieve primary email address for partyId: " + partyId, MODULE);
             return null;
         }
     }
@@ -474,13 +487,13 @@ public class PartyHelper {
             classifications = EntityUtil.filterByDate(classifications);
             List partyClassificationGroupIds = EntityUtil.getFieldListFromEntityList(classifications, "partyClassificationGroupId", true);
             if (UtilValidate.isNotEmpty(partyClassificationGroupIds)) {
-                List partyClassificationGroups = delegator.findByCondition("PartyClassificationGroup", new EntityExpr("partyClassificationGroupId", EntityOperator.IN, partyClassificationGroupIds), null, UtilMisc.toList("description"));
+                List partyClassificationGroups = delegator.findByCondition("PartyClassificationGroup", EntityCondition.makeCondition("partyClassificationGroupId", EntityOperator.IN, partyClassificationGroupIds), null, UtilMisc.toList("description"));
                 if (UtilValidate.isNotEmpty(partyClassificationGroups)) {
                     groups.addAll(partyClassificationGroups);
                 }
             }
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Unable to retrieve party classification groups for partyId: " + partyId, module);
+            Debug.logError(e, "Unable to retrieve party classification groups for partyId: " + partyId, MODULE);
         }
         return groups;
     }
@@ -498,12 +511,12 @@ public class PartyHelper {
         if (UtilValidate.isEmpty(partyId)) {
             return carrierAccountData;
         }
-        List cond = UtilMisc.toList(new EntityExpr("partyId", EntityOperator.EQUALS, partyId), EntityUtil.getFilterByDateExpr());
+        List cond = UtilMisc.toList(EntityCondition.makeCondition("partyId", partyId), EntityUtil.getFilterByDateExpr());
         List<GenericValue> partyCarrierAccounts = null;
         try {
-            partyCarrierAccounts = delegator.findByCondition("PartyCarrierAccount", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("accountNumber"));
+            partyCarrierAccounts = delegator.findByCondition("PartyCarrierAccount", EntityCondition.makeCondition(cond, EntityOperator.AND), null, UtilMisc.toList("accountNumber"));
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             partyCarrierAccounts = new ArrayList<GenericValue>();
         }
 
@@ -543,7 +556,7 @@ public class PartyHelper {
         try {
             role = delegator.findByPrimaryKey("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", "INTERNAL_ORGANIZATIO"));
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
         }
         return (role != null);
     }
@@ -559,20 +572,20 @@ public class PartyHelper {
         Timestamp now = UtilDateTime.nowTimestamp();
 
         List conditions = UtilMisc.toList(
-                new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
-                new EntityExpr("contactMechPurposeTypeId", EntityOperator.LIKE, "%PHONE%"),
-                new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, "TELECOM_NUMBER"));
+                EntityCondition.makeCondition("partyId", partyId),
+                EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.LIKE, "%PHONE%"),
+                EntityCondition.makeCondition("contactMechTypeId", "TELECOM_NUMBER"));
 
         List phoneNumbers = new ArrayList<GenericValue>();
         try {
-            List<GenericValue> partyContacts = delegator.findByCondition("PartyContactWithPurpose", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("-purposeFromDate"));
+            List<GenericValue> partyContacts = delegator.findByCondition("PartyContactWithPurpose", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("-purposeFromDate"));
             partyContacts = EntityUtil.filterByDate(partyContacts, now, "contactFromDate", "contactThruDate", true);
             partyContacts = EntityUtil.filterByDate(partyContacts, now, "purposeFromDate", "purposeThruDate", true);
             for (GenericValue partyContact : partyContacts) {
                 phoneNumbers.add(delegator.findByPrimaryKey("TelecomNumber", UtilMisc.toMap("contactMechId", partyContact.get("contactMechId"))));
             }
         } catch (GenericEntityException e) {
-            Debug.logError(e, "Unable to retrieve phone numbers for partyId: " + partyId, module);
+            Debug.logError(e, "Unable to retrieve phone numbers for partyId: " + partyId, MODULE);
         }
         return phoneNumbers;
     }
@@ -587,10 +600,10 @@ public class PartyHelper {
     @SuppressWarnings("unchecked")
     public static List<GenericValue> getPartners(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
         List conditions = UtilMisc.toList(
-                new EntityExpr("partyIdTo", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
-                new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "PARTNER"),
-                new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "PARTNER_OF"),
+                EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("roleTypeIdTo", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
+                EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PARTNER"),
+                EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "PARTNER_OF"),
                 EntityUtil.getFilterByDateExpr()
         );
         return delegator.findByAnd("PartyFromSummaryByRelationship", conditions);
@@ -608,7 +621,6 @@ public class PartyHelper {
      * @return the URL to the view page for the given party
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static String createViewPageURL(GenericValue party, List<String> roleIds, String externalLoginKey) throws GenericEntityException {
 
         GenericDelegator delegator = party.getDelegator();
@@ -618,19 +630,25 @@ public class PartyHelper {
 
         if (roleTypeId != null) {
             // let's also make sure that a Client PartyRelationship exists, otherwise we shouldn't generate a view link to a CRM account, contact or lead
-            EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
+            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                     EntityUtil.getFilterByDateExpr(),
-                    new EntityExpr("partyId", EntityOperator.EQUALS, party.getString("partyId")),
-                    new EntityExpr("roleTypeIdFrom", EntityOperator.IN, roleIds)
-            ), EntityOperator.AND);
+                    EntityCondition.makeCondition("partyId", party.getString("partyId")),
+                    EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, roleIds)
+            );
             List<GenericValue> crmRelationships = delegator.findByConditionCache("PartyFromSummaryByRelationship", conditions, Arrays.asList("partyId"), null);
             if (crmRelationships.size() > 0) {
                 uri.append("/crmsfa/control/");
-                if ("PROSPECT".equals(roleTypeId)) uri.append("viewLead?");
-                else if ("ACCOUNT".equals(roleTypeId)) uri.append("viewAccount?");
-                else if ("CONTACT".equals(roleTypeId)) uri.append("viewContact?");
-                else if ("PARTNER".equals(roleTypeId)) uri.append("viewPartner?");
-                else roleTypeId = null; // default to partymgr viewprofile
+                if ("PROSPECT".equals(roleTypeId)) {
+                    uri.append("viewLead?");
+                } else if ("ACCOUNT".equals(roleTypeId)) {
+                    uri.append("viewAccount?");
+                } else if ("CONTACT".equals(roleTypeId)) {
+                    uri.append("viewContact?");
+                } else if ("PARTNER".equals(roleTypeId)) {
+                    uri.append("viewPartner?");
+                } else {
+                    roleTypeId = null; // default to partymgr viewprofile
+                }
             } else {
                 if ("SUPPLIER".equals(roleTypeId)) {
                     // Suppliers have no relationship but should be directed to purchasing
@@ -703,7 +721,7 @@ public class PartyHelper {
     public static boolean isInternalMessage(String partyId, String property, GenericDelegator delegator) {
         String role = UtilConfig.getPropertyValue("opentaps", "messaging.roles." + property);
         if (UtilValidate.isEmpty(role)) {
-            Debug.logError("There are no messaging roles in opentaps.properties. Please correct this error.", module);
+            Debug.logError("There are no messaging roles in opentaps.properties. Please correct this error.", MODULE);
             return false;
         }
 
@@ -724,7 +742,7 @@ public class PartyHelper {
             result = getFirstValidRoleTypeId(partyId, roleList, delegator);
         } catch (GenericEntityException ex) {
             result = null;
-            Debug.logError("Problem getting getFirstValidRoleTypeId [" + partyId + "]: " + ex.getMessage(), module);
+            Debug.logError("Problem getting getFirstValidRoleTypeId [" + partyId + "]: " + ex.getMessage(), MODULE);
         }
 
         if (result != null) {
@@ -763,11 +781,10 @@ public class PartyHelper {
      * @param delegator a <code>GenericDelegator</code> value
      * @return the <code>List</code> of party id
      */
-    @SuppressWarnings("unchecked")
     public static List<String> getInternalMessage(String property, GenericDelegator delegator) {
         String role = UtilConfig.getPropertyValue("opentaps", "messaging.roles." + property);
         if (UtilValidate.isEmpty(role)) {
-            Debug.logError("There are no messaging roles in opentaps.properties. Please correct this error.", module);
+            Debug.logError("There are no messaging roles in opentaps.properties. Please correct this error.", MODULE);
             return null;
         }
 
@@ -786,11 +803,11 @@ public class PartyHelper {
 
         try {
 
-            List<GenericValue> partyByRole = delegator.findByCondition("UserLogin", new EntityExpr("partyId", EntityOperator.IN, EntityUtil.getFieldListFromEntityList(delegator.findByCondition("PartyRole", new EntityExpr("roleTypeId", EntityOperator.IN, roleList), null, null), "partyId", true)), null, null);
+            List<GenericValue> partyByRole = delegator.findByCondition("UserLogin", EntityCondition.makeCondition("partyId", EntityOperator.IN, EntityUtil.getFieldListFromEntityList(delegator.findByCondition("PartyRole", EntityCondition.makeCondition("roleTypeId", EntityOperator.IN, roleList), null, null), "partyId", true)), null, null);
             partyList = EntityUtil.getFieldListFromEntityList(partyByRole, "partyId", true);
 
         } catch (GenericEntityException ex) {
-            Debug.logError("Problem getting All UserLogin: " + ex.getMessage(), module);
+            Debug.logError("Problem getting All UserLogin: " + ex.getMessage(), MODULE);
         }
 
         return partyList;
@@ -840,12 +857,12 @@ public class PartyHelper {
         }
 
         for (int i = 0; i < contactMechPurposeTypeIds.length; i++) {
-            List whereConditions = UtilMisc.toList(new EntityExpr("partyId", EntityOperator.EQUALS, partyId));
-            whereConditions.add(new EntityExpr("contactMechPurposeTypeId", EntityOperator.EQUALS, contactMechPurposeTypeIds[i]));
+            List whereConditions = UtilMisc.toList(EntityCondition.makeCondition("partyId", partyId));
+            whereConditions.add(EntityCondition.makeCondition("contactMechPurposeTypeId", contactMechPurposeTypeIds[i]));
             whereConditions.add(EntityUtil.getFilterByDateExpr("contactFromDate", "contactThruDate"));
             whereConditions.add(EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate"));
 
-            List<GenericValue> partyContactMechPurposes = delegator.findByCondition("PartyContactWithPurpose", new EntityConditionList(whereConditions, EntityOperator.AND), null, UtilMisc.toList("contactFromDate"));
+            List<GenericValue> partyContactMechPurposes = delegator.findByCondition("PartyContactWithPurpose", EntityCondition.makeCondition(whereConditions, EntityOperator.AND), null, UtilMisc.toList("contactFromDate"));
 
             if (UtilValidate.isEmpty(partyContactMechPurposes)) {
                 continue;
@@ -854,7 +871,7 @@ public class PartyHelper {
             GenericValue partyContactMechPurpose = EntityUtil.getFirst(partyContactMechPurposes);
 
             // get the associated partySupplementalData
-            Debug.logInfo("Updating partySupplementalData for partyId " + partyId, module);
+            Debug.logInfo("Updating partySupplementalData for partyId " + partyId, MODULE);
             // update the field
             partySupplementalData.set(fieldToUpdates[i], partyContactMechPurpose.getString("contactMechId"));
             partySupplementalData.store();

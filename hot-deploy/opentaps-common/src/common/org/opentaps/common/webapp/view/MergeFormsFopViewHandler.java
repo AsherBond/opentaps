@@ -23,21 +23,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Locale;
 import java.util.Map;
-
-import freemarker.template.TemplateException;
-import org.apache.fop.apps.Fop;
-import org.apache.fop.apps.FopFactory;
-import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.webapp.view.ApacheFopFactory;
-import org.ofbiz.webapp.view.ViewHandler;
-import org.ofbiz.webapp.view.ViewHandlerException;
-import org.opentaps.common.template.freemarker.FreemarkerUtil;
-import org.opentaps.common.util.XslFoConversion;
-import org.w3c.dom.Document;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,6 +32,20 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamSource;
+
+import freemarker.template.TemplateException;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.webapp.view.ApacheFopWorker;
+import org.ofbiz.webapp.view.ViewHandler;
+import org.ofbiz.webapp.view.ViewHandlerException;
+import org.opentaps.common.template.freemarker.FreemarkerUtil;
+import org.opentaps.common.util.XslFoConversion;
+import org.w3c.dom.Document;
 
 public abstract class MergeFormsFopViewHandler implements ViewHandler {
 
@@ -138,7 +137,7 @@ public abstract class MergeFormsFopViewHandler implements ViewHandler {
             try {
                 if (reportType.equals(PDF) || reportType.equals(TXT)) {
 
-                    FopFactory fopFac = ApacheFopFactory.instance();
+                    FopFactory fopFac = ApacheFopWorker.getFactoryInstance();
                     Fop fop = fopFac.newFop(reportType, out);
                     Transformer transformer = TransformerFactory.newInstance().newTransformer();
                     Source source = new StreamSource(new StringReader(UtilXml.writeXmlDocument(xslfo)));

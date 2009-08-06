@@ -25,8 +25,7 @@ import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
@@ -241,7 +240,7 @@ public final class InventoryServices {
             // Get the last recorded unitCost for the inventoryItem
             EntityFindOptions findOpt = new EntityFindOptions();
             findOpt.setMaxRows(1);
-            GenericValue oldInventoryItemValue = EntityUtil.getFirst(delegator.findByCondition("InventoryItemValueHistory", new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItemId), null, null, UtilMisc.toList("dateTime DESC", "inventoryItemValueHistId DESC"), findOpt));
+            GenericValue oldInventoryItemValue = EntityUtil.getFirst(delegator.findByCondition("InventoryItemValueHistory", EntityCondition.makeCondition("inventoryItemId", inventoryItemId), null, null, UtilMisc.toList("dateTime DESC", "inventoryItemValueHistId DESC"), findOpt));
             BigDecimal oldUnitCost = null;
             if (UtilValidate.isNotEmpty(oldInventoryItemValue)) {
                 oldUnitCost = UtilValidate.isEmpty(oldInventoryItemValue.get("unitCost")) ? BigDecimal.ZERO : oldInventoryItemValue.getBigDecimal("unitCost").setScale(4, BigDecimal.ROUND_HALF_UP);
