@@ -1168,8 +1168,9 @@ public class UtilDateTime {
      * @return Date format string
      */
     @Deprecated public static String getDateFormat(Locale locale) {
-        if (locale == null)
+        if (locale == null) {
             locale = Locale.getDefault();
+        }
 
         int dateStyle = -1;
 
@@ -1186,5 +1187,81 @@ public class UtilDateTime {
         SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateInstance(dateStyle, locale);
         return df.toPattern();
     }
+
+    /**
+     * Returns appropriate time format string.
+     * @deprecated was removed from ofbiz, re-added for backward compatibility
+     * @param locale User's locale, may be <code>null</code>
+     * @return Time format string
+     */
+    @Deprecated public static String getTimeFormat(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+
+        int timeStyle = -1;
+
+        if (TIME_FORMAT == null || "DEFAULT".equals(TIME_FORMAT) || "SHORT".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.SHORT;
+        } else if ("MEDIUM".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.MEDIUM;
+        } else if ("LONG".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.LONG;
+        } else {
+            return TIME_FORMAT;
+        }
+
+        SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getTimeInstance(timeStyle, locale);
+        return df.toPattern();
+    }
+
+    /**
+     * Returns appropriate date + time format string.
+     * @deprecated was removed from ofbiz, re-added for backward compatibility
+     * @param locale User's locale, may be <code>null</code>.
+     * @return Date/time format string
+     */
+    @Deprecated public static String getDateTimeFormat(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+
+        int dateStyle = -1;
+        if (DATE_FORMAT == null || "DEFAULT".equals(DATE_FORMAT) || "SHORT".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.SHORT;
+        } else if ("MEDIUM".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.MEDIUM;
+        } else if ("LONG".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.LONG;
+        }
+
+        int timeStyle = -1;
+        if (TIME_FORMAT == null || "DEFAULT".equals(TIME_FORMAT) || "SHORT".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.SHORT;
+        } else if ("MEDIUM".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.MEDIUM;
+        } else if ("LONG".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.LONG;
+        }
+
+        if (dateStyle >= 0 && timeStyle >= 0) {
+            SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
+            return df.toPattern();
+        }
+
+        if (dateStyle >= 0 && timeStyle == -1) {
+            SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateInstance(dateStyle, locale);
+            return (df.toPattern() + " " + TIME_FORMAT);
+        }
+
+        if (dateStyle == -1 && timeStyle == -1) {
+            return DATE_FORMAT + " " + TIME_FORMAT;
+        }
+
+        SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getTimeInstance(timeStyle, locale);
+        return DATE_FORMAT + " " + df.toPattern();
+    }
+
+
 
 }
