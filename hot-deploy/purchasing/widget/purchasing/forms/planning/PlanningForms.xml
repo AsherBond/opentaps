@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has form widgets that originate from the Apache OFBiz FacilityForms.xml file.  Modifications were made to these forms to better work with the purchasing app. -->
+
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="listInventory" type="list" target="" title="" list-name="inventoryByProduct" 
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="listTable" header-row-style="listTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="ViewFacilityInventoryByProduct" override-list-size="${overrideListSize}">
+        <row-actions>
+            <service service-name="getProductInventoryAndFacilitySummary" result-map-name="resultMap">
+                <field-map field-name="minimumStock" env-name="minimumStock"/>
+                <field-map field-name="productId" env-name="productId"/>
+                <field-map field-name="facilityId" env-name="facilityId"/>
+                <field-map field-name="checkTime" env-name="checkTime"/>
+            </service>
+        </row-actions>
+        <field name="items" title="${uiLabelMap.ProductProductId}" widget-style="buttontext">
+            <hyperlink target="/catalog/control/EditProduct?productId=${productId}" target-type="inter-app" description="${productId}"/>     
+        </field>
+        <field name="productId" title="${uiLabelMap.CommonDescription}" widget-area-style="tabletext">
+            <display-entity entity-name="Product" description="${internalName}">
+                <sub-hyperlink target="/catalog/control/EditProduct?productId=${productId}" target-type="inter-app" description="${uiLabelMap.ProductCatalog}" link-style="buttontext"/>
+            </display-entity>
+        </field>
+        <field name="totalAvailableToPromise" title="${uiLabelMap.CommonTotal} ${uiLabelMap.ProductAtp}" widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.totalAvailableToPromise}"/></field>
+        <field name="totalQuantityOnHand" title="${uiLabelMap.CommonTotal} ${uiLabelMap.ProductQoh}" widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.totalQuantityOnHand}"/></field>
+        <field name="quantityOnOrder" title="${uiLabelMap.ProductOrderedQuantity}"  widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.quantityOnOrder}"/></field>
+        <field name="minimumStock" title="${uiLabelMap.ProductMinimumStock}" widget-area-style="tabletextright" title-area-style="textright"><display /></field>
+        <field name="reorderQuantity" title="${uiLabelMap.ProductReorderQuantity}" widget-area-style="tabletextright" title-area-style="textright"><display/></field>
+        <field name="daysToShip" title="${uiLabelMap.ProductDaysToShip}" widget-area-style="tabletextright" title-area-style="textright"><display/></field>
+        <field name="offsetQOHQtyAvailable" title="${uiLabelMap.ProductQtyOffsetQOH}" widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.offsetQOHQtyAvailable}"/></field>
+        <field name="offsetATPQtyAvailable" title="${uiLabelMap.ProductQtyOffsetATP}" widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.offsetATPQtyAvailable}"/></field>
+        <field name="usageQuantity" title="${uiLabelMap.ProductUsage}" widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.usageQuantity}"/></field>
+        <field name="defultPrice" title="Default Price" widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.defultPrice}"/></field>
+        <field name="listPrice" title="List Price" widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.listPrice}"/></field>
+        <field name="wholeSalePrice" title="Whole Sale Price" widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.wholeSalePrice}"/></field>
+    </form>
+
+    <form name="ApprovedProductRequirements" type="multi" use-row-submit="true" target="quickPurchaseOrderEntry" title="" list-name="requirementsForSupplier"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="listTable" header-row-style="listTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="requirementOrderForm">
+        
+        <field name="billToCustomerPartyId"><hidden value="${parameters.billToCustomerPartyId}"/></field>
+        <field name="supplierPartyId"><hidden value="${parameters.partyId}"/></field>
+        <field name="requirementId" widget-style="buttontext">
+            <hyperlink also-hidden="true" description="${requirementId}" target="EditRequirement?requirementId=${requirementId}"/>
+        </field>
+        <field name="productId" widget-style="buttontext">
+            <hyperlink also-hidden="true" target-type="inter-app" description="${productId}" target="/catalog/control/EditProductInventoryItems?productId=${productId}" target-window="top"/>
+        </field>
+        <field name="internalName" entry-name="productId">
+            <display-entity entity-name="Product" key-field-name="productId" description="${internalName}"/>
+        </field>
+        <field name="partyId" title="${uiLabelMap.ProductSupplier}">
+            <display description="${bsh: org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false);}"/>
+        </field>
+        <field name="supplierProductId" title="${uiLabelMap.ProductSupplierProductId}"><display/></field>
+        <field name="idValue" title="UPCA"><display/></field>
+        <field name="minimumOrderQuantity" title="${uiLabelMap.FormFieldTitle_minimumOrderQuantity}" widget-area-style="tabletextright" title-area-style="textright"><display/></field>
+        <field name="lastPrice" widget-area-style="tabletextright" title-area-style="textright"><display type="currency" currency="${currencyUomId}"/></field>
+        <field name="requiredByDate"><display/></field>
+        <field name="atp" title="${uiLabelMap.ProductAtp}" widget-area-style="tabletextright" title-area-style="textright"><display/></field>
+        <field name="qoh" title="${uiLabelMap.ProductQoh}" widget-area-style="tabletextright" title-area-style="textright"><display/></field>
+        <field name="qtySold" title="${uiLabelMap.OrderQuantitySold}" widget-area-style="tabletextright" title-area-style="textright"><display/></field>
+        <field name="quantity" widget-style="inputBox"><text size="4"/></field>
+        <field name="comments"><display/></field>
+        <field name="facilityId"><hidden value="${parameters.facilityId}"/></field>
+        <field name="_rowSubmit" title="${uiLabelMap.CommonSelect}"><check/></field>
+    </form>    
+
+</forms>

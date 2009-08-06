@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Sales versus Minimum Stock" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<import value="org.ofbiz.base.util.UtilDateTime"/>
+	<parameter name="organizationPartyId" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["Company"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CommonFromDate" class="java.sql.Timestamp">
+		<parameterDescription><![CDATA[Default report is for last 30 days.]]></parameterDescription>
+		<defaultValueExpression><![CDATA[UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DATE, -30, $P{REPORT_TIME_ZONE}, $P{REPORT_LOCALE})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CommonThruDate" class="java.sql.Timestamp">
+		<parameterDescription><![CDATA[Default report is for last 30 days.]]></parameterDescription>
+		<defaultValueExpression><![CDATA[UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DATE, 0, $P{REPORT_TIME_ZONE}, $P{REPORT_LOCALE})]]></defaultValueExpression>
+	</parameter>
+	<parameter name="facilityId" class="java.lang.String">
+		<defaultValueExpression><![CDATA["WebStoreWarehouse"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT OI.PRODUCT_ID, PR.INTERNAL_NAME, SUM(OI.QUANTITY), SUM(OI.CANCEL_QUANTITY),  SUM(OI.QUANTITY) - SUM(OI.CANCEL_QUANTITY) AS NET_SOLD, PF.MINIMUM_STOCK
+FROM ORDER_ITEM AS OI
+JOIN ORDER_HEADER AS OH ON OH.ORDER_ID = OI.ORDER_ID AND OH.ORDER_TYPE_ID = 'SALES_ORDER' AND OH.BILL_FROM_PARTY_ID = $P{organizationPartyId}
+AND OH.ORDER_DATE BETWEEN $P{CommonFromDate} and $P{CommonThruDate}
+LEFT OUTER JOIN PRODUCT_FACILITY AS PF ON PF.PRODUCT_ID = OI.PRODUCT_ID AND PF.FACILITY_ID = $P{facilityId}
+JOIN PRODUCT AS PR ON OI.PRODUCT_ID = PR.PRODUCT_ID
+WHERE OI.STATUS_ID NOT IN ('ITEM_CANCELLED', 'ITEM_REJECTED')
+GROUP BY OI.PRODUCT_ID, PR.INTERNAL_NAME, PF.MINIMUM_STOCK]]>
+	</queryString>
+	<field name="PRODUCT_ID" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SUM(OI.QUANTITY)" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MINIMUM_STOCK" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="SUM(OI.CANCEL_QUANTITY)" class="java.math.BigDecimal"/>
+	<field name="INTERNAL_NAME" class="java.lang.String"/>
+	<field name="NET_SOLD" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="58" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="9" width="802" height="1"/>
+			</line>
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="51" width="802" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="210" y="16" width="424" height="35"/>
+				<textElement textAlignment="Center">
+					<font size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sales versus Minimum Stock]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="0" width="101" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PRODUCT ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="312" y="0" width="122" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTY SOLD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="434" y="0" width="108" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[QTY CANCELLED]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="685" y="0" width="117" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[MINIMUM STOCK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="102" y="0" width="210" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[INTERNAL NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="568" y="0" width="117" height="20"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NET QTY SOLD]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="312" y="0" width="122" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SUM(OI.QUANTITY)}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="685" y="0" width="117" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{MINIMUM_STOCK}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="434" y="0" width="108" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{SUM(OI.CANCEL_QUANTITY)}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="0" width="101" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PRODUCT_ID}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="102" y="0" width="210" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{INTERNAL_NAME}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="568" y="0" width="117" height="20"/>
+				<textElement textAlignment="Right">
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{NET_SOLD}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField evaluationTime="Report" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="516" y="6" width="36" height="19" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["" + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="342" y="6" width="170" height="19" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Page " + $V{PAGE_NUMBER} + " of "]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField" x="1" y="6" width="209" height="19" forecolor="#000000" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

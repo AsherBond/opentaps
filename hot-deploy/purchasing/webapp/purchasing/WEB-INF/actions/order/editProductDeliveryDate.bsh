@@ -1,0 +1,129 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+ * Retrieve the product from the product or good id
+ * Get all open purchase order items and their associated
+ *  OrderDeliverySchedule if any
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.service.ServiceUtil;
+
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.order.UtilOrder;
+
+// get the current select organization
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+// get the given parameters
+orderId = parameters.get("orderId");
+productId = parameters.get("productId");
+searchOption = parameters.get("searchOption");
+
+// set the default search by
+searchByProduct = true;
+searchByOrder = false;
+
+// check the search option
+if (UtilValidate.isNotEmpty(searchOption)) {
+    if ("order".equals(searchOption)) {
+        searchByProduct = false;
+        searchByOrder = true;
+    } else if ("product".equals(searchOption)) {
+        searchByProduct = true;
+        searchByOrder = false;
+    }
+} else {
+    // decide according to the other parameters
+    if (UtilValidate.isNotEmpty(orderId) && UtilValidate.isEmpty(productId)) {
+        searchByProduct = false;
+        searchByOrder = true;
+    } else if (UtilValidate.isNotEmpty(productId) && UtilValidate.isEmpty(orderId)) {
+        searchByProduct = true;
+        searchByOrder = false;
+    }
+}
+
+// put the selected search by
+searchOption = searchByOrder?"order":"product";
+context.put("searchOption", searchOption);
+
+// if we are looking for a purchase order
+if (searchByOrder && UtilValidate.isNotEmpty(orderId)) {
+
+    // retreive the order header
+    conditions = UtilMisc.toMap("orderId", orderId);
+    orderHeader = delegator.findByPrimaryKey("OrderHeader", conditions);
+
+    // check the order exists and is a Purchase Order
+    if (orderHeader == null) {
+        UtilMessage.addFieldError(request, "orderId", "OpentapsError_OrderNotFound", conditions);
+        return;
+    }
+    if (!"PURCHASE_ORDER".equals(orderHeader.get("orderTypeId"))) {
+        UtilMessage.addFieldError(request, "orderId", "OpentapsError_OrderNotPurchaseOrder", conditions);
+        return;
+    }
+
+    // check if estimate dates are editable (if the order is Created, Approved or Hold)
+    datesEditable = "ORDER_APPROVED".equals(orderHeader.get("statusId")) || 
+        "ORDER_HOLD".equals(orderHeader.get("statusId")) || 
+        "ORDER_CREATED".equals(orderHeader.get("statusId"));
+
+    context.put("datesEditable", datesEditable);
+    context.put("orderId", orderId);
+    context.put("order", orderHeader);
+
+    // get the order items
+    conditions = UtilMisc.toList(
+       new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
+       new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("ITEM_APPROVED", "ITEM_CREATED"))
+    );
+    orderItems = delegator.findByAnd("OrderItemAndOrderDeliverySchedule", conditions, UtilMisc.toList("orderItemSeqId"));
+    
+    context.put("orderItems", orderItems);
+
+// else if we are looking for a product
+} else if (searchByProduct && UtilValidate.isNotEmpty(productId)) {
+
+    // retreive the product by product Id or Good Id
+    conditions = UtilMisc.toMap("productId", productId);
+    svcResult = dispatcher.runSync("getProductByComprehensiveSearch", conditions);
+    if (ServiceUtil.isError(svcResult) || ServiceUtil.isFailure(svcResult)) {
+        UtilMessage.addFieldError(request, "productId", ServiceUtil.getErrorMessage(svcResult), conditions);
+        return;
+    } else {
+        product = svcResult.get("product");
+        if (product == null) {
+            UtilMessage.addFieldError(request, "productId", "ProductErrorProductNotFound", conditions);
+            return;
+        }
+        context.put("product", product);
+    }
+
+    // get the purchase order items for this product which are CREATED or APPROVED
+    conditions = UtilMisc.toList(
+      new EntityExpr("productId", EntityOperator.EQUALS, product.getString("productId")),
+      new EntityExpr("orderTypeId", EntityOperator.EQUALS, "PURCHASE_ORDER"),
+      new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("ITEM_APPROVED", "ITEM_CREATED"))
+    );
+    orderItems = delegator.findByAnd("OrderHeaderItemAndOrderDeliverySchedule", conditions, UtilMisc.toList("estimatedReadyDate"));
+
+    context.put("orderItems", orderItems);
+}

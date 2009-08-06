@@ -1,0 +1,925 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <!-- Include requests for common opentaps features. -->
+    <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
+
+    <!-- Special controller containing the legacy order requests -->
+    <include location="component://purchasing/webapp/purchasing/WEB-INF/ordermgr-controller.xml"/>
+
+    <description>Purchasing Module Site Configuration File</description>
+    <owner>Open Source Strategies, Inc. (c) 2007 </owner>
+    <errorpage>/error/error.jsp</errorpage>
+
+    <!-- event handlers -->
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+    <handler name="simple" type="request" class="org.ofbiz.webapp.event.SimpleEventHandler"/>
+    <handler name="service" type="request" class="org.ofbiz.webapp.event.ServiceEventHandler"/>
+    <handler name="service-multi" type="request" class="org.ofbiz.webapp.event.ServiceMultiEventHandler"/>
+    <handler name="bsf" type="request" class="org.ofbiz.webapp.event.BsfEventHandler"/>    
+
+    <!-- view handlers -->
+    <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
+    <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
+    <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>    
+
+    <preprocessor>
+        <!-- Events to run on every request before security (chains exempt) -->
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkExternalLoginKey"/>
+    </preprocessor>
+    <postprocessor>
+        <!-- Events to run on every request after all other processing (chains exempt) -->
+    </postprocessor>
+
+
+    <!-- ================= -->
+    <!-- Security Mappings -->
+    <!-- ================= -->
+
+    <request-map uri="checkLogin" edit="false">
+        <description>Verify a user is logged in.</description>
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkLogin" />
+        <response name="success" type="view" value="myHomeMain" />
+        <response name="error" type="view" value="login" />
+    </request-map>
+    <request-map uri="login">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login" />
+        <response name="success" type="view" value="selectOrganizationForm"/>
+        <response name="error" type="view" value="login"/>
+    </request-map>
+    <request-map uri="logout">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="logout"/>
+        <response name="success" type="request" value="checkLogin"/>
+        <response name="error" type="view" value="myHomeMain"/>
+    </request-map>
+
+
+    <!-- ====================== -->
+    <!-- Basic Request Mappings -->
+    <!-- ====================== -->
+
+    <request-map uri="authview">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+
+    <request-map uri="setSessionLocale">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.common.CommonEvents" invoke="setSessionLocale"/>
+        <response name="success" type="request" value="myHomeMain"/>
+        <response name="error" type="request" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="main">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="selectOrganizationForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="selectOrganizationForm"/>
+    </request-map>
+    <request-map uri="setOrganization">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="setOrganization" />
+        <response name="selectOrganization" type="view" value="selectOrganizationForm"/>
+        <response name="success" type="url" value="/purchasing/control/myHomeMain"/>
+    </request-map>
+
+
+    <!-- ================== -->
+    <!-- Main Request Maps  -->
+    <!-- ================== -->
+
+    <request-map uri="myHomeMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="orderMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="orderMain"/>
+    </request-map>
+    <request-map uri="supplierMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="supplierMain"/>
+    </request-map>
+    <request-map uri="bomMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="bomMain"/>
+    </request-map>
+    <request-map uri="planningMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="planningMain"/>
+    </request-map>
+    <request-map uri="reportsMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="reportsMain"/>
+    </request-map>    
+
+    <!-- call this request when you have a donePage that you want to go to after finishing a service -->
+    <request-map uri="donePageRequestHelper">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="donePageRequestHelper"/>
+        <response name="myProfile" type="view" value="myProfile"/>
+        <response name="viewSupplier" type="request-redirect" value="viewSupplier"/>
+        <!-- mostly for error redirects -->
+        <response name="myProfileEditContactMech" type="request" value="myProfileEditContactMech"/>
+        <!-- default -->
+        <response name="error" type="view" value="myHomeMain"/>
+        <response name="" type="request" value="myHomeMain"/>
+        <response name="purchasingQuickCheckout" type="request" value="purchasingQuickCheckout"/>
+        <response name="ordersEditContactMech" type="request" value="ordersEditContactMech"/>
+    </request-map>
+
+    <!-- ======================== -->
+    <!-- Bom Tab Request Mappings -->
+    <!-- ======================== -->
+
+    <request-map uri="EditProductBom">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editBom"/>
+    </request-map>
+    <request-map uri="UpdateProductBom">
+        <security https="true" auth="true"/>
+        <event type="simple" path="org/ofbiz/manufacturing/bom/BomSimpleMethods.xml" invoke="eventEditBOM"/>
+        <response name="success" type="request-redirect-filterparam" value="EditProductBom" allowed-params="productId,productAssocTypeId"/>
+        <response name="error" type="view" value="editBom"/>
+    </request-map>
+    <request-map uri="BomSimulation">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="bomSimulation"/>
+    </request-map>
+    <request-map uri="runBomSimulation">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="getBOMTree"/>
+        <response name="success" type="view" value="bomSimulation"/>
+    </request-map>
+
+    <request-map uri="FindRouting">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findRouting"/>
+    </request-map>
+    <request-map uri="NewRouting">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="newRouting"/>
+    </request-map>
+    <request-map uri="EditRouting">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editRouting"/>
+    </request-map>
+
+    <request-map uri="CreateRouting">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createWorkEffort"/>
+        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId" allowed-attributes="workEffortId"/>
+        <response name="error" type="view" value="editRouting"/>
+    </request-map>
+    <request-map uri="UpdateRouting">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateWorkEffort"/>
+        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="error" type="view" value="editRouting"/>
+    </request-map>
+
+    <request-map uri="FindRoutingTask">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findRoutingTask"/>
+    </request-map>
+    <request-map uri="EditRoutingTask">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+    </request-map>
+    <request-map uri="NewRoutingTask">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="newRoutingTask"/>
+    </request-map>
+
+    <request-map uri="CreateRoutingTask">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createWorkEffort"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+    <request-map uri="UpdateRoutingTask">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateWorkEffort"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+
+    <request-map uri="AddRoutingTaskAssoc">
+        <security https="true" auth="true"/>
+        <event type="simple" path="org/ofbiz/manufacturing/techdata/RoutingSimpleEvents.xml" invoke="addRoutingTaskAssoc"/>
+        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="error" type="view" value="editRouting"/>
+    </request-map>
+    <request-map uri="RemoveRoutingTaskAssoc">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeWorkEffortAssoc"/>
+        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="error" type="view" value="editRouting"/>
+    </request-map>
+
+    <request-map uri="EditRoutingProductLink">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editRouting"/>
+    </request-map>
+    <request-map uri="AddRoutingProductLink">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createWorkEffortGoodStandard"/>
+        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="error" type="view" value="editRouting"/>
+    </request-map>
+    <request-map uri="UpdateRoutingProductLink">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateWorkEffortGoodStandard"/>
+        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="error" type="view" value="editRouting"/>
+    </request-map>
+    <request-map uri="removeRoutingProductLink">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeWorkEffortGoodStandard"/>
+        <response name="success" type="request-redirect-filterparam" value="EditRouting" allowed-params="workEffortId"/>
+        <response name="error" type="view" value="editRouting"/>
+    </request-map>
+
+    <request-map uri="addRoutingTaskCost">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createWorkEffortCostCalc"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+    <request-map uri="removeRoutingTaskCost">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeWorkEffortCostCalc"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+
+    <request-map uri="EditRoutingTaskProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+    </request-map>
+    <request-map uri="addRoutingTaskProduct">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createWorkEffortGoodStandard"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+    <request-map uri="updateRoutingTaskProduct">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateWorkEffortGoodStandard"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+    <request-map uri="removeRoutingTaskProduct">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeWorkEffortGoodStandard"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+
+    <request-map uri="createRoutingTaskFixedAsset">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createWorkEffortFixedAssetStd"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+    <request-map uri="updateRoutingTaskFixedAsset">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateWorkEffortFixedAssetStd"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+    <request-map uri="removeRoutingTaskFixedAsset">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeWorkEffortFixedAssetStd"/>
+        <response name="success" type="view" value="editRoutingTask"/>
+        <response name="error" type="view" value="editRoutingTask"/>
+    </request-map>
+
+    <!-- ============================= -->
+    <!-- Planning Tab Request Mappings -->
+    <!-- ============================= -->
+
+    <!-- XXX these might not match the ones in ofbiz, so replace with ofbiz -->
+    <request-map uri="ViewFacilityInventoryByProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findInventory"/>
+    </request-map>
+    <request-map uri="findRequirements">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findRequirements"/>
+    </request-map>
+    <request-map uri="approveSupplierRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="approveRequirement"/>
+        <response name="success" type="request-redirect-noparam" value="findRequirements"/>
+        <response name="error" type="view" value="findRequirements"/>
+    </request-map>  
+    <request-map uri="approveOpenRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="approveRequirement"/>
+        <response name="success" type="request-redirect-noparam" value="openRequirements"/>
+        <response name="error" type="view" value="openRequirements"/>
+    </request-map>          
+    <request-map uri="openRequirements">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="openRequirements"/>
+    </request-map>
+    <request-map uri="ApprovedProductRequirementsByVendor">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="approvedRequirements"/>
+    </request-map>
+    <request-map uri="ApprovedTransferRequirements">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="approvedTransferRequirements"/>
+    </request-map>
+    <request-map uri="ApprovedInternalRequirements">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="approvedInternalRequirements"/>
+    </request-map>
+    <request-map uri="createProductionRunsFromPendingInternalRequirements">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.purchasing.planning.PlanningEvents" invoke="createProductionRunsFromPendingInternalRequirements"/>
+        <response name="success" type="view" value="approvedInternalRequirements"/>
+        <response name="error" type="view" value="approvedInternalRequirements"/>
+    </request-map>
+    <request-map uri="createInventoryTransfersFromPendingTransferRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="createInventoryTransferFromRequirement"/>
+        <response name="success" type="view" value="approvedTransferRequirements"/>
+        <response name="error" type="view" value="approvedTransferRequirements"/>
+    </request-map>
+    <request-map uri="cancelInternalRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="purchasing.cancelRequirement"/>
+        <response name="success" type="view" value="approvedInternalRequirements"/>
+        <response name="error" type="view" value="approvedInternalRequirements"/>
+    </request-map>
+    <request-map uri="cancelTransferRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="purchasing.cancelRequirement"/>
+        <response name="success" type="view" value="approvedTransferRequirements"/>
+        <response name="error" type="view" value="approvedTransferRequirements"/>
+    </request-map>
+    <request-map uri="approveRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="approveRequirement"/>
+        <response name="success" type="view" value="openRequirements"/>
+        <response name="error" type="view" value="openRequirements"/>
+    </request-map>
+    <request-map uri="requirementOrderForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="requirementOrderForm"/>
+    </request-map>
+    <request-map uri="quickPurchaseOrderEntry">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.purchasing.order.PurchasingOrderEvents" invoke="createCartFromRequirements"/>
+        <response name="success" type="request" value="quickCheckoutOrderWithDefaultOptions"/>
+        <response name="error" type="request" value="orderentry"/>
+    </request-map>
+    <request-map uri="createCartForAllSupplierRequirements">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.purchasing.order.PurchasingOrderEvents" invoke="createCartForAllSupplierRequirements"/>
+        <response name="success" type="request" value="processorder"/>
+        <response name="error" type="request" value="approveRequirements"/>
+    </request-map>
+    <request-map uri="cancelRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="purchasing.cancelRequirement"/>
+        <response name="success" type="request-redirect-noparam" value="findRequirements"/>
+        <response name="error" type="view" value="findRequirements"/>
+    </request-map>    
+    <request-map uri="cancelOpenRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="purchasing.cancelRequirement"/>
+        <response name="success" type="view" value="openRequirements"/>
+        <response name="error" type="view" value="openRequirements"/>
+    </request-map>
+    <request-map uri="approveAllOpenRequirements">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="purchasing.approveAllOpenRequirements"/>
+        <response name="success" type="request-redirect" value="ApprovedProductRequirementsByVendor"/>
+        <response name="error" type="view" value="openRequirements"/>
+    </request-map>
+    <request-map uri="cancelOrderingRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="purchasing.cancelRequirement"/>
+        <response name="success" type="view" value="requirementOrderForm"/>
+        <response name="error" type="view" value="requirementOrderForm"/>
+    </request-map>
+    <request-map uri="cancelSupplierRequirements">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="purchasing.cancelRequirementsApprovedByVendor"/>
+        <response name="success" type="view" value="approvedRequirements"/>
+        <response name="error" type="view" value="approvedRequirements"/>
+    </request-map>
+    <request-map uri="updateSupplierRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="purchasing.updateRequirementSupplierAndQuantity"/>
+        <response name="success" type="request-redirect-noparam" value="findRequirements"/>
+        <response name="error" type="view" value="findRequirements"/>
+    </request-map> 
+    <request-map uri="updateOpenRequirements">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="purchasing.updateRequirementSupplierAndQuantity"/>
+        <response name="success" type="request-redirect-noparam" value="openRequirements"/>
+        <response name="error" type="view" value="openRequirements"/>
+    </request-map>     
+    <!-- Manufacturing Runs -->
+    <request-map uri="runMRP">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="runMRP"/>
+    </request-map>
+    <request-map uri="runMrpGo">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.runMrpFromForm"/>
+        <response name="success" type="request-redirect" value="viewMRP"/>
+        <response name="error" type="view" value="runMRP"/>
+    </request-map>
+    <request-map uri="viewMRP">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewMRP"/>
+    </request-map>
+    <request-map uri="FindInventoryEventPlan">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewMRP"/>
+    </request-map>
+
+    <!-- Backup Warehouses -->
+    <request-map uri="viewBackupWarehouses">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewBackupWarehouses"/>
+    </request-map>
+    <request-map uri="addBackupWarehouseForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addBackupWarehouseForm"/>
+    </request-map>
+    <request-map uri="createBackupWarehouseForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createBackupWarehouseForm"/>
+    </request-map>
+    <request-map uri="updateFacilityAssoc">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateFacilityAssoc"/>
+        <response name="success" type="request-redirect" value="viewBackupWarehouses"/>
+        <response name="error" type="view" value="viewBackupWarehouses"/>
+    </request-map>
+    <request-map uri="createFacilityAssoc">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createFacilityAssoc"/>
+        <response name="success" type="request-redirect" value="viewBackupWarehouses"/>
+        <response name="error" type="view" value="addBackupWarehouseForm"/>
+    </request-map>
+    <request-map uri="createBackupWarehouse">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createBackupWarehouse"/>
+        <response name="success" type="request-redirect" value="viewBackupWarehouses"/>
+        <response name="error" type="view" value="createBackupWarehouseForm"/>
+    </request-map>
+
+    <!-- ================== -->
+    <!-- Order Tab Mappings -->
+    <!-- ================== -->
+
+    <request-map uri="initorderentry">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.purchasing.order.PurchasingOrderEvents" invoke="initializeCart"/>
+        <response name="success" type="request" value="initOrderEntry"/>
+        <response name="error" type="view" value="checkinits"/>
+    </request-map>
+
+    <request-map uri="InitPurchaseOrder">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="InitPurchaseOrder"/>
+    </request-map>
+    <request-map uri="InitializePurchaseOrder">
+        <description>Handles setting the supplier, currency, agreement and shipment dates of an purchase order.</description>
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.purchasing.order.PurchasingOrderEvents" invoke="initializePurchaseOrder"/>
+        <response name="success" type="request" value="createOrderMainScreen"/>
+        <response name="error" type="request" value="InitPurchaseOrder"/>
+    </request-map>
+
+    <request-map uri="getSupplierAgreementsJSON">
+        <description></description>
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="findSupplierAgreementsJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="initOrderEntry">
+        <security https="true" auth="true" direct-request="false"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="initializeOrderEntry"/>
+        <response name="success" type="request" value="orderentry"/>
+        <response name="error" type="view" value="checkinits"/>
+    </request-map>
+    <request-map uri="order.pdf">
+        <security https="true" auth="true"/>
+        <event type="java" invoke="prepareOrderReport" path="org.opentaps.common.order.OrderEvents"/>
+        <response name="success" type="view" value="OrderJR"/>
+        <response name="error" type="view" value="orderview"/>
+    </request-map>
+    <request-map uri="orderold.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="OrderPDF"/>
+    </request-map>    
+    <request-map uri="OrderJR">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="OrderJR"/>
+    </request-map>    
+    <request-map uri="findOrders">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findOrders"/>
+    </request-map>
+    <request-map uri="openOrders">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="openOrders"/>
+    </request-map>
+    <request-map uri="LookupPartyAndUserLoginAndPerson">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="LookupPartyAndUserLoginAndPerson"/>
+    </request-map>
+    <request-map uri="createnewnote">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createnewnote"/>
+    </request-map>
+    <request-map uri="invoiceSupplies">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="invoiceSupplies"/>
+    </request-map>
+    <request-map uri="createSuppliesInvoice">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.invoice.InvoiceEvents" invoke="invoiceOrderItems"/>
+        <response name="success" type="request-redirect-noparam " value="invoiceSupplies"/>
+        <response name="error" type="view" value="invoiceSupplies"/>
+    </request-map>
+    <request-map uri="processorder">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.purchasing.order.PurchasingOrderEvents" invoke="purchasingCreateOrder"/>
+        <response name="sales_order" type="request" value="checkBlackList"/>
+        <response name="work_order" type="request" value="checkBlackList"/>
+        <response name="purchase_order" type="request" value="clearpocart"/>
+        <response name="error" type="view" value="confirm"/>
+    </request-map>
+    <request-map uri="clearCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="clearCart"/>
+        <response name="success" type="view" value="createOrderMainScreen"/>
+    </request-map>    
+    <request-map uri="appendItemToOrder">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="opentaps.appendOrderItem"/>
+        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="error" type="view" value="editorderitems"/>
+    </request-map>
+    <request-map uri="editProductDeliveryDate">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editProductDeliveryDate"/>
+    </request-map>
+    <request-map uri="updateProductDeliveryDate">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="purchasing.updateOrderItemEstimatedDeliveryDate"/>
+        <response name="success" type="request-redirect" value="editProductDeliveryDate"/>
+        <response name="error" type="view" value="editProductDeliveryDate"/>
+    </request-map> 
+
+    <!-- Opentaps versions of create order requests. -->
+    <request-map uri="createOrderMainScreen">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="destroyCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.purchasing.order.PurchasingOrderEvents" invoke="purchasingDestroyCart"/>
+        <response name="success" type="request" value="orderMain"/>
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="modifycart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="modifyCart"/>
+        <response name="success" type="request-redirect-noparam" value="createOrderMainScreen" />
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="addOrderItem">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="addOrderItem"/>
+        <response name="success" type="request-redirect" value="createOrderMainScreen"/>
+        <response name="error" type="view" value="createOrderMainScreen"/>
+        <!-- when the user enters a configurable or virtual product, we should take them to a screen where they can configure or choose a variant -->
+        <response name="configureProduct" type="view" value="configureProduct"/>
+        <!-- TODO: this one is not implemented because variants are not supported for POs yet -->
+        <response name="chooseVariantProduct" type="request" value="countMatchingProducts"/>
+        <!-- if the productId does not match any Product, perform a lookup -->
+        <response name="findMatchingProducts" type="request" value="countMatchingProducts"/>
+    </request-map>
+    <request-map uri="countMatchingProducts">
+        <security https="true" auth="true" direct-request="false"/>
+        <event type="java" path="org.opentaps.purchasing.order.PurchasingOrderEvents" invoke="countMatchingProducts"/>
+        <response name="success" type="request" value="findMatchingSupplierProducts"/>
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="findMatchingSupplierProducts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findMatchingSupplierProducts"/>
+    </request-map>
+    <request-map uri="BulkAddProducts">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="bulkAddProducts"/>
+        <response name="success" type="request-redirect" value="createOrderMainScreen"/>
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+
+
+    <!-- ===================== -->
+    <!-- Supplier Tab Mappings -->
+    <!-- ===================== -->
+
+    <request-map uri="findSuppliers">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findSuppliers"/>
+    </request-map>
+    <request-map uri="viewSupplier">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewSupplier"/>
+    </request-map>
+    <request-map uri="createSupplier">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createSupplier"/>
+    </request-map>
+    <request-map uri="createSupplierParty">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="purchasing.createSupplier"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-attributes="partyId" allowed-params="partyId"/>
+        <response name="error" type="view" value="createSupplier"/>
+    </request-map>
+    <request-map uri="supplierEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="supplierEditContactMech"/>
+    </request-map>
+    <request-map uri="createSupplierNoteForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createSupplierNoteForm"/>
+    </request-map>
+    <request-map uri="createSupplierNote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="purchasing.createSupplierNote"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-params="partyId"/>
+        <response name="error" type="view" value="createSupplierNoteForm"/>
+    </request-map>
+    <request-map uri="updateSupplierForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateSupplierForm"/>
+    </request-map>
+    <request-map uri="updateSupplier">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="purchasing.updateSupplier"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-params="partyId"/>
+        <response name="error" type="view" value="updateSupplierForm"/>
+    </request-map>
+    <request-map uri="viewAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="createAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createAgreement"/>
+    </request-map>
+    <request-map uri="editAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editAgreement"/>
+    </request-map>
+    <request-map uri="processUpdateAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="error" type="view" value="editAgreement"/>
+    </request-map>
+    <request-map uri="changeAgreementStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processCreateAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAgreement"/>
+        <response name="success" type="request" value="initialAgreementItemsAndTerms"/>
+        <response name="error" type="view" value="createAgreement"/>
+    </request-map>
+    <request-map uri="initialAgreementItemsAndTerms">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processCreateAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processRemoveAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeAgreementItemAndTerms"/>
+        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processCreateAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAgreementTerm"/>
+        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="error" type="view" value="createAgreementTerm"/>
+    </request-map>
+    <request-map uri="processUpdateAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreementTerm"/>
+        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processRemoveAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteAgreementTerm"/>
+        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="createSupplierTaxAuthInfo">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPartyTaxAuthInfo"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-params="partyId"/>
+        <response name="error" type="request-redirect" value="viewSupplier"/>
+    </request-map>
+    <request-map uri="updateSupplierTaxAuthInfo">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updatePartyTaxAuthInfo"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSupplier" allowed-params="partyId"/>
+        <response name="error" type="request-redirect" value="viewSupplier"/>
+    </request-map>
+    <request-map uri="outsourceRoutingTaskForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="outsourceRoutingTaskForm"/>
+    </request-map>
+    <request-map uri="outsourceRoutingTask">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="opentaps.outsourceRoutingTask"/>
+        <response name="success" type="view" value="supplierMain"/>
+        <response name="error" type="view" value="outsourceRoutingTaskForm"/>
+    </request-map>
+    
+    <request-map uri="purchasingQuickCheckout">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="purchasingQuickCheckout"/>
+    </request-map>    
+    <request-map uri="ordersEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ordersEditContactMech"/>
+    </request-map>
+    <request-map uri="createPostalAddressAndPurpose">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="createPartyPostalAddress"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="writeOrderEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.preparePurchasingOrderEmail"/>
+        <response name="success" type="request" value="writeEmail"/>
+    </request-map>   
+    <!-- ========================= -->
+    <!-- Pentaho Services Mappings -->
+    <!-- ========================= -->
+
+    <request-map uri="ViewAction">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.pentaho.PentahoEvents" invoke="viewAction"/>        
+        <response name="success" type="none"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+    
+    
+    <request-map uri="finalizeOrder">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.shoppingcart.OpentapsCheckOutEvents" invoke="finalizeOrderEntry"/>
+        <response name="addparty" type="view" value="setAdditionalParty"/>
+        <response name="customer" type="view" value="custsetting"/>
+        
+        <!-- customized quick checkout -->
+        <response name="term" type="view" value="purchasingQuickCheckout"/>
+        
+        <response name="shipping" type="view" value="shipsetting"/>
+        <response name="shippingAddress" type="view" value="EditShipAddress"/>
+        <response name="options" type="view" value="optionsetting"/>
+        <response name="payment" type="request" value="calcShippingBeforePayment"/>
+        <response name="paymentError" type="request" value="calcShippingBeforePayment"/>
+        <response name="shipGroups" type="view" value="SetItemShipGroups"/>
+        <response name="sales" type="request" value="calcShipping"/>
+        <response name="po" type="view" value="confirm"/>
+        <response name="error" type="request" value="orderentry"/>
+    </request-map>
+
+    <!-- ============= -->
+    <!-- View Mappings -->
+    <!-- ============= -->
+
+    <view-map name="error" page="/error/error.jsp"/>
+    <view-map name="login" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#login"/>
+    <view-map name="selectOrganizationForm" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#selectOrganizationForm"/>
+
+    <!-- main screens for each section -->
+    <view-map name="myHomeMain" type="screen" page="component://purchasing/widget/purchasing/screens/myhome/MyHomeScreens.xml#myHome"/>
+    <view-map name="orderMain" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#openOrders"/>
+    <view-map name="openOrders" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#openOrders"/>
+    <view-map name="supplierMain" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#findSuppliers"/>
+    <view-map name="bomMain" type="screen" page="component://purchasing/widget/purchasing/screens/manufacturing/ManufacturingScreens.xml#bomSimulation"/>
+    <view-map name="planningMain" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#findInventory"/>
+
+    <!-- BOM Tab Views -->
+    <view-map name="editBom" type="screen" page="component://purchasing/widget/purchasing/screens/manufacturing/ManufacturingScreens.xml#editBom"/>
+    <view-map name="bomSimulation" type="screen" page="component://purchasing/widget/purchasing/screens/manufacturing/ManufacturingScreens.xml#bomSimulation"/>
+    <view-map name="findRouting" type="screen" page="component://purchasing/widget/purchasing/screens/manufacturing/ManufacturingScreens.xml#FindRouting"/>
+    <view-map name="newRouting" type="screen" page="component://purchasing/widget/purchasing/screens/manufacturing/ManufacturingScreens.xml#NewRouting"/>
+    <view-map name="editRouting" type="screen" page="component://purchasing/widget/purchasing/screens/manufacturing/ManufacturingScreens.xml#EditRouting"/>
+    <view-map name="findRoutingTask" type="screen" page="component://purchasing/widget/purchasing/screens/manufacturing/ManufacturingScreens.xml#FindRoutingTask"/>
+    <view-map name="newRoutingTask" type="screen" page="component://purchasing/widget/purchasing/screens/manufacturing/ManufacturingScreens.xml#NewRoutingTask"/>
+    <view-map name="editRoutingTask" type="screen" page="component://purchasing/widget/purchasing/screens/manufacturing/ManufacturingScreens.xml#EditRoutingTask"/>
+
+    <!-- Planning Tab Views -->
+    <view-map name="findInventory" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#findInventory"/>
+    <view-map name="findRequirements" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#findRequirements"/>
+    <view-map name="approveSupplierRequirements" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#findRequirements"/>
+    <view-map name="openRequirements" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#openRequirements"/>
+    <view-map name="EditRequirement" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#EditRequirement"/>
+
+    <view-map name="ApproveRequirements" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#openRequirements"/>
+    <view-map name="approvedRequirements" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#approvedRequirements"/>
+    <view-map name="approvedInternalRequirements" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#approvedInternalRequirements"/>
+    <view-map name="approvedTransferRequirements" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#approvedTransferRequirements"/>
+    <view-map name="requirementOrderForm" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#requirementOrderForm"/>
+    <view-map name="runMRP" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#runMRP"/>
+    <view-map name="viewMRP" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#viewMRP"/>
+
+    <view-map name="viewBackupWarehouses" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#viewBackupWarehouses"/>
+    <view-map name="addBackupWarehouseForm" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#addBackupWarehouseForm"/>
+    <view-map name="createBackupWarehouseForm" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#createBackupWarehouseForm"/>
+
+    <!-- Create Order Views (replaces those from ordermgr, delete the ones in ordermgr-controller.xml as we go) -->
+    <view-map name="InitPurchaseOrder" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#InitPurchaseOrder"/>
+    <view-map name="checkinits" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#CheckInits"/>
+    <view-map name="orderagreements" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#OrderAgreements"/>
+    <view-map name="createOrderMainScreen" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#createOrderMainScreen"/>
+    <view-map name="findMatchingSupplierProducts" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#findMatchingSupplierProducts"/>
+    <view-map name="purchasingQuickCheckout" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#purchasingQuickCheckout"/>
+    <view-map name="ordersEditContactMech" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#ordersEditContactMech"/>
+
+
+    <!-- Checkout screens -->
+    <view-map name="orderTerm" type="screen" page="component://purchasing/widget/purchasing/screens/order/CheckoutScreens.xml#OrderTerms"/>
+    <view-map name="shipsetting" type="screen" page="component://purchasing/widget/purchasing/screens/order/CheckoutScreens.xml#ShipSettings"/>
+    <view-map name="optionsetting" type="screen" page="component://purchasing/widget/purchasing/screens/order/CheckoutScreens.xml#OptionSettings"/>
+    <view-map name="confirm" type="screen" page="component://purchasing/widget/purchasing/screens/order/CheckoutScreens.xml#ConfirmOrder"/>
+
+    <!-- Order View Screens -->
+    <view-map name="ordercomplete" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#viewOrder"/>
+    <view-map name="orderview" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#viewOrder"/>
+    <view-map name="editorderitems" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#editOrder"/>
+    <view-map name="findOrders" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#findOrders"/>
+    <view-map name="OrderPDF" type="screenfop" page="component://purchasing/widget/purchasing/screens/common/PrintScreens.xml#OrderPDF" content-type="application/pdf" encoding="none"/>
+    <!-- TODO: Copy that screen to OpenTaps Common -->
+    <view-map name="LookupPartyAndUserLoginAndPerson" page="component://party/widget/partymgr/LookupScreens.xml#LookupPartyAndUserLoginAndPerson" type="screen"/>
+    <view-map name="createnewnote" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#OrderNewNote"/>
+    <view-map name="invoiceSupplies" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#invoiceSupplies"/>
+    <view-map name="editProductDeliveryDate" type="screen" page="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml#editProductDeliveryDate"/>
+
+    <!-- Supplier Screens -->
+    <view-map name="findSuppliers" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#findSuppliers"/>
+    <view-map name="viewSupplier" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#viewSupplier"/>
+    <view-map name="createSupplier" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#createSupplier"/>
+    <view-map name="supplierEditContactMech" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#supplierEditContactMech"/>
+    <view-map name="createSupplierNoteForm" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#createSupplierNoteForm"/>
+    <view-map name="updateSupplierForm" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#updateSupplierForm"/>
+    <view-map name="viewAgreement" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#viewAgreement"/>
+    <view-map name="createAgreement" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#createAgreement"/>
+    <view-map name="editAgreement" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#editAgreement"/>
+    <view-map name="outsourceRoutingTaskForm" type="screen" page="component://purchasing/widget/purchasing/screens/supplier/SupplierScreens.xml#outsourceRoutingTaskForm"/>
+    <view-map name="OrderJR" type="jasperreports" page="component://purchasing/webapp/purchasing/reports/repository/orderPDF/Order.jrxml" content-type="application/pdf" encoding="none"/>
+
+</site-conf>

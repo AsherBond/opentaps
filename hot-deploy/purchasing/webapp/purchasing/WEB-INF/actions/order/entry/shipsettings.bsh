@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.party.contact.ContactMechWorker;
+import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
+
+// this routine will get all Facilities which have a FacilityRole of RECV_INV_FOR to the list of facilities for the internal
+// organization during purchase order creation
+if ((UtilValidate.isNotEmpty(cart)) && ("PURCHASE_ORDER".equals(cart.getOrderType()))) {
+    facilityMaps = new LinkedList();    // must start a new List or you'd be adding to a list from the ofbiz checkout logic
+    facilities = UtilCommon.getOrganizationReceivingFacilities(cart.getBillToCustomerPartyId(), delegator);
+    if (UtilValidate.isNotEmpty(facilities)) {
+        for (afi = facilities.iterator(); afi.hasNext(); ) {
+            facility = (GenericValue) afi.next();
+            facilityMaps.add(UtilMisc.toMap(
+               "facility", facility,
+               "facilityContactMechList", ContactMechWorker.getFacilityContactMechValueMaps(delegator, facility.get("facilityId"), false, null)
+            ));
+        }
+    }
+    
+    //add current selection
+    usingSingleAddress = true;
+    if (UtilValidate.isNotEmpty(cart.getShippingContactMechId())) {
+        for (int i=0; i < facilityMaps.size(); i++) {
+         facilityMap = facilityMaps.get(i);
+         facility = facilityMap.get("facility");
+         facilityContactMechList = facilityMap.get("facilityContactMechList");
+         for (int j=0; j < facilityContactMechList.size(); j++) {
+           facilityContactMechValueMap = facilityContactMechList.get(j);
+           contactMech = facilityContactMechValueMap.get("contactMech");
+          if (contactMech.get("contactMechId").equals(cart.getShippingContactMechId())) {
+          	//check the shippingContactMechId of cart if exist in facilityContactMechList, if found, then means not using single address
+            usingSingleAddress = false;
+            break;
+          }
+         }
+        }
+        
+        // if cannot find shippingContactMechId of cart in facilityContactMechList, then means it is a single address added recently
+        // then we need add it to choices map
+        if (usingSingleAddress) {
+         facilityContactMechValueMap = new HashMap();
+         delegator = request.getAttribute("delegator");
+         // find ContactMech by cart.getShippingContactMechId()
+         contactMechs = delegator.findByAnd("ContactMech", UtilMisc.toList(new EntityExpr("contactMechId", EntityOperator.EQUALS, cart.getShippingContactMechId())));
+         if (contactMechs.size() > 0) {
+             contactMech = contactMechs.get(0);
+             // get related POSTAL ADDRESS or TELECOM NUMBER
+             facilityContactMechValueMap.put("contactMech", contactMech);
+             if ("POSTAL_ADDRESS".equals(contactMech.getString("contactMechTypeId"))) {
+                facilityContactMechValueMap.put("postalAddress", contactMech.getRelatedOne("PostalAddress"));
+             } else if ("TELECOM_NUMBER".equals(contactMech.getString("contactMechTypeId"))) {
+                facilityContactMechValueMap.put("telecomNumber", contactMech.getRelatedOne("TelecomNumber"));
+             }
+         }
+         facilityContactMechValueMaps = new LinkedList();
+         facilityContactMechValueMaps.add(facilityContactMechValueMap);
+         // add it to choices map
+         facilityMaps.add(UtilMisc.toMap(
+               "facility", null,
+               "facilityContactMechList", facilityContactMechValueMaps
+            ));
+        }
+    }
+    context.put("facilityMaps", facilityMaps);
+}

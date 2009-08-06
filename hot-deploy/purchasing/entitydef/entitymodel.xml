@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Entity definitions for the Opentaps Purchasing Application</title>
+    <copyright>Copyright (c) 2005 - 2006 Open Source Strategies Inc.</copyright>
+
+    <!-- Leon: For lookups, I think the best apporach is to use a dynamic view entity to join in the desired goodIdentificationTypeIds to
+    sarch by to the Product and SupplierProduct entities.  Hence if a company wants to do searches by SKU and UPCA, it would work seamlessly.  -->
+    <view-entity entity-name="SupplierProductGoodIdentification" package-name="org.opentaps.purchasing.supplier"
+        title="Allows searching supplier products by SKU, UPC-A code and other kinds of product identification.">
+
+        <member-entity entity-alias="SP" entity-name="SupplierProduct"/>
+        <member-entity entity-alias="GI" entity-name="GoodIdentification"/>
+
+        <alias-all entity-alias="SP"/>
+        <alias-all entity-alias="GI"/>
+
+        <view-link entity-alias="SP" rel-entity-alias="GI" rel-optional="true">
+            <key-map field-name="productId"/>
+        </view-link>
+
+        <relation type="one-nofk" rel-entity-name="Product">
+            <key-map field-name="productId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="OrderHeaderItemAndOrderDeliverySchedule" package-name="org.opentaps.purchasing.supplier"
+        title="To get and OrderItem with its Estimated Delivery Date.">
+      <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+      <member-entity entity-alias="OI" entity-name="OrderItem"/>
+      <member-entity entity-alias="ODS" entity-name="OrderDeliverySchedule"/>
+      
+      <alias-all entity-alias="OI"/>
+      <alias-all entity-alias="ODS"/>
+      <alias entity-alias="OH" name="orderTypeId"/>
+      
+      <view-link entity-alias="OI" rel-entity-alias="OH" rel-optional="false">
+        <key-map field-name="orderId"/>
+      </view-link>
+      <view-link entity-alias="OI" rel-entity-alias="ODS" rel-optional="true">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+      </view-link>
+
+      <relation type="one" fk-name="OHI_ODS_STTS" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
+      </relation>
+      
+    </view-entity>
+
+    <view-entity entity-name="OrderItemAndOrderDeliverySchedule" package-name="org.opentaps.purchasing.supplier"
+        title="To get and OrderItem with its Estimated Delivery Date.">
+      <member-entity entity-alias="OI" entity-name="OrderItem"/>
+      <member-entity entity-alias="ODS" entity-name="OrderDeliverySchedule"/>
+      
+      <alias-all entity-alias="OI"/>
+      <alias-all entity-alias="ODS"/>
+      
+      <view-link entity-alias="OI" rel-entity-alias="ODS" rel-optional="true">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+      </view-link>
+
+      <relation type="one" fk-name="OI_ODS_STTS" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
+      </relation>
+      
+    </view-entity>
+
+     <view-entity entity-name="MrpOrderInfo"
+            package-name="org.opentaps.purchasing.mrp"
+            never-cache="true"
+            title="Links orderheader/role/item to inventory item either via OISGIR for searching pending orders">
+      <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+      <member-entity entity-alias="OI" entity-name="OrderItem"/>
+      <member-entity entity-alias="OISGIR" entity-name="OrderItemShipGrpInvRes"/>
+      <member-entity entity-alias="OISGA" entity-name="OrderItemShipGroupAssoc"/>
+      <member-entity entity-alias="OISG" entity-name="OrderItemShipGroup"/>
+      <member-entity entity-alias="II" entity-name="InventoryItem"/>
+      <member-entity entity-alias="P" entity-name="Product"/>
+      <alias entity-alias="OH" name="orderId"/>
+      <alias entity-alias="OH" name="orderTypeId"/>
+      <alias entity-alias="OH" name="orderDate"/>
+      <alias entity-alias="OH" name="productStoreId"/>
+      <alias entity-alias="OH" name="orderStatusId" field="statusId"/>      
+      <alias entity-alias="OI" name="orderItemSeqId"/>
+      <alias entity-alias="OI" name="productId"/>
+      <alias entity-alias="OI" name="quantity"/>
+      <alias entity-alias="OI" name="cancelQuantity"/>
+      <alias entity-alias="OI" name="itemStatusId" field="statusId"/>
+      <alias entity-alias="OI" name="itemShipBeforeDate" field="shipBeforeDate"/>
+      <alias entity-alias="OI" name="itemShipAfterDate" field="shipAfterDate"/>
+      <alias entity-alias="OI" name="itemEstimatedDeliveryDate" field="estimatedDeliveryDate"/>
+      <alias entity-alias="OISG" name="shipGroupSeqId"/>
+      <alias entity-alias="OISG" name="shipGroupContactMechId" field="contactMechId"/>
+      <alias entity-alias="OISG" name="shipByDate"/>
+      <alias entity-alias="OISG" name="shipAfterDate"/>
+      <alias entity-alias="OISGIR" name="quantityReserved" field="quantity"/>
+      <alias entity-alias="OISGIR" name="reservedDatetime"/>
+      <alias entity-alias="OISGIR" name="reserveSequenceId" field="sequenceId"/>
+      <alias entity-alias="II" name="facilityId"/>
+      <alias entity-alias="P" name="salesDiscontinuationDate"/>
+      <alias entity-alias="P" name="introductionDate"/>
+      <view-link entity-alias="OH" rel-entity-alias="OI" rel-optional="true">
+        <key-map field-name="orderId"/>
+      </view-link>
+      <view-link entity-alias="OI" rel-entity-alias="P" rel-optional="true">
+        <key-map field-name="productId"/>
+      </view-link>            
+        <!-- OrderItem links to InventoryItem via OISGIR for pending orders -->
+      <view-link entity-alias="OI" rel-entity-alias="OISGIR" rel-optional="true">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+      </view-link>
+      <!-- we must go from OrderItem to OrderItemShipGroupAssoc to OrderItemShipGroup: for PO's there are no OISGIR so this link would not work-->
+      <view-link entity-alias="OI" rel-entity-alias="OISGA" rel-optional="false">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+      </view-link>
+      <view-link entity-alias="OISGA" rel-entity-alias="OISG" rel-optional="false">
+        <key-map field-name="orderId"/>
+        <key-map field-name="shipGroupSeqId"/>
+      </view-link>
+      <view-link entity-alias="OISGIR" rel-entity-alias="II" rel-optional="true">
+        <key-map field-name="inventoryItemId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="OrderType">
+        <key-map field-name="orderTypeId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="OrderItem">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>
+      </relation>
+    </view-entity>
+
+  <!-- ========================================================= -->
+  <!-- org.opentaps.purchasing.mrp -->
+  <!-- ========================================================= -->
+
+    <entity entity-name="MrpInventoryEvent"
+            package-name="org.opentaps.purchasing.mrp"
+            title="MRP Inventory event">
+      <description>
+        Contains all the MRP inventory events by ProductId to be able to check the product availability 
+        and if necessary generate some requirements. This entity overrides ofbiz InventoryEventPlanned by
+        having facilityId to the primary key
+      </description>
+      <field name="productId" type="id-ne"></field>
+      <field name="eventDate" type="date-time"></field>
+      <field name="inventoryEventPlanTypeId" type="id-ne"></field>
+      <field name="eventQuantity" type="floating-point"></field>
+      <field name="netQoh" type="floating-point"></field>       
+      <field name="facilityId" type="id"></field>
+      <field name="eventName" type="very-long"></field>
+      <field name="isLate" type="indicator"></field>
+      <prim-key field="productId"/>
+      <prim-key field="eventDate"/>
+      <prim-key field="inventoryEventPlanTypeId"/>
+      <prim-key field="facilityId"/>      
+      <relation type="one" fk-name="MRP_INV_EVNT_PRDT" rel-entity-name="Product">
+        <key-map field-name="productId"/>
+      </relation>
+      <relation type="one" fk-name="MRP_INV_EVNT_TYP" rel-entity-name="InventoryEventPlannedType">
+        <key-map field-name="inventoryEventPlanTypeId"/>
+      </relation>
+      <relation type="one" fk-name="MRP_INV_EVNT_FAC" rel-entity-name="Facility">
+        <key-map field-name="facilityId"/>
+      </relation>
+      <relation type="many" fk-name="MRP_INV_EVNT_DET" rel-entity-name="MrpInventoryEventDetail">
+        <key-map field-name="productId"/>
+        <key-map field-name="eventDate"/>
+        <key-map field-name="inventoryEventPlanTypeId"/>
+        <key-map field-name="facilityId"/>                        
+      </relation>      
+    </entity>
+    
+    <entity entity-name="MrpInventoryEventDetail"
+            package-name="org.opentaps.purchasing.mrp"
+            title="MRP Inventory event detail">
+      <description>
+        Contains all the MRP inventory event details like order_id, order_item_seq_id, quantity, amount, netQOH  
+      </description>
+      <field name="productId" type="id-ne"></field>
+      <field name="eventDate" type="date-time"></field>
+      <field name="inventoryEventPlanTypeId" type="id-ne"></field>
+      <field name="facilityId" type="id"></field>    
+      <field name="mrpInvEvtDetSeqId" type="id"></field>
+      <field name="orderId" type="id"></field>
+      <field name="orderItemSeqId" type="id"></field>      
+      <field name="quantity" type="floating-point"></field>      
+      <prim-key field="productId"/>
+      <prim-key field="eventDate"/>
+      <prim-key field="inventoryEventPlanTypeId"/>
+      <prim-key field="facilityId"/>
+      <prim-key field="mrpInvEvtDetSeqId"/>      
+      <relation type="one" fk-name="MRPIEVDTL_OITM" rel-entity-name="OrderItem">
+        <key-map field-name="orderId"/>
+        <key-map field-name="orderItemSeqId"/>        
+      </relation>
+    </entity>    
+
+    <entity entity-name="MrpProductStoreGroupMember"
+            package-name="org.opentaps.purchasing.mrp"
+            title="Mrp ProductStore Group Member Entity">
+      <field name="productStoreId" type="id-ne"></field>
+      <field name="productStoreGroupId" type="id-ne"></field>
+      <field name="fromDate" type="date-time"></field>
+      <field name="thruDate" type="date-time"></field>
+      <field name="sequenceNum" type="numeric"></field>
+      <prim-key field="productStoreId"/>
+      <prim-key field="productStoreGroupId"/>
+      <prim-key field="fromDate"/>
+      <relation type="one" fk-name="MPRDSTR_MEM_PRDSTR" rel-entity-name="ProductStore">
+        <key-map field-name="productStoreId"/>
+      </relation>
+      <relation type="one" fk-name="MPRDSTR_MEM_PSGRP" rel-entity-name="ProductStoreGroup">
+        <key-map field-name="productStoreGroupId"/>
+      </relation>
+    </entity>
+
+    <view-entity entity-name="MrpFacilityInventoryEventPlanned" package-name="org.opentaps.purchasing.mrp"
+            title="Links Product, ProductFacility, MrpInventoryEvent, InventoryEventPlannedType to ">
+        <member-entity entity-alias="PR" entity-name="Product"/>
+        <member-entity entity-alias="PF" entity-name="ProductFacility"/>
+        <member-entity entity-alias="IEP" entity-name="MrpInventoryEvent"/>
+        <member-entity entity-alias="IEPT" entity-name="InventoryEventPlannedType"/>
+        <alias-all entity-alias="PF"/>
+        <alias-all entity-alias="IEP">
+            <exclude field="productId"/>
+            <exclude field="facilityId"/>
+        </alias-all>
+        <alias name="billOfMaterialLevel" entity-alias="PR"/>
+        <alias name="introductionDate" entity-alias="PR"/>
+        <alias name="salesDiscontinuationDate" entity-alias="PR"/>
+        <alias name="inOut" entity-alias="IEPT"/>
+        <view-link entity-alias="PF" rel-entity-alias="PR">
+            <key-map field-name="productId"/>
+        </view-link>
+        <view-link entity-alias="PF" rel-entity-alias="IEP" rel-optional="true">
+            <key-map field-name="productId"/>
+            <key-map field-name="facilityId"/>
+        </view-link>
+        <view-link entity-alias="IEP" rel-entity-alias="IEPT" rel-optional="true">
+            <key-map field-name="inventoryEventPlanTypeId"/>
+        </view-link>
+        <relation type="one-nofk" rel-entity-name="Product">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation type="one-nofk" fk-name="FINV_EVT_PLN_MIEV" rel-entity-name="MrpInventoryEvent">
+            <key-map field-name="productId"/>
+            <key-map field-name="eventDate"/>
+            <key-map field-name="inventoryEventPlanTypeId"/>
+            <key-map field-name="facilityId"/>                        
+        </relation>  
+        <relation type="many" fk-name="FINV_EVT_PLN_MIEVD" rel-entity-name="MrpInventoryEventDetail">
+            <key-map field-name="productId"/>
+            <key-map field-name="eventDate"/>
+            <key-map field-name="inventoryEventPlanTypeId"/>
+            <key-map field-name="facilityId"/>                        
+        </relation>         
+    </view-entity>
+    
+    <view-entity entity-name="FacilityProductAndMrpEventAndDetailAndOrder" package-name="org.opentaps.purchasing.mrp"
+            title="Links Product, ProductFacility, MrpInventoryEvent, InventoryEventPlannedType, MrpInventoryEventDetail and OrderHeader">
+        <member-entity entity-alias="PR" entity-name="Product"/>
+        <member-entity entity-alias="PF" entity-name="ProductFacility"/>
+        <member-entity entity-alias="IEP" entity-name="MrpInventoryEvent"/>
+        <member-entity entity-alias="IEPT" entity-name="InventoryEventPlannedType"/>
+        <member-entity entity-alias="MIED" entity-name="MrpInventoryEventDetail"/>        
+        <member-entity entity-alias="OH" entity-name="OrderHeader"/>        
+        <alias-all entity-alias="PF"/>
+        <alias-all entity-alias="IEP">
+            <exclude field="productId"/>
+            <exclude field="facilityId"/>
+        </alias-all>
+        <alias name="billOfMaterialLevel" entity-alias="PR"/>
+        <alias name="introductionDate" entity-alias="PR"/>
+        <alias name="salesDiscontinuationDate" entity-alias="PR"/>
+        <alias name="inOut" entity-alias="IEPT"/>
+        <alias name="orderId" entity-alias="MIED"/>        
+        <alias name="productStoreId" entity-alias="OH"/>        
+        <view-link entity-alias="PF" rel-entity-alias="PR">
+            <key-map field-name="productId"/>
+        </view-link>
+        <view-link entity-alias="PF" rel-entity-alias="IEP" rel-optional="true">
+            <key-map field-name="productId"/>
+            <key-map field-name="facilityId"/>
+        </view-link>
+        <view-link entity-alias="IEP" rel-entity-alias="IEPT" rel-optional="true">
+            <key-map field-name="inventoryEventPlanTypeId"/>
+        </view-link>
+        <view-link entity-alias="IEP" rel-entity-alias="MIED">
+            <key-map field-name="productId"/>
+            <key-map field-name="facilityId"/>
+        </view-link>
+        <view-link entity-alias="MIED" rel-entity-alias="OH">
+            <key-map field-name="orderId"/>
+        </view-link>                
+        <relation type="one-nofk" rel-entity-name="Product">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="InventoryEventPlannedType">
+            <key-map field-name="inventoryEventPlanTypeId"/>
+        </relation> 
+        <relation type="one-nofk" fk-name="FIV_EVTP_OH_MIEV" rel-entity-name="MrpInventoryEvent">
+            <key-map field-name="productId"/>
+            <key-map field-name="eventDate"/>
+            <key-map field-name="inventoryEventPlanTypeId"/>
+            <key-map field-name="facilityId"/>                        
+        </relation>  
+        <relation type="many" fk-name="FIV_EVTP_OH_MIEVD" rel-entity-name="MrpInventoryEventDetail">
+            <key-map field-name="productId"/>
+            <key-map field-name="eventDate"/>
+            <key-map field-name="inventoryEventPlanTypeId"/>
+            <key-map field-name="facilityId"/>                        
+        </relation>         
+    </view-entity>
+    
+    <view-entity entity-name="FacilityProductAndMrpEventAndDetailAndOrderAndProductStoreGroup" package-name="org.opentaps.purchasing.mrp"
+            title="Links Product, ProductFacility, MrpInventoryEvent, InventoryEventPlannedType, MrpInventoryEventDetail, OrderHeader and ProductStoreGroup">
+        <member-entity entity-alias="PR" entity-name="Product"/>
+        <member-entity entity-alias="PF" entity-name="ProductFacility"/>
+        <member-entity entity-alias="IEP" entity-name="MrpInventoryEvent"/>
+        <member-entity entity-alias="IEPT" entity-name="InventoryEventPlannedType"/>
+        <member-entity entity-alias="MIED" entity-name="MrpInventoryEventDetail"/>        
+        <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+        <member-entity entity-alias="PSGM" entity-name="MrpProductStoreGroupMember"/>
+        <member-entity entity-alias="PSG" entity-name="ProductStoreGroup"/>        
+        <alias-all entity-alias="PF"/>
+        <alias-all entity-alias="IEP">
+            <exclude field="productId"/>
+            <exclude field="facilityId"/>
+        </alias-all>
+        <alias-all entity-alias="PSGM">
+            <exclude field="productStoreGroupId"/>
+            <exclude field="productStoreId"/>
+        </alias-all>    
+        <alias name="billOfMaterialLevel" entity-alias="PR"/>
+        <alias name="introductionDate" entity-alias="PR"/>
+        <alias name="salesDiscontinuationDate" entity-alias="PR"/>
+        <alias name="inOut" entity-alias="IEPT"/>
+        <alias name="orderId" entity-alias="MIED"/>        
+        <alias name="productStoreId" entity-alias="OH"/>        
+        <alias name="productStoreGroupId" entity-alias="PSG"/>        
+        <view-link entity-alias="PF" rel-entity-alias="PR">
+            <key-map field-name="productId"/>
+        </view-link>
+        <view-link entity-alias="PF" rel-entity-alias="IEP" rel-optional="true">
+            <key-map field-name="productId"/>
+            <key-map field-name="facilityId"/>
+        </view-link>
+        <view-link entity-alias="IEP" rel-entity-alias="IEPT" rel-optional="true">
+            <key-map field-name="inventoryEventPlanTypeId"/>
+        </view-link>
+        <view-link entity-alias="IEP" rel-entity-alias="MIED">
+            <key-map field-name="productId"/>
+            <key-map field-name="facilityId"/>
+        </view-link>
+        <view-link entity-alias="MIED" rel-entity-alias="OH">
+            <key-map field-name="orderId"/>
+        </view-link>
+        <view-link entity-alias="OH" rel-entity-alias="PSGM">
+            <key-map field-name="productStoreId"/>
+        </view-link>
+        <view-link entity-alias="PSGM" rel-entity-alias="PSG">
+            <key-map field-name="productStoreGroupId"/>
+        </view-link>                                        
+        <relation type="one-nofk" rel-entity-name="Product">
+            <key-map field-name="productId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="InventoryEventPlannedType">
+            <key-map field-name="inventoryEventPlanTypeId"/>
+        </relation>        
+        <relation type="one-nofk" fk-name="FIV_EVP_MPSG_MIEV" rel-entity-name="MrpInventoryEvent">
+            <key-map field-name="productId"/>
+            <key-map field-name="eventDate"/>
+            <key-map field-name="inventoryEventPlanTypeId"/>
+            <key-map field-name="facilityId"/>                        
+        </relation>  
+        <relation type="many" fk-name="FIV_EVP_MPSG_MIEVD" rel-entity-name="MrpInventoryEventDetail">
+            <key-map field-name="productId"/>
+            <key-map field-name="eventDate"/>
+            <key-map field-name="inventoryEventPlanTypeId"/>
+            <key-map field-name="facilityId"/>                        
+        </relation>         
+    </view-entity>
+    
+    <view-entity entity-name="MrpProductStoreGroupAndProductStore" package-name="org.opentaps.purchasing.mrp"
+            title="Links ProductStoreGroup and ProductStore">
+        <member-entity entity-alias="PSG" entity-name="ProductStoreGroup"/>
+        <member-entity entity-alias="MPSGM" entity-name="MrpProductStoreGroupMember"/>        
+        <member-entity entity-alias="PS" entity-name="ProductStore"/>
+        <alias-all entity-alias="PSG"/>
+        <alias-all entity-alias="MPSGM">
+            <exclude field="productStoreGroupId"/>
+            <exclude field="productStoreId"/>
+        </alias-all>
+        <alias-all entity-alias="PS"/>
+        <view-link entity-alias="PSG" rel-entity-alias="MPSGM" rel-optional="true">
+            <key-map field-name="productStoreGroupId"/>
+        </view-link>
+        <view-link entity-alias="MPSGM" rel-entity-alias="PS" rel-optional="true">
+            <key-map field-name="productStoreId"/>
+        </view-link>
+        <relation type="one-nofk" rel-entity-name="ProductStoreGroup">
+            <key-map field-name="productStoreGroupId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="ProductStore">
+            <key-map field-name="productStoreId"/>
+        </relation>  
+    </view-entity>      
+
+    <extend-entity entity-name="WorkEffortGoodStandard">
+        <field name="minQuantity" type="floating-point"/>
+        <field name="maxQuantity" type="floating-point"/>
+    </extend-entity>
+
+<!-- Redefine this entity for add RequirementType.description and StatusItem.description -->
+    <view-entity entity-name="RequirementAndRole"
+            package-name="org.ofbiz.order.request"
+            title="Requirement And Role View Entity">
+      <member-entity entity-alias="RQ" entity-name="Requirement"/>
+      <member-entity entity-alias="RQR" entity-name="RequirementRole"/>
+      <alias entity-alias="RQ" name="requirementId"/>
+      <alias entity-alias="RQ" name="requirementTypeId"/>
+      <alias entity-alias="RQ" name="statusId"/>
+      <alias entity-alias="RQ" name="facilityId"/>
+      <alias entity-alias="RQ" name="deliverableId"/>
+      <alias entity-alias="RQ" name="fixedAssetId"/>
+      <alias entity-alias="RQ" name="productId"/>
+      <alias entity-alias="RQ" name="description"/>
+      <alias entity-alias="RQ" name="requirementStartDate"/>
+      <alias entity-alias="RQ" name="requiredByDate"/>
+      <alias entity-alias="RQ" name="estimatedBudget"/>
+      <alias entity-alias="RQ" name="quantity"/>
+      <alias entity-alias="RQ" name="reason"/>
+      <alias entity-alias="RQ" name="lastModifiedDate"/>
+      <alias entity-alias="RQ" name="lastModifiedByUserLogin"/>
+      <alias entity-alias="RQR" name="partyId"/>
+      <alias entity-alias="RQR" name="roleTypeId"/>
+      <alias entity-alias="RQR" name="fromDate"/>
+      <alias entity-alias="RQR" name="thruDate"/>
+      <view-link entity-alias="RQ" rel-entity-alias="RQR" rel-optional="true">
+        <key-map field-name="requirementId"/>
+      </view-link>
+      <relation type="one-nofk" rel-entity-name="Requirement">
+        <key-map field-name="requirementId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="RequirementRole">
+        <key-map field-name="requirementId"/>
+        <key-map field-name="partyId"/>
+        <key-map field-name="roleTypeId"/>
+        <key-map field-name="fromDate"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="Party">
+        <key-map field-name="partyId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="Person">
+        <key-map field-name="partyId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="PartyRole">
+        <key-map field-name="partyId"/>
+        <key-map field-name="roleTypeId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="RoleType">
+        <key-map field-name="roleTypeId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="StatusItem">
+        <key-map field-name="statusId"/>
+      </relation>      
+      <relation type="one-nofk" rel-entity-name="RequirementType">
+        <key-map field-name="requirementTypeId"/>
+      </relation>      
+    </view-entity>
+
+</entitymodel>

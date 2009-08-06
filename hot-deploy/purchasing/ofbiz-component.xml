@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<ofbiz-component name="purchasing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+    <resource-loader name="main" type="component"/>
+    <classpath type="jar" location="build/lib/*"/>
+    <classpath type="dir" location="script"/>
+    <classpath type="dir" location="config"/>
+    
+    <!-- seed data which will be loaded on "ant run-install" and "ant run-install-seed" -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/PurchasingSecurityData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/PurchasingSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ContextHelpResourceSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ReportSeedData.xml"/>
+
+    <!-- demo data which will be loaded only on "ant run-install" -->
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/PurchasingDemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/PurchasingOFBizSecurityData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/RequirementsTestData.xml"/>   
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoKeyboardShortcuts.xml"/> 
+
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/>
+
+    <!-- service definition files -->
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_mrp.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_facility.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
+   
+    <webapp name="purchasing"
+        title="Purchasing"
+        server="default-server"
+        location="webapp/purchasing"
+        mount-point="/purchasing"
+        base-permission="PRCH"
+        app-bar-display="true"/>
+    <webapp name="purchasinggwt"
+        title="GWT Part of Purchasing Application"
+        server="default-server"
+        location="webapp/purchasinggwt"
+        mount-point="/purchasinggwt"
+        app-bar-display="false"/>
+</ofbiz-component>

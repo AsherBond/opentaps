@@ -1,0 +1,105 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+import javolution.util.FastMap;
+import javolution.util.FastList;
+
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+
+import org.ofbiz.base.util.UtilFormatOut;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.order.order.OrderReadHelper;
+
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.order.Order;
+import org.opentaps.domain.base.entities.Shipment;
+import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+
+
+domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+orderDomain = domainsLoader.loadDomainsDirectory().getOrderDomain();
+orderRepository = orderDomain.getOrderRepository();
+
+orderId = parameters.get("orderId");
+context.put("orderId", orderId);
+
+Order order = null;
+if (UtilValidate.isNotEmpty(orderId)) {
+    try {
+        order = orderRepository.getOrderById(orderId);
+    } catch (FoundationException e) {
+        return;
+    }
+}
+
+// Make and store in context entry for navigation history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("PurchNavHistoryOrder", locale, UtilMisc.toMap("orderId", order.getOrderId(), "orderName", order.getOrderName())), "orderview", UtilMisc.toList("orderId"));
+
+// orderContactMechValueMaps contains contact information of any type. In order to add ability
+// hide phone numbers section on the page if there are no numbers we intoduce this flag that should be TRUE
+// if phone numbers exists in the list.
+hasPhoneNumbers = Boolean.FALSE;
+
+context.put("order", order);
+
+// use for backward compatibility for now
+context.put("orderHeader", Repository.genericValueFromEntity(delegator, order));
+
+// Add to contact mech values phone numbers
+cmvm = context.get("orderContactMechValueMaps");
+if (UtilValidate.isNotEmpty(cmvm)) {
+    billFromPartyId = order.getBillFromVendorPartyId();
+    conditions = FastList.newInstance();
+    conditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, billFromPartyId));
+    conditions.add(new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, "TELECOM_NUMBER"));
+    conditions.add(EntityUtil.getFilterByDateExpr());
+    conditions.add(EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate"));
+    selectList = UtilMisc.toList("contactMechTypeId", "contactMechPurposeTypeId", "contactMechId", "extension");
+    partyContactPurposes = delegator.findByCondition("PartyContactDetailByPurpose", new EntityConditionList(conditions, EntityOperator.AND), selectList, null);
+
+    if (partyContactPurposes != null) {
+        for (phone : partyContactPurposes) {
+
+            // check whether phone number w/ current purpose exists in contact mech map.
+            boolean hasPhone = false;
+            for (orderContactMechMap : cmvm) {
+                orderContactMech = orderContactMechMap.get("orderContactMech");
+                if (orderContactMech != null && phone.getString("contactMechPurposeTypeId").equals(orderContactMech.getString("contactMechPurposeTypeId")))
+                    hasPhone = true;
+            }
+            if (hasPhone) continue;
+
+            // grab info about telecom number and put it to orderContactMechValueMaps
+            contactMechMap = FastMap.newInstance();
+            contactMechMap.put("contactMech", phone);
+            contactMechMap.put("contactMechType", delegator.findByPrimaryKeyCache("ContactMechType", UtilMisc.toMap("contactMechTypeId", phone.getString("contactMechTypeId"))));
+            contactMechMap.put("contactMechPurposeType", delegator.findByPrimaryKeyCache("ContactMechPurposeType", UtilMisc.toMap("contactMechPurposeTypeId", phone.getString("contactMechPurposeTypeId"))));
+            contactMechMap.put("telecomNumber", delegator.findByPrimaryKeyCache("TelecomNumber", UtilMisc.toMap("contactMechId", phone.getString("contactMechId"))));
+            cmvm.add(contactMechMap);
+            hasPhoneNumbers = Boolean.TRUE;
+        }
+    }
+}
+
+context{"hasPhoneNumbers"} = hasPhoneNumbers;

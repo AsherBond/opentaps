@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+    <eca service="changePurchasingOrderItemStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="ITEM_CANCELLED"/>
+        <action service="cancelOrderInventoryReservation" mode="sync"/>
+        <action service="recalcShippingTotal" mode="sync"/>
+        <action service="recalcTaxTotal" mode="sync"/>
+        <action service="resetGrandTotal" mode="sync"/>
+        <action service="checkOrderItemStatus" mode="sync"/>
+    </eca>
+    <eca service="changePurchasingOrderItemStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="ITEM_COMPLETED"/>
+        <action service="checkOrderItemStatus" mode="sync"/>
+    </eca>
+    <eca service="changePurchasingOrderItemStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="ITEM_APPROVED"/>
+        <action service="checkOrderItemStatus" mode="sync"/>
+    </eca>
+    <eca service="changePurchasingOrderItemStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="ITEM_APPROVED"/>
+        <action service="checkDigitalItemFulfillment" mode="sync"/>
+    </eca>
+
+    <!-- order status changes -->
+    <eca service="changePurchasingOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_CANCELLED"/>
+        <action service="releaseOrderPayments" mode="sync"/>
+    </eca>
+    <eca service="changePurchasingOrderStatus" event="commit" run-on-error="false">
+        <condition field-name="statusId" operator="equals" value="ORDER_COMPLETED"/>
+        <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="resetGrandTotal" mode="sync"/>
+        <action service="sendOrderCompleteNotification" mode="async" persist="true"/>
+    </eca>
+</service-eca>    

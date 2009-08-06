@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<entity-engine-xml>
+
+    <ReportRegistry reportId="PUBACKORDPRODS" shortName="Open Sales Order Items Report" description="All back-ordered products in sectional view of products and orders" location="component://purchasing/webapp/purchasing/reports/repository/BackOrderedProducts.jrxml"/>
+    <ReportRegistry reportId="PUESTDELIVERYDATES" shortName="Estimated delivery dates" description="All open purchase order items and their estimated delivery dates." location="component://purchasing/webapp/purchasing/reports/repository/EstimatedDeliveryDates.jrxml"/>
+    <ReportRegistry reportId="PURCHBYSUPPLIER" shortName="Purchases by Supplier" description="Total purchases by supplier during a period of time." location="component://purchasing/webapp/purchasing/reports/repository/PurchasesBySupplier.jrxml"/>
+    <ReportRegistry reportId="PURCHBYPRODUCT" shortName="Purchases by Product" description="Total purchases by product during a period of time." location="component://purchasing/webapp/purchasing/reports/repository/PurchasesByProduct.jrxml"/>
+    <ReportRegistry reportId="SALESMINSTOCK" shortName="Sales versus Minimum Stock" description="Sales versus warehouse minimum stock level." location="component://purchasing/webapp/purchasing/reports/repository/SalesMinimumStock.jrxml"/>
+    <ReportRegistry reportId="PMNTSUPPLIER" shortName="Payments by Supplier" description="Number and amount of payments made to suppliers." location="component://purchasing/webapp/purchasing/reports/repository/PaymentsBySupplier.jrxml"/>
+    <ReportRegistry reportId="SALESHIPDATE" shortName="Sales Shipments by Date" description="Sales shipments by date." location="component://purchasing/webapp/purchasing/reports/repository/SalesShipmentsByDate.jrxml"/>
+    
+    <ReportGroup reportGroupId="PRCH_ORDER" showInSelect="Y" description="Order Reports" application="purchasing" sequenceNum="1"/>
+    <ReportGroupMember reportGroupId="PRCH_ORDER" reportId="PUBACKORDPRODS" sequenceNum="1"/>
+    <ReportGroupMember reportGroupId="PRCH_ORDER" reportId="PUESTDELIVERYDATES" sequenceNum="2"/>
+    <ReportGroupMember reportGroupId="PRCH_ORDER" reportId="SALESMINSTOCK" sequenceNum="3"/>
+    <ReportGroupMember reportGroupId="PRCH_ORDER" reportId="SALESHIPDATE" sequenceNum="4"/>
+
+    <ReportGroup reportGroupId="PRCH_PURCHASING" showInSelect="Y" description="Purchasing Reports" application="purchasing" sequenceNum="2"/>
+    <ReportGroupMember reportGroupId="PRCH_PURCHASING" reportId="PURCHBYSUPPLIER" sequenceNum="1"/>
+    <ReportGroupMember reportGroupId="PRCH_PURCHASING" reportId="PURCHBYPRODUCT" sequenceNum="2"/>
+    <ReportGroupMember reportGroupId="PRCH_PURCHASING" reportId="PMNTSUPPLIER" sequenceNum="3"/>
+    
+    <ReportRegistry reportId="PRUCHORDER" shortName="Purchasing Order Report" description="Report show you the order detail." location="component://purchasing/webapp/purchasing/reports/repository/orderPDF/Order.jrxml"/>
+
+    <ReportGroup reportGroupId="PRCH_FORM" showInSelect="N" description="Order Reports" application="purchasing"/>
+    <ReportGroupMember reportGroupId="PRCH_FORM" reportId="PRUCHORDER"/>
+
+</entity-engine-xml>

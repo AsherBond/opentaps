@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="purchasinggwt/org.opentaps.gwt.purchasing.order.order" global="true"/>
+                <set field="sectionName" value="order" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="openOrders">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchOpenOrders"/>  
+                <set field="sectionHeaderUiLabel" value="PurchOpenOrders"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+                <set field="onlyOpenOrders" value="true"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/findPurchaseOrders.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/includes/javascriptRefresh.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/order/findPurchaseOrders.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findOrders">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsFindOrders"/>  
+                <set field="sectionHeaderUiLabel" value="OpentapsFindOrders"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/findPurchaseOrdersForm.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/findPurchaseOrders.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://purchasing/webapp/purchasing/order/findOrdersForm.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/order/findPurchaseOrders.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- This is the OFBiz orderview screen reconfigured for opentaps layout -->
+    <screen name="viewOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsViewPurchaseOrder"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsViewPurchaseOrder"/>
+                <set field="customerDetailLink" value="/partymgr/control/viewprofile?partyId=" global="true"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderview.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderviewwebsecure.bsh"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/viewOrder.bsh"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/getOrderAccountingTags.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/order/viewOrder.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+
+    <!-- This is the OFBiz editOrderItem screen reconfigured for opentaps layout -->
+    <screen name="editOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsOrderEditOrder"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsOrderEditOrder"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderview.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderviewwebsecure.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/editOrder.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/excludeCancelledItems.bsh"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/viewOrder.bsh"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/getOrderAccountingTags.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/order/editOrder.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+
+    <!-- This is the OFBiz OrderNewNote screen reconfigured for opentaps layout -->
+    <screen name="OrderNewNote">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsCreateNote"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsCreateNote"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/newnote.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://order/webapp/ordermgr/order/newnote.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>    
+
+    <!-- TODO: this will be a template for similar pages that have to create invoices from a subset of order items -->
+    <screen name="invoiceSupplies">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchInvoiceSupplies"/>
+                <set field="sectionHeaderUiLabel" value="PurchInvoiceSupplies"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/invoiceSupplies.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/order/invoiceSupplies.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="editProductDeliveryDate">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchEstimatedDeliveryDate"/>
+                <set field="sectionHeaderUiLabel" value="PurchEstimatedDeliveryDate"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/editProductDeliveryDate.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/order/editProductDeliveryDate.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+</screens>

@@ -1,0 +1,64 @@
+<entity-engine-xml>
+
+
+    <!--
+     * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the Honest Public License.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * Honest Public License for more details.
+     *
+     * You should have received a copy of the Honest Public License
+     * along with this program; if not, write to Funambol,
+     * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+     *
+    -->
+
+    <ContextHelpResource contextHelpResourceId="3000" screenName="myHomeMain" applicationName="purchasing" remotePageName="Purchasing_Home_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3001" screenName="supplierMain" applicationName="purchasing" remotePageName="Find_Suppliers_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3002" screenName="findSuppliers" applicationName="purchasing" remotePageName="Find_Suppliers_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3003" screenName="createSupplier" applicationName="purchasing" remotePageName="Create_Supplier_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3004" screenName="viewSupplier" applicationName="purchasing" remotePageName="Supplier_Details_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3005" screenName="viewAgreement" applicationName="purchasing" remotePageName="Purchase_Agreement_Details_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3006" screenName="createAgreement" applicationName="purchasing" remotePageName="Create_Purchase_Agreement_Screen" remotePageVersion="0" />
+
+    <!-- These will probably be replaced soon with better screens -->
+    <ContextHelpResource contextHelpResourceId="3007" screenName="InitPurchaseOrder" applicationName="purchasing" remotePageName="Create_Purchase_Orders_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3010" screenName="createOrderMainScreen" applicationName="purchasing" remotePageName="Create_Purchase_Orders_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3011" screenName="purchasingQuickCheckout" applicationName="purchasing" remotePageName="Create_Purchase_Orders_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="3012" screenName="invoiceSupplies" applicationName="purchasing" remotePageName="Invoice_Supplies" remotePageVersion="0" />
+        
+    <ContextHelpResource contextHelpResourceId="3013" screenName="outsourceRoutingTaskForm" applicationName="purchasing" remotePageName="Outsource_a_Task_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3014" screenName="ViewFacilityInventoryByProduct" applicationName="purchasing" remotePageName="Inventory_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3015" screenName="openRequirements" applicationName="purchasing" remotePageName="Open_Requirements_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3016" screenName="EditRequirement" applicationName="purchasing" remotePageName="View_Requirement_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3017" screenName="ApprovedProductRequirementsByVendor" applicationName="purchasing" remotePageName="Approved_Requirements_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3018" screenName="requirementOrderForm" applicationName="purchasing" remotePageName="Create_PO_from_Approved_Requirements" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3019" screenName="runMRP" applicationName="purchasing" remotePageName="Run_MRP_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3020" screenName="viewMRP" applicationName="purchasing" remotePageName="View_MRP_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3021" screenName="FindInventoryEventPlan" applicationName="purchasing" remotePageName="View_MRP_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="3022" screenName="viewBackupWarehouses" screenState="addBackupWarehouses" applicationName="purchasing" remotePageName="Add_Existing_Backup_Warehouse_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3023" screenName="viewBackupWarehouses" screenState="selectMainWarehouses" applicationName="purchasing" remotePageName="Configure_Warehouses_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3024" screenName="createBackupWarehouseForm" applicationName="purchasing" remotePageName="Add_New_Backup_Warehouse_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="3025" screenName="approvedRequirements" applicationName="purchasing" remotePageName="Approved_Requirements_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="3026" screenName="editBom" applicationName="purchasing" remotePageName="Edit_Bom_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3027" screenName="bomMain" applicationName="purchasing" remotePageName="Bom_Simulation_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3028" screenName="bomSimulation" applicationName="purchasing" remotePageName="Bom_Simulation_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3029" screenName="runBomSimulation" applicationName="purchasing" remotePageName="Bom_Simulation_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3030" screenName="orderMain" applicationName="purchasing" remotePageName="Open_Purchase_Orders_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3031" screenName="openOrders" applicationName="purchasing" remotePageName="Open_Purchase_Orders_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3032" screenName="findOrders" applicationName="purchasing" remotePageName="Find_Purchase_Orders_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3033" screenName="editProductDeliveryDate" applicationName="purchasing" remotePageName="Edit_Delivery_Dates_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="3034" screenName="approvedInternalRequirements" applicationName="purchasing" remotePageName="Produce_Approved_Requirements" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="3035" screenName="confirm" applicationName="purchasing" remotePageName="Create_Purchase_Orders_Screen" remotePageVersion="0" />
+
+</entity-engine-xml>

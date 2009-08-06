@@ -1,0 +1,30 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import javolution.util.FastList;
+import org.ofbiz.base.util.UtilMisc;
+
+shortcuts = FastList.newInstance();
+shortcuts.add( UtilMisc.toMap("uri", "openOrders", "uiLabel", "PurchOpenOrders"));
+shortcuts.add( UtilMisc.toMap("uri", "findOrders", "uiLabel", "OpentapsFindOrders"));
+if (session.getAttribute("shoppingCart") == null) {
+    shortcuts.add( UtilMisc.toMap("uri", "orderentry", "uiLabel", "OpentapsCreateOrder"));
+} else {
+    shortcuts.add( UtilMisc.toMap("uri", "createOrderMainScreen", "uiLabel", "OpentapsResumeOrder"));
+}
+shortcuts.add( UtilMisc.toMap("uri", "invoiceSupplies", "uiLabel", "PurchInvoiceSupplies"));
+shortcuts.add( UtilMisc.toMap("uri", "editProductDeliveryDate", "uiLabel", "PurchEstimatedDeliveryDate"));
+context.put("shortcuts", shortcuts);

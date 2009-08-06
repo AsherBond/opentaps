@@ -1,0 +1,193 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file is based on file(s) from OFBIZ and has been modified by Open Source Strategies, Inc. */
+
+
+import java.util.*;
+import java.sql.Timestamp;
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.*;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.widget.html.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.model.ModelEntity;
+import org.ofbiz.manufacturing.mrp.MrpServices;
+import org.ofbiz.base.util.Debug;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.product.UtilProduct;
+import org.opentaps.purchasing.mrp.UtilMrp;
+
+import org.opentaps.common.util.UtilCommon;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+GenericDelegator delegator = request.getAttribute("delegator");
+LocalDispatcher dispatcher = request.getAttribute("dispatcher");
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+facilities = UtilCommon.getOrganizationReceivingFacilities(session.getAttribute("organizationPartyId"), delegator);
+context.put("facilities", facilities);
+
+// get list of productStores to allow the user the option to do a product store specific MRP
+productStores = UtilProduct.getProductStoresFromPayToPartyId(organizationPartyId, delegator);
+context.put("productStores", productStores);                            
+
+// get list of productStoreGroups to allow the user the option to do a product store group specific MRP
+searchConditions = UtilMisc.toList( new EntityExpr( "payToPartyId" , EntityOperator.EQUALS , organizationPartyId ) ) ;
+fieldsToSelect = UtilMisc.toList( "productStoreGroupId", "productStoreGroupName" ); 
+productStoreGroups = delegator.findByCondition("MrpProductStoreGroupAndProductStore",
+                            new EntityConditionList(searchConditions, EntityOperator.AND),
+                            null,
+                            fieldsToSelect,
+                            UtilMisc.toList( "productStoreGroupName" ),
+                            UtilCommon.DISTINCT_READ_OPTIONS);   
+context.put("productStoreGroups", productStoreGroups);
+
+//get the inventory (mrpInventoryEvent)
+productId = request.getParameter("productId");
+
+// create the eventDate for calendar
+UtilDateTime fromDate = new UtilDateTime();
+Timestamp fromTs = fromDate.nowTimestamp();
+fromTs = fromDate.getDayStart( fromTs, timeZone, locale );
+
+String fromStr = UtilDateTime.timeStampToString(fromTs, UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+
+context.put("eventDateStr", fromStr);
+
+// get the lookup flag
+lookupFlag = request.getParameter("lookupFlag");
+facilityId = parameters.get("facilityId");
+context.put("facilityId", facilityId);
+
+// initial param list
+paramList = "facilityId=" + facilityId;
+inventoryList = null;
+
+if (lookupFlag != null) {
+    paramList = paramList + "&lookupFlag=" + lookupFlag;
+    lookupErrorMessage = null;   
+    andExprs = new ArrayList();
+     
+    // now do the filtering
+    if (productId != null && productId.length() > 0) {
+            paramList = paramList + "&productId=" + productId;
+        if ( productId.length() > 0)
+        andExprs.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
+    } 
+    andExprs.add(new EntityExpr("inventoryEventPlanTypeId", EntityOperator.NOT_EQUAL, "INITIAL_QOH"));
+    andExprs.add(new EntityExpr("inventoryEventPlanTypeId", EntityOperator.NOT_EQUAL, "ERROR"));
+    andExprs.add(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
+    
+    supplierPartyId = request.getParameter("supplierPartyId");    
+    if (UtilValidate.isNotEmpty(supplierPartyId)) {
+        productIds = UtilMrp.getProductIdsFromSupplier(supplierPartyId, delegator);
+        if (UtilValidate.isNotEmpty(productIds)) {
+            andExprs.add(new EntityExpr("productId", EntityOperator.IN, productIds));
+        } else {
+            UtilMessage.addError(request, "PuchBshError_CannotFindProductsForSupplier", UtilMisc.toMap("supplierPartyId", supplierPartyId));
+            return;        
+        }
+    }
+
+    productStoreId = request.getParameter("productStoreId");
+    productStoreGroupId = request.getParameter("productStoreGroupId");      
+    if ( UtilValidate.isNotEmpty(andExprs)) {
+        // AG111207 - the filtering by product store (group) assumes initInventoryEventPlanned(...) processed only sales orders for this product store (group)
+        // the product store (group) filtering basically filters the products that have associated sales orders, hence the importance of the fact stated above
+        ModelEntity mrpFacilityInventoryEventPlanned = delegator.getModelEntity("MrpFacilityInventoryEventPlanned");
+        List fieldsToSelect = mrpFacilityInventoryEventPlanned.getAllFieldNames();
+        fieldsToSelect.remove("eventName");
+        List orderBy = UtilMisc.toList("productId", "eventDate");
+        if (UtilValidate.isNotEmpty(productStoreId)) {
+            andExprs.add(new EntityExpr("productStoreId", EntityOperator.EQUALS, productStoreId));
+            inventoryList = delegator.findByCondition("FacilityProductAndMrpEventAndDetailAndOrder", new EntityConditionList(andExprs, EntityOperator.AND), null, fieldsToSelect, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);            
+        } else if (UtilValidate.isNotEmpty(productStoreGroupId)) {
+            andExprs.add(new EntityExpr("productStoreGroupId", EntityOperator.EQUALS, productStoreGroupId));
+            inventoryList = delegator.findByCondition("FacilityProductAndMrpEventAndDetailAndOrderAndProductStoreGroup", new EntityConditionList(andExprs, EntityOperator.AND), null, fieldsToSelect, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);            
+        } else {
+            inventoryList = delegator.findByCondition("MrpInventoryEvent", new EntityConditionList(andExprs, EntityOperator.AND), null, orderBy);
+        }    
+    }
+    context.put("inventoryList", inventoryList);
+}
+context.put("paramList", paramList);
+
+// set the page parameters
+viewIndex = 0;
+viewIndexStr = UtilCommon.getParameter(request, "VIEW_INDEX");
+if (viewIndexStr != null) {
+    try {
+        viewIndex = Integer.valueOf(viewIndexStr).intValue();
+    } catch (Exception e) {
+        Debug.logError(e.getMessage(), "");
+    }
+}
+
+viewSize = 200;
+viewSizeStr = UtilCommon.getParameter(request, "VIEW_SIZE");
+if (viewSizeStr != null) {
+    try {
+        viewSize = Integer.valueOf(viewSizeStr).intValue();
+    } catch (Exception e) {
+        Debug.logError(e.getMessage(), "");
+    }
+}
+
+listSize = 0;
+if (inventoryList != null) {
+    listSize = inventoryList.size();
+}
+
+lowIndex = viewIndex * viewSize;
+highIndex = (viewIndex + 1) * viewSize;
+
+if (listSize < highIndex) {
+    highIndex = listSize;
+}
+
+if (highIndex < 1) {
+    highIndex = 0;
+}
+
+context.put("viewIndex", viewIndex);
+context.put("listSize", listSize);
+context.put("highIndex", highIndex);
+context.put("lowIndex", lowIndex);
+context.put("viewSize", viewSize);

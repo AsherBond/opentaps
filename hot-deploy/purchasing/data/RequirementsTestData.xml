@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+    <!-- Requirements Test Data for Open Requirements CrossTab Report -->
+    <Requirement requirementId="ATEST_REQ1" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1000" statusId="REQ_CREATED" requirementStartDate="2009-05-13 12:00:00.0" quantity="5"/>
+    <Requirement requirementId="ATEST_REQ2" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1000" statusId="REQ_CREATED" requirementStartDate="2009-05-15 12:00:00.0" quantity="10"/>
+    <Requirement requirementId="ATEST_REQ3" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1001" statusId="REQ_PROPOSED" requirementStartDate="2009-06-03 12:00:00.0" quantity="15"/>
+    <Requirement requirementId="ATEST_REQ4" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1001" statusId="REQ_CREATED" requirementStartDate="2009-06-23 12:00:00.0" quantity="10"/>
+    <Requirement requirementId="ATEST_REQ5" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1005" statusId="REQ_PROPOSED" requirementStartDate="2009-07-10 12:00:00.0" quantity="20"/>
+    <Requirement requirementId="ATEST_REQ6" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1000" statusId="REQ_CREATED" requirementStartDate="2009-07-20 12:00:00.0" quantity="30"/>
+    <Requirement requirementId="ATEST_REQ7" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-5005" statusId="REQ_CREATED" requirementStartDate="2009-08-16 12:00:00.0" quantity="15"/>
+    <Requirement requirementId="ATEST_REQ8" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-5005" statusId="REQ_PROPOSED" requirementStartDate="2009-08-25 12:00:00.0" quantity="10"/>
+    <Requirement requirementId="ATEST_REQ9" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1000" statusId="REQ_CREATED" requirementStartDate="2009-09-11 12:00:00.0" quantity="20"/>
+    <Requirement requirementId="ATEST_REQ10" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1005" statusId="REQ_PROPOSED" requirementStartDate="2009-09-27 12:00:00.0" quantity="25"/>
+    <Requirement requirementId="ATEST_REQ11" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1000" statusId="REQ_PROPOSED" requirementStartDate="2009-10-10 12:00:00.0" quantity="10"/>
+    <Requirement requirementId="ATEST_REQ12" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1001" statusId="REQ_CREATED" requirementStartDate="2009-11-15 12:00:00.0" quantity="15"/>
+    <Requirement requirementId="ATEST_REQ13" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-5005" statusId="REQ_PROPOSED" requirementStartDate="2009-11-25 12:00:00.0" quantity="20"/>
+    <Requirement requirementId="ATEST_REQ14" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1005" statusId="REQ_CREATED" requirementStartDate="2009-12-05 12:00:00.0" quantity="25"/>
+    <Requirement requirementId="ATEST_REQ15" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1000" statusId="REQ_PROPOSED" requirementStartDate="2009-12-10 12:00:00.0" quantity="10"/>
+    <Requirement requirementId="ATEST_REQ16" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1001" statusId="REQ_CREATED" requirementStartDate="2009-12-15 12:00:00.0" quantity="15"/>
+    <Requirement requirementId="ATEST_REQ17" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-5005" statusId="REQ_PROPOSED" requirementStartDate="2010-01-20 12:00:00.0" quantity="20"/>
+    <Requirement requirementId="ATEST_REQ18" requirementTypeId="PRODUCT_REQUIREMENT" facilityId="WebStoreWarehouse" productId="GZ-1005" statusId="REQ_CREATED" requirementStartDate="2010-02-05 12:00:00.0" quantity="25"/>
+
+    <RequirementRole requirementId="ATEST_REQ1" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ2" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ3" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ4" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ5" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ6" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ7" partyId="EuroSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ8" partyId="EuroSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ9" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ10" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ11" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ12" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ13" partyId="EuroSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ14" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ15" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ16" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ17" partyId="EuroSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+    <RequirementRole requirementId="ATEST_REQ18" partyId="DemoSupplier" roleTypeId="SUPPLIER" fromDate="2008-01-01 12:00:00.0" />
+
+</entity-engine-xml>

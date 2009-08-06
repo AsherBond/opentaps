@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="purchasinggwt/org.opentaps.gwt.purchasing.suppliers.suppliers" global="true"/>
+                <set field="sectionName" value="supplier" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="requiredPermission" value="PRCH_SPLR"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findSuppliers">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchFindSuppliers"/>
+                <set field="sectionHeaderUiLabel" value="PurchFindSuppliers"/>
+                <set field="findPartyWidget" value="findSuppliers"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/supplier/findSuppliers.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewSupplier">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchSupplierDetails"/>
+                <set field="sectionHeaderUiLabel" value="PurchSupplierDetails"/>
+                <set field="editContactMechPage" value="supplierEditContactMech"/>
+                <set field="donePage" value="viewSupplier"/>
+                <set field="agreementViewer" value="viewAgreement"/>
+                <!-- target for order by and pagination links -->
+                <set field="listSortTarget" value="viewSupplier"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/viewSupplier.bsh"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/purchasingAgreementPermissions.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/contactmech/viewprofile.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <!-- Main supplier section -->
+                        <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/supplier/viewSupplier.ftl"/></html></platform-specific>
+
+                        <!-- supplier contact info -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://opentaps-common/webapp/common/contactmech/viewprofile.ftl"/></html></platform-specific>
+                        </container>
+
+                        <!-- Orders section -->
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader">
+                                <label style="subSectionTitle">${uiLabelMap.PurchOpenOrders}</label>
+                                <section><condition><if-compare field-name="hasCreateOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                    <widgets>
+                                        <container style="subMenuBar">
+                                            <link target="orderentry?partyId=${supplierPartyId}" text="${uiLabelMap.OpentapsCreateOrder}" style="subMenuButton"/>
+                                        </container>
+                                    </widgets>
+                                </section>
+                            </container>
+                            <section>
+                                <condition><if-compare field-name="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <widgets>
+                                    <include-form name="ListOrders" location="component://purchasing/widget/purchasing/forms/supplier/SupplierForms.xml"/>
+                                </widgets>
+                            </section>
+                        </container>
+                        
+                        <!-- Agreements section -->
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader">
+                                <label style="subSectionTitle">${uiLabelMap.AccountingAgreements}</label>
+                                <platform-specific>
+                                    <html><html-template location="component://purchasing/webapp/purchasing/supplier/submenus/viewSupplierAgreements.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                            <section>
+                                <condition>
+                                    <if-compare field-name="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/>
+                                </condition>
+                                <actions>
+                                    <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/SupplierPurchAgreements.bsh"/>
+                                </actions>
+                                <widgets>
+                                    <platform-specific>
+                                        <html><html-template location="component://opentaps-common/webapp/common/agreements/listAgreements.ftl"/></html>
+                                    </platform-specific>
+                                </widgets>
+                            </section>
+                        </container>
+
+                        <!-- Notes section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/supplier/submenus/viewSupplierNotes.ftl"/></html></platform-specific>
+                            <include-form name="listNotes" location="component://opentaps-common/widget/forms/common/CommonForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createSupplier">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchCreateSupplier"/>
+                <set field="sectionHeaderUiLabel" value="PurchCreateSupplier"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/supplier/createSupplier.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="supplierEditContactMech">
+        <section>
+            <actions>
+                <set field="donePage" value="viewSupplier"/>
+                <set field="errorPage" value="supplierEditContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="CommonEditContactMech" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createSupplierNoteForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsCreateNote"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsCreateNote"/>
+                <set field="requiredPermission" value="PRCH_SPLR_UPDATE"/>
+                <set field="createNoteFormTarget" value="createSupplierNote"/>
+                <set field="donePage" value="viewSupplier"/>
+                <set field="partyId" from-field="parameters.partyId"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="createNoteForm" location="component://purchasing/widget/purchasing/forms/supplier/SupplierForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateSupplierForm">
+        <section>
+            <actions>
+                <set field="sectionHeaderUiLabel" value="PurchUpdateSupplier"/>
+                <set field="requiredPermission" value="PRCH_SPLR_UPDATE"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/viewSupplier.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/supplier/updateSupplier.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="viewAgreement">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchViewAgreement"/>
+                <set field="sectionHeaderUiLabel" value="PurchViewAgreement"/>
+                <set field="screenMode" value="VIEW"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/purchasingAgreementPermissions.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementItems.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container>
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/agreements/viewCommonAgreementHeader.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/agreements/viewAgreement.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="createAgreement">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchCreateAgreement"/>
+                <set field="sectionHeaderUiLabel" value="PurchCreateAgreement"/>
+                <set field="screenMode" value="CREATE"/>
+                <!-- Initial values used when create purchase agreement -->
+                <set field="agreementTypeId" value="PURCHASE_AGREEMENT"/>
+                <set field="partyIdFrom" from-field="parameters.organizationPartyId"/>
+                <set field="partyIdTo" from-field="parameters.partyId"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/purchasingAgreementPermissions.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/agreements/createAgreement.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="editAgreement">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchEditAgreement"/>
+                <set field="sectionHeaderUiLabel" value="PurchEditAgreement"/>
+                <set field="screenMode" value="EDIT"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/purchasingAgreementPermissions.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/agreements/editAgreement.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="outsourceRoutingTaskForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchOutsourceRoutingTask"/>
+                <set field="sectionHeaderUiLabel" value="PurchOutsourceRoutingTask"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/outsourceRoutingTaskForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/supplier/outsourceRoutingTaskForm.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+</screens>

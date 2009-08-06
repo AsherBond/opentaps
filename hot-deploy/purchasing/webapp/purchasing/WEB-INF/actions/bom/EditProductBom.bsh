@@ -1,0 +1,124 @@
+/*
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file has been modified by Open Source Strategies, Inc. */
+
+
+import java.util.*;
+import java.sql.*;
+import java.io.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.widget.html.*;
+import org.opentaps.common.util.UtilCommon;
+
+security = request.getAttribute("security");
+delegator = request.getAttribute("delegator");
+
+nowDate = UtilDateTime.nowDate();
+context.put("nowDate", nowDate);
+
+String nowTimestampString = UtilHttp.encodeBlanks(UtilDateTime.nowTimestamp().toString());
+context.put("nowTimestampString", nowTimestampString);
+
+
+// the product for which the BOM is
+String productId = UtilCommon.getParameter(request, "productId");
+if (productId != null) context.put("productId", productId);
+
+// the type of BOM, ie: MANUF_COMPONENT, ENGINEER_COMPONENT ...
+String productAssocTypeId = UtilCommon.getParameter(request, "productAssocTypeId");
+if (productAssocTypeId != null) context.put("productAssocTypeId", productAssocTypeId);
+
+boolean hasErrors = false;
+if (context.get("errorMessageList") != null && context.get("errorMessageList").size() > 0) hasErrors = true;
+context.put("hasErrors", hasErrors);
+
+// this is either CREATE, UPDATE, DELETE, COPY or null
+// UPDATE: edit a ProductAssoc
+// CREATE: add a new ProductAssoc
+// DELETE: remove a ProductAssoc
+// null:   just displaying the BOM for the given productId
+String updateMode = UtilCommon.getParameter(request, "UPDATE_MODE");
+
+// if a ProductAssoc is selected, this flag forces the form to display its values
+// instead of the HTTP parameters
+boolean useValues = false;
+
+// load a ProductAssoc to be displayed in the main form from the given HTTP parameters
+// only try to do that when no action is selected in updateMode
+// as this should only occurs when selecting an Edit link from the ProductAssoc list
+// or when "UPDATE" since this means an error occurred and we need to reload the data
+if (updateMode == null || "UPDATE".equals(updateMode)) {
+  // the productIdTo of the ProductAssoc
+  String productIdTo = UtilCommon.getParameter(request, "productIdTo");
+  if (productIdTo != null) context.put("productIdTo", productIdTo);
+
+  // part of the PK for a ProductAssoc
+  String fromDateStr = UtilCommon.getParameter(request, "fromDate");
+
+  Timestamp fromDate = null;
+  if (fromDateStr != null) fromDate = Timestamp.valueOf(fromDateStr);
+  if (fromDate == null) fromDate = (Timestamp) request.getAttribute("ProductAssocCreateFromDate");
+  if (fromDate != null) context.put("fromDate", fromDate);
+
+  GenericValue productAssoc = delegator.findByPrimaryKey("ProductAssoc", UtilMisc.toMap("productId", productId, "productIdTo", productIdTo, "productAssocTypeId", productAssocTypeId, "fromDate", fromDate));
+
+  if (productAssoc != null) {
+      context.put("productAssoc", productAssoc);
+      useValues = (!hasErrors && "true".equalsIgnoreCase(UtilCommon.getParameter(request, "useValues")));
+  }
+}
+
+context.put("useValues", useValues);
+
+// populate options for the productAssocTypeId select, ie: MANUF_COMPONENT, ENGINEER_COMPONENT ...
+Collection assocTypes = delegator.findByAnd("ProductAssocType", UtilMisc.toMap("parentTypeId", "PRODUCT_COMPONENT"), UtilMisc.toList("productAssocTypeId", "description"));
+context.put("assocTypes", assocTypes);
+
+// populate options for the ProductAssoc.estimateCalcMethod
+Collection formulae = delegator.findByAnd("CustomMethod", UtilMisc.toMap("customMethodTypeId", "BOM_FORMULA"), UtilMisc.toList("customMethodId", "description"));
+context.put("formulae", formulae);
+
+// if a productId was given the screen will get the Product entity
+if (product != null) {
+    // list the components of this product for the given productAssocTypeId
+    List assocFromProducts = product.getRelated("MainProductAssoc", (productAssocTypeId != null ? UtilMisc.toMap("productAssocTypeId", productAssocTypeId) : null), UtilMisc.toList("sequenceNum"));
+    if (assocFromProducts != null) context.put("assocFromProducts", assocFromProducts);
+
+    // list the products which has this product as component for the given productAssocTypeId
+    List assocToProducts = product.getRelatedByAnd("AssocProductAssoc", (productAssocTypeId != null ? UtilMisc.toMap("productAssocTypeId", productAssocTypeId) : null));
+    if (assocToProducts != null) context.put("assocToProducts", assocToProducts);
+}
+

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entity-engine-xml>
+    
+    <SecurityPermission description="Basic permission to use the Purchasing application" permissionId="PRCH_VIEW"/>
+
+    <SecurityPermission description="Basic permission to use the Supplier tab" permissionId="PRCH_SPLR_VIEW"/>
+    <SecurityPermission description="Permission to create suppliers" permissionId="PRCH_SPLR_CREATE"/>
+    <SecurityPermission description="Permission to modify suppliers" permissionId="PRCH_SPLR_UPDATE"/>
+
+    <SecurityPermission description="Basic permission to view the Manufacturing" permissionId="PRCH_MFG_VIEW"/>
+    <SecurityPermission description="Basic permission to create and update Manufacturing" permissionId="PRCH_MFG_ADMIN"/>
+
+    <SecurityPermission description="Basic permission to use the Planning tab" permissionId="PRCH_PLAN_VIEW"/>
+    <SecurityPermission description="Permission to approve requirements" permissionId="PRCH_PLAN_APRV"/>
+
+    <SecurityPermission description="Basic permission to use the Purchase Order tab" permissionId="PRCH_PO_VIEW"/>
+    <SecurityPermission description="Permission to create Purchase Orders" permissionId="PRCH_PO_CREATE"/>
+
+    <SecurityPermission description="Permission to configure backup warehouses." permissionId="PRCH_WRHS_CONFIG"/>
+    
+    <SecurityPermission description="View operations in the  [Reports] tab and all of the reports inside it." permissionId="PRCH_RPT_VIEW"/>    
+
+    <!-- Purchasing manager can perform any action in the Purchasing -->
+    <SecurityGroup groupId="PRCH_MANAGER" description="Purchasing Manager with permissions to perform any action in the Purchasing application"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_SPLR_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_SPLR_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_SPLR_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_MFG_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_MFG_ADMIN"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PLAN_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PLAN_APRV"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PO_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_PO_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_WRHS_CONFIG"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_RPT_VIEW"/>    
+
+    <!-- For now, grant admin access to OFBiz catalog, manufacturing, order, accounting services -->
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="CATALOG_ADMIN"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="FACILITY_ADMIN"/>    <!-- required for inventory transfers in mrp -->
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="MANUFACTURING_ADMIN"/> <!-- for mrp -->
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="ORDERMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PARTYMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="ACCOUNTING_ADMIN"/>
+
+    <!-- Purchasing manager can invoice supplies. -->
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="FINANCIALS_AP_INUPDT"/>
+    
+    <!-- permission for approve purchasing order. -->
+    <SecurityPermission description="Basic permission to approve purchase orders" permissionId="PRCH_ORD_APPRV"/>
+
+    <!-- Purchasing manager can approve purchase order in the Purchasing -->
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_ORD_APPRV"/>
+    
+    <!-- PRCH_CLERK is a group which have create/update/view supplier and create/view/admin order rights -->
+    <SecurityGroup groupId="PRCH_CLERK" description="Purchasing Clerk with permissions to create purchasing orders"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_SPLR_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_SPLR_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_SPLR_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_PO_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_PO_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="ORDERMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_STS_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_GRP_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_REL_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_REL_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_ROLE_DELETE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_PCM_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_PCM_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_PCM_DELETE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_CME_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_CME_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_CME_DELETE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_SRC_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PARTYMGR_NOTE"/>    
+</entity-engine-xml>

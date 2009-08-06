@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="ListOrders" type="list"
+        title="Orders" default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="listTable" header-row-style="listTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListOrders" paginate-size-field="ordersSize" paginate-index-field="ordersIndex"
+        list-name="ordersListIt">
+        <field name="orderDate" title="${uiLabelMap.OrderOrderDate}">
+            <display description="${orderDate}"/>
+        </field>
+        <field name="orderId" title="${uiLabelMap.OpentapsOrderNameID}" widget-style="buttontext">
+            <hyperlink also-hidden="false" target-type="plain" description="${orderName} (${orderId})" target="orderview?orderId=${orderId}"/>
+        </field>
+        <field name="partyId" title="${uiLabelMap.ProductSupplier}">
+            <display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/>
+        </field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}">
+            <display-entity entity-name="StatusItem"/>
+        </field>
+        <field name="shipByDate" title="${uiLabelMap.OrderShipBeforeDate}">
+            <display description="${bsh:org.opentaps.common.order.UtilOrder.getEarliestShipByDate(delegator, orderId, timeZone, locale);}"/>
+        </field>
+        <field name="grandTotal" title="${uiLabelMap.OrderAmount}">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+    </form>
+
+    <form name="createNoteForm" type="single" target="${createNoteFormTarget}" title=""
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="note" title="${uiLabelMap.CommonNote}" widget-style="inputBox"><textarea/></field>
+        <field name="partyId"><hidden/></field>
+        <field name="custRequestId"><hidden/></field> <!-- this is here because Cases can also have notes -->
+        <field name="submitButton" title="${uiLabelMap.OpentapsCreateNote}" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="doneScreen"><hidden value="${doneScreen}"/></field>
+        <field name="doneScreenLocation"><hidden value="${doneScreenLocation}"/></field>
+    </form>
+
+</forms>

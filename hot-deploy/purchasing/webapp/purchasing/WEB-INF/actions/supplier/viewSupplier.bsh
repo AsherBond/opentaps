@@ -1,0 +1,164 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.order.shoppingcart.ShoppingCart;
+
+import org.opentaps.purchasing.security.PurchasingSecurity;
+import org.opentaps.common.util.UtilCommon;
+
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.content.ContentHelper;
+
+security = request.getAttribute("security");
+
+// userLogin
+userLogin = request.getAttribute("userLogin");
+if (userLogin == null) { // this should *never* happen
+    return;
+}
+
+purchasingSecurity = new PurchasingSecurity(security, userLogin);
+
+// organization party
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+partyId = parameters.get("partyId");
+
+// make sure that the partyId is actually a SUPPLIER before trying to display it as once
+delegator = request.getAttribute("delegator");
+validRoleTypeId = PartyHelper.getFirstValidRoleTypeId(partyId, UtilMisc.toList("SUPPLIER"), delegator);
+
+// if not, return right away (otherwise we get spaghetti code)
+if ((validRoleTypeId == null) || (!validRoleTypeId.equals("SUPPLIER")))  {
+    context.put("validView", false);
+    return;
+}
+
+/* finds all the information relevant to this supplier and puts them in the context, so the various forms
+   and FTLs of this screen can display them correctly */
+
+dispatcher = request.getAttribute("dispatcher");
+
+// supplier summary data
+// TODO: Using PartyGroup instead of view due to bug with view entity not automatically decrypting fields.  Fix this view entity bug?
+partySummary = delegator.findByPrimaryKey("PartyGroup", UtilMisc.toMap("partyId", partyId));
+context.put("partySummary", partySummary);
+
+// put to history
+context{"history"} = UtilCommon.makeHistoryEntry(partySummary.get("groupName"), "viewSupplier", UtilMisc.toList("partyId"));
+
+// who is currently responsible for supplier
+responsibleParty = PartyHelper.getCurrentResponsibleParty(partyId, "ACCOUNT", delegator);
+context.put("responsibleParty", responsibleParty);
+
+// supplier contacts TODO: this order by isn't used yet, maybe we will need to sort these one day
+contactsOrderBy = parameters.get("contactsOrderBy");
+if (contactsOrderBy == null) contactsOrderBy = "lastName";
+findParams = UtilMisc.toMap("entityName", "PartyFromSummaryByRelationship",
+        "inputFields", UtilMisc.toMap("partyIdTo", partyId, "roleTypeIdTo", "ACCOUNT", "partyRelationshipTypeId", "CONTACT_REL_INV"),
+        "filterByDate", "Y");
+findParams.put("orderBy", contactsOrderBy);
+
+results = dispatcher.runSync("performFind", findParams);
+context.put("contactsListIt", results.get("listIt"));
+
+// set this flag to allow contact mechs to be shown
+request.setAttribute("displayContactMechs", "Y");
+
+
+//  *************** order data ********************
+desiredOrderStatuses = UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD");
+ordersOrderBy = parameters.get("ordersOrderBy");
+if (ordersOrderBy == null) ordersOrderBy = "orderDate DESC";
+//must specify minimum required fields so that the distinct select works
+fieldsToSelect = UtilMisc.toList("orderName", "orderId", "correspondingPoId", "statusId", "grandTotal", "partyId");
+fieldsToSelect.add("orderDate");
+//build the main condition
+conditionList = new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("orderTypeId", EntityOperator.EQUALS, "PURCHASE_ORDER"),
+            new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
+            new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_FROM_VENDOR"),
+            new EntityExpr("statusId", EntityOperator.IN, desiredOrderStatuses)
+            ), EntityOperator.AND);
+
+// 	perform the find
+myOrders = delegator.findListIteratorByCondition("OrderHeaderItemAndRoles", conditionList, null, 
+        fieldsToSelect, // fields to select (null => all)
+        UtilMisc.toList(ordersOrderBy), // fields to order by
+        // the first true here is for "specifyTypeAndConcur"
+        // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
+        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
+
+context.put("ordersListIt", myOrders);
+//  *************** order data ********************
+
+// supplier data sources
+sources = delegator.findByAnd("PartyDataSource", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("fromDate DESC"));
+context.put("dataSources", sources);
+
+// supplier notes
+results = dispatcher.runSync("performFind", UtilMisc.toMap("entityName", "PartyNoteView", 
+            "inputFields", UtilMisc.toMap("targetPartyId", partyId), "orderBy", "noteDateTime DESC"));
+context.put("notesListIt", results.get("listIt"));
+
+hasUpdatePermission = false;
+hasViewOrderPermission = false;
+if (organizationPartyId != null) {
+    hasUpdatePermission = purchasingSecurity.hasPartyRelationSecurity("PRCH_SPLR", "_UPDATE", organizationPartyId);
+    hasViewOrderPermission = purchasingSecurity.hasPartyRelationSecurity("PRCH_PO", "_VIEW", organizationPartyId);
+    hasCreateOrderPermission = purchasingSecurity.hasPartyRelationSecurity("PRCH_PO", "_CREATE", organizationPartyId);
+}
+context.put("hasUpdatePermission", hasUpdatePermission);
+context.put("hasViewOrderPermission", hasViewOrderPermission);
+context.put("hasCreateOrderPermission", hasCreateOrderPermission);
+
+// whether we should display [Create Order] which destroys any existing cart or [Resume Order] to continue an order
+cart = (ShoppingCart) session.getAttribute("shoppingCart");
+if (cart != null) {
+    context.put("continueOrder", true);
+} else {
+    context.put("continueOrder", false);
+}
+
+context.put("validView", true);
+
+// get the generic content metadata for supplier, which should always be visible, even if supplier is deactivated
+context.put("content", ContentHelper.getContentInfoForParty(partyId, "ACCOUNT", delegator));
+context.put("supplierPartyId", partyId);
+
+// get the tax authorities associated with this supplier
+conditions = UtilMisc.toList(
+    new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
+    EntityUtil.getFilterByDateExpr()
+);
+supplierTaxAuthorities = delegator.findByAnd("PartyTaxAuthInfoAndDetail", conditions, UtilMisc.toList("fromDate"));
+context.put("supplierTaxAuthorities", supplierTaxAuthorities);
+
+// also get a list of tax authorities for adding
+if (hasUpdatePermission) {
+    taxAuthorities = delegator.findAllCache("TaxAuthorityAndDetail", UtilMisc.toList("geoName"));
+    context.put("taxAuthorities", taxAuthorities);
+}
+
+// add the current timestamp to help the expire tax party form
+context.put("nowDate", UtilDateTime.nowTimestamp());

@@ -1,0 +1,78 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file has been modified by Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.manufacturing.bom.BOMTree;
+import org.opentaps.common.util.UtilCommon;
+
+// base condition is status of requirements for the organization's facilities
+searchConditions = UtilMisc.toList(
+                new EntityExpr("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(session.getAttribute("organizationPartyId"), delegator)),
+                new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("REQ_CREATED", "REQ_PROPOSED")));
+
+// productIds to search.  Note it's important to remove the productId now so that it's not part of the condition made by prepareFind again
+productId = parameters.remove("productId");
+if (UtilValidate.isNotEmpty(productId)) {
+    productIdsToSearch = UtilMisc.toList(productId);
+
+    // automatically search BOM children for now.  Later we'll add a parameter when we replace the form widget form 
+    if (true) {
+        bomTree = new BOMTree(productId, "MANUF_COMPONENT", UtilDateTime.nowDate(), delegator, dispatcher, userLogin);
+        Map treeQty = new HashMap();
+        bomTree.sumQuantities(treeQty);
+        productIdsToSearch.addAll(treeQty.keySet());
+    }
+    searchConditions.add(new EntityExpr("productId", EntityOperator.IN, productIdsToSearch));
+}
+
+// generic prepare from form parameters
+Map prepare = dispatcher.runSync("prepareFind", UtilMisc.toMap("inputFields", parameters, "entityName", "Requirement"));
+if (UtilValidate.isNotEmpty(prepare.get("entityConditionList"))) {
+    searchConditions.add((EntityConditionList) prepare.get("entityConditionList"));
+}
+
+// execute the find  A delegator find would be more efficient but there were some problems with the screen/form widgets so I kept this
+results = dispatcher.runSync("executeFind", UtilMisc.toMap("entityConditionList", new EntityConditionList(searchConditions, EntityOperator.AND), "entityName", "Requirement"));
+context.put("requirements", results.get("listIt"));
+
+// put this back in so it shows up on the lookup form again
+parameters.put("productId", productId);

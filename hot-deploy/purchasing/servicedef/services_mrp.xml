@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file is partially based on an OFBIZ file and has been modified by Open Source Strategies, Inc.  -->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Purchasing Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <service name="opentaps.runMrpFromForm" engine="java"
+            location="org.opentaps.purchasing.mrp.OpentapsMrpServices" invoke="runMrpFromForm" auth="true" use-transaction="false">
+        <description>Run MRP from the web form. We use this as a wrapper to "opentaps.runMrp" which converts boolean from the form drop down.</description>
+        <attribute name="facilityGroupId" type="String" mode="IN" optional="true"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="true"/>
+        <attribute name="supplierPartyId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productStoreGroupId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="mrpName" type="String" mode="IN" optional="true"/>
+        <attribute name="reInitializeInventoryEvents" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="defaultYearsOffset" type="Integer" mode="IN" optional="true"/>
+        <attribute name="receiptEventBuffer" type="Double" mode="IN" optional="true"/>
+        <attribute name="receiptBufferTimeUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="requirementQuantityDecimals" type="Integer" mode="IN" optional="true"/>
+        <attribute name="interimRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
+        <attribute name="finalRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
+        <attribute name="percentageOfSalesForecast" type="Double" mode="IN" optional="true"/>
+        <attribute name="createTransferRequirements" type="String" mode="IN" optional="true"/>
+        <attribute name="createPendingManufacturingRequirements" type="String" mode="IN" optional="true"/>
+        <attribute name="msgResult" type="List" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.runMrp" engine="java"
+            location="org.opentaps.purchasing.mrp.OpentapsMrpServices" invoke="runMrp" auth="true"
+            transaction-timeout="7200" max-retry="0">
+        <description>Run MRP.
+        facilityGroupId and facilityId are the facility group or facility where requirements are created.
+        For a group of facilities MRP is run in sequence of their FacilityGroupMember.sequenceNum.
+        mrpName is descriptive
+        defaultYearsOffset is the number of years in the future sales order shipments are assumed to be required, if no explicit shipping date is supplied
+        receiptEventBuffer and receiptBufferTimeUomId are used to specify the amount of time inventory events which increase inventory are shifted to the past.            
+        requirementQuantityDecimals is the number of decimal places to round resulting Requirement quantities.  By default, it is 2 or whatever "decimals" is set to in the Java code
+        interim_ and finalRequirementRoundingMode are used to control how fractional quantities are rounded for interim
+        percentageOfSalesForecast is the percentage of sales forecast to use.  0 means forecasts are excluded.  100 means forecasts are included in full.  
+        createTransferRequirements: if set to TRUE, then TRANSFER_REQUIREMENT will be created, instead of inventory transfers directly
+        </description>
+        <attribute name="facilityGroupId" type="String" mode="IN" optional="true"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="true"/>
+        <attribute name="supplierPartyId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productStoreGroupId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="mrpName" type="String" mode="IN" optional="true"/>
+        <attribute name="reInitializeInventoryEvents" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="defaultYearsOffset" type="Integer" mode="IN" optional="true"/>
+        <attribute name="receiptEventBuffer" type="Double" mode="IN" optional="true"/>
+        <attribute name="receiptBufferTimeUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="requirementQuantityDecimals" type="Integer" mode="IN" optional="true"/>
+        <attribute name="interimRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
+        <attribute name="finalRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
+        <attribute name="percentageOfSalesForecast" type="Double" mode="IN" optional="true"/>
+        <attribute name="createTransferRequirements" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="createPendingManufacturingRequirements" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="msgResult" type="List" mode="OUT" optional="true"/>
+    </service>
+    <service name="opentaps.runMrpForFacility" engine="java"
+            location="org.opentaps.purchasing.mrp.OpentapsMrpServices" invoke="runMrpForFacility" auth="true"
+            transaction-timeout="7200" max-retry="0">
+        <description>
+            Runs MRP for a facility.  Called by opentaps.runMrp -- see that service for parameter documentation.
+            mrpConfiguration is a new, experimental configuration class.
+        </description>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="supplierPartyId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productStoreGroupId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="mrpName" type="String" mode="IN" optional="true"/>
+        <attribute name="reInitializeInventoryEvents" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="defaultYearsOffset" type="Integer" mode="IN" optional="true"/>
+        <attribute name="receiptEventBuffer" type="Double" mode="IN" optional="true"/>
+        <attribute name="receiptBufferTimeUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="mrpConfiguration" type="org.opentaps.purchasing.mrp.MrpConfiguration" mode="IN" optional="true"/>
+        <attribute name="requirementQuantityDecimals" type="Integer" mode="IN" optional="true"/>
+        <attribute name="interimRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
+        <attribute name="finalRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
+        <attribute name="percentageOfSalesForecast" type="Double" mode="IN" optional="true"/>
+        <attribute name="createTransferRequirements" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="createPendingManufacturingRequirements" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="msgResult" type="List" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.initInventoryEventPlanned" engine="java"
+            location="org.opentaps.purchasing.mrp.OpentapsMrpServices" invoke="initInventoryEventPlanned" auth="true">
+        <description>Initialize the table InventoryEventPlanned for MRP for a facility.
+        reInitialize will cause existing values to be removed.
+        now is used to synchronize current time for all MRP
+        defaultYearsOffset is the number of years in the future sales order shipments are assumed to be required, if no explicit shipping date is supplied
+        receiptEventBufferMilliseconds is the number of milliseconds inventory events which increase inventory are shifted to the past</description>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="supplierPartyId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>        
+        <attribute name="productStoreGroupId" type="String" mode="IN" optional="true"/> 
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="reInitialize" type="Boolean" mode="IN" optional="false"/>
+        <attribute name="now" type="java.sql.Timestamp" mode="IN" optional="true"/>
+        <attribute name="defaultYearsOffset" type="Integer" mode="IN" optional="true"/>
+        <attribute name="receiptEventBufferMilliseconds" type="Double" mode="IN" optional="true"/>
+        <attribute name="percentageOfSalesForecast" type="Double" mode="IN" optional="true"/>
+        <attribute name="mrpRunProductIds" type="List" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="createInventoryTransferFromRequirement" engine="java"
+            location="org.opentaps.purchasing.mrp.OpentapsMrpServices" invoke="createInventoryTransferFromRequirement" auth="true">
+        <description>Creates an Inventory Transfer from a requirement.</description>
+        <attribute mode="IN" name="requirementId" optional="false" type="String"/>
+        <attribute mode="IN" name="quantity" optional="true" type="Double"/>
+        <attribute mode="OUT" name="inventoryTransferIds" optional="true" type="List"/>
+    </service>
+
+    <service name="createProductionRunsFromPendingInternalRequirements" engine="java"
+            location="org.opentaps.purchasing.mrp.OpentapsMrpServices" invoke="createProductionRunsFromPendingInternalRequirements" auth="true">
+        <description>Creates Production Runs from a list of Pending Internal Requirements.</description>
+        <attribute mode="IN" name="requirementIds" optional="false" type="List"/>
+        <attribute mode="IN" name="facilityIds" optional="true" type="Map"/>
+        <attribute mode="IN" name="routingIds" optional="true" type="Map"/>
+        <attribute mode="OUT" name="productionRunIds" optional="true" type="List"/>
+    </service>
+
+
+</services>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Purchasing Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <service name="purchasing.createSupplier" engine="java" location="org.opentaps.purchasing.supplier.SupplierServices" invoke="createSupplier">
+    <description>Creates a supplier and contact data. Postal address will have the GENERAL_LOCATION, SHIPPING_LOCATION, SHIP_ORIG_LOCATION,
+        PAYMENT_LOCATION and BILLING_LOCATION contactMechTypeIds.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="groupName" type="String" mode="IN" optional="false"/>
+        <attribute name="federalTaxId" type="String" mode="IN" optional="true"/>
+        <attribute name="isIncorporated" type="String" mode="IN" optional="true"/>
+        <attribute name="requires1099" type="String" mode="IN" optional="false"/>
+        <attribute name="primaryEmail" type="String" mode="IN" optional="true"/>
+        <attribute name="primaryWebUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="primaryPhoneCountryCode" type="String" mode="IN" optional="true"/>
+        <attribute name="primaryPhoneAreaCode" type="String" mode="IN" optional="true"/>
+        <attribute name="primaryPhoneNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="primaryPhoneExtension" type="String" mode="IN" optional="true"/>
+        <attribute name="primaryFaxCountryCode" type="String" mode="IN" optional="true"/>
+        <attribute name="primaryFaxAreaCode" type="String" mode="IN" optional="true"/>
+        <attribute name="primaryFaxNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="primaryFaxExtension" type="String" mode="IN" optional="true"/>
+        <attribute name="generalToName" type="String" mode="IN" optional="true"/>
+        <attribute name="generalAttnName" type="String" mode="IN" optional="true"/>
+        <attribute name="generalAddress1" type="String" mode="IN" optional="true"/>
+        <attribute name="generalAddress2" type="String" mode="IN" optional="true"/>
+        <attribute name="generalCity" type="String" mode="IN" optional="true"/>
+        <attribute name="generalStateProvinceGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="generalPostalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="generalCountryGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="purchasing.createSupplierNote" engine="java" location="org.opentaps.purchasing.common.NoteServices" invoke="createSupplierNote">
+        <description>Creates a Note for a Supplier. Will check if the userLogin has permission to update this supplier (PRCH_SPLR_UPDATE).</description>
+        <attribute name="note" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="purchasing.updateSupplier" engine="java" location="org.opentaps.purchasing.supplier.SupplierServices" invoke="updateSupplier">
+        <description>updates a Supplier, which is a combination of Party, PartyGroup, and PartySupplementalData.  The userLogin will need PRCH_SPLR_UPDATE permission on this account.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="groupName" type="String" mode="IN" optional="false"/>
+        <attribute name="federalTaxId" type="String" mode="IN" optional="true"/>
+        <attribute name="isIncorporated" type="String" mode="IN" optional="true"/>
+        <attribute name="requires1099" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="purchasing.approveAllOpenRequirements" engine="java" location="org.opentaps.purchasing.planning.PlanningServices" invoke="approveAllOpenRequirements" auth="true"
+            transaction-timeout="7200">
+        <description>Approve all requirements for all facilities of this organization.</description>
+        <attribute mode="IN" name="organizationPartyId" optional="false" type="String"/>
+    </service>
+
+    <service name="purchasing.cancelRequirementsApprovedByVendor" engine="java" location="org.opentaps.purchasing.planning.PlanningServices" invoke="cancelRequirementsApprovedByVendor" auth="true">
+        <description>Change status to rejected for all approved product requirements assigned to supplier.</description>
+        <attribute name="partyId" mode="IN" type="String" optional="false"></attribute>
+    </service>
+
+    <service name="opentaps.outsourceRoutingTask" engine="java"
+            location="org.opentaps.purchasing.supplier.SupplierServices" invoke="outsourceRoutingTask">
+        <description>Given a rounting task (workEffortId), creates the necessary data to "outsource" it to a given supplier product.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="productName" type="String" mode="IN" optional="true"/>
+        <attribute name="supplierProductId" type="String" mode="IN" optional="false"/>
+        <attribute name="supplierProductName" type="String" mode="IN" optional="true"/>
+        <attribute name="availableFromDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="availableThruDate" type="Timestamp" mode="IN" optional="true    "/>
+        <attribute name="minimumOrderQuantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="lastPrice" type="Double" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="glAccountTypeId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="purchasing.updateOrderItemEstimatedDeliveryDate" engine="java" location="org.opentaps.purchasing.order.PurchasingOrderServices" invoke="updateOrderItemEstimatedDeliveryDate" auth="true">
+        <description>Update the estimated delivery date for a purchase order item.</description>
+        <attribute mode="IN" name="orderId" optional="false" type="String"/>
+        <attribute mode="IN" name="orderItemSeqId" optional="false" type="String"/>
+        <attribute mode="IN" name="estimatedReadyDate" optional="true" type="Timestamp"/>
+    </service>
+
+    <service name="purchasing.updateRequirementSupplier" engine="pojo"
+        location="org.opentaps.purchasing.domain.planning.requirement.RequirementService" invoke="updateRequirementSupplier" auth="true">
+        <description>Expire the current Supplier RequirementRole and creates a new RequirementRole for the new supplier.</description>
+        <attribute name="requirementId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="newPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="purchasing.updateRequirementSupplierAndQuantity" engine="pojo"
+        location="org.opentaps.purchasing.domain.planning.requirement.RequirementService" invoke="updateRequirementSupplierAndQuantity" auth="true">
+        <description>Change requirement partyId (supplier) or quantity.</description>
+        <attribute name="requirementId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="newPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="quantity" type="BigDecimal" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="closeRequirement" engine="pojo" location="org.opentaps.purchasing.domain.planning.requirement.RequirementService" invoke="closeRequirement">
+        <description>Change requirement status to closed.</description>
+        <attribute mode="IN" type="String" name="requirementId"/>
+    </service>
+    
+    <service name="purchasing.cancelRequirement" engine="pojo" location="org.opentaps.purchasing.domain.planning.requirement.RequirementService" invoke="cancelRequirement" auth="true">
+        <description>Change requirement status to rejected.</description>
+        <attribute mode="IN" type="String" name="requirementId"/>
+    </service>
+    
+    <service name="updatePurchaseOrderItems" engine="java" auth="true"
+            location="org.opentaps.common.order.OrderServices" invoke="updatePurchaseOrderItems">
+        <description>Update the quantities/prices for an existing purchase order</description>
+        <attribute name="orderId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="itemDescriptionMap" type="Map" mode="IN" string-map-prefix="idm_" optional="true"/>
+        <attribute name="itemQtyMap" type="Map" mode="IN" string-map-prefix="iqm_" optional="false"/>
+        <attribute name="itemPriceMap" type="Map" mode="IN" string-map-prefix="ipm_" optional="false"/>
+        <attribute name="overridePriceMap" type="Map" mode="IN" string-map-prefix="opm_" optional="false"/>
+        <attribute name="tagsMap1" type="Map" mode="IN" string-map-prefix="tag1_" optional="true"/>
+        <attribute name="tagsMap2" type="Map" mode="IN" string-map-prefix="tag2_" optional="true"/>
+        <attribute name="tagsMap3" type="Map" mode="IN" string-map-prefix="tag3_" optional="true"/>
+        <attribute name="tagsMap4" type="Map" mode="IN" string-map-prefix="tag4_" optional="true"/>
+        <attribute name="tagsMap5" type="Map" mode="IN" string-map-prefix="tag5_" optional="true"/>
+        <attribute name="tagsMap6" type="Map" mode="IN" string-map-prefix="tag6_" optional="true"/>
+        <attribute name="tagsMap7" type="Map" mode="IN" string-map-prefix="tag7_" optional="true"/>
+        <attribute name="tagsMap8" type="Map" mode="IN" string-map-prefix="tag8_" optional="true"/>
+        <attribute name="tagsMap9" type="Map" mode="IN" string-map-prefix="tag9_" optional="true"/>
+        <attribute name="tagsMap10" type="Map" mode="IN" string-map-prefix="tag10_" optional="true"/>
+        <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
+    </service>    
+
+    <!-- redefine this service in purchasing for add security permission "PURCH_ORD_APPRV" check -->
+    <service name="changePurchasingOrderItemStatus" engine="java" auth="true"
+    		location="org.ofbiz.order.order.OrderServices" invoke="setItemStatus">
+       <required-permissions join-type="AND">
+           <check-permission permission="PRCH_ORD_APPRV"/>
+       </required-permissions>    		
+    	<description>Change the status of an existing order item.  If no orderItemSeqId is specified, the status of all order items will be changed.</description>
+    	<attribute name="orderId" type="String" mode="IN" optional="false"/>
+    	<attribute name="orderItemSeqId" type="String" mode="IN" optional="true"/>
+    	<attribute name="fromStatusId" type="String" mode="IN" optional="true"/>
+    	<attribute name="statusId" type="String" mode="IN" optional="false"/>
+        <attribute name="statusDateTime" type="Timestamp" mode="IN" optional="true"/>
+    </service>
+
+    <!-- redefine this service in purchasing for add security permission "PURCH_ORD_APPRV" check -->    
+    <service name="changePurchasingOrderStatus" engine="java" auth="true"
+            location="org.ofbiz.order.order.OrderServices" invoke="setOrderStatus">
+       <required-permissions join-type="AND">
+           <check-permission permission="PRCH_ORD_APPRV"/>
+       </required-permissions>  
+        <description>Change the status of an existing order</description>
+        <attribute name="orderId" type="String" mode="IN"/>
+        <attribute name="statusId" type="String" mode="IN"/>
+        <attribute name="oldStatusId" type="String" mode="OUT" optional="false"/>
+        <attribute name="orderStatusId" type="String" mode="OUT" optional="true"/>
+        <attribute name="orderTypeId" type="String" mode="OUT" optional="true"/>
+        <attribute name="needsInventoryIssuance" type="String" mode="OUT" optional="true"/>
+        <attribute name="grandTotal" type="Double" mode="OUT" optional="true"/>
+    </service>
+
+</services>

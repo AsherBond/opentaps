@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- Parts of this file came from the Apache Open For Business Project. -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <property-map resource="ManufacturingUiLabels" map-name="uiLabel" global="true"/>
+
+                <set field="sectionName" value="bom" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="requiredPermission" value="PRCH_MFG"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/bom/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="editBom">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="ManufacturingEditProductBom"/>  
+                <set field="sectionHeaderUiLabel" value="ManufacturingEditProductBom"/>  
+
+                <set field="productId" from-field="parameters.productId"/>
+                <entity-one entity-name="Product" value-name="product"/>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/bom/EditProductBom.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://purchasing/webapp/purchasing/bom/EditProductBom.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="bomSimulation">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="ManufacturingBomSimulation"/>  
+                <set field="sectionHeaderUiLabel" value="ManufacturingBomSimulation"/>  
+
+                <set field="bomType" from-field="parameters.bomType"/>
+                <set field="productId" from-field="parameters.productId"/>
+                <set field="type" from-field="parameters.type"/>
+                <set field="quantity" from-field="parameters.quantity"/>
+                <set field="amount" from-field="parameters.amount"/>
+
+                <set field="productFeatureApplTypeId" value="STANDARD_FEATURE"/>
+                <property-to-field field="defaultCurrencyUomId" resource="general" property="currency.uom.id.default" default="USD"/>
+
+                <entity-and entity-name="ProductFeatureAndAppl" list-name="selectedFeatures">
+                    <field-map env-name="productId" field-name="productId"/>
+                    <field-map env-name="productFeatureApplTypeId" field-name="productFeatureApplTypeId"/>
+                    <order-by field-name="sequenceNum"/>
+                </entity-and>
+                <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/bom/BomSimulation.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://purchasing/webapp/purchasing/bom/BomSimulationForm.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://purchasing/webapp/purchasing/bom/BomSimulation.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FindRouting">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PageTitleFindRouting"/>
+                <set field="sectionHeaderUiLabel" value="ManufacturingRoutings"/>  
+
+                <set field="requestParameters.workEffortTypeId" default-value="ROUTING"/>
+                <set field="requestParameters.currentStatusId" default-value="ROU_ACTIVE"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <include-form name="FindRoutings" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <include-form name="ListRoutings" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="NewRouting">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="ManufacturingNewRouting"/>
+                <set field="sectionHeaderUiLabel" value="ManufacturingNewRouting"/>
+
+                <!-- Edit Routing -->
+                <set field="workEffortId" from-field="parameters.workEffortId"/>
+                <entity-one entity-name="WorkEffort" value-name="routing"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <!-- Edit Routing -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/editRouting.ftl"/></html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditRouting">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PageTitleEditRouting"/>
+                <set field="sectionHeaderUiLabel" value="ManufacturingEditRouting"/>
+
+                <!-- Edit Routing -->
+                <set field="workEffortId" from-field="parameters.workEffortId"/>
+                <entity-one entity-name="WorkEffort" value-name="routing"/>
+
+                <!-- Edit Routing Task Assoc -->
+                <set field="workEffortAssocTypeId" value="ROUTING_COMPONENT"/>
+                <entity-and entity-name="WorkEffortAssocView" list-name="allRoutingTasks">
+                    <field-map env-name="workEffortId" field-name="workEffortIdFrom"/>
+                    <field-map env-name="workEffortAssocTypeId" field-name="workEffortAssocTypeId"/>
+                    <order-by field-name="sequenceNum"/>
+                    <order-by field-name="fromDate"/>
+                </entity-and>
+
+                <!-- Edit Routing Product Link -->
+                <set field="workEffortGoodStdTypeId" value="ROU_PROD_TEMPLATE"/>
+                <entity-and entity-name="WorkEffortGoodStandard" list-name="allRoutingProductLinks">
+                    <field-map env-name="workEffortId" field-name="workEffortId"/>
+                    <field-map env-name="workEffortGoodStdTypeId" field-name="workEffortGoodStdTypeId"/>
+                </entity-and>
+                <entity-one entity-name="WorkEffortGoodStandard" value-name="routingProductLink" auto-field-map="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <!-- Edit Routing -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/editRouting.ftl"/></html></platform-specific>
+                        </container>
+
+                        <!-- Edit Routing Task Assoc -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/editRoutingTaskAssoc.ftl"/></html></platform-specific>
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/listRoutingTaskAssoc.ftl"/></html></platform-specific>
+                        </container>
+
+                        <!-- Edit Routing Product Link -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/editRoutingProductLink.ftl"/></html></platform-specific>
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/listRoutingProductLink.ftl"/></html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FindRoutingTask">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PageTitleFindRoutingTask"/>
+                <set field="sectionHeaderUiLabel" value="ManufacturingFindRoutingTasks"/>
+
+                <set field="requestParameters.workEffortTypeId" to-scope="screen" default-value="ROU_TASK"/>
+                <set field="requestParameters.currentStatusId" to-scope="screen" default-value="ROU_ACTIVE"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <include-form name="FindRoutingTasks" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <include-form name="ListRoutingTasks" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="NewRoutingTask">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PageTitleEditRoutingTask"/>
+                <set field="sectionHeaderUiLabel" value="ManufacturingNewRoutingTask"/>
+                
+                <!-- Edit Routing Task -->
+                <set field="workEffortId" from-field="parameters.workEffortId"/>
+                <entity-one entity-name="WorkEffort" value-name="routingTask"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <!-- Edit Routing Task -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/editRoutingTask.ftl"/></html></platform-specific>
+                            <container style="form">
+                                <include-form name="EditRoutingTask" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditRoutingTask">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PageTitleEditRoutingTask"/>
+                <set field="sectionHeaderUiLabel" value="ManufacturingEditRoutingTask"/>
+                
+                <!-- Edit Routing Task -->
+                <set field="workEffortId" from-field="parameters.workEffortId"/>
+                <entity-one entity-name="WorkEffort" value-name="routingTask"/>
+
+                <!-- Edit Routing Task cost -->
+                <entity-one entity-name="WorkEffort" value-name="routingTask"/>
+                <entity-and entity-name="WorkEffortCostCalc" list-name="allCosts">
+                    <field-map field-name="workEffortId" env-name="workEffortId"/>
+                </entity-and>
+
+                <!-- Deliverable Products -->
+                <entity-one entity-name="WorkEffort" value-name="routingTask"/>
+                <entity-and entity-name="WorkEffortGoodStandard" list-name="allProducts">
+                    <field-map field-name="workEffortGoodStdTypeId" value="PRUNT_PROD_DELIV"/>
+                    <field-map env-name="workEffortId" field-name="workEffortId"/>
+                </entity-and>
+                <entity-and entity-name="WorkEffortGoodStandard" list-name="allRoutingProductLinks">
+                    <field-map env-name="workEffortId" field-name="workEffortId"/>
+                    <field-map field-name="workEffortGoodStdTypeId" value="PRUNT_PROD_DELIV"/>
+                </entity-and>
+                <entity-one entity-name="WorkEffortGoodStandard" value-name="routingProductLink" auto-field-map="true"/>
+
+                <!-- Fixed Assets -->
+                <entity-and entity-name="WorkEffortFixedAssetStd" list-name="allFixedAssets">
+                    <field-map field-name="workEffortId" env-name="workEffortId" />
+                </entity-and>
+
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <!-- Edit Routing Task -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/editRoutingTask.ftl"/></html></platform-specific>
+                            <container style="form">
+                                <include-form name="EditRoutingTask" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                            </container>
+                        </container>
+
+                        <!-- Edit Routing Task cost -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/editRoutingTaskCost.ftl"/></html></platform-specific>
+                            <container style="form">
+                                <include-form name="AddRoutingTaskCost" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                                <include-form name="ListRoutingTaskCosts" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                            </container>
+                        </container>
+
+                        <!-- Deliverable Products -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/deliverableProducts.ftl"/></html></platform-specific>
+                            <container style="form">
+                                <include-form name="EditRoutingTaskProduct" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                                <include-form name="ListRoutingTaskProducts" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml"/>
+                            </container>
+                        </container>
+
+                        <!-- Fixed Assets -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/bom/fixedAssets.ftl"/></html></platform-specific>
+                            <container style="form">
+                                <include-form name="EditRoutingTaskFixedAsset" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml" />
+                                <include-form name="ListRoutingTaskFixedAssets" location="component://manufacturing/webapp/manufacturing/routing/RoutingTaskForms.xml" />
+                            </container>
+                        </container>
+
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

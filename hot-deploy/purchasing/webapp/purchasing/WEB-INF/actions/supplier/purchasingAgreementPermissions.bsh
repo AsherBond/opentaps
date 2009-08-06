@@ -1,0 +1,58 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ import org.ofbiz.base.util.UtilMisc;
+ import org.opentaps.purchasing.security.PurchasingSecurity;
+ import org.opentaps.common.util.UtilCommon;
+ 
+ organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+ if (organizationPartyId == null) {
+     return;
+ }
+ 
+ /*
+  * Create application security object
+  * Hereinafter we mean that:
+  *     view agreement require PRCH_VIEW
+  *     edit agreemnt require PRCH_SPLR_UPDATE && ACCOUNTING_UPDATE
+  *     create agreement require PRCH_SPLR_CREATE && ACCOUNTING_CREATE
+  */
+ security = request.getAttribute("security");
+
+ userLogin = request.getAttribute("userLogin");
+ if (userLogin == null) {
+     return;
+ }
+
+ purchasingSecurity = new PurchasingSecurity(security, userLogin);
+
+ hasViewAgreementPermission  = false;
+ hasUpdateAgreementPermission = false;
+ hasCreateAgreementPermission = false;
+ 
+ if (organizationPartyId != null) {
+     hasViewAgreementPermission = 
+         purchasingSecurity.hasPartyRelationSecurity("PRCH_SPLR", "_VIEW", organizationPartyId);
+     hasUpdateAgreementPermission = 
+         (purchasingSecurity.hasPartyRelationSecurity("PRCH_SPLR", "_UPDATE", organizationPartyId) &&
+         purchasingSecurity.hasPartyRelationSecurity("ACCOUNTING", "_UPDATE", organizationPartyId));
+     hasCreateAgreementPermission =
+         (purchasingSecurity.hasPartyRelationSecurity("PRCH_SPLR", "_CREATE", organizationPartyId) &&
+         purchasingSecurity.hasPartyRelationSecurity("ACCOUNTING", "_CREATE", organizationPartyId));
+ }
+ 
+ context.put("hasViewAgreementPermission", hasViewAgreementPermission);
+ context.put("hasUpdateAgreementPermission", hasUpdateAgreementPermission);
+ context.put("hasCreateAgreementPermission", hasCreateAgreementPermission);

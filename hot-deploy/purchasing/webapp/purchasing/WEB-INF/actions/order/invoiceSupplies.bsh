@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// TODO: We also want to support bulk items, but since they are automatically completed by the time an order is approved,
+// TODO: we will have to figure out why they are and whether we can set them to APPROVED first before completing them.
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.order.UtilOrder;
+
+import javolution.util.FastList;
+
+// this file is a cousin of receiveOutsourcedPO.bsh
+orderId = parameters.get("orderId");
+if (UtilValidate.isEmpty(orderId)) return;
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+conditions = UtilMisc.toMap("orderId", orderId);
+order = delegator.findByPrimaryKey("OrderHeader", conditions);
+if (order == null) {
+    UtilMessage.addFieldError(request, "orderId", "OpentapsError_OrderNotFound", conditions);
+    Debug.logError("no order found for " + orderId, "");
+    return;
+}
+if (!"PURCHASE_ORDER".equals(order.get("orderTypeId"))) {
+    UtilMessage.addFieldError(request, "orderId", "OpentapsError_OrderNotPurchaseOrder", conditions);
+    Debug.logError("order [" + orderId + "] is not a purchase order", "");
+    return;
+}
+if (!organizationPartyId.equals(order.get("billToPartyId"))) {
+    UtilMessage.addPermissionDeniedError(request);
+    Debug.logError("order [" + orderId + "] is not a purchase order for [" + organizationPartyId + "]", "");
+    return;
+}
+// this can occur during course of this feature, in which case make an empty list and don't do anything else
+if ("ORDER_COMPLETED".equals(order.get("statusId"))) {
+    context.put("orderItems", FastList.newInstance());
+    Debug.logError("order [" + orderId + "] has been completed already", "");
+    return;
+}
+if (!"ORDER_APPROVED".equals(order.get("statusId"))) {
+    UtilMessage.addError(request, "OpentapsError_OrderNotApprovedLong",
+        UtilMisc.toMap("orderId", orderId, "statusDescription", order.getRelatedOneCache("StatusItem").get("description")));
+    Debug.logError("order [" + orderId + "] is not approved", "");
+    return;
+}
+context.put("orderId", orderId);
+context.put("order", order);
+
+conditions = UtilMisc.toList(
+    new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
+    new EntityExpr("statusId", EntityOperator.EQUALS, "ITEM_APPROVED"),
+    new EntityExpr("orderItemTypeId", EntityOperator.IN, UtilMisc.toList("SUPPLIES_ORDER_ITEM", "BULK_ORDER_ITEM", "WORK_ORDER_ITEM"))
+);
+orderItems = delegator.findByAnd("OrderItem", conditions, UtilMisc.toList("orderItemSeqId"));
+
+// set the orderItem.quantity field to what's actually available (ordered - cancelled - invoiced)
+for (iter = orderItems.iterator(); iter.hasNext(); ) {
+    item = iter.next();
+    available = item.get("quantity").doubleValue();
+    if (item.get("cancelQuantity") != null) available -= item.get("cancelQuantity").doubleValue();
+    available -= UtilOrder.getInvoicedQuantity(item);
+    if (available == 0) iter.remove();
+    item.set("quantity", available);
+}
+context.put("orderItems", orderItems);

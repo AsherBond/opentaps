@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ import org.ofbiz.entity.GenericDelegator;
+ import org.ofbiz.base.util.UtilMisc;
+ import org.ofbiz.base.util.UtilValidate;
+ import org.ofbiz.entity.condition.EntityOperator;
+ import org.ofbiz.entity.condition.EntityExpr;
+ import org.ofbiz.entity.util.EntityUtil;
+ import org.opentaps.common.util.UtilCommon;
+ import org.opentaps.purchasing.order.PurchasingOrderEvents;
+ 
+ //get the cart from our special get/initialize method
+ hasParty = false;
+ orderPartySupplementalData = null;
+ cart = PurchasingOrderEvents.getCartObject(request);
+ if (cart != null) {
+     context.put("shoppingcart", cart);
+     if (UtilValidate.isNotEmpty(cart.getOrderPartyId())) {
+         hasParty = true;
+     }
+
+     // put to context selected agreement
+     agreementId = cart.agreementId;
+     if (UtilValidate.isNotEmpty(agreementId)) {
+         agreement = delegator.findByPrimaryKey("Agreement", UtilMisc.toMap("agreementId", agreementId));
+         if (agreement != null) {
+             context.put("cartAgreement", agreement);
+         }
+     }
+ }
+ context.put("hasParty", hasParty);
+
+ organizationPartyId = session.getAttribute("organizationPartyId");
+ context.put("organizationPartyId", organizationPartyId);
+ 
+ // get the produt store that's presently set and put in context
+ productStoreId = session.getAttribute("productStoreId");
+ productStore = delegator.findByPrimaryKeyCache("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+ context.put("productStore", productStore);
+ 
+ // list of currencies and default currency for PO
+ context.put("currencies", delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "CURRENCY_MEASURE")));
+ context.put("defaultCurrencyUomId", UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));

@@ -1,0 +1,104 @@
+import javolution.util.FastMap;
+import org.ofbiz.order.order.OrderReadHelper;
+import org.opentaps.common.party.PartyContactHelper;
+
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.order.Order;
+import org.opentaps.domain.order.ItemIssuance;
+import org.opentaps.domain.base.entities.Shipment;
+import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+
+domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+orderDomain = domainsLoader.loadDomainsDirectory().getOrderDomain();
+orderRepository = orderDomain.getOrderRepository();
+
+orderId = parameters.get("orderId");
+
+try {
+    order = orderRepository.getOrderById(orderReadHelper.getOrderId());
+} catch (FoundationException e) {
+    return;
+}
+context.put("order", order);
+
+// Groups order items by product
+
+orderItems = context.get("orderItemList");
+if (orderItems == null) return;
+
+double getItemQuantity(item) {
+    qtyDbl = item.get("quantity");
+    qty = (qtyDbl == null ? 0 : qtyDbl.doubleValue());
+    cqtyDbl = item.get("cancelQuantity");
+    cqty = (cqtyDbl == null ? 0 : cqtyDbl.doubleValue());
+    return qty - cqty;
+}
+
+double getItemTotal(item) {
+    return OrderReadHelper.getOrderItemSubTotal(item, orderAdjustments);
+}
+
+double getItemAdjustmentTotal(item) {
+    return OrderReadHelper.getOrderItemAdjustmentsTotal(item, orderAdjustments, true, false, false);
+}
+
+groupedItems = FastMap.newInstance();
+for (iter = orderItems.iterator(); iter.hasNext(); ) {
+    item = iter.next();
+    productId = item.get("productId");
+    statusId = item.get("statusId");
+    key = productId + "^" + statusId;
+    row = groupedItems.get(key);
+
+    // new row, fill it with the item and continue
+    if (row == null) {
+        row = FastMap.newInstance();
+        row.putAll(item.getAllFields());
+        row.put("groupQuantity", new Double(getItemQuantity(item)));
+        row.put("groupTotal", new Double(getItemTotal(item)));
+        row.put("groupAdjustmentTotal", new Double(getItemAdjustmentTotal(item)));
+        orderItemType = item.getRelatedOne("OrderItemType");
+        if (orderItemType != null) {
+            row.put("orderItemTypeDescription", orderItemType.get("description", context.get("locale")));
+        }
+        groupedItems.put(key, row);
+        continue;
+    }
+
+    // merge the row with this item's data
+    oldQuantity = row.get("groupQuantity").doubleValue();
+    thisQuantity = getItemQuantity(item);
+    row.put("groupQuantity", new Double(oldQuantity + thisQuantity));
+
+    oldTotal = row.get("groupTotal").doubleValue();
+    thisTotal = getItemTotal(item);
+    row.put("groupTotal", new Double(oldTotal + thisTotal));
+
+    oldAdjustmentTotal = row.get("groupAdjustmentTotal").doubleValue();
+    thisAdjustmentTotal = getItemAdjustmentTotal(item);
+    row.put("groupAdjustmentTotal", new Double(oldAdjustmentTotal + thisAdjustmentTotal));
+
+    groupedItems.put(key, row);
+}
+
+context.put("groupedItems", groupedItems.values());
+
+// this section is supplemental to displaying the order, I know it's messy to include here but we'll need a whole new bsh otherwise
+
+orh = context.get("orderReadHelper");
+if (orh != null) {
+    supplier = orh.getBillFromParty();
+    if (supplier != null) {
+        supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(supplier.getString("partyId"), "GENERAL_LOCATION", true, delegator);
+        if (supplierAddress == null) {
+            supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(supplier.getString("partyId"), "BILLING_LOCATION", true, delegator);
+        }
+        if (supplierAddress == null) {
+            supplierAddress = PartyContactHelper.getPostalAddressValueByPurpose(supplier.getString("partyId"), "PAYMENT_LOCATION", true, delegator);
+        }
+        if (supplierAddress != null) context.put("supplierAddress", supplierAddress);
+    }
+}

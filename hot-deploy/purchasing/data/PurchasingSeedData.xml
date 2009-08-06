@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entity-engine-xml>
+
+    <!-- Inventory event for Pending internal requirement -->
+    <InventoryEventPlannedType inventoryEventPlanTypeId="PEND_MANUF_O_RECP" description="Pending Manufacturing Order receipt" inOut="+"/>
+    <!-- More understandable descriptions -->
+    <RequirementType requirementTypeId="PRODUCT_REQUIREMENT" description="Purchasing Requirement"/>
+    <RequirementType requirementTypeId="INTERNAL_REQUIREMENT" description="Production Requirement"/>
+    <RequirementType requirementTypeId="PENDING_INTERNAL_REQ" description="Pending Internal Requirement" hasTable="N"/>
+    <!-- Add a status for requirements, when a transfer is created or when the production run is created or when a PO is created: the requirement status is set to CLOSED -->
+    <StatusItem statusId="REQ_CLOSED" statusTypeId="REQUIREMENT_STATUS" statusCode="CLOSED" sequenceId="03" description="Closed"/>
+    <StatusValidChange statusId="REQ_APPROVED" statusIdTo="REQ_CLOSED" transitionName="Close Requirement"/>
+
+    <!-- A new type for contracted manufacturing, which maps to PINV_MFG_CONTRACT in Financials -->
+    <OrderItemType orderItemTypeId="MFG_CONTRACT" parentTypeId="PURCHASE_SPECIFIC" hasTable="N" description="Outsourced Task"/>
+
+    <!-- Used to associate a Product -> WorkEffort (Routing Task) when the Product is used for purchase orders of that routing task -->
+    <WorkEffortGoodStandardType workEffortGoodStdTypeId="ROU_OUTSOURCE_PROD" description="Product for purchasing outsourced manufacturing task"/>
+
+    <WorkEffortGoodStandardType workEffortGoodStdTypeId="PRUN_OUTSRC_PURCH" description="Product needs to be purchased for outsourced production run task"/>
+
+    <ProductStore productStoreId="PURCHASING" storeName="Dummy store for purchasing application"
+        subtitle="This store is a hack.  Although purchase orders do not require a product store, the cart must have one"
+        prorateShipping="N"/>
+
+</entity-engine-xml>

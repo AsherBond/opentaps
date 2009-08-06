@@ -1,0 +1,33 @@
+<entity-engine-xml>
+<!--
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+ 
+    <!-- Purchasing Keyboard shortcuts demo data -->
+    <KeyboardShortcut shortcutId="PRCH_FIND_SUPP" sequenceNum="410" shortcut="shift+f1" actionTypeId="KB_URL" actionTarget="supplierMain" applicationName="purchasing" description="Find Suppliers" />
+    <KeyboardShortcut shortcutId="PRCH_CREATE_SUPP" sequenceNum="411" shortcut="f1" actionTypeId="KB_URL" actionTarget="createSupplier" applicationName="purchasing" description="Create a Supplier" />
+
+    <KeyboardShortcut shortcutId="PRCH_BOM_SIMU" sequenceNum="412" shortcut="shift+f2" actionTypeId="KB_URL" actionTarget="bomMain" applicationName="purchasing" description="BOM Simulation" />
+
+    <KeyboardShortcut shortcutId="PRCH_FIND_REQ" sequenceNum="413" shortcut="shift+f3" actionTypeId="KB_URL" actionTarget="findRequirements" applicationName="purchasing" description="Find Requirements" />
+    <KeyboardShortcut shortcutId="PRCH_FIND_INV" sequenceNum="414" shortcut="f3" actionTypeId="KB_URL" actionTarget="ViewFacilityInventoryByProduct" applicationName="purchasing" description="Find facility Inventory Items" />
+
+    <KeyboardShortcut shortcutId="PRCH_FIND_ORDERS" sequenceNum="415" shortcut="shift+f4" actionTypeId="KB_URL" actionTarget="findOrders" applicationName="purchasing" description="Find Purchase Orders" />
+    <KeyboardShortcut shortcutId="PRCH_CREATE_ORDER" sequenceNum="416" shortcut="f4" actionTypeId="KB_URL" actionTarget="orderentry" applicationName="purchasing" description="Create a Purchase Order" />
+
+    <KeyboardShortcut shortcutId="PRCH_CREATE_ORDER" sequenceNum="417" shortcut="f6" actionTypeId="KB_URL" actionTarget="manageReports" applicationName="purchasing" description="Reports" />
+
+</entity-engine-xml>

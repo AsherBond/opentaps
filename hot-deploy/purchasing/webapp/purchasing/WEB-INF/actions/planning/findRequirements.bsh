@@ -1,0 +1,130 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file has been modified by Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.manufacturing.bom.BOMTree;
+
+import org.opentaps.common.util.UtilCommon;
+ 
+performFind = parameters.get("performFind");
+target = parameters.get("target");
+if (target == null) {
+    //if not set the target parameter, then use findRequirements as default target
+    target = "findRequirements";
+    parameters.put("target", target);
+}
+
+// put the statuses choice
+if (target.equals("findRequirements")) {
+    // set all status for the find requirements page
+    context.put("availableStatuses", delegator.findByAnd("StatusItem", UtilMisc.toMap("statusTypeId", "REQUIREMENT_STATUS"), UtilMisc.toList("sequenceId", "description")));
+} else if (target.equals("openRequirements")) {
+    //  set the valid statuses for the open requirements page
+    statusConditions = UtilMisc.toList(new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("REQ_CREATED", "REQ_PROPOSED")));
+    statusConditions.add(new EntityExpr("statusTypeId", EntityOperator.EQUALS, "REQUIREMENT_STATUS"));
+    context.put("availableStatuses", delegator.findByCondition("StatusItem", new EntityConditionList(statusConditions, EntityOperator.AND), null, UtilMisc.toList("sequenceId", "description")));	
+}
+
+// if not perform to find, then return an empty list
+if (!"Y".equals(performFind)) {
+    context.put("requirements", new java.util.ArrayList());
+    return;
+}
+
+// base condition is status of requirements for the organization's facilities
+searchConditions = UtilMisc.toList(
+                new EntityExpr("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(session.getAttribute("organizationPartyId"), delegator)));
+findOpenRequirement = parameters.get("findOpenRequirement");
+if (findOpenRequirement != null && findOpenRequirement.equals("Y")) {
+	searchConditions.add(new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("REQ_CREATED", "REQ_PROPOSED")));
+}
+
+// productIds to search.  Note it's important to remove the productId now so that it's not part of the condition made by prepareFind again
+productId = parameters.remove("productId");
+if (UtilValidate.isNotEmpty(productId)) {
+    productIdsToSearch = UtilMisc.toList(productId);
+
+    // automatically search BOM children for now.  Later we'll add a parameter when we replace the form widget form 
+    if (true) {
+        bomTree = new BOMTree(productId, "MANUF_COMPONENT", UtilDateTime.nowDate(), delegator, dispatcher, userLogin);
+        Map treeQty = new HashMap();
+        bomTree.sumQuantities(treeQty);
+        productIdsToSearch.addAll(treeQty.keySet());
+    }
+    searchConditions.add(new EntityExpr("productId", EntityOperator.IN, productIdsToSearch));
+}
+ 
+// partyId to search.  Note it's important to remove the partyId now so that it's not part of the condition made by prepareFind again
+partyId = parameters.remove("partyId");
+if (UtilValidate.isNotEmpty(partyId)) {
+    searchConditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, partyId));
+}
+
+// allowing to group requirement types, for now using groupedRequirementTypeId=INTERNAL, search for both INTERNAL_REQUIREMENT and PENDING_INTERNAL_REQ
+groupedRequirementTypeId = parameters.remove("groupedRequirementTypeId");
+if (UtilValidate.isNotEmpty(groupedRequirementTypeId)) {
+    if ("INTERNAL".equals(groupedRequirementTypeId)) {
+        searchConditions.add(new EntityExpr("requirementTypeId", EntityOperator.IN, UtilMisc.toList("INTERNAL_REQUIREMENT", "PENDING_INTERNAL_REQ")));
+        parameters.remove("requirementTypeId");
+    }
+}
+
+ 
+// it should find RequirementAndRole where the role type is SUPPLIER, now allow supplier party ID to be updated for product requirements , so comment this line
+// searchConditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, "SUPPLIER"));
+
+// generic prepare from form parameters
+Map prepare = dispatcher.runSync("prepareFind", UtilMisc.toMap("inputFields", parameters, "entityName", "Requirement"));
+if (UtilValidate.isNotEmpty(prepare.get("entityConditionList"))) {
+    searchConditions.add((EntityConditionList) prepare.get("entityConditionList"));
+}
+
+// only look for active roles
+searchConditions.add(EntityUtil.getFilterByDateExpr());
+// execute the find  A delegator find would be more efficient
+results = delegator.findByCondition("RequirementAndRole", new EntityConditionList(searchConditions, EntityOperator.AND), null,null);
+context.put("requirements", results);
+
+// put this back in so it shows up on the lookup form again
+parameters.put("productId", productId);
+parameters.put("partyId", partyId);
+

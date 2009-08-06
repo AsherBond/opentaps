@@ -1,0 +1,58 @@
+/* 
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+import javolution.util.FastList;
+import javolution.util.FastSet;
+
+import org.ofbiz.accounting.invoice.InvoiceWorker;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.base.entities.PaymentApplication;
+import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.infrastructure.*;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+
+delegator = request.getAttribute("delegator");
+cart = session.getAttribute("shoppingCart");
+context.put("cart", cart);
+
+orderTerms = cart.getOrderTerms();
+context.put("orderTerms",orderTerms);
+
+uiLabelMap = UtilMessage.getUiLabels(locale);
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+context.put("organizationPartyId", organizationPartyId);
+
+// get the organizationRepository
+dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+organizationRepository = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+termTypes = organizationRepository.getValidTermTypes("PURCHASE_ORDER");
+context.put("termTypes",termTypes);
+
+agreements = delegator.findByAnd("Agreement", UtilMisc.toList(
+                    new EntityExpr("agreementTypeId", EntityOperator.EQUALS, "PURCHASE_AGREEMENT"),
+                    new EntityExpr("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),
+                    new EntityExpr("partyIdFrom", EntityOperator.EQUALS, cart.billToCustomerPartyId),
+                    new EntityExpr("partyIdTo", EntityOperator.EQUALS, cart.partyId),
+                    EntityUtil.getFilterByDateExpr()));
+context.put("agreements",agreements);    

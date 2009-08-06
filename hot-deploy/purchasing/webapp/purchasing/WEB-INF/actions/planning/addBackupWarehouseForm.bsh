@@ -1,0 +1,67 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import javolution.util.FastSet;
+
+if (! security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
+    context.put("allowed", false);
+    return;
+}
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+warehouses = UtilCommon.getOrganizationReceivingFacilities(organizationPartyId, delegator);
+context.put("warehouses", warehouses);
+
+inventoryItemTypes = delegator.findAllCache("InventoryItemType");
+print("****" + inventoryItemTypes);
+context.put("inventoryItemTypes", inventoryItemTypes);
+
+facilityIdTo = parameters.get("facilityIdTo");
+
+// get the active facility backups
+facilityTo = delegator.findByPrimaryKey("Facility", UtilMisc.toMap("facilityId", facilityIdTo));
+conditions = UtilMisc.toList(
+    new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityIdTo),
+    EntityUtil.getFilterByDateExpr()
+);
+backupAssocs = delegator.findByAnd("FacilityAssoc", conditions, UtilMisc.toList("sequenceNum"));
+
+context.put("defaultInventoryItemTypeId", facilityTo.getString("defaultInventoryItemTypeId"));
+
+// set of warehouses to exclude from the add backup form
+exclude = FastSet.newInstance();
+exclude.add(facilityIdTo);
+
+backups = FastList.newInstance();
+for (assoc : backupAssocs) {
+    backup = FastMap.newInstance();
+    backup.putAll( assoc.getAllFields() );
+
+    warehouse = assoc.getRelatedOne("FromFacility");
+    backup.putAll( warehouse.getAllFields() );
+
+    backups.add( backup );
+    exclude.add( warehouse.get("facilityId") );
+}
+context.put("facilityTo", facilityTo);
+context.put("backups", backups);
+context.put("excludeWarehouses", exclude);

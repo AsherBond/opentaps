@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Facility Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="createFacilityAssoc" engine="java" default-entity-name="FacilityAssoc"
+            location="org.opentaps.purchasing.facility.FacilityServices" invoke="createFacilityAssoc">
+        <description>Creates a Facility association from the facilityId to the facilityIdTo.  User must have WRHS_FACILITY_ASSOC permission on both facilities.</description>
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+        <override name="sequenceNum" optional="false"/> 
+        <override name="fromDate" optional="true"/>
+    </service>
+
+    <service name="updateFacilityAssoc" engine="java" default-entity-name="FacilityAssoc"
+            location="org.opentaps.purchasing.facility.FacilityServices" invoke="updateFacilityAssoc">
+        <description>Updates a Facility association from the facilityId to the facilityIdTo.  User must have WRHS_FACILITY_ASSOC permission on both facilities.</description>
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>
+
+    <service name="opentaps.createBackupWarehouse" engine="java"
+        location="org.opentaps.purchasing.facility.FacilityServices" invoke="createBackupWarehouse">
+        <attribute name="facilityIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="facilityName" type="String" mode="IN" optional="false"/>
+        <attribute name="ownerPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="defaultInventoryItemTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="managerPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="sequenceNum" type="Long" mode="IN" optional="true"/>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="thruDate" type="Timestamp" mode="IN" optional="true"/>
+    </service>
+
+</services>
