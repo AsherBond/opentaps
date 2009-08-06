@@ -207,7 +207,7 @@ public class BillingAccountServices {
                        GenericValue productStore = order.getRelatedOne("ProductStore");
                        if (productStore.getString("manualAuthIsCapture") == null || (! productStore.getString("manualAuthIsCapture").equalsIgnoreCase("Y"))) {
                            String responseId = delegator.getNextSeqId("PaymentGatewayResponse");
-                           GenericValue pgResponse = delegator.makeValue("PaymentGatewayResponse", null);
+                           GenericValue pgResponse = delegator.makeValue("PaymentGatewayResponse");
                            pgResponse.set("paymentGatewayResponseId", responseId);
                            pgResponse.set("paymentServiceTypeEnumId", PaymentGatewayServices.CAPTURE_SERVICE_TYPE);
                            pgResponse.set("orderPaymentPreferenceId", orderPaymentPreference.getString("orderPaymentPreferenceId"));
