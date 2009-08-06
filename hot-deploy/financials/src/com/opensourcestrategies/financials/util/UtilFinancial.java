@@ -535,7 +535,7 @@ public final class UtilFinancial {
                 amountToAdd = amountToAdd.negate();
             }
 
-            UtilMisc.addToBigDecimalInMap(glAccountSums, account, amountToAdd);
+            UtilMisc.addInMapOfBigDecimal(glAccountSums, account, amountToAdd);
         }
     }
 
@@ -564,11 +564,11 @@ public final class UtilFinancial {
             //  and accounted negatively in the account balance total map
             // this way we always have balance = credits - debits
             if (invert) {
-                UtilMisc.addToBigDecimalInMap(glAccountBalancesSums, account, amount.negate());
-                UtilMisc.addToBigDecimalInMap(glAccountDebitsSums, account, amount);
+                UtilMisc.addInMapOfBigDecimal(glAccountBalancesSums, account, amount.negate());
+                UtilMisc.addInMapOfBigDecimal(glAccountDebitsSums, account, amount);
             } else {
-                UtilMisc.addToBigDecimalInMap(glAccountBalancesSums, account, amount);
-                UtilMisc.addToBigDecimalInMap(glAccountCreditsSums, account, amount);
+                UtilMisc.addInMapOfBigDecimal(glAccountBalancesSums, account, amount);
+                UtilMisc.addInMapOfBigDecimal(glAccountCreditsSums, account, amount);
             }
 
             // check balance = credits - debits
@@ -619,7 +619,7 @@ public final class UtilFinancial {
                     key += "," + (transactionEntry.getString(UtilAccountingTags.ENTITY_TAG_PREFIX + i) == null ? "" : transactionEntry.getString(UtilAccountingTags.ENTITY_TAG_PREFIX + i));
                 }
             }
-            UtilMisc.addToBigDecimalInMap(glAccountSums, key, amountToAdd);
+            UtilMisc.addInMapOfBigDecimal(glAccountSums, key, amountToAdd);
         }
     }
 

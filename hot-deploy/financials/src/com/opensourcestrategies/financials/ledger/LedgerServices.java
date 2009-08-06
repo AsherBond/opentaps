@@ -264,7 +264,7 @@ public final class LedgerServices {
                 for (Integer validTagEnumId : validTagEnumIds) {
                     tagsKey.put(UtilAccountingTags.ENTITY_TAG_PREFIX + validTagEnumId, entry.get(UtilAccountingTags.ENTITY_TAG_PREFIX + validTagEnumId));
                 }
-                UtilMisc.addToBigDecimalInMap(amountsByTagKey, tagsKey, entry.getBigDecimal("amount"));     // add each entry's amount to its tags key
+                UtilMisc.addInMapOfBigDecimal(amountsByTagKey, tagsKey, entry.getBigDecimal("amount"));     // add each entry's amount to its tags key
                 totalAmount = totalAmount.add(entry.getBigDecimal("amount")).setScale(decimals, rounding);  // keep a running total
             }
 
