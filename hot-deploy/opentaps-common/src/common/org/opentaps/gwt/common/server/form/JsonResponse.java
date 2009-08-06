@@ -64,10 +64,10 @@ public class JsonResponse {
         retval.put(UtilLookup.JSON_SUCCESS, true);
         retval.put(UtilLookup.JSON_TOTAL, 1);
         JSONArray jsonArray = new JSONArray();
-        jsonArray.put(JSONObject.fromMap(callResults));
+        jsonArray.element(JSONObject.fromObject(callResults));
         retval.put(UtilLookup.JSON_SUCCESS_RESPONSE, jsonArray);
 
-        return AjaxEvents.doJSONResponse(response, JSONObject.fromMap(retval));
+        return AjaxEvents.doJSONResponse(response, JSONObject.fromObject(retval));
     }
 
     /**
@@ -81,10 +81,10 @@ public class JsonResponse {
         retval.put(UtilLookup.JSON_SUCCESS, false);
         retval.put(UtilLookup.JSON_TOTAL, 1);
         JSONArray jsonArray = new JSONArray();
-        jsonArray.put(UtilMisc.toMap(UtilLookup.JSON_ERROR_MESSAGE, errorMessage));
+        jsonArray.element(UtilMisc.toMap(UtilLookup.JSON_ERROR_MESSAGE, errorMessage));
         retval.put(UtilLookup.JSON_ERROR_EXCEPTION, jsonArray);
 
-        return AjaxEvents.doJSONResponse(response, JSONObject.fromMap(retval));
+        return AjaxEvents.doJSONResponse(response, JSONObject.fromObject(retval));
     }
 
    /**
@@ -123,21 +123,21 @@ public class JsonResponse {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(UtilLookup.JSON_ERROR_FIELD_NAME, f);
             jsonObject.put(UtilLookup.JSON_ERROR_MESSAGE, UtilLookup.JSON_ERROR_MISSING_FIELD);
-            jsonArray.put(jsonObject.toString());
+            jsonArray.element(jsonObject);
         }
 
         for (String f : extraFields) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(UtilLookup.JSON_ERROR_FIELD_NAME, f);
             jsonObject.put(UtilLookup.JSON_ERROR_MESSAGE, UtilLookup.JSON_ERROR_EXTRA_FIELD);
-            jsonArray.put(jsonObject.toString());
+            jsonArray.element(jsonObject);
         }
 
         Map<String, Object> retval = new HashMap<String, Object>();
         retval.put(UtilLookup.JSON_SUCCESS, false);
         retval.put(UtilLookup.JSON_ERRORS, jsonArray);
 
-        return AjaxEvents.doJSONResponse(response, JSONObject.fromMap(retval));
+        return AjaxEvents.doJSONResponse(response, JSONObject.fromObject(retval));
     }
 
     /**
@@ -161,28 +161,28 @@ public class JsonResponse {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(UtilLookup.JSON_ERROR_FIELD_NAME, f);
             jsonObject.put(UtilLookup.JSON_ERROR_MESSAGE, UtilLookup.JSON_ERROR_MISSING_FIELD);
-            jsonArray.put(jsonObject.toString());
+            jsonArray.element(jsonObject);
         }
 
         for (String f : extraFields) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(UtilLookup.JSON_ERROR_FIELD_NAME, f);
             jsonObject.put(UtilLookup.JSON_ERROR_MESSAGE, UtilLookup.JSON_ERROR_EXTRA_FIELD);
-            jsonArray.put(jsonObject.toString());
+            jsonArray.element(jsonObject);
         }
 
         for (String f : customFieldsErrors.keySet()) {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(UtilLookup.JSON_ERROR_FIELD_NAME, f);
             jsonObject.put(UtilLookup.JSON_ERROR_MESSAGE, customFieldsErrors.get(f));
-            jsonArray.put(jsonObject.toString());
+            jsonArray.element(jsonObject);
         }
 
         Map<String, Object> retval = new HashMap<String, Object>();
         retval.put(UtilLookup.JSON_SUCCESS, false);
         retval.put(UtilLookup.JSON_ERRORS, jsonArray);
 
-        return AjaxEvents.doJSONResponse(response, JSONObject.fromMap(retval));
+        return AjaxEvents.doJSONResponse(response, JSONObject.fromObject(retval));
     }
 
     /**

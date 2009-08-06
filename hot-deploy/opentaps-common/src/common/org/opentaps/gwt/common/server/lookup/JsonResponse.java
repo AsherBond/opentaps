@@ -120,7 +120,7 @@ public class JsonResponse {
         jsonObject.put(Permissions.CREATE_FIELD_NAME, permissions.canCreate());
         jsonObject.put(Permissions.UPDATE_FIELD_NAME, permissions.canUpdate());
         jsonObject.put(Permissions.DELETE_FIELD_NAME, permissions.canDelete());
-        jsonArray.put(jsonObject.toString());
+        jsonArray.element(jsonObject);
 
         if (entities != null) {
             for (EntityInterface e : entities) {
@@ -143,7 +143,7 @@ public class JsonResponse {
                 jsonObject.put(Permissions.UPDATE_FIELD_NAME, permissions.canUpdate());
                 jsonObject.put(Permissions.DELETE_FIELD_NAME, permissions.canDelete());
 
-                jsonArray.put(jsonObject.toString());
+                jsonArray.element(jsonObject);
             }
         }
 
@@ -152,7 +152,7 @@ public class JsonResponse {
         retval.put(UtilLookup.JSON_ID, entityIdFieldName);
         retval.put(UtilLookup.JSON_TOTAL, service.getResultTotalCount());
 
-        return AjaxEvents.doJSONResponse(response, JSONObject.fromMap(retval));
+        return AjaxEvents.doJSONResponse(response, JSONObject.fromObject(retval));
     }
 
     /**
@@ -172,14 +172,14 @@ public class JsonResponse {
             jsonObject = new JSONObject();
             jsonObject.put(UtilLookup.SUGGEST_ID, "");
             jsonObject.put(UtilLookup.SUGGEST_TEXT, "");
-            jsonArray.put(jsonObject.toString());
+            jsonArray.element(jsonObject);
         }
         if (entities != null) {
             for (EntityInterface e : entities) {
                 jsonObject = new JSONObject();
                 jsonObject.put(UtilLookup.SUGGEST_ID, e.get(entityIdFieldName));
                 jsonObject.put(UtilLookup.SUGGEST_TEXT, format.makeSuggestDisplayedText(e));
-                jsonArray.put(jsonObject.toString());
+                jsonArray.element(jsonObject.toString());
             }
         }
 
@@ -188,7 +188,7 @@ public class JsonResponse {
         retval.put(UtilLookup.JSON_ID, UtilLookup.SUGGEST_ID);
         retval.put(UtilLookup.JSON_TOTAL, resultTotalCount);
 
-        return AjaxEvents.doJSONResponse(response, JSONObject.fromMap(retval));
+        return AjaxEvents.doJSONResponse(response, JSONObject.fromObject(retval));
     }
 
     /**
@@ -241,10 +241,10 @@ public class JsonResponse {
         retval.put(UtilLookup.JSON_SUCCESS, false);
         retval.put(UtilLookup.JSON_TOTAL, 1);
         JSONArray jsonArray = new JSONArray();
-        jsonArray.put(UtilMisc.toMap(UtilLookup.JSON_ERROR_MESSAGE, errorMessage));
+        jsonArray.element(UtilMisc.toMap(UtilLookup.JSON_ERROR_MESSAGE, errorMessage));
         retval.put(UtilLookup.JSON_ERROR_EXCEPTION, jsonArray);
 
-        return AjaxEvents.doJSONResponse(response, JSONObject.fromMap(retval));
+        return AjaxEvents.doJSONResponse(response, JSONObject.fromObject(retval));
     }
 
     private String downloadExcel(String filename, ServletContext servletContext) {
