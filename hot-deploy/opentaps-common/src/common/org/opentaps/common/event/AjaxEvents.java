@@ -75,12 +75,12 @@ public final class AjaxEvents {
     }
 
     public static String doJSONResponse(HttpServletResponse response, Collection<?> collection) {
-        return doJSONResponse(response, JSONArray.fromCollection(collection).toString());
+        return doJSONResponse(response, JSONArray.fromObject(collection).toString());
     }
 
     @SuppressWarnings("unchecked")
     public static String doJSONResponse(HttpServletResponse response, Map map) {
-        return doJSONResponse(response, JSONObject.fromMap(map));
+        return doJSONResponse(response, JSONObject.fromObject(map));
     }
 
     public static String doJSONResponse(HttpServletResponse response, String jsonString) {
