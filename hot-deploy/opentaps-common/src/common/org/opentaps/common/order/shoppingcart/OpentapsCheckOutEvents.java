@@ -33,8 +33,8 @@
  *******************************************************************************/
 package org.opentaps.common.order.shoppingcart;
 
+import java.math.BigDecimal;
 import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,6 +49,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.CheckOutEvents;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
+
 /**
  * Opentaps Check Out Events.
  */
@@ -114,7 +115,7 @@ public final class OpentapsCheckOutEvents {
 
     private static void addTerm(HttpServletRequest request, GenericDelegator delegator, ShoppingCart cart) {
         String termTypeId = request.getParameter("termTypeId");
-        Double termValue = UtilValidate.isEmpty(request.getParameter("termValue")) ? null : Double.parseDouble(request.getParameter("termValue"));
+        BigDecimal termValue = UtilValidate.isEmpty(request.getParameter("termValue")) ? null : new BigDecimal(request.getParameter("termValue"));
         Long termDays = UtilValidate.isEmpty(request.getParameter("termDays")) ? null : Long.parseLong(request.getParameter("termDays"));
         String textValue = request.getParameter("textValue");
         if (termTypeId != null) {

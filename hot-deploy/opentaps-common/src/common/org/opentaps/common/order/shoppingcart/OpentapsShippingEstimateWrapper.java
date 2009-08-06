@@ -86,9 +86,9 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
     protected List shippableItemSizes = null;
     protected List shippableItemInfo = null;
     protected String productStoreId = null;
-    protected double shippableQuantity = 0;
-    protected double shippableWeight = 0;
-    protected double shippableTotal = 0;
+    protected BigDecimal shippableQuantity = BigDecimal.ZERO;
+    protected BigDecimal shippableWeight = BigDecimal.ZERO;
+    protected BigDecimal shippableTotal = BigDecimal.ZERO;
     protected Map availableCarrierServices = new HashMap();
     protected ShoppingCart cart = null;
     protected int shipGroupSeqId = 0;
@@ -207,9 +207,9 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
 
                 String shippingCmId = shippingAddress != null ? shippingAddress.getString("contactMechId") : null;
 
-                Map estimateMap = ShippingEvents.getShipGroupEstimate(GenericDispatcher.getLocalDispatcher(this.dispatcherName, this.cart.getDelegator()), this.cart.getDelegator(), "SALES_ORDER",
+                Map estimateMap = ShippingEvents.getShipGroupEstimate(GenericDispatcher.getLocalDispatcher(this.dispatcherName, cart.getDelegator()), cart.getDelegator(), "SALES_ORDER",
                         shippingMethodTypeId, carrierPartyId, carrierRoleTypeId, shippingCmId, productStoreId, supplierPartyId,
-                        shippableItemInfo, shippableWeight, shippableQuantity, shippableTotal);
+                        shippableItemInfo, shippableWeight, shippableQuantity, shippableTotal, cart.getPartyId(), cart.getProductStoreShipMethId());
                 shippingEstimates.put(shipMethod, estimateMap.get("shippingTotal"));
             }
         }
@@ -228,8 +228,8 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
 
         // Set up input map for upsRateEstimate
         Map input = UtilMisc.toMap("upsRateInquireMode", "Shop"); // triggers the mode of estimate we want
-        input.put("shippableQuantity", new Double(this.shippableQuantity));
-        input.put("shippableWeight", new Double(this.shippableWeight));
+        input.put("shippableQuantity", this.shippableQuantity);
+        input.put("shippableWeight", this.shippableWeight);
         input.put("productStoreId", this.productStoreId);
         input.put("carrierRoleTypeId", "CARRIER");
         input.put("carrierPartyId", "UPS");
@@ -239,7 +239,7 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
         }
         input.put("shippableItemInfo", this.shippableItemInfo);
         input.put("shipmentMethodTypeId", "XXX"); // Dummy value for required field that isn't necessary for rate shop requests
-        input.put("shippableTotal", new Double(this.shippableTotal));
+        input.put("shippableTotal", this.shippableTotal);
 
         try {
 

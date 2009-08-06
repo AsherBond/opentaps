@@ -40,6 +40,7 @@
 
 package org.opentaps.common.order.shoppingcart;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -74,7 +75,7 @@ public class OpentapsShoppingCart extends ShoppingCart {
     private Map<CartShipInfo, Boolean> shipGroupCOD = new HashMap<CartShipInfo, Boolean>();
     private Map<CartShipInfo, OpentapsShippingEstimateWrapper> shipEstimateWrappers = new HashMap<CartShipInfo, OpentapsShippingEstimateWrapper>();
     // allow to store the cancel quantities of each cart item, as the ShoppingCart does not store this information
-    private Map<Integer, Double> cancelQuantities = new HashMap<Integer, Double>();
+    private Map<Integer, BigDecimal> cancelQuantities = new HashMap<Integer, BigDecimal>();
 
     /**
      * Creates a new <code>OpentapsShoppingCart</code> instance.
@@ -146,7 +147,7 @@ public class OpentapsShoppingCart extends ShoppingCart {
             int newShipGroupSeqId = addShipInfo();
             CartShipInfo newShipGroup = (CartShipInfo) getShipGroups().get(newShipGroupSeqId);
             newShipGroup.shipTaxAdj = oldShipGroup.shipTaxAdj;
-            newShipGroup.contactMechId = oldShipGroup.contactMechId;
+            newShipGroup.setContactMechId(oldShipGroup.getContactMechId());
             newShipGroup.shipmentMethodTypeId = oldShipGroup.shipmentMethodTypeId;
             newShipGroup.supplierPartyId = oldShipGroup.supplierPartyId;
             newShipGroup.carrierPartyId = oldShipGroup.carrierPartyId;
@@ -336,7 +337,7 @@ public class OpentapsShoppingCart extends ShoppingCart {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List makeOrderItems(boolean explodeItems, LocalDispatcher dispatcher) {
+    public List makeOrderItems(boolean explodeItems, boolean replaceAggregatedId, LocalDispatcher dispatcher) {
         // do the explosion
         if (explodeItems && dispatcher != null) {
             explodeItems(dispatcher);
@@ -371,6 +372,11 @@ public class OpentapsShoppingCart extends ShoppingCart {
                 if (status == null) {
                     status = initialStatus;
                 }
+                //check for aggregated products
+                String aggregatedInstanceId = null;
+                if (replaceAggregatedId && UtilValidate.isNotEmpty(item.getConfigWrapper())) {
+                    aggregatedInstanceId = getAggregatedInstanceId(item, dispatcher);
+                }
 
                 GenericValue orderItem = getDelegator().makeValue("OrderItem");
                 orderItem.set("orderItemSeqId", item.getOrderItemSeqId());
@@ -379,24 +385,24 @@ public class OpentapsShoppingCart extends ShoppingCart {
                 if (item.getItemGroup() != null) {
                     orderItem.set("orderItemGroupSeqId", item.getItemGroup().getGroupNumber());
                 }
-                orderItem.set("productId", item.getProductId());
+                orderItem.set("productId", UtilValidate.isNotEmpty(aggregatedInstanceId) ? aggregatedInstanceId : item.getProductId());
                 orderItem.set("prodCatalogId", item.getProdCatalogId());
                 orderItem.set("productCategoryId", item.getProductCategoryId());
                 // the cart has been loaded with the ordered quantity in order to have promotions
                 // being correctly applied, but in that case when the cart is remade into an Order
                 // we want to preserve the cancel quantities
-                Double cancelQuantity = cancelQuantities.get(getItemIndex(item));
+                BigDecimal cancelQuantity = cancelQuantities.get(getItemIndex(item));
                 if (cancelQuantity != null) {
-                    orderItem.set("quantity", new Double(item.getQuantity() + cancelQuantity));
-                    orderItem.set("cancelQuantity", new Double(cancelQuantity));
+                    orderItem.set("quantity", item.getQuantity().add(cancelQuantity));
+                    orderItem.set("cancelQuantity", cancelQuantity);
                 } else {
-                    orderItem.set("quantity", new Double(item.getQuantity()));
+                    orderItem.set("quantity", item.getQuantity());
                     orderItem.set("cancelQuantity", null);
                 }
 
-                orderItem.set("selectedAmount", new Double(item.getSelectedAmount()));
-                orderItem.set("unitPrice", new Double(item.getBasePrice()));
-                orderItem.set("unitListPrice", new Double(item.getListPrice()));
+                orderItem.set("selectedAmount", item.getSelectedAmount());
+                orderItem.set("unitPrice", item.getBasePrice());
+                orderItem.set("unitListPrice", item.getListPrice());
                 orderItem.set("isModifiedPrice",item.getIsModifiedPrice() ? "Y" : "N");
                 orderItem.set("isPromo", item.getIsPromo() ? "Y" : "N");
 
@@ -437,7 +443,7 @@ public class OpentapsShoppingCart extends ShoppingCart {
      * @exception CartItemModifyException if an error occurs
      * @exception ItemNotFoundException if an error occurs
      */
-    public int addOrIncreaseItem(String productId, Double quantity, Timestamp requiredByDate, LocalDispatcher dispatcher) throws CartItemModifyException, ItemNotFoundException {
+    public int addOrIncreaseItem(String productId, BigDecimal quantity, Timestamp requiredByDate, LocalDispatcher dispatcher) throws CartItemModifyException, ItemNotFoundException {
         return super.addOrIncreaseItem(productId, null, quantity, null, null, null, requiredByDate, null, null, null, null, null, null, null, null, dispatcher);
     }
 
@@ -458,7 +464,7 @@ public class OpentapsShoppingCart extends ShoppingCart {
      * @param index a <code>ShoppingCartItem</code> index
      * @param cancelQuantity the cancel quantity
      */
-    public void setCancelQuantity(Integer index, Double cancelQuantity) {
+    public void setCancelQuantity(Integer index, BigDecimal cancelQuantity) {
         this.cancelQuantities.put(index, cancelQuantity);
     }
 

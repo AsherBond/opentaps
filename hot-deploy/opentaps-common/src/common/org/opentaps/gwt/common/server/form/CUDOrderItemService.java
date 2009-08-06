@@ -16,6 +16,7 @@
 
 package org.opentaps.gwt.common.server.form;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -111,7 +112,7 @@ public class CUDOrderItemService extends GenericCUDService {
             String priceStr = getProvider().getParameter(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE);
             if (priceStr != null) {
                 try {
-                    Double price = Double.parseDouble(priceStr);
+                    BigDecimal price = new BigDecimal(priceStr);
                     ShoppingCartItem item = cart.findCartItem(index);
                     item.setBasePrice(price);
                     item.setDisplayPrice(price);
@@ -143,8 +144,8 @@ public class CUDOrderItemService extends GenericCUDService {
             String quantityString = getProvider().getParameter(OrderItemsCartLookupConfiguration.INOUT_QUANTITY);
             if (quantityString != null) {
                 try {
-                    Double quantity = Double.parseDouble(quantityString);
-                    if (quantity != item.getQuantity()) {
+                    BigDecimal quantity = new BigDecimal(quantityString);
+                    if (quantity.compareTo(item.getQuantity()) != 0) {
                         item.setQuantity(quantity, getProvider().getInfrastructure().getDispatcher(), cart);
                     }
                 } catch (NumberFormatException e) {
@@ -156,11 +157,11 @@ public class CUDOrderItemService extends GenericCUDService {
             String priceStr = getProvider().getParameter(OrderItemsCartLookupConfiguration.INOUT_UNIT_PRICE);
             if (priceStr != null) {
                 try {
-                    Double price = Double.parseDouble(priceStr);
-                    if (price != item.getBasePrice()) {
+                    BigDecimal price = new BigDecimal(priceStr);
+                    if (price.compareTo(item.getBasePrice()) != 0) {
                         item.setBasePrice(price);
                     }
-                    if (price != item.getDisplayPrice()) {
+                    if (price.compareTo(item.getDisplayPrice()) != 0) {
                         item.setDisplayPrice(price);
                     }
                 } catch (NumberFormatException e) {

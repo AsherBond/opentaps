@@ -232,22 +232,22 @@ public final class ShoppingCartServices {
                 }
 
                 // not a promo item; go ahead and add it in
-                Double amount = item.getDouble("selectedAmount");
+                BigDecimal amount = item.getBigDecimal("selectedAmount");
                 if (amount == null) {
-                    amount = new Double(0);
+                    amount = BigDecimal.ZERO;
                 }
-                Double quantity = item.getDouble("quantity");
+                BigDecimal quantity = item.getBigDecimal("quantity");
                 if (quantity == null) {
-                    quantity = new Double(0);
+                    quantity = BigDecimal.ZERO;
                 }
-                Double quoteUnitPrice = item.getDouble("quoteUnitPrice");
+                BigDecimal quoteUnitPrice = item.getBigDecimal("quoteUnitPrice");
                 if (quoteUnitPrice == null) {
-                    quoteUnitPrice = new Double(0);
+                    quoteUnitPrice = BigDecimal.ZERO;
                 }
-                if (amount.doubleValue() > 0) {
+                if (amount.signum() > 0) {
                     // If, in the quote, an amount is set, we need to
                     // pass to the cart the quoteUnitPrice/amount value.
-                    quoteUnitPrice = new Double(quoteUnitPrice.doubleValue() / amount.doubleValue());
+                    quoteUnitPrice = quoteUnitPrice.divide(amount);
                 }
                 int itemIndex = -1;
                 if (item.get("productId") == null) {
@@ -255,7 +255,7 @@ public final class ShoppingCartServices {
                     String desc = item.getString("comments");
                     try {
                         // note that passing in null for itemGroupNumber as there is no real grouping concept in the quotes right now
-                        itemIndex = cart.addNonProductItem(null, desc, null, null, quantity.doubleValue(), null, null, null, dispatcher);
+                        itemIndex = cart.addNonProductItem(null, desc, null, null, quantity, null, null, null, dispatcher);
                     } catch (CartItemModifyException e) {
                         return UtilMessage.createAndLogServiceError(e, MODULE);
                     }
@@ -263,7 +263,7 @@ public final class ShoppingCartServices {
                     // product item
                     String productId = item.getString("productId");
                     try {
-                        itemIndex = cart.addItemToEnd(productId, amount, quantity.doubleValue(), quoteUnitPrice, null, null, null, null, dispatcher, new Boolean(!applyQuoteAdjustments), new Boolean(quoteUnitPrice.doubleValue() == 0));
+                        itemIndex = cart.addItemToEnd(productId, amount, quantity, quoteUnitPrice, null, null, null, null, dispatcher, new Boolean(!applyQuoteAdjustments), new Boolean(quoteUnitPrice.signum() == 0));
                     } catch (ItemNotFoundException e) {
                         return UtilMessage.createAndLogServiceError(e, MODULE);
                     } catch (CartItemModifyException e) {
@@ -427,7 +427,7 @@ public final class ShoppingCartServices {
                 if (paymentId == null) {
                     paymentId = opp.getString("paymentMethodTypeId");
                 }
-                Double maxAmount = opp.getDouble("maxAmount");
+                BigDecimal maxAmount = opp.getBigDecimal("maxAmount");
                 String overflow = opp.getString("overflowFlag");
 
                 ShoppingCart.CartPaymentInfo cpi = null;
@@ -481,9 +481,9 @@ public final class ShoppingCartServices {
             }
 
             // not a promo item; go ahead and add it in
-            Double amount = item.getDouble("selectedAmount");
+            BigDecimal amount = item.getBigDecimal("selectedAmount");
             if (amount == null) {
-                amount = new Double(0);
+                amount = BigDecimal.ZERO;
             }
             BigDecimal quantity = item.getBigDecimal("quantity");
             BigDecimal quantityCanceled = item.getBigDecimal("cancelQuantity");
@@ -499,7 +499,7 @@ public final class ShoppingCartServices {
                 String desc = item.getString("itemDescription");
                 try {
                     // TODO: passing in null now for itemGroupNumber, but should reproduce from OrderItemGroup records
-                    itemIndex = cart.addNonProductItem(itemType, desc, null, null, quantity.doubleValue(), null, null, null, dispatcher);
+                    itemIndex = cart.addNonProductItem(itemType, desc, null, null, quantity, null, null, null, dispatcher);
                 } catch (CartItemModifyException e) {
                     return UtilMessage.createAndLogServiceError(e, MODULE);
                     }
@@ -508,7 +508,7 @@ public final class ShoppingCartServices {
                 String prodCatalogId = item.getString("prodCatalogId");
                 String productId = item.getString("productId");
                 try {
-                    itemIndex = cart.addItemToEnd(productId, amount, quantity.doubleValue(), null, null, null, prodCatalogId, item.getString("orderItemTypeId"), dispatcher, null, null, skipInventoryChecks, skipProductChecks);
+                    itemIndex = cart.addItemToEnd(productId, amount, quantity, null, null, null, prodCatalogId, item.getString("orderItemTypeId"), dispatcher, null, null, skipInventoryChecks, skipProductChecks);
                 } catch (ItemNotFoundException e) {
                     return UtilMessage.createAndLogServiceError(e, MODULE);
                 } catch (CartItemModifyException e) {
@@ -533,11 +533,11 @@ public final class ShoppingCartServices {
             cartItem.setShoppingList(item.getString("shoppingListId"), item.getString("shoppingListItemSeqId"));
             cartItem.setIsModifiedPrice("Y".equals(item.getString("isModifiedPrice")));
             if (cartItem.getIsModifiedPrice()) {
-                cartItem.setBasePrice(item.getDouble("unitPrice").doubleValue());
+                cartItem.setBasePrice(item.getBigDecimal("unitPrice"));
             }
 
             // preserve the order item cancel quantity
-            cart.setCancelQuantity(itemIndex, item.getDouble("cancelQuantity"));
+            cart.setCancelQuantity(itemIndex, item.getBigDecimal("cancelQuantity"));
 
             // set the accounting tag as cart item attributes (similar to the order entry)
             for (int i = 1; i <= UtilAccountingTags.TAG_COUNT; i++) {
@@ -563,16 +563,16 @@ public final class ShoppingCartServices {
                 cart.setGiftMessage(g, sg.getString("giftMessage"));
                 cart.setShippingContactMechId(g, sg.getString("contactMechId"));
                 cart.setShippingInstructions(g, sg.getString("shippingInstructions"));
-                cart.setItemShipGroupQty(itemIndex, 0.0, g);
+                cart.setItemShipGroupQty(itemIndex, BigDecimal.ZERO, g);
             }
 
             // set the item's ship group qty
             List<GenericValue> itemShipGroups = orh.getOrderItemShipGroupAssocs(item);
             for (int g = 0; g < itemShipGroups.size(); g++) {
                 GenericValue sgAssoc = itemShipGroups.get(g);
-                Double shipGroupQty = OrderReadHelper.getOrderItemShipGroupQuantity(sgAssoc);
+                BigDecimal shipGroupQty = OrderReadHelper.getOrderItemShipGroupQuantity(sgAssoc);
                 if (shipGroupQty == null) {
-                    shipGroupQty = new Double(0);
+                    shipGroupQty = BigDecimal.ZERO;
                 }
 
                 GenericValue sg = null;
@@ -586,7 +586,7 @@ public final class ShoppingCartServices {
                 // use the map to get the proper index, else a missing assoc to the first ship group makes the counter "g" to be misaligned
                 // resulting in the second ship group info overwriting the first
                 int shipGroupIndex = shipGroupsMap.get(sg.getString("shipGroupSeqId")).intValue();
-                cart.setItemShipGroupQty(itemIndex, shipGroupQty.doubleValue(), shipGroupIndex);
+                cart.setItemShipGroupQty(itemIndex, shipGroupQty, shipGroupIndex);
 
             }
         }
