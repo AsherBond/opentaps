@@ -265,7 +265,7 @@ public class Query {
     public static String getHelperName(GenericDelegator delegator, String entityName) throws GenericEntityConfException {
         // wow, is this a round trip or what?
         ModelGroupReader mgr = ModelGroupReader.getModelGroupReader(delegator.getDelegatorName());
-        String groupName = mgr.getEntityGroupName(entityName);
+        String groupName = mgr.getEntityGroupName(entityName, delegator.getDelegatorName());
         return delegator.getGroupHelperName(groupName);
     }
 
