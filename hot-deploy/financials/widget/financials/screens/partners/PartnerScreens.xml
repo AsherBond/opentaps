@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="partners" global="true"/>
+                <set field="sectionStyle" value="singleColumn"/>
+                <set field="requiredPermission" value="FINANCIALS_PARTNER"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+     <screen name="partners">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsPartners"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsPartners"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/partners/partners.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+     <screen name="createPartnerInvoiceForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsCreatePartnerInvoice"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsCreatePartnerInvoice"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/partners/getPartnersForOrganization.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/partners/createPartnerInvoiceForm.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+     <screen name="invoicePartnersForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsInvoicePartners"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsInvoicePartners"/>
+                <set field="invoiceTypeId" value="PARTNER_INVOICE"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/partners/getPartnersForOrganization.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/invoices/findInvoices.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/partners/invoicePartnersForm.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FindPartnerAgreements">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsFindPartnerAgreements"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsFindPartnerAgreements"/>
+                <set field="agreementViewer" value="viewPartnerAgreement"/>
+               <!-- Predefined search parameters -->
+                <set field="partyIdFrom" from-field="parameters.organizationPartyId"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/partners/getPartnersForOrganization.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/agreements/partnerAgreementsList.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://financials/webapp/financials/partners/findAgreements.ftl"/></html>
+                        </platform-specific>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader">
+                                <label style="subSectionTitle">${uiLabelMap.AccountingAgreements}</label>
+                            </container>
+                            <section>
+                                <widgets>
+                                    <platform-specific>
+                                        <html><html-template location="component://opentaps-common/webapp/common/agreements/listAgreements.ftl"/></html>
+                                    </platform-specific>
+                                </widgets>
+                            </section>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="CreatePartnerAgreement">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsCreatePartnerAgreement"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsCreatePartnerAgreement"/>
+                <set field="screenMode" value="CREATE"/>
+                <set field="createAgreementAction" value="processCreatePartnerAgreement"/>
+
+                <!-- Initial values used when create sales agreement -->
+                <set field="agreementTypeId" value="PARTNER_AGREEMENT"/>
+                <set field="partyIdFrom" from-field="parameters.organizationPartyId"/>
+                <set field="roleTypeIdFrom" from-field="INTERNAL_ORGANIZATIO"/>
+                <set field="roleTypeIdTo" from-field="PARTNER"/>
+
+                <script location="component://financials/webapp/financials/WEB-INF/actions/partners/getPartnersForOrganization.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://financials/webapp/financials/agreements/createPartnerAgreement.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ViewPartnerAgreement">
+        <section>
+            <actions>
+                <set field="screenMode" value="VIEW"/>
+                <set field="editAction" value="editPartnerAgreement"/>
+                <set field="changeStatusAction" value="changePartnerAgreementStatus"/>
+                <set field="createItemAction" value="processCreatePartnerAgreementItem"/>
+                <set field="removeItemAction" value="processRemovePartnerAgreementItem"/>
+                <set field="createTermAction" value="processCreatePartnerAgreementTerm"/>
+                <set field="updateTermAction" value="processUpdatePartnerAgreementTerm"/>
+                <set field="removeTermAction" value="processRemovePartnerAgreementTerm"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/agreements/partnerAgreementPermission.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementItems.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container>
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/agreements/viewCommonAgreementHeader.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/agreements/viewAgreement.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditPartnerAgreement">
+        <section>
+            <actions>
+                <set field="screenMode" value="EDIT"/>
+                <set field="updateAgreementAction" value="processUpdatePartnerAgreement"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/agreements/partnerAgreementPermission.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/agreements/editAgreement.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+</screens>
+

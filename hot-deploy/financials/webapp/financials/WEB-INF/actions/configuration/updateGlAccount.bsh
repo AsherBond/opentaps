@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Ali Afzal Malik (ali@opensourcestrategies.com)
+ */
+
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.UtilMisc;
+import java.util.List;
+
+import org.opentaps.common.util.UtilMessage;
+
+//  try to find the GL account
+if (UtilValidate.isNotEmpty(parameters.get("glAccountId"))) {
+    glAccount = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", parameters.get("glAccountId")));
+    if (glAccount == null) {
+        UtilMessage.addError(request, "FinancialsError_GlAccountNotFound");
+        return;
+    }    
+    context.put("glAccount", glAccount);
+
+    // need both values to look up in GlAccountClassTypeMap
+    glAccountTypeId = glAccount.getString("glAccountTypeId");
+    glAccountClassId = glAccount.getString("glAccountClassId");
+    if(glAccountTypeId == null || glAccountClassId == null)
+	    return;
+
+    list = delegator.findByAnd("GlAccountClassTypeMap", UtilMisc.toMap("glAccountTypeId", glAccountTypeId, "glAccountClassId", glAccountClassId));
+
+    // the combination glAccountTypeId and glAccountClassId must be valid
+    if(list.size() == 0)
+	    return;
+
+    glAccountClassTypeMap = list.get(0);
+    context.put("glAccountClassTypeMap",glAccountClassTypeMap);
+}
+
+//  this form is also used to add a subaccount, so we also try to find the parent GL account
+parentGlAccount = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", parameters.get("parentGlAccountId")));
+if (UtilValidate.isNotEmpty(parentGlAccount)) {
+    context.put("defaultGlAccountTypeId", parentGlAccount.get("glAccountTypeId"));
+    context.put("defaultGlAccountClassId", parentGlAccount.get("glAccountClassId"));
+    context.put("defaultAccountCode", parentGlAccount.get("accountCode"));
+    context.put("defaultAccountName", parentGlAccount.get("accountName"));    
+}
+
+

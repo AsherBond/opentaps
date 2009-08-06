@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<entity-engine-xml>
+    <GlFiscalType glFiscalTypeId="REFERENCE" description="Reference or Testing"/>
+
+    <!-- Invoice VOID status to reverse READY invoices.  Note that no StatusValidChange is defined for this in order to force use of the voidInvoice service. -->
+    <StatusItem description="Voided" sequenceId="40" statusCode="VOIDED" statusId="INVOICE_VOIDED" statusTypeId="INVOICE_STATUS"/>
+
+    <AcctgTransType acctgTransTypeId="BUDGET" parentTypeId="" hasTable="N" description="Budget"/>
+    <AcctgTransType acctgTransTypeId="INVENTORY" parentTypeId="" hasTable="N" description="Inventory"/>
+    <AcctgTransType acctgTransTypeId="SHIPMENT_OUT_ATX" parentTypeId="" hasTable="N" description="Outbound Shipment"/>
+    <AcctgTransType acctgTransTypeId="SHIPMENT_RCPT_ATX" parentTypeId="" hasTable="N" description="Shipment Receipt"/>
+    <AcctgTransType acctgTransTypeId="MANUFACTURING_ATX" parentTypeId="" hasTable="N" description="Manufacturing"/>
+    <AcctgTransType acctgTransTypeId="INVOICE_SALES_ATX" parentTypeId="" hasTable="N" description="Sales Invoice"/>
+    <AcctgTransType acctgTransTypeId="INVOICE_PURCH_ATX" parentTypeId="" hasTable="N" description="Vendor Invoice"/>
+    <AcctgTransType acctgTransTypeId="INVOICE_CREDIT_ATX" parentTypeId="" hasTable="N" description="Customer Credit"/>
+    <AcctgTransType acctgTransTypeId="INVOICE_COMM_ATX" parentTypeId="" hasTable="N" description="Commission Invoice"/>
+    <AcctgTransType acctgTransTypeId="INVOICE_INTRST_ATX" parentTypeId="" hasTable="N" description="Finance Charge"/>
+
+    <AcctgTransType acctgTransTypeId="BANK_SETTLEMENT" parentTypeId="PAYMENT_ACCTG_TRANS" hasTable="N" description="Bank Settlement"/>
+    <AcctgTransType acctgTransTypeId="REVERSE" parentTypeId="INTERNAL_ACCTG_TRANS" hasTable="N" description="Reversal Transaction"/>
+    <AcctgTransType acctgTransTypeId="WRITEOFF" parentTypeId="INTERNAL_ACCTG_TRANS" hasTable="N" description="Transaction due to Writeoff"/>
+    <AcctgTransType acctgTransTypeId="INVOICE_ADJUSTMENT" parentTypeId="INTERNAL_ACCTG_TRANS" hasTable="N" description="Invoice Adjustment"/>
+    <AcctgTransType acctgTransTypeId="ACCOUNT_BALANCING" parentTypeId="INTERNAL_ACCTG_TRANS" hasTable="N" description="Account Balancing"/>
+
+    <!-- for foreign exchange gain/losses during invoice, payment, etc. type transactions -->
+    <AcctgTransType acctgTransTypeId="FX_GAINLOSS_ACCTG" parentTypeId="INTERNAL_ACCTG_TRANS" hasTable="N" description="Foreign Exchange Transaction Gain/Loss"/>
+    <!-- for foreign exchange gain/losses due to valuation of assets. -->
+    <AcctgTransType acctgTransTypeId="FX_VALUE_GL_ACCTG" parentTypeId="INTERNAL_ACCTG_TRANS" hasTable="N" description="Foreign Exchange Valuation Gain/Loss"/>
+
+    <!-- Distributions such as dividends should be classified as part of the equity accounts and reduced against shareholders equity -->
+    <GlAccountClass glAccountClassId="DISTRIBUTION" parentClassId="EQUITY"/>
+
+    <GlAccountType glAccountTypeId="ASSET" description="Asset"/>
+    <GlAccountType glAccountTypeId="LIABILITY" description="Liability"/>
+    <GlAccountType glAccountTypeId="EQUITY" description="Equity"/>
+
+    <!-- GL Account Type hierarchy for income statement -->
+    <GlAccountType glAccountTypeId="REVENUE" parentTypeId="INCOME" hasTable="N" description="Revenue"/>
+    <GlAccountType glAccountTypeId="COGS" parentTypeId="EXPENSE" hasTable="N" description="Cost of Goods Sold"/>
+    <GlAccountType glAccountTypeId="OPERATING_EXPENSE" parentTypeId="EXPENSE" hasTable="N" description="Operating Expense"/>
+    <GlAccountType glAccountTypeId="OTHER_EXPENSE" parentTypeId="EXPENSE" hasTable="N" description="Other Expense"/>
+    <GlAccountType glAccountTypeId="OTHER_INCOME" parentTypeId="INCOME" hasTable="N" description="Other Income"/>
+    <GlAccountType glAccountTypeId="TAX_EXPENSE" parentTypeId="EXPENSE" hasTable="N" description="Tax Expense"/>
+
+    <!-- Reclassify these accounts -->
+    <GlAccountType glAccountTypeId="PURCHASE_PRICE_VAR" parentTypeId="OPERATING_EXPENSE" hasTable="N" description="Tax Expense"/>
+    <GlAccountType glAccountTypeId="COGS_ADJ_AVG_COST" parentTypeId="COGS" hasTable="N" description="COGS Average Cost Adjustment"/>
+
+    <!-- special types for manufacturing expenses -->
+    <GlAccountType glAccountTypeId="MFG_EXPENSE" parentTypeId="OPERATING_EXPENSE" hasTable="N" description="Manufacturing Expense"/>
+    <GlAccountType glAccountTypeId="MFG_EXPENSE_CONTRACT" parentTypeId="MFG_EXPENSE" hasTable="N" description="Contract Manufacturing Expense"/>
+    <GlAccountType glAccountTypeId="MFG_EXPENSE_INTERNAL" parentTypeId="MFG_EXPENSE" hasTable="N" description="Internal Manufacturing Expense"/>
+    <!-- This is used for writing off
+    (a) difference between standard costs and actual costs when standard costing is used 
+    (b) excess of cost of products being disassembled: ie the value of a car - value of its parts -->
+    <GlAccountType glAccountTypeId="MFG_EXPENSE_VARIANCE" parentTypeId="MFG_EXPENSE" hasTable="N" description="Manufacturing Expense Variance"/>
+    <!-- Scrap account for additional parts issued to replace defective ones -->
+    <GlAccountType glAccountTypeId="MFG_EXPENSE_SCRAP" parentTypeId="MFG_EXPENSE" hasTable="N" description="Scrapped Raw Materials Expense"/>
+    <!-- Expense account for a production run which was reverted, but some of whose cost could not be returned to Raw Materials Inventory:
+    ie, asset time and labor already used or some raw materials, like glue, that cannot be used for anything else -->
+    <GlAccountType glAccountTypeId="MFG_EXPENSE_REVPRUN" parentTypeId="MFG_EXPENSE" hasTable="N" description="Expense for Reverted Production Runs"/>
+
+    <!-- track due from vendor, in case we want to use a different GL account than regular accounts receivable -->
+    <GlAccountType glAccountTypeId="DUE_FROM_VENDOR" parentTypeId="" hasTable="N" description="Due From Vendor"/>
+
+    <!-- Inventory value adjustment (usually write downs) -->
+    <GlAccountType glAccountTypeId="INVENTORY_VAL_ADJ" parentTypeId="" hasTable="N" description="Inventory Valuation Adjustment"/>
+
+    <!-- Lockbox cash discount goes directly to this account -->
+    <GlAccountType glAccountTypeId="LOCKBOX_CASH_DISC" parentTypeId="" hasTable="N" description="Lockbox Cash Discount"/>
+
+    <!-- Special account for reconciling parent payments for child invoices.  This is used to offset accounts receiables, etc. -->
+    <GlAccountType glAccountTypeId="PARENT_SUB_BAL_ACCT" parentTypeId="" hasTable="N" description="Parent Sub Account Reconciliation"/>
+
+    <!-- Payment status VOID and legal status changes -->
+    <StatusItem description="Voided" sequenceId="11" statusCode="VOID" statusId="PMNT_VOID" statusTypeId="PMNT_STATUS"/>
+    <!-- If a related payment is voided, the invoice status may be set back to ready -->
+    <StatusValidChange condition="" statusId="INVOICE_PAID" statusIdTo="INVOICE_READY" transitionName="Unpay"/>
+    <StatusValidChange condition="" statusId="PMNT_SENT" statusIdTo="PMNT_VOID" transitionName="Payment Voided"/>
+    <StatusValidChange condition="" statusId="PMNT_RECEIVED" statusIdTo="PMNT_VOID" transitionName="Payment Voided"/>
+
+    <!-- Invoice processing status CONFIRMED -->
+    <StatusType description="Invoice Processing Status" hasTable="N" parentTypeId="" statusTypeId="INVOICE_PROCESS_STTS"/>
+    <StatusItem description="Printed" sequenceId="01" statusCode="PRINTED" statusId="INVOICE_PRINTED" statusTypeId="INVOICE_PROCESS_STTS"/>
+
+    <!-- Configures the GL account types for serialized inventory status changes.  For transitions that should not post, define an entry with no glAccount types. --> 
+    <InventoryStatusGlAccountType statusIdFrom="INV_ON_ORDER" statusIdTo="INV_AVAILABLE" debitGlAccountTypeId="INVENTORY_ACCOUNT" creditGlAccountTypeId="UNINVOICED_SHIP_RCPT"/>
+    <!-- This is turned off because (1) it does not work: createInventoryTransfer does call updateInventoryItem and (2) it would create duplicate transaction entries with the
+    postInventoryItemOwnerChange service
+    <InventoryStatusGlAccountType statusIdFrom="INV_AVAILABLE" statusIdTo="INV_BEING_TRANSFERED" debitGlAccountTypeId="INVENTORY_XFER_OUT" creditGlAccountTypeId="INVENTORY_ACCOUNT"/>
+    -->
+    <InventoryStatusGlAccountType statusIdFrom="INV_AVAILABLE" statusIdTo="INV_DEFECTIVE" debitGlAccountTypeId="INV_CHANGE_ACCOUNT" creditGlAccountTypeId="INVENTORY_ACCOUNT"/>
+    <InventoryStatusGlAccountType statusIdFrom="INV_AVAILABLE" statusIdTo="INV_PROMISED"/> <!-- Inventory reservation, nothing to post. -->
+    <!-- This should not be turned on because inventory transfer would also trigger postInventoryItemOwnerChange which would post to GL
+    <InventoryStatusGlAccountType statusIdFrom="INV_BEING_TRANSFERED" statusIdTo="INV_AVAILABLE" debitGlAccountTypeId="INVENTORY_ACCOUNT" creditGlAccountTypeId="INVENTORY_XFER_IN"/>
+    -->
+    <InventoryStatusGlAccountType statusIdFrom="INV_PROMISED" statusIdTo="INV_DELIVERED" debitGlAccountTypeId="COGS_ACCOUNT" creditGlAccountTypeId="INVENTORY_ACCOUNT"/>
+    <InventoryStatusGlAccountType statusIdFrom="INV_PROMISED" statusIdTo="INV_AVAILABLE"/> <!-- Inventory reservation reversed, nothing to post. -->
+    <InventoryStatusGlAccountType statusIdFrom="INV_PROMISED" statusIdTo="INV_DEFECTIVE" debitGlAccountTypeId="INV_CHANGE_ACCOUNT" creditGlAccountTypeId="INVENTORY_ACCOUNT"/>
+    <InventoryStatusGlAccountType statusIdFrom="INV_RETURNED" statusIdTo="INV_AVAILABLE" debitGlAccountTypeId="INVENTORY_ACCOUNT" creditGlAccountTypeId="COGS_ACCOUNT"/>
+    <InventoryStatusGlAccountType statusIdFrom="INV_RETURNED" statusIdTo="INV_DEFECTIVE" debitGlAccountTypeId="INV_CHANGE_ACCOUNT" creditGlAccountTypeId="COGS_ACCOUNT"/>
+
+    <!-- A pretty unusual type of payment: receipt from a partner to whom we might eventually owe money on the AP account --> 
+    <PaymentType description="Partner Receipt" hasTable="N"  parentTypeId="RECEIPT" paymentTypeId="PARTNER_RECEIPT" systemUse="Y"/>
+
+    <PaymentType description="Finance Charge Payment" hasTable="N"  parentTypeId="RECEIPT" paymentTypeId="INTEREST_RECEIPT" systemUse="N"/>
+
+    <!-- a special payment method type to support a credit issued by a vendor -->
+    <PaymentType description="Vendor Credit" parentTypeId="RECEIPT" paymentTypeId="VENDOR_CREDIT_RCPT" systemUse="N"/>
+
+    <!-- This seems more user friendly -->
+    <InvoiceType invoiceTypeId="INTEREST_INVOICE" description="Finance Charge"/>
+    <InvoiceType invoiceTypeId="PURCHASE_INVOICE" description="Vendor Invoice"/>
+    <InvoiceType invoiceTypeId="RETURN_INVOICE" description="Credit Memo"/>
+
+    <StatusItem description="Pending" statusId="INVOICE_IN_PROCESS"/>
+    <StatusItem description="Ready" statusId="INVOICE_READY"/>
+
+    <!-- Override all the InvoiceItemTypes to give them better names TODO: this isn't organized at all -->
+
+    <!-- interest invoice items -->
+    <InvoiceItemType description="Finance Charge" invoiceItemTypeId="INV_INTRST_CHRG"/>
+
+    <!-- sales invoice items -->
+    <InvoiceItemType description="Adjustment" invoiceItemTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Promotion" invoiceItemTypeId="INV_PROMOTION_ADJ" parentTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Discount" invoiceItemTypeId="INV_DISCOUNT_ADJ" parentTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Fee" invoiceItemTypeId="FEE" parentTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Miscellaneous Charges" invoiceItemTypeId="INV_MISC_CHARGE" parentTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Sales Tax" invoiceItemTypeId="INV_SALES_TAX" parentTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Shipping and Handling" invoiceItemTypeId="INV_SHIPPING_CHARGES" parentTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Surcharge" invoiceItemTypeId="INV_SURCHARGE_ADJ" parentTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Additional Feature" invoiceItemTypeId="INV_ADD_FEATURE" parentTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Warranty" invoiceItemTypeId="INV_WARRANTY_ADJ" parentTypeId="INVOICE_ADJ"/>
+    <InvoiceItemType description="Product" invoiceItemTypeId="INV_PROD_ITEM"/>
+    <InvoiceItemType description="Finished Good" invoiceItemTypeId="INV_FPROD_ITEM" parentTypeId="INV_PROD_ITEM"/>
+    <InvoiceItemType description="Digital Good" invoiceItemTypeId="INV_DPROD_ITEM" parentTypeId="INV_PROD_ITEM"/>
+    <InvoiceItemType description="Finished/Digital Good" invoiceItemTypeId="INV_FDPROD_ITEM" parentTypeId="INV_PROD_ITEM"/>
+    <InvoiceItemType description="Product-Feature" invoiceItemTypeId="INV_PROD_FEATR_ITEM" parentTypeId="INV_PROD_ITEM"/>
+    <InvoiceItemType description="Service Product" invoiceItemTypeId="INV_SPROD_ITEM" parentTypeId="INV_PROD_ITEM"/>
+    <InvoiceItemType description="Work-Effort" invoiceItemTypeId="INV_WE_ITEM"/>
+    <InvoiceItemType description="Time-Entry" invoiceItemTypeId="INV_TE_ITEM"/>
+
+    <!-- a special invoice item designed for claiming items lost in transit, say to a shipper.  To make this work:
+    1.  Create a new variance reason
+    2.  Configure a GL account for your variance reason
+    3.  Configure the same GL account for this invoiceItemType in the DefaultInvoiceItemTypeGlAccount.xml file.
+
+    Then, when the item is lost, your GL entries will be:
+       DR Variance Expense, CR Inventory
+    When you create a "sales invoice" to the shipper, your GL entries will be:
+       DR Accounts Receivable, CR Variance Expense
+       -->
+    <InvoiceItemType description="Lost Item Claim" invoiceItemTypeId="INV_LOST_ITEM_CLAIM"/>
+    <InvoiceItemTypeMap invoiceItemMapKey="LOST_ITEM_CLAIM" invoiceTypeId="SALES_INVOICE" invoiceItemTypeId="INV_LOST_ITEM_CLAIM"/>
+
+    <!-- adjustment invoice items -->
+    <InvoiceItemType description="Adjustment Item" invoiceItemTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Promotion Item" invoiceItemTypeId="ITM_PROMOTION_ADJ" parentTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Replacement Item" invoiceItemTypeId="ITM_REPLACE_ADJ" parentTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Discount Item" invoiceItemTypeId="ITM_DISCOUNT_ADJ" parentTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Fee Item" invoiceItemTypeId="ITM_FEE" parentTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Miscellaneous Charge Item" invoiceItemTypeId="ITM_MISC_CHARGE" parentTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Sales Tax Item" invoiceItemTypeId="ITM_SALES_TAX" parentTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Shipping and Handling Item" invoiceItemTypeId="ITM_SHIPPING_CHARGES" parentTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Surcharge Item" invoiceItemTypeId="ITM_SURCHARGE_ADJ" parentTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Additional Feature Item" invoiceItemTypeId="ITM_ADD_FEATURE" parentTypeId="INVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Warranty Item" invoiceItemTypeId="ITM_WARRANTY_ADJ" parentTypeId="INVOICE_ITM_ADJ"/>
+
+    <!-- invoice item types for purchase (AP) invoices -->
+    <InvoiceItemType description="Adjustment" invoiceItemTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Promotion" invoiceItemTypeId="PINV_PROMOTION_ADJ" parentTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Discount" invoiceItemTypeId="PINV_DISCOUNT_ADJ" parentTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Fee" invoiceItemTypeId="P_FEE" parentTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Miscellaneous Charges" invoiceItemTypeId="PINV_MISC_CHARGE" parentTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Sales Tax" invoiceItemTypeId="PINV_SALES_TAX" parentTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Shipping and Handling" invoiceItemTypeId="PINV_SHIP_CHARGES" parentTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Surcharge" invoiceItemTypeId="PINV_SURCHARGE_ADJ" parentTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Additional Feature" invoiceItemTypeId="PINV_ADD_FEATURE" parentTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Warranty" invoiceItemTypeId="PINV_WARRANTY_ADJ" parentTypeId="PINVOICE_ADJ"/>
+    <InvoiceItemType description="Adjustment Item" invoiceItemTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Promotion Item" invoiceItemTypeId="PITM_PROMOTION_ADJ" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Replacement Item" invoiceItemTypeId="PITM_REPLACE_ADJ" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Discount Item" invoiceItemTypeId="PITM_DISCOUNT_ADJ" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Fee Item" invoiceItemTypeId="PITM_FEE" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Miscellaneous Charges Item" invoiceItemTypeId="PITM_MISC_CHARGE" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Sales Tax Item" invoiceItemTypeId="PITM_SALES_TAX" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Shipping and Handling Item" invoiceItemTypeId="PITM_SHIP_CHARGES" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Surcharge Item" invoiceItemTypeId="PITM_SURCHARGE_ADJ" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Additional Feature Item" invoiceItemTypeId="PITM_ADD_FEATURE" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Warranty Item" invoiceItemTypeId="PITM_WARRANTY_ADJ" parentTypeId="PINVOICE_ITM_ADJ"/>
+    <InvoiceItemType description="Product" invoiceItemTypeId="PINV_PROD_ITEM"/>
+    <InvoiceItemType description="Finished Good" invoiceItemTypeId="PINV_FPROD_ITEM" parentTypeId="PINV_PROD_ITEM"/>
+    <InvoiceItemType description="Digital Good" invoiceItemTypeId="PINV_DPROD_ITEM" parentTypeId="PINV_PROD_ITEM"/>
+    <InvoiceItemType description="Finished/Digital Good" invoiceItemTypeId="PINV_FDPROD_ITEM" parentTypeId="PINV_PROD_ITEM"/>
+    <InvoiceItemType description="Product-Feature" invoiceItemTypeId="PINV_PROD_FEATR_ITEM" parentTypeId="PINV_PROD_ITEM"/>
+    <InvoiceItemType description="Service Product" invoiceItemTypeId="PINV_SPROD_ITEM" parentTypeId="PINV_PROD_ITEM"/>
+    <InvoiceItemType description="Inventory Product" invoiceItemTypeId="PINV_INVPRD_ITEM" parentTypeId="PINV_PROD_ITEM"/>
+    <InvoiceItemType description="Supplies" invoiceItemTypeId="PINV_SUPLPRD_ITEM" parentTypeId="PINV_PROD_ITEM"/>
+    <InvoiceItemType description="Fixed Asset" invoiceItemTypeId="PINV_FXASTPRD_ITEM" parentTypeId="PINV_PROD_ITEM"/>
+    <InvoiceItemType description="Work-Effort" invoiceItemTypeId="PINV_WE_ITEM"/>
+    <InvoiceItemType description="Time-Entry" invoiceItemTypeId="PINV_TE_ITEM"/>
+
+    <!-- shipping charges billed from UPS, FedEx, DHL, etc. -->
+    <InvoiceItemType description="Shipping Charge from Carrier" invoiceItemTypeId="PINV_CARRIER_SHIP"/>
+    <InvoiceItemTypeMap invoiceItemMapKey="LOST_ITEM_CLAIM" invoiceTypeId="PURCHASE_INVOICE" invoiceItemTypeId="PINV_CARRIER_SHIP"/>
+
+    <!-- invoice items for customer returns -->
+    <InvoiceItemType description="Return Product" invoiceItemTypeId="CRT_PROD_ITEM"/>
+    <InvoiceItemType description="Return Finished Good" invoiceItemTypeId="CRT_FPROD_ITEM" parentTypeId="CRT_PROD_ITEM"/>
+    <InvoiceItemType description="Return Digital Good" invoiceItemTypeId="CRT_DPROD_ITEM" parentTypeId="CRT_PROD_ITEM"/>
+    <InvoiceItemType description="Return Finished/Digital Good" invoiceItemTypeId="CRT_FDPROD_ITEM" parentTypeId="CRT_PROD_ITEM"/>
+    <InvoiceItemType description="Return Product-Feature" invoiceItemTypeId="CRT_PROD_FEATR_ITEM" parentTypeId="CRT_PROD_ITEM"/>
+    <InvoiceItemType description="Return Service Product" invoiceItemTypeId="CRT_SPROD_ITEM" parentTypeId="CRT_PROD_ITEM"/>
+    <InvoiceItemType description="Return Work-Effort" invoiceItemTypeId="CRT_WE_ITEM"/>
+    <InvoiceItemType description="Return Time-Entry" invoiceItemTypeId="CRT_TE_ITEM"/>
+    <InvoiceItemType description="Return Promotion" invoiceItemTypeId="CRT_PROMOTION_ADJ"/>
+    <InvoiceItemType description="Return Replacement" invoiceItemTypeId="CRT_REPLACE_ADJ"/>
+    <InvoiceItemType description="Return Discount" invoiceItemTypeId="CRT_DISCOUNT_ADJ"/>
+    <InvoiceItemType description="Return Fee" invoiceItemTypeId="CRT_FEE_ADJ"/>
+    <InvoiceItemType description="Return Miscellaneous Charges" invoiceItemTypeId="CRT_MISC_ADJ"/>
+    <InvoiceItemType description="Return Sales Tax" invoiceItemTypeId="CRT_SALES_TAX_ADJ"/>
+    <InvoiceItemType description="Return Shipping and Handling" invoiceItemTypeId="CRT_SHIPPING_ADJ"/>
+    <InvoiceItemType description="Return Surcharge" invoiceItemTypeId="CRT_SURCHARGE_ADJ"/>
+    <InvoiceItemType description="Return Additional Feature" invoiceItemTypeId="CRT_ADD_FEATURE_ADJ"/>
+    <InvoiceItemType description="Return Warranty" invoiceItemTypeId="CRT_WARRANTY_ADJ"/>
+    <InvoiceItemType description="Return Marketing Package Adjustment" invoiceItemTypeId="CRT_MKTG_PKG_ADJ"/>
+    <InvoiceItemType description="Return Manual Adjustment" invoiceItemTypeId="CRT_MAN_ADJ"/>
+
+    <!-- invoice item types for commission invoices -->
+    <InvoiceItemType description="Commission" invoiceItemTypeId="COMM_INV_ITEM"/>
+    <InvoiceItemType description="Commission Adjustment" invoiceItemTypeId="COMM_INV_ADJ"/>
+
+    <!-- an invoice item type for contract manufacturing expenses with a special GL account -->
+    <InvoiceItemType description="Contract manufacturing expense" invoiceItemTypeId="PINV_MFG_CONTRACT"/>
+    <InvoiceItemTypeMap invoiceItemMapKey="MFG_CONTRACT" invoiceTypeId="PURCHASE_INVOICE" invoiceItemTypeId="PINV_MFG_CONTRACT"/>
+
+    <!-- invoice item types for invoices created from inventory transfers such as those from a third party or affiliate -->
+    <InvoiceItemType description="Inventory Xfer In" invoiceItemTypeId="PINV_XFRIN_PAYABLE"/>
+    <InvoiceItemTypeMap invoiceItemMapKey="XFER_IN_PAY" invoiceTypeId="PURCHASE_INVOICE" invoiceItemTypeId="PINV_XFRIN_PAYABLE"/>
+    <InvoiceItemType description="Inventory Xfer Out" invoiceItemTypeId="INV_XFROUT_RCVABL"/>
+    <InvoiceItemTypeMap invoiceItemMapKey="XFER_OUT_RECV" invoiceTypeId="SALES_INVOICE" invoiceItemTypeId="INV_XFROUT_RCVABL"/>
+
+    <!-- Third party billing seed data -->
+    <PaymentMethodType paymentMethodTypeId="EXT_BILL_3RDPTY" description="Bill to Third Party"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_BILL_FROM_CUST" description="Billed From Customer"/>
+    <InvoiceItemTypeMap invoiceItemMapKey="CUST_3RDPTY_BILL" invoiceTypeId="SALES_INVOICE" invoiceItemTypeId="ITM_BILL_FROM_CUST"/>
+
+    <!-- Adjustments for closed invoices.  -->
+    <InvoiceAdjustmentType invoiceAdjustmentTypeId="WRITEOFF" description="Write Off"/>
+    <InvoiceAdjustmentType invoiceAdjustmentTypeId="CASH_DISCOUNT" description="Cash Discount"/>
+    <InvoiceAdjustmentType invoiceAdjustmentTypeId="EARLY_PAY_DISCT" description="Early Payment Discount"/>
+    <!-- GL account types for their configuration -->
+    <GlAccountType glAccountTypeId="ADJUSTMENT" parentTypeId="" hasTable="N" description="Revenue"/>
+    <GlAccountType glAccountTypeId="ACCTRECV_ADJUST" parentTypeId="ADJUSTMENT" hasTable="N" description="Accounts Receivable Adjustment"/>
+    <GlAccountType glAccountTypeId="ACCTPAY_ADJUST" parentTypeId="ADJUSTMENT" hasTable="N" description="Accounts Payable Adjustment"/>
+
+    <!-- a GL fiscal type for encumbrances on the ledger and types of encumberance details -->
+    <GlFiscalType glFiscalTypeId="ENCUMBRANCE" description="Encumbrance"/>
+
+</entity-engine-xml>

@@ -1,0 +1,310 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.math.*;
+import java.text.NumberFormat;
+import java.util.*;
+import javolution.util.FastSet;
+
+import org.ofbiz.accounting.invoice.*;
+import org.ofbiz.accounting.payment.*;
+import org.ofbiz.accounting.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.party.party.*;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.base.entities.InvoiceAdjustment;
+import org.opentaps.domain.base.entities.Party;
+import org.opentaps.domain.base.entities.PaymentApplication;
+import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
+import org.opentaps.domain.billing.payment.Payment;
+import org.opentaps.foundation.entity.Entity;
+import org.opentaps.foundation.entity.EntityNotFoundException;
+import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.repository.ofbiz.Repository;
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+
+delegator = request.getAttribute("delegator");
+// this gets overrided later according to the payment type (if we can get one)
+context.put("decoratorLocation", "component://opentaps-common/widget/screens/common/CommonScreens.xml");
+
+boolean isDisbursement = false;
+paymentId = UtilCommon.getParameter(request, "paymentId");
+
+dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+billingDomain = dl.loadDomainsDirectory().getBillingDomain();
+paymentRepository = billingDomain.getPaymentRepository();
+Payment payment = null;
+try {
+    payment = paymentRepository.getPaymentById(paymentId);
+} catch (FoundationException) {
+    // let the payment = null check deal with this
+}
+if (payment == null) {
+    UtilMessage.addError(request, "FinancialsError_CannotFindPaymentId", UtilMisc.toMap("paymentId", paymentId));
+    return "error";
+}
+
+if (payment.isPayCheck()) {
+    context.put("allowed", false);
+    return;
+}
+
+context.put("paymentId", paymentId);
+context.put("payment", payment);
+
+// update permission
+hasUpdatePermission = security.hasEntityPermission("FINANCIALS", "_AP_PUPDT", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PUPDT", userLogin);
+context.put("hasUpdatePermission", hasUpdatePermission);
+
+// apply permission
+hasApplyPermission = ( security.hasEntityPermission("FINANCIALS", "_AP_PAPPL", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PAPPL", userLogin) );
+if (hasApplyPermission && (payment.isConfirmed())) {
+    hasApplyPermission = false;
+}
+context.put("hasApplyPermission", hasApplyPermission);
+
+// create permission
+hasCreatePermission = security.hasEntityPermission("FINANCIALS", "_AP_PCRTE", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PCRTE", userLogin);
+context.put("hasCreatePermission", hasCreatePermission);
+
+// by default, disbursements have a link to the vendorStatement page, receipts have a link to the customerStatement page, but these are exceptions.
+// For example, a customer refund is a disbursement but the right statement link is the customerStatement page
+Map statementForPayment = UtilMisc.toMap("CUSTOMER_REFUND", "customerStatement", "COMMISSION_PAYMENT", "commissionsStatement");
+if (UtilValidate.isNotEmpty(payment.getPaymentTypeId())) {
+    context.put("statementLink", statementForPayment.get(payment.getPaymentTypeId()));
+}
+
+if (UtilValidate.isNotEmpty(payment.getPaymentMethodId())) {
+    context.put("paymentMethod", payment.getPaymentMethod());
+}
+
+// Sets up payment and related data for the FTL
+isDisbursement = payment.isDisbursement();
+context.put("isDisbursement", isDisbursement);
+if (isDisbursement) {
+    partyNameTo = PartyHelper.getPartyName(delegator, payment.getPartyIdTo(), false);
+    context.put("partyNameTo", partyNameTo);
+    // get the tags
+    context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(payment.getOrganizationPartyId(), UtilAccountingTags.DISBURSEMENT_PAYMENT_TAG, delegator));
+} else {
+    partyNameFrom = PartyHelper.getPartyName(delegator, payment.getPartyIdFrom(), false);
+    context.put("partyNameFrom", partyNameFrom);
+    // get the tags
+    context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(payment.getOrganizationPartyId(), UtilAccountingTags.RECEIPT_PAYMENT_TAG, delegator));
+}
+paymentType = payment.getPaymentType();
+context.put("paymentType",paymentType);
+
+paymentMethodTypeId = payment.getPaymentMethodTypeId();
+if (paymentMethodTypeId == null) {
+    Debug.logError("paymentMethodTypeId is Null: " + payment, "viewPayment.bsh" );
+} else {
+    paymentMethodType = payment.getPaymentMethodType();
+    context.put("paymentMethodType",paymentMethodType);
+}
+
+// get this from the session or from the parameters. Note that it doesn't matter if this is set to true and there is no child accounts involved
+// it only alters the UI in case there are child accounts
+showChildAccountsInvoices = "Y".equals(UtilCommon.getParameter(context, "showChildAccountsInvoices"));
+
+// should we also list invoices from the payer child accounts
+// the option is only relevant is the payer is an Account, and if the payment is a customer payment and the payer has sub accounts
+if (!isDisbursement && payment.getPartyFrom() != null && payment.getPartyFrom().isAccount()) {
+    partyFrom = payment.getPartyFrom().asAccount();
+    subAccounts = partyFrom.getSubAccounts();
+    hasChildAccountsToShow = UtilValidate.isNotEmpty(subAccounts);
+} else {
+    hasChildAccountsToShow = false;
+}
+
+// save it in the session, so this applies as the user preference during the session
+request.getSession().setAttribute("showChildAccountsInvoices", showChildAccountsInvoices?"Y":"N");
+
+context.put("hasChildAccountsToShow", hasChildAccountsToShow);
+context.put("showChildAccountsInvoices", showChildAccountsInvoices);
+
+// figure out how much has already been applied and how much is still open
+BigDecimal paymentApplied = payment.getAppliedAmount();
+BigDecimal paymentToApply = payment.getAmount().subtract(paymentApplied).setScale(Payment.DECIMALS, Payment.ROUNDING);
+context.put("amountToApply", paymentToApply);
+
+// determine if the payment can still be applied to outstanding invoices, which is the case if the payment is *not* PMNT_CONFIRMED
+boolean hasAmountToApply = false;
+boolean isTaxPayment = payment.isTaxPayment();
+
+InvoiceRepositoryInterface invoiceRepository = billingDomain.getInvoiceRepository();
+
+if (! payment.isVoided()) {
+    // Get the payments already applied
+    applicationIds = new FastSet();
+    applications = payment.getRelated(PaymentApplication.class);
+    paymentApplicationsList = new ArrayList();
+    paymentApplicationsListGlAccounts = new ArrayList();
+    for (application : applications) {
+    	applicationIds.add(application.getPaymentApplicationId());
+
+        paymentApplicationMap = new HashMap();
+        paymentApplicationMap.put("paymentId", application.getPaymentId());
+        paymentApplicationMap.put("paymentApplicationId", application.getPaymentApplicationId());
+        paymentApplicationMap.put("amountApplied", application.getAmountApplied());
+        paymentApplicationMap.put("taxAuthGeoId", application.getTaxAuthGeoId());
+        
+        invoiceId = application.getInvoiceId();
+        invoice = null;
+        if (UtilValidate.isNotEmpty(invoiceId)) {
+            invoice = invoiceRepository.getInvoiceById(invoiceId);
+            paymentApplicationMap.put("invoiceId", invoiceId);
+            paymentApplicationMap.put("invoiceRefNum", invoice.getReferenceNumber());
+        }
+
+        overrideGlAccountId = application.getOverrideGlAccountId();
+        if (UtilValidate.isNotEmpty(overrideGlAccountId)) {
+            glAccount = delegator.findByPrimaryKeyCache("GlAccount", UtilMisc.toMap("glAccountId", overrideGlAccountId));
+            if (glAccount != null) {
+                paymentApplicationMap.put("overrideGlAccountId", overrideGlAccountId);
+                paymentApplicationMap.put("glAccount", glAccount);
+                paymentApplicationMap.put("currencyUomId", payment.getCurrencyUomId());
+                paymentApplicationsListGlAccounts.add(paymentApplicationMap);
+            }
+        } else {
+            if (UtilValidate.isNotEmpty(invoiceId)) {
+                paymentApplicationMap.put("description",invoice.getDescription());
+                paymentApplicationMap.put("invoiceDate", invoice.getInvoiceDate());
+                paymentApplicationMap.put("invoiceRefNum", invoice.getReferenceNumber());
+
+                outstandingAmount = invoice.getPendingOpenAmount();
+                if (outstandingAmount.signum() != 0) {
+                    paymentApplicationMap.put("outstandingAmount", outstandingAmount);
+                }
+            }
+            paymentApplicationsList.add(paymentApplicationMap);
+        }
+    }
+
+    context.put("paymentApplicationsList", paymentApplicationsList);
+    context.put("paymentApplications", applications);
+    context.put("paymentApplicationsListGlAccounts", paymentApplicationsListGlAccounts);
+
+    // get the invoice adjustments
+    invoiceAdjustments = payment.getRelated(InvoiceAdjustment.class);
+    context.put("adjustments", invoiceAdjustments);
+
+    // get list of taxAuths.
+    taxAuthGeoIds =null;
+    if (isTaxPayment && ! payment.isConfirmed()) {
+        // if the payment is some sort of a tax payment, then find the Geos for which this tax payment can be applied
+        // based on the pay-to party.  Data is used to populate taxAuthGeoId for PaymentApplications
+        taxAuthGeoIds = delegator.findByAnd("TaxAuthorityAndDetail",UtilMisc.toMap("taxAuthPartyId", payment.getPartyIdTo()));
+        context.put("taxAuthGeoIds", taxAuthGeoIds);
+    }
+    if (! payment.isCancelled() &&  paymentToApply.doubleValue() > 0){
+        hasAmountToApply = true;
+
+        // Based on Payment.parentTypeId see if we need to read unpaid invoices or get list of taxAuths.
+        if (! isTaxPayment) {
+            // get a list of all the invoices which are not canceled, written off, or paid, and which are applicable to this payment based on parties
+            invoiceParties = UtilMisc.toList(payment.getPartyIdFrom());
+
+            // if set to, also get the sub accounts of the party that sent the payment
+            if (hasChildAccountsToShow && showChildAccountsInvoices) {
+                invoiceParties.addAll(Entity.getDistinctFieldValues(subAccounts, Party.Fields.partyId));
+            }
+
+            conditions = UtilMisc.toList(new EntityExpr("partyId", EntityOperator.IN, invoiceParties),
+                                         new EntityExpr("partyIdFrom", EntityOperator.EQUALS, payment.getPartyIdTo()),
+                                         new EntityExpr("statusId", EntityOperator.NOT_IN, UtilMisc.toList("INVOICE_CANCELLED","INVOICE_WRITEOFF","INVOICE_PAID", "INVOICE_VOIDED")));
+            entityConditionList = new EntityConditionList(conditions, EntityOperator.AND);
+            List invoices = delegator.findByCondition("Invoice", entityConditionList, null, null);
+            List invoicesDomain = Repository.loadFromGeneric(Invoice.class, invoices, invoiceRepository);
+
+            // now create a list of Maps which hold invoice information, the amountApplied, and the amount to be applied (ie, still open)
+            if (UtilValidate.isNotEmpty(invoicesDomain)) {
+                ArrayList invoicesList = new ArrayList();  // to pass back to the screeen list of unapplied invoices
+                for (Invoice invoice : invoicesDomain) {
+                    outstandingAmount = invoice.getPendingOpenAmount();
+                    if (outstandingAmount.signum() != 0) {
+                        // put in the map
+                        Map invoiceMap = new HashMap();
+                        invoiceMap.put("invoiceId", invoice.getInvoiceId());
+                        invoiceMap.put("currencyUomId", invoice.getCurrencyUomId());
+                        invoiceMap.put("amount", invoice.getInvoiceTotal());
+                        invoiceMap.put("invoiceRefNum", invoice.getReferenceNumber());
+                        invoiceMap.put("description",invoice.getDescription());
+                        invoiceMap.put("invoiceDate", invoice.getInvoiceDate());
+                        invoiceMap.put("amountApplied", invoice.getAppliedAmount());
+                        invoiceMap.put("outstandingAmount", outstandingAmount);
+                        if (paymentToApply.compareTo(outstandingAmount) < 0 ) {
+                            invoiceMap.put("amountToApply", paymentToApply);
+                        } else {
+                            invoiceMap.put("amountToApply", outstandingAmount);
+                        }
+                        invoicesList.add(invoiceMap);
+                    }
+                }
+                context.put("invoices",invoicesList);
+            }
+        } else {
+            if (UtilValidate.isNotEmpty(taxAuthGeoIds)) {
+                ArrayList taxAuthPaymentApplicationList = new ArrayList();
+                Iterator p = taxAuthGeoIds.iterator();
+                while (p.hasNext()) {
+                    taxAuth = p.next();
+                    Map taxAuthPaymentApplicationMap = new HashMap();
+                    taxAuthPaymentApplicationMap.put("paymentId",paymentId);
+                    taxAuthPaymentApplicationMap.put("geoId",taxAuth.get("geoId"));
+                    taxAuthPaymentApplicationMap.put("amountToApply",paymentToApply);
+                    taxAuthPaymentApplicationList.add(taxAuthPaymentApplicationMap);
+
+                }
+                context.put("taxAuthPaymentApplicationList",taxAuthPaymentApplicationList);
+            }
+        }
+    }
+}
+
+// need to customize view based on type of payment.
+context.put("isTaxPayment", isTaxPayment);
+context.put("hasAmountToApply", hasAmountToApply);
+if (isDisbursement) {
+    parameters.put("headerItem", "payables");
+    context.put("addPaymentTypeId", "DISBURSEMENT");
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/payables/PayablesScreens.xml");
+} else {
+    parameters.put("headerItem", "receivables");
+    context.put("addPaymentTypeId", "RECEIPT");
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml");
+}
+
+// put to history
+context{"history"} = UtilCommon.makeHistoryEntry(
+    UtilMessage.expandLabel("FinancialsNavHistoryPayment", locale,
+        UtilMisc.toMap(
+            "paymentTypeName", paymentType.get("description", locale),
+            "paymentId", payment.getPaymentId()
+        )
+    ),
+    "viewPayment",
+     UtilMisc.toList("paymentId")
+);

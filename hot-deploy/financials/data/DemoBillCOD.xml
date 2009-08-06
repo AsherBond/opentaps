@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+    <!-- Support COD billing process: customer invoices are paid by "Paid via COD" and an invoice for the COD Amount minus COD Fee is generated to the Carrier -->
+    <PaymentMethodType paymentMethodTypeId="EXT_BILL_3RDPTY_COD" description="Paid via COD"/>
+
+    <InvoiceItemType invoiceItemTypeId="ITM_BILL_FRM_COD" description="COD Receipt"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_BILL_FRM_COD_ADJ" description="COD Commission"/>
+
+    <!-- This account must not have glAccountTypeId of ACCOUNTS_RECEIVABLE or it will show up on statements and balance summaries,
+    negating the effects of making a COD payment to a customer invoice -->
+    <GlAccount glAccountId="126100" parentGlAccountId="120000" accountCode="126100"
+        glAccountClassId="CURRENT_ASSET" glAccountTypeId=""
+        accountName="UNINVOICED COD RECEIPTS" postedBalance="0.0"/>
+    <GlAccount glAccountId="731200" parentGlAccountId="730000" accountCode="731200"
+        glAccountClassId="SGA_EXPENSE" glAccountTypeId=""
+        accountName="CARRIER COD FEES" postedBalance="0.0"/>
+
+    <GlAccountOrganization glAccountId="126100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="731200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+
+    <InvoiceItemTypeGlAccount invoiceItemTypeId="ITM_BILL_FRM_COD" organizationPartyId="Company" glAccountId="126100"/>
+    <InvoiceItemTypeGlAccount invoiceItemTypeId="ITM_BILL_FRM_COD_ADJ" organizationPartyId="Company" glAccountId="731200"/>
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="EXT_BILL_3RDPTY_COD" organizationPartyId="Company" glAccountId="126100"/>
+
+</entity-engine-xml>

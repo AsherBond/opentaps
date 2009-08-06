@@ -1,0 +1,192 @@
+/* 
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.*;
+ 
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.accounting.util.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.*;
+
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+
+//Data Prep for Editing a Payment
+
+paymentTypeId="RECEIPT";
+currencyUomId="";
+
+// this gets overrided later according to the payment type (if we can get one)
+context.put("decoratorLocation", "component://opentaps-common/widget/screens/common/CommonScreens.xml");
+
+boolean isDisbursement = false;  // by default, assuming that it's a receipt (wishful thinking?)
+paymentId = parameters.get("paymentId");
+if (paymentId == null) {
+  paymentId = request.getParameter("paymentId");
+}
+
+GenericValue paymentValue;
+// have paymentId, get the Payment so we can edit it
+if (UtilValidate.isNotEmpty(paymentId)) {
+    // get Payment entity
+    paymentValue = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId));
+    // Payment found
+    if (paymentValue != null) {   
+        context.put("paymentValue", paymentValue);
+        isDisbursement = UtilAccounting.isDisbursement(paymentValue);
+        if (isDisbursement) {
+            paymentTypeId = "DISBURSEMENT";
+        }
+        context.put("paymentTypeId", paymentTypeId);
+    } else { // Payment not found, bad paymentId
+        UtilMessage.addError(request, "FinancialsError_CannotFindPaymentId", UtilMisc.toMap("paymentId", paymentId));
+        return "error";
+    }
+    currencyUomId = paymentValue.get("currencyUomId");
+    if (currencyUomId == null) {
+        Debug.logError("currencyUomId is Null" + paymentValue, "editPayment.bsh" );
+    }
+    paymentMethodTypeId = paymentValue.get("paymentMethodTypeId");
+    if (paymentMethodTypeId == null) {
+        Debug.logError("paymentMethodTypeId is Null" + paymentValue, "editPayment.bsh" );
+    }
+} else { // no paymentId given, this is for a new Payment
+    paymentTypeId = request.getParameter("paymentTypeId");
+    // check required paymentTypeId
+    if (!"RECEIPT".equals(paymentTypeId) && !"DISBURSEMENT".equals(paymentTypeId)) {
+        // we might have a create payment form submitted with error, try to get the original value
+        paymentTypeId = request.getParameter("paymentType");
+    }
+    context.put("paymentType", paymentTypeId);
+    if (!"RECEIPT".equals(paymentTypeId) && !"DISBURSEMENT".equals(paymentTypeId)) {
+        UtilMessage.addError(request, "FinancialsError_IllegalPaymentTypeId", UtilMisc.toMap("paymentId", paymentId));
+        return "error";
+    } else {
+        isDisbursement = "DISBURSEMENT".equals(paymentTypeId);
+    }
+}
+context.put("isDisbursement", isDisbursement);
+
+
+// set up the documentation and decorator
+if (isDisbursement) {
+    context.put("screenState", "makePayment");
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/payables/PayablesScreens.xml");
+    // get the tags
+    context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.DISBURSEMENT_PAYMENT_TAG, delegator));
+} else {
+    context.put("screenState", "receivePayment");
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml");
+    // get the tags
+    context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.RECEIPT_PAYMENT_TAG, delegator));
+}
+
+// default payment type based on either on the payment or whether it's disbursement or not
+if (UtilValidate.isNotEmpty(paymentValue)) {
+    context.put("defaultPaymentTypeId", paymentValue.get("paymentTypeId"));
+} else {
+    if (isDisbursement) {
+        context.put("defaultPaymentTypeId", "VENDOR_PAYMENT");
+    } else {
+        context.put("defaultPaymentTypeId", "CUSTOMER_PAYMENT");
+    }
+}
+
+organizationPartyId = context.get("organizationPartyId");
+context.put("organizationPartyId", organizationPartyId);
+organizationParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", organizationPartyId));
+
+supportedPaymentTypes = null;
+paymentMethodList = null;
+
+
+if (isDisbursement) {
+    parameters.put("headerItem","payables");
+    if ( paymentValue != null && paymentValue.get( "partyIdTo" ) != null ) {
+        partyIdTo = paymentValue.getString("partyIdTo");
+    } else {
+        partyIdTo = parameters.get("partyId");
+    }
+    if (UtilValidate.isEmpty(partyIdTo)) {
+        partyIdTo = parameters.get("partyIdTo");
+    }
+    if (UtilValidate.isNotEmpty(partyIdTo)) {
+        toParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyIdTo));
+        context.put("toParty", toParty);
+    }
+    paymentMethodList = EntityUtil.filterByDate(organizationParty.getRelated("PaymentMethod", UtilMisc.toList("paymentMethodTypeId")));
+
+} else {
+    parameters.put("headerItem", "receivables");
+    if ( paymentValue != null && paymentValue.get( "partyIdFrom" ) != null ) {
+        partyIdFrom = paymentValue.getString("partyIdFrom");
+    } else {
+        partyIdFrom = parameters.get("partyId");
+    }
+    if (UtilValidate.isEmpty(partyIdFrom)) {
+        partyIdFrom = parameters.get("partyIdFrom");
+    }
+    if (UtilValidate.isNotEmpty(partyIdFrom)) {
+        fromParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyIdFrom));
+        if (fromParty != null) {
+            context.put("fromParty", fromParty);
+            paymentMethodList = EntityUtil.filterByDate(fromParty.getRelated("PaymentMethod", UtilMisc.toList("paymentMethodTypeId")));
+        }
+    }
+    paymentMethodTypeList = UtilFinancial.getSimpleCustomerPaymentMethodTypes(delegator);
+    context.put("paymentMethodTypeList",paymentMethodTypeList);
+}
+context.put("paymentMethodList",paymentMethodList);
+
+// find all not systemUse paymentType, note that systemUse could be null
+orConditionList = new LinkedList();
+orConditionList.add(new EntityExpr("systemUse", EntityOperator.EQUALS, "N"));
+orConditionList.add(new EntityExpr("systemUse", EntityOperator.EQUALS, null));
+orConditions = new EntityConditionList(orConditionList, EntityOperator.OR);
+allPaymentTypes = delegator.findByAnd("PaymentType", UtilMisc.toList(orConditions));
+paymentTypeList = new ArrayList();
+for (int i=0; i < allPaymentTypes.size(); i++) {
+     // iterator all allPaymentTypes to get match result
+     paymentType = allPaymentTypes.get(i);
+     if (isDisbursement && (UtilObject.equalsHelper(paymentType.getString("parentTypeId"), "DISBURSEMENT") || UtilObject.equalsHelper(paymentType.getString("parentTypeId"), "TAX_PAYMENT"))) {
+         paymentTypeList.add(paymentType);
+     } else if (!isDisbursement && UtilObject.equalsHelper(paymentType.getString("parentTypeId"), "RECEIPT")) {
+         paymentTypeList.add(paymentType);
+     }
+}
+
+
+context.put("paymentTypeList", paymentTypeList);
+
+if (UtilValidate.isEmpty(currencyUomId)) {
+    Debug.logInfo("currencyUomId is Null Getting From Preference" + currencyUomId, "editPayment.bsh" );
+    // Get the base currency for the organization
+    context.put("orgCurrencyUomId", UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
+}
+context.put("currencyUomId",currencyUomId);
+currencyUoms = delegator.findByAndCache("Uom",UtilMisc.toMap("uomTypeId","CURRENCY_MEASURE"));
+context.put("currencyUoms",currencyUoms);
+
+// get the default bank settlement account's payment method
+defaultBankSettlement = delegator.findByPrimaryKeyCache("GlAccountTypeDefault", UtilMisc.toMap("organizationPartyId", organizationPartyId, "glAccountTypeId", "BANK_STLMNT_ACCOUNT"));
+if (UtilValidate.isNotEmpty(defaultBankSettlement)) {
+    defaultPaymentMethod = EntityUtil.getFirst(delegator.findByAnd("PaymentMethod", UtilMisc.toMap("partyId", organizationPartyId, "glAccountId", defaultBankSettlement.get("glAccountId"))));
+    if (UtilValidate.isNotEmpty(defaultPaymentMethod)) {
+        context.put("defaultPaymentMethodId", defaultPaymentMethod.get("paymentMethodId"));
+    }
+}

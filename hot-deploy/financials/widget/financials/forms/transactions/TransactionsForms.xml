@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <!-- list accounting transactions -->
+    <form name="listAcctgTrans" type="list" target=""
+        default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
+        header-row-style="boxtop"
+        list-iterator-name="acctgTransListIt" paginate-target="transactions">
+        <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionId}" widget-style="linktext">
+            <hyperlink target="viewAcctgTrans?acctgTransId=${acctgTransId}" description="${acctgTransId}"/>
+        </field>
+        <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
+            <display-entity entity-name="AcctgTransType" cache="true"/>
+        </field>
+        <field name="isPosted" title="${uiLabelMap.FinancialsIsPosted}"><display/></field>
+        <field name="partyId" title="${uiLabelMap.PartyParty}">
+            <display-entity entity-name="PartyNameView" description="${groupName} ${firstName} ${lastName} (${partyId})"/>
+        </field>
+        <field name="transactionDate" title="${uiLabelMap.FinancialsTransactionDate}"><display/></field>
+        <field name="scheduledPostingDate" title="${uiLabelMap.FinancialsScheduledPostingDate}"><display/></field>
+        <field name="postedDate" title="${uiLabelMap.FinancialsPostedDate}"><display/></field>
+    </form>
+
+     <form name="listUnpostedAcctgTrans" type="list" target=""
+        default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
+        header-row-style="boxtop"
+        list-iterator-name="acctgTransListIt" paginate-target="transactions">
+        <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionId}" widget-style="linktext">
+            <hyperlink target="viewAcctgTrans?acctgTransId=${acctgTransId}" description="${acctgTransId}"/>
+        </field>
+        <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
+            <display-entity entity-name="AcctgTransType" cache="true"/>
+        </field>
+        <field name="isPosted" title="${uiLabelMap.FinancialsIsPosted}"><display/></field>
+        <field name="partyId" title="${uiLabelMap.PartyParty}">
+            <display-entity entity-name="PartyNameView" description="${groupName} ${firstName} ${lastName} (${partyId})"/>
+        </field>
+        <field name="transactionDate" title="${uiLabelMap.FinancialsTransactionDate}"><display/></field>
+        <field name="scheduledPostingDate" title="${uiLabelMap.FinancialsScheduledPostingDate}"><display/></field>
+        <field name="Post" title="Post" widget-style="buttontext" use-when="isPosted!=void&amp;&amp;isPosted!=null&amp;&amp;isPosted.equals(&quot;N&quot;)">
+            <hyperlink target="postAcctgTrans?acctgTransId=${acctgTransId}" description="Post"/>
+        </field>
+    </form>
+
+    <form name="findAcctgTransForm" type="single" target=""
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="findAcctgTransId" title="${uiLabelMap.FinancialsTransactionId}"><text/></field>
+        <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options description="${description}" entity-name="AcctgTransType" cache="true">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="partyId" title="${uiLabelMap.PartyPartyId}">
+            <!-- TODO: need lookup controller and maybe screen/form -->
+            <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
+        </field>
+        <field name="glFiscalTypeId" title="${uiLabelMap.GlFiscalType}">
+            <drop-down allow-empty="true" current="selected" no-current-selected-key="ACTUAL">
+                <entity-options description="${description}" entity-name="GlFiscalType" cache="true">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="isPosted" title="${uiLabelMap.FinancialsIsPosted}">
+            <drop-down allow-empty="true" no-current-selected-key="Y">
+                <option description="${uiLabelMap.CommonNo}" key="N"/>
+                <option description="${uiLabelMap.CommonYes}" key="Y"/>
+            </drop-down>
+        </field> 
+        <field name="performFind">
+            <hidden value="Y"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- as above, but specify isPosted=N explicitly -->
+    <form name="findUnpostedAcctgTransForm" type="single" target=""
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="findAcctgTransId" title="${uiLabelMap.FinancialsTransactionId}"><text/></field>
+        <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options description="${description}" entity-name="AcctgTransType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="partyId" title="${uiLabelMap.PartyPartyId}">
+            <!-- TODO: need lookup controller and maybe screen/form -->
+            <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
+        </field>
+        <field name="isPosted">
+            <hidden value="N"/>
+        </field> 
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+
+    <form name="viewAcctgTrans" type="single" target="updateAcctgTransForm" default-map-name="acctgTrans"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <auto-fields-entity entity-name="AcctgTrans" default-field-type="display"/>
+        <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
+            <display-entity entity-name="AcctgTransType"/>
+        </field>
+        <field name="partyId" widget-area-style="linktext">
+            <display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
+        </field>
+        <field name="invoiceId" widget-area-style="linktext">
+            <hyperlink description="${acctgTrans.invoiceId}" target="viewInvoice?invoiceId=${acctgTrans.invoiceId}"/>
+        </field>
+        <field name="inventoryItemId" widget-area-style="linktext">
+            <hyperlink description="${acctgTrans.inventoryItemId}" target="/facility/control/EditInventoryItem?inventoryItemId=${acctgTrans.inventoryItemId}" target-type="inter-app"/>
+        </field>
+        <field name="paymentId" widget-area-style="linktext">
+            <hyperlink description="${acctgTrans.paymentId}" target="viewPayment?paymentId=${acctgTrans.paymentId}"/>
+        </field>
+    </form>
+
+    <form name="updateAcctgTransForm" type="single" target="updateAcctgTrans" default-map-name="acctgTrans"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <auto-fields-service service-name="updateAcctgTrans"/>
+        <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionId}" widget-style="tabletext"><display/></field>
+        <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options description="${description}" entity-name="AcctgTransType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="transactionDate"><date-time/></field>
+        <field name="partyId" title="${uiLabelMap.PartyPartyId}">
+            <!-- TODO: need lookup controller and maybe screen/form -->
+            <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
+        </field>
+        <field name="isPosted" title="${uiLabelMap.FinancialsIsPosted}">
+            <drop-down allow-empty="false" current="selected">
+                <option description="${uiLabelMap.CommonNo}" key="N"/>
+                <option description="${uiLabelMap.CommonYes}" key="Y"/>
+            </drop-down>
+        </field> 
+        <field name="glFiscalTypeId" title="${uiLabelMap.GlFiscalType}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options description="${description}" entity-name="GlFiscalType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}">
+            <textarea/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit" use-when="!acctgTrans.get(&quot;isPosted&quot;).equals(&quot;Y&quot;)">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+    <form name="createAcctgTransForm" type="single" target="createAcctgTrans"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <auto-fields-service service-name="createAcctgTrans"/>
+        <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options description="${description}" entity-name="AcctgTransType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="transactionDate"><date-time default-value="${bsh:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
+        <field name="partyId" title="${uiLabelMap.PartyPartyId}">
+            <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
+        </field>
+        <field name="glFiscalTypeId" title="${uiLabelMap.GlFiscalType}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options description="${description}" entity-name="GlFiscalType">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+    
+    <form name="viewAcctgTransEntry" type="single" default-map-name="acctgTransEntry" target="updateAcctgTransEntryForm"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <auto-fields-entity entity-name="AcctgTransEntry" default-field-type="display"/>
+        <field name="acctgTransId" widget-style="linktext">
+            <hyperlink description="${acctgTransEntry.acctgTransId}" target="viewAcctgTrans?acctgTransId=${acctgTransEntry.acctgTransId}"/>
+        </field>
+        <field name="glAccountId" title="${uiLabelMap.GlAccount}">
+            <display-entity entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})" key-field-name="glAccountId">
+                <sub-hyperlink target="AccountActivitiesDetail?glAccountId=${acctgTransEntry.glAccountId}" description="(${uiLabelMap.FinancialsActivities})" link-style="linktext" />
+            </display-entity>
+        </field>
+        <field name="partyId" widget-area-style="linktext">
+            <display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
+        </field>
+    </form>
+
+    <form name="updateAcctgTransEntryForm" type="single" target="updateAcctgTransEntry" default-map-name="acctgTransEntry"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <auto-fields-entity entity-name="AcctgTransEntry"/>
+        <field name="debitCreditFlag">
+            <drop-down allow-empty="false">
+                <option key="D" description="Debit"/>
+                <option key="C" description="Credit"/>
+            </drop-down>
+        </field>
+        <field name="glAccountId" title="${uiLabelMap.GlAccount}">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options description="${accountCode}: ${accountName} (${glAccountId})" entity-name="GlAccountOrganizationAndClass">
+                    <entity-constraint name="organizationPartyId" operator="equals" value="${parameters.organizationPartyId}"/>
+                    <entity-order-by field-name="accountCode"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="reconcileStatusId" widget-style="tabletext"><display/></field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+    <form name="createAcctgTransEntryForm" type="single" target="createAcctgTransEntry"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <auto-fields-service service-name="createAcctgTransEntry"/>
+        <field name="debitCreditFlag">
+            <drop-down allow-empty="false">
+                <option key="D" description="Debit"/>
+                <option key="C" description="Credit"/>
+            </drop-down>
+        </field>
+        <field name="glAccountId" title="${uiLabelMap.GlAccount}">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options description="${accountCode}: ${accountName} (${glAccountId})" entity-name="GlAccountOrganizationAndClass">
+                    <entity-constraint name="organizationPartyId" operator="equals" value="${parameters.organizationPartyId}"/>
+                    <entity-order-by field-name="accountCode"/>
+                </entity-options>
+            </drop-down>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+    <!-- remade this form (originally in accounting/webapp/accounting/chartofaccounts/GlAccountForms.xml) because our links are different -->
+    <form name="ListGlReconciliations" type="list" list-name="glReconciliations" default-entity-name="GlReconciliation"
+        default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
+        header-row-style="boxtop">
+        <field name="glReconciliationId">
+            <hyperlink also-hidden="false" description="${glReconciliationId}" target="viewGlReconciliation?glReconciliationId=${glReconciliationId}&amp;glAccountId=${glAccountId}"/>
+        </field>
+        <field name="glReconciliationName"><display/></field>
+        <field name="description"><display/></field>
+        <field name="createdByUserLogin" title="${uiLabelMap.FinancialsReconciledBy}"><display/></field>
+        <field name="reconciledBalance"><display/></field>
+        <field name="reconciledDate"><display/></field>
+    </form>
+
+    <!-- remade this form (originally in accounting/webapp/accounting/chartofaccounts/GlAccountForms.xml) because our links are different -->
+    <form name="ListGlReconciliationEntries" type="list" list-name="glReconciliationEntries" default-entity-name="GlReconciliationEntry"
+        default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
+        header-row-style="boxtop">
+        <field name="transactionDate"><display/></field>
+        <field name="acctgTransTypeId">
+            <display-entity entity-name="AcctgTransType"/>
+        </field> 
+        <field name="acctgTransId">
+            <hyperlink also-hidden="false" description="${acctgTransId}: ${acctgTransEntrySeqId}" target="viewAcctgTrans?acctgTransId=${acctgTransId}"/>
+        </field>
+        <field name="debitCreditFlag" title="${uiLabelMap.FinancialsDebitCredit}"><display/></field>
+        <field name="reconciledAmount" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}"/></field>
+    </form>
+
+    <form name="listExchangeRates" type="list" list-name="conversions" default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" 
+            header-row-style="boxtop" default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true" >
+        <field name="uomId" title="${uiLabelMap.CommonFrom} ${uiLabelMap.CommonCurrency}"><display also-hidden="false"/></field>
+        <field name="uomIdTo" title="${uiLabelMap.CommonTo} ${uiLabelMap.CommonCurrency}"><display also-hidden="false"/></field>
+        <field name="conversionFactor"><display also-hidden="false"/></field>
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}"><display also-hidden="false"/></field>
+        <field name="thruDate" title="${uiLabelMap.CommonThru}"><display also-hidden="false"/></field>
+        <field name="update" title="${uiLabelMap.FinancialsEnterNewRate}" widget-style="buttontext"> 
+            <hyperlink description="${uiLabelMap.FinancialsEnterNewRate}" target="exchangeRates?uomId=${uomId}&amp;uomIdTo=${uomIdTo}"/>
+        </field>
+    </form>
+    
+    <form name="updateExchangeRate" type="single" target="updateExchangeRate" default-service-name="updateFXConversion"
+            default-table-style="listTable" default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
+        <field name="uomId" title="${uiLabelMap.CommonFrom} ${uiLabelMap.CommonCurrency}">
+            <drop-down no-current-selected-key="USD">
+                <entity-options entity-name="Uom" description="${description}" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="uomIdTo" title="${uiLabelMap.CommonTo} ${uiLabelMap.CommonCurrency}">
+            <drop-down no-current-selected-key="USD">
+                <entity-options entity-name="Uom" description="${description}" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="conversionFactor"><text/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}"><submit/></field>
+    </form>
+    
+    <form name="ListInvoicesForRecurrence" type="list" list-name="invoiceRecurrences" use-row-submit="true"
+        paginate-target="invoiceRecurrence" paginate-size-field="invoicesSize" paginate-index-field="invoicesIndex"
+        default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" header-row-style="boxtop"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true"
+        target="updateInvoiceRecurrence?invoicesSize=${invoicesSize}&amp;invoicesIndex=${invoicesIndex}">
+        <row-actions>
+            <set field="invoiceDate" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;invoice&quot;).get(&quot;invoiceDate&quot;)}"/>
+            <set field="invoiceTypeId" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;invoice&quot;).get(&quot;invoiceTypeId&quot;)}"/>
+            <set field="dueDate" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;invoice&quot;).get(&quot;dueDate&quot;)}"/>
+            <set field="recurrenceRuleId" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;recurrenceRuleId&quot;)}"/>
+            <set field="lastRecurrenceDate" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;lastRecurrenceDate&quot;)}"/>
+            <set field="nextRecurrenceDate" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;nextRecurrenceDate&quot;)}"/>
+            <set field="fromPartyName" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;fromPartyName&quot;)}"/>
+            <set field="toPartyName" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;toPartyName&quot;)}"/>
+        </row-actions>
+        <field name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext">
+            <hyperlink description="${invoiceId}" target="viewInvoice?invoiceId=${invoiceId}"/>
+        </field>
+        <field name="recurrenceInfoId"><hidden value="${recurrenceInfoId}"/></field>
+        <field name="invoiceTypeId" title="${uiLabelMap.CommonType}"><display-entity entity-name="InvoiceType" also-hidden="false"/></field>
+        <field name="refNum" title="${uiLabelMap.FinancialsReferenceNumber}"><display also-hidden="false"/></field>
+        <field name="invoiceDate" title="${uiLabelMap.AccountingInvoiceDate}"><display also-hidden="false"/></field>
+        <field name="dueDate" title="${uiLabelMap.AccountingDueDate}"><display also-hidden="false"/></field>
+        <field name="fromPartyName" title="${uiLabelMap.CommonFrom}">
+            <display description="${fromPartyName}"/>
+        </field>
+        <field name="toPartyName" title="${uiLabelMap.CommonTo}">
+            <display description="${toPartyName}"/>
+        </field>
+        <field name="lastRecurrenceDate" title="${uiLabelMap.FinancialsLastRecurrenceDate}"><display also-hidden="false"/></field>
+        <field name="nextRecurrenceDate" title="${uiLabelMap.CommonNext}"><display also-hidden="false"/></field>
+        <field name="recurrenceRuleId" title="${uiLabelMap.FinancialsRecurrence}">
+            <drop-down allow-empty="false" current="selected" no-current-selected-key="">
+                <option key="" description="${uiLabelMap.FinancialsNever}"/>
+                <list-options list-name="recurrenceRules" key-name="recurrenceRuleId" description="${xName}"></list-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit/></field>
+        <field name="removeButton" title="${uiLabelMap.CommonRemove}" widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="updateInvoiceRecurrence?invoicesSize=${invoicesSize}&amp;invoicesIndex=${invoicesIndex}&amp;invoiceId=${invoiceId}&amp;recurrenceInfoId=${recurrenceInfoId}&amp;recurrenceRuleId=" also-hidden="false"/>
+        </field>
+    </form>
+    
+    <form name="AddInvoiceRecurrence" type="single" default-title-style="tableheadtext" default-tooltip-style="tabletext" default-widget-style="tabletext"
+        default-table-style="listTable" target="updateInvoiceRecurrence">
+        <field name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext" position="1"><text size="15"/></field>
+        <field name="recurrenceRuleId" title="${uiLabelMap.FinancialsRecurrence}" position="2">
+            <drop-down allow-empty="false" current="selected">
+                <list-options list-name="recurrenceRules" key-name="recurrenceRuleId" description="${xName}"></list-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallSubmit" position="3"><submit/></field>
+    </form>
+</forms>

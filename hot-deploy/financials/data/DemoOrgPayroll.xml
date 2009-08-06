@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!-- this is a sample configuration of payroll to general ledger for an organization -->
+
+<entity-engine-xml>
+  
+    <!-- Configure GL accounts for paychecks -->
+    <GlAccountTypeDefault glAccountTypeId="SALARY_EXPENSES" organizationPartyId="Company" glAccountId="601100" />
+    
+    <!-- Some sample parties related to payroll transactions -->
+    <Party partyId="CA_FTB" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="CA_FTB" groupName="Franchise Tax Board"/>
+
+    <Party partyId="FIDELITY" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="FIDELITY" groupName="Fidelity Investments"/>
+
+    <Party partyId="BLUE_SHIELD" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="BLUE_SHIELD" groupName="Blue Shield"/>
+
+    <!-- Configure GL accounts for each paycheck item.  The ones which are withheld from the employee do not need a debit gl account, as they should
+     all go to the SALARY EXPENSE account. -->
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="WITHHOLD_US_TAX" organizationPartyId="Company" debitGlACcountId="" creditGlAccountId="222100" defaultDueToPartyId="USA_IRS"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="WITHHOLD_CA_TAX" organizationPartyId="Company" debitGlACcountId="" creditGlAccountId="222400"  defaultDueToPartyId="CA_FTB"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="WITHHOLD_US_FICA_SS" organizationPartyId="Company" debitGlACcountId="" creditGlAccountId="222200" defaultDueToPartyId="USA_IRS"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="WITHHOLD_US_FICA_MED" organizationPartyId="Company" debitGlACcountId="" creditGlAccountId="222300" defaultDueToPartyId="USA_IRS"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="WITHHOLD_EMP_401K" organizationPartyId="Company" debitGlACcountId="" creditGlAccountId="222600" defaultDueToPartyId="FIDELITY"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="WITHHOLD_EMP_MED" organizationPartyId="Company" debitGlACcountId="" creditGlAccountId="223500" defaultDueToPartyId="BLUE_SHIELD"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="WITHHOLD_CA_SDI" organizationPartyId="Company" debitGlACcountId="" creditGlAccountId="222900" defaultDueToPartyId="CA_FTB"/>  <!-- miscellaneous -->
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="WITHHOLD_CA_ETT" organizationPartyId="Company" debitGlACcountId="" creditGlAccountId="222900" defaultDueToPartyId="CA_FTB"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="WITHHOLD_CA_SUI" organizationPartyId="Company" debitGlACcountId="" creditGlAccountId="222900" defaultDueToPartyId="CA_FTB"/>
+
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="EMPLOYER_US_FICA_SS" organizationPartyId="Company" debitGlAccountId="604100" creditGlAccountId="223100" defaultDueToPartyId="USA_IRS"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="EMPLOYER_US_FICA_MED" organizationPartyId="Company" debitGlAccountId="604100" creditGlAccountId="223200" defaultDueToPartyId="USA_IRS"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="EMPLOYER_401K" organizationPartyId="Company" debitGlAccountId="605100" creditGlAccountId="223500" defaultDueToPartyId="FIDELITY"/>
+    <PaycheckItemTypeGlAccount paycheckItemTypeId="EMPLOYER_MED" organizationPartyId="Company" debitGlAccountId="608000" creditGlAccountId="221300" defaultDueToPartyId="BLUE_SHIELD"/>
+
+    <!-- Set up a separate paycheck type for each set of deductions -->
+    <PaymentType paymentTypeId="PAY_CHECK_USA_CA" parentTypeId="PAY_CHECK" description="California Paycheck" hasTable="N"  systemUse="Y"/>
+    <PaymentType paymentTypeId="PAY_CHECK_USA_CA_FT" parentTypeId="PAY_CHECK" description="California Paycheck - Full Time" hasTable="N" systemUse="Y"/>
+    <PaymentType paymentTypeId="PAY_CHECK_USA_NYC" parentTypeId="PAY_CHECK" description="New York City Paycheck" hasTable="N" systemUse="Y"/>
+
+    <!-- Relate paychecks to employees.  _NA_ means this type is available for any employee.  If an employee has paychecktype(s) defined, he/she could only
+    receive paychecks of that type.  Otherwise, if there are no paycheck types defined for an employee, he/she gets any paycheck type available for the _NA_ party -->
+    <EmployeePaycheckType organizationPartyId="Company" employeePartyId="_NA_" paymentTypeId="PAY_CHECK_USA_CA" fromDate="2007-01-01 00:00:00" comments="By default, all employees have a California paycheck"/>
+    <EmployeePaycheckType organizationPartyId="Company" employeePartyId="DemoSalesManager" paymentTypeId="PAY_CHECK_USA_CA_FT" fromDate="2007-01-01 00:00:00" comments="DemoSalesManager's paycheck includes 401K and medical"/>
+
+    <!-- Configure the deduction and employer portions for the different paycheck types -->
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA" paycheckItemTypeId="WITHHOLD_US_TAX"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA" paycheckItemTypeId="WITHHOLD_CA_TAX"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA" paycheckItemTypeId="WITHHOLD_US_FICA_SS"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA" paycheckItemTypeId="WITHHOLD_US_FICA_MED"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA" paycheckItemTypeId="EMPLOYER_US_FICA_SS"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA" paycheckItemTypeId="EMPLOYER_US_FICA_MED"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA" paycheckItemTypeId="WITHHOLD_CA_SDI"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA" paycheckItemTypeId="WITHHOLD_CA_ETT"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA" paycheckItemTypeId="WITHHOLD_CA_SUI"/>
+
+    <!-- This paycheck type includes 401K and medical benefits -->
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="WITHHOLD_US_TAX"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="WITHHOLD_CA_TAX"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="WITHHOLD_US_FICA_SS"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="WITHHOLD_US_FICA_MED"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="EMPLOYER_US_FICA_SS"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="EMPLOYER_US_FICA_MED"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="WITHHOLD_CA_SDI"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="WITHHOLD_CA_ETT"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="WITHHOLD_CA_SUI"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="WITHHOLD_EMP_401K"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="WITHHOLD_EMP_MED"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="EMPLOYER_401K"/>
+    <PaycheckTypeItemTypeAssoc paymentTypeId="PAY_CHECK_USA_CA_FT" paycheckItemTypeId="EMPLOYER_MED"/>
+
+</entity-engine-xml>

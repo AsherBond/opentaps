@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <!-- list GL Account Types -->
+    <form name="listGlAccountTypes" type="list" target=""
+        default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
+        header-row-style="boxtop" 
+        list-name="accountTypes">
+
+        <field name="glAccountTypeId" title="${uiLabelMap.FinancialsGlAccountType}">
+            <display-entity entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId"/>
+        </field>
+        <field name="glAccountId" title="${uiLabelMap.GlAccount}">
+            <display-entity entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})" key-field-name="glAccountId"/>
+        </field>
+        <field name="Update" widget-style="buttontext">            
+            <hyperlink description="${uiLabelMap.CommonEdit}" target="updateGlAccountTypeDefaultScreen?glAccountTypeId=${glAccountTypeId}&amp;glAccountId=${glAccountId}&amp;organizationPartyId=${organizationPartyId}"/>
+        </field>
+    </form>
+    
+    <!-- Add and Update Gl Account Type Default -->
+    <form name="addGlAccountTypeDefault" type="single" title="Add an GL Account Type" target="${targetNameToUse}"
+        default-widget-style="tabletext" default-title-style="tableheadtext">
+        <auto-fields-service service-name="createGlAccountTypeDefault"/>
+        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>        
+        <field use-when="glAccountTypeId==void || glAccountTypeId==null" name="glAccountTypeId" title="Gl Account Type">
+            <drop-down>
+                <entity-options entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field use-when="glAccountTypeId!=void &amp;&amp; glAccountTypeId!=null" name="glAccountTypeId" title="Gl Account Type">
+            <display-entity entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId"/>
+        </field>
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAcc}">            
+            <drop-down>
+                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})">
+                    <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
+                    <entity-order-by field-name="accountCode"/>
+                </entity-options>
+            </drop-down>  
+        </field>
+        <!-- 
+        <field name="glAccountId" title="Gl Account Id">            
+           <text></text>         
+          <lookup target-form-name="LookupGlAccount" size="20" maxlength="20"/>
+        </field>
+        -->        
+        <field use-when="glAccountTypeId==void || glAccountTypeId==null" name="submitButton" title="Add"><submit/></field>
+        <field use-when="glAccountTypeId!=void &amp;&amp; glAccountTypeId!=null" name="submitButton" title="Update"><submit/></field>
+    </form>
+    
+    <!-- list Payment Methods -->
+    <form name="listPaymentMethods" type="list" target="updatePaymentMethod"
+        default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
+        header-row-style="boxtop" 
+        list-name="paymentMethods" separate-columns="true" >
+
+        <field name="paymentMethodId" title="${uiLabelMap.CommonId}">
+            <display/>
+        </field>
+        <field name="paymentMethodTypeId" title="${uiLabelMap.CommonType}">
+            <display-entity entity-name="PaymentMethodType" description="${description}" key-field-name="paymentMethodTypeId"/>
+        </field>
+        <field name="description" widget-style="inputBox"><text size="30" maxlength="100"/></field>              
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAcc}">            
+            <drop-down>
+                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})">
+                    <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
+                    <entity-order-by field-name="accountCode"/>
+                </entity-options>
+            </drop-down>  
+        </field>
+         <field name="Update" widget-style="buttontext" ><submit button-type="text-link"/></field>        
+        <field name="Expire" widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.FinancialsPaymentMethodExpire}" target="updatePaymentMethod?paymentMethodId=${paymentMethodId}&amp;expirePaymentMethod=expPM"/>
+        </field>
+    </form>
+    
+    <!-- Add and Update Gl Account Type Default -->
+    <form name="addPaymentMethod" type="single" title="Add new Payment Method" target="${targetNameToUse}"
+        default-widget-style="inputBox" default-title-style="tableheadtext">
+        <auto-fields-service service-name="financials.createPaymentMethod"/>
+        <field name="partyId"><hidden value="${organizationPartyId}"/></field>        
+        <field name="paymentMethodTypeId" title="${uiLabelMap.AccountingPaymentMethodType}">
+            <drop-down allow-empty="false">
+                <entity-options entity-name="PaymentMethodType" description="${description}"/>
+            </drop-down>
+        </field>
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAcc}">            
+            <drop-down>
+                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})">
+                    <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
+                    <entity-order-by field-name="accountCode"/>
+                </entity-options>
+            </drop-down>  
+        </field>
+        <field name="description"><text size="60"/></field>      
+        <field name="fromDate"><hidden/></field>      
+        <field name="thruDate"><hidden/></field>      
+        <field name="submitButton" title="Add" widget-style="buttontext"><submit/></field>
+    </form>
+    
+    <!-- add new Time Period -->
+    <form name="createCustomTimePeriod" type="single" title="Add a new Time Period" target="createCustomTimePeriod"
+        default-widget-style="tabletext" default-title-style="tableheadtext">
+        <auto-fields-service service-name="createCustomTimePeriod"/>
+        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>    
+        <field name="isClosed"><hidden value="N"/></field> 
+        <field name="parentPeriodId">
+            <drop-down allow-empty="true">
+                <list-options list-name="openTimePeriods" key-name="customTimePeriodId" description="${periodName} ${periodNum} ${uiLabelMap.CommonFrom} ${fromDate} ${uiLabelMap.CommonTo} ${thruDate}"/>
+            </drop-down>
+        </field>
+        <field name="periodTypeId" title="${uiLabelMap.FinancialsTimePeriodType}">            
+            <drop-down>
+                <entity-options entity-name="PeriodType" description="${description}">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>  
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonCreate}"><submit/></field>
+    </form>
+    
+    <!-- update an existing Gl Account -->
+    <form  name="updateGlAccount" type="single" title="Update an existing Gl Account" target="updateExistingGlAccount" default-map-name="glAccount"
+        default-widget-style="tabletext" default-title-style="tableheadtext">
+        <field name="glAccountId"><display/></field>
+        <field name="glAccountClassTypeKey" map-name="glAccountClassTypeMap">            
+            <drop-down allow-empty="true">
+                <entity-options entity-name="GlAccountClassTypeMap" description="${description}">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>  
+        </field>
+
+        <field name="parentGlAccountId">            
+            <text/>
+<!-- TODO: make this lookup the parent gl account           
+     <drop-down>
+                <entity-options entity-name="GlAccount" description="${description}" key-field-name="glAccountId">
+                    <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>  
+-->        </field>
+        <field name="accountName">
+            <text size="100"></text>
+        </field>
+        <field name="description">
+            <textarea rows="2" cols="60"/>
+        </field>        
+        <field name="submitButton" title="Update"><submit/></field>
+    </form>
+    
+    <!-- add an existing Gl Account to an Organization -->
+    <form name="addExistingGlAccount" type="single" title="Add an existing Gl Account" target="addExistingGlAccount"
+        default-widget-style="tabletext" default-title-style="tableheadtext">
+        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
+        <field name="roleTypeId"><hidden value=""/></field>    
+        <field name="glAccountId" title="${uiLabelMap.AccountingGlAcc}">            
+            <drop-down>
+                <entity-options entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})">
+                    <entity-order-by field-name="accountCode"/>
+                </entity-options>
+            </drop-down>  
+        </field>
+        <field name="submitButton" title="Add"><submit/></field>
+    </form>
+    
+    <!-- add a new Gl Account to an Organization -->
+    <form name="addNewGlAccount" type="single" title="Add a new Gl Account" target="addNewGlAccount"
+        default-widget-style="tabletext" default-title-style="tableheadtext">        
+        <field name="glAccountId"><hidden value=""/></field>
+        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
+        <field name="glXbrlClassId"><hidden value=""/></field>
+        <field name="productId"><hidden value=""/></field>
+        <field name="glResourceTypeId"><hidden value="MONEY"/></field>
+        <field name="glAccountClassTypeKey">            
+            <drop-down>
+                <entity-options entity-name="GlAccountClassTypeMap" description="${description}">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>  
+        </field>    
+        <field name="parentGlAccountId" title="${uiLabelMap.FinancialsParentGLAccount}" >            
+            <drop-down allow-empty="true">
+                <entity-options entity-name="GlAccountOrganizationAndClass" description="${accountCode}: ${accountName} (${glAccountId})" key-field-name="glAccountId">
+                    <entity-constraint name="organizationPartyId" operator="equals" env-name="parameters.organizationPartyId"  />
+                    <entity-order-by field-name="accountCode"/>
+                </entity-options>
+            </drop-down>  
+        </field>
+        <field name="accountCode" title="${uiLabelMap.FinancialsGLAccountCode}" >            
+            <text/>
+        </field>
+        <field name="accountName" title="${uiLabelMap.FinancialsGLAccountName}" >            
+            <text size="60"/>
+        </field>
+        <field name="description">
+            <textarea rows="2" cols="60"/>
+        </field>        
+        <field name="submitButton" title="Add"><submit/></field>
+    </form>
+    
+    <!-- add a Sub Account to a Gl Account -->
+    <form name="addSubAccount" type="single" title="Add a Sub Account" target="addSubAccount"
+        default-widget-style="tabletext" default-title-style="tableheadtext">
+        <field name="glAccountId"><hidden value=""/></field>
+        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>      
+        <field name="glXbrlClassId"><hidden value=""/></field>
+        <field name="productId"><hidden value=""/></field>
+        <field name="glResourceTypeId"><hidden value="MONEY"/></field>
+        <field name="glAccountClassTypeKey">            
+            <drop-down>
+                <entity-options entity-name="GlAccountClassTypeMap" description="${description}">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>  
+        </field>    
+        <field name="parentGlAccountId" title="${uiLabelMap.FinancialsParentGLAccount}" >            
+            <display description="${parameters.parentGlAccountId}"/>
+        </field>
+        <field name="accountCode" title="${uiLabelMap.FinancialsGLAccountCode}" >            
+            <text default-value="${defaultAccountCode}"/>
+        </field>
+        <field name="accountName" title="${uiLabelMap.FinancialsGLAccountName}" >            
+            <text default-value="${defaultAccountName}" size="60"/>
+        </field>
+        <field name="description">
+            <textarea rows="2" cols="60"/>
+        </field>
+        <field name="submitButton" title="Add"><submit/></field>
+    </form>
+
+    <!-- Update PartyAcctgPreference.refundPaymentMethodId -->
+    <form name="refundPaymentMethod" type="single" title="Update PartyAcctgPreference.refundPaymentMethodId" target="updatePartyAcctgPreference"
+        default-widget-style="inputBox" default-title-style="tableheadtext">
+        <field name="partyId"><hidden value="${organizationPartyId}"/></field>        
+        <field name="refundPaymentMethodId" title="${uiLabelMap.FinancialsPaymentMethod}">
+            <drop-down allow-empty="true" no-current-selected-key="${partyAcctgPreference.refundPaymentMethodId}">
+                <list-options list-name="paymentMethods" key-name="paymentMethodId" description="${description}"/>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="buttontext"><submit/></field>
+    </form>
+</forms>
+ 

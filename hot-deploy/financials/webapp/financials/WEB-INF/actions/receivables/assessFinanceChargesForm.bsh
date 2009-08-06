@@ -1,0 +1,76 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import java.util.*;
+import java.math.BigDecimal;
+import org.ofbiz.base.util.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+String payeePartyId = parameters.get( "partyId" ) ;
+String partyClassificationGroupId = parameters.get( "partyClassificationGroupId" );
+String interestRateString = parameters.get( "interestRate" ) ;
+String gracePeriodString = parameters.get( "gracePeriod" ) ;
+
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("FinancialsNavHistoryAssessFinanceCharge", locale));
+
+try {
+    interestRate = new BigDecimal(interestRateString);
+} catch (Exception e) {
+    interestRate = BigDecimal.ZERO;
+}
+try {
+    gracePeriod = Integer.parseInt(gracePeriodString);
+} catch (Exception e) {
+    gracePeriod = 0 ;
+}
+invoiceData = new HashMap();
+outstandingInvoices = AccountsHelper.calculateFinanceCharges(delegator, organizationPartyId, payeePartyId, partyClassificationGroupId, interestRate, gracePeriod, timeZone, locale);
+
+// this code brought to you by the Form Widget(TM):
+// we have to have a List of invoices as Maps to be passed below as invoices, otherwise the ReceivablesForms#ListInvoicesForInterest which uses invoices as the list will
+// have a ClassCastException going from the new opentaps Invoice object to a Map (on ModelForm.java line 1167)
+
+outstandingInvoiceKeys = new ArrayList();
+for (invoice: outstandingInvoices.keySet()) {
+    outstandingInvoiceKeys.add(invoice.toMap());
+}
+
+// now we iterate through the invoices, using Invoice object as the key, which is ok because invoiceData's key is invoiceId
+for (invoice : outstandingInvoices.keySet()) {
+    invoiceInfo = outstandingInvoices.get(invoice);
+    partyIdToNameMap = dispatcher.runSync("getPartyNameForDate" ,UtilMisc.toMap("partyId", invoice.get("partyId"), "compareDate", invoice.get("invoiceDate"), "userLogin", session.getAttribute("userLogin")));
+    toPartyName = partyIdToNameMap.get("fullName");
+    if (toPartyName == null) {
+        toPartyName = "";
+    }
+    toPartyName += " (" + invoice.get("partyId") + ")";
+    invoiceInfo.put("toPartyName", toPartyName);
+
+    invoiceData.put(invoice.get("invoiceId"), invoiceInfo);
+}
+
+context.put( "invoices" , outstandingInvoiceKeys);
+context.put( "invoiceData" , invoiceData ) ;
+
+context.put( "organizationPartyId" , organizationPartyId ) ;
+context.put( "payeePartyId" , payeePartyId ) ;
+context.put( "partyClassificationGroupId" , partyClassificationGroupId ) ;
+context.put( "gracePeriod" , gracePeriod ) ;
+context.put( "interestRate" , interestRate ) ;

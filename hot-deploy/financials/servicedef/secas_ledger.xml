@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+* @author: Si Chen (sichen@opensourcestrategies.com)
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+
+<!-- these SECAs are for automatically creating accounting transactions based on business transactions.  
+     They should normally be "sync" SECAs so that they happen as soon
+     as the business transactions are ready, and so that if the accounting transactions can't be created,
+     the user will get an error.  This is to avoid cases where business transactions are created but in limbo
+     because accounting transactions can't be created.
+
+      All of these services are being run as the system user because they are triggered automatically in the background,
+      so the user running the initial operation may not have (and probably should not have) general ledger posting privileges.
+      This also helps to separate manually posted transactions (with a user's login) versus automated ones (with system) -->
+    <eca service="setInvoiceStatus" event="commit">
+        <condition field-name="invoiceId" operator="is-not-empty"/>
+        <condition field-name="statusId" operator="equals" value="INVOICE_READY"/>
+        <condition field-name="oldStatusId" operator="not-equals" value="INVOICE_READY"/>
+
+        <!-- Don't repost the transaction if the invoice is reverting from PAID to READY due to a voided payment -->
+        <condition field-name="oldStatusId" operator="not-equals" value="INVOICE_PAID"/>
+        <action service="postInvoiceToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="setInvoiceStatus" event="commit">
+        <condition field-name="invoiceId" operator="is-not-empty"/>
+        <condition field-name="statusId" operator="equals" value="INVOICE_WRITEOFF"/>
+        <action service="postInvoiceWriteoffToGl" mode="sync" run-as-user="system" />
+    </eca>
+    <eca service="createPaymentApplication" event="commit">
+        <condition field-name="invoiceId" operator="is-not-empty" />
+        <action service="matchPaymentInvoiceGlPosts" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <eca service="createPhysicalInventoryAndVariance" event="commit">
+        <condition field-name="physicalInventoryId" operator="is-not-empty"/>
+        <action service="postInventoryVarianceToGl" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- reset gl account posted balances after closing a time period -->
+    <eca service="closeAllTimePeriods" event="commit">
+        <action service="resetOrgGlAccountBalances" mode="sync" run-as-user="system"/>
+    </eca>    
+
+    <!-- when a shipment receipt is generated, post it to the GL -->
+    <eca service="createShipmentReceipt" event="commit">
+        <action service="postShipmentReceiptToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <!-- update the average costs: this must happen AFTER the postShipmentReceipt because it relies on
+    UtilCOGS.getInventoryValueForProduct which relies on posted GL values -->
+    <eca service="postShipmentReceiptToGl" event="commit">
+         <action service="updateReceiptAverageCost" mode="sync" run-as-user="system"/>
+    </eca>
+
+
+    <!-- Post the shipment to the GL when the status changes to SHIPMENT_SHIPPED -->
+    <!-- if new statusId of a SALES_SHIPMENT is SHIPMENT_SHIPPED, post the transactions -->
+    <eca service="updateShipment" event="commit">
+        <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <condition field-name="statusId" operator="equals" value="SHIPMENT_PACKED"/>
+        <condition field-name="shipmentTypeId" operator="equals" value="SALES_SHIPMENT"/>
+        <action service="postShipmentToGl" mode="sync" run-as-user="system"/>        
+    </eca>
+
+    <!-- this is for posting accounting transactions to the general ledger.  While "async" would improve performance and, if for some
+          reason the accounting transaction cannot be posted to the ledger, someone can still go in, review the accounting transaction, and
+          then manually post them later, it does not work for time period closings, so we have to make it sync for now. -->
+    <eca service="createAcctgTransAndEntries" event="commit">
+        <condition field-name="acctgTransId" operator="is-not-empty"/>
+        <action service="postAcctgTrans" mode="sync" persist="true"/>
+    </eca>    
+
+    <!-- Track InventoryItem ownership and status changes. -->
+    <eca service="updateInventoryItem" event="commit">
+        <condition field-name="ownerPartyId" operator="is-not-empty"/>
+        <condition-field field-name="ownerPartyId" operator="not-equals" to-field-name="oldOwnerPartyId"/>
+        <action service="postInventoryItemOwnerChange" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="updateInventoryItem" event="commit">
+        <condition field-name="statusId" operator="is-not-empty"/>
+        <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="postInventoryItemStatusChange" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- Post inventory tag change adjustments -->
+    <eca service="updateInventoryItem" event="commit">
+        <action service="opentaps.postInventoryItemAccountingTagChange" mode="sync"/>
+    </eca>
+
+    <!-- Post inventory value adjustments when InventoryItem.unitCost is changed -->
+    <eca service="updateInventoryItem" event="commit">
+        <action service="opentaps.postInventoryItemValueAdjustment" mode="sync"/>
+    </eca>
+
+    <!-- Production run transactions -->
+    <eca service="changeProductionRunTaskStatus" event="commit">
+        <condition field-name="newStatusId" operator="equals" value="PRUN_COMPLETED"/>
+        <condition-field field-name="newStatusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="postWorkEffortCostsToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="changeProductionRunStatus" event="commit">
+        <condition field-name="newStatusId" operator="equals" value="PRUN_CLOSED"/>
+        <condition-field field-name="newStatusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="postProductionRunCostVarianceToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="productionRunProduce" event="commit">
+        <action service="postInventoryProducedToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="opentaps.productionRunProduce" event="commit">
+        <action service="postInventoryProducedToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="productionRunTaskProduce" event="commit">
+        <action service="postInventoryProducedToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="assignInventoryToWorkEffort" event="commit">
+        <action service="postInventoryToWorkEffortAssignToGl" mode="sync" run-as-user="system"/>
+        <action service="addAvgCostAdjToProductionRunCosts" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- Post the foreign exchange gain/loss to the GL when the invoice status changes to INVOICE_PAID -->
+    <eca service="setInvoiceStatus" event="commit">
+        <condition field-name="invoiceId" operator="is-not-empty"/>
+        <condition field-name="statusId" operator="equals" value="INVOICE_PAID"/>
+        <action service="postForeignExchangeMatchingToGl" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- Post to the GL when a payment is received or sent -->
+    <eca service="createPayment" event="commit">
+        <condition field-name="statusId" operator="equals" value="PMNT_SENT"/>
+        <action service="postPaymentToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="createPayment" event="commit">
+        <condition field-name="statusId" operator="equals" value="PMNT_RECEIVED"/>
+        <action service="postPaymentToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="setPaymentStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="PMNT_SENT"/>
+        <condition field-name="oldStatusId" operator="not-equals" value="PMNT_SENT"/>
+        <action service="postPaymentToGl" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="setPaymentStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="PMNT_RECEIVED"/>
+        <condition field-name="oldStatusId" operator="not-equals" value="PMNT_RECEIVED"/>
+        <action service="postPaymentToGl" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- Set all transaction entries related to a payment to partially reconciled when the payment is confirmed. -->
+    <eca service="setPaymentStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="PMNT_CONFIRMED"/>
+        <condition field-name="oldStatusId" operator="not-equals" value="PMNT_CONFIRMED"/>
+        <action service="opentaps.partiallyReconcilePayment" mode="sync" run-as-user="system"/>
+        <action service="opentaps.reconcileParentSubAccountPayment" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- since createAcctgTransAndEntries is not used for postPaycheckToGl, we need to call posting routine directly -->
+    <eca service="postPaycheckToGl" event="commit">
+        <action service="postAcctgTrans" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- When a production run is reverted, it should call postRevertProductionRun -->
+    <eca service="revertProductionRun" event="commit">
+        <action service="postRevertedProductionRunToGl" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- Creates commission invoice on payment confirmation if commissions have to
+    be earned on payment as per agreement -->
+    <eca service="setPaymentStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="PMNT_CONFIRMED"/>
+        <condition field-name="oldStatusId" operator="not-equals" value="PMNT_CONFIRMED"/>
+        <action service="opentaps.createCommissionInvoicesOnConfirmedPayment" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- Apply the accouting tag to the Inventory Items if it comes from a tagged PO -->
+    <eca service="receiveInventoryProduct" event="commit">
+        <condition field-name="orderId" operator="is-not-empty"/>
+        <condition field-name="orderItemSeqId" operator="is-not-empty"/>
+        <condition field-name="inventoryItemId" operator="is-not-empty"/>
+        <action service="tagReceivedInventoryFromOrder" mode="sync"/>
+    </eca>
+
+</service-eca>

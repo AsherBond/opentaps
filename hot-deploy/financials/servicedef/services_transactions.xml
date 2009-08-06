@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+ *
+ * @author Si Chen (sichen@opensourcestrategies.com)
+ *
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Financial Transactions Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+    
+    <service name="createQuickAcctgTrans" default-entity-name="AcctgTrans" engine="java"
+            location="com.opensourcestrategies.financials.transactions.TransactionServices" invoke="createQuickAcctgTrans" auth="true">
+        <description>Create a Quick AcctgTrans record.  isPosted is forced to "N"</description>
+        <required-permissions join-type="OR">
+           <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true">
+            <exclude field-name="isPosted"/>
+            <exclude field-name="postedDate"/>
+            <exclude field-name="createdByUserLogin"/>
+            <exclude field-name="lastModifiedByUserLogin"/>
+        </auto-attributes>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="debitGlAccountId" mode="IN" type="String" optional="false"/>        
+        <attribute name="creditGlAccountId" mode="IN" type="String" optional="false"/>        
+        <attribute name="amount" mode="IN" type="Double" optional="false"/>
+        <override name="acctgTransTypeId" optional="false"/>
+        <override name="transactionDate" optional="false"/>
+        <override name="glFiscalTypeId" optional="false"/>
+        <!-- debit tags -->
+        <attribute name="debitTagEnumId1" type="String" mode="IN" optional="true"/>
+        <attribute name="debitTagEnumId2" type="String" mode="IN" optional="true"/>
+        <attribute name="debitTagEnumId3" type="String" mode="IN" optional="true"/>
+        <attribute name="debitTagEnumId4" type="String" mode="IN" optional="true"/>
+        <attribute name="debitTagEnumId5" type="String" mode="IN" optional="true"/>
+        <attribute name="debitTagEnumId6" type="String" mode="IN" optional="true"/>
+        <attribute name="debitTagEnumId7" type="String" mode="IN" optional="true"/>
+        <attribute name="debitTagEnumId8" type="String" mode="IN" optional="true"/>
+        <attribute name="debitTagEnumId9" type="String" mode="IN" optional="true"/>
+        <attribute name="debitTagEnumId10" type="String" mode="IN" optional="true"/>
+        <!-- credit tags -->
+        <attribute name="creditTagEnumId1" type="String" mode="IN" optional="true"/>
+        <attribute name="creditTagEnumId2" type="String" mode="IN" optional="true"/>
+        <attribute name="creditTagEnumId3" type="String" mode="IN" optional="true"/>
+        <attribute name="creditTagEnumId4" type="String" mode="IN" optional="true"/>
+        <attribute name="creditTagEnumId5" type="String" mode="IN" optional="true"/>
+        <attribute name="creditTagEnumId6" type="String" mode="IN" optional="true"/>
+        <attribute name="creditTagEnumId7" type="String" mode="IN" optional="true"/>
+        <attribute name="creditTagEnumId8" type="String" mode="IN" optional="true"/>
+        <attribute name="creditTagEnumId9" type="String" mode="IN" optional="true"/>
+        <attribute name="creditTagEnumId10" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="reverseAcctgTrans" engine="java" 
+            location="com.opensourcestrategies.financials.transactions.TransactionServices" invoke="reverseAcctgTrans" auth="true">
+        <description>Reverse an AcctgTrans by creating another AcctgTrans with opposite AcctgTransEntries. Uses createAcctgTransAndEntries service.</description>
+        <attribute name="acctgTransId" type="String" mode="INOUT" optional="false"/>
+    </service>
+
+    <service name="voidPayment" engine="java" 
+            location="com.opensourcestrategies.financials.transactions.TransactionServices" invoke="voidPayment" auth="true">
+        <description>Sets payment status to PMNT_VOID, removes all PaymentApplications, changes related invoice statuses to 
+            INVOICE_READY if status is INVOICE_PAID, and reverses related AcctgTrans by calling reverseAcctgTrans service</description>
+        <attribute name="paymentId" mode="IN" optional="false" type="String"/>
+    </service>
+
+    <service name="postScheduledAcctgTrans" engine="java" transaction-timeout="3600"
+            location="com.opensourcestrategies.financials.transactions.TransactionServices" invoke="postScheduledAcctgTrans" auth="true">
+        <description>Posts any AcctgTrans that are currently scheduled to be posted.  Requires ACCOUNTING_ATX_POST permission.</description>
+    </service>
+
+    <service name="updateInvoiceRecurrence" engine="java" auth="true"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="updateInvoiceRecurrence">
+        <description>Updates the InvoiceRecurrence values for an invoice. Requires FINANCIALS_RECUR_INV permission</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="recurrenceInfoId" type="String" mode="IN" optional="true"/>
+        <attribute name="recurrenceRuleId" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="runInvoiceRecurrence" engine="java" auth="true" use-transaction="false"
+            location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="runInvoiceRecurrence">
+        <description>Service to be run by the job scheduler. Responsible for automatically creating copies of invoices which
+            are set to recur, but looking in the InvoiceRecurrence entity and comparing the lastRecurrenceDate field and the
+            defined recurrenceInfo with the current time</description> 
+    </service>
+    <service name="cloneInvoice" engine="java" auth="true"
+            location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="cloneInvoice">
+        <description>Creates a deep copy of an invoice. Values in Invoice, InvoiceAttribute, InvoiceItem, InvoiceItemAttribute, InvoiceTerm
+            and InvoiceTermAttribute are copied, and InvoiceStatus entries are generated. InvoiceDate is set to the current time and dueDate
+            is set ahead of invoiceDate by an equal amount to the old invoice. Requires FINANCIALS_RECUR_INV permission</description> 
+        <attribute name="invoiceId" type="String" mode="INOUT" optional="false"/>
+    </service>
+
+    <!-- Same as the createAcctgTransEntry/updateAcctgTransEntry ofbiz service but perform validation on the accounting tags -->
+    <service name="createAcctgTransEntryManual" default-entity-name="AcctgTransEntry" engine="java"
+            location="com.opensourcestrategies.financials.transactions.TransactionServices" invoke="createAcctgTransEntryManual" auth="true">
+        <description>Add an Entry to a AcctgTrans.  Will use baseCurrencyUomId in PartyAcctgPreference if no currencyUomId is in parameters.</description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
+        </required-permissions>
+        <implements service="interfaceAcctgTransEntry"/>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <override name="acctgTransEntrySeqId" mode="OUT"/>
+    </service>
+    <service name="updateAcctgTransEntryManual" default-entity-name="AcctgTransEntry" engine="java"
+            location="com.opensourcestrategies.financials.transactions.TransactionServices" invoke="updateAcctgTransEntryManual" auth="true">
+        <description>Update an Entry to a AcctgTrans record</description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_UPDATE"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+</services>

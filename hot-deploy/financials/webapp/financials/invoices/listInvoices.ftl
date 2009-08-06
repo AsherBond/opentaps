@@ -1,0 +1,92 @@
+<#--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<#-- Parametrized find form for invoices. -->
+
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<script type="text/javascript">
+function showButtons() {
+    var show = false;
+    var buttons = document.getElementById('buttonsBar');
+    if (!buttons) {
+        return;
+    }
+
+    var cform = document['listInvoices'];
+    var len = cform.elements.length;
+    for (var i = 0; i < len; i++) {
+        var element = cform.elements[i];                   
+        if (element.name.substring(0, 10) == "_rowSubmit" && element.checked) {
+            show = true;
+            break;
+        }
+    }
+
+    if (show) {
+        opentaps.removeClass(buttons, 'hidden');
+    } else {
+        opentaps.addClass(buttons, 'hidden');
+        if (cform.selectAll.checked) {
+            cform.selectAll.checked = false;
+        }
+    }
+}
+</script>
+
+<@paginate name="listInvoices" list=invoiceListBuilder rememberPage=false>
+    <#noparse>
+    <form name="listInvoices" action="invoice.pdf" method="POST" target="_blank" class="basic-form">
+        <@navigationHeader/>
+        <table class="listTable">
+            <tr class="listTableHeader">
+                <@headerCell title=uiLabelMap.FinancialsInvoiceId orderBy="invoiceId"/>
+                <@headerCell title=uiLabelMap.FinancialsReferenceNumber orderBy="referenceNumber"/>
+                <@headerCell title=uiLabelMap.AccountingInvoiceDate orderBy="invoiceDate"/>
+                <@headerCell title=uiLabelMap.AccountingDueDate orderBy="dueDate"/>
+                <@headerCell title=uiLabelMap.CommonStatus orderBy="statusId"/>
+                <@headerCell title=uiLabelMap.FinancialsProcessingStatus orderBy="processingStatusId"/>
+                <@headerCell title=uiLabelMap.AccountingFromParty orderBy="partyIdFrom, invoiceDate DESC"/>
+                <@headerCell title=uiLabelMap.AccountingToParty orderBy="partyId, invoiceDate DESC"/>
+                <@displayCell text=uiLabelMap.AccountingAmount blockClass="textright"/>
+                <@displayCell text=uiLabelMap.OrderOutstanding blockClass="textright"/>
+                <td><input type="checkbox" name="selectAll" value="N" onclick="javascript:toggleAll(this, 'listInvoices'); showButtons();"></td>
+            </tr>
+            <#list pageRows as row>
+            <tr class="${tableRowClass(row_index)}">
+                <@inputHidden name="invoiceId" value=row.invoiceId index=row_index/>
+                <@displayLinkCell text=row.invoiceId href="viewInvoice?invoiceId=${row.invoiceId}"/>
+                <@displayCell text=row.referenceNumber/>
+                <@displayDateCell date=row.invoiceDate/>
+                <@displayDateCell date=row.dueDate/>
+                <@displayCell text=row.statusDescription/>
+                <@displayCell text=row.processingStatusDescription/>
+                <@displayCell text=row.partyNameFrom/>
+                <@displayCell text=row.partyName/>
+                <@displayCurrencyCell amount=row.amount currencyUomId=row.currencyUomId/>
+                <@displayCurrencyCell amount=row.outstanding currencyUomId=row.currencyUomId/>
+                <#if row.statusId != "INVOICE_CANCELLED" && row.statusId != "INVOICE_WRITEOFF" && row.statusId != "INVOICE_VOIDED">
+                    <td><input type="checkbox" name="_rowSubmit_o_${row_index}" value="Y" onclick="javascript:showButtons();"></td>
+                <#else>
+                    <td>&nbsp;</td>
+                </#if>
+            </tr>
+            </#list>
+        <tr><td colspan="10"><div id="buttonsBar" class="textright hidden"><@inputSubmit title="${uiLabelMap.CommonPrint}" onClick=""/></div></td></tr>
+        </table>
+    </form>
+    </#noparse>
+</@paginate>

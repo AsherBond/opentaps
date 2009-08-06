@@ -1,0 +1,44 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+// userLogin's emails (might want to use crmsfa.PartyContactHelper instead)
+userLogin = context.get("userLogin");
+conditions = UtilMisc.toList(
+    new EntityExpr("partyId", EntityOperator.EQUALS, userLogin.get("partyId")),
+    new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, "EMAIL_ADDRESS"),
+    EntityUtil.getFilterByDateExpr("contactFromDate", "contactThruDate")
+    );
+userLoginEmails = delegator.findByAnd("PartyContactWithPurpose", conditions);
+context.put("userLoginEmails", userLoginEmails);
+
+if (! UtilValidate.isEmpty(invoice)) {
+    recipientPartyId = UtilMisc.toList("PURCHASE_INVOICE", "CUST_RTN_INVOICE", "COMMISSION_INVOICE").contains(invoice.getString("invoiceTypeId")) ? invoice.get("partyIdFrom") : invoice.get("partyId");
+    if (! UtilValidate.isEmpty(recipientPartyId)) {
+        recipientEmailAddresses = delegator.findByAnd("PartyContactWithPurpose", UtilMisc.toMap("partyId", recipientPartyId, "contactMechTypeId", "EMAIL_ADDRESS"));
+        recipientEmailAddresses = EntityUtil.filterByDate(recipientEmailAddresses, null, "contactFromDate", "contactThruDate", true);
+        recipientEmailAddress = EntityUtil.getFirst(EntityUtil.filterByAnd(recipientEmailAddresses, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_EMAIL")));
+        if (! UtilValidate.isEmpty(recipientEmailAddress)) {
+            context.put("recipientEmailAddress", recipientEmailAddress.get("infoString"));
+        }
+    }
+}
+

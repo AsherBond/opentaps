@@ -1,0 +1,41 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.base.util.*;
+
+import com.opensourcestrategies.financials.util.UtilFinancial;
+
+billingAccountId = parameters.get("billingAccountId");
+billingAccount = delegator.findByPrimaryKey("BillingAccount", UtilMisc.toMap("billingAccountId", billingAccountId));
+context.put("billingAccount", billingAccount);
+
+// get the bill to customer party
+conditions = new EntityConditionList( UtilMisc.toList(
+      EntityUtil.getFilterByDateExpr(),
+      new EntityExpr("billingAccountId", EntityOperator.EQUALS, billingAccountId),
+      new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER")
+      ), EntityOperator.AND);
+context.put("defaultBillToParty", EntityUtil.getFirst(delegator.findByCondition("BillingAccountRole", conditions, null, null)));
+
+// currencies
+context.put("currencies", delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "CURRENCY_MEASURE")));
+
+// payment methods
+context.put("paymentMethodTypes", UtilFinancial.getSimpleCustomerPaymentMethodTypes(delegator));

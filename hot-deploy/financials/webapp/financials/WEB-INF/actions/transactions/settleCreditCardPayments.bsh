@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+ */
+
+/*
+ * This is specially for quick-creating payment settlement transactions 
+ */
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.accounting.util.UtilAccounting;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+context.put("organizationPartyId", organizationPartyId);
+
+// always the case 
+context.put("acctgTransTypeId", "BANK_SETTLEMENT");
+
+// bank settlement account defaults to parameter override
+bankSettlementGlAccountId = parameters.get("settlementGlAccountId");
+if (UtilValidate.isEmpty(bankSettlementGlAccountId)) {
+    bankSettlementGlAccountId = UtilAccounting.getProductOrgGlAccountId(null, "BANK_STLMNT_ACCOUNT", organizationPartyId, delegator); 
+}
+
+
+// figure out what the gl accounts for the credit card transactions 
+cardTransactionsGlAccountId = null;
+cardTransactionsGlAccount = delegator.findByPrimaryKey("CreditCardTypeGlAccount", UtilMisc.toMap("cardType", parameters.get("cardType"), "organizationPartyId", organizationPartyId));
+if (cardTransactionsGlAccount != null) {
+    cardTransactionsGlAccountId = cardTransactionsGlAccount.getString("glAccountId");
+} else {
+    Debug.logWarning("No GL account configured for card type " + parameters.get("cardType") + " when trying to settle card", ""); 
+}
+
+// this form is now configurable!  if it's used for REFUND, then debit card transactions account and credit bank settlement account.
+// otherwise, debit the bank settlement account and credit the card transactions account
+if ("REFUND".equals(parameters.get("paymentOrRefund"))) {
+    context.put("debitGlAccountId", cardTransactionsGlAccountId); 
+    context.put("creditGlAccountId", bankSettlementGlAccountId); 
+} else {
+    context.put("debitGlAccountId", bankSettlementGlAccountId); 
+    context.put("creditGlAccountId", cardTransactionsGlAccountId); 
+}
+

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Accounting Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <!-- general COGS services -->
+    <service name="getInvoiceItemCOGS" engine="simple"
+        location="com/opensourcestrategies/financials/cogs/COGSServices.xml" invoke="getInvoiceItemCOGS" use-transaction="false">
+        <description>Get the COGS for an item on an invoice.</description>
+        <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
+        <attribute type="String" mode="IN" name="invoiceId" optional="false"/>
+        <attribute type="String" mode="IN" name="invoiceItemSeqId" optional="false"/>
+        <attribute type="Double" mode="OUT" name="cost" optional="false"/>
+    </service>   
+
+    <!-- services for product average costs -->
+    <service name="createProductAverageCost" engine="java"
+        location="com.opensourcestrategies.financials.cogs.COGSServices" invoke="createProductAverageCost">
+        <description>Creates a new average cost entry in ProductAverageCost for a product and organization, expiring any old ones</description>
+        <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
+        <attribute type="String" mode="IN" name="productId" optional="false"/>
+        <attribute type="Double" mode="IN" name="averageCost" optional="false"/>
+    </service>
+    <service name="updateProductAverageCost" engine="java"
+        location="com.opensourcestrategies.financials.cogs.COGSServices" invoke="updateProductAverageCost">
+        <description>Updates the average cost entry for a product, using inventory value and quantity</description>
+        <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
+        <attribute type="String" mode="IN" name="productId" optional="false"/>
+    </service>
+    <service name="updateInvoiceAverageCosts" engine="java"
+        location="com.opensourcestrategies.financials.cogs.COGSServices" invoke="updateInvoiceAverageCosts">
+        <description>Updates average cost for every product item on a purchase invoice.  Only works for purchase invoices.  No longer in use - now
+            using updateReceiptAverageCosts instead.</description>
+        <attribute type="String" mode="IN" name="invoiceId" optional="false"/>
+    </service>
+    <service name="updateReceiptAverageCost" engine="java"
+        location="com.opensourcestrategies.financials.cogs.COGSServices" invoke="updateReceiptAverageCost">
+        <description>Updates average cost for the inventory item on a shipment receipt (there is only one item per receipt).</description>
+        <attribute type="String" mode="IN" name="receiptId" optional="false"/>
+    </service>
+
+    <service name="addAvgCostAdjToProductionRunCosts" engine="java"
+        location="com.opensourcestrategies.financials.cogs.COGSServices" invoke="addAvgCostAdjToProductionRunCosts">
+        <description>
+            Creates a CostComponent for the workEffortId of the difference between the inventory item's average cost for its owner party
+            and the item's unit cost, multiplied by the quantity issued, if the item's owner uses average cost method of accounting.  If average cost is below item cost, it
+            should create a negative CostComponent.  Note that workEffortId is the workEffortId of a production run task.
+        </description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="finishedProductId" type="String" mode="IN" optional="true"/>
+        <attribute name="costComponentId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+
+</services>

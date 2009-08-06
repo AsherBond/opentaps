@@ -1,0 +1,173 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+ * Accounts receivables and payable balances report.
+ *
+ * @author Nate Reed
+ * @author Si Chen
+ */
+
+/*
+ * Modified by <a href="mailto:cristo.paulo@gmail.com">Paulo Cristo</a>
+ * on August 2007.
+ * Added some chart functionality.
+ */
+
+import java.util.HashMap;
+import java.util.List;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import java.util.Iterator;
+import java.math.BigDecimal;
+import org.opentaps.common.reporting.UtilChart;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilProperties;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.jfree.chart.*;
+import org.jfree.chart.servlet.ServletUtilities;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RectangleInsets;
+import org.ofbiz.party.party.PartyHelper;
+
+
+// get the form data from the helper script
+uiLabelMap = UtilProperties.getResourceBundleMap("FinancialsUiLabels", locale);
+organizationPartyId = context.get("organizationPartyId");
+glFiscalTypeId = context.get("glFiscalTypeId");
+asOfDateTime = context.get("asOfDate");
+if (asOfDateTime == null) {
+    context.put("isBalanceScreenRendered", false);
+    return;
+}
+// Get the base currency for the organization
+context.put("orgCurrencyUomId", UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
+
+// what the report does is configured in the screen widget which calls it
+reportType = context.get("reportType");
+if ("VENDOR".equals(reportType)) {
+    balances = AccountsHelper.getBalancesForAllVendors(organizationPartyId, glFiscalTypeId, asOfDateTime, delegator);
+    title = uiLabelMap.get("FinancialsVendors");
+    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("FinancialsPayablesBalancesReport"));
+} else if ("CUSTOMER".equals(reportType)) {
+    balances = AccountsHelper.getBalancesForAllCustomers(organizationPartyId, glFiscalTypeId, asOfDateTime, delegator);
+    title = uiLabelMap.get("FinancialsCustomers");
+    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("FinancialsReceivablesBalancesReport"));
+} else if ("COMMISSION".equals(reportType)) {
+    balances = AccountsHelper.getBalancesForAllCommissions(organizationPartyId, glFiscalTypeId, asOfDateTime, delegator);
+    context{"history"} = UtilCommon.makeHistoryEntry(uiLabelMap.get("FinancialsCommissionBalancesReport"));
+}
+
+keySet = (Set)balances.keySet();
+context.put("parties", keySet);
+context.put("balances", balances);
+context.put("asOfDateTime", asOfDateTime);
+
+// create a balance summary list for pagination
+customerVendorBalanceList = FastList.newInstance();
+totalAmount = AccountsHelper.ZERO;
+for (partyId : keySet) {
+    if (partyId != null) {
+    	partyBalanceAmount = (BigDecimal) balances.get(partyId);
+    	// don't show zero or null amounts on the balances summary
+    	if (partyBalanceAmount == null || partyBalanceAmount == 0.0) {
+    		continue;
+    	}
+    	
+        customerVendorBalance = FastMap.newInstance();
+
+        customerVendorBalance{"partyId"} = partyId;
+        customerVendorBalance{"partyName"} = PartyHelper.getPartyName(delegator, partyId, false);
+        customerVendorBalance{"amount"} = partyBalanceAmount;
+
+        customerVendorBalanceList.add(customerVendorBalance);
+        totalAmount = totalAmount.add(partyBalanceAmount);
+    }
+}
+context.put("customerVendorBalanceList", customerVendorBalanceList);
+context.put("totalAmount", totalAmount);
+
+// do not display the screen if it is the first time loaded, and there is no balance data
+isBalanceScreenRendered = session.getAttribute("isBalanceScreenRendered");
+if (isBalanceScreenRendered == null) {  // first time loaded
+	if (keySet.isEmpty()) {  // no data
+		session.setAttribute("isBalanceScreenRendered", new Boolean(false));
+	}
+	else {
+		session.setAttribute("isBalanceScreenRendered", new Boolean(true));
+	}
+}
+else if (!isBalanceScreenRendered.booleanValue()) {
+	session.setAttribute("isBalanceScreenRendered", new Boolean(true));
+}
+context{"isBalanceScreenRendered"} = session.getAttribute("isBalanceScreenRendered");
+
+// Gets customers/vendors with balances > 5% of total
+data = (List) UtilCommon.getPercentageValues(balances, new BigDecimal(0.05), locale);
+
+//helper variables
+context{"hasData"} = (Boolean)((data.size() > 0 ) ? true : false);
+if (data.size() > 0) {
+    context{"numberRows"} = data.size() + 5;    // for <TD> rowspan
+
+    // create pie chart
+    pieDataset = new DefaultPieDataset();
+
+    for (element : data) {
+        keys = element.keySet();
+        Number value;
+        for (String key : keys) {
+            value = (Number)element.get(key);
+            if (value != null && value.doubleValue() > 0.0) {
+                pieDataset.setValue(PartyHelper.getPartyName(delegator, key, false) + " (" + value.toString() + "%)", value);
+            }
+            break;
+        }
+    }
+
+    JFreeChart chart = ChartFactory.createPieChart(title + uiLabelMap.get("FinancialsBalancesByCustomerTitle"), pieDataset, true, true, false);
+    chart.setBackgroundPaint(Color.white);
+    chart.setBorderVisible(true);
+    chart.setPadding(new RectangleInsets(5.0, 5.0, 5.0, 5.0));
+    chartImage = ServletUtilities.saveChartAsPNG(chart, 500, 500, null);
+    context{"chartImage"} = chartImage;
+
+    // create the Excel document
+
+    // create Excel document header map
+    partyUiLabelMap = UtilProperties.getResourceBundleMap("PartyUiLabels", locale);
+    commonUiLabelMap = UtilProperties.getResourceBundleMap("CommonUiLabels", locale);
+
+    headerMap = FastMap.newInstance();
+    headerMap{"partyId"} = partyUiLabelMap.get("PartyPartyId");
+    headerMap{"partyName"} = partyUiLabelMap.get("PartyName");
+    headerMap{"amount"} = uiLabelMap.get("FinancialsReceivablesBalancesReportBalance");
+    
+    // create a data list to be exported to Excel doc
+    excelDataList = FastList.newInstance();
+    excelDataList.add(headerMap);
+    excelDataList.addAll(customerVendorBalanceList);
+    
+    columnNameList = UtilMisc.toList("partyId", "partyName", "amount");
+    UtilCommon.saveToExcel("runtime/output/Balances.xls", "Balances", columnNameList, excelDataList);
+    context.put("fileName", "Balances.xls");
+}

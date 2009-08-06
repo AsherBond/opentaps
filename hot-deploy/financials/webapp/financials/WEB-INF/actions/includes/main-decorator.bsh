@@ -1,0 +1,218 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.UtilConfig;
+import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.common.util.UtilCommon;
+import com.opensourcestrategies.financials.security.FinancialsSecurity;
+
+// get the organization party ID
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+organizationParty = session.getAttribute("organizationParty");
+if (UtilValidate.isNotEmpty(organizationParty)) {
+    context.put("applicationSetupOrganization", organizationParty);
+}
+context.put("organizationPartyId", organizationPartyId);
+parameters.put("organizationPartyId", organizationPartyId);
+
+// add financials security TODO move the rest of the parameters.hasXXXSecurity over to this class
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+fsecurity = new FinancialsSecurity(security, userLogin, organizationPartyId);
+globalContext.put("financialsSecurity", fsecurity);
+
+// by default, set all the permissions to false, then set to true if the userLogin exists and permissions are verified
+hasFinancialsViewPermission = false;
+hasFinancialsConfigPermission = false;
+hasFinancialsPayablesPermission = false;
+hasFinancialsEmployeesPermission = false;
+hasFinancialsReceivablesPermission = false;
+hasFinancialsTransactionPermission = false;
+hasFinancialsReportsPermission = false;
+hasFinancialsAPInvoiceViewPermission = false;
+hasFinancialsAPInvoiceCreatePermission = false;
+hasFinancialsAPInvoiceUpdatePermission = false;
+hasFinancialsAPPaymentViewPermission = false;
+hasFinancialsAPPaymentCreatePermission = false;
+hasFinancialsAPPaymentUpdatePermission = false;
+hasFinancialsAPPaymentApplyPermission = false;
+hasFinancialsARInvoiceViewPermission = false;
+hasFinancialsARInvoiceCreatePermission = false;
+hasFinancialsARInvoiceUpdatePermission = false;
+hasFinancialsARPaymentViewPermission = false;
+hasFinancialsARPaymentCreatePermission = false;
+hasFinancialsARPaymentUpdatePermission = false;
+hasFinancialsARPaymentApplyPermission = false;
+hasViewAgreementPermission = false;
+hasUpdateAgreementPermission = false;
+hasCreateAgreementPermission = false;
+hasPartnerViewPermission = false;
+
+if (security != null && userLogin != null) {
+  // check for financials view permission
+  if (security.hasEntityPermission("FINANCIALS", "_VIEW", userLogin)) {
+    hasFinancialsViewPermission = true;
+  }
+
+  // check for configuration permission
+  if (security.hasEntityPermission("FINANCIALS", "_CONFIG", userLogin)) {
+    hasFinancialsConfigPermission = true;
+  }
+
+  //check for Payables Tab permission
+  if (security.hasEntityPermission("FINANCIALS", "_AP_VIEW", userLogin)) {
+    hasFinancialsPayablesPermission = true;
+  }
+
+  //check for Employees Tab permission
+  if (security.hasEntityPermission("FINANCIALS", "_EMP_VIEW", userLogin)) {
+    hasFinancialsEmployeesPermission = true;
+  }
+
+  //check for Receivables Tab permission
+  if (security.hasEntityPermission("FINANCIALS", "_AR_VIEW", userLogin)) {
+    hasFinancialsReceivablesPermission = true;
+  }
+
+  //check for Transaction Tab permission
+  if (security.hasEntityPermission("FINANCIALS", "_TX_VIEW", userLogin)) {
+    hasFinancialsTransactionPermission = true;
+  }
+
+  //check for Reports Tab permission
+  if (security.hasEntityPermission("FINANCIALS", "_RPT_VIEW", userLogin)) {
+    hasFinancialsReportsPermission = true;
+  }
+
+  //check for AP/AR Invoices/Payments permission
+  if (security.hasEntityPermission("FINANCIALS", "_AP_INVIEW", userLogin)) {
+    hasFinancialsAPInvoiceViewPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AP_INCRTE", userLogin)) {
+    hasFinancialsAPInvoiceCreatePermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AP_INUPDT", userLogin)) {
+    hasFinancialsAPInvoiceUpdatePermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AP_PVIEW", userLogin)) {
+    hasFinancialsAPPaymentViewPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AP_PCRTE", userLogin)) {
+    hasFinancialsAPPaymentCreatePermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AP_PUPDT", userLogin)) {
+    hasFinancialsAPPaymentUpdatePermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AP_PAPPL", userLogin)) {
+    hasFinancialsAPPaymentApplyPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AR_INVIEW", userLogin)) {
+    hasFinancialsARInvoiceViewPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AR_INCRTE", userLogin)) {
+    hasFinancialsARInvoiceCreatePermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AR_INUPDT", userLogin)) {
+    hasFinancialsARInvoiceUpdatePermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AR_PVIEW", userLogin)) {
+    hasFinancialsARPaymentViewPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AR_PCRTE", userLogin)) {
+    hasFinancialsARPaymentCreatePermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AR_PUPDT", userLogin)) {
+    hasFinancialsARPaymentUpdatePermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_AR_PAPPL", userLogin)) {
+    hasFinancialsARPaymentApplyPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_COMM_VIEW", userLogin)) {
+      hasViewAgreementPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_COMM_UPDT", userLogin) &&
+      security.hasEntityPermission("ACCOUNTING", "_CREATE", userLogin)) {
+      hasCreateAgreementPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_COMM_UPDT", userLogin) &&
+      security.hasEntityPermission("ACCOUNTING", "_UPDATE", userLogin)) {
+      hasUpdateAgreementPermission = true;
+  }
+
+  hasPartnerViewPermission = fsecurity.hasViewPartnerPermission();
+}
+
+parameters.put("hasFinancialsViewPermission", hasFinancialsViewPermission);
+parameters.put("hasFinancialsConfigPermission", hasFinancialsConfigPermission);
+parameters.put("hasFinancialsPayablesPermission", hasFinancialsPayablesPermission);
+parameters.put("hasFinancialsReceivablesPermission", hasFinancialsReceivablesPermission);
+parameters.put("hasFinancialsTransactionPermission", hasFinancialsTransactionPermission);
+parameters.put("hasFinancialsReportsPermission", hasFinancialsReportsPermission);
+parameters.put("hasFinancialsAPInvoiceViewPermission", hasFinancialsAPInvoiceViewPermission);
+parameters.put("hasFinancialsAPInvoiceCreatePermission", hasFinancialsAPInvoiceCreatePermission);
+parameters.put("hasFinancialsAPInvoiceUpdatePermission", hasFinancialsAPInvoiceUpdatePermission);
+parameters.put("hasFinancialsAPPaymentViewPermission", hasFinancialsAPPaymentViewPermission);
+parameters.put("hasFinancialsAPPaymentCreatePermission", hasFinancialsAPPaymentCreatePermission);
+parameters.put("hasFinancialsAPPaymentUpdatePermission", hasFinancialsAPPaymentUpdatePermission);
+parameters.put("hasFinancialsAPPaymentApplyPermission", hasFinancialsAPPaymentApplyPermission);
+parameters.put("hasFinancialsARInvoiceViewPermission", hasFinancialsARInvoiceViewPermission);
+parameters.put("hasFinancialsARInvoiceCreatePermission", hasFinancialsARInvoiceCreatePermission);
+parameters.put("hasFinancialsARInvoiceUpdatePermission", hasFinancialsARInvoiceUpdatePermission);
+parameters.put("hasFinancialsARPaymentViewPermission", hasFinancialsARPaymentViewPermission);
+parameters.put("hasFinancialsARPaymentCreatePermission", hasFinancialsARPaymentCreatePermission);
+parameters.put("hasFinancialsARPaymentUpdatePermission", hasFinancialsARPaymentUpdatePermission);
+parameters.put("hasFinancialsARPaymentApplyPermission", hasFinancialsARPaymentApplyPermission);
+parameters.put("hasViewAgreementPermission", hasViewAgreementPermission);
+parameters.put("hasCreateAgreementPermission", hasCreateAgreementPermission);
+parameters.put("hasUpdateAgreementPermission", hasUpdateAgreementPermission);
+
+if (security == null || userLogin == null) return;
+
+// also put the name of the organization in the context
+context.put("organizationName", PartyHelper.getPartyName(delegator, organizationPartyId, false));
+parameters.put("organizationName", PartyHelper.getPartyName(delegator, organizationPartyId, false));
+
+// set currency for all reports
+// Get the base currency for the organization
+baseCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
+context.put("orgCurrencyUomId", baseCurrencyUomId);
+parameters.put("orgCurrencyUomId", baseCurrencyUomId);
+
+// define sections in tab order from left to right
+sections = new ArrayList();
+sections.add(UtilMisc.toMap("uiLabel", "OpentapsMyHome", "uri", "/myHomeMain", "sectionName", "myHome", "hasPermission", true));
+sections.add(UtilMisc.toMap("uiLabel", "FinancialsReceivables", "uri", "/receivablesMain", "sectionName", "receivables", "hasPermission", hasFinancialsReceivablesPermission));
+sections.add(UtilMisc.toMap("uiLabel", "FinancialsPayables", "uri", "/payablesMain", "sectionName", "payables", "hasPermission", hasFinancialsPayablesPermission));
+sections.add(UtilMisc.toMap("uiLabel", "FinancialsEmployees", "uri", "/employeesMain", "sectionName", "employees", "hasPermission", hasFinancialsEmployeesPermission));
+sections.add(UtilMisc.toMap("uiLabel", "OpentapsPartners", "uri", "/partnersMain", "sectionName", "partners", "hasPermission", hasPartnerViewPermission));
+sections.add(UtilMisc.toMap("uiLabel", "FinancialsLedger", "uri", "/transactionsMain", "sectionName", "transactions", "hasPermission", hasFinancialsTransactionPermission));
+sections.add(UtilMisc.toMap("uiLabel", "CommonReports", "uri", "/reportsMain", "sectionName", "reports", "hasPermission", hasFinancialsReportsPermission));
+sections.add(UtilMisc.toMap("uiLabel", "FinancialsConfigure", "uri", "/configurationMain", "sectionName", "configuration", "hasPermission", hasFinancialsConfigPermission));
+
+// show the ofbiz tab last if so desired
+showOfbizTab = UtilConfig.getPropertyBoolean("financials", "financials.tab.ofbiz.show", false);
+if (showOfbizTab) {
+    ofbizTabLabel = UtilConfig.getPropertyValue("financials", "financials.tab.ofbiz.label");
+    ofbizTabTarget = UtilConfig.getPropertyValue("financials", "financials.tab.ofbiz.target");
+    if (ofbizTabLabel != null && ofbizTabTarget != null) {
+        sections.add(UtilMisc.toMap("uiLabel", ofbizTabLabel, "uri", ofbizTabTarget, "sectionName", "ofbiz", "hasPermission", true, "isExternal", true));
+    }
+}
+
+//NOTE: ModelScreenWidget.java:545 uses context.get("sections"), so this would crash if we put "sections" into the map.  Hence the name "applicationSections"
+context.put("applicationSections", sections);

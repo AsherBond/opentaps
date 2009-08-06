@@ -1,0 +1,106 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.accounting.util.UtilAccounting;
+import org.ofbiz.accounting.payment.PaymentWorker;
+import org.opentaps.common.util.UtilCommon;
+
+import com.opensourcestrategies.financials.util.UtilFinancial;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.Debug;
+
+// find payments of paymentMethodType PERSONAL_CHECK or COMPANY_CHECK with statusId PMNT_SENT
+userLogin = request.getAttribute("userLogin");
+
+if (!security.hasEntityPermission("FINANCIALS", "_AP_PUPDT", userLogin)) {
+    context.put("allowed", false);
+    return;
+}
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+if (organizationPartyId == null) {
+    return;
+}
+
+paymentsOrderBy = "effectiveDate";
+
+// condition to find all sent payments that are not receipts or paychecks
+paymentCond = new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId), 
+            new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_SENT")            
+            ), EntityOperator.AND);
+
+paymentMethodTypeCond = new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "PERSONAL_CHECK"), 
+            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK")
+            ), EntityOperator.OR);
+
+paymentTypeCond = null;        
+paymentTypeCond = new EntityConditionList(UtilMisc.toList(
+            UtilFinancial.getPaymentTypeExpr(delegator, "DISBURSEMENT"),
+            UtilFinancial.getPaymentTypeComplementExpr(delegator, "PAY_CHECK"),
+            UtilFinancial.getPaymentTypeComplementExpr(delegator, "RECEIPT")                    
+            ), EntityOperator.AND); 
+            
+// build the main condition
+conditionList = new EntityConditionList(
+        UtilMisc.toList(
+               paymentCond,
+               paymentMethodTypeCond,
+               paymentTypeCond
+            ), EntityOperator.AND);
+
+// use a page builder to fetch the outstanding check list, because we need to filter receipts and paychecks
+buildPaymentList(delegator, conditions) {
+    entityName = "Payment";
+    fieldsToSelect = UtilMisc.toList("paymentId");
+    fieldsToSelect.add("paymentTypeId");
+    fieldsToSelect.add("paymentMethodId");
+    fieldsToSelect.add("paymentRefNum");            
+    fieldsToSelect.add("effectiveDate");
+    fieldsToSelect.add("partyIdTo");   
+    fieldsToSelect.add("amount");    
+    orderBy = UtilMisc.toList(paymentsOrderBy);
+    where = conditions;
+    
+    build(page) {
+        newPage = FastList.newInstance();
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            payment = iter.next();
+            row = FastMap.newInstance();
+            row.putAll(payment.getAllFields());
+            paymentMethod = payment.getRelatedOneCache("PaymentMethod");
+            if (paymentMethod != null)
+                row.put("paymentMethod", paymentMethod.get("description", locale));
+            row.put("partyToName", PartyHelper.getPartyName(delegator, payment.get("partyIdTo"), false));
+            row.put("view", "viewPayment");
+            newPage.add(row);
+        }
+        return newPage;
+    }
+    return this; // remember this, very important
+}
+context.put("paymentListBuilder", buildPaymentList(delegator, conditionList));

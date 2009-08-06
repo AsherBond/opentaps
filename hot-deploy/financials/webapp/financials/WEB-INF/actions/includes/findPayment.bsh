@@ -1,0 +1,138 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.*;
+ 
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.accounting.util.*;
+import org.ofbiz.entity.util.*;
+import org.opentaps.common.util.*;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+// this gets overrided later according to the payment type
+context.put("decoratorLocation", "component://opentaps-common/widget/screens/common/CommonScreens.xml");
+
+// set the disbursement flag which is used to set the partyIdFrom/To to that of the organization on the find payment form as a hidden field
+// also set a default status id which is based on whether it's a disbursement (SENT) or not (RECEIVED), but this is overriden by parameters.statusId
+parameters.put("headerItem", "receivables");
+boolean findDisbursement = false;
+defaultStatusId = "";  // no default status
+findPaymentTypeId = request.getParameter("findPaymentTypeId");
+if ("DISBURSEMENT".equals(findPaymentTypeId)) {
+    findDisbursement = true;
+    parameters.put("headerItem","payables");
+}
+// NOTE: if it's null then it's not been set, but if it's been set to nothing, then it's "" and not null, so OK to set default status to it
+// Do not use UtilValidate.isEmpty or you will never be able to do a search without a ""
+if (parameters.get("statusId") != null) {  
+    defaultStatusId = parameters.get("statusId");
+}
+context.put("findDisbursement", findDisbursement);
+context.put("defaultStatusId", defaultStatusId);
+
+organizationPartyId = context.get("organizationPartyId");
+context.put("organizationPartyId",organizationPartyId);
+organizationParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", organizationPartyId));
+
+
+//get the list of paymentMethods, PaymentMethodTypes, paymentTypes
+
+supportedPaymentTypes = null;
+if (findDisbursement) {
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/payables/PayablesScreens.xml");
+    parameters.put("headerItem","payables");
+    paymentMethodList = organizationParty.getRelated("PaymentMethod", UtilMisc.toList("paymentMethodTypeId"));
+    context.put("paymentMethodList",paymentMethodList);
+    supportedPaymentTypes = UtilMisc.toList("CUSTOMER_REFUND", "VENDOR_PAYMENT", "VENDOR_PREPAY", "SALES_TAX_PAYMENT", "INCOME_TAX_PAYMENT", "PAYROLL_TAX_PAYMENT");
+    supportedPaymentTypes.add("COMMISSION_PAYMENT");
+} else {
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml");
+    parameters.put("headerItem","receivables");
+    paymentMethodTypeList = UtilFinancial.getSimpleCustomerPaymentMethodTypes(delegator);
+    context.put("paymentMethodTypeList",paymentMethodTypeList);
+    supportedPaymentTypes = UtilMisc.toList("INTEREST_RECEIPT", "VENDOR_CREDIT_RCPT", "CUSTOMER_PAYMENT", "CUSTOMER_DEPOSIT");
+}
+paymentTypeList = delegator.findByAnd("PaymentType", UtilMisc.toList(new EntityExpr("paymentTypeId", EntityOperator.IN, supportedPaymentTypes)));  // no _Cache version available
+context.put("paymentTypeList", paymentTypeList);
+
+statusList = delegator.findByAndCache("StatusItem", UtilMisc.toMap("statusTypeId", "PMNT_STATUS"), UtilMisc.toList("sequenceId"));
+context.put("statusList", statusList);
+
+//possible fields we're searching by
+partyIdFrom = parameters.get("partyIdFrom");
+partyIdTo = parameters.get("partyIdTo");
+paymentTypeId = parameters.get("paymentTypeId");
+paymentMethodId = parameters.get("paymentMethodId");
+paymentMethodTypeId = parameters.get("paymentMethodTypeId");
+paymentRefNum= parameters.get("paymentRefNum");
+statusId = parameters.get("statusId");
+fromDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "fromDate", locale), timeZone, locale);
+thruDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "thruDate", locale), timeZone, locale);
+paymentId = parameters.get("paymentId");
+
+//construct search conditions
+searchConditions = new ArrayList();
+if (paymentId != null && !paymentId.equals("")) {
+    searchConditions.add(new EntityExpr("paymentId", EntityOperator.EQUALS, paymentId));
+}
+if (partyIdFrom != null && !partyIdFrom.equals("")) {
+    searchConditions.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyIdFrom));
+}
+if (partyIdTo != null && !partyIdTo.equals("")) {
+    searchConditions.add(new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyIdTo));
+}
+if (paymentTypeId != null && !paymentTypeId.equals("")) {
+    searchConditions.add(new EntityExpr("paymentTypeId", EntityOperator.EQUALS, paymentTypeId));
+}
+if (findDisbursement) {
+	if (paymentMethodId !=null && !paymentMethodId.equals("")) {
+	    searchConditions.add(new EntityExpr("paymentMethodId", EntityOperator.EQUALS, paymentMethodId));
+	}
+} else {
+	if (paymentMethodTypeId !=null && !paymentMethodTypeId.equals("")) {
+	    searchConditions.add(new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, paymentMethodTypeId));
+	}
+}
+
+if (paymentRefNum != null && !paymentRefNum.equals("")) {
+    // make sure the look up is case insensitive
+    searchConditions.add(new EntityExpr(new EntityFunction.UPPER(new EntityFieldValue("paymentRefNum")),
+            EntityOperator.LIKE, paymentRefNum.toUpperCase() + "%"));
+}
+
+if (statusId != null && !statusId.equals("")) {
+    searchConditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
+}
+if (!UtilValidate.isEmpty(fromDate)) {
+    searchConditions.add(new EntityExpr("effectiveDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+}
+if (!UtilValidate.isEmpty(thruDate)) {
+    searchConditions.add(new EntityExpr("effectiveDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate));
+}
+if (searchConditions.size() > 0){
+    searchConditions.add( UtilFinancial.getPaymentTypeComplementExpr(delegator, "PAY_CHECK") ); // excludes payments of type pay check
+    entityConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+    List payments = delegator.findByCondition("Payment", entityConditionList, null, UtilMisc.toList("effectiveDate DESC"));
+    // payment list to use in form-widgets
+    context.put("payments", payments);
+}
+
+

@@ -1,0 +1,38 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+// get the card types with defined GL accounts for the settlement box drop down 
+creditCardTypes = delegator.findByAndCache("CreditCardTypeGlAccount", UtilMisc.toMap("organizationPartyId", organizationPartyId), UtilMisc.toList("cardType"));
+context.put("creditCardTypes", creditCardTypes);
+
+// get all the undeposited funds accounts
+undepositedReceiptsAccounts = delegator.findByAnd("GlAccountOrganizationAndClass", UtilMisc.toMap("organizationPartyId", organizationPartyId, "glAccountTypeId", "UNDEPOSITED_RECEIPTS"), UtilMisc.toList("glAccountId"));
+context.put("undepositedReceiptsAccounts", undepositedReceiptsAccounts);
+
+// get all the available bank settlement accounts
+settlementAccounts = delegator.findByAnd("GlAccountOrganizationAndClass", UtilMisc.toMap("organizationPartyId", organizationPartyId, "glAccountTypeId", "BANK_STLMNT_ACCOUNT"), UtilMisc.toList("glAccountId"));
+context.put("settlementAccounts", settlementAccounts);
+
+// default accounts for undeposited receipts and settlements
+context.put("defaultUndepositedReceiptsAccount", delegator.findByPrimaryKeyCache("GlAccountTypeDefault", UtilMisc.toMap("organizationPartyId", organizationPartyId, "glAccountTypeId", "UNDEPOSITED_RECEIPTS")));
+context.put("defaultSettlementAccount", delegator.findByPrimaryKeyCache("GlAccountTypeDefault", UtilMisc.toMap("organizationPartyId", organizationPartyId, "glAccountTypeId", "BANK_STLMNT_ACCOUNT")));
+
+// TODO: support more payment method types
+

@@ -1,0 +1,103 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ *  @author Chris Liberty (cliberty@opensourcestrategies.com)
+ */
+
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsComparativeCashFlowStatement"));
+
+organizationPartyId = context.get("organizationPartyId");
+glFiscalTypeId1 = context.get("glFiscalTypeId1");
+glFiscalTypeId2 = context.get("glFiscalTypeId2");
+fromDate1 = context.get("fromDate1");
+thruDate1 = context.get("thruDate1");
+fromDate2 = context.get("fromDate2");
+thruDate2 = context.get("thruDate2");
+if (fromDate1 == null || thruDate1 == null || fromDate2 == null || thruDate2 == null) return;
+
+input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId1", glFiscalTypeId1, "glFiscalTypeId2", glFiscalTypeId2);
+input.put("userLogin", userLogin);
+input.put("fromDate1", fromDate1);
+input.put("thruDate1", thruDate1);
+input.put("fromDate2", fromDate2);
+input.put("thruDate2", thruDate2);
+
+// add tags from the request to the service parameters
+UtilAccountingTags.addTagParameters(request, input);
+
+context.put("input",input);
+
+result = dispatcher.runSync("getComparativeCashFlowStatement", input);
+if (ServiceUtil.isError(result)) return;
+
+set1CashFlowStatement = result.get("set1CashFlowStatement");
+set2CashFlowStatement = result.get("set2CashFlowStatement");
+
+// put everything into the context
+context.put("beginningCashAmount1", set1CashFlowStatement.get("beginningCashAmount"));
+context.put("beginningCashAmount2", set2CashFlowStatement.get("beginningCashAmount"));
+context.put("endingCashAmount1", set1CashFlowStatement.get("endingCashAmount"));
+context.put("endingCashAmount2", set2CashFlowStatement.get("endingCashAmount"));
+context.put("operatingCashFlow1", set1CashFlowStatement.get("operatingCashFlow"));
+context.put("operatingCashFlow2", set2CashFlowStatement.get("operatingCashFlow"));
+context.put("investingCashFlow1", set1CashFlowStatement.get("investingCashFlow"));
+context.put("investingCashFlow2", set2CashFlowStatement.get("investingCashFlow"));
+context.put("financingCashFlow1", set1CashFlowStatement.get("financingCashFlow"));
+context.put("financingCashFlow2", set2CashFlowStatement.get("financingCashFlow"));
+context.put("netCashFlow1", set1CashFlowStatement.get("netCashFlow"));
+context.put("netCashFlow2", set2CashFlowStatement.get("netCashFlow"));
+context.put("netIncome1", set1CashFlowStatement.get("netIncome"));
+context.put("netIncome2", set2CashFlowStatement.get("netIncome"));
+
+set1Accounts = new HashMap();
+set1Accounts.put("beginningCashAccounts", set1CashFlowStatement.get("beginningCashAccountBalances"));
+set1Accounts.put("endingCashAccounts", set1CashFlowStatement.get("endingCashAccountBalances"));
+set1Accounts.put("operatingCashFlowAccounts", set1CashFlowStatement.get("operatingCashFlowAccountBalances"));
+set1Accounts.put("investingCashFlowAccounts", set1CashFlowStatement.get("investingCashFlowAccountBalances"));
+set1Accounts.put("financingCashFlowAccounts", set1CashFlowStatement.get("financingCashFlowAccountBalances"));
+context.put("set1Accounts", set1Accounts);
+
+set2Accounts = new HashMap();
+set2Accounts.put("beginningCashAccounts", set2CashFlowStatement.get("beginningCashAccountBalances"));
+set2Accounts.put("endingCashAccounts", set2CashFlowStatement.get("endingCashAccountBalances"));
+set2Accounts.put("operatingCashFlowAccounts", set2CashFlowStatement.get("operatingCashFlowAccountBalances"));
+set2Accounts.put("investingCashFlowAccounts", set2CashFlowStatement.get("investingCashFlowAccountBalances"));
+set2Accounts.put("financingCashFlowAccounts", set2CashFlowStatement.get("financingCashFlowAccountBalances"));
+context.put("set2Accounts", set2Accounts);
+
+context.put("beginningCashAccountBalances", result.get("beginningCashAccountBalances"));
+context.put("beginningCashAccounts", EntityUtil.orderBy(result.get("beginningCashAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("endingCashAccountBalances", result.get("endingCashAccountBalances"));
+context.put("endingCashAccounts", EntityUtil.orderBy(result.get("endingCashAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("operatingCashFlowAccountBalances", result.get("operatingCashFlowAccountBalances"));
+context.put("operatingCashFlowAccounts", EntityUtil.orderBy(result.get("operatingCashFlowAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("investingCashFlowAccountBalances", result.get("investingCashFlowAccountBalances"));
+context.put("investingCashFlowAccounts", EntityUtil.orderBy(result.get("investingCashFlowAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("financingCashFlowAccountBalances", result.get("financingCashFlowAccountBalances"));
+context.put("financingCashFlowAccounts", EntityUtil.orderBy(result.get("financingCashFlowAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+
+// put the correct GlFiscalTypes into the context for the display tier
+glFiscalType1 = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId1));
+glFiscalType2 = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId2));
+context.put("glFiscalType1", glFiscalType1);
+context.put("glFiscalType2", glFiscalType2);

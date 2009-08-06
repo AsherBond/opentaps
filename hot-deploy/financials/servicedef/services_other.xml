@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Accounting Services - Miscellaneous</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+    <!-- these services are for GL export -->
+    <service name="exportGLToFile" engine="java"
+            location="com.opensourcestrategies.financials.integration.GLExportServices" invoke="exportGLToFile" transaction-timeout="7200" auth="true">
+        <implements service="storeEntitySyncData"/>
+    </service>
+    
+    <!-- Payment services -->
+    <service name="financials.createPayment" engine="java" default-entity-name="Payment"
+        location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="createPayment" auth="true">
+        <description>Wrapper service for OFBiz createPayment, to ensure that the paymentMethodTypeId parameter is overridden by the
+            paymentMethodTypeId of the PaymentMethod passed as a parameter.</description>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <override name="paymentTypeId" optional="false"/>
+        <override name="partyIdFrom" optional="false"/>
+        <override name="partyIdTo" optional="false"/>
+        <override name="statusId" optional="false"/>
+        <override name="amount" optional="false"/>
+    </service>
+
+    <service name="financials.updatePayment" engine="java" default-entity-name="Payment"
+        location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="updatePayment" auth="true">
+        <description>Wrapper service for OFBiz updatePayment, to ensure that the paymentMethodTypeId parameter is overridden by the
+            paymentMethodTypeId of the PaymentMethod passed as a parameter.</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="paymentId" mode="INOUT" optional="false" />
+    </service>
+
+    <!-- Lockbox services -->
+    <service name="financials.uploadLockboxFile" engine="pojo"
+        location="org.opentaps.financials.domain.billing.lockbox.LockboxService" invoke="uploadLockboxFile" auth="true">
+        <description>Upload and import a Lockbox file.</description>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="uploadedFile" type="org.ofbiz.entity.util.ByteWrapper" mode="IN" optional="false"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="false"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="financials.lockboxBatchItemDetailAction" engine="pojo"
+        location="org.opentaps.financials.domain.billing.lockbox.LockboxService" invoke="lockboxBatchItemDetailAction" auth="true">
+        <description>Handle actions on Lockbox Details, either to apply amounts or create a new detail.</description>
+        <attribute name="lockboxBatchId" type="String" mode="IN" optional="false"/>
+        <attribute name="itemSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="detailSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceId" type="String" mode="IN" optional="true"/>
+        <attribute name="amountToApply" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="cashDiscount" type="BigDecimal" mode="IN" optional="false"/>
+    </service>
+
+    <service name="financials.addLockboxBatchItemDetail" engine="pojo"
+        location="org.opentaps.financials.domain.billing.lockbox.LockboxService" invoke="addLockboxBatchItemDetail" auth="true">
+        <description>Add a new Lockbox Detail to an existing Lockbox Item.</description>
+        <attribute name="lockboxBatchId" type="String" mode="IN" optional="false"/>
+        <attribute name="itemSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceId" type="String" mode="IN" optional="true"/>
+        <attribute name="amountToApply" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="cashDiscount" type="BigDecimal" mode="IN" optional="false"/>
+    </service>
+
+    <service name="financials.updateLockboxBatchItemDetail" engine="pojo"
+        location="org.opentaps.financials.domain.billing.lockbox.LockboxService" invoke="updateLockboxBatchItemDetail" auth="true">
+        <description>Apply amounts to an existing LockboxBatchItemDetail.</description>
+        <attribute name="lockboxBatchId" type="String" mode="IN" optional="false"/>
+        <attribute name="itemSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="detailSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="amountToApply" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="cashDiscount" type="BigDecimal" mode="IN" optional="false"/>
+    </service>
+
+    <service name="financials.processLockboxBatch" engine="pojo"
+        location="org.opentaps.financials.domain.billing.lockbox.LockboxService" invoke="processLockboxBatch" auth="true">
+        <description>Validate and process all the ready lines from the batch.</description>
+        <attribute name="lockboxBatchId" type="String" mode="IN" optional="false"/>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <!-- Encumbrance accounting services -->
+    <service name="createEncumbranceSnapshotAndDetail" engine="pojo"
+        location="org.opentaps.financials.domain.ledger.EncumbranceServices" invoke="createEncumbranceSnapshotAndDetail" auth="true" use-transaction="false">
+        <description>
+            This service goes through active purchase orders and posted transactions of the gl account 
+            type ENCUMBRANCE and creates an encumbrance snapshot with all the detail records.
+        </description>
+        <attribute name="organizationPartyId" mode="IN" type="String"/>
+        <attribute name="startDatetime" mode="IN" type="Timestamp" optional="true"/>
+        <attribute name="snapshotDatetime" mode="IN" type="Timestamp" optional="true"/>
+        <attribute name="comments" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+    </service>
+</services>

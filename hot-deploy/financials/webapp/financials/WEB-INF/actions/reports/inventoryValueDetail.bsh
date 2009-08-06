@@ -1,0 +1,100 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/* 
+ * Inventory valuation detail
+ * Inventory item QoH value converted to organization currency
+ *
+ * @author Leon Torres (leon@opensourcestrategies.com)
+ * @author Si Chen (sichen@opensourcestrategies.com)
+ */ 
+
+import java.math.BigDecimal;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.service.*;
+import com.opensourcestrategies.financials.financials.FinancialServices;
+import org.opentaps.common.util.UtilMessage;
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+userLogin = context.get("userLogin");
+
+// see if we're searching by productId
+productId = parameters.get("productId");
+includeProductIdCondition = (productId == null || productId.trim().length() == 0 ? false : true);
+if (includeProductIdCondition) productIdExpr = new EntityExpr("productId", true, EntityOperator.LIKE, productId.trim() + "%", true);
+
+// make a map of the inventoryItem to the QoH value
+inventoryValueDetail = FastMap.newInstance();
+
+// organization party conversion factor is already in parameters, thanks to main-decorator.bsh
+orgCurrencyUomId = parameters.get("orgCurrencyUomId");
+
+// get the non-serial inventory items
+conditions = UtilMisc.toList(
+        new EntityExpr("ownerPartyId", EntityOperator.EQUALS, organizationPartyId),
+        new EntityExpr("inventoryItemTypeId", EntityOperator.EQUALS, "NON_SERIAL_INV_ITEM"),
+	new EntityExpr("quantityOnHandTotal", EntityOperator.NOT_EQUAL, 0));
+if (includeProductIdCondition) conditions.add(productIdExpr);
+inventoryItemConditions = new EntityConditionList(conditions, EntityOperator.AND);
+inventoryItems = delegator.findByCondition("InventoryItem", inventoryItemConditions, null, UtilMisc.toList("productId", "inventoryItemId")); // order by productId, inventoryItemId
+
+// add the available serialized items to the end
+conditions = UtilMisc.toList(
+        new EntityExpr("ownerPartyId", EntityOperator.EQUALS, organizationPartyId),
+        new EntityExpr("inventoryItemTypeId", EntityOperator.EQUALS, "SERIALIZED_INV_ITEM"),
+        new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("INV_AVAILABLE", "INV_PROMISED"))
+        );
+if (includeProductIdCondition) conditions.add(productIdExpr);
+inventoryItemConditions = new EntityConditionList(conditions, EntityOperator.AND);
+serializedItems = delegator.findByCondition("InventoryItem", inventoryItemConditions, null, UtilMisc.toList("productId", "inventoryItemId")); // order by productId, inventoryItemId
+inventoryItems.addAll(serializedItems);
+
+// go through each inventory item and determine the (conversionFactor * QoH amount * unitCost)
+for (iter = inventoryItems.iterator(); iter.hasNext(); ) {
+    inventoryItem = iter.next();
+    // if for some reason a serialized item does not have a QOH, set it to 1.0 - this is true if the status above is AVAILABLE and PROMISED already
+    qoh = inventoryItem.getBigDecimal("quantityOnHandTotal");
+    if ((qoh == null) && ("SERIALIZED_INV_ITEM".equals(inventoryItem.getString("inventoryItemTypeId")))) {
+        qoh = new BigDecimal(1.00);
+    }
+    
+    if (qoh != null) {
+         amount = qoh.multiply(inventoryItem.getBigDecimal("unitCost")).setScale(FinancialServices.decimals, FinancialServices.rounding);
+
+         // convert TODO: make a faster method as this is slow as a service
+         serviceResults = dispatcher.runSync("convertUom", UtilMisc.toMap("uomId", inventoryItem.get("currencyUomId"), "uomIdTo", orgCurrencyUomId, "originalValue", new Double(amount.doubleValue())));
+         amount = new BigDecimal(((Double) serviceResults.get("convertedValue")).doubleValue());
+
+         // round off and store
+         amount = amount.setScale(FinancialServices.decimals, FinancialServices.rounding);
+         inventoryValueDetail.put(inventoryItem, amount);
+    }
+}
+
+context.put("inventoryValueDetail", inventoryValueDetail);
+
+// next, report the transaction entries for the INV_ADJ_AVG_COST and WIP_INVENTORY accounts
+conditions = UtilMisc.toList(
+        new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+        new EntityExpr("isPosted", EntityOperator.EQUALS, "Y"),
+        new EntityExpr("glAccountTypeId", EntityOperator.IN, UtilMisc.toList("INV_ADJ_AVG_COST", "WIP_INVENTORY")),
+        new EntityExpr("amount", EntityOperator.NOT_EQUAL, new Double(0))
+        );
+if (includeProductIdCondition) conditions.add( productIdExpr );
+adjustmentTransactions = delegator.findByCondition("AcctgTransAndEntries", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("glAccountId", "productId"));
+context.put("adjustmentTransactions", adjustmentTransactions);

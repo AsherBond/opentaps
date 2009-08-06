@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * Foundation, Inc., 51 Frankli
+n St, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+  <!-- ========================================================= -->
+  <!-- ======================== Defaults ======================= -->
+  <!-- ========================================================= -->
+    <title>Entity of an Open Source Strategies Financials component</title>
+    <description>None</description>
+    <copyright>Copyright (c) 2006 - 2007 Open Source Strategies, Inc.</copyright>
+    <author>None</author>
+    <version>1.0</version>
+
+    <entity entity-name="StoreDim" package-name="com.opensourcestrategies.financials.reporting"
+        title="Store Dimension">
+        <description>Datawarehouse store dimension.</description>
+        <field name="storeDimId" type="surrogate-key"/>
+        <field name="dimVersion" type="version"/>
+        <field name="dateFrom" type="date-time"/>        
+        <field name="dateTo" type="date-time"/>
+        <field name="productStoreId" type="id-ne"/>
+        <field name="storeDimName" type="name"/>        
+        <prim-key field="storeDimId"/>
+    </entity>
+    
+    <entity entity-name="TaxAuthorityDim" package-name="com.opensourcestrategies.financials.reporting"
+        title="Tax Authority Dimension">
+        <description>Datawarehouse tax authority dimension.</description>
+        <field name="taxAuthorityDimId" type="surrogate-key"/>
+        <field name="dimVersion" type="version"/>
+        <field name="dateFrom" type="date-time"/>        
+        <field name="dateTo" type="date-time"/>
+        <field name="taxAuthPartyId" type="id-ne"/>
+        <field name="taxAuthGeoId" type="id-ne"/>        
+        <field name="groupName" type="name"/>
+        <field name="geoName" type="name"/>
+        <field name="geoCode" type="short-varchar"/>        
+        <prim-key field="taxAuthorityDimId"/>
+    </entity>    
+    
+    <entity entity-name="DateDim" package-name="com.opensourcestrategies.financials.reporting"
+        title="Date Dimension">
+        <description>Datawarehouse date dimension.</description>
+        <field name="dateDimId" type="surrogate-key"/>
+        <field name="dimVersion" type="version"/>
+        <field name="dateFrom" type="date-time"/>
+        <field name="dateTo" type="date-time"/>        
+        <field name="invoiceDate" type="date-time"/>        
+        <field name="dayOfMonth" type="id"/>
+        <field name="weekOfYear" type="id"/>
+        <field name="monthOfYear" type="id"/>
+        <field name="yearNumber" type="id"/>
+        <field name="quarter" type="id"/>                                
+        <field name="nameDay" type="id"/>
+        <field name="nameMonth" type="id"/>
+        <prim-key field="dateDimId"/>
+    </entity>
+    
+    <entity entity-name="CurrencyDim" package-name="com.opensourcestrategies.financials.reporting"
+        title="Currency Dimension">
+        <description>Datawarehouse currency dimension.</description>
+        <field name="currencyDimId" type="surrogate-key"/>
+        <field name="dimVersion" type="version"/>
+        <field name="dateFrom" type="date-time"/>        
+        <field name="dateTo" type="date-time"/>
+        <field name="uomId" type="id-ne"/>
+        <prim-key field="currencyDimId"/>
+    </entity>
+
+    <entity entity-name="SalesInvoiceItemFact" package-name="com.opensourcestrategies.financials.reporting"
+        title="Sales Invoice Item Fact">
+        <description>Datawarehouse sales invoice item fact.</description>
+        <field name="dateDimId" type="surrogate-key"/>        
+        <field name="storeDimId" type="surrogate-key"/>   
+        <field name="currencyDimId" type="surrogate-key"/>
+        <field name="invoiceId" type="id"/>
+        <field name="invoiceItemSeqId" type="id"/>        
+        <field name="grossAmount" type="fact-amount"/>        
+        <field name="discounts" type="fact-amount"/>
+        <field name="refunds" type="fact-amount"/>                
+        <field name="netAmount" type="fact-amount"/>        
+        <prim-key field="dateDimId"/>
+        <prim-key field="storeDimId"/>
+        <prim-key field="currencyDimId"/>
+        <prim-key field="invoiceId"/>
+        <prim-key field="invoiceItemSeqId"/>
+    </entity>    
+    
+    <entity entity-name="TaxInvoiceItemFact" package-name="com.opensourcestrategies.financials.reporting"
+        title="Tax Invoice Item Fact">
+        <description>Datawarehouse tax invoice item fact.</description>
+        <field name="dateDimId" type="surrogate-key"/>        
+        <field name="storeDimId" type="surrogate-key"/>        
+        <field name="taxAuthorityDimId" type="surrogate-key"/>
+        <field name="currencyDimId" type="surrogate-key"/>                
+        <field name="invoiceId" type="id"/>
+        <field name="invoiceItemSeqId" type="id"/>        
+        <field name="grossAmount" type="fact-amount"/>        
+        <field name="discounts" type="fact-amount"/>
+        <field name="refunds" type="fact-amount"/>                
+        <field name="netAmount" type="fact-amount"/>        
+        <field name="taxDue" type="fact-amount"/>        
+        <prim-key field="dateDimId"/>
+        <prim-key field="storeDimId"/>        
+        <prim-key field="taxAuthorityDimId"/>
+        <prim-key field="currencyDimId"/>
+        <prim-key field="invoiceId"/>
+        <prim-key field="invoiceItemSeqId"/>
+    </entity>        
+
+    <entity entity-name="GlAccountTransEntryFact" package-name="com.opensourcestrategies.financials.reporting"
+        title="Budget Details versus Expenses and Encumbrances">
+        <description>Budget Details versus Expenses and Encumbrances</description>
+        <field name="glAccountTransEntryFactId" type="id-ne"/>
+        <field name="transactionDate" type="date-time"/>
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="glAccountId" type="id"/>
+        <field name="acctgTransId" type="id"/>
+        <field name="acctgTransEntrySeqId" type="id"/>
+        <field name="budgetDebitAmount" type="currency-amount"/>
+        <field name="budgetCreditAmount" type="currency-amount"/>
+        <field name="actualDebitAmount" type="currency-amount"/>
+        <field name="actualCreditAmount" type="currency-amount"/>
+        <field name="encumberedDebitAmount" type="currency-amount"/>
+        <field name="encumberedCreditAmount" type="currency-amount"/>
+        <field name="budgetNetAmount" type="currency-amount"/>
+        <field name="actualNetAmount" type="currency-amount"/>
+        <field name="encumberedNetAmount" type="currency-amount"/>
+
+        <prim-key field="glAccountTransEntryFactId"/>
+
+        <relation rel-entity-name="GlAccount" type="one">
+            <key-map field-name="glAccountId"/>
+        </relation>
+        <relation rel-entity-name="AcctgTransEntry" type="one">
+            <key-map field-name="acctgTransId"/>
+            <key-map field-name="acctgTransEntrySeqId"/>
+        </relation>
+    </entity>
+
+</entitymodel>

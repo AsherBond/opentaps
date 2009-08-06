@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<entity-engine-xml>
+
+    <!-- This is for testing the net due on X day of the month -->
+    <!-- a sample account -->
+    <Party partyId="demoneton10th" partyTypeId="PARTY_GROUP" description="Demo Net Due on 10th Account"
+           preferredCurrencyUomId="USD"/>
+    <PartyGroup partyId="demoneton10th" groupName="Demo Net Due on 10th Account"/>
+    <PartyRole partyId="demoneton10th" roleTypeId="ACCOUNT"/>
+    <PartyRelationship partyIdTo="DemoSalesRep3" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="demoneton10th"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="ACCOUNT_OWNER"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR"
+                       comments="DemoSalesRep3 is responsible for demoneton10th, which means he acts as the account owner"/>
+    <PartyRelationship partyIdTo="DemoSalesRep2" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="demoneton10th"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO"
+                       comments="DemoSalesRep2 is a full rep for demoneton10th, with view/update permissions"/>
+    <PartyRelationship partyIdTo="DemoSalesRep1" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="demoneton10th"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP_LIMITED"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO"
+                       comments="DemoSalesRep1 is a limited rep for demoneton10th, with view permission only"/>
+    <!-- an address -->
+    <ContactMech contactMechId="demoneton10th1" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="demoneton10th1" toName="Demo Account No. 1" address1="1234 Los Angeles Ave"
+                   city="Los Angeles" stateProvinceGeoId="CA" postalCode="90000" countryGeoId="USA"/>
+    <!-- this one is a general, billing, and shipping address -->
+    <PartyContactMech partyId="demoneton10th" contactMechId="demoneton10th1" fromDate="2005-12-01 00:00:00.000"
+                      allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="demoneton10th" contactMechId="demoneton10th1"
+                             contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="demoneton10th" contactMechId="demoneton10th1"
+                             contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="demoneton10th" contactMechId="demoneton10th1"
+                             contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartySupplementalData partyId="demoneton10th" primaryPostalAddressId="demoneton10th1" />
+
+    <Agreement agreementId="demoneton10th" partyIdFrom="Company" agreementTypeId="SALES_AGREEMENT" description="Invoice Due Agreement (Due on 10th of Month)" partyIdTo="demoneton10th" fromDate="2007-01-01 00:00:00.000"  statusId="AGR_ACTIVE"/>
+    <AgreementItem agreementId="demoneton10th" agreementItemSeqId="00001" agreementItemTypeId="AGREEMENT_PAYMENT" currencyUomId="USD" agreementText="Invoices Due on 10th of Month, Cutoff Date 25th of Month"/>
+    <AgreementTerm agreementTermId="demoneton10th1" termTypeId="FIN_PAYMENT_FIXDAY" agreementId="demoneton10th" agreementItemSeqId="00001" termValue="10" minQuantity="25" description="Invoices Due on 10th of Month, Cutoff Date 25th of Month"/>
+
+    <!-- This is for testing party classification group agreements -->    
+    <!-- PartyClassification Types and Groups for Invoice Due Dates -->
+	<PartyClassificationType partyClassificationTypeId="INVOICE_DUE_CLASSIFI" hasTable="N" description="Invoice Due Date"/>
+	<PartyClassificationGroup partyClassificationGroupId="NET_DUE_10TH" partyClassificationTypeId="INVOICE_DUE_CLASSIFI" description="Due upon 10th of month"/>
+	<PartyClassificationGroup partyClassificationGroupId="NET_DUE_30DAY" partyClassificationTypeId="INVOICE_DUE_CLASSIFI" description="Net 30 day billing"/>
+	<PartyClassificationGroup partyClassificationGroupId="NET_DUE_60DAY" partyClassificationTypeId="INVOICE_DUE_CLASSIFI" description="Net 60 day billing"/>
+
+	<!-- Agreements for Invoice-Due-Date-related PartyClassificationGroup -->
+	<Agreement agreementId="AGR_DUE_10TH" partyIdFrom="Company" agreementTypeId="SALES_AGREEMENT" description="Invoice Due Agreement (Due on 10th of Month)" toPartyClassGroupId="NET_DUE_10TH" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+	<AgreementItem agreementId="AGR_DUE_10TH" agreementItemSeqId="00001" agreementItemTypeId="AGREEMENT_PAYMENT" currencyUomId="USD" agreementText="Invoices Due on 10th of Month, Cutoff Date 25th of Month"/>
+	<AgreementTerm agreementTermId="AGRTRM_DUE_10TH" termTypeId="FIN_PAYMENT_FIXDAY" agreementId="AGR_DUE_10TH" agreementItemSeqId="00001" termValue="10" minQuantity="25" description="Invoices Due on 10th of Month, Cutoff Date 25th of Month"/>
+
+	<Agreement agreementId="AGR_DUE_30DAY" partyIdFrom="Company" agreementTypeId="SALES_AGREEMENT" description="Invoice Due Agreement (Due in 30 days)" toPartyClassGroupId="NET_DUE_30DAY" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+	<AgreementItem agreementId="AGR_DUE_30DAY" agreementItemSeqId="00001" agreementItemTypeId="AGREEMENT_PAYMENT" currencyUomId="USD" agreementText="Invoices Due in 30 Days"/>
+	<AgreementTerm agreementTermId="AGRTRM_DUE_30DAY" termTypeId="FIN_PAYMENT_TERM" agreementId="AGR_DUE_30DAY" agreementItemSeqId="00001" termDays="30" description="Invoices Due in 30 Days"/>
+
+	<Agreement agreementId="AGR_DUE_60DAY" partyIdFrom="Company" partyIdTo="democlass3" agreementTypeId="SALES_AGREEMENT" description="Invoice Due Agreement (Due in 60 days)" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+	<AgreementItem agreementId="AGR_DUE_60DAY" agreementItemSeqId="00001" agreementItemTypeId="AGREEMENT_PAYMENT" currencyUomId="USD" agreementText="Invoices Due in 60 Days"/>
+	<AgreementTerm agreementTermId="AGRTRM_DUE_60DAY" termTypeId="FIN_PAYMENT_TERM" agreementId="AGR_DUE_60DAY" agreementItemSeqId="00001" termDays="60" description="Invoices Due in 60 Days"/>
+
+    <!-- sample parties for classifications -->
+    <Party partyId="democlass1" partyTypeId="PARTY_GROUP" description="Demo Party Classification Account 1"
+           preferredCurrencyUomId="USD"/>
+    <PartyGroup partyId="democlass1" groupName="Demo Party Classification Account 1"/>
+    <PartyRole partyId="democlass1" roleTypeId="ACCOUNT"/>
+    <PartyRelationship partyIdTo="DemoSalesRep3" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="democlass1"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="ACCOUNT_OWNER"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR"
+                       comments="DemoSalesRep3 is responsible for democlass1, which means he acts as the account owner"/>
+    <PartyRelationship partyIdTo="DemoSalesRep2" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="democlass1"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO"
+                       comments="DemoSalesRep2 is a full rep for democlass1, with view/update permissions"/>
+    <PartyRelationship partyIdTo="DemoSalesRep1" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="democlass1"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP_LIMITED"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO"
+                       comments="DemoSalesRep1 is a limited rep for democlass1, with view permission only"/>
+    <!-- an address -->
+    <ContactMech contactMechId="democlass11" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="democlass11" toName="Demo Account No. 1" address1="1234 Los Angeles Ave"
+                   city="Los Angeles" stateProvinceGeoId="CA" postalCode="90000" countryGeoId="USA"/>
+    <!-- this one is a general, billing, and shipping address -->
+    <PartyContactMech partyId="democlass1" contactMechId="democlass11" fromDate="2005-12-01 00:00:00.000"
+                      allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="democlass1" contactMechId="democlass11"
+                             contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="democlass1" contactMechId="democlass11"
+                             contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="democlass1" contactMechId="democlass11"
+                             contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartySupplementalData partyId="democlass1" primaryPostalAddressId="democlass11" />
+
+    <Party partyId="democlass2" partyTypeId="PARTY_GROUP" description="Demo Party Classification Account 2"
+           preferredCurrencyUomId="USD"/>
+    <PartyGroup partyId="democlass2" groupName="Demo Party Classification Account 2"/>
+    <PartyRole partyId="democlass2" roleTypeId="ACCOUNT"/>
+    <PartyRelationship partyIdTo="DemoSalesRep3" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="democlass2"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="ACCOUNT_OWNER"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR"
+                       comments="DemoSalesRep3 is responsible for democlass2, which means he acts as the account owner"/>
+    <PartyRelationship partyIdTo="DemoSalesRep2" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="democlass2"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO"
+                       comments="DemoSalesRep2 is a full rep for democlass2, with view/update permissions"/>
+    <PartyRelationship partyIdTo="DemoSalesRep1" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="democlass2"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP_LIMITED"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO"
+                       comments="DemoSalesRep1 is a limited rep for democlass2, with view permission only"/>
+    <!-- an address -->
+    <ContactMech contactMechId="democlass21" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="democlass21" toName="Demo Account No. 1" address1="1234 Los Angeles Ave"
+                   city="Los Angeles" stateProvinceGeoId="CA" postalCode="90000" countryGeoId="USA"/>
+    <!-- this one is a general, billing, and shipping address -->
+    <PartyContactMech partyId="democlass2" contactMechId="democlass21" fromDate="2005-12-01 00:00:00.000"
+                      allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="democlass2" contactMechId="democlass21"
+                             contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="democlass2" contactMechId="democlass21"
+                             contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="democlass2" contactMechId="democlass21"
+                             contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartySupplementalData partyId="democlass2" primaryPostalAddressId="democlass21" />
+
+    <Party partyId="democlass3" partyTypeId="PARTY_GROUP" description="Demo Party Classification Account 3"
+           preferredCurrencyUomId="USD"/>
+    <PartyGroup partyId="democlass3" groupName="Demo Party Classification Account 3"/>
+    <PartyRole partyId="democlass3" roleTypeId="ACCOUNT"/>
+    <PartyRelationship partyIdTo="DemoSalesRep3" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="democlass3"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="ACCOUNT_OWNER"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR"
+                       comments="DemoSalesRep3 is responsible for democlass3, which means he acts as the account owner"/>
+    <PartyRelationship partyIdTo="DemoSalesRep2" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="democlass3"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO"
+                       comments="DemoSalesRep2 is a full rep for democlass3, with view/update permissions"/>
+    <PartyRelationship partyIdTo="DemoSalesRep1" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="democlass3"
+                       roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP_LIMITED"
+                       fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO"
+                       comments="DemoSalesRep1 is a limited rep for democlass3, with view permission only"/>
+    <!-- an address -->
+    <ContactMech contactMechId="democlass31" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="democlass31" toName="Demo Account No. 1" address1="1234 Los Angeles Ave"
+                   city="Los Angeles" stateProvinceGeoId="CA" postalCode="90000" countryGeoId="USA"/>
+    <!-- this one is a general, billing, and shipping address -->
+    <PartyContactMech partyId="democlass3" contactMechId="democlass31" fromDate="2005-12-01 00:00:00.000"
+                      allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="democlass3" contactMechId="democlass31"
+                             contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="democlass3" contactMechId="democlass31"
+                             contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="democlass3" contactMechId="democlass31"
+                             contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartySupplementalData partyId="democlass3" primaryPostalAddressId="democlass31" />
+
+    <PartyClassification partyId="democlass1" partyClassificationGroupId="NET_DUE_10TH" fromDate="2007-01-01 00:00:00"/>
+    <PartyClassification partyId="democlass2" partyClassificationGroupId="NET_DUE_30DAY" fromDate="2007-01-01 00:00:00"/>
+    <PartyClassification partyId="democlass3" partyClassificationGroupId="NET_DUE_60DAY" fromDate="2007-01-01 00:00:00"/>
+    <PartyClassification partyId="demopartner2" partyClassificationGroupId="NET_DUE_30DAY" fromDate="2009-01-01 00:00:00"/>
+
+
+</entity-engine-xml>

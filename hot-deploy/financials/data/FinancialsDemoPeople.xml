@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<entity-engine-xml>
+
+    <Party partyId="demofinadmin" partyTypeId="PERSON"/>
+    <Person partyId="demofinadmin" firstName="Demo" lastName="Financials Admin"/>
+    <UserLogin userLoginId="demofinadmin" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s" partyId="demofinadmin"/>
+    <UserLoginSecurityGroup userLoginId="demofinadmin" groupId="FINANCIALS_ADMIN" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="810" fromDate="2005-12-01 00:00:00" userLoginId="demofinadmin"/>
+    <ContactMech contactMechId="demofinadminemail" contactMechTypeId="EMAIL_ADDRESS" infoString="demofinadmin@opentaps.org"/>
+    <PartyContactMech partyId="demofinadmin" contactMechId="demofinadminemail" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="demofinadmin" contactMechId="demofinadminemail" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="demofinadmin" primaryEmailId="demofinadminemail" />
+
+    <Party partyId="DemoARSpecialist" partyTypeId="PERSON"/>
+    <Person partyId="DemoARSpecialist" firstName="Demo" lastName="Receivables Specialist"/>
+    <UserLogin userLoginId="demoacctrecv" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s" partyId="DemoARSpecialist"/>
+    <UserLoginSecurityGroup userLoginId="demoacctrecv" groupId="FINANCIALS_AR" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="811" fromDate="2005-12-01 00:00:00" userLoginId="demoacctrecv"/>
+
+    <Party partyId="DemoAPSpecialist" partyTypeId="PERSON"/>
+    <Person partyId="DemoAPSpecialist" firstName="Demo" lastName="Payables Specialist"/>
+    <UserLogin userLoginId="demoacctpay" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s" partyId="DemoAPSpecialist"/>
+    <UserLoginSecurityGroup userLoginId="demoacctpay" groupId="FINANCIALS_AP" fromDate="2007-01-01 00:00:00"/> 
+    <AsteriskUser extension="812" fromDate="2005-12-01 00:00:00" userLoginId="demoacctpay"/>
+
+    <Party partyId="DemoARSpecialist2" partyTypeId="PERSON"/>
+    <Person partyId="DemoARSpecialist2" firstName="Demo" lastName="Receivables Invoice Specialist"/>
+    <UserLogin userLoginId="demoarinv" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s" partyId="DemoARSpecialist2"/>
+    <UserLoginSecurityGroup userLoginId="demoarinv" groupId="FINANCIALS_AR_INV" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="813" fromDate="2005-12-01 00:00:00" userLoginId="demoarinv"/>
+
+    <Party partyId="DemoAPSpecialist2" partyTypeId="PERSON"/>
+    <Person partyId="DemoAPSpecialist2" firstName="Demo" lastName="Payables Invoice Specialist"/>
+    <UserLogin userLoginId="demoapinv" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s" partyId="DemoAPSpecialist2"/>
+    <UserLoginSecurityGroup userLoginId="demoapinv" groupId="FINANCIALS_AP_INV" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="814" fromDate="2005-12-01 00:00:00" userLoginId="demoapinv"/>
+
+    <Party partyId="DemoARSpecialist3" partyTypeId="PERSON"/>
+    <Person partyId="DemoARSpecialist3" firstName="Demo" lastName="Receivables Payments Specialist"/>
+    <UserLogin userLoginId="demoarpay" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s" partyId="DemoARSpecialist3"/>
+    <UserLoginSecurityGroup userLoginId="demoarpay" groupId="FINANCIALS_AR_PMNT" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="815" fromDate="2005-12-01 00:00:00" userLoginId="demoarpay"/>
+
+    <Party partyId="DemoAPSpecialist3" partyTypeId="PERSON"/>
+    <Person partyId="DemoAPSpecialist3" firstName="Demo" lastName="Payables Payments Specialist"/>
+    <UserLogin userLoginId="demoappay" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s" partyId="DemoAPSpecialist3"/>
+    <UserLoginSecurityGroup userLoginId="demoappay" groupId="FINANCIALS_AP_PMNT" fromDate="2007-01-01 00:00:00"/>
+    <AsteriskUser extension="816" fromDate="2005-12-01 00:00:00" userLoginId="demoappay"/>
+
+    <Party partyId="DemoTxSpecialist" partyTypeId="PERSON"/>
+    <Person partyId="DemoTxSpecialist" firstName="Demo" lastName="Transactions Specialist"/>
+    <UserLogin userLoginId="demotrans" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s" partyId="DemoTxSpecialist"/>
+    <UserLoginSecurityGroup userLoginId="demotrans" groupId="FINANCIALS_TRANS" fromDate="2007-01-01 00:00:00"/> 
+    <AsteriskUser extension="817" fromDate="2005-12-01 00:00:00" userLoginId="demotrans"/>
+
+    <!-- also add in admin and flexadmin for ofbiz demo purposes -->
+    <UserLoginSecurityGroup userLoginId="admin" groupId="FINANCIALS_ADMIN" fromDate="2007-01-01 00:00:00"/>
+    <UserLoginSecurityGroup userLoginId="flexadmin" groupId="FINANCIALS_ADMIN" fromDate="2007-01-01 00:00:00"/>
+
+
+
+</entity-engine-xml>

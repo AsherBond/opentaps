@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * Foundation, Inc., 51 Frankli
+n St, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+  <!-- ========================================================= -->
+  <!-- ======================== Defaults ======================= -->
+  <!-- ========================================================= -->
+    <title>Entity of an Open Source Strategies Financials component</title>
+    <description>None</description>
+    <copyright>Copyright (c) 2006 - 2007 Open Source Strategies, Inc.</copyright>
+    <author>None</author>
+    <version>1.0</version>
+
+    <entity entity-name="PaycheckItemType" package-name="com.opensourcestrategies.financials.payroll"
+        title="Paycheck Item Type">
+        <description>Type of a Paycheck Item: Federal, State, City tax withholding, medical, 401k, employer contributions, etc.</description>
+        <field name="paycheckItemTypeId" type="id-ne"/>
+        <field name="description" type="description"/>
+        <field name="paycheckItemClassId" type="id-ne"/>
+        <field name="defaultSeqNum" type="id-ne"/>        
+        <prim-key field="paycheckItemTypeId"/>
+        <relation type="one" rel-entity-name="PaycheckItemClass" fk-name="PCHKITMTYP_CLAS">
+            <key-map field-name="paycheckItemClassId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="PaycheckItemClass" package-name="com.opensourcestrategies.financials.payroll"
+            title="Paycheck Item Classification">
+        <description>Classifies paycheck item as deduction (withheld from employee) or expenses (paid by employer)</description>
+        <field name="paycheckItemClassId" type="id-ne"/>
+        <field name="description" type="description"/>
+        <prim-key field="paycheckItemClassId"/>
+    </entity>
+
+    <entity entity-name="PaycheckItem" package-name="com.opensourcestrategies.financials.payroll"
+        title="Paycheck Item">
+        <description>Line items of a paycheck, including employee withholdings and employer expenses</description>
+        <field name="paymentId" type="id-ne"/>
+        <field name="paycheckItemSeqId" type="id-ne"/>
+        <field name="paycheckItemTypeId" type="id-ne"/>
+        <field name="amount" type="currency-amount"><description>A positive number if it is to be deducted from the paycheck or a positive amount to be expensed.</description></field>
+        <field name="partyId" type="id-ne"><description>The party to whom the item should be paid, ie IRS, 401K or medical insurance provider</description></field>
+        <prim-key field="paymentId"/>
+        <prim-key field="paycheckItemSeqId"/>
+        <relation type="one" fk-name="PCHKITM_PAYMENT" rel-entity-name="Payment">
+            <key-map field-name="paymentId"/>
+        </relation>
+        <relation type="one" fk-name="PCHKITM_TYPE" rel-entity-name="PaycheckItemType">
+            <key-map field-name="paycheckItemTypeId"/>
+        </relation>
+        <relation type="one" fk-name="PCHKITM_PARTY" rel-entity-name="Party">
+            <key-map field-name="partyId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="EmployeePaycheckType" package-name="com.opensourcestrategies.financials.payroll"
+            title="Maps the types of paychecks to particular employees which are available: ie, US - California, US - Nevada, etc.
+            Use _NA_ as employeePartyId for all employees">
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="employeePartyId" type="id-ne"/>
+        <field name="paymentTypeId" type="id-ne"/>
+        <field name="fromDate" type="date-time"/>
+        <field name="thruDate" type="date-time"/>
+        <field name="comments" type="comment"/>
+        <prim-key field="organizationPartyId"/>
+        <prim-key field="employeePartyId"/>
+        <prim-key field="paymentTypeId"/>
+        <prim-key field="fromDate"/>
+        <relation type="one" fk-name="EMPPCHK_ORGPTY" title="Organization" rel-entity-name="Party">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" fk-name="EMPPCHK_EMPPTY" title="Employee" rel-entity-name="Party">
+            <key-map field-name="employeePartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" fk-name="EMPPCHK_PMTTYP" rel-entity-name="PaymentType">
+            <key-map field-name="paymentTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="PaycheckTypeItemTypeAssoc" package-name="com.opensourcestrategies.financials.payroll"
+            title="Configures the paycheck items for each paycheck type">
+        <field name="paymentTypeId" type="id-ne"/>
+        <field name="paycheckItemTypeId" type="id-ne"/>
+        <prim-key field="paymentTypeId"/>
+        <prim-key field="paycheckItemTypeId"/>
+        <relation type="one" fk-name="PCHKITM_PMTTYP" rel-entity-name="PaymentType">
+            <key-map field-name="paymentTypeId"/>
+        </relation>
+        <relation type="one" fk-name="PCHKITM_PCHKITMTYP" rel-entity-name="PaycheckItemType">
+            <key-map field-name="paycheckItemTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="PaycheckItemTypeGlAccount" package-name="com.opensourcestrategies.financials.payroll"
+        title="Paycheck Item Type to GL Account Mapping">
+        <description>Basic mapping of paycheck item types to GL accounts for an organization</description>
+        <field name="paycheckItemTypeId" type="id-ne"/>
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="debitGlAccountId" type="id-ne"/>
+        <field name="creditGlAccountId" type="id-ne"/>
+        <field name="defaultDueToPartyId" type="id-ne">
+            <description>Party this line item is due to, if it's different than the employee.
+            </description>
+        </field>
+        <prim-key field="paycheckItemTypeId"/>
+        <prim-key field="organizationPartyId"/>
+        <relation type="one" title="Organization" rel-entity-name="Party" fk-name="PCKITMTYPGL_ORGPTY">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" title="Debit" rel-entity-name="GlAccount" fk-name="PCKITMTYPGL_DRGL">
+            <key-map field-name="debitGlAccountId" rel-field-name="glAccountId"/>
+        </relation>
+        <relation type="one" title="Credit" rel-entity-name="GlAccount" fk-name="PCKITMTYPGL_CRGL">
+            <key-map field-name="creditGlAccountId" rel-field-name="glAccountId"/>
+        </relation>
+        <relation type="one" title="DefaultDueTo" rel-entity-name="Party" fk-name="PCKITMTYPGL_PTY">
+            <key-map field-name="defaultDueToPartyId" rel-field-name="partyId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="PaycheckItemAndType" package-name="com.opensourcestrategies.financials.payroll"
+        title="PaycheckItem joined with PaycheckItemType">
+        <description>Sum of PaycheckItem.amount with ability to select by paymentId (always) and optionally by type, class, and partyId</description>
+        <member-entity entity-alias="PCKITM" entity-name="PaycheckItem"/>
+        <member-entity entity-alias="PCKITMTYP" entity-name="PaycheckItemType"/>
+
+        <alias name="paymentId" entity-alias="PCKITM"/>
+        <alias name="paycheckItemSeqId" entity-alias="PCKITM"/>
+        <alias name="paycheckItemTypeId" entity-alias="PCKITM"/>
+        <alias name="paycheckItemClassId" entity-alias="PCKITMTYP"/>
+        <alias name="amount" entity-alias="PCKITM"/>
+        <alias name="partyId" entity-alias="PCKITM"/>
+
+        <view-link entity-alias="PCKITM" rel-entity-alias="PCKITMTYP">
+            <key-map field-name="paycheckItemTypeId"/>
+        </view-link>
+
+        <relation type="one-nofk" rel-entity-name="PaycheckItemType">
+            <key-map field-name="paycheckItemTypeId"/>
+        </relation>
+
+    </view-entity>
+
+    <view-entity entity-name="PaycheckItemAndTypeSum" package-name="com.opensourcestrategies.financials.payroll"
+        title="PaycheckItem joined with PaycheckItemType, sum on amount">
+        <description>Sum of PaycheckItem.amount with ability to select by paymentId (always) and optionally by type, class, and partyId</description>
+        <member-entity entity-alias="PCKITM" entity-name="PaycheckItem"/>
+        <member-entity entity-alias="PCKITMTYP" entity-name="PaycheckItemType"/>
+
+        <alias name="paymentId" entity-alias="PCKITM" group-by="true"/>
+        <alias name="paycheckItemTypeId" entity-alias="PCKITM" group-by="false"/>
+        <alias name="paycheckItemClassId" entity-alias="PCKITMTYP" group-by="false"/>
+        <alias name="amount" entity-alias="PCKITM" function="sum"/>
+        <alias name="partyId" entity-alias="PCKITM" group-by="false"/>
+        
+        <view-link entity-alias="PCKITM" rel-entity-alias="PCKITMTYP">
+            <key-map field-name="paycheckItemTypeId"/>
+        </view-link>
+
+    </view-entity>
+
+    <view-entity entity-name="PaycheckTypeItemTypeAssocAndPaycheckItemType" package-name="com.opensourcestrategies.financials.payroll"
+        title="PaycheckItemTypeAssoc joined with PaycheckItemType">
+        <description>Mapping of PaycheckItemTypes to PaymentType</description>
+        <member-entity entity-alias="PCKITMTYPASSOC" entity-name="PaycheckTypeItemTypeAssoc"/>
+        <member-entity entity-alias="PCKITMTYP" entity-name="PaycheckItemType"/>
+
+        <alias name="paymentTypeId" entity-alias="PCKITMTYPASSOC"/>
+        <alias name="paycheckItemTypeId" entity-alias="PCKITMTYPASSOC"/>
+        <alias name="description" entity-alias="PCKITMTYP"/>        
+        <alias name="paycheckItemClassId" entity-alias="PCKITMTYP"/>
+        <alias name="defaultSeqNum" entity-alias="PCKITMTYP"/>        
+        
+        <view-link entity-alias="PCKITMTYPASSOC" rel-entity-alias="PCKITMTYP">
+            <key-map field-name="paycheckItemTypeId"/>
+        </view-link>
+
+    </view-entity>
+
+</entitymodel>

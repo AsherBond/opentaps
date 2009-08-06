@@ -1,0 +1,126 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+/*
+ * This file should be called before every report that uses the
+ * flowReportOptions, stateReportOptions, etc. form files for
+ * reporting. It takes care of parsing the input form data,
+ * especially the dates, and setting up the context for correct
+ * use by the form ftl files.
+ *
+ * After this script is called, call your report generation
+ * script and get the form data from the context:
+ *
+ * glFiscalTypeId
+ * fromDate (Timestamp or null if not specified)
+ * thruDate (Timestamp or null if not specified)
+ *
+ * @author Leon Torres (leon@opensourcestrategies.com)
+ * TODO: for comparative state, take the thru dates
+ */
+
+import java.util.*;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import org.ofbiz.base.util.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+
+timeZone = UtilHttp.getTimeZone(request);
+locale = UtilHttp.getLocale(request);
+dateFormat = UtilDateTime.getDateFormat(locale);
+
+// set a default asOfDate to end of today
+defaultAsOfDate = UtilDateTime.getDayEnd( UtilDateTime.nowTimestamp(), timeZone, locale );
+context.put("defaultAsOfDate", UtilDateTime.timeStampToString(defaultAsOfDate, dateFormat, timeZone, locale));
+
+// get the form data
+organizationPartyId = session.getAttribute("organizationPartyId");
+customTimePeriods = delegator.findByAndCache("CustomTimePeriod", UtilMisc.toMap("organizationPartyId", organizationPartyId), UtilMisc.toList("customTimePeriodId"));
+glFiscalTypes = delegator.findAll("GlFiscalType");
+
+// get the accounting tags
+context.put("tagTypes", UtilAccountingTags.getAccountingTagFiltersForOrganization(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, locale));
+
+context.put("organizationPartyId", organizationPartyId);
+context.put("customTimePeriods", customTimePeriods);
+context.put("glFiscalTypes", glFiscalTypes);
+
+// check that the reportDateOption is defined (radio button for chosing time period or dates)
+dateOption = UtilCommon.getParameter(request, "reportDateOption");
+if (dateOption == null) {
+    // use the default asOfDate and run the report
+    context.put("asOfDate", defaultAsOfDate);
+    return;
+}
+
+// get the report form type (flow, state, comparativeFlow, comparativeState)
+reportFormType = UtilCommon.getParameter(request, "reportFormType");
+context.put("reportFormType", reportFormType);
+
+// pass the glFiscalTypeId to the next script
+glFiscalTypeId = UtilCommon.getParameter(request, "glFiscalTypeId");
+context.put("glFiscalTypeId", glFiscalTypeId);
+
+// pass the isPosted to the next script
+isPosted = UtilCommon.getParameter(request, "isPosted");
+context.put("isPosted", isPosted);
+
+// determine the from and thru dates according to the report form type
+if (dateOption.equals("byDate")) {
+    if (reportFormType.equals("state")) {
+        asOfDate = UtilCommon.getParameter(request, "asOfDate");
+        if (asOfDate == null || asOfDate.length() == 0) return;
+        asOfTimestamp = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(asOfDate, dateFormat, timeZone, locale), timeZone, locale);
+        context.put("asOfDate", asOfTimestamp);
+    }
+    else if (reportFormType.equals("flow")) {
+        fromDate = UtilCommon.getParameter(request, "fromDate");
+        thruDate = UtilCommon.getParameter(request, "thruDate");
+        fromDateTs = null;
+        thruDateTs = null;
+        if (UtilValidate.isNotEmpty(fromDate)) {
+            try {
+                fromDateTs = UtilDateTime.stringToTimeStamp(fromDate, dateFormat, timeZone, locale);            
+            } catch (ParseException) {
+                UtilMessage.addFieldError(request, "fromDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", fromDate) );
+            }
+        }
+        if (UtilValidate.isNotEmpty(thruDate)) {
+            try {
+                thruDateTs = UtilDateTime.stringToTimeStamp(thruDate, dateFormat, timeZone, locale);
+            } catch (ParseException) {
+                UtilMessage.addFieldError(request, "thruDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", thruDate) );
+            }
+        }
+        if (fromDateTs != null) context.put("fromDate", UtilDateTime.getDayStart(fromDateTs, timeZone, locale));
+        if (thruDateTs != null) context.put("thruDate", UtilDateTime.getDayEnd(thruDateTs, timeZone, locale));
+    }
+} else if (dateOption.equals("byTimePeriod")) {
+    if (reportFormType.equals("state") || reportFormType.equals("flow")) {
+        context.put("customTimePeriodId", UtilCommon.getParameter(request, "customTimePeriodId"));
+        timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", context.get("customTimePeriodId")));
+        fromDate = new Timestamp(timePeriod.get("fromDate").getTime());
+        thruDate = new Timestamp(timePeriod.get("thruDate").getTime());
+        thruDate = UtilDateTime.adjustTimestamp(thruDate, Calendar.MILLISECOND, -1, timeZone, locale);
+        context.put("fromDate", UtilDateTime.getDayStart(fromDate, timeZone, locale));
+        context.put("thruDate", thruDate);
+        context.put("asOfDate", thruDate);
+    }
+}
+

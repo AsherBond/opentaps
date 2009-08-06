@@ -1,0 +1,126 @@
+/*
+ * Copyright (c) 2006-2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilDate;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilDateTime;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.opentaps.domain.billing.lockbox.LockboxRepositoryInterface;
+import org.opentaps.domain.billing.lockbox.LockboxBatch;
+
+// used for date parsing
+locale = UtilHttp.getLocale(request);
+timeZone = UtilHttp.getTimeZone(request);
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+context.put("organizationPartyId", organizationPartyId);
+
+domain = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin)).loadDomainsDirectory().getBillingDomain();
+repository = domain.getLockboxRepository();
+
+conditions = FastList.newInstance();
+
+/*
+ * Get parameters and prepare conditions
+ */
+lockboxBatchId = UtilCommon.getParameter(request, "lockboxBatchId");
+if (UtilValidate.isNotEmpty(lockboxBatchId)) {
+    conditions.add(new EntityExpr("batchId", EntityOperator.LIKE, "%" + lockboxBatchId + "%"));
+}
+
+dateTimeString = UtilCommon.getParameter(request, "datetimeEntered");
+dateTimeEntered = null;
+dateTimeEnd = null;
+// find batch entered during the day the user input (disregarding the time the batch was entered)
+if (UtilValidate.isNotEmpty(dateTimeString)) {
+    dateTimeEntered = UtilDate.toTimestamp(dateTimeString, timeZone, locale);
+    if (dateTimeEntered != null) {
+        dateTimeEnd = UtilDateTime.getDayEnd(dateTimeEntered, timeZone, locale);
+    }
+    // User enters date only. Build expression that checks period from day start to day end. 
+    conditions.add(new EntityConditionList(
+            UtilMisc.toList(
+                    new EntityExpr("datetimeEntered", EntityOperator.GREATER_THAN_EQUAL_TO, dateTimeEntered), 
+                    new EntityExpr("datetimeEntered", EntityOperator.LESS_THAN_EQUAL_TO, dateTimeEnd)), 
+                    EntityOperator.AND));
+}
+
+batchAmountString = UtilCommon.getParameter(request, "batchAmount");
+batchAmount = null;
+// find batch with exact match on batch amount
+if (UtilValidate.isNotEmpty(batchAmountString)) {
+    try {
+    	batchAmount = Double.parseDouble(batchAmountString);
+    	conditions.add(new EntityExpr("batchAmount", EntityOperator.EQUALS, batchAmount));
+    } catch (NumberFormatException e) {
+        UtilMessage.addFieldError(request, "batchAmount", e.getMessage());
+    }
+}
+
+outstandingAmountString = UtilCommon.getParameter(request, "outstandingAmount");
+outstandingAmount = null;
+// find batch with exact match on outstanding amount
+if (UtilValidate.isNotEmpty(outstandingAmountString)) {
+    try { 
+    	outstandingAmount = Double.parseDouble(outstandingAmountString);
+    	conditions.add(new EntityExpr("outstandingAmount", EntityOperator.EQUALS, outstandingAmount));
+    } catch (NumberFormatException e) {
+        UtilMessage.addFieldError(request, "outstandingAmount", e.getMessage());
+    }
+}
+
+// Pagination
+lockboxListBuilder(LockboxRepositoryInterface lockboxRepository) {
+    entityName = "LockboxBatch";
+    where = conditions;
+    orderBy = UtilMisc.toList("datetimeEntered DESC");
+
+    build( page ) {
+        newPage = FastList.newInstance();
+        for (lockboxBatch : page) {
+            newRow = FastMap.newInstance();
+
+            lockboxBatchId = lockboxBatch.getString("lockboxBatchId");
+
+            LockboxBatch batch = lockboxRepository.getBatchById(lockboxBatch.get("lockboxBatchId"));
+            if (batch != null) {
+                newRow.put("lockboxBatchId", lockboxBatchId);
+                newRow.put("batchId", batch.getBatchId());
+                newRow.put("datetimeEntered", batch.getDatetimeEntered());
+                newRow.put("batchAmount", batch.getBatchAmount());
+                newRow.put("outstandingAmount", batch.getOutstandingAmount());
+                newPage.add(newRow);
+            }
+        }
+        return newPage;
+    }
+
+    return this;
+}
+context.put("lockboxListBuilder", lockboxListBuilder(repository));

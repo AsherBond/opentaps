@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Financials Services</description>
+    <vendor>Open Source Strategies</vendor>
+    <version>1.0</version>
+
+    <service name="postAcctgTrans" engine="pojo" default-entity-name="AcctgTrans" 
+        location="org.opentaps.financials.domain.ledger.LedgerService" invoke="postAcctgTrans" auth="true" transaction-timeout="600">
+        <description>
+            Post an accounting transaction and track the posted amount in the open time periods configured for the organization.
+            This service will ensure that there are open time periods defined for the transaction date and that the trial balance is zero.
+        </description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_POST"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="reconcileGlAccount" default-entity-name="GlReconciliation" engine="java"
+            location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="reconcileGlAccount" auth="true">
+        <description>Reconciles a GLAccount</description>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="glAccountId" type="String" mode="IN" optional="false"/>
+        <attribute name="acctgTransEntries" type="java.util.List" mode="IN" optional="false" string-list-suffix="_atei"/>
+        <attribute name="reconciledBalance" type="Double" mode="IN" optional="false"/>
+        <attribute name="reconciledDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="glReconciliationName" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="glReconciliationId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="postInvoiceToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postInvoiceToGl">
+        <description>
+            Posts invoices to General Ledger, using the createAcctgTransAndEntries service from above.
+        </description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postInvoiceWriteoffToGl" engine="pojo"
+        location="org.opentaps.financials.domain.ledger.InvoiceLedgerService" invoke="postInvoiceWriteoffToGl">
+        <description>
+            Posts written-off amount of invoice to General Ledger, using the createAcctgTransAndEntries service from above.
+        </description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+    <service name="postPaymentToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postPaymentToGl" default-entity-name="Payment">
+        <description>
+            Posts a payment to General Ledger.
+        </description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postPaycheckToGl" engine="java"
+            location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postPaycheckToGl">
+            <description>
+                Posts a paycheck to General Ledger.  This is not meant to be called directly but from inside postPaymentToGl
+            </description>
+        <attribute name="paycheck" type="org.ofbiz.entity.GenericValue" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="getPaymentAccountAndParties" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="getPaymentAccountAndParties" default-entity-name="Payment">
+        <description>
+            Gets the organization and transaction parties of a payment and the GL account of the payment.
+        </description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute name="glAccountId" type="String" mode="OUT" optional="false"/>
+        <attribute name="organizationPartyId" type="String" mode="OUT" optional="false"/>
+        <attribute name="transactionPartyId" type="String" mode="OUT" optional="false"/>
+    </service>
+    <service name="matchPaymentInvoiceGlPosts" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="matchPaymentInvoiceGlPosts" default-entity-name="PaymentApplication">
+        <description>
+            Check if the invoice's and payment's offsetting GL accounts are the same. If not, creates two accounting transaction
+            entries to offset the two. If the payment is a disbursement, the PaymentApplication's amountApplied is posted 
+            as a Credit to the offsetting payment account and a Debit to the offsetting invoice account. For receipts, the 
+            amount is posted as a Debit to the offsetting payment account and a Credit to the offsetting invoice account.
+            The result is the acctgTransId of this transaction, if created. 
+        </description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="opentaps.reconcileParentSubAccountPayment" engine="pojo"
+        location="org.opentaps.financials.domain.ledger.PaymentLedgerService" invoke="reconcileParentSubAccountPayment" default-entity-name="Payment">
+        <description>
+        </description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+    <service name="postInventoryVarianceToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postInventoryVarianceToGl" default-entity-name="InventoryItemVariance">
+        <description>
+            Posts inventory variance transactions to the General Ledger.
+        </description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postShipmentReceiptToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postShipmentReceiptToGl" default-entity-name="ShipmentReceipt">
+        <description>
+          Posts a shipment receipt to GL: debit Inventory, credit Uninvoiced Item Receipt.  Note this creates accounting transaction 
+          for every line item of a shipment received.
+        </description>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postShipmentToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postShipmentToGl" default-entity-name="Shipment">
+        <description>
+          Posts a shipment to GL: debit COGS, credit Inventory.  Note this creates accounting transaction
+          for every item issuance of a shipment.
+        </description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postInventoryItemOwnerChange" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postInventoryItemOwnerChange">
+        <description>
+          Post inventory transaction to GL to record the change of the owner of the inventory item.
+        </description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+        <attribute name="oldOwnerPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postInventoryItemStatusChange" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postInventoryItemStatusChange">
+        <description>
+            Post inventory transaction to GL to record the status change of an inventory item.  The entity InventoryStatusGlAccountType
+            contains what GlAccountType will be used for each status transition.  If the fromStatusId is null, then it is assumed to
+            be On Order (INV_ON_ORDER).  If a status change is not supported or has no GlAccountTypes defined, then this service assumes 
+            nothing is to be done.
+        </description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+        <attribute name="oldStatusId" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="opentaps.postInventoryItemAccountingTagChange" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postInventoryItemAccountingTagChange">
+        <description>
+            If any accounting tag of the InventoryItem change, it will post a "neutral" GL transaction to Debit and Credit INVENTORY_ACCOUNT
+            of the InventoryItem current value.
+            Only the debit entry is tagged using the old tags, and the credit transaction is tagged with the current inventory item tags.
+        </description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag1" type="String" mode="IN" optional="true"/>
+        <attribute name="oldTag2" type="String" mode="IN" optional="true"/>
+        <attribute name="oldTag3" type="String" mode="IN" optional="true"/>
+        <attribute name="oldTag4" type="String" mode="IN" optional="true"/>
+        <attribute name="oldTag5" type="String" mode="IN" optional="true"/>
+        <attribute name="oldTag6" type="String" mode="IN" optional="true"/>
+        <attribute name="oldTag7" type="String" mode="IN" optional="true"/>
+        <attribute name="oldTag8" type="String" mode="IN" optional="true"/>
+        <attribute name="oldTag9" type="String" mode="IN" optional="true"/>
+        <attribute name="oldTag10" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="opentaps.postInventoryItemValueAdjustment" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postInventoryItemValueAdjustment">
+        <description>
+            If InventoryItem.unitCost is changed, it will post a GL transaction to Debit INVENTORY_VAL_ADJ and Credit INVENTORY_ACCOUNT
+            of the InventoryItem.productId by the amount of the unitCost change * the quantity on hand of the inventory item (or 1.0 if
+            it's serialized and Available).
+            Unit cost change is calculated by referring to the most recent value in InventoryItemValueHistory
+            which is *earlier* than the modification date of the InventoryItem itself. If no previous unit cost history is found, no GL
+            posting will be made.
+        </description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postRawMaterialIssuancesToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postRawMaterialIssuancesToGl">
+        <description>
+            Posts raw materials inventory issuances (to a WorkEffort) to the GL: Debit WIP Inventory, Credit Raw Materials Inventory
+            Note that this service runs at the production run task level and will post for all items on the WorkEffortInventoryAssign,
+            not on the InventoryItem level.  Returns a List of acctgTransId created.
+        </description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="finishedProductId" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTransIds" type="List" mode="OUT" optional="true"/>
+    </service>
+    <service name="postInventoryToWorkEffortAssignToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postInventoryToWorkEffortAssignToGl">
+        <description>
+            Posts inventory issuance (to a WorkEffort) of given quantity to the GL: Debit WIP Inventory, Credit Raw Materials Inventory.
+            The WIP Inventory product is specified by finishedProductId and if it is not specified, then the service will attempt to
+            look up a productoin run corresponding to the given workEffortId.  If the quantity is not supplied, then the entire
+            WorkEffortInventoryAssign.quantity is used.
+        </description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="finishedProductId" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postProductionRunCostVarianceToGl" engine="pojo"
+        location="org.opentaps.financials.domain.ledger.ManufacturingLedgerService" invoke="postProductionRunCostVarianceToGl">
+        <description>
+          Service to post a production run variance, only used if the organization uses standard costing.
+          This is called after a production run is completed and posts the difference
+          between the production run cost and the value of the inventory items produced.
+        </description>
+        <attribute name="productionRunId" type="String" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postWorkEffortCostsToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postWorkEffortCostsToGl">
+        <description>
+            Posts WorkEffort costs to the GL.
+        </description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postInventoryProducedToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postInventoryProducedToGl">
+        <description>
+            Posts inventory produced by a WorkEffort (production run) to the GL.
+        </description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="inventoryItemIds" type="List" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postRevertedProductionRunToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postRevertedProductionRunToGl">
+        <description>More process after reverting production run.</description>
+        <attribute name="productionRunId" type="String" mode="IN" optional="false"/>
+        <attribute name="savedParts" type="List" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="postForeignExchangeMatchingToGl" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="postForeignExchangeMatchingToGl">
+        <description>
+            Posts foreign exchange gain/loss to General Ledger.
+        </description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- ====== Services for closing out accounting time periods ====== -->
+    <service name="closeTimePeriod" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="closeTimePeriod">
+        <description>
+            Closes a particular time period for an organization.  Generally, use closeAllTimePeriods.
+        </description>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="customTimePeriodId" type="String" mode="IN" optional="false"/>
+    </service>
+    <service name="closeAllTimePeriods" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="closeAllTimePeriods">
+        <description>
+            Closes all time periods which end on the date of the specified time period for an organization.
+            Follows the exact sequence of WEEK, BIWEEK, MONTH, QUARTER, and YEAR
+        </description>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="customTimePeriodId" type="String" mode="IN" optional="false"/>
+    </service>
+    <service name="resetOrgGlAccountBalances" engine="java"
+        location="com.opensourcestrategies.financials.ledger.LedgerServices" invoke="resetOrgGlAccountBalances">
+        <description>
+            Resets all the postedBalance of GlAccountOrganization for an organization to 0.0 for REVENUE, INCOME, and EXPENSE GL accounts.
+        </description>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="customTimePeriodId" type="String" mode="IN" optional="false"/>
+    </service>   
+
+</services>

@@ -1,0 +1,94 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import java.util.*;
+import java.sql.Timestamp;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.accounting.util.UtilAccounting;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import java.text.ParseException;
+
+locale = UtilHttp.getLocale(request);
+timeZone = UtilHttp.getTimeZone(request);
+dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPaymentReceiptsDetail"));
+
+// default glAccountId: undeposited receipts account 
+context.put("defaultGlAccountId", UtilAccounting.getProductOrgGlAccountId(null, "UNDEPOSITED_RECEIPTS", organizationPartyId, delegator)); 
+
+// list of gl accounts to select
+glAccounts = delegator.findAll("GlAccount", UtilMisc.toList("glAccountId"));
+context.put("glAccounts", glAccounts);
+
+// get the from and thru date timestamps
+fromDateString = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
+thruDateString = UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
+
+// don't do anything if dates invalid
+if (fromDateString == null || thruDateString == null) return;
+fromDate = null;
+thruDate = null;
+try {
+  fromDate = UtilDateTime.stringToTimeStamp(fromDateString.trim(), dateTimeFormat, timeZone, locale);
+  thruDate = UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale);
+} catch (ParseException) {
+  return; // TODO: inform user of error
+}
+if (thruDate.before(fromDate)) return;
+
+// the glAccountId to select for
+glAccountId = parameters.get("glAccountId");
+if (glAccountId == null || glAccountId.trim().length() == 0) return;
+
+// Since these are receipts, the partyIdTo of the payment should be the organization
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+conditionList = UtilMisc.toList(
+            new EntityExpr("glAccountId", EntityOperator.EQUALS, glAccountId),
+            new EntityExpr("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+            new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate),
+            new EntityExpr("debitCreditFlag", EntityOperator.EQUALS, "D"), // note that only ATE debits must be selected
+            new EntityExpr("partyIdTo", EntityOperator.EQUALS, organizationPartyId)
+            );
+paymentMethodTypeId = request.getParameter("paymentMethodTypeId");
+if( ! UtilValidate.isEmpty(paymentMethodTypeId)) {
+    conditionList.add(new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, paymentMethodTypeId));
+}
+            
+conditions = new EntityConditionList(conditionList, EntityOperator.AND);
+
+// determine whether the invoice level needs to be shown.  A different view entity is used if the invoice level detail is required
+fieldsToSelect = UtilMisc.toList("transactionDate", "paymentId", "paymentMethodTypeId", "partyIdFrom", "amount", "currencyUomId");
+fieldsToSelect.add("paymentRefNum");
+entityName = "PaymentReceiptsDetail";
+if ("Y".equals(parameters.get("showInvoiceLevelDetail"))) {
+    fieldsToSelect.add("invoiceId");
+    fieldsToSelect.add("amountApplied");
+    entityName = "PaymentReceiptsDetailWithApplication";
+}
+report = delegator.findByCondition(entityName, conditions, fieldsToSelect, UtilMisc.toList("transactionDate DESC"));
+
+context.put("report", report);

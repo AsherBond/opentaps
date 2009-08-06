@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+ *
+ * @author Si Chen (sichen@opensourcestrategies.com)
+ *
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Financial Reporting Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <!-- ========= Common tag interface ========= -->
+    <service name="accountingTagsInterface" engine="interface">
+        <description>Interface for the accounting tags.</description>
+        <attribute name="tag1" mode="IN" type="String" optional="true"/>
+        <attribute name="tag2" mode="IN" type="String" optional="true"/>
+        <attribute name="tag3" mode="IN" type="String" optional="true"/>
+        <attribute name="tag4" mode="IN" type="String" optional="true"/>
+        <attribute name="tag5" mode="IN" type="String" optional="true"/>
+        <attribute name="tag6" mode="IN" type="String" optional="true"/>
+        <attribute name="tag7" mode="IN" type="String" optional="true"/>
+        <attribute name="tag8" mode="IN" type="String" optional="true"/>
+        <attribute name="tag9" mode="IN" type="String" optional="true"/>
+        <attribute name="tag10" mode="IN" type="String" optional="true"/>
+    </service>
+    <service name="accountingTagsEntityInterface" engine="interface">
+        <description>Interface for the accounting tags in an entity.</description>
+        <attribute name="acctgTagEnumId1" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId2" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId3" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId4" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId5" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId6" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId7" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId8" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId9" type="String" mode="IN" optional="true"/>
+        <attribute name="acctgTagEnumId10" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="getTrialBalanceForDate" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getTrialBalanceForDate" auth="true" use-transaction="false">
+        <description>Generates a trial balance for a company based as of the specified date</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="asOfDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
+
+        <attribute name="assetAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="liabilityAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="equityAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="revenueAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="expenseAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="incomeAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="otherAccountBalances" mode="OUT" type="java.util.Map"/>
+
+        <attribute name="assetAccountDebits" mode="OUT" type="java.util.Map"/>
+        <attribute name="liabilityAccountDebits" mode="OUT" type="java.util.Map"/>
+        <attribute name="equityAccountDebits" mode="OUT" type="java.util.Map"/>
+        <attribute name="revenueAccountDebits" mode="OUT" type="java.util.Map"/>
+        <attribute name="expenseAccountDebits" mode="OUT" type="java.util.Map"/>
+        <attribute name="incomeAccountDebits" mode="OUT" type="java.util.Map"/>
+        <attribute name="otherAccountDebits" mode="OUT" type="java.util.Map"/>
+
+        <attribute name="assetAccountCredits" mode="OUT" type="java.util.Map"/>
+        <attribute name="liabilityAccountCredits" mode="OUT" type="java.util.Map"/>
+        <attribute name="equityAccountCredits" mode="OUT" type="java.util.Map"/>
+        <attribute name="revenueAccountCredits" mode="OUT" type="java.util.Map"/>
+        <attribute name="expenseAccountCredits" mode="OUT" type="java.util.Map"/>
+        <attribute name="incomeAccountCredits" mode="OUT" type="java.util.Map"/>
+        <attribute name="otherAccountCredits" mode="OUT" type="java.util.Map"/>
+
+        <attribute name="totalCredits" mode="OUT" type="java.math.BigDecimal"/>
+        <attribute name="totalDebits"  mode="OUT" type="java.math.BigDecimal"/>
+        <attribute name="totalBalances" mode="OUT" type="java.math.BigDecimal"/>
+    </service>
+
+    <!-- ========= Income Statement Services ========= -->
+
+    <service name="getIncomeStatementByTimePeriods" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getIncomeStatementByTimePeriods" auth="true" use-transaction="false">
+        <description>Generates an income statement for a company from the start date of the start CustomTimePeriod to the thru (ending) date
+            of the ending CustomTimePeriod</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="fromTimePeriodId" mode="IN" type="String" optional="false"/>
+        <attribute name="thruTimePeriodId" mode="IN" type="String" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>  <!-- ACTUAL, BUDGET, etc. -->
+        <attribute name="retainedEarningsGlAccount" mode="OUT" type="org.ofbiz.entity.GenericValue" optional="false"/>
+        <attribute name="grossProfit" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="operatingIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="pretaxIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="netIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="glAccountSums" mode="OUT" type="java.util.Map"/>
+        <attribute name="glAccountGroupSums" mode="OUT" type="java.util.Map"/>
+        <attribute name="glAccountSumsFlat" mode="OUT" type="java.util.Map"/>
+        <attribute name="isClosed" mode="OUT" type="Boolean"/>
+    </service>
+    <service name="getIncomeStatementByDates" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getIncomeStatementByDates" auth="true" use-transaction="false">
+        <description>Generates an income statement for a company based upon specified dates</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>  <!-- ACTUAL, BUDGET, etc. -->
+        <attribute name="grossProfit" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="operatingIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="pretaxIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="netIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="retainedEarningsGlAccount" mode="OUT" type="org.ofbiz.entity.GenericValue" optional="false"/>
+        <attribute name="glAccountSums" mode="OUT" type="java.util.Map"/>
+        <attribute name="glAccountGroupSums" mode="OUT" type="java.util.Map"/>
+        <attribute name="glAccountSumsFlat" mode="OUT" type="java.util.Map"/>
+        <attribute name="isClosed" mode="OUT" type="Boolean"/>
+    </service>
+    <service name="getActualNetIncomeSinceLastClosing" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getActualNetIncomeSinceLastClosing" auth="true" use-transaction="false">
+        <description>Calculates net income (of ACTUAL gl fiscal type) since last closed accounting period or, if none exists, since earliest accounting period.
+            Optionally, use periodTypeId to get net income since last closed accounting period of this type.</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="periodTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="retainedEarningsGlAccount" mode="OUT" type="org.ofbiz.entity.GenericValue" optional="false"/>
+        <attribute name="netIncome" mode="OUT" type="BigDecimal" optional="false"/>
+    </service>
+
+    <!-- ========= Balance Sheet Services ========= -->
+    
+    <service name="getBalanceSheetForTimePeriod" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getBalanceSheetForTimePeriod" auth="true" use-transaction="false">
+        <description>Generates balance sheet as of the end date of a time period.  Returns separate Maps of GlAccount:amount
+            for Assets, Liabilities, and Equities and a flag to indicate if this is time period is closed</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="customTimePeriodId" mode="IN" type="String" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="assetAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="liabilityAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="equityAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="retainedEarningsGlAccount" mode="OUT" type="GenericValue" optional="true"/>
+        <attribute name="interimNetIncomeAmount" mode="OUT" type="java.math.BigDecimal" optional="true"/>
+        <attribute name="isClosed" mode="OUT" type="Boolean"/>        
+    </service>
+    <service name="getBalanceSheetForDate" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getBalanceSheetForDate" auth="true" use-transaction="false">
+        <description>Generates balance sheet as of a particular date, by working forward from the last closed time period,
+            or, if none, from the beginning of the earliest time period.  Note that by putting in a glFiscalTypeId different 
+            than "ACTUAL", you can use this to generate pro-forma or budget balance sheets based on an initial actual balance 
+            sheet from a closed time period and other types of AcctgTrans and AcctgTransEntries.</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="asOfDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="assetAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="liabilityAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="equityAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="retainedEarningsGlAccount" mode="OUT" type="GenericValue" optional="true"/>
+        <attribute name="interimNetIncomeAmount" mode="OUT" type="java.math.BigDecimal" optional="true"/>
+        <attribute name="isClosed" mode="OUT" type="Boolean"/>        
+    </service>
+    <service name="getComparativeBalanceSheet" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getComparativeBalanceSheet" auth="true" use-transaction="false">
+        <description>Generates balance sheet for two dates and determines the balance difference between the two. The balances are in BigDecimal.
+            The output includes the result of getBalanceSheetForDate for the fromDate and thruDate and fromGlFiscalTypeId and toGlFiscalTypeId.
+        </description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="fromGlFiscalTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="toGlFiscalTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="fromDateAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="thruDateAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="assetAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="liabilityAccountBalances" mode="OUT" type="java.util.Map"/>
+        <attribute name="equityAccountBalances" mode="OUT" type="java.util.Map"/>
+    </service>
+    <service name="getComparativeIncomeStatement" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getComparativeIncomeStatement" auth="true" use-transaction="false">
+        <description>Generates income statement for two sets of dates and glFiscalTypeIds and determines the difference between the two. The balances are in BigDecimal.
+            The output includes the result of getIncomeStatementByDates for the two sets of fromDates and thruDates.
+        </description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="glFiscalTypeId1" mode="IN" type="String" optional="true"/>
+        <attribute name="glFiscalTypeId2" mode="IN" type="String" optional="true"/>
+        <attribute name="fromDate1" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate1" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="fromDate2" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate2" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="set1IncomeStatement" mode="OUT" type="java.util.Map"/>
+        <attribute name="set2IncomeStatement" mode="OUT" type="java.util.Map"/>
+        <attribute name="accountBalances" mode="OUT" type="java.util.Map"/>
+    </service>
+    <service name="getComparativeCashFlowStatement" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getComparativeCashFlowStatement" auth="true" use-transaction="false">
+        <description>Generates cash flow statement for two sets of dates and glFiscalTypeIds and determines the difference between the two. The balances are in BigDecimal.
+            The output includes the result of getCashFlowStatementForDates for the two sets of fromDates and thruDates.
+        </description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="glFiscalTypeId1" mode="IN" type="String" optional="true"/>
+        <attribute name="glFiscalTypeId2" mode="IN" type="String" optional="true"/>
+        <attribute name="fromDate1" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate1" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="fromDate2" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate2" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="set1CashFlowStatement" mode="OUT" type="java.util.Map"/>
+        <attribute name="set2CashFlowStatement" mode="OUT" type="java.util.Map"/>
+        <attribute name="beginningCashAccountBalances" mode="OUT" type="Map" optional="false"/>
+        <attribute name="endingCashAccountBalances" mode="OUT" type="Map" optional="false"/>
+        <attribute name="operatingCashFlowAccountBalances" mode="OUT" type="Map" optional="false"/>
+        <attribute name="investingCashFlowAccountBalances" mode="OUT" type="Map" optional="false"/>
+        <attribute name="financingCashFlowAccountBalances" mode="OUT" type="Map" optional="false"/>
+    </service>
+
+    <!-- ========= Misc Statements ========= -->
+
+    <service name="cashFlowInterface" engine="interface" location="" invoke="">
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="beginningCashAmount" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="endingCashAmount" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="operatingCashFlow" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="investingCashFlow" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="financingCashFlow" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="netCashFlow" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="netIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="beginningCashAccountBalances" mode="OUT" type="Map" optional="false"/>
+        <attribute name="endingCashAccountBalances" mode="OUT" type="Map" optional="false"/>
+        <attribute name="operatingCashFlowAccountBalances" mode="OUT" type="Map" optional="false"/>
+        <attribute name="investingCashFlowAccountBalances" mode="OUT" type="Map" optional="false"/>
+        <attribute name="financingCashFlowAccountBalances" mode="OUT" type="Map" optional="false"/>
+
+    </service>
+    <service name="getCashFlowStatementForDates" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getCashFlowStatementForDates" auth="true" use-transaction="false">
+        <description>Generates a cash flow statement. TODO: more description</description>
+        <implements service="cashFlowInterface"/>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+    </service>
+    <service name="getCashFlowStatementForTimePeriods" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getCashFlowStatementForTimePeriods" auth="true" use-transaction="false">
+        <description>Generates a cash flow statement. TODO: more description</description>
+        <implements service="cashFlowInterface"/>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="fromTimePeriodId" mode="IN" type="String" optional="false"/>
+        <attribute name="thruTimePeriodId" mode="IN" type="String" optional="false"/>
+    </service>
+
+
+    <!-- ========= Services Used by All of Above ========= -->
+
+    <service name="getAcctgTransAndEntriesByType" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getAcctgTransAndEntriesByType" auth="true" use-transaction="false">
+        <description>Finds and returns a List of AcctgTransAndEntries based on organizationPartyId, fromDate, thruDate, fiscalTypeId,
+            subject to the glAccountClassIds in the glAccountClasses List or the glAccountTypeIds in the glAccountTypes List.
+            Optional productId and partyId allow you to do analysis at the product or customer level.</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="accountingTagUsage" mode="IN" type="String" optional="true" default-value="FINANCIALS_REPORTS"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="productId" mode="IN" type="String" optional="true"/>
+        <attribute name="partyId" mode="IN" type="String" optional="true"/>
+        <attribute name="glAccountClasses" mode="IN" type="java.util.List" optional="true"/>
+        <attribute name="glAccountTypes" mode="IN" type="java.util.List" optional="true"/>
+        <attribute name="transactionEntries" mode="OUT" type="java.util.List" optional="false"/>
+    </service>
+    <service name="addToAccountBalances" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="addToAccountBalances" auth="true" use-transaction="false">
+        <description>Takes an initial Map of GlAccount, sums and a List of AcctgTransAndEntries and adds them to the Map,
+            based on debit/credit flag of transaction entry and whether the account is a debit or credit account.
+            Useful for doing income statement and intra-time-period updating of balance sheets, etc.</description>
+        <attribute name="glAccountSums" mode="INOUT" type="java.util.Map" optional="false"/>
+        <attribute name="transactionEntries" mode="IN" type="java.util.List" optional="false"/>
+    </service>
+    <service name="addToAccountBalancesWithDetails" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="addToAccountBalancesWithDetails" auth="true" use-transaction="false">
+        <description>Takes an initial Map of GlAccount, sums and a List of AcctgTransAndEntries and adds them to the Map,
+            based on debit/credit flag of transaction entry and whether the account is a debit or credit account.
+            Useful for doing income statement and intra-time-period updating of balance sheets, etc.
+            This is like {@link #addToAccountBalances} but returns three Map : glAccountBalancesSums, glAccountDebitsSums
+            and glAccountCreditsSums.
+        </description>
+        <attribute name="glAccountBalancesSums" mode="INOUT" type="java.util.Map" optional="false"/>
+        <attribute name="glAccountDebitsSums" mode="INOUT" type="java.util.Map" optional="false"/>
+        <attribute name="glAccountCreditsSums" mode="INOUT" type="java.util.Map" optional="false"/>
+        <attribute name="transactionEntries" mode="IN" type="java.util.List" optional="false"/>
+    </service>
+    <service name="getIncomeStatementAccountSumsByDate" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getIncomeStatementAccountSumsByDate" auth="true" use-transaction="false">
+        <description>gets a Map of glAccount -> sum of transactions for all income statement accounts (REVENUE, EXPENSE, INCOME) 
+            over a period of dates for an organization.</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="glAccountSums" mode="OUT" type="java.util.Map"/>
+    </service>
+    
+    <service name="getIncomeStatementByTagByDates" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getIncomeStatementByTagByDates" auth="true" use-transaction="false">
+        <description>Generates an income statement for a company based upon specified dates</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="accountingTagUsage" mode="IN" type="String" optional="true" default-value="FINANCIALS_REPORTS"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="true"/>  <!-- ACTUAL, BUDGET, etc. -->
+        <attribute name="grossProfit" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="operatingIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="pretaxIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="netIncome" mode="OUT" type="java.math.BigDecimal" optional="false"/>
+        <attribute name="retainedEarningsGlAccount" mode="OUT" type="org.ofbiz.entity.GenericValue" optional="false"/>
+        <attribute name="glAccountSums" mode="OUT" type="java.util.Map"/>
+        <attribute name="glAccountGroupSums" mode="OUT" type="java.util.Map"/>
+        <attribute name="glAccountSumsFlat" mode="OUT" type="java.util.Map"/>
+        <attribute name="isClosed" mode="OUT" type="Boolean"/>
+    </service>
+    <service name="addToAccountBalancesByTag" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="addToAccountBalancesByTag" auth="true" use-transaction="false">
+        <description>Takes an initial Map of GlAccount and Tags, sums and a List of AcctgTransAndEntries and adds them to the Map,
+            based on debit/credit flag of transaction entry and whether the account is a debit or credit account.
+            Useful for doing income statement and intra-time-period updating of balance sheets, etc.</description>
+        <attribute name="glAccountSums" mode="INOUT" type="java.util.Map" optional="false"/>
+        <attribute name="transactionEntries" mode="IN" type="java.util.List" optional="false"/>
+        <attribute name="accountingTags" mode="IN" type="java.util.Map" optional="false"/>
+    </service>
+    <service name="getIncomeStatementAccountSumsByTagByDate" engine="java"
+            location="com.opensourcestrategies.financials.financials.FinancialServices" invoke="getIncomeStatementAccountSumsByTagByDate" auth="true" use-transaction="false">
+        <description>gets a Map of glAccount and tags -> sum of transactions for all income statement accounts (REVENUE, EXPENSE, INCOME) 
+            over a period of dates for an organization.</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="accountingTagUsage" mode="IN" type="String" optional="true" default-value="FINANCIALS_REPORTS"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="glFiscalTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="glAccountSums" mode="OUT" type="java.util.Map"/>
+    </service>
+    <service name="balanceStatementReport" engine="java"
+            location="com.opensourcestrategies.financials.reports.BalanceReports" invoke="balanceStatementReport" auth="true" use-transaction="false">
+        <description>Service to prepare the balanceReport data.</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="organizationPartyId" mode="IN" type="String" optional="false"/>
+        <attribute name="accountingTagUsage" mode="IN" type="String" optional="true" default-value="BALANCE_REPORTS"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="false"/>
+        <attribute name="reportData" mode="OUT" type="java.util.List"/>
+        <attribute name="tagTypeDescription1" mode="OUT" type="String" optional="true"/>
+        <attribute name="tagTypeDescription2" mode="OUT" type="String" optional="true"/>
+        <attribute name="tagTypeDescription3" mode="OUT" type="String" optional="true"/>
+        <attribute name="tagTypeDescription4" mode="OUT" type="String" optional="true"/>
+        <attribute name="tagTypeDescription5" mode="OUT" type="String" optional="true"/>
+        <attribute name="tagTypeDescription6" mode="OUT" type="String" optional="true"/>
+        <attribute name="tagTypeDescription7" mode="OUT" type="String" optional="true"/>
+        <attribute name="tagTypeDescription8" mode="OUT" type="String" optional="true"/>
+        <attribute name="tagTypeDescription9" mode="OUT" type="String" optional="true"/>
+        <attribute name="tagTypeDescription10" mode="OUT" type="String" optional="true"/>
+    </service>
+
+    
+    <service name="captureAccountBalancesSnapshot" engine="pojo"
+        location="org.opentaps.financials.domain.billing.financials.AccountBalanceHistoryService" invoke="captureAccountBalancesSnapshot" auth="true">
+        <description>create snapshot for customer/vendor/commission balances </description>
+    </service>
+
+
+    <service name="tagReceivedInventoryFromOrder" engine="pojo"
+        location="org.opentaps.financials.domain.billing.financials.TagReceivedInventoryService" invoke="tagReceivedInventoryFromOrder" auth="true">
+        <description>Tag the received inventory item from the PO item.</description>
+        <attribute name="orderId" mode="IN" type="String" optional="false"/>
+        <attribute name="orderItemSeqId" mode="IN" type="String" optional="false"/>
+        <attribute name="inventoryItemId" mode="IN" type="String" optional="false"/>
+    </service>
+</services>

@@ -1,0 +1,46 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import org.opentaps.common.util.UtilCommon; 
+import com.opensourcestrategies.financials.payroll.PayrollHelper;
+
+delegator = request.getAttribute("delegator");
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+// if request is comming from viewPaycheck->Create New set default paycheck type
+paymentTypeId = request.getParameter("paymentTypeId");
+if (paymentTypeId != null) {
+   paymentType = delegator.findByPrimaryKey("PaymentType", UtilMisc.toMap("paymentTypeId", paymentTypeId));	
+   context.put("paymentType", paymentType);
+}
+
+defaultCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
+context.put("defaultCurrencyUomId", defaultCurrencyUomId);
+
+organizationParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", organizationPartyId));
+// paychecks can only be made from a checking account
+paymentMethodList = EntityUtil.orderBy(
+    organizationParty.getRelatedByAnd("PaymentMethod", UtilMisc.toMap("paymentMethodTypeId", "COMPANY_CHECK")),
+    UtilMisc.toList("description", "paymentMethodId"));
+
+context.put("paymentMethodList", paymentMethodList);
+
+// a list of payment types that are paychecks
+ph = new PayrollHelper(organizationPartyId, delegator);
+paycheckTypes = EntityUtil.getRelated("PaymentType", ph.getAvailablePaycheckTypes());
+context.put("paycheckTypes", paycheckTypes);

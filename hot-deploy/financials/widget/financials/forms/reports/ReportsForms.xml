@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!--
+    * @author Si Chen (sichen@opensourcestrategies.com)
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+        
+     <form name="TaxSummary" type="list" title="Tax Authorities and Outstanding Balances"
+            default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
+            default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
+            header-row-style="boxtop"
+            list-name="balances">
+          <field name="taxAuthGeoId" title=" ">
+              <display-entity entity-name="Geo" description="${geoName} (${geoId})" key-field-name="geoId"/>
+          </field>
+          <field name="taxAuthPartyId" title="${uiLabelMap.AccountingTaxAuthority}"><display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, taxAuthPartyId, false)} (${taxAuthPartyId})"/></field>
+          <field name="glAccountId">
+              <display-entity entity-name="GlAccount" description="${accountCode}: ${accountName}">
+                  <sub-hyperlink target="AccountActivitiesDetail?glAccountId=${glAccountId}" description="(${glAccountId})" link-style="buttontext"/> 
+              </display-entity>
+          </field>
+          <field name="postedBalance" widget-area-style="tabletextright"><display type="currency" currency="${baseCurrencyUomId}"/></field>
+          <field name=" " widget-area-style="tabletextright" widget-style="buttontext">
+              <hyperlink description="${uiLabelMap.CommonDetails}" target="TaxGlAccountDetails?glAccountId=${glAccountId}"/>
+          </field>
+          <field name="  " widget-area-style="tabletextright" widget-style="buttontext">
+              <hyperlink description="${uiLabelMap.FinancialsPayTax}" target="editPayment?paymentTypeId=DISBURSEMENT&amp;partyId=${taxAuthPartyId}"/>
+          </field>
+     </form>
+
+     <form name="SalesAndInventory" type="list" list-name="report"
+         default-widget-style="tabletext" default-title-style="tableheadtext"
+         paginate-target="SalesAndInventoryReport">
+         <field name="productId"><display/></field>
+         <field name="salesSum"><display/></field>
+         <field name="cogsSum"><display/></field>
+         <field name="unitsSold"><display/></field>
+         <field name="avgSellingPrice"><display/></field>
+         <field name="netProfit"><display/></field>
+         <field name="inventorySumStart"><display/></field>
+         <field name="inventorySumEnd"><display/></field>
+         <field name="inventoryAverage"><display/></field>
+         <field name="inventoryTurnover"><display/></field>
+         <field name="annualizedInventoryTurnover"><display/></field>
+         <field name="profitabilityRatio"><display/></field>
+     </form>
+</forms>

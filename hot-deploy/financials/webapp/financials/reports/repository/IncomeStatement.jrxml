@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="IncomeStatement" pageWidth="612" pageHeight="792" whenNoDataType="AllSectionsNoDetail" columnWidth="541" leftMargin="43" rightMargin="28" topMargin="28" bottomMargin="28" whenResourceMissingType="Empty">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageFooter"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="organizationPartyId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="organizationName" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fromDate" class="java.sql.Timestamp" isForPrompting="false"/>
+	<parameter name="thruDate" class="java.sql.Timestamp" isForPrompting="false"/>
+	<parameter name="netIncome" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="accountingTags" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<field name="typeSeqNum" class="java.lang.Integer"/>
+	<field name="accountCode" class="java.lang.String"/>
+	<field name="accountName" class="java.lang.String"/>
+	<field name="glAccountTypeDescription" class="java.lang.String"/>
+	<field name="accountSum" class="java.lang.Number"/>
+	<field name="cumulativeIncomeName" class="java.lang.String"/>
+	<field name="cumulativeIncomeAmount" class="java.math.BigDecimal"/>
+	<field name="glAccountTypeAmount" class="java.lang.Number"/>
+	<group name="CumulativeIncome">
+		<groupExpression><![CDATA[$F{cumulativeIncomeName}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="26" splitType="Prevent">
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="0" y="2" width="437" height="16"/>
+					<textElement>
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{cumulativeIncomeName}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement key="textField" x="437" y="2" width="104" height="16"/>
+					<textElement textAlignment="Right">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{cumulativeIncomeAmount}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement key="line" x="0" y="0" width="541" height="1"/>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="AccountType">
+		<groupExpression><![CDATA[$F{glAccountTypeDescription}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="32">
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField" x="0" y="0" width="437" height="16"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{glAccountTypeDescription}]]></textFieldExpression>
+				</textField>
+				<textField evaluationTime="Group" evaluationGroup="AccountType" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement key="textField" x="437" y="0" width="104" height="16"/>
+					<textElement textAlignment="Right">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Number"><![CDATA[$F{glAccountTypeAmount}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="99">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="28" width="541" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{organizationName} + " (" + $P{organizationPartyId} +")")]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<textField pattern="MMM dd, yyyy" isBlankWhenNull="true">
+					<reportElement key="textField" x="276" y="48" width="75" height="20"/>
+					<textElement verticalAlignment="Middle"/>
+					<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDate}]]></textFieldExpression>
+				</textField>
+				<textField pattern="MMM dd, yyyy" isBlankWhenNull="true">
+					<reportElement key="textField" x="175" y="48" width="75" height="20"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle"/>
+					<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDate}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField" x="250" y="48" width="26" height="20"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle"/>
+					<textFieldExpression class="java.lang.String"><![CDATA[" - "]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="0" width="541" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{AccountingIncomeStatement}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="68" width="541" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{accountingTags}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="16">
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="0" y="0" width="75" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountCode}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+				<reportElement key="textField" x="367" y="0" width="99" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$F{accountSum}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement key="textField" x="75" y="0" width="292" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="16">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="209" y="0" width="80" height="16"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage} +" "+$V{PAGE_NUMBER}+" "+$R{OpentapsOf}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField" x="289" y="0" width="40" height="16"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

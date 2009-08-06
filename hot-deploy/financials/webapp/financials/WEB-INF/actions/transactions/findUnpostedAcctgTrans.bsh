@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+ */
+
+/*
+ * Script to find AcctgTrans according to user-specified parameters.
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+
+listIteratorNameToUse = parameters.get("listIteratorNameToUse");
+if (listIteratorNameToUse == null) return;
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+// construct search conditions
+searchConditions = new ArrayList();
+searchConditions.add(new EntityExpr("isPosted", EntityOperator.EQUALS, "N"));
+if (UtilValidate.isNotEmpty(organizationPartyId)) {
+    searchConditions.add(new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId));
+} else {
+    Debug.logError("No organizationPartyId set ?", "");
+}
+
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+listIt = delegator.findListIteratorByCondition("AcctgTransAndOrg", searchConditionList, null, 
+        null, // fields to select
+        null, // fields to order by
+        // the first true here is for "specifyTypeAndConcur"
+        // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
+        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
+
+// this is the iterator to use in form-widgets
+context.put(listIteratorNameToUse, listIt);

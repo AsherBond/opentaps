@@ -1,0 +1,61 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.accounting.invoice.InvoiceWorker;
+import org.ofbiz.accounting.payment.PaymentWorker;
+import org.opentaps.common.util.UtilCommon;
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+if (organizationPartyId == null) {
+    return;
+}
+
+carrierPartyId = parameters.get("carrierPartyId");
+if (UtilValidate.isEmpty(carrierPartyId)) return;
+
+conditionList = new ArrayList();
+conditionList.add(new EntityExpr("carrierPartyId", EntityOperator.EQUALS, carrierPartyId));
+conditionList.add(new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"));
+conditionList.add(new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "EXT_COD"));
+conditionList.add(new EntityExpr("oppStatusId", EntityOperator.EQUALS, "PAYMENT_NOT_RECEIVED"));
+conditionList.add(new EntityExpr("shipmentTypeId", EntityOperator.EQUALS, "SALES_SHIPMENT"));
+conditionList.add(new EntityExpr("shipmentStatusId", EntityOperator.IN, UtilMisc.toList("SHIPMENT_PACKED", "SHIPMENT_SHIPPED")));
+conditionList.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId));
+conditionList.add(new EntityExpr("statusId", EntityOperator.EQUALS, "INVOICE_READY"));
+conditionList.add(new EntityExpr("invoiceId", EntityOperator.NOT_EQUAL, null));
+shipGroupRouteSegs = delegator.findByCondition("ShipGroupRouteSegAndInvoice", new EntityConditionList(conditionList, EntityOperator.AND), null, UtilMisc.toList("trackingIdNumber", "shipmentId", "invoiceId"), UtilMisc.toList("invoiceId"), UtilCommon.DISTINCT_READ_OPTIONS);
+
+codInvoices = new ArrayList();
+sgrsit = shipGroupRouteSegs.iterator();
+while (sgrsit.hasNext()) {
+  sgrsi = sgrsit.next();
+  invoice = sgrsi.getRelatedOne("Invoice");
+  codInvoice = sgrsi.getAllFields();
+  codInvoice.put("invoice", invoice);
+  partyIdToNameMap = dispatcher.runSync( "getPartyNameForDate" , UtilMisc.toMap( "partyId" , invoice.getString( "partyId" ) , "compareDate" , invoice.get( "invoiceDate" ) , "userLogin" , session.getAttribute( "userLogin" ) ) ) ;
+  toPartyName = (UtilValidate.isNotEmpty(partyIdToNameMap) && UtilValidate.isNotEmpty(partyIdToNameMap.get("fullName"))) ? partyIdToNameMap.get("fullName") : "";
+  codInvoice.put("toPartyName", toPartyName);
+  codInvoice.put("outstanding", InvoiceWorker.getInvoiceNotApplied(invoice));
+  codInvoices.add(codInvoice);
+}
+
+context.put("codInvoices", codInvoices);
+
+context.put("now", UtilDateTime.nowTimestamp());

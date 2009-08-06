@@ -1,0 +1,122 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.accounting.payment.PaymentWorker;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import com.opensourcestrategies.financials.payroll.PayrollHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+if (organizationPartyId == null) {
+    return;
+}
+
+organizationParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", organizationPartyId));
+// paychecks can only be made from a checking account
+paymentMethodList = EntityUtil.orderBy(
+    organizationParty.getRelatedByAnd("PaymentMethod", UtilMisc.toMap("paymentMethodTypeId", "COMPANY_CHECK")),
+    UtilMisc.toList("description", "paymentMethodId"));
+
+context.put("paymentMethodList", paymentMethodList);
+
+// a list of payment types that are paychecks
+ph = new PayrollHelper(organizationPartyId, delegator);
+context.put("paycheckTypes", EntityUtil.getRelated("PaymentType", ph.getAvailablePaycheckTypes()));
+
+statusList = delegator.findByAndCache("StatusItem", UtilMisc.toMap("statusTypeId", "PMNT_STATUS"), UtilMisc.toList("sequenceId"));
+context.put("statusList", statusList);
+
+// check if the form was submitted, and if not then don't do lookup (allows no condition lookup)
+noConditionFind = UtilCommon.getParameter(request, "noConditionFind");
+if (! "Y".equals(noConditionFind)) return;
+
+// fields to search
+paymentId = UtilCommon.getParameter(request, "paymentId");
+partyIdTo = UtilCommon.getParameter(request, "partyIdTo");
+statusId = UtilCommon.getParameter(request, "statusId");
+fromDateString = UtilCommon.getParameter(request, "fromDate");
+thruDateString = UtilCommon.getParameter(request, "thruDate");
+paymentTypeId = UtilCommon.getParameter(request, "paymentTypeId");
+paymentMethodId = UtilCommon.getParameter(request, "paymentMethodId");
+paymentRefNum = UtilCommon.getParameter(request, "paymentRefNum");
+
+// validate dates
+fromDate = null; thruDate = null;
+if (fromDateString != null) {
+    try {
+        fromDate = UtilDateTime.stringToTimeStamp(fromDateString, UtilDateTime.getDateFormat(locale), timeZone, locale);
+    } catch (ParseException) {
+        UtilMessage.addFieldError(request, "fromDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDateTime.getDateFormat(locale))));
+        return;
+    }
+}
+if (thruDateString != null) {
+    try {
+        thruDate = UtilDateTime.stringToTimeStamp(thruDateString, UtilDateTime.getDateFormat(locale), timeZone, locale);
+    } catch (ParseException) {
+        UtilMessage.addFieldError(request, "thruDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDateTime.getDateFormat(locale))));
+        return;
+    }
+    thruDate = UtilDateTime.getNextDayStart(thruDate);
+}
+
+// build the conditions
+conditions = FastList.newInstance();
+if (paymentId != null) conditions.add( new EntityExpr("paymentId", EntityOperator.EQUALS, paymentId) );
+if (partyIdTo != null) conditions.add( new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyIdTo) );
+if (statusId != null) conditions.add( new EntityExpr("statusId", EntityOperator.EQUALS, statusId) );
+if (paymentTypeId != null) conditions.add( new EntityExpr("paymentTypeId", EntityOperator.EQUALS, paymentTypeId) );
+if (paymentMethodId != null) conditions.add( new EntityExpr("paymentMethodId", EntityOperator.EQUALS, paymentMethodId) );
+if (paymentRefNum != null) conditions.add( new EntityExpr("paymentRefNum", true, EntityOperator.LIKE, paymentRefNum, true) );
+if (fromDate != null) conditions.add( new EntityExpr("effectiveDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate) );
+if (thruDate != null) conditions.add( new EntityExpr("effectiveDate", EntityOperator.LESS_THAN, thruDate) );
+
+// required conditions
+conditions.add( UtilFinancial.getPaymentTypeExpr(delegator, "PAY_CHECK") );
+conditions.add( new EntityExpr("partyIdFrom", EntityOperator.EQUALS, session.getAttribute("organizationPartyId")) );
+
+// use a page builder to fetch the list, because we need some extra data
+buildPaymentList(delegator, conditions) {
+    entityName = "Payment";
+    orderBy = UtilMisc.toList("paymentId");
+    where = conditions;
+
+    build(page) {
+        newPage = FastList.newInstance();
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            payment = iter.next();
+            row = FastMap.newInstance();
+            row.putAll(payment.getAllFields());
+
+            row.put("statusDescription", payment.getRelatedOneCache("StatusItem").get("description"));
+            row.put("amountOutstainding", PaymentWorker.getPaymentNotAppliedBd(delegator, payment.get("paymentId")));
+            row.put("employeeName", PartyHelper.getPartyName(delegator, payment.get("partyIdTo"), false));
+            newPage.add(row);
+        }
+        return newPage;
+    }
+    return this; // remember this, very important
+}
+context.put("paymentListBuilder", buildPaymentList(delegator, conditions));

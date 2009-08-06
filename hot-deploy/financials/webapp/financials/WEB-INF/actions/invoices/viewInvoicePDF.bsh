@@ -1,0 +1,250 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.accounting.invoice.InvoiceWorker;
+import org.ofbiz.party.contact.ContactHelper;
+
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.order.UtilOrder;
+import org.opentaps.domain.DomainsLoader;
+import com.opensourcestrategies.financials.invoice.InvoiceHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import com.opensourcestrategies.financials.financials.FinancialServices;
+
+uiLabelMap = context.get("uiLabelMap");
+invoices = FastList.newInstance();
+
+invoiceId = context.get("invoiceId");
+if (invoiceId == null) invoiceId = UtilCommon.getParameter(request, "invoiceId");
+selected = FastList.newInstance();
+if (invoiceId == null) {
+   multi = UtilHttp.parseMultiFormData(parameters);
+   for (row: multi) {
+       selected.add(row.get("invoiceId"));
+   }
+} else {
+    selected.add(invoiceId);
+}
+
+dl = new DomainsLoader(request);
+domains = dl.loadDomainsDirectory();
+billingDomain = domains.getBillingDomain();
+invoiceRepository = billingDomain.getInvoiceRepository();
+
+for (currentId: selected) {
+
+
+    item = FastMap.newInstance();
+
+    invoice = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", currentId));
+    if (invoice == null) return;
+    item{"invoice"} = invoice;
+
+    // get the invoice lines for presentation
+    item{"invoiceLines"} = InvoiceHelper.getInvoiceLinesForPresentation(delegator, currentId);
+
+    invoiceTypeId = invoice.getString("invoiceTypeId");
+    isReceipt = false;
+    isDisbursement = false;
+    isPartner = false;
+    if ("SALES_INVOICE".equals(invoiceTypeId)) {
+        isReceipt = true;
+    } else if ("PURCHASE_INVOICE".equals(invoiceTypeId)) {
+        isDisbursement = true;
+    } else if ("CUST_RTN_INVOICE".equals(invoiceTypeId)) {
+        isDisbursement = true;
+    } else if ("COMMISSION_INVOICE".equals(invoiceTypeId)) {
+        isDisbursement = true;
+    } else if ("INTEREST_INVOICE".equals(invoiceTypeId)) {
+        isReceipt = true;
+    } else if ("PARTNER_INVOICE".equals(invoiceTypeId)) {
+        isPartner = true;
+    }
+    item{"isReceipt"} = (Boolean)isReceipt;
+    item{"isDisbursement"} = (Boolean)isDisbursement;
+    item{"isPartner"} = (Boolean)isPartner;
+
+    whichPartyId = (isReceipt || isPartner ? invoice.get("partyId") : invoice.get("partyIdFrom"));
+    item{"billingPartyId"} = whichPartyId;
+
+    // the billing address, which can be either the payment or billing location
+    invoiceContactMechId = null;
+    conditions = UtilMisc.toList(
+        new EntityExpr("contactMechPurposeTypeId", EntityOperator.EQUALS, "BILLING_LOCATION"),
+        new EntityExpr("invoiceId", EntityOperator.EQUALS, invoice.get("invoiceId")));
+    invoiceContactMech = EntityUtil.getFirst( delegator.findByAnd("InvoiceContactMech", conditions) );
+    if (invoiceContactMech != null) {
+        invoiceContactMechId = invoiceContactMech.get("contactMechId");
+        invoiceAddress = delegator.findByPrimaryKey("PostalAddress", UtilMisc.toMap("contactMechId", invoiceContactMech.get("contactMechId")));
+    } else {
+        // if the address is not in InvoiceContactMech, use the billing address of the party
+        invoiceAddress = UtilFinancial.getBillingAddress(whichPartyId, delegator);
+        if (invoiceAddress != null) {
+            invoiceContactMechId = invoiceAddress.get("contactMechId");
+        }
+    }
+    item{"invoiceAddress"} = invoiceAddress;
+    item{"invoiceContactMechId"} = invoiceContactMechId;
+
+    // Invoice terms and term types
+    invoiceTermList = invoice.getRelated("InvoiceTerm", UtilMisc.toList("invoiceTermId"));
+    invoiceTerms = FastList.newInstance();
+    for (invoiceTerm : invoiceTermList) {
+        termType = invoiceTerm.getRelatedOne("TermType");
+        if (UtilValidate.isNotEmpty(termType)
+            && "FINANCIAL_TERM".equals(termType.get("parentTypeId"))) {
+            invoiceTerms.add(invoiceTerm);
+        }
+    }
+    item{"invoiceTerms"} = invoiceTerms;
+
+    // OrderIds related to the invoice
+    orderItemBillings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("invoiceId", currentId));
+    orderIds = EntityUtil.getFieldListFromEntityList(orderItemBillings, "orderId", true);
+    item{"orderIds"} = orderIds;
+
+    // Invoice total
+    invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
+    item{"invoiceTotal"} = new Double(invoiceTotal);    
+
+    // determine the payments and everything related to them
+    if (isReceipt || isDisbursement) {
+        if (isReceipt) {
+            statusCondition = new EntityConditionList(UtilMisc.toList(
+                new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_RECEIVED"),
+                new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_CONFIRMED")),
+                EntityOperator.OR);
+        } else if (isDisbursement) {
+            statusCondition = new EntityConditionList(UtilMisc.toList(
+                new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_SENT"),
+                new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_CONFIRMED")),
+                EntityOperator.OR);
+        }
+        tempResult = delegator.findByCondition("PaymentAndApplication",
+            new EntityExpr("invoiceId", EntityOperator.EQUALS, currentId),
+            null,
+            UtilMisc.toList("paymentId", "effectiveDate", "paymentMethodTypeId", "paymentMethodId", "statusId", "amountApplied"),
+            UtilMisc.toList("-effectiveDate"), UtilCommon.DISTINCT_READ_OPTIONS);
+
+        conditions = new EntityConditionList(UtilMisc.toList(
+                statusCondition,
+                new EntityExpr("invoiceId", EntityOperator.EQUALS, currentId)),
+                EntityOperator.AND);
+        paymentApplicationIter = delegator.findListIteratorByCondition("PaymentAndApplication", conditions, null,
+            Arrays.asList(new Object[] {"paymentId", "effectiveDate", "paymentMethodTypeId", "paymentMethodId", "statusId", "amountApplied", "paymentRefNum"}),
+            UtilMisc.toList("effectiveDate"), UtilCommon.DISTINCT_READ_OPTIONS);
+
+        paymentList = FastList.newInstance();
+        paymentApplication = null;
+        while ((paymentApplication = paymentApplicationIter.next()) != null) {
+            paymentDataMap = FastMap.newInstance();
+            paymentDataMap.putAll(paymentApplication.getAllFields());
+
+            paymentMethodTypeId = paymentApplication.getString("paymentMethodTypeId");
+
+            method = "";
+
+            if ("CREDIT_CARD".equals(paymentMethodTypeId)) {
+                paymentMethodId = paymentApplication.get("paymentMethodId");
+
+                if (UtilValidate.isNotEmpty(paymentMethodId)) {
+                    paymentMethod = delegator.findByPrimaryKeyCache("PaymentMethodAndCreditCard",
+                        UtilMisc.toMap("paymentMethodId", paymentMethodId));
+
+                    if (paymentMethod != null) {
+                        creditCard = paymentMethod.getRelatedOne("CreditCard");
+
+                        if (creditCard != null) { // should always be true at this point
+                            method = ContactHelper.formatCreditCard(creditCard);
+                        } 
+                    }
+                }
+                // if for example we don't have a paymentMethodId (ie: manual Credit card payment) or any other reason
+                // we would not have method at this point, set to the generic description
+                if ("".equals(method)) {
+                    paymentMethodType = delegator.findByPrimaryKeyCache("PaymentMethodType", UtilMisc.toMap("paymentMethodTypeId", paymentMethodTypeId));
+                    Debug.logError("credit card not found, using paymentMethodType "+paymentMethodType, "");
+                    method = paymentMethodType.getString("description");
+                }
+            } else {
+                if (UtilValidate.isNotEmpty(paymentMethodTypeId)) {
+                    paymentMethodType = delegator.findByPrimaryKeyCache("PaymentMethodType",
+                        UtilMisc.toMap("paymentMethodTypeId", paymentMethodTypeId));
+
+                    if (paymentMethodType != null) {
+                        method = paymentMethodType.getString("description");
+                    }
+                }
+            }
+
+            paymentDataMap.put("method", method);
+
+            if (UtilValidate.isEmpty(paymentDataMap.get("paymentRefNum"))) {
+                paymentDataMap.put("paymentRefNum", uiLabelMap.get("CommonNA"));
+            }
+
+            paymentList.add(paymentDataMap);
+        }
+        paymentApplicationIter.close();
+
+        // Collect adjustments
+        adjustmentList = FastList.newInstance();
+        adjustments = invoice.getRelated("InvoiceAdjustment");
+        for (adj : adjustments) {
+            adjItem = FastMap.newInstance();
+            adjItem.putAll(adj);
+
+            adjType = adj.getRelatedOne("InvoiceAdjustmentType");
+            adjItem.put("adjustmentType", UtilValidate.isNotEmpty(adjType) ? adjType.get("description", UtilHttp.getLocale(request)) : null);
+
+            adjustmentList.add(adjItem);
+        }
+
+        // the payment total should add up to the list of payments above
+        paymentsTotal = InvoiceWorker.getInvoiceAppliedBd(delegator, currentId);
+        outstandingAmount = InvoiceWorker.getInvoiceTotalBd(delegator, currentId).subtract(paymentsTotal);
+
+        item{"paymentList"} = paymentList;
+        item{"adjustmentList"} = adjustmentList;
+        item{"outstandingAmount"} = outstandingAmount;
+        item{"paymentsTotal"} = paymentsTotal;
+    }
+
+    // get the shipping address from the invoice domain object TODO: should really be at top, but it would involve rewriting the whole thing and adding a lot of new domain methods
+    invoiceObj = invoiceRepository.getInvoiceById(currentId);
+    shippingAddress = invoiceObj.getShippingAddress();
+    if (shippingAddress != null) {
+        item{"shippingAddress"} = shippingAddress.toMap();
+    }
+
+    if (isReceipt) {
+        item{"paymentListLabel"} = uiLabelMap.get("AccountingPaymentsReceived");
+    } else if (isDisbursement) {
+        item{"paymentListLabel"} = uiLabelMap.get("FinancialsPaymentsSent");
+    }
+    
+    invoices.add(item);
+}
+context{"invoices"} = invoices;

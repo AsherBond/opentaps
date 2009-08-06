@@ -1,0 +1,36 @@
+<entity-engine-xml>
+<!--
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+ 
+    <!-- Financials Keyboard shortcuts demo data -->
+    <KeyboardShortcut shortcutId="FINA_FIND_SINV" sequenceNum="210" shortcut="shift+f1" actionTypeId="KB_URL" actionTarget="findSalesInvoices" applicationName="financials" description="Find Sales Invoices" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_SINV" sequenceNum="211" shortcut="f1" actionTypeId="KB_URL" actionTarget="createInvoiceForm?invoiceTypeId=SALES_INVOICE" applicationName="financials" description="Create a Sales Invoice" />
+
+    <KeyboardShortcut shortcutId="FINA_FIND_VINV" sequenceNum="212" shortcut="shift+f2" actionTypeId="KB_URL" actionTarget="findPurchaseInvoices" applicationName="financials" description="Find Vendor invoices" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_VINV" sequenceNum="213" shortcut="f2" actionTypeId="KB_URL" actionTarget="createInvoiceForm?invoiceTypeId=PURCHASE_INVOICE" applicationName="financials" description="Create a Vendor invoice" />
+
+    <KeyboardShortcut shortcutId="FINA_FIND_PAYCHECK" sequenceNum="214" shortcut="shift+f3" actionTypeId="KB_URL" actionTarget="findPaycheck" applicationName="financials" description="Find Paychecks" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_PAYCHECK" sequenceNum="215" shortcut="f3" actionTypeId="KB_URL" actionTarget="createPaycheckForm" applicationName="financials" description="Create a Paycheck" />
+
+    <KeyboardShortcut shortcutId="FINA_FIND_PINV" sequenceNum="216" shortcut="shift+f4" actionTypeId="KB_URL" actionTarget="findPartnerInvoices" applicationName="financials" description="Find Partner Invoices" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_PINV" sequenceNum="217" shortcut="f4" actionTypeId="KB_URL" actionTarget="createPartnerInvoiceForm" applicationName="financials" description="Create a Partner Invoice" />
+
+    <KeyboardShortcut shortcutId="FINA_FIND_TRANS" sequenceNum="218" shortcut="shift+f5" actionTypeId="KB_URL" actionTarget="transactionsMain" applicationName="financials" description="Find Transactions" />
+    <KeyboardShortcut shortcutId="FINA_CREATE_TRANS" sequenceNum="219" shortcut="f5" actionTypeId="KB_URL" actionTarget="createAcctgTransForm" applicationName="financials" description="Create a Transaction" />
+
+
+</entity-engine-xml>

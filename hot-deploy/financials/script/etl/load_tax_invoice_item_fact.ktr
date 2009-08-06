@@ -1,0 +1,1456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>load_tax_invoice_item_fact</name>
+    <description/>
+    <extended_description/>
+    <trans_version/>
+    <directory>&#47;</directory>
+    <log>
+      <read/>
+      <write/>
+      <input/>
+      <output/>
+      <update/>
+      <rejected/>
+      <connection/>
+      <table/>
+      <step_performance_table/>
+      <use_batchid>Y</use_batchid>
+      <use_logfield>N</use_logfield>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>N</using_thread_priorities>
+    <shared_objects_file/>
+    <capture_step_performance>N</capture_step_performance>
+    <step_performance_capturing_delay>1000</step_performance_capturing_delay>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <modified_user>-</modified_user>
+  <modified_date>2007&#47;12&#47;19 18:28:24.091</modified_date>
+  </info>
+  <notepads>
+  </notepads>
+  <connection>
+    <name>ofbiz_ods</name>
+    <server>${odsHostServer}</server>
+    <type>DERBY</type>
+    <access>JNDI</access>
+    <database>operational</database>
+    <port>1527</port>
+    <username>${odsUserName}</username>
+    <password>${odsPassword}</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1527</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <connection>
+    <name>ofbiz_dw</name>
+    <server>${dwHostServer}</server>
+    <type>DERBY</type>
+    <access>JNDI</access>
+    <database>operational</database>
+    <port>1527</port>
+    <username>${dwUserName}</username>
+    <password>${dwPassword}</password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>1527</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>Get invoice_item total promotions</from><to>Get invoice_item total refunds</to><enabled>Y</enabled> </hop>  <hop> <from>Get product_store_id</from><to>Lookup StoreDim</to><enabled>Y</enabled> </hop>  <hop> <from>Get invoice_item total promotion refund adjustments</from><to>Get invoice_item total tax due</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup tax_authority_dim</from><to>Get product_store_id</to><enabled>Y</enabled> </hop>  <hop> <from>Get invoice_item total tax due</from><to>Get invoice_item total tax refund adjustments </to><enabled>Y</enabled> </hop>  <hop> <from>Get invoice_item total tax refund adjustments </from><to>Lookup tax_authority_dim</to><enabled>Y</enabled> </hop>  <hop> <from>Extract data for DateDim</from><to>Lookup&#47;update DateDim</to><enabled>Y</enabled> </hop>  <hop> <from>Select values #1 (hack to work with Derby)</from><to>Extract data for DateDim</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup StoreDim</from><to>Select values #2 (hack to work with Derby)</to><enabled>Y</enabled> </hop>  <hop> <from>Select values #2 (hack to work with Derby)</from><to>Set default values</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup&#47;update DateDim</from><to>Lookup&#47;update CurrencyDim</to><enabled>Y</enabled> </hop>  <hop> <from>Lookup&#47;update CurrencyDim</from><to>Get invoice_item total promotions</to><enabled>Y</enabled> </hop>  <hop> <from>Select tax_invoice_item_fact values</from><to>Insert &#47; Update</to><enabled>Y</enabled> </hop>  <hop> <from>Set default values</from><to>Calculate sales_invoice_item_fact fatcs</to><enabled>Y</enabled> </hop>  <hop> <from>Calculate sales_invoice_item_fact fatcs</from><to>Select tax_invoice_item_fact values</to><enabled>Y</enabled> </hop>  <hop> <from>Get invoice_item data</from><to>Select values #1 (hack to work with Derby)</to><enabled>Y</enabled> </hop>  <hop> <from>Get invoice_item total refunds</from><to>Get return invoice items</to><enabled>Y</enabled> </hop>  <hop> <from>Get return invoice items</from><to>Get TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</to><enabled>Y</enabled> </hop>  <hop> <from>Get invoice_item total refunds</from><to>lookup TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</to><enabled>Y</enabled> </hop>  <hop> <from>lookup TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</from><to>Get invoice_item total promotion refund adjustments</to><enabled>Y</enabled> </hop>  <hop> <from>Get TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</from><to>lookup TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</to><enabled>Y</enabled> </hop>  </order>
+  <step>
+    <name>Calculate sales_invoice_item_fact fatcs</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+       <calculation><field_name>totalRefundAllocRate</field_name>
+<calc_type>DIVIDE</calc_type>
+<field_a>totalSalesAmount</field_a>
+<field_b>totalSIIAmountForRefundAllocCalc</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>17</value_length>
+<value_precision>2</value_precision>
+<remove>N</remove>
+<conversion_mask>0.0</conversion_mask>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>totalPromotionRefundAdjAux1</field_name>
+<calc_type>DIVIDE</calc_type>
+<field_a>totalPromotionRefundAdj</field_a>
+<field_b>totalRefundsInvoiceItemNum</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>17</value_length>
+<value_precision>2</value_precision>
+<remove>N</remove>
+<conversion_mask>0.0</conversion_mask>
+<decimal_symbol>.</decimal_symbol>
+<grouping_symbol>,</grouping_symbol>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>totalPromotionRefundAdjAux2</field_name>
+<calc_type>MULTIPLY</calc_type>
+<field_a>totalPromotionRefundAdjAux1</field_a>
+<field_b>totalRefundAllocRate</field_b>
+<field_c/>
+<value_type>-</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>discounts</field_name>
+<calc_type>SUBTRACT</calc_type>
+<field_a>totalPromotions</field_a>
+<field_b>totalPromotionRefundAdjAux2</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>17</value_length>
+<value_precision>2</value_precision>
+<remove>N</remove>
+<conversion_mask>0.0</conversion_mask>
+<decimal_symbol>.</decimal_symbol>
+<grouping_symbol>,</grouping_symbol>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>totalRefundsAux1</field_name>
+<calc_type>DIVIDE</calc_type>
+<field_a>totalRefunds</field_a>
+<field_b>totalRefundsInvoiceItemNum</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>17</value_length>
+<value_precision>2</value_precision>
+<remove>N</remove>
+<conversion_mask>0.0</conversion_mask>
+<decimal_symbol>.</decimal_symbol>
+<grouping_symbol>,</grouping_symbol>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>totalRefundsAux2</field_name>
+<calc_type>MULTIPLY</calc_type>
+<field_a>totalRefundsAux1</field_a>
+<field_b>totalRefundAllocRate</field_b>
+<field_c/>
+<value_type>-</value_type>
+<value_length>-1</value_length>
+<value_precision>-1</value_precision>
+<remove>N</remove>
+<conversion_mask/>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>netAmountAux</field_name>
+<calc_type>SUBTRACT</calc_type>
+<field_a>totalSalesAmount</field_a>
+<field_b>totalRefundsAux2</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>17</value_length>
+<value_precision>2</value_precision>
+<remove>N</remove>
+<conversion_mask>0.0</conversion_mask>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>netAmount</field_name>
+<calc_type>ADD</calc_type>
+<field_a>netAmountAux</field_a>
+<field_b>discounts</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>17</value_length>
+<value_precision>2</value_precision>
+<remove>N</remove>
+<conversion_mask>0.0</conversion_mask>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>totalTaxRefundAdjAux1</field_name>
+<calc_type>DIVIDE</calc_type>
+<field_a>totalTaxRefundAdj</field_a>
+<field_b>totalRefundsInvoiceItemNum</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>17</value_length>
+<value_precision>2</value_precision>
+<remove>N</remove>
+<conversion_mask>0.0</conversion_mask>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>totalTaxRefundAdjAux2</field_name>
+<calc_type>MULTIPLY</calc_type>
+<field_a>totalTaxRefundAdjAux1</field_a>
+<field_b>totalRefundAllocRate</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>17</value_length>
+<value_precision>2</value_precision>
+<remove>N</remove>
+<conversion_mask>0.0</conversion_mask>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+       <calculation><field_name>tax_due</field_name>
+<calc_type>SUBTRACT</calc_type>
+<field_a>totalTaxDue</field_a>
+<field_b>totalTaxRefundAdjAux2</field_b>
+<field_c/>
+<value_type>Number</value_type>
+<value_length>17</value_length>
+<value_precision>2</value_precision>
+<remove>N</remove>
+<conversion_mask>0.0</conversion_mask>
+<decimal_symbol/>
+<grouping_symbol/>
+<currency_symbol/>
+</calculation>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>506</xloc>
+      <yloc>417</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Extract data for DateDim</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>&#47;&#47; The fields we want to calculate
+var day_of_month;
+var week_of_year;
+var month_of_year;
+var year_number;
+var quarter;
+var name_day;
+var name_month;
+&#47;&#47; Calculate!
+day_of_month = _invoice_date.Clone().dat2str(&quot;dd&quot;);
+week_of_year = _invoice_date.Clone().dat2str(&quot;ww&quot;);
+month_of_year = _invoice_date.Clone().dat2str(&quot;MM&quot;);
+year_number = _invoice_date.Clone().dat2str(&quot;yyyy&quot;);
+name_day = _invoice_date.Clone().dat2str(&quot;E&quot;).getString();
+name_month = _invoice_date.Clone().dat2str(&quot;MMMM&quot;).getString();
+if(month_of_year &lt;= 3) {
+       quarter = &quot;Q1&quot;;
+}
+else if(month_of_year &lt;= 6) {
+       quarter = &quot;Q2&quot;;
+}
+else if(month_of_year &lt;= 9) {
+       quarter = &quot;Q3&quot;;
+}
+else {
+       quarter = &quot;Q4&quot;;
+}
+
+
+</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>day_of_month</name>
+        <rename>day_of_month</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>week_of_year</name>
+        <rename>week_of_year</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>month_of_year</name>
+        <rename>month_of_year</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>year_number</name>
+        <rename>year_number</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>quarter</name>
+        <rename>quarter</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>name_day</name>
+        <rename>name_day</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>name_month</name>
+        <rename>name_month</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>426</xloc>
+      <yloc>19</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_ods</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT SUM(SALES_INVOICE_ITEM.QUANTITY*SALES_INVOICE_ITEM.AMOUNT) AS TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC
+FROM RETURN_ITEM, RETURN_ITEM_BILLING, INVOICE AS RETURN_INVOICE, INVOICE_ITEM AS RETURN_INVOICE_ITEM,
+INVOICE AS SALES_INVOICE, INVOICE_ITEM AS SALES_INVOICE_ITEM, ORDER_ITEM_BILLING
+WHERE SALES_INVOICE.INVOICE_TYPE_ID = &apos;SALES_INVOICE&apos;
+AND RETURN_INVOICE.INVOICE_ID = ?
+AND SALES_INVOICE_ITEM.INVOICE_ID = SALES_INVOICE.INVOICE_ID
+AND RETURN_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID = ?
+AND ORDER_ITEM_BILLING.INVOICE_ID = SALES_INVOICE_ITEM.INVOICE_ID
+AND ORDER_ITEM_BILLING.INVOICE_ITEM_SEQ_ID = SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID
+AND RETURN_ITEM.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID
+AND RETURN_ITEM.ORDER_ITEM_SEQ_ID = ORDER_ITEM_BILLING.ORDER_ITEM_SEQ_ID
+AND RETURN_ITEM_BILLING.RETURN_ID = RETURN_ITEM.RETURN_ID
+AND RETURN_ITEM_BILLING.RETURN_ITEM_SEQ_ID = RETURN_ITEM.RETURN_ITEM_SEQ_ID
+AND RETURN_INVOICE.INVOICE_ID = RETURN_ITEM_BILLING.INVOICE_ID
+AND RETURN_INVOICE.INVOICE_TYPE_ID = &apos;CUST_RTN_INVOICE&apos;
+AND RETURN_INVOICE_ITEM.INVOICE_ID = RETURN_INVOICE.INVOICE_ID
+AND RETURN_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID = RETURN_ITEM_BILLING.INVOICE_ITEM_SEQ_ID
+AND RETURN_INVOICE_ITEM.INVOICE_ITEM_TYPE_ID IN (&apos;CRT_PROD_ITEM&apos;, &apos;CRT_DPROD_ITEM&apos;, &apos;CRT_FDPROD_ITEM&apos;, &apos;CRT_PROD_FEATR_ITEM&apos;, &apos;CRT_SPROD_ITEM&apos;)
+GROUP BY RETURN_INVOICE_ITEM.INVOICE_ID, RETURN_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID</sql>
+    <outer_join>N</outer_join>
+    <parameter>
+      <field>
+        <name>RII_ID</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>RII_SEQ_ID</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>662</xloc>
+      <yloc>78</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get invoice_item data</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_ods</connection>
+    <sql>SELECT INVOICE_ITEM.INVOICE_ID, INVOICE_ITEM_SEQ_ID,
+INVOICE_ITEM.QUANTITY*INVOICE_ITEM.AMOUNT AS TOTAL_SALES_AMOUNT,
+INVOICE.INVOICE_DATE,
+INVOICE.CURRENCY_UOM_ID
+FROM INVOICE, INVOICE_ITEM
+WHERE INVOICE_ITEM.INVOICE_ID = INVOICE.INVOICE_ID
+AND INVOICE.INVOICE_TYPE_ID = &apos;SALES_INVOICE&apos;
+AND INVOICE.STATUS_ID IN (&apos;INVOICE_READY&apos;, &apos;INVOICE_PAID&apos;)
+AND INVOICE_ITEM.INVOICE_ITEM_TYPE_ID IN (&apos;INV_FPROD_ITEM&apos;,
+&apos;INV_DPROD_ITEM&apos;,
+&apos;INV_FDPROD_ITEM&apos;,
+&apos;INV_PROD_FEATR_ITEM&apos;,
+&apos;INV_SPROD_ITEM&apos;)</sql>
+    <limit>0</limit>
+    <lookup/>
+    <execute_each_row>N</execute_each_row>
+    <variables_active>N</variables_active>
+    <lazy_conversion_active>N</lazy_conversion_active>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>30</xloc>
+      <yloc>19</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get invoice_item total promotion refund adjustments</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_ods</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT SUM(RETURN_INVOICE_ITEM.QUANTITY*RETURN_INVOICE_ITEM.AMOUNT) AS TOTAL_PROMOTION_REFUND_ADJ
+FROM RETURN_ITEM, RETURN_ITEM_BILLING, INVOICE AS RETURN_INVOICE, INVOICE_ITEM AS RETURN_INVOICE_ITEM,
+INVOICE AS SALES_INVOICE, INVOICE_ITEM AS SALES_INVOICE_ITEM, ORDER_ITEM_BILLING
+WHERE SALES_INVOICE.INVOICE_TYPE_ID = &apos;SALES_INVOICE&apos;
+AND SALES_INVOICE.INVOICE_ID = ?
+AND SALES_INVOICE_ITEM.INVOICE_ID = SALES_INVOICE.INVOICE_ID
+AND SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID = ?
+AND ORDER_ITEM_BILLING.INVOICE_ID = SALES_INVOICE_ITEM.INVOICE_ID
+AND ORDER_ITEM_BILLING.INVOICE_ITEM_SEQ_ID = SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID
+AND RETURN_ITEM.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID
+AND RETURN_ITEM.ORDER_ITEM_SEQ_ID = ORDER_ITEM_BILLING.ORDER_ITEM_SEQ_ID
+AND RETURN_ITEM_BILLING.RETURN_ID = RETURN_ITEM.RETURN_ID
+AND RETURN_ITEM_BILLING.RETURN_ITEM_SEQ_ID = RETURN_ITEM.RETURN_ITEM_SEQ_ID
+AND RETURN_INVOICE.INVOICE_ID = RETURN_ITEM_BILLING.INVOICE_ID
+AND RETURN_INVOICE.INVOICE_TYPE_ID = &apos;CUST_RTN_INVOICE&apos;
+AND RETURN_INVOICE_ITEM.PARENT_INVOICE_ID = RETURN_INVOICE.INVOICE_ID
+AND RETURN_INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID = RETURN_ITEM_BILLING.INVOICE_ITEM_SEQ_ID
+AND RETURN_INVOICE_ITEM.PARENT_INVOICE_ID = RETURN_INVOICE_ITEM.INVOICE_ID
+AND RETURN_INVOICE_ITEM.INVOICE_ITEM_TYPE_ID IN (&apos;CRT_PROMOTION_ADJ&apos;, &apos;CRT_DISCOUNT_ADJ&apos;)
+GROUP BY SALES_INVOICE_ITEM.INVOICE_ID, SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID
+</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>invoice_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>invoice_item_seq_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>334</xloc>
+      <yloc>142</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get invoice_item total promotions</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_ods</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT SUM(INVOICE_ITEM.QUANTITY*INVOICE_ITEM.AMOUNT) AS TOTAL_PROMOTIONS
+FROM INVOICE_ITEM
+WHERE INVOICE_ITEM_TYPE_ID IN (&apos;ITM_PROMOTION_ADJ&apos;, &apos;ITM_DISCOUNT_ADJ&apos;)
+AND INVOICE_ITEM.PARENT_INVOICE_ID = ?
+AND INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID = ?
+GROUP BY INVOICE_ITEM.PARENT_INVOICE_ID,
+INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID
+</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>invoice_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>invoice_item_seq_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>965</xloc>
+      <yloc>19</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get invoice_item total refunds</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_ods</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT SUM(RETURN_INVOICE_ITEM.QUANTITY*RETURN_INVOICE_ITEM.AMOUNT) AS TOTAL_REFUNDS, 
+COUNT(*) AS TOTAL_REFUNDS_II_NUM
+FROM RETURN_ITEM, RETURN_ITEM_BILLING, INVOICE AS RETURN_INVOICE, INVOICE_ITEM AS RETURN_INVOICE_ITEM,
+INVOICE AS SALES_INVOICE, INVOICE_ITEM AS SALES_INVOICE_ITEM, ORDER_ITEM_BILLING
+WHERE SALES_INVOICE.INVOICE_TYPE_ID = &apos;SALES_INVOICE&apos;
+AND SALES_INVOICE.INVOICE_ID = ?
+AND SALES_INVOICE_ITEM.INVOICE_ID = SALES_INVOICE.INVOICE_ID
+AND SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID = ?
+AND ORDER_ITEM_BILLING.INVOICE_ID = SALES_INVOICE_ITEM.INVOICE_ID
+AND ORDER_ITEM_BILLING.INVOICE_ITEM_SEQ_ID = SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID
+AND RETURN_ITEM.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID
+AND RETURN_ITEM.ORDER_ITEM_SEQ_ID = ORDER_ITEM_BILLING.ORDER_ITEM_SEQ_ID
+AND RETURN_ITEM_BILLING.RETURN_ID = RETURN_ITEM.RETURN_ID
+AND RETURN_ITEM_BILLING.RETURN_ITEM_SEQ_ID = RETURN_ITEM.RETURN_ITEM_SEQ_ID
+AND RETURN_INVOICE.INVOICE_ID = RETURN_ITEM_BILLING.INVOICE_ID
+AND RETURN_INVOICE.INVOICE_TYPE_ID = &apos;CUST_RTN_INVOICE&apos;
+AND RETURN_INVOICE_ITEM.INVOICE_ID = RETURN_INVOICE.INVOICE_ID
+AND RETURN_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID = RETURN_ITEM_BILLING.INVOICE_ITEM_SEQ_ID
+AND RETURN_INVOICE_ITEM.INVOICE_ITEM_TYPE_ID IN (&apos;CRT_PROD_ITEM&apos;, &apos;CRT_DPROD_ITEM&apos;, &apos;CRT_FDPROD_ITEM&apos;, &apos;CRT_PROD_FEATR_ITEM&apos;, &apos;CRT_SPROD_ITEM&apos;)
+GROUP BY SALES_INVOICE_ITEM.INVOICE_ID, SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>invoice_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>invoice_item_seq_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>968</xloc>
+      <yloc>142</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get invoice_item total tax due</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_ods</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT SUM(INVOICE_ITEM.QUANTITY*INVOICE_ITEM.AMOUNT) AS TOTAL_TAX_DUE,
+INVOICE_ITEM.TAX_AUTH_PARTY_ID, INVOICE_ITEM.TAX_AUTH_GEO_ID
+FROM INVOICE_ITEM
+WHERE INVOICE_ITEM_TYPE_ID = &apos;ITM_SALES_TAX&apos;
+AND INVOICE_ITEM.PARENT_INVOICE_ID = ?
+AND INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID = ?
+GROUP BY INVOICE_ITEM.TAX_AUTH_PARTY_ID,
+INVOICE_ITEM.TAX_AUTH_GEO_ID,
+INVOICE_ITEM.PARENT_INVOICE_ID,
+INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID </sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>invoice_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>invoice_item_seq_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>77</xloc>
+      <yloc>142</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get invoice_item total tax refund adjustments </name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_ods</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT SUM(RETURN_INVOICE_ITEM.QUANTITY*RETURN_INVOICE_ITEM.AMOUNT) AS TOTAL_TAX_REFUND_ADJ
+FROM RETURN_ITEM, RETURN_ITEM_BILLING, INVOICE AS RETURN_INVOICE, INVOICE_ITEM AS RETURN_INVOICE_ITEM,
+INVOICE AS SALES_INVOICE, INVOICE_ITEM AS SALES_INVOICE_ITEM, ORDER_ITEM_BILLING,
+INVOICE_ITEM AS TAX_INVOICE_ITEM
+WHERE SALES_INVOICE.INVOICE_TYPE_ID = &apos;SALES_INVOICE&apos;
+AND SALES_INVOICE.INVOICE_ID = ?
+AND SALES_INVOICE_ITEM.INVOICE_ID = SALES_INVOICE.INVOICE_ID
+AND SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID = ?
+AND TAX_INVOICE_ITEM.PARENT_INVOICE_ID = SALES_INVOICE_ITEM.INVOICE_ID
+AND TAX_INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID = SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID
+AND TAX_INVOICE_ITEM.TAX_AUTH_PARTY_ID = ?
+AND TAX_INVOICE_ITEM.TAX_AUTH_GEO_ID = ?
+AND ORDER_ITEM_BILLING.INVOICE_ID = SALES_INVOICE_ITEM.INVOICE_ID
+AND ORDER_ITEM_BILLING.INVOICE_ITEM_SEQ_ID = SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID
+AND RETURN_ITEM.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID
+AND RETURN_ITEM.ORDER_ITEM_SEQ_ID = ORDER_ITEM_BILLING.ORDER_ITEM_SEQ_ID
+AND RETURN_ITEM_BILLING.RETURN_ID = RETURN_ITEM.RETURN_ID
+AND RETURN_ITEM_BILLING.RETURN_ITEM_SEQ_ID = RETURN_ITEM.RETURN_ITEM_SEQ_ID
+AND RETURN_INVOICE.INVOICE_ID = RETURN_ITEM_BILLING.INVOICE_ID
+AND RETURN_INVOICE.INVOICE_TYPE_ID = &apos;CUST_RTN_INVOICE&apos;
+AND RETURN_INVOICE_ITEM.PARENT_INVOICE_ID = RETURN_ITEM_BILLING.INVOICE_ID
+AND RETURN_INVOICE_ITEM.PARENT_INVOICE_ITEM_SEQ_ID = RETURN_ITEM_BILLING.INVOICE_ITEM_SEQ_ID
+AND RETURN_INVOICE_ITEM.PARENT_INVOICE_ID = RETURN_INVOICE_ITEM.INVOICE_ID
+AND RETURN_INVOICE_ITEM.INVOICE_ITEM_TYPE_ID = &apos;CRT_SALES_TAX_ADJ&apos;
+AND RETURN_INVOICE_ITEM.TAX_AUTH_PARTY_ID = ?
+AND RETURN_INVOICE_ITEM.TAX_AUTH_GEO_ID = ?
+GROUP BY SALES_INVOICE_ITEM.INVOICE_ID, SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID, TAX_INVOICE_ITEM.TAX_AUTH_PARTY_ID, TAX_INVOICE_ITEM.TAX_AUTH_GEO_ID</sql>
+    <outer_join>Y</outer_join>
+    <parameter>
+      <field>
+        <name>invoice_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>invoice_item_seq_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>tax_auth_party_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>tax_auth_geo_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>tax_auth_party_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>tax_auth_geo_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>75</xloc>
+      <yloc>277</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get product_store_id</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_ods</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT MAX(PRODUCT_STORE_ID) AS PRODUCT_STORE_ID
+FROM ORDER_HEADER, ORDER_ITEM_BILLING
+WHERE ORDER_ITEM_BILLING.INVOICE_ID = ?
+AND ORDER_ITEM_BILLING.INVOICE_ITEM_SEQ_ID = ?
+AND ORDER_HEADER.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID</sql>
+    <outer_join>N</outer_join>
+    <parameter>
+      <field>
+        <name>invoice_id</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>invoice_item_seq_id</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>821</xloc>
+      <yloc>277</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get return invoice items</name>
+    <type>DBJoin</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_ods</connection>
+    <rowlimit>0</rowlimit>
+    <sql>SELECT SALES_INVOICE_ITEM.INVOICE_ID AS SII_ID, SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID AS SII_SEQ_ID,
+RETURN_INVOICE_ITEM.INVOICE_ID AS RII_ID,RETURN_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID AS RII_SEQ_ID
+FROM RETURN_ITEM, RETURN_ITEM_BILLING, INVOICE AS RETURN_INVOICE, INVOICE_ITEM AS RETURN_INVOICE_ITEM,
+INVOICE AS SALES_INVOICE, INVOICE_ITEM AS SALES_INVOICE_ITEM, ORDER_ITEM_BILLING
+WHERE SALES_INVOICE.INVOICE_TYPE_ID = &apos;SALES_INVOICE&apos;
+AND SALES_INVOICE.INVOICE_ID = ?
+AND SALES_INVOICE_ITEM.INVOICE_ID = SALES_INVOICE.INVOICE_ID
+AND SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID = ?
+AND ORDER_ITEM_BILLING.INVOICE_ID = SALES_INVOICE_ITEM.INVOICE_ID
+AND ORDER_ITEM_BILLING.INVOICE_ITEM_SEQ_ID = SALES_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID
+AND RETURN_ITEM.ORDER_ID = ORDER_ITEM_BILLING.ORDER_ID
+AND RETURN_ITEM.ORDER_ITEM_SEQ_ID = ORDER_ITEM_BILLING.ORDER_ITEM_SEQ_ID
+AND RETURN_ITEM_BILLING.RETURN_ID = RETURN_ITEM.RETURN_ID
+AND RETURN_ITEM_BILLING.RETURN_ITEM_SEQ_ID = RETURN_ITEM.RETURN_ITEM_SEQ_ID
+AND RETURN_INVOICE.INVOICE_ID = RETURN_ITEM_BILLING.INVOICE_ID
+AND RETURN_INVOICE.INVOICE_TYPE_ID = &apos;CUST_RTN_INVOICE&apos;
+AND RETURN_INVOICE_ITEM.INVOICE_ID = RETURN_INVOICE.INVOICE_ID
+AND RETURN_INVOICE_ITEM.INVOICE_ITEM_SEQ_ID = RETURN_ITEM_BILLING.INVOICE_ITEM_SEQ_ID
+AND RETURN_INVOICE_ITEM.INVOICE_ITEM_TYPE_ID IN (&apos;CRT_PROD_ITEM&apos;, &apos;CRT_DPROD_ITEM&apos;, &apos;CRT_FDPROD_ITEM&apos;, &apos;CRT_PROD_FEATR_ITEM&apos;, &apos;CRT_SPROD_ITEM&apos;)
+</sql>
+    <outer_join>N</outer_join>
+    <parameter>
+      <field>
+        <name>INVOICE_ID</name>
+        <type>String</type>
+      </field>
+      <field>
+        <name>INVOICE_ITEM_SEQ_ID</name>
+        <type>String</type>
+      </field>
+    </parameter>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>887</xloc>
+      <yloc>78</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Insert &#47; Update</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>ofbiz_dw</connection>
+    <commit>100</commit>
+    <update_bypassed>N</update_bypassed>
+    <lookup>
+      <schema/>
+      <table>tax_invoice_item_fact</table>
+      <key>
+        <name>date_dim_id</name>
+        <field>date_dim_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>store_dim_id</name>
+        <field>store_dim_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>tax_authority_dim_id</name>
+        <field>tax_authority_dim_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>currency_dim_id</name>
+        <field>currency_dim_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>invoice_id</name>
+        <field>invoice_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <key>
+        <name>invoice_item_seq_id</name>
+        <field>invoice_item_seq_id</field>
+        <condition>=</condition>
+        <name2/>
+      </key>
+      <value>
+        <name>date_dim_id</name>
+        <rename>date_dim_id</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>store_dim_id</name>
+        <rename>store_dim_id</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>tax_authority_dim_id</name>
+        <rename>tax_authority_dim_id</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>currency_dim_id</name>
+        <rename>currency_dim_id</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>invoice_id</name>
+        <rename>invoice_id</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>invoice_item_seq_id</name>
+        <rename>invoice_item_seq_id</rename>
+        <update>N</update>
+      </value>
+      <value>
+        <name>gross_amount</name>
+        <rename>gross_amount</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>discounts</name>
+        <rename>discounts</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>refunds</name>
+        <rename>refunds</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>net_amount</name>
+        <rename>net_amount</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>tax_due</name>
+        <rename>tax_due</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>37</xloc>
+      <yloc>417</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Lookup StoreDim</name>
+    <type>DimensionLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <schema/>
+      <table>STORE_DIM</table>
+      <connection>ofbiz_dw</connection>
+      <commit>100</commit>
+      <update>Y</update>
+      <fields>
+        <key>
+          <name>product_store_id</name>
+          <lookup>product_store_id</lookup>
+        </key>
+        <date>
+          <name/>
+          <from>date_from</from>
+          <to>date_to</to>
+        </date>
+        <return>
+          <name>store_dim_id</name>
+          <rename/>
+          <creation_method>tablemax</creation_method>
+          <use_autoinc>N</use_autoinc>
+          <version>dim_version</version>
+        </return>
+      </fields>
+      <sequence/>
+      <min_year>1974</min_year>
+      <max_year>2199</max_year>
+      <cache_size>5000</cache_size>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>968</xloc>
+      <yloc>277</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Lookup tax_authority_dim</name>
+    <type>DimensionLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <schema/>
+      <table>TAX_AUTHORITY_DIM</table>
+      <connection>ofbiz_dw</connection>
+      <commit>100</commit>
+      <update>Y</update>
+      <fields>
+        <key>
+          <name>tax_auth_party_id_1</name>
+          <lookup>tax_auth_party_id</lookup>
+        </key>
+        <key>
+          <name>tax_auth_geo_id_1</name>
+          <lookup>tax_auth_geo_id</lookup>
+        </key>
+        <date>
+          <name/>
+          <from>date_from</from>
+          <to>date_to</to>
+        </date>
+        <return>
+          <name>tax_authority_dim_id</name>
+          <rename/>
+          <creation_method>tablemax</creation_method>
+          <use_autoinc>N</use_autoinc>
+          <version>dim_version</version>
+        </return>
+      </fields>
+      <sequence/>
+      <min_year>1974</min_year>
+      <max_year>2199</max_year>
+      <cache_size>5000</cache_size>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>666</xloc>
+      <yloc>277</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Lookup&#47;update CurrencyDim</name>
+    <type>DimensionLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <schema/>
+      <table>CURRENCY_DIM</table>
+      <connection>ofbiz_dw</connection>
+      <commit>100</commit>
+      <update>Y</update>
+      <fields>
+        <key>
+          <name>uom_id</name>
+          <lookup>uom_id</lookup>
+        </key>
+        <date>
+          <name/>
+          <from>date_from</from>
+          <to>date_to</to>
+        </date>
+        <return>
+          <name>currency_dim_id</name>
+          <rename/>
+          <creation_method>tablemax</creation_method>
+          <use_autoinc>N</use_autoinc>
+          <version>dim_version</version>
+        </return>
+      </fields>
+      <sequence/>
+      <min_year>1974</min_year>
+      <max_year>2199</max_year>
+      <cache_size>5000</cache_size>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>781</xloc>
+      <yloc>19</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Lookup&#47;update DateDim</name>
+    <type>DimensionLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <schema/>
+      <table>DATE_DIM</table>
+      <connection>ofbiz_dw</connection>
+      <commit>100</commit>
+      <update>Y</update>
+      <fields>
+        <key>
+          <name>_invoice_date</name>
+          <lookup>invoice_date</lookup>
+        </key>
+        <date>
+          <name/>
+          <from>date_from</from>
+          <to>date_to</to>
+        </date>
+        <field>
+          <name>day_of_month</name>
+          <lookup>day_of_month</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>week_of_year</name>
+          <lookup>week_of_year</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>month_of_year</name>
+          <lookup>month_of_year</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>year_number</name>
+          <lookup>year_number</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>quarter</name>
+          <lookup>quarter</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>name_day</name>
+          <lookup>name_day</lookup>
+          <update>Insert</update>
+        </field>
+        <field>
+          <name>name_month</name>
+          <lookup>name_month</lookup>
+          <update>Insert</update>
+        </field>
+        <return>
+          <name>date_dim_id</name>
+          <rename/>
+          <creation_method>tablemax</creation_method>
+          <use_autoinc>N</use_autoinc>
+          <version>dim_version</version>
+        </return>
+      </fields>
+      <sequence/>
+      <min_year>1974</min_year>
+      <max_year>2199</max_year>
+      <cache_size>5000</cache_size>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>601</xloc>
+      <yloc>19</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select tax_invoice_item_fact values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>date_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>store_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>tax_authority_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>currency_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>invoice_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>invoice_item_seq_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>totalSalesAmount</name>
+        <rename>gross_amount</rename>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>discounts</name>
+        <rename/>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>totalRefundsAux2</name>
+        <rename>refunds</rename>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>netAmount</name>
+        <rename>net_amount</rename>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>tax_due</name>
+        <rename/>
+        <length>17</length>
+        <precision>2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>233</xloc>
+      <yloc>417</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values #1 (hack to work with Derby)</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>invoice_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>invoice_item_seq_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>total_sales_amount</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>invoice_date</name>
+        <rename>_invoice_date</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>currency_uom_id</name>
+        <rename>uom_id</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>225</xloc>
+      <yloc>19</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values #2 (hack to work with Derby)</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>invoice_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>invoice_item_seq_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>total_sales_amount</name>
+        <rename>_total_sales_amount</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>_invoice_date</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>day_of_month</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>week_of_year</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>month_of_year</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>year_number</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>quarter</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>name_day</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>name_month</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>date_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>total_promotions</name>
+        <rename>_total_promotions</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>total_refunds</name>
+        <rename>_total_refunds</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>total_promotion_refund_adj</name>
+        <rename>_total_promotion_refund_adj</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>product_store_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>store_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>total_tax_due</name>
+        <rename>_total_tax_due</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>total_tax_refund_adj</name>
+        <rename>_total_tax_refund_adj</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>tax_authority_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>currency_dim_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>total_refunds_ii_num</name>
+        <rename>_total_refunds_ii_num</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</name>
+        <rename>_TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>968</xloc>
+      <yloc>417</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Set default values</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var totalSalesAmount = 0.00;
+var totalPromotions = 0.00;
+var totalRefunds = 0.00;
+var totalPromotionRefundAdj = 0.00;
+var totalTaxDue = 0.00;
+var totalTaxRefundAdj = 0.00
+var totalRefundsInvoiceItemNum = 1;
+var totalSIIAmountForRefundAllocCalc = 1.00;
+
+if (_total_sales_amount.getNumber() != null) totalSalesAmount = _total_sales_amount.Clone();
+if (_total_promotions.getNumber() != null) totalPromotions = _total_promotions.Clone();
+if (_total_refunds.getNumber() != null) totalRefunds = _total_refunds.Clone();
+if (_total_promotion_refund_adj.getNumber() != null) totalPromotionRefundAdj = _total_promotion_refund_adj.Clone();
+if (_total_tax_due.getNumber() != null) totalTaxDue = _total_tax_due.Clone();
+if (_total_tax_refund_adj.getNumber() != null) totalTaxRefundAdj = _total_tax_refund_adj.Clone();
+if ((_total_refunds_ii_num.getNumber() != null) &amp;&amp; (_total_refunds_ii_num.getNumber() &gt; 0)) totalRefundsInvoiceItemNum = _total_refunds_ii_num.Clone();
+if ((_TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC.getNumber() != null) &amp;&amp; (_TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC.getNumber() &gt; 0)) totalSIIAmountForRefundAllocCalc = _TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC.Clone();
+</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>totalSalesAmount</name>
+        <rename>totalSalesAmount</rename>
+        <type>Number</type>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>totalPromotions</name>
+        <rename>totalPromotions</rename>
+        <type>Number</type>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>totalRefunds</name>
+        <rename>totalRefunds</rename>
+        <type>Number</type>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>totalPromotionRefundAdj</name>
+        <rename>totalPromotionRefundAdj</rename>
+        <type>Number</type>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>totalTaxDue</name>
+        <rename>totalTaxDue</rename>
+        <type>Number</type>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>totalTaxRefundAdj</name>
+        <rename>totalTaxRefundAdj</rename>
+        <type>Number</type>
+        <length>17</length>
+        <precision>2</precision>
+      </field>      <field>        <name>totalRefundsInvoiceItemNum</name>
+        <rename>totalRefundsInvoiceItemNum</rename>
+        <type>Integer</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>totalSIIAmountForRefundAllocCalc</name>
+        <rename>totalSIIAmountForRefundAllocCalc</rename>
+        <type>Number</type>
+        <length>17</length>
+        <precision>2</precision>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>728</xloc>
+      <yloc>416</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>lookup TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</name>
+    <type>StreamLookup</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <from>Get TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</from>
+    <input_sorted>N</input_sorted>
+    <preserve_memory>Y</preserve_memory>
+    <sorted_list>N</sorted_list>
+    <integer_pair>N</integer_pair>
+    <lookup>
+      <key>
+        <name>INVOICE_ID</name>
+        <field>SII_ID</field>
+      </key>
+      <key>
+        <name>INVOICE_ITEM_SEQ_ID</name>
+        <field>SII_SEQ_ID</field>
+      </key>
+      <value>
+        <name>TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</name>
+        <rename>TOTAL_SII_AMOUNT_FOR_REFUND_ALLOC_CALC</rename>
+        <default/>
+        <type>Number</type>
+      </value>
+    </lookup>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>662</xloc>
+      <yloc>142</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+</transformation>

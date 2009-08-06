@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="transactions" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="requiredPermission" value="FINANCIALS_TX"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- combination of find transactions and list of transactions -->
+    <screen name="transactions">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="AccountingTransactions"/>  
+                <set field="sectionHeaderUiLabel" value="AccountingTransactions"/>  
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/transactions.bsh"/>
+                <set field="parameters.listIteratorNameToUse" value="acctgTransListIt"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/findAcctgTrans.bsh"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>                
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsFindTransactions}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="findAcctgTransForm" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.AccountingTransactions}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="listAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createQuickAcctgTransForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsCreateQuickTransaction"/>
+                <set field="quickAcctgTransFormTarget" value="createQuickAcctgTrans"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getTransactionTypes.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/createQuickAcctgTransaction.bsh"/>
+            </actions>    
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCreateQuickTransaction}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific><html>
+                                        <html-template location="component://financials/webapp/financials/transactions/createQuickAcctgTransForm.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="settlePaymentsOptions">
+        <section>   
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsSettlePayments"/> 
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getPaymentMethodTypes.bsh"/>
+            </actions>
+            <widgets>   
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsSettlePayments}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific><html>
+                                        <html-template location="component://financials/webapp/financials/transactions/settlePaymentsOptions.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    
+    <screen name="settleCreditCardPayments">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsSettlePayments"/>
+                <set field="quickAcctgTransFormTarget" value="settlePayments"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/settleCreditCardPayments.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getTransactionTypes.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/createQuickAcctgTransaction.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsSettlePaymentsFrom} ${parameters.cardType}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific><html>
+                                        <html-template location="component://financials/webapp/financials/transactions/createQuickAcctgTransForm.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="settleUndepositedPayments">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsSettlePayments"/> 
+                <set field="quickAcctgTransFormTarget" value="settlePayments"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/settleUndepositedPayments.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getTransactionTypes.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/createQuickAcctgTransaction.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsSettlePaymentsFrom} ${parameters.cardType}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific><html>
+                                        <html-template location="component://financials/webapp/financials/transactions/createQuickAcctgTransForm.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createAcctgTransForm">
+        <section>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCreateTransaction}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="createAcctgTransForm" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="viewAcctgTrans">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTrans.bsh"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>
+                <set field="pageTitleLabel" value="PageTitleViewAccountingTransaction"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                           <platform-specific><html>
+                              <html-template location="component://financials/webapp/financials/transactions/acctgTransOptions.ftl"/>
+                           </html></platform-specific>
+                           <include-form name="viewAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </container>
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/transactions/acctgTransEntriesBalance.ftl"/>
+                        </html></platform-specific>
+                        <container style="screenlet">
+                           <platform-specific><html>
+                              <html-template location="component://financials/webapp/financials/transactions/acctgTransEntries.ftl"/>
+                           </html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createAcctgTransEntryForm">
+        <section>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCreateTransactionEntry}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="createAcctgTransEntryForm" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateAcctgTransForm">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/viewAcctgTrans.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsUpdateTransaction}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="updateAcctgTransForm" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewAcctgTransEntry">
+        <section>
+            <actions>
+                <entity-one entity-name="AcctgTrans" value-name="acctgTrans"/>
+                <entity-one entity-name="AcctgTransEntry" value-name="acctgTransEntry"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-body">
+                                <!-- only include the options if acctgTrans.isPosted = N -->
+                                <section>
+                                    <condition><if-compare field-name="acctgTrans.isPosted" operator="equals" value="N"/></condition>
+                                    <widgets>
+                                        <platform-specific><html>
+                                            <html-template location="component://financials/webapp/financials/transactions/acctgTransEntryOptions.ftl"/>
+                                        </html></platform-specific>
+                                    </widgets>
+                                </section>
+                                <include-form name="viewAcctgTransEntry" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateAcctgTransEntryForm">
+        <section>
+            <actions>
+                <entity-one entity-name="AcctgTransEntry" value-name="acctgTransEntry"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsUpdateTransactionEntry}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="updateAcctgTransEntryForm" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ListUnpostedAcctgTrans">
+        <section>
+            <actions>
+                <set field="parameters.listIteratorNameToUse" value="acctgTransListIt"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/findUnpostedAcctgTrans.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsUnpostedTransactions}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="listUnpostedAcctgTrans" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>    
+
+    <!-- select a time period and account to reconcile -->
+    <screen name="reconcileAccounts">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
+                <set field="glAccountId" from-field="parameters.glAccountId"/>
+                <entity-and entity-name="GlAccountOrganization" list-name="glAccountOrgList">
+                    <field-map field-name="organizationPartyId"/>
+                    <order-by field-name="glAccountId"/>
+                 </entity-and>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet-header">
+                            <label style="boxhead" text="${uiLabelMap.CommonFor} ${parameters.organizationName}"/>
+                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://financials/webapp/financials/transactions/reconcileAccounts.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- reconcile the account -->
+    <screen name="reconcileAccountForm">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
+                <set field="glAccountId" from-field="parameters.glAccountId"/>
+                <set field="reconciledDate" from-field="parameters.reconciledDate_c_date"/>
+                <set field="reconciledBalance" from-field="parameters.reconciledBalance"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/ReconcileGlAccount.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://financials/webapp/financials/transactions/ReconcileGlAccountOrganization.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="reconcileAfterSettlement">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/SetReconcileFromSettlement.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/ReconcileGlAccount.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://financials/webapp/financials/transactions/ReconcileGlAccountOrganization.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ViewGlAccountBalance">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
+                <set field="glAccountId" from-field="parameters.glAccountId"/>
+                <entity-and entity-name="GlReconciliation" list-name="glReconciliations">
+                    <field-map field-name="glAccountId"/>
+                    <field-map field-name="organizationPartyId"/>
+                    <order-by field-name="reconciledDate DESC"/>
+                </entity-and>
+                <entity-one entity-name="GlAccount" value-name="glAccount"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="Reconciled Account Balance for ${glAccount.accountCode} ${glAccount.accountName} (${parameters.glAccountId})"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="ListGlReconciliations" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ViewGlReconciliation">
+        <section>
+            <actions>
+                <set field="glReconciliationId" from-field="parameters.glReconciliationId"/>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
+                <set field="glAccountId" from-field="parameters.glAccountId"/>
+                <entity-and entity-name="GlReconciliationAndAcctgTransEntry" list-name="glReconciliationEntries">
+                    <field-map field-name="glReconciliationId"/>
+                    <order-by field-name="transactionDate"/> 
+                    <order-by field-name="acctgTransId"/>
+                    <order-by field-name="acctgTransEntrySeqId"/>
+                </entity-and>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="Reconciliation No. ${parameters.glReconciliationId}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="ListGlReconciliationEntries" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Screen to view and manage foreign exchange conversions -->
+    <screen name="exchangeRates">
+        <section>
+            <actions>
+                <entity-condition entity-name="UomConversionDated" list-name="conversions">
+                    <order-by field-name="uomId"/>
+                    <order-by field-name="uomIdTo"/>
+                    <order-by field-name="fromDate"/>
+                </entity-condition>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsExchangeRates}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="listExchangeRates" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsExchangeRatesUpdate}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="updateExchangeRate" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Screen to view and manage invoice recurrence -->
+    <screen name="invoiceRecurrence">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/invoiceRecurrence.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsRecurringInvoices}"/>
+                            </container>
+                            <include-form name="ListInvoicesForRecurrence" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                            <include-form name="AddInvoiceRecurrence" location="component://financials/widget/financials/forms/transactions/TransactionsForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="adjustInventoryValues">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/transactions/getInventoryItemsAndValueHistory.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://financials/webapp/financials/transactions/adjustInventoryValues.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

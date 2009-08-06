@@ -1,0 +1,63 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.ofbiz.accounting.payment.BillingAccountWorker;
+
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+
+delegator = request.getAttribute("delegator");
+
+billingAccountId = parameters.get("billingAccountId");
+context.put("billingAccountId", billingAccountId);  // BillingAccountForms.xml#EditBillingAccount uses this to lookup addresses
+
+billingAccount = delegator.findByPrimaryKey("BillingAccount", UtilMisc.toMap("billingAccountId", billingAccountId));
+billingAccountMap = billingAccount.getAllFields();
+
+// The data model supports multiple roles to a billing account, but in reality all the applications only one BILL_TO_CUSTOMER role is used
+billingAccountCustomer = EntityUtil.getFirst(EntityUtil.filterByDate(billingAccount.getRelatedByAnd("BillingAccountRole", UtilMisc.toMap("roleTypeId", "BILL_TO_CUSTOMER"))));
+if (UtilValidate.isNotEmpty(billingAccountCustomer)) {
+    billingAccountMap.put("customerPartyId", billingAccountCustomer.get("partyId"));
+    billingAccountMap.put("customerName", PartyHelper.getPartyName(delegator, billingAccountCustomer.get("partyId"), false));
+}
+
+
+context.put("billingAccount", billingAccountMap);
+
+billAcctPaymentAndApplications = delegator.findByAnd("PaymentAndApplication", 
+    UtilMisc.toList(new EntityExpr("billingAccountId", EntityOperator.EQUALS, billingAccountId),
+    		new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PMNT_NOT_PAID")),
+    UtilMisc.toList("effectiveDate"));
+context.put("billAcctPaymentAndApplications", billAcctPaymentAndApplications);
+
+context.put("billAcctOpenOrders", BillingAccountWorker.getBillingAccountOpenOrders(delegator, billingAccountId));
+
+// pay invoice flag toggle
+payInvoiceEnabled = false;
+// if available balance > 0
+if (com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, billingAccountId).signum() == 1) {
+   payInvoiceEnabled = true;
+}
+context.put("payInvoiceEnabled", payInvoiceEnabled);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("FinancialsNavHistoryBillingAccount", locale, UtilMisc.toMap("billingAccountId", billingAccountId, "partyName", billingAccountMap.get("customerName"))), "viewCustomerBillAcct");

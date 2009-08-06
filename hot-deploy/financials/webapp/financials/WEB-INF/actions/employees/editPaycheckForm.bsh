@@ -1,0 +1,76 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.party.party.PartyHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import com.opensourcestrategies.financials.payroll.PayrollHelper;
+import com.opensourcestrategies.financials.payroll.PaycheckReader;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+delegator = request.getAttribute("delegator");
+
+paymentId = parameters.get("paymentId");
+if (paymentId == null) {
+    paymentId = request.getParameter("paymentId");
+}
+
+if (paymentId == null) {
+    request.setAttribute("_ERROR_MESSAGE_", "ERROR: paymentId is in valid, Please check paymentId and retry");
+    return "error";
+}
+
+payment = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId",paymentId));
+if (payment == null) {
+    request.setAttribute("_ERROR_MESSAGE_", "ERROR: Cannot find Payment from paymentId [" + paymentId + "]. Please check paymentId and retry");
+    return "error";
+}
+
+
+if (!UtilFinancial.isPaycheck(payment)) {
+    return;
+}
+
+context.put("paymentId", paymentId);
+context.put("paycheck", payment);
+
+
+// update permission
+hasUpdatePermission = security.hasEntityPermission("FINANCIALS", "_EMP_PCUPDT", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PUPDT", userLogin); 
+context.put("hasUpdatePermission", hasUpdatePermission);
+
+// create permission
+hasCreatePermission = security.hasEntityPermission("FINANCIALS", "_EMP_PCCRTE", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PCRTE", userLogin);
+context.put("hasCreatePermission", hasCreatePermission);
+
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+organizationParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", organizationPartyId));
+// paychecks can only be made from a checking account
+paymentMethodList = EntityUtil.orderBy(
+    organizationParty.getRelatedByAnd("PaymentMethod", UtilMisc.toMap("paymentMethodTypeId", "COMPANY_CHECK")),
+    UtilMisc.toList("description", "paymentMethodId"));
+
+context.put("paymentMethodList", paymentMethodList);
+
+// a list of payment types that are paychecks
+ph = new PayrollHelper(organizationPartyId, delegator);
+paycheckTypes = EntityUtil.getRelated("PaymentType", ph.getAvailablePaycheckTypes());
+context.put("paycheckTypes", paycheckTypes);
+

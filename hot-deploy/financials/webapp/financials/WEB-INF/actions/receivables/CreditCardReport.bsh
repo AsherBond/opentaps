@@ -1,0 +1,118 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import java.util.*;
+import java.sql.Timestamp;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.accounting.util.UtilAccounting;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import java.text.ParseException;
+
+locale = UtilHttp.getLocale(request);
+timeZone = UtilHttp.getTimeZone(request);
+dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCreditCardReport"));
+
+// get the from and thru date timestamps
+fromDateString = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
+thruDateString = UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
+
+// don't do anything if dates invalid
+if (fromDateString == null || thruDateString == null) return;
+fromDate = null;
+thruDate = null;
+try {
+  fromDate = UtilDateTime.stringToTimeStamp(fromDateString.trim(), dateTimeFormat, timeZone, locale);
+  thruDate = UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale);
+} catch (ParseException) {
+  return; // TODO: inform user of error
+}
+if (thruDate.before(fromDate)) return;
+
+// fields to select and order by
+orderByForSum = UtilMisc.toList("currencyUomId"); // this is not really important, but helps speed up conversion
+orderByForDetail = UtilMisc.toList("transactionDate DESC");
+fieldsToSelectForSum = UtilMisc.toList("paymentMethodId", "currencyUomId", "amount", "effectiveDate");
+fieldsToSelectForDetail = null; // all fields
+
+// since these are all receipts, we need to constrain to Payment.partyIdTo = organizationPartyId
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+// conditions for detail report
+commonConditions = new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+            new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate),
+            new EntityExpr("transCodeEnumId", EntityOperator.EQUALS, "PGT_CAPTURE"),
+            new EntityExpr("partyIdTo", EntityOperator.EQUALS, organizationPartyId)
+            ), EntityOperator.AND);
+
+// conditions for sum report
+sumConditions = new EntityConditionList( UtilMisc.toList(
+    new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_RECEIVED"),
+    new EntityExpr("partyIdTo", EntityOperator.EQUALS, organizationPartyId),
+    new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "CREDIT_CARD"),
+    new EntityExpr("effectiveDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+    new EntityExpr("effectiveDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate)
+), EntityOperator.AND);
+
+sumResults = delegator.findByCondition("Payment", sumConditions, fieldsToSelectForSum, orderByForSum);
+detailResults = delegator.findByCondition("CreditCardTrans", commonConditions, fieldsToSelectForDetail, orderByForDetail);
+
+// sum report keyed to credit card type
+sumReport = new TreeMap();
+unknownType = UtilMessage.expandLabel("OpentapsUnknown", locale);
+for (iter = sumResults.iterator(); iter.hasNext(); ) {
+    sum = iter.next();
+    cc = sum.getRelatedOneCache("CreditCard");
+    ccType = (cc == null ? unknownType : cc.get("cardType"));
+    previousAmount = 0;
+
+    // get the last row keyed to the cardType, and its amount (which we will merge)
+    row = sumReport.get(ccType);
+    if (row == null) {
+        row = FastMap.newInstance();
+        row.putAll(sum.getAllFields());
+        row.put("cardType", ccType);
+    } else {
+        previousAmount = ((Double) row.get("amount")).doubleValue();
+    }
+
+    // convert current results
+    amount = sum.get("amount");
+    currencyUomId = sum.get("currencyUomId");
+    asOf = sum.getTimestamp("effectiveDate");
+    amountConverted = amount * UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, currencyUomId, asOf);
+
+    // store the merged results
+    row.put("amount", amountConverted + previousAmount);
+    sumReport.put(ccType, row);
+}
+
+// store the cardType-sorted sum report results 
+context.put("sumReport", sumReport.values());
+
+// the detail report needs to use getRelatedOne in the ftl to get the CreditCard details, especially cardNumber since it cannot be unencrypted in a view entity
+context.put("detailReport", detailResults);

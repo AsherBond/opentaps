@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+* @author: Si Chen (sichen@opensourcestrategies.com)
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+
+    <!-- Before allowing an invoice to be set ready, we should check if a credit limit is exceeded for the invoice party
+         and anything else that needs to be checked.  If we cannot set to ready, a rollback will occur. -->
+    <eca service="setInvoiceStatus" event="invoke">
+        <condition field-name="statusId" operator="equals" value="INVOICE_READY"/>
+        <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="opentaps.isInvoiceReady" mode="sync"/>
+    </eca>
+
+    <!-- Create commission invoices when a sales invoice is Approved (INVOICE_READY).  Note that the type has to be checked by service. -->
+    <eca service="setInvoiceStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="INVOICE_READY"/>
+        <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="crmsfa.createCommissionInvoices" mode="sync"/>
+    </eca>
+
+    <!-- Create invoice terms when an invoice is created -->
+    <eca service="createInvoice" event="commit">
+        <action service="createInvoiceTerms" mode="sync"/>
+    </eca>
+
+    <!-- Set the due date from the agreement terms when an invoice is created -->
+    <eca service="createInvoice" event="commit">
+        <action service="setInvoiceDueDate" mode="sync"/>
+    </eca>
+
+    <!-- Bill third parties when a sales invoice is set to ready -->
+    <eca service="setInvoiceStatus" event="commit">
+        <condition field-name="statusId" operator="equals" value="INVOICE_READY"/>
+        <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="billToThirdParty" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- Associate shipment addresses with invoices -->
+    <eca service="createInvoicesFromShipments" event="commit">
+        <action service="opentaps.createShippingInvoiceContactMech" mode="sync"/>
+    </eca>
+
+</service-eca>

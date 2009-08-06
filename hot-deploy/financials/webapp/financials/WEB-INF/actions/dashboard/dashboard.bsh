@@ -1,0 +1,102 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import com.opensourcestrategies.financials.reports.JFreeFinancialCharts;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import javolution.util.FastSet;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.domain.DomainsLoader;
+
+// this routine looks up all the GlAccountOrganiations of a particular type for the dashboard
+// and adds to the accountsMap of glAccountTypeId -> total balance
+List lookupAccounts(List typesToLookup, Map accountsMap) {
+    conditions = UtilMisc.toList(
+        new EntityExpr("glAccountTypeId", EntityOperator.IN, typesToLookup),
+        new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+        EntityUtil.getFilterByDateExpr()
+        );
+    // GlAccountOrganizationAndClass has all the accounts of the organization
+    // GlAccountTypeOrganization only has the account defined by GlAccountTypeDefault, so one account per type
+    accounts = delegator.findByAnd("GlAccountOrganizationAndClass", conditions);
+    // add to the accountsMap balance for this type
+    for (account: accounts) {
+        UtilMisc.addToBigDecimalInMap(accountsMap, account.getString("glAccountTypeId"), account.getBigDecimal("postedBalance"));
+    }
+    return accounts;
+}
+
+security = request.getAttribute("security");
+if (security == null) return;
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+if (organizationPartyId == null) {
+    return;
+}
+
+// show AR and AP accounts depending on permissions TODO: see if we can use the security parameters set up in main-decorator.bsh
+hasReceivablesPermission = security.hasEntityPermission("FINANCIALS", "_AR_VIEW", userLogin);
+hasPayablesPermission = security.hasEntityPermission("FINANCIALS", "_AP_VIEW", userLogin);
+hasReportsPermission = security.hasEntityPermission("FINANCIALS", "_RPT_VIEW", userLogin);
+
+// get the balances for each group of gl account types
+accountsMap = new HashMap();
+if (hasReceivablesPermission) {
+    context.put("cashEquivalentAccounts", lookupAccounts(UtilMisc.toList("UNDEPOSITED_RECEIPTS", "BANK_STLMNT_ACCOUNT" ), accountsMap));
+    context.put("accountsReceivablesAccounts", lookupAccounts(UtilMisc.toList("ACCOUNTS_RECEIVABLE"), accountsMap));
+}
+if (hasPayablesPermission) {
+    context.put("accountsPayablesAccounts", lookupAccounts(UtilMisc.toList("ACCOUNTS_PAYABLE", "COMMISSIONS_PAYABLE", "UNINVOICED_SHIP_RCPT"), accountsMap));
+}
+if (hasReportsPermission) {
+    context.put("inventoryAccounts", lookupAccounts(UtilMisc.toList("INVENTORY_ACCOUNT", "RAWMAT_INVENTORY", "WIP_INVENTORY", "INV_ADJ_AVG_COST"), accountsMap));
+}
+
+// set the currency for displaying the balances
+organizationDomain = new DomainsLoader(request).loadDomainsDirectory().getOrganizationDomain();
+repo = organizationDomain.getOrganizationRepository();
+organization = repo.getOrganizationById(organizationPartyId);
+if (organization != null) {
+    context.put("orgCurrencyUomId", organization.getPartyAcctgPreference().getBaseCurrencyUomId());
+}
+
+// get the credit card settlement accounts' balances
+creditCardAccounts = null;
+if (hasReceivablesPermission) {
+  creditCardAccounts = delegator.findByAnd("CreditCardTypeGlAccount", UtilMisc.toMap("organizationPartyId", organizationPartyId));
+  glAccountIds = EntityUtil.getFieldListFromEntityList(creditCardAccounts, "glAccountId", true);
+  if (glAccountIds.size() > 0) {
+      conditions = UtilMisc.toList(
+              new EntityExpr("glAccountId", EntityOperator.IN, glAccountIds),
+              new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+              EntityUtil.getFilterByDateExpr()
+              );
+      creditCardAccounts = delegator.findByAnd("GlAccountOrganizationAndClass", conditions);
+  }
+}
+if (creditCardAccounts != null) {
+    // make it available in the FTL
+    context.put("creditCardAccounts", creditCardAccounts);
+    // add it to the accounts map
+    for (account: creditCardAccounts) {
+        UtilMisc.addToBigDecimalInMap(accountsMap, account.getString("glAccountTypeId"), account.getBigDecimal("postedBalance"));
+    }
+}
+context{"chartImage"} = JFreeFinancialCharts.createLiquiditySnapshotChart(accountsMap, creditCardAccounts, locale, hasReceivablesPermission, hasPayablesPermission, hasReportsPermission);

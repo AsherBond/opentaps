@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<entity-engine-xml>
+
+     <!-- This file configures USA payrolls but can be modified as you need for your domain -->
+    <AcctgTransType acctgTransTypeId="PAYROLL" parentTypeId="PAYMENT_ACCTG_TRANS" hasTable="N" description="Payroll"/>
+
+    <!-- classifies each paycheck line item as deduction or expense -->
+    <PaycheckItemClass paycheckItemClassId="DEDUCTION" description="Deduction: Withheld from Employee"/>
+    <PaycheckItemClass paycheckItemClassId="EXPENSE" description="Expense: Paid for by the Employer"/>
+
+    <!-- These are the items withheld from the employee's portion of the paycheck -->
+    <PaycheckItemType paycheckItemTypeId="WITHHOLD_US_TAX" description="Federal Income Tax Withholding" paycheckItemClassId="DEDUCTION" defaultSeqNum="00001"/>
+    <PaycheckItemType paycheckItemTypeId="WITHHOLD_CA_TAX" description="California Income Tax Withholding" paycheckItemClassId="DEDUCTION" defaultSeqNum="00002"/>
+    <PaycheckItemType paycheckItemTypeId="WITHHOLD_US_FICA_SS" description="FICA Social Security Withholding" paycheckItemClassId="DEDUCTION" defaultSeqNum="00003"/>
+    <PaycheckItemType paycheckItemTypeId="WITHHOLD_US_FICA_MED" description="FICA Medicare Withholding" paycheckItemClassId="DEDUCTION" defaultSeqNum="00004"/>
+    <PaycheckItemType paycheckItemTypeId="WITHHOLD_EMP_401K" description="401K Contribution - Employee" paycheckItemClassId="DEDUCTION" defaultSeqNum="00005"/>
+    <PaycheckItemType paycheckItemTypeId="WITHHOLD_EMP_MED" description="Medical Insurance - Employee" paycheckItemClassId="DEDUCTION" defaultSeqNum="00006"/>
+    <PaycheckItemType paycheckItemTypeId="EMPLOYER_US_FICA_SS" description="FICA Social Security Expense" paycheckItemClassId="EXPENSE" defaultSeqNum="10001"/>
+    <PaycheckItemType paycheckItemTypeId="EMPLOYER_US_FICA_MED" description="FICA Medicare Expense" paycheckItemClassId="EXPENSE" defaultSeqNum="10002"/>
+    <PaycheckItemType paycheckItemTypeId="EMPLOYER_401K" description="401K Contribution - Employer" paycheckItemClassId="EXPENSE" defaultSeqNum="10003"/>
+    <PaycheckItemType paycheckItemTypeId="EMPLOYER_MED" description="Medical Insurance - Employer" paycheckItemClassId="EXPENSE" defaultSeqNum="10004"/>
+
+     <!-- a couple of interesting California state payroll taxes -->
+    <PaycheckItemType paycheckItemTypeId="WITHHOLD_CA_SDI" description="California State Disability Insurance (SDI)" paycheckItemClassId="DEDUCTION" defaultSeqNum="00007"/>
+    <PaycheckItemType paycheckItemTypeId="WITHHOLD_CA_ETT" description="California Employment Training Tax (ETT)" paycheckItemClassId="DEDUCTION" defaultSeqNum="00008"/>
+    <PaycheckItemType paycheckItemTypeId="WITHHOLD_CA_SUI" description="California SUI" paycheckItemClassId="DEDUCTION" defaultSeqNum="00009"/>
+
+    <GlAccountType glAccountTypeId="SALARY_EXPENSES" description="Salary Expenses" hasTable="N" parentTypeId="OPERATING_EXPENSE"/>
+
+    <!-- Special role for payroll liabilities -->
+    <RoleType roleTypeId="PAYROLL_VENDOR" parentTypeId="BILL_FROM_VENDOR" description="Payroll Pay to Vendor"/>
+
+</entity-engine-xml>

@@ -1,0 +1,32 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+ 
+ // This script takes the parameters from the settle payments page and prepares the reconcile page based on them
+ context.put("reconciledDate", parameters.get("transactionDate_c_date"));
+ context.put("reconciledBalance", new Double(0));  // ALWAYS 0 - the point is to reconcile the settled account back to zero
+ 
+ // the account to reconcile is whichever one is not the bank settlement account
+ debitGlAccount = delegator.findByPrimaryKeyCache("GlAccount", UtilMisc.toMap("glAccountId", parameters.get("debitGlAccountId")));
+ if ("BANK_STLMNT_ACCOUNT".equals(debitGlAccount.getString("glAccountTypeId"))) {
+     parameters.put("glAccountId", parameters.get("creditGlAccountId"));
+ } else {
+     // if the debit account is not a bank settlement account, then the credit one SHOULD be the bank settlement account, so the debit account SHOULD be the right one to reconcile 
+     parameters.put("glAccountId", parameters.get("debitGlAccountId"));
+ }

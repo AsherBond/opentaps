@@ -1,0 +1,32 @@
+
+/* Section header images */
+
+
+div#sectionHeaderTitle_receivables {
+    background-image: url('/opentaps_images/openclipart.org/addressed_envelope_with_stamp_01.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_myHome {
+    background-image: url('/opentaps_images/openclipart.org/histogram_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_payables {
+    background-image: url('/opentaps_images/openclipart.org/ringing_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_employees {
+    background-image: url('/opentaps_images/openclipart.org/ppls_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_transactions {
+    background-image: url('/opentaps_images/openclipart.org/box_with_folders_nicu_bu_01.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_partners {
+    background-image: url('/opentaps_images/openclipart.org/earth_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_reports {
+    background-image: url('/opentaps_images/openclipart.org/inservice_presentation_01.png');
+    padding-left: 40px;
+}

@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Accounting Services - Miscellaneous</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+        
+    <!-- these services are for GlAccountTypeDefault -->
+    <service name="createGlAccountTypeDefault" engine="simple" default-entity-name="GlAccountTypeDefault"
+            location="com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="createGlAccountTypeDefault">        
+        <description>Create an GlAccountTypeDefault</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="all" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="updateGlAccountTypeDefault" engine="simple" default-entity-name="GlAccountTypeDefault"
+            location="com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="updateGlAccountTypeDefault">        
+        <description>Update an existing GlAccountTypeDefault</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="all" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="financials.updatePaymentMethod" engine="simple" default-entity-name="PaymentMethod"
+            location="com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="updatePaymentMethod">        
+        <description>Update an existing Payment Method's</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute type="String" mode="IN" name="glAccountId" optional="true"/>
+        <attribute type="String" mode="IN" name="expirePaymentMethod" optional="true"/><!--parameter passed to set thruDate field to expire PaymentMethod-->
+        <attribute type="String" mode="IN" name="description" optional="true"/>
+    </service>
+    
+    <service name="removeGlAccountFromOrganization" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="removeGlAccountFromOrganization">
+        <description>Removes a GlAccount from an organization's chart of accounts by setting it to be expired.</description>
+        <attribute name="glAccountId" type="String" mode="IN"/>
+        <attribute name="organizationPartyId" type="String" mode="IN"/>
+    </service>
+    
+    <service name="addNewGlAccount" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="addNewGlAccount">
+        <description>Adds a new Gl Account and then associate it with the organizationPartyId in GlAccountOrganization.
+        Note that accountCode will be used to set both glAccountId and account code.  If the account code already exists,
+        it will return an error.</description>
+        <attribute name="accountCode" type="String" mode="IN" optional="false"/>
+        <attribute name="accountName" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="glAccountClassTypeKey" type="String" mode="IN" optional="false"/>
+        <attribute name="glResourceTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="parentGlAccountId" type="String" mode="IN" optional="true"/>
+        <attribute name="postedBalance" type="Double" mode="IN" optional="true"/>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="updateExistingGlAccount" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="updateExistingGlAccount">
+        <description>Updates an exiting gl account. It delegates work to the ofbiz updateGlAccount service.</description>
+        <attribute name="glAccountId" type="String" mode="IN" optional="false"/>
+        <attribute name="glAccountClassTypeKey" type="String" mode="IN" optional="false"/>
+        <attribute name="parentGlAccountId" type="String" mode="IN" optional="true"/>
+        <attribute name="accountName" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+	</service>
+
+    <service name="financials.createPaymentMethod" engine="simple" default-entity-name="PaymentMethod"
+            location="com/opensourcestrategies/financials/configuration/ConfigurationServices.xml" invoke="createPaymentMethod">        
+        <description>Create new PaymentMethod</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+        
+    <service name="financials.updatePartyAcctgPreference" default-entity-name="PartyAcctgPreference" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="updatePartyAcctgPreference" auth="true">
+        <description>Update PartyAcctgPreference for an organization</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="addGlAccountToOrganization" default-entity-name="GlAccountOrganization" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="addGlAccountToOrganization" auth="true">
+        <description>Create or Update a GlAccount record</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="createAccountingTag" default-entity-name="Enumeration" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="createAccountingTag" auth="true">
+        <description>Creates an accounting tag Enumeration record</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumCode" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="updateAccountingTag" default-entity-name="Enumeration" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="updateAccountingTag" auth="true">
+        <description>Updates an accounting tag Enumeration record</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="enumCode" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="deleteAccountingTag" default-entity-name="Enumeration" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="deleteAccountingTag" auth="true">
+        <description>Deletes an accounting tag Enumeration record, this will only works if the tag is not in use in any other entity</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="updateAccountingTagUsage" default-entity-name="AcctgTagEnumType" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="updateAccountingTagUsage" auth="true">
+        <description>Updates an accounting tag usage record for an organization</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updateAccountingTagPostingCheck" default-entity-name="AcctgTagPostingCheck" engine="java"
+            location="com.opensourcestrategies.financials.configuration.ConfigurationServices" invoke="updateAccountingTagPostingCheck" auth="true">
+        <description>Updates or creates the accounting tag posting check record for an organization</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="FINANCIALS" action="_CONFIG"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+</services>

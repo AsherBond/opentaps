@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!-- This file is an initial balance sheet file.  It can be used as a template for importing existing accounting information --> 
+
+<entity-engine-xml>
+
+    <!-- a forecast of the financials condition at a future point in time.  
+    Enter it as posted already (isPosted="Y") because postAcctgTrans currently does not check if the AcctgTrans is of type ACTUAL. 
+    The fiscal type can be FORECAST, BUDGET, PLAN, etc. etc. -->
+    
+    <!-- this is the inventory value balances --> 
+    <AcctgTrans acctgTransId="9100" acctgTransTypeId="INTERNAL_ACCTG_TRANS" glFiscalTypeId="FORECAST" description="Sample Forecast" transactionDate="2007-06-30 23:59:59" isPosted="Y"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" productId="GZ-8544" glAccountId="140000" organizationPartyId="Company" amount="1980.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" productId="WG-1111" glAccountId="140000" organizationPartyId="Company" amount="1210.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00003" acctgTransEntryTypeId="_NA_" productId="GZ-2644" glAccountId="140000" organizationPartyId="Company" amount="6060.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00004" acctgTransEntryTypeId="_NA_" productId="WG-9943-B3" glAccountId="140000" organizationPartyId="Company" amount="2200.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00005" acctgTransEntryTypeId="_NA_" productId="WG-9943-B4" glAccountId="140000" organizationPartyId="Company" amount="2200.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00006" acctgTransEntryTypeId="_NA_" productId="WG-9943-S3" glAccountId="140000" organizationPartyId="Company" amount="2200.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00007" acctgTransEntryTypeId="_NA_" productId="WG-9943-B4" glAccountId="140000" organizationPartyId="Company" amount="2200.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00008" acctgTransEntryTypeId="_NA_" productId="GZ-1006-1" glAccountId="140000" organizationPartyId="Company" amount="16.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00009" acctgTransEntryTypeId="_NA_" productId="GZ-1006-2" glAccountId="140000" organizationPartyId="Company" amount="16.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00010" acctgTransEntryTypeId="_NA_" productId="GZ-1006-3" glAccountId="140000" organizationPartyId="Company" amount="16.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00011" acctgTransEntryTypeId="_NA_" productId="GZ-1006-4" glAccountId="140000" organizationPartyId="Company" amount="16.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00012" acctgTransEntryTypeId="_NA_" productId="WG-5569" glAccountId="140000" organizationPartyId="Company" amount="220.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00020" acctgTransEntryTypeId="_NA_" glAccountId="330000" organizationPartyId="Company" amount="18334.00" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/> 
+
+    <!-- initial capitalization and bank account balance -->
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00030" acctgTransEntryTypeId="_NA_" glAccountId="111100" organizationPartyId="Company" amount="100000.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00031" acctgTransEntryTypeId="_NA_" glAccountId="330000" organizationPartyId="Company" amount="100000.00" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
+
+    <!-- a sample fixed assets which can be depreciated, in this case a building -->
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00040" acctgTransEntryTypeId="_NA_" glAccountId="162000" organizationPartyId="Company" amount="100000.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00041" acctgTransEntryTypeId="_NA_" glAccountId="330000" organizationPartyId="Company" amount="100000.00" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
+    
+    <!-- a loan -->
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00050" acctgTransEntryTypeId="_NA_" glAccountId="111100" organizationPartyId="Company" amount="100000.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00051" acctgTransEntryTypeId="_NA_" glAccountId="241000" organizationPartyId="Company" amount="100000.00" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
+    
+    <!-- interest payments -->
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00060" acctgTransEntryTypeId="_NA_" glAccountId="111100" organizationPartyId="Company" amount="1500.00" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00061" acctgTransEntryTypeId="_NA_" glAccountId="821000" organizationPartyId="Company" amount="1500.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+
+    <!-- sales and cost projections --> 
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00070" acctgTransEntryTypeId="_NA_" glAccountId="400000" organizationPartyId="Company" amount="1000000.00" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00071" acctgTransEntryTypeId="_NA_" glAccountId="410000" organizationPartyId="Company" amount="85000.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00072" acctgTransEntryTypeId="_NA_" glAccountId="500000" organizationPartyId="Company" amount="665000.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00073" acctgTransEntryTypeId="_NA_" glAccountId="600000" organizationPartyId="Company" amount="185000.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="9100" acctgTransEntrySeqId="00074" acctgTransEntryTypeId="_NA_" glAccountId="900000" organizationPartyId="Company" amount="25000.00" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    
+</entity-engine-xml>

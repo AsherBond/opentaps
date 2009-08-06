@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ *  @author Leon Torres (leon@opensourcestrategies.com
+ */
+
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsComparativeBalance"));
+organizationPartyId = context.get("organizationPartyId");
+fromGlFiscalTypeId = context.get("fromGlFiscalTypeId");
+toGlFiscalTypeId = context.get("toGlFiscalTypeId");
+fromDate = context.get("fromDate");
+thruDate = context.get("thruDate");
+if (fromDate == null || thruDate == null) return;
+
+// Make sure the asOfDate is the end-of-day for the two dates
+fromDate = UtilDateTime.getDayEnd(fromDate, timeZone, locale);
+thruDate = UtilDateTime.getDayEnd(thruDate, timeZone, locale);
+
+input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "fromGlFiscalTypeId", fromGlFiscalTypeId, "toGlFiscalTypeId", toGlFiscalTypeId);
+input.put("userLogin", userLogin);
+input.put("fromDate", fromDate);
+input.put("thruDate", thruDate);
+
+// add tags from the request to the service parameters
+UtilAccountingTags.addTagParameters(request, input);
+
+result = dispatcher.runSync("getComparativeBalanceSheet", input);
+if (ServiceUtil.isError(result)) return;
+
+// put everything into the context
+context.put("assetAccounts", EntityUtil.orderBy(result.get("assetAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("assetAccountBalances", result.get("assetAccountBalances"));
+context.put("liabilityAccounts", EntityUtil.orderBy(result.get("liabilityAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("liabilityAccountBalances", result.get("liabilityAccountBalances"));
+context.put("equityAccounts", EntityUtil.orderBy(result.get("equityAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("equityAccountBalances", result.get("equityAccountBalances"));
+
+context.put("fromDateAccountBalances", result.get("fromDateAccountBalances"));
+context.put("thruDateAccountBalances", result.get("thruDateAccountBalances"));
+context.put("fromDate", fromDate);
+context.put("thruDate", thruDate);
+
+// put the correct GlFiscalTypes into the context for the display tier
+fromGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", fromGlFiscalTypeId));
+toGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", toGlFiscalTypeId));
+context.put("fromGlFiscalType", fromGlFiscalType);
+context.put("toGlFiscalType", toGlFiscalType);

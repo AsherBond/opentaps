@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">    
+    <!-- create a new GlAccountTypeDefault -->
+    <simple-method method-name="createGlAccountTypeDefault" short-description="Create an GlAccountTypeDefault">
+        <make-value value-name="newEntity" entity-name="GlAccountTypeDefault"/>
+        <set-pk-fields map-name="parameters" value-name="newEntity"/>
+        <set-nonpk-fields map-name="parameters" value-name="newEntity"/>
+        <create-value value-name="newEntity"/>
+        <check-errors/>
+    </simple-method>
+
+    <!-- update an existing GlAccountTypeDefault -->
+    <simple-method method-name="updateGlAccountTypeDefault" short-description="Update an existing GlAccountTypeDefault">
+        <entity-one entity-name="GlAccountTypeDefault" value-name="glAccountTypeDefault" auto-field-map="true"/>
+        <check-errors/>
+        <set-nonpk-fields map-name="parameters" value-name="glAccountTypeDefault"/>
+        <store-value value-name="glAccountTypeDefault"/>
+        <check-errors/>
+    </simple-method>
+    
+    <!-- update an existing PaymentMethod -->
+    <simple-method method-name="updatePaymentMethod" short-description="Update an existing PaymentMethod's">
+        <entity-one entity-name="PaymentMethod" value-name="paymentMethod" auto-field-map="true"/>
+        <check-errors/>
+        <set-nonpk-fields map-name="parameters" value-name="paymentMethod"/>
+        <if-not-empty field-name="parameters.expirePaymentMethod">
+           <now-timestamp-to-env env-name="paymentMethod.thruDate"/>
+        </if-not-empty>
+        <store-value value-name="paymentMethod"/>
+        <check-errors/>
+    </simple-method>
+    
+    <!-- create a new PaymentMethod -->
+    <simple-method method-name="createPaymentMethod" short-description="Create new PaymentMethod">
+        <make-value value-name="newEntity" entity-name="PaymentMethod"/>
+        <set-nonpk-fields map-name="parameters" value-name="newEntity"/>
+        <sequenced-id-to-env sequence-name="PaymentMethod" env-name="paymentMethodId"/>
+        <env-to-field env-name="paymentMethodId" map-name="newEntity"/>
+        <field-to-result field-name="paymentMethodId" result-name="paymentMethodId"/>
+        <if-empty field-name="newEntity.fromDate">
+            <now-timestamp-to-env env-name="newEntity.fromDate"/>
+        </if-empty>
+        <create-value value-name="newEntity"/>
+        <check-errors/>
+    </simple-method>
+</simple-methods>

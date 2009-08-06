@@ -1,0 +1,104 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilDate;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+timeZone = UtilHttp.getTimeZone(request);
+locale = UtilHttp.getLocale(request);
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+context{"tagTypes"} = UtilAccountingTags.getAccountingTagFiltersForOrganization(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, locale);
+
+accountActivitiesDetailsBuilder(organizationPartyId, transactionFromDate, transactionThruDate) {
+    entityName = "AcctgTransAndEntries";
+    where = UtilMisc.toList( new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                             new EntityExpr("glFiscalTypeId", EntityOperator.NOT_EQUAL, "REFERENCE"));
+
+    /* list of parameters can can be used to filter */
+    String[] paramList = new String[] {
+        "glAccountId", 
+        "productId", 
+        "shipmentId", 
+        "invoiceId", 
+        "paymentId", 
+        "partyId", 
+        "workEffortId", 
+        "isPosted", 
+        "debitCreditFlag", 
+        "inventoryItemId",
+        "acctgTransTypeId"};
+
+    for (int i=0; i < paramList.length; i++) {
+        value = parameters.get(paramList[i]);
+        if (UtilValidate.isNotEmpty(value)) {
+            where.add( new EntityExpr(paramList[i], EntityOperator.EQUALS, value) );
+        }        
+    }
+
+    /* filter with the from and thru dates */
+    if (UtilValidate.isNotEmpty(transactionFromDate)) {
+        where.add( new EntityExpr("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, transactionFromDate) );
+    }
+    if (UtilValidate.isNotEmpty(transactionThruDate)) {
+        where.add( new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, transactionThruDate) );
+    }
+
+    /* default filter condition for isPosted */
+    if ( ! parameters.containsKey("isPosted") ) {
+        where.add( new EntityExpr("isPosted", EntityOperator.EQUALS, "Y") );      
+    }
+
+    where.addAll(UtilAccountingTags.buildTagConditions(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, request));
+
+    /* by default order by transaction date DESC : most recent on top  */
+    orderBy = UtilMisc.toList("transactionDate DESC");
+    
+    return this;
+}
+
+/* convert the split posted values into usable timestamps */
+transactionFromDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "transactionFromDate", locale), timeZone, locale);
+transactionThruDate = UtilDateTime.getDayEnd(UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "transactionThruDate", locale), timeZone, locale));
+
+/* some links from other screens provide organizationPartyId in the URL */
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+/* pass the query builder for pagination */
+context.put("accountActivitiesDetailsBuilder", accountActivitiesDetailsBuilder(organizationPartyId, transactionFromDate, transactionThruDate));
+
+// list of acctg trans types for dropdown
+acctgTransTypes = delegator.findAllCache("AcctgTransType", UtilMisc.toList("description"));
+context.put("acctgTransTypes", acctgTransTypes);
+
+/* get the list of GlAccounts to display in the find form combobox */
+glAccounts = delegator.findByAnd("GlAccountOrgAndPrefAndClass",
+                  UtilMisc.toList(new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                                  EntityUtil.getFilterByDateExpr()),
+                  UtilMisc.toList("accountCode", "accountName", "glAccountId"));
+context.put("glAccounts", glAccounts);
+
+/* put back the timestamps in the context so the value can be displayed in the form */
+context.put("transactionFromDate", transactionFromDate);
+context.put("transactionThruDate", transactionThruDate);
+
+/* make an history entry */
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsAccountActivitiesDetail"));

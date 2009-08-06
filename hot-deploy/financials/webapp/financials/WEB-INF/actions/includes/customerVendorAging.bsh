@@ -1,0 +1,96 @@
+/* 
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/* 
+ * Accounts receivables and payable balances report.
+ *
+ * @author Si Chen
+ */
+
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+partyId = UtilCommon.getParameter(request, "partyId");
+context.put("partyId", partyId);
+
+// get the form data from the helper script
+organizationPartyId = context.get("organizationPartyId");
+glFiscalTypeId = context.get("glFiscalTypeId");
+asOfDate = context.get("asOfDate");
+if (asOfDate == null) return;
+// Get the base currency for the organization
+context.put("orgCurrencyUomId", UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
+
+daysOutstandingBreakPoints = UtilMisc.toList(new Integer(30), new Integer(60), new Integer(90));
+
+// this is a hack to get the the invoices over the last break point (ie, 90+ invoices)
+maximumDSOBreakPoint = new Integer(9999);
+breakPointParams = new LinkedList();
+breakPointParams.addAll(daysOutstandingBreakPoints);
+breakPointParams.add(maximumDSOBreakPoint);
+
+isVendor = false;
+isCustomer = false;
+
+reportType = context.get("reportType");
+invoicesByDSO = null;
+if (reportType.equals("ACCOUNTS_PAYABLE")) {
+    isVendor = true;
+    if (UtilValidate.isEmpty(partyId)) {
+        invoicesByDSO = AccountsHelper.getUnpaidInvoicesForVendors(organizationPartyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
+    } else {
+       	invoicesByDSO = AccountsHelper.getUnpaidInvoicesForVendor(organizationPartyId, partyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
+    }
+    if (context{"history"} == null) {
+        context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPayablesAgingReport"));
+    }
+} else if (reportType.equals("ACCOUNTS_RECEIVABLE")) {
+    isCustomer = true;
+    if (UtilValidate.isEmpty(partyId)) {
+        invoicesByDSO = AccountsHelper.getUnpaidInvoicesForCustomers(organizationPartyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
+    } else {
+       	invoicesByDSO = AccountsHelper.getUnpaidInvoicesForCustomer(organizationPartyId, partyId, breakPointParams, asOfDate, UtilMisc.toList("INVOICE_READY"), delegator, timeZone, locale);
+    }
+    if (context{"history"} == null) {
+        context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsReceivablesAgingReport"));
+    }
+}
+context.put("invoicesByDSO", invoicesByDSO);
+context.put("daysOutstandingBreakPoints", daysOutstandingBreakPoints);  // must be this one which are the users' break points
+context.put("olderThanMaxDSOInvoices", invoicesByDSO.get(maximumDSOBreakPoint)); // these are invoices older than the maximum DSO from the users
+context.put("asOfDate", asOfDate);
+
+// tell the form that we want partyId input
+partyLabel = (isVendor ? "FinancialsVendor" : isCustomer ? "FinancialsCustomer" : "PartyParty");
+context.put("partyIdInputRequested", UtilMisc.toMap("label", partyLabel));
+
+// helpful debugging code - going to lug it around a little longer
+/*
+for (kit = invoicesByDSO.keySet().iterator(); kit.hasNext(); ) {
+    nextKey = kit.next();
+    invoices = invoicesByDSO.get(nextKey);
+    for (it = invoices.iterator(); it.hasNext(); ) {
+        invoice = it.next();
+        print(invoice.invoice.get("invoiceId") + ": " + invoice.amount + "(" + invoice.isPastDue() + ")");
+    }
+}
+*/

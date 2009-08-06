@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<ofbiz-component name="financials"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+    <resource-loader name="main" type="component"/>
+    <classpath type="jar" location="build/lib/*"/>
+    <classpath type="dir" location="script"/>
+    <classpath type="dir" location="config"/>
+
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_payroll.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup_payroll.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_reporting.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup_reporting.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_lockbox.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup_lockbox.xml"/>
+
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoGeneralChartOfAccounts.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoOrganizations.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoOrgChartOfAccount.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DefaultInvoiceItemTypeGlAccounts.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoOrgBalanceSheet.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/GLExport.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/FinancialsDemoPeople.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoAgreement.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoInventoryItemValue.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoAccountBalanceHistories.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoKeyboardShortcuts.xml"/>
+
+    <!-- this really should be seed data, but because DemoGeneralChartOfAccounts.xml is demo data in OFBiz accounting, this has
+    to be demo, or the run-install sequence will break --> 
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DefaultInvoiceItemTypeGlAccounts.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/AccountingTypeData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/FinancialsSecurityData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/FinancialsSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/DefaultInvoiceItemTypeSequence.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ScheduledJobs.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ReportSeedData.xml"/>
+
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/GlAccountClassTypeMap.xml"/>
+
+    <!-- a specialized demo for billing to third parties -->
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoBillThirdParty.xml"/>
+
+    <!-- COD Receipts -->
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoBillCOD.xml"/>
+
+    <!-- Payroll -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/PayrollSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ContextHelpResourceSeedData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoOrgPayroll.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoPaycheck.xml"/>
+
+    <!-- Lockbox Test data -->
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoLockbox.xml"/>
+
+    <service-resource type="model" loader="main" location="servicedef/services_ledger_ext.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_invoice.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_payment.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_other.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_cogs.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_financials.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_manufacturing.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_configuration.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_transactions.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_billingaccount.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_payroll.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_gateway.xml"/>
+
+    <service-resource type="eca" loader="main" location="servicedef/secas_ledger.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_invoice.xml"/>
+
+    <webapp name="financials"
+        title="Financials"
+        server="default-server"
+        location="webapp/financials"
+        base-permission="FINANCIALS"
+        mount-point="/financials"
+        app-bar-display="true"/>
+    <webapp name="financialsgwt"
+        title="GWT Part of Financials"
+        server="default-server"
+        location="webapp/financialsgwt"
+        mount-point="/financialsgwt"
+        app-bar-display="false"/>
+</ofbiz-component>

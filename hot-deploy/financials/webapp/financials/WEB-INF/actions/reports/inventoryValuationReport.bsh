@@ -1,0 +1,63 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/* 
+ * Inventory valuation report.
+ *
+ * @author Leon Torres (leon@opensourcestrategies.com)
+ */ 
+
+import java.util.*;
+ 
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.service.*;
+import org.ofbiz.accounting.util.UtilAccounting;
+import com.opensourcestrategies.financials.util.UtilCOGS;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsInventoryValuationReport"));
+
+// get the form data from the helper script
+organizationPartyId = context.get("organizationPartyId");
+glFiscalTypeId = context.get("glFiscalTypeId");
+asOfDateTime = context.get("asOfDate");
+if (asOfDateTime == null) return;
+
+// see if we're searching by productId
+productId = parameters.get("productId");
+
+if (productId == null || productId.trim().length() == 0) {
+    // get the data from the handy util method, for all products and using asOfDate as the latest date
+    inventoryValueByProduct = UtilCOGS.getInventoryValueForAllProducts(organizationPartyId, asOfDate, delegator);
+} else {
+    // use a LIKE search on productId
+    productIdExpr = new EntityExpr("productId", true, EntityOperator.LIKE, productId.trim() + "%", true);
+    inventoryValueByProduct = UtilCOGS.getInventoryValueForProductsByCondition(productIdExpr, organizationPartyId, asOfDate, delegator);
+}
+
+if ((inventoryValueByProduct != null) && (inventoryValueByProduct.keySet() != null)) {
+    // sort the keys of the productId -> inventory value Map
+    inventoryValueKeys = Arrays.asList(inventoryValueByProduct.keySet().toArray());
+    Collections.sort(inventoryValueKeys);
+    
+    context.put("inventoryValueKeys", inventoryValueKeys);
+    context.put("inventoryValueByProduct", inventoryValueByProduct);
+    context.put("asOfDate", asOfDate);
+}

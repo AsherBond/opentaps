@@ -1,0 +1,119 @@
+<entity-engine-xml>
+
+
+    <!--
+     * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the Honest Public License.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * Honest Public License for more details.
+     *
+     * You should have received a copy of the Honest Public License
+     * along with this program; if not, write to Funambol,
+     * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+     *
+    -->
+
+    <ContextHelpResource contextHelpResourceId="2000" screenName="myHomeMain" applicationName="financials" remotePageName="Financials_Home_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2001" screenName="CODReceipt" applicationName="financials" remotePageName="Receive_COD_Statement_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2002" screenName="manageCashDrawers" applicationName="financials" remotePageName="Manage_Cash_Drawer_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="2003" screenName="editPayment" screenState="receivePayment" applicationName="financials" remotePageName="Receive_a_Payment_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2004" screenName="findCustomerBillAcct" applicationName="financials" remotePageName="Find_Customer_Billing_Account_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2005" screenName="createCustomerBillAcctForm" applicationName="financials" remotePageName="Create_Customer_Billing_Account_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2006" screenName="receivablesBalancesReport" applicationName="financials" remotePageName="Balances_by_Customer_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2007" screenName="createInvoiceForm" screenState="createSalesInvoice" applicationName="financials" remotePageName="Create_Sales_Invoice_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2008" screenName="viewInvoice" applicationName="financials" remotePageName="View_Invoice_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2009" screenName="findSalesInvoices" applicationName="financials" remotePageName="Find_Sales_Invoices_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2010" screenName="findPayment" applicationName="financials" remotePageName="Find_Payment_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2011" screenName="findSalesAgreements" applicationName="financials" remotePageName="Find_Customer_Agreements_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2012" screenName="createSalesAgreement" applicationName="financials" remotePageName="Create_Customer_Agreement_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2013" screenName="updateInvoiceItemForm" applicationName="financials" remotePageName="Modify_Invoice_Items_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2014" screenName="customerStatement" applicationName="financials" remotePageName="Customer_Statement_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2015" screenName="CreditCardReport" applicationName="financials" remotePageName="Credit_Card_Settlements_Report_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2016" screenName="findFinanceCharges" applicationName="financials" remotePageName="Find_Finance_Charges_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2017" screenName="commissionBalancesReport" applicationName="financials" remotePageName="Commission_Balances_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2018" screenName="receivablesMain" applicationName="financials" remotePageName="Receivables_Main_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2019" screenName="payablesMain" applicationName="financials" remotePageName="Payables_Main_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2020" screenName="payInvoiceWithBillingAccountForm" applicationName="financials" remotePageName="Pay_Invoice_with_Billing_Account_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2021" screenName="viewCustomerBillAcct" applicationName="financials" remotePageName="View_Billing_Account_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2022" screenName="receiveBillingAccountPaymentForm" applicationName="financials" remotePageName="Receive_a_Payment_to_Billing_Account_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2023" screenName="viewSalesAgreement" applicationName="financials" remotePageName="View_Customer_Agreements_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2024" screenName="viewAgreement" screenState="viewCommAgreement" applicationName="financials" remotePageName="View_Commission_Agreement_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="2025" screenName="payablesMain" applicationName="financials" remotePageName="View_Payment" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2026" screenName="editPayment" screenState="makePayment" applicationName="financials" remotePageName="Make_a_Payment_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2027" screenName="findPurchaseInvoices" applicationName="financials" remotePageName="Find_Vendor_Invoices_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2028" screenName="createInvoiceForm" screenState="createPurchInvoice" applicationName="financials" remotePageName="Create_Vendor_Invoice_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2029" screenName="createCommissionAgreement" applicationName="financials" remotePageName="Create_Commission_Agreement_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2030" screenName="findCustomerReturnInvoices" applicationName="financials" remotePageName="Find_Credit_Memos_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2031" screenName="findCommissionAgreements" applicationName="financials" remotePageName="Find_Commission_Agreements_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2032" screenName="createInvoiceForm" screenState="createCommInvoice" applicationName="financials" remotePageName="Create_Commission_Invoice_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2033" screenName="createInvoiceForm" screenState="createRtnInvoice" applicationName="financials" remotePageName="Create_Credit_Memo_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2034" screenName="payablesBalancesReport" applicationName="financials" remotePageName="Balances_by_Vendor_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2035" screenName="vendorStatement" applicationName="financials" remotePageName="Vendor_Statement_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2036" screenName="commissionsStatement" applicationName="financials" remotePageName="Commissions_Statement_Screen" remotePageVersion="0" />
+    
+    <ContextHelpResource contextHelpResourceId="2037" screenName="findPaycheck" applicationName="financials" remotePageName="Find_Paycheck_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2038" screenName="createPaycheckForm" applicationName="financials" remotePageName="Create_Paycheck_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2039" screenName="editPaycheckForm" applicationName="financials" remotePageName="Edit_Paycheck_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="2040" screenName="transactionsMain" applicationName="financials" remotePageName="Quick_Transaction" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2041" screenName="createAcctgTransForm" applicationName="financials" remotePageName="Create_Transaction_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2042" screenName="viewAcctgTrans" screenState="viewTransaction" applicationName="financials" remotePageName="View_Transaction_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2043" screenName="viewAcctgTrans" screenState="editTransaction" applicationName="financials" remotePageName="Edit_Transaction_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2044" screenName="ListUnpostedAcctgTrans" applicationName="financials" remotePageName="Unposted_Transactions_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2045" screenName="settlePaymentsOptions" applicationName="financials" remotePageName="Settle_Payments_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2046" screenName="exchangeRates" applicationName="financials" remotePageName="Exchange_Rates_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2047" screenName="invoiceRecurrence" applicationName="financials" remotePageName="Recurring_Invoices_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2048" screenName="adjustInventoryValues" applicationName="financials" remotePageName="Adjust_Inventory_Values" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="2049" screenName="TrialBalance" applicationName="financials" remotePageName="Trial_Balance_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2050" screenName="TransactionSummary" applicationName="financials" remotePageName="Trial_Balance_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2051" screenName="AccountActivitiesDetail" applicationName="financials" remotePageName="GL_Account_Activity_Details_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2052" screenName="IncomeStatement" applicationName="financials" remotePageName="Income_Statement_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2053" screenName="ComparativeIncomeStatement" applicationName="financials" remotePageName="Comparative_Income_Statement" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2054" screenName="CashFlowStatement" applicationName="financials" remotePageName="Cash_Flow_Statement" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2055" screenName="ComparativeCashFlowStatement" applicationName="financials" remotePageName="Comparative_Cash_Flow_Statement" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2056" screenName="BalanceSheet" applicationName="financials" remotePageName="Balance_Sheet" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2057" screenName="ComparativeBalance" applicationName="financials" remotePageName="Comparative_Balance_Sheet_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2058" screenName="InventoryValuationReport" applicationName="financials" remotePageName="Inventory_Valuation_Report" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2059" screenName="InventoryValueDetail" applicationName="financials" remotePageName="Inventory_Value_Detail_Report" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2060" screenName="payablesAgingReport" applicationName="financials" remotePageName="Accounts_Payables_Aging_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2061" screenName="receivablesAgingReport" applicationName="financials" remotePageName="Accounts_Receivables_Aging_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2062" screenName="reconcileAccounts" applicationName="financials" remotePageName="Select_Account_to_Reconcile_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2063" screenName="SalesAndInventory" applicationName="financials" remotePageName="Sales%2C_Inventory%2C_Profitability_Analysis" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2064" screenName="reportsMain" applicationName="financials" remotePageName="Reports_Main_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2065" screenName="TaxGlAccountDetails" applicationName="financials" remotePageName="Sales_Tax_Detail_Report_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2066" screenName="TaxSummary" applicationName="financials" remotePageName="Tax_Summary_Report_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2067" screenName="assessFinanceChargesForm" applicationName="financials" remotePageName="Assess_Finance_Charges_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2068" screenName="reconcileAccountForm" applicationName="financials" remotePageName="Reconciliation_Detail_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2069" screenName="viewGlAccountBalance" applicationName="financials" remotePageName="Reconciled_Account_Balance_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2070" screenName="reconcileAccountForm" applicationName="financials" remotePageName="Reconcile_Account_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2071" screenName="viewGlReconciliation" applicationName="financials" remotePageName="Reconciliation_Detail_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2072" screenName="AverageDSOReportReceivables" applicationName="financials" remotePageName="Receivables_Average_DSO_Report_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2073" screenName="AverageDSOReportPayables" applicationName="financials" remotePageName="Payables_Average_DSO_Report_Screen" remotePageVersion="0" />
+
+    <!-- partners tab -->
+    <ContextHelpResource contextHelpResourceId="2074" screenName="partnersMain" applicationName="financials" remotePageName="Partners_Home_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2075" screenName="createPartnerInvoiceForm" applicationName="financials" remotePageName="Create_Partner_Invoice_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2076" screenName="findPartnerInvoices" applicationName="financials" remotePageName="Find_Partner_Invoice_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2077" screenName="invoicePartnersForm" applicationName="financials" remotePageName="Invoice_Partners_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2078" screenName="findPartnerAgreements" applicationName="financials" remotePageName="Find_Partner_Agreements_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2079" screenName="viewPartnerAgreement" applicationName="financials" remotePageName="View_Partner_Agreement_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="2080" screenName="confirmSentPaymentsForm" applicationName="financials" remotePageName="Confirm_Sent_Payments" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="2090" screenName="manageLockboxBatches" applicationName="financials" remotePageName="Manage_Lockbox_Batches" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="2091" screenName="viewLockboxBatch" applicationName="financials" remotePageName="Lockbox_Batch_Details" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="2092" screenName="CommissionReport" applicationName="financials" remotePageName="Commission_Report_Screen" remotePageVersion="0" />
+
+    <!-- configuration screens -->
+    <ContextHelpResource contextHelpResourceId="FINCONFIG1" screenName="accountingTags" applicationName="financials" remotePageName="Accounting_Tags_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="FINCONFIG2" screenName="accountingTagsUsage" applicationName="financials" remotePageName="Accounting_Tags_Usage_Screen" remotePageVersion="0" />
+</entity-engine-xml>

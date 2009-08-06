@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+
+<!-- This file contains configuration for sample organizations -->
+
+<entity-engine-xml>
+    <!-- NOTE: these depends on the DemoMerchant file in the OFBiz ecommerce component -->
+    
+    <PartyRole partyId="Company" roleTypeId="INTERNAL_ORGANIZATIO"/>
+ 
+    <!-- A sample parent/subsidiary structure:
+        Company has subsidiaries CompanySub1 and CompanySub2
+        CompanySub1 in turns has a subsidiary CompanySub3
+        Roles and relationships defined based on the getParentOrganizations in party/servicedef/services_view.xml -->
+    <Party partyId="CompanySub1" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="CompanySub1" groupName="Your Company's First Subsidiary"/>
+    <Party partyId="CompanySub2" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="CompanySub2" groupName="Your Company's Second Subsidiary"/>
+    <Party partyId="CompanySub3" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="CompanySub3" groupName="Your Company's Third Subsidiary"/>
+
+    <PartyRole partyId="Company" roleTypeId="PARENT_ORGANIZATION"/>
+    <PartyRole partyId="CompanySub1" roleTypeId="ORGANIZATION_UNIT"/>
+    <PartyRole partyId="CompanySub1" roleTypeId="INTERNAL_ORGANIZATIO"/>
+    <PartyRole partyId="CompanySub1" roleTypeId="PARENT_ORGANIZATION"/>  <!-- CompanySub1 is both a subsidiary and a parent -->
+    <PartyRole partyId="CompanySub2" roleTypeId="ORGANIZATION_UNIT"/>
+    <PartyRole partyId="CompanySub2" roleTypeId="INTERNAL_ORGANIZATIO"/>
+    <PartyRole partyId="CompanySub3" roleTypeId="ORGANIZATION_UNIT"/>
+    <PartyRole partyId="CompanySub3" roleTypeId="INTERNAL_ORGANIZATIO"/>
+    
+    <PartyRelationship partyIdFrom="Company" partyIdTo="CompanySub1" roleTypeIdFrom="PARENT_ORGANIZATION" roleTypeIdTo="ORGANIZATION_UNIT"
+        fromDate="2000-01-01 00:00:00" partyRelationshipTypeId="GROUP_ROLLUP"/>
+    <PartyRelationship partyIdFrom="Company" partyIdTo="CompanySub2" roleTypeIdFrom="PARENT_ORGANIZATION" roleTypeIdTo="ORGANIZATION_UNIT"
+        fromDate="2000-01-01 00:00:00" partyRelationshipTypeId="GROUP_ROLLUP"/>
+    <PartyRelationship partyIdFrom="CompanySub1" partyIdTo="CompanySub3" roleTypeIdFrom="PARENT_ORGANIZATION" roleTypeIdTo="ORGANIZATION_UNIT"
+        fromDate="2000-01-01 00:00:00" partyRelationshipTypeId="GROUP_ROLLUP"/>
+
+    <!-- This setting will make sure there are no gaps in the sequence of invoiceIds 
+    <PartyAcctgPreference partyId="Company" invoiceSequenceEnumId="INVSQ_ENF_SEQ"/>
+    -->
+    <!-- default accounting preference settings -->
+    <PartyAcctgPreference partyId="CompanySub1" taxFormId="US_IRS_1120" cogsMethodId="COGS_AVG_COST" baseCurrencyUomId="USD"/>
+    <PartyAcctgPreference partyId="CompanySub2" taxFormId="US_IRS_1120" cogsMethodId="COGS_AVG_COST" baseCurrencyUomId="USD"/>
+    <PartyAcctgPreference partyId="CompanySub3" taxFormId="US_IRS_1120" cogsMethodId="COGS_AVG_COST" baseCurrencyUomId="USD"/>
+    
+    <!-- Some sample currency conversion measures -->
+    <UomConversionDated uomId="EUR" uomIdTo="USD" conversionFactor="1.2877" fromDate="2005-05-03 00:00:00" />
+    <UomConversionDated uomId="USD" uomIdTo="CAD" conversionFactor="1.2528" fromDate="2005-05-03 00:00:00" />
+    <UomConversionDated uomId="USD" uomIdTo="CHF" conversionFactor="1.1982" fromDate="2005-05-03 00:00:00" />
+
+    <!-- Default footer for PDF -->
+    <PartyAcctgPreference partyId="Company" salesInvoiceFooterText="opentaps Open Source ERP + CRM - www.opentaps.org" />
+
+</entity-engine-xml>

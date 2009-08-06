@@ -1,0 +1,127 @@
+/* 
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// finds all cases for all accounts that the userLogin is a member of or all contacts that the user is responsible for
+
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.accounting.payment.PaymentWorker;
+import org.ofbiz.accounting.util.UtilAccounting;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+if (organizationPartyId == null) {
+    return;
+}
+
+// find all check payment methods for this organization which are still current
+checkPaymentMethods = delegator.findByAnd("PaymentMethod", UtilMisc.toList(
+            new EntityExpr("partyId", EntityOperator.EQUALS, organizationPartyId),
+            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK"),
+            EntityUtil.getFilterByDateExpr()));
+context.put("checkPaymentMethods", checkPaymentMethods);
+
+// find payments of paymentMethodType PERSONAL_CHECK or COMPANY_CHECK with statusId NOT_PAID 
+
+if (!security.hasEntityPermission("ACCOUNTING", "_PRINT_CHECKS", userLogin)) {
+    context.put("allowed", false);
+    return;
+}
+
+paymentMethodId = parameters.get("paymentMethodId");
+if (paymentMethodId != null) {
+    context.put("paymentMethodId", paymentMethodId);
+} else {
+    context.put("paymentMethodId", "");
+}
+
+paymentsOrderBy = "effectiveDate";
+
+// condition to find all payments that are not receipts or paychecks
+paymentCond = new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId), 
+            new EntityExpr("paymentMethodId", EntityOperator.EQUALS, paymentMethodId),
+            new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_NOT_PAID")            
+            ), EntityOperator.AND);
+
+paymentMethodTypeCond = new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "PERSONAL_CHECK"), 
+            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK")
+            ), EntityOperator.OR);
+
+paymentTypeCond = null;        
+if ("Y".equals(isPaycheck)) {            
+    paymentTypeCond = new EntityConditionList(UtilMisc.toList(
+                    UtilFinancial.getPaymentTypeExpr(delegator, "PAY_CHECK")
+                    ), EntityOperator.AND);
+} else {
+    paymentTypeCond = new EntityConditionList(UtilMisc.toList(
+                    UtilFinancial.getPaymentTypeExpr(delegator, "DISBURSEMENT"),
+                    UtilFinancial.getPaymentTypeComplementExpr(delegator, "PAY_CHECK"),
+                    UtilFinancial.getPaymentTypeComplementExpr(delegator, "RECEIPT")                    
+                    ), EntityOperator.AND); 
+}
+            
+// build the main condition
+conditionList = new EntityConditionList(
+        UtilMisc.toList(
+               paymentCond,
+               paymentMethodTypeCond,
+               paymentTypeCond
+            ), EntityOperator.AND);
+
+// use a page builder to fetch the outstanding check list, because we need to filter receipts and paychecks
+buildPaymentList(delegator, conditions) {
+    entityName = "Payment";
+    fieldsToSelect = UtilMisc.toList("paymentId");
+    fieldsToSelect.add("paymentTypeId");
+    fieldsToSelect.add("paymentMethodId");
+    fieldsToSelect.add("paymentRefNum");            
+    fieldsToSelect.add("effectiveDate");
+    fieldsToSelect.add("partyIdTo");   
+    fieldsToSelect.add("amount");    
+    orderBy = UtilMisc.toList(paymentsOrderBy);
+    where = conditions;
+    
+    build(page) {
+        newPage = FastList.newInstance();
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            payment = iter.next();
+            row = FastMap.newInstance();
+            row.putAll(payment.getAllFields());
+            row.put("paymentMethod", payment.getRelatedOneCache("PaymentMethod").get("description", locale));
+            row.put("partyToName", PartyHelper.getPartyName(delegator, payment.get("partyIdTo"), false));
+            if ("Y".equals(isPaycheck)) {
+                row.put("view", "viewPaycheck");
+            } else {
+                row.put("view", "viewPayment");            
+            }
+            newPage.add(row);
+        }
+        return newPage;
+    }
+    return this; // remember this, very important
+}
+context.put("paymentListBuilder", buildPaymentList(delegator, conditionList));

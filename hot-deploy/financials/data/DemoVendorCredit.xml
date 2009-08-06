@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+    <!-- a somewhat hacky configuration of vendor credit payments: this payment method type can be used for incoming and outgoing payments and is configured
+    to the Vendor Credits account (154000), while the Vendor Credit Receipt payment type is configured to the Due From Vendor account (123100).  The process configured
+    is as of the following:
+
+    1.  Receive a payment of the type "Vendor Credit Receipt" and method "Vendor Credit" from your vendor, causing
+    DR Vendor Credit, CR Due from Vendor
+
+    2.  Make a payment of the type "Vendor Payment" back to your vendor using this payment method "Vendor credit", causing
+    DR Accounts Payable, CR Vendor Credit
+
+    Note that the Vendor Credit payment method would be unnecessary if the make outgoing payment screen could be made dynamic to allow either a payment method or a type,
+    or a separate apply vendor credit to a vendor invoice screen is created. 
+    -->
+    <PaymentMethodType paymentMethodTypeId="VENDOR_CREDIT" description="Vendor Credit" defaultGlAccountId="154000"/>
+    <PaymentMethod paymentMethodId="VENDOR_CREDIT" description="Vendor Credits" paymentMethodTypeId="VENDOR_CREDIT" partyId="Company" glAccountId="154000"/>
+
+    <PaymentGlAccountTypeMap paymentTypeId="VENDOR_CREDIT_RCPT" organizationPartyId="Company" glAccountTypeId="DUE_FROM_VENDOR"/>
+    <GlAccountTypeDefault glAccountTypeId="DUE_FROM_VENDOR" organizationPartyId="Company" glAccountId="123100" />
+
+
+</entity-engine-xml>

@@ -1,0 +1,48 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+ import java.util.Calendar;
+ import java.util.Date;
+ import org.ofbiz.base.util.UtilMisc;
+ import org.ofbiz.base.util.UtilHttp;
+ import org.ofbiz.base.util.UtilDateTime;
+ import javolution.util.FastList;
+ import org.opentaps.common.util.UtilCommon;
+ import org.opentaps.common.util.UtilMessage;
+ import org.opentaps.common.reporting.UtilReports;
+ 
+ locale = UtilHttp.getLocale(request);
+ timeZone = UtilHttp.getTimeZone(request);
+ 
+ organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+ if (organizationPartyId == null) {
+     return;
+ }
+ 
+ printers = UtilReports.enumeratePrinters();
+ if (printers != null && printers.size() > 0) {
+     context{"printers"} = printers;
+ }
+ 
+ context{"reportTypes"} = UtilReports.getJRSupportedMimeType(delegator);
+ 
+ context{"today"} = UtilDateTime.getDayEnd(UtilDateTime.nowTimestamp(), timeZone, locale);       
+ context{"thirtyDaysAgo"} = UtilDateTime.getDayStart(
+                                                        UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(),Calendar.DAY_OF_MONTH, -30, timeZone, locale), 
+                                                        timeZone,
+                                                        locale
+                                                    );

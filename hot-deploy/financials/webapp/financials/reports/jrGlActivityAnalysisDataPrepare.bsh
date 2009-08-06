@@ -1,0 +1,159 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+ 
+import java.text.ParseException;
+
+import org.opentaps.common.util.UtilAccountingTags;
+import javolution.util.FastList;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.content.report.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.model.DynamicViewEntity;
+import org.ofbiz.entity.model.ModelKeyMap;
+import org.ofbiz.entity.transaction.TransactionUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+
+ 
+ detailing = UtilCommon.getParameter(request, "detailing");
+ if (UtilValidate.isEmpty(detailing)) detailing = "DETAILED";
+
+ // all parameters required by JasperReports we shoud place 
+ // into jrParameters map
+ jrParameters = UtilHttp.getParameterMap(request);
+
+ GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
+ locale = UtilHttp.getLocale(request);
+ timeZone = UtilHttp.getTimeZone(request);
+ uiLabelMap = UtilMessage.getUiLabels(locale);
+
+ organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+ glAccountId = UtilCommon.getParameter(request, "glAccountId");
+ glFiscalTypeId = UtilCommon.getParameter(request, "glFiscalTypeId");
+ fromDateString = UtilCommon.getParameter(request, "fromDate");
+ thruDateString = UtilCommon.getParameter(request, "thruDate");
+ fromDate = null;
+ thruDate = null;
+
+ try {
+     fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+ } catch (ParseException) {
+     if (UtilValidate.isNotEmpty(fromDateString)) {
+         UtilMessage.addError(request, "FinancialsError_IllegalDateFormat", UtilMisc.toMap("fieldName", uiLabelMap.get("CommonFromDate")));
+         return "error";
+     }
+ }
+ 
+ try {
+     thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+ } catch (ParseException) {
+     if (UtilValidate.isNotEmpty(thruDateString)) {
+         UtilMessage.addError(request, "FinancialsError_IllegalDateFormat", UtilMisc.toMap("fieldName", uiLabelMap.get("CommonThruDate")));
+         return "error";
+     }
+ }
+
+ jrParameters{"fromDateMark"} = fromDate;
+ jrParameters{"thruDateMark"} = thruDate;
+
+ jrParameters{"fromDate"} = UtilDateTime.toDateString(fromDate, "yyyy-MM-dd");
+ jrParameters{"thruDate"} = UtilDateTime.toDateString(thruDate, "yyyy-MM-dd");
+
+ jrParameters{"organizationPartyId"} = organizationPartyId;
+ jrParameters{"glFiscalTypeId"} = glFiscalTypeId;
+
+ glAccount = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", glAccountId));
+ if (glAccount != null) {
+     jrParameters{"accountCode"} = glAccount.getString("accountCode");
+     jrParameters{"accountName"} = glAccount.getString("accountName");
+     jrParameters{"glAccountId"} = glAccountId;
+ } else {
+     jrParameters{"glAccountId"} = "";
+ }
+
+ if ("DETAILED".equals(detailing)) {
+     dv = new DynamicViewEntity();
+     dv.addMemberEntity("ATR", "AcctgTrans");
+     dv.addMemberEntity("ATE", "AcctgTransEntry");
+     dv.addMemberEntity("PG", "PartyGroup");
+     dv.addMemberEntity("PD", "Product");
+     dv.addAlias("PG", "groupName", null, null, null, Boolean.TRUE, null);
+     dv.addAlias("PD", "internalName", null, null, null, Boolean.TRUE, null);
+     dv.addAlias("ATE", "debitCreditFlag", null, null, null, Boolean.TRUE, null);
+     dv.addAlias("ATE", "sumTotal", "amount", "sumTotal", null, null, "sum");
+     dv.addAlias("ATR", "isPosted");
+     dv.addAlias("ATE", "organizationPartyId");
+
+     for (int i = 1; i <= UtilAccountingTags.TAG_COUNT; i++) {
+         dv.addAlias("ATE", "acctgTagEnumId" + i);
+     }
+
+     dv.addAlias("ATE", "glAccountId");
+     dv.addAlias("ATR", "glFiscalTypeId");
+     dv.addAlias("ATR", "transactionDate");
+     dv.addViewLink("ATR", "ATE", Boolean.TRUE, ModelKeyMap.makeKeyMapList("acctgTransId"));
+     dv.addViewLink("ATR", "PG", Boolean.TRUE, ModelKeyMap.makeKeyMapList("partyId"));
+     dv.addViewLink("ATE", "PD", Boolean.TRUE, ModelKeyMap.makeKeyMapList("productId"));
+
+     selectList = FastList.newInstance();
+     selectList.add("groupName");
+     selectList.add("internalName");
+     selectList.add("debitCreditFlag");
+     selectList.add("sumTotal");
+
+     whereConditions = FastList.newInstance();
+     whereConditions.add(new EntityExpr("isPosted", EntityOperator.EQUALS, "Y"));
+     whereConditions.add(new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId));
+     if (glAccountId != null) {
+         whereConditions.add(new EntityExpr("glAccountId", EntityOperator.EQUALS, glAccountId));
+     }
+
+     whereConditions.add(new EntityExpr("glFiscalTypeId", EntityOperator.EQUALS, glFiscalTypeId));
+     if (fromDate != null) {
+         whereConditions.add(new EntityExpr("transactionDate", EntityOperator.GREATER_THAN, fromDate));
+     }
+
+     if (thruDate != null) {
+         whereConditions.add(new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate));
+     }
+     // add tag filters
+     whereConditions.addAll(UtilAccountingTags.buildTagConditions(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, request));
+
+     Debug.logInfo("Conditions: " + whereConditions, "");
+
+     TransactionUtil.begin();
+     iterator = delegator.findListIteratorByCondition(dv, new EntityConditionList(whereConditions, EntityOperator.AND), null, selectList, null, null);
+     jrDataSource = new JREntityListIteratorDataSource(iterator);
+     request.setAttribute("jrDataSource", jrDataSource);
+     request.setAttribute("jrParameters", jrParameters);
+     TransactionUtil.commit();
+
+     return "detail";
+
+ } else if ("SUMMARIZED".equals(detailing)) {
+     request.setAttribute("jrParameters", jrParameters);
+     return "summary";
+
+ }
+ 
+ return "error";
+ 

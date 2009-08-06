@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <!-- form to select an organization -->
+    <form name="selectOrganizationForm" type="single" target="main"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="organizationPartyId" title="${uiLabelMap.FinancialsSelectOrganization}">
+            <drop-down allow-empty="false">
+                <list-options list-name="configuredOrganizations" key-name="partyId" description="${groupName} (${partyId})"/>
+            </drop-down>
+        </field>
+        <field name="" title="${uiLabelMap.CommonNote}" widget-style="tabletext">
+            <display description="${uiLabelMap.FinancialsDefaultCompanyForDemo}"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonSelect}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+    <form name="selectOrganizationToConfigureForm" type="single" target="configureOrganization"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="organizationPartyId" title="${uiLabelMap.FinancialsSelectOrganization}">
+            <drop-down allow-empty="false">
+                <list-options list-name="unconfiguredOrganizations" key-name="partyId" description="${groupName} (${partyId})"/>
+            </drop-down>
+        </field>
+        <field name="clearOrganizationFromSession"><hidden value="true"/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsConfigure}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+</forms>

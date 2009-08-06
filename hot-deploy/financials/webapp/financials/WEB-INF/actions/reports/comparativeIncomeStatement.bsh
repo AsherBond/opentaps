@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ *  @author Chris Liberty (cliberty@opensourcestrategies.com)
+ */
+
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsComparativeIncomeStatement"));
+
+organizationPartyId = context.get("organizationPartyId");
+glFiscalTypeId1 = context.get("glFiscalTypeId1");
+glFiscalTypeId2 = context.get("glFiscalTypeId2");
+fromDate1 = context.get("fromDate1");
+thruDate1 = context.get("thruDate1");
+fromDate2 = context.get("fromDate2");
+thruDate2 = context.get("thruDate2");
+if (fromDate1 == null || thruDate1 == null || fromDate2 == null || thruDate2 == null) return;
+
+input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId1", glFiscalTypeId1, "glFiscalTypeId2", glFiscalTypeId2);
+input.put("userLogin", userLogin);
+input.put("fromDate1", fromDate1);
+input.put("thruDate1", thruDate1);
+input.put("fromDate2", fromDate2);
+input.put("thruDate2", thruDate2);
+
+// add tags from the request to the service parameters
+UtilAccountingTags.addTagParameters(request, input);
+
+context.put("input",input);
+result = dispatcher.runSync("getComparativeIncomeStatement", input);
+if (ServiceUtil.isError(result)) return;
+
+set1IncomeStatement = result.get("set1IncomeStatement");
+set2IncomeStatement = result.get("set2IncomeStatement");
+
+// put everything into the context
+context.put("netIncome1", set1IncomeStatement.get("netIncome"));
+context.put("netIncome2", set2IncomeStatement.get("netIncome"));
+context.put("isClosed1", set1IncomeStatement.get("isClosed"));
+context.put("isClosed2", set2IncomeStatement.get("isClosed"));
+context.put("accounts", EntityUtil.orderBy(result.get("accountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("accountBalances", result.get("accountBalances"));
+context.put("set1Accounts", set1IncomeStatement.get("glAccountSumsFlat"));
+context.put("set2Accounts", set2IncomeStatement.get("glAccountSumsFlat"));
+
+// put the correct GlFiscalTypes into the context for the display tier
+glFiscalType1 = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId1));
+glFiscalType2 = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId2));
+context.put("glFiscalType1", glFiscalType1);
+context.put("glFiscalType2", glFiscalType2);

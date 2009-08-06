@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+ 
+<!-- Portions of this file are from the Apache licensed OFBiz accounting application -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!--
+    Copyright 2001-2006 The Apache Software Foundation
+    
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not
+    use this file except in compliance with the License. You may obtain a copy of
+    the License at
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations
+    under the License.
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="ListChecksToPrint" type="multi" list-name="payments" title="${uiLabelMap.FinancialsOutstandingChecks}" target="check.pdf" 
+        default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" header-row-style="boxtop"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true" >
+        <field name="paymentId" widget-style="buttontext">
+            <hyperlink target="viewPayment?paymentId=${paymentId}" description="${paymentId}"/>
+        </field>
+        <field name="paymentMethodId" title="${uiLabelMap.AccountingPaymentMethod}">
+            <display-entity description="${description} (${paymentMethodId})" entity-name="PaymentMethod"/> 
+        </field>
+        <field name="paymentRefNum" title="${uiLabelMap.FinancialsPaymentRefNum}"><display/></field>
+        <field name="effectiveDate"><display /></field>
+        <field name="partyIdTo" title="${uiLabelMap.FinancialsPayToParty}">
+          <display-entity description="${firstName} ${middleName} ${lastName} ${groupName}" entity-name="PartyNameView" key-field-name="partyId"/>
+        </field>
+        <field name="amount" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}"/></field>
+        <field name="_rowSubmit" title="${uiLabelMap.CommonSelect}"><check/></field>
+    </form>
+
+    <form name="ListInvoicesForCheckRun" type="multi" list-name="invoices"
+        paginate-target="checkRun" paginate-size-field="invoicesSize" paginate-index-field="invoicesIndex"
+        default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" header-row-style="boxtop"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true"
+        target="processCheckRun?paymentMethodId=${paymentMethodId}&amp;initialCheckNumber=${initialCheckNumber}&amp;organizationPartyId=${organizationPartyId}&amp;partyIdFrom=${partyIdFrom}&amp;dueDate=${dueDate}&amp;acctgTagEnumId1=${tag1}&amp;acctgTagEnumId2=${tag2}&amp;acctgTagEnumId3=${tag3}&amp;acctgTagEnumId4=${tag4}&amp;acctgTagEnumId5=${tag5}&amp;acctgTagEnumId6=${tag6}&amp;acctgTagEnumId7=${tag7}&amp;acctgTagEnumId8=${tag8}&amp;acctgTagEnumId9=${tag9}&amp;acctgTagEnumId10=${tag10}">
+        <row-actions>
+            <set field="outstandingAmount" value="${bsh:invoiceData.get(invoiceId).get(&quot;outstandingAmount&quot;)}"/>
+            <set field="fromPartyName" value="${bsh:invoiceData.get(invoiceId).get(&quot;fromPartyName&quot;)}"/>
+        </row-actions>
+        <field name="invoiceIds" entry-name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext">
+            <hyperlink description="${invoiceId}" target="viewInvoice?invoiceId=${invoiceId}"/>
+        </field>
+        <field name="partyIdsFrom" entry-name="${partyIdFrom}"><hidden value="${partyIdFrom}"/></field>
+        <field name="invoiceTypeIds" entry-name="${invoiceTypeId}"><hidden value="${invoiceTypeId}"/></field>
+        <field name="referenceNumber" title="${uiLabelMap.FinancialsReferenceNumber}"><display also-hidden="false"/></field>
+        <field name="invoiceDate" title="${uiLabelMap.AccountingInvoiceDate}"><display also-hidden="false"/></field>
+        <field name="dueDate" title="${uiLabelMap.AccountingDueDate}"><display also-hidden="false"/></field>
+        <field name="fromPartyName" title="${uiLabelMap.PartyParty}">
+            <hyperlink description="${fromPartyName}" target="customerStatement?partyId=${partyIdFrom}" also-hidden="false"/>
+        </field>
+        <field name="currencyUomIds" entry-name="currencyUomId" title="${uiLabelMap.CommonCurrency}"><hidden/></field>
+        <field name="outstandingAmount" title="${uiLabelMap.FinancialsAmountOutstanding}" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}" also-hidden="false"/></field>
+        <field name="amounts" entry-name="${amount}" title="${uiLabelMap.FinancialsAmountToPay}"><text size="10" default-value="${outstandingAmount}"/></field>
+        <field name="_rowSubmit" title="${uiLabelMap.CommonSelected}"><check/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsIssueChecks}" widget-style="smallSubmit" widget-area-style="boxlink"><submit/></field>
+    </form>
+
+</forms>
+        

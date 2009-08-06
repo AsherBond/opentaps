@@ -1,0 +1,137 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ */
+
+/**
+ * Generates a statement report for a GL account.
+ * This report displays all the transaction entries for a
+ * given date range between the organizationPartyId and 
+ * GL account.
+ *
+ * Note that this is based on the party-oriented statement
+ * report customerVendorStatement.bsh.
+ *
+ * @author Leon Torres (leon@opensourcestrategies.com)
+ * @author Si Chen (sichen@opensourcestrategies.com)
+ */
+
+import java.util.*;
+import java.sql.Timestamp;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilCommon;
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+
+// the screen should tell us the report type (TAX, future report types)
+reportType = context.get("reportType");
+if (reportType == null) reportType = parameters.get("reportType");
+
+isTax = false;
+if ("TAX".equals(reportType)) isTax = true;
+else return;
+
+context.put("isTax", isTax);
+
+// whether this is a receivable or payable report
+context.put("isReceivable", !isTax);
+context.put("isPayable", isTax);
+
+// tell the form that we want glAccountId input (for now it is just a hidden variable)
+context.put("reportRequiresGlAccount", true);
+
+// get these from the common form parsing script
+organizationPartyId = context.get("organizationPartyId");
+glFiscalTypeId = context.get("glFiscalTypeId");
+
+// get the glAccountId, however it is supplied
+glAccountId = parameters.get("glAccountId");
+context.put("glAccountId", glAccountId);
+if (UtilValidate.isEmpty(glAccountId)) return;
+glAccount = delegator.findByPrimaryKeyCache("GlAccount", UtilMisc.toMap("glAccountId", glAccountId));
+context.put("glAccount", glAccount);
+
+// get the tax party (this assumes one to one relationship)
+taxMapping = EntityUtil.getFirst( glAccount.getRelated("TaxAuthorityGlAccount") );
+if (taxMapping != null) context.put("taxAuthPartyId", taxMapping.get("taxAuthPartyId"));
+
+// get dates back from the context
+fromDate = context.get("fromDate");
+thruDate = context.get("thruDate");
+if (fromDate == null || thruDate == null) return;
+
+// our organization
+organizationPartyId = session.getAttribute("organizationPartyId");
+// Get the base currency for the organization
+context.put("orgCurrencyUomId", UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
+
+
+// first group of transactions are non-payments
+conditions = UtilMisc.toList(
+        new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate),
+        new EntityExpr("transactionDate", EntityOperator.GREATER_THAN, fromDate),
+        new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+        new EntityExpr("glAccountId", EntityOperator.EQUALS, glAccountId),
+        new EntityExpr("acctgTransTypeId", EntityOperator.NOT_EQUAL, "PAYMENT_ACCTG_TRANS"),
+        new EntityExpr("isPosted", EntityOperator.EQUALS, "Y"));
+findConditions = new EntityConditionList(conditions, EntityOperator.AND);
+
+// get transactions ordered by transactionDate
+transactions = delegator.findByCondition("AcctgTransAndEntries", findConditions, null, UtilMisc.toList("transactionDate"));
+context.put("transactions", transactions);
+
+// second group of transactions are payments
+conditions = UtilMisc.toList(
+        new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate),
+        new EntityExpr("transactionDate", EntityOperator.GREATER_THAN, fromDate),
+        new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+        new EntityExpr("glAccountId", EntityOperator.EQUALS, glAccountId),
+        new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "PAYMENT_ACCTG_TRANS"),
+        new EntityExpr("isPosted", EntityOperator.EQUALS, "Y"));
+findConditions = new EntityConditionList(conditions, EntityOperator.AND);
+
+// get transactions ordered by transactionDate
+paymentTransactions = delegator.findByCondition("AcctgTransAndEntries", findConditions, null, UtilMisc.toList("transactionDate"));
+context.put("paymentTransactions", paymentTransactions);
+
+// XXX NOTE this report has no beginningBalance like the party based version
+
+// add up the balance for creating a tax payment
+double transactionAmount(trans, isDisbursement) {
+    flag = trans.get("debitCreditFlag");
+    amount = trans.getDouble("amount");
+    if (isDisbursement) {
+       if ("C".equals(flag)) return (-1 * amount);
+       return amount;
+    } else {
+       if ("D".equals(flag)) return (-1 * amount);
+       return amount;
+    }
+}
+liabilityAmount = 0;
+paymentAmount = 0;
+for (iter = transactions.iterator(); iter.hasNext(); ) {
+    liabilityAmount += transactionAmount(iter.next(), false);
+}
+for (iter = paymentTransactions.iterator(); iter.hasNext(); ) {
+    paymentAmount += transactionAmount(iter.next(), true);
+}
+context.put("liabilityAmount", liabilityAmount);
+context.put("paymentAmount", paymentAmount);
+
+context.put("organizationPartyId",organizationPartyId);

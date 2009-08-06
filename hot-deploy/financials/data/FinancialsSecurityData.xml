@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<entity-engine-xml>
+    
+    <!-- Financials application security by functional area -->
+    <SecurityPermission description="All operations in Financials application." permissionId="FINANCIALS_ADMIN"/>
+    <SecurityPermission description="Configuration operations in Financials." permissionId="FINANCIALS_CONFIG"/>
+    <SecurityPermission description="View operations in the Financials Manager." permissionId="FINANCIALS_VIEW"/>
+    <SecurityPermission description="View operations in the [Receivables] tab and all screens inside it." permissionId="FINANCIALS_AR_VIEW"/>
+    <SecurityPermission description="View operations in the [Payables] tab and all screens inside it." permissionId="FINANCIALS_AP_VIEW"/>
+    <SecurityPermission description="View operations in the [Transactions] tab and all of the screens inside it." permissionId="FINANCIALS_TX_VIEW"/>
+    <SecurityPermission description="View operations in the  [Reports] tab and all of the reports inside it." permissionId="FINANCIALS_RPT_VIEW"/>
+    <SecurityPermission description="Reverse transactions." permissionId="FINANCIALS_REVERSE"/>
+    <SecurityPermission description="Control invoice recurrence" permissionId="FINANCIALS_RECUR_INV"/>
+    <SecurityPermission description="View invoices in the [Payables] tab and screens" permissionId="FINANCIALS_AP_INVIEW"/>
+    <SecurityPermission description="Create invoices in the [Payables] tab and screens" permissionId="FINANCIALS_AP_INCRTE"/>
+    <SecurityPermission description="Update invoices in the [Payables] tab and screens" permissionId="FINANCIALS_AP_INUPDT"/>
+    <SecurityPermission description="View payments in the [Payables] tab and screens" permissionId="FINANCIALS_AP_PVIEW"/>
+    <SecurityPermission description="Create payments in the [Payables] tab and screens" permissionId="FINANCIALS_AP_PCRTE"/>
+    <SecurityPermission description="Update payments in the [Payables] tab and screens" permissionId="FINANCIALS_AP_PUPDT"/>
+    <SecurityPermission description="Apply payments in the [Payables] tab and screens" permissionId="FINANCIALS_AP_PAPPL"/>
+    <SecurityPermission description="Write off invoices in the [Payables] tab and screens" permissionId="FINANCIALS_AP_INWRTOF"/>
+    <SecurityPermission description="View invoices in the [Receivables] tab and screens" permissionId="FINANCIALS_AR_INVIEW"/>
+    <SecurityPermission description="Create invoices in the [Receivables] tab and screens" permissionId="FINANCIALS_AR_INCRTE"/>
+    <SecurityPermission description="Update invoices in the [Receivables] tab and screens" permissionId="FINANCIALS_AR_INUPDT"/>
+    <SecurityPermission description="View payments in the [Receivables] tab and screens" permissionId="FINANCIALS_AR_PVIEW"/>
+    <SecurityPermission description="Create payments in the [Receivables] tab and screens" permissionId="FINANCIALS_AR_PCRTE"/>
+    <SecurityPermission description="Update payments in the [Receivables] tab and screens" permissionId="FINANCIALS_AR_PUPDT"/>
+    <SecurityPermission description="Apply payments in the [Receivables] tab and screens" permissionId="FINANCIALS_AR_PAPPL"/>
+    <SecurityPermission description="Write off invoices in the [Receivables] tab and screens" permissionId="FINANCIALS_AR_INWRTOF"/>
+    <SecurityPermission description="View commission agreements" permissionId="FINANCIALS_COMM_VIEW"/>
+    <SecurityPermission description="Create and update commission agreements" permissionId="FINANCIALS_COMM_UPDT"/>
+    <SecurityPermission description="View sales agreements" permissionId="FINANCIALS_SAGR_VIEW"/>
+    <SecurityPermission description="Create and update sales agreements" permissionId="FINANCIALS_SAGR_UPDT"/>
+    <SecurityPermission description="View [Employee] tab and screens" permissionId="FINANCIALS_EMP_VIEW"/>
+    <SecurityPermission description="Create employee paychecks" permissionId="FINANCIALS_EMP_PCCRTE"/>
+    <SecurityPermission description="Update employee paychecks" permissionId="FINANCIALS_EMP_PCUPDT"/>
+    <SecurityPermission description="View [Partners] tab and screens" permissionId="FINANCIALS_PARTNER_VIEW"/>
+    <SecurityPermission description="View partner invioces" permissionId="FINANCIALS_PARTNER_INVOICE_VIEW"/>
+    <SecurityPermission description="Create partner invioces" permissionId="FINANCIALS_PARTNER_INVOICE_CREATE"/>
+    <SecurityPermission description="Update partner invoices" permissionId="FINANCIALS_PARTNER_INVOICE_UPDATE"/>
+    <SecurityPermission description="View partner agreements" permissionId="FINANCIALS_PARTNER_AGREEMENT_VIEW"/>
+    <SecurityPermission description="Create partner agreements" permissionId="FINANCIALS_PARTNER_AGREEMENT_CREATE"/>
+    <SecurityPermission description="Update partner agreements" permissionId="FINANCIALS_PARTNER_AGREEMENT_UPDATE"/>
+
+    <SecurityGroup groupId="FINANCIALS_ADMIN" description="Financials and Accounting Admin with permissions for all operations in both applications"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AR_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_TX_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_RPT_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="OFBTOOLS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ACCOUNTING_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ACCTG_FX_ENTRY"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="PAY_INFO_ADMIN"/> <!-- required to create and update payments in OFBIZ -->
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_INVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_INCRTE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_INUPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_PVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_PCRTE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_PUPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_PAPPL"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_INWRTOF"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AR_INVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AR_INCRTE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AR_INUPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AR_PVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AR_PCRTE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AR_PUPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AR_PAPPL"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AR_INWRTOF"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="PERIOD_MAINT"/> <!-- for updating time periods -->
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="OPENTAPS_CSHDRWR"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_COMM_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_COMM_UPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_SAGR_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_SAGR_UPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_EMP_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_EMP_PCCRTE"/>    
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_EMP_PCUPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_PARTNER_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_PARTNER_INVOICE_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_PARTNER_INVOICE_CREATE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_PARTNER_INVOICE_UPDATE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_PARTNER_AGREEMENT_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_PARTNER_AGREEMENT_CREATE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_PARTNER_AGREEMENT_UPDATE"/> 
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FACILITY_UPDATE"/>     <!-- Needed for revaluing inventory -->
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ORDERMGR_UPDATE"/>     <!-- Needed for invoicing performed services -->
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="PRCH_ORD_APPRV"/>     <!-- Needed for invoicing performed services -->
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="PARTYMGR_ADMIN"/>
+
+    <!-- Special AR, AP, Transactions roles.  ACCOUNTING_ADMIN is required for now due to coarse nature OFBIZ permissions but will be removed once we have financials screens for invoices, etc.
+    OFBTOOLS_VIEW is required to access any OFBIZ backend app including ACCOUNTING.  Not sure if we want to require this for Financials as well or not but including for now to work with Accounting -->
+    <SecurityGroup groupId="FINANCIALS_AR" description="Financials Accounts Receivables handling permission"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="FINANCIALS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="FINANCIALS_AR_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="FINANCIALS_REVERSE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="OFBTOOLS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="ACCOUNTING_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="PAY_INFO_CREATE"/> <!-- required to create payments in OFBIZ -->
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="PAY_INFO_UPDATE"/> <!-- required to update payments in OFBIZ --> 
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="ORDERMGR_UPDATE"/>     <!-- Needed for invoicing performed services -->   
+    <SecurityGroupPermission groupId="FINANCIALS_AR" permissionId="PARTYMGR_ADMIN"/>
+
+    <SecurityGroup groupId="FINANCIALS_AP" description="Financials Accounts Payables handling permission"/> 
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="FINANCIALS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="FINANCIALS_AP_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="FINANCIALS_REVERSE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="ACCOUNTING_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="OFBTOOLS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="PAY_INFO_CREATE"/> <!-- required to create payments in OFBIZ -->
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="PAY_INFO_UPDATE"/> <!-- required to update payments in OFBIZ -->    
+    <SecurityGroupPermission groupId="FINANCIALS_AP" permissionId="PARTYMGR_ADMIN"/>
+
+    <SecurityGroup groupId="FINANCIALS_TRANS" description="Financials Transactions creation, posting, and reconciliation permission"/>
+    <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="FINANCIALS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="FINANCIALS_TX_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="FINANCIALS_REVERSE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="ACCOUNTING_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_TRANS" permissionId="OFBTOOLS_VIEW"/>
+
+    <SecurityGroup groupId="FINANCIALS_AR_INV" description="Financials Accounts Receivables view/create/update invoices, view payments"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="FINANCIALS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="FINANCIALS_AR_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="FINANCIALS_AR_INVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="FINANCIALS_AR_INCRTE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="FINANCIALS_AR_INUPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="FINANCIALS_AR_PVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="ACCOUNTING_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="ORDERMGR_UPDATE"/>     <!-- Needed for invoicing performed services -->
+    <SecurityGroupPermission groupId="FINANCIALS_AR_INV" permissionId="PARTYMGR_ADMIN"/>
+
+    <SecurityGroup groupId="FINANCIALS_AP_INV" description="Financials Accounts Payables view/create/update invoices, view payments"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="FINANCIALS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="FINANCIALS_AP_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="FINANCIALS_AP_INVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="FINANCIALS_AP_INCRTE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="FINANCIALS_AP_INUPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="FINANCIALS_AP_PVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="ACCOUNTING_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_INV" permissionId="PARTYMGR_ADMIN"/>
+    
+    <SecurityGroup groupId="FINANCIALS_AR_PMNT" description="Financials Accounts Receivables view/create/update/apply payments, view invoices"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="FINANCIALS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="FINANCIALS_AR_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="FINANCIALS_AR_PVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="FINANCIALS_AR_PCRTE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="FINANCIALS_AR_PUPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="FINANCIALS_AR_PAPPL"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="FINANCIALS_AP_INVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="ACCOUNTING_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="PAY_INFO_CREATE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AR_PMNT" permissionId="PARTYMGR_ADMIN"/>
+
+    <SecurityGroup groupId="FINANCIALS_AP_PMNT" description="Financials Accounts Payables view/create/update/apply payments, view invoices"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="FINANCIALS_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="FINANCIALS_AP_VIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="FINANCIALS_AP_PVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="FINANCIALS_AP_PCRTE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="FINANCIALS_AP_PUPDT"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="FINANCIALS_AP_PAPPL"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="FINANCIALS_AP_INVIEW"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="ACCOUNTING_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="PAY_INFO_CREATE"/>
+    <SecurityGroupPermission groupId="FINANCIALS_AP_PMNT" permissionId="PARTYMGR_ADMIN"/>
+
+    <!-- system must be financials admin for automated ledger postings to work -->
+    <UserLoginSecurityGroup userLoginId="system" groupId="FINANCIALS_ADMIN" fromDate="2001-01-01 00:00:00"/>
+
+    <!-- let admin do anything in financials -->
+    <UserLoginSecurityGroup userLoginId="admin" groupId="FINANCIALS_ADMIN" fromDate="2001-01-01 00:00:00"/>
+</entity-engine-xml>

@@ -1,0 +1,73 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+import javolution.util.FastList;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.agreement.UtilAgreement;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+
+statuses = delegator.findByAnd("StatusItem", UtilMisc.toMap("statusTypeId", "AGREEMENT"));
+context.put("statuses", statuses);
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+if (organizationPartyId == null) {
+    return;
+}
+
+performFind = parameters.get("performFind");
+if (!"Y".equals(performFind)) {
+    return;
+}
+
+partyIdTo = UtilCommon.getParameter(request, "partyIdTo");
+partyId = UtilCommon.getParameter(request, "partyId");
+if (partyId != null) {
+    partyIdTo = partyId;
+}
+statusId = UtilCommon.getParameter(request, "statusId");
+roleTypeIdFrom = "INTERNAL_ORGANIZATIO";
+roleTypeIdTo = "COMMISSION_AGENT";
+agreementTypeId = "COMMISSION_AGREEMENT";
+
+/*
+ * Check partyId if it has the role COMMISSION_AGENT
+ */
+validRoleTypeId = PartyHelper.getFirstValidRoleTypeId(partyIdTo, UtilMisc.toList("COMMISSION_AGENT"), delegator);
+if ((partyIdTo != null) && ((validRoleTypeId == null) || (!validRoleTypeId.equals("COMMISSION_AGENT"))))  {
+    return;
+}
+
+/*
+ * Get list of agreements between organization and current agent 
+ */
+searchConditions = FastList.newInstance(); 
+searchConditions.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId));
+if (partyIdTo != null) {
+    searchConditions.add(new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyIdTo));
+}
+searchConditions.add(statusId == null ? new EntityExpr("statusId", EntityOperator.NOT_IN, UtilMisc.toList("AGR_CANCELLED")) : new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
+searchConditions.add(new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeIdFrom));
+searchConditions.add(new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, roleTypeIdTo));
+searchConditions.add(new EntityExpr("agreementTypeId", EntityOperator.EQUALS, agreementTypeId));
+searchConditions.add(EntityUtil.getFilterByDateExpr());
+conditions = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+orderBy = UtilMisc.toList("fromDate");
+
+context.put("agreementsPaginatorName", "commissionAgreements");
+context.put("agreementsListBuilder", UtilAgreement.getAgreementsListBuilder(conditions, orderBy, locale));

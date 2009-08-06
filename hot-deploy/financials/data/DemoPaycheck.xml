@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!-- this is a sample paycheck.
+    note that these numbers are for demonstration purposes only and do not reflect actual payroll tax rates, etc. 
+    
+    In the US, a paycheck is gross pay minus withholdings from the employee for federal, state taxes plus any pre-tax benefits like medical care.
+    Then there are employer portion of taxes to the government, most importantly FICA social security and unemployment taxes, plus employer
+    contributions to 401k/pensions and medical and other benefit plans.  -->
+
+<entity-engine-xml>
+
+    <Party partyId="DemoEmployee" partyTypeId="PERSON"/>
+    <Person partyId="DemoEmployee" firstName="Demo" lastName="Employee"/>
+    <ContactMech contactMechId="DemoEmployeeAddress" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoEmployeeAddress" toName="Demo Employee" address1="1234 Los Angeles Ave" city="Los Angeles" stateProvinceGeoId="CA" postalCode="90000" countryGeoId="USA"/>
+    <PartyContactMech partyId="DemoEmployee" contactMechId="DemoEmployeeAddress" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoEmployee" contactMechId="DemoEmployeeAddress" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoEmployee" primaryPostalAddressId="DemoEmployeeAddress"  />
+
+    <!-- This is a sample paycheck -->
+    <Payment paymentId="DEMOPAYCHECK1" paymentTypeId="PAY_CHECK_USA_CA" paymentMethodId="COCHECKING" paymentMethodTypeId="COMPANY_CHECK"
+        partyIdFrom="Company" partyIdTo="DemoEmployee" statusId="PMNT_NOT_PAID" 
+        amount="5000.00" currencyUomId="USD" paymentRefNum="22879" comments="Sample pay check for DemoEmployee"/>
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00001" paycheckItemTypeId="WITHHOLD_US_TAX" amount="1250" partyId="USA_IRS"/>
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00002" paycheckItemTypeId="WITHHOLD_CA_TAX" amount="400" partyId="CA_FTB"/>
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00003" paycheckItemTypeId="WITHHOLD_US_FICA_SS" amount="200" partyId="USA_IRS"/>
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00004" paycheckItemTypeId="WITHHOLD_US_FICA_MED" amount="100" partyId="USA_IRS"/>
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00005" paycheckItemTypeId="WITHHOLD_EMP_401K" amount="500" partyId="FIDELITY"/>
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00006" paycheckItemTypeId="WITHHOLD_EMP_MED" amount="40" partyId="BLUE_SHIELD"/>
+
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00010" paycheckItemTypeId="EMPLOYER_US_FICA_SS" amount="200" partyId="USA_IRS"/>
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00011" paycheckItemTypeId="EMPLOYER_US_FICA_MED" amount="100" partyId="USA_IRS"/>
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00012" paycheckItemTypeId="EMPLOYER_401K" amount="500" partyId="FIDELITY"/>
+    <PaycheckItem paymentId="DEMOPAYCHECK1" paycheckItemSeqId="00013" paycheckItemTypeId="EMPLOYER_MED" amount="120" partyId="BLUE_SHIELD"/>
+
+</entity-engine-xml>

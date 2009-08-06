@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<entity-engine-xml>
+
+    <!-- A demo account -->
+    <Party partyId="DemoLBAcct" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="DemoLBAcct" groupName="Demo Lockbox Account"/>
+    <PartyRole partyId="DemoLBAcct" roleTypeId="CUSTOMER"/>
+    <PartyRole partyId="DemoLBAcct" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyRole partyId="DemoLBAcct" roleTypeId="_NA_"/>
+
+    <!-- A demo contact -->
+    <Party partyId="DemoLBCust" partyTypeId="PERSON"/>
+    <Person partyId="DemoLBCust" firstName="Demo" lastName="Lockbox Customer"/>
+    <PartyRole partyId="DemoLBCust" roleTypeId="CUSTOMER"/>
+    <PartyRole partyId="DemoLBCust" roleTypeId="BILL_TO_CUSTOMER"/>
+
+    <!-- demo invoices -->
+    <Invoice invoiceId="LB0001" invoiceTypeId="SALES_INVOICE" partyIdFrom="Company" partyId="DemoLBAcct" statusId="INVOICE_IN_PROCESS" invoiceDate="2008-04-25 12:46:27.122" description="Lockbox demo invoice 1" currencyUomId="USD"/>
+    <InvoiceItem invoiceId="LB0001" invoiceItemSeqId="00001" invoiceItemTypeId="INV_SPROD_ITEM" uomId="USD" taxableFlag="N" amount="700.0" description="Lockbox test item"/>
+    <InvoiceStatus statusId="INVOICE_IN_PROCESS" invoiceId="LB0001" statusDate="2008-04-25 12:46:27.122"/>
+
+    <Invoice invoiceId="LB0002" invoiceTypeId="SALES_INVOICE" partyIdFrom="Company" partyId="DemoLBAcct" statusId="INVOICE_IN_PROCESS" invoiceDate="2008-04-25 12:46:27.122" description="Lockbox demo invoice 2" currencyUomId="USD"/>
+    <InvoiceItem invoiceId="LB0002" invoiceItemSeqId="00001" invoiceItemTypeId="INV_SPROD_ITEM" uomId="USD" taxableFlag="N" amount="500.0" description="Lockbox test item"/>
+    <InvoiceStatus statusId="INVOICE_IN_PROCESS" invoiceId="LB0002" statusDate="2008-04-25 12:46:27.122"/>
+
+    <Invoice invoiceId="LB0003" invoiceTypeId="SALES_INVOICE" partyIdFrom="Company" partyId="DemoLBCust" statusId="INVOICE_IN_PROCESS" invoiceDate="2008-04-25 12:46:27.122" description="Lockbox demo invoice 3" currencyUomId="USD"/>
+    <InvoiceItem invoiceId="LB0003" invoiceItemSeqId="00001" invoiceItemTypeId="INV_SPROD_ITEM" uomId="USD" taxableFlag="N" amount="600.0" description="Lockbox test item"/>
+    <InvoiceStatus statusId="INVOICE_IN_PROCESS" invoiceId="LB0003" statusDate="2008-04-25 12:46:27.122"/>
+
+    <Invoice invoiceId="LB0004" invoiceTypeId="SALES_INVOICE" partyIdFrom="Company" partyId="DemoLBCust" statusId="INVOICE_IN_PROCESS" invoiceDate="2008-04-25 12:46:27.122" description="Lockbox demo invoice 4" currencyUomId="USD"/>
+    <InvoiceItem invoiceId="LB0004" invoiceItemSeqId="00001" invoiceItemTypeId="INV_SPROD_ITEM" uomId="USD" taxableFlag="N" amount="1550.0" description="Lockbox test item"/>
+    <InvoiceStatus statusId="INVOICE_IN_PROCESS" invoiceId="LB0004" statusDate="2008-04-25 12:46:27.122"/>
+
+    <Invoice invoiceId="LB0005" invoiceTypeId="SALES_INVOICE" partyIdFrom="Company" partyId="DemoLBCust" statusId="INVOICE_IN_PROCESS" invoiceDate="2008-04-25 12:46:27.122" description="Lockbox demo invoice 5" currencyUomId="USD"/>
+    <InvoiceItem invoiceId="LB0005" invoiceItemSeqId="00001" invoiceItemTypeId="INV_SPROD_ITEM" uomId="USD" taxableFlag="N" amount="300.0" description="Lockbox test item"/>
+    <InvoiceStatus statusId="INVOICE_IN_PROCESS" invoiceId="LB0005" statusDate="2008-04-25 12:46:27.122"/>
+
+    <Invoice invoiceId="LB0006" invoiceTypeId="SALES_INVOICE" partyIdFrom="Company" partyId="DemoLBCust" statusId="INVOICE_IN_PROCESS" invoiceDate="2008-04-25 12:46:27.122" description="Lockbox demo invoice 6" currencyUomId="USD"/>
+    <InvoiceItem invoiceId="LB0006" invoiceItemSeqId="00001" invoiceItemTypeId="INV_SPROD_ITEM" uomId="USD" taxableFlag="N" amount="300.0" description="Lockbox test item"/>
+    <InvoiceStatus statusId="INVOICE_IN_PROCESS" invoiceId="LB0006" statusDate="2008-04-25 12:46:27.122"/>
+
+</entity-engine-xml>

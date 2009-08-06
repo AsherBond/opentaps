@@ -1,0 +1,48 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.party.party.PartyHelper;
+
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+
+hasViewAgreementPermission = false;
+hasUpdateAgreementPermission = false;
+hasCreateAgreementPermission = false;
+
+  if (security.hasEntityPermission("FINANCIALS", "_COMM_VIEW", userLogin)) {
+      hasViewAgreementPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_COMM_UPDT", userLogin) &&
+      security.hasEntityPermission("ACCOUNTING", "_CREATE", userLogin)) {
+      hasCreateAgreementPermission = true;
+  }
+  if (security.hasEntityPermission("FINANCIALS", "_COMM_UPDT", userLogin) &&
+      security.hasEntityPermission("ACCOUNTING", "_UPDATE", userLogin)) {
+      hasUpdateAgreementPermission = true;
+  }
+
+
+context.put("hasViewAgreementPermission", hasViewAgreementPermission);
+context.put("hasCreateAgreementPermission", hasCreateAgreementPermission);
+context.put("hasUpdateAgreementPermission", hasUpdateAgreementPermission);
+
+parameters.put("hasViewAgreementPermission", hasViewAgreementPermission);
+parameters.put("hasCreateAgreementPermission", hasCreateAgreementPermission);
+parameters.put("hasUpdateAgreementPermission", hasUpdateAgreementPermission);
+
+if (security == null || userLogin == null) return;

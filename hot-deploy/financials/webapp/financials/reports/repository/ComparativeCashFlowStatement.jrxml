@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ComparativeIncomeStatement" pageWidth="792" pageHeight="612" orientation="Landscape" whenNoDataType="AllSectionsNoDetail" columnWidth="721" leftMargin="43" rightMargin="28" topMargin="28" bottomMargin="28" whenResourceMissingType="Empty">
+	<property name="net.sf.jasperreports.export.xls.exclude.origin.band.1" value="pageFooter"/>
+	<parameter name="organizationPartyId" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="organizationName" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="fromDateLeft" class="java.sql.Timestamp" isForPrompting="false"/>
+	<parameter name="thruDateLeft" class="java.sql.Timestamp" isForPrompting="false"/>
+	<parameter name="netIncomeLeft" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="fromDateRight" class="java.sql.Timestamp" isForPrompting="false"/>
+	<parameter name="thruDateRight" class="java.sql.Timestamp" isForPrompting="false"/>
+	<parameter name="netIncomeRight" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="fiscalTypeLeft" class="java.lang.String"/>
+	<parameter name="fiscalTypeRight" class="java.lang.String"/>
+	<parameter name="beginningCashAmountLeft" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="beginningCashAmountRight" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="endingCashAmountLeft" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="endingCashAmountRight" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="netCashFlowLeft" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="netCashFlowRight" class="java.math.BigDecimal" isForPrompting="false"/>
+	<parameter name="accountingTags" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<field name="accountCode" class="java.lang.String"/>
+	<field name="accountName" class="java.lang.String"/>
+	<field name="accountSumLeft" class="java.lang.Number"/>
+	<field name="accountSumRight" class="java.lang.Number"/>
+	<field name="accountSumDiff" class="java.lang.Number"/>
+	<field name="cashFlowType" class="java.lang.String"/>
+	<field name="cashFlowTypeTotal" class="java.lang.String"/>
+	<field name="cashFlowTypeTotalAmountLeft" class="java.math.BigDecimal"/>
+	<field name="cashFlowTypeTotalAmountRight" class="java.math.BigDecimal"/>
+	<field name="netCashFlow" class="java.lang.String"/>
+	<field name="endingCashFlow" class="java.lang.String"/>
+	<group name="CashFlowBoundaries">
+		<groupExpression><![CDATA[$F{endingCashFlow}]]></groupExpression>
+		<groupHeader>
+			<band height="30">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="391" height="16"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsBeginningCashBalance}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="391" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[($P{beginningCashAmountLeft} == null ? BigDecimal.ZERO : $P{beginningCashAmountLeft})]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="16" width="721" height="1"/>
+				</line>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="501" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[($P{beginningCashAmountRight} == null ? BigDecimal.ZERO : $P{beginningCashAmountRight})]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="611" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{beginningCashAmountRight}.subtract($P{beginningCashAmountLeft} )]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="17">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="391" height="16"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{endingCashFlow}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="391" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[($P{endingCashAmountLeft} == null ? BigDecimal.ZERO : $P{endingCashAmountLeft})]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="16" width="721" height="1"/>
+				</line>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="501" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[($P{endingCashAmountRight} == null ? BigDecimal.ZERO : $P{endingCashAmountRight})]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="611" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{endingCashAmountRight}.subtract( $P{endingCashAmountLeft} )]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="NetCashFlow">
+		<groupExpression><![CDATA[$F{netCashFlow}]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band height="30">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="391" height="16"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{netCashFlow}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="391" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[($P{netCashFlowLeft} == null ? BigDecimal.ZERO : $P{netCashFlowLeft})]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="16" width="721" height="1"/>
+				</line>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="501" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[($P{netCashFlowRight} == null ? BigDecimal.ZERO : $P{netCashFlowRight})]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="611" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$P{netCashFlowRight}.subtract( $P{netCashFlowLeft} )]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<group name="CashFlowType">
+		<groupExpression><![CDATA[$F{cashFlowType}]]></groupExpression>
+		<groupHeader>
+			<band height="17">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="721" height="16"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{cashFlowType}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="16" width="721" height="1"/>
+				</line>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="30">
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="0" width="391" height="16"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{cashFlowTypeTotal}]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="391" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{cashFlowTypeTotalAmountLeft} == null ? BigDecimal.ZERO : $F{cashFlowTypeTotalAmountLeft})]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="16" width="721" height="1"/>
+				</line>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="501" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[($F{cashFlowTypeTotalAmountRight} == null ? BigDecimal.ZERO : $F{cashFlowTypeTotalAmountRight})]]></textFieldExpression>
+				</textField>
+				<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+					<reportElement x="611" y="0" width="110" height="16"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{cashFlowTypeTotalAmountRight}.subtract($F{cashFlowTypeTotalAmountLeft} )]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="80">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="28" width="721" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[($P{organizationName} + " (" + $P{organizationPartyId} +")")]]></textFieldExpression>
+			</textField>
+			<elementGroup/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="721" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{FinancialsComparativeCashFlowStatement}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="0" y="48" width="721" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{accountingTags}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band/>
+	</pageHeader>
+	<columnHeader>
+		<band height="33">
+			<textField pattern="MM/dd/yy" isBlankWhenNull="true">
+				<reportElement x="400" y="1" width="50" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDateLeft}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yy" isBlankWhenNull="true">
+				<reportElement x="460" y="1" width="50" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDateLeft}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="450" y="1" width="10" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="391" y="17" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fiscalTypeLeft}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="501" y="17" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{fiscalTypeRight}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="611" y="17" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{OpentapsDifference}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="560" y="1" width="10" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField pattern="MM/dd/yy" isBlankWhenNull="true">
+				<reportElement x="570" y="1" width="50" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{thruDateRight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="MM/dd/yy" isBlankWhenNull="true">
+				<reportElement x="510" y="1" width="50" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$P{fromDateRight}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="17" width="391" height="16"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{Account}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="75" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountCode}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="611" y="0" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[($F{accountSumDiff} == null ? BigDecimal.ZERO : $F{accountSumDiff})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="501" y="0" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[($F{accountSumRight} == null ? BigDecimal.ZERO : $F{accountSumRight})]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
+				<reportElement x="391" y="0" width="110" height="16"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Number"><![CDATA[($F{accountSumLeft} == null ? BigDecimal.ZERO : $F{accountSumLeft})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="75" y="0" width="316" height="16"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{accountName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="16">
+			<textField>
+				<reportElement x="296" y="0" width="80" height="16"/>
+				<textElement textAlignment="Right">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$R{CommonPage} +" "+$V{PAGE_NUMBER}+" " + $R{OpentapsOf}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="376" y="0" width="40" height="16"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

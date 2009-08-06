@@ -1,0 +1,53 @@
+/*
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.opentaps.common.domain.organization.OrganizationRepository;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.base.entities.AcctgTagEnumType;
+import org.opentaps.domain.base.entities.AcctgTagPostingCheck;
+import org.opentaps.domain.base.entities.AcctgTagUsageType;
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+context.put("organizationPartyId", organizationPartyId);
+
+OrganizationRepository repository = new OrganizationRepository(delegator);
+
+// get the list of accounting tag enumerations being used by the organization
+context.put("tagsByType", UtilAccountingTags.getAllAccoutingTagEnumerations(delegator));
+
+// get all available usages
+usages = repository.findAll(AcctgTagUsageType.class, UtilMisc.toList(AcctgTagUsageType.Fields.acctgTagUsageTypeId.asc()));
+context.put("usages", usages);
+
+// get all available tag types
+context.put("tagTypes", UtilAccountingTags.getAllAccoutingTagEnumerationTypes(delegator));
+
+// get the used configurations for the organization
+// this builds a map associating the usage configuration for the current organization to each usage found,
+// note that a configuration might not exist yet, so it could be null
+usageConfigurations = new HashMap();
+for (AcctgTagUsageType usage : usages) {
+
+    usageConfigurations.put(usage, repository.getFirst(repository.findList(AcctgTagEnumType.class, repository.map(
+          AcctgTagEnumType.Fields.organizationPartyId, organizationPartyId,
+          AcctgTagEnumType.Fields.acctgTagUsageTypeId, usage.getAcctgTagUsageTypeId()))));
+}
+
+context.put("usageConfigurations", usageConfigurations);
+
+// get the posting check configuration, which could be null
+context.put("postingCheck", repository.findOne(AcctgTagPostingCheck.class, repository.map(AcctgTagPostingCheck.Fields.organizationPartyId, organizationPartyId)));

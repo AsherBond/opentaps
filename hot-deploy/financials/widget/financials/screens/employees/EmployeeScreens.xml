@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="employees" global="true"/>
+                <set field="sectionStyle" value="singleColumn"/>
+                <set field="requiredPermission" value="FINANCIALS_EMP"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="employees">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsEmployees"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsEmployees"/>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/employees/employees.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findPaycheck">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsFindPaycheck"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsFindPaycheck"/>  
+                <script location="component://financials/webapp/financials/WEB-INF/actions/employees/findPaychecks.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/employees/findPaychecks.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewPaycheck">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsViewPaycheck"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsViewPaycheck"/>  
+                <script location="component://financials/webapp/financials/WEB-INF/actions/employees/viewPaycheck.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific><html>
+                            <html-template location="component://financials/webapp/financials/employees/viewPaycheck.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewPaycheckPDF">
+        <section>
+            <actions>
+                <!-- 
+                <set field="defaultFontFamily" value="DejaVuSans"/>
+                -->
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/employees/viewPaycheckPDF.bsh"/>
+            </actions>
+            <widgets>
+                <section>
+                    <condition>
+                        <not><if-empty field-name="paycheck"/></not>
+                    </condition>
+                    <widgets>
+                        <platform-specific>
+                            <html><html-template location="component://financials/webapp/financials/employees/viewPaycheck.fo.ftl"/></html>
+                        </platform-specific>
+                    </widgets>
+                    <fail-widgets>
+                        <include-screen name="permissionDeniedPDF" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+                    </fail-widgets>
+                </section>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="createPaycheckForm">
+        <section>
+            <actions>
+              	<set field="pageTitleLabel" value="FinancialsCreatePaycheck"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsCreatePaycheck"/>              
+                <script location="component://financials/webapp/financials/WEB-INF/actions/employees/createPaycheckForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
+                    <decorator-section name="section-body">
+                        <section>
+                            <condition>
+                                <or>
+                                    <if-has-permission permission="FINANCIALS_EMP" action="_PCCRTE"/>
+                                </or>
+                            </condition>
+                            <widgets>
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/employees/createPaycheckForm.ftl"/>
+                                </html></platform-specific>
+                            </widgets>
+                            <fail-widgets>
+                                <include-screen name="PermissionErrorScreen" location="component://financials/widget/financials/screens/common/CommonScreens.xml"/>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="editPaycheckForm">
+        <section>
+            <actions>
+              	<set field="pageTitleLabel" value="FinancialsEditPaycheck"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsEditPaycheck"/>            
+                <script location="component://financials/webapp/financials/WEB-INF/actions/employees/editPaycheckForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="${decoratorLocation}">
+                    <decorator-section name="section-body">
+                        <section>
+                            <condition>
+                                <or>
+                                    <if-has-permission permission="FINANCIALS_EMP" action="_PCCRTE"/>
+                                </or>
+                            </condition>
+                            <widgets>
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/employees/editPaycheckForm.ftl"/>
+                                </html></platform-specific>
+                            </widgets>
+                            <fail-widgets>
+                                <include-screen name="PermissionErrorScreen" location="component://financials/widget/financials/screens/common/CommonScreens.xml"/>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>    
+    
+    <screen name="listPaychecksToPrint">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsOutstandingPaychecks"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsOutstandingPaychecks"/>
+                <set field="isPaycheck" value="Y"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/payables/listChecksToPrint.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <section>
+                        <widgets>
+                            <platform-specific>
+                                <html><html-template location="component://financials/webapp/financials/payables/listChecksToPrint.ftl"/></html>
+                            </platform-specific>                                                            
+                        </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>        
+    
+</screens>
+

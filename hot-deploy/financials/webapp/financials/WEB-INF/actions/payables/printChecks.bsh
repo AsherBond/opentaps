@@ -1,0 +1,99 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+// Note: this file originates from Apache OFBiz
+// This file has been modified by Open Source Strategies, Inc.
+
+import java.util.ArrayList;
+import java.util.Collections;
+import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilNumber;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+
+// rounding mode
+int decimals = UtilNumber.getBigDecimalScale("invoice.decimals");
+int rounding = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
+context.put("decimals", decimals);
+context.put("rounding", rounding);
+
+// list of payments
+payments = new ArrayList();
+
+// first ensure ability to print
+security = request.getAttribute("security");
+context.put("security", security);
+if (!security.hasEntityPermission("ACCOUNTING", "_PRINT_CHECKS", session)) {
+    context.put("payments", payments); // if no permission, just pass an empty list for now
+    return;
+}
+
+// in the case of a single payment, the paymentId will be supplied
+paymentId = context.get("paymentId");
+if (paymentId != null) {
+
+    payment = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId));
+    if (payment != null) payments.add(payment);
+    context.put("payments", payments);
+} else {
+
+    // in the case of a multi form, parse the multi data and get all of the selected payments
+    selected = UtilHttp.parseMultiFormData(parameters);
+    iter = selected.iterator();
+    while (iter.hasNext()) {
+        row = iter.next(); 
+        payment = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", row.get("paymentId")));
+        if (payment == null) continue;
+        payments.add(payment);
+    }
+
+    // reverse the order of the payments to match the view (why it's reversed is a mystery)
+    Collections.reverse(payments);
+    context.put("payments", payments);
+}
+
+// whether one payment or multiple were supplied is transparent to the rest of this script, just use this list
+payments = context.get("payments");
+
+// get the billing address for each payment and store in a map keyed to paymentId
+billingAddresses = FastMap.newInstance();
+for (iter = payments.iterator(); iter.hasNext(); ) {
+    payment = iter.next();
+    billingAddress = UtilFinancial.getBillingAddress(payment.get("partyIdTo"), delegator);
+    billingAddresses.put(payment.get("paymentId"), billingAddress);
+}
+context.put("billingAddresses", billingAddresses);
+

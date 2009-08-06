@@ -1,0 +1,57 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+if (organizationPartyId == null) {
+    return;
+}
+
+invoiceTypeId = context.get("invoiceTypeId");
+isReceipt = null;
+if ("SALES_INVOICE".equals(invoiceTypeId)) {
+    context.put("screenState", "createSalesInvoice");
+    isReceipt = true;
+} else if ("PURCHASE_INVOICE".equals(invoiceTypeId)) {
+    context.put("screenState", "createPurchInvoice");
+    isReceipt = false;
+} else if ("CUST_RTN_INVOICE".equals(invoiceTypeId)) {
+    context.put("screenState", "createRtnInvoice");
+    isReceipt = false;
+} else if ("COMMISSION_INVOICE".equals(invoiceTypeId)) {
+    context.put("screenState", "createCommInvoice");
+    isReceipt = false;
+}
+
+context.put("isReceipt", isReceipt);
+context.put("isDisbursement", !isReceipt);
+
+if (isReceipt) {
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml");
+} else {
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/payables/PayablesScreens.xml");
+}
+
+glAccounts = delegator.findByAndCache("GlAccountOrganizationAndClass", UtilMisc.toMap("organizationPartyId", organizationPartyId), UtilMisc.toList("accountCode"));
+context.put("glAccounts", glAccounts);
+
+itemTypeMap = delegator.findByAndCache("InvoiceItemTypeMap", UtilMisc.toMap("invoiceTypeId", invoiceTypeId));
+itemTypes = EntityUtil.getRelatedCache("InvoiceItemType", itemTypeMap);
+context.put("invoiceItemTypes", itemTypes);
+context.put("currencies", delegator.findByAndCache("Uom", UtilMisc.toMap("uomTypeId", "CURRENCY_MEASURE"), UtilMisc.toList("abbreviation")));

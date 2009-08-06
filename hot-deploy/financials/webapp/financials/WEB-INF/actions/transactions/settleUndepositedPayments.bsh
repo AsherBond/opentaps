@@ -1,0 +1,44 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+ */
+
+/*
+ * This is specially for quick-creating payment settlement transactions 
+ */
+
+import org.ofbiz.accounting.util.UtilAccounting;
+import org.ofbiz.base.util.UtilValidate;
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+context.put("organizationPartyId", organizationPartyId);
+
+// always the case 
+context.put("acctgTransTypeId", "BANK_SETTLEMENT");
+
+// debit the chosen bank settlement account or the bank settlement account of the organization party
+if (UtilValidate.isEmpty(parameters.get("settlementGlAccountId"))) {
+    context.put("debitGlAccountId", UtilAccounting.getProductOrgGlAccountId(null, "BANK_STLMNT_ACCOUNT", organizationPartyId, delegator)); 
+} else {
+    context.put("debitGlAccountId", parameters.get("settlementGlAccountId"));
+}
+ 
+// credit the undeposited receipts account 
+if (UtilValidate.isEmpty(parameters.get("undepositedReceiptGlAccountId"))) {
+    context.put("creditGlAccountId", UtilAccounting.getProductOrgGlAccountId(null, "UNDEPOSITED_RECEIPTS", organizationPartyId, delegator)); 
+} else {
+    context.put("creditGlAccountId", parameters.get("undepositedReceiptGlAccountId"));
+}

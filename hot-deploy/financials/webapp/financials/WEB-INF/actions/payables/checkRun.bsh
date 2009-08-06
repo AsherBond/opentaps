@@ -1,0 +1,130 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.ofbiz.accounting.invoice.InvoiceWorker;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.organization.OrganizationRepositoryInterface;
+import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import java.sql.Timestamp;
+import java.text.ParseException;
+
+delegator = request.getAttribute("delegator");
+locale = UtilHttp.getLocale(request);
+timeZone = UtilHttp.getTimeZone(request);
+dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+
+DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+dd = dl.loadDomainsDirectory();
+OrganizationRepositoryInterface organizationRepository = dd.getOrganizationDomain().getOrganizationRepository();
+Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
+invoiceRepository = dd.getBillingDomain().getInvoiceRepository();
+
+// Find all current check payment methods for the organization
+checkPaymentMethods = delegator.findByAnd("PaymentMethod", UtilMisc.toList(
+            new EntityExpr("partyId", EntityOperator.EQUALS, organizationPartyId),
+            new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "COMPANY_CHECK"),
+            EntityUtil.getFilterByDateExpr()));
+context.put("checkPaymentMethods", checkPaymentMethods);
+
+context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.CHECK_RUN_TAG, delegator));
+UtilAccountingTags.addTagParameters(request, context, "acctgTagEnumId");
+
+// get the default bank settlement account's payment method
+defaultPaymentMethod = organization.getDefaultPaymentMethod();
+context.put("defaultPaymentMethodId", defaultPaymentMethod.getPaymentMethodId());
+
+// Populate the initial check number from the request attribute first, in case it's been updated and returned by the
+//  processing service
+initialCheckNumber = request.getAttribute("initialCheckNumber");
+if (UtilValidate.isEmpty(initialCheckNumber)) {
+    initialCheckNumber = request.getParameter("initialCheckNumber");
+}
+context.put("initialCheckNumber", initialCheckNumber);
+
+paymentMethodId = request.getParameter("paymentMethodId");
+context.put("paymentMethodId", paymentMethodId);
+
+if (UtilValidate.isEmpty(initialCheckNumber) || UtilValidate.isEmpty(paymentMethodId)) {
+    return;
+}
+
+dueDateStr = request.getParameter("dueDate");
+dueDate = null;
+if (UtilValidate.isNotEmpty(dueDateStr)) {
+    try {
+        dueDate = UtilDateTime.stringToTimeStamp(dueDateStr, dateTimeFormat, timeZone, locale);
+    } catch (ParseException e) {
+        try {
+            dueDate = UtilDateTime.stringToTimeStamp(dueDateStr + " 00:00:00", dateTimeFormat, timeZone, locale);
+        } catch (ParseException e) {
+            // Just discard if the datetime string is malformed
+        }
+    }
+}
+context.put("dueDate", dueDate);
+
+partyIdFrom = request.getParameter("partyIdFrom");
+context.put("partyIdFrom", partyIdFrom);
+
+// TODO how can the domain model emulate this kind of flexible lookup?
+conditions = new ArrayList();
+conditions.add(new EntityExpr("invoiceTypeId", EntityOperator.IN, UtilMisc.toList("PURCHASE_INVOICE", "CUST_RTN_INVOICE", "COMMISSION_INVOICE")));
+conditions.add(new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("INVOICE_READY")));
+if (UtilValidate.isNotEmpty(partyIdFrom)) {
+    conditions.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyIdFrom));
+}
+invoiceList = delegator.findByCondition("Invoice", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("invoiceId"));
+if ( ! UtilValidate.isEmpty( dueDate ) ) {
+    dateConditions = new ArrayList();
+    dateConditions.add(new EntityExpr( "dueDate" , EntityOperator.LESS_THAN_EQUAL_TO , dueDate ));
+
+    // todo: Exclude invoices with null dueDates?
+    dateConditions.add(new EntityExpr( "dueDate" , EntityOperator.EQUALS , null ));
+    invoiceList = EntityUtil.filterByCondition( invoiceList , new EntityConditionList( dateConditions , EntityOperator.OR ) ) ;
+}
+
+// Assemble the invoice data
+now = UtilDateTime.nowTimestamp();
+invoices = new ArrayList();
+invoiceData = new HashMap();
+for (invoice : invoiceList) {
+    // load our domain object by hand, since the lookup was custom
+    invoiceObj = Repository.loadFromGeneric(Invoice.class, invoice);
+    invoiceObj.initRepository(invoiceRepository); // this is sort of a hack since we are creating the domain objects by hand
+    outstandingAmount = invoiceObj.getPendingOpenAmount();
+    if (outstandingAmount.signum() > 0) {
+
+        partyIdFromNameMap = dispatcher.runSync( "getPartyNameForDate" , UtilMisc.toMap( "partyId" , invoice.getString( "partyIdFrom" ) , "compareDate" , invoice.get( "invoiceDate" ) , "userLogin" , session.getAttribute( "userLogin" ) ) ) ;
+        fromPartyName = partyIdFromNameMap.get( "fullName" ) ;
+        if ( fromPartyName == null ) {
+            fromPartyName = "" ;
+        }
+        fromPartyName += "(" + invoice.getString( "partyIdFrom" ) + ")" ;
+
+        invoices.add(invoice);
+        invoiceData.put( invoice.getString("invoiceId"), UtilMisc.toMap( "outstandingAmount", outstandingAmount, "fromPartyName" , fromPartyName ) ) ;        
+    }
+}
+context.put("invoices", invoices);
+context.put("invoiceData", invoiceData);

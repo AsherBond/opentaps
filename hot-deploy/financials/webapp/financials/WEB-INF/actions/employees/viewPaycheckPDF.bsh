@@ -1,0 +1,77 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilNumber;
+import org.ofbiz.party.party.PartyHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import com.opensourcestrategies.financials.payroll.PaycheckReader;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+// rounding mode and scale
+decimals = UtilNumber.getBigDecimalScale("fin_arithmetic.properties", "payroll.paycheck.decimals");
+rounding = UtilNumber.getBigDecimalRoundingMode("fin_arithmetic.properties", "payroll.paycheck.rounding");
+context.put("decimals", decimals);
+context.put("rounding", rounding);
+
+// get the payment and make sure it is a paycheck, otherwise return nothing
+paymentId = parameters.get("paymentId");
+if (paymentId == null) {
+    return;
+}
+payment = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId));
+if (payment == null) {
+    return;
+}
+if (! UtilFinancial.isPaycheck(payment)) {
+    return;
+}
+context.put("paycheck", payment);
+
+// paycheck reader
+reader = new PaycheckReader(payment);
+
+// paycheck pay to party name
+context.put("paycheckPartyName", PartyHelper.getPartyName(delegator, reader.getEmployeePartyId(), false));
+
+// get the billing address
+context.put("billingAddress", reader.getBillingAddress());
+
+// expand the paycheck items (witholdings) to include all data we need for pdf (See PaycheckItemAndType)
+witholdings = FastList.newInstance();
+deductions = reader.getPaycheckItemsByClass("DEDUCTION");
+for (iter = deductions.iterator(); iter.hasNext(); ) {
+    deduction = iter.next();
+    witholding = FastMap.newInstance();
+    witholding.putAll( deduction.getAllFields() );
+
+    amount = deduction.getBigDecimal("amount");
+    if (amount == null) {
+        amount = UtilFinancial.ZERO;
+    } else {
+        amount = amount.multiply(new BigDecimal("-1")).setScale(2, rounding);
+    }
+    witholding.put("amount", amount);
+
+    witholding.put("witholdingPartyName", PartyHelper.getPartyName(delegator, deduction.get("partyId"), false));
+    witholding.put("typeDescription", deduction.getRelatedOneCache("PaycheckItemType").get("description"));
+    witholdings.add(witholding);
+}
+
+context.put("witholdings", witholdings);
+context.put("netAmount", reader.getNetAmount());

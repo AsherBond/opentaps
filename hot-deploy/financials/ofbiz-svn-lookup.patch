@@ -1,0 +1,52 @@
+Index: webapp/financials/accounts/receiveBillingAccountPaymentForm.ftl
+===================================================================
+--- webapp/financials/accounts/receiveBillingAccountPaymentForm.ftl	(revision 510734)
++++ webapp/financials/accounts/receiveBillingAccountPaymentForm.ftl	(working copy)
+@@ -33,7 +33,7 @@
+         <td class="tabletext" width="80%" align="left">
+           <input type="text" name="partyIdFrom" size="20" value="${defaultBillToParty.partyId?default("")}" class="inputBox"></input>
+           <a href="javascript:call_fieldlookup2(document.receiveBillingAccountPayment.partyIdFrom, 'LookupPartyName');">
+-            <img src="/content/images/fieldlookup.gif" width="16" height="16" border="0" alt="Lookup"></img>
++            <img src="/images/fieldlookup.gif" width="16" height="16" border="0" alt="Lookup"></img>
+           </a>
+         </td>
+       </tr>
+Index: webapp/financials/includes/comparativeStateReportOptions.ftl
+===================================================================
+--- webapp/financials/includes/comparativeStateReportOptions.ftl	(revision 510734)
++++ webapp/financials/includes/comparativeStateReportOptions.ftl	(working copy)
+@@ -86,7 +86,7 @@
+     <span class="tableheadtext">${uiLabelMap.get(partyIdInputRequested.get("label"))}</span>
+     <input type="text" name="partyId" size="20" maxlength="20" value="${partyId?if_exists}" class="inputBox"></input>
+     <a href="javascript:call_fieldlookup2(document.comparativeReportForm.partyId, 'LookupPartyName');">
+-      <img src="/content/images/fieldlookup.gif" width="16" height="16" border="0" alt="Lookup"></img>
++      <img src="/images/fieldlookup.gif" width="16" height="16" border="0" alt="Lookup"></img>
+     </a>
+   </div>
+   </#if>
+Index: webapp/financials/includes/stateReportOptions.ftl
+===================================================================
+--- webapp/financials/includes/stateReportOptions.ftl	(revision 510734)
++++ webapp/financials/includes/stateReportOptions.ftl	(working copy)
+@@ -82,7 +82,7 @@
+     <span class="tableheadtext">${uiLabelMap.get(partyIdInputRequested.get("label"))}</span>
+     <input type="text" name="partyId" size="20" maxlength="20" value="${partyId?if_exists}" class="inputBox"></input>
+     <a href="javascript:call_fieldlookup2(document.stateReportForm.partyId, 'LookupPartyName');">
+-      <img src="/content/images/fieldlookup.gif" width="16" height="16" border="0" alt="Lookup"></img>
++      <img src="/images/fieldlookup.gif" width="16" height="16" border="0" alt="Lookup"></img>
+     </a>
+   </div>
+   </#if>
+Index: webapp/financials/includes/comparativeFlowReportOptions.ftl
+===================================================================
+--- webapp/financials/includes/comparativeFlowReportOptions.ftl	(revision 510734)
++++ webapp/financials/includes/comparativeFlowReportOptions.ftl	(working copy)
+@@ -90,7 +90,7 @@
+     <span class="tableheadtext">${uiLabelMap.get(partyIdInputRequested.get("label"))}</span>
+     <input type="text" name="partyId" size="20" maxlength="20" value="${partyId?if_exists}" class="inputBox"></input>
+     <a href="javascript:call_fieldlookup2(document.comparativeReportForm.partyId, 'LookupPartyName');">
+-      <img src="/content/images/fieldlookup.gif" width="16" height="16" border="0" alt="Lookup"></img>
++      <img src="/images/fieldlookup.gif" width="16" height="16" border="0" alt="Lookup"></img>
+     </a>
+   </div>
+   </#if>

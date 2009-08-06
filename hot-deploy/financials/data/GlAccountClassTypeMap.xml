@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entity-engine-xml>
+    <GlAccountClassTypeMap glAccountClassTypeKey="ACCOUNTS_PAYABLE" glAccountClassId="CURRENT_LIABILITY" glAccountTypeId="ACCOUNTS_PAYABLE" description="ACCOUNTS PAYABLE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="ACCOUNTS_RECEIVABLE" glAccountClassId="CURRENT_ASSET" glAccountTypeId="ACCOUNTS_RECEIVABLE" description="ACCOUNTS RECEIVABLE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="ASSET" glAccountClassId="ASSET" glAccountTypeId="ASSET" description="ASSET"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="BANK_STLMNT_ACCOUNT" glAccountClassId="CASH_EQUIVALENT" glAccountTypeId="BANK_STLMNT_ACCOUNT" description="BANK ACCOUNT"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="COGS" glAccountClassId="COGS_EXPENSE" glAccountTypeId="COGS" description="COGS"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="COMMISSIONS_PAYABLE" glAccountClassId="CURRENT_LIABILITY" glAccountTypeId="COMMISSIONS_PAYABLE" description="COMMISSION PAYABLE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="CURRENT_ASSET" glAccountClassId="CASH_EQUIVALENT" glAccountTypeId="CURRENT_ASSET" description="CASH EQUIVALENT"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="CURRENT_LIABILITY" glAccountClassId="CURRENT_LIABILITY" glAccountTypeId="CURRENT_LIABILITY" description="CURRENT LIABILITY"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="FIXED_ASSET" glAccountClassId="ACCUM_AMORTIZATION" glAccountTypeId="FIXED_ASSET" description="ACCUM AMORTIZATION"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="INVENTORY_ACCOUNT" glAccountClassId="INVENTORY_ASSET" glAccountTypeId="INVENTORY_ACCOUNT" description="INVENTORY"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="LIABILITY" glAccountClassId="LIABILITY" glAccountTypeId="LIABILITY" description="LIABILITY"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="LONG_TERM_LIABILITY" glAccountClassId="LONGTERM_LIABILITY" glAccountTypeId="LONG_TERM_LIABILITY" description="LONG TERM LIABILITY"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="OPERATING_EXPENSE" glAccountClassId="AMORTIZATION" glAccountTypeId="OPERATING_EXPENSE" description="AMORTIZATION EXPENSE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="OTHER_EXPENSE" glAccountClassId="INTEREST_EXPENSE" glAccountTypeId="OTHER_EXPENSE" description="INTEREST EXPENSE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="OTHER_INCOME" glAccountClassId="CASH_INCOME" glAccountTypeId="OTHER_INCOME" description="CASH INCOME"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="OWNERS_EQUITY" glAccountClassId="OWNERS_EQUITY" glAccountTypeId="OWNERS_EQUITY" description="EQUITY"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="RAWMAT_INVENTORY" glAccountClassId="INVENTORY_ASSET" glAccountTypeId="RAWMAT_INVENTORY" description="RAW MATERIALS"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="REVENUE" glAccountClassId="REVENUE" glAccountTypeId="REVENUE" description="REVENUE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="TAX_EXPENSE" glAccountClassId="CASH_EXPENSE" glAccountTypeId="TAX_EXPENSE" description="TAX EXPENSE"/>
+    <GlAccountClassTypeMap glAccountClassTypeKey="WIP_INVENTORY" glAccountClassId="INVENTORY_ASSET" glAccountTypeId="WIP_INVENTORY" description="WIP INVENTORY"/>
+</entity-engine-xml>

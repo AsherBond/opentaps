@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<!-- This demonstrates how to set up third party billing. -->
+
+<entity-engine-xml>
+
+    <!-- first set up a third party -->
+    <Party partyId="DemoSugarDaddy" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="DemoSugarDaddy" groupName="Demo Sugar Daddy"/>
+
+    <!-- next define it for the store and make 3rd party billing available -->
+    <ProductStore productStoreId="9000" billToThirdPartyId="DemoSugarDaddy"/>
+    <ProductStorePaymentSetting productStoreId="9000" paymentMethodTypeId="EXT_BILL_3RDPTY" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL"/>
+
+    <!-- now set up a gl account for it -->
+    <!-- This account must not have glAccountTypeId of ACCOUNTS_RECEIVABLE or it will show up on statements and balance summaries,
+        negating the effects of making a COD payment to a customer invoice -->
+    <GlAccount glAccountId="126000" parentGlAccountId="120000" accountCode="126000"
+        glAccountClassId="CURRENT_ASSET" glAccountTypeId=""
+        accountName="UNINVOICED THIRD PARTY BILLINGS" postedBalance="0.0"/>
+
+    <!-- add it to the company -->
+    <GlAccountOrganization glAccountId="126000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+
+    <!-- configure it for both payment and invoicing -->
+    <InvoiceItemTypeGlAccount invoiceItemTypeId="ITM_BILL_FROM_CUST" organizationPartyId="Company" glAccountId="126000"/>
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="EXT_BILL_3RDPTY" organizationPartyId="Company" glAccountId="126000"/>
+
+
+</entity-engine-xml>

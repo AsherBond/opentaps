@@ -1,0 +1,90 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.transaction.TransactionUtil;
+import org.ofbiz.service.calendar.*;
+
+
+delegator = request.getAttribute("delegator");
+userLogin = session.getAttribute("userLogin");
+
+// Permission check
+hasRecurPermission = security.hasEntityPermission("FINANCIALS", "_RECUR_INV", request.getSession()); 
+context.put("hasRecurPermission", hasRecurPermission);
+if (! hasRecurPermission) {
+    return;
+}
+
+// Available recurrence rules
+recurrenceRules = delegator.findByLike("RecurrenceRule", UtilMisc.toMap("recurrenceRuleId", "FINANCIALS_%"), UtilMisc.toList("recurrenceRuleId"));
+context.put("recurrenceRules", recurrenceRules);
+
+// Invoices
+invoiceRecurrences = delegator.findAll("InvoiceRecurrence", UtilMisc.toList("invoiceId"));
+invoiceRecurrences = EntityUtil.filterByDate(invoiceRecurrences);
+
+// Assemble the invoice data
+nowTimestamp = UtilDateTime.nowTimestamp();
+invoiceData = new HashMap();
+ilit = invoiceRecurrences.iterator();
+while (ilit.hasNext()) {
+    invoiceRecurrence = ilit.next();
+    invoice = invoiceRecurrence.getRelatedOne("Invoice");
+    recurrenceInfoVO = invoiceRecurrence.getRelatedOne("RecurrenceInfo");
+    invoiceInfo = new HashMap();
+    invoiceInfo.put("invoice", invoice);
+    invoiceInfo.put("recurrenceRuleId", recurrenceInfoVO.getString("recurrenceRuleId"));
+    invoiceInfo.put("recurrenceInfoId", recurrenceInfoVO.getString("recurrenceInfoId"));
+    
+    partyIdFromNameMap = dispatcher.runSync( "getPartyNameForDate" , UtilMisc.toMap( "partyId" , invoice.getString( "partyIdFrom" ) , "compareDate" , invoice.get( "invoiceDate" ) , "userLogin" , userLogin ) ) ;
+    fromPartyName = partyIdFromNameMap.get( "fullName" ) ;
+    if ( fromPartyName == null ) {
+        fromPartyName = "" ;
+    }
+    fromPartyName += " (" + invoice.getString( "partyIdFrom" ) + ")" ;
+    invoiceInfo.put("fromPartyName" , fromPartyName);
+
+    partyIdToNameMap = dispatcher.runSync( "getPartyNameForDate" , UtilMisc.toMap( "partyId" , invoice.getString( "partyId" ) , "compareDate" , invoice.get( "invoiceDate" ) , "userLogin" , userLogin ) ) ;
+    toPartyName = partyIdToNameMap.get( "fullName" ) ;
+    if ( toPartyName == null ) {
+        toPartyName = "" ;
+    }
+    toPartyName += " (" + invoice.getString( "partyId" ) + ")" ;
+    invoiceInfo.put("toPartyName" , toPartyName );        
+
+    lastRecurrenceDate = invoiceRecurrence.getTimestamp("lastRecurrenceDate");
+    if (UtilValidate.isEmpty(lastRecurrenceDate)) {
+        lastRecurrenceDate = recurrenceInfoVO.getTimestamp("startDate");
+    }
+    invoiceInfo.put("lastRecurrenceDate", lastRecurrenceDate);
+    recurrenceInfo = new RecurrenceInfo(recurrenceInfoVO);
+    nextRecurrenceDate = new Date(recurrenceInfo.next(UtilValidate.isEmpty(lastRecurrenceDate) ? now.getTime() : lastRecurrenceDate.getTime()));
+    if (nextRecurrenceDate.before(UtilDateTime.nowDate())) {
+        nextRecurrenceDate = UtilDateTime.nowDate();
+    }
+    invoiceInfo.put("nextRecurrenceDate", nextRecurrenceDate);
+
+    invoiceData.put(invoiceRecurrence.get("invoiceId") + "_" + invoiceRecurrence.get("recurrenceInfoId"), invoiceInfo);
+}
+
+context.put("invoiceRecurrences", invoiceRecurrences);
+context.put("invoiceData", invoiceData);
+

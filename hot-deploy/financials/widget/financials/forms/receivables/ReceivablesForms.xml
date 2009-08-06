@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+   
+<!-- Portions of this file is based on the OFBiz accounting application -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+    
+<!--
+Copyright 2001-2006 The Apache Software Foundation
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations
+under the License.
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="FindInvoicesForInterest" type="single" target="assessFinanceChargesForm" default-title-style="tableheadtext" default-widget-style="inputBox">
+        <field name="partyId" title="${uiLabelMap.CommonPartyID}"><lookup target-form-name="LookupPartyName"/></field>
+        <field name="partyClassificationGroupId" title="${uiLabelMap.FinancialsPartyClassification}">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="PartyClassificationGroup">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="gracePeriod" title="${uiLabelMap.FinancialsGracePeriod}" required-field="true"><text default-value="${gracePeriod}"/></field> 
+        <field name="interestRate" title="${uiLabelMap.FinancialsInterestRate}" required-field="true"><text default-value="${interestRate}"/></field> 
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="ListInvoicesForInterest" type="multi" list-name="invoices" use-row-submit="true" 
+        paginate-target="findInvoices" paginate-size-field="invoicesSize" paginate-index-field="invoicesIndex"
+        default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" header-row-style="boxtop"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true"
+        target="assessFinanceCharges?partyId=${partyId}&amp;gracePeriod=${gracePeriod}&amp;interestRate=${interestRate}">
+        <row-actions>
+            <set field="daysOutstanding" value="${bsh:invoiceData.get(invoiceId).get(&quot;daysOutstanding&quot;)}"/>
+            <set field="outstandingAmount" value="${bsh:invoiceData.get(invoiceId).get(&quot;outstandingAmount&quot;)}"/>
+            <set field="interestCharged" value="${bsh:invoiceData.get(invoiceId).get(&quot;interestCharged&quot;)}"/>
+            <set field="interestAmount" value="${bsh:invoiceData.get(invoiceId).get(&quot;interestAmount&quot;)}" type="BigDecimal"/>
+            <set field="amount" value="${bsh:interestAmount.signum()&gt;0?interestAmount:0}"/>
+            <set field="description" value="${uiLabelMap.FinancialsFinanceChargeForInvoice} ${invoiceId}"/> 
+            <set field="toPartyName" value="${bsh:invoiceData.get(invoiceId).get(&quot;toPartyName&quot;)}"/>
+            <set field="_rowSubmit" value="${bsh:interestAmount.signum()&gt;0?&quot;Y&quot;:&quot;N&quot;}"/> 
+        </row-actions>
+        <field name="partyIdFrom"><hidden value="${partyIdFrom}"/></field>
+        <field name="partyIdTo"><hidden value="${partyId}"/></field>
+        <field name="currencyUomId"><hidden value="${currencyUomId}"/></field>
+        <field name="parentInvoiceId" entry-name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext">
+            <hyperlink description="${invoiceId}" target="viewInvoice?invoiceId=${invoiceId}"/>
+        </field>
+        <field name="invoiceDate" title="${uiLabelMap.AccountingInvoiceDate}"><display also-hidden="false"/></field>
+        <field name="toPartyName" title="${uiLabelMap.FinancialsCustomerParty}">
+            <hyperlink description="${toPartyName}" target="customerStatement?partyId=${partyId}" also-hidden="false"/>
+        </field>
+        <field name="daysOutstanding" title="${uiLabelMap.FinancialsDaysOutstanding}" widget-area-style="tabletextright"><display also-hidden="false"/></field>
+        <field name="outstandingAmount" title="${uiLabelMap.FinancialsAmountOutstanding}" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}" also-hidden="false"/></field>
+        <field name="interestCharged" title="${uiLabelMap.FinancialsPreviousFinanceCharges}" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}" also-hidden="false"/></field>
+        <field name="amount" title="${uiLabelMap.FinancialsFinanceChargeForInvoice}"><text size="10"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><text size="30"/></field>
+        <field name="_rowSubmit" title="${uiLabelMap.CommonSelected}"><check/></field>
+        <field name="submitButton" title="${uiLabelMap.FinancialsAssessFinanceCharges}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+</forms>

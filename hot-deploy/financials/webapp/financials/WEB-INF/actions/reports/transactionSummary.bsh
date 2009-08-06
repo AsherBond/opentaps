@@ -1,0 +1,168 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import java.util.*;
+import java.sql.Timestamp;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.accounting.util.UtilAccounting;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+import java.text.ParseException;
+
+locale = UtilHttp.getLocale(request);
+timeZone = UtilHttp.getTimeZone(request);
+dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsTransactionSummary"));
+
+context{"tagTypes"} = UtilAccountingTags.getAccountingTagFiltersForOrganization(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, locale);
+
+// toggle some field options in flowReportOptions.ftl
+context.put("reportRequiresGlFiscalType", false);
+context.put("reportRequiresIsPosted", true);
+
+// get the from and thru date timestamps
+fromDateString = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
+thruDateString = UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
+
+// don't do anything if dates invalid
+if (fromDateString == null || thruDateString == null) return;
+fromDate = null;
+thruDate = null;
+try {
+  fromDate = UtilDateTime.stringToTimeStamp(fromDateString.trim(), dateTimeFormat, timeZone, locale);
+} catch (ParseException) {
+  UtilMessage.addFieldError(request, "fromDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", fromDateString) );
+}
+try {
+  thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString.trim(), dateTimeFormat, timeZone, locale), timeZone, locale);
+} catch (ParseException) {
+  UtilMessage.addFieldError(request, "thruDate", "FinancialsError_IllegalDateFieldFormat", UtilMisc.toMap("date", thruDateString) );
+}
+if (fromDate != null) context.put("fromDate", fromDate);
+if (thruDate != null) context.put("thruDate", thruDate);
+if (fromDate == null || thruDate == null) return;
+if (thruDate.before(fromDate)) return;
+
+glFiscalTypeId = parameters.get("glFiscalTypeId");
+if (glFiscalTypeId == null) glFiscalTypeId = "ACTUAL";
+context.put("glFiscalTypeId", glFiscalTypeId);
+
+isPosted = parameters.get("isPosted");
+if (isPosted == null) isPosted = "Y";
+context.put("isPosted", isPosted);
+
+commonConditionLists = UtilMisc.toList(
+            new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+            new EntityExpr("glFiscalTypeId", EntityOperator.EQUALS, glFiscalTypeId),
+            new EntityExpr("isPosted", EntityOperator.EQUALS, isPosted),
+            new EntityExpr("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+            new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate)
+            );
+commonConditionLists.addAll(UtilAccountingTags.buildTagConditions(organizationPartyId, UtilAccountingTags.FINANCIALS_REPORTS_TAG, delegator, request));
+
+commonConditions = new EntityConditionList(commonConditionLists, EntityOperator.AND);
+
+creditConditions = new EntityConditionList(UtilMisc.toList(commonConditions, new EntityExpr("debitCreditFlag", EntityOperator.EQUALS, "C")), EntityOperator.AND);
+debitConditions = new EntityConditionList(UtilMisc.toList(commonConditions, new EntityExpr("debitCreditFlag", EntityOperator.EQUALS, "D")), EntityOperator.AND);
+
+fieldsToSelect = UtilMisc.toList("glAccountId", "accountCode", "accountName", "glAccountClassId", "amount");
+orderBy = UtilMisc.toList("glAccountId");
+
+// find the debits and credits, summed up.  Note that with the introduction of accounting tags, there may still be multiple rows for each gl Account now.  
+credits = delegator.findByCondition("AcctgTransEntryAccountSum", creditConditions, fieldsToSelect, orderBy);
+debits = delegator.findByCondition("AcctgTransEntryAccountSum", debitConditions, fieldsToSelect, orderBy);
+
+// go through credits and build a report row keyed to glAccountId with the total credit amounts 
+reportMap = new TreeMap();
+for (iter = credits.iterator(); iter.hasNext(); ) {
+    credit = iter.next();
+    
+    // get the row for the GL account already in this Map, or create it if it's not there
+    row = reportMap.remove(credit.get("glAccountId")); 
+    if (row == null) {
+        row = UtilMisc.toMap("glAccountId", credit.get("glAccountId"), "accountCode", credit.get("accountCode"), "accountName", credit.get("accountName"));
+    }
+
+    // calculate the creditSum for this row, adding it to the existing creditSum for the GL account if it's there 
+    creditSum = null;
+    if (row.get("creditSum") == null) {
+        creditSum = credit.getBigDecimal("amount");
+    } else {
+       // credit.amount should never be null, but let's be careful
+        creditSum = ((BigDecimal) row.get("creditSum"));
+        if (credit.get("amount") != null) {
+            creditSum = creditSum.add(credit.getBigDecimal("amount"));
+        }
+    }
+
+    // skip this row if credit sum is null or zero  
+    if (creditSum == null) continue;
+    creditSum = creditSum.setScale(UtilFinancial.decimals, UtilFinancial.rounding);
+    if (creditSum.signum() == 0) continue;
+    row.put("creditSum", creditSum);
+
+    reportMap.put(credit.get("glAccountId"), row);
+}
+
+// go through debits and add the debit data to each row, or build new rows if no credits were reported for an account
+for (iter = debits.iterator(); iter.hasNext(); ) {
+    debit = iter.next();
+
+    // it's possible that there were no credits, so a row for the GL account does not exist from above.  If so, add it.
+    row = reportMap.remove(debit.get("glAccountId")); // note that row is removed and must be put back
+    if (row == null) {
+        row = UtilMisc.toMap("glAccountId", debit.get("glAccountId"), "accountCode", debit.get("accountCode"), "accountName", debit.get("accountName"));
+    }
+
+    // similar strategy to creditSum from above
+    debitSum = null;
+    if (row.get("debitSum") == null) {
+        debitSum = debit.getBigDecimal("amount");
+    } else {
+        debitSum = ((BigDecimal) row.get("debitSum"));
+        if (debit.get("amount") != null) {
+            debitSum = debitSum.add(debit.getBigDecimal("amount"));
+        }
+    }
+ 
+    if (debitSum == null) debitSum = BigDecimal.ZERO;
+    debitSum = debitSum.setScale(UtilFinancial.decimals, UtilFinancial.rounding);
+    row.put("debitSum", debitSum);
+
+    creditSum = row.get("creditSum");
+    if (creditSum == null) creditSum = BigDecimal.ZERO;
+
+    // if both credit and debit sums are ZERO, then continue to next row (this row is removed)
+    if (debitSum.signum() == 0 && creditSum.signum() == 0) {
+        continue;
+    }
+
+    reportMap.put(debit.get("glAccountId"), row);
+}
+
+// put the key-sorted values into the context as our report data
+context.put("report", reportMap.values());

@@ -1,0 +1,260 @@
+/* 
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+import javolution.util.FastList;
+import javolution.util.FastSet;
+
+import org.ofbiz.accounting.invoice.InvoiceWorker;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.base.entities.PaymentApplication;
+import org.opentaps.domain.organization.Organization;
+import org.opentaps.domain.billing.invoice.Invoice;
+import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.infrastructure.*;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+
+uiLabelMap = UtilMessage.getUiLabels(locale);
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+if (organizationPartyId == null) {
+    return;
+}
+context.put("organizationPartyId", organizationPartyId);
+
+// get the view preference from the parameter
+useGwtParam = UtilCommon.getParameter(request, "useGwt");
+// get it from the database
+useGwtPref = UtilCommon.getUserLoginViewPreference(request, "financials", "viewInvoice", "useGwt");
+if (useGwtParam != null) {
+    useGwt = "Y".equals(useGwtParam);
+    // persist the change if any
+    useGwtParam = useGwt ? "Y" : "N";
+    if (!useGwtParam.equals(useGwtPref)) {
+        UtilCommon.setUserLoginViewPreference(request, "financials", "viewInvoice", "useGwt", useGwtParam);
+    }
+} else if (useGwtPref != null) {
+    useGwt = "Y".equals(useGwtPref);
+} else {
+    // else default to true
+    useGwt = true;
+}
+context.put("useGwt", useGwt);
+
+// get the invoice from the domain
+invoiceId = context.get("invoiceId");
+dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+billingDomain = dl.loadDomainsDirectory().getBillingDomain();
+invoiceRepository = billingDomain.getInvoiceRepository();
+organizationRepository = dl.loadDomainsDirectory().getOrganizationDomain().getOrganizationRepository();
+
+Invoice invoice = null;
+try {
+    invoice = invoiceRepository.getInvoiceById(invoiceId);
+} catch (FoundationException e) {
+    // let the invoice == null check deal with this
+}
+if (invoice == null) {
+    context.put("decoratorLocation", "component://opentaps-common/widget/screens/common/CommonScreens.xml");
+    return;
+}
+context.put("invoice", invoice);
+
+// put to history
+invoiceType = invoice.getInvoiceType();
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("FinancialsNavHistoryInvoice", locale, UtilMisc.toMap("invoiceId", invoiceId, "invoiceTypeName", invoiceType.get("description", locale))), "viewInvoice", UtilMisc.toList("invoiceId"));
+
+// get the invoice items
+context.put("invoiceItems", invoice.getInvoiceItems());
+
+// get the application payments, we need to fetch the payment entity too
+paymentApplications = invoice.getPaymentApplications();
+payments = new FastList();
+creditPayments = new FastList();
+for (pa : paymentApplications) {
+    payment = billingDomain.getPaymentRepository().getPaymentById(pa.getPaymentId());
+    p = payment.toMap();
+    p.put("paymentApplicationId", pa.getPaymentApplicationId());
+    p.put("amountApplied", pa.getAmountApplied());
+    status = payment.getStatusItem();
+    p.put("statusDescription", status.get("description", locale));
+    if (invoice.isReturnInvoice() && payment.isCustomerRefund() && payment.isBillingAccountPayment()) {
+        // the billing account comes from the payment's other payment application
+        applications = payment.getRelated(PaymentApplication.class);
+        for (app : applications) {
+            if (app.getBillingAccountId() != null) {
+                p.put("billingAccountId", app.getBillingAccountId());
+                creditPayments.add(p);
+                break;
+            }
+        }
+    } else {
+        payments.add(p);
+    }
+}
+context.put("payments", payments);
+context.put("creditPayments", creditPayments);
+
+// these booleans group the invoices into tabs
+context.put("isReceipt", invoice.isReceivable());
+context.put("isDisbursement", invoice.isPayable());
+context.put("isPartner", invoice.isPartnerInvoice());
+
+// note Partner invoice are considered receivable invoice, so test for that first
+if (invoice.isPartnerInvoice()) {
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/partners/PartnerScreens.xml");
+} else if (invoice.isPayable()) {
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/payables/PayablesScreens.xml");
+} else if (invoice.isReceivable()) {
+    context.put("decoratorLocation", "component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml");
+}
+
+// get the accounting tags for the invoice
+if (invoice.isCommissionInvoice()) {
+    context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.COMMISSION_INVOICES_TAG, delegator));
+} else if (invoice.isSalesInvoice()) {
+    context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.SALES_INVOICES_TAG, delegator));
+} else if (invoice.isPurchaseInvoice()) {
+    context.put("tagTypes", UtilAccountingTags.getAccountingTagsForOrganization(organizationPartyId, UtilAccountingTags.PURCHASE_INVOICES_TAG, delegator));
+}
+
+context.put("billingPartyId", invoice.getTransactionPartyId());
+
+// the billing address, which can be either the payment or billing location
+invoiceContactMechId = null;
+conditions = UtilMisc.toList(
+        new EntityExpr("contactMechPurposeTypeId", EntityOperator.EQUALS, "BILLING_LOCATION"),
+        new EntityExpr("invoiceId", EntityOperator.EQUALS, invoice.getInvoiceId()));
+invoiceContactMech = EntityUtil.getFirst( delegator.findByAnd("InvoiceContactMech", conditions) );
+if (invoiceContactMech != null) {
+    invoiceContactMechId = invoiceContactMech.get("contactMechId");
+    invoiceAddress = delegator.findByPrimaryKey("PostalAddress", UtilMisc.toMap("contactMechId", invoiceContactMech.get("contactMechId")));
+} else {
+    // if the address is not in InvoiceContactMech, use the billing address of the party
+    invoiceAddress = UtilFinancial.getBillingAddress(invoice.getTransactionPartyId(), delegator);
+    if (invoiceAddress != null) {
+        invoiceContactMechId = invoiceAddress.get("contactMechId");
+    }
+}
+context.put("invoiceAddress", invoiceAddress);
+context.put("invoiceContactMechId", invoiceContactMechId);
+
+// update permissions
+hasUpdatePermission = false;
+hasAdjustmentPermission = false;
+if ((invoice.isReceivable() && security.hasEntityPermission("FINANCIALS", "_AR_INUPDT", userLogin)) || (invoice.isPayable() && security.hasEntityPermission("FINANCIALS", "_AP_INUPDT", userLogin))) {
+    hasUpdatePermission = invoice.isInProcess();
+    hasAdjustmentPermission = invoice.isAdjustable();
+}
+context.put("hasUpdatePermission", hasUpdatePermission);
+context.put("hasAdjustmentPermission", hasAdjustmentPermission);
+
+// create permission
+hasCreatePermission = security.hasEntityPermission("FINANCIALS", "_AP_INCRTE", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_INCRTE", userLogin);
+context.put("hasCreatePermission", hasCreatePermission);
+
+// writeoff permisssion
+hasWriteoffPermission = false;
+if ( (invoice.isReceivable() && (security.hasEntityPermission("FINANCIALS", "_AR_INWRTOF", userLogin)) ||
+     !invoice.isReceivable() && (security.hasEntityPermission("FINANCIALS", "_AP_INWRTOF", userLogin)))  &&
+     (invoice.isReady() || invoice.isPaid()) ) {
+   hasWriteoffPermission = true;
+}
+context.put("hasWriteoffPermission", hasWriteoffPermission);
+
+// update permission implies that the header and items are editable, so get some data for the forms
+if (hasUpdatePermission) {
+    glAccounts = delegator.findByAndCache("GlAccountOrganizationAndClass", UtilMisc.toMap("organizationPartyId", organizationPartyId), UtilMisc.toList("accountCode"));
+    context.put("glAccounts", glAccounts);
+    context.put("invoiceItemTypes", invoice.getApplicableInvoiceItemTypes());
+
+    // party's billing and payment locations
+    conditions = UtilMisc.toList(
+            new EntityConditionList( UtilMisc.toList(
+                    new EntityExpr("contactMechPurposeTypeId", EntityOperator.EQUALS, "BILLING_LOCATION"),
+                    new EntityExpr("contactMechPurposeTypeId", EntityOperator.EQUALS, "PAYMENT_LOCATION")
+                    ), EntityOperator.OR),
+            new EntityExpr("partyId", EntityOperator.EQUALS, invoice.getTransactionPartyId()),
+            EntityUtil.getFilterByDateExpr()
+            );
+    purposes = delegator.findByAnd("PartyContactMechPurpose", conditions);
+    addresses = EntityUtil.getRelated("PostalAddress", purposes);
+    context.put("addresses", addresses);
+
+    // available tax authorities
+    taxAuthorities = delegator.findAllCache("TaxAuthorityAndDetail", UtilMisc.toList("abbreviation", "groupName"));
+    context.put("taxAuthorities", taxAuthorities);
+}
+
+// Invoice terms and term types
+context.put("invoiceTerms", invoice.getInvoiceTerms());
+termTypes = organizationRepository.getValidTermTypes(invoice.getInvoiceTypeId());
+context.put("termTypes", termTypes);
+
+// Prepare string that contains list of related order ids
+orderItemBillings = invoice.getOrderItemBillings();
+orderIds = new FastSet();
+for (billing : orderItemBillings) {
+    orderIds.add(billing.getString("orderId"));
+}
+ordersList = null;
+for (id: orderIds) {
+    orderItems = delegator.findByAnd("OrderItem", UtilMisc.toMap("orderId", id));
+    if (orderItems == null) continue;
+    if (ordersList == null) {
+        ordersList = id;
+    } else {
+        ordersList += (", " + id);
+    }
+    if (orderItems != null && orderItems.size() > 0) {
+        orderCorrespondingPOs = EntityUtil.getFieldListFromEntityList(orderItems, "correspondingPoId", true);
+        if (orderCorrespondingPOs != null && orderCorrespondingPOs.size() > 0) {
+            ordersList += "(";
+            first = true;
+            for (poId: orderCorrespondingPOs) {
+                ordersList += first ? (uiLabelMap.get("OpentapsPONumber") + ":" + poId) : (", " + poId);
+                first = false;
+            }
+            ordersList += ")";
+        }
+    }
+}
+if (ordersList != null) {
+    context{"ordersList"} = ordersList;
+}
+
+// billing accounts of the from party for Accounts Payable invoices
+if (invoice.isPayable()) {
+  conditions = UtilMisc.toList(
+      new EntityExpr("partyId", EntityOperator.EQUALS, invoice.getPartyIdFrom()),
+      new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
+      EntityUtil.getFilterByDateExpr()
+      );
+  billingAccounts = delegator.findByAnd("BillingAccountAndRole", conditions, UtilMisc.toList("billingAccountId"));
+  context.put("billingAccounts", billingAccounts);
+}
+
+// invoice adjustment types
+if (invoice.isAdjustable()) {
+    Organization organization = organizationRepository.getOrganizationById(organizationPartyId);
+    types = invoiceRepository.getInvoiceAdjustmentTypes(organization, invoice);
+    context.put("invoiceAdjustmentTypes", types);
+}

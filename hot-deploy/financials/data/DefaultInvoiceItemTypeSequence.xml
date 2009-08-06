@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+* Copyright (c) 2008 Open Source Strategies, Inc.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the Honest Public License.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* Honest Public License for more details.
+*
+* You should have received a copy of the Honest Public License
+* along with this program; if not, write to Funambol,
+* 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+*
+-->
+
+<entity-engine-xml>
+    <!-- This allows you to configure the seqsuence of invoice items on the screens to edit invoices.
+    I have only changed a few sequence numbers, so the rest default to 999 and fall in whatever order. -->
+
+    <InvoiceItemType invoiceItemTypeId="COMM_INV_ADJ" defaultSequenceNum="2"/>
+    <InvoiceItemType invoiceItemTypeId="COMM_INV_ITEM" defaultSequenceNum="1"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_ADD_FEATURE_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_DISCOUNT_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_DPROD_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_FDPROD_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_FEE_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_FPROD_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_MAN_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_MISC_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_MKTG_PKG_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_PROD_FEATR_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_PROD_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_PROMOTION_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_REPLACE_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_SALES_TAX_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_SHIPPING_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_SPROD_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_SURCHARGE_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_TE_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_WARRANTY_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="CRT_WE_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="FEE" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INVOICE_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INVOICE_ITM_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_ADD_FEATURE" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_DISCOUNT_ADJ" defaultSequenceNum="3"/>
+    <InvoiceItemType invoiceItemTypeId="INV_DPROD_ITEM" defaultSequenceNum="2"/>
+    <InvoiceItemType invoiceItemTypeId="INV_FDPROD_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_FPROD_ITEM" defaultSequenceNum="1"/>
+    <InvoiceItemType invoiceItemTypeId="INV_INTRST_CHRG" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_LOST_ITEM_CLAIM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_MISC_CHARGE" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_PROD_FEATR_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_PROD_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_PROMOTION_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_RENT_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_SALES_TAX" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_SHIPPING_CHARGES" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_SPROD_ITEM" defaultSequenceNum="3"/>
+    <InvoiceItemType invoiceItemTypeId="INV_SURCHARGE_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_TE_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_WARRANTY_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_WE_ITEM" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="INV_XFROUT_RCVABL" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_ADD_FEATURE" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_BILL_FRM_COD" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_BILL_FRM_COD_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_BILL_FROM_CUST" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_DISCOUNT_ADJ" defaultSequenceNum="5"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_FEE" defaultSequenceNum="4"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_MISC_CHARGE" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_PROMOTION_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_REPLACE_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_SALES_TAX" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_SHIPPING_CHARGES" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_SURCHARGE_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="ITM_WARRANTY_ADJ" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="PART_INV_ADJ" defaultSequenceNum="2"/>
+    <InvoiceItemType invoiceItemTypeId="PART_INV_ITEM" defaultSequenceNum="1"/>
+    <InvoiceItemType invoiceItemTypeId="PINVOICE_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINVOICE_ITM_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_ADD_FEATURE" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_CARRIER_SHIP" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_DISCOUNT_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_DPROD_ITEM" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_FDPROD_ITEM" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_FPROD_ITEM" defaultSequenceNum="1"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_FXASTPRD_ITEM" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_INVPRD_ITEM" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_MFG_CONTRACT" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_MISC_CHARGE" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_PROD_FEATR_ITEM" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_PROD_ITEM" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_PROMOTION_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_SALES_TAX" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_SHIP_CHARGES" defaultSequenceNum="90"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_SPROD_ITEM" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_SUPLPRD_ITEM" defaultSequenceNum="2"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_SURCHARGE_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_TE_ITEM" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_WARRANTY_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_WE_ITEM" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PINV_XFRIN_PAYABLE" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_ADD_FEATURE" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_DISCOUNT_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_FEE" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_MISC_CHARGE" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_PROMOTION_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_REPLACE_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_SALES_TAX" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_SHIP_CHARGES" defaultSequenceNum="999"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_SURCHARGE_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="PITM_WARRANTY_ADJ" defaultSequenceNum="99"/>
+    <InvoiceItemType invoiceItemTypeId="P_FEE" defaultSequenceNum="99"/>
+
+
+</entity-engine-xml>

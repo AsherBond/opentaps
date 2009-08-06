@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+ *
+ * @author Si Chen (sichen@opensourcestrategies.com)
+ *
+-->
+
+<!-- A portion of this file comes from the Apache OFBIZ project -->
+
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Billing Account Convenience Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+    
+    <service name="createCustomerBillingAccount" engine="java" 
+            location="com.opensourcestrategies.financials.accounts.BillingAccountServices" invoke="createCustomerBillingAccount">
+        <description>
+            Will create a BillingAccount and a BillingAccountRole for the customerPartyId and the initial accountLimit.  
+            If accountLimit is null, then it will be created as zero.
+            BillingAccount is created in the currency of the organizationPartyId's PartyAcctgPreference.baseCurrencyUomId.
+            If the customer partyId does not already have a PartyRole of BILL_TO_CUSTOMER, then it will be created for the customer.
+            Does not have its own security checks but calls on createBillingAccount and createBillingAccountRole which check for security.
+        </description>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="customerPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="accountLimit" type="Double" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="fromDate" type="java.sql.Timestamp" mode="IN" optional="true"/>
+        <attribute name="thruDate" type="java.sql.Timestamp" mode="IN" optional="true"/>
+        
+        <attribute name="billingAccountId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="receiveBillingAccountPayment" engine="java" auth="true"
+            location="com.opensourcestrategies.financials.accounts.BillingAccountServices" invoke="receiveBillingAccountPayment">
+        <description>Receives a payment from a party to a product store's pay to party</description>
+        <attribute name="billingAccountId" type="String" mode="IN" optional="false"/>
+        <attribute name="paymentMethodTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="paymentTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="amount" type="Double" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="effectiveDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="paymentRefNum" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="captureBillingAccountPayments" engine="java"
+            location="com.opensourcestrategies.financials.accounts.BillingAccountServices" invoke="captureBillingAccountPayment" auth="true">
+        <description>Records a settlement or payment of an invoice by a billing account for the given captureAmount
+        Note that this is the ofbiz "deprecated" captureBillingAccountPayment service, but because its replacement captureBillingAccountPayments
+        broke billing account functionality as a real billing account, the original captureBillingAccountPayment service is brought back and
+        maintained here.  This name overrides the one defined in ofbiz accounting.</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="billingAccountId" type="String" mode="IN" optional="false"/>
+        <attribute name="captureAmount" type="Double" mode="INOUT" optional="false"/>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentId" type="String" mode="OUT" optional="false"/>
+        <attribute name="paymentGatewayResponseId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="calcBillingAccountBalance" engine="java"
+            location="com.opensourcestrategies.financials.accounts.BillingAccountServices" invoke="calcBillingAccountBalance">
+        <description>Calculate the balance of a Billing Account.  Note this also overrides the one in ofbiz accounting by pointing
+        to the methods in financials.  It basically causes the CheckOutHelper to respect our billing account balance calculations.</description>
+        <attribute name="billingAccountId" type="String" mode="IN" optional="false"/>
+        <attribute name="accountBalance" type="Double" mode="OUT" optional="false"/>
+        <attribute name="billingAccount" type="GenericValue" mode="OUT" optional="false"/>
+    </service>
+
+</services>

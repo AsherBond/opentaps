@@ -1,0 +1,1856 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <!-- Include requests for common opentaps features. -->
+    <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
+
+    <description>Financials Module Site Configuration File</description>
+    <owner>Open Source Strategies, Inc. (c) 2005-2006 </owner>
+    <errorpage>/error/error.jsp</errorpage>
+
+    <!-- event handlers -->
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+    <handler name="service" type="request" class="org.ofbiz.webapp.event.ServiceEventHandler"/>
+    <handler name="service-multi" type="request" class="org.ofbiz.webapp.event.ServiceMultiEventHandler"/>
+    <handler name="bsf" type="request" class="org.ofbiz.webapp.event.BsfEventHandler"/>
+
+    <!-- view handlers -->
+    <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
+    <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
+    <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>
+
+    <preprocessor>
+        <!-- Events to run on every request before security (chains exempt) -->
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkExternalLoginKey"/>
+    </preprocessor>
+    <postprocessor>
+        <!-- Events to run on every request after all other processing (chains exempt) -->
+    </postprocessor>
+
+
+    <!-- ================= -->
+    <!-- Security Mappings -->
+    <!-- ================= -->
+
+    <request-map uri="checkLogin" edit="false">
+        <description>Verify a user is logged in.</description>
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkLogin" />
+        <response name="success" type="view" value="myHomeMain" />
+        <response name="error" type="view" value="login" />
+    </request-map>
+    <request-map uri="login">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login" />
+        <response name="success" type="view" value="selectOrganizationForm"/>
+        <response name="error" type="view" value="login"/>
+    </request-map>
+    <request-map uri="logout">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="logout"/>
+        <response name="success" type="request" value="checkLogin"/>
+        <response name="error" type="view" value="myHomeMain"/>
+    </request-map>
+
+
+    <!-- ====================== -->
+    <!-- Basic Request Mappings -->
+    <!-- ====================== -->
+
+    <request-map uri="authview">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+
+    <request-map uri="setSessionLocale">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.common.CommonEvents" invoke="setSessionLocale"/>
+        <response name="success" type="request" value="myHomeMain"/>
+        <response name="error" type="request" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="main">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="selectOrganizationForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="selectOrganizationForm"/>
+    </request-map>
+    <request-map uri="setOrganization">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="setOrganization" />
+        <response name="selectOrganization" type="view" value="selectOrganizationForm"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+
+    <!-- ================== -->
+    <!-- Main Request Maps  -->
+    <!-- ================== -->
+
+    <!-- call this request when you have a donePage that you want to go to after finishing a service -->
+    <request-map uri="donePageRequestHelper">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="donePageRequestHelper"/>
+        <response name="myProfile" type="view" value="myProfile"/>
+        <!-- mostly for error redirects -->
+        <response name="myProfileEditContactMech" type="request" value="myProfileEditContactMech"/>
+        <!-- default -->
+        <response name="error" type="view" value="myHomeMain"/>
+        <response name="" type="request" value="myHomeMain"/>
+    </request-map>
+
+    <request-map uri="myHomeMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="receivablesMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="receivablesMain"/>
+    </request-map>
+    <request-map uri="payablesMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="payablesMain"/>
+    </request-map>
+    <request-map uri="employeesMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="employeesMain"/>
+    </request-map>
+    <request-map uri="partnersMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="partnersMain"/>
+    </request-map>
+    <request-map uri="transactionsMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="transactionsMain"/>
+    </request-map>
+    <request-map uri="reportsMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="reportsMain"/>
+    </request-map>
+    <request-map uri="configurationMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="configurationMain"/>
+    </request-map>
+ 
+
+    <!-- ======================== -->
+    <!-- Receivables Request Maps -->
+    <!-- ======================== -->
+
+    <request-map uri="receivables">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="receivablesMain"/>
+    </request-map>
+    <request-map uri="receivablesBalancesReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="receivablesBalancesReport"/>
+    </request-map>
+    <request-map uri="receivablesAgingReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="receivablesAgingReport"/>
+    </request-map>
+    <request-map uri="customerStatement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="customerStatement"/>
+    </request-map>
+    <request-map uri="CustomerStatement.pdf">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.accounts.AccountsEvents" invoke="customerStatementPDF" />
+        <response name="success" type="view" value="jrCustomerStatement"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="AverageDSOReportReceivables">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="AverageDSOReportReceivables"/>
+    </request-map>
+    <request-map uri="CreditCardReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="CreditCardReport"/>
+    </request-map>
+    <request-map uri="PaymentReceiptsDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="PaymentReceiptsDetail"/>
+    </request-map>
+    <request-map uri="assessFinanceChargesForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="assessFinanceChargesForm"/>
+    </request-map>
+    <request-map uri="assessFinanceCharges">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="financials.createInterestInvoice"/>
+        <response name="success" type="request-redirect" value="assessFinanceChargesForm"/>
+        <response name="error" type="view" value="assessFinanceChargesForm"/>
+    </request-map>
+
+    <request-map uri="updateBillingAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateBillingAccount"/>        
+        <response name="success" type="request-redirect" value="viewCustomerBillAcct"/>
+        <response name="error" type="view" value="viewCustomerBillAcct"/>
+    </request-map>
+    <request-map uri="viewCustomerBillAcct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewCustomerBillAcct"/>
+    </request-map>
+    <request-map uri="findCustomerBillAcct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findCustomerBillAcct"/>
+    </request-map>
+    <request-map uri="payInvoiceWithBillingAccountForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="payInvoiceWithBillingAccountForm"/>
+    </request-map>
+    <request-map uri="payInvoiceWithBillingAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="captureBillingAccountPayment"/>
+        <response name="success" type="request-redirect" value="viewCustomerBillAcct"/>
+        <response name="error" type="view" value="payInvoiceWithBillingAccountForm"/>
+    </request-map>
+
+    <request-map uri="customerVendorStatement.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="CustomerVendorStatementPDF"/>
+    </request-map>
+    <request-map uri="CODReceipt">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="CODReceipt"/>
+    </request-map>
+    <request-map uri="processCODReceipt">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="processCODReceipt"/>
+        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="fail" type="view" value="CODReceipt"/>
+        <response name="error" type="view" value="CODReceipt"/>
+    </request-map>
+    <request-map uri="manageCashDrawers">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="manageCashDrawers"/>
+    </request-map>
+    <request-map uri="getOrCreateCashDrawer">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.getOrCreateCashDrawer"/>
+        <response name="success" type="request-redirect" value="manageCashDrawers"/>
+        <response name="error" type="view" value="manageCashDrawers"/>
+    </request-map>
+    <request-map uri="closeCashDrawer">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.closeCashDrawer"/>
+        <response name="success" type="request-redirect" value="manageCashDrawers"/>
+        <response name="error" type="view" value="manageCashDrawers"/>
+    </request-map>
+
+    <!-- Lockbx Management Requests -->
+    <request-map uri="manageLockboxBatches">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="manageLockboxBatches"/>
+    </request-map>
+    <request-map uri="uploadLockboxFile">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="financials.uploadLockboxFile"/>
+        <response name="success" type="request-redirect" value="manageLockboxBatches"/>
+        <response name="error" type="view" value="manageLockboxBatches"/>
+    </request-map>
+    <request-map uri="viewLockboxBatch">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="viewLockboxBatch"/>
+    </request-map>
+    <request-map uri="lockboxBatchItemDetailAction">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="financials.lockboxBatchItemDetailAction"/>
+        <response name="success" type="request-redirect-filterparam" value="viewLockboxBatch" allowed-params="lockboxBatchId"/>
+        <response name="error" type="view" value="viewLockboxBatch"/>
+    </request-map>
+    <request-map uri="processLockboxBatch">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="financials.processLockboxBatch"/>
+        <response name="success" type="request-redirect-filterparam" value="viewLockboxBatch" allowed-params="lockboxBatchId"/>
+        <response name="error" type="request-redirect" value="viewLockboxBatch"/>
+    </request-map>
+    <request-map uri="findLockboxBatches">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="findLockboxBatches"/>
+    </request-map>
+    
+    <!-- Sales Agreements Requests -->
+    <request-map uri="findSalesAgreements">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findSalesAgreements"/>
+    </request-map>
+    <request-map uri="createSalesAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createSalesAgreement"/>
+    </request-map>
+    <request-map uri="viewSalesAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewSalesAgreement"/>
+    </request-map>
+    <request-map uri="changeSalesAgreementStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewSalesAgreement"/>
+    </request-map>
+    <request-map uri="editSalesAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editSalesAgreement"/>
+    </request-map>
+    <request-map uri="processCreateSalesAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAgreement"/>
+        <response name="success" type="request" value="initialSalesAgreementItemsAndTerms"/>
+        <response name="error" type="view" value="createSalesAgreement"/>
+    </request-map>
+    <request-map uri="processUpdateSalesAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="editSalesAgreement"/>
+    </request-map>
+    <request-map uri="initialSalesAgreementItemsAndTerms">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId" allowed-attributes="agreementId"/>
+        <response name="error" type="view" value="viewSalesAgreement"/>
+    </request-map>
+    <request-map uri="processCreateSalesAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewSalesAgreement"/>
+    </request-map>
+    <request-map uri="processRemoveSalesAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeAgreementItemAndTerms"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewSalesAgreement"/>
+    </request-map>
+    <request-map uri="processCreateSalesAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAgreementTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewSalesAgreement"/>
+    </request-map>
+    <request-map uri="processUpdateSalesAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreementTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewSalesAgreement"/>
+    </request-map>
+    <request-map uri="processRemoveSalesAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteAgreementTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewSalesAgreement"/>
+    </request-map>
+
+    <!-- ======================== -->
+    <!-- Payables Request Maps -->
+    <!-- ======================== -->
+
+    <request-map uri="payables">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="payablesMain"/>
+    </request-map>
+    <request-map uri="payablesBalancesReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="payablesBalancesReport"/>
+    </request-map>
+    <request-map uri="commissionBalancesReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="commissionBalancesReport"/>
+    </request-map>
+    <request-map uri="payablesAgingReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="payablesAgingReport"/>
+    </request-map>
+    <request-map uri="vendorStatement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="vendorStatement"/>
+    </request-map>
+    <request-map uri="commissionsStatement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="commissionsStatement"/>
+    </request-map>
+    <request-map uri="CommissionReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="CommissionReport"/>
+    </request-map>
+    <request-map uri="CommissionReport.pdf">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.CommissionReports" invoke="jasperCommissionReport"/>
+        <response name="success" type="view" value="jrCommissionReport"/>
+        <response name="error" type="view" value="CommissionReport"/>
+    </request-map>
+    <request-map uri="AverageDSOReportPayables">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="AverageDSOReportPayables"/>
+    </request-map>
+    <request-map uri="listChecksToPrint">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="listChecksToPrint"/>
+    </request-map>
+    <request-map uri="check.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="PrintChecks"/>
+    </request-map>
+    <request-map uri="quickSendPayment">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="quickSendPayment"/>
+        <response name="success" type="view" value="listChecksToPrint"/>
+        <response name="error" type="view" value="listChecksToPrint"/>
+    </request-map>
+    <request-map uri="checkRun">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="checkRun"/>
+    </request-map>
+    <request-map uri="processCheckRun">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="processCheckRun"/>
+        <response name="success" type="request-redirect" value="listChecksToPrint"/>
+        <response name="error" type="view" value="checkRun"/>
+    </request-map>
+    <request-map uri="confirmSentPaymentsForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="confirmSentPaymentsForm"/>
+    </request-map>
+    <request-map uri="confirmSentPayments">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="setPaymentStatus"/>
+        <response name="success" type="view" value="confirmSentPaymentsForm"/>
+        <response name="error" type="view" value="confirmSentPaymentsForm"/>
+    </request-map>
+
+    <!-- Commission Agreements Requests -->
+    <request-map uri="findCommissionAgreements">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findCommissionAgreements"/>
+    </request-map>
+    <request-map uri="createCommissionAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createCommissionAgreement"/>
+    </request-map>
+    <request-map uri="viewAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="editAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editAgreement"/>
+    </request-map>
+    <request-map uri="changeAgreementStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processCreateAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createAgreementAndRole"/>
+        <response name="success" type="request" value="initialAgreementItemsAndTerms"/>
+        <response name="error" type="view" value="createCommissionAgreement"/>
+    </request-map>
+    <request-map uri="processUpdateAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="editAgreement"/>
+    </request-map>
+    <request-map uri="initialAgreementItemsAndTerms">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId" allowed-attributes="agreementId"/>
+        <response name="error" type="view" value="createCommissionAgreement"/>
+    </request-map>
+    <request-map uri="processCreateAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processRemoveAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeAgreementItemAndTerms"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processCreateAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAgreementTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processUpdateAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreementTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+    <request-map uri="processRemoveAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteAgreementTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewAgreement"/>
+    </request-map>
+
+
+    <!-- ====================== -->
+    <!-- Employees Request Maps -->
+    <!-- ====================== -->
+
+    <request-map uri="findPaycheck">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findPaycheck"/> 
+    </request-map>
+    <request-map uri="createPaycheckForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPaycheckForm"/>
+    </request-map>
+    <request-map uri="createPaycheck">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createPaycheck"/>
+        <response name="success" type="request-redirect" value="viewPaycheck" />
+        <response name="error" type="view" value="createPaycheckForm" />
+    </request-map>
+    <request-map uri="viewPaycheck">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewPaycheck"/> 
+        <response name="error" type="view" value="viewPaycheck"/>        
+    </request-map>
+   <request-map uri="editPaycheckForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editPaycheckForm"/>
+    </request-map>    
+    <request-map uri="updatePaycheck">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.updatePaycheck"/>
+        <response name="success" type="request-redirect" value="viewPaycheck" />
+        <response name="error" type="view" value="viewPaycheck" />
+    </request-map>    
+    <request-map uri="viewPaycheck.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewPaycheckPDF"/> 
+    </request-map>
+    <request-map uri="setPaycheckStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setPaymentStatus"/>
+        <response name="success" type="request-redirect" value="viewPaycheck"/>
+        <response name="error" type="view" value="viewPaycheck"/>
+    </request-map>    
+    
+    <request-map uri="updatePaycheckItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.updatePaycheckItem"/>
+        <response name="success" type="request-redirect" value="viewPaycheck" />
+        <response name="error" type="view" value="viewPaycheck" />
+    </request-map>       
+    
+    <request-map uri="listPaychecksToPrint">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="listPaychecksToPrint"/>
+    </request-map>    
+
+    <request-map uri="getPaymentTypeDataJSON">
+        <event type="java" path="com.opensourcestrategies.financials.payroll.PayrollEvents" invoke="getPaymentTypeDataJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+
+    <!-- ====================== -->
+    <!-- Partners Tab Requests  -->
+    <!-- ====================== -->
+
+    <request-map uri="findPartnerInvoices">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findPartnerInvoices"/>
+    </request-map>
+    <request-map uri="createPartnerInvoiceForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPartnerInvoiceForm"/>
+    </request-map>
+    <request-map uri="createPartnerInvoice">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createInvoice"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId" allowed-attributes="invoiceId"/>
+        <response name="error" type="view" value="createPartnerInvoiceForm"/>
+    </request-map>
+    <request-map uri="invoicePartnersForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="invoicePartnersForm"/>
+    </request-map>
+    <request-map uri="createPartnerSalesInvoice">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.invoice.InvoiceEvents" invoke="createPartnerSalesInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="error" type="view" value="invoicePartnersForm"/>
+    </request-map>
+
+    <!-- Partners Agreements Requests -->
+    <request-map uri="findPartnerAgreements">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findPartnerAgreements"/>
+    </request-map>
+    <request-map uri="createPartnerAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPartnerAgreement"/>
+    </request-map>
+    <request-map uri="viewPartnerAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="editPartnerAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editPartnerAgreement"/>
+    </request-map>
+    <request-map uri="changePartnerAgreementStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processCreatePartnerAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAgreement"/>
+        <response name="success" type="request" value="initialPartnerAgreementItemsAndTerms"/>
+        <response name="error" type="view" value="createPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processUpdatePartnerAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="editPartnerAgreement"/>
+    </request-map>
+    <request-map uri="initialPartnerAgreementItemsAndTerms">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId" allowed-attributes="agreementId"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processCreatePartnerAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processRemovePartnerAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeAgreementItemAndTerms"/>
+        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processCreatePartnerAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAgreementTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processUpdatePartnerAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreementTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processRemovePartnerAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteAgreementTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+
+
+    <!-- ==================== -->
+    <!-- Reports Request Maps -->
+    <!-- ==================== -->
+
+    <request-map uri="reports">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="reportsMain"/>
+    </request-map>
+    <request-map uri="BalanceSheet">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="BalanceSheet"/>
+    </request-map>
+    <request-map uri="IncomeStatement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="IncomeStatement"/>
+    </request-map>
+    <request-map uri="PostedBalances">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="PostedBalances"/>
+    </request-map>
+    <request-map uri="TrialBalance">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="TrialBalance"/>
+    </request-map>
+    <request-map uri="TransactionSummary">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="TransactionSummary"/>
+    </request-map>
+    <request-map uri="ComparativeBalance">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ComparativeBalance"/>
+    </request-map>
+    <request-map uri="ComparativeIncomeStatement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ComparativeIncomeStatement"/>
+    </request-map>
+    <request-map uri="CashFlowStatement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="CashFlowStatement"/>
+    </request-map>
+    <request-map uri="ComparativeCashFlowStatement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ComparativeCashFlowStatement"/>
+    </request-map>
+    <request-map uri="EquityStatement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EquityStatement"/>
+    </request-map>
+    <request-map uri="TaxSummary">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="TaxSummary"/>
+    </request-map>
+    <request-map uri="TaxGlAccountDetails">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="TaxGlAccountDetails"/>
+    </request-map>
+    <request-map uri="AccountActivitiesDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="AccountActivitiesDetail"/>
+    </request-map>
+    <request-map uri="InventoryValuationReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="InventoryValuationReport"/>
+    </request-map>
+    <request-map uri="InventoryValueDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="InventoryValueDetail"/>
+    </request-map>
+    <request-map uri="SalesAndInventory">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="SalesAndInventory"/>
+    </request-map>
+    <request-map uri="GlActivityAnalysisSetup">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="GlActivityAnalysisSetup"/>
+    </request-map>
+    <request-map uri="GlActivityAnalysisPrepareData">
+        <security https="true" auth="true"/>
+        <event type="bsf" path="/reports/" invoke="jrGlActivityAnalysisDataPrepare.bsh"/>
+        <response name="detail" type="view" value="GlActivityReport"/>
+        <response name="summary" type="view" value="GlActivityReportCrosstab"/>
+        <response name="error" type="request-redirect" value="GlActivityAnalysisSetup"/>
+    </request-map>
+    <request-map uri="GlActivityAnalysisPrepareDataPrint">
+        <security https="true" auth="true"/>
+        <event type="bsf" path="/reports/" invoke="jrGlActivityAnalysisDataPrepare.bsh"/>
+        <response name="success" type="request" value="printGlActivityAnalysis"/>
+        <response name="error" type="request-redirect" value="GlActivityAnalysisSetup"/>
+    </request-map>
+    <request-map uri="printGlActivityAnalysis">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="printJRReport"/>
+        <response name="success" type="request-redirect" value="GlActivityAnalysisSetup"/>
+        <response name="error" type="request-redirect" value="GlActivityAnalysisSetup"/>
+    </request-map>
+    <request-map uri="GlActivityReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="GlActivityReport"/>
+    </request-map>
+    <request-map uri="GlActivityReportCrosstab">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="GlActivityReportCrosstab"/>
+    </request-map>
+    <request-map uri="SalesTaxReportSetup">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="SalesTaxReportSetup"/>
+    </request-map>
+    <request-map uri="SalesTaxReportPrepareData">
+        <security https="true" auth="true"/>
+        <event type="bsf" path="/reports/" invoke="jrSalesTaxReportDataPrepare.bsh"/>
+        <response name="success" type="view" value="SalesTaxReport"/>
+        <response name="error" type="request-redirect" value="SalesTaxReportSetup"/>
+    </request-map>
+    <request-map uri="SalesTaxReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="SalesTaxReport"/>
+    </request-map>
+    <request-map uri="SalesTaxReportPrepareDataPrint">
+        <security https="true" auth="true"/>
+        <event type="bsf" path="/reports/" invoke="jrSalesTaxReportDataPrepare.bsh"/>
+        <response name="success" type="request" value="printSalesTaxReport"/>
+        <response name="error" type="request-redirect" value="SalesTaxReportSetup"/>
+    </request-map>
+    <request-map uri="printSalesTaxReport">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="printJRReport"/>
+        <response name="success" type="request-redirect" value="SalesTaxReportSetup"/>
+        <response name="error" type="request-redirect" value="SalesTaxReportSetup"/>
+    </request-map>
+    <request-map uri="SalesTaxReportReloadDatamarts">
+        <security https="true" auth="true"/>
+        <event type="bsf" path="/reports/" invoke="jrSalesTaxReportReloadDatamarts.bsh"/>
+        <response name="success" type="view" value="SalesTaxReportSetup"/>
+        <response name="error" type="request-redirect" value="SalesTaxReportSetup"/>
+    </request-map>
+    <!-- balance report define  -->
+    <request-map uri="createEncumbranceSnapshotAndDetail">
+        <security https="true" auth="true"/>
+        <event type="bsf" path="/reports/" invoke="runEncumbranceSnapshot.bsh"/>
+        <response name="success" type="view" value="reportsMain"/>
+        <response name="error" type="view" value="reportsMain"/>
+    </request-map>
+    <request-map uri="BalanceReportSetup">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="BalanceReportSetup"/>
+    </request-map>
+   <request-map uri="BalanceReportPrepareData">
+        <security https="true" auth="true"/>
+        <event type="java" invoke="jasperBalanceReport" path="com.opensourcestrategies.financials.reports.BalanceReports"/>
+        <response name="success" type="view" value="jrBalanceReport"/>
+        <response name="error" type="request-redirect" value="BalanceReportSetup"/>
+    </request-map>
+    <request-map uri="SalesByStoreByDayReportSetup">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="SalesByStoreByDayReportSetup"/>
+    </request-map>
+    <request-map uri="SalesByStoreByDayReportPrepareData">
+        <security https="true" auth="true"/>
+        <event type="bsf" path="/reports/" invoke="jrSalesByStoreByDayReportDataPrepare.bsh"/>
+        <response name="success" type="view" value="SalesByStoreByDayReport"/>
+        <response name="error" type="request-redirect" value="SalesByStoreByDayReportSetup"/>
+    </request-map>
+    <request-map uri="SalesByStoreByDayReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="SalesByStoreByDayReport"/>
+    </request-map>
+    <request-map uri="SalesByStoreByDayReportPrepareDataPrint">
+        <security https="true" auth="true"/>
+        <event type="bsf" path="/reports/" invoke="jrSalesByStoreByDayReportDataPrepare.bsh"/>
+        <response name="success" type="request" value="printSalesByStoreByDayReport"/>
+        <response name="error" type="request-redirect" value="SalesByStoreByDayReportSetup"/>
+    </request-map>
+    <request-map uri="printSalesByStoreByDayReport">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="printJRReport"/>
+        <response name="success" type="request-redirect" value="SalesByStoreByDayReportSetup"/>
+        <response name="error" type="request-redirect" value="SalesByStoreByDayReportSetup"/>
+    </request-map>
+
+    <!-- trial balance report by JR  -->
+    <request-map uri="JRTrialBalance">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareTrialBalanceReport"/>
+        <response name="pdf" type="view" value="JRTrialBalancePDF"/>
+        <response name="xls" type="view" value="JRTrialBalanceXLS"/>
+        <response name="error" type="request-redirect-filterparam" value="TrialBalance" allowed-params="none"/>
+    </request-map>
+    <request-map uri="JRTrialBalancePDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRTrialBalancePDF"/>
+    </request-map>
+    <request-map uri="JRTrialBalanceXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRTrialBalanceXLS"/>
+    </request-map>
+
+    <!-- income statement report by JR  -->
+    <request-map uri="JRIncomeStatement">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareIncomeStatementReport"/>
+        <response name="pdf" type="view" value="JRIncomeStatementPDF"/>
+        <response name="xls" type="view" value="JRIncomeStatementXLS"/>
+        <response name="error" type="request-redirect-filterparam" value="IncomeStatement" allowed-params="none"/>
+    </request-map>
+    <request-map uri="JRIncomeStatementPDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRIncomeStatementPDF"/>
+    </request-map>
+    <request-map uri="JRIncomeStatementXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRIncomeStatementXLS"/>
+    </request-map>
+
+    <!-- comarative income statement report by JR  -->
+    <request-map uri="JRComparativeIncomeStatement">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeIncomeStatementReport"/>
+        <response name="pdf" type="view" value="JRComparativeIncomeStatementPDF"/>
+        <response name="xls" type="view" value="JRComparativeIncomeStatementXLS"/>
+        <response name="error" type="request-redirect-filterparam" value="ComparativeIncomeStatement" allowed-params="none"/>
+    </request-map>
+    <request-map uri="JRComparativeIncomeStatementPDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRIncomeStatementPDF"/>
+    </request-map>
+    <request-map uri="JRComparativeIncomeStatementXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRIncomeStatementXLS"/>
+    </request-map>
+
+    <!-- balance sheet report by JR  -->
+    <request-map uri="JRBalanceSheet">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareBalanceSheetReport"/>
+        <response name="pdf" type="view" value="JRBalanceSheetPDF"/>
+        <response name="xls" type="view" value="JRBalanceSheetXLS"/>
+        <response name="error" type="request-redirect-filterparam" value="BalanceSheet" allowed-params="none"/>
+    </request-map>
+    <request-map uri="JRBalanceSheetPDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRBalanceSheetPDF"/>
+    </request-map>
+    <request-map uri="JRBalanceSheetXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRBalanceSheetXLS"/>
+    </request-map>
+
+    <!-- comparative balance report by JR -->
+    <request-map uri="JRComparativeBalance">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeBalanceReport"/>
+        <response name="pdf" type="view" value="JRComparativeBalancePDF"/>
+        <response name="xls" type="view" value="JRComparativeBalanceXLS"/>
+        <response name="error" type="request-redirect-filterparam" value="ComparativeBalance" allowed-params="none"/>
+    </request-map>
+    <request-map uri="JRComparativeBalancePDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRIncomeStatementPDF"/>
+    </request-map>
+    <request-map uri="JRComparativeBalanceXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRIncomeStatementXLS"/>
+    </request-map>
+
+    <!-- cach flow statement report by JR  -->
+    <request-map uri="JRCashFlowStatement">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareCashFlowStatementReport"/>
+        <response name="pdf" type="view" value="JRCashFlowStatementPDF"/>
+        <response name="xls" type="view" value="JRCashFlowStatementXLS"/>
+        <response name="error" type="request-redirect-filterparam" value="CashFlowStatement" allowed-params="none"/>
+    </request-map>
+    <request-map uri="JRCashFlowStatementPDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRCashFlowStatementPDF"/>
+    </request-map>
+    <request-map uri="JRCashFlowStatementXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRCashFlowStatementXLS"/>
+    </request-map>
+
+    <!-- comparative cach flow statement report by JR  -->
+    <request-map uri="JRComparativeCashFlowStatement">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeCashFlowStatementReport"/>
+        <response name="pdf" type="view" value="JRComparativeCashFlowStatementPDF"/>
+        <response name="xls" type="view" value="JRComparativeCashFlowStatementXLS"/>
+        <response name="error" type="request-redirect-filterparam" value="ComparativeCashFlowStatement" allowed-params="none"/>
+    </request-map>
+    <request-map uri="JRComparativeCashFlowStatementPDF">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRComparativeCashFlowStatementPDF"/>
+    </request-map>
+    <request-map uri="JRComparativeCashFlowStatementXLS">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="JRComparativeCashFlowStatementXLS"/>
+    </request-map>
+
+    <!-- ========================= -->
+    <!-- Transactions Request Maps -->
+    <!-- ========================= -->
+
+    <request-map uri="transactions">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="transactionsMain"/>
+    </request-map>
+    <request-map uri="viewAcctgTrans">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewAcctgTrans"/>
+    </request-map>
+    <request-map uri="updateAcctgTransForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateAcctgTransForm"/>
+    </request-map>
+    <request-map uri="updateAcctgTrans">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAcctgTrans"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="error" type="view" value="viewAcctgTrans" />
+    </request-map>
+    <request-map uri="createAcctgTransForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createAcctgTransForm"/>
+    </request-map>
+    <request-map uri="createAcctgTrans">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAcctgTrans"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId" allowed-attributes="acctgTransId"/>
+        <response name="error" type="view" value="createAcctgTransForm" />
+    </request-map>
+    <request-map uri="viewAcctgTransEntry">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewAcctgTransEntry"/>
+    </request-map>
+    <request-map uri="updateAcctgTransEntryForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateAcctgTransEntryForm"/>
+    </request-map>
+    <!-- note: those two requests are the same but from a different view -->
+    <request-map uri="updateAcctgTransEntry">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAcctgTransEntryManual"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="error" type="view" value="viewAcctgTransEntry" />
+    </request-map>
+    <request-map uri="updateAcctgTransEntryInline">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="updateAcctgTransEntryManual"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="error" type="view" value="viewAcctgTrans" />
+    </request-map>
+    <request-map uri="createAcctgTransEntryForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createAcctgTransEntryForm"/>
+    </request-map>
+    <!-- note: those two requests are the same but from a different view -->
+    <request-map uri="createAcctgTransEntryInline">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAcctgTransEntryManual"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="error" type="view" value="viewAcctgTrans" />
+    </request-map>
+    <request-map uri="createAcctgTransEntry">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAcctgTransEntryManual"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="error" type="view" value="createAcctgTransEntryForm" />
+    </request-map>
+    <request-map uri="deleteAcctgTrans">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteAcctgTrans"/>
+        <response name="success" type="request-redirect-noparam" value="transactions" />
+        <response name="error" type="view" value="viewAcctgTrans"/>
+    </request-map>
+    <request-map uri="deleteAcctgTransEntry">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteAcctgTransEntry"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="error" type="view" value="viewAcctgTransEntry"/>
+    </request-map>
+    <request-map uri="ListUnpostedAcctgTrans">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ListUnpostedAcctgTrans"/>
+    </request-map>
+    <request-map uri="postAcctgTrans">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="postAcctgTrans"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans"/>
+        <response name="error" type="view" value="viewAcctgTrans"/>
+    </request-map>    
+    <request-map uri="closeAllTimePeriods">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="closeAllTimePeriods"/>
+        <response name="success" type="request-redirect" value="organizationTimePeriods"/>
+        <response name="error" type="view" value="organizationTimePeriods"/>
+    </request-map>   
+
+    <request-map uri="createQuickAcctgTransForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createQuickAcctgTransForm"/>
+    </request-map>
+    <!-- as opposed to settlePayments below -->
+    <request-map uri="settlePaymentsOptions"> 
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="settlePaymentsOptions"/>
+    </request-map>
+    <request-map uri="settleUndepositedPayments">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="settleUndepositedPayments"/>
+    </request-map>
+    <request-map uri="settleCreditCardPayments">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="settleCreditCardPayments"/>
+    </request-map>
+
+    <!-- this request chain will create the acctg trans and then post it automatically -->
+    <request-map uri="settlePayments">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createQuickAcctgTrans"/>
+        <response name="success" type="request" value="postSettledPayment" />
+        <response name="error" type="view" value="createQuickAcctgTransForm" />
+    </request-map>
+     <request-map uri="postSettledPayment">
+        <security https="true" auth="true" direct-request="false"/>  <!-- this request can only be called in the request chain and not from the browser -->
+        <event type="service" invoke="postAcctgTrans"/>
+        <response name="success" type="request-redirect" value="reconcileAfterSettlement" />
+        <response name="error" type="view" value="createQuickAcctgTransForm" />
+    </request-map> 
+    <request-map uri="reconcileAfterSettlement">
+        <security https="true" auth="true"/> <!-- for some odd reason direct-request="false" won't work here -->
+        <response name="success" type="view" value="reconcileAfterSettlement"/>
+    </request-map>      
+    
+    <request-map uri="createQuickAcctgTrans">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createQuickAcctgTrans"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-attributes="acctgTransId" allowed-params="acctgTransId"/>
+        <response name="error" type="view" value="createQuickAcctgTransForm" />
+    </request-map>
+    
+    <request-map uri="reverseAcctgTrans">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="reverseAcctgTrans"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans"/>
+        <response name="error" type="view" value="viewAcctgTrans"/>
+    </request-map>
+
+    <request-map uri="exchangeRates">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="exchangeRates"/>
+    </request-map>
+    
+    <request-map uri="updateExchangeRate">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateFXConversion"/>
+        <response name="success" type="request-redirect" value="exchangeRates"/>
+        <response name="error" type="view" value="exchangeRates"/>
+    </request-map>
+
+    <!-- reconciliation screens -->
+    <request-map uri="reconcileAccounts">
+        <description>A form for selecting the account to reconcile and the date</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="reconcileAccounts"/>
+    </request-map>
+    <request-map uri="reconcileAccountForm">
+        <description>Reconciliation form.</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="reconcileAccountForm"/>
+    </request-map>
+    <request-map uri="updateAcctgTransEntries">
+        <description>Update several acctg trans entries at once. Used by reconcile form.</description>
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="updateAcctgTransEntry"/>
+        <response name="success" type="view" value="ViewGlAccountBalance"/>
+        <response name="error" type="view" value="reconcileAccounts"/>
+    </request-map>
+    <request-map uri="updateAndRefreshReconciliation">
+        <description>Same as above, except takes us back to the reconcile page, so it is used to save and refresh during reconciliation</description>
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="updateAcctgTransEntry"/>
+        <response name="success" type="view" value="reconcileAccountForm"/>
+        <response name="error" type="view" value="reconcileAccountForm"/>
+    </request-map>
+    <request-map uri="reconcileGlAccount">
+        <description>Perform the reconciliation</description>
+        <security https="true" auth="true"/>
+        <event type="service" invoke="reconcileGlAccount"/>
+        <response name="success" type="view" value="ViewGlAccountBalance"/>
+        <response name="error" type="view" value="reconcileAccounts"/>
+    </request-map>
+    <request-map uri="viewGlAccountBalance">
+        <description>View the reconciled balance of a GL Account</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ViewGlAccountBalance"/>
+    </request-map>
+    <request-map uri="viewGlReconciliation">
+        <description>View a particular reconciliation</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ViewGlReconciliation"/>
+    </request-map>
+    <request-map uri="adjustInventoryValues">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="adjustInventoryValues"/>
+    </request-map>
+    <request-map uri="updateInventoryItemValues">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="updateInventoryItem"/>
+        <response name="success" type="request-redirect-noparam" value="adjustInventoryValues"/>
+        <response name="error" type="view" value="adjustInventoryValues"/>
+    </request-map>
+    
+    <!-- ========================== -->
+    <!-- Configuration Request Maps -->
+    <!-- ========================== -->
+
+    <request-map uri="configureOrganization">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="configureOrganization"/>
+    </request-map>
+
+    <request-map uri="createPartyAcctgPreference">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPartyAcctgPreference"/>
+        <response name="success" type="view" value="configureOrganization"/>
+        <response name="error" type="view" value="configureOrganization"/>
+    </request-map>
+
+   
+    <request-map uri="listGlAccounts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="listGlAccounts"/>
+    </request-map>
+    
+    <request-map uri="organizationTimePeriods">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="organizationTimePeriods"/>
+    </request-map>
+    
+    <request-map uri="listGlAccountTypes">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="listGlAccountTypes"/>
+    </request-map>
+    
+    <request-map uri="createGlAccountTypeDefault">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createGlAccountTypeDefault"/>
+        <response name="success" type="request-redirect" value="listGlAccountTypes"/>
+        <response name="error" type="view" value="listGlAccountTypes"/>
+    </request-map>
+    
+    <request-map uri="updateGlAccountTypeDefaultScreen">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateGlAccountTypeDefaultScreen"/>
+    </request-map>
+    
+    <request-map uri="updateGlAccountTypeDefault">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateGlAccountTypeDefault"/>
+        <response name="success" type="request-redirect" value="listGlAccountTypes"/>
+        <response name="error" type="view" value="updateGlAccountTypeDefaultScreen"/>
+    </request-map>
+    
+    <request-map uri="listPaymentMethods">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="listPaymentMethods"/>
+    </request-map>
+
+    <request-map uri="createPaymentMethod">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="financials.createPaymentMethod"/>
+        <response name="success" type="view" value="listPaymentMethods"/>
+    </request-map>
+
+    <request-map uri="updatePaymentMethod">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="financials.updatePaymentMethod"/>
+        <response name="success" type="request-redirect" value="listPaymentMethods"/>
+        <response name="error" type="view" value="listPaymentMethods"/>
+    </request-map>
+    
+    <request-map uri="removeGlAccountFromOrganization">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeGlAccountFromOrganization"/>
+        <response name="success" type="request-redirect" value="listGlAccounts"/>
+        <response name="error" type="view" value="listGlAccounts"/>
+    </request-map>
+    
+    <request-map uri="createCustomTimePeriod">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createCustomTimePeriod"/>
+        <response name="success" type="request-redirect" value="organizationTimePeriods"/>
+        <response name="error" type="view" value="organizationTimePeriods"/>
+    </request-map>
+    
+    <request-map uri="updateGlAccountScreen">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateGlAccountScreen"/>
+    </request-map>
+    
+    <request-map uri="updateGlAccount2">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateGlAccount2"/>
+        <response name="success" type="request-redirect" value="listGlAccounts"/>
+        <response name="error" type="view" value="updateGlAccountScreen"/>
+    </request-map>
+    
+    <request-map uri="addExistingGlAccountScreen">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addExistingGlAccountScreen"/>
+    </request-map>
+    
+    <request-map uri="addExistingGlAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="addGlAccountToOrganization"/>
+        <response name="success" type="request-redirect" value="listGlAccounts"/>
+        <response name="error" type="view" value="addExistingGlAccountScreen"/>
+    </request-map>
+    
+    <request-map uri="addNewGlAccountScreen">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addNewGlAccountScreen"/>
+    </request-map>
+    
+    <request-map uri="addNewGlAccount">
+        <security https="true" auth="true" /> 
+        <event type="service" invoke="addNewGlAccount" /> 
+        <response name="success" type="request-redirect" value="listGlAccounts" /> 
+        <response name="error" type="view" value="addNewGlAccountScreen" /> 
+    </request-map>
+    
+    <request-map uri="addSubAccountScreen">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addSubAccountScreen"/>
+    </request-map>
+    
+    <request-map uri="addSubAccount">
+        <security https="true" auth="true" /> 
+        <event type="service" invoke="addNewGlAccount" /> 
+        <response name="success" type="request-redirect" value="listGlAccounts" />  
+        <response name="error" type="view" value="addSubAccountScreen" /> 
+    </request-map>
+    <request-map uri="updateExistingGlAccount">
+        <security https="true" auth="true" /> 
+        <event type="service" invoke="updateExistingGlAccount" /> 
+        <response name="success" type="request-redirect" value="updateGlAccountScreen"/>
+        <response name="error" type="view" value="updateGlAccountScreen" /> 
+    </request-map>
+    
+
+    <request-map uri="updatePartyAcctgPreference">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="financials.updatePartyAcctgPreference"/>
+        <response name="success" type="request-redirect" value="listPaymentMethods"/>
+        <response name="error" type="view" value="listPaymentMethods"/>
+    </request-map>
+
+    
+    <request-map uri="accountingTags">
+        <description>View the configured accounting tags</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountingTags"/>
+    </request-map>
+    <request-map uri="updateAccountingTag">
+        <description>Update an accounting tag enumeration value</description>
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="updateAccountingTag"/>
+        <response name="success" type="request-redirect-noparam" value="accountingTags"/>
+        <response name="error" type="view" value="accountingTags"/>
+    </request-map>
+    <request-map uri="createAccountingTag">
+        <description>Create an accounting tag enumeration value</description>
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAccountingTag"/>
+        <response name="success" type="request-redirect-noparam" value="accountingTags"/>
+        <response name="error" type="view" value="accountingTags"/>
+    </request-map>
+    <request-map uri="deleteAccountingTag">
+        <description>Delete an accounting tag enumeration value, this will only works if the tag is not in use in any other entity</description>
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteAccountingTag"/>
+        <response name="success" type="request-redirect-noparam" value="accountingTags"/>
+        <response name="error" type="view" value="accountingTags"/>
+    </request-map>
+    
+    <request-map uri="accountingTagsUsage">
+        <description>View the configured accounting tags usage for the organization</description>
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountingTagsUsage"/>
+    </request-map>
+    <request-map uri="updateAccountingTagUsage">
+        <description>Update an accounting tag usage for the organization</description>
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAccountingTagUsage"/>
+        <response name="success" type="request-redirect-noparam" value="accountingTagsUsage"/>
+        <response name="error" type="view" value="accountingTagsUsage"/>
+    </request-map>
+
+    <request-map uri="updateAccountingTagPostingCheck">
+        <description>Update an accounting tag posting check configuration for the organization</description>
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAccountingTagPostingCheck"/>
+        <response name="success" type="request-redirect-noparam" value="accountingTagsUsage"/>
+        <response name="error" type="view" value="accountingTagsUsage"/>
+    </request-map>
+
+    
+    <!-- ===================== -->
+    <!-- Payments Request Maps -->
+    <!-- ===================== -->
+    
+    <request-map uri="viewPayment">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewPayment"/>
+        <response name="error" type="view" value="viewPayment"/>
+    </request-map>
+    <request-map uri="createPaymentApplication">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPaymentApplication" /> 
+        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />
+        <response name="error" type="view" value="viewPayment"/>
+    </request-map>
+    <request-map uri="updatePaymentApplication">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updatePaymentApplication" /> 
+        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />
+        <response name="error" type="view" value="viewPayment"/>
+    </request-map>
+    <request-map uri="removePaymentApplication">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removePaymentApplication"/>
+        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />
+        <response name="error" type="view" value="viewPayment"/>
+    </request-map>
+    <request-map uri="editPayment">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editPayment"/>
+        <response name="error" type="view" value="editPayment"/>
+    </request-map>
+
+    <request-map uri="createPayment">
+        <security https="true" auth="true" /> 
+        <event type="service" invoke="financials.createPayment" /> 
+        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />  
+        <response name="error" type="view" value="editPayment" /> 
+    </request-map>
+	
+    <request-map uri="updatePayment">
+        <security https="true" auth="true" /> 
+        <event type="service" invoke="financials.updatePayment" /> 
+        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />  
+        <response name="error" type="view" value="editPayment" /> 
+    </request-map>
+			
+    <request-map uri="setPaymentStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setPaymentStatus"/>
+        <response name="success" type="request-redirect" value="viewPayment"/>
+        <response name="error" type="view" value="viewPayment"/>
+    </request-map>
+
+    <request-map uri="findPayment">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findPayment"/>
+        <response name="error" type="view" value="findPayment"/>
+    </request-map>
+	
+    <request-map uri="voidPayment">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="voidPayment"/>
+        <response name="success" type="request-redirect" value="viewPayment"/>
+        <response name="error" type="view" value="viewPayment"/>
+    </request-map>
+
+    <!-- lookup requests -->
+    <request-map uri="LookupInvoice">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="LookupInvoice"/>
+    </request-map>
+    <request-map uri="LookupClients">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupClients"/>
+    </request-map>
+
+    <!-- ==================== -->
+    <!-- Invoice Request Maps -->
+    <!-- ==================== -->
+
+    <request-map uri="findSalesInvoices">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="findSalesInvoices"/>
+    </request-map>
+    <request-map uri="findPurchaseInvoices">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="findPurchaseInvoices"/>
+    </request-map>
+    <request-map uri="findCustomerReturnInvoices">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="findCustomerReturnInvoices"/>
+    </request-map>
+    <request-map uri="findCommissionInvoices">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="findCommissionInvoices"/>
+    </request-map>
+    <request-map uri="findFinanceCharges">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="findFinanceCharges"/>
+    </request-map>
+    <request-map uri="invoicePerformedOrderItems">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="opentaps.invoiceNonPhysicalOrderItems"/>
+        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="failure" type="view" value="receivablesMain"/>
+        <response name="error" type="view" value="receivablesMain"/>
+    </request-map>
+    <request-map uri="viewInvoice">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="createInvoiceForm">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="createInvoiceForm"/>
+    </request-map>
+    <request-map uri="createInvoice">
+        <description>Checks if an invoice can be created.  Uses forceComplete behavior.</description>
+        <security auth="true" https="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.invoice.InvoiceEvents" invoke="referenceNumberCheck"/>
+        <response name="success" type="request" value="createInvoiceActual"/>
+        <response name="error" type="view" value="createInvoiceForm"/>
+    </request-map>
+    <request-map uri="createInvoiceActual">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="createInvoice"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId" allowed-attributes="invoiceId"/>
+        <response name="error" type="view" value="createInvoiceForm"/>
+    </request-map>
+    <request-map uri="updateInvoice">
+        <description>Checks if an invoice can be updated.  Uses forceComplete behavior.</description>
+        <security auth="true" https="true"/>
+        <event type="java" path="com.opensourcestrategies.financials.invoice.InvoiceEvents" invoke="referenceNumberCheck"/>
+        <response name="success" type="request" value="updateInvoiceActual"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="updateInvoiceActual">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="updateInvoiceAndBillingAddress"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="createInvoiceItem">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="createInvoiceItem"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="updateInvoiceItemForm">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="updateInvoiceItemForm"/>
+    </request-map>
+    <request-map uri="updateInvoiceItem">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="updateInvoiceItem"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="updateInvoiceItemMulti">
+        <security auth="true" https="true"/>
+        <event type="service-multi" invoke="updateInvoiceItem"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="setInvoiceStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setInvoiceStatus"/>
+        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>   
+    <!-- special request to change invoice to READY and check if it shouldbe set to PAID as well -->
+    <request-map uri="setInvoiceReady">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setInvoiceReadyAndCheckIfPaid"/>
+        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="setInvoiceProcessingStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.setInvoiceProcessingStatus"/>
+        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="voidInvoice">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.voidInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="removeInvoiceItem">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="removeInvoiceItem"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="writeInvoiceEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.prepareInvoiceEmail"/>
+        <response name="success" type="request" value="writeEmail"/>
+    </request-map>
+    <request-map uri="viewEmailActivity">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewEmailActivity"/>
+    </request-map>               
+    <request-map uri="emailInvoice">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="emailInvoice"/>
+    </request-map>
+    <request-map uri="sendInvoiceEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="sendInvoiceEmail"/>
+        <response name="success" type="view" value="viewInvoice"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="invoice.pdf">
+        <security https="true" auth="true"/>
+        <event type="java" invoke="prepareInvoiceReport" path="org.opentaps.common.invoice.InvoiceEvents"/>
+        <response name="success" type="view" value="InvoiceJR"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="InvoiceJR">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="InvoiceJR"/>
+    </request-map>
+    <request-map uri="sampleInvoice.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="sampleInvoice.pdf"/>
+    </request-map>
+    <request-map uri="createInvoiceTerm">
+        <security auth="true" https="true"/>
+        <event type="service" path="" invoke="createInvoiceTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="updateInvoiceTerm">
+        <security auth="true" https="true"/>
+        <event type="service" path="" invoke="updateInvoiceTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="updateInvoiceTermMulti">
+        <security auth="true" https="true"/>
+        <event type="service-multi" path="" invoke="updateInvoiceTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="deleteInvoiceTerm">
+        <security auth="true" https="true"/>
+        <event type="service" path="" invoke="deleteInvoiceTerm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="invoiceRecurrence">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="invoiceRecurrence"/>
+    </request-map>
+    <request-map uri="updateInvoiceRecurrence">
+        <security auth="true" https="true"/>
+        <event type="service" path="" invoke="updateInvoiceRecurrence"/>
+        <response name="success" type="request-redirect" value="invoiceRecurrence"/>
+        <response name="error" type="view" value="invoiceRecurrence"/>
+    </request-map>
+     <request-map uri="convertToBillingAccount">
+        <security auth="true" https="true"/>
+        <event type="service" path="" invoke="convertToBillingAccount"/>
+        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+    <request-map uri="createInvoiceAdjustmentViewInvoice">
+        <security auth="true" https="true"/>
+        <event type="service" path="" invoke="createInvoiceAdjustment"/>
+        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="error" type="view" value="viewInvoice"/>
+    </request-map>
+
+    <!-- ================== -->
+    <!-- View Pref Requests -->
+    <!-- ================== -->
+
+    <!-- The idea behind these is to avoid the need for donePage to go back to where the pref was set -->
+    <request-map uri="setChartOfAccountsPref">
+        <security auth="true" https="true"/>
+        <event type="service" path="" invoke="opentaps.setViewPreference"/>
+        <response name="success" type="request-redirect" value="listGlAccounts"/>
+        <response name="error" type="view" value="listGlAccounts"/>
+    </request-map>
+
+
+    <!-- ============= -->
+    <!-- View Mappings -->
+    <!-- ============= -->
+
+    <view-map name="error" page="/error/error.jsp"/>
+    <view-map name="login" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#login"/>
+    <view-map name="selectOrganizationForm" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#selectOrganizationForm"/>
+
+    <!-- main screens for each section -->
+    <view-map name="myHomeMain" type="screen" page="component://financials/widget/financials/screens/myhome/MyHomeScreens.xml#myHome"/>
+    <view-map name="receivablesMain" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#receivables"/>
+    <view-map name="payablesMain" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payables"/>
+    <view-map name="employeesMain" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#employees"/>
+    <view-map name="partnersMain" type="screen" page="component://financials/widget/financials/screens/partners/PartnerScreens.xml#partners"/>
+    <view-map name="transactionsMain" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#transactions"/>
+    <view-map name="reportsMain" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#reports"/>
+    <view-map name="configurationMain" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#listGlAccounts"/>
+
+    <!-- Payment Common -->
+    <view-map name="editPayment" type="screen" page="component://financials/widget/financials/screens/common/PaymentScreens.xml#EditPayment"/>
+    <view-map name="viewPayment" type="screen" page="component://financials/widget/financials/screens/common/PaymentScreens.xml#ViewPayment"/>
+    <view-map name="findPayment" type="screen" page="component://financials/widget/financials/screens/common/PaymentScreens.xml#FindPayment"/>
+
+    <!-- receivables -->
+    <view-map name="receivablesBalancesReport" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#receivablesBalancesReport"/>
+    <view-map name="receivablesAgingReport" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#receivablesAgingReport"/>
+    <view-map name="customerStatement" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#customerStatement"/>
+    <view-map name="AverageDSOReportReceivables" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#AverageDSOReportReceivables"/>
+    <view-map name="CreditCardReport" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#CreditCardReport"/>
+    <view-map name="PaymentReceiptsDetail" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#PaymentReceiptsDetail"/>
+    <view-map name="assessFinanceChargesForm" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#assessFinanceChargesForm"/> 
+
+    <view-map name="viewCustomerBillAcct" type="screen" page="component://financials/widget/financials/screens/receivables/BillingAccountScreens.xml#viewCustomerBillAcct"/>
+    <view-map name="findCustomerBillAcct" type="screen" page="component://financials/widget/financials/screens/receivables/BillingAccountScreens.xml#findCustomerBillAcct"/>
+    <view-map name="payInvoiceWithBillingAccountForm" type="screen" page="component://financials/widget/financials/screens/receivables/BillingAccountScreens.xml#payInvoiceWithBillingAccountForm"/>
+
+    <view-map name="CustomerVendorStatementPDF" type="screenfop" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#CustomerVendorStatementPDF" content-type="application/pdf" encoding="none"/>
+    <view-map name="CODReceipt" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#CODReceipt"/>
+    <view-map name="manageCashDrawers" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#manageCashDrawers"/>
+
+    <view-map name="manageLockboxBatches" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#manageLockboxBatches"/>
+    <view-map name="viewLockboxBatch" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#viewLockboxBatch"/>
+    <view-map name="findLockboxBatches" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#findLockboxBatches"/>
+
+    <view-map name="findSalesAgreements" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#FindSalesAgreements"/>
+    <view-map name="createSalesAgreement" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#CreateSalesAgreement"/>
+    <view-map name="viewSalesAgreement" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#ViewSalesAgreement"/>
+    <view-map name="editSalesAgreement" type="screen" page="component://financials/widget/financials/screens/receivables/ReceivablesScreens.xml#EditSalesAgreement"/>
+
+    <!-- payables -->
+    <view-map name="payablesBalancesReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payablesBalancesReport"/>
+    <view-map name="commissionBalancesReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#commissionBalancesReport"/>
+    <view-map name="payablesAgingReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#payablesAgingReport"/>
+    <view-map name="vendorStatement" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#vendorStatement"/>
+    <view-map name="commissionsStatement" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#commissionsStatement"/>
+    <view-map name="AverageDSOReportPayables" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#AverageDSOReportPayables"/>
+    <view-map name="listChecksToPrint" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#listChecksToPrint"/>
+    <view-map name="PrintChecks" type="screenfop" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#PrintChecks" content-type="application/pdf"/>
+    <view-map name="checkRun" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#checkRun"/>
+    <view-map name="findCommissionAgreements" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#FindCommissionAgreements"/>
+    <view-map name="createCommissionAgreement" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#CreateCommissionAgreement"/>
+    <view-map name="viewAgreement" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#ViewAgreement"/>
+    <view-map name="editAgreement" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#EditAgreement"/>
+    <view-map name="confirmSentPaymentsForm" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#confirmSentPaymentsForm"/>
+    <view-map name="CommissionReport" type="screen" page="component://financials/widget/financials/screens/payables/PayablesScreens.xml#CommissionReport"/>
+
+    <!-- employees -->
+    <view-map name="findPaycheck" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#findPaycheck"/>
+    <view-map name="createPaycheckForm" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#createPaycheckForm"/>    
+    <view-map name="editPaycheckForm" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#editPaycheckForm"/>    
+    <view-map name="viewPaycheck" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#viewPaycheck"/>
+    <view-map name="viewPaycheckPDF" type="screenfop" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#viewPaycheckPDF" content-type="application/pdf"/>
+    <view-map name="listPaychecksToPrint" type="screen" page="component://financials/widget/financials/screens/employees/EmployeeScreens.xml#listPaychecksToPrint"/>
+
+    <!-- partners -->
+    <view-map name="createPartnerInvoiceForm" type="screen" page="component://financials/widget/financials/screens/partners/PartnerScreens.xml#createPartnerInvoiceForm"/>
+    <view-map name="invoicePartnersForm" type="screen" page="component://financials/widget/financials/screens/partners/PartnerScreens.xml#invoicePartnersForm"/>
+    <view-map name="findPartnerAgreements" type="screen" page="component://financials/widget/financials/screens/partners/PartnerScreens.xml#FindPartnerAgreements"/>
+    <view-map name="createPartnerAgreement" type="screen" page="component://financials/widget/financials/screens/partners/PartnerScreens.xml#CreatePartnerAgreement"/>
+    <view-map name="viewPartnerAgreement" type="screen" page="component://financials/widget/financials/screens/partners/PartnerScreens.xml#ViewPartnerAgreement"/>
+    <view-map name="editPartnerAgreement" type="screen" page="component://financials/widget/financials/screens/partners/PartnerScreens.xml#EditPartnerAgreement"/>
+
+    <!-- reports -->
+    <view-map name="reports" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#reports"/>
+    <view-map name="BalanceSheet" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#BalanceSheet"/>
+    <view-map name="IncomeStatement" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#IncomeStatement"/>
+    <view-map name="PostedBalances" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#PostedBalances"/>
+    <view-map name="TrialBalance" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#TrialBalance"/>
+    <view-map name="JRTrialBalancePDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/TrialBalance.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRTrialBalanceXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/TrialBalance.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="TransactionSummary" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#TransactionSummary"/>
+    <view-map name="ComparativeBalance" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#ComparativeBalance"/>
+    <view-map name="ComparativeIncomeStatement" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#ComparativeIncomeStatement"/>
+    <view-map name="CashFlowStatement" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#CashFlowStatement"/>
+    <view-map name="ComparativeCashFlowStatement" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#ComparativeCashFlowStatement"/>
+    <view-map name="EquityStatement" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#EquityStatement"/>
+    <view-map name="TaxSummary" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#TaxSummary"/>
+    <view-map name="TaxGlAccountDetails" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#TaxGlAccountDetails"/>
+    <view-map name="AccountActivitiesDetail" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#AccountActivitiesDetail"/>
+    <view-map name="InventoryValuationReport" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#InventoryValuationReport"/>
+    <view-map name="InventoryValueDetail" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#InventoryValueDetail"/>
+    <view-map name="SalesAndInventory" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#SalesAndInventory"/>
+    <view-map name="GlActivityReport" type="jasperreports" page="component://financials/webapp/financials/reports/repository/GLActivityReport.jrxml" content-type="application/pdf" encoding="none"/>
+    <view-map name="GlActivityReportCrosstab" type="jasperreports" page="component://financials/webapp/financials/reports/repository/GlActivityReportCrosstab.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>
+    <view-map name="GlActivityAnalysisSetup" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#GlActivityAnalysisSetup"/>
+    <view-map name="SalesTaxReport" type="jasperreports" page="component://financials/webapp/financials/reports/repository/DatamartSalesTaxReport.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="SalesTaxReportSetup" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#SalesTaxReportSetup"/>    
+    <view-map name="SalesByStoreByDayReport" type="jasperreports" page="component://financials/webapp/financials/reports/repository/SalesByStoreByDayReport.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="SalesByStoreByDayReportSetup" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#SalesByStoreByDayReportSetup"/>
+    <view-map name="jrCustomerStatement" type="jasperreports" page="component://financials/webapp/financials/reports/repository/CustomerStatement.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="jrCommissionReport" type="jasperreports" page="component://financials/webapp/financials/reports/repository/CommissionReport.jrxml" content-type="application/pdf" encoding="none"/>
+
+    <view-map name="jrBalanceReport" type="jasperreports" page="component://financials/webapp/financials/reports/repository/BalanceReport.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="BalanceReportSetup" type="screen" page="component://financials/widget/financials/screens/reports/ReportsScreens.xml#BalanceReportSetup"/>    
+    <view-map name="JRIncomeStatementPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/IncomeStatement.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRIncomeStatementXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/IncomeStatement.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRComparativeIncomeStatementPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeIncomeStatement.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRComparativeIncomeStatementXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeIncomeStatement.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="jrBalanceReport" type="jasperreports" page="component://financials/webapp/financials/reports/repository/BalanceReport.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRCashFlowStatementPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/CashFlowStatement.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRCashFlowStatementXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/CashFlowStatement.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRComparativeCashFlowStatementPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeCashFlowStatement.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRComparativeCashFlowStatementXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeCashFlowStatement.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRBalanceSheetPDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/BalanceSheet.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRBalanceSheetXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/BalanceSheet.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+    <view-map name="JRComparativeBalancePDF" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeBalance.jrxml" content-type="application/pdf" encoding="none"/>    
+    <view-map name="JRComparativeBalanceXLS" type="jasperreports" page="component://financials/webapp/financials/reports/repository/ComparativeBalance.jrxml" content-type="application/vnd.ms-excel" encoding="none"/>    
+
+    <!-- transactions -->
+    <view-map name="viewAcctgTrans" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTrans"/>
+    <view-map name="createAcctgTransForm" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#createAcctgTransForm"/>
+    <view-map name="updateAcctgTransForm" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#updateAcctgTransForm"/>
+    <view-map name="viewAcctgTransEntry" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#viewAcctgTransEntry"/>
+    <view-map name="createAcctgTransEntryForm" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#createAcctgTransEntryForm"/>
+    <view-map name="updateAcctgTransEntryForm" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#updateAcctgTransEntryForm"/>
+    <view-map name="ListUnpostedAcctgTrans" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#ListUnpostedAcctgTrans"/>
+    <view-map name="createQuickAcctgTransForm" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#createQuickAcctgTransForm"/>
+    <view-map name="settlePaymentsOptions" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#settlePaymentsOptions"/>
+    <view-map name="settleCreditCardPayments" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#settleCreditCardPayments"/>
+    <view-map name="settleUndepositedPayments" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#settleUndepositedPayments"/>
+    <view-map name="exchangeRates" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#exchangeRates"/>
+    <view-map name="invoiceRecurrence" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#invoiceRecurrence"/>
+    <view-map name="adjustInventoryValues" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#adjustInventoryValues"/>
+
+    <!-- reconciliations -->    
+    <view-map name="reconcileAccounts" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#reconcileAccounts"/>
+    <view-map name="reconcileAccountForm" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#reconcileAccountForm"/>
+    <view-map name="reconcileAfterSettlement" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#reconcileAfterSettlement"/>
+    <view-map name="ViewGlAccountBalance" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#ViewGlAccountBalance"/>
+    <view-map name="ViewGlReconciliation" type="screen" page="component://financials/widget/financials/screens/transactions/TransactionsScreens.xml#ViewGlReconciliation"/>
+
+    <!-- configuration -->
+    <view-map name="configureOrganization" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#configureOrganization"/>
+    <view-map name="accountingTags" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#accountingTags"/>
+    <view-map name="accountingTagsUsage" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#accountingTagsUsage"/>
+    <view-map name="organizationTimePeriods" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#organizationTimePeriods"/>
+    <view-map name="listGlAccounts" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#listGlAccounts"/>
+    <view-map name="listGlAccountTypes" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#listGlAccountTypes"/>
+    <view-map name="updateGlAccountTypeDefaultScreen" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#updateGlAccountTypeDefault"/>
+    <view-map name="listPaymentMethods" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#listPaymentMethods"/>
+    <view-map name="updateGlAccountScreen" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#updateGlAccount"/>
+    <view-map name="addExistingGlAccountScreen" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#addExistingGlAccount"/>
+    <view-map name="addNewGlAccountScreen" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#addNewGlAccount"/>    
+    <view-map name="addSubAccountScreen" type="screen" page="component://financials/widget/financials/screens/configuration/ConfigurationScreens.xml#addSubAccount"/>    
+
+    <!-- lookups -->
+    <view-map name="LookupInvoice" type="screen" page="component://financials/widget/financials/screens/common/LookupScreens.xml#LookupInvoice"/>
+    <view-map name="LookupClients" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupClients"/>
+
+    <!-- invoices -->
+    <view-map name="findSalesInvoices" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findSalesInvoices"/>
+    <view-map name="findPurchaseInvoices" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findPurchaseInvoices"/>
+    <view-map name="findCustomerReturnInvoices" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findCustomerReturnInvoices"/>
+    <view-map name="findCommissionInvoices" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findCommissionInvoices"/>
+    <view-map name="findFinanceCharges" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findFinanceCharges"/>
+    <view-map name="findPartnerInvoices" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#findPartnerInvoices"/>
+    <view-map name="viewInvoice" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#viewInvoice"/>
+    <view-map name="createInvoiceForm" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#createInvoiceForm"/>
+    <view-map name="updateInvoiceItemForm" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#updateInvoiceItemForm"/>
+    <view-map name="emailInvoice" type="screen" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#emailInvoice"/>
+    <view-map name="InvoiceJR" type="jasperreports" page="component://financials/webapp/financials/reports/repository/Invoice.jrxml" content-type="application/pdf" encoding="none"/>
+    <view-map name="sampleInvoice.pdf" type="screenfop" page="component://financials/widget/financials/screens/invoices/InvoiceScreens.xml#SampleInvoicePDF" content-type="application/pdf" encoding="none"/>
+</site-conf>

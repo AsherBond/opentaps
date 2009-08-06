@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!-- This file contains configuration for the GL accounts they use -->
+
+<entity-engine-xml>
+    <!-- defines Gl Accounts associated with the organization, in this case Company.  Basically, all the GL accounts in the DemoGeneralChartOfAccounts.xml are
+         here, EXCEPT for the ones which relate to partnership capital, so Company is set up as a corporation. -->
+    <GlAccountOrganization glAccountId="100000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="100000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="110000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111500" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111600" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111700" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111800" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111900" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="112000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="120000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="121000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="121100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="121200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="121800" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="121900" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="122000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="122100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="122200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="122300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="122400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="122500" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="122900" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="123000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="123100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="124000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="124100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="124200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="124300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="125000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="129000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="140000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="141000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="142000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="149000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="150000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="151000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="151100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="151200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="151300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="151900" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="152000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="152100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="152200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="152300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="152900" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="153000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="153001" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="154000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="160000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="161000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="162000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="163000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="164000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="165000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="170000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="171000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="172000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="173000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="174000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="180000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="181000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="182000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="183000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="184000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="185000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="186000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="187000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="188000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="190000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="191000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="191100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="191200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="191300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="191800" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="191900" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="192000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="199000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="200000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="210000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="211000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="212000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="213000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="213100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="213200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="213300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="213400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="214000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="215000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="220000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="221000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="221100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="221200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="221300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222500" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222600" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222700" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222800" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222900" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="223000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="223100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="223200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="223300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="223400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="223500" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+
+    <GlAccountOrganization glAccountId="224000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+
+    <GlAccountOrganization glAccountId="224100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="224106" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="224140" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="224151" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="224153" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    
+    <GlAccountOrganization glAccountId="224200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="224209" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    
+    <GlAccountOrganization glAccountId="225000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="226000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="229000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="230000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="231000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="239000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="240000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="241000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="242000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="243000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="248000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="300000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="310000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="311000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="330000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="331000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="332000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="333000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="334000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="335000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="336000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="340000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="341000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="342000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="342100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="342200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="342300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="344000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="400000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="401000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="408000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="409000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="410000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="420000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="421000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="422000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="423000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="424000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="500000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="501000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="502000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="503000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="510000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="510200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="511000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="511100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="511200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="512000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="512050" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="512100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="512200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="513000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="513100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="513200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="514000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="514100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="515000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="515100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="515200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="516000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="516100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="517100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="517200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="517300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="517400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="518100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="518200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="519000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="519100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="519200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="600000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="600100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="600110" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="600120" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="600130" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="600140" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="600190" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="601000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="601100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="601200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="601300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="601400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="602000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="602100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="602200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="603000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="603100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="603200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="604000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="604100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="604200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="604500" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="604600" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="604700" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="605000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="605100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="605200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="605800" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="605900" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="606000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="607000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="607100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="607200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="607400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="607500" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="607600" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="607700" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="607900" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="608000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="609000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="609100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="609200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="609500" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="610000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="611000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="611100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="611200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="611300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="612000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="612100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="612200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="612300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="612400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="613000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="613100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="613200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="613300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="620000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="621000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="621100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="621200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="621300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="621400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="621500" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="622000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="622100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="622200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="623000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="623100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="623200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="624000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="624100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="624200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="624300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="624400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="625000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="626000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="626100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="626200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="626300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="626400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="630000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="631000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="631100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="631200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="631300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="631400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="632000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="640000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="641000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="642000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="643000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="649000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="650000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="651000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="652000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="653000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="654000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="659000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="660000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="661000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="662000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="663000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="669000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="670000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="671000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="672000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="673000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="674000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="675000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="675100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="675200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="675300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="675400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="680000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="681000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="682000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="683000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="690000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="691000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="692000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="693000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="694000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="700000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="701000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="701100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="701200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="701300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="701400" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="702000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="709000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="710000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="711000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="712000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="712100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="712200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="712300" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="720000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="721000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="730000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="731000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="731100" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="731200" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="739000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="740000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="741000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="742000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="743000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="744000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="750000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="751000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="752000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="753000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="754000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="760000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="761000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="762000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="763000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="770000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="771000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="772000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="773000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="774000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="779000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="780000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="781000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="782000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="783000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="784000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="785000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="786000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="787000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="788000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="789000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="790000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="800000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="801000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="802000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="803000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="804000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="805000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="806000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="810000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="811000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="812000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="813000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="814000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="819000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="820000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="821000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="822000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="823000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="824000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="829000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="890000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="900000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="901000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="902000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="903000" organizationPartyId="Company" fromDate="2000-01-01 00:00:00"/> 
+
+    <!-- Some special organization-specific GL Accounts assignments.  Otherwise, the defaults in InvoiceItemType apply.
+    NOTE: You can also use account 731200 here.  -->
+    <InvoiceItemTypeGlAccount invoiceItemTypeId="INV_SHIPPING_CHARGES" organizationPartyId="Company" glAccountId="408000"/> <!-- Postage and Handling Fee Received -->
+    <InvoiceItemTypeGlAccount invoiceItemTypeId="ITM_SHIPPING_CHARGES" organizationPartyId="Company" glAccountId="408000"/>
+    
+    <!-- Default GL accounts for each type of GL account (Sales, COGS, AR, AP, etc.) -->
+    <GlAccountTypeDefault glAccountTypeId="ACCOUNTS_RECEIVABLE" organizationPartyId="Company" glAccountId="120000" />
+    <GlAccountTypeDefault glAccountTypeId="ACCOUNTS_PAYABLE" organizationPartyId="Company" glAccountId="210000" />
+    <GlAccountTypeDefault glAccountTypeId="BANK_STLMNT_ACCOUNT" organizationPartyId="Company" glAccountId="111100" />
+    <GlAccountTypeDefault glAccountTypeId="UNDEPOSITED_RECEIPTS" organizationPartyId="Company" glAccountId="112000" />
+    <GlAccountTypeDefault glAccountTypeId="CURRENT_ASSET" organizationPartyId="Company" glAccountId="150000" />
+    <GlAccountTypeDefault glAccountTypeId="PARENT_SUB_BAL_ACCT" organizationPartyId="Company" glAccountId="153001" />
+    <GlAccountTypeDefault glAccountTypeId="OTHER_ASSET" organizationPartyId="Company" glAccountId="190000" />
+    <GlAccountTypeDefault glAccountTypeId="SALES_ACCOUNT" organizationPartyId="Company" glAccountId="400000" />
+    <GlAccountTypeDefault glAccountTypeId="SALES_RETURNS" organizationPartyId="Company" glAccountId="420000" />
+    <GlAccountTypeDefault glAccountTypeId="DISCOUNTS_ACCOUNT" organizationPartyId="Company" glAccountId="410000" />
+    <GlAccountTypeDefault glAccountTypeId="COGS_ACCOUNT" organizationPartyId="Company" glAccountId="500000" />
+    <GlAccountTypeDefault glAccountTypeId="INV_CHANGE_ACCOUNT" organizationPartyId="Company" glAccountId="519000" />
+    <GlAccountTypeDefault glAccountTypeId="OPERATING_EXPENSE" organizationPartyId="Company" glAccountId="600000" />
+    <GlAccountTypeDefault glAccountTypeId="COMMISSION_EXPENSE" organizationPartyId="Company" glAccountId="601300" />
+    <GlAccountTypeDefault glAccountTypeId="OTHER_EXPENSE" organizationPartyId="Company" glAccountId="820000" />
+    <GlAccountTypeDefault glAccountTypeId="OWNERS_EQUITY" organizationPartyId="Company" glAccountId="300000" />
+    <GlAccountTypeDefault glAccountTypeId="TAX_ACCOUNT" organizationPartyId="Company" glAccountId="900000" />
+    <GlAccountTypeDefault glAccountTypeId="CUSTOMER_DEPOSIT" organizationPartyId="Company" glAccountId="213300" />  <!-- Special Order Deposits -->
+    <GlAccountTypeDefault glAccountTypeId="CUSTOMER_CREDIT" organizationPartyId="Company" glAccountId="213000" />  <!-- Customer Credits -->
+    <GlAccountTypeDefault glAccountTypeId="PREPAID_EXPENSES" organizationPartyId="Company" glAccountId="150000" />  
+    <GlAccountTypeDefault glAccountTypeId="RETAINED_EARNINGS" organizationPartyId="Company" glAccountId="336000" /> <!-- Retained Earnings -->
+    <GlAccountTypeDefault glAccountTypeId="PROFIT_LOSS_ACCOUNT" organizationPartyId="Company" glAccountId="890000" /> <!-- Special net income account for time period closings -->
+    <GlAccountTypeDefault glAccountTypeId="INVENTORY_ACCOUNT" organizationPartyId="Company" glAccountId="140000" /> <!-- INVENTORY -->
+    <GlAccountTypeDefault glAccountTypeId="RAWMAT_INVENTORY" organizationPartyId="Company" glAccountId="141000" /> <!-- RAW MATERIALS INVENTORY -->
+    <GlAccountTypeDefault glAccountTypeId="WIP_INVENTORY" organizationPartyId="Company" glAccountId="142000" /> <!-- WORK IN PROGRESS INVENTORY -->
+    <!-- Note: You can just point the average cost adjustment to the same inventory account.  It will still work.
+        A separate account, however, will allow you to track lot level versus average cost differences over time -->
+    <GlAccountTypeDefault glAccountTypeId="INV_ADJ_AVG_COST" organizationPartyId="Company" glAccountId="149000" /> <!-- INVENTORY -->
+    <GlAccountTypeDefault glAccountTypeId="UNINVOICED_SHIP_RCPT" organizationPartyId="Company" glAccountId="214000" /> <!-- Uninvoiced Item Receipts -->
+    <GlAccountTypeDefault glAccountTypeId="PURCHASE_PRICE_VAR" organizationPartyId="Company" glAccountId="516000" /> <!-- Purchase Price Variance -->
+    <!-- This could be just set to the same as COGS account, but for development it's actually nice to see the effects of average cost -->
+    <GlAccountTypeDefault glAccountTypeId="COGS_ADJ_AVG_COST" organizationPartyId="Company" glAccountId="503000" />
+    <!-- Payables (Receivables) accounts for inventory transferred in (out) -->
+    <GlAccountTypeDefault glAccountTypeId="INVENTORY_XFER_IN" organizationPartyId="Company" glAccountId="215000" />
+    <GlAccountTypeDefault glAccountTypeId="INVENTORY_XFER_OUT" organizationPartyId="Company" glAccountId="125000" />
+    <!-- Similarly, FX Gain/Loss can go to specific accounts or both go to 518000 -->
+    <GlAccountTypeDefault glAccountTypeId="FX_GAIN_ACCOUNT" organizationPartyId="Company" glAccountId="518100" />
+    <GlAccountTypeDefault glAccountTypeId="FX_LOSS_ACCOUNT" organizationPartyId="Company" glAccountId="518200" />
+    <!-- These configure default accounts for interest receivables and income -->
+    <GlAccountTypeDefault glAccountTypeId="INTRSTINC_RECEIVABLE" organizationPartyId="Company" glAccountId="121800" />
+    <GlAccountTypeDefault glAccountTypeId="INTEREST_INCOME" organizationPartyId="Company" glAccountId="810000" />
+
+    <!-- sales commissions due account -->
+    <GlAccountTypeDefault glAccountTypeId="COMMISSIONS_PAYABLE" organizationPartyId="Company" glAccountId="221100"/>
+    
+    <!-- accounts for manufacturing related expenses -->
+    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE" organizationPartyId="Company" glAccountId="600100"/>
+    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_INTERNAL" organizationPartyId="Company" glAccountId="600110"/>
+    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_CONTRACT" organizationPartyId="Company" glAccountId="600120"/>
+    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_SCRAP" organizationPartyId="Company" glAccountId="600130"/>
+    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_REVPRUN" organizationPartyId="Company" glAccountId="600140"/>
+    <GlAccountTypeDefault glAccountTypeId="MFG_EXPENSE_VARIANCE" organizationPartyId="Company" glAccountId="600190"/>
+
+    <!-- inventory write down -->
+    <GlAccountTypeDefault glAccountTypeId="INVENTORY_VAL_ADJ" organizationPartyId="Company" glAccountId="515000"/>
+
+    <!-- configure the lockbox gl account -->
+    <GlAccountTypeDefault glAccountTypeId="LOCKBOX_CASH_DISC" organizationPartyId="Company" glAccountId="511000"/>
+
+    <!-- TODO: We should probably have accounts for SALES TAX LIABILITY, etc. -->
+
+    <!-- TODO: Figure out which GL accounts these should map to -->
+    <!--
+    <GlAccountTypeDefault glAccountTypeId="BALANCE_ACCOUNT" organizationPartyId="Company" glAccountId="" />
+    <GlAccountTypeDefault glAccountTypeId="FIXED_ASSET" organizationPartyId="Company" glAccountId="" />
+    <GlAccountTypeDefault glAccountTypeId="CREDIT_CARD" organizationPartyId="Company" glAccountId="" />
+    <GlAccountTypeDefault glAccountTypeId="CURRENT_LIABILITY" organizationPartyId="Company" glAccountId="" />
+    <GlAccountTypeDefault glAccountTypeId="LONG_TERM_LIABILITY" organizationPartyId="Company" glAccountId="" />
+    <GlAccountTypeDefault glAccountTypeId="CUSTOMER_ACCOUNT" organizationPartyId="Company" glAccountId="" />
+    <GlAccountTypeDefault glAccountTypeId="SUPPLIER_ACCOUNT" organizationPartyId="Company" glAccountId="" />
+    <GlAccountTypeDefault glAccountTypeId="PRODUCT_ACCOUNT" organizationPartyId="Company" glAccountId="" />
+    <GlAccountTypeDefault glAccountTypeId="PURCHASE_ACCOUNT" organizationPartyId="Company" glAccountId="" />
+    -->
+    
+    <!-- configuration data used to map various payment types to their gl account types (above) and hence to their gl accounts -->
+    <PaymentGlAccountTypeMap paymentTypeId="CUSTOMER_REFUND" organizationPartyId="Company" glAccountTypeId="CUSTOMER_CREDIT"/>
+    <PaymentGlAccountTypeMap paymentTypeId="CUSTOMER_PAYMENT" organizationPartyId="Company" glAccountTypeId="ACCOUNTS_RECEIVABLE"/>
+    <PaymentGlAccountTypeMap paymentTypeId="CUSTOMER_DEPOSIT" organizationPartyId="Company" glAccountTypeId="CUSTOMER_DEPOSIT"/>
+    <PaymentGlAccountTypeMap paymentTypeId="VENDOR_PAYMENT" organizationPartyId="Company" glAccountTypeId="ACCOUNTS_PAYABLE"/>
+    <PaymentGlAccountTypeMap paymentTypeId="VENDOR_PREPAY" organizationPartyId="Company" glAccountTypeId="PREPAID_EXPENSES"/>
+    <PaymentGlAccountTypeMap paymentTypeId="COMMISSION_PAYMENT" organizationPartyId="Company" glAccountTypeId="COMMISSIONS_PAYABLE"/>
+    <PaymentGlAccountTypeMap paymentTypeId="INTEREST_RECEIPT" organizationPartyId="Company" glAccountTypeId="INTRSTINC_RECEIVABLE"/>
+
+    <!-- sample payment method for this company -->
+    <PaymentMethod paymentMethodId="COCHECKING" description="Primary Checking Account" paymentMethodTypeId="COMPANY_CHECK" partyId="Company" glAccountId="111100"/> <!-- GENERAL CHECKING ACCOUNT -->
+    <EftAccount paymentMethodId="COCHECKING" bankName="Test company bank" routingNumber="1111111111" accountType="Checking" accountNumber="3333333333" />
+    <PaymentMethod paymentMethodId="COMMKT" description="Secondary Money Market Account" paymentMethodTypeId="COMPANY_CHECK" partyId="Company" glAccountId="111400"/> <!-- MONEY MARKET -->
+    <PaymentMethod paymentMethodId="COVISA" description="Company VISA Business Card" paymentMethodTypeId="CREDIT_CARD" partyId="Company" glAccountId="231000"/> <!-- SHORT TERM OBLIGATION -->
+    <CreditCard paymentMethodId="COVISA" cardType="Visa" cardNumber="4111111111111111" expireDate="02/2011" firstNameOnCard="JOHN" lastNameOnCard="PRESIDENT" companyNameOnCard="Company" contactMechId="9000"/>
+    <PaymentMethod paymentMethodId="COAMEX" description="Company AmEx Corporate Card" paymentMethodTypeId="CREDIT_CARD" partyId="Company" glAccountId="231000"/> 
+    <CreditCard paymentMethodId="COAMEX" cardType="AmericanExpress" cardNumber="340000000000009" expireDate="02/2011" firstNameOnCard="JOHN" lastNameOnCard="PRESIDENT" companyNameOnCard="Company" contactMechId="9000"/>
+    <PaymentMethodType paymentMethodTypeId="COMPANY_CHECK" defaultGlAccountId="112000"/> <!-- default to Undeposited Receipts -->
+
+    <!-- This will be default payment method for refunds, when no other payment method is available -->
+    <PartyAcctgPreference partyId="Company" refundPaymentMethodId="COCHECKING"/>
+
+    <!-- gl accounts for customer payments -->
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="CREDIT_CARD" organizationPartyId="Company" glAccountId="122000"/> <!-- in transit from credit card processors -->
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="PERSONAL_CHECK" organizationPartyId="Company" glAccountId="112000"/> <!-- Undeposited Receipts --> 
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="CERTIFIED_CHECK" organizationPartyId="Company" glAccountId="112000"/>
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="EXT_OFFLINE" organizationPartyId="Company" glAccountId="112000"/> <!-- Offline payments and COD are set to Undeposited receipts as well -->
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="EXT_COD" organizationPartyId="Company" glAccountId="112000"/>
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="MONEY_ORDER" organizationPartyId="Company" glAccountId="112000"/>
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="EFT_ACCOUNT" organizationPartyId="Company" glAccountId="111100"/>
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="CASH" organizationPartyId="Company" glAccountId="112000"/>  <!-- Or set to 111700: CASH IN REGISTERS -->
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="EXT_BILLACT" organizationPartyId="Company" glAccountId="213000" /> <!-- Customer credits --> 
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="EXT_PAYPAL" organizationPartyId="Company" glAccountId="122500" /> 
+    <CreditCardTypeGlAccount organizationPartyId="Company" cardType="Visa" glAccountId="122300"/>
+    <CreditCardTypeGlAccount organizationPartyId="Company" cardType="MasterCard" glAccountId="122300"/>
+    <CreditCardTypeGlAccount organizationPartyId="Company" cardType="AmericanExpress" glAccountId="122100"/>
+    <CreditCardTypeGlAccount organizationPartyId="Company" cardType="Discover" glAccountId="122200"/>
+
+    <!-- gift certificates settings.  When a gift certificate is purchased, the transactions are
+        Debit Accounts Receivable, Credit Customer Gift Certificate Balances
+     When a gift certificate is redeemed, the transactions are
+        Debit Customer Gift Certificate Balance, Credit Accounts Receivable -->
+    <PaymentMethodTypeGlAccount paymentMethodTypeId="GIFT_CERTIFICATE" organizationPartyId="Company" glAccountId="120000" /> <!-- Accounts Receivables -->
+    <PaymentGlAccountTypeMap paymentTypeId="GC_DEPOSIT" organizationPartyId="Company" glAccountTypeId="CUSTOMER_GC_DEPOSIT"/>
+    <PaymentGlAccountTypeMap paymentTypeId="GC_WITHDRAWAL" organizationPartyId="Company" glAccountTypeId="CUSTOMER_GC_DEPOSIT"/>
+    <GlAccountTypeDefault glAccountTypeId="CUSTOMER_GC_DEPOSIT" organizationPartyId="Company" glAccountId="213200" /> <!-- Unredeemed gift certificates -->
+    
+    <!-- TODO: Support other customer payment types in PaymentMethodType -->
+    
+    <!-- now, special gl accounts for products -->
+    <ProductGlAccount organizationPartyId="Company" productId="GZ-1000" glAccountTypeId="SALES_ACCOUNT" glAccountId="400000"/>
+    <ProductGlAccount organizationPartyId="Company" productId="GZ-1001" glAccountTypeId="SALES_ACCOUNT" glAccountId="409000"/>
+    <ProductGlAccount organizationPartyId="Company" productId="GZ-1004" glAccountTypeId="SALES_ACCOUNT" glAccountId="401000"/>
+    <ProductGlAccount organizationPartyId="Company" productId="GZ-1000" glAccountTypeId="INVENTORY_ACCOUNT" glAccountId="140000"/>
+    <ProductGlAccount organizationPartyId="Company" productId="GZ-1001" glAccountTypeId="INVENTORY_ACCOUNT" glAccountId="140000"/>
+    <ProductGlAccount organizationPartyId="Company" productId="GZ-1004" glAccountTypeId="INVENTORY_ACCOUNT" glAccountId="140000"/>
+
+    <!-- raw materials should be set up to be received into a raw materials inventory -->
+    <ProductGlAccount organizationPartyId="Company" productId="MAT_A_COST" glAccountTypeId="INVENTORY_ACCOUNT" glAccountId="141000"/>
+    <ProductGlAccount organizationPartyId="Company" productId="MAT_B_COST" glAccountTypeId="INVENTORY_ACCOUNT" glAccountId="141000"/>
+
+    <!-- setup for GL accounts of manufacturing steps.  This manufacturing operation's cost component will be 
+        Debit WIP_INVENTORY by default and Credit OPERATING_EXPENSE as set below -->
+    <CostComponentCalc costComponentCalcId="EXAMPLE_COST" costGlAccountTypeId="OPERATING_EXPENSE"/>
+    
+    <VarianceReasonGlAccount varianceReasonId="VAR_LOST" organizationPartyId="Company" glAccountId="514000"/> <!-- INVENTORY_ACCOUNT shrinkage -->
+    <VarianceReasonGlAccount varianceReasonId="VAR_STOLEN" organizationPartyId="Company" glAccountId="514000"/>
+    <VarianceReasonGlAccount varianceReasonId="VAR_FOUND" organizationPartyId="Company" glAccountId="514000"/>
+    <VarianceReasonGlAccount varianceReasonId="VAR_INTEGR" organizationPartyId="Company" glAccountId="514000"/>
+    <VarianceReasonGlAccount varianceReasonId="VAR_DAMAGED" organizationPartyId="Company" glAccountId="514000"/>
+    <VarianceReasonGlAccount varianceReasonId="VAR_SAMPLE" organizationPartyId="Company" glAccountId="625000"/> <!-- other advertising & promotion -->
+    <VarianceReasonGlAccount varianceReasonId="VAR_TRANSIT" organizationPartyId="Company" glAccountId="514100"/> <!-- lost in transit -->
+
+    <InvoiceGlAccountType organizationPartyId="Company" invoiceTypeId="SALES_INVOICE" invoiceGlAccountTypeId="ACCOUNTS_RECEIVABLE"/>
+    <InvoiceGlAccountType organizationPartyId="Company" invoiceTypeId="PURCHASE_INVOICE" invoiceGlAccountTypeId="ACCOUNTS_PAYABLE"/>
+    <InvoiceGlAccountType organizationPartyId="Company" invoiceTypeId="CUST_RTN_INVOICE" invoiceGlAccountTypeId="CUSTOMER_CREDIT"/>
+    <InvoiceGlAccountType organizationPartyId="Company" invoiceTypeId="COMMISSION_INVOICE" invoiceGlAccountTypeId="COMMISSIONS_PAYABLE"/>
+    <InvoiceGlAccountType organizationPartyId="Company" invoiceTypeId="INTEREST_INVOICE" invoiceGlAccountTypeId="INTRSTINC_RECEIVABLE"/>
+   
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="SALES_INVOICE" invoiceAdjustmentTypeId="WRITEOFF" acctgTransTypeId="WRITEOFF" glAccountId="517100"/>
+    <!-- Many people think credit memos is part of accounts receivable, so we are putting its writeoff to the same gl account has sales invoices-->
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="CUST_RTN_INVOICE" invoiceAdjustmentTypeId="WRITEOFF" acctgTransTypeId="WRITEOFF" glAccountId="517100"/>
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="PURCHASE_INVOICE" invoiceAdjustmentTypeId="WRITEOFF" acctgTransTypeId="WRITEOFF" glAccountId="517200"/>
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="COMMISSION_INVOICE" invoiceAdjustmentTypeId="WRITEOFF" acctgTransTypeId="WRITEOFF" glAccountId="517300"/>
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="INTEREST_INVOICE" invoiceAdjustmentTypeId="WRITEOFF" acctgTransTypeId="WRITEOFF" glAccountId="517400"/>
+
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="SALES_INVOICE" invoiceAdjustmentTypeId="CASH_DISCOUNT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="511000"/> <!-- Early pay discount -->
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="CUST_RTN_INVOICE" invoiceAdjustmentTypeId="CASH_DISCOUNT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="423000"/> <!-- adjustment on customer returns -->
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="PURCHASE_INVOICE" invoiceAdjustmentTypeId="CASH_DISCOUNT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="516100"/> <!-- purchase order adjustments -->
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="COMMISSION_INVOICE" invoiceAdjustmentTypeId="CASH_DISCOUNT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="601400"/> <!-- commission adjustments -->
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="INTEREST_INVOICE" invoiceAdjustmentTypeId="CASH_DISCOUNT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="511000"/> <!-- early pay discount -->
+
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="SALES_INVOICE" invoiceAdjustmentTypeId="EARLY_PAY_DISCT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="511000"/> <!-- Early pay discount -->
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="CUST_RTN_INVOICE" invoiceAdjustmentTypeId="EARLY_PAY_DISCT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="423000"/> <!-- adjustment on customer returns -->
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="PURCHASE_INVOICE" invoiceAdjustmentTypeId="EARLY_PAY_DISCT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="516100"/> <!-- purchase order adjustments -->
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="COMMISSION_INVOICE" invoiceAdjustmentTypeId="EARLY_PAY_DISCT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="601400"/> <!-- commission adjustments -->
+    <InvoiceAdjustmentGlAccount organizationPartyId="Company" invoiceTypeId="INTEREST_INVOICE" invoiceAdjustmentTypeId="EARLY_PAY_DISCT" acctgTransTypeId="INVOICE_ADJUSTMENT" glAccountId="511000"/> <!-- early pay discount -->
+
+    <!-- TODO: add some COGS accounts -->
+
+
+</entity-engine-xml>

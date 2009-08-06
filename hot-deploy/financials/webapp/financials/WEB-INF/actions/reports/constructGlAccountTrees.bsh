@@ -1,0 +1,39 @@
+/*
+ * Copyright (c) 2007 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import com.opensourcestrategies.financials.financials.FinancialServices;
+import com.opensourcestrategies.financials.accounts.GLAccountTree;
+import org.ofbiz.base.util.UtilValidate;
+import javolution.util.FastMap;
+import java.util.ArrayList;
+
+glAccountSums = context.get("glAccountSums");
+if (glAccountSums == null) return;
+glAccountTrees = FastMap.newInstance();
+incomeStatementTypesSize = FinancialServices.INCOME_STATEMENT_TYPES.size();
+List glAccountIncomeStatementTypes = new ArrayList(FinancialServices.INCOME_STATEMENT_TYPES);
+glAccountIncomeStatementTypes.add(FinancialServices.UNCLASSIFIED_TYPE);
+
+for (glAccountTypeId : glAccountIncomeStatementTypes) {
+    accountList = glAccountSums.get(glAccountTypeId);
+    if (accountList == null) continue;
+    if (FinancialServices.UNCLASSIFIED_TYPE.equals(glAccountTypeId) && UtilValidate.isEmpty(accountList)) continue;
+    glAccountTree = new GLAccountTree(delegator, context.get("organizationPartyId"), context.get("orgCurrencyUomId"), accountList);
+    glAccountTrees.put(glAccountTypeId, glAccountTree);
+}
+
+context.put("glAccountTrees", glAccountTrees);

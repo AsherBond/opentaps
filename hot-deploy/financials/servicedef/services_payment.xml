@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Accounting Services - Invoice</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+    
+    <service name="createPaymentApplication" engine="java" 
+            location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="createPaymentApplication" auth="true">
+        <description>
+          Create a payment application.
+          It will check that the amount applied is not greater than the payment outstanding amount.
+          If applied to an Invoice, it will also check that the  amount applied is not greater than the invoice outstanding amount.
+          If the amount to apply is greater than what is required for an invoice, it will apply only the required amount.  If you
+          want to return an error instead, use parameter checkForOverApplication with value true.
+        </description>
+        <attribute name="paymentId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceId" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceItemSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="billingAccountId" type="String" mode="IN" optional="true"/>
+        <attribute name="overrideGlAccountId" type="String" mode="IN" optional="true"/>
+        <attribute name="taxAuthGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="amountApplied" type="Double" mode="IN" optional="false"/>
+        <attribute name="checkForOverApplication" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="paymentApplicationId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="updatePaymentApplication" default-entity-name="PaymentApplication" engine="java"
+        location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="updatePaymentApplication">
+        <description>
+            Apply a payment to a Invoice or other payment or Billing account or  Taxauthority,
+            create/update paymentApplication records.
+        </description>
+        <auto-attributes mode="IN" include="pk" optional="true"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+        <attribute name="invoiceProcessing" type="String" mode="IN" optional="true"/>
+        <override name="paymentId" optional="false"/>        
+    </service>
+
+    <service name="opentaps.partiallyReconcilePayment" engine="java"
+        location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="partiallyReconcilePayment">
+        <description>
+            Set all transaction entries related to a payment to partially reconciled when the payment is confirmed.
+        </description>
+        <attribute name="paymentId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="setPaymentStatus" engine="java" default-entity-name="Payment"
+        location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="setPaymentStatus" auth="true">
+        <description>Change the status of a Payment.  Overrrides legacy so that we can skip the check on payment applications when payment is confirmed.</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute name="statusId" type="String" mode="IN" optional="false"/>
+        <attribute name="oldStatusId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+</services>

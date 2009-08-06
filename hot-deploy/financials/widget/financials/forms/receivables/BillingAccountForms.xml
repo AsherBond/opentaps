@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+ 
+<!-- Portions of this file are from the Apache licensed OFBiz accounting application -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!--
+    Copyright 2001-2006 The Apache Software Foundation
+    
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not
+    use this file except in compliance with the License. You may obtain a copy of
+    the License at
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations
+    under the License.
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <!-- No longer used but left for compatibility -->
+    <form name="createCustomerBillingAccount" type="single" target="createCustomerBillingAccount"
+                default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="organizationPartyId"><hidden/></field>
+        <field name="customerPartyId"><lookup target-form-name="LookupPartyName"/></field>
+        <field name="accountLimit" tooltip="${uiLabelMap.FinancialsBillingAccountAccountLimitTip}"><text/></field>
+        <field name="description"><text size="100"/></field>
+        <field name="fromDate"><date-time/></field>
+        <field name="thruDate"><date-time/></field>
+
+        <field name="createButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+    <form name="findCustomerBillingAccount" type="single" target="findCustomerBillAcct"
+                default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}"><text/></field>
+        <field name="customerPartyId"><lookup target-form-name="LookupPartyName"/></field>
+        <field name="performFind"><hidden value="Y"/></field>
+        <field name="findButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>  
+
+    <form name="listCustomerBillingAccounts" type="list" list-name="billingAccounts"
+    	paginate-target="findCustomerBillAcct" paginate-index-field="viewIndex" paginate-size-field="viewSize"
+    	 default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" header-row-style="boxtop"
+        default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true" >
+    	<field name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}"><hyperlink target="viewCustomerBillAcct?billingAccountId=${billingAccountId}" description="${billingAccountId}" /> </field>   
+    	<field name="description"><display/></field>
+    	<field name="accountFromDate"><display/></field>    	
+        <field name="accountThruDate"><display/></field>
+        <!-- this is the correct way to get the value of a row from a list of form widget values.  each row is called "context" -->
+        <field name="originalBalance"><display description="${bsh:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountOriginalBalance(delegator, context.get(&quot;billingAccountId&quot;))}" type="currency" currency="${accountCurrencyUomId}"/></field>
+        <field name="availableBalance"><display description="${bsh:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, context.get(&quot;billingAccountId&quot;))}" type="currency" currency="${accountCurrencyUomId}"/></field>
+    </form>
+
+    <form name="payInvoiceWithBillingAccountForm" type="single" target="payInvoiceWithBillingAccount"
+        default-title-style="tableheadtext" default-tooltip-style="tabletext" default-widget-style="inputBox"
+        default-table-style="listTable">
+
+        <field name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}" widget-style="tabletext">
+            <display value="${parameters.billingAccountId}"/>
+        </field>
+        <field name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}"><text/></field>
+        <field name="captureAmount" title="${uiLabelMap.CommonAmount}">
+            <text size="10"/> 
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.FinancialsMakePayment}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="EditBillingAccount" type="single" target="updateBillingAccount" title=""
+          default-map-name="billingAccount" default-tooltip-style="tooltip">
+        <alt-target use-when="billingAccount==null" target="createBillingAccount"/>
+        
+        <field use-when="billingAccount!=null" name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}">
+            <display/>
+        </field>
+        <field name="customerPartyId" title="${uiLabelMap.AccountingCustomer}">
+            <display description="${billingAccount.customerName} (${billingAccount.customerPartyId})"/>
+        </field>
+       
+        <field name="fromDate" position="1"><date-time/></field>
+        <field name="thruDate" position="2"><date-time/></field>
+
+        <field name="description">
+            <textarea rows="2"/>
+        </field>
+
+        <field name="originalBalance" title="${uiLabelMap.FinancialsOriginalBalance}">
+            <display description="${bsh:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountOriginalBalance(delegator, billingAccountId)}"
+                    type="currency" currency="${billingAccount.accountCurrencyUomId}"/>
+        </field>
+        <field name="availableBalance" title="${uiLabelMap.AccountingBillingAvailableBalance}"
+               tooltip="${uiLabelMap.AccountingBillingAvailableBalanceMessage}">
+            <display description="${bsh:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, billingAccountId)}"
+                    type="currency" currency="${billingAccount.accountCurrencyUomId}"/>
+        </field>
+
+
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit">
+            <submit button-type="button"/>
+        </field>
+    </form>
+
+
+</forms>
+        

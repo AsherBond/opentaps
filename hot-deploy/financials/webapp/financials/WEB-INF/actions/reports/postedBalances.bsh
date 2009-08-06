@@ -1,0 +1,63 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import java.util.*;
+import javolution.util.FastMap;
+import javolution.util.FastList;
+import org.ofbiz.accounting.util.UtilAccounting;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.party.party.PartyHelper;
+import com.opensourcestrategies.financials.accounts.GLAccountTree;
+
+delegator = request.getAttribute("delegator");
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
+        new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+        new EntityExpr("postedBalance", EntityOperator.NOT_EQUAL, null)),
+        EntityOperator.AND);
+trialBalances = delegator.findByCondition("GlAccountOrganizationAndClass", conditions, 
+                                          UtilMisc.toList("glAccountId", "postedBalance", "parentGlAccountId"),
+                                          UtilMisc.toList("glAccountId"));
+trialBalances = EntityUtil.filterByDate(trialBalances);
+
+context.put("trialBalances", trialBalances);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsPostedBalancesByGlAccount"));
+
+context.put("organizationPartyId", organizationPartyId);
+context.put("organizationName", PartyHelper.getPartyName(delegator, organizationPartyId, false));
+
+//Trial balances tree
+trialBalancesList = FastList.newInstance();
+for (trialAccount : trialBalances) {
+    balanceItem = FastMap.newInstance();
+    balanceItem.put("glAccountId", trialAccount.getString("glAccountId"));
+    balanceItem.put("parentGlAccountId", trialAccount.getString("parentGlAccountId"));
+    balanceItem.put("accountSum", trialAccount.getBigDecimal("postedBalance"));
+    trialBalancesList.add(balanceItem);
+}
+print(trialBalancesList);
+trialBalancesTree = new GLAccountTree(delegator, context.get("organizationPartyId"), UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator), trialBalancesList);
+context{"trialBalancesTree"} = trialBalancesTree;

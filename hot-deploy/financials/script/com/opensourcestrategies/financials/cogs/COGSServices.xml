@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+    <!-- general COGS services -->
+
+    <!-- TODO: this will need to be written in java -->
+    <simple-method method-name="getInvoiceItemCOGS" short-description="Gets COGS for an item on an invoice">
+        <!-- get the company's accounting preferences -->
+        <entity-one entity-name="PartyAcctgPreference" value-name="partyAcctgPreference"/>
+
+        <!-- get the invoice item -->
+        <entity-one entity-name="InvoiceItem" value-name="invoiceItem" use-cache="true"/>
+        
+        <if-not-empty field-name="productId" map-name="invoiceItem">
+            <set-service-fields to-map-name="averageCostParams" service-name="getProductAverageCost" map-name="parameters"/>
+            <set from-field="invoiceItem.productId" field="averageCostParams.productId"/>
+
+            <!-- TODO: implement LIFO, FIFO as well -->
+            <!-- if no cogsMethodId assume COGS_AVG_COST for now -->
+            <if>
+                <condition>
+                    <and>
+                        <not><if-empty field-name="partyAcctgPreference.cogsMethodId"/></not>
+                        <if-compare field-name="partyAcctgPreference.cogsMethodId" operator="not-equals" value="COGS_AVG_COST"/>
+                    </and>
+                </condition>
+                <then>
+                    <set value="COGS Method [${partyAcctgPreference.cogsMethodId}] is not implemented yet. Sorry." field="errMsg"/>
+                    <log level="error"><field field-name="errMsg"/></log>
+                    <add-error><fail-message message="${errMsg}"/></add-error>
+                    <check-errors/>
+                </then>
+            </if>
+
+            <if>
+                <condition>
+                    <or>
+                        <if-empty field-name="partyAcctgPreference.cogsMethodId"/>
+                        <if-compare field-name="partyAcctgPreference.cogsMethodId" operator="equals" value="COGS_AVG_COST"/>
+                    </or>
+                </condition>
+                <then>
+                    <call-service service-name="getProductAverageCost" in-map-name="averageCostParams">
+                        <result-to-field result-name="averageCost" field-name="cost"/>
+                    </call-service>
+                </then>
+            </if>
+        <else>
+            <set field="cost" type="Double"  value="0"/>
+        </else>
+        </if-not-empty>
+        <field-to-result field-name="cost"/>
+    </simple-method>
+</simple-methods>

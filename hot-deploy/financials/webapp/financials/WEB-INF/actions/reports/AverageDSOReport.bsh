@@ -1,0 +1,174 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import java.util.*;
+import javolution.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.accounting.invoice.InvoiceWorker;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
+import com.opensourcestrategies.financials.util.*;
+
+import org.opentaps.common.util.UtilMessage;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+// really useless right now, but if we ever convert it to java this will be good for debugging
+module = "AverageDSOReport";
+
+// get the from and thru date from parseReportOptions
+fromDate = context.get("fromDate");
+thruDate = context.get("thruDate");
+
+// get the invoice type of the report
+invoiceTypeId = context.get("invoiceTypeId");
+isReceivablesReport = "SALES_INVOICE".equals(invoiceTypeId);
+isPayablesReport = "PURCHASE_INVOICE".equals(invoiceTypeId);
+context.put("isReceivablesReport", isReceivablesReport);
+context.put("isPayablesReport", isPayablesReport);
+
+// don't do anything if invoiceTypeId is invalid
+if (!isReceivablesReport && !isPayablesReport) return;
+
+// the date of the report is either now or the thruDate of user's input, whichever is earlier
+now = UtilDateTime.nowTimestamp();
+reportDate = (thruDate != null && thruDate.before(now) ? thruDate : now); 
+context.put("reportDate", reportDate);
+
+// the partyId field we want to use for grouping the report fields is partyIdFrom for receivables, partyId for payables
+partyIdField = (isReceivablesReport ? "partyId" : "partyIdFrom");
+
+// constants
+options = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+organizationPartyId = session.getAttribute("organizationPartyId");
+// Get the base currency for the organization
+currencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
+
+// get the invoices as a list iterator.  Pending and cancelled invoices should not be considered.
+conditionList = FastList.newInstance();
+conditionList.add( new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, invoiceTypeId) );
+conditionList.add( new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "INVOICE_IN_PROCESS") );
+conditionList.add( new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "INVOICE_WRITEOFF") );
+conditionList.add( new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "INVOICE_CANCELLED") );
+conditionList.add( new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "INVOICE_VOIDED") );
+conditionList.add( new EntityExpr("invoiceDate", EntityOperator.LESS_THAN_EQUAL_TO, reportDate) );
+// use the other partyId field to restrict invoices to those just for the current organization 
+if (isReceivablesReport) {
+    conditionList.add( new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId)); 
+} else {
+    conditionList.add( new EntityExpr("partyId", EntityOperator.EQUALS, organizationPartyId));
+}
+
+if (fromDate != null) {
+    conditionList.add( new EntityExpr("invoiceDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate) );
+}
+conditions = new EntityConditionList( conditionList, EntityOperator.AND );
+iterator = delegator.findListIteratorByCondition("Invoice", conditions, null, null, UtilMisc.toList(partyIdField), options);
+
+// compose the report by keeping each row of data in a report map keyed to partyId
+reportMap = FastMap.newInstance();
+while ((invoice = iterator.next()) != null) {
+    partyId = invoice.get(partyIdField);
+    row = reportMap.get(partyId);
+
+    // if no row yet, create a new row and add party data for display
+    if (row == null) {
+        row = FastMap.newInstance();
+        row.put("partyId", partyId);
+        row.put("partyName", PartyHelper.getPartyName(delegator, partyId, false));
+    }
+
+    // keep runing total of invoice
+    invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
+    // convert to the currency exchange rate at the time of the invoiceDate
+    invoiceSum = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId"), invoice.getTimestamp("invoiceDate")) * invoiceTotal;
+    if (row.get("invoiceSum") != null) invoiceSum += row.get("invoiceSum").doubleValue();
+    row.put("invoiceSum", new Double(invoiceSum));
+
+    // compute DSO, number of days outstanding for invoice
+    invoiceDate = invoice.get("invoiceDate");
+    if (invoiceDate == null) {
+        Debug.logWarning("No invoice date for invoice [" + invoice.get("invoiceId") + "], skipping it", module);
+    }
+
+    // if the invoice is PAID, then the paid date from the invoice is used as paid date
+    // if there is no paidDate, then it is set to invoiceDate -- ie, DSO of 0, because in older versions of ofbiz
+    // most orders are captured & paid when they are shipped and no paidDate was set
+    dsoDate = reportDate; 
+    if ("INVOICE_PAID".equals(invoice.getString("statusId"))) {
+        dsoDate = (invoice.get("paidDate") != null ? invoice.get("paidDate") : invoiceDate);
+    }
+    fromCal = UtilDateTime.toCalendar(invoiceDate, timeZone, locale);
+    thruCal = UtilDateTime.toCalendar(dsoDate, timeZone, locale);
+    dso = (thruCal.getTimeInMillis() - fromCal.getTimeInMillis())*1.0/1000/60/60/24;
+
+    // keep running sum of DSO
+    dsoSum = dso;
+    if (row.get("dsoSum") != null) dsoSum += row.get("dsoSum").doubleValue();
+    row.put("dsoSum", new Double(dsoSum));
+
+    // keep running DSO*invoiceTotal sum
+    dsoValueSum = dso * invoiceTotal;
+    if (row.get("dsoValueSum") != null) dsoValueSum += row.get("dsoValueSum").doubleValue();
+    row.put("dsoValueSum", dsoValueSum);
+
+    // update number of invoices
+    numberOfInvoices = 1;
+    if (row.get("numberOfInvoices") != null) numberOfInvoices += row.get("numberOfInvoices").intValue();
+    row.put("numberOfInvoices", new Integer(numberOfInvoices));
+
+    // update avg DSO
+    row.put("dsoAvg", new Double(dsoSum / numberOfInvoices));
+
+    // update weighted DSO
+    if (invoiceSum != 0) {
+        row.put("dsoWeighted", new Double(dsoValueSum / invoiceSum));
+    } else {
+        row.put("dsoWeighted", 0);
+    }
+    
+    reportMap.put(partyId, row);
+}
+report = reportMap.values();
+
+// go through report once more and compute totals row
+invoiceSum = 0.0;
+dsoSum = 0.0;
+dsoValueSum = 0.0;
+numberOfInvoices = 0;
+for (iter = report.iterator(); iter.hasNext(); ) {
+    row = iter.next();
+    invoiceSum += row.get("invoiceSum").doubleValue();
+    dsoSum += row.get("dsoSum").doubleValue();
+    dsoValueSum += row.get("dsoValueSum").doubleValue();
+    numberOfInvoices += row.get("numberOfInvoices").intValue();
+}
+
+totals = FastMap.newInstance();
+totals.put("invoiceSum", new Double(invoiceSum));
+totals.put("dsoSum", new Double(dsoSum));
+totals.put("dsoValueSum", new Double(dsoValueSum));
+totals.put("numberOfInvoices", new Integer(numberOfInvoices));
+totals.put("dsoAvg", new Double(dsoSum / numberOfInvoices));
+totals.put("dsoWeighted", new Double(dsoValueSum / invoiceSum));
+
+context.put("report", report);
+context.put("totals", totals);
+
+iterator.close();

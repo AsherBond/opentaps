@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- Portion of this file comes from the OFBiz PayableScreens --> 
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!--
+    $Id: $
+    
+    Copyright 2001-2006 The Apache Software Foundation
+    
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not
+    use this file except in compliance with the License. You may obtain a copy of
+    the License at
+    
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations
+    under the License.
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="payables" global="true"/>
+                <set field="sectionStyle" value="singleColumn"/>
+                <set field="requiredPermission" value="FINANCIALS_AP"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="payables">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsPayables"/>  
+                <set field="sectionHeaderUiLabel" value="FinancialsPayables"/>  
+                <!-- TODO: see if removing this will work, we now have main-decorator.bsh that does this -->
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/payables/payables.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="listChecksToPrint">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsOutstandingChecks"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsOutstandingChecks"/>
+                <set field="isPaycheck" value="N"/>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+                <script location="component://financials/webapp/financials/WEB-INF/actions/payables/listChecksToPrint.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <section>
+                        <widgets>
+                            <platform-specific>
+                                <html><html-template location="component://financials/webapp/financials/payables/listChecksToPrint.ftl"/></html>
+                            </platform-specific>                                                            
+                        </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>    
+
+    <screen name="payablesBalancesReport">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+                <set field="reportType" value="VENDOR"/>  <!-- this configures the bsh report to get the right data -->
+                <set field="returnPage" value="payables"/>
+                <set field="returnLabel" value="FinancialsReturnToPayables"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/customerVendorBalances.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsPayablesBalancesReport}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
+                                </html></platform-specific>
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/customerVendorBalances.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="commissionBalancesReport">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+                <set field="reportType" value="COMMISSION"/>  <!-- this configures the bsh report to get the right data -->
+                <set field="returnPage" value="payables"/>
+                <set field="returnLabel" value="FinancialsReturnToPayables"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/customerVendorBalances.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCommissionBalancesReport}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
+                                </html></platform-specific>
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/customerVendorBalances.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="payablesAgingReport">
+        <section>
+            <actions>
+                <set field="reportType" value="ACCOUNTS_PAYABLE"/>  <!-- this configures the bsh report to get the right data -->
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+                <set field="returnPage" value="payables"/>
+                <set field="returnLabel" value="FinancialsReturnToPayables"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/customerVendorAging.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsPayablesAgingReport}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/stateReportOptions.ftl"/>
+                                </html></platform-specific>
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/customerVendorAging.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="vendorStatement">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+                <set field="reportType" value="VENDOR"/> 
+                <set field="returnPage" value="payables"/>
+                <set field="returnLabel" value="FinancialsReturnToPayables"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/customerVendorStatement.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsVendorStatement}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
+                                </html></platform-specific>
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/customerVendorStatement.ftl"/>
+                                </html></platform-specific>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="commissionsStatement">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
+                <set field="reportType" value="COMMISSIONS"/> 
+                <set field="returnPage" value="payables"/>
+                <set field="returnLabel" value="FinancialsReturnToPayables"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/parseReportOptions.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/customerVendorStatement.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCommissionsStatement}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>
+                                </html></platform-specific>
+                                <platform-specific><html>
+                                    <html-template location="component://financials/webapp/financials/includes/customerVendorStatement.ftl"/>
+                                </html></platform-specific>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="AverageDSOReportPayables">
+        <section>
+            <actions>
+                <set field="invoiceTypeId" value="PURCHASE_INVOICE"/>
+                <set field="returnPage" value="payables"/>
+                <set field="returnLabel" value="FinancialsReturnToPayables"/>
+                <set field="reportTitle" value="FinancialsAverageDSOReportPayables"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/reports/setAvgDSORepPayablesToHistory.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="AverageDSOReport" location="component://financials/widget/financials/screens/reports/ReportsScreens.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="checkRun">
+        <section>
+            <actions>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/payables/checkRun.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/includes/pagination.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <section>
+                            <condition>
+                                <or>
+                                    <if-has-permission permission="FINANCIALS_AP" action="_PCRTE"/>
+                                </or>
+                            </condition>
+                            <widgets>
+                                <platform-specific>
+                                    <html><html-template location="component://financials/webapp/financials/payables/FindInvoicesForCheckRun.ftl"/></html>
+                                </platform-specific>
+                                <include-form name="ListInvoicesForCheckRun" location="component://financials/widget/financials/forms/payables/PayablesForm.xml"/>
+                            </widgets>
+                            <fail-widgets>
+                                <include-screen name="PermissionErrorScreen" location="component://financials/widget/financials/screens/common/CommonScreens.xml"/>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>       
+    </screen>
+
+    <screen name="PrintChecks">
+        <section>
+            <actions>
+                <!-- 
+                <set field="defaultFontFamily" value="DejaVuSans"/>
+                -->
+                <!-- pass in paymentId to print one check, otherwise use multi form input -->
+                <set field="paymentId" from-field="parameters.paymentId" />
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/payables/printChecks.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://financials/webapp/financials/payables/PrintChecks.fo.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="FindCommissionAgreements">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsFindCommissionAgreements"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsFindCommissionAgreements"/>  
+                <set field="agreementViewer" value="viewAgreement"/>
+               <!-- Predefined search parameters -->
+                <set field="agreementTypeId" value="COMMISSION_AGREEMENT"/>
+                <set field="partyIdFrom" from-field="parameters.organizationPartyId"/>
+                <set field="roleTypeIdFrom" value="INTERNAL_ORGANIZATIO"/>
+                <set field="roleTypeIdTo" value="COMMISSION_AGENT"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/agreements/commissionAgreementsList.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://financials/webapp/financials/payables/findAgreements.ftl"/></html>
+                        </platform-specific>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader">
+                                <label style="subSectionTitle">${uiLabelMap.AccountingAgreements}</label>
+                            </container>
+                            <section>
+                                <widgets>
+                                    <platform-specific>
+                                        <html><html-template location="component://opentaps-common/webapp/common/agreements/listAgreements.ftl"/></html>
+                                    </platform-specific>
+                                </widgets>
+                            </section>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="CreateCommissionAgreement">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsCreateCommissionAgreement"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsCreateCommissionAgreement"/>
+                <set field="screenMode" value="CREATE"/>
+                
+                <!-- Initial values used when create commission agreement -->
+                <set field="agreementTypeId" value="COMMISSION_AGREEMENT"/>
+                <set field="partyIdFrom" from-field="parameters.organizationPartyId"/>
+                <set field="roleTypeIdFrom" value="INTERNAL_ORGANIZATIO"/>
+                <set field="roleTypeIdTo" value="COMMISSION_AGENT"/>
+                
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/agreements/createAgreement.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ViewAgreement">
+        <section>
+            <actions>
+                <set field="screenMode" value="VIEW"/>
+                <!-- for documentation system -->
+                <set field="screenState" value="viewCommAgreement"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/agreements/commissionAgreementPermission.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementItems.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container>
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/agreements/viewCommonAgreementHeader.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/agreements/viewAgreement.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditAgreement">
+        <section>
+            <actions>
+                <set field="screenMode" value="EDIT"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/agreements/commissionAgreementPermission.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/agreements/editAgreement.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="confirmSentPaymentsForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsConfirmSentPayments"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsConfirmSentPayments"/>
+                <set field="isPaycheck" value="N"/>
+                <set field="formAction" value="confirmSentPayments"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/payables/confirmSentPaymentsForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <section>
+                        <widgets>
+                            <platform-specific>
+                                <html><html-template location="component://financials/webapp/financials/payables/confirmSentPaymentsForm.ftl"/></html>
+                            </platform-specific>
+                        </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="CommissionReport">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsCommissionReport"/>
+                <set field="sectionHeaderUiLabel" value="FinancialsCommissionReport"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <section>
+                        <widgets>
+                            <platform-specific>
+                                <html><html-template location="component://financials/webapp/financials/payables/CommissionReport.ftl"/></html>
+                            </platform-specific>
+                        </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
+

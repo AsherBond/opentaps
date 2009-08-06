@@ -1,0 +1,118 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ *  @author     Leon Torres (leon@opensourcestrategies.org)
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.accounting.util.UtilAccounting;
+ 
+delegator = request.getAttribute("delegator");
+security = request.getAttribute("security");
+
+if(security.hasEntityPermission("ACCOUNTING", "_VIEW", session)) {
+    context.put("hasPermission", Boolean.TRUE);
+} else {
+    context.put("hasPermission", Boolean.FALSE);
+}
+
+glAccountId = parameters.get("glAccountId");
+organizationPartyId = session.getAttribute("organizationPartyId");
+context.put("organizationPartyId", organizationPartyId);
+
+// Get the GlAccount
+glAccount = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", glAccountId));
+context.put("glAccount", glAccount);
+
+// base type of account
+if (UtilAccounting.isDebitAccount(glAccount)) {
+  context.put("accountIsDebit", "TRUE");
+} else {
+  context.put("accountIsDebit", "FALSE");
+}
+
+// get the date of latest GlReconciliation, if exists
+glReconciliations = delegator.findByAnd("GlReconciliation", UtilMisc.toMap("glAccountId", glAccountId), UtilMisc.toList("reconciledDate DESC"));
+if (glReconciliations != null && glReconciliations.size() > 0) {
+    context.put("lastReconciledDate", glReconciliations.get(0).get("reconciledDate"));
+    context.put("lastReconciledBalance", glReconciliations.get(0).get("reconciledBalance"));
+} else {
+    context.put("lastReconciledBalance", new Double(0.0));
+}
+
+// if there is no reconciledDate from the parameters (ie if we got here from settle payments screen),
+// then get it from the transactionDate.  If there is no transaction date, then use now
+if (parameters.get("reconciledDate") == null) {
+    transactionDate = UtilHttp.makeParamValueFromComposite(request, "transactionDate", locale);
+    if (transactionDate == null) {
+        context.put("reconciledDate" , UtilDateTime.nowTimestamp());
+    } else {
+        context.put("reconciledDate", transactionDate);
+    }
+}
+
+// get all related, posted, and not AES_RECONCILED AcctgTransAndEntries
+condition = new EntityConditionList(
+    UtilMisc.toList(
+        new EntityExpr("glAccountId", EntityOperator.EQUALS, glAccountId), 
+        new EntityExpr("isPosted", EntityOperator.EQUALS, "Y"), 
+        new EntityConditionList(  // NOTE: for some reason, NOT_EQUAL AES_RECONCILED didn't work -- probably a trinary logic issue with null
+            UtilMisc.toList(
+                new EntityExpr("reconcileStatusId", EntityOperator.EQUALS, "AES_NOT_RECONCILED"),
+                new EntityExpr("reconcileStatusId", EntityOperator.EQUALS, "AES_PARTLY_RECON"),
+                new EntityExpr("reconcileStatusId", EntityOperator.EQUALS, null)
+            ),
+            EntityOperator.OR
+        )
+    ),
+    EntityOperator.AND
+);
+
+// figure out how to sort the entries.  Note that this is not yet supported by the form because we need to find a way to do this either live in browser or save the reconcile status changes first
+orderByStr = parameters.get("orderBy");
+
+// default is to order by transaction date
+if (UtilValidate.isEmpty(orderByStr)) {
+    orderByStr = "transactionDate";
+}
+
+orderBy = new ArrayList();
+if ("transactionDate".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+} else if ("acctgTransId".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("acctgTransId", "acctgTransEntrySeqId");
+} else if ("acctgTransTypeId".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("acctgTransTypeId", "transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+} else if ("refNum".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("refNum", "transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+} else if ("debitASC".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("debitCreditFlag DESC", "amount ASC", "transactionDate");
+} else if ("debitDESC".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("debitCreditFlag DESC", "amount DESC", "transactionDate");
+} else if ("creditASC".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("debitCreditFlag ASC", "amount ASC", "transactionDate");
+} else if ("creditDESC".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("debitCreditFlag ASC", "amount DESC", "transactionDate");
+} else if ("reconcileStatusId".equals(orderByStr)) {
+    orderBy = UtilMisc.toList("reconcileStatusId", "transactionDate", "acctgTransId", "acctgTransEntrySeqId");
+}
+
+entries = delegator.findListIteratorByCondition("AcctgTransAndEntriesForReconciliation", condition, null, orderBy);
+
+context.put("entries", entries.getCompleteList());
+entries.close();

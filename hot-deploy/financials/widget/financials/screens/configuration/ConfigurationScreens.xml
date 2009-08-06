@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ *  @author Ali Afzal Malik (ali@opensourcestrategies.com)
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="configuration" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <!-- TODO: FINANCIALS_CONFIG_VIEW permission, because _VIEW is necessary for requiredPermission to work here -->
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="organizationTimePeriods">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/timePeriods.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsTimePeriodsFor} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <platform-specific>
+                                    <html><html-template location="component://financials/webapp/financials/configuration/timePeriods.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsCreateANewTimePeriodFor} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="createCustomTimePeriod" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="listGlAccounts">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CommonConfiguration"/>  
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/listGlAccounts.bsh"/>
+            </actions>            
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">  
+                            <platform-specific>
+                                <html><html-template location="component://financials/webapp/financials/configuration/glAccounts.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="listGlAccountTypes">
+        <section>
+            <actions>
+                <set field="targetNameToUse" value="createGlAccountTypeDefault"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/listGlAccountTypes.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsConfigureLedgerConfigurationFor} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="listGlAccountTypes" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsConfigureLedgerAccountFor} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="addGlAccountTypeDefault" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="updateGlAccountTypeDefault">
+        <section>
+            <actions>
+                <set field="targetNameToUse" value="updateGlAccountTypeDefault"/>
+                <set field="glAccountTypeId" value="${parameters.glAccountTypeId}"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/listGlAccountTypes.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsUpdateGlAccountType} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="addGlAccountTypeDefault" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="listPaymentMethods">
+        <section>
+            <actions>
+                <set field="targetNameToUse" value="createPaymentMethod"/>
+                <set field="paymentMethodTypeId" value="${parameters.paymentMethodTypeId}"/>
+                <entity-one entity-name="PartyAcctgPreference" value-name="partyAcctgPreference">
+                    <field-map field-name="partyId" value="${parameters.organizationPartyId}"/>
+                </entity-one>
+                <set field="targetNameToUse" value="createPaymentMethod"/>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/listPaymentMethods.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsPaymentMethodsFor} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="listPaymentMethods" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsAddPaymentMethodsFor} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="addPaymentMethod" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsSelectRefundPaymentMethod} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="refundPaymentMethod" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>  
+    <screen name="updateGlAccount">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/updateGlAccount.bsh"/>
+            </actions>            
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">  
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsUpdateGlAccountFor} ${parameters.organizationName}"/>
+                            </container>                        
+                            <container style="screenlet-body">
+                                <include-form name="updateGlAccount" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addExistingGlAccount">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/listGlAccounts.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsAddExistingAccountFor} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="addExistingGlAccount" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addNewGlAccount">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/listGlAccounts.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsAddNewAccountFor} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="addNewGlAccount" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addSubAccount">
+        <section>
+            <actions>
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/updateGlAccount.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsAddSubAccountFor} ${parameters.organizationName}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="addSubAccount" location="component://financials/widget/financials/forms/configuration/ConfigurationForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>  
+
+    <!-- View/Create PartyAcctgPreference -->
+    <screen name="configureOrganization">
+        <section>
+            <actions>			
+                <set field="partyId" from-field="parameters.organizationPartyId"/>
+                <entity-one entity-name="PartyAcctgPreference" value-name="partyAcctgPreference"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">
+                            <container style="screenlet-header">
+                                <label style="boxhead" text="${uiLabelMap.FinancialsConfigureOrganization}"/>
+                            </container>
+                            <container style="screenlet-body">
+                                <include-form name="PartyAcctgPreference" location="component://accounting/webapp/accounting/admin/AdminForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- list the configured accounting tags -->
+    <screen name="accountingTags">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsAccountingTags"/>  
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/accountingTags.bsh"/>
+            </actions>            
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">  
+                            <platform-specific>
+                                <html><html-template location="component://financials/webapp/financials/configuration/accountingTags.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="screenlet">  
+                            <platform-specific>
+                                <html><html-template location="component://financials/webapp/financials/configuration/createAccountingTag.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- list the configured accounting tags usage for the organization -->
+    <screen name="accountingTagsUsage">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="FinancialsAccountingTagUsage"/>  
+                <script location="component://financials/webapp/financials/WEB-INF/actions/configuration/accountingTags.bsh"/>
+            </actions>            
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="screenlet">  
+                            <platform-specific>
+                                <html><html-template location="component://financials/webapp/financials/configuration/accountingTagsPostingCheck.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="screenlet">  
+                            <platform-specific>
+                                <html><html-template location="component://financials/webapp/financials/configuration/accountingTagsUsage.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

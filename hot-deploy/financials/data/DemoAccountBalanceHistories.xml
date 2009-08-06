@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!-- This file contains some sample account balance histories, so you can see the customer balances charts (but no actual invoice/payment histories)
+in the customer/vendor/commission statement screens of financials -->
+
+<entity-engine-xml>
+<Party partyId="DemoAcctBalSupplier" partyTypeId="PARTY_GROUP"/>
+<PartyGroup partyId="DemoAcctBalSupplier" groupName="Demo Supplier for AccountBalanceHistory"/>
+<PartyRole partyId="DemoAcctBalSupplier" roleTypeId="SUPPLIER"/>
+
+<Party partyId="DemoAcctBalCust" partyTypeId="PARTY_GROUP" description="DemoAcctBalCust for AccountBalanceHistory" preferredCurrencyUomId="USD"/>
+<PartyGroup partyId="DemoAcctBalCust" groupName="Demo Sales Account"/>
+<PartyRole partyId="DemoAcctBalCust" roleTypeId="ACCOUNT"/>
+
+<Party partyId="DemoAcctBalAgent" partyTypeId="PERSON"/>
+<Person partyId="DemoAcctBalAgent" firstName="Demo" lastName="Agent"/>
+
+<AccountBalanceHistory accountBalanceHistoryId="1001" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-01 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="12000" />
+<AccountBalanceHistory accountBalanceHistoryId="1002" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-02 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="800" />
+<AccountBalanceHistory accountBalanceHistoryId="1003" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-03 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="2300" />
+<AccountBalanceHistory accountBalanceHistoryId="1004" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-04 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="19000" />
+<AccountBalanceHistory accountBalanceHistoryId="1005" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-05 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="-200" />
+<AccountBalanceHistory accountBalanceHistoryId="1006" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-06 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="30000" />
+<AccountBalanceHistory accountBalanceHistoryId="1007" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-07 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="1000" />
+<AccountBalanceHistory accountBalanceHistoryId="1008" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-08 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="800" />
+<AccountBalanceHistory accountBalanceHistoryId="1009" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-09 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="12300" />
+<AccountBalanceHistory accountBalanceHistoryId="1010" organizationPartyId="Company" partyId="DemoAcctBalCust" asOfDatetime="2009-04-10 00:00:00" balanceTypeEnumId="CUSTOMERS" totalBalance="1800" />
+
+<AccountBalanceHistory accountBalanceHistoryId="1011" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-01 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="134000" />
+<AccountBalanceHistory accountBalanceHistoryId="1012" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-02 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="2800" />
+<AccountBalanceHistory accountBalanceHistoryId="1013" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-03 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="-2300" />
+<AccountBalanceHistory accountBalanceHistoryId="1014" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-04 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="99000" />
+<AccountBalanceHistory accountBalanceHistoryId="1015" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-05 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="19000" />
+<AccountBalanceHistory accountBalanceHistoryId="1016" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-06 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="-30000" />
+<AccountBalanceHistory accountBalanceHistoryId="1017" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-07 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="1000" />
+<AccountBalanceHistory accountBalanceHistoryId="1018" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-08 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="800" />
+<AccountBalanceHistory accountBalanceHistoryId="1019" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-09 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="12300" />
+<AccountBalanceHistory accountBalanceHistoryId="1020" organizationPartyId="Company" partyId="DemoAcctBalSupplier" asOfDatetime="2009-04-10 00:00:00" balanceTypeEnumId="SUPPLIERS" totalBalance="76339" />
+
+<AccountBalanceHistory accountBalanceHistoryId="1021" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-01 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="3000" />
+<AccountBalanceHistory accountBalanceHistoryId="1022" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-02 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="200" />
+<AccountBalanceHistory accountBalanceHistoryId="1023" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-03 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="1000" />
+<AccountBalanceHistory accountBalanceHistoryId="1024" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-04 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="0" />
+<AccountBalanceHistory accountBalanceHistoryId="1025" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-05 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="1200" />
+<AccountBalanceHistory accountBalanceHistoryId="1026" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-06 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="2500" />
+<AccountBalanceHistory accountBalanceHistoryId="1027" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-07 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="1600" />
+<AccountBalanceHistory accountBalanceHistoryId="1028" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-08 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="800" />
+<AccountBalanceHistory accountBalanceHistoryId="1029" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-09 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="150" />
+<AccountBalanceHistory accountBalanceHistoryId="1030" organizationPartyId="Company" partyId="DemoAcctBalAgent" asOfDatetime="2009-04-10 00:00:00" balanceTypeEnumId="COMMISSIONS" totalBalance="900" />
+
+</entity-engine-xml>
+    

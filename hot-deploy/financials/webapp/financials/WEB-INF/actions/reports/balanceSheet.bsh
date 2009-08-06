@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("AccountingBalanceSheet"));
+    
+// get the asOfDate from parseReportOptions
+asOfDate = context.get("asOfDate");
+
+// return if no asOfDate set
+if (asOfDate == null) return;
+
+// The reportFormType parameter indicates that the form has been submitted - 
+//  don't run the report unless that's the case
+reportFormType = parameters.get("reportFormType");
+if (reportFormType == null) return;
+
+input = UtilMisc.toMap("organizationPartyId", context.get("organizationPartyId"), "glFiscalTypeId", context.get("glFiscalTypeId"), "asOfDate", asOfDate, "userLogin", userLogin);
+UtilAccountingTags.addTagParameters(request, input);
+result = dispatcher.runSync("getBalanceSheetForDate", input);
+
+// put results into the context
+if (!ServiceUtil.isError(result)) {
+    context.put("assetAccounts", EntityUtil.orderBy(result.get("assetAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+    context.put("assetAccountBalances", result.get("assetAccountBalances"));
+    context.put("liabilityAccounts", EntityUtil.orderBy(result.get("liabilityAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+    context.put("liabilityAccountBalances", result.get("liabilityAccountBalances"));
+    context.put("equityAccounts", EntityUtil.orderBy(result.get("equityAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+    context.put("equityAccountBalances", result.get("equityAccountBalances"));
+    context.put("isClosed", result.get("isClosed"));
+}
+
+// Get the base currency for the organization
+context.put("orgCurrencyUomId", UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
+

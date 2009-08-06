@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<entity-engine-xml>
+
+    <!-- RecurrenceRules for invoice recurrence -->
+    <RecurrenceRule recurrenceRuleId="FINANCIALS_001" xName="Daily" frequency="DAILY" intervalNumber="1" countNumber="-1"/>
+    <RecurrenceRule recurrenceRuleId="FINANCIALS_002" xName="Monthly" frequency="MONTHLY" intervalNumber="1" countNumber="-1"/>
+    <RecurrenceRule recurrenceRuleId="FINANCIALS_003" xName="Biweekly" frequency="WEEKLY" intervalNumber="2" countNumber="-1"/>
+    <!-- this is how you would create a quarterly recurrence -->
+    <RecurrenceRule recurrenceRuleId="FINANCIALS_006" xName="Quarterly" frequency="MONTHLY" intervalNumber="3" countNumber="-1"/>
+
+    <!-- These two don't seem to work -->
+    <!--
+    <RecurrenceRule recurrenceRuleId="FINANCIALS_004" xName="1st of Month" frequency="" intervalNumber="1" countNumber="-1" byMonthDayList="1"/>
+    <RecurrenceRule recurrenceRuleId="FINANCIALS_005" xName="15th of Month" frequency="" intervalNumber="1" countNumber="-1" byMonthDayList="15"/>
+    -->
+
+    <!-- Schedule runInvoiceRecurrence service nightly -->
+    <RecurrenceInfo recurrenceInfoId="FINANCIALS_001" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="FINANCIALS_001" recurrenceCount="0"/>
+    <JobSandbox jobId="FINANCIALS_001" jobName="Run Invoice Recurrence" runTime="2007-01-01 01:00:00.000" serviceName="runInvoiceRecurrence" poolId="pool" runAsUser="system" recurrenceInfoId="FINANCIALS_001"/>
+
+    <!-- Schedule postScheduledAcctgTrans service nightly -->
+    <RecurrenceInfo recurrenceInfoId="FINANCIALS_002" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="FINANCIALS_001" recurrenceCount="0"/>
+    <JobSandbox jobId="FINANCIALS_002" jobName="Post Scheduled Accounting Transactions" runTime="2007-01-01 02:00:00.000" serviceName="postScheduledAcctgTrans" poolId="pool" runAsUser="system" recurrenceInfoId="FINANCIALS_002"/>
+
+    <!-- Schedule createSnapshot service nightly -->
+    <RecurrenceInfo recurrenceInfoId="FINANCIALS_003" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="FINANCIALS_001" recurrenceCount="0"/>
+    <JobSandbox jobId="FINANCIALS_003" jobName="Create Snapshot for customer/vendor/commission balances" runTime="2007-01-01 02:00:00.000" serviceName="captureAccountBalancesSnapshot" poolId="pool" runAsUser="system" recurrenceInfoId="FINANCIALS_003"/>
+
+    <!-- Schedule creating encumbrance info every night -->
+    <RuntimeData runtimeDataId="FINANCIALS_ENC_DATA">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+            <ofbiz-ser>
+              <map-HashMap>
+                <map-Entry>
+                  <map-Key>
+                    <std-String value="organizationPartyId"/>
+                  </map-Key>
+                  <map-Value>
+                    <std-String value="Company"/>
+                  </map-Value>
+                </map-Entry>
+              </map-HashMap>
+            </ofbiz-ser>
+        ]]></runtimeInfo>
+    </RuntimeData>
+    <RecurrenceRule recurrenceRuleId="FINANCIALS_ENC_RULE" xName="Daily" frequency="DAILY" intervalNumber="1" countNumber="-1"/>
+    <RecurrenceInfo recurrenceInfoId="FINANCIALS_ENC_INFO" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="FINANCIALS_ENC_RULE" recurenceCount="0"/>
+    <JobSandbox jobId="FINANCIALS_ENC_JOB" jobName="Create encumbrance snapshot" runTime="2007-01-01 03:00:00.000" serviceName="createEncumbranceSnapshotAndDetail" poolId="pool" runAsUser="system" recurrenceInfoId="FINANCIALS_ENC_INFO" runtimeDataId="FINANCIALS_ENC_DATA"/>
+
+</entity-engine-xml>

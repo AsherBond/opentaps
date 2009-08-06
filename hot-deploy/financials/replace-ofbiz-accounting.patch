@@ -1,0 +1,58 @@
+Index: applications/party/widget/partymgr/CommonScreens.xml
+===================================================================
+--- applications/party/widget/partymgr/CommonScreens.xml	(revision 983)
++++ applications/party/widget/partymgr/CommonScreens.xml	(working copy)
+@@ -74,7 +74,7 @@
+                                         <include-menu location="component://party/widget/partymgr/PartyMenus.xml" name="ProfileTabBar"/>
+                                         
+                                         <container style="button-bar button-style-2">
+-                                            <link target="/accounting/control/FindBillingAccount?partyId=${partyId}" url-mode="inter-app" 
++                                            <link target="/financials/control/findCustomerBillAcct?customerPartyId=${partyId}&amp;performFind=Y" url-mode="inter-app"
+                                                 text="${uiLabelMap.AccountingBillingAccount}"/>
+                                             <section>
+                                                 <condition><if-has-permission permission="ORDERMGR" action="_VIEW"/></condition>
+@@ -99,9 +99,9 @@
+                                             <section>
+                                                 <condition><if-has-permission permission="ACCOUNTING" action="_VIEW"/></condition>
+                                                 <widgets>
+-                                                    <link target="/accounting/control/findPayments?lookupFlag=Y&amp;hideFields=Y&amp;partyIdTo=${partyId}&amp;externaLoginKey=${externalLoginKey}" url-mode="inter-app" 
++                                                    <link target="/financials/control/findPayment?performFind=Y&amp;partyIdTo=${partyId}&amp;statusId=PMNT_SENT&amp;findPaymentTypeId=DISBURSEMENT&amp;externalLoginKey=${externalLoginKey}" url-mode="inter-app" 
+                                                         text="${uiLabelMap.AccountingPaymentsSent}"/>
+-                                                    <link target="/accounting/control/findPayments?lookupFlag=Y&amp;hideFields=Y&amp;partyIdFrom=${partyId}&amp;externaLoginKey=${externalLoginKey}" url-mode="inter-app" 
++                                                    <link target="/financials/control/findPayment?performFind=Y&amp;partyIdFrom=${partyId}&amp;statusId=PMNT_RECEIVED&amp;externaLoginKey=${externalLoginKey}" url-mode="inter-app" 
+                                                         text="${uiLabelMap.AccountingPaymentsReceived}"/>
+                                                     <link target="/accounting/control/FindFinAccount?ownerPartyId=${partyId}" url-mode="inter-app"
+                                                         text="${uiLabelMap.AccountingFinAccounts}"/>
+Index: applications/product/webapp/facility/shipment/PackOrder.ftl
+===================================================================
+--- applications/product/webapp/facility/shipment/PackOrder.ftl	(revision 983)
++++ applications/product/webapp/facility/shipment/PackOrder.ftl	(working copy)
+@@ -42,8 +42,8 @@
+            <ul>
+              <#list invoiceIds as invoiceId>
+                <li>
+-                 #<a href="/accounting/control/invoiceOverview?invoiceId=${invoiceId}&externalLoginKey=${externalLoginKey}" target="_blank" class="buttontext">${invoiceId}</a>
+-                 (<a href="/accounting/control/invoice.pdf?invoiceId=${invoiceId}&externalLoginKey=${externalLoginKey}" target="_blank" class="buttontext">PDF</a>)
++                 #<a href="/financials/control/viewInvoice?invoiceId=${invoiceId}&externalLoginKey=${externalLoginKey}" target="_blank" class="buttontext">${invoiceId}</a>
++                 (<a href="/financials/control/invoice.pdf?invoiceId=${invoiceId}&externalLoginKey=${externalLoginKey}" target="_blank" class="buttontext">PDF</a>)
+                </li>
+              </#list>
+            </ul>
+Index: applications/order/webapp/ordermgr/return/returnItems.ftl
+===================================================================
+--- applications/order/webapp/ordermgr/return/returnItems.ftl	(revision 983)
++++ applications/order/webapp/ordermgr/return/returnItems.ftl	(working copy)
+@@ -227,11 +227,11 @@
+             <#assign itemResp = item.getRelatedOne("ReturnItemResponse")?if_exists>
+             <#if itemResp?has_content>
+               <#if itemResp.paymentId?has_content>
+-                <div class="tabletext">${uiLabelMap.AccountingPayment} #<a href="/accounting/control/editPayment?paymentId=${itemResp.paymentId}${externalKeyParam}" class="buttontext">${itemResp.paymentId}</a></div>
++                <div class="tabletext">${uiLabelMap.AccountingPayment} #<a href="/financials/control/viewPayment?paymentId=${itemResp.paymentId}${externalKeyParam}" class="buttontext">${itemResp.paymentId}</a></div>
+               <#elseif itemResp.replacementOrderId?has_content>
+                 <div class="tabletext">${uiLabelMap.OrderOrder} #<a href="<@ofbizUrl>orderview?orderId=${itemResp.replacementOrderId}</@ofbizUrl>" class="buttontext">${itemResp.replacementOrderId}</a></div>
+               <#elseif itemResp.billingAccountId?has_content>
+-                <div class="tabletext">${uiLabelMap.AccountingAccountId} #<a href="/accounting/control/EditBillingAccount?billingAccountId=${itemResp.billingAccountId}${externalKeyParam}" class="buttontext">${itemResp.billingAccountId}</a></div>
++                <div class="tabletext">${uiLabelMap.AccountingAccountId} #<a href="/financials/control/ViewCustomerBillAcct?billingAccountId=${itemResp.billingAccountId}${externalKeyParam}" class="buttontext">${itemResp.billingAccountId}</a></div>
+               </#if>
+             <#else>
+               <div class="tabletext">${uiLabelMap.CommonNone}</div>

@@ -1,0 +1,57 @@
+/*
+ * Copyright (c) 2007 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import com.opensourcestrategies.financials.financials.FinancialServices;
+import com.opensourcestrategies.financials.accounts.GLAccountTree;
+import javolution.util.FastMap;
+import java.util.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+assetAccountBalances = context.get("assetAccountBalances");
+liabilityAccountBalances = context.get("liabilityAccountBalances");
+equityAccountBalances = context.get("equityAccountBalances");
+revenueAccountBalances = context.get("revenueAccountBalances");
+expenseAccountBalances = context.get("expenseAccountBalances");
+incomeAccountBalances = context.get("incomeAccountBalances");
+otherAccountBalances = context.get("otherAccountBalances");
+
+// Assets tree
+if (assetAccountBalances != null) {
+   context.put("assetAccountBalancesTree", GLAccountTree.getGLAccountTree(delegator, context.get("organizationPartyId"), context.get("orgCurrencyUomId"), assetAccountBalances));
+}
+// Liability tree
+if (liabilityAccountBalances != null) {
+   context.put("liabilityAccountBalancesTree",  GLAccountTree.getGLAccountTree(delegator, context.get("organizationPartyId"), context.get("orgCurrencyUomId"), liabilityAccountBalances));
+}
+// Equity tree
+if (equityAccountBalances != null) {
+   context.put("equityAccountBalancesTree", GLAccountTree.getGLAccountTree(delegator, context.get("organizationPartyId"), context.get("orgCurrencyUomId"), equityAccountBalances));
+}
+if (revenueAccountBalances != null) {
+   context.put("revenueAccountBalancesTree", GLAccountTree.getGLAccountTree(delegator, context.get("organizationPartyId"), context.get("orgCurrencyUomId"), revenueAccountBalances));
+}
+if (expenseAccountBalances != null) {
+   context.put("expenseAccountBalancesTree", GLAccountTree.getGLAccountTree(delegator, context.get("organizationPartyId"), context.get("orgCurrencyUomId"), expenseAccountBalances));
+}
+
+if (incomeAccountBalances != null) {
+   context.put("incomeAccountBalancesTree", GLAccountTree.getGLAccountTree(delegator, context.get("organizationPartyId"), context.get("orgCurrencyUomId"), incomeAccountBalances));
+}
+if (otherAccountBalances != null) {
+   context.put("otherAccountBalancesTree", GLAccountTree.getGLAccountTree(delegator, context.get("organizationPartyId"), context.get("orgCurrencyUomId"), otherAccountBalances));
+}

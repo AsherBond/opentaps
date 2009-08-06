@@ -1,0 +1,115 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
+
+import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.inventory.InventoryItem;
+import org.opentaps.domain.inventory.InventoryRepositoryInterface;
+import org.opentaps.domain.inventory.InventoryDomainInterface;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+if (organizationPartyId == null) {
+    return;
+}
+
+context.put("facilities", UtilCommon.getOrganizationReceivingFacilities(organizationPartyId, delegator));
+
+// get the org domain
+dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+orgDomain = dl.loadDomainsDirectory().getOrganizationDomain();
+orgRepos = orgDomain.getOrganizationRepository();
+org = orgRepos.getOrganizationById(organizationPartyId);
+
+context.put("costingMethods", delegator.findByAnd("Enumeration", UtilMisc.toMap("enumTypeId", "COSTING_METHOD")));
+context.put("defaultCostingMethodId", org.getPartyAcctgPreference().getCostingMethodId());
+
+if (UtilValidate.isEmpty(parameters.get("performFind"))) return;
+
+facilityId = parameters.get("facilityId");
+productId = parameters.get("productId");
+receivedFromDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "receivedFromDate", locale), timeZone, locale);
+receivedThruDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "receivedThruDate", locale), timeZone, locale);
+
+conditions = new ArrayList();
+conditions.add(new EntityExpr("quantityOnHandTotal", EntityOperator.NOT_EQUAL, 0));        
+if (UtilValidate.isNotEmpty(facilityId)) conditions.add(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));        
+if (UtilValidate.isNotEmpty(productId)) conditions.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));        
+if (UtilValidate.isNotEmpty(receivedFromDate)) {
+  context.put("receivedFromDate", receivedFromDate);
+  conditions.add(new EntityExpr("datetimeReceived", EntityOperator.NOT_EQUAL, null));        
+  conditions.add(new EntityExpr("datetimeReceived", EntityOperator.GREATER_THAN_EQUAL_TO, receivedFromDate));        
+}
+if (UtilValidate.isNotEmpty(receivedThruDate)) {
+  context.put("receivedThruDate", receivedThruDate);
+  conditions.add(new EntityExpr("datetimeReceived", EntityOperator.NOT_EQUAL, null));        
+  conditions.add(new EntityExpr("datetimeReceived", EntityOperator.LESS_THAN_EQUAL_TO, receivedThruDate));        
+}
+
+// check the selected costing method, defaults to ACTUAL_COSTING which is the easiest to get
+costingMethodId = parameters.get("costingMethod");
+if (UtilValidate.isEmpty(costingMethodId)) {
+    costingMethodId = "ACTUAL_COSTING";
+}
+
+useStandardCost = ("STANDARD_COSTING".equals(costingMethodId));
+
+if (useStandardCost) {
+    inventoryDomain = dl.loadDomainsDirectory().getInventoryDomain();
+    inventoryRepository = inventoryDomain.getInventoryRepository();
+}
+
+builder() {
+    entityName = "InventoryItem";
+    orderBy = UtilMisc.toList("inventoryItemId");
+    where = conditions;
+
+    build(page) {
+        newPage = new ArrayList();
+        for (row : page) {
+            invItem = row.getAllFields();
+            // if the costing method is standard costing, then the unit cost should be the standard cost of the inventory item
+            // Otherwise, the unit cost should be current inventory item's unit cost
+            if (useStandardCost) {
+                domainInventoryItem = Repository.loadFromGeneric(InventoryItem.class, row, inventoryRepository);
+                stdCost = domainInventoryItem.getStandardCost();
+                invItem.put("displayCost", stdCost);
+            } else {
+                invItem.put("displayCost", row.get("unitCost"));
+            }
+
+            invItem.put("facility", row.getRelatedOne("Facility"));
+            invItem.put("product", row.getRelatedOne("Product"));
+            invItem.put("inventoryItemValues", row.getRelated("InventoryItemValueHistory", UtilMisc.toList("dateTime DESC")));
+            newPage.add(invItem);
+        }
+        return newPage;
+    }
+
+    return this;
+}
+context.put("inventoryItems", builder());
+

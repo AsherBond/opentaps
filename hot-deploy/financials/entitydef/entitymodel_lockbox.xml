@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Data model for lockbox features</title>
+    <copyright>2008 Open Source Strategies, Inc.</copyright>
+
+    <!-- Because one call to parse lockbox will create the LockboxBatch, _Item, and ItemDetails of the same batch,
+    I think it is safe to use the composite keys of these entities. -->
+
+    <entity entity-name="LockboxBatch" package-name="org.opentaps.financials.lockbox">
+        <field name="lockboxBatchId" type="id-long">
+            <description>A long string which unique identifies each lockbox batch.  This may include company name
+            and date time as well as the batchID</description>
+        </field>
+        <field name="batchId" type="id-long">
+            <description>A shorter string which identifies this particular batch, to match against the items in the batch
+            (see below).</description>
+        </field>
+        <field name="fileHashMark" type="id-long-ne">
+            <description>Batch origin, hash of file.</description>
+        </field>
+        <field name="datetimeEntered" type="date-time">
+            <description>Date and time this lockbox batch was entered at the bank</description>
+        </field>
+        <field name="batchCount" type="numeric">
+            <description>Number of items in this batch.</description>
+        </field>
+        <field name="batchAmount" type="currency-precise"/>
+        <field name="outstandingAmount" type="currency-precise">
+            <description>Initially set to batchAmount, but decremented as the LockboxBatchItems are resolved.
+            Once this reaches zero, the batch is considered complete.</description>
+        </field>
+        <field name="createdByUserLoginId" type="id-vlong-ne"/>
+        <prim-key field="lockboxBatchId"/>
+        <relation type="one" rel-entity-name="UserLogin" fk-name="LKBXBAT_USERLOGIN">
+            <key-map field-name="createdByUserLoginId" rel-field-name="userLoginId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="LockboxBatchItem" package-name="org.opentaps.financials.lockbox">
+        <field name="lockboxBatchId" type="id-long"/>
+        <field name="itemSeqId" type="id-ne"/>
+        <field name="routingNumber" type="id-ne"></field>
+        <field name="accountNumber" type="long-varchar" encrypt="true"/>
+        <field name="paymentDate" type="date-time"/>
+        <field name="checkNumber" type="id"/>
+        <field name="checkAmount" type="currency-precise"/>
+        <prim-key field="lockboxBatchId"/>
+        <prim-key field="itemSeqId"/>
+        <relation type="one" rel-entity-name="LockboxBatch" fk-name="LBXITEM_LBXBATCH">
+            <key-map field-name="lockboxBatchId"/>
+        </relation>    
+    </entity>
+
+    <entity entity-name="LockboxBatchItemDetail" package-name="org.opentaps.financials.lockbox">
+        <field name="lockboxBatchId" type="id-long"/>
+        <field name="itemSeqId" type="id-ne"/>
+        <field name="detailSeqId" type="id-ne"/>
+        <field name="invoiceNumber" type="id"/>
+        <field name="invoiceAmount" type="currency-precise"/>
+        <field name="customerId" type="id"/>
+        <field name="paymentId" type="id"/>
+        <field name="paymentApplicationId" type="id"/>
+        <field name="isUserEntered" type="indicator"/>
+        <field name="amountToApply" type="currency-precise"/>
+        <field name="cashDiscount" type="currency-precise"/>
+        <prim-key field="lockboxBatchId"/>
+        <prim-key field="itemSeqId"/>
+        <prim-key field="detailSeqId"/>
+        <relation type="one" rel-entity-name="LockboxBatch" fk-name="LBXDETAIL_LBXBATCH">
+            <key-map field-name="lockboxBatchId"/>
+        </relation>
+        <relation type="one" rel-entity-name="LockboxBatchItem" fk-name="LBXDETAIL_LBXITEM">
+            <key-map field-name="lockboxBatchId"/>
+            <key-map field-name="itemSeqId"/>
+        </relation>
+        <relation type="one" rel-entity-name="PaymentApplication" fk-name="LBXDETAIL_PAYAPP">
+            <key-map field-name="paymentApplicationId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Payment" fk-name="LBXDETAIL_PAY">
+            <key-map field-name="paymentId"/>
+        </relation>
+    </entity>
+
+</entitymodel>
+

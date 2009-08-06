@@ -1,0 +1,1312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+  <!-- ========================================================= -->
+  <!-- ======================== Defaults ======================= -->
+  <!-- ========================================================= -->
+    <title>Entity of an Open Source Strategies Financials component</title>
+    <description>None</description>
+    <copyright>Copyright (c) 2006 - 2007 Open Source Strategies, Inc.</copyright>
+    <author>None</author>
+    <version>1.0</version>
+
+    <!-- =================================== -->
+    <!-- com.opensourcestrategies.financials -->  
+    <!-- =================================== -->
+
+    <extend-entity entity-name="AcctgTransEntry">
+        <field name="acctgTagEnumId1" type="id-ne"/>
+        <field name="acctgTagEnumId2" type="id-ne"/>
+        <field name="acctgTagEnumId3" type="id-ne"/>
+        <field name="acctgTagEnumId4" type="id-ne"/>
+        <field name="acctgTagEnumId5" type="id-ne"/>
+        <field name="acctgTagEnumId6" type="id-ne"/>
+        <field name="acctgTagEnumId7" type="id-ne"/>
+        <field name="acctgTagEnumId8" type="id-ne"/>
+        <field name="acctgTagEnumId9" type="id-ne"/>
+        <field name="acctgTagEnumId10" type="id-ne"/>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG1" title="tag1">
+            <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG2" title="tag2">
+            <key-map field-name="acctgTagEnumId2" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG3" title="tag3">
+            <key-map field-name="acctgTagEnumId3" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG4" title="tag4">
+            <key-map field-name="acctgTagEnumId4" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG5" title="tag5">
+            <key-map field-name="acctgTagEnumId5" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG6" title="tag6">
+            <key-map field-name="acctgTagEnumId6" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG7" title="tag7">
+            <key-map field-name="acctgTagEnumId7" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG8" title="tag8">
+            <key-map field-name="acctgTagEnumId8" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG9" title="tag9">
+            <key-map field-name="acctgTagEnumId9" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ATE_TAG10" title="tag10">
+            <key-map field-name="acctgTagEnumId10" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
+
+    <extend-entity entity-name="Enumeration">
+        <field name="parentEnumId" type="id-ne"/>
+        <relation type="one" fk-name="PENUM_ENUM" rel-entity-name="Enumeration">
+          <key-map field-name="parentEnumId" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
+
+    <entity entity-name="EncumbranceSnapshot" package-name="org.opentaps.financials.encumbrance">
+        <description>
+            Header entity each time an encumbrance is calculated.  No foreign keys because this is
+            a data warehouse type table.
+        </description>
+        <field name="encumbranceSnapshotId" type="id-ne"/>
+        <field name="snapshotDatetime" type="date-time"/>
+        <field name="createdByUserLoginId" type="id-vlong-ne"/>
+        <field name="description" type="description"/>
+        <field name="comments" type="comment"/>
+        <prim-key field="encumbranceSnapshotId"/>
+    </entity>
+
+    <entity entity-name="EncumbranceDetail" package-name="org.opentaps.financials.encumbrance">
+        <description>
+            Detail data for each encumbrance snapshot. Note that the fields are not foreign keyed
+            because this is a data warehouse type table.
+        </description>
+        <field name="encumbranceSnapshotId" type="id-ne"/>
+        <field name="encumbranceDetailSeqId" type="id-ne"/>
+        <field name="encumbranceDetailTypeId" type="id-ne"/>
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="partyId" type="id-ne"/>
+
+        <!-- these fields relate to when the encumbrance detail is the result of an order -->
+        <field name="orderId" type="id-ne"/>
+        <field name="orderItemSeqId" type="id-ne"/>
+        <field name="originalQuantity" type="floating-point"/>
+        <field name="cancelQuantity" type="floating-point"/>
+        <field name="invoicedQuantity" type="floating-point"/>
+        <field name="encumberedQuantity" type="floating-point"/>
+        <field name="unitAmount" type="currency-amount"/>
+
+        <!-- these fields relate to when the encumbrance detail is the result of an accounting transaction entry -->
+        <field name="acctgTransId" type="id-ne"/>
+        <field name="acctgTransEntryId" type="id-ne"/>
+        <field name="debitCreditFlag" type="indicator"/>
+        <field name="glAccountId" type="id-ne"/>
+
+        <field name="encumberedAmount" type="currency-amount"/>
+
+        <field name="acctgTagEnumId1" type="id-ne"/>
+        <field name="acctgTagEnumId2" type="id-ne"/>
+        <field name="acctgTagEnumId3" type="id-ne"/>
+        <field name="acctgTagEnumId4" type="id-ne"/>
+        <field name="acctgTagEnumId5" type="id-ne"/>
+        <field name="acctgTagEnumId6" type="id-ne"/>
+        <field name="acctgTagEnumId7" type="id-ne"/>
+        <field name="acctgTagEnumId8" type="id-ne"/>
+        <field name="acctgTagEnumId9" type="id-ne"/>
+        <field name="acctgTagEnumId10" type="id-ne"/>
+
+        <prim-key field="encumbranceSnapshotId"/>
+        <prim-key field="encumbranceDetailSeqId"/>
+        <relation type="one" fk-name="EB_DETAIL_SNP" rel-entity-name="EncumbranceSnapshot">
+            <key-map field-name="encumbranceSnapshotId" rel-field-name="encumbranceSnapshotId"/>
+        </relation>
+        <relation type="one" fk-name="EB_DETAIL_EBDTYP" rel-entity-name="EncumbranceDetailType">
+            <key-map field-name="encumbranceDetailTypeId" rel-field-name="encumbranceDetailTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG1" title="tag1">
+            <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG2" title="tag2">
+            <key-map field-name="acctgTagEnumId2" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG3" title="tag3">
+            <key-map field-name="acctgTagEnumId3" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG4" title="tag4">
+            <key-map field-name="acctgTagEnumId4" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG5" title="tag5">
+            <key-map field-name="acctgTagEnumId5" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG6" title="tag6">
+            <key-map field-name="acctgTagEnumId6" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG7" title="tag7">
+            <key-map field-name="acctgTagEnumId7" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG8" title="tag8">
+            <key-map field-name="acctgTagEnumId8" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG9" title="tag9">
+            <key-map field-name="acctgTagEnumId9" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="EB_TAG10" title="tag10">
+            <key-map field-name="acctgTagEnumId10" rel-field-name="enumId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="EncumbranceDetailType" package-name="org.opentaps.financials.encumbrance">
+        <field name="encumbranceDetailTypeId" type="id-ne"/>
+        <field name="description" type="description"/>
+        <prim-key field="encumbranceDetailTypeId"/>
+    </entity>
+
+    <!-- ========================================== -->
+    <!-- com.opensourcestrategies.financials.ledger -->  
+    <!-- ========================================== -->
+
+    <extend-entity entity-name="AcctgTrans">
+        <field name="invoiceAdjustmentId" type="id"/>
+        <relation type="one" rel-entity-name="InvoiceAdjustment">
+            <key-map field-name="invoiceAdjustmentId"/>
+        </relation>
+    </extend-entity>
+
+    <entity entity-name="AcctgTransEntryRole" package-name="com.opensourcestrategies.financials.ledger"
+        title="Entity to track additional parties of an AcctgTransEntry">
+        <field name="acctgTransId" type="id-ne"/>
+        <field name="acctgTransEntrySeqId" type="id-ne"/>
+        <field name="partyId" type="id-ne"/>
+        <field name="roleTypeId" type="id-ne"/>
+        <prim-key field="acctgTransId"/>
+        <prim-key field="acctgTransEntrySeqId"/>
+        <prim-key field="partyId"/>
+        <prim-key field="roleTypeId"/>
+        <relation type="one" rel-entity-name="AcctgTransEntry">
+            <key-map field-name="acctgTransId"/>
+            <key-map field-name="acctgTransEntrySeqId"/>
+        </relation>
+        <relation type="one" rel-entity-name="PartyRole">
+            <key-map field-name="partyId"/>
+            <key-map field-name="roleTypeId"/>
+         </relation>
+    </entity>
+
+    <view-entity entity-name="AcctgTransAndEntries"
+            package-name="com.opensourcestrategies.financials.ledger"
+            title="View of AcctgTrans and Entries, for easier lookup and calculation">
+      <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
+      <member-entity entity-alias="ATT" entity-name="AcctgTransType"/>
+      <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+      <member-entity entity-alias="GLA" entity-name="GlAccount"/>
+      <member-entity entity-alias="GLAC" entity-name="GlAccountClass"/>
+      <alias entity-alias="ATR" name="isPosted"/>
+      <alias entity-alias="ATR" name="glFiscalTypeId"/>
+      <alias entity-alias="ATR" name="acctgTransTypeId"/>
+      <alias entity-alias="ATR" name="transactionDate"/>
+      <alias entity-alias="ATR" name="transDescription" field="description"/>
+      <alias entity-alias="ATT" name="transTypeDescription" field="description"/>
+      <alias entity-alias="ATR" name="invoiceId"/>
+      <alias entity-alias="ATR" name="paymentId"/>
+      <alias entity-alias="ATR" name="shipmentId"/>
+      <alias entity-alias="ATR" name="receiptId"/>
+      <alias entity-alias="ATR" name="inventoryItemId"/>
+      <alias entity-alias="ATR" name="workEffortId"/>
+      <alias entity-alias="ATR" name="physicalInventoryId"/>
+      <alias entity-alias="ATE" name="acctgTransId"/>
+      <alias entity-alias="ATE" name="acctgTransEntrySeqId"/>
+      <alias entity-alias="ATE" name="glAccountId"/>
+      <alias entity-alias="ATE" name="productId"/>
+      <alias entity-alias="ATE" name="debitCreditFlag"/>
+      <alias entity-alias="ATE" name="amount"/>
+      <alias entity-alias="ATE" name="currencyUomId"/>
+      <alias entity-alias="ATE" name="organizationPartyId"/>
+      <alias entity-alias="GLA" name="glAccountTypeId"/>
+      <alias entity-alias="GLA" name="accountCode"/>
+      <alias entity-alias="GLA" name="accountName"/>
+      <alias entity-alias="GLAC" name="glAccountClassId"/>
+      <alias entity-alias="ATE" name="partyId"/>
+      <alias entity-alias="ATE" name="reconcileStatusId"/>
+      <alias entity-alias="ATE" name="acctgTransEntryTypeId"/>
+      <alias entity-alias="ATE" name="acctgTagEnumId1" />
+      <alias entity-alias="ATE" name="acctgTagEnumId2" />
+      <alias entity-alias="ATE" name="acctgTagEnumId3" />
+      <alias entity-alias="ATE" name="acctgTagEnumId4" />
+      <alias entity-alias="ATE" name="acctgTagEnumId5" />
+      <alias entity-alias="ATE" name="acctgTagEnumId6" />
+      <alias entity-alias="ATE" name="acctgTagEnumId7" />
+      <alias entity-alias="ATE" name="acctgTagEnumId8" />
+      <alias entity-alias="ATE" name="acctgTagEnumId9" />
+      <alias entity-alias="ATE" name="acctgTagEnumId10" />
+      <view-link entity-alias="ATR" rel-entity-alias="ATE">
+        <key-map field-name="acctgTransId"/>
+      </view-link>
+      <view-link entity-alias="ATR" rel-entity-alias="ATT">
+        <key-map field-name="acctgTransTypeId"/>
+      </view-link>
+      <view-link entity-alias="ATE" rel-entity-alias="GLA">
+        <key-map field-name="glAccountId"/>
+      </view-link>
+      <view-link entity-alias="GLA" rel-entity-alias="GLAC">
+        <key-map field-name="glAccountClassId"/>
+      </view-link>
+      <relation type="one" fk-name="ATAE_GLACT" rel-entity-name="GlAccount">
+        <key-map field-name="glAccountId"/>
+      </relation>
+      <relation type="one" fk-name="ATAE_GLACTCLS" rel-entity-name="GlAccountClass">
+        <key-map field-name="glAccountClassId"/>
+      </relation>
+      <relation type="one" fk-name="ATAE_ATTYPE" rel-entity-name="AcctgTransType">
+        <key-map field-name="acctgTransTypeId"/>
+      </relation>
+      <relation type="one" fk-name="ATAE_INVOICE" rel-entity-name="Invoice">
+        <key-map field-name="invoiceId"/>
+      </relation>
+      <relation type="one" fk-name="ATAE_PAYMENT" rel-entity-name="Payment">
+        <key-map field-name="paymentId"/>
+      </relation>
+    </view-entity>
+
+    <view-entity entity-name="AcctgTransAndEntriesPostedTransDate"
+                 package-name="com.opensourcestrategies.financials.ledger"
+                 title="View entity to get the last transaction date of posted transactions for an organization">
+        <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
+        <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+        <alias entity-alias="ATR" name="transactionDate" group-by="false" function="max"/>
+        <alias entity-alias="ATR" name="isPosted" group-by="true"/>
+        <alias entity-alias="ATE" name="organizationPartyId" group-by="true"/>
+        <view-link entity-alias="ATR" rel-entity-alias="ATE">
+           <key-map field-name="acctgTransId"/>
+        </view-link>                    
+    </view-entity>
+
+    <view-entity entity-name="AcctgTransEntryAccountSum"
+            package-name="com.opensourcestrategies.financials.ledger" 
+            title="Sum of AcctgTransEntry entity amounts for reporting by glAccountId">
+
+       <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+       <member-entity entity-alias="GLA" entity-name="GlAccount"/>
+
+       <alias entity-alias="ATR" name="transactionDate" group-by="false"/>
+       <alias entity-alias="ATR" name="glFiscalTypeId" group-by="true"/>
+       <alias entity-alias="ATE" name="organizationPartyId" group-by="true"/>
+       <alias entity-alias="ATE" name="debitCreditFlag" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId1" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId2" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId3" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId4" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId5" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId6" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId7" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId8" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId9" group-by="true"/>
+       <alias entity-alias="ATE" name="acctgTagEnumId10" group-by="true"/>
+       <alias entity-alias="ATE" name="amount" function="sum"/>
+       <alias entity-alias="ATR" name="isPosted" group-by="false"/>
+       <alias entity-alias="GLA" name="glAccountId" group-by="true"/>
+       <alias entity-alias="GLA" name="accountCode" group-by="true"/>
+       <alias entity-alias="GLA" name="accountName" group-by="true"/>
+       <alias entity-alias="GLA" name="glAccountClassId" group-by="true"/>
+
+       <view-link entity-alias="ATR" rel-entity-alias="ATE">
+           <key-map field-name="acctgTransId"/>
+       </view-link>       
+       <view-link entity-alias="ATE" rel-entity-alias="GLA">
+           <key-map field-name="glAccountId"/>
+       </view-link>
+       <relation type="one-nofk" rel-entity-name="GlAccountClass">
+           <key-map field-name="glAccountClassId"/>
+       </relation>
+    </view-entity>
+
+    <view-entity entity-name="AcctgTransEntryPartySum" 
+            package-name="com.opensourcestrategies.financials.ledger" 
+            title="Sum of AcctgTransEntry entity amounts for reporting by transaction party">
+
+       <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+       <member-entity entity-alias="GLA" entity-name="GlAccount"/>
+
+       <alias entity-alias="ATR" name="acctgTransId"/>
+       <alias entity-alias="ATR" name="transactionDate" group-by="false"/>
+       <alias entity-alias="ATR" name="glFiscalTypeId" group-by="true"/> <!-- this should be false only if we want to select across multiple gl fiscal types -->
+       <alias entity-alias="ATE" name="organizationPartyId" group-by="true"/>
+       <alias entity-alias="ATE" name="debitCreditFlag" group-by="true"/>
+       <alias entity-alias="ATE" name="amount" function="sum"/>
+       <alias entity-alias="ATE" name="partyId" group-by="true"/>
+       <alias entity-alias="ATR" name="isPosted" group-by="false"/>
+       <alias entity-alias="GLA" name="glAccountTypeId" group-by="false"/> 
+
+       <view-link entity-alias="ATR" rel-entity-alias="ATE">
+         <key-map field-name="acctgTransId"/>
+       </view-link>       
+       <view-link entity-alias="ATE" rel-entity-alias="GLA">
+        <key-map field-name="glAccountId"/>
+       </view-link>
+    </view-entity>
+
+    <view-entity entity-name="AcctgTransEntryEquivalenceSum"
+            package-name="com.opensourcestrategies.financials.ledger"
+            title="Sum of AcctgTransEntry entity amounts for validating equivalence between two transactions.">
+
+       <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+
+       <alias entity-alias="ATR" name="acctgTransId" group-by="false"/>
+       <alias entity-alias="ATE" name="amount" function="sum"/>
+       <alias entity-alias="ATE" name="glAccountId" group-by="true"/>
+       <alias entity-alias="ATE" name="organizationPartyId" group-by="true"/>
+       <alias entity-alias="ATE" name="debitCreditFlag" group-by="true"/>
+       <alias entity-alias="ATE" name="currencyUomId" group-by="true"/>
+       <alias entity-alias="ATE" name="productId" group-by="true"/>
+       <alias entity-alias="ATE" name="partyId" group-by="true"/>
+       <alias entity-alias="ATE" name="roleTypeId" group-by="true"/>
+
+       <view-link entity-alias="ATR" rel-entity-alias="ATE">
+         <key-map field-name="acctgTransId"/>
+       </view-link>
+    </view-entity>
+
+    <view-entity entity-name="GlReconciliationAndAcctgTransEntry"
+            package-name="com.opensourcestrategies.financials.ledger"
+            title="Join of GlReconciliationEntry, AcctgTrans, and AcctgTransEntry">
+       <member-entity entity-alias="GRE" entity-name="GlReconciliationEntry"/>
+       <member-entity entity-alias="A" entity-name="AcctgTrans"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+
+       <alias-all entity-alias="GRE"/>
+       <alias-all entity-alias="A"/>
+       <alias-all entity-alias="ATE"/>
+       <view-link entity-alias="GRE" rel-entity-alias="A">
+           <key-map field-name="acctgTransId"/>
+       </view-link>
+       <view-link entity-alias="GRE" rel-entity-alias="ATE">
+           <key-map field-name="acctgTransId"/>
+           <key-map field-name="acctgTransEntrySeqId"/>
+       </view-link>
+
+    </view-entity>        
+
+    <view-entity entity-name="CreditCardTrans"
+            package-name="com.opensourcestrategies.financials.ledger"
+            title="Join of PaymentGatewayResponse and PaymentApplication for report of CC transaction details.">
+       <member-entity entity-alias="P" entity-name="Payment"/>
+       <member-entity entity-alias="PA" entity-name="PaymentApplication"/>
+       <member-entity entity-alias="PGR" entity-name="PaymentGatewayResponse"/>
+       <member-entity entity-alias="CC" entity-name="CreditCard"/>
+       <member-entity entity-alias="OPP" entity-name="OrderPaymentPreference"/>
+
+       <alias entity-alias="P" name="paymentId"/>
+       <alias entity-alias="P" name="currencyUomId"/>
+       <alias entity-alias="P" name="partyIdTo"/>
+       <alias entity-alias="P" name="paymentAmount" field="amount"/>
+       <alias entity-alias="PA" name="amountApplied"/>
+       <alias entity-alias="PA" name="invoiceId"/>
+       <alias entity-alias="PGR" name="paymentGatewayResponseId"/>
+       <alias entity-alias="PGR" name="transactionDate"/>
+       <alias entity-alias="PGR" name="transCodeEnumId"/>
+       <alias entity-alias="PGR" name="referenceNum"/>
+       <alias entity-alias="PGR" name="gatewayCode"/>
+       <alias entity-alias="CC" name="paymentMethodId"/>
+       <alias entity-alias="OPP" name="orderId"/>
+
+       <view-link entity-alias="P" rel-entity-alias="PA" rel-optional="true">
+           <key-map field-name="paymentId"/>
+       </view-link>
+       <view-link entity-alias="P" rel-entity-alias="PGR">
+           <key-map field-name="paymentGatewayResponseId"/>
+       </view-link>
+       <view-link entity-alias="P" rel-entity-alias="CC" rel-optional="true">
+           <key-map field-name="paymentMethodId"/>
+       </view-link>
+       <view-link entity-alias="PGR" rel-entity-alias="OPP" rel-optional="true">
+           <key-map field-name="orderPaymentPreferenceId"/>
+       </view-link>
+       <relation type="one-nofk" rel-entity-name="CreditCard">
+           <key-map field-name="paymentMethodId"/>
+       </relation>
+    </view-entity>
+
+    <view-entity entity-name="PaymentReceiptsDetail"
+            package-name="com.opensourcestrategies.financials.ledger"
+            title="Join of Payment, AcctgTrans, and AcctgTransEntry for report of payment receipts by GL Account.">
+       <member-entity entity-alias="P" entity-name="Payment"/>
+       <member-entity entity-alias="A" entity-name="AcctgTrans"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+
+       <alias entity-alias="P" name="paymentId"/>
+       <alias entity-alias="P" name="paymentMethodTypeId"/>
+       <alias entity-alias="P" name="paymentRefNum"/>
+       <alias entity-alias="P" name="partyIdTo"/>
+       <alias entity-alias="P" name="partyIdFrom"/>
+       <alias entity-alias="P" name="amount"/>
+       <alias entity-alias="P" name="currencyUomId"/>
+       <alias entity-alias="A" name="acctgTransId"/>
+       <alias entity-alias="A" name="transactionDate"/>
+       <alias entity-alias="ATE" name="glAccountId"/>
+       <alias entity-alias="ATE" name="debitCreditFlag"/>
+
+       <view-link entity-alias="A" rel-entity-alias="P">
+           <key-map field-name="paymentId"/>
+       </view-link>
+       <view-link entity-alias="A" rel-entity-alias="ATE">
+           <key-map field-name="acctgTransId"/>
+       </view-link>
+    </view-entity>
+
+    <view-entity entity-name="PaymentReceiptsDetailWithApplication"
+            package-name="com.opensourcestrategies.financials.ledger"
+            title="Join of Payment, PaymentAppllication, AcctgTrans, and AcctgTransEntry for report of payment receipts by GL Account
+            further broken down by invoice applied to.">
+       <member-entity entity-alias="P" entity-name="Payment"/>
+       <member-entity entity-alias="PA" entity-name="PaymentApplication"/>
+       <member-entity entity-alias="A" entity-name="AcctgTrans"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+
+       <alias entity-alias="P" name="paymentId"/>
+       <alias entity-alias="P" name="paymentMethodTypeId"/>
+       <alias entity-alias="P" name="paymentRefNum"/>
+       <alias entity-alias="P" name="partyIdTo"/>
+       <alias entity-alias="P" name="partyIdFrom"/>
+       <alias entity-alias="P" name="amount"/>
+       <alias entity-alias="P" name="currencyUomId"/>
+       <alias entity-alias="PA" name="invoiceId"/>
+       <alias entity-alias="PA" name="amountApplied"/>
+       <alias entity-alias="A" name="acctgTransId"/>
+       <alias entity-alias="A" name="transactionDate"/>
+       <alias entity-alias="ATE" name="glAccountId"/>
+       <alias entity-alias="ATE" name="debitCreditFlag"/>
+
+       <view-link entity-alias="A" rel-entity-alias="P">
+           <key-map field-name="paymentId"/>
+       </view-link>
+       <view-link entity-alias="P" rel-entity-alias="PA" rel-optional="true">
+           <key-map field-name="paymentId"/>
+       </view-link>
+       <view-link entity-alias="A" rel-entity-alias="ATE">
+           <key-map field-name="acctgTransId"/>
+       </view-link>
+    </view-entity>
+
+    <entity entity-name="InventoryStatusGlAccountType" table-name="INV_STTS_GLACCT_TYPE"
+        package-name="com.opensourcestrategies.financials.ledger"
+        title="Seed data table which maps status change for serialized inventory to GlAccountTypes, which are then defined for each organization">
+
+        <field name="statusIdFrom" type="id-ne"></field>
+        <field name="statusIdTo" type="id-ne"></field>
+        <field name="debitGlAccountTypeId" type="id-ne"></field>
+        <field name="creditGlAccountTypeId" type="id-ne"></field>
+
+        <prim-key field="statusIdFrom"/>
+        <prim-key field="statusIdTo"/>
+
+        <relation type="one" title="From" fk-name="INSTAT_STTS_FROM" rel-entity-name="StatusItem">
+            <key-map field-name="statusIdFrom" rel-field-name="statusId"/>
+        </relation>
+        <relation type="one" title="To" fk-name="INSTAT_STTS_TO" rel-entity-name="StatusItem">
+            <key-map field-name="statusIdTo" rel-field-name="statusId"/>
+        </relation>
+        <relation type="one" title="Debit" fk-name="INSTAT_DR_GLACTP" rel-entity-name="GlAccountType">
+            <key-map field-name="debitGlAccountTypeId" rel-field-name="glAccountTypeId"/>
+        </relation>
+        <relation type="one" title="Credit" fk-name="INSTAT_CR_GLACTP" rel-entity-name="GlAccountType">
+            <key-map field-name="creditGlAccountTypeId" rel-field-name="glAccountTypeId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="GlAccountTypeOrganization"
+        package-name="com.opensourcestrategies.financials.party"
+        title="Join of GlAccountTypeDefault with GlAccountOrganization and GlAccount to show the accounts associated with each Account Type and their posted balances.">
+
+        <member-entity entity-alias="GATD" entity-name="GlAccountTypeDefault"/>
+        <member-entity entity-alias="GAT" entity-name="GlAccountType"/>
+        <member-entity entity-alias="GA" entity-name="GlAccount"/>
+        <member-entity entity-alias="GAO" entity-name="GlAccountOrganization"/>
+
+        <alias-all entity-alias="GA">
+            <exclude field="glAccountTypeId"/>
+            <exclude field="postedBalance"/>
+        </alias-all>
+        <alias entity-alias="GAT" name="glAccountTypeDescription" field="description"/>
+        <alias entity-alias="GAT" name="glAccountTypeId"/>
+        <alias entity-alias="GAO" name="postedBalance"/>
+        <alias entity-alias="GAO" name="organizationPartyId"/>
+        <alias entity-alias="GAO" name="fromDate"/>
+        <alias entity-alias="GAO" name="thruDate"/>
+
+        <view-link entity-alias="GATD" rel-entity-alias="GAT">
+            <key-map field-name="glAccountTypeId"/>
+        </view-link>
+        <view-link entity-alias="GATD" rel-entity-alias="GA">
+            <key-map field-name="glAccountId"/>
+        </view-link>
+        <view-link entity-alias="GATD" rel-entity-alias="GAO">
+            <key-map field-name="glAccountId"/>
+            <key-map field-name="organizationPartyId"/>
+        </view-link>
+    </view-entity>
+    <view-entity entity-name="GlAccountOrgAndPrefAndClass"
+            package-name="org.ofbiz.accounting.ledger"
+            title="View of GL Account Organization, PartyAcctgPref and the GlAccount and class, for lookup and calculation">
+      <member-entity entity-alias="GLAO" entity-name="GlAccountOrganization"/>
+      <member-entity entity-alias="GLA" entity-name="GlAccount"/>
+      <member-entity entity-alias="PAP" entity-name="PartyAcctgPreference"/>
+      <alias-all entity-alias="GLAO"/>
+      <alias-all entity-alias="GLA">
+        <exclude field="postedBalance"/>
+      </alias-all>
+      <alias entity-alias="GLA" name="accountPostedBalance" field="postedBalance"/>
+      <alias name="baseCurrencyUomId" entity-alias="PAP"/>
+      <view-link entity-alias="GLAO" rel-entity-alias="GLA">
+        <key-map field-name="glAccountId"/>
+      </view-link>
+      <view-link entity-alias="GLAO" rel-entity-alias="PAP">
+        <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+      </view-link>
+      <relation type="one" fk-name="GLAOPC_GLA" rel-entity-name="GlAccount">
+        <key-map field-name="glAccountId"/>
+      </relation>
+      <relation type="one" fk-name="GLAOPC_GLAO" rel-entity-name="GlAccountOrganization">
+        <key-map field-name="glAccountId"/>
+        <key-map field-name="organizationPartyId"/>
+      </relation>
+      <relation type="one" fk-name="GLAOPC_ACCTGPREF" rel-entity-name="PartyAcctgPreference">
+        <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+      </relation>
+    </view-entity>
+    <entity entity-name="InvoiceAdjustmentType"
+                package-name="org.opentaps.accounting.ledger"
+                title="Different types of adjustments available for invoices: cash discount, credit, early pay discount, etc.  This should be used on invoices that have been posted.  For unposted invoices, add invoice items to adjust it">
+        <field name="invoiceAdjustmentTypeId" type="id-ne"/>
+        <field name="description" type="description"/>
+        <prim-key field="invoiceAdjustmentTypeId"/>
+    </entity>
+    <entity entity-name="InvoiceAdjustmentGlAccount"
+            package-name="org.opentaps.accounting.ledger"
+            title="Entity to configure gl account for different invoice adjustments">
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="invoiceTypeId" type="id-ne"/>
+        <field name="invoiceAdjustmentTypeId" type="id-ne"/>
+        <field name="glAccountId" type="id-ne"/>
+        <field name="acctgTransTypeId" type="id-ne"/>
+        <prim-key field="organizationPartyId"/>
+        <prim-key field="invoiceTypeId"/>
+        <prim-key field="invoiceAdjustmentTypeId"/>
+        <relation type="one" rel-entity-name="Party" fk-name="INVADJGLACT_PTY">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="InvoiceType" fk-name="INVADGLAC_INVTYP">
+            <key-map field-name="invoiceTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="InvoiceAdjustmentType" fk-name="INVADGLAC_INVADTY">
+            <key-map field-name="invoiceAdjustmentTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="GlAccount" fk-name="INVADGLAC_GLACT">
+            <key-map field-name="glAccountId"/>
+        </relation>
+        <relation type="one" rel-entity-name="AcctgTransType" fk-name="INVADGLAC_ATXTYPE">
+            <key-map field-name="acctgTransTypeId"/>
+        </relation>
+    </entity>
+    <entity entity-name="InvoiceGlAccountType" package-name="org.opentaps.accounting.ledger"
+            title="Entity to configure gl account types and other posting parameters based on invoice type">
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="invoiceTypeId" type="id-ne"/>
+        <field name="invoiceGlAccountTypeId" type="id-ne"/>
+        <prim-key field="organizationPartyId"/>
+        <prim-key field="invoiceTypeId"/>
+        <relation type="one" rel-entity-name="Party" fk-name="INVGLAT_PTY">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" rel-entity-name="InvoiceType" fk-name="INVGLAT_INVTYP">
+            <key-map field-name="invoiceTypeId"/>
+        </relation>
+        <relation type="one" title="Invoice" rel-entity-name="GlAccountType" fk-name="INVGLAT_GLACT">
+            <key-map field-name="invoiceGlAccountTypeId" rel-field-name="glAccountTypeId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="AccountBalanceHistory" package-name="com.opensourcestrategies.financials.ledger"
+        title="Entity to track outstanding balances over time of customer/vendor/commission balances">
+        <field name="accountBalanceHistoryId" type="id-ne"/>
+        <field name="organizationPartyId" type="id-ne"/>
+        <field name="partyId" type="id-ne"/>
+        <field name="asOfDatetime" type="date-time"/>
+        <field name="balanceTypeEnumId" type="id-ne"/>
+        <field name="totalBalance" type="floating-point"/>
+        <prim-key field="accountBalanceHistoryId"/>
+        <relation type="one" fk-name="ACCT_BLCHIS_ORGPTY" title="Organization" rel-entity-name="Party">
+            <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+        </relation>
+        <relation type="one" fk-name="ACCT_BLCHIS_PARTY" rel-entity-name="Party">
+          <key-map field-name="partyId"/>
+        </relation>
+        <relation type="one" fk-name="ACCT_BLCHIS_ENUM" title="BalanceType" rel-entity-name="Enumeration">
+            <key-map field-name="balanceTypeEnumId" rel-field-name="enumId"/>
+        </relation>                
+    </entity>
+    
+    <entity entity-name="GlAccountClassTypeMap" package-name="com.opensourcestrategies.financials.ledger"
+    	title="Gl Account Class - Gl Account Type Pair">
+    	<field name="glAccountClassTypeKey" type="id-ne" />
+    	<field name="glAccountClassId" type="id-ne" />
+    	<field name="glAccountTypeId" type="id-ne" />
+    	<field name="description" type="description"></field>
+    	<prim-key field="glAccountClassTypeKey"/>
+    	<relation type="one" fk-name="ACCMAP_CLS" rel-entity-name="GlAccountClass">
+    		<key-map field-name="glAccountClassId" />
+    	</relation>
+    	<relation type="one" fk-name="ACCMAP_TYP" rel-entity-name="GlAccountType">
+    		<key-map field-name="glAccountTypeId"/>
+    	</relation> 	
+    </entity>
+
+    <!-- ========================================= -->
+    <!-- com.opensourcestrategies.financials.party -->  
+    <!-- ========================================= -->
+
+    <view-entity entity-name="PartyAcctgPreferenceRoleAndDetail"
+        package-name="com.opensourcestrategies.financials.party"
+        title="List of parties with their configurations.">
+
+        <member-entity entity-alias="PTY" entity-name="Party"/>
+        <member-entity entity-alias="PREF" entity-name="PartyAcctgPreference"/>
+        <member-entity entity-alias="PR" entity-name="PartyRole"/>
+        <member-entity entity-alias="PERSON" entity-name="Person"/>
+        <member-entity entity-alias="PTYGRP" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PS" entity-name="PartyStatus"/>
+
+        <alias-all entity-alias="PREF">
+            <exclude field="partyId"/>
+        </alias-all>
+        <alias-all entity-alias="PR"/>
+        <alias-all entity-alias="PS">
+            <exclude field="statusId"/>
+        </alias-all>
+        <alias-all entity-alias="PERSON">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PTYGRP">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias entity-alias="PREF" name="ptyAcctgPrefPartyId" field="partyId"/>
+        <alias entity-alias="PERSON" name="personComments" field="comments"/>
+        <alias entity-alias="PTYGRP" name="partyGroupComments" field="comments"/>
+        <alias entity-alias="PS" name="previousStatusId" field="statusId"/>
+
+        <view-link entity-alias="PTY" rel-entity-alias="PREF" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PTY" rel-entity-alias="PR">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PTY" rel-entity-alias="PERSON" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PTY" rel-entity-alias="PTYGRP" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PTY" rel-entity-alias="PS" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+    </view-entity>
+    <entity entity-name="AgreementCategoryAppl"
+        package-name="org.ofbiz.party.agreement"
+        title="Entity that associates a ProductCategory to an AgreementItem, useful for connecting groups of products to agreements">
+
+        <field name="agreementId" type="id-ne"></field>
+        <field name="agreementItemSeqId" type="id-ne"></field>
+        <field name="productCategoryId" type="id-ne"></field>
+
+        <prim-key field="agreementId"/>
+        <prim-key field="agreementItemSeqId"/>
+        <prim-key field="productCategoryId"/>
+
+        <relation type="one-nofk" rel-entity-name="Agreement">
+            <key-map field-name="agreementId"/>
+        </relation>
+        <relation type="one" fk-name="AGRMNT_PCAT_AITM" rel-entity-name="AgreementItem">
+            <key-map field-name="agreementId"/>
+            <key-map field-name="agreementItemSeqId"/>
+        </relation>
+        <relation type="one" fk-name="AGRMNT_PCAT_CAT" rel-entity-name="ProductCategory">
+            <key-map field-name="productCategoryId"/>
+        </relation>
+    </entity>
+
+
+    <!-- =========================================== -->
+    <!-- com.opensourcestrategies.financials.product -->  
+    <!-- =========================================== -->
+
+    <view-entity entity-name="AcctgTransEntryProdSum"
+        package-name="com.opensourcestrategies.financials.product"
+        title="Sum of AcctgTransEntry amounts for reporting by productId">
+
+        <member-entity entity-alias="P" entity-name="Product"/>
+        <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+        <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
+        <member-entity entity-alias="GA" entity-name="GlAccount"/>
+
+        <alias entity-alias="P" name="productId" group-by="true"/>
+        <alias entity-alias="P" name="internalName" group-by="true"/>
+        <alias entity-alias="P" name="brandName" group-by="true"/>
+        <alias entity-alias="ATE" name="amount" function="sum"/>
+        <alias entity-alias="ATE" name="currencyUomId" group-by="true"/> <!-- make sure to select one currency -->
+        <alias entity-alias="ATE" name="debitCreditFlag" group-by="true"/>
+        <alias entity-alias="ATR" name="transactionDate" group-by="false"/> 
+        <alias entity-alias="GA" name="glAccountClassId" group-by="false"/> <!-- summing up over account classes -->
+
+        <view-link entity-alias="P" rel-entity-alias="ATE">
+            <key-map field-name="productId"/>
+        </view-link>
+        <view-link entity-alias="ATE" rel-entity-alias="GA">
+            <key-map field-name="glAccountId"/>
+        </view-link>
+        <view-link entity-alias="ATE" rel-entity-alias="ATR">
+            <key-map field-name="acctgTransId"/>
+        </view-link>
+    </view-entity>
+
+ 
+    <!-- =========================================== -->
+    <!-- com.opensourcestrategies.financials.invoice -->  
+    <!-- =========================================== -->
+
+
+    <extend-entity entity-name="ProductStore">
+        <field name="billToThirdPartyId" type="id">
+            <description>If set, certain sales invoice items will be billed to this party.</description>
+        </field>
+        <relation type="one" fk-name="PROD_STR_BILLTOPTY" title="BillToThirdParty" rel-entity-name="Party">
+            <key-map field-name="billToThirdPartyId" rel-field-name="partyId"/>
+        </relation>
+    </extend-entity>
+
+    <extend-entity entity-name="InventoryItem">
+        <field name="acctgTagEnumId1" type="id-ne"/>
+        <field name="acctgTagEnumId2" type="id-ne"/>
+        <field name="acctgTagEnumId3" type="id-ne"/>
+        <field name="acctgTagEnumId4" type="id-ne"/>
+        <field name="acctgTagEnumId5" type="id-ne"/>
+        <field name="acctgTagEnumId6" type="id-ne"/>
+        <field name="acctgTagEnumId7" type="id-ne"/>
+        <field name="acctgTagEnumId8" type="id-ne"/>
+        <field name="acctgTagEnumId9" type="id-ne"/>
+        <field name="acctgTagEnumId10" type="id-ne"/>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG1" title="tag1">
+            <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG2" title="tag2">
+            <key-map field-name="acctgTagEnumId2" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG3" title="tag3">
+            <key-map field-name="acctgTagEnumId3" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG4" title="tag4">
+            <key-map field-name="acctgTagEnumId4" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG5" title="tag5">
+            <key-map field-name="acctgTagEnumId5" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG6" title="tag6">
+            <key-map field-name="acctgTagEnumId6" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG7" title="tag7">
+            <key-map field-name="acctgTagEnumId7" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG8" title="tag8">
+            <key-map field-name="acctgTagEnumId8" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG9" title="tag9">
+            <key-map field-name="acctgTagEnumId9" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVENT_TAG10" title="tag10">
+            <key-map field-name="acctgTagEnumId10" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
+
+    <extend-entity entity-name="InvoiceItem">
+        <field name="acctgTagEnumId1" type="id-ne"/>
+        <field name="acctgTagEnumId2" type="id-ne"/>
+        <field name="acctgTagEnumId3" type="id-ne"/>
+        <field name="acctgTagEnumId4" type="id-ne"/>
+        <field name="acctgTagEnumId5" type="id-ne"/>
+        <field name="acctgTagEnumId6" type="id-ne"/>
+        <field name="acctgTagEnumId7" type="id-ne"/>
+        <field name="acctgTagEnumId8" type="id-ne"/>
+        <field name="acctgTagEnumId9" type="id-ne"/>
+        <field name="acctgTagEnumId10" type="id-ne"/>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG1" title="tag1">
+            <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG2" title="tag2">
+            <key-map field-name="acctgTagEnumId2" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG3" title="tag3">
+            <key-map field-name="acctgTagEnumId3" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG4" title="tag4">
+            <key-map field-name="acctgTagEnumId4" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG5" title="tag5">
+            <key-map field-name="acctgTagEnumId5" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG6" title="tag6">
+            <key-map field-name="acctgTagEnumId6" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG7" title="tag7">
+            <key-map field-name="acctgTagEnumId7" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG8" title="tag8">
+            <key-map field-name="acctgTagEnumId8" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG9" title="tag9">
+            <key-map field-name="acctgTagEnumId9" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="INVO_TAG10" title="tag10">
+            <key-map field-name="acctgTagEnumId10" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
+
+    <extend-entity entity-name="OrderItem">
+        <field name="acctgTagEnumId1" type="id-ne"/>
+        <field name="acctgTagEnumId2" type="id-ne"/>
+        <field name="acctgTagEnumId3" type="id-ne"/>
+        <field name="acctgTagEnumId4" type="id-ne"/>
+        <field name="acctgTagEnumId5" type="id-ne"/>
+        <field name="acctgTagEnumId6" type="id-ne"/>
+        <field name="acctgTagEnumId7" type="id-ne"/>
+        <field name="acctgTagEnumId8" type="id-ne"/>
+        <field name="acctgTagEnumId9" type="id-ne"/>
+        <field name="acctgTagEnumId10" type="id-ne"/>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG1" title="tag1">
+            <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG2" title="tag2">
+            <key-map field-name="acctgTagEnumId2" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG3" title="tag3">
+            <key-map field-name="acctgTagEnumId3" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG4" title="tag4">
+            <key-map field-name="acctgTagEnumId4" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG5" title="tag5">
+            <key-map field-name="acctgTagEnumId5" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG6" title="tag6">
+            <key-map field-name="acctgTagEnumId6" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG7" title="tag7">
+            <key-map field-name="acctgTagEnumId7" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG8" title="tag8">
+            <key-map field-name="acctgTagEnumId8" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG9" title="tag9">
+            <key-map field-name="acctgTagEnumId9" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="ORDR_TAG10" title="tag10">
+            <key-map field-name="acctgTagEnumId10" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity> 
+
+    <extend-entity entity-name="Payment">
+        <field name="acctgTagEnumId1" type="id-ne"/>
+        <field name="acctgTagEnumId2" type="id-ne"/>
+        <field name="acctgTagEnumId3" type="id-ne"/>
+        <field name="acctgTagEnumId4" type="id-ne"/>
+        <field name="acctgTagEnumId5" type="id-ne"/>
+        <field name="acctgTagEnumId6" type="id-ne"/>
+        <field name="acctgTagEnumId7" type="id-ne"/>
+        <field name="acctgTagEnumId8" type="id-ne"/>
+        <field name="acctgTagEnumId9" type="id-ne"/>
+        <field name="acctgTagEnumId10" type="id-ne"/>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG1" title="tag1">
+            <key-map field-name="acctgTagEnumId1" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG2" title="tag2">
+            <key-map field-name="acctgTagEnumId2" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG3" title="tag3">
+            <key-map field-name="acctgTagEnumId3" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG4" title="tag4">
+            <key-map field-name="acctgTagEnumId4" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG5" title="tag5">
+            <key-map field-name="acctgTagEnumId5" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG6" title="tag6">
+            <key-map field-name="acctgTagEnumId6" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG7" title="tag7">
+            <key-map field-name="acctgTagEnumId7" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG8" title="tag8">
+            <key-map field-name="acctgTagEnumId8" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG9" title="tag9">
+            <key-map field-name="acctgTagEnumId9" rel-field-name="enumId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Enumeration" fk-name="PAY_TAG10" title="tag10">
+            <key-map field-name="acctgTagEnumId10" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>   
+
+    <view-entity entity-name="InvoiceItemAndDescriptions"
+        package-name="com.opensourcestrategies.financials.invoice"
+        title="Invoice and InvoiceItem">
+
+        <member-entity entity-alias="II" entity-name="InvoiceItem"/>
+        <member-entity entity-alias="IIT" entity-name="InvoiceItemType"/>
+        <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+        <member-entity entity-alias="P" entity-name="Product"/>
+        <member-entity entity-alias="GL" entity-name="GlAccount"/>
+
+        <alias-all entity-alias="II"/>
+        <alias entity-alias="IIT" name="invoiceItemTypeIdDescription" field="description"/>
+        <alias entity-alias="PG" name="taxAuthPartyIdDescription" field="groupName"/>
+        <alias entity-alias="P" name="productIdDescription" field="internalName"/>
+        <alias entity-alias="GL" name="overrideGlAccountIdDescription" field="accountName"/>
+
+        <view-link entity-alias="II" rel-entity-alias="IIT" rel-optional="true">
+            <key-map field-name="invoiceItemTypeId"/>
+        </view-link>
+        <view-link entity-alias="II" rel-entity-alias="PG" rel-optional="true">
+            <key-map field-name="taxAuthPartyId" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="II" rel-entity-alias="P" rel-optional="true">
+            <key-map field-name="productId"/>
+        </view-link>
+        <view-link entity-alias="II" rel-entity-alias="GL" rel-optional="true">
+            <key-map field-name="overrideGlAccountId" rel-field-name="glAccountId"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="InvoiceAndInvoiceItem"
+        package-name="com.opensourcestrategies.financials.invoice"
+        title="Invoice and InvoiceItem">
+
+        <member-entity entity-alias="I" entity-name="Invoice"/>
+        <member-entity entity-alias="II" entity-name="InvoiceItem"/>
+
+        <alias-all entity-alias="I"/>
+        <alias-all entity-alias="II" prefix="item"/>
+
+        <view-link entity-alias="I" rel-entity-alias="II">
+            <key-map field-name="invoiceId"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="InvoiceAndPartyClassificationDisbursement"
+        package-name="com.opensourcestrategies.financials.invoice"
+        title="Joins Invoice and PartyClassificationGroup to allow selecting disbursement invoice data based on party classifications.">
+
+        <member-entity entity-alias="I" entity-name="Invoice"/>
+        <member-entity entity-alias="PC" entity-name="PartyClassification"/>
+
+        <alias-all entity-alias="I"/>
+        <alias entity-alias="PC" name="partyClassificationGroupId"/>
+        <alias entity-alias="PC" name="fromDate"/>
+        <alias entity-alias="PC" name="thruDate"/>
+
+        <view-link entity-alias="I" rel-entity-alias="PC">
+            <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+        </view-link>
+
+        <relation type="one" rel-entity-name="Invoice">
+            <key-map field-name="invoiceId"/>
+        </relation>
+        <relation type="many" rel-entity-name="InvoiceItem">
+            <key-map field-name="invoiceId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="InvoiceAndPartyClassificationReceipt"
+        package-name="com.opensourcestrategies.financials.invoice"
+        title="Joins Invoice PartyClassificationGroup to allow selecting receipt invoice data based on party classifications.">
+
+        <member-entity entity-alias="I" entity-name="Invoice"/>
+        <member-entity entity-alias="PC" entity-name="PartyClassification"/>
+
+        <alias-all entity-alias="I"/>
+        <alias entity-alias="PC" name="partyClassificationGroupId"/>
+        <alias entity-alias="PC" name="fromDate"/>
+        <alias entity-alias="PC" name="thruDate"/>
+
+        <view-link entity-alias="I" rel-entity-alias="PC">
+            <key-map field-name="partyId"/>
+        </view-link>
+
+        <relation type="one" rel-entity-name="Invoice">
+            <key-map field-name="invoiceId"/>
+        </relation>
+        <relation type="many" rel-entity-name="InvoiceItem">
+            <key-map field-name="invoiceId"/>
+        </relation>
+    </view-entity>
+    
+    <entity entity-name="InvoiceRecurrence" package-name="com.opensourcestrategies.financials.invoice"
+        title="Invoice Recurrence">
+        <description>Entity to track invoice recurrence</description>
+        <field name="invoiceId" type="id-ne"/>
+        <field name="recurrenceInfoId" type="id-ne"/>
+        <field name="lastRecurrenceDate" type="date-time"/>
+        <field name="fromDate" type="date-time"/>
+        <field name="thruDate" type="date-time"/>
+        <prim-key field="invoiceId"/>
+        <prim-key field="recurrenceInfoId"/>
+        <relation type="one" fk-name="INV_RECUR_INVOICE" rel-entity-name="Invoice">
+            <key-map field-name="invoiceId"/>
+        </relation>
+        <relation type="one" fk-name="INV_RECUR_RCR_INFO" rel-entity-name="RecurrenceInfo">
+            <key-map field-name="recurrenceInfoId"/>
+        </relation>
+    </entity>
+    <entity entity-name="InvoiceAdjustment" package-name="org.opentaps.financials.invoice"
+        title="Records adjustments made to invoices after it has been finalized and posted to the ledger">
+        <field name="invoiceAdjustmentId" type="id-ne"/>
+        <field name="invoiceId" type="id-ne"/>
+        <field name="paymentId" type="id-ne"/>
+        <field name="invoiceAdjustmentTypeId" type="id-ne"/>
+        <field name="amount" type="currency-precise"/>
+        <field name="comment" type="very-long" col-name="ADJ_COMMENT"/> <!-- comment is a reserved word -->
+        <field name="createdByUserLogin" type="id-vlong-ne"/>
+        <field name="effectiveDate" type="date-time"/>
+        <prim-key field="invoiceAdjustmentId"/>
+        <relation type="one" rel-entity-name="Invoice" fk-name="INVADJ_INV">
+            <key-map field-name="invoiceId"/>
+        </relation>
+        <relation type="one" rel-entity-name="Payment" fk-name="INVADJ_PMNT">
+            <key-map field-name="paymentId"/>
+        </relation>
+        <relation type="one" rel-entity-name="InvoiceAdjustmentType" fk-name="INVADJ_INVADJTYP">
+            <key-map field-name="invoiceAdjustmentTypeId"/>
+        </relation>
+        <relation type="one" rel-entity-name="UserLogin" fk-name="INVADJ_CRTUSER">
+            <key-map field-name="createdByUserLogin" rel-field-name="userLoginId"/>
+        </relation>
+    </entity>
+    
+    <view-entity entity-name="AcctgTransAndEntriesForReconciliation"
+        package-name="com.opensourcestrategies.financials.transactions"
+        title="Special join entity to support the GL reconciliation screen">
+
+        <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
+        <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+        <member-entity entity-alias="PMT" entity-name="Payment"/>
+        <!-- add other related entities later -->
+        <alias entity-alias="ATR" name="acctgTransId"/>
+        <alias entity-alias="ATR" name="acctgTransTypeId"/>
+        <alias entity-alias="ATR" name="partyId"/>
+        <alias entity-alias="ATR" name="paymentId"/>
+        <alias entity-alias="ATR" name="transactionDate"/>
+        <alias entity-alias="ATR" name="isPosted"/>
+        <alias entity-alias="ATE" name="acctgTransEntrySeqId"/>
+        <alias entity-alias="ATE" name="glAccountId"/>
+        <alias entity-alias="ATE" name="debitCreditFlag"/>
+        <alias entity-alias="ATE" name="amount"/>
+        <alias entity-alias="ATE" name="reconcileStatusId"/>
+        <alias entity-alias="PMT" name="refNum" field="paymentRefNum"/>
+        <alias entity-alias="PMT" name="paymentTypeId"/>
+
+        <view-link entity-alias="ATR" rel-entity-alias="ATE">
+            <key-map field-name="acctgTransId"/>
+        </view-link>
+        <view-link entity-alias="ATR" rel-entity-alias="PMT" rel-optional="true">
+           <key-map field-name="paymentId"/>
+        </view-link>
+  
+        <relation type="one" rel-entity-name="AcctgTransType">
+            <key-map field-name="acctgTransTypeId"/>
+        </relation>  
+        <relation type="one" rel-entity-name="Payment">
+            <key-map field-name="paymentId"/>
+        </relation>
+        <relation type="one" rel-entity-name="PaymentType">
+            <key-map field-name="paymentTypeId"/>
+        </relation>
+    </view-entity>
+
+    <extend-entity entity-name="InvoiceItemType">
+        <field name="defaultSequenceNum" type="numeric"/>
+    </extend-entity>
+    
+    <view-entity entity-name="InvoiceItemTypeAndOrgGlAccount"
+        package-name="com.opensourcestrategies.financials.invoice"
+        title="Special join entity to determine which invoice item types have GL accounts associated with them">
+    
+        <member-entity entity-alias="IITM" entity-name="InvoiceItemTypeMap"/>
+        <member-entity entity-alias="IIT" entity-name="InvoiceItemType"/>
+        <member-entity entity-alias="IITGA" entity-name="InvoiceItemTypeGlAccount"/>
+            
+        <alias-all entity-alias="IITM"/>
+        <alias entity-alias="IIT" name="description"/>
+        <alias entity-alias="IIT" name="defaultGlAccountId"/>
+        <alias entity-alias="IIT" name="defaultSequenceNum"/>
+        <alias entity-alias="IITGA" name="organizationPartyId"/>
+        <alias entity-alias="IITGA" name="orgGlAccountId" field="glAccountId"/>
+            
+        <view-link entity-alias="IITM" rel-entity-alias="IIT">
+            <key-map field-name="invoiceItemTypeId"/>
+        </view-link>
+        <view-link entity-alias="IITM" rel-entity-alias="IITGA" rel-optional="true">
+            <key-map field-name="invoiceItemTypeId"/>
+        </view-link>
+            
+    </view-entity>
+    
+    <view-entity entity-name="AcctgTransAndOrg"
+                 package-name="com.opensourcestrategies.financials.transactions"
+                 title="Allows looking up AcctgTrans by organizationPartyId">
+       <member-entity entity-alias="ATR" entity-name="AcctgTrans"/>
+       <member-entity entity-alias="ATE" entity-name="AcctgTransEntry"/>
+
+       <alias name="transactionDate" entity-alias="ATR"/>
+       <alias name="acctgTransId" entity-alias="ATR"/>
+       <alias name="acctgTransTypeId" entity-alias="ATR"/>
+       <alias name="isPosted" entity-alias="ATR"/>
+       <alias name="partyId" entity-alias="ATR"/>
+       <alias name="glFiscalTypeId" entity-alias="ATR"/>
+       <alias name="scheduledPostingDate" entity-alias="ATR"/>
+       <alias name="postedDate" entity-alias="ATR"/>
+       <alias name="organizationPartyId" entity-alias="ATE"/>
+
+       <view-link entity-alias="ATR" rel-entity-alias="ATE" rel-optional="true">
+           <key-map field-name="acctgTransId"/>
+       </view-link>
+    </view-entity>
+
+    <entity entity-name="InvoiceItemAssoc" package-name="com.opensourcestrategies.financials.invoice"
+        title="Invoice Item to Invoice Item association.">
+        <description>
+            Invoice Item to Invoice Item association for tracking the result of mapping functions such as agreements.
+            For instance, a set of PARNTER_INVOICE line items can be mapped onto a single SALES_INVOICE line item
+            using a flat 70% commission agreement.  This entity allows us to audit these mappings and report on
+            the relationship between invoices in fine detail.
+        </description>
+        <field name="invoiceItemAssocId" type="id-ne"/>
+        <field name="invoiceIdFrom" type="id-ne"/>
+        <field name="invoiceItemSeqIdFrom" type="id-ne"/>
+        <field name="invoiceIdTo" type="id-ne"/>
+        <field name="invoiceItemSeqIdTo" type="id-ne"/>
+        <field name="agreementId" type="id"/>
+        <field name="amount" type="currency-precise"><description>Amount of the to invoice item that is allocated.</description></field>
+        <prim-key field="invoiceItemAssocId"/>
+        <relation type="one" fk-name="INVITEMASC_FROM" title="From" rel-entity-name="InvoiceItem">
+            <key-map field-name="invoiceIdFrom" rel-field-name="invoiceId"/>
+            <key-map field-name="invoiceItemSeqIdFrom" rel-field-name="invoiceItemSeqId"/>
+        </relation>
+        <relation type="one" fk-name="INVITEMASC_TO" title="To" rel-entity-name="InvoiceItem">
+            <key-map field-name="invoiceIdTo" rel-field-name="invoiceId"/>
+            <key-map field-name="invoiceItemSeqIdTo" rel-field-name="invoiceItemSeqId"/>
+        </relation>
+        <relation type="one" fk-name="INVITEMASC_AGR" rel-entity-name="Agreement">
+            <key-map field-name="agreementId"/>
+        </relation>
+    </entity>
+
+    <!-- Extend the Invoice to provide an additionnal processing
+         status field -->
+    <extend-entity entity-name="Invoice">
+        <field name="processingStatusId" type="id"></field>
+        <relation type="one" title="Processing" fk-name="INVOICE_PROC_STTS" rel-entity-name="StatusItem">
+            <key-map field-name="processingStatusId" rel-field-name="statusId"/>
+        </relation>
+    </extend-entity>
+
+    <view-entity entity-name="PaymentApplicationSum"
+            package-name="com.opensourcestrategies.financials.payment" 
+            title="Sum of Payment Applications with Payment details. Does not support Payment.toPaymentApplicationId.">
+
+       <member-entity entity-alias="P" entity-name="Payment"/>
+       <member-entity entity-alias="PA" entity-name="PaymentApplication"/>
+
+       <alias entity-alias="P" name="paymentId" group-by="true"/>
+       <alias entity-alias="P" name="paymentTypeId" group-by="true"/>
+       <alias entity-alias="P" name="paymentMethodTypeId" group-by="true"/>
+       <alias entity-alias="P" name="paymentMethodId" group-by="true"/>
+       <alias entity-alias="P" name="partyIdFrom" group-by="true"/>
+       <alias entity-alias="P" name="partyIdTo" group-by="true"/>
+       <alias entity-alias="P" name="statusId" group-by="true"/>
+       <alias entity-alias="P" name="effectiveDate" group-by="true"/>
+       <alias entity-alias="P" name="paymentRefNum" group-by="true"/>
+       <alias entity-alias="P" name="amount" group-by="true"/>
+       <alias entity-alias="P" name="currencyUomId" group-by="true"/>
+       <alias entity-alias="PA" name="amountApplied" function="sum"/>
+
+       <view-link entity-alias="P" rel-entity-alias="PA" rel-optional="true">
+           <key-map field-name="paymentId"/>
+       </view-link>
+       <relation type="one-nofk" rel-entity-name="PaymentMethod">
+           <key-map field-name="paymentMethodId"/>
+       </relation>
+    </view-entity>
+
+    <!-- These entities are to refactor the entity which defined in ofbiz. in this new entity we will use productAverageCostId auto sequenced as primary key
+    -->
+    <entity entity-name="ProductAverageCost" package-name="com.opensourcestrategies.financials.ledger"
+            title="Running tally of average cost">
+       <description>Running tally of a product's average cost in a particular company</description>
+       <field name="productAverageCostId" type="id-ne"/>
+       <field name="organizationPartyId" type="id-ne"/>
+       <field name="productId" type="id-ne"/>
+       <field name="averageCost" type="floating-point"/>
+       <field name="fromDate" type="date-time"/>
+       <field name="thruDate" type="date-time"/>
+       <prim-key field="productAverageCostId"/>
+       <relation type="one" rel-entity-name="Party" fk-name="AVG_COST_PARTY">
+           <key-map field-name="organizationPartyId" rel-field-name="partyId"/>
+       </relation>
+       <relation type="one" rel-entity-name="Product" fk-name="AVG_COST_PROD">
+           <key-map field-name="productId"/>
+       </relation>
+    </entity>
+
+
+    <!-- extend PaymentType add systemUse field -->
+    <extend-entity entity-name="PaymentType">
+      <field name="systemUse" type="indicator"><description>if set to Y, then this payment type would not be shown to the user when creating or editing payments</description></field>
+    </extend-entity>
+</entitymodel>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitygroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitygroup.xsd">
+
+  <entity-group group="org.ofbiz" entity="EncumbranceSnapshot"/>
+  <entity-group group="org.ofbiz" entity="EncumbranceDetail"/>
+  <entity-group group="org.ofbiz" entity="EncumbranceDetailType"/>
+  
+  <!-- ========================================== -->
+  <!-- com.opensourcestrategies.financials.ledger -->
+  <!-- ========================================== -->
+
+  <entity-group group="org.ofbiz" entity="AcctgTransEntryRole"/>
+  <entity-group group="org.ofbiz" entity="AcctgTransEntryAccountSum"/>
+  <entity-group group="org.ofbiz" entity="AcctgTransAndEntries"/>
+  <entity-group group="org.ofbiz" entity="AcctgTransAndEntriesPostedTransDate"/>
+  <entity-group group="org.ofbiz" entity="AcctgTransEntryPartySum"/>
+  <entity-group group="org.ofbiz" entity="AcctgTransEntryEquivalenceSum"/>
+  <entity-group group="org.ofbiz" entity="GlReconciliationAndAcctgTransEntry"/>
+  <entity-group group="org.ofbiz" entity="CreditCardTrans"/>
+  <entity-group group="org.ofbiz" entity="PaymentReceiptsDetail"/>
+  <entity-group group="org.ofbiz" entity="PaymentReceiptsDetailWithApplication"/>
+  <entity-group group="org.ofbiz" entity="InventoryStatusGlAccountType"/>
+  <entity-group group="org.ofbiz" entity="GlAccountTypeOrganization"/>
+  <entity-group group="org.ofbiz" entity="GlAccountOrgAndPrefAndClass"/>
+  <entity-group group="org.ofbiz" entity="InvoiceGlAccountType"/>
+  <entity-group group="org.ofbiz" entity="InvoiceAdjustmentGlAccount"/>
+  <entity-group group="org.ofbiz" entity="ProductAverageCost"/>
+  <entity-group group="org.ofbiz" entity="AccountBalanceHistory"/>
+  
+  <entity-group group="org.ofbiz" entity="GlAccountClassTypeMap"/>
+   
+  <!-- ========================================= -->
+  <!-- com.opensourcestrategies.financials.party -->
+  <!-- ========================================= -->
+
+  <entity-group group="org.ofbiz" entity="PartyAcctgPreferenceRoleAndDetail"/>
+  <entity-group group="org.ofbiz" entity="AgreementCategoryAppl" />
+
+  <!-- =========================================== -->
+  <!-- com.opensourcestrategies.financials.product -->  
+  <!-- =========================================== -->
+
+  <entity-group group="org.ofbiz" entity="AcctgTransEntryProdSum"/>
+
+  <!-- =========================================== -->
+  <!-- com.opensourcestrategies.financials.invoice -->  
+  <!-- =========================================== -->
+
+  <entity-group group="org.ofbiz" entity="InvoiceItemAndDescriptions"/>
+  <entity-group group="org.ofbiz" entity="InvoiceItemTypeAndOrgGlAccount"/>
+  <entity-group group="org.ofbiz" entity="InvoiceAndInvoiceItem"/>
+  <entity-group group="org.ofbiz" entity="InvoiceAndPartyClassificationDisbursement"/>
+  <entity-group group="org.ofbiz" entity="InvoiceAndPartyClassificationReceipt"/>
+  <entity-group group="org.ofbiz" entity="InvoiceRecurrence"/>
+  <entity-group group="org.ofbiz" entity="InvoiceItemAssoc"/>
+  <entity-group group="org.ofbiz" entity="InvoiceAdjustmentType"/>
+  <entity-group group="org.ofbiz" entity="InvoiceAdjustment"/>
+
+  <entity-group group="org.ofbiz" entity="AcctgTransAndEntriesForReconciliation"/>
+  <entity-group group="org.ofbiz" entity="AcctgTransAndOrg"/>
+
+  <!-- =========================================== -->
+  <!-- com.opensourcestrategies.financials.payment -->  
+  <!-- =========================================== -->
+
+  <entity-group group="org.ofbiz" entity="PaymentApplicationSum"/>
+
+</entitygroup>

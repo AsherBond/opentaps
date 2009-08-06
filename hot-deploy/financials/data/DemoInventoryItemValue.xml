@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+    <!-- Demo data for initial InventoryItemValueHistory -->
+    <InventoryItemValueHistory inventoryItemId="9000" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9001" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9002" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9003" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9004" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9005" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9006" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9010" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9011" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9012" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9013" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9021" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9022" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9023" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+    <InventoryItemValueHistory inventoryItemId="9024" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+
+</entity-engine-xml>

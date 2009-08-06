@@ -1,0 +1,68 @@
+<#--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+
+<#if paycheck?has_content>
+
+<!-- Paycheck Header -->
+
+<div class="screenlet">
+  <div class="screenlet-header">
+    <div class="boxhead">
+        ${uiLabelMap.FinancialsPaycheck}<a href="<@ofbizUrl>viewPaycheck?paymentId=${paycheck.paymentId}</@ofbizUrl>" class="linktext" style="color:yellow;"> ${uiLabelMap.OrderNbr}${paycheck.paymentId}</a>
+    </div>    
+  </div>
+
+  <div class="screenlet-body">
+    <table border="0" cellpadding="2" cellspacing="0" width="100%">
+	<#if (paycheck.statusId == "PMNT_NOT_PAID") && (hasUpdatePermission)>
+        <form method="post" action="<@ofbizUrl>updatePaycheck</@ofbizUrl>" name="updatePaycheckForm">
+        	  <@inputHidden name="paymentId" value="${paycheck.paymentId}"/>        
+              <@displayRow title=uiLabelMap.CommonStatus text=paycheck.getRelatedOneCache("StatusItem").get("description", "FinancialsEntityLabel", locale) />        	  
+              <@displayRow title=uiLabelMap.FinancialsPaycheckType text=paycheck.getRelatedOneCache("PaymentType").get("description", "FinancialsEntityLabel", locale)/>
+              <@displayRow title=uiLabelMap.FinancialsPayToParty text=paycheck.partyIdTo />
+              <@inputSelectRow name="paymentMethodId" title=uiLabelMap.AccountingPaymentMethod list=paymentMethodList key="paymentMethodId" displayField="description" default=paycheck.paymentMethodId/>
+              <tr>
+		          <@displayCell text=uiLabelMap.FinancialsGrossAmount blockClass="titleCell" blockStyle="width: 100px" class="tableheadtext"/>
+	          	  <@inputCurrencyCell name="amount" currencyName="currencyUomId" default=paycheck.amount defaultCurrencyUomId=paycheck.currencyUomId/>
+			  </tr>	          	                
+        	  <@inputDateTimeRow name="effectiveDate" title=uiLabelMap.AccountingEffectiveDate default=paycheck.effectiveDate form="updatePaycheckForm" />
+              <@inputTextRow name="comments" title=uiLabelMap.CommonComments size=60 default=paycheck.comments/>
+              <@inputTextRow name="paymentRefNum" title=uiLabelMap.FinancialsPaymentRefNum default=paycheck.paymentRefNum/>
+              <@inputSubmitRow title=uiLabelMap.FinancialsUpdatePaycheck />
+        </form>
+      <#else>
+    	<@inputHidden name="paymentId" value="${paycheck.paymentId}"/>        
+        <@displayRow title=uiLabelMap.CommonStatus text=paycheck.getRelatedOneCache("StatusItem").get("description", "FinancialsEntityLabel", locale) />        	  
+        <@displayRow title=uiLabelMap.FinancialsPaycheckType text=paycheck.getRelatedOneCache("PaymentType").get("description", "FinancialsEntityLabel", locale)/>
+        <@displayRow title=uiLabelMap.FinancialsPayToParty text=paycheck.partyIdTo />
+        <@displayRow title=uiLabelMap.AccountingPaymentMethod text=paycheck.paymentMethodId />
+        <@displayCurrencyRow title=uiLabelMap.FinancialsGrossAmount amount=paycheck.amount currencyUomId=paycheck.currencyUomId />
+        <@displayDateRow title=uiLabelMap.AccountingEffectiveDate date=paycheck.effectiveDate />
+        <@displayRow title=uiLabelMap.CommonComments text=paycheck.comments?if_exists />
+        <@displayRow title=uiLabelMap.FinancialsPaymentRefNum text=paycheck.paymentRefNum?if_exists />        
+      </#if>
+    </table>
+  </div>
+
+</div>
+
+</#if>
+
+
+
+
+

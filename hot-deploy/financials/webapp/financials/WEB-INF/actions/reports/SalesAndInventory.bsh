@@ -1,0 +1,245 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+// TODO: find by LIKE %internalName%
+
+import java.util.*;
+import java.math.BigDecimal;
+import javolution.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.accounting.util.UtilAccounting;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsSalesAndInventory"));
+
+// get the from and thru date from parseReportOptions
+fromDate = context.get("fromDate");
+thruDate = context.get("thruDate");
+
+// don't do anything if dates invalid
+if (fromDate == null || thruDate == null || thruDate.before(fromDate)) return;
+
+// see if we're searching by productId
+productId = parameters.get("productId");
+includeProductIdCondition = (productId == null || productId.trim().length() == 0 ? false : true);
+if (includeProductIdCondition) productIdExpr = new EntityExpr("productId", true, EntityOperator.LIKE, productId.trim() + "%", true);
+
+// compute days in period
+fromCal = UtilDateTime.toCalendar(fromDate, timeZone, locale);
+thruCal = UtilDateTime.toCalendar(thruDate, timeZone, locale);
+daysInPeriod = (thruCal.getTimeInMillis() - fromCal.getTimeInMillis())*1.0/1000/60/60/24;
+
+// constants
+orderAndSelect = UtilMisc.toList("productId");
+options = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+organizationPartyId = session.getAttribute("organizationPartyId");
+currencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
+
+// function to get the sum of acctg transactions for each of the three classes of accounts (skips products with no sum)
+Map getAccountTotals(classId, dateCondition) {
+    select = UtilMisc.toList("productId", "debitCreditFlag", "amount");
+
+    // determine if glAccountClass is type "DEBIT" or type "CREDIT"
+    glAccountClass = delegator.findByPrimaryKeyCache("GlAccountClass", UtilMisc.toMap("glAccountClassId", classId));
+    isDebitAccount = UtilAccounting.isAccountClassClass(glAccountClass, "DEBIT");
+    isCreditAccount = UtilAccounting.isAccountClassClass(glAccountClass, "CREDIT");
+
+    // conditions common to both debit and credit selection
+    expressions = UtilMisc.toList(dateCondition, UtilFinancial.getGlAccountClassExpr(classId, delegator));
+    expressions.add( new EntityExpr("currencyUomId", EntityOperator.EQUALS, currencyUomId) ); // limit to one currency
+    if (includeProductIdCondition) expressions.add(productIdExpr);
+    commonConditions = new EntityConditionList(expressions, EntityOperator.AND);
+
+    // debit and credit conditions
+    debitConditions = new EntityConditionList( UtilMisc.toList(commonConditions, new EntityExpr("debitCreditFlag", EntityOperator.EQUALS, "D")), EntityOperator.AND);
+    creditConditions = new EntityConditionList( UtilMisc.toList(commonConditions, new EntityExpr("debitCreditFlag", EntityOperator.EQUALS, "C")), EntityOperator.AND);
+
+    // avoid reporting products with no net amount
+    having = new EntityConditionList( UtilMisc.toList(
+          new EntityExpr("amount", EntityOperator.NOT_EQUAL, null),
+          new EntityExpr("amount", EntityOperator.NOT_EQUAL, new Double(0))
+    ), EntityOperator.AND);
+
+    debitsIter = delegator.findListIteratorByCondition("AcctgTransEntryProdSum", debitConditions, having, select, orderAndSelect, options);
+    creditsIter = delegator.findListIteratorByCondition("AcctgTransEntryProdSum", creditConditions, having, select, orderAndSelect, options);
+
+    results = FastMap.newInstance();
+    while ((credit = creditsIter.next()) != null) {
+        amount = credit.getDouble("amount").doubleValue();
+        if (isDebitAccount) amount = -amount;
+        results.put(credit.get("productId"), new Double(amount));
+    }
+    while ((debit = debitsIter.next()) != null) {
+        amount = debit.getDouble("amount").doubleValue();
+        if (!isDebitAccount) amount = -amount;
+        credit = results.get(debit.get("productId"));
+        if (credit != null) amount += credit.doubleValue();
+        results.put(debit.get("productId"), new Double(amount));
+    }
+    debitsIter.close();
+    creditsIter.close();
+    return results;
+}
+
+// interval of report for sales and cogs sums
+intervalCondition = new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+            new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate)
+            ), EntityOperator.AND);
+
+// inventory sum at the beginning and end of time interval
+untilFromDateCondition = new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, fromDate);
+untilThruDateCondition = new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate);
+
+salesSums = getAccountTotals("REVENUE", intervalCondition);
+cogsSums = getAccountTotals("COGS_EXPENSE", intervalCondition);
+inventorySumsStart = getAccountTotals("INVENTORY_ASSET", untilFromDateCondition);
+inventorySumsEnd = getAccountTotals("INVENTORY_ASSET", untilThruDateCondition);
+
+// get quantity issuance in this time period (units sold)
+expressions = UtilMisc.toList( 
+            new EntityExpr("issuedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+            new EntityExpr("issuedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, thruDate),
+            new EntityExpr("orderStatusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+            new EntityExpr("orderStatusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
+            new EntityExpr("orderItemStatusId", EntityOperator.NOT_EQUAL, "ITEM_CANCELLED"),
+            new EntityExpr("orderItemStatusId", EntityOperator.NOT_EQUAL, "ITEM_REJECTED")
+            );
+
+expressions.add( new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER") );
+if (includeProductIdCondition) expressions.add(productIdExpr);
+conditions = new EntityConditionList(expressions, EntityOperator.AND);
+iterator = delegator.findListIteratorByCondition("OrderItemQuantityReportGroupByProduct", conditions, null, UtilMisc.toList("productId", "quantityIssued"), null, options);
+issuanceMap = FastMap.newInstance();
+while ((issuance = iterator.next()) != null) {
+    issuanceMap.put(issuance.get("productId"), issuance.get("quantityIssued"));
+}
+iterator.close();
+
+// get a list iterator of product Ids
+conditions = null;
+if (includeProductIdCondition) conditions = productIdExpr;
+iterator = delegator.findListIteratorByCondition("Product", conditions, null, UtilMisc.toList("productId"), UtilMisc.toList("productId"), options);
+
+// totals for the bottom row
+salesTotal = 0;
+cogsTotal = 0;
+inventoryStartTotal = 0;
+inventoryEndTotal = 0;
+grossProfitTotal = 0;
+unitsSoldTotal = 0;
+inventoryAverageTotal = 0;
+
+// go through all products and compute the report for each, skipping those without units sold
+report = FastList.newInstance();
+while ((product = iterator.next()) != null) {
+    productId = product.getString("productId");
+
+    // get units sold
+    unitsSold = (issuanceMap.get(productId) == null ? 0 : issuanceMap.get(productId).doubleValue());
+    if (unitsSold == 0) continue;
+    unitsSoldTotal += unitsSold;
+
+    // get the sum of each account for this product or default to 0
+    salesSumData = salesSums.get(productId);
+    cogsSumData = cogsSums.get(productId);
+    inventorySumStartData = inventorySumsStart.get(productId);
+    inventorySumEndData = inventorySumsEnd.get(productId);
+
+    salesSum = (salesSumData == null ? 0 : salesSumData.doubleValue());
+    cogsSum = (cogsSumData == null ? 0 : cogsSumData.doubleValue());
+    inventorySumStart = (inventorySumStartData == null ? 0 : inventorySumStartData.doubleValue());
+    inventorySumEnd = (inventorySumEndData == null ? 0 : inventorySumEndData.doubleValue());
+
+    // build result map
+    row = FastMap.newInstance();
+    row.put("productId", productId);
+    row.put("salesSum", new Double(salesSum));
+    row.put("cogsSum", new Double(cogsSum));
+    row.put("inventorySumStart", new Double(inventorySumStart));
+    row.put("inventorySumEnd", new Double(inventorySumEnd));
+    row.put("unitsSold", new Double(unitsSold));
+
+    // compute remaining report fields
+    salesTotal += salesSum;
+    cogsTotal += cogsSum;
+    inventoryStartTotal += inventorySumStart;
+    inventoryEndTotal += inventorySumEnd;
+
+    grossProfit = salesSum - cogsSum;
+    grossProfitTotal += grossProfit;
+    row.put("grossProfit", new Double(grossProfit));
+
+    inventoryAverage = (inventorySumStart + inventorySumEnd) / 2;
+    inventoryAverageTotal += inventoryAverage;
+    row.put("inventoryAverage", new Double(inventoryAverage));
+
+    if (inventoryAverage != 0) {
+        inventoryTurnover = cogsSum / inventoryAverage;
+        row.put("inventoryTurnover", new Double(inventoryTurnover));
+
+        if (daysInPeriod >= 1.0) {
+            annualizedInventoryTurnover = 365 * (inventoryTurnover / daysInPeriod);
+            row.put("annualizedInventoryTurnover", new Double(annualizedInventoryTurnover));
+
+            if (salesSum != 0) {
+                profitabilityRatio = new BigDecimal((1 - cogsSum/salesSum) * annualizedInventoryTurnover);
+                row.put("profitabilityRatio", UtilNumber.toPercentString(profitabilityRatio, 2, BigDecimal.ROUND_HALF_UP));
+            }
+        }
+    }
+    
+    report.add(row);
+}
+iterator.close();
+
+// don't do anything else if the report is empty
+if (report.size() == 0) return;
+
+// compute the totals row
+totals = FastMap.newInstance();
+totals.put("salesSum", new Double(salesTotal));
+totals.put("cogsSum", new Double(cogsTotal));
+totals.put("unitsSold", new Double(unitsSoldTotal));
+totals.put("grossProfit", new Double(grossProfitTotal));
+totals.put("inventorySumStart", new Double(inventoryStartTotal));
+totals.put("inventorySumEnd", new Double(inventoryEndTotal));
+totals.put("inventoryAverage", new Double(inventoryAverageTotal));
+if (inventoryAverageTotal != 0) {
+    inventoryTurnoverTotal = cogsTotal / inventoryAverageTotal;
+    totals.put("inventoryTurnover", new Double(inventoryTurnoverTotal));
+
+    if (daysInPeriod >= 1.0) {
+        annualizedInventoryTurnoverTotal = 365 * (inventoryTurnoverTotal / daysInPeriod);
+        totals.put("annualizedInventoryTurnover", new Double(annualizedInventoryTurnoverTotal));
+
+        if (salesTotal != 0) {
+            profitabilityRatio = new BigDecimal((1 - cogsTotal/salesTotal) * annualizedInventoryTurnoverTotal);
+            totals.put("profitabilityRatio", UtilNumber.toPercentString(profitabilityRatio, 2, BigDecimal.ROUND_HALF_UP));
+        }
+    }
+}
+
+context.put("report", report);
+context.put("totals", totals);

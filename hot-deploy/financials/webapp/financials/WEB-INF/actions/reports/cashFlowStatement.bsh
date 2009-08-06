@@ -1,0 +1,96 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ *  @author Leon Torres (leon@opensourcestrategies.com
+ */
+
+import java.util.*;
+import javolution.util.FastMap;
+import javolution.util.FastList;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilAccountingTags;
+import com.opensourcestrategies.financials.accounts.GLAccountTree;
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.getUiLabels(locale).get("FinancialsCashFlowStatement"));
+
+organizationPartyId = context.get("organizationPartyId");
+glFiscalTypeId = context.get("glFiscalTypeId");
+
+fromDate = context.get("fromDate");
+thruDate = context.get("thruDate");
+if (fromDate == null || thruDate == null) return;
+
+
+input = UtilMisc.toMap("organizationPartyId", organizationPartyId, "glFiscalTypeId", glFiscalTypeId, "userLogin", userLogin);
+input.put("fromDate", fromDate);
+input.put("thruDate", thruDate);
+// add tags from the request to the service parameters
+UtilAccountingTags.addTagParameters(request, input);
+result = dispatcher.runSync("getCashFlowStatementForDates", input);
+
+if (ServiceUtil.isError(result)) return;
+
+context.put("beginningCashAmount", result.get("beginningCashAmount"));
+context.put("endingCashAmount", result.get("endingCashAmount"));
+context.put("operatingCashFlow", result.get("operatingCashFlow"));
+context.put("investingCashFlow", result.get("investingCashFlow"));
+context.put("financingCashFlow", result.get("financingCashFlow"));
+context.put("netCashFlow", result.get("netCashFlow"));
+context.put("netIncome", result.get("netIncome"));
+context.put("beginningCashAccountBalances", result.get("beginningCashAccountBalances"));
+context.put("endingCashAccountBalances", result.get("endingCashAccountBalances"));
+context.put("operatingCashFlowAccountBalances", result.get("operatingCashFlowAccountBalances"));
+context.put("investingCashFlowAccountBalances", result.get("investingCashFlowAccountBalances"));
+context.put("financingCashFlowAccountBalances", result.get("financingCashFlowAccountBalances"));
+
+context.put("operatingAccounts", EntityUtil.orderBy(result.get("operatingCashFlowAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("investingAccounts", EntityUtil.orderBy(result.get("investingCashFlowAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+context.put("financingAccounts", EntityUtil.orderBy(result.get("financingCashFlowAccountBalances").keySet(), UtilMisc.toList("glAccountId")));
+
+// Get the base currency for the organization
+context.put("orgCurrencyUomId", UtilCommon.getOrgBaseCurrency(context.get("organizationPartyId"), delegator));
+
+constructGlAccountTree(String id, GenericDelegator delegator, Map context, Map result) {
+    glAccount = context.get(id + "Accounts");
+    glAccountTree = null;
+    if (glAccount != null) {
+        glAccountList = FastList.newInstance();
+        glAccountIter = glAccount.iterator();
+        while (glAccountIter.hasNext()) {
+            GenericEntity accountEntity = glAccountIter.next();
+            Map account = accountEntity.getAllFields();
+            account.put("accountSum", result.get(id + "CashFlowAccountBalances").get(accountEntity));
+            glAccountList.add(account);
+        }
+
+        glAccountTree = new GLAccountTree(delegator, context.get("organizationPartyId"), context.get("orgCurrencyUomId"), glAccountList);
+    }
+        
+    return glAccountTree;
+}
+
+glAccountTrees = FastMap.newInstance();
+
+glAccountTrees.put("operating", constructGlAccountTree("operating", delegator, context, result));
+glAccountTrees.put("investing", constructGlAccountTree("investing", delegator, context, result));
+glAccountTrees.put("financing", constructGlAccountTree("financing", delegator, context, result));
+
+context.put("glAccountTrees", glAccountTrees);

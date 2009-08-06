@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Financial Services - Payroll</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <service name="opentaps.createPaycheck" engine="java"
+        location="com.opensourcestrategies.financials.payroll.PayrollServices" invoke="createPaycheck" auth="true">
+        <description>Create a payment of type PAYCHECK and associated paycheck items.</description>
+        <attribute name="paymentTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>        
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="paymentMethodId" type="String" mode="IN" optional="false"/>        
+        <attribute name="amount" type="Double" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>        
+		<attribute name="effectiveDate" type="Timestamp" mode="IN" optional="false"/>        
+        <attribute name="comments" type="String" mode="IN" optional="true"/>        
+        <attribute name="paymentRefNum" type="String" mode="IN" optional="true"/>        
+        <attribute name="statusId" type="String" mode="IN" optional="false"/> 
+        <attribute name="paymentId" type="String" mode="OUT" optional="true"/>
+    </service>
+    
+    <service name="opentaps.updatePaycheck" engine="java"
+        location="com.opensourcestrategies.financials.payroll.PayrollServices" invoke="updatePaycheck" auth="true">
+        <description>Update a payment of type PAYCHECK.</description>
+        <attribute name="paymentId" type="String" mode="INOUT" optional="false"/>        
+        <attribute name="paymentTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>        
+        <attribute name="partyIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentMethodId" type="String" mode="IN" optional="true"/>        
+        <attribute name="amount" type="Double" mode="IN" optional="true"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="true"/>        
+		<attribute name="effectiveDate" type="Timestamp" mode="IN" optional="true"/>        
+        <attribute name="comments" type="String" mode="IN" optional="true"/>        
+        <attribute name="paymentRefNum" type="String" mode="IN" optional="true"/>        
+        <attribute name="statusId" type="String" mode="IN" optional="true"/> 
+    </service>    
+    
+   <service name="opentaps.updatePaycheckItem" engine="java"
+        location="com.opensourcestrategies.financials.payroll.PayrollServices" invoke="updatePaycheckItem" auth="true">
+        <description>Update a paycheck item.</description>
+        <attribute name="paymentId" type="String" mode="IN" optional="false"/>
+        <attribute name="paycheckItemSeqId" type="String" mode="IN" optional="false"/>        
+        <attribute name="amount" type="Double" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>     
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>  
+    </service>        
+
+
+</services>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Accounting Services - Invoice</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <service name="financials.createInterestInvoice" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createInterestInvoice" auth="true">
+        <description>Create an invoice reflecting finance charges, of type INTEREST_INVOICE, with one InvoiceItem of type INV_INTRST_CHRG.</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
+        <attribute name="amount" type="Double" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="dueDate" type="Date" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="parentInvoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.createPartnerSalesInvoice" engine="java" default-entity-name="Invoice"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createPartnerSalesInvoice" auth="true">
+        <description>
+            Create a SALES_INVOICE between the organization and the partner based on a PARTNER_AGREEMENT.  If no agreement
+            is specified, the first active partner agreement between the organizationPartyId and partnerPartyId is used.
+            The line items are generated from a provided set of PARTNER_INVOICEs between the partner and its customers.
+            Note that an invoice might not be generated if the total amount is zero or there is nothing to process.
+        </description>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+        <attribute name="invoiceIds" type="List" mode="IN" optional="false"/>
+        <attribute name="agreementId" type="String" mode="IN" optional="true"/>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="partnerPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="createInvoiceForOrder" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createInvoiceForOrder">
+        <description>
+            Create an invoice from existing order
+            orderId = The orderId to associate the invoice with
+            billItems = List of ItemIssuance records to use for creating the invoice
+        </description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="billItems" type="List" mode="IN" optional="false"/>
+        <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="updateInvoiceAndBillingAddress" engine="java" default-entity-name="Invoice"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="updateInvoiceAndBillingAddress" auth="true">
+        <description>Updates an invoice and its related billing/payment addresses.</description>
+        <auto-attributes mode="INOUT" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+        <attribute name="contactMechId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="sendInvoiceEmail" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="sendInvoiceEmail" auth="true">
+        <description>Send an email with invoice attached.</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="sendFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="sendTo" type="String" mode="IN" optional="false"/>
+        <attribute name="sendCc" type="String" mode="IN" optional="true"/>
+        <attribute name="subject" type="String" mode="IN" optional="true"/>
+        <attribute name="bodyText" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <!-- Create/Update/Delete invoice terms -->
+    <service name="createInvoiceTerm" engine="java"  default-entity-name="InvoiceTerm"
+            location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createInvoiceTerm" auth="true">
+        <description>Create an InvoiceTerm. Will return failure if a term of the same type exists, or if the term to be created
+            is a payment term (governed by InvoiceHelper.invoiceDueDateAgreementTermTypeIds) and a term of that sort exists.</description>
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="updateInvoiceTerm" engine="java" default-entity-name="InvoiceTerm"
+            location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="updateInvoiceTerm" auth="true">
+        <description>Update an InvoiceTerm. Will return failure if a term of the new type exists, or if the new term type
+            is a payment term (governed by InvoiceHelper.invoiceDueDateAgreementTermTypeIds) and a term of that sort exists.</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="deleteInvoiceTerm" engine="simple" default-entity-name="InvoiceTerm" 
+            location="com/opensourcestrategies/financials/invoices/InvoiceServices.xml" invoke="deleteInvoiceTerm" auth="true">
+        <description>Delete an InvoiceTerm</description>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="processCheckRun" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="processCheckRun" auth="true">
+        <description>Creates check payments and paymentApplications based on the partyIdFrom, invoiceTypeId
+            and total amounts applied to invoices for that party/invoiceType.</description>
+        <implements service="accountingTagsEntityInterface"/>
+        <attribute name="invoiceIds" type="Map" string-map-prefix="invoiceIds_o_" mode="IN" optional="true"/>
+        <attribute name="invoiceTypeIds" type="Map" string-map-prefix="invoiceTypeIds_o_" mode="IN" optional="true"/>
+        <attribute name="partyIdsFrom" type="Map" string-map-prefix="partyIdsFrom_o_" mode="IN" optional="true"/>
+        <attribute name="currencyUomIds" type="Map" string-map-prefix="currencyUomIds_o_" mode="IN" optional="true"/>
+        <attribute name="amounts" type="Map" string-map-prefix="amounts_o_" mode="IN" optional="true"/>
+        <attribute name="_rowSubmit" type="Map" string-map-prefix="_rowSubmit_o_" mode="IN" optional="true"/>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentMethodId" type="String" mode="IN" optional="false"/>
+        <attribute name="dueDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="initialCheckNumber" type="String" mode="INOUT" optional="false"/>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="convertToBillingAccount" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="convertToBillingAccount" auth="true">
+        <description>Converts an Accounts Payable invoice to a Billing Account. (Also known as Store Credit.)</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="billingAccountId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="amount" type="BigDecimal" mode="IN" optional="true"/>
+    </service>
+
+    <service name="createInvoiceTerms" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createInvoiceTerms" auth="true">
+        <description>Creates InvoiceTerms based on the AgreementTerms between the parties of the invoice.</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="setInvoiceDueDate" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="setInvoiceDueDate" auth="true">
+        <description>Sets invoice due date based on the InvoiceTerms. If one of the terms is FIN_PAYMENT_TERM or 
+            FIN_PAYMENT_FIXDAY and no due date is set, the term will be used to calculate the due date of the invoice.
+        </description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="invoiceAgreementTerm" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="invoiceAgreementTerm" auth="true">
+        <description>Creates an Invoice Item and an AgreementTermBilling.  
+            This service must be used when creating invoices based on agreement terms.</description>
+        <implements service="createInvoiceItem"/>
+        <attribute name="agreementTermId" type="String" mode="IN" optional="false"/>
+        <attribute name="paymentApplicationId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="saveInvoicePDFToFile" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="saveInvoicePDFToFile" auth="true">
+        <description>Saves an invoice PDF to file in a location designated in financials.properties</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="screenLocation" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="billToThirdParty" engine="java" location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="billToThirdParty">
+        <description>
+            Service to bill a third party instead of the store's pay to party while keeping a record of what the third
+            party owes to the pay to party.  This works by taking a regular sales invoice between a customer and
+            the pay to party as an input.  It will determine what invoice items should be billed to a third party
+            based on the ProductStore.billToThirdPartyId for the orders covered by the invoice.  Each invoice item
+            is copied to a special sales invoice that is from the pay to party to the third party.  Then the sales
+            invoice with the customer is paid in full and closed.  Only orders whose sole payment method is
+            EXT_BILL_3RDPTY are covered.
+        </description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createThirdPartySalesInvoice" engine="java" location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createThirdPartySalesInvoice">
+        <description>Creates a new open invoice from the input party to the third party.</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="thirdPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceId" type="String" mode="OUT" optional="false"/>
+    </service>
+    
+    <service name="processCODReceipt" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="processCODReceipt" auth="true">
+        <description>Creates and approves an invoice to the carrier with itemized charges for COD payments, and creates
+            a payment and application for each sales invoice of type EXT_BILL_3RDPTY_COD.</description>
+        <attribute name="invoiceIds" type="Map" string-map-prefix="invoiceId_o_" mode="IN" optional="true"/>
+        <attribute name="paymentRefNums" type="Map" string-map-prefix="paymentRefNum_o_" mode="IN" optional="true"/>
+        <attribute name="amounts" type="Map" string-map-prefix="amount_o_" mode="IN" optional="true"/>
+        <attribute name="trackingCodes" type="Map" string-map-prefix="trackingCode_o_" mode="IN" optional="true"/>
+        <attribute name="_rowSubmits" type="Map" string-map-prefix="_rowSubmit_o_" mode="IN" optional="true"/>
+        <attribute name="adjustmentAmount" type="String" mode="IN" optional="true"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="referenceNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="carrierPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceDate" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.isInvoiceReady" engine="java" location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="isInvoiceReady">
+        <description>
+            Checks if an invoice can be set to ready.  Checks a number of things:
+            1)  If the payment applications add up to the invoice (same as checkInvoicePaymentApplications)
+            2)  If the invoice billing party has a credit limit agreement, then ensure it is not exceeded.
+            If the inovoice cannot be set ready, this service returns a service error.
+        </description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="setInvoiceReadyAndCheckIfPaid" engine="java" location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="setInvoiceReadyAndCheckIfPaid">
+        <description>
+            Sets the invoice to READY using the setInvoiceStatus, and then calls checkInvoicePaymentApplications to see if should be set as PAID
+            This is meant for the financials webapp to set invoices to READY and will cause them to be automatically set to PAID if the invoice already
+            has payments applied to it, such as from the CRMSFA's order view screen's receive payment page
+        </description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.setInvoiceProcessingStatus" engine="java" location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="setInvoiceProcessingStatus">
+        <attribute name="invoiceId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="statusId" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="opentaps.voidInvoice" engine="java" location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="voidInvoice">
+        <description>Voids an invoice.  Invoice must be in ready state.  Reverses any transactions related to the invoice. </description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.invoiceNonPhysicalOrderItems" engine="pojo"
+        location="org.opentaps.financials.domain.billing.invoice.OrderInvoicingService" invoke="invoiceNonPhysicalOrderItems">
+        <description>Creates an invoice from the non-physical items on the order.  It will invoice from the status in the orderItemStatusId,
+        or if it is not supplied, default to ITEM_PERFORMED.  After the invoice is created, it will attempt to change the items' status
+        to ITEM_COMPLETE.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderItemStatusId" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+   <service name="opentaps.createShippingInvoiceContactMech" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createShippingInvoiceContactMech">
+        <description>Associates shipment addresses with invoices.  This is meant to be triggered after createInvoicesFromShipments.</description>
+        <attribute name="shipmentIds" type="List" mode="IN" optional="false"/>
+        <attribute name="invoicesCreated" type="List" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.createCommissionInvoicesOnConfirmedPayment" engine="java"
+        location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="createCommissionInvoicesOnConfirmedPayment">
+        <description>Creates commission invoice if a payment is confirmed.</description>
+        <attribute name="paymentId" mode="IN" type="String"/>
+    </service>
+
+    <service name="checkInvoicePaymentApplications" engine="pojo"
+        location="org.opentaps.financials.domain.billing.invoice.InvoiceService" invoke="checkInvoicePaid">
+        <description>Checks if the invoice still has an outstanding amount or if it has been fully paid and
+        adjusted.  If so, set it to PAID.  This overrides an ofbiz accounting service so it can work with our
+        InvoiceAdjustments</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createInvoiceAdjustment" engine="pojo"
+            location="org.opentaps.financials.domain.billing.invoice.InvoiceService" invoke="createInvoiceAdjustment">
+        <description>Create an adjustment to an invoice.  It will be posted if the invoice has already been posted.</description> 
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceAdjustmentTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="adjustmentAmount" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="paymentId" type="String" mode="IN" optional="true"/>
+        <attribute name="comment" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceAdjustmentId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="invoiceSuppliesOrWorkEffortOrderItems" engine="java"
+             location="com.opensourcestrategies.financials.invoice.InvoiceServices" invoke="invoiceSuppliesOrWorkEffortOrderItems">
+        <description>Creates invoices from the orderData, which is a Collection of Maps with the fields orderId, orderItemSeqId, workEffortId, quantity.
+            All field values, including quantity, should be string
+        </description>
+        <attribute name="orderData" type="java.util.Collection" mode="IN" optional="false"/>
+        <attribute name="invoiceId" type="String" mode="OUT" optional="false"/>
+
+    </service>
+
+    <service name="setAccountingTags" engine="pojo"
+        location="org.opentaps.financials.domain.billing.invoice.InvoiceService" invoke="setAccountingTags">
+        <description>Automatically copies all the accounting tags from the order item to the invoice item</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createInvoiceItem" engine="pojo"
+        location="org.opentaps.financials.domain.billing.invoice.InvoiceItemService" invoke="createInvoiceItem" auth="true">
+        <description>Create a new Invoice Item Record</description>
+        <implements service="accountingTagsEntityInterface"/>
+        <attribute name="validateAccountingTags" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceItemSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceItemTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="overrideGlAccountId" type="String" mode="IN" optional="true"/>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="productFeatureId" type="String" mode="IN" optional="true"/>
+        <attribute name="parentInvoiceId" type="String" mode="IN" optional="true"/>
+        <attribute name="parentInvoiceItemSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="uomId" type="String" mode="IN" optional="true"/>
+        <attribute name="taxableFlag" type="String" mode="IN" optional="true"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="true"/>
+        <attribute name="amount" type="Double" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="taxAuthPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="taxAuthGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="taxAuthorityRateSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="invoiceItemSeqId" type="String" mode="OUT" optional="false"/>
+    </service>
+    
+    <service name="updateInvoiceItem" engine="pojo"
+        location="org.opentaps.financials.domain.billing.invoice.InvoiceItemService" invoke="updateInvoiceItem" auth="true">
+        <description>Update existing Invoice Item Record</description>
+        <implements service="accountingTagsEntityInterface"/>
+        <attribute name="validateAccountingTags" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceItemSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceItemTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="overrideGlAccountId" type="String" mode="IN" optional="true"/>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="productFeatureId" type="String" mode="IN" optional="true"/>
+        <attribute name="parentInvoiceId" type="String" mode="IN" optional="true"/>
+        <attribute name="parentInvoiceItemSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="uomId" type="String" mode="IN" optional="true"/>
+        <attribute name="taxableFlag" type="String" mode="IN" optional="true"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="true"/>
+        <attribute name="amount" type="Double" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="taxAuthPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="taxAuthGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="taxAuthorityRateSeqId" type="String" mode="IN" optional="true"/>
+    </service>    
+</services>

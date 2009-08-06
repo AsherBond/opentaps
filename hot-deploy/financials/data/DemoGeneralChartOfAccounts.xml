@@ -1,0 +1,326 @@
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!-- These are additional GL accounts not found in the accounting application -->
+    
+<entity-engine-xml>
+
+    <GlAccount glAccountId="100000" glAccountTypeId="ASSET"/>
+    <GlAccount glAccountId="126000" glAccountTypeId="CURRENT_ASSET"/>
+    <GlAccount glAccountId="126100" glAccountTypeId="CURRENT_ASSET"/>
+
+    <!-- This account records receivables from vendors, such as those arising after returning products to a vendor -->
+    <GlAccount glAccountId="123100" parentGlAccountId="120000" accountCode="123100"
+            glAccountClassId="CURRENT_ASSET" glAccountTypeId="CURRENT_ASSET"
+            accountName="DUE FROM VENDORS" postedBalance="0.0"/>
+    <!-- This account records a current asset of credits from vendors, which could be used to pay off vendor bills -->
+    <GlAccount glAccountId="154000" parentGlAccountId="150000" accountCode="154000"
+        glAccountClassId="CURRENT_ASSET" glAccountTypeId="CURRENT_ASSET"
+        accountName="VENDOR CREDITS" postedBalance="0.0"/>
+    <!-- Reatined earnings should be part of owners' equity, not common stock -->
+    <GlAccount glAccountId="336000" parentGlAccountId="300000"/>
+    
+    <GlAccount glAccountId="111100" glAccountTypeId="BANK_STLMNT_ACCOUNT"/>
+    <GlAccount glAccountId="112000" glAccountTypeId="UNDEPOSITED_RECEIPTS"/>
+    
+    <GlAccount glAccountId="200000" glAccountTypeId="LIABILITY"/>
+    <GlAccount glAccountId="300000" glAccountTypeId="EQUITY"/>
+    <GlAccount glAccountId="400000" glAccountTypeId="REVENUE"/>
+    <GlAccount glAccountId="401000" glAccountTypeId="REVENUE"/>
+    <GlAccount glAccountId="409000" glAccountTypeId="REVENUE"/>
+    <GlAccount glAccountId="410000" glAccountTypeId="REVENUE"/>
+    <GlAccount glAccountId="420000" glAccountTypeId="REVENUE"/>
+    <GlAccount glAccountId="421000" glAccountTypeId="REVENUE"/>
+    <GlAccount glAccountId="422000" glAccountTypeId="REVENUE"/>
+    <GlAccount glAccountId="423000" glAccountTypeId="REVENUE"/>
+    <GlAccount glAccountId="424000" glAccountTypeId="REVENUE"/>
+
+    <GlAccount glAccountId="500000" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="501000" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="502000" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="503000" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="510000" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="510200" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="511000" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="511100" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="511200" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="512000" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="512050" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="512100" glAccountTypeId="COGS"/>
+    <GlAccount glAccountId="512200" glAccountTypeId="COGS"/>
+
+    <GlAccount glAccountId="513000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="513100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="513200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="514000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="515000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="515100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="515200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="516000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="516100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="517000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="517100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="517200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="517300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="517400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="518000" glAccountClassId="CASH_EXPENSE" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="518100" glAccountClassId="CASH_EXPENSE" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="518200" glAccountClassId="CASH_EXPENSE" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="519000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="519100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="519200" glAccountTypeId="OPERATING_EXPENSE"/>
+
+    <GlAccount glAccountId="600000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="601000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="601100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="601200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="601300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="601400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="602000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="602100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="602200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="603000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="603100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="603200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="604000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="604100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="604200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="604500" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="604600" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="604700" glAccountTypeId="OPERATING_EXPENSE"/>
+	
+    <GlAccount glAccountId="605000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="605100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="605200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="605800" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="605900" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="606000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="607000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="607100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="607200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="607400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="607500" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="607600" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="607700" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="607900" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="608000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="609000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="609100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="609200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="609500" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="610000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="611000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="611100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="611200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="611300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="612000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="612100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="612200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="612300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="612400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="613000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="613100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="613200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="613300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="620000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="621000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="621100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="621200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="621300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="621400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="621500" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="622000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="622100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="622200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="623000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="623100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="623200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="624000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="624100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="624200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="624300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="624400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="625000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="626000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="626100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="626200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="626300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="626400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="630000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="631000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="631100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="631200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="631300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="631400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="632000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="640000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="641000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="642000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="643000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="649000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="650000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="651000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="652000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="653000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="654000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="659000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="660000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="661000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="662000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="663000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="669000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="670000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="671000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="672000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="673000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="674000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="675000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="675100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="675200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="675300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="675400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="680000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="681000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="682000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="683000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="690000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="691000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="692000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="693000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="694000" glAccountTypeId="OPERATING_EXPENSE"/>
+
+    <!-- Even though this is called "Other Expenses" in fact they are operating in nature, such as credit card services charges, rather
+    than non-operating, such as one-time writedowns of investments -->
+    <GlAccount glAccountId="700000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="701000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="701100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="701200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="701300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="701400" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="702000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="709000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="710000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="711000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="712000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="712100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="712200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="712300" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="720000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="721000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="730000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="731000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="731100" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="731200" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="739000" glAccountTypeId="OPERATING_EXPENSE"/>
+
+    <GlAccount glAccountId="740000" glAccountTypeId="TAX_EXPENSE"/>
+    <GlAccount glAccountId="741000" glAccountTypeId="TAX_EXPENSE"/>
+    <GlAccount glAccountId="742000" glAccountTypeId="TAX_EXPENSE"/>
+    <GlAccount glAccountId="743000" glAccountTypeId="TAX_EXPENSE"/>
+    <GlAccount glAccountId="744000" glAccountTypeId="TAX_EXPENSE"/>
+
+    <GlAccount glAccountId="750000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="751000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="752000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="752000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="753000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="754000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="760000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="761000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="762000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="763000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="770000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="771000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="772000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="773000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="774000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="779000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="780000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="781000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="782000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="783000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="784000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="785000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="786000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="787000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="788000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="789000" glAccountTypeId="OPERATING_EXPENSE"/>
+    <GlAccount glAccountId="790000" glAccountTypeId="OPERATING_EXPENSE"/>
+
+    <GlAccount glAccountId="800000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="801000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="802000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="803000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="804000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="805000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="806000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="810000" glAccountTypeId="INTEREST_INCOME"/>
+    <GlAccount glAccountId="811000" glAccountTypeId="INTEREST_INCOME"/>
+    <GlAccount glAccountId="812000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="813000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="814000" glAccountTypeId="OTHER_INCOME"/>
+    <GlAccount glAccountId="819000" glAccountTypeId="OTHER_INCOME"/>
+
+    <GlAccount glAccountId="820000" glAccountTypeId="OTHER_EXPENSE"/>
+    <GlAccount glAccountId="821000" glAccountTypeId="OTHER_EXPENSE"/>
+    <GlAccount glAccountId="822000" glAccountTypeId="OTHER_EXPENSE"/>
+    <GlAccount glAccountId="823000" glAccountTypeId="OTHER_EXPENSE"/>
+    <GlAccount glAccountId="824000" glAccountTypeId="OTHER_EXPENSE"/>
+    <GlAccount glAccountId="829000" glAccountTypeId="OTHER_EXPENSE"/>
+
+    <!-- A special but important account for time period closings: the net income account for carrying the period's income, which must be a Debit account -->
+    <GlAccount glAccountId="890000" glAccountTypeId="PROFIT_LOSS_ACCOUNT" glAccountClassId="DEBIT" accountCode="890000" accountName="Net Income"/>
+    
+    <GlAccount glAccountId="900000" glAccountTypeId="TAX_EXPENSE" glAccountClassId="CASH_EXPENSE"/>
+    <GlAccount glAccountId="901000" glAccountTypeId="TAX_EXPENSE" glAccountClassId="CASH_EXPENSE"/>
+    <GlAccount glAccountId="902000" glAccountTypeId="TAX_EXPENSE" glAccountClassId="CASH_EXPENSE"/>
+    <GlAccount glAccountId="903000" glAccountTypeId="TAX_EXPENSE" glAccountClassId="CASH_EXPENSE"/>
+
+    <GlAccount glAccountId="153001" parentGlAccountId="153000" accountCode="153001"
+        glAccountClassId="CURRENT_ASSET" glAccountTypeId="CURRENT_ASSET"
+        accountName="PARENT CHILD RECONCILING ACCOUNT" postedBalance="0.0"/>
+
+
+    <GlAccount glAccountId="408000" parentGlAccountId="400000" accountCode="408000"
+        glAccountClassId="REVENUE" glAccountTypeId="REVENUE"
+        accountName="POSTAGE AND HANDLING FEES RECEIVED" postedBalance="0.0"/>
+
+    <GlAccount glAccountId="514100" parentGlAccountId="514000" accountCode="514100"
+        glAccountClassId="INVENTORY_ADJUST" glAccountTypeId="OPERATING_EXPENSE"
+        accountName="LOST OR DAMAGED IN TRANSIT" postedBalance="0.0"/>
+
+    <GlAccount glAccountId="600100" parentGlAccountId="600000" accountCode="600100"
+        glAccountClassId="EXPENSE" glAccountTypeId="OPERATING_EXPENSE"
+        accountName="GENERAL MANUFACTURING EXPENSES" postedBalance="0.0"/>
+    <GlAccount glAccountId="600110" parentGlAccountId="600100" accountCode="600110"
+        glAccountClassId="EXPENSE" glAccountTypeId="OPERATING_EXPENSE"
+        accountName="INTERNAL MANUFACTURING EXPENSES" postedBalance="0.0"/>
+    <GlAccount glAccountId="600120" parentGlAccountId="600100" accountCode="600120"
+        glAccountClassId="EXPENSE" glAccountTypeId="OPERATING_EXPENSE"
+        accountName="CONTRACT MANUFACTURING EXPENSES" postedBalance="0.0"/>
+    <GlAccount glAccountId="600130" parentGlAccountId="600100" accountCode="600130"
+        glAccountClassId="EXPENSE" glAccountTypeId="OPERATING_EXPENSE"
+        accountName="SCRAPPED RAW MATERIAL EXPENSE" postedBalance="0.0"/>
+    <GlAccount glAccountId="600140" parentGlAccountId="600100" accountCode="600140"
+        glAccountClassId="EXPENSE" glAccountTypeId="OPERATING_EXPENSE"
+        accountName="EXPENSE FOR REVERSED PRODUCTION RUNS" postedBalance="0.0"/>
+    <GlAccount glAccountId="600190" parentGlAccountId="600100" accountCode="600190"
+        glAccountClassId="EXPENSE" glAccountTypeId="OPERATING_EXPENSE"
+        accountName="MANUFACTURING EXPENSE VARIANCE" postedBalance="0.0"/>
+
+
+</entity-engine-xml>

@@ -1,0 +1,106 @@
+/* 
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.party.party.PartyHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
+import com.opensourcestrategies.financials.payroll.PayrollHelper;
+import com.opensourcestrategies.financials.payroll.PaycheckReader;
+import org.opentaps.common.util.UtilMessage;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+delegator = request.getAttribute("delegator");
+
+paymentId = parameters.get("paymentId");
+if (paymentId == null) {
+    paymentId = request.getParameter("paymentId");
+}
+
+if (paymentId == null) {
+    UtilMessage.addError(request, "FinancialsBshErrorPaycheckIdIsMissing");
+    return;
+}
+
+payment = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId",paymentId));
+if (payment == null) {
+    UtilMessage.addError(request, "FinancialsBshErrorPaycheckNotFound", UtilMisc.toMap("paymentId", paymentId));
+    return;
+}
+
+if (!UtilFinancial.isPaycheck(payment)) {
+    UtilMessage.addError(request, "FinancialsBshErrorThisPaymentIsNotAPaycheck", UtilMisc.toMap("paymentId", paymentId));
+    return;
+}
+
+context.put("paymentId", paymentId);
+context.put("paycheck", payment);
+
+
+// update permission
+hasUpdatePermission = security.hasEntityPermission("FINANCIALS", "_EMP_PCUPDT", userLogin); 
+context.put("hasUpdatePermission", hasUpdatePermission);
+
+// create permission
+hasCreatePermission = security.hasEntityPermission("FINANCIALS", "_EMP_PCCRTE", userLogin);
+context.put("hasCreatePermission", hasCreatePermission);
+
+
+organizationPartyId = session.getAttribute("organizationPartyId");
+
+organizationParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", organizationPartyId));
+// paychecks can only be made from a checking account
+paymentMethodList = EntityUtil.orderBy(
+    organizationParty.getRelatedByAnd("PaymentMethod", UtilMisc.toMap("paymentMethodTypeId", "COMPANY_CHECK")),
+    UtilMisc.toList("description", "paymentMethodId"));
+
+context.put("paymentMethodList", paymentMethodList);
+
+// a list of payment types that are paychecks
+ph = new PayrollHelper(organizationPartyId, delegator);
+paycheckTypes = EntityUtil.getRelated("PaymentType", ph.getAvailablePaycheckTypes());
+context.put("paycheckTypes", paycheckTypes);
+
+
+// expand the paycheck items (witholdings and expenses) to include all data we need for presentation (See PaycheckItemAndType)
+reader = new PaycheckReader(payment);
+
+witholdings = FastList.newInstance();
+paycheckWitholdings = reader.getPaycheckItemsByClass("DEDUCTION");
+for (iter = paycheckWitholdings.iterator(); iter.hasNext(); ) {
+    paycheckWitholding = iter.next();
+    witholding = FastMap.newInstance();
+    witholding.putAll( paycheckWitholding.getAllFields() );
+    witholding.put("witholdingPartyName", PartyHelper.getPartyName(delegator, paycheckWitholding.get("partyId"), false));
+    witholding.put("typeDescription", paycheckWitholding.getRelatedOneCache("PaycheckItemType").get("description", locale));
+    witholdings.add(witholding);
+}
+context.put("witholdings", witholdings);
+
+expenses = FastList.newInstance();
+paycheckExpenses = reader.getPaycheckItemsByClass("EXPENSE");
+for (iter = paycheckExpenses.iterator(); iter.hasNext(); ) {
+    paycheckExpense = iter.next();
+    expense = FastMap.newInstance();
+    expense.putAll( paycheckExpense.getAllFields() );
+    expense.put("expensePartyName", PartyHelper.getPartyName(delegator, paycheckExpense.get("partyId"), false));
+    expense.put("typeDescription", paycheckExpense.getRelatedOneCache("PaycheckItemType").get("description"));
+    expenses.add(expense);
+}
+context.put("expenses", expenses);
+
+context.put("netAmount", reader.getNetAmount());
