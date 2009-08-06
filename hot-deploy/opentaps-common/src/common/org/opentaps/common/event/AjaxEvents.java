@@ -214,7 +214,7 @@ public final class AjaxEvents {
         String partyIdTo = UtilCommon.getParameter(request, "partyIdTo");
         String returnNumberOnly = UtilCommon.getParameter(request, "returnNumberOnly");
 
-        Map<String, Object> callCtxt = UtilMisc.toMap("partyIdTo", partyIdTo, "isRead", Boolean.FALSE, "locale", locale);
+        Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("partyIdTo", partyIdTo, "isRead", Boolean.FALSE, "locale", locale);
         Map<String, Object> callResult = dispatcher.runSync("opentaps.receiveInternalMessage", callCtxt);
 
         List<?> newMessages = FastList.newInstance();
