@@ -1,0 +1,85 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// product lookup which includes ability to search by GoodIdentification TODO: the results aren't distinct because there can be many idValues for a product
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.service.ServiceUtil;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilConfig;
+
+// some pre-populated data for the lookup product
+context.put("productTypes", delegator.findAllCache("ProductType", UtilMisc.toList("description")));
+context.put("goodIdTypes", delegator.findAllCache("GoodIdentificationType", UtilMisc.toList("description")));
+
+// clone the parameters because we need to modify them
+inputFields = new HashMap(parameters);
+
+// check if we're ignoring the good id
+idValue = inputFields.get("idValue");
+ignoreGoodId = (idValue == null || idValue.trim().length() == 0);
+
+// get the description of the selected good ID type
+if (!ignoreGoodId) {
+    goodIdentificationTypeId = parameters.get("goodIdentificationTypeId");
+    if (UtilValidate.isNotEmpty(goodIdentificationTypeId)) {
+        goodIdType = delegator.findByPrimaryKeyCache("GoodIdentificationType", UtilMisc.toMap("goodIdentificationTypeId", goodIdentificationTypeId));
+        context.put("goodIdentificationTypeDescription", goodIdType.get("description"));
+        ignoreGoodType = true;
+    } else {
+        context.put("goodIdentificationTypeDescription", UtilProperties.getMessage("ProductUiLabels", "ProductGoodId", locale));
+        context.put("goodIdentificationTypeIdDescription", UtilProperties.getMessage("ProductUiLabels", "ProductType", locale));
+        ignoreGoodType = false;
+    }
+}
+
+// because of the way the form is set up, we need to remove the type variable if no ID is filled in
+if (ignoreGoodId) inputFields.remove("goodIdentificationTypeId");
+inputFields.remove("facilityId");
+
+// prepare the find first, because we want to control the actual find by condition
+results = dispatcher.runSync("prepareFind", UtilMisc.toMap("inputFields", inputFields, "entityName", "ProductAndGoodIdentification"));
+if (ServiceUtil.isError(results)) return;
+conditions = results.get("entityConditionList");
+if (conditions == null) return;
+
+// limit to valid prices in our current product store
+application = parameters.get("opentapsApplicationName"); // has to be set in web.xml for this to work
+productStoreId = UtilConfig.getPropertyValue(application, application + ".order.productStoreId");
+currencyUomId = UtilConfig.getPropertyValue(application, "defaultCurrencyUomId");
+storeConditions = new EntityConditionList( UtilMisc.toList(
+    new EntityExpr("productStoreId", EntityOperator.EQUALS, productStoreId),
+    new EntityConditionList( UtilMisc.toList(
+        new EntityExpr("productPriceTypeId", EntityOperator.EQUALS, "LIST_PRICE"),
+        new EntityExpr("productPriceTypeId", EntityOperator.EQUALS, "DEFAULT_PRICE")
+    ), EntityOperator.OR ),
+    EntityUtil.getFilterByDateExpr("productPriceFromDate", "productPriceThruDate"),
+    new EntityExpr("productPricePurposeId", EntityOperator.EQUALS, "PURCHASE"),
+    new EntityExpr("currencyUomId", EntityOperator.EQUALS, "USD")
+), EntityOperator.AND);
+combinedConditions = new EntityConditionList( UtilMisc.toList(conditions, storeConditions), EntityOperator.AND);
+
+fields = UtilMisc.toList("productId", "productTypeId", "brandName", "internalName");
+if (!ignoreGoodId) {
+    if (!ignoreGoodType) fields.add("goodIdentificationTypeId");
+    fields.add("idValue");
+}
+iterator = delegator.findListIteratorByCondition("ProductLookup", combinedConditions, null, fields, null, UtilCommon.DISTINCT_READ_OPTIONS);
+
+context.put("products", iterator);

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<entity-engine-xml>
+
+    <!-- An example of the type of agreements our partners may have with their customers -->
+    <AgreementTypeForRoleType organizationPartyId="Company" agreementTypeId="PARTNER_SALES_AGR" roleTypeId="PARTNER"/>
+
+    <!-- Items of a Partner-Customer Agreement -->
+    <AgreementItemType agreementItemTypeId="PARTNER_CUST_PAY" description="Partner-Customer Payment Terms"/>
+    <AgreementItemType agreementItemTypeId="PARTNER_TOS" description="Partner Terms Of Service"/>
+
+    <!-- Terms available -->
+    <TermType termTypeId="PARTNER_SVC_PROD" description="Partner Service for Product" parentTypeId="PARTNER_SALES_TERM"/>
+    <TermType termTypeId="PARTNER_SVC_PARTY" description="Partner Service for Party" parentTypeId="PARTNER_SALES_TERM"/>
+
+    <!-- A sample warranty -->
+    <EnumerationType enumTypeId="WARRANTY" description="Warranty Options"/>
+    <TermTypeToEnumTypeMap termTypeId="PARTNER_SVC_PROD" enumTypeId="WARRANTY"/>
+    <Enumeration enumId="WARRANTY_FULL" enumTypeId="WARRANTY" enumCode="01" description="Full Warranty"/>
+    <Enumeration enumId="WARRANTY_LIMITED" enumTypeId="WARRANTY" enumCode="02" description="Limited Warranty"/>
+    <Enumeration enumId="WARRANTY_PARTS" enumTypeId="WARRANTY" enumCode="03" description="Parts Only"/>
+
+    <!-- Fields for these term types -->
+    <TermTypeFields termTypeId="PARTNER_SVC_PROD" field1="productId" field2="valueEnumId"/>
+    <TermTypeFields termTypeId="PARTNER_SVC_PARTY" field1="partyId"/>
+
+    <!-- A partner sales agreement for this demo has payment and terms of service terms -->
+    <AgreementToItemMap agreementTypeId="PARTNER_SALES_AGR" agreementItemTypeId="PARTNER_CUST_PAY" autoCreate="Y" sequenceNum="1" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="PARTNER_SALES_AGR" agreementItemTypeId="PARTNER_TOS" autoCreate="Y" sequenceNum="2" maxAllowed="1"/>
+
+    <!-- payment item -->
+    <AgreementItemToTermMap agreementItemTypeId="PARTNER_CUST_PAY" termTypeId="FIN_PAYMENT_TERM" autoCreate="N" sequenceNum="1" maxAllowed="1"/>
+    <AgreementItemToTermMap agreementItemTypeId="PARTNER_CUST_PAY" termTypeId="CREDIT_LIMIT" autoCreate="N" sequenceNum="2" maxAllowed="1"/>
+
+    <!-- service terms -->
+    <AgreementItemToTermMap agreementItemTypeId="PARTNER_TOS" termTypeId="PARTNER_SVC_PROD" autoCreate="N" sequenceNum="1"/>
+    <AgreementItemToTermMap agreementItemTypeId="PARTNER_TOS" termTypeId="PARTNER_SVC_PARTY" autoCreate="N" sequenceNum="2"/>
+
+    <!-- Define some agreements between demopartner1 and its accounts -->
+    <Agreement agreementId="dp1a1agreement" agreementTypeId="PARTNER_SALES_AGR"
+        partyIdFrom="demopartner1" roleTypeIdFrom="PARTNER" partyIdTo="dp1acct1" roleTypeIdTo="ACCOUNT"
+        description="Partner agreement with Account" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+
+    <Agreement agreementId="dp1a2agreement" agreementTypeId="PARTNER_SALES_AGR"
+        partyIdFrom="demopartner1" roleTypeIdFrom="PARTNER" partyIdTo="dp1acct2" roleTypeIdTo="ACCOUNT"
+        description="Partner agreement with Account" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+
+    <Agreement agreementId="dp1a1c1agreement" agreementTypeId="PARTNER_SALES_AGR"
+        partyIdFrom="demopartner1" roleTypeIdFrom="PARTNER" partyIdTo="dp1a1contact1" roleTypeIdTo="CONTACT"
+        description="Partner agreement with Contact" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+
+
+</entity-engine-xml>

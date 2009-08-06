@@ -1,0 +1,184 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.Arrays;
+import javolution.util.FastList;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
+import org.ofbiz.party.party.PartyHelper;
+
+/*
+ * Find all products which match the pattern and return list of theis id
+ * Search matches in: 
+ *    Product.productId, 
+ *    Product.internalName, 
+ *    Product.productName,
+ *    Product.comments, 
+ *    Product.description, 
+ *    Product.longDescription, 
+ *    GoodIdentification.idValue
+ * Discontinued products aren't filtered out because still may present in orders.
+ */
+findProductByPattern(pattern) {
+    if (UtilValidate.isEmpty(pattern)) return null;
+
+    // hope pattern contains productId
+    if (pattern.length() <= 20) {
+        product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", pattern));
+        if (product != null) return UtilMisc.toList(product.getString("productId"));
+    }
+
+    // search using LIKE otherwise
+    likePattern = "%" + pattern + "%";
+    productConditions = FastList.newInstance();
+    productConditions.add(new EntityExpr("productId", EntityOperator.LIKE, likePattern));
+    productConditions.add(new EntityExpr("internalName", EntityOperator.LIKE, likePattern));
+    productConditions.add(new EntityExpr("productName", EntityOperator.LIKE, likePattern));
+    productConditions.add(new EntityExpr("comments", EntityOperator.LIKE, likePattern));
+    productConditions.add(new EntityExpr("description", EntityOperator.LIKE, likePattern));
+    productConditions.add(new EntityExpr("longDescription", EntityOperator.LIKE, likePattern));
+    productConditions.add(new EntityExpr("idValue", EntityOperator.LIKE, likePattern));
+    productConditionList = new EntityConditionList(productConditions, EntityOperator.OR);
+    products = delegator.findByCondition("ProductAndGoodIdentification", productConditionList, UtilMisc.toList("productId"), null);
+    if (UtilValidate.isEmpty(products)) return null; // no matches
+
+    return EntityUtil.getFieldListFromEntityList(products, "productId", true);
+}
+
+timeZone = UtilHttp.getTimeZone(request);
+
+// Initial values for the variables passed to the FTL script
+resultList = FastList.newInstance();
+resultTotalSize = 0;
+extraParameters = "";
+
+organizationPartyId = UtilCommon.getOrganizationPartyId(request);
+if (UtilValidate.isEmpty(organizationPartyId)) {
+     facilityId = session.getAttribute("facilityId");
+     facility = delegator.findByPrimaryKey("Facility", UtilMisc.toMap("facilityId", facilityId));
+     organizationPartyId = facility.getString("ownerPartyId");
+}
+
+
+// We only perform a lookup if either this is the "Open Orders" form, or if the perform
+// lookup flag is either passed as a parameter or has already been passed in the context
+// (e.g. by setting it up in a screen)
+if ("Y".equals(context.get("performFind")) ||
+        "Y".equals(parameters.get("performFind")) || 
+        "true".equals(context.get("onlyOpenOrders"))) {
+    searchConditions = FastList.newInstance();
+
+    if ("true".equals(context.get("onlyOpenOrders"))) {
+        searchConditions.add(new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("ORDER_CREATED", "ORDER_APPROVED", "ORDER_HOLD")));
+    } else {
+        // fields to search by
+        orderId = parameters.get("orderId");
+        orderName = parameters.get("orderName");
+        supplierPartyId = parameters.get("supplierPartyId");
+        statusId = parameters.get("statusId");
+        fromDate = parameters.get("fromDate");
+        thruDate = parameters.get("thruDate");
+        createdBy = parameters.get("createdBy");
+        productPattern = UtilCommon.getParameter(request, "productPattern");
+        performFind = parameters.get("performFind");
+
+        if (UtilValidate.isEmpty(fromDate)) {
+            fromDate = UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
+            parameters.put("fromDate", fromDate);
+        }
+        if (UtilValidate.isEmpty(thruDate)) {
+            thruDate = UtilHttp.makeParamValueFromComposite(request, "thruDate", locale);
+            parameters.put("thruDate", thruDate);
+        }
+        if (!UtilValidate.isEmpty(orderId)) {
+            searchConditions.add(new EntityExpr("orderId", EntityOperator.EQUALS, orderId));
+        }
+        if (!UtilValidate.isEmpty(orderName)) {
+            searchConditions.add(new EntityExpr("orderName", EntityOperator.LIKE, orderName + "%"));
+        }
+        if (!UtilValidate.isEmpty(supplierPartyId)) {
+            searchConditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, supplierPartyId));
+        }
+        if (!UtilValidate.isEmpty(statusId)) {
+            searchConditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
+        }
+        if (!UtilValidate.isEmpty(fromDate)) {
+            searchConditions.add(new EntityExpr("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilDate.toTimestamp(fromDate, timeZone, locale)));
+        }
+        if (!UtilValidate.isEmpty(thruDate)) {
+            searchConditions.add(new EntityExpr("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, UtilDate.toTimestamp(thruDate, timeZone, locale)));
+        }
+        if (!UtilValidate.isEmpty(createdBy)) {
+            searchConditions.add(new EntityExpr("createdBy", EntityOperator.EQUALS, createdBy));
+        }
+        if (UtilValidate.isNotEmpty(productPattern)) {
+            productMatches = findProductByPattern(productPattern);
+            if (UtilValidate.isNotEmpty(productMatches)) {
+                ordersByProduct = delegator.findByCondition("OrderHeaderAndItems", new EntityExpr("productId", EntityOperator.IN, productMatches), UtilMisc.toList("orderId"), null);
+                if (UtilValidate.isNotEmpty(ordersByProduct)) {
+                    searchConditions.add(new EntityExpr("orderId", EntityOperator.IN, EntityUtil.getFieldListFromEntityList(ordersByProduct, "orderId", true)));
+                }
+            }
+        }
+
+        orderId = orderId == null? "" : orderId;
+        orderName = orderName == null? "" : orderName;
+        supplierPartyId = supplierPartyId == null? "" : supplierPartyId;
+        statusId = statusId == null? "" : statusId;
+        fromDate = fromDate == null? "": fromDate;
+        thruDate = thruDate == null? "": thruDate;
+        createdBy = createdBy == null? "": createdBy;
+
+        extraParameters = "&orderId=" + orderId + "&orderName=" + orderName + "&supplierPartyId=" + supplierPartyId + "&statusId=" + statusId + "&fromDate=" + fromDate + "&thruDate=" + thruDate + "&createdBy=" + createdBy + "&performFind=" + performFind;
+    }
+
+    searchConditions.add(new EntityExpr("orderTypeId", EntityOperator.EQUALS, "PURCHASE_ORDER"));
+    searchConditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_FROM_VENDOR"));
+    searchConditions.add(new EntityExpr("billToPartyId", EntityOperator.EQUALS, organizationPartyId));           // restrict to the current organization
+    allConditions = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+    fields = Arrays.asList(new Object[] {"orderId", "orderDate", "orderName", "partyId", "statusId", "grandTotal", "currencyUom"});
+    orderBy = UtilMisc.toList("orderDate");
+
+    iterator = delegator.findListIteratorByCondition("OrderHeaderAndRoles", allConditions, null, fields, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);
+    initResultList = iterator.getPartialList(viewIndex.intValue(), viewSize.intValue());
+    iterator.last();
+    resultTotalSize = iterator.currentIndex();
+    iterator.close();
+
+    resultIt = initResultList.iterator();
+    while (resultIt.hasNext()) {
+        orderHeader = resultIt.next();
+        orderHeaderMap = orderHeader.getAllFields();
+        orderHeaderMap.put("supplierPartyId", orderHeader.get("partyId"));
+        orderHeaderMap.put("supplierPartyName", PartyHelper.getPartyName(delegator, orderHeader.get("partyId"), false));
+
+        statusItem = orderHeader.getRelatedOneCache("StatusItem");
+        statusDescription = statusItem != null? statusItem.get("description") : "";
+        orderHeaderMap.put("statusDescription", statusDescription);
+
+        resultList.add(orderHeaderMap);
+    }
+}
+
+context.put("purchaseOrders", resultList);
+context.put("purchaseOrdersTotalSize", resultTotalSize);
+context.put("extraParameters", extraParameters);

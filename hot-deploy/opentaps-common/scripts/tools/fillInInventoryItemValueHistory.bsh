@@ -1,0 +1,33 @@
+/*
+ * This script fills in the InventoryItemValueHistory based on OrderRoles and should be run to get
+ * old data (ie, from earlier versions of opentaps to work properly)
+ */
+
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.base.util.*;
+
+delegator = GenericDelegator.getGenericDelegator("default");
+
+now = UtilDateTime.nowTimestamp();
+
+//restored InventoryItemValueHistory records may have initially empty PK. Fill it out first.
+invItemsValueHistory = delegator.findAll("InventoryItemValueHistory");
+for (invItemValue : invItemsValueHistory) {
+    if (UtilValidate.isEmpty(invItemValue.getString("inventoryItemValueHistId"))) {
+        conditionList = UtilMisc.toList(new EntityExpr("inventoryItemId", EntityOperator.EQUALS, invItemValue.getString("inventoryItemId")), new EntityExpr("inventoryItemId", EntityOperator.EQUALS, invItemValue.getString("inventoryItemId")));
+        conditions = new EntityConditionList(conditionList, EntityOperator.AND);
+        delegator.storeByCondition("InventoryItemValueHistory", UtilMisc.toMap("inventoryItemValueHistId", delegator.getNextSeqId("InventoryItemValueHistory")), conditions);
+        print("Empty PK for item " + invItemValue.getString("inventoryItemId") + ". Assigng value.");
+    }
+}
+
+invItems = delegator.findAll("InventoryItem");
+for (iiit = invItems.iterator(); iiit.hasNext(); ) {
+    ii = iiit.next();
+    existing = delegator.findCountByAnd("InventoryItemValueHistory", UtilMisc.toMap("inventoryItemId", ii.get("inventoryItemId")));
+    if (existing > 0) continue;
+    print(ii.get("inventoryItemId"));
+    iivh = delegator.makeValue("InventoryItemValueHistory", UtilMisc.toMap("inventoryItemValueHistId", delegator.getNextSeqId("InventoryItemValueHistory"), "inventoryItemId", ii.get("inventoryItemId"), "unitCost", ii.get("unitCost"), "setByUserLogin", "system", "dateTime", now));
+    iivh.create(); 
+}

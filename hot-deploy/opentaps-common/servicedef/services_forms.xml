@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Forms Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <service name="createMergeForm" engine="java" default-entity-name="MergeForm"
+            location="org.opentaps.common.forms.MergeFormServices" invoke="createMergeForm" auth="true">
+        <description>Create merge form</description>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <auto-attributes include="pk" mode="OUT" optional="true"/>
+        <attribute name="privateForm" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="updateMergeForm" engine="java" default-entity-name="MergeForm"
+            location="org.opentaps.common.forms.MergeFormServices" invoke="updateMergeForm" auth="true">
+        <description>Update merge form</description>
+        <auto-attributes include="pk" mode="INOUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="privateForm" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="deleteMergeForm" engine="java" default-entity-name="MergeForm"
+            location="org.opentaps.common.forms.MergeFormServices" invoke="deleteMergeForm" auth="true">
+        <description>Delete merge form</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createMergeFormCategory" engine="java" default-entity-name="MergeFormCategory"
+            location="org.opentaps.common.forms.MergeFormServices" invoke="createMergeFormCategory" auth="true">
+        <description>Create merge form category</description>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <auto-attributes include="pk" mode="OUT" optional="true"/>
+    </service>
+    <service name="updateMergeFormCategory" engine="java" default-entity-name="MergeFormCategory"
+            location="org.opentaps.common.forms.MergeFormServices" invoke="updateMergeFormCategory" auth="true">
+        <description>Update merge form category</description>
+        <auto-attributes include="pk" mode="INOUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="deleteMergeFormCategory" engine="java" default-entity-name="MergeFormCategory"
+            location="org.opentaps.common.forms.MergeFormServices" invoke="deleteMergeFormCategory" auth="true">
+        <description>Delete merge form category</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+</services>
+

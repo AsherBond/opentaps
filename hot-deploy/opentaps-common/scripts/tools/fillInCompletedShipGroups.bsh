@@ -1,0 +1,24 @@
+import java.util.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.service.GenericDispatcher;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.order.order.*;
+import org.opentaps.common.order.UtilOrder;
+
+// Fills in OrderItemShipGroup.statusId of ship groups related to packed or shipped shipments, so that
+//  the 'Picklists to be Shipped' screen doesn't contain old, completed picklists 
+
+delegator = GenericDelegator.getGenericDelegator("default");
+dispatcher = GenericDispatcher.getLocalDispatcher("ecommerce", delegator);
+userLogin = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "system"));
+
+shipments = delegator.findByCondition("Shipment", new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("SHIPMENT_PACKED", "SHIPMENT_SHIPPED")), null, null);
+shipmentIds = EntityUtil.getFieldListFromEntityList(shipments, "shipmentId", true);
+for (x = 0; x < shipmentIds.size(); x++) {
+  shipmentId = shipmentIds.get(x);
+  serviceResult = dispatcher.runSync("opentaps.setShipmentOrderShipGroupsPacked", UtilMisc.toMap("userLogin", userLogin, "shipmentId", shipmentId));
+  print("ShipmentId " + shipmentId + ": " + serviceResult.get("responseMessage") + " (" + (x + 1) + " of " + shipmentIds.size() + ")");
+}
+            

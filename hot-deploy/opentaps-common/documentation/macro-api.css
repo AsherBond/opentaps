@@ -1,0 +1,92 @@
+/*  Specifically for the macro API documentation */
+
+body {
+  font: 10pt Helvetia, Arial, sans-serif;
+  background-color: #6C6C6C;
+}
+
+div.background {
+  margin-left: 20px;
+  margin-right: 20px;
+  background-color: #999999;
+}
+
+div.foreground {
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: white;
+}
+
+h2 {
+  padding-top: 30px;
+  font-size: 20pt;
+  text-align: center;
+}
+
+h2 a {
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+}
+a:hover {
+  color: red;
+  text-decoration: underline;
+}
+
+table.two-column-definition {
+  border-collapse: separate;
+  border-spacing: 3px;
+  font: 10pt Helvetia, Arial, sans-serif;
+}
+
+table.two-column-definition th {
+  vertical-align: top;
+  font-weight: bold;
+  padding: 5px;
+  background-color: #CCCCCC;
+}
+
+table.two-column-definition td {
+  vertical-align: top;
+  padding: 5px;
+  background-color: #DDDDDD;
+}
+
+div.macro {
+  font-family: monospace;
+  padding: 10px;
+  background-color: #CCBBCC;
+}
+
+div.definition {
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #DDDDDD;
+}
+
+div.code {
+  padding: 10px;
+  margin-left: 15px;
+  margin-right: 15px;
+  font-family: monospace;
+  border: 1px dotted black;
+  background-color: #DDDDEE;
+  white-space: pre;
+}
+
+.tooltip {
+  background-color: #ffffdd;
+  border: 0.1em solid #999999;
+  color: #000000;
+  font-style: italic;
+  margin: 1.0em;
+  padding: 0.1em;
+}
+
+.errortooltip {
+  color: #AA0000;
+}

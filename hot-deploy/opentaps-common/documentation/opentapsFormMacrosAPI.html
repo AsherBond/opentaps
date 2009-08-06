@@ -1,0 +1,422 @@
+<html>
+  <head>
+    <title>Opentaps Form Macros API</title>
+    <link rel="stylesheet" href="macro-api.css" type="text/css"/>
+  </head>
+  <body>
+  <div class="background">
+  <div class="foreground">
+
+    <a name="top"></a>
+    <h2>Opentaps Form Macros API Reference</h2>
+
+    <p class="text">
+    This document provides a reference for each of the available macros
+    and functions available in opentapsFormMacros.ftl.  There are various
+    kinds of macros available:
+    </p>
+
+    <table class="two-column-definition">
+      <tr>
+        <th><a href="#BuildingBlocks">Building Blocks</a></th>
+        <td>
+          Macros that generate basic display and input elements.  Those
+          that generate plain HTML are called display macros.  Those that
+          generate &lt;input&gt; elements are called input macros.
+          <p>
+          For convenience, these macros also come with Cell and Row flavors.
+          A Cell macro will wrap the display or input in &lt;td&gt;.
+          All Cell macros allow you to specify the class of this &lt;td&gt;
+          using a parameter <b>blockClass</b>. (Some don't yet.. this is TODO)
+          </p>
+          <p>A Row macro will have a <b>title</b> argument and it will 
+          generate a two column row with the title in the first column and 
+          the display or input in the second column.  The title class is
+          titleCell by default, but can be overridden with the
+          <b>titleClass</b> parameter.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <th>Input Macros</th>
+        <td>
+          <p>The Building Block input macros have a number of convenience
+          features built into them.</p>
+          <p>The <b>name</b> parameter refers to the name of the input.</p>
+          <p>
+          All input macros accept an <b>index</b> parameter.  If this parameter
+          is greater than or equal to 0, then the input will be treated as a
+          multi sumbit input element.  That is, the field name will have a
+          <tt>_o_${index}</tt> suffix.
+          </p>
+          <p>
+          Input macros that have a <b>default</b> parameter have a special
+          behavior with regards to default values.  If the default value
+          is specified, then it will use that value as the default instead
+          of rendering an empty field.  If it is not specified, it will
+          attempt to look for an existing value in the parameters map.
+          </p>
+        </td>
+      </tr>
+      <tr>
+        <th><a href="#Larger">Larger Building Blocks</a></th>
+        <td>
+          These macros generate more complicated form inputs or display HTML.
+          For example, there is a macro to generate a state and country
+          dropdown which has the ability to change the states when the country
+          is changed.  These macros may be composed of other Building Blocks.
+        </td>
+      </tr>
+      <tr>
+        <th><a href="#Global">Global Functions</a></th>
+        <td>
+          Functions in FTL are a lot like macros, but they can be invoked from
+          with the ${} substitution notation.
+        </td>
+      </tr>
+      <tr>
+        <th><a href="#Convenience">Convenience Macros</a></th>
+        <td>
+          There are a variety of convenience macros to perfom common things,
+          such as rendering text in a tooltip style.
+        </td>
+      </tr>
+    </table>
+
+    <a name="BuildingBlocks"></a>
+    <h2><a href="#top">Building Blocks</a></h2>
+
+    <p class="text">
+    Each of these macros also have Cell and Row versions.  For example,
+    the &lt;inputText&gt; macro is also available as &lt;inputTextCell&gt; and 
+    &lt;inputTextRow&gt;.  The Row version has
+    an additional required parameter named <b>title</b>.
+    </p>
+      
+    <div class="macro">
+      &lt;@display text="" class="tabletext" style=""&gt;
+    </div>
+    <div class="definition">
+      Displays the given text in a &lt;span&gt; with default class tabletext.  It 
+      also accepts a CSS style specification.  This macro is generally not
+      that useful, but it is used by other macros to generate content.
+      The Row and Cell versions are somewhat more useful.
+    </div>
+
+    <div class="macro">
+      &lt;@displayLink href text class="buttontext"&gt;
+    </div>
+    <div class="definition">
+      Generates a hypertext link with the given href.  The link text is
+      specified by text argument.  It will transform the href depending
+      on what the string starts with:
+        <ul>
+            <li>String starts with "javascript:"  -  No wrapping</li>
+            <li>String starts with "/"  -  Wraps in <tt>&lt;@ofbizUrl&gt;</tt> and passes externalLoginKey.  (e.g., "/warehouse/control/main")</li>
+            <li>All other cases:  Wraps in <tt>&lt;@ofbizUrl&gt;</tt></il>
+        </ul>
+    </div>
+
+    <div class="macro">
+      &lt;@displayCurrency currencyUomId="" amount=0 class="tabletext"&gt;
+    </div>
+    <div class="definition">
+      Renders currency in the current locale.  If the amount is negative
+      the result will be red.  If a different class is specified, 
+      negative amounts will still be red.
+      The Cell and Row versions of this always right align the currency
+      via the css class currencyCell.
+    </div>
+
+    <div class="macro">
+      &lt;@displayDate date="" format="DATE_TIME" class="tabletext" style=""&gt;
+    </div>
+    <div class="definition">
+      Renders date in locale specific way. The concrete format depends on opentaps settings. 
+      The Cell and Row versions of this have the same meaning as in other macros. The list 
+      of possible values of format is described in the description of the function <code>getLocalizedDate</code>.
+    </div>
+
+    <div class="macro">
+      &lt;@inputHidden name value index=-1&gt;
+    </div>
+    <div class="definition">
+      Renders a hidden input with the given name and value.  This is mostly
+      useful for making multi-submit hidden inputs, which would otherwise
+      be clunky to write by hand.
+    </div>
+
+    <div class="macro">
+      &lt;@inputText name size=30 maxlength="" default="" index=-1&gt;
+    </div>
+    <div class="definition">
+      Renders a text input field with the given name.
+    </div>
+
+    <div class="macro">
+      &lt;@inputTextarea name rows=5 cols=60 default="" index=-1&gt;
+    </div>
+    <div class="definition">
+      Renders a textarea with the given name.
+    </div>
+
+
+    <div class="macro">
+      &lt;@inputSelect name list key="" displayField="" default="" defaultOptionText="" required=true index=-1&gt;
+    </div>
+    <div class="definition">
+      <p>
+      Renders a dropdown.  The list is generated from the parameter 'list'.
+      If this list contains the display field you want to render, then you can
+      do the following,
+      </p>
+<div class="code">&lt;@inputSelect name="statusId" list=statusItems key="statusId" displayField="description" /&gt;
+</div>
+      <p>
+      If you need to do additional processing of the list to get the text for each field, you can do the following,
+      </p>
+<div class="code">&lt;@inputSelect name="statusTypeId" list=statusItems key="statusTypeId" ; option&gt;
+    &lt;#assign statusType = option.getRelatedOneCache("StatusType")&gt;
+    ${statusType.description}
+&lt;/@inputSelect&gt;
+</div>
+      <p>
+      This macro can generate an empty first row.  To do this, set 
+      <b>required</b> to false.  If you want to put some text in this empty row,
+      such as 'please select something', you can specify it with 
+      <b>defaultOptionText</b>.
+      </p>
+    </div>
+
+    <div class="macro">
+      &lt;@inputLookup name lookup form default="" size=20 maxlength=20 index=-1&gt;
+    </div>
+    <div class="definition">
+      Like &lt;@inputText&gt; but also renders a lookup button next to it.
+      The name of the lookup, such as LookupPartyName, should be specified
+      with the <b>lookup</b> parameter.  The name of the form must also be
+      supplied with <b>form</b>.
+    </div>
+
+    <div class="macro">
+      &lt;@inputCurrency name list currencyName="currencyUomId" default="" defaultCurrency="USD" index=-1&gt;
+    </div>
+    <div class="definition">
+      Renders a small text input and a dropdown of currencies for entering a
+      currency amount. Pass in a list of <b>Uom</b> entities of type
+      <b>CURRENCY_MEASURE</b>.  Since this macro generates two separate inputs,
+      the <b>name</b> parameter refers to the text input, where the amount is
+      entered, and the <b>currencyName</b> refers to the name of the currency
+      dropdown.  This macro might be simplified in the future since it's
+      rare that such flexibility is required.
+    </div>
+
+
+    <div class="macro">
+      &lt;@inputSubmit title onClick="submitFormWithSingleClick(this)"&gt;
+    </div>
+    <div class="definition">
+      Renders a form submit button whose default onClick action is to prevent
+      doubleposting.  The <b>title</b> parameter is the button text.
+      You may want to override onClick to do something fancy.
+      Note that onClick is case sensitive.
+    </div>
+
+
+    <div class="macro">
+      &lt;@inputButton title onClick=""&gt;
+    </div>
+    <div class="definition">
+      Renders a button with text from the <b>title</b> parameter.
+      This is useful when you want a form control with an onClick handler.
+      Note that onClick is case sensitive.
+    </div>
+
+    <div class="macro">
+      &lt;@inputIndicator name required=true default="" index=-1&gt;
+    </div>
+    <div class="definition">
+      Renders a Y or N dropdown for indicator fields.  Set <b>required</b>
+      to false if you want to allow a null value.
+    </div>
+
+    <a name="Larger"></a>
+    <h2><a href="#top">Larger Building Blocks</a></h2>
+
+    <div class="macro">
+      &lt;@inputDateTime name default="" popup=true weekNumbers=false onUpdate="" onDateStatusFunc="" linkedName="" delta=0&gt;
+    </div>
+    <div class="definition">
+      Renders a date time input with separate fields for hours, minutes, and AM/PM.
+    </div>
+
+    <div class="macro">
+      &lt;@inputDate name default="" size=10 index=-1 popup=true weekNumbers=false onUpdate="" onDateStatusFunc="" linkedName="" delta=0&gt;
+    </div>
+    <div class="definition">
+      Renders a date input.
+    </div>
+
+    <div class="macro">
+      &lt;@inputSelectTaxAuthority list defaultGeoId="" defaultPartyId="" required=false&gt;
+    </div>
+    <div class="definition">
+      Renders a special tax authority dropdown.  This is rarely used, mostly
+      for generating invoice items and tax authority lists.
+    </div>
+
+    <div class="macro">
+      &lt;@inputState name="stateProvinceGeoId" countryInputName="countryGeoId" address=&lt;&gt;&gt;
+    </div>
+    <div class="definition">
+      Renders a dropdown of states for the default application country.  This
+      dropdown is AJAX enhanced and will change to match the states or 
+      provinces of the selected country from the dropdown specified
+      by <b>countryInputName</b>.  This macro comes in Cell and Row flavors.
+      <p>
+      If you want, you can pass in an address Map or GenericValue.  The
+      state of this address will be used to select the default value.
+      </p>
+    </div>
+
+    <div class="macro">
+      &lt;@inputCountry name="countryGeoId" stateInputName="stateProvinceGeoId" address=&lt;&gt;&gt;
+    </div>
+    <div class="definition">
+      Renders a dropdown of countries.  The default country is determined
+      from the application properties <b>defaultCountryGeoId</b>.
+      This dropdown is AJAX enhanced and will cause the state dropdown
+      specified by <b>stateInputName</b> to change to match the selected
+      country.  This macro comes in Cell and Row flavors.
+      <p>
+      If you want, you can pass in an address Map or GenericValue.  The
+      country of this address will be used to select the default value.
+      </p>
+    </div>
+
+    <div class="macro">
+      &lt;@inputStateCountry stateInputName="stateProvinceGeoId" countryInputName="countryGeoId" address=&lt;&gt;&gt;
+    </div>
+    <div class="definition">
+      Renders the &lt;@inputState&gt; and &lt;@inputCountry&gt; dropdowns together.  Not
+      really that useful, but it's here for legacy support.  This macro
+      comes in Cell and Row flavors.
+    </div>
+
+    <div class="macro">
+      &lt;@inputConfirm title href="" form="" confirmText=uiLabelMap.OpentapsAreyouSure class="buttonDangerous"&gt;
+    </div>
+    <div class="definition">
+      Renders a special link that will bring up a confirmation dialogue.  If the user confirms the dialgoue, then the action will proceed.
+      <p>
+      This macro may be linked to a form or it can be standalone.  If the 
+      <b>form</b> is speficied, then a form.submit() action will take place
+      when the user confirms.  If a <b>href</b> is supplied, then the user
+      will be sent to that link.
+      </p>
+    </div>
+
+    <div class="macro">
+      &lt;@inputHiddenRowSubmit index submit=true&gt;
+    </div>
+    <div class="definition">
+      Renders the special hidden variable that controls whether a given
+      row will be processed in a multi form.  If you are making a multi 
+      input form, you must call this macro for each row.  If for some
+      reason you want to disable the row with the macro, you can
+      specify <b>submit</b> to false, and the row will not be procesed.
+    </div>
+
+    <a name="Global"></a>
+    <h2><a href="#top">Global Functions</a></h2>
+
+
+    <div class="macro">
+      tableRowClass( rowIndex, rowClassOdd="rowWhite", rowClassEven="rowLightGray" )
+    </div>
+    <div class="definition">
+      <p>
+      This function returns the value of <b>rowClassOdd</b> if the index is
+      even, otherwise <b>rowClassEven</b>.  Yes, this is a little backwards
+      and will probably be fixed.  It is used as follows,
+      </p>
+<div class="code">&lt;#list fooList as foo&gt;
+    &lt;tr class="${tableRowClass(foo_index)}"&gt;&lt;/tr&gt;
+&lt;/#list&gt;
+</div>
+    </div>
+    
+    <div class="macro">
+      getLocalizedDate( date, format="DATE_TIME", encode=false )
+    </div>
+    <div class="definition">
+      <p>
+      Function returns string representation of date and/or time in the localized format. 
+      The concrete format depends on opentaps settings.
+      </p>
+      <p>Arguments:<br/>
+        <code>date</code> - <code>Timestamp</code> or <code>Date</code> (<i>Caution</i>: variable of type Date may be only used jointly with DATE_ONLY format)<br />
+        <code>format</code> - one of the <code>DATE</code>(e.g. 02/15/08), <code>DATE_TIME</code>(e.g. 02/15/08 01:15 PM), <code>TIME</code>(e.g. 01:15 PM) and <code>DATE_ONLY</code>(like DATE for Date objects).<br />
+        <code>encode</code> - boolean argument that tells the function encode whitespaces, e.g. 02/15/08%2013:15. Should be <code>true</code> if result of function is embed in URL.<br /> 
+      </p>
+      <p><code>getLocalizedDate</code> is internally used in <code>&lt;@displayDate/&gt;</code> macro.</p>
+      <p>Snippets:</p>
+      <div class="code">
+      <code>getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp())</code><br/>
+      Output: 02/15/08 01:15 PM
+      </div>
+      <br/>
+      <div class="code">
+      <code>getLocalizedDate(fromDate, "DATE")</code><br/>
+      Output: 02/15/08
+      </div>
+      <br/>
+      <div class="code">
+      <code>&lt;a href="https://localhost:8443/app/control/request?fromDate=${getLocalizedDate(fromDate, "DATE_TIME", true)}>...</a></code><br/>
+      Output:<code>&lt;a href="https://localhost:8443/app/control/request?fromDate=02/15/08%2001:15%20PM&gt;...&lt;/a&gt;</code>
+      </div>
+    </div>
+
+    <a name="Convenience"></a>
+    <h2><a href="#top">Convenience Macros</a></h2>
+
+    <div class="macro">
+      &lt;@tooltip text="" class="tooltip"&gt;
+    </div>
+    <div class="definition">
+      <p>
+      Renders a tooltip.  This message stands out and can be used for
+      notifying the user of important things.
+      </p>
+      <span class="tooltip">Example of a tooltip.</span>
+      
+    </div>
+
+    <div class="macro">
+      &lt;@displayError name index=-1&gt;
+    </div>
+    <div class="definition">
+      <p>
+      Renders a message if there is an error for the given field name
+      (and index if a multi-form).  The css class is errortooltip.
+      This is used with the
+      UtilMessage.addFieldError() methods.  A form field is not required,
+      this can be used to render messages anywhere on the screen.  Sample
+      use case:
+      </p>
+<div class="code">// in a bsh file called before the FTL
+UtilMessage.addFieldError(request, "foo", "OpentapsError_PermissionDenied");
+
+&lt;!-- in the FTL file --&gt;
+&lt;@displayError name="foo" /&gt;
+</div>
+<p>The output will be:</p>
+<span class="errortooltip">Sorry, you do not have permission to perform this action.</span>
+    </div>
+
+    <div style="height: 100px;"></div>
+
+  </div>
+  </div>
+  </body>
+</html>

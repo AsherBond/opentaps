@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- Some of this file came from Apache OFBIZ but has been modified by Open Source Strategies, Inc. -->
+
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Common Order Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="setOrderHeaderPartiesFromRoles" engine="java"
+        location="org.opentaps.common.order.OrderServices" invoke="setOrderHeaderPartiesFromRoles">
+        <description>Sets the OrderHeader.billFromPartyId = OrderRole BILL_FROM_VENDOR and OH.billToPartyId = OrderRole BILL_TO_CUSTOMER.
+        Meant to be run as a SECA on storeOrder in the background.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="autoApproveThirdPartyOrder" engine="java"
+        location="org.opentaps.common.order.OrderServices" invoke="autoApproveThirdPartyOrder">
+        <description>Approves third party orders when created.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.disburseChangeForOrder" engine="java"
+        location="org.opentaps.common.order.OrderServices" invoke="disburseChangeForOrder">
+        <description>Creates a cash customer refund against an order</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="disbursementAmount" type="Double" mode="IN" optional="true"/>
+        <attribute name="disbursementPaymentId" type="String" mode="OUT" optional="true"/>
+        <attribute name="disbursementOrderPaymentPreferenceId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.getOrCreateCashDrawer" engine="java" default-entity-name="CashDrawer"
+        location="org.opentaps.common.order.OrderServices" invoke="getOrCreateCashDrawer">
+        <description>Gets the user's current cash drawer for the currency, or creates a new cash drawer</description>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="initialAmount" type="Double" mode="IN" optional="true"/>
+        <attribute name="openingComments" type="String" mode="IN" optional="true"/>
+        <attribute name="operatorUserLoginId" type="String" mode="IN" optional="true"/>
+        <attribute name="openTimestamp" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="cashDrawerId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.recordCashDrawerTransaction" engine="java"
+        location="org.opentaps.common.order.OrderServices" invoke="recordCashDrawerTransaction">
+        <description>Creates a CashDrawerTransaction record for a payment for the user's currently open CashDrawer</description>
+        <attribute name="paymentId" type="String" mode="IN" optional="false"/>
+        <attribute name="cashDrawerId" type="String" mode="OUT" optional="true"/>
+        <attribute name="cashDrawerItemSeqId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.closeCashDrawer" engine="java"
+        location="org.opentaps.common.order.OrderServices" invoke="closeCashDrawer">
+        <description>Determines variance between calculated final value and user-entered final value, and closes drawer if no variance
+            or if forced.</description>
+        <attribute name="finalAmount" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="closingComments" type="String" mode="IN" optional="true"/>
+        <attribute name="cashDrawerId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="forceClose" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="cashVariance" type="Double" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.approveAppendedOrderItems" engine="java"
+        location="org.opentaps.common.order.OrderServices" invoke="approveAppendedOrderItems">
+        <description>Checks to see if an OrderItem added to an order should be marked as approved.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.appendOrderItemBasic" engine="java" auth="true"
+            location="org.opentaps.common.order.OrderServices" invoke="appendOrderItemBasic">
+        <description>Add an item to an existing order without re-calculating the rest of the order</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="orderId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="true"/>
+        <attribute name="listPrice" type="Double" mode="IN" optional="true"/>
+        <attribute name="unitPrice" type="Double" mode="IN" optional="false"/>
+        <attribute name="isSalePrice" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="surveyResponseId" type="String" mode="IN" optional="true"/>
+        <attribute name="comments" type="String" mode="IN" optional="true"/>
+        <attribute name="correspondingPoId" type="String" mode="IN" optional="true"/>
+        <attribute name="amount" type="Double" mode="IN" optional="true"/>
+    </service>
+
+    <service name="appendOrderItem" engine="java" auth="true"
+            location="org.opentaps.common.order.OrderServices" invoke="addItemToApprovedOrder">
+        <description>Append an item to an existing order</description>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="orderId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="prodCatalogId" type="String" mode="IN" optional="true"/>
+        <attribute name="basePrice" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="amount" type="Double" mode="IN" optional="true"/>
+        <attribute name="overridePrice" type="String" mode="IN" optional="true"/>
+        <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="updateOrderItems" engine="java" auth="true"
+            location="org.opentaps.common.order.OrderServices" invoke="updateApprovedOrderItemsLegacy">
+        <description>Update the quantities/prices for an existing order, copied from opentaps to customize how cancel quantities are handled.</description>
+        <attribute name="orderId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="itemDescriptionMap" type="Map" mode="IN" string-map-prefix="idm_" optional="true"/>
+        <attribute name="itemQtyMap" type="Map" mode="IN" string-map-prefix="iqm_" optional="false"/>
+        <attribute name="itemPriceMap" type="Map" mode="IN" string-map-prefix="ipm_" optional="false"/>
+        <attribute name="overridePriceMap" type="Map" mode="IN" string-map-prefix="opm_" optional="false"/>
+        <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="opentaps.updateOrderItems" engine="java" auth="true"
+            location="org.opentaps.common.order.OrderServices" invoke="updateApprovedOrderItems">
+        <description>Update the quantities/prices for an existing order, wrapper for the ofbiz updateOrderItems but that can cancel the items when quantity is 0</description>
+        <attribute name="orderId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="itemDescriptionMap" type="Map" mode="IN" string-map-prefix="idm_" optional="true"/>
+        <attribute name="itemQtyMap" type="Map" mode="IN" string-map-prefix="iqm_" optional="false"/>
+        <attribute name="itemPriceMap" type="Map" mode="IN" string-map-prefix="ipm_" optional="false"/>
+        <attribute name="overridePriceMap" type="Map" mode="IN" string-map-prefix="opm_" optional="false"/>
+        <attribute name="tagsMap1" type="Map" mode="IN" string-map-prefix="tag1_" optional="true"/>
+        <attribute name="tagsMap2" type="Map" mode="IN" string-map-prefix="tag2_" optional="true"/>
+        <attribute name="tagsMap3" type="Map" mode="IN" string-map-prefix="tag3_" optional="true"/>
+        <attribute name="tagsMap4" type="Map" mode="IN" string-map-prefix="tag4_" optional="true"/>
+        <attribute name="tagsMap5" type="Map" mode="IN" string-map-prefix="tag5_" optional="true"/>
+        <attribute name="tagsMap6" type="Map" mode="IN" string-map-prefix="tag6_" optional="true"/>
+        <attribute name="tagsMap7" type="Map" mode="IN" string-map-prefix="tag7_" optional="true"/>
+        <attribute name="tagsMap8" type="Map" mode="IN" string-map-prefix="tag8_" optional="true"/>
+        <attribute name="tagsMap9" type="Map" mode="IN" string-map-prefix="tag9_" optional="true"/>
+        <attribute name="tagsMap10" type="Map" mode="IN" string-map-prefix="tag10_" optional="true"/>
+        <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.appendOrderItem" engine="java"
+         location="org.opentaps.common.order.OrderServices" invoke="appendOrderItem" auth="true">
+        <description>Does a comprehensive product lookup for given productId and appends to the order if found.  Otherwise returns a service error.</description>
+        <implements service="appendOrderItem"/>
+        <implements service="accountingTagsInterface"/>
+        <attribute name="recalcOrder" type="String" mode="IN" optional="true"/>
+        <attribute name="surveyResponseId" type="String" mode="IN" optional="true"/>
+        <attribute name="comments" type="String" mode="IN" optional="true"/>
+        <attribute name="correspondingPoId" type="String" mode="IN" optional="true"/>
+        <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="opentaps.cancelOrderItemBilling" engine="java"
+        location="org.opentaps.common.order.OrderServices" invoke="cancelOrderItemBilling">
+        <description>Set the quantity on all order item billing records of the invoice to zero when invoice is canceled or voided.</description>
+        <attribute name="invoiceId" mode="IN" type="String"/>
+    </service>
+
+    <service name="reserveProductInventory" engine="pojo" 
+        transaction-timeout="600" location="org.opentaps.common.domain.inventory.OrderInventoryService" invoke="reserveProductInventory" auth="true">
+        <description>Reserve Inventory for a Product.
+            If requireInventory is Y the quantity not reserved is returned, if N then a negative
+            availableToPromise will be used to track quantity ordered beyond what is in stock.
+        </description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderItemSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="reservedDatetime" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="requireInventory" type="String" mode="IN" optional="false"/>
+        <attribute name="reserveOrderEnumId" type="String" mode="IN" optional="false"/>
+        <attribute name="sequenceId" type="Long" mode="IN" optional="true"/>
+        <attribute name="facilityId" mode="IN" type="String" optional="true"/>
+        <attribute name="quantityNotReserved" type="Double" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="reserveProductInventoryByFacility" engine="pojo"
+                transaction-timeout="600" location="org.opentaps.common.domain.inventory.OrderInventoryService" invoke="reserveProductInventory" auth="true">
+        <description>Reserve Inventory for a Product By Facility
+            If requireInventory is Y the quantity not reserved is returned, if N then a negative
+            availableToPromise will be used to track quantity ordered beyond what is in stock.
+        </description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderItemSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="reservedDatetime" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="requireInventory" type="String" mode="IN" optional="false"/>
+        <attribute name="reserveOrderEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="sequenceId" type="Long" mode="IN" optional="true"/>
+        <attribute name="quantityNotReserved" type="Double" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="reReserveProductInventory" engine="pojo" 
+        location="org.opentaps.common.domain.inventory.OrderInventoryService" invoke="reReserveProductInventory">
+        <description> Cancel reservation and reserve the same product from another warehouse</description>
+        <attribute name="orderId" mode="IN" type="String"/>
+        <attribute name="orderItemSeqId" mode="IN" type="String"/>
+        <attribute name="inventoryItemId" mode="IN" type="String"/>
+        <attribute name="shipGroupSeqId" mode="IN" type="String"/>
+        <attribute name="facilityId" mode="IN" type="String"/>
+        <attribute name="quantity" mode="IN" type="Double"/>
+    </service>
+
+    <service name="loadCartFromOrder" engine="java" auth="true"
+            location="org.opentaps.common.order.shoppingcart.ShoppingCartServices" invoke="loadCartFromOrder">
+        <description>Create a ShoppingCart Object based on an existing order</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="skipInventoryChecks" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="skipProductChecks" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="loadCartFromQuote" engine="java" auth="true"
+            location="org.opentaps.common.order.shoppingcart.ShoppingCartServices" invoke="loadCartFromQuote" use-transaction="false">
+        <description>Create a ShoppingCart Object based on an existing quote. If applyQuoteAdjustments is set to false then standard cart adjustments are generated.</description>
+        <attribute name="quoteId" type="String" mode="IN" optional="false"/>
+        <attribute name="applyQuoteAdjustments" type="String" mode="IN" optional="true"/>
+        <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="opentaps.updatePostalAddressForProductStoreFacilityByAddress" engine="java" auth="false"
+        location="org.opentaps.common.order.OrderServices" invoke="updatePostalAddressForProductStoreFacilityByAddress">
+        <description>Service designed to run after updatePostalAddress.  Its purpose is to copy any ProductStoreFacilityByAddress entries for the updated address.</description>
+        <attribute name="oldContactMechId" mode="IN" type="String" optional="false"/>
+        <attribute name="contactMechId" mode="IN" type="String" optional="false"/>
+    </service>
+
+    <service name="recreateOrderAdjustments" engine="pojo" auth="true"
+            location="org.opentaps.common.domain.order.OrderService" invoke="recreateOrderAdjustments">
+        <description>Remove all existing order adjustments, recalc them and persist in OrderAdjustment.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="recalcTaxTotal" engine="pojo"
+            location="org.opentaps.common.domain.order.OrderService" invoke="recalcOrderTax">
+        <description>Adjust the order tax amount</description>
+        <attribute name="orderId" type="String" mode="IN"/>
+    </service>
+
+    <service name="recalcShippingTotal" engine="java"
+            location="org.opentaps.common.order.OrderServices" invoke="recalcOrderShipping">
+        <description>Adjust the order shipping amount</description>
+        <attribute name="orderId" type="String" mode="IN"/>
+    </service>
+
+    <service name="resetGrandTotal" engine="pojo"
+            location="org.opentaps.common.domain.order.OrderService" invoke="resetGrandTotal" require-new-transaction="false">
+        <!-- NOTE: require-new-transaction is false because this service is often run as a sync action on an ECA, so generally at the same time and in a separate TX it runs into locking problems -->
+        <description>Reset the grandTotal of an existing order</description>
+        <attribute name="orderId" type="String" mode="IN"/>
+    </service>
+
+</services>

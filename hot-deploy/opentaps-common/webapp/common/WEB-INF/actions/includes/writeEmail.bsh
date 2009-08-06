@@ -1,0 +1,217 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+
+userLogin = request.getAttribute("userLogin");
+
+userEmailAddresses = delegator.findByAnd("PartyContactWithPurpose", UtilMisc.toMap("contactMechTypeId", "EMAIL_ADDRESS", "partyId", userLogin.getString("partyId")));
+userEmailAddresses = EntityUtil.filterByDate(userEmailAddresses, UtilDateTime.nowTimestamp(), "contactFromDate", "contactThruDate", true);
+context.put("userEmailAddresses", userEmailAddresses);
+
+// if the emailType is MKTG_CAMPAIGN, get a list of active IN_PROGRESS campaigns to show
+if ("MKTG_CAMPAIGN".equals(parameters.get("emailType"))) {
+    conditions = new EntityConditionList( UtilMisc.toList(
+            EntityUtil.getFilterByDateExpr(),
+            new EntityExpr("statusId", EntityOperator.EQUALS, "MKTG_CAMP_INPROGRESS")
+            ), EntityOperator.AND);
+    campaigns = delegator.findByCondition("MarketingCampaign", conditions, null, UtilMisc.toList("campaignName"));
+    context.put("marketingCampaigns", campaigns);
+}
+
+communicationEvent = null;
+
+// communicationEvent from parameter
+if (parameters.containsKey("communicationEventId")) {
+    communicationEventId = parameters.get("communicationEventId");
+    workEffortId = parameters.get("workEffortId");
+    
+    if (UtilValidate.isNotEmpty(workEffortId) && UtilValidate.isNotEmpty(communicationEventId)) {
+
+        communicationEvent = delegator.findByPrimaryKeyCache("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId));
+    
+        workEffortEntity = delegator.findByPrimaryKeyCache("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
+        workEffort = workEffortEntity.getAllFields();
+    
+        // get the associated opportunity
+        opportunities = workEffortEntity.getRelated("SalesOpportunityWorkEffort");
+        if (opportunities.size() > 0) {
+            salesOpportunityId =  opportunities.get(0).getString("salesOpportunityId");
+            workEffort.put("salesOpportunityId", salesOpportunityId);
+        }
+        // get the associated case
+        cases = workEffortEntity.getRelated("CustRequestWorkEffort");
+        if (cases.size() > 0) {
+            custRequestId = cases.get(0).getString("custRequestId");
+            workEffort.put("custRequestId", custRequestId);
+        }
+        // get the related order
+        ohwe = EntityUtil.getFirst(delegator.findByAnd("OrderHeaderWorkEffort", UtilMisc.toMap("workEffortId",workEffortId), UtilMisc.toList("orderId")));
+        if (ohwe != null) {
+            workEffort.put("orderId", ohwe.getString("orderId"));
+        }
+    }
+} else {
+    // if the communicationEvent exists, then we were passed a pending email (check for pending should already have been done to render this page)
+    communicationEvent = context.get("communicationEvent");
+    workEffort = context.get("workEffort");
+}
+
+if (communicationEvent != null) {
+    // fill in communicationEvent fields if the parameter is empty
+    map = communicationEvent.getAllFields();
+    for (iter = map.keySet().iterator(); iter.hasNext(); ) {
+        key = iter.next();
+        value = parameters.get(key);
+        if (UtilValidate.isEmpty(value)) {
+            parameters.put(key, map.get(key));
+        }
+    }
+
+    // check if we are replying or forwarding the email
+    isReply = false;
+    isForward = false;
+    if (parameters.containsKey("action")) {
+        if (parameters.get("action").equals("reply")) {
+            isReply = true;
+        } else if (parameters.get("action").equals("forward")) {
+            isForward = true;
+        }
+        // need to clear communicationEventId workEffortId from parameters as they are used for saved emails
+        parameters.put("communicationEventId", "");
+        parameters.put("workEffortId", "");
+        parameters.put("origCommEventId", communicationEventId);
+    }
+
+    // remaining fields we might have to reload
+    fromEmail = parameters.get("fromEmail");
+    toEmail = parameters.get("toEmail");
+    ccEmail = parameters.get("ccEmail");
+    bccEmail = parameters.get("bccEmail");
+    salesOpportunityId = parameters.get("salesOpportunityId");
+    custRequestId = parameters.get("custRequestId");
+    orderId = parameters.get("orderId");
+
+    // we also need the from and to emails
+    if (UtilValidate.isEmpty(fromEmail)) {        
+        fromContactMech = communicationEvent.getRelatedOne("FromContactMech");
+        if (fromContactMech != null) {
+            fromEmail = fromContactMech.getString("infoString");
+        } else if (UtilValidate.isNotEmpty(communicationEvent.getString("fromString"))) { 
+            fromEmail = communicationEvent.getString("fromString");
+        }
+        // if fromEmail is given from the form then it cannot be empty and then we also have toEmail
+        toContactMech = communicationEvent.getRelatedOne("ToContactMech");
+        if (toContactMech != null) { 
+            toEmail = toContactMech.getString("infoString");
+        } else if (UtilValidate.isNotEmpty(communicationEvent.getString("toString"))) { 
+            toEmail = communicationEvent.getString("toString");
+        }
+    }
+
+    if (isReply) {
+        parameters.put("toEmail", fromEmail);
+        parameters.put("fromEmail", toEmail);
+    } else {    
+        parameters.put("fromEmail", fromEmail);
+        if (!isForward) {
+            parameters.put("toEmail", toEmail);
+        }
+    }
+
+    // change the subject | email body if is it a reply or a forward
+    subject = parameters.get("subject");
+    if (isReply) {
+        prefix = UtilProperties.getMessage("CRMSFAUiLabels", "CrmEmailRe", locale) + " ";
+        if (! subject.matches("^" + prefix + ".*")) parameters.put("subject", prefix + subject);        
+    } else if (isForward) {
+        prefix = UtilProperties.getMessage("CRMSFAUiLabels", "CrmEmailFwd", locale) + " ";
+        if (! subject.matches("^" + prefix + ".*")) parameters.put("subject", prefix + subject);        
+    }
+    // change the email body - happily FCKEditor seems to deal with the text wrapping without help
+    if (isReply || isForward) {
+        lineSep = "<br/>";
+        content = parameters.get("content");
+        if (UtilValidate.isNotEmpty(content)) {
+            // quoting
+            content = content.replaceAll("(?m)^", UtilProperties.getMessage("CRMSFAUiLabels", "CrmEmailQuotedLinePrefix", locale));
+            content = content.replaceAll("[\\n\\r]+", lineSep);
+            // add original sender name and address
+            wroteLabel = UtilProperties.getMessage("CRMSFAUiLabels", "CrmWroteEmail", locale);
+            content = UtilProperties.getMessage("CRMSFAUiLabels", "CrmEmailQuotedHeader", UtilMisc.toMap("fromEmail", fromEmail, "wroteLabel", wroteLabel, "lineSeparator", lineSep), locale) + content;
+            parameters.put("content", content);
+            // the contentMimeTypeId of the communication event is usually text/plain, but the default setting for the editor is text/html,
+            // so we override the contentMimeTypeId here, otherwise the recepient will get a text/plain email containing HTML
+            parameters.put("contentMimeTypeId", "text/html");
+        }
+    }
+        
+    context.put("ccAddresses", communicationEvent.getString("ccString"));
+    context.put("bccAddresses", communicationEvent.getString("bccString"));
+
+
+    // set the association IDs if the field is empty
+    if (workEffort != null) {
+        if (UtilValidate.isEmpty(salesOpportunityId) && workEffort.containsKey("salesOpportunityId")) {
+            parameters.put("salesOpportunityId", workEffort.get("salesOpportunityId"));
+        }
+        if (UtilValidate.isEmpty(custRequestId) && workEffort.containsKey("custRequestId")) {
+            parameters.put("custRequestId", workEffort.get("custRequestId"));
+        }
+        if (UtilValidate.isEmpty(orderId) && workEffort.containsKey("orderId")) {
+            parameters.put("orderId", workEffort.get("orderId"));
+        }
+    }
+
+    // Get all the attachments of the email
+    attachments = delegator.findByAnd("CommEventContentDataResource", UtilMisc.toMap("communicationEventId", communicationEvent.getString("communicationEventId")));
+    attachments = EntityUtil.filterByDate(attachments);
+    context.put("attachments", attachments);
+
+    return; // we're done
+}
+
+// otherwise we're creating a fresh email
+
+// if a contactMechIdTo is passed in, this is the email we're writing to
+contactMechIdTo = parameters.get("contactMechIdTo");
+if (UtilValidate.isNotEmpty(contactMechIdTo)) {
+    contactMech = delegator.findByPrimaryKey("ContactMech", UtilMisc.toMap("contactMechId", contactMechIdTo));
+    if (contactMech != null) {
+        parameters.put("contactMechIdTo", contactMechIdTo);
+        parameters.put("toEmail", contactMech.getString("infoString"));
+    }
+} else {
+    // if there's a toEmail in the parameter but no contactMechIdTo, put it back in the context (happens when user types in an email and then switches input mode)
+    parameters.put("toEmail", parameters.get("toEmail"));
+}
+
+// If a mergeFormId (template) parameter is provided, merge the form with the party (if any) and provide the result to the context
+partyIdTo = parameters.get("partyIdTo"); 
+if (UtilValidate.isEmpty(partyIdTo)) partyIdTo = parameters.get("internalPartyId");
+orderId = parameters.get("orderId");
+shipGroupSeqId = parameters.get("shipGroupSeqId");
+shipmentId = parameters.get("shipmentId");
+mergeFormId = parameters.get("mergeFormId");
+if (UtilValidate.isNotEmpty(mergeFormId)) {
+    mergedOutput = PartyHelper.mergePartyWithForm(delegator, mergeFormId, partyIdTo, orderId, shipGroupSeqId, shipmentId, UtilMisc.ensureLocale(UtilHttp.getLocale(request)), true);
+    context.put("templateText", mergedOutput.get("mergeFormText"));
+    if (UtilValidate.isEmpty(parameters.get("subject"))) parameters.put("subject", mergedOutput.get("subject"));
+}

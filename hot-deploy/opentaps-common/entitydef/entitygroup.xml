@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<entitygroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitygroup.xsd">
+
+    <!-- =================================== -->
+    <!-- org.opentaps.common.accounting      -->
+    <!-- =================================== -->
+
+    <entity-group group="org.ofbiz" entity="AcctgTagEnumType"/>
+    <entity-group group="org.ofbiz" entity="AcctgTagUsageType"/>
+    <entity-group group="org.ofbiz" entity="AcctgTagPostingCheck"/>
+
+    <!-- ============================== -->
+    <!-- org.opentaps.common.agreement  -->
+    <!-- ============================== -->
+
+    <entity-group group="org.ofbiz" entity="AgreementTermBilling"/>
+    <entity-group group="org.ofbiz" entity="AgreementBillingAndInvoiceSum"/>
+    <entity-group group="org.ofbiz" entity="AgreementToItemMap" />
+    <entity-group group="org.ofbiz" entity="AgreementItemToTermMap" />
+    <entity-group group="org.ofbiz" entity="TermTypeToEnumTypeMap" />
+    <entity-group group="org.ofbiz" entity="TermTypeToUomTypeMap" />
+    <entity-group group="org.ofbiz" entity="AgreementAndItemAndTerm" />
+    <entity-group group="org.ofbiz" entity="AgreementInvoiceItemType" />
+    <entity-group group="org.ofbiz" entity="AgreementTypeForRoleType" />
+    <entity-group group="org.ofbiz" entity="AgreementDocumentTypeMap" />
+    <entity-group group="org.ofbiz" entity="AgreementTermTypesByDocumentType" />
+    <entity-group group="org.ofbiz" entity="TermTypeFields" />
+
+    <!-- ============================= -->
+    <!-- org.opentaps.common.marketing -->
+    <!-- ============================= -->
+    <entity-group group="org.ofbiz" entity="MarketingCampaignContactList"/>
+    
+    <!-- ============================ -->
+    <!-- org.opentaps.common.facility -->
+    <!-- ============================ -->
+
+    <entity-group group="org.ofbiz" entity="FacilityAssoc"/>
+    <entity-group group="org.ofbiz" entity="FacilityAssocType"/>
+    <entity-group group="org.ofbiz" entity="InventoryItemValueHistory" />
+    <entity-group group="org.ofbiz" entity="InventoryTransferAndItem" />
+
+    <!-- ========================= -->
+    <!-- org.opentaps.common.party -->
+    <!-- ========================= -->
+
+    <entity-group group="org.ofbiz" entity="PartySupplementalData" />
+    <entity-group group="org.ofbiz" entity="PartySummaryCRMView" />
+    <entity-group group="org.ofbiz" entity="PartyRoleNameDetailSupplementalData" />
+    <entity-group group="org.ofbiz" entity="PartyDeactivation"/>
+
+    <!-- ================================== -->
+    <!-- org.opentaps.common.party.viewpref -->
+    <!-- ================================== -->
+
+    <entity-group group="org.ofbiz" entity="ViewPreference" />
+    <entity-group group="org.ofbiz" entity="ViewPrefType" />
+    <entity-group group="org.ofbiz" entity="ViewPrefValueType" />
+    <entity-group group="org.ofbiz" entity="ViewPrefAndLocation" />
+    <entity-group group="org.ofbiz" entity="PaginationPreference" />
+    <entity-group group="org.ofbiz" entity="WorkEffortViewHistory" />
+    <entity-group group="org.ofbiz" entity="EntityViewHistory" />
+
+    <!-- ========================= -->
+    <!-- org.opentaps.common.order -->
+    <!-- ========================= -->
+
+    <entity-group group="org.ofbiz" entity="CashDrawer" />
+    <entity-group group="org.ofbiz" entity="CashDrawerTransaction" />
+    <entity-group group="org.ofbiz" entity="CashDrawerTransPaymentAndMType" />
+    <entity-group group="org.ofbiz" entity="OrderHeaderItemAndRolesAndInvPending" />
+    <entity-group group="org.ofbiz" entity="OrderHeaderItemAndRolesAndInvCompleted" />
+    <entity-group group="org.ofbiz" entity="OrderPaymentPrefAndPayment" />
+    <entity-group group="org.ofbiz" entity="ProductOrderItemType" />
+    <entity-group group="org.ofbiz" entity="ProductInvoiceItemType" />
+    <entity-group group="org.ofbiz" entity="ProductStoreShipMethAndCarrier" />
+    <entity-group group="org.ofbiz" entity="ReservedItemDetail" />
+    <entity-group group="org.ofbiz" entity="ReservedItemOrderCount" />
+    <entity-group group="org.ofbiz" entity="ReservedItemProductCount" />
+    <entity-group group="org.ofbiz" entity="ShipGroupRouteSegAndInvoice" />
+    <entity-group group="org.ofbiz" entity="ShipmentAndOrderItemShipGroup" />
+    <entity-group group="org.ofbiz" entity="SalesForecastItem" />
+    <entity-group group="org.ofbiz" entity="ProductStoreFacilityByAddress" />
+
+    <!-- ========================= -->
+    <!-- org.opentaps.common.forms -->
+    <!-- ========================= -->
+
+    <entity-group group="org.ofbiz" entity="MergeFormCategory" />
+    <entity-group group="org.ofbiz" entity="MergeFormToCategory" />
+    <entity-group group="org.ofbiz" entity="MergeForm" />
+    <entity-group group="org.ofbiz" entity="MergeFormAndCategory" />
+
+
+    <!-- ============================ -->
+    <!-- org.opentaps.common.shipment -->
+    <!-- ============================ -->
+
+    <entity-group group="org.ofbiz" entity="PicklistItemAndOdrItmShipGrp" /> 
+    <entity-group group="org.ofbiz" entity="CarrierReturnService" />
+    <entity-group group="org.ofbiz" entity="WorkEffortPartyAssignCommEvent" />
+    <entity-group group="org.ofbiz" entity="FacilityTransferPlan" />
+
+    <!-- =========================== -->
+    <!-- org.opentaps.common.product -->
+    <!-- =========================== -->    
+
+    <entity-group group="org.ofbiz" entity="ProductAndGoodIdentification" />
+    <entity-group group="org.ofbiz" entity="ProductStoreGroupAndProductStore"/>
+    <entity-group group="org.ofbiz" entity="ProductAndPriceAndGoodIdentificationView"/>
+
+    <!-- ============================= -->
+    <!-- org.opentaps.common.reporting -->
+    <!-- ============================= -->    
+
+    <entity-group group="org.ofbiz" entity="ReportRegistry"/>
+    <entity-group group="org.ofbiz" entity="ReportGroup"/>
+    <entity-group group="org.ofbiz" entity="ReportGroupMember"/>
+    <entity-group group="org.ofbiz" entity="ReportGroupMemberRegistry"/>
+
+    <!-- =================================== -->
+    <!-- org.opentaps.common.reporting.tests -->
+    <!-- =================================== -->
+    <entity-group group="org.ofbiz" entity="TestGeoData"/>
+    
+    <!-- ============================ -->
+    <!-- org.opentaps.common.asterisk -->
+    <!-- ============================ -->    
+    <entity-group group="org.ofbiz" entity="AsteriskUser" />
+    
+    <!-- ========================= -->
+    <!-- org.opentaps.common.other -->
+    <!-- ========================= -->
+
+    <!-- History of pages viewed -->
+    <entity-group group="org.ofbiz" entity="ViewHistory" />
+
+    <!-- Links for the help page on wiki -->
+    <entity-group group="org.ofbiz" entity="ContextHelpResource" />
+
+    <!-- Miscellaneous view user preferences -->
+    <entity-group group="org.ofbiz" entity="UserLoginViewPreference" />
+ 
+    <!-- =================== -->
+    <!-- org.opentaps.common -->
+    <!-- =================== -->
+    <entity-group group="org.ofbiz" entity="KeyboardShortcut"/>
+    <entity-group group="org.ofbiz" entity="KeyboardShortcutHandler"/>
+    <entity-group group="org.ofbiz" entity="KeyboardShortcutAndHandler"/>
+
+</entitygroup>  

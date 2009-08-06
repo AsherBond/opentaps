@@ -1,0 +1,46 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+
+import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.party.PartyReader;
+
+organizationPartyId = context.get("organizationPartyId");
+if (organizationPartyId == null) {
+    organizationPartyId = parameters.get("organizationPartyId");
+    context.put("organizationPartyId", organizationPartyId);
+}
+
+if (organizationPartyId != null) {
+    context.putAll( UtilCommon.getOrganizationHeaderInfo(organizationPartyId, delegator) );
+} else {
+    org.ofbiz.base.util.Debug.logWarning("The setup for this PDF does not define an organizationPartyId.  Please specify what organization's header to render.", "");
+}
+
+// website
+pr = new PartyReader(organizationPartyId, delegator);
+context.put("website",pr.getWebsite());
+
+// primary phone number
+phoneNumber = PartyContactHelper.getTelecomNumberByPurpose(organizationPartyId, "PRIMARY_PHONE", true, delegator);
+context.put("primaryPhone",phoneNumber);
+
+// primary fax number
+faxNumber = PartyContactHelper.getTelecomNumberByPurpose(organizationPartyId, "FAX_NUMBER", true, delegator);
+context.put("primaryFax",faxNumber);

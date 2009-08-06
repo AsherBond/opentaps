@@ -1,0 +1,105 @@
+/*
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+package org.opentaps.common.domain.party;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.hibernate.search.FullTextQuery;
+import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.opentaps.domain.base.entities.PartyRole;
+import org.opentaps.domain.base.entities.PartyRolePk;
+import org.opentaps.domain.party.Account;
+import org.opentaps.domain.party.AccountSearchServiceInterface;
+import org.opentaps.domain.party.PartyRepositoryInterface;
+import org.opentaps.domain.search.SearchService;
+import org.opentaps.foundation.repository.RepositoryException;
+import org.opentaps.foundation.service.ServiceException;
+
+/**
+ * The implementation of the Account search service.
+ */
+public class AccountSearchService extends SearchService implements AccountSearchServiceInterface {
+
+    private List<Account> accounts = null;
+
+    /** {@inheritDoc} */
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    /** {@inheritDoc} */
+    public void makeQuery(StringBuilder sb) {
+        PartySearch.makePartyGroupQuery(sb, "ACCOUNT");
+    }
+
+    /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
+    public Set<Class> getClassesToQuery() {
+        return PartySearch.PARTY_CLASSES;
+    }
+
+    /** {@inheritDoc} */
+    public void search() throws ServiceException {
+        StringBuilder sb = new StringBuilder();
+        makeQuery(sb);
+        searchInEntities(getClassesToQuery(), sb.toString());
+
+        try {
+            PartyRepositoryInterface partyRepository = getDomainsDirectory().getPartyDomain().getPartyRepository();
+            accounts = filterSearchResults(getResults(), partyRepository);
+        } catch (RepositoryException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    /** {@inheritDoc} */
+    @SuppressWarnings("unchecked")
+    public List<Account> filterSearchResults(List<Object[]> results, PartyRepositoryInterface repository) throws ServiceException {
+
+        // get the entities from the search results
+        Set<String> accountIds = new HashSet<String>();
+        int classIndex = getQueryProjectedFieldIndex(FullTextQuery.OBJECT_CLASS);
+        int idIndex = getQueryProjectedFieldIndex(FullTextQuery.ID);
+        if (classIndex < 0 || idIndex < 0) {
+            throw new ServiceException("Incompatible result projection, classIndex = " + classIndex + ", idIndex = " + idIndex);
+        }
+
+        for (Object[] o : results) {
+            Class c = (Class) o[classIndex];
+            if (c.equals(PartyRole.class)) {
+                PartyRolePk pk = (PartyRolePk) o[idIndex];
+                if ("ACCOUNT".equals(pk.getRoleTypeId())) {
+                    accountIds.add(pk.getPartyId());
+                }
+            }
+        }
+
+        try {
+            if (!accountIds.isEmpty()) {
+                return repository.findList(Account.class, new EntityExpr(Account.Fields.partyId.name(), EntityOperator.IN, accountIds));
+            } else {
+                return new ArrayList<Account>();
+            }
+        } catch (GeneralException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+}

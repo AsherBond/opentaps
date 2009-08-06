@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+
+    <!-- Maintain the InventoryItemValueHistory entity when InventoryItems are created or updated -->
+    <eca service="createInventoryItem" event="commit">
+        <action service="opentaps.updateInventoryItemValueHistory" mode="sync"/>
+    </eca>
+    <eca service="updateInventoryItem" event="commit">
+        <action service="opentaps.updateInventoryItemValueHistory" mode="sync"/>
+    </eca>
+
+    <!-- Before reserving inventory, ensure that we're not over reserving the item -->
+    <eca service="reserveProductInventory" event="invoke">
+        <action service="opentaps.checkInventoryAlreadyReserved" mode="sync"/>
+    </eca>
+    <eca service="reserveProductInventoryByFacility" event="invoke">
+        <action service="opentaps.checkInventoryAlreadyReserved" mode="sync"/>
+    </eca>
+    <eca service="reserveProductInventoryByContainer" event="invoke">
+        <action service="opentaps.checkInventoryAlreadyReserved" mode="sync"/>
+    </eca>
+    <eca service="reserveStoreInventory" event="invoke">
+        <condition field-name="orderId" operator="is-not-empty"/>
+        <condition field-name="orderItemSeqId" operator="is-not-empty"/>
+        <action service="opentaps.checkInventoryAlreadyReserved" mode="sync"/>
+    </eca>
+
+</service-eca>

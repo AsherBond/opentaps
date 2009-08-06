@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!-- Seed data for commission support. -->
+<entity-engine-xml>
+
+    <!-- Roles and relations for commission agents. -->
+    <RoleType roleTypeId="COMMISSION_AGENT" hasTable="N" description="Commission Agent"/>
+    <PartyRelationshipType partyRelationshipTypeId="COMMISSION_AGENT" partyRelationshipName="Commissioned Agent"
+        description="Commissioned agent"/> 
+    <PartyRelationshipType partyRelationshipTypeId="COMMISSION_AGENT_ALL" partyRelationshipName="Commissioned Agent on All Orders"
+        description="Commissioned agent who earns a commission on all orders of a customer, regardless of whether it is placed through him"/>
+
+    <!-- Make sure the agreement type COMMISSION_AGREEMENT exists -->
+    <AgreementType agreementTypeId="COMMISSION_AGREEMENT" description="Commission" hasTable="N" parentTypeId=""/>
+
+    <!-- Define three types of agreement items:  payments, customers and rates -->
+    <AgreementItemType agreementItemTypeId="COMM_PAYMENT" description="Payment terms"/>
+    <AgreementItemType agreementItemTypeId="COMM_TIMING" description="Timing of Commissions"/>
+    <AgreementItemType agreementItemTypeId="COMM_CUSTOMERS" description="Commission Customers"/>
+    <AgreementItemType agreementItemTypeId="COMM_RATES" description="Commission Rate Schedule"/>
+
+    <TermType termTypeId="COMM_ORDER_ROLE" description="Applies to any order with role"/>
+    <TermType termTypeId="COMM_PARTY_APPL" description="Applies to customer"/>
+    <TermType termTypeId="COMM_PARTYCLASS_APPL" description="Applies to customer classification"/>
+
+    <TermType termTypeId="COMM_TIMING_AT" description="When Commission is Earned"/>
+    <TermTypeFields termTypeId="COMM_TIMING_AT" field1="valueEnumId"/>
+    <EnumerationType enumTypeId="COMM_TIMING_TERM" hasTable="N" description="Commission timing"/>
+    <Enumeration enumId="COMM_AT_INVOICE" description="When customer sales invoice is ready" enumTypeId="COMM_TIMING_TERM" enumCode="AT_INVOICE" sequenceId="01"/>
+    <Enumeration enumId="COMM_AT_PAYMENT" description="When customer payment is confirmed" enumTypeId="COMM_TIMING_TERM" enumCode="AT_PAYMENT" sequenceId="05"/>
+    <TermTypeToEnumTypeMap termTypeId="COMM_TIMING_AT" enumTypeId="COMM_TIMING_TERM"/>
+
+    <!-- New term class for sales commissions -->
+    <TermType description="Sales Commission" hasTable="N" termTypeId="SALES_COMMISSION"/>
+
+    <!-- Term type for basic, flat commissions.  The termValue of the AgreementTerm serves as the commission rate. -->
+    <TermType termTypeId="FLAT_COMMISSION" parentTypeId="SALES_COMMISSION" description="Flat commission rate on entire order"/>
+
+    <!-- Optional term that specifies no commission to be earned on items with promotions or adjustments.  Applies if the %discount is above the termValue. -->
+    <TermType termTypeId="NO_PROMO_COMMISSION" parentTypeId="SALES_COMMISSION" description="No commission for promotions above a certain value"/>
+
+    <!-- Term for commission on a particular product.  The term value of the AgreementTerm serves as the commission rate. -->
+    <TermType termTypeId="PRODUCT_COMMISSION" parentTypeId="SALES_COMMISSION" description="Commission for a specific product"/>
+
+    <!-- 
+        Term for commission on products in a category.  The term value of the AgreementTerm serves as the commission rate. 
+        This works like a direct PRODUCT_COMMISSION for each product defined in the COMMISSION_CATEGORY.  Hence, it can be
+        considered to be a convenient way of defining PRODUCT_COMMISSION for hundreds to thousands of produccts.
+    -->
+    <TermType termTypeId="PROD_CAT_COMMISSION" parentTypeId="SALES_COMMISSION" description="Commission for each product in a category"/>
+
+    <!-- 
+        Term for commission on products in a group.  Unlike the abvove term, this term will consider all products ordered from
+        a category towards the term quantity.  As an example, if you order 5 GZ-1000 and 10 GZ-1001 from the same 
+        COMMISSION_CATEGORY, then the quantity is considered to be 15 from that category.  That is, the rate will
+        be determined from the AgreementTerm which applies to 15 products in that category.
+    -->
+    <TermType termTypeId="PROD_GRP_COMMISSION" parentTypeId="SALES_COMMISSION" description="Commission for all products in a category"/>
+
+    <!-- Define a commission product category which can be used with PROD_CAT_COMMISSION terms. -->
+    <ProductCategoryType productCategoryTypeId="COMMISSION_CATEGORY" hasTable="N" description="Products in this kind of category qualify for commissions"/>
+
+    <!-- An agreement can be made of up of these four item types. -->
+    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_PAYMENT" sequenceNum="1" defaultDescription="Commission payout terms" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_TIMING" sequenceNum="2" defaultDescription="Timing of Commissions" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_CUSTOMERS" sequenceNum="3" defaultDescription="Commission customers" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="COMMISSION_AGREEMENT" agreementItemTypeId="COMM_RATES" sequenceNum="4" defaultDescription="Commission rates" autoCreate="Y" maxAllowed="1"/>
+
+    <!-- Identify which terms are payment items -->
+    <AgreementItemToTermMap agreementItemTypeId="COMM_PAYMENT" termTypeId="FIN_PAYMENT_TERM" maxAllowed="1"/>
+    <AgreementItemToTermMap agreementItemTypeId="COMM_PAYMENT" termTypeId="FIN_PAYMENT_FIXDAY" maxAllowed="1"/>
+
+    <!-- Identify which terms are payment items -->
+    <AgreementItemToTermMap agreementItemTypeId="COMM_TIMING" termTypeId="COMM_TIMING_AT" maxAllowed="1"/>
+
+    <!-- Identify which terms are customer items -->
+    <AgreementItemToTermMap agreementItemTypeId="COMM_CUSTOMERS" termTypeId="COMM_PARTY_APPL"/>
+    <AgreementItemToTermMap agreementItemTypeId="COMM_CUSTOMERS" termTypeId="COMM_PARTYCLASS_APPL"/>
+    <AgreementItemToTermMap agreementItemTypeId="COMM_CUSTOMERS" termTypeId="COMM_ORDER_ROLE"/>
+
+    <!-- Identify which terms are commission items -->
+    <AgreementItemToTermMap agreementItemTypeId="COMM_RATES" termTypeId="FLAT_COMMISSION" maxAllowed="1"/>
+    <!-- This is not yet implemented.
+    <AgreementItemToTermMap agreementItemTypeId="COMM_RATES" termTypeId="PRODUCT_COMMISSION"/>
+    -->
+    <AgreementItemToTermMap agreementItemTypeId="COMM_RATES" termTypeId="PROD_CAT_COMMISSION"/>
+    <AgreementItemToTermMap agreementItemTypeId="COMM_RATES" termTypeId="PROD_GRP_COMMISSION"/>
+
+    <!-- For commission agreements, specify how to map the invoice item types -->
+    <AgreementInvoiceItemType agreementTypeId="COMMISSION_AGREEMENT" invoiceItemTypeIdFrom="INV_PROD_ITEM" invoiceItemTypeIdTo="COMM_INV_ITEM" descriptionLabel="FinancialsCommissionLineItemText" sequenceNum="1"/>
+    <AgreementInvoiceItemType agreementTypeId="COMMISSION_AGREEMENT" invoiceItemTypeIdFrom="INV_DPROD_ITEM" invoiceItemTypeIdTo="COMM_INV_ITEM" descriptionLabel="FinancialsCommissionAdjItemText" sequenceNum="2"/>
+    <AgreementInvoiceItemType agreementTypeId="COMMISSION_AGREEMENT" invoiceItemTypeIdFrom="INV_FPROD_ITEM" invoiceItemTypeIdTo="COMM_INV_ITEM" descriptionLabel="FinancialsCommissionAdjItemText" sequenceNum="3"/>
+    <AgreementInvoiceItemType agreementTypeId="COMMISSION_AGREEMENT" invoiceItemTypeIdFrom="INV_FDPROD_ITEM" invoiceItemTypeIdTo="COMM_INV_ITEM" descriptionLabel="FinancialsCommissionAdjItemText" sequenceNum="4"/>
+    <AgreementInvoiceItemType agreementTypeId="COMMISSION_AGREEMENT" invoiceItemTypeIdFrom="INV_SPROD_ITEM" invoiceItemTypeIdTo="COMM_INV_ITEM" descriptionLabel="FinancialsCommissionAdjItemText" sequenceNum="5"/>
+    <AgreementInvoiceItemType agreementTypeId="COMMISSION_AGREEMENT" invoiceItemTypeIdFrom="ITM_DISCOUNT_ADJ" invoiceItemTypeIdTo="COMM_INV_ADJ" descriptionLabel="FinancialsCommissionAdjItemText" sequenceNum="6"/>
+    <AgreementInvoiceItemType agreementTypeId="COMMISSION_AGREEMENT" invoiceItemTypeIdFrom="ITM_PROMOTION_ADJ" invoiceItemTypeIdTo="COMM_INV_ADJ" descriptionLabel="FinancialsCommissionAdjItemText" sequenceNum="7"/>
+
+    <!--  interestingly enough, commission invoices should have more or less the same terms as a purchase invoice, and
+    does not need all the specifications of HOW commissions are calculated - just WHEN they will be paid -->
+	<AgreementDocumentTypeMap documentTypeId="COMMISSION_INVOICE" agreementTypeId="PURCHASE_AGREEMENT"/>
+	
+
+</entity-engine-xml>

@@ -1,0 +1,110 @@
+
+/**
+ * General Tree view CSS
+ */
+
+.TreeExpando  {
+    clear:both;
+    display:inline;
+    float:left;
+    height:18px;
+    width:18px;
+}
+
+.TreeExpandoOpened {
+    background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_minus.gif');
+}
+.TreeExpandoClosed {
+    background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_plus.gif');
+}
+.TreeExpandoLeaf {
+    background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_leaf.gif');
+}
+.TreeExpandoLoading {
+    background-image: url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/treeExpand_loading.gif');
+}
+
+.TreeContent {
+    cursor:default;
+    margin-left:18px;
+    min-height:18px;
+    min-width:18px;
+    padding-left:1px;
+    padding-top:3px;
+}
+
+.TreeNode {
+    background-image:url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/i.gif');
+    background-position:left top;
+    background-repeat:repeat-y;
+    margin-left:19px;
+}
+
+.TreeIsLast {
+    background:transparent url('/opentaps_js/dojo_0.90/dijit/themes/tundra/images/i_half.gif') no-repeat scroll 0% 0%;
+}
+.TreeIsRoot {
+    margin-left:0pt;
+}
+
+.TreeLabelFocused {
+    outline-color:invert;
+    outline-style:dotted;
+    outline-width:1px;
+}
+
+.dijitExpandoText {
+    display:none;
+}
+
+div.TreeIcon {
+    border-bottom:1px solid #ddd;
+}
+
+div.TreeIcon:hover {
+    background-color:#EEDDFF;
+}
+
+
+
+/**
+ * For glAccountTrees
+ */
+.account {
+    float:left;
+    text-align:left;
+    width:49%;
+}
+.amount {
+    float:right;
+    text-align:right;
+    width:30%;
+}
+.twoColumnAmount {
+    float:right;
+    text-align:right;
+}
+.debitAmount {
+    width:100px;
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-size:10px;
+}
+.creditAmount {
+    width:100px;
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-size:10px;
+}
+.amountTotal {
+    float:right;
+    text-align:right;
+    width:30%;
+    display:none;
+}
+
+.treeViewContainer {
+    width:75%;
+}
+.treeViewHeader {
+    text-align:center;
+    margin-bottom:1em;
+}

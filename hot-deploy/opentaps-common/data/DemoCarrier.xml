@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Demo Carrier which can be used to understand the carrier shipment model and to trial run shipment features offline. -->
+<entity-engine-xml>
+
+    <!-- Carriers must be defined as a party group with CARRIER role. -->
+    <Party partyId="DemoCarrier" partyTypeId="PARTY_GROUP" />
+    <PartyGroup partyId="DemoCarrier" groupName="Demo Carrier" />
+    <PartyRole partyId="DemoCarrier" roleTypeId="CARRIER" />
+
+    <!-- 
+    Define what shipment methods (air, ground, 2nd day) the carrier has.  Also store the code that identifies this method in the remote API.  
+    You might have to create a separate set of ShipmentMethodType that matches the methods of the carrier.
+    -->
+    <CarrierShipmentMethod partyId="DemoCarrier" roleTypeId="CARRIER" shipmentMethodTypeId="GROUND" sequenceNumber="1" carrierServiceCode="GND" />
+    <CarrierShipmentMethod partyId="DemoCarrier" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS" sequenceNumber="2" carrierServiceCode="EXP" />
+
+    <!--
+    Define what shipment methods of the carrier are available for a store.  This is where the shipment
+    rate estimate service is defined (it can vary from store to store).  The userDescription field is
+    what the user sees when selecting a shipment option and the sequenceNumber is the order.  If no
+    userDescription is used, the default is ShipmentMethodType.description.
+    -->
+    <ProductStoreShipmentMeth productStoreShipMethId="DEMOPRDSTRSHIPMETH_1" productStoreId="9000" partyId="DemoCarrier" roleTypeId="CARRIER" shipmentMethodTypeId="GROUND" serviceName="opentaps.demoCarrierShipmentEstimate" sequenceNumber="1" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" />
+    <ProductStoreShipmentMeth productStoreShipMethId="DEMOPRDSTRSHIPMETH_2" productStoreId="9000" partyId="DemoCarrier" roleTypeId="CARRIER" shipmentMethodTypeId="EXPRESS" serviceName="opentaps.demoCarrierShipmentEstimate" sequenceNumber="2" includeNoChargeItems="N" allowUspsAddr="N" requireUspsAddr="N" />
+
+</entity-engine-xml>

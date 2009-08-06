@@ -1,0 +1,61 @@
+<entity-engine-xml>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+    <!-- The .NIT Gizmo will always cause a requirement when ordered -->
+    <Product productId="GZ-1005" requirementMethodEnumId="PRODRQM_AUTO"/>
+
+    <!-- Define some UPCA codes for existing products: these must be valid UPCA codes or the validation service will reject them -->
+    <GoodIdentification productId="GZ-1000" idValue="043000285213" goodIdentificationTypeId="UPCA"/>
+    <GoodIdentification productId="GZ-1001" idValue="028190007593" goodIdentificationTypeId="UPCA"/>
+    <GoodIdentification productId="GZ-1004" idValue="041163473041" goodIdentificationTypeId="UPCA"/>
+    <GoodIdentification productId="GZ-1006" idValue="085696608044" goodIdentificationTypeId="UPCA"/>
+
+    <!-- This item will cause requirements to be created when the ATP is below 5 for quantity of the order -->
+    <Product productId="GZ-2002" requirementMethodEnumId="PRODRQM_ATP"/>
+    <ProductFacility productId="GZ-2002" facilityId="WebStoreWarehouse" minimumStock="5" reorderQuantity="10" daysToShip="2"/>
+
+    <!-- This item will cause requirements to be created when the ATP drops below minimum stock --> 
+    <Product productId="WG-5569" requirementMethodEnumId="PRODRQM_ATP"/>
+    
+    <!-- Define a supply class product for purchasing. -->
+    <Product productId="SUPPLY-001" productTypeId="SUPPLIES" productName="Pencil" internalName="Pencil" description="Office pencil (demo supply)." 
+        taxable="N" chargeShipping="N" autoCreateKeywords="N" isVirtual="N" isVariant="N" createdDate="2007-01-01 00:00:00.000"  createdByUserLogin="admin"/>
+    <SupplierProduct partyId="DemoSupplier" productId="SUPPLY-001" minimumOrderQuantity="0" lastPrice="1.50" currencyUomId="USD" supplierProductId="SUPPLY-001-0" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="SUPPLY-001" minimumOrderQuantity="5" lastPrice="1.25" currencyUomId="USD" supplierProductId="SUPPLY-001-5" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="SUPPLY-001" minimumOrderQuantity="25" lastPrice="1.00" currencyUomId="USD" supplierProductId="SUPPLY-001-25" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="BigSupplier" productId="SUPPLY-001" minimumOrderQuantity="500" lastPrice="0.75" currencyUomId="USD" supplierProductId="BKSUPPLY-001" availableFromDate="2007-01-01 00:00:00.000"/>
+
+    <!-- Define a fixed asset class product for purchasing. -->
+    <Product productId="ASSET-001" productTypeId="FIXED_ASSET" productName="Office Computer" internalName="Office Computer" description="Office Computer (demo fixed asset)." 
+        taxable="N" chargeShipping="N" autoCreateKeywords="N" isVirtual="N" isVariant="N" createdDate="2007-01-01 00:00:00.000"  createdByUserLogin="admin"/>
+    <SupplierProduct partyId="DemoSupplier" productId="ASSET-001" minimumOrderQuantity="0" lastPrice="1000.00" currencyUomId="USD" supplierProductId="ASSET-001-0" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="ASSET-001" minimumOrderQuantity="5" lastPrice="950.00" currencyUomId="USD" supplierProductId="ASSET-001-5" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="ASSET-001" minimumOrderQuantity="25" lastPrice="900.00" currencyUomId="USD" supplierProductId="ASSET-001-25" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="BigSupplier" productId="ASSET-001" minimumOrderQuantity="500" lastPrice="750.00" currencyUomId="USD" supplierProductId="BKASSET-001" availableFromDate="2007-01-01 00:00:00.000"/>
+
+    <!-- An example of a service -->
+    <Product productId="service1" productTypeId="SERVICE" internalName="Exemplary Service" productName="Exemplary Service" description="Exemplary Service"/>
+    <ProductPrice productId="service1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2008-01-01 00:00:00" price="10.00"/>
+
+    <!-- Standard costing for a manufactured item -->
+    <CostComponent costComponentId="6103" costComponentTypeId="EST_STD_ROUTE_COST" productId="PROD_COST" fromDate="2008-10-17 15:39:39.0" cost="20.0" costUomId="USD" lastUpdatedStamp="2008-10-17 15:39:39.0" lastUpdatedTxStamp="2008-10-17 15:39:39.0" createdStamp="2008-10-17 15:39:39.0" createdTxStamp="2008-10-17 15:39:39.0"/>
+    <CostComponent costComponentId="6102" costComponentTypeId="EST_STD_OTHER_COST" productId="PROD_COST" fromDate="2008-10-17 15:39:09.0" cost="25.0" costUomId="USD" lastUpdatedStamp="2008-10-17 15:39:09.0" lastUpdatedTxStamp="2008-10-17 15:39:09.0" createdStamp="2008-10-17 15:39:09.0" createdTxStamp="2008-10-17 15:39:09.0"/>
+    <CostComponent costComponentId="6101" costComponentTypeId="EST_STD_LABOR_COST" productId="PROD_COST" fromDate="2008-10-17 15:38:49.0" cost="110.0" costUomId="USD" lastUpdatedStamp="2008-10-17 15:38:49.0" lastUpdatedTxStamp="2008-10-17 15:38:49.0" createdStamp="2008-10-17 15:38:49.0" createdTxStamp="2008-10-17 15:38:49.0"/>
+    <CostComponent costComponentId="6100" costComponentTypeId="EST_STD_MAT_COST" productId="PROD_COST" fromDate="2008-10-17 15:38:31.0" cost="39.0" costUomId="USD" lastUpdatedStamp="2008-10-17 15:38:31.0" lastUpdatedTxStamp="2008-10-17 15:38:31.0" createdStamp="2008-10-17 15:38:31.0" createdTxStamp="2008-10-17 15:38:31.0"/>
+
+</entity-engine-xml>

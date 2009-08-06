@@ -1,0 +1,78 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+package org.opentaps.common.jndi;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+import javax.sql.DataSource;
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericDelegator;
+
+public class JNDIContextListener implements ServletContextListener {
+
+    public static final String MODULE = JNDIContextListener.class.getName();     
+
+    /** {@inheritDoc} */
+    public void contextInitialized(ServletContextEvent event) {
+
+        try {
+
+            GenericDelegator delegator =  GenericDelegator.getGenericDelegator("default");
+            InitialContext ctx = new InitialContext();
+
+            String dataSourceName = delegator.getGroupHelperName("org.ofbiz");
+            if (UtilValidate.isNotEmpty(dataSourceName)) {
+                DataSourceImpl operational = new DataSourceImpl(dataSourceName);  
+                ctx.rebind("java:operational", (DataSource) operational);
+            }
+
+            dataSourceName = delegator.getGroupHelperName("org.opentaps.analytics");
+            if (UtilValidate.isNotEmpty(dataSourceName)) {
+                DataSourceImpl analytics = new DataSourceImpl(dataSourceName);  
+                ctx.rebind("java:analytics", (DataSource) analytics);
+            }
+
+            dataSourceName = delegator.getGroupHelperName("org.opentaps.testing");
+            if (UtilValidate.isNotEmpty(dataSourceName)) {
+                DataSourceImpl analytics = new DataSourceImpl(dataSourceName);  
+                ctx.rebind("java:testing", (DataSource) analytics);
+            }
+
+        } catch (NamingException e) {
+            Debug.logError(e, "Error binding analytics datasources to JNDI server", MODULE);        
+        }
+
+    }
+
+    /** {@inheritDoc} */
+    public void contextDestroyed(ServletContextEvent event) {
+
+        try {
+
+            new InitialContext().unbind("java:operational");
+            new InitialContext().unbind("java:analytics");
+            new InitialContext().unbind("java:testing");
+
+        } catch (NamingException e) {
+            Debug.logError(e, "Error unbinding analytics datasources from JNDI server", MODULE);
+        }      
+    }
+
+}

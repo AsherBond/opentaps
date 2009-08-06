@@ -1,0 +1,23 @@
+/*
+ * This script will convert any Person or PartyGroup parties from OFBiz
+ * into CRMSFA Contacts and Accounts respectively.  It will check that
+ * they are not already part of CRMSFA and assign them to the configured
+ * sales manager (see below).
+ */
+
+// provide the user login of a sales manager who will be assigned all of the converted parties
+assignToUserLoginId = "sichen";
+ 
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.service.GenericDispatcher;
+import org.ofbiz.base.util.UtilMisc;
+
+delegator = GenericDelegator.getGenericDelegator("default");
+dispatcher = GenericDispatcher.getLocalDispatcher("ecommerce", delegator);
+userLogin = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", assignToUserLoginId));
+if (userLogin == null) {
+    print("ERROR:  Must supply a valid sales manager user login ID.  Could not find the one configured ["+assignToUserLoginId+"].");
+}
+
+results = dispatcher.runSync("opentaps.convertOfbizParties", UtilMisc.toMap("userLogin", userLogin));
+print(results);

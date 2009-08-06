@@ -1,0 +1,33 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.party.party.PartyHelper;
+
+carriers = new ArrayList();
+carrierParties = delegator.findByAnd("PartyRole", UtilMisc.toMap("roleTypeId", "CARRIER"));
+cpit = carrierParties.iterator();
+while (cpit.hasNext()) {
+    carrierParty = cpit.next();
+    carrierPartyName = PartyHelper.getPartyName(carrierParty);
+    cpMap = carrierParty.getAllFields();
+    if (UtilValidate.isNotEmpty(carrierPartyName)) {
+        cpMap.put("partyName", carrierPartyName);
+        carriers.add(cpMap);
+    }
+}
+context.put("carriers", carriers);

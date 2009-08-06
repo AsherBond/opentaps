@@ -1,0 +1,37 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+
+import org.opentaps.common.util.UtilCommon;
+
+options = UtilCommon.DISTINCT_READ_OPTIONS;
+orderBy = UtilMisc.toList("groupName");
+
+conditions = new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("roleTypeId", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
+            new EntityExpr("ptyAcctgPrefPartyId", EntityOperator.NOT_EQUAL, null)
+            ), EntityOperator.AND);
+configuredOrganizations = delegator.findByCondition("PartyAcctgPreferenceRoleAndDetail", conditions, null, null, orderBy, options);
+context.put("configuredOrganizations", configuredOrganizations);
+
+conditions = new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("roleTypeId", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
+            new EntityExpr("ptyAcctgPrefPartyId", EntityOperator.EQUALS, null)
+            ), EntityOperator.AND);
+unconfiguredOrganizations = delegator.findByCondition("PartyAcctgPreferenceRoleAndDetail", conditions, null, null, orderBy, options);
+context.put("unconfiguredOrganizations", unconfiguredOrganizations);

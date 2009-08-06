@@ -1,0 +1,49 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+
+partyId = parameters.get("partyId");
+carrierPartyId = parameters.get("carrierPartyId");
+fromDateStr = parameters.get("fromDate");
+if ((partyId != null) && (carrierPartyId != null) && (fromDateStr != null)) {
+    partyCarrierAccount = delegator.findByPrimaryKey("PartyCarrierAccount", UtilMisc.toMap("partyId", partyId, "carrierPartyId", carrierPartyId, "fromDate", UtilDate.toTimestamp(fromDateStr, timeZone, locale)));
+    context.put("partyCarrierAccount", partyCarrierAccount);
+}
+
+context.put("now", UtilDateTime.nowTimestamp());
+
+internalOrgs = delegator.findByAnd("PartyRole", UtilMisc.toMap("roleTypeId", "INTERNAL_ORGANIZATIO"));
+cond = UtilMisc.toList(new EntityExpr("roleTypeId", EntityOperator.EQUALS, "CARRIER"),
+                       new EntityExpr("partyTypeId", EntityOperator.EQUALS, "PARTY_GROUP"));
+if (UtilValidate.isNotEmpty(internalOrgs)) {
+   cond.add(new EntityExpr("partyId", EntityOperator.NOT_IN, EntityUtil.getFieldListFromEntityList(internalOrgs, "partyId", true)));
+}
+carrierParties = delegator.findByCondition("PartyRoleAndPartyDetail", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("groupName"));
+context.put("carrierParties", carrierParties);

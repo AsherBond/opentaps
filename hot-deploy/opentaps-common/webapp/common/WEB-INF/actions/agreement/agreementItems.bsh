@@ -1,0 +1,157 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ import org.ofbiz.base.util.Debug;
+ import org.ofbiz.base.util.UtilMisc;
+ import org.ofbiz.base.util.UtilValidate;
+ import org.ofbiz.entity.condition.*;
+ import org.ofbiz.entity.model.DynamicViewEntity;
+ import org.ofbiz.entity.model.ModelKeyMap;
+ import javolution.util.FastList;
+ import javolution.util.FastMap;
+ import org.ofbiz.entity.util.EntityUtil;
+ 
+ agreementId = parameters.get("agreementId");
+ if (agreementId == null) {
+     Debug.logError("No agreementId in agreementItems.bsh", "");
+     return;
+ }
+ 
+ dv = new DynamicViewEntity();
+ dv.addMemberEntity("AI", "AgreementItem");
+ dv.addMemberEntity("AIT", "AgreementItemType");
+ dv.addAlias("AI", "agreementId");
+ dv.addAlias("AI", "agreementItemSeqId");
+ dv.addAlias("AI", "agreementItemTypeId");
+ dv.addAlias("AI", "currencyUomId");
+ dv.addAlias("AI", "agreementText");
+ dv.addAlias("AIT", "description");
+ dv.addViewLink("AI", "AIT", Boolean.FALSE, ModelKeyMap.makeKeyMapList("agreementItemTypeId"));
+
+ selectList = UtilMisc.toList("agreementId", "agreementItemSeqId", "agreementItemTypeId", "description", "currencyUomId", "agreementText");
+ orderBy = UtilMisc.toList("agreementItemSeqId");
+ 
+ iterator = delegator.findListIteratorByCondition(dv, new EntityExpr("agreementId", EntityOperator.EQUALS, agreementId), null, selectList, orderBy, null);
+ agreementItems = iterator.completeList;
+ iterator.close();
+ context.put("agreementItems", agreementItems);
+ 
+ dv = new DynamicViewEntity();
+ dv.addMemberEntity("ATR", "AgreementTerm");
+ dv.addMemberEntity("TT", "TermType");
+ dv.addAlias("ATR", "agreementId");
+ dv.addAlias("ATR", "agreementTermId");
+ dv.addAlias("ATR", "agreementItemSeqId");
+ dv.addAlias("ATR", "description");
+ dv.addAlias("ATR", "fromDate");
+ dv.addAlias("ATR", "thruDate");
+ dv.addAlias("ATR", "termTypeId");
+ dv.addAlias("ATR", "termValue");
+ dv.addAlias("ATR", "currencyUomId");
+ dv.addAlias("ATR", "termDays");
+ dv.addAlias("ATR", "textValue");
+ dv.addAlias("ATR", "roleTypeId");
+ dv.addAlias("ATR", "minQuantity");
+ dv.addAlias("ATR", "maxQuantity");
+ dv.addAlias("ATR", "productCategoryId");
+ dv.addAlias("ATR", "productId");
+ dv.addAlias("ATR", "partyId");
+ dv.addAlias("ATR", "roleTypeId");
+ dv.addAlias("ATR", "partyClassificationGroupId");
+ dv.addAlias("ATR", "valueEnumId");
+ dv.addAlias("TT", "termTypeDescription", "description", null, null, null, null);
+ dv.addViewLink("ATR", "TT", Boolean.FALSE, ModelKeyMap.makeKeyMapList("termTypeId"));
+ 
+ selectList = FastList.newInstance();
+ selectList.add("agreementId");
+ selectList.add("agreementTermId");
+ selectList.add("agreementItemSeqId");
+ selectList.add("description");
+ selectList.add("fromDate");
+ selectList.add("thruDate");
+ selectList.add("termTypeDescription");
+ selectList.add("termTypeId");
+ selectList.add("termValue");
+ selectList.add("termDays");
+ selectList.add("textValue");
+ selectList.add("minQuantity");
+ selectList.add("maxQuantity");
+ selectList.add("productCategoryId");
+ selectList.add("productId");
+ selectList.add("partyId");
+ selectList.add("roleTypeId");
+ selectList.add("partyClassificationGroupId");
+ selectList.add("currencyUomId");
+ selectList.add("valueEnumId");
+ orderBy = UtilMisc.toList("agreementId", "agreementItemSeqId");
+ iterator = delegator.findListIteratorByCondition(dv, new EntityExpr("agreementId", EntityOperator.EQUALS, agreementId), null, selectList, orderBy, null);
+ agreementTerms = iterator.completeList;
+ iterator.close();
+ context.put("agreementTerms", agreementTerms);
+ 
+ // Prepare list of values for valueEnumId
+ enumData = FastList.newInstance();
+ for (GenericValue term : agreementTerms) {
+     if (UtilValidate.isNotEmpty(term.getString("valueEnumId"))) {
+
+                   enumMap = FastMap.newInstance();
+
+                    // Gets enumeration mapped to the term type
+                    termTypeToEnumMaps = delegator.findByAnd("TermTypeToEnumTypeMap", UtilMisc.toMap("termTypeId", term.getString("termTypeId")));
+                    if (UtilValidate.isEmpty(termTypeToEnumMaps)) {
+                        // Error. No mapping between term type and enum type.
+                        Debug.logError("No mapping between term type " + termType + " and enumeration type.", module);
+                        continue;
+                    }
+                    
+                    enumMap{"termTypeId"} = term.getString("termTypeId");
+                    
+                    // EnumerationType.description as field title
+                    termTypeToEnumMap = EntityUtil.getFirst(termTypeToEnumMaps);
+                    enumTitle = (String)(termTypeToEnumMap.getRelatedOne("EnumerationType").get("description", "OpentapsEntityLabels", locale));
+                    enumMap{"enumTitle"} = UtilValidate.isNotEmpty(enumTitle) ? enumTitle : "Enumeration Value";
+                    
+                    // Enumeration values
+                    enumValues = delegator.findByCondition("Enumeration", new EntityExpr("enumTypeId", EntityOperator.EQUALS, termTypeToEnumMap.getString("enumTypeId")), UtilMisc.toList("enumId", "description"), UtilMisc.toList("sequenceId"));
+                    enumMap{"enumValues"} = enumValues;
+                    
+                    enumData.add(enumMap);
+     }
+ }
+ if (UtilValidate.isNotEmpty(enumData)) context{"enumData"} = enumData;
+ 
+ /*
+  * Prepare data for form createAgreementItem
+  */
+ agreementHeader = context.get("agreementHeader");
+ if (agreementHeader != null) {
+     agreementTypeId = agreementHeader.get("agreementTypeId");
+     itemMap = delegator.findByAnd("AgreementToItemMap", UtilMisc.toMap("agreementTypeId", agreementTypeId));
+     List allowItemsId = FastList.newInstance();
+     Iterator iter = itemMap.iterator();
+     while (iter.hasNext()) {
+         itemType = iter.next();
+         maxAllowed = itemType.get("maxAllowed");
+         if (delegator.findCountByAnd("AgreementItem", UtilMisc.toMap("agreementId", agreementId, "agreementItemTypeId", itemType.get("agreementItemTypeId"))) < (maxAllowed == null ? 0 : maxAllowed) || maxAllowed == null) {
+             allowItemsId.add(itemType.get("agreementItemTypeId"));
+         }
+     }
+     if (allowItemsId != null && allowItemsId.size() > 0) {
+         allowItems = delegator.findByCondition("AgreementItemType", new EntityExpr("agreementItemTypeId", EntityOperator.IN, allowItemsId), null, null);
+     }
+     if (allowItems != void && allowItems != null)
+         context.put("allowItems", allowItems);
+ }
+ 

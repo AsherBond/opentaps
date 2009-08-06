@@ -1,0 +1,51 @@
+<#--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<script type="text/javascript">
+
+  checkIntervalMillis = ${internalMessageCheckFrequencySeconds?default(300)} * 1000;
+  
+  opentaps.addOnLoad(initializeMessageCheck);
+
+  function initializeMessageCheck() {
+    checkInterval = setInterval("checkForNewMessages()", checkIntervalMillis);
+    checkForNewMessages();
+  }
+
+  function checkForNewMessages() {
+    var requestData = {'partyIdTo' : '${userLogin.partyId}', 'returnNumberOnly' : 'Y'};
+    opentaps.sendRequest("getNewInternalMessagesJSON", requestData, updateMessages)
+  }
+
+  function updateMessages(/* Array */ data) {
+    if (! data) return;
+    var numMessages = document.getElementById('numMessages');
+    if (! numMessages) return;
+    if (data.numberOfNewMessages == 0) {
+        opentaps.replaceChildren(numMessages, opentaps.createSpan('numMessages', '${uiLabelMap.OpentapsNoNewMessages?js_string}'));
+    } else {
+
+        // TODO: Localize this properly, without dictating position of the link
+        var newNumMessages = opentaps.createSpan('numMessages', '${uiLabelMap.OpentapsNewMessagesPrefix}&nbsp;' + data.numberOfNewMessages + '&nbsp;');
+        opentaps.replaceChildren(numMessages, newNumMessages);
+        newNumMessages.appendChild(opentaps.createAnchor(null, 'myMessages?isRead=N', '${uiLabelMap.OpentapsNewMessages}.', 'linktext'));
+    }
+  }
+</script>
+
+<div class="tabletext" style="margin-bottom:5px">
+<span id="numMessages">${uiLabelMap.OpentapsNoNewMessages}</span>&nbsp;&nbsp;<a class="linktext" href="javascript:sendMessage()">${uiLabelMap.OpentapsSendMessage}</a>&nbsp;&nbsp;<a class="linktext" href="<@ofbizUrl>myMessages</@ofbizUrl>">Inbox</a>
+</div>

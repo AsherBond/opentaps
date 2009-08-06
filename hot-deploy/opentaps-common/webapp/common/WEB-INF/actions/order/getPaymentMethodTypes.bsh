@@ -1,0 +1,36 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+
+paymentMethodTypes = new ArrayList();
+
+context.put("paymentMethodTypes", paymentMethodTypes); 
+
+paymentMethodTypeValues = delegator.findAll("PaymentMethodType");
+
+locale = UtilHttp.getLocale(request);
+pmit = paymentMethodTypeValues.iterator();
+while (pmit.hasNext()) {
+    paymentMethodType = pmit.next();
+    paymentMethodType.set("description", paymentMethodType.get("description", locale));
+    paymentMethodTypes.add(paymentMethodType);
+}
+paymentMethodTypes = EntityUtil.orderBy(paymentMethodTypes, UtilMisc.toList("description"));
+context.put("paymentMethodTypes", paymentMethodTypes); 

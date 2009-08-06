@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Content Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <service name="opentaps.prepareQuoteEmail" engine="java" use-transaction="false"
+             location="org.opentaps.common.content.EmailServices" invoke="prepareQuoteEmail">
+        <description>Send an email to someone in the system. Associate a completed Quote and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the QuoteId of the saved data.
+            No security at the moment.</description>
+        <attribute name="quoteId" type="String" mode="IN" optional="false"/>
+        <attribute name="sendTo" type="String" mode="IN" optional="true"/>
+        <attribute name="subject" type="String" mode="IN" optional="true"/>
+        <attribute name="content" type="String" mode="IN" optional="true"/>        
+        <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
+        <attribute name="communicationEventId" type="String" mode="OUT" optional="false"/>
+    </service>
+    <service name="opentaps.prepareSalesOrderEmail" engine="java" use-transaction="false"
+             location="org.opentaps.common.content.EmailServices" invoke="prepareSalesOrderEmail">
+        <description>Send an email to someone in the system. Associate a completed Order and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the OrderId of the saved data.
+            No security at the moment.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="sendTo" type="String" mode="IN" optional="true"/>
+        <attribute name="subject" type="String" mode="IN" optional="true"/>
+        <attribute name="content" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
+        <attribute name="communicationEventId" type="String" mode="OUT" optional="false"/>
+    </service>
+    <service name="opentaps.preparePurchasingOrderEmail" engine="java" use-transaction="false"
+             location="org.opentaps.common.content.EmailServices" invoke="preparePurchasingOrderEmail">
+        <description>Send an email to someone in the system. Associate a completed Order and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the OrderId of the saved data.
+            No security at the moment.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="sendTo" type="String" mode="IN" optional="true"/>
+        <attribute name="subject" type="String" mode="IN" optional="true"/>
+        <attribute name="content" type="String" mode="IN" optional="true"/>        
+        <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
+        <attribute name="communicationEventId" type="String" mode="OUT" optional="false"/>
+    </service> 
+    <service name="opentaps.prepareInvoiceEmail" engine="java" use-transaction="false"
+             location="org.opentaps.common.content.EmailServices" invoke="prepareInvoiceEmail">
+        <description>Send an email to someone in the system. Associate a completed Invoice and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the InvoiceId of the saved data.
+            No security at the moment.</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="sendTo" type="String" mode="IN" optional="true"/>
+        <attribute name="subject" type="String" mode="IN" optional="true"/>
+        <attribute name="content" type="String" mode="IN" optional="true"/>        
+        <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
+        <attribute name="communicationEventId" type="String" mode="OUT" optional="false"/>
+    </service>            
+</services>    

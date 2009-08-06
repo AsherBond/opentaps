@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Agreement Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="autoCreateAgreementItemsAndTerms" engine="java"
+            location="org.opentaps.common.agreement.AgreementServices" invoke="autoCreateAgreementItemsAndTerms">
+        <description>Given an Agreement header, creates the AgreementItem(s) and AgreementTerms based on a template.  
+            The template is modeled in the entities AgreementToItemMap and AgreementItemToTermMap.</description>
+        <attribute name="agreementId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="agreementItemTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="currencyUomId" mode="IN" type="String" optional="true"/>
+        <attribute name="agreementText" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="setInitialAgreementStatus" engine="java"
+        location="org.opentaps.common.agreement.AgreementServices" invoke="setInitialAgreementStatus">
+        <description>Set initial status of the agreement.</description>
+        <attribute name="agreementId" mode="IN" type="String" optional="false"/>
+    </service>
+    
+    <service name="removeAgreementItemAndTerms" engine="java"
+        location="org.opentaps.common.agreement.AgreementServices" invoke="removeAgreementItemAndTerms">
+        <description>Remove agreement item and its terms</description>
+        <attribute name="agreementId" mode="IN" type="String" optional="false"/>
+        <attribute name="agreementItemSeqId" mode="IN" type="String" optional="false"/>
+    </service>
+    
+    <service name="opentaps.createAgreementAndRole" engine="java" location="org.opentaps.common.agreement.AgreementServices" invoke="createAgreementAndRole">
+        <description>
+            Create agreement using createAgreement service and add role to partyTo if party have no it.
+        </description>
+        <attribute name="agreementTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="partyIdFrom" mode="IN" type="String" optional="false"/>
+        <attribute name="roleTypeIdFrom" mode="IN" type="String" optional="false"/>
+        <attribute name="partyIdTo" mode="IN" type="String" optional="false"/>
+        <attribute name="roleTypeIdTo" mode="IN" type="String" optional="false"/>
+        <attribute name="agreementDate" mode="IN" type="Timestamp" optional="true"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="true"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="textData" mode="IN" type="String" optional="true"/>
+        <attribute name="agreementId" mode="OUT" type="String" optional="true"/>
+    </service>
+
+</services>
+

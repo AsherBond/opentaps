@@ -1,0 +1,117 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2008 Open Source Strategies, Inc. */
+
+import org.opentaps.common.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.service.ServiceUtil;
+import org.apache.commons.validator.GenericValidator;
+import java.text.ParseException;
+
+locale = UtilHttp.getLocale(request);
+timeZone = UtilHttp.getTimeZone(request);
+dateFormat = UtilDateTime.getDateFormat(locale);
+
+boolean isInternalMessageSender = false;
+
+if (userLogin == null) return;
+
+isInternalMessageSender = PartyHelper.isInternalMessageSender(userLogin.getString("partyId"), delegator);
+partyIdTo = userLogin.getString("partyId");
+
+isRead = UtilCommon.getParameter(context, "isRead");
+textPattern = UtilCommon.getParameter(context, "textPattern");
+subjPattern = UtilCommon.getParameter(context, "subjPattern");
+fromDate = UtilCommon.getParameter(context, "fromDate");
+thruDate = UtilCommon.getParameter(context, "thruDate");
+partyIdFrom = UtilCommon.getParameter(context, "partyIdFrom");
+
+List processIncomingMessages(messages) {
+    incomingMessages = FastList.newInstance();
+
+    for (msg : messages) {
+        currentMessage = FastMap.newInstance();
+
+        currentMessage.putAll(msg.getAllFields());
+        partyIdFromName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, msg.get("partyIdFrom"), false);
+        currentMessage.put("fromAddress", UtilValidate.isNotEmpty(partyIdFromName) ? (partyIdFromName + " &lt;" + msg.get("partyIdFrom") + "&gt;") : msg.get("partyIdFrom"));
+
+        incomingMessages.add(currentMessage);
+    }
+
+    return incomingMessages;
+}
+
+callCtxt = FastMap.newInstance();
+callCtxt{"partyIdTo"} = partyIdTo;
+if (UtilValidate.isNotEmpty(isRead) && "N".equals(isRead))
+    callCtxt{"isRead"} = Boolean.FALSE;
+if (UtilValidate.isNotEmpty(textPattern)) {
+    keywords = textPattern.split("[ ,;]");
+    contains = FastList.newInstance();
+    for (keyword : keywords) {
+        if(!GenericValidator.isBlankOrNull(keyword))
+            contains.add(keyword);
+    }
+    if (UtilValidate.isNotEmpty(contains))
+        callCtxt{"messageContains"} = contains;
+}
+if (UtilValidate.isNotEmpty(subjPattern)) {
+    keywords = subjPattern.split("[ ,;]");
+    contains = FastList.newInstance();
+    for (keyword : keywords) {
+        if(!GenericValidator.isBlankOrNull(keyword))
+            contains.add(keyword);
+    }
+    if (UtilValidate.isNotEmpty(contains))
+        callCtxt{"subjectContains"} = contains;
+}
+if (UtilValidate.isNotEmpty(partyIdFrom)) {
+    callCtxt{"partyIdFrom"} = UtilMisc.toList(partyIdFrom);
+}
+if (UtilValidate.isNotEmpty(fromDate)) {
+    try {
+        fromDateTs = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDate, dateFormat, timeZone, locale), timeZone, locale);
+        if (fromDateTs != null)
+            callCtxt{"dateFrom"} = fromDateTs;
+    } catch (ParseException e) {
+        UtilMessage.addFieldError(request, "fromDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDateTime.getDateFormat(locale))));
+    }
+}
+if (UtilValidate.isNotEmpty(thruDate)) {
+    try {
+        thruDateTs = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDate, dateFormat, timeZone, locale), timeZone, locale);
+        if (thruDateTs != null)
+            callCtxt{"dateTo"} = thruDateTs;
+    } catch (ParseException e) {
+        UtilMessage.addFieldError(request, "thruDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDateTime.getDateFormat(locale))));
+    }
+}
+callResult = dispatcher.runSync("opentaps.receiveInternalMessage", callCtxt);
+if (ServiceUtil.isFailure(callResult) && ServiceUtil.isError(callResult)) {
+    //TODO: (oandreyev) add error handling
+}
+
+context.put("internalMessages", processIncomingMessages(callResult.get("messages")));

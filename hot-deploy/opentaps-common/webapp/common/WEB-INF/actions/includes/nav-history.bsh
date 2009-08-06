@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.crypto.HashCrypt;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.opentaps.common.util.UtilConfig;
+import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import javax.servlet.ServletContext;
+import org.ofbiz.base.component.ComponentConfig;
+
+
+application = parameters.get("componentName");
+
+if (UtilConfig.getPropertyBoolean(application, "opentaps.history.show", true)) {
+
+    userLogin = parameters.get("userLogin");
+    if (userLogin == null) {
+        return;
+    }
+
+    servletContext = request.getAttribute("servletContext");
+    serverId = servletContext.getAttribute("_serverId");
+    contextPath = request.getContextPath();
+    info = ComponentConfig.getWebAppInfo(serverId, contextPath);
+    webAppName = info.getName();
+
+    depth = UtilConfig.getPropertyInt(application, "opentaps.history.depth", 7);
+    width = UtilConfig.getPropertyInt(application, "opentaps.history.width", 25);
+    bgColor = UtilConfig.getPropertyValue(application, "opentaps.history.color.background");
+    textColor = UtilConfig.getPropertyValue(application, "opentaps.history.color.text");
+    hoverTextColor = UtilConfig.getPropertyValue(application, "opentaps.history.color.text.hover");
+    decorationColor = UtilConfig.getPropertyValue(application, "opentaps.history.color.decoration");
+    if (!UtilValidate.isEmpty(bgColor) && !UtilValidate.isEmpty(hoverTextColor) && !UtilValidate.isEmpty(textColor) && !UtilValidate.isEmpty(decorationColor)) {
+        if ("section".equalsIgnoreCase(bgColor)) {
+            bgcolor = UtilConfig.getSectionBgColor(application, context.get("sectionName"));
+        };
+        context{"historyBgColor"} = bgColor;
+        context{"historyTextColor"} = textColor;
+        context{"historyTextHoverColor"} = hoverTextColor;
+        context{"historyDecorationColor"} = decorationColor;
+    }
+
+    historyItems = delegator.findByAndCache("ViewHistory", UtilMisc.toMap("userLoginId", userLogin.get("userLoginId"), "applicationName", application, "webAppName", webAppName), UtilMisc.toList("createdStamp DESC"));
+    if (historyItems != null) {
+        historyList = FastList.newInstance();
+        int index = 0;
+        for (item: historyItems) {
+            if (index == depth) {
+                // remove current since it is expired
+                delegator.removeByCondition("ViewHistory", new EntityExpr("viewHistoryId", EntityOperator.EQUALS, item.get("viewHistoryId")), false);
+                break;
+            }
+            newItem = FastMap.newInstance();
+            newItem{"uri"} = item.get("uri");
+            newItem{"text"} = item.get("contextInfo");
+            historyList.add(newItem);
+            index++;
+        }
+    }
+    context{"historyList"} = historyList;
+    context{"historyItemChars"} = (Integer)width;
+}

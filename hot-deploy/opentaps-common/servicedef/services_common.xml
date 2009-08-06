@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Common Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="saveFOScreenToPDFFile" engine="java" 
+            location="org.opentaps.common.CommonServices" invoke="saveFOScreenToPDFFile">
+        <description>Saves a rendered FO screen to a PDF file</description>
+        <attribute name="screenLocation" type="String" mode="IN" optional="false"/>
+        <attribute name="savePath" type="String" mode="IN" optional="false"/>
+        <attribute name="fileName" type="String" mode="IN" optional="false"/>
+        <attribute name="screenContext" type="Map" mode="IN" optional="true"/>
+        <attribute name="screenParameters" type="Map" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="opentaps.purgeNavHistory" engine="java" auth="true" use-transaction="false"
+        location="org.opentaps.common.CommonServices" invoke="purgeNavHistory">
+        <description>Service to be run by the job scheduler. It removes lost and useless records of navigation history</description>
+    </service>
+
+    <service name="opentaps.runServiceEngineTests" engine="java" auth="true" use-transaction="false"
+        location="org.opentaps.common.CommonServices" invoke="runServiceEngineTests">
+        <description></description>
+        <attribute name="iterations" mode="IN" type="Integer"/>
+        <attribute name="records" mode="IN" type="Integer" optional="true"/>
+    </service>
+    
+    <service name="opentaps.testEmptyService" engine="java" auth="false" use-transaction="false"
+        location="org.opentaps.common.CommonServices" invoke="testEmptyService">
+        <description></description>
+    </service>
+
+    <service name="opentaps.testEmptySeca" engine="java" auth="false"
+        location="org.opentaps.common.CommonServices" invoke="testEmptySeca">
+        <description></description>
+    </service>
+
+    <service name="opentaps.testCreateTestEntity" engine="java" auth="false" use-transaction="false"
+        location="org.opentaps.common.CommonServices" invoke="testCreateTestEntity">
+        <description></description>
+        <attribute name="records" mode="IN" type="Integer"/>
+        <attribute name="startAt" mode="OUT" type="Timestamp"/>
+        <attribute name="finishAt" mode="OUT" type="Timestamp"/>
+    </service>
+
+    <service name="opentaps.testUpdateTestEntity" engine="java" auth="false" use-transaction="true"
+        location="org.opentaps.common.CommonServices" invoke="testUpdateTestEntity">
+        <description></description>
+        <attribute name="startAt" mode="OUT" type="Timestamp"/>
+        <attribute name="finishAt" mode="OUT" type="Timestamp"/>
+    </service>
+
+    <service name="opentaps.testIterateTestEntity" engine="java" auth="false" use-transaction="true"
+        location="org.opentaps.common.CommonServices" invoke="testIterateTestEntity">
+        <description></description>
+        <attribute name="startAt" mode="OUT" type="Timestamp"/>
+        <attribute name="finishAt" mode="OUT" type="Timestamp"/>
+    </service>
+
+    <service name="opentaps.testIterateTestEntityCache" engine="java" auth="false" use-transaction="true"
+        location="org.opentaps.common.CommonServices" invoke="testIterateTestEntityCache">
+        <description></description>
+        <attribute name="startAt" mode="OUT" type="Timestamp"/>
+        <attribute name="finishAt" mode="OUT" type="Timestamp"/>
+    </service>
+
+    <service name="opentaps.testQueryTestEntity" engine="java" auth="false" use-transaction="true"
+        location="org.opentaps.common.CommonServices" invoke="testQueryTestEntity">
+        <description></description>
+        <attribute name="startAt" mode="OUT" type="Timestamp"/>
+        <attribute name="finishAt" mode="OUT" type="Timestamp"/>
+    </service>
+
+</services>

@@ -1,0 +1,43 @@
+<module>
+  <!--
+  Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ 
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the Honest Public License.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  Honest Public License for more details.
+ 
+  You should have received a copy of the Honest Public License
+  along with this program; if not, write to Funambol,
+  643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+  -->
+  <inherits name='com.google.gwt.user.User'/>
+  <!-- we copied the GWT standard them in this module for CSS customization -->
+  <stylesheet src="standard.css"/>
+  <inherits name="com.gwtext.GwtExt"/>
+  <inherits name="com.googlecode.gwt.math.Math"/>
+  <inherits name="com.google.gwt.i18n.I18N"/>
+  <inherits name="com.google.gwt.json.JSON"/>
+  <!-- Allow GWT logging, integrated with firebug -->
+  <inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
+  <!-- You may comment this line to have logging inside a div (if you don't have firebug) -->
+  <set-property name="log_DivLogger" value="DISABLED" />
+  <!-- The GWT compiler generate one JS code for each combination of user-agent and locale, 
+       so for development purpose, you can only define the combination you wish to test in 
+       order to speed up the compilation.
+       Available values for the user-agent are "ie6,gecko,gecko1_8,safari,opera"
+       but note that you can only set one of them if you do not want to use them all.
+  -->
+  <!-- <set-property name="user.agent" value="gecko1_8"/> -->
+  <extend-property name="locale" values="en"/>
+  <extend-property name="locale" values="zh"/>
+  <extend-property name="locale" values="fr"/>
+  <stylesheet src="opentaps.css"/>
+  <stylesheet src="resources/css/ext-all.css"/>
+  <stylesheet src="resources/css/xtheme-gray.css"/>
+  <script src="adapter/ext/ext-base.js" />
+  <script src="ext-all.js" />
+</module>

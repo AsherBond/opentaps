@@ -1,0 +1,34 @@
+/*
+ * This script fills in the OrderHeader.billFromPartyId and billToPartyId based on OrderRoles and should be run to get
+ * old data (ie, from earlier versions of opentaps to work properly)
+ */
+ 
+import java.util.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.order.order.OrderReadHelper;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+delegator = GenericDelegator.getGenericDelegator("default");
+
+// if the bill from party is not found for an order, use this party
+defaultBillFromPartyId = "Company";
+
+orders = delegator.findAll("OrderHeader");
+for (oi = orders.iterator(); oi.hasNext(); ) {
+    o = oi.next();  
+    orh = new OrderReadHelper(o); 
+    billToParty = orh.getBillToParty();
+    billFromParty = orh.getBillFromParty();
+    if (billToParty == null) {
+        print("Warning:  Order ["+o.get("orderId")+"] has no bill to party in OrderRole. Skipping this order.");
+        continue;
+    }
+    if (billFromPartyId == null) {
+        print("Warning:  Order ["+o.get("orderId")+"] has no bill from  party in OrderRole. Assuming "+defaultBillFromPartyId+".");
+        billFromPartyId = defaultBillFromPartyId; 
+    }
+
+    o.set("billFromPartyId", billFromPartyId);
+    o.set("billToPartyId", orh.getBillToParty().get("partyId")); 
+    o.store(); 
+}

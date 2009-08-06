@@ -1,0 +1,97 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.common.util.UtilCommon;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+performFind = parameters.get("performFind");
+if (! "Y".equals(performFind)) {
+    return;
+}
+
+groupName = parameters.get("groupName");
+
+conditions = FastList.newInstance();
+conditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, "SUPPLIER"));
+if (UtilValidate.isNotEmpty(groupName)) {
+    conditions.add(new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("groupName", true, EntityOperator.LIKE, "%" + groupName + "%", true),
+            new EntityExpr("firstName", true, EntityOperator.LIKE, "%" + groupName + "%", true),
+            new EntityExpr("lastName", true, EntityOperator.LIKE, "%" + groupName + "%", true)
+    ), EntityOperator.OR));
+}
+conditionList = new EntityConditionList(conditions, EntityOperator.AND);
+
+buildSupplierList (delegator, conditions) {
+
+    entityName = "PartyRoleNameDetailSupplementalData";
+    List fieldsToSelect = new ArrayList();
+    fieldsToSelect.addAll(Arrays.asList(new String[]{"partyId", "partyTypeId", "firstName", "middleName", "lastName", "groupName", "primaryEmailId", "primaryPostalAddressId", "primaryTelecomNumberId", "primaryCity", "primaryStateProvinceGeoId", "primaryCountryGeoId", "primaryEmail", "primaryCountryCode", "primaryAreaCode", "primaryContactNumber"}));
+    orderBy = UtilMisc.toList("groupName", "firstName", "lastName");
+    where = conditions;
+
+    build(page) {
+        newPage = FastList.newInstance();
+        for (party : page) {
+            row = FastMap.newInstance();
+            row.putAll(party.getAllFields());
+            row{"compositeName"} = PartyHelper.formatPartyNameObject(party, false);
+            String partyId = party.get("partyId");
+            
+            pCity = party.get("primaryCity");
+            pState = party.get("primaryStateProvinceGeoId");
+            abbrevPostalAddressByPurpose = "";
+            if (UtilValidate.isNotEmpty(pCity)) {
+                abbrevPostalAddressByPurpose =  pCity;
+            }
+            if (UtilValidate.isNotEmpty(pState)) {
+                abbrevPostalAddressByPurpose += ", " + pState;
+            }
+            row.put("abbrevPostalAddressByPurpose", abbrevPostalAddressByPurpose);
+
+            telecomNumberByPurpose = "";
+            pCountryCode = party.get("primaryCountryCode");
+            pAreaCode = party.get("primaryAreaCode");
+            pContactNumber = party.get("primaryContactNumber");
+            if (UtilValidate.isNotEmpty(pCountryCode)) {
+                telecomNumberByPurpose = pCountryCode;
+            }
+            if (UtilValidate.isNotEmpty(pAreaCode)) {
+                telecomNumberByPurpose += " (" + pAreaCode + ")";
+            }
+            if (UtilValidate.isNotEmpty(pContactNumber)) {
+                telecomNumberByPurpose += " " + pContactNumber;
+            }
+            row.put("telecomNumberByPurpose", telecomNumberByPurpose);
+
+            electronicAddressByPurpose = party.get("primaryEmail");
+            row.put("electronicAddressByPurpose", electronicAddressByPurpose);
+
+            newPage.add(row);
+        }
+        return newPage;
+    }
+    return this;
+}
+context{"suppliers"} = buildSupplierList(delegator, conditionList);

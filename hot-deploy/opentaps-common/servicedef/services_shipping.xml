@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Common Shipping Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="setShipmentRouteSegmentFromShipGroup" engine="java" 
+            location="org.opentaps.common.shipment.ShippingServices" invoke="setShipmentRouteSegmentFromShipGroup">
+        <description>Populate ShipmentRouteSegment information from the related OrderItemShipGroup</description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentRouteSegmentId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="upperCasePostalAddress" engine="java"
+            location="org.opentaps.common.shipment.ShippingServices" invoke="upperCasePostalAddress">
+        <description>Converts a postal address to upper case.  To use this service, uncomment the SECA in secas_postaladdress.xml</description>
+        <attribute name="contactMechId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="opentaps.updatePartyCarrierAccountFromShipGroup" engine="java" 
+            location="org.opentaps.common.shipment.ShippingServices" invoke="updatePartyCarrierAccountFromShipGroup">
+        <description>Creates a PartyCarrierAccount record if the distinct combination of partyId/carrierPartyId/accountNumber/postalCode/countryGeoCode
+                        doesn't already exist.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.setShipmentOrderShipGroupsPacked" engine="java" 
+            location="org.opentaps.common.shipment.ShippingServices" invoke="setShipmentOrderShipGroupsPacked">
+        <description>Updates the status of any non-drop-ship OrderItemShipGroups related to a shipment to OISG_PACKED</description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.checkCanPack" engine="java"
+            location="org.opentaps.common.shipment.ShippingServices" invoke="checkCanPack">
+        <description>Checks if a shipment can be packed.  If not, it returns a service error.</description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.createAndConfirmReturnShipment" engine="java"
+         location="org.opentaps.common.shipment.ShippingServices" invoke="createAndConfirmReturnShipment" auth="true">
+        <description>Creates a SALES_RETURN shipment and items from a return, related to the ReturnHeader, and confirms/accepts the shipment with a carrier</description>
+        <attribute name="returnId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="opentaps.scheduleReturnShipmentUPS" engine="java"
+            location="org.opentaps.common.shipment.ShippingServices" invoke="scheduleReturnShipmentUPS">
+        <description>Creates a UPS ShipRequest tailored for a return shipment service and confirms it with UPS</description>
+        <attribute name="shipmentId" type="String" mode="IN" optional="false"/>
+        <attribute name="returnId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentRouteSegmentId" type="String" mode="IN" optional="false"/>
+    </service>
+
+  <service name="opentaps.fedexRateRequest" engine="java" location="org.opentaps.common.shipment.fedex.OpentapsFedexServices" invoke="fedexRateRequest" auth="false">
+    <description>Sends a subscription request to FedEx to get the rate, which is required for Fedex Ship Manager Direct as shipping credential.
+        You must supply a contact name and a partyId (usually your company's with a valid address and phone number per Fedex requirements.</description>
+    <implements service="calcShipmentEstimateInterface"/>
+    <!-- Passing in a list of package weights will override the splitting of packages and calculation of package weights by item -->
+    <attribute name="packageWeights" type="List" mode="IN" optional="true"/>
+  </service>
+
+    <service name="opentaps.demoCarrierShipmentEstimate" engine="java" location="org.opentaps.common.shipment.DemoCarrierServices" invoke="demoCarrierShipmentEstimate" auth="false">
+        <description>Gets the estimate for the demo carrier.  The rate is 1 USD per pound for ground, 2 USD for express.</description>
+        <implements service="calcShipmentEstimateInterface"/>
+    </service>
+
+    <service name="opentaps.demoCarrierConfirmShipment" engine="java" location="org.opentaps.common.shipment.DemoCarrierServices" invoke="demoCarrierConfirmShipment" auth="false">
+        <description>Confirms a shipment with the demo carrier.  Mainly generates a shipping label for demo purposes.</description>
+        <auto-attributes entity-name="ShipmentRouteSegment" include="pk" mode="IN" optional="false"/>
+    </service>
+
+</services>
+

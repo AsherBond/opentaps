@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- 
+  This file contains requests for my profile pages
+  and the generic requests to  Create Update Read 
+  and Delete contact mechs.  The generic requests
+  all go to donePageRequestHelper, and can be used
+  for any kind of Party object.
+-->
+
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <description>My Profile and Contact Mech Controller</description>
+    <owner>Open Source Strategies, Inc. (c) 2006-2007 </owner>
+
+    <request-map uri="donePageRequestHelper">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="donePageRequestHelper"/>
+        <response name="myProfile" type="request" value="myProfile"/>
+        <response name="myProfileEditContactMech" type="request" value="myProfileEditContactMech"/>
+        <!-- default -->
+        <response name="error" type="view" value="myProfile"/>
+        <response name="" type="request" value="myProfile"/>
+    </request-map>
+
+    <request-map uri="myProfile">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myProfile"/>
+    </request-map>
+    <request-map uri="visitdetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="visitdetail"/>
+    </request-map>
+    <request-map uri="updateMyProfileForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateMyProfileForm"/>
+    </request-map>
+    <request-map uri="updateMyProfile">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updatePerson"/>
+        <response name="success" type="request" value="updateProfileSessionLocale"/>
+        <response name="error" type="view" value="updateMyProfileForm"/>
+    </request-map>
+    <request-map uri="updateProfileSessionLocale">
+        <security https="true" auth="true" direct-request="false"/>
+        <event type="java" path="org.ofbiz.common.CommonEvents" invoke="setSessionLocale"/>
+        <response name="success" type="request" value="reloadUserLoginPerson"/>
+        <response name="error" type="view" value="updateMyProfileForm"/>
+    </request-map>
+    <request-map uri="reloadUserLoginPerson">
+        <security https="true" auth="true" direct-request="false"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="reloadUserLoginPerson"/>
+        <response name="success" type="request-redirect-noparam" value="myProfile"/>
+    </request-map>
+    <request-map uri="changePasswordForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="changePasswordForm"/>
+    </request-map>
+    <request-map uri="updatePassword">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updatePassword"/>
+        <!-- made success a view instead of request-redirect so that the password doesn't show up in the URL -->
+        <response name="success" type="request-redirect-noparam" value="myProfile"/> 
+        <response name="error" type="view" value="changePasswordForm"/> 
+    </request-map>
+    <request-map uri="myProfileEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myProfileEditContactMech"/>
+    </request-map>
+
+    <!-- All of the CRUD requests go to donePageRequestHelper, which uses donePage parameter to determine where to go next. -->
+    <request-map uri="createContactMech">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPartyContactMech"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updateContactMech">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updatePartyContactMech"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="deleteContactMech">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deletePartyContactMech"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="createPostalAddress">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPartyPostalAddress"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="createPostalAddressAndPurpose">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPartyPostalAddress"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updatePostalAddress">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updatePartyPostalAddress"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="createTelecomNumber">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPartyTelecomNumber"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updateTelecomNumber">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updatePartyTelecomNumber"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="createEmailAddress">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPartyEmailAddress"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updateEmailAddress">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updatePartyEmailAddress"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="createPartyContactMechPurpose">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPartyContactMechPurpose"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="deletePartyContactMechPurpose">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deletePartyContactMechPurpose"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+
+    <!-- Internal messaging requests -->
+    <request-map uri="myMessages">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myMessages"/>
+    </request-map>
+    <request-map uri="sendInternalMessage">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="opentaps.sendInternalMessage"/>
+        <response name="success" type="request-redirect" value="myMessages"/>
+        <response name="error" type="request-redirect" value="myMessages"/>
+    </request-map>
+    <request-map uri="viewInternalMessage">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewInternalMessage"/>
+    </request-map>
+    <request-map uri="composeInternalMessage">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="composeInternalMessage"/>
+    </request-map>
+    <request-map uri="replyInternalMessage">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="replyInternalMessage"/>
+    </request-map>
+    <request-map uri="forwardInternalMessage">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="forwardInternalMessage"/>
+    </request-map>
+    <request-map uri="deleteInternalMessage">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteCommunicationEvent"/>
+        <response name="success" type="request-redirect" value="myMessages"/>
+        <response name="error" type="view" value="myMessages"/>
+    </request-map>
+    <request-map uri="markMessageRead">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateCommunicationEvent"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <view-map name="myProfile" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#myProfile"/>
+    <view-map name="visitdetail" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#visitdetail"/>
+    <view-map name="updateMyProfileForm" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#updateMyProfileForm"/>
+    <view-map name="changePasswordForm" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#changePasswordForm"/>
+    <view-map name="myProfileEditContactMech" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#myProfileEditContactMech"/>
+    <view-map name="myMessages" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#myMessages"/>
+    <view-map name="viewInternalMessage" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#viewMessage"/>
+    <view-map name="composeInternalMessage" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#composeMessage"/>
+    <view-map name="replyInternalMessage" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#replyMessage"/>
+    <view-map name="forwardInternalMessage" type="screen" page="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml#forwardMessage"/>
+
+</site-conf>

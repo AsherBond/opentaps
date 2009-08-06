@@ -1,0 +1,94 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/*
+ *  Copyright (c) 2005-2006 Open Source Strategies, Inc.
+ *  Copyright (c) 2003-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+// @author Leon Torres (leon@opensourcestrategies.com)
+
+// This file is called by main-decorator and is executed for most screens. Its purpose is to retrieve resources common to all screens.
+import javolution.util.FastMap;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilHttp;
+import org.opentaps.common.party.ViewPrefWorker;
+import org.opentaps.common.util.UtilMessage;
+
+// Instead of using screens to define the uiLabelMap, grab it from UtilMessage
+uiLabelMap = UtilMessage.getUiLabels(locale);
+
+// Add any uiLabels defined upstream to the top of the map
+existingUiLabelMap = globalContext.get("uiLabelMap");
+if (existingUiLabelMap != null) uiLabelMap.pushResourceBundle(existingUiLabelMap.getInitialResourceBundle());
+
+globalContext.put("uiLabelMap", uiLabelMap); 
+
+// Add the import and include transforms
+// These will enable Freemarker include loading and global macros from a remote file.
+// Note that globalContext will allow access from all sections of the screen widget
+loader = Thread.currentThread().getContextClassLoader();
+globalContext.put("import", loader.loadClass("org.opentaps.common.template.freemarker.transform.ImportTransform").newInstance());
+globalContext.put("include", loader.loadClass("org.opentaps.common.template.freemarker.transform.IncludeTransform").newInstance());
+globalContext.put("paginateTransform", loader.loadClass("org.opentaps.common.webapp.transform.PaginateTransform").newInstance());
+globalContext.put("opentapsApplicationName", UtilHttp.getApplicationName(request));
+
+// configuration properties (if more property files are needed, use putAll() to concatenate the underlying hashmaps of Properties)
+// TODO: this is also placed in global context in CommonScreens.xml, so is this redundant? Can we do "globalContext.configProperties" in ftl?
+configProperties = UtilProperties.getProperties("opentaps.properties");
+context.put("configProperties", configProperties);
+
+// some properties are lists, which have to be split (this split method also works in ftl, but should be done in a script)
+stylesheetFiles = configProperties.get("opentaps.files.stylesheets").split("\\s*,\\s*");
+context.put("stylesheetFiles", stylesheetFiles);
+
+// userLogin
+userLogin = request.getAttribute("userLogin");
+if (userLogin == null) { // this should *never* happen
+    return;
+}
+context.put("userLogin", userLogin);
+
+// security
+security = request.getAttribute("security"); 
+context.put("security", security);
+
+// external login key
+extLogin = request.getAttribute("externalLoginKey"); 
+if (extLogin != null) {
+    context.put("externalKeyParam", "externalLoginKey=" + requestAttributes.get("externalLoginKey"));
+}
+
+// context path
+context.put("contextPath", request.getContextPath());

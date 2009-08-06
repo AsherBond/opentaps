@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Party Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <!-- user view preference services -->
+    <service name="opentaps.createViewPreference" engine="java" default-entity-name="ViewPreference"
+        location="org.opentaps.common.party.PartyServices" invoke="createViewPreference" auth="true">
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>
+    <service name="opentaps.updateViewPreference" engine="java" default-entity-name="ViewPreference"
+        location="org.opentaps.common.party.PartyServices" invoke="updateViewPreference" auth="true">
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>
+    <service name="opentaps.setViewPreference" engine="java"
+         location="org.opentaps.common.party.PartyServices" invoke="setViewPreference" auth="true">
+         <description>
+             Sets the given view preference to the given value. If no value is given or the value is the empty string,
+             then the preference will be erased.  The value may be either a viewPrefEnumId or a viewPrefString.  The service will
+             automatically detect which type it is.
+         </description>
+        <attribute name="viewPrefTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="viewPrefValue" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="opentaps.checkReceiveEmailOwnerUniqueness" engine="java"
+        location="org.opentaps.common.party.PartyServices" invoke="checkReceiveEmailOwnerUniqueness">
+        <description>Service checks if new email with purpose RECEIVE_EMAIL_OWNER is unique for party.</description>
+        <attribute name="partyId" mode="IN" type="String"/>
+        <attribute name="contactMechId" mode="IN" type="String"/>
+        <attribute name="contactMechPurposeTypeId" mode="IN" type="String"/>
+    </service>
+
+    <service name="opentaps.expireAndCreatePartyClassification" engine="java"
+        location="org.opentaps.common.party.PartyServices" invoke="expireAndCreatePartyClassification">
+        <description>Expires any existing PartyClassifications for a partyId where partyClassificationGroupId is any partyClassificationGroupId related to partyClassificationTypeId,
+            and creates a new PartyClassification</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyClassificationTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyClassificationGroupId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <!-- Services to support internal messaging -->
+    <service name="opentaps.sendInternalMessage" engine="java"
+        location="org.opentaps.common.party.PartyServices" invoke="sendInternalMessage">
+        <description>Create a CommunicationEvent object which communicationEventTypeId is INTERNAL_MESSAGE</description>
+        <attribute name="partyIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="partyIdTo" type="List" mode="IN" optional="true"/>
+        <attribute name="partyIdToAsString" mode="IN" type="String" optional="true"/>
+        <attribute name="subject" mode="IN" type="String" optional="true"/>
+        <attribute name="message" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.receiveInternalMessage" engine="java"
+        location="org.opentaps.common.party.PartyServices" invoke="receiveInternalMessage" use-transaction="false">
+        <description>Read a CommunicationEvent object which communicationEventTypeId is INTERNAL_MESSAGE</description>
+        <attribute name="partyIdFrom" type="List" mode="IN" optional="true"/>
+        <attribute name="partyIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="messageContains" type="List" mode="IN" optional="true"/>
+        <attribute name="subjectContains" type="List" mode="IN" optional="true"/>
+        <attribute name="isRead" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="dateFrom" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="dateTo" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="messages" type="List" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="opentaps.removeParty" engine="java"
+            location="org.opentaps.common.party.PartyServices" invoke="removeParty">
+        <description>Remove a Party and its related records</description>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+
+    </service>
+
+    <!-- PartyContactMechPurpose services -->
+    <service name="createPartyContactMechPurpose" engine="java"
+            location="org.opentaps.common.party.PartyServices" invoke="createPartyContactMechPurpose" auth="true">
+        <description>Create a Party ContactMech Purpose</description>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="contactMechId" type="String" mode="IN" optional="false"/>
+        <attribute name="contactMechPurposeTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="fromDate" type="Timestamp" mode="OUT" optional="true"/>
+    </service>
+    <service name="deletePartyContactMechPurpose" engine="java"
+            location="org.opentaps.common.party.PartyServices" invoke="deletePartyContactMechPurpose" auth="true">
+        <description>Delete a Party ContactMech Purpose</description>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="contactMechId" type="String" mode="IN" optional="false"/>
+        <attribute name="contactMechPurposeTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.setSupplementalDataForAllParties" engine="java" use-transaction="false"
+             location="org.opentaps.common.party.PartyServices" invoke="setSupplementalDataForAllParties">
+        <attribute mode="OUT" name="partiesUpdated" type="Integer" optional="true"/>
+    </service>
+
+    <service name="createPartyCarrierAccount" engine="java" default-entity-name="PartyCarrierAccount"
+        location="org.opentaps.common.party.PartyServices" invoke="createPartyCarrierAccount" auth="true">
+        <description>Create a PartyCarrierAccount record</description>
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>        
+        <override type="Timestamp" mode="IN" name="fromDate" optional="true"/>
+        <override type="String" mode="IN" name="accountNumber" optional="false"/>
+    </service>
+    <service name="updatePartyCarrierAccount" engine="java" default-entity-name="PartyCarrierAccount"
+            location="org.opentaps.common.party.PartyServices" invoke="updatePartyCarrierAccount" auth="true">
+        <description>Update a PartyCarrierAccount record</description>
+        <auto-attributes mode="IN" include="pk" optional="false"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>        
+    </service>
+
+</services>

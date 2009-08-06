@@ -1,0 +1,66 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// product lookup which includes ability to search by GoodIdentification TODO: the results aren't distinct because there can be many idValues for a product
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
+
+// some pre-populated data for the lookup product
+context.put("productTypes", delegator.findAllCache("ProductType", UtilMisc.toList("description")));
+context.put("goodIdTypes", delegator.findAllCache("GoodIdentificationType", UtilMisc.toList("description")));
+
+// clone the parameters because we need to modify them
+inputFields = new HashMap(parameters);
+
+// check if we're ignoring the good id
+idValue = inputFields.get("idValue");
+ignoreGoodId = (idValue == null || idValue.trim().length() == 0);
+
+// get the description of the selected good ID type
+if (!ignoreGoodId) {
+    goodIdentificationTypeId = parameters.get("goodIdentificationTypeId");
+    if (UtilValidate.isNotEmpty(goodIdentificationTypeId)) {
+        goodIdType = delegator.findByPrimaryKeyCache("GoodIdentificationType", UtilMisc.toMap("goodIdentificationTypeId", goodIdentificationTypeId));
+        context.put("goodIdentificationTypeDescription", goodIdType.get("description"));
+        ignoreGoodType = true;
+    } else {
+        context.put("goodIdentificationTypeDescription", UtilProperties.getMessage("ProductUiLabels", "ProductGoodId", locale));
+        context.put("goodIdentificationTypeIdDescription", UtilProperties.getMessage("ProductUiLabels", "ProductType", locale));
+        ignoreGoodType = false;
+    }
+}
+
+// because of the way the form is set up, we need to remove the type variable if no ID is filled in
+if (ignoreGoodId) inputFields.remove("goodIdentificationTypeId");
+inputFields.remove("facilityId");
+
+// prepare the find first, because we want to control the actual find by condition
+results = dispatcher.runSync("prepareFind", UtilMisc.toMap("inputFields", inputFields, "entityName", "ProductAndGoodIdentification"));
+if (ServiceUtil.isError(results)) return;
+conditions = results.get("entityConditionList");
+if (conditions == null) return;
+
+fields = UtilMisc.toList("productId", "productTypeId", "brandName", "internalName");
+if (!ignoreGoodId) {
+    if (!ignoreGoodType) fields.add("goodIdentificationTypeId");
+    fields.add("idValue");
+}
+iterator = delegator.findListIteratorByCondition("ProductAndGoodIdentification", conditions, null, fields, null, UtilCommon.DISTINCT_READ_OPTIONS);
+
+context.put("products", iterator);

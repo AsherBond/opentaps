@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- This is for use with the opentaps pagination framework -->
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <description>Opentaps Pagination Controller</description>
+    <owner>Open Source Strategies, Inc. (c) 2006-2007 </owner>
+
+    <!-- event handlers -->
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+    
+    <!-- This is a special handler that tightly integrates pagination, list builders, opentaps form macros, and formlets together. -->
+    <handler name="formlet" type="request" class="org.opentaps.common.event.FormletEventHandler"/>
+
+    <request-map uri="paginate">
+        <event type="formlet" path="org.opentaps.common.event.PaginationEvents" invoke="paginate"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="changePaginationOrder">
+        <event type="formlet" path="org.opentaps.common.event.PaginationEvents" invoke="changePaginationOrder"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="changePaginationViewSize">
+        <event type="formlet" path="org.opentaps.common.event.PaginationEvents" invoke="changePaginationViewSize"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="renderPaginatedListAsExcel">
+        <security auth="true" https="true"/>
+        <event type="java" path="org.opentaps.common.event.PaginationEvents" invoke="renderPaginatedListAsExcel"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+</site-conf>

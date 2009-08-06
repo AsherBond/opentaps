@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<ofbiz-component name="opentaps-common"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+    <resource-loader name="main" type="component"/>
+    <classpath type="jar" location="build/lib/*"/>
+    <classpath type="jar" location="lib/*"/>
+    <classpath type="jar" location="lib/aspectwerkz/*"/>
+    <classpath type="jar" location="lib/asterisk/*"/>
+    <classpath type="jar" location="lib/hibernate/*"/>
+    <classpath type="dir" location="scripts"/>
+    <classpath type="dir" location="config"/>
+    <classpath type="dir" location="lib/DejaVu"/>
+
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/UomSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/CommonSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/AgreementSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/CommissionSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/PartnerSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/TaxAuthorities_US.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ViewPrefSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ShipmentTypeData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/AccountingTagsSeedData.xml"/>
+
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/CommonDemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/ProductDemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoTimePeriods.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoProductWarning.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/PartnerDemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/PartnerDemoAgreement.xml"/>
+    <!-- <entity-resource type="data" reader-name="demo" loader="main" location="data/FedExRateDemoData.xml"/> -->
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/UpsRateDemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoCarrier.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/AccountingTagsDemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoKeyboardShortcuts.xml"/>
+
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_shipment.xml"/>
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_workeffort.xml"/>
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_custrequest.xml"/>
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_product.xml"/>
+
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_party.xml"/>
+
+    <service-resource type="model" loader="main" location="servicedef/services_agreement.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_bom.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_common.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_content.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_forms.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_inventory.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_shipping.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_orders.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_product.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_workeffort.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_custrequest.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_party.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_search.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_email.xml"/>
+
+    <!-- Uncomment this, or better still, copy it to your own ofbiz-component.xml if you want all postal addresses to be upper case automatically. -->
+    <!--service-resource type="eca" loader="main" location="servicedef/secas_postaladdress.xml"/-->
+
+    <service-resource type="eca" loader="main" location="servicedef/secas_inventory.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_orders.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_shipping.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_agreements.xml"/>
+    <!-- note that webapp/opentaps/ is not a bona fide application, just a storage location for common ftl and bsh files -->
+
+    <webapp name="opentaps_images"
+        title="Opentaps Commons Images"
+        server="default-server"
+        location="webapp/images"
+        mount-point="/opentaps_images"
+        app-bar-display="false"/>
+    <webapp name="opentaps_css"
+        title="Opentaps Commons Stylesheet Files"
+        server="default-server"
+        location="webapp/css"
+        mount-point="/opentaps_css"
+        app-bar-display="false"/>
+    <webapp name="opentaps_js"
+        title="Opentaps Commons Javascript Files"
+        server="default-server"
+        location="webapp/js"
+        mount-point="/opentaps_js"
+        app-bar-display="false"/>
+    <webapp name="opentaps_files"
+        title="Opentaps Commons Shared Files"
+        server="default-server"
+        location="webapp/files"
+        mount-point="/opentaps_files"
+        app-bar-display="false"/>
+    <webapp name="commongwt"
+        title="Opentaps Commons GWT Components"
+        server="default-server"
+        location="webapp/commongwt"
+        mount-point="/commongwt"
+        app-bar-display="false"/>
+
+</ofbiz-component>

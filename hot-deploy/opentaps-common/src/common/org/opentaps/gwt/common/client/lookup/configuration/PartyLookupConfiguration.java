@@ -1,0 +1,91 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+package org.opentaps.gwt.common.client.lookup.configuration;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Defines the interface between the server and client for the PartyLookupService
+ * Technically not a java interface, but it defines all the constants needed on both sides
+ *  which makes the code more robust.
+ */
+public abstract class PartyLookupConfiguration {
+
+    private PartyLookupConfiguration() { }
+
+    public static final String URL_FIND_CONTACTS = "gwtFindContacts";
+    public static final String URL_FIND_ACCOUNTS = "gwtFindAccounts";
+    public static final String URL_FIND_LEADS = "gwtFindLeads";
+    public static final String URL_FIND_PARTNERS = "gwtFindPartners";
+    public static final String URL_FIND_SUPPLIERS = "gwtFindSuppliers";
+    public static final String URL_SUGGEST_CONTACTS = "gwtSuggestContacts";
+    public static final String URL_SUGGEST_ACCOUNTS = "gwtSuggestAccounts";
+
+    public static final String IN_RESPONSIBILTY = "MyOrTeamResponsibility";
+    public static final String MY_VALUES = "MY_VALUES";
+    public static final String TEAM_VALUES = "TEAM_VALUES";
+
+    public static final String INOUT_PARTY_ID = "partyId";
+    public static final String INOUT_COMPANY_NAME = "companyName";
+    public static final String INOUT_GROUP_NAME = "groupName";
+    public static final String INOUT_FIRST_NAME = "firstName";
+    public static final String INOUT_LAST_NAME = "lastName";
+    public static final String INOUT_ADDRESS = "primaryAddress1";
+    public static final String INOUT_COUNTRY = "primaryCountryAbbreviation";
+    public static final String INOUT_STATE = "primaryStateProvinceAbbreviation";
+    public static final String INOUT_CITY = "primaryCity";
+    public static final String INOUT_POSTAL_CODE = "primaryPostalCode";
+    public static final String INOUT_PHONE_COUNTRY_CODE = "primaryCountryCode";
+    public static final String INOUT_PHONE_AREA_CODE = "primaryAreaCode";
+    public static final String INOUT_PHONE_NUMBER = "primaryContactNumber";
+    public static final String INOUT_FORMATED_PHONE_NUMBER = "formatedPrimaryPhone";
+    public static final String IN_CLASSIFICATION = "partyClassificationGroupId";
+    public static final String OUT_TO_NAME = "primaryToName";
+    public static final String OUT_ADDRESS_ID = "primaryPostalAddressId";
+    public static final String OUT_ATTENTION_NAME = "primaryAttnName";
+    public static final String OUT_ADDRESS_2 = "primaryAddress2";
+    public static final String OUT_POSTAL_CODE_EXT = "primaryPostalCodeExt";
+    public static final String OUT_PHONE_ID = "primaryTelecomNumberId";
+    public static final String OUT_EMAIL = "primaryEmail";
+    public static final String OUT_EMAIL_ID = "primaryEmailId";
+
+    public static final List<String> LIST_OUT_FIELDS = Arrays.asList(
+        INOUT_PARTY_ID,
+        INOUT_COMPANY_NAME,
+        INOUT_GROUP_NAME,
+        INOUT_FIRST_NAME,
+        INOUT_LAST_NAME,
+        INOUT_ADDRESS,
+        INOUT_COUNTRY,
+        INOUT_STATE,
+        INOUT_CITY,
+        INOUT_POSTAL_CODE,
+        INOUT_PHONE_COUNTRY_CODE,
+        INOUT_PHONE_AREA_CODE,
+        INOUT_PHONE_NUMBER,
+        OUT_TO_NAME,
+        OUT_ATTENTION_NAME,
+        OUT_ADDRESS_2,
+        OUT_POSTAL_CODE_EXT,
+        OUT_EMAIL,
+        OUT_EMAIL_ID,
+        OUT_PHONE_ID,
+        OUT_ADDRESS_ID
+    );
+
+}

@@ -1,0 +1,84 @@
+<entity-engine-xml>
+
+
+    <!--
+     * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the Honest Public License.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * Honest Public License for more details.
+     *
+     * You should have received a copy of the Honest Public License
+     * along with this program; if not, write to Funambol,
+     * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+     *
+    -->
+
+    <StatusType statusTypeId="AGREEMENT" description="Agreement"/>
+
+    <StatusItem statusId="AGR_CREATED" statusTypeId="AGREEMENT" statusCode="CREATED" sequenceId="01" description="Created"/>
+    <StatusItem statusId="AGR_ACTIVE" statusTypeId="AGREEMENT" statusCode="ACTIVE" sequenceId="20" description="Active"/>
+    <StatusItem statusId="AGR_COMPLETED" statusTypeId="AGREEMENT" statusCode="COMPLETED" sequenceId="30" description="Completed"/>
+    <StatusItem statusId="AGR_REJECTED" statusTypeId="AGREEMENT" statusCode="REJECTED" sequenceId="98" description="Rejected"/>
+    <StatusItem statusId="AGR_CANCELLED" statusTypeId="AGREEMENT" statusCode="CANCELLED" sequenceId="99" description="Cancelled"/>
+
+    <StatusValidChange statusId="AGR_CREATED" statusIdTo="AGR_ACTIVE" transitionName="Activate"/>
+    <StatusValidChange statusId="AGR_CREATED" statusIdTo="AGR_REJECTED" transitionName="Reject"/>
+    <StatusValidChange statusId="AGR_CREATED" statusIdTo="AGR_CANCELLED" transitionName="Cancel"/>
+
+    <StatusValidChange statusId="AGR_ACTIVE" statusIdTo="AGR_COMPLETED" transitionName="Complete"/>
+    <StatusValidChange statusId="AGR_ACTIVE" statusIdTo="AGR_CANCELLED" transitionName="Cancel"/>
+
+    <TermType termTypeId="CREDIT_LIMIT" hasTable="N" description="Credit Limit"/>
+
+    <!-- a representative structure of supplier (purchasing) agreements: supplier terms and payment terms, with allowed terms -->
+    <AgreementItemType agreementItemTypeId="AGREEMENT_PAYMENT" description="Payment Terms"/>
+    <AgreementItemType agreementItemTypeId="AGREEMENT_SUPPLIER" description="Supplier Descriptive Terms"/>
+    <AgreementItemType agreementItemTypeId="AGREEMENT_CREDIT" description="Credit Terms"/>
+
+    <AgreementToItemMap agreementTypeId="PURCHASE_AGREEMENT" agreementItemTypeId="AGREEMENT_SUPPLIER" autoCreate="Y" sequenceNum="1" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="PURCHASE_AGREEMENT" agreementItemTypeId="AGREEMENT_PAYMENT" autoCreate="Y" sequenceNum="2" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="PURCHASE_AGREEMENT" agreementItemTypeId="AGREEMENT_PRICING_PR" autoCreate="N" sequenceNum="3" maxAllowed="1"/>
+    
+    <AgreementItemToTermMap agreementItemTypeId="AGREEMENT_SUPPLIER" termTypeId="PURCH_VENDOR_ID" autoCreate="N" sequenceNum="1" maxAllowed="1"/>
+    <AgreementItemToTermMap agreementItemTypeId="AGREEMENT_SUPPLIER" termTypeId="PURCH_FREIGHT" autoCreate="N" sequenceNum="2" maxAllowed="1"/>
+
+    <AgreementItemToTermMap agreementItemTypeId="AGREEMENT_PAYMENT" termTypeId="FIN_PAYMENT_TERM" autoCreate="N" sequenceNum="1" maxAllowed="1"/>
+    <AgreementItemToTermMap agreementItemTypeId="AGREEMENT_PAYMENT" termTypeId="FIN_PAYMENT_FIXDAY" autoCreate="N" sequenceNum="2" maxAllowed="1"/>
+    <!-- this term is not supported in invoicing, but is added for record keeping purposes only -->
+    <AgreementItemToTermMap agreementItemTypeId="AGREEMENT_PAYMENT" termTypeId="FIN_PAYMENT_DISC" autoCreate="N" sequenceNum="3" maxAllowed="1"/>
+
+    <!-- customer (sales) agreements only have payment terms for now -->
+    <AgreementToItemMap agreementTypeId="SALES_AGREEMENT" agreementItemTypeId="AGREEMENT_PAYMENT" autoCreate="Y" sequenceNum="1" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="SALES_AGREEMENT" agreementItemTypeId="AGREEMENT_CREDIT" autoCreate="Y" sequenceNum="2" maxAllowed="1"/>
+
+    <AgreementItemToTermMap agreementItemTypeId="AGREEMENT_CREDIT" termTypeId="CREDIT_LIMIT" autoCreate="N" sequenceNum="1" maxAllowed="1"/>
+
+
+    <!-- More understandable descriptions -->
+    <TermType termTypeId="FIN_PAYMENT_TERM" description="Net Payment Due in Specified Days"/>
+    <TermType termTypeId="FIN_PAYMENT_DISC" description="Discount if Paid within Specified Days"/>
+    <TermType termTypeId="FIN_PAYMENT_FIXDAY" description="Net Payment Due on Fixed Day of Month"/>
+
+    <AgreementType agreementTypeId="SALES_AGREEMENT" description="Customer" hasTable="N" parentTypeId="PRODUCT_AGREEMENT"/>
+
+    <!-- A new agreement type for agreements of our partners to their customers -->
+    <AgreementType agreementTypeId="PARTNER_SALES_AGR" description="Partner Sales"/>
+
+    <!-- Umbrella parent term type -->
+    <TermType termTypeId="PARTNER_SALES_TERM" description="Terms of partner sales agreements"/>
+
+    <!-- This configures the agreement terms to be associated with different types of orders and invoices
+         by associating the agreement type to different document types.  All terms of that agreement type will be 
+         associated with the document type.  -->
+    <AgreementDocumentTypeMap documentTypeId="SALES_ORDER" agreementTypeId="SALES_AGREEMENT"/>
+    <AgreementDocumentTypeMap documentTypeId="PURCHASE_ORDER" agreementTypeId="PURCHASE_AGREEMENT"/>
+    <AgreementDocumentTypeMap documentTypeId="PARTNER_INVOICE" agreementTypeId="SALES_AGREEMENT"/>
+    <AgreementDocumentTypeMap documentTypeId="SALES_INVOICE" agreementTypeId="SALES_AGREEMENT"/>
+    <AgreementDocumentTypeMap documentTypeId="PURCHASE_INVOICE" agreementTypeId="PURCHASE_AGREEMENT"/>
+
+</entity-engine-xml>

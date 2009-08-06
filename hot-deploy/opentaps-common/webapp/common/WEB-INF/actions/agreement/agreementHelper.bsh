@@ -1,0 +1,119 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilConfig;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.purchasing.security.PurchasingSecurity;
+ 
+ agreementId = parameters.get("agreementId");
+ if (agreementId == null) {
+     Debug.logWarning("No agreementId in agreementHelper.bsh", "");
+     return;
+ }
+ 
+ uiLabelMap = UtilMessage.getUiLabels(locale);
+ 
+ agreementHeader = delegator.findByPrimaryKeyCache("Agreement", UtilMisc.toMap("agreementId", agreementId));
+ if (agreementHeader == null) {
+     Debug.logError("No agreementHeader found for agreementId [" + agreementId + "] in agreementHelper.bsh", "");
+     return;
+ }
+ context.put("agreementHeader", agreementHeader);
+
+ /*
+  * Get names of agreement parties
+  */
+  if ("VIEW".equals(screenMode) || "EDIT".equals(screenMode)) {
+
+     partyNameFrom = PartyHelper.getPartyName(delegator, agreementHeader.get("partyIdFrom"), false);
+     partyNameTo = PartyHelper.getPartyName(delegator, agreementHeader.get("partyIdTo"), false);
+     context.put("partyNameFrom", partyNameFrom);
+     context.put("partyNameTo", partyNameTo);
+ 
+     agreementType = agreementHeader.getRelatedOne("AgreementType");
+     context{"agreementType"} = agreementType;
+
+     status = agreementHeader.getRelatedOne("StatusItem");
+     context.put("status", status);
+
+     partyClsGroup = agreementHeader.getRelatedOne("ToPartyClassificationGroup");
+     context.put("partyClsGroup", partyClsGroup);
+
+     agreementTypeId = agreementType.getString("agreementTypeId");
+
+     switch (agreementTypeId) {
+     case "SALES_AGREEMENT":
+         typeDescription = uiLabelMap.get("OpentapsAgreementCustomer");
+         break;
+     case "COMMISSION_AGREEMENT":
+         typeDescription = uiLabelMap.get("OpentapsAgreementCommission");
+         break;
+     case "PURCHASE_AGREEMENT":
+         typeDescription = uiLabelMap.get("OpentapsAgreementPurchase");
+         break;
+     case "PARTNER_AGREEMENT":
+         typeDescription = uiLabelMap.get("OpentapsAgreementPartner");
+         break;
+     case "PARTNER_SALES_AGR":
+         typeDescription = uiLabelMap.get("OpentapsAgreementPartnerSales");
+         break;
+     default:
+         typeDescription = uiLabelMap.get("AccountingAgreement");
+     }
+     context{"agreementTypeDescription"} = typeDescription;
+
+     // valid status transitions
+     statusItems = delegator.findByAnd("StatusValidChangeToDetail", UtilMisc.toMap("statusId", agreementHeader.get("statusId")));
+     context.put("statusItems", statusItems);
+ }
+ 
+ if ("VIEW".equals(screenMode)) {
+
+     // put to history  TODO what format for agreements between third parties? (PARTNER_SALES_AGR)
+     context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("OpentapsNavHistoryAgreement", locale, UtilMisc.toMap("agreementTypeName", agreementType.get("description", locale), "agreementId", agreementId, "partyNameTo", partyNameTo)), null, UtilMisc.toList("agreementId"));
+
+     /* disable/enable button Edit in viewAgreement */
+     if (status != null) {
+         context.put("isEditable", (UtilCommon.hasValidChange(status.get("statusId"), delegator) && hasUpdateAgreementPermission));
+     } else {
+         context.put("isEditable", hasUpdateAgreementPermission);
+     }
+
+     /* prepare correct links to party from and to profile */
+     roles = new ArrayList(com.opensourcestrategies.crmsfa.party.PartyHelper.CLIENT_PARTY_ROLES);
+     roles.add("SUPPLIER");
+
+     agreementsLinkingFromParty = UtilMisc.toList("PARTNER_SALES_AGR");
+     partyFrom = agreementHeader.getRelatedOneCache("FromParty");
+     if (partyFrom != null && agreementsLinkingFromParty.contains(agreementTypeId)) {
+         partyFromURL = org.opentaps.common.party.PartyHelper.createViewPageURL(partyFrom, roles, externalLoginKey);
+         if (partyFromURL != null) context{"partyFromURL"} = partyFromURL;
+     }
+
+     partyTo = agreementHeader.getRelatedOneCache("ToParty");
+     if (partyTo != null) {
+         partyToURL = org.opentaps.common.party.PartyHelper.createViewPageURL(partyTo, roles, externalLoginKey);
+         if (partyToURL != null) context{"partyToURL"} = partyToURL;
+     }
+     
+ }

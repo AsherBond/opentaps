@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!-- TODO: this file has a dependency on CommissionSeedData.xml, so time to clean up agreement seed data. -->        
+<entity-engine-xml>
+
+    <!-- define partnering relationships -->
+    <PartyRelationshipType partyRelationshipTypeId="PARTNER_OF" description="Partner Of" partyRelationshipName="Partner Of"/>
+    <!-- define accounts of partners -->
+    <PartyRelationshipType partyRelationshipTypeId="ACCOUNT_OF" description="Account Of" partyRelationshipName="Account Of"/>
+
+    <!-- An invoice on behalf of a partner: for example, from demopartner1 to one of his accounts -->
+    <InvoiceType invoiceTypeId="PARTNER_INVOICE" description="Partner Invoice"/>
+
+    <!-- A partner agreement is a special type of agreement which uses the same items and terms as commissions to share billing logic -->
+    <AgreementType agreementTypeId="PARTNER_AGREEMENT" description="Partner" hasTable="N" parentTypeId=""/>
+    <AgreementToItemMap agreementTypeId="PARTNER_AGREEMENT" agreementItemTypeId="COMM_PAYMENT" sequenceNum="1" defaultDescription="Partner payment terms" autoCreate="Y" maxAllowed="1"/>
+    <AgreementToItemMap agreementTypeId="PARTNER_AGREEMENT" agreementItemTypeId="COMM_RATES" sequenceNum="3" defaultDescription="Partner rates" autoCreate="Y" maxAllowed="1"/>
+
+    <!-- Special status to mark the partner invoices as processed so we know they were invoiced. -->
+    <StatusItem statusId="INVOICE_INV_PTNR" statusTypeId="INVOICE_STATUS" statusCode="INVOICED" sequenceId="20" description="Invoiced to Partner"/>
+    <StatusValidChange statusId="INVOICE_READY" statusIdTo="INVOICE_INV_PTNR" transitionName="Invoice to Partner"/>
+
+    <!-- Invoice item type for partner sales invoice line items.  TODO: better place for this? -->
+    <InvoiceItemType invoiceItemTypeId="PART_INV_ITEM" description="Partner Invoice Item"/>
+    <InvoiceItemType invoiceItemTypeId="PART_INV_ADJ" description="Part Invoice Adjustment"/>
+
+    <!-- For partner agreements, specify how to map the invoice item types -->
+    <AgreementInvoiceItemType agreementTypeId="PARTNER_AGREEMENT" invoiceItemTypeIdFrom="INV_PROD_ITEM" invoiceItemTypeIdTo="PART_INV_ITEM" descriptionLabel="FinancialsPartnerSalesInvoiceItem" sequenceNum="1"/>
+    <AgreementInvoiceItemType agreementTypeId="PARTNER_AGREEMENT" invoiceItemTypeIdFrom="INV_DPROD_ITEM" invoiceItemTypeIdTo="PART_INV_ITEM" descriptionLabel="FinancialsPartnerSalesInvoiceItem" sequenceNum="2"/>
+    <AgreementInvoiceItemType agreementTypeId="PARTNER_AGREEMENT" invoiceItemTypeIdFrom="INV_FPROD_ITEM" invoiceItemTypeIdTo="PART_INV_ITEM" descriptionLabel="FinancialsPartnerSalesInvoiceItem" sequenceNum="3"/>
+    <AgreementInvoiceItemType agreementTypeId="PARTNER_AGREEMENT" invoiceItemTypeIdFrom="INV_FDPROD_ITEM" invoiceItemTypeIdTo="PART_INV_ITEM" descriptionLabel="FinancialsPartnerSalesInvoiceItem" sequenceNum="4"/>
+    <AgreementInvoiceItemType agreementTypeId="PARTNER_AGREEMENT" invoiceItemTypeIdFrom="INV_SPROD_ITEM" invoiceItemTypeIdTo="PART_INV_ITEM" descriptionLabel="FinancialsPartnerSalesInvoiceItem" sequenceNum="5"/>
+    <AgreementInvoiceItemType agreementTypeId="PARTNER_AGREEMENT" invoiceItemTypeIdFrom="ITM_DISCOUNT_ADJ" invoiceItemTypeIdTo="PART_INV_ADJ" descriptionLabel="FinancialsPartnerSalesInvoiceAdj" sequenceNum="6"/>
+    <AgreementInvoiceItemType agreementTypeId="PARTNER_AGREEMENT" invoiceItemTypeIdFrom="ITM_PROMOTION_ADJ" invoiceItemTypeIdTo="PART_INV_ADJ" descriptionLabel="FinancialsPartnerSalesInvoiceAdj" sequenceNum="7"/>
+
+</entity-engine-xml>

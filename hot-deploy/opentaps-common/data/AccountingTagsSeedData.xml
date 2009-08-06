@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<entity-engine-xml>
+
+    <!-- The main enumeration type for all accounting tags  -->
+    <EnumerationType enumTypeId="ACCOUNTING_TAG" description="Accounting Tag"/>
+
+    <!-- Supported usage types for accounting tags
+    These should roughly mirror the invoice type, GL account type, etc. but they don't have to -->
+    <AcctgTagUsageType acctgTagUsageTypeId="FINANCIALS_REPORTS" description="Reports in financials, including financial statements"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="BALANCE_REPORTS" description="Tags printed in the Balance Statement Reports in financials"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="PRCH_INV_ITEMS" description="Purchase invoice"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="SALES_INV_ITEMS" description="Sales invoice items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="COMM_INV_ITEMS" description="Commission invoice items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="PRCH_ORDER_ITEMS" description="Purchase order items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="SALES_ORDER_ITEMS" description="Sales order items"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="DISBURSEMENT" description="Payments which are of type Disbursement"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="RECEIPT" description="Payments which are of type Receipt"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="ACCOUNTS_PAYABLE" description="Accounts payable posting"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="ACCOUNTS_RECEIVABLE" description="Accounts Receivable posting"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="COMMISSIONS_PAYABLE" description="Commissions Payable posting"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="TRANSACTION_ENTRY" description="Transaction entries"/>
+    <AcctgTagUsageType acctgTagUsageTypeId="CHECK_RUN" description="Payments to multiple vendors"/>
+
+</entity-engine-xml>

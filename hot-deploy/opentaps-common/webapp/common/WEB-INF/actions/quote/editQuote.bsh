@@ -1,0 +1,38 @@
+/* 
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilConfig;
+
+quoteId = UtilCommon.getParameter(request, "quoteId");
+
+if (quoteId != null) {
+    quote = delegator.findByPrimaryKey("Quote", UtilMisc.toMap("quoteId", quoteId));
+    context.put("quote", quote);
+    context.put("pageTitleLabel", "OrderOrderQuoteEdit");
+    context.put("sectionHeaderUiLabel", "OrderOrderQuoteEdit");
+} else {
+    context.put("pageTitleLabel", "CrmCreateQuote");
+    context.put("sectionHeaderUiLabel", "CrmCreateQuote");
+}
+organizationPartyId = UtilConfig.getPropertyValue("opentaps", "organizationPartyId");
+context.put("defaultProductStoreId", UtilConfig.getPropertyValue("crmsfa", "crmsfa.order.productStoreId"));
+
+context.put("quoteTypes", delegator.findAllCache("QuoteType"));
+context.put("productStores", delegator.findByAndCache("ProductStore", UtilMisc.toMap("payToPartyId", organizationPartyId), UtilMisc.toList("storeName")));
+context.put("salesChannels", UtilCommon.getEnumerations("ORDER_SALES_CHANNEL", delegator));

@@ -1,0 +1,1061 @@
+/*
+    PLEASE NOTE THAT IF GWT WIDGETS ARE BEING USED, THE ext-all.css WILL "RESET" ALL BASIC CSS ELEMENTS.
+    TO FIND OUT MORE ABOUT THIS, READ THE DOCUMENTATION IN ext-all.css.
+*/
+
+/* define global style for some elements as per W3C recommendations */
+
+h1 { font-size: 2em; margin: .67em 0 }
+h2 { font-size: 1.5em; margin: .75em 0 }
+h3 { font-size: 1.17em; margin: .83em 0 }
+h4, p { margin: 1.12em 0 }
+h5 { font-size: .83em; margin: 1.5em 0 }
+h6 { font-size: .75em; margin: 1.67em 0 }
+h1, h2, h3, h4, h5, h6 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bolder;
+    padding-left: 0.5em;
+}
+
+/* new ofbizmessage style */
+ul.ofbizErrorMessagesList {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+/* Section tab buttons */
+ul.sectionTabBar a {
+    color: gray;
+    background: white;
+    text-decoration: none;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+ul.sectionTabBar a:hover {
+    color: red;
+}
+
+ul.sectionTabBar {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 8pt;
+    font-weight: bold;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul.sectionTabBar li {
+    float: left;
+    margin: 0;
+    border-top: 1px solid gray;
+    border-right: 1px solid gray;
+}
+
+div.sectionTabBorder {
+    height: 0.5em;
+    margin: 0;
+    clear: left;
+}
+
+#footer {
+  text-align: center;
+}
+
+#login-greeting {
+  width: 100%;
+  text-align: center;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 14pt;
+  font-weight: bold;
+  color: white;
+  background-color: 000099;
+  margin-top: 1em;
+}
+
+/* These container styles allow for a fixed size left column bar and a variable width center column  */
+#one-column {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+}
+
+#left-content-column {
+    position: absolute;
+    left: 8px;
+    width: 160px;
+}
+
+#center-content-column {
+    position: absolute;
+    left: 175px;
+    right: 8px;
+}
+/* version two allows for a wider left column */
+#left-content-column-two {
+    position: absolute;
+    left: 8px;
+    width: 245px;
+}
+#center-content-column-two {
+    position: absolute;
+    left: 260px;
+    right: 8px;
+}
+#crmsfa-footer {
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
+}
+#login-greeting {
+  width: 100%;
+  text-align: center;
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 14pt;
+  font-weight: bold;
+  color: white;
+  background-color: 000099;
+  margin-top: 1em;
+}
+
+/* block containing messages (errors, service messages) */
+.messages {
+    font: 10pt Verdana, Arial, Helvetica, sans-serif;
+    background-color: #FFFFFF;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px dotted gray;
+}
+.messageLink {
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
+    color: blue;
+    text-decoration: underline;
+}
+
+/* section and subsection styles */
+.sectionHeader {
+    font: bold 14pt Verdana, Arial, Helvetica, sans-serif;
+    color: #000099;
+    border-bottom: 1px solid #AAAAAA;
+    margin-bottom: 10px;
+    padding-left: 5px;
+    width: 100%; /* this was necessary to make it work with IE */
+}
+
+div.sectionHeaderTitle  {
+    background-repeat: no-repeat;
+    background-position: 5px 50%;
+    width: auto;
+    height: 1.6em;
+}
+
+div.sectionHeaderTitle span {
+    line-height: 1.6em;
+}
+
+.allSubSectionBlocks { /* This style wraps all the subsection blocks, useful for the IE problem */
+    margin-bottom: 50px;
+}
+.subSectionBlock {
+    margin-bottom: 20px;
+}
+.subSectionHeader {
+    font: bold 12pt Verdana, Arial, Helvetica, sans-serif;
+    /* border-bottom: 1px solid #AAAAAA; */
+    margin-bottom: 0px;
+    padding: 3px;
+    background-color: #EEEEEE;
+    min-height: 18px;
+    _height: 18px; /* min-height isn't understood by IE, so we use the IE _height hack to do this */
+}
+.subSectionTitle {
+    color: #000099;
+    float: left;
+    padding-left: 5px;
+    line-height: 15px;
+}
+/* for warnings that appear next to the subSectionTitle */
+.subSectionWarning {
+    color: red;
+    margin-left: 30px;
+}
+
+/* a sub-menu bar */
+.subMenuBar {
+    text-align: right;
+    padding-top: 3px;
+}
+.subMenuButton { 
+    margin-left: 8px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+    color: #000099;
+    background-color: white;
+    border: 1px solid #AAAAAA;
+    white-space: nowrap;
+}
+/* some buttons should be highlighted differently to set them apart as dangerous operations */
+.subMenuButtonDangerous {
+    margin-left: 8px;
+    padding-left: 6px;
+    padding-right: 6px;
+    font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+    color: #AA0000;
+    background-color: white;
+    border: 1px solid #AAAAAA;
+    white-space: nowrap;
+}
+/* We also need a similar style for regular links */
+.buttonDangerous {
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 1px;
+    font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+    color: #AA0000;
+    background-color: white;
+    border: 1px solid #AAAAAA;
+    white-space: nowrap;
+}
+.subMenuButton:hover {
+    color: red;
+    text-decoration: none;
+}
+.subMenuButtonDangerous:hover {
+    color: white;
+    background-color: red;
+    text-decoration: none;
+}
+.buttonDangerous:hover {
+    color: white;
+    background-color: red;
+    text-decoration: none;
+}
+.subMenuButtonText {
+    font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+}
+
+/* form widget styles */
+.requiredField {
+    text-decoration: none;
+    font: bold 10px Verdana, Arial, Helvetica, sans-serif;
+    color: #AA0000;
+}
+.requiredFieldNormal {
+    text-decoration: none;
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    color: #AA0000;
+}
+.fieldDateTime {
+    width: 150px;
+}
+.fieldWidth50 {
+    width: 50px;
+}
+.fieldWidth100 {
+    width: 100px;
+}
+.fieldWidth200 {
+    width: 200px;
+}
+.fieldWidth300 {
+    width: 300px;
+}
+.fieldWidth400 {
+    width: 400px;
+}
+.fieldWidth500 {
+    width: 500px;
+}
+.fieldWidth600 {
+    width: 600px;
+}
+.fieldWidth25pct {
+    width: 25%;
+}
+.fieldWidth50pct {
+    width: 50%;
+}
+
+.subsidiary {
+    font-style: italic;
+    padding-left: 20px !important;
+    color: #777;
+    font-size: 0.9em
+}
+
+/* form widget dividers */
+.formSectionHeader {
+    background-color: #EEEEEE;
+    width: 100%;
+}
+.formSectionHeaderTitle {
+    font: bold 12px Verdana, Arial, Helvetica, sans-serif;
+    padding-left: 5px;
+    color: #000099;
+}
+.rowWhite {
+    background-color: white;
+}
+.rowLightGray {
+    background-color: #DDDDDD;
+}
+.rowLightGreen {
+    background-color: #99FF99;
+}
+.rowLightRed {
+    background-color: #FF9999;
+}
+/* Works on standards compliant browsers except IE, which would require adding onmouseover events. */
+tr.rowWhite:hover, tr.rowLightGray:hover, tr.rowLightGreen:hover, tr.rowLightRed:hover, tr.viewManyTR1:hover, tr.viewManyTR2:hover {
+    background-color: #EEDDFF;
+}
+
+/* table styles */
+
+table.twoColumnForm { /* Use this for simple two-column forms where first column is for titles. */
+    width: 100%;
+    border: 1px solid #AAAAAA;
+    padding: 5px;
+}
+table.fourColumnForm { /* Use this for simple four-column forms where first and third columns are for titles. */
+    width: 100%;
+    border: 1px solid #AAAAAA;
+    padding: 5px;
+}
+
+/* Use this style for lists of data with alternating row colors.  TODO: Replace crmsfaListTable and commonListTable. */
+table.listTable {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #AAAAAA;
+}
+
+/* This style has a large header row shaded gray and is for presenting notable lists such as in warehouse myHome */
+table.headedTable {
+    width: 40%;
+    margin-left: 15px;
+}
+
+table.headedTable tr.header {
+    background-color: #EEE;
+}
+
+table.headedTable tr td {
+    font-size: 0.9em;
+}
+
+table.listTable tr.listTableHeader, table.headedTable tr.header td {
+    border: 1px solid #AAAAAA !important;
+}
+
+table.listTable tr td, table.headedTable tr td {
+    padding: 3px;
+}
+
+table tr.listTableHeader th, table tr.listTableHeader td,
+table.headedTable tr.header {
+    font-weight:bold;
+}
+
+table.listTable tr td a, table.listTable tr td a:visited,
+table.headedTable tr td a, table.headedTable tr td a:visited {
+    color: #000099;
+}
+
+table.listTable tr td a:hover, table.headedTable tr td a:hover {
+    text-decoration: underline;
+}
+
+table.listTable tr th.leftAlign {
+    text-align:left;
+}
+
+table.listTable tr th.rightAlign {
+    text-align:right;
+}
+
+td.alignRight {
+    text-align:right;
+}
+
+/* Legacy support. TODO: replace with listTable. */
+.crmsfaListTable {
+    clear: both;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #AAAAAA;
+}
+.crmsfaListTableHeader {
+    border: 1px solid #AAAAAA;
+}
+/* add padding to the list cells, and whatever else we need */
+.crmsfaListTable TR TD {
+    padding: 3px;
+}
+.commonListTable { /* TODO: this is redundant, let us normalize to listTable */
+    clear: both;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #AAAAAA;
+}
+.commonListTableHeader {
+    border: 1px solid #AAAAAA;
+}
+/* add padding to the list cells, and whatever else we need */
+.commonListTable TR TD {
+    padding: 3px;
+}
+.orderByHeaderLink {
+    color: #000099;
+    text-decoration: underline;
+}
+.orderByHeaderLink:hover {
+    color: red;
+}
+/* miscellaneous that need to be reviewed */
+a img.imageLinkBorderless {
+    border: 0px;
+}
+
+/* form styles */
+div.form {
+    white-space: nowrap;
+    margin: 0px auto;
+    margin-left: 0px;
+    padding: 5px;
+    border: 1px solid #999999;
+}
+div.formRow {
+    clear: both;
+    padding-top: 5px;
+}
+div.formRow span.formLabel {
+    font: bold 10px Verdana, Arial, Helvetica, sans-serif;
+    float: left;
+    width: 13%;
+    text-align: right;
+}
+div.formRow span.formLabelRequired {
+    font: bold 10px Verdana, Arial, Helvetica, sans-serif;
+    float: left;
+    width: 13%;
+    text-align: right;
+    color: #AA0000;
+}
+div.formRow span.formLabelNormal {
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    float: left;
+    width: 13%;
+    text-align: right;
+    color: #AA0000;
+}
+div.formRow span.formInputSpan {
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    float: right;
+    width: 85%;
+    text-align: left;
+}
+
+div.formRow span.formInputSpanSpaced {
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    float: right;
+    width: 85%;
+    text-align: left;
+    line-height: 1.5em;
+}
+
+div.formRow span.formFullRowTex {
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    float: left;
+    width: 100%;
+    text-align: left;
+    line-height: 1.5em;
+}
+
+div.spacer { clear: both; height: 5px; }
+
+/* custom contact mech table styles */
+table.contactTable {
+    border-collapse: collapse;
+    margin-left: 60px;
+    margin-right: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+table.contactTable th {
+    padding-bottom: 10px;
+    text-align: center;
+}
+table.contactTable td {
+    border-top: 1px solid black;
+    padding: 10px;
+    vertical-align: top;
+}
+table.contactTable td.contactTableCenter {
+    text-align: center;
+}
+
+/* bullet lists style */
+
+ul.bulletList {
+    list-style: disc;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    padding-left: 4em;
+}
+
+/* shortcut link style */
+
+ul.shortcuts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    width: 100%;
+}
+ul.shortcuts li {
+    background-color: white;
+    margin: 0;
+    margin-bottom: 2px;
+}
+ul.shortcuts li a {
+    display: block; /* this is how we make the whole block clickable, but note html>body hack below */
+    text-decoration: none;
+    padding: .25em;
+    border: solid 1px #AAAAAA;
+    width: 100%;
+}
+/* see http://www.alistapart.com/articles/taminglists/ for explanation */
+html>body ul.shortcuts li a {
+    width: auto;
+}
+ul.shortcuts a:hover, a:active, ul.shortcuts a.selected {
+    color: black;
+    background-color: #EEEEEE;
+    border: solid 1px black;
+    text-decoration: none;
+}
+
+
+/*  address selector in order entry */
+table.shipSetting {
+    width: 100%;
+    border: solid 1px #999999;
+    border-collapse: collapse;
+}
+
+table.shipSetting tr th {
+    text-align: left;
+    font: bold 10pt Verdana, Arial, Helvetica, sans-serif;
+    background-color: #DDDDDD;
+}
+
+table.shipSetting td {
+    padding: 3px;
+    vertical-align: top;
+    border-top: solid 1px #999999;
+    border-bottom: solid 1px #999999;
+}
+table.shipSettingAddressList {
+    border-collapse: collapse;
+}
+table.shipSettingAddressList td {
+    padding: 1px;
+    border: none;
+}
+
+/* Pagination styles */
+
+div.pagination {
+    width: 100%;
+    text-align: right;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font: normal 0.8em Verdana, Arial, Helvetica, sans-serif;
+}
+div.pagination span {
+    margin-left: 3px;
+    margin-right: 5px
+}
+div.pagination a, div.pagination a:visited {
+    color: #000099;
+}
+div.pagination a:hover {
+    text-decoration: underline;
+}
+div.pagination a:active {
+    border:none;
+}
+input.paginationButton { /* Pagination Navigatin Context button */
+    font: normal 0.5em Verdana, Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    color: #33339F;
+    background: white;
+    border: #999999 solid 1px;
+}
+input.paginationButton:hover {
+    color: white;
+    background: #33339F; 
+    text-decoration: none;
+}
+.pageNumber {
+    font: normal 0.8em Verdana, Arial, Helvetica, sans-serif;
+    padding-right: 10px;
+}
+.navigationBar { /* For navigation between a subSectionHeader and a listTable */
+    text-align: right;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    border: 1px solid #AAAAAA;
+    border-bottom: none;
+}
+a.exportExcelButton {
+    font: normal 0.7em Verdana, Arial, Helvetica, sans-serif;
+    text-decoration: none;
+    margin-right: 10px;
+    color: #33339F;
+    background-color: white;
+    border: #999999 1px solid;
+    padding: 6 6 1 3;
+}
+a.exportExcelButton img {
+    border:none;
+}
+a.exportExcelButton:hover {
+    color: white;
+    background: #33339F; 
+    text-decoration: none;
+}
+
+/* Read only style for input elements.  This will gray-out all input elements in the container */
+.readOnly input {
+    color: #777;
+    background-color: #eee;
+}
+.readOnly select {
+    color: #777;
+    background-color: #eee;
+}
+
+/* The inverse of readOnly, to undo the readonly style. */
+.readOnlyRevert input {
+    color: black;
+    background-color: white;
+}
+.readOnlyRevert select {
+    color: black;
+    background-color: white;
+}
+
+/* Order header form - These are specific to one area, so not being genericized */
+
+div#orderEntryHeaderForm {
+  padding-left: 5px;
+  padding-bottom: 10px
+}
+div#orderEntryHeaderForm input.inputBox, div#orderEntryHeaderForm select {
+  width: 125px
+}
+div#orderEntryHeaderForm img {
+  padding-bottom: 2px;
+}
+div.orderEntryHeaderFormRow {
+  margin-top: 6px;
+  width: 100%;
+  text-align: right;
+}
+span.orderEntryHeaderFormLabel {
+  float: left;
+  margin-top: 3px;
+}
+span.orderEntryHeaderFormInput {
+  padding-right: 14px;
+}
+div.orderEntryHeaderSubmitRow {
+  margin-top: 15px;
+  text-align: right;
+  margin-right: 18px;
+}
+
+
+/* FlexArea control and container classes */
+
+.hidden {
+  display: none;
+}
+
+.flexAreaControl_closed, .flexAreaControl_open {
+    background-repeat: no-repeat;
+    padding-left: 30px;
+    padding-right: 15px;
+    margin-left: 20px;
+    width: auto;
+    background-position: 10px 50%;
+    position:relative;
+    top:10px;
+    z-index:100;
+    margin-bottom:10px;
+    background-color: white;
+}
+
+.flexAreaControlSimple_closed, .flexAreaControlSimple_open {
+   background-repeat: no-repeat;
+   padding-left: 20px;
+   padding-right: 5px;
+   padding-top: 1px;
+   padding-bottom: 1px;
+   margin-left: 20px;
+   width: auto;
+   background-position: 5px 50%;
+   z-index:100;
+   border:1px solid #AAA;
+   color:#444;
+   font-weight:bold;
+}
+
+
+.flexAreaControl_closed, .flexAreaControlSimple_closed {
+    background-image: url('/opentaps_images/arrowSmallWhite_right.png');
+}
+.flexAreaControl_open, .flexAreaControlSimple_open {
+    background-image: url('/opentaps_images/arrowSmallWhite_down.png');
+}
+
+.subSectionHeader_open, .subSectionHeader_closed {
+    padding-right: 30px;
+    background-position: center right;
+    background-repeat: no-repeat;
+}
+
+.subSectionHeader_open {
+    background-image: url('/opentaps_images/arrowRoundWhite_up.png');
+}
+
+.subSectionHeader_closed {
+    background-image: url('/opentaps_images/arrowRoundWhite_down.png');
+}
+
+.flexAreaControl_decorator {
+    margin-left: 10px;
+    margin-right: 10px;
+    border-top:1px solid #AAA;
+    height:0px;
+    position:relative;
+    top: 1px;
+    line-height:0;
+    font-size:0;
+}
+
+.flexAreaContainer_closed, .flexAreaContainer_open {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    border: 1px solid #AAA;
+}
+
+/*****************************************************************************/
+/**               Styles useful for Opentap Form Macros                     **/
+/*****************************************************************************/
+
+.currencyRed {
+    color: #AA0000;
+}
+.currencyCell {
+    text-align: right;
+}
+.twoColumnForm .currencyCell,
+.fourColumnForm .currencyCell {
+    text-align: inherit;
+}
+
+.titleCellTop, .titleCell { /* Default title block style for Row macros. */
+    width: 125px;
+    padding: 0 25px 0 10px;
+    text-align: right;
+    white-space: nowrap;
+}
+.titleCellTop { /* Vligns the tite to top.  Useful for textarea inputs or large cells. */
+    vertical-align: top;
+}
+
+tr.headerRow td { /* Style for table headers that appear at the top of a list */
+    border-bottom: 1px solid #AAA;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+tr.totalRow td { /* Style for a row showing totals */
+    border-top: 1px solid #AAA;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+/* Postal address validation classes */
+
+div.postalAddressValidationError {
+    border: 1px solid #CC6666;
+    background-color: #FFEEEE;
+    padding: 5px 5px 5px 20px !important;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    width: 250px;
+    color: #333333;
+    overflow: auto;
+}
+div.postalAddressValidationError div.error {
+    width: 210px;  
+    color: #BB0000;
+}
+div.postalAddressValidationError div.data {
+    float: left;
+    margin-bottom: 1.5em;
+}
+div.postalAddressValidationError div.links {
+    float: right;
+    width: 25px;
+    margin-bottom: 1.5em;
+}
+div.postalAddressValidationError div.links img {
+    margin-top: 10px;
+}
+div.postalAddressValidationError a, div.postalAddressValidationError a:visited {
+    color: #009900;
+}
+div.postalAddressValidationError a:hover {
+    text-decoration: underline;
+}
+div.postalAddressValidationError a:active {
+    border:none;
+}
+
+.errortooltip { /* Used by <@displayError> */
+    color: #AA0000;
+}
+
+/* Miscellaneous classes */
+
+.spinner {
+    width: 100%;
+    text-align: center; 
+}
+
+.textright { /* Some things just need right aligned text */
+    text-align: right;
+}
+
+.disabled {
+    color: #666;
+}
+
+/* Navigation history bar styles */
+ul.navHistory {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: #E7E7E7;
+    list-style: none;
+    float: left;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+}
+
+ul.navHistory li {
+    float: left;
+}
+
+ul.navHistory a {
+    display: block;
+    padding: 0 0.5em;
+    line-height: 1.6em;
+    text-decoration: none;
+    color: black;
+    border-left: 1px solid gray;
+    float: left;
+}
+
+span.navTitle {
+    display: block;
+    padding: 0em 0.5em;
+    line-height: 1.6em;
+    color: black;
+    font-weight: bold;
+}
+
+ul.navHistory a:hover {
+    color: #000066;
+}
+
+div.liveHelp {
+    margin-top: 5px;
+}
+
+div.liveHelp img {
+    border:none;
+}
+
+a.liveHelp:hover {
+    text-decoration: none;
+    cursor: help;
+}
+
+a.liveHelp:active {
+    border: 0;
+}
+
+/*
+ * Set of styles for internal message pop up window 
+ */
+BODY.internalMessage {
+    padding: 0px;
+    padding-bottom: 10px;
+    background-color: white;
+}
+
+.internalMessage div {
+    border: medium none;
+}
+
+.internalMessage textarea {
+    width: 100%;
+    height: 320px;
+    padding: 0px;
+    margin: 0px;
+    border-left: 0px none;
+    border-right: 0px none;
+}
+
+.internalMessage table {
+    border: none;
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+table.internalMessage .titleCell td {
+    width: 50px;
+}
+
+.internalMessage input {
+}
+
+.headerTitle {
+    width: 50px;
+    text-align: right;
+}
+
+#headersPane {
+    background: #EBEBEB none repeat scroll 0%;
+}
+
+#separator {
+    border-left: 1px solid;
+    padding-left: 3px;
+}
+
+/*
+ * Styles for survey response table in opentapsSurveyMacros.ftl
+ */
+table.surveyResponse {
+    background-color: transparent;
+}
+
+table.surveyResponse td.surveyQuestion {
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
+    text-align: right;
+}
+
+table.surveyResponse td.surveyAnswer {
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
+    padding-left: 3px;
+}
+
+/*
+ * Styles for auto complete combo box
+ */
+fieldset.inputAutoCompleteQuick input.XdijitInputField {
+    background:white none repeat scroll 0%;
+    border:1px solid #999999;
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-size:8pt;
+    font-weight:normal;
+    padding:1px;
+}
+
+/* 
+ * Provides an "outline" like effect 
+ * (dijitComboBoxInput is in a dijitComboBoxNoArrow fieldset)
+ */
+.dijitComboBoxNoArrow {
+    border:1px solid yellow;
+}
+
+.dijitComboBoxInput {
+    background:white none repeat scroll 0%;
+    border:1px solid #999999;
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-size:8pt;
+    font-weight:normal;
+    padding:0pt;
+}
+
+  
+.dijitMenuItem {
+    font-family:Verdana,Arial,Helvetica,sans-serif;
+    font-size:8pt;
+    font-weight:normal;
+    text-decoration:none;
+    padding:0.1em 0.2em;
+    white-space:nowrap;
+}
+
+
+/*  Order entry product warnings */
+.productWarning {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color: red;
+    padding-left: 10px;
+    margin:  10px;
+}
+
+/* Toggle button */
+a.toggleButton, .toggleButtonDisabled {
+    background-color: #ffffff;
+    border: #999999 solid 1px;
+    margin: 0;
+    padding: 0.1em 1.5em 0.1em 1.5em;
+    white-space: nowrap;
+    font-size: 10px;
+}
+
+.toggleButtonDisabled {
+    background-color: #000099;
+    color: white;
+}
+
+a.toggleButton {
+    background-color: white;
+    color: #000099;
+}
+
+a.toggleButton:hover {
+    color: red;
+    text-decoration: none;
+}
+
+div.cleaner {
+    height:1px;
+    line-height:1px;
+    clear:both;
+    font-size:1px;
+}
+
+table.shortcutHelp td.shortcutKey {
+   font-weight:bold;
+   padding-right:2em;
+}

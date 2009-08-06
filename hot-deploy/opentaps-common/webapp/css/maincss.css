@@ -1,0 +1,1363 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file contains content which comes from the Apache OFBIZ project but may have been modified */
+/* This file has been modified by Open Source Strategies, Inc. */
+
+
+/* This CSS file is used for all OFBiz applications EXCEPT ecommerce. */
+/* See the "ecommain.css" file for ecommerce. */
+
+/* ===== General Styles ===== */
+BODY {
+background: white;
+margin-top: 0px;
+margin-right: 0px;
+margin-bottom: 0px;
+margin-left: 0px;
+
+text-decoration: none;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+FORM {
+margin: 0px;
+}
+
+UL {
+margin-top: 0;
+margin-bottom: 0;
+}
+
+.endcolumns {
+clear: both;
+height: 0px;
+visibility: hidden;
+}
+
+.head1 {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+margin: 0px;
+font-size: 12pt;
+font-weight: bold;
+color: #000099;
+}
+
+.head2 {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+margin: 0px;
+font-size: 10pt;
+font-weight: bold;
+color: #000000;
+}
+
+.head3 {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+margin: 0px;
+font-size: 8pt;
+font-weight: bold;
+color: #000000;
+}
+
+.info {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+margin: 0px;
+font-size: 10px;
+font-style: normal;
+color: #000000;
+}
+
+textarea, .textAreaBox {
+/* textAreaBox is deprecated */
+background-color: #ffffff;
+border: #999999 solid 1px;
+font-size: 1.1em;
+}
+
+th, table tr th, .tableheadtext {
+/* tableheadtext is deprecated */
+color: #000000;
+font-weight: bold;
+font-size: 10px;
+}
+
+DIV.graybox {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+background: #CCCCCC;
+border: 1px solid #000000;
+text-align: center;
+margin: 2px auto;
+width: auto;
+padding: 4px;
+}
+
+DIV.tabletexthidden {
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+visibility: hidden;
+}
+
+A.tabletext, DIV.tabletext, SPAN.tabletext, P.tabletext, .tabletext {
+font-size: 10px;
+text-decoration: none;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+A.tabletext:hover {
+font-size: 10px;
+text-decoration: underline;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.tabletextright {
+font-size: 10px;
+text-decoration: none;
+font-family: Verdana, Arial, Helvettica, sans-serif;
+text-align: right;
+}
+
+.tablebuttontext {
+font-size: 10px;
+color: #1E3C66;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.contenttext {
+font-size: 8pt;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.headerboxoutside {
+background: #FFFFFF;
+padding: 0;
+}
+
+.headerboxtop {
+background: #FFFFFF;
+padding: 4px;
+border-color: #FFFFFF;
+border-style: solid;
+border-width: 1px 1px 0px 1px;
+}
+
+.headerboxbottom {
+background: #FFFFFF;
+padding: 0;
+border-color: #FFFFFF;
+border-style: solid;
+border-width: 0px 1px 1px 1px;
+}
+
+.boxhead {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+margin: 0px;
+font-size: 8pt;
+font-weight: bold;
+text-decoration: none;
+color: #FFFFFF;
+}
+
+DIV.boxtop {
+margin-top: 0; margin-right: auto; margin-bottom: 0; margin-left: auto;
+padding: 0; text-align: center;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+background: #000099;
+padding-top: 1px;
+padding-bottom: 1px;
+padding-right: 4px;
+padding-left: 4px;
+border-color: #999999;
+border-style: solid;
+border-width: 0px 0px 0px 0px;
+}
+
+DIV.boxhead-left {
+border: none; float: left; margin: 0; padding: 0; width: auto;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+font-weight: bold;
+text-decoration: none;
+color: #FFFFFF;
+}
+
+DIV.boxhead-fill {
+margin: 0; padding: 0; border: none; text-align: center; width: 0;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+font-weight: bold;
+text-decoration: none;
+color: #FFFFFF;
+}
+
+DIV.boxhead-right {
+border: none; float: right; margin: 0; padding: 0; width: auto;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+font-weight: bold;
+text-decoration: none;
+color: #FFFFFF;
+}
+
+A.boxheadbutton {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+margin: 0px;
+font-size: 8pt;
+font-weight: bold;
+text-decoration: none;
+color: #FFFFFF;
+}
+
+A.boxheadbutton:hover {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+margin: 0px;
+font-size: 8pt;
+font-weight: bold;
+text-decoration: none;
+color: red;
+}
+
+.boxoutside {
+background: #FFFFFF;
+padding: 0px;
+border-color: #999999;
+border-style: solid;
+border-width: 1px 1px 1px 1px;
+}
+
+.boxtop {
+background: #000099;
+padding-top: 1px;
+padding-bottom: 1px;
+padding-right: 4px;
+padding-left: 4px;
+border-color: #999999;
+border-style: solid;
+border-width: 0px 0px 0px 0px;
+}
+
+.boxbottom {
+background: #FFFFFF;
+padding: 4px;
+border-color: #999999;
+border-style: solid;
+border-width: 0px 0px 0px 0px;
+}
+
+.button {
+border-style: outset; border-color: #9999CC; border-width: 2px;
+background: #dddddd;
+padding-right: 5px; padding-left: 5px;
+}
+
+/* ===== Tab/Button Bar Styles ===== */
+.tabContainer {
+background: #FFFFFF;
+padding-top: 4px;
+margin-bottom: 10px;
+}
+
+A.tabButton {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+background: #D4D0C8;
+padding-right: 5px;
+padding-left: 5px;
+padding-top: 1px;
+padding-bottom: 1px;
+border: solid #000099 1px;
+}
+
+A.tabButton:hover {
+color: #FFFFFF;
+background: #000099;
+border: solid #000099 1px;
+}
+
+A.tabButtonSelected {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #FFFFFF;
+background: #000099;
+padding-right: 5px;
+padding-left: 5px;
+padding-top: 1px;
+padding-bottom: 1px;
+border: solid #000099 1px;
+}
+
+A.tabButtonSelected:hover {
+color: #FFFFFF;
+border: solid #000099 1px;
+}
+
+.tableheadtext {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: black;
+}
+
+A.tableheadbutton {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: black;
+}
+
+A.tableheadbutton:hover {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: underline;
+color: red;
+}
+
+.browsecategorytext {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+text-indent: -10px;
+}
+
+A.browsecategorybutton {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+}
+
+A.browsecategorybutton:hover {
+color: #000099;
+text-decoration: underline;
+}
+
+.browsecategorybuttondisabled {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #333333;
+}
+
+A.buttontext, .buttontextdisabled {
+background-color: #ffffff;
+border: #999999 solid 1px;
+margin: 0 0.1em 0 0.1em;
+padding: 0.1em 0.4em 0.1em 0.4em;
+white-space: nowrap;
+font-size: 10px;
+}
+
+A.buttontext {
+color: #000099;
+}
+
+A.buttontext:hover {
+color: red;
+text-decoration: none;
+}
+
+A.linktext {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+text-decoration: none;
+color: #0000BB;
+}
+
+A.linktext:visited {
+color: #6633CC;
+}
+
+A.linktext:hover {
+text-decoration: underline;
+}
+
+.buttontextdisabled {
+color: #333333;
+}
+
+A.headerbuttontext {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+}
+
+
+A.headerbuttontext:hover {
+color: black;
+text-decoration: underline;
+}
+
+.submenutextinfo {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: white;
+padding-left: 5px;
+padding-right: 5px;
+border-right: 1px solid #5886C6
+}
+
+.submenutext, A.submenutext, A.submenutext:visited {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: yellow;
+padding-left: 2px;
+padding-right: 5px;
+border-right: 1px solid #5886C6
+}
+
+A.submenutext:hover {
+color: yellow;
+text-decoration: underline;
+}
+
+.submenutextdisabled, A.submenutextdisabled {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #CCCCCC;
+padding-left: 2px;
+padding-right: 5px;
+border-right: 1px solid #5886C6
+}
+
+A.submenutextdisabled:hover {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: underline;
+color: yellow;
+}
+
+.submenutextinforight {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: white;
+padding-left: 2px;
+}
+
+.submenutextright, A.submenutextright {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: yellow;
+padding-left: 2px;
+}
+
+A.submenutextright:hover {
+color: yellow;
+text-decoration: underline;
+}
+
+.submenutextrightdisabled, A.submenutextrightdisabled {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #CCCCCC;
+padding-left: 2px;
+}
+
+A.submenutextrightdisabled:hover {
+text-decoration: underline;
+color: yellow;
+}
+
+A.lightbuttontext {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: yellow;
+border: none;
+}
+
+A.lightbuttontext:hover {
+color: yellow;
+text-decoration: underline;
+}
+
+A.lightbuttontextsmall {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8px;
+font-weight: bold;
+text-decoration: none;
+color: yellow;
+border: none;
+}
+
+A.lightbuttontextsmall:hover {
+color: yellow;
+text-decoration: underline;
+}
+
+.lightbuttontextdisabled {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #CCCCCC;
+}
+
+A.buttontextbig, .buttontextbigdisabled {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 15px;
+font-weight: bold;
+text-decoration: none;
+background: white;
+border: #999999 solid 1px;
+margin: 2px 2px 2px 2px;
+padding: 1px 4px 1px 4px;
+}
+A.buttontextbig {
+color: #000099;
+}
+.buttontextbigdisabled {
+color: #CCCCCC;
+}
+A.buttontextbig:hover {
+color: red;
+text-decoration: underline;
+}
+
+A IMG.imageborder {
+border-style: solid;
+border-width: 1px;
+border-color: #999999;
+}
+
+.headerButtonLeft {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+background: #B4B0AA;
+border-right: solid white 1px;
+padding-right: 10px;
+padding-left: 10px;
+}
+
+.headerButtonLeft:hover {
+background: #D4D0C8;
+color: black;
+text-decoration: underline;
+}
+
+.headerButtonLeftSelected {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+background: #D4D0C8;
+border-right: solid white 1px;
+padding-right: 10px;
+padding-left: 10px;
+}
+
+.headerButtonRight {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+background: #B4B0AA;
+border-left: solid white 1px;
+padding-right: 10px;
+padding-left: 10px;
+text-align: right;
+}
+
+.headerButtonRight:hover {
+background: #D4D0C8;
+color: black;
+text-decoration: underline;
+}
+
+.headerButtonRightSelected {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+background: #D4D0C8;
+border-left: solid white 1px;
+padding-right: 10px;
+padding-left: 10px;
+}
+
+.headerCenter {
+background: #B4B0AA;
+padding-right: 10px;
+padding-left: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000000;
+}
+
+A.headerCenter {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+background: #D4D0C8;
+padding-right: 10px;
+padding-left: 10px;
+}
+
+A.headerCenter:hover {
+background: #D4D0C8;
+color: black;
+text-decoration: underline;
+}
+
+.headerCenterSelected {
+background: #D4D0C8;
+padding-right: 10px;
+padding-left: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+font-weight: bold;
+text-decoration: none;
+color: #000000;
+}
+
+.headerCompanyName {
+margin: 0px;
+font-size: 12pt;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-weight: bold;
+color: #000099;
+white-space: nowrap;
+}
+
+.headerCompanySubtitle {
+margin: 0px;
+font-size: xx-small;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: #330099;
+white-space: nowrap;
+}
+
+.insideHeaderText {
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-weight: bold;
+color: black;
+margin-top: 3px;
+}
+
+.insideHeaderSubtext {
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: black;
+margin-top: 3px;
+}
+
+A.insideHeaderLink {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+}
+
+A.insideHeaderLink:hover {
+color: black;
+text-decoration: underline;
+}
+
+.insideHeaderDisabled {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+font-weight: bold;
+text-decoration: none;
+color: #666666;
+}
+
+.headersmalltext {
+font-size: 8pt;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-weight: bold;
+color: black;
+}
+a.headersmalllink {
+font-size: 8pt;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-weight: bold;
+color: #000099;
+text-decoration: none;
+}
+a.headersmalllink:hover {
+color: red;
+}
+
+HR.sepbar {
+font-size: xx-small;
+width: 100%;
+height: 1px;
+background: #999999;
+border-width: 0px;
+}
+
+/* headers preceding the list of errors or events */
+.errorMessageHeader {
+font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+color: red;
+margin-bottom: 3px;
+}
+.eventMessageHeader {
+font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+color: #000099;
+margin-bottom: 3px;
+}
+
+/* list block style */
+.errorList {
+list-style-type: none;
+font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+color: red;
+margin: 0px;
+padding-left: 20px;
+}
+.eventList {
+list-style-type: none;
+font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
+color: #000099;
+margin: 0px;
+padding-left: 20px;
+}
+
+/* list item style */
+.errorMessage {
+color: #ff0000;
+font-size: 1.1em;
+font-weight: bold;
+}
+
+.eventMessage {
+}
+
+.ontab {
+font-size: 8pt;
+background: black;
+padding: 2px;
+border-style: inset;
+border-width: 3px;
+}
+
+a.onlnk {
+font-size: 8pt;
+font-weight: bold;
+color: #FFFFFF;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+text-decoration: none;
+padding: 2px;
+}
+
+.offtab {
+font-size: 10px;
+background: #CCCCCC;
+padding: 2px;
+border-style: outset;
+border-width: 3px;
+}
+
+a.offlnk {
+font-size: 10px;
+font-weight: bold;
+color: #000099;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+text-decoration: none;
+padding: 2px;
+}
+
+a.offlnk:hover {
+color: red;
+}
+
+.areaheader {
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-weight: bold;
+color: #FFFFFF;
+width: 100%;
+background: black;
+padding: 2px;
+}
+
+.edittable {
+border-color: #000000 #000000 #003333;
+border-style: solid;
+border-top-width: thin;
+border-right-width: thin;
+border-bottom-width: thin;
+border-left-width: thin
+}
+
+.viewOneTR1 {
+background: #B4B0AA;
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.viewOneTR2 {
+background: #D4D0C8;
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.viewManyHeaderTR {
+background: #99CCFF;
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.viewManyTR1 {
+background: #D4D0C8;
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.viewManyTR2 {
+background: #FFFFFF;
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+.editInputBox {
+background: #FFFFFF;
+font-size: 8pt;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+background: white;
+border: #999999 solid 1px;
+margin: 2px;
+}
+
+.inputBox {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-weight: normal;
+background: #FFFFFF;
+font-size: 8pt;
+background: white;
+border: #999999 solid 1px;
+margin: 2px;
+}
+
+.selectBox {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+background: #FFFFFF;
+font-size: 8pt;
+background: white;
+border: #999999 solid 1px;
+margin: 2px;
+}
+
+.textAreaBox {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+background: #FFFFFF;
+font-size: 8pt;
+background: white;
+border: #999999 solid 1px;
+margin: 2px;
+}
+
+.radioButton {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+background: #FFFFFF;
+font-size: 8pt;
+}
+
+.checkBox {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+background: #FFFFFF;
+font-size: 8pt;
+}
+
+.smallSubmit {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+text-decoration: none;
+color: #000099;
+background: white;
+border: #999999 solid 1px;
+margin: 2px;
+padding: 0px 6px;
+}
+
+.mediumSubmit,.largeSubmit,.loginButton {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10pt;
+font-weight: bold;
+text-decoration: none;
+color: #000099;
+background: white;
+border: #999999 solid 1px;
+margin: 2px;
+}
+
+.smallSubmit:hover,.mediumSubmit:hover,.largeSubmit:hover,.loginButton:hover {
+color: red;
+text-decoration: underline;
+}
+
+.smallSubmitDisabled {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+font-weight: bold;
+text-decoration: none;
+color: #666666;
+background: white;
+border: 0px;
+margin: 2px;
+}
+
+.smallAltSubmit,.mediumAltSubmit,.largeAltSubmit {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 8pt;
+}
+
+.basePrice {
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: black;
+}
+
+.normalPrice {
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: green;
+}
+
+.salePrice {
+font-size: 10px;
+font-family: Verdana, Arial, Helvetica, sans-serif;
+color: red;
+}
+
+/* Form layout styles to simulate a table-style layout */
+.form-row {
+clear: both;
+padding-top: 2px;
+}
+.form-label {
+float: left;
+width: 180px;
+text-align: right;
+padding-top: 5px;
+}
+.form-field {
+float: left;
+margin-left: 10px;
+text-align: left;
+}
+
+/* ===== Product Summary Styles ===== */
+.product-prevnext {
+text-align: right;
+}
+
+.productsummary-container {
+margin-top: 5px;
+margin-bottom: 5px;
+border-top: #999 solid 1px;
+}
+
+.productsummary {
+position: relative;
+padding: 5px;
+border-bottom: #999 solid 1px;
+min-height: 60px;
+height:auto !important;
+height:60px;
+}
+
+.productsummary .smallimage {
+float: left;
+/* position: absolute; top: 5px; left: 5px; */
+margin: 0px 5px 5px 0px;
+}
+.productsummary .smallimage img {
+border: #CCC solid 1px;
+height: 50px;
+}
+
+.productsummary .productbuy {
+float: right;
+width: 130px;
+margin: 5px;
+text-align: right;
+}
+
+.productsummary .productinfo {
+/* margin-left: 60px; */
+text-align: left;
+}
+
+/* ===== Product Detail Styles ===== */
+#productdetail #long-description {
+margin-top: 10px;
+padding-top: 5px;
+border-top: #999 solid 1px;
+}
+
+#productdetail #reviews {
+margin-top: 10px;
+padding-top: 5px;
+border-top: #999 solid 1px;
+}
+
+#productdetail #associated-products {
+margin-top: 10px;
+padding-top: 5px;
+border-top: #999 solid 1px;
+}
+
+.treeWrapper { 
+color:black; 
+background:#ffffff; 
+font-size:12pt; 
+font-weight: normal;
+font-family:verdana, arial, sans-serif;
+text-align:left;
+text-decoration:none;
+margin-left:12px;
+margin-top:2px;
+border-top:1px solid black;
+border-left:1px solid black;
+}
+
+BODY.lookupBody {
+    margin: 10px;
+    background-color: white;
+}
+
+/* ======================== */
+/* ===== Table Styles ===== */
+/* ======================== */
+
+.basic-table {
+width: 100%;
+empty-cells: show; /* ensure border appears also for empty cells */
+background-color: #ffffff;
+color: #000000;
+}
+
+.basic-table tr td {
+/* Style for all cells */
+padding: 0.1em;
+}
+
+.basic-table tr .label,
+.basic-table tr .group-label {
+/* field labels for forms */
+white-space: nowrap;
+font-weight: bold;
+text-align: right;
+padding-right: 1.5em;
+white-space: nowrap;
+width: 20%;
+}
+
+.basic-table tr .group-label {
+/* "header" for field label groups */
+font-size: 1.2em;
+padding: 2em 1.5em 0 0;
+}
+
+.basic-table tr th,
+.basic-table .header-row {
+font-weight: bold;
+text-align: left;
+}
+
+.basic-table .header-row td {
+border-bottom: 1px solid #000000;
+}
+
+.basic-table .header-row td a {
+color: #000000;
+}
+
+.basic-table .viewManyTR1,
+.basic-table .alternate-row {
+/* Alternating row style */
+/* .viewManyTR1 deprecated - use .alternate-row */
+background-color: #eeeeee;
+}
+
+.basic-table tr .button-col {
+/* button column style - for the small
+collection of buttons used in lists */
+vertical-align: top;
+}
+
+.basic-table tr .button-col a {
+background-color: #ffffff;
+border: #999999 solid 1px;
+color: #000099;
+float: left;
+margin: 0 0.1em 0 0.1em;
+padding: 0.1em 0.4em 0.1em 0.4em;
+white-space: nowrap;
+}
+
+.basic-table tr .smallSubmit,
+.basic-table tr .smallSubmit:visited {
+background-color: #ffffff;
+border: #999999 solid 1px;
+color: #000099;
+font-size: 1em;
+font-weight: bold;
+margin: 0.2em;
+padding: 0.1em 0.2em 0.1em 0.2em;
+white-space: nowrap;
+}
+
+.basic-table tr .button-col a:hover,
+.basic-table tr .button-col a:active,
+.basic-table tr .smallSubmit:hover,
+.basic-table tr .smallSubmit:active {
+color: #ff0000;
+text-decoration: none;
+}
+
+/* ===== Table decorator - Hover bar ===== */
+
+.hover-bar tr:hover {
+background-color: #cccccc;
+cursor: default;
+}
+
+.hover-bar .header-row:hover,
+.hover-bar tr th:hover {
+background-color: #ffffff;
+color: #000000;
+}
+
+/* ===== Table decorator - Grid ===== */
+
+/* These decorators need an IE hack. IE7 does not
+render borders around empty <td> elements */
+
+.dark-grid {
+/* dark grid */
+border-right: 1px solid #000000;
+border-top: 1px solid #000000;
+}
+
+.dark-grid td {
+border-bottom: 1px solid #000000;
+border-left: 1px solid #000000;
+}
+
+.light-grid {
+/* light grid */
+border-right: 1px solid #cccccc;
+border-top: 1px solid #cccccc;
+}
+
+.light-grid td,
+.light-grid .header-row td{
+border-bottom: 1px solid #cccccc;
+border-left: 1px solid #cccccc;
+}
+
+/* ======================= */
+/* ===== Tree Styles ===== */
+/* ======================= */
+
+.basic-tree {
+/* placeholder */
+}
+
+.basic-tree ul {
+padding-left: 1em;
+}
+
+.basic-tree li {
+padding-left: 1em;
+white-space: nowrap;
+}
+
+.basic-tree li .expanded {
+background: url(/images/collapse.gif) no-repeat left center;
+padding-right: 1em;
+}
+
+.basic-tree li .collapsed {
+background: url(/images/expand.gif) no-repeat left center;
+padding-right: 1em;
+}
+
+.basic-tree li .treeitem {
+/* treeitem is deprecated */
+border-style: none;
+color: #000099;
+font-size: 1em;
+}
+
+.basic-tree li a:hover {
+color: #0000ff;
+}
+
+
+/* ======================== */
+/* ===== Form Styles ===== */
+/* ======================== */
+
+.basic-form table {
+width: 100%;
+}
+
+.basic-form, table .header-row:hover {
+background-color: #ffffff;
+color: #000000;
+}
+
+.basic-form table tr td {
+padding: 0.1em;
+}
+
+.basic-form table tr .label,
+.basic-form table tr .group-label {
+/* field labels for forms */
+white-space: nowrap;
+font-weight: bold;
+text-align: right;
+padding-right: 1.5em;
+width: 20%;
+}
+
+.basic-form table tr .group-label {
+/* "header" for field label groups */
+font-size: 1.2em;
+padding: 2em 1.5em 0 0;
+}
+
+.basic-form table tr th,
+.basic-form table .header-row {
+font-weight: bold;
+text-align: left;
+}
+
+.basic-form table .header-row:hover,
+.basic-form table tr th:hover{
+background-color: #ffffff;
+color: #000000;
+}
+
+.basic-form table .header-row td {
+border-bottom: 1px solid #999999;
+}
+
+.basic-form table .viewManyTR1,
+.basic-form table .alternate-row {
+/* Alternating row style */
+/* .viewManyTR1 deprecated - use .alternate-row */
+background-color: #eeeeee;
+}
+
+.basic-form table tr td .smallSubmit,
+.basic-form table tr td .smallSubmit:visited {
+background-color: #ffffff;
+border: #999999 solid 1px;
+color: #000099;
+font-size: 1em;
+font-weight: bold;
+margin: 0.2em;
+padding: 0.1em 0.2em 0.1em 0.2em;
+}
+
+.basic-form table tr td .smallSubmit:hover,
+.basic-form table tr td .smallSubmit:active {
+color: #ff0000;
+text-decoration: none;
+}
+
+.basic-form table tr td .disabled {
+background-color: #cccccc;
+color: #333366;
+text-decoration: none;
+}
+
+/* ===== Form decorator - Form Widget ===== */
+
+.form-widget table tr .label,
+.form-widget-table tr .label {
+/* Added for backward compatibility */
+width: 20%;
+}
+
+.form-widget table,
+.form-widget-table {
+width: auto;
+}
+
+.tooltip {
+/* tooltip style */
+background-color: #ffffdd;
+border: 1px solid #999999;
+color: #000000;
+font-style: italic;
+margin: 1.0em;
+padding: 0.1em;
+}
+
+.gwtAsteriskNotification table {
+    font-size:10px;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    color:black;
+    position:fixed;
+    _position:absolute;
+    top:30px;
+    _top:expression(eval(document.body.scrollTop)+30);
+    right:8px;
+    z-index:1;
+    background-color:#eeeeee;
+    border:1px solid black;
+    padding:10px 10px 8px;
+}

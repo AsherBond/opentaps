@@ -1,0 +1,87 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import javolution.util.FastList;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.party.party.PartyHelper;
+
+/*
+ * Finds back ordered items with complete details spanning OrderHeader, OrderItem, OrderItemShipGroup,
+ * InventoryItem and OrderItemShipGrpInvRes
+ */
+
+// data for the find form
+shipmentMethodTypes = delegator.findAllCache("CarrierAndShipmentMethod", UtilMisc.toList("description"));
+methodsAndCarriers = new ArrayList();
+smtit = shipmentMethodTypes.iterator();
+while (smtit.hasNext()) {
+    smt = smtit.next();
+    smMap = smt.getAllFields();
+    carrierPartyName = PartyHelper.getPartyName(delegator, smt.get("partyId"), false);
+    smMap.put("carrierPartyName", carrierPartyName);
+    methodsAndCarriers.add(smMap);
+}
+context.put("shipmentMethodTypes", methodsAndCarriers);
+
+// fields to search by
+productId = parameters.get("productId");
+carrierAndShipmentMethodTypeId = parameters.get("carrierAndShipmentMethodTypeId");
+facilityId = parameters.get("facilityId");
+statusId = UtilCommon.getParameter(request, "statusId");
+statusIds = FastList.newInstance();
+if (statusId == null) { //  when user first loads page
+    statusIds.add("ORDER_APPROVED");
+} else if ("ANY".equals(statusId)) {
+    statusIds.add("ORDER_APPROVED");
+    statusIds.add("ORDER_HOLD");
+    statusIds.add("ORDER_CREATED");
+} else {
+    statusIds.add(statusId);
+}
+
+searchConditions = FastList.newInstance();
+if (!UtilValidate.isEmpty(productId)) {
+    searchConditions.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
+}
+if (!UtilValidate.isEmpty(facilityId)) {
+    searchConditions.add(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
+}
+if (!UtilValidate.isEmpty(carrierAndShipmentMethodTypeId)) {
+    carrierPartyId = carrierAndShipmentMethodTypeId.split("\\^")[0];
+    shipmentMethodTypeId = carrierAndShipmentMethodTypeId.split("\\^")[1];
+    searchConditions.add(new EntityExpr("carrierPartyId", EntityOperator.EQUALS, carrierPartyId));
+    searchConditions.add(new EntityExpr("shipmentMethodTypeId", EntityOperator.EQUALS, shipmentMethodTypeId));
+}
+
+fields = null;
+orderBy = UtilMisc.toList("reservedDatetime", "sequenceId");
+
+searchConditions.add(new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"));
+searchConditions.add(new EntityExpr("quantityNotAvailable", EntityOperator.GREATER_THAN, new Double(0)));
+searchConditions.add(new EntityExpr("orderStatusId", EntityOperator.IN, statusIds));
+searchConditions.add(new EntityExpr("orderItemStatusId", EntityOperator.IN, UtilMisc.toList("ITEM_APPROVED", "ITEM_CREATED")));
+allConditions = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+iterator = delegator.findListIteratorByCondition("ReservedItemDetail", allConditions, null, fields, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);
+backOrderedItems = iterator.getPartialList(viewIndex.intValue(), viewSize.intValue());
+iterator.last();
+backOrderedItemsTotalSize = iterator.currentIndex();
+context.put("backOrderedItems", backOrderedItems);
+context.put("backOrderedItemsTotalSize", backOrderedItemsTotalSize);
+iterator.close();

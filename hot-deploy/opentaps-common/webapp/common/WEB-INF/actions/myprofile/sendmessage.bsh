@@ -1,0 +1,60 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2008 Open Source Strategies, Inc. */
+
+/**
+ * Script file for sending a Message
+ *
+ * @author     Fabien Carrion (gkfabs@opensourcestrategies.com)
+ */
+
+import org.opentaps.common.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+
+boolean isInternalMessageSender = false;
+
+if (userLogin == null) return;
+
+isInternalMessageSender = PartyHelper.isInternalMessageSender(userLogin.getString("partyId"), delegator);
+context{"partyIdFrom"} = userLogin.getString("partyId");
+
+List addressees = PartyHelper.getInternalMessageRecipient(delegator);
+
+context.put("isInternalMessageSender", isInternalMessageSender);
+context.put("addressees", addressees);
+
+if ("REPLY".equals(screenAction) || "FORWARD".equals(screenAction)) {
+
+    communicationEventId = UtilCommon.getParameter(context, "communicationEventId");
+
+    message = delegator.findByPrimaryKey("CommunicationEvent", UtilMisc.toMap("communicationEventId", communicationEventId));
+    if (message != null) {
+        partyFromName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, message.getString("partyIdFrom"), false);
+        if ("REPLY".equals(screenAction)) {
+            context.put("partyIdToAsString",  UtilValidate.isNotEmpty(partyFromName) ? (partyFromName + " <" + message.getString("partyIdFrom") + ">") : message.getString("partyIdFrom"));
+            message.set("content", "\n\n==================\n" + message.get("content"));
+            message.set("subject", "Re:" + message.getString("subject"));
+        }
+        if ("FORWARD".equals(screenAction)) {
+            message.set("content", "\n\n==================\n" + message.get("content"));
+            message.set("subject", "Fwd:" + message.getString("subject"));
+        }
+        context.put("message", message);
+    }
+
+}

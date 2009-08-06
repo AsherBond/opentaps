@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.crypto.HashCrypt;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.opentaps.common.util.UtilConfig;
+import org.opentaps.common.util.UtilCommon;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilDateTime;
+import javax.servlet.ServletContext;
+import org.ofbiz.base.component.ComponentConfig;
+
+application = parameters.get("componentName");
+
+if (UtilConfig.getPropertyBoolean(application, "opentaps.history.show", true)) {
+
+    userLogin = parameters.get("userLogin");
+    if (userLogin == null) {
+        return;
+    }
+
+    servletContext = request.getAttribute("servletContext");
+    serverId = servletContext.getAttribute("_serverId");
+    contextPath = request.getContextPath();
+    info = ComponentConfig.getWebAppInfo(serverId, contextPath);
+    webAppName = info.getName();
+
+    //store current view in history
+    historyEntry = context.get("history");
+    historyTitle = null;
+    if (historyEntry != null && (historyTitle = historyEntry.get("text")) != null) {
+        currentView = historyEntry.get("view");
+        if (UtilValidate.isEmpty(currentView)) {
+            currentView = UtilCommon.getParameter(context, "_CURRENT_VIEW_");            
+        };
+        String uri = UtilHttp.getFullRequestUrl(request).toString();
+        if (uri.indexOf(currentView) != -1) {
+            if (request.QueryString != null) {
+                uri = uri.substring(0, uri.lastIndexOf("?"));
+            }
+            String queryString = UtilCommon.makeHistoryQueryString(parameters, historyEntry.get("override"));
+            uri += ("?" + queryString);
+            uri = uri.substring(uri.indexOf(controlPath) + controlPath.length());
+
+            // Quick fix: skips uri if its format differs from appname/conrol/currentView
+            if (!currentView.equalsIgnoreCase(uri.substring(1, uri.lastIndexOf("?")))) return;
+
+            entry = delegator.makeValue("ViewHistory", null);
+            controlPath = parameters.get("_CONTROL_PATH_");
+            entry.set("uri", uri);
+            userLoginId = userLogin.get("userLoginId");
+            entry.set("userLoginId", userLoginId);
+            entry.set("applicationName", application);
+            entry.set("contextInfo", historyTitle);
+            entry.set("webAppName", webAppName);
+            
+            digest = HashCrypt.getDigestHash(uri.toString() + userLoginId + application + historyTitle, "MD5");
+            entry.set("digest", digest);
+            
+            // Delete any identical previous history entries
+            delegator.removeByAnd("ViewHistory", UtilMisc.toMap("digest", digest));
+
+            entry.set("expireAt", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DATE, UtilConfig.getPropertyInt(application, "opentaps.history.expire", 90), UtilHttp.getTimeZone(request), locale));
+            entry.set("viewHistoryId", delegator.getNextSeqId("viewHistoryId"));
+            entry.create();
+        }
+    }
+}

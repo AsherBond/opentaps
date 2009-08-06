@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+ <!-- DO NOT LOAD THIS FILE UNLESS YOU HAVE DISABLED SALES TAXES FOR NEW YORK STATE -->
+
+<entity-engine-xml>
+
+     <!-- This part could be seed data for the state of New York -->
+     <Geo abbreviation="12866" geoCode="12866" geoId="USA-12866" geoName="12866" geoTypeId="POSTAL_CODE"/>
+     <Geo abbreviation="10003" geoCode="10003" geoId="USA-10003" geoName="10003" geoTypeId="POSTAL_CODE"/>
+     <Geo abbreviation="10031" geoCode="10031" geoId="USA-10031" geoName="10031" geoTypeId="POSTAL_CODE"/>
+
+     <!-- Set up the counties here -->
+     <Geo abbreviation="Saratoga" geoCode="NY SARATOGA" geoId="NY_SARATOGA" geoName="Saratoga County" geoTypeId="COUNTY"/>
+     <Geo abbreviation="New York City" geoCode="NY NYC" geoId="NY_NYC" geoName="New York City" geoTypeId="COUNTY"/>
+
+     <!-- Define the zip codes in the county -->
+     <GeoAssoc geoId="NY_SARATOGA" geoIdTo="USA-12866" geoAssocTypeId="REGIONS"/>
+     <GeoAssoc geoId="NY_NYC" geoIdTo="USA-10003" geoAssocTypeId="REGIONS"/>
+     <GeoAssoc geoId="NY_NYC" geoIdTo="USA-10031" geoAssocTypeId="REGIONS"/>
+
+     <!-- Make your county a part of your state -->
+     <GeoAssoc geoId="NY" geoIdTo="NY_SARATOGA" geoAssocTypeId="REGIONS"/>
+     <GeoAssoc geoId="NY" geoIdTo="NY_NYC" geoAssocTypeId="REGIONS"/>
+
+     <!-- Set up sales tax for each county.  New York State sales tax reporting is different than California.  
+     In New York state, you just report it at a total rate by county on ST-100, for example: Saratoga 7%, New York City 8.375%
+     So the setup here is to put the full tax rate into each county
+     ***VERY IMPORTANT*** MAKE SURE THAT YOU DO NOT HAVE A NEW YORK STATE LEVEL SALES TAX AS WELL, OR YOUR CUSTOMERS WILL GET CHARGED TAX TWICE!
+     -->
+     <TaxAuthority taxAuthGeoId="NY_SARATOGA" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+     <TaxAuthorityRateProduct taxAuthorityRateSeqId="NY-SARATOGA" taxAuthGeoId="NY_SARATOGA" taxAuthPartyId="NY_DTF" taxAuthorityRateTypeId="SALES_TAX"
+         productStoreId="9000" taxPercentage="7.00" fromDate="2000-01-01 00:00:00"/>
+    <!-- This would allow inheritance from state to county -->
+     <TaxAuthorityAssoc taxAuthGeoId="NY" taxAuthPartyId="NY_DTF" toTaxAuthGeoId="NY_SARATOGA" toTaxAuthPartyId="NY_DTF" taxAuthorityAssocTypeId="EXEMPT_INHER"
+              fromDate="2000-01-01 00:00:00"/>
+
+     <TaxAuthority taxAuthGeoId="NY_NYC" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+     <TaxAuthorityRateProduct taxAuthorityRateSeqId="NY-NYC" taxAuthGeoId="NY_NYC" taxAuthPartyId="NY_DTF" taxAuthorityRateTypeId="SALES_TAX"
+             productStoreId="9000" taxPercentage="8.375" fromDate="2000-01-01 00:00:00"/>
+    <!-- This would allow inheritance from state to county -->
+     <TaxAuthorityAssoc taxAuthGeoId="NY" taxAuthPartyId="NY_DTF" toTaxAuthGeoId="NY_NYC" toTaxAuthPartyId="NY_DTF" taxAuthorityAssocTypeId="EXEMPT_INHER"
+              fromDate="2000-01-01 00:00:00"/>
+
+
+     <!-- a test customer for different counties' rates   -->
+     <Party partyId="ny1" partyTypeId="PERSON"/>
+     <Person partyId="ny1" firstName="George" lastName="Washington"/>
+     <PartyRole partyId="ny1" roleTypeId="CONTACT"/>
+     <PartyRelationship partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" partyIdFrom="ny1" roleTypeIdFrom="CONTACT" partyRelationshipTypeId="CONTACT_REL_INV"
+         fromDate="2005-12-01 00:00:00"/>
+
+     <!-- At this address the customer should get a 7% tax -->
+     <ContactMech contactMechId="ny1address1" contactMechTypeId="POSTAL_ADDRESS"/>
+     <!-- Benedict Arnold won the Battle of Saratoga, but who's going to commemorate him? -->
+     <PostalAddress contactMechId="ny1address1" toName="George Washington" address1="100 Washington St" city="Washington Springs" stateProvinceGeoId="NY" postalCode="12866" countryGeoId="USA"/>
+     <PartyContactMech partyId="ny1" contactMechId="ny1address1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+     <PartyContactMechPurpose partyId="ny1" contactMechId="ny1address1" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ny1" contactMechId="ny1address1" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ny1" contactMechId="ny1address1" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+
+     <!-- At this address the customer should get a 8.375% tax -->
+     <ContactMech contactMechId="ny1address2" contactMechTypeId="POSTAL_ADDRESS"/>
+     <PostalAddress contactMechId="ny1address2" toName="George Washington" address1="1 Washington Place" city="New York" stateProvinceGeoId="NY" postalCode="10003" countryGeoId="USA"/>
+     <PartyContactMech partyId="ny1" contactMechId="ny1address2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+     <PartyContactMechPurpose partyId="ny1" contactMechId="ny1address2" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ny1" contactMechId="ny1address2" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ny1" contactMechId="ny1address2" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+
+     <!-- At this address the customer should not be charged a sales tax -->
+     <ContactMech contactMechId="ny1address3" contactMechTypeId="POSTAL_ADDRESS"/>
+     <PostalAddress contactMechId="ny1address3" toName="George Washington" address1="3 Washington Circle NW" city="Washington" stateProvinceGeoId="DC" postalCode="20037" countryGeoId="USA"/>
+     <PartyContactMech partyId="ny1" contactMechId="ny1address3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+     <PartyContactMechPurpose partyId="ny1" contactMechId="ny1address3" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ny1" contactMechId="ny1address3" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ny1" contactMechId="ny1address3" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartySupplementalData partyId="ny1" primaryPostalAddressId="ny1address3" />
+
+     <!-- This party is for testing inheritance of exemptions.  He is exempt from NY state tax, which means he is exempt from county level taxes too -->
+     <Party partyId="ny2" partyTypeId="PERSON"/>
+     <Person partyId="ny2" firstName="Alexander" lastName="Hamilton"/>
+     <PartyRole partyId="ny2" roleTypeId="CONTACT"/>
+     <PartyRelationship partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" partyIdFrom="ny2" roleTypeIdFrom="CONTACT" 
+         fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="CONTACT_REL_INV"/>
+
+     <!-- Being the first Treasury Secretary, he doesn't have to pay taxes -->
+     <PartyTaxAuthInfo partyId="ny2" taxAuthGeoId="NY" taxAuthPartyId="NY_DTF" fromDate="2000-01-01 00:00:00" partyTaxId="000001" isExempt="Y" />
+
+      <ContactMech contactMechId="ny2address1" contactMechTypeId="POSTAL_ADDRESS"/>
+      <PostalAddress contactMechId="ny2address1" toName="Alexander Hamilton" address1="100 Washington St" city="Saratoga Springs" stateProvinceGeoId="NY" postalCode="12866" countryGeoId="USA"/>
+      <PartyContactMech partyId="ny2" contactMechId="ny2address1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+      <PartyContactMechPurpose partyId="ny2" contactMechId="ny2address1" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+      <PartyContactMechPurpose partyId="ny2" contactMechId="ny2address1" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+      <PartyContactMechPurpose partyId="ny2" contactMechId="ny2address1" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+
+      <ContactMech contactMechId="ny2address2" contactMechTypeId="POSTAL_ADDRESS"/>
+      <PostalAddress contactMechId="ny2address2" toName="Alexander Hamilton" address1="3 Hamilton Place" city="New York" stateProvinceGeoId="NY" postalCode="10031" countryGeoId="USA"/>
+      <PartyContactMech partyId="ny2" contactMechId="ny2address2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+      <PartyContactMechPurpose partyId="ny2" contactMechId="ny2address2" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+      <PartyContactMechPurpose partyId="ny2" contactMechId="ny2address2" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+      <PartyContactMechPurpose partyId="ny2" contactMechId="ny2address2" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+
+      <ContactMech contactMechId="ny2address3" contactMechTypeId="POSTAL_ADDRESS"/>
+      <PostalAddress contactMechId="ny2address3" toName="Alexander Hamilton" address1="1500 Pennsylvania Ave NW" city="Washington" stateProvinceGeoId="DC" postalCode="20220" countryGeoId="USA"/>
+      <PartyContactMech partyId="ny2" contactMechId="ny2address3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+      <PartyContactMechPurpose partyId="ny2" contactMechId="ny2address3" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+      <PartyContactMechPurpose partyId="ny2" contactMechId="ny2address3" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+      <PartyContactMechPurpose partyId="ny2" contactMechId="ny2address3" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+      <PartySupplementalData partyId="ny2" primaryPostalAddressId="ny2address3" />
+
+</entity-engine-xml>

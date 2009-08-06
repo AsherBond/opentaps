@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<project name="opentaps-common - Opentaps Common Aspects" default="all" basedir=".">
+
+    <!-- ================================================================== -->
+    <!-- Initialization of all property settings                            -->
+    <!-- ================================================================== -->
+
+    <target name="init">
+        <property environment="env"/>
+        <property name="desc" value="Opentaps Common Aspects"/>
+        <property name="name" value="opentaps-common-aspect"/>
+        <property name="aopConfig" value="config/aop-ecas.xml"/>
+        <property name="src.dir" value="src"/>
+        <property name="dtd.dir" value="dtd"/>
+        <property name="lib.dir" value="lib"/>
+        <property name="build.dir" value="build"/>
+        <property name="ofbiz.dir" value="../../"/> 
+    </target>
+
+    <target name="classpath">
+        <path id="local.class.path">
+            <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/lib/commons" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/lib/scripting" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/lib/j2eespecs" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/base/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/entity/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/entity/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/datafile/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/security/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/service/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/service/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/minilang/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/webapp/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/webapp/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/common/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/widget/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/framework/workflow/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/accounting/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/order/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/content/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/party/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/product/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/applications/manufacturing/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/opentaps-common/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/amazon/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/crmsfa/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/dataimport/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/financials/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/purchasing/build/lib" includes="*.jar"/>
+            <fileset dir="${ofbiz.dir}/hot-deploy/warehouse/build/lib" includes="*.jar"/>
+            <fileset dir="${lib.dir}/aspectwerkz" includes="*.jar"/>
+
+        </path>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Compile all aspect java classes                                    -->
+    <!-- ================================================================== -->
+	<target name="compile">
+		<javac srcdir="${src.dir}/common/org/opentaps/aspect/secas" destdir="${build.dir}/classes/common" debug="on" source="1.5" target="1.5">
+			<classpath refid="local.class.path" />
+		</javac>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Post Compile for aspect cleasses & targets classes                 -->
+    <!-- ================================================================== -->
+	<target name="postcompile">
+        <echo message="[build] =========== Start Building Aspect (Post Compile) ============="/>
+		<java classname="org.codehaus.aspectwerkz.annotation.AnnotationC" fork="true">
+			<jvmarg value="-Daspectwerkz.definition.file=${aopConfig}"/>
+			<classpath refid="local.class.path" />
+			<arg line="-src ${src.dir}/common/org/opentaps/aspect/secas -classes ${build.dir}/classes/common" />
+		</java>
+        <echo message="[build] =========== Done Building Aspect (Post Compile) =============="/>
+	</target>
+	
+	<target name="detect-dependencies">
+	<condition property="processRequired">
+      <and>
+            <available classname="org.ofbiz.entity.GenericDelegator" classpathref="local.class.path"/>
+            <available classname="org.ofbiz.common.CommonServices" classpathref="local.class.path"/>
+            <available classname="org.ofbiz.order.order.OrderServices" classpathref="local.class.path"/>
+      </and>
+    </condition>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- Weave advice into target jars                                      -->
+    <!-- ================================================================== -->
+	<target name="weave" depends="detect-dependencies" if="processRequired">
+        <echo message="[build] =========== Start Building Aspect (Weave) ============="/>
+		<java classname="org.codehaus.aspectwerkz.compiler.AspectWerkzC" fork="true">
+			<jvmarg value="-Daspectwerkz.definition.file=${aopConfig}"/>
+			<jvmarg value="-Daspectwerkz.transform.filter=no"/>
+			<arg value="-verify"/>
+			<classpath refid="local.class.path" />
+     	    <classpath>
+              <pathelement path="${build.dir}/classes/common"/>
+            </classpath>
+    		<!-- below is the jars to post-process -->	
+    		<arg value="${ofbiz.dir}/framework/entity/build/lib/ofbiz-entity.jar"/>
+		</java>
+		<java classname="org.codehaus.aspectwerkz.compiler.AspectWerkzC" fork="true">
+			<jvmarg value="-Daspectwerkz.definition.file=${aopConfig}"/>
+			<jvmarg value="-Daspectwerkz.transform.filter=no"/>
+			<arg value="-verify"/>
+			<classpath refid="local.class.path" />
+     	    <classpath>
+              <pathelement path="${build.dir}/classes/common"/>
+            </classpath>
+    		<!-- below is the jars to post-process, if these jar not effect each other you can put them in same pos, else please seperate them into another task -->	
+    		<arg value="${ofbiz.dir}/framework/common/build/lib/ofbiz-common.jar"/>
+		</java>
+		<java classname="org.codehaus.aspectwerkz.compiler.AspectWerkzC" fork="true">
+			<jvmarg value="-Daspectwerkz.definition.file=${aopConfig}"/>
+			<jvmarg value="-Daspectwerkz.transform.filter=no"/>
+			<arg value="-verify"/>
+			<classpath refid="local.class.path" />
+     	    <classpath>
+              <pathelement path="${build.dir}/classes/common"/>
+            </classpath>
+    		<!-- below is the jars to post-process -->	
+    		<arg value="${ofbiz.dir}/applications/order/build/lib/ofbiz-order.jar"/>
+		</java>
+		<jar jarfile="${lib.dir}/${name}.jar" update="true" basedir="${build.dir}/classes/common" includes="org/opentaps/aspect/secas/**" />
+		<!-- put aop.xml into target jar META-INF dir -->
+		<mkdir dir="${build.dir}/classes/META-INF" />
+		<copy file="${aopConfig}" tofile="${build.dir}/classes/META-INF/aop.xml" overwrite="true"/>
+		<jar jarfile="${ofbiz.dir}/framework/entity/build/lib/ofbiz-entity.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
+		<jar jarfile="${ofbiz.dir}/framework/common/build/lib/ofbiz-common.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
+		<jar jarfile="${ofbiz.dir}/applications/order/build/lib/ofbiz-order.jar" update="true" basedir="${build.dir}/classes/" includes="META-INF/aop.xml" />
+        <echo message="[build] =========== Done Building Aspect (Weave) =============="/>
+    </target>
+
+    <target name="cleanaop">
+        <delete dir="${build.dir}/classes/common/org/opentaps/aspect/secas"/>
+        <delete file="${lib.dir}/${name}.jar"/>
+    </target> 
+
+    <!-- ================================================================== -->
+    <!-- Compilation of the source files, rebuilding selected libraries                                                                                                                         -->
+    <!-- ================================================================== -->
+
+    <target name="all" depends="init,cleanaop,classpath,compile,postcompile,weave" />
+
+</project>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- 
+  This file contains common requests for all opentaps applications.
+  All applications should include this.
+-->
+ 
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <include location="component://opentaps-common/webapp/common/WEB-INF/myprofile-controller.xml"/>
+    <include location="component://opentaps-common/webapp/common/WEB-INF/lookup-controller.xml"/>
+    <include location="component://opentaps-common/webapp/common/WEB-INF/pagination-controller.xml"/>
+    <include location="component://opentaps-common/webapp/common/WEB-INF/displayEffects-controller.xml"/>
+    <include location="component://opentaps-common/webapp/common/WEB-INF/pdf-controller.xml"/>
+    <include location="component://opentaps-common/webapp/common/WEB-INF/gwt-controller.xml"/>
+
+    <description>Opentaps Common JSON Controller</description>
+    <owner>Open Source Strategies, Inc. (c) 2006-2009</owner>
+
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+    <handler name="json" type="request" class="org.ofbiz.webapp.event.JSONServiceEventHandler"/>
+    <handler name="chart" type="view" class="org.opentaps.common.reporting.ChartViewHandler"/>
+    <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>
+
+    <request-map uri="forgotpassword">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="forgotPassword"/>
+        <response name="success" type="view" value="login"/>
+        <response name="error" type="view" value="login"/>
+    </request-map>
+
+    <request-map uri="getStateDataJSON">
+        <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="getStateDataJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="validatePostalCodeJSON">
+        <event type="json" invoke="uspsCityStateLookup"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="validatePostalAddressJSON">
+        <event type="json" invoke="uspsAddressValidation"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="getAgreementTermValidFieldsJSON">
+        <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="getAgreementTermValidFieldsJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="getNewInternalMessagesJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="getNewInternalMessagesJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    
+    <request-map uri="checkExistOrderContentJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="checkExistOrderContentJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    
+    <request-map uri="checkExistSupplierProductJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="checkExistSupplierProductJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>    
+    
+    <request-map uri="getCurrentIncomingNumberFromVoIPServer">
+        <event type="json" invoke="getCurrentIncomingNumberFromFacetPhoneServer"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="javascriptUiLabels.js">
+        <response name="success" type="view" value="javascriptUiLabels.js"/>
+    </request-map>
+    
+    <request-map uri="showChart">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="showChart"/>
+    </request-map>
+    
+    <request-map uri="setupReport">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="setupReport"/>
+    </request-map>
+
+    <request-map uri="manageReports">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="manageReports"/>
+    </request-map>
+    
+    <request-map uri="runReport">
+        <security auth="true" https="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="runReport"/>
+        <response name="export" type="request-redirect" value="exportReport"/>
+        <response name="print" type="request-redirect" value="printReport"/>
+        <response name="error" type="request-redirect" value="setupReport"/>
+    </request-map>
+    
+    <request-map uri="exportReport">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="exportReport"/>
+        <response name="error" type="request-redirect" value="setupReport"/>
+    </request-map>
+    
+    <request-map uri="printReport">
+        <security auth="true" https="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="printJRReport"/>
+        <response name="success" type="view" value="setupReport"/>
+        <response name="error" type="view" value="setupReport"/>
+    </request-map>
+
+    <!-- auto complete requests -->
+    <request-map uri="getAutoCompleteProduct">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteProduct"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getAutoCompleteAccountPartyIds">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteAccountPartyIds"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getAutoCompleteClientPartyIds">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteClientPartyIds"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getAutoCompleteSupplierPartyIds">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteSupplierPartyIds"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getAutoCompletePartyIds">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompletePartyIds"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getAutoCompleteGlAccounts">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteGlAccounts"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="makeOutgoingCall">
+        <security auth="true" https="true"/>
+        <event type="java" path="org.opentaps.common.event.AsteriskEvents" invoke="makeOutgoingCall"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="writeEmail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="writeEmail"/>
+    </request-map>
+    <request-map uri="sendActivityEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.sendActivityEmail"/>
+        <response name="success" type="request" value="donePageRequestHelper"/> <!-- use the helper to get back to the correct view page -->
+        <response name="error" type="view" value="writeEmail"/>
+    </request-map>
+    <request-map uri="saveActivityEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.saveActivityEmail"/>
+        <response name="success" type="request" value="donePageRequestHelper"/> <!-- use the helper to get back to the correct view page -->
+        <response name="error" type="view" value="writeEmail"/>
+    </request-map>
+    <request-map uri="deleteActivityEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.deleteActivityEmail"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="view" value="viewActivity"/>
+    </request-map>           
+    <view-map name="javascriptUiLabels.js" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#javascriptUiLabels.js" content-type="text/javascript"/>
+    <view-map name="showChart" type="chart"/>
+    <view-map name="setupReport" type="screen" page="component://opentaps-common/widget/screens/reports/ReportScreens.xml#setupReport"/>
+    <view-map name="manageReports" type="screen" page="component://opentaps-common/widget/screens/reports/ReportScreens.xml#manageReports"/>
+    <view-map name="exportReport" type="jasperreports"/>
+    <view-map name="writeEmail" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#writeEmail"/>
+
+</site-conf>

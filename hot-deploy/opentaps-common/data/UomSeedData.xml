@@ -1,0 +1,7 @@
+<entity-engine-xml>
+
+    <UomConversion uomId="TF_mon" uomIdTo="TF_ms" conversionFactor="2629800000"/>
+    <UomConversion uomId="TF_day" uomIdTo="TF_ms" conversionFactor="86400000"/>
+    <UomConversion uomId="TF_hr" uomIdTo="TF_ms" conversionFactor="3600000"/>
+
+</entity-engine-xml>

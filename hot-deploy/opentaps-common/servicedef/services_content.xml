@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Content Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="uploadFile" engine="java" 
+            location="org.opentaps.common.content.ContentServices" invoke="uploadFile">
+        <description>Uploads a user supplied file into the content system.  This service uses a simplification of the content datamodel: 
+            All binary files are identified with DataResource.dataResourceTypeId LOCAL_FILE and Content.contentTypeId FILE.  
+            DataResource.objectInfo stores the local path of the file as saved in the filesystem of the server.  Content is a reference 
+            to the DataResource and the object which is associated to other entities in the system, such as party (PartyContent), 
+            WorkEffort (WorkEffortContent), etc.  The net result is a contentId by which the file can be referenced.</description>
+        <attribute name="contentName" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <!-- These are multipart form fields with the binary stream for the file and the metadata for it. -->
+        <attribute name="uploadedFile" type="org.ofbiz.entity.util.ByteWrapper" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="true"/>
+        <!-- This parameter use to specific upload folder. -->
+        <attribute name="uploadFolder" type="String" mode="IN" optional="true"/>
+        <attribute name="classificationEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="contentId" type="String" mode="OUT" optional="false"/>
+        <attribute name="isOverwrite" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="uploadUrl" engine="java" 
+            location="org.opentaps.common.content.ContentServices" invoke="uploadUrl">
+        <description>Uploads a user supplied URL into the content system as a hyperlink.  This service uses a simplification of the content datamodel: 
+            All URL hyperlinks are identified with DataResource.dataResourceTypeId URL_RESOURCE and Content.contentTypeId HYPERLINK.  
+            DataResource.objectInfo stores the URL itself.  Content is a reference to the DataResource and the object which is associated
+            to other entities in the system, such as party (PartyContent), WorkEffort (WorkEffortContent), etc.
+            The net result is a contentId by which the file can be referenced.</description>
+        <attribute name="url" type="String" mode="IN" optional="false"/>
+        <attribute name="contentName" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="classificationEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="contentId" type="String" mode="OUT" optional="false"/>
+    </service>
+    
+    <service name="updateContent" engine="java" 
+            location="org.opentaps.common.content.ContentServices" invoke="updateContent">
+        <description>Update fileds of Content.</description>
+        <attribute name="contentId" type="String" mode="IN"/>
+        <attribute name="classificationEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="contentName" type="String" mode="IN"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="contentId" type="String" mode="OUT"/>
+    </service>    
+
+</services>

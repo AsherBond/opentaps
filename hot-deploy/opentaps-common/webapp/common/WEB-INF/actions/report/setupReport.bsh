@@ -1,0 +1,115 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.location.ComponentLocationResolver;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilConfig;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.reporting.UtilReports;
+import javolution.util.FastMap;
+import javolution.util.FastList;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.json.JSONObject;
+
+
+reportId = UtilCommon.getParameter(context, "reportId");
+if (UtilValidate.isEmpty(reportId)) return;
+
+report = delegator.findByPrimaryKey("ReportRegistry", UtilMisc.toMap("reportId", reportId));
+if (UtilValidate.isEmpty(report)) {
+    //TODO: error handling
+}
+context{"report"} = report;
+
+//make navigation history entry
+reportName = report.getString("shortName");
+if (UtilValidate.isNotEmpty(reportName))
+	context{"history"} = UtilCommon.makeHistoryEntry(reportName, "setupReport", UtilMisc.toList("reportId"));
+
+
+reportParameters = FastList.newInstance();
+parametersType = FastMap.newInstance();
+
+location = report.getString("location");
+if (location.indexOf("analytics") > 0) {
+    context.put("useQueryBuilder", Boolean.TRUE);
+}
+// get the jasper report file
+filePath = UtilValidate.isUrl(location) ? ComponentLocationResolver.getBaseLocation(location).toString() : location;
+    
+// parse the jasper report and put the parameters into the context for rendering as input fields
+/*JasperDesign*/ design = JRXmlLoader.load(filePath);     
+if (design != null) {
+    // get list of parameters
+    parametersList = design.getParametersList();
+    for (/*jrDesignParameter*/ currentParameter : parametersList) {
+        // check that the parameter is suitable for display on screen
+        if (currentParameter.isForPrompting() && !currentParameter.SystemDefined) {
+            parameterMap = FastMap.newInstance();
+            if (UtilValidate.isNotEmpty(currentParameter.getDescription())) {
+                parameterMap{"description"} = currentParameter.getDescription();
+            }
+            parameterMap{"name"} = currentParameter.getName();
+            // get the type of the parameter
+            if (UtilValidate.isNotEmpty(currentParameter.getValueClassName())) {
+                parameterMap{"type"} = currentParameter.getValueClassName().substring(currentParameter.ValueClassName.lastIndexOf(".") + 1);
+               	parametersType.put(currentParameter.getName(), currentParameter.getValueClassName().substring(currentParameter.ValueClassName.lastIndexOf(".") + 1));
+            }
+
+            /*
+            if we ever need to get default values, this is how.  The expression is of class JRExpression
+            print(currentParameter.getDefaultValueExpression().getText());
+            print(currentParameter.getDefaultValueExpression().getValueClassName());
+            */
+            reportParameters.addLast(parameterMap);
+        }
+    }
+}
+
+if (UtilValidate.isNotEmpty(reportParameters)) {
+    context{"reportParameters"} = reportParameters;
+    context{"parametersTypeJSON"} = JSONObject.fromMap(parametersType);
+}
+
+context{"reportTypes"} = UtilReports.getJRSupportedMimeType(delegator);
+
+printers = UtilReports.enumeratePrinters();
+if (printers != null && printers.size() > 0) {
+    context{"printers"} = printers;
+}
+
+// AG10012008 - I'm putting the facilities list unconditionally for now into the context map
+// AG10012008 - we should include it only if required by the report in next revision
+organizationPartyId = UtilCommon.getParameter(context, "organizationPartyId");
+if (UtilValidate.isEmpty(organizationPartyId)) {
+    organizationPartyId = UtilConfig.getPropertyValue("crmsfa", "organizationPartyId");
+}
+
+if (UtilValidate.isNotEmpty(organizationPartyId)) {
+    context{"organizationPartyId"} = organizationPartyId;
+}
+
+facilities = UtilCommon.getOrganizationReceivingFacilities(organizationPartyId, delegator);
+context{"facilities"} = facilities;
+
+// This stuff suports organizationPartyId preconfigured field in setup report screen.
+options = UtilCommon.DISTINCT_READ_OPTIONS;
+orderBy = UtilMisc.toList("groupName");

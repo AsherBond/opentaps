@@ -1,0 +1,102 @@
+/** Opentaps CSS for GWT */
+
+.gwtWidget .gwt-screenlet {
+  background-color:#FFFFFF;
+  border:1px solid #999999;
+  margin-bottom:10px;
+  width:100%;
+}
+
+.gwtWidget .gwt-screenlet-header {
+  padding:1px 4px;
+  vertical-align:middle;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-size:8pt;
+  font-weight:bold;
+  margin:0;
+  text-decoration:none;
+}
+
+.gwtWidget .gwt-screenlet-body {
+  background-color:#FFFFFF;
+  padding:4px;
+}
+
+.gwtWidget .gwt-screenlet-body .x-form-item  {
+  padding:0 !important;
+}
+
+.gwtWidget .x-form-item-label {
+  color:#000000;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-size:10px;
+  font-size-adjust:none;
+  font-stretch:normal;
+  font-style:normal;
+  font-variant:normal;
+  font-weight:normal;
+  line-height:normal;
+  text-decoration:none;
+}
+
+.gwtWidget .requiredField .x-form-item-label {
+  color:#AA0000;
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-size:10px;
+  font-size-adjust:none;
+  font-stretch:normal;
+  font-style:normal;
+  font-variant:normal;
+  font-weight:normal;
+  line-height:normal;
+  text-decoration:none;
+}
+
+.gwtWidget .buttontext {
+  font-family:Verdana,Arial,Helvetica,sans-serif;
+  font-style:normal;
+  font-weight:normal;
+  font-size:10px;
+}
+
+.gwtWidget .buttontext a {
+  text-decoration:none;
+  border:1px solid #999999;
+  margin:2px;
+  padding:0 6px;
+  display:inline-block;
+}
+
+.gwtWidget .buttontext a:hover {
+  text-decoration:none;
+  color:red;
+}
+
+.gwtWidget span.buttontext {
+  text-decoration:none;
+  border:1px solid #999999;
+  margin:2px;
+  padding:2px 6px;
+  display:inline-block;
+  cursor:pointer;
+  color:#0000AA;
+  background-color:white;
+}
+
+.inlinebuttontext  {
+  display:inline-block;
+  vertical-align:bottom;
+}
+
+.inlinewidget {
+  display:inline-block;
+}
+
+/* Higher contrast mask */
+.ext-el-mask {
+    background:#555 !important;
+}
+
+.promoItemRow {
+    background-color:#FDD !important;
+}

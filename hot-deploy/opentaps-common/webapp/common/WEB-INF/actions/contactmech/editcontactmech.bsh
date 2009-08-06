@@ -1,0 +1,88 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/*
+ *  Copyright (c) 2003-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a 
+ *  copy of this software and associated documentation files (the "Software"), 
+ *  to deal in the Software without restriction, including without limitation 
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ *  and/or sell copies of the Software, and to permit persons to whom the 
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included 
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT 
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR 
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *@author     Johan Isacsson
+ *@author     Andy Zeneski
+ *@author     David E. Jones
+ *@version    $Rev: 314 $
+ *@since      2.2
+ */
+
+import java.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.securityext.login.*;
+import org.ofbiz.common.*;
+import org.ofbiz.party.contact.*;
+import org.ofbiz.webapp.control.*;
+
+String partyId = parameters.get("partyId");
+context.put("partyId", partyId);
+
+Map mechMap = new HashMap();
+ContactMechWorker.getContactMechAndRelated(request, partyId, mechMap);
+context.put("mechMap", mechMap);
+// put contactMech directly in the context so that the ftl can see it
+context.put("contactMech", mechMap.get("contactMech"));
+
+// make sure done page is set (which is done by getContactMechAndRelated, but might not actually happen)
+if (context.get("donePage") == null) {
+    context.put("donePage", parameters.get("DONE_PAGE"));
+}
+
+String contactMechId = (String) mechMap.get("contactMechId");
+context.put("contactMechId", contactMechId);
+
+preContactMechTypeId = parameters.get("preContactMechTypeId");
+context.put("preContactMechTypeId", preContactMechTypeId);
+
+paymentMethodId = parameters.get("paymentMethodId");
+context.put("paymentMethodId", paymentMethodId);
+
+cmNewPurposeTypeId = parameters.get("contactMechPurposeTypeId");
+if (cmNewPurposeTypeId != null) {
+    contactMechPurposeType = delegator.findByPrimaryKey("ContactMechPurposeType", UtilMisc.toMap("contactMechPurposeTypeId", cmNewPurposeTypeId));
+    if (contactMechPurposeType != null) {
+        context.put("contactMechPurposeType", contactMechPurposeType);
+    } else {
+        cmNewPurposeTypeId = null;
+    }
+    context.put("cmNewPurposeTypeId", cmNewPurposeTypeId);
+}
+
+context.put("donePageFull", parameters.get("DONE_PAGE"));

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- 
+  This file contains requests for Lookup requests.
+  It contains legacy javascript popups and will
+  contain AJAX enhanced versions.
+-->
+        
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <description>Lookup Controller</description>
+    <owner>Open Source Strategies, Inc. (c) 2006-2007 </owner>
+
+    <request-map uri="LookupLot">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupLot"/>
+    </request-map>
+    <request-map uri="LookupPerson">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupPerson"/>
+    </request-map>
+    <request-map uri="LookupProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupProduct"/>
+    </request-map> 
+    <request-map uri="LookupProductAndPrice">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupProductAndPrice"/>
+    </request-map>   
+    <request-map uri="LookupProductInStore">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupProductInStore"/>
+    </request-map>
+    <request-map uri="LookupPurchaseOrder">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupPurchaseOrder"/>
+    </request-map>
+    <request-map uri="LookupSalesOrders">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupSalesOrders"/>
+    </request-map>
+    <request-map uri="LookupRouting">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="LookupRouting"/>
+    </request-map>
+    <request-map uri="LookupRoutingTask">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupRoutingTask"/>
+    </request-map>
+    <request-map uri="LookupUserLoginAndPartyDetails">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupUserLoginAndPartyDetails"/>
+    </request-map>
+    <request-map uri="LookupSupplier">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupSupplier"/>
+    </request-map>
+    <request-map uri="LookupPartner">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupPartner"/>
+    </request-map>
+    <request-map uri="LookupProductCategory">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupProductCategory"/>
+    </request-map>
+    <request-map uri="LookupInternalAddressBook">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupInternalAddressBook"/>
+    </request-map>
+    <request-map uri="LookupGlAccount">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupGlAccount"/>
+    </request-map>
+    <request-map uri="LookupPartyName">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="LookupPartyName"/>
+    </request-map>
+
+    <view-map name="LookupLot" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupLot"/>
+    <view-map name="LookupPerson" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupPerson"/>
+    <view-map name="LookupProduct" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupProduct"/>
+    <view-map name="LookupProductAndPrice" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupProductAndPrice"/>
+    <view-map name="LookupProductInStore" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupProductInStore"/>
+    <view-map name="LookupPurchaseOrder" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupPurchaseOrder"/>
+    <view-map name="LookupSalesOrders" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupSalesOrders"/>
+    <view-map name="LookupRouting" type="screen" page="component://manufacturing/widget/manufacturing/LookupScreens.xml#LookupRouting"/>
+    <view-map name="LookupRoutingTask" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupRoutingTask"/>
+    <view-map name="LookupUserLoginAndPartyDetails" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupUserLoginAndPartyDetails"/>
+    <view-map name="LookupSupplier" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupSupplier"/>
+    <view-map name="LookupPartner" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupPartner"/>
+    <view-map name="LookupProductCategory" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupProductCategory"/>
+    <view-map name="LookupInternalAddressBook" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupInternalAddressBook"/>
+    <view-map name="LookupGlAccount" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupGlAccount"/>
+    <view-map name="LookupPartyName" type="screen" page="component://opentaps-common/widget/screens/common/LookupScreens.xml#LookupPartyName"/>
+
+</site-conf>

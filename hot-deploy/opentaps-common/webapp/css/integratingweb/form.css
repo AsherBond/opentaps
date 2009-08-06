@@ -1,0 +1,86 @@
+@charset "UTF-8";
+/* CSS Document */
+
+#login{
+width:240px;
+height:143px;
+border:1px dotted #999999;
+}
+
+.inputLogin{
+width:145px;
+background:#FAFAFA none repeat scroll 0 0;
+border:1px solid #999999;
+height:18px;
+margin-left:10px;
+display:inline;
+}
+
+*html .inputLogin{
+width:147px;
+w/idth:145px;
+display:inline;}
+
+#login label{
+display:block;
+float:left;
+width:58px;
+text-align:left;
+color:#333333;
+font-size:0.9em;
+margin-left:8px;}
+
+
+*html #login label{
+width:66px;
+w/idth:58px;
+display:inline;
+}
+
+#login p{
+margin-top:15px;
+font-family:Arial, Helvetica, sans-serif;
+font-size:0.9em;}
+
+#login p.top{
+margin-top:25px;}
+
+ .decorativeSubmit{
+	margin-left:130px;
+	color:#FF6633;
+	text-align:center;
+	width:50px;
+	height: 25px;
+	border:2px solid #666666;
+	font-size:1em;
+	background-color:#FFFFFF;
+}
+
+/* forgotPassword CSS*/
+#forgotpasswd{
+    border:1px dotted #999999;
+    height:100px;
+    margin-right:20px;
+    margin-top:10px;
+    width:238px;
+    display:none;
+}
+
+#forgotpasswd label{
+display:block;
+float:left;
+width:60px;
+text-align:left;
+color:#333333;
+font-size:0.9em;
+margin-left:8px;
+}
+
+#forgotpasswd p{
+margin-top:15px;
+font-family:Arial, Helvetica, sans-serif;
+font-size:0.9em;}
+
+#forgotpasswd p.top{
+margin-top:25px;}
+

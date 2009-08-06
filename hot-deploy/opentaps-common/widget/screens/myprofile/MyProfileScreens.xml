@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- screens to show a user profile and user related data -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="myProfile">
+        <section>
+            <actions>
+                <!-- parameters for re-usable widgets -->
+                <set field="pageTitleLabel" value="PageTitleViewProfile"/>
+                <set field="editContactMechPage" value="myProfileEditContactMech"/>
+                <set field="donePage" value="myProfile"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/myprofile/viewprofile.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://opentaps-common/widget/screens/common/CommonScreens.xml">
+                    <decorator-section name="section-body">
+                        <container id="column-container">
+                            <platform-specific><html>
+                                <html-template location="component://opentaps-common/webapp/common/myprofile/viewprofile.ftl"/>
+                            </html></platform-specific>
+                            <container style="subSectionBlock">
+                                <platform-specific><html>
+                                    <html-template location="component://opentaps-common/webapp/common/myprofile/contactmech.ftl"/>
+                                </html></platform-specific>
+                            </container>
+                            <container style="subSectionBlock">
+                                <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.PartyVisits}</label></container>
+                                <include-form name="ListVisits" location="component://opentaps-common/widget/forms/myprofile/MyProfileForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="visitdetail">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/myprofile/visitdetail.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://opentaps-common/widget/screens/common/CommonScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific><html>
+                                <html-template location="component://opentaps-common/webapp/common/myprofile/visitdetail.ftl"/>
+                            </html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- for changing user name and other details -->
+    <screen name="updateMyProfileForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsUpdateProfile"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/myprofile/updateMyProfileForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://opentaps-common/widget/screens/common/CommonScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.OpentapsUpdateProfile}</label></container>
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/myprofile/editprofile.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- for changing password -->
+    <screen name="changePasswordForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmChangePassword"/>
+                <set field="donePage" value="myProfile"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/myprofile/changePasswordForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://opentaps-common/widget/screens/common/CommonScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmChangePassword}</label></container>
+                            <container style="form">
+                                <include-form name="updatePassword" location="component://party/webapp/partymgr/party/PartyForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Follows the pattern of the other edit contact mech pages.  TODO: refactor contact mech screens.  See the crmsfa common/ContactScreens.xml -->
+    <screen name="myProfileEditContactMech">
+        <section>
+            <actions>
+                <set field="donePage" value="myProfile"/>
+                <set field="errorPage" value="myProfileEditContactMech"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contactmech/editcontactmech.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://opentaps-common/widget/screens/common/CommonScreens.xml">
+                    <decorator-section name="section-body">
+                        <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contactmech/editcontactmech.ftl"/></html></platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Decorator for internal message pop up window -->
+    <screen name="GenericMessageDecorator">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/main-lookup-decorator.bsh"/>
+            </actions>
+            <widgets>
+                <!-- lookup header -->
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/messageHeader.ftl"/></html></platform-specific>
+                <!-- body -->
+                <decorator-section-include name="message-body"/>
+                <!-- footer -->
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/footer.ftl"/></html></platform-specific>
+                <!-- end -->
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/bottom.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="composeMessage">
+        <section>
+            <actions>
+                <set field="screenAction" value="NEW"/> 
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/myprofile/sendmessage.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="GenericMessageDecorator">
+                    <decorator-section name="message-body">
+                    <platform-specific>
+                        <html><html-template location="component://opentaps-common/webapp/common/myprofile/sendmessage.ftl"/></html>
+                    </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="replyMessage">
+        <section>
+            <actions>
+                <set field="screenAction" value="REPLY"/> 
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/myprofile/sendmessage.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="GenericMessageDecorator">
+                    <decorator-section name="message-body">
+                    <platform-specific>
+                        <html><html-template location="component://opentaps-common/webapp/common/myprofile/sendmessage.ftl"/></html>
+                    </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="forwardMessage">
+        <section>
+            <actions>
+                <set field="screenAction" value="FORWARD"/> 
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/myprofile/sendmessage.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="GenericMessageDecorator">
+                    <decorator-section name="message-body">
+                    <platform-specific>
+                        <html><html-template location="component://opentaps-common/webapp/common/myprofile/sendmessage.ftl"/></html>
+                    </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewMessage">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/myprofile/viewMessage.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="GenericMessageDecorator">
+                    <decorator-section name="message-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/myprofile/viewmessage.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="Messages">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/myprofile/getInternalMessages.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/myprofile/messages.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="myMessages">
+        <section>
+            <actions>
+                <!-- parameters for re-usable widgets -->
+                <set field="donePage" value="myMessages"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://opentaps-common/widget/screens/common/CommonScreens.xml">
+                    <decorator-section name="section-body">
+                        <container id="column-container">
+                            <container style="subSectionBlock">
+                              <include-screen name="Messages" location="component://opentaps-common/widget/screens/myprofile/MyProfileScreens.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

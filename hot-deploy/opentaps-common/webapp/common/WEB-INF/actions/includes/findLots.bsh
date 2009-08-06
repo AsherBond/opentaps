@@ -1,0 +1,73 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/*
+ * Provides a way to find LOT by lotId, supplierPartyId, (TODO: add more).
+ * The result is a list iterator named which should be used in the form widget.  The name of the list iterator
+ * is passed in as a parameter (listIteratorNameToUse) because the forms use different list iterators, which
+ * allows those forms to be reused on their own or inside other screens
+ */
+ 
+import java.util.ArrayList;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+
+listIteratorNameToUse = parameters.get("listIteratorNameToUse");
+if (listIteratorNameToUse == null) return;
+
+// possible fields we're searching by
+lotId = parameters.get("lotId");
+supplierPartyId = parameters.get("supplierPartyId");
+noSearchFind = parameters.get("noConditionFind");
+
+// construct search conditions
+searchConditions = new ArrayList();
+if (lotId != null && !lotId.equals("")) {
+    searchConditions.add(new EntityExpr("lotId", true, EntityOperator.LIKE, "%" + lotId + "%", true));
+}
+if (supplierPartyId != null && !supplierPartyId.equals("")) {
+    searchConditions.add(new EntityExpr("supplierPartyId", true, EntityOperator.EQUALS, supplierPartyId, true));
+}
+if ((searchConditions.size() == 0) && UtilValidate.isEmpty(noSearchFind)) {
+    return;
+}
+
+conditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+// We need to get a list iterator because 1) the forms are all set to use list iterators and 2) that seems to be the only way to find distinct records
+listIt = delegator.findListIteratorByCondition("Lot", conditionList, null, 
+        UtilMisc.toList("lotId", "supplierPartyId", "creationDate", "expirationDate"), // fields to select 
+        UtilMisc.toList("lotId"), // fields to order by
+        // the first true here is for "specifyTypeAndConcur"
+        // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
+        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
+
+// this is the iterator to use in form-widgets
+context.put(listIteratorNameToUse, listIt);
+
+// this debugging code is kind of helpful so I'll keep it around for now 
+/*
+listIt = context.get(listIteratorNameToUse);
+print("******* list iterator values: ***********");
+if (listIt != null) { while ((next = listIt.next()) != null) { print(next); } }
+else { print("No list iterator found"); }
+print("*****************************************");
+*/

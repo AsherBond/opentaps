@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+        
+<!-- This file may contain code which has been modified from that included with the Apache-licensed OFBiz product application -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+        
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Inventory Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="createInventoryItem" default-entity-name="InventoryItem" engine="java"
+                location="org.opentaps.common.inventory.InventoryServices" invoke="createInventoryItem" auth="true">
+        <description>Create an InventoryItem</description>
+        <auto-attributes include="pk" mode="OUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true">
+            <exclude field-name="availableToPromiseTotal"/>
+            <exclude field-name="quantityOnHandTotal"/>
+        </auto-attributes>
+        <attribute name="validateAccountingTags" type="Boolean" mode="IN" optional="true"/>
+        <override name="inventoryItemTypeId" optional="false"/>
+        <override name="productId" optional="false"/>
+        <override name="facilityId" optional="false"/>
+    </service>
+
+    <service name="updateInventoryItem" default-entity-name="InventoryItem" engine="java"
+                location="org.opentaps.common.inventory.InventoryServices" invoke="updateInventoryItem" auth="true">
+        <description>Update an InventoryItem</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true">
+            <exclude field-name="availableToPromiseTotal"/>
+            <exclude field-name="quantityOnHandTotal"/>
+        </auto-attributes>
+        <attribute name="validateAccountingTags" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="oldOwnerPartyId" mode="OUT" optional="false" type="String"/>
+        <attribute name="oldStatusId" mode="OUT" optional="true" type="String"/>
+        <attribute name="oldTag1" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag2" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag3" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag4" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag5" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag6" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag7" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag8" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag9" type="String" mode="OUT" optional="true"/>
+        <attribute name="oldTag10" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="receiveInventoryProduct" engine="simple" transaction-timeout="600"
+            location="org/ofbiz/shipment/receipt/ShipmentReceiptServices.xml" invoke="receiveInventoryProduct" auth="true">
+        <description>Receive Inventory In Warehouse</description>
+        <auto-attributes entity-name="InventoryItem" include="nonpk" mode="IN" optional="true">
+            <exclude field-name="availableToPromiseTotal"/>
+            <exclude field-name="quantityOnHandTotal"/>
+        </auto-attributes>
+        <attribute name="validateAccountingTags" type="Boolean" mode="IN" optional="true"/>
+        <auto-attributes entity-name="InventoryItemDetail" include="nonpk" mode="IN" optional="true"/>
+        <auto-attributes entity-name="ShipmentReceipt" include="nonpk" mode="IN" optional="true"/>
+        <attribute name="inventoryItemDetailSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="priorityOrderId" type="String" mode="IN" optional="true"/>
+        <attribute name="priorityOrderItemSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="inventoryItemId" type="String" mode="OUT" optional="true"/>        
+        <override name="quantityAccepted" optional="false"/>
+        <override name="quantityRejected" optional="false"/>
+        <override name="inventoryItemTypeId" optional="false"/>
+        <override name="productId" optional="false"/>
+        <override name="facilityId" optional="false"/>
+    </service>
+
+    <service name="opentaps.updateInventoryItemValueHistory" engine="java" 
+            location="org.opentaps.common.inventory.InventoryServices" invoke="updateInventoryItemValueHistory">
+        <description>Maintains the InventoryItemValueHistory entity with creations or changes to inventory item unit costs</description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="opentaps.checkInventoryAlreadyReserved" engine="java"
+            location="org.opentaps.common.inventory.InventoryServices" invoke="checkInventoryAlreadyReserved">
+        <description>Ensures that a request to reserve inventory for an order item does not over reserve it.  
+            This should be run as an invoke SECA on all reserveProductInventory services.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderItemSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+    </service>
+
+    <!-- Be sure to balance inventory items on Inventory transfer complete -->
+    <service name="completeInventoryTransfer" engine="pojo"
+            location="org.opentaps.common.domain.inventory.OrderInventoryService" invoke="completeInventoryTransfer">
+        <description>Completes the inventory transfer</description>
+        <attribute name="inventoryTransferId" type="String" mode="IN" optional="false"/>
+    </service>
+    <service name="completeInventoryTransferOld" engine="java"
+            location="org.ofbiz.product.inventory.InventoryServices" invoke="completeInventoryTransfer">
+        <description>Completes the inventory transfer</description>
+        <attribute name="inventoryTransferId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="balanceInventoryItems" engine="pojo" transaction-timeout="600" location="org.opentaps.common.domain.inventory.OrderInventoryService" invoke="balanceInventoryItems" auth="true">
+        <description>Balance inventory items based on the item passed</description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+        <attribute name="priorityOrderId" type="String" mode="IN" optional="true"/>
+        <attribute name="priorityOrderItemSeqId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="disassemblePurchasingPackage" engine="pojo" transaction-timeout="600" location="org.opentaps.common.domain.inventory.OrderInventoryService" invoke="disassemblePurchasingPackage" auth="true">
+        <description>automatically taken apart Purchasing Package product</description>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+    </service>
+
+</services>

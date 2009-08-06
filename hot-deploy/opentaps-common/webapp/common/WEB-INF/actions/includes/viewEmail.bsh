@@ -1,0 +1,121 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+// Makes sure CommEventRole.contactMechId is not in the rolesWithContactMechs, which could be anything with contactMechId but is probably more CommEventRoles
+boolean hasContactMechAlready(List rolesWithContactMechs, GenericValue commEventRole) {
+    return UtilValidate.isNotEmpty(EntityUtil.filterByAnd(rolesWithContactMechs, UtilMisc.toMap("contactMechId", commEventRole.get("contactMechId"))));
+}
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+
+// we should be passed a communicationEvent
+communicationEvent = context.get("communicationEvent");
+if ((communicationEvent == null)) {
+    return;
+}
+
+// Get the CommunicationEvent's partyIdFrom/To & contactMechIdFrom/To and turn them into fake commEventRoles
+fromRoles = new ArrayList();
+toRoles = new ArrayList();
+ccRoles = new ArrayList();
+
+// From
+partyIdFrom = communicationEvent.get("partyIdFrom");
+contactMechIdFrom = communicationEvent.get("contactMechIdFrom");
+if (partyIdFrom != null && contactMechIdFrom != null) {
+    fieldMap = UtilMisc.toMap("partyId", partyIdFrom, "contactMechId", contactMechIdFrom);
+    fieldMap.put("roleTypeId", "EMAIL_SENDER");
+    fieldMap.put("communicationEventId", communicationEvent.get("communicationEventId"));
+    fromRole = delegator.makeValue("CommunicationEventRole", fieldMap);
+    fromRoles.add(fromRole);
+}
+// To
+partyIdTo = communicationEvent.get("partyIdTo");
+contactMechIdTo = communicationEvent.get("contactMechIdTo");
+if (partyIdTo != null && contactMechIdTo != null) {
+    fieldMap = UtilMisc.toMap("partyId", partyIdTo, "contactMechId", contactMechIdTo);
+    fieldMap.put("roleTypeId", "EMAIL_RECIPIENT_TO");
+    fieldMap.put("communicationEventId", communicationEvent.get("communicationEventId"));
+    toRole = delegator.makeValue("CommunicationEventRole", fieldMap);
+    toRoles.add(toRole);
+}
+
+// Get all the recipients which are stored in CommunicationEventRole
+commEventRoles = communicationEvent.getRelated("CommunicationEventRole");
+rolesItr = commEventRoles.iterator();
+while (rolesItr.hasNext()) {
+    commEventRole = rolesItr.next();
+    // make sure we don't add duplicates
+    if (!hasContactMechAlready(fromRoles, commEventRole) &&
+        "EMAIL_SENDER".equals(commEventRole.getString("roleTypeId")) && commEventRole.get("contactMechId") != contactMechIdFrom) {
+        fromRoles.add(commEventRole);
+    } else if (!hasContactMechAlready(toRoles, commEventRole) &&
+                "EMAIL_RECIPIENT_TO".equals(commEventRole.getString("roleTypeId")) && commEventRole.get("contactMechId") != contactMechIdTo) {
+        toRoles.add(commEventRole);
+    } else if (!hasContactMechAlready(ccRoles, commEventRole) &&
+                "EMAIL_RECIPIENT_CC".equals(commEventRole.getString("roleTypeId"))) {
+        ccRoles.add(commEventRole);
+    }
+}
+context.put("fromRoles", fromRoles);
+context.put("toRoles", toRoles);
+context.put("ccRoles", ccRoles);
+
+// Get the unmatched email addresses from the communicationEvent
+fromString = communicationEvent.getString("fromString");
+toString = communicationEvent.getString("toString");
+ccString = communicationEvent.getString("ccString");
+bccString = communicationEvent.getString("bccString");
+fromAddresses = new ArrayList();
+toAddresses = new ArrayList();
+ccAddresses = new ArrayList();
+bccAddresses = new ArrayList();
+if (UtilValidate.isNotEmpty(fromString)) {
+    fromAddresses.addAll(StringUtil.split(fromString, ","));
+}
+if (UtilValidate.isNotEmpty(toString)) {
+    toAddresses.addAll(StringUtil.split(toString, ","));
+}
+if (UtilValidate.isNotEmpty(ccString)) {
+    ccAddresses.addAll(StringUtil.split(ccString, ","));
+}
+if (UtilValidate.isNotEmpty(bccString)) {
+    bccAddresses.addAll(StringUtil.split(bccString, ","));
+}
+context.put("fromAddresses", fromAddresses);
+context.put("toAddresses", toAddresses);
+context.put("ccAddresses", ccAddresses);
+context.put("bccAddresses", bccAddresses);
+
+// Get all the attachments of the email
+commEventContentAssocs = communicationEvent.getRelated("CommEventContentAssoc");
+contentItr = commEventContentAssocs.iterator();
+attachments = new ArrayList();
+while (contentItr.hasNext()) {
+    content = contentItr.next();
+    fromContent = content.getRelatedOne("FromContent");
+    attachments.add(fromContent);
+}
+
+
+context.put("communicationEventId", communicationEvent.get("communicationEventId"));
+context.put("attachments", attachments);
+

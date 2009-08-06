@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<entity-engine-xml>
+
+    <!-- sample partner -->
+    <Party partyId="demopartner1" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="demopartner1" groupName="Demo Partner 1"/>
+    <PartyRole partyId="demopartner1" roleTypeId="PARTNER"/>
+    <PartyRelationship partyIdFrom="demopartner1" roleTypeIdFrom="PARTNER" partyIdTo="Company" roleTypeIdTo="INTERNAL_ORGANIZATIO"
+            fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="PARTNER_OF" comments="Demo Partner 1 is a partner of the Company"/>
+
+    <!-- accounts of the partner -->
+    <Party partyId="dp1acct1" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="dp1acct1" groupName="Demo Partner 1 Account 1"/>
+    <PartyRole partyId="dp1acct1" roleTypeId="ACCOUNT"/>
+    <PartyRelationship partyIdFrom="dp1acct1" roleTypeIdFrom="ACCOUNT" partyIdTo="demopartner1" roleTypeIdTo="PARTNER"
+            fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ACCOUNT_OF" comments="Demo Partner 1 Account 1 is an account of the Demo Partner 1"/>
+
+    <Party partyId="dp1acct2" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="dp1acct2" groupName="Demo Partner 1 Account 2"/>
+    <PartyRole partyId="dp1acct2" roleTypeId="ACCOUNT"/>
+    <PartyRelationship partyIdFrom="dp1acct2" roleTypeIdFrom="ACCOUNT" partyIdTo="demopartner1" roleTypeIdTo="PARTNER"
+            fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ACCOUNT_OF" comments="Demo Partner 1 Account 2 is an account of the Demo Partner 1"/>
+
+    <Party partyId="dp1acct3" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="dp1acct3" groupName="Demo Partner 1 Account 3"/>
+    <PartyRole partyId="dp1acct3" roleTypeId="ACCOUNT"/>
+    <PartyRelationship partyIdFrom="dp1acct3" roleTypeIdFrom="ACCOUNT" partyIdTo="demopartner1" roleTypeIdTo="PARTNER"
+            fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ACCOUNT_OF" comments="Demo Partner 1 Account 3 is an account of the Demo Partner 1"/>
+
+    <!-- contacts of the partner's accounts -->
+    <Party partyId="dp1a1contact1" partyTypeId="PERSON"/>
+    <Person partyId="dp1a1contact1" firstName="First Contact" lastName="Partner"/>
+    <PartyRole partyId="dp1a1contact1" roleTypeId="CONTACT"/>
+    <PartyRelationship partyIdFrom="dp1a1contact1" roleTypeIdFrom="CONTACT" partyIdTo="dp1acct1" roleTypeIdTo="ACCOUNT"
+            fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="CONTACT_REL_INV" comments="Demo Partner 1 Account 1 Contact 1 is a contact of the Demo Partner 1 Account 1"/>
+
+    <Party partyId="dp1a1contact2" partyTypeId="PERSON"/>
+    <Person partyId="dp1a1contact2" firstName="First Contact" lastName="Partner"/>
+    <PartyRole partyId="dp1a1contact2" roleTypeId="CONTACT"/>
+    <PartyRelationship partyIdFrom="dp1a1contact2" roleTypeIdFrom="CONTACT" partyIdTo="dp1acct1" roleTypeIdTo="ACCOUNT"
+            fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="CONTACT_REL_INV" comments="Demo Partner 1 Account 1 Contact 2 is a contact of the Demo Partner 1 Account 1"/>
+
+    <!-- Sample partnering agreement specifying payment terms and billing rate to partners for services -->
+    <Agreement agreementId="PARTNER_COMM_AGR1" agreementTypeId="PARTNER_AGREEMENT"
+        partyIdFrom="Company" roleTypeIdFrom="INTERNAL_ORGANIZATIO" partyIdTo="demopartner1" roleTypeIdTo="PARTNER"
+        description="Partner Agreement with Demo Partner 1" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+    <AgreementItem agreementId="PARTNER_COMM_AGR1" agreementItemTypeId="COMM_PAYMENT" agreementItemSeqId="1" currencyUomId="USD" agreementText="Due in 30 days."/>
+    <AgreementTerm agreementTermId="PARTNER_COMM_AGR1A" agreementId="PARTNER_COMM_AGR1" agreementItemSeqId="1" termTypeId="FIN_PAYMENT_TERM" termDays="30"/>
+    <AgreementItem agreementId="PARTNER_COMM_AGR1" agreementItemTypeId="COMM_RATES" agreementItemSeqId="2" currencyUomId="USD" agreementText="Bill partner 70% of retail invoiced amounts in USD."/>
+    <AgreementTerm agreementTermId="PARTNER_COMM_AGR1B" agreementId="PARTNER_COMM_AGR1" agreementItemSeqId="2" termTypeId="FLAT_COMMISSION" termValue="70"/>
+    
+    <!-- another partner -->
+    <Party partyId="demopartner2" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="demopartner2" groupName="Demo Partner 2"/>
+    <PartyRole partyId="demopartner2" roleTypeId="PARTNER"/>
+    <PartyRelationship partyIdFrom="demopartner2" roleTypeIdFrom="PARTNER" partyIdTo="Company" roleTypeIdTo="INTERNAL_ORGANIZATIO" fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="PARTNER_OF" comments="Demo Partner 2 is a partner of the Company"/>
+
+    <!-- another partner -->
+    <Party partyId="demopartner3" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="demopartner3" groupName="Demo Partner 3"/>
+    <PartyRole partyId="demopartner3" roleTypeId="PARTNER"/>
+    <PartyRelationship partyIdFrom="demopartner3" roleTypeIdFrom="PARTNER" partyIdTo="Company" roleTypeIdTo="INTERNAL_ORGANIZATIO" fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="PARTNER_OF" comments="Demo Partner 3 is a partner of the Company"/>
+
+    <!-- another partner -->
+    <Party partyId="participator4" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="participator4" groupName="Demo Participator 4"/>
+    <PartyRole partyId="participator4" roleTypeId="PARTNER"/>
+    <PartyRelationship partyIdFrom="participator4" roleTypeIdFrom="PARTNER" partyIdTo="Company" roleTypeIdTo="INTERNAL_ORGANIZATIO" fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="PARTNER_OF" comments="Demo Participator 4 is a partner of the Company"/>
+
+
+    <!-- some ContactMechs for the demopartner2 -->
+    <!-- a address --> 
+    <ContactMech contactMechId="DemoPartnerAddress2" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoPartnerAddress2" toName="Demo Partner Account No. 2" address1="91 East 8th Street" city="New York" stateProvinceGeoId="NY" postalCode="10001" countryGeoId="USA"/>
+    <PartyContactMech partyId="demopartner2" contactMechId="DemoPartnerAddress2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="demopartner2" contactMechId="DemoPartnerAddress2" contactMechPurposeTypeId="PRIMARY_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <!-- a phone number --> 
+    <ContactMech contactMechId="DemoPartnerPhone2" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPartnerPhone2" countryCode="1" areaCode="310" contactNumber="322-5111" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="demopartner2" contactMechId="DemoPartnerPhone2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="demopartner2" contactMechId="DemoPartnerPhone2" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    <!-- a email address --> 
+    <ContactMech contactMechId="DemoPartnerEmail2" contactMechTypeId="EMAIL_ADDRESS" infoString="demopartner2@demopartner2.com"/>
+    <PartyContactMech partyId="demopartner2" contactMechId="DemoPartnerEmail2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="demopartner2" contactMechId="DemoPartnerEmail2" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="demopartner2" primaryPostalAddressId="DemoPartnerAddress2" primaryTelecomNumberId="DemoPartnerPhone2" primaryEmailId="DemoPartnerEmail2" />
+    
+    <!-- some ContactMechs for the demopartner3 -->
+    <!-- a address --> 
+    <ContactMech contactMechId="DemoPartnerAddress3" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoPartnerAddress3" toName="Demo Partner Account No. 3" address1="11 NORTH 97th Street" city="New York" stateProvinceGeoId="NY" postalCode="10001" countryGeoId="USA"/>
+    <PartyContactMech partyId="demopartner3" contactMechId="DemoPartnerAddress3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="demopartner3" contactMechId="DemoPartnerAddress3" contactMechPurposeTypeId="PRIMARY_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <!-- a phone number --> 
+    <ContactMech contactMechId="DemoPartnerPhone3" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPartnerPhone3" countryCode="1" areaCode="310" contactNumber="765-3423" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="demopartner3" contactMechId="DemoPartnerPhone3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="demopartner3" contactMechId="DemoPartnerPhone3" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    <!-- a email address --> 
+    <ContactMech contactMechId="DemoPartnerEmail3" contactMechTypeId="EMAIL_ADDRESS" infoString="demopartner3@demopartner3.com"/>
+    <PartyContactMech partyId="demopartner3" contactMechId="DemoPartnerEmail3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="demopartner3" contactMechId="DemoPartnerEmail3" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="demopartner3" primaryPostalAddressId="DemoPartnerAddress3" primaryTelecomNumberId="DemoPartnerPhone3" primaryEmailId="DemoPartnerEmail3" />
+
+    <!-- some ContactMechs for the participator4 -->
+    <!-- a address --> 
+    <ContactMech contactMechId="DemoPartnerAddress4" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoPartnerAddress4" toName="Demo Partner Account No. 4" address1="823 West Broadway" city="Bangor" stateProvinceGeoId="ME" postalCode="04401" countryGeoId="USA"/>
+    <PartyContactMech partyId="participator4" contactMechId="DemoPartnerAddress4" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="participator4" contactMechId="DemoPartnerAddress4" contactMechPurposeTypeId="PRIMARY_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <!-- a phone number --> 
+    <ContactMech contactMechId="DemoPartnerPhone4" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPartnerPhone4" countryCode="1" areaCode="207" contactNumber="134-3793" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="participator4" contactMechId="DemoPartnerPhone4" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="participator4" contactMechId="DemoPartnerPhone4" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    <!-- a email address --> 
+    <ContactMech contactMechId="DemoPartnerEmail4" contactMechTypeId="EMAIL_ADDRESS" infoString="participator4@participator4.com"/>
+    <PartyContactMech partyId="participator4" contactMechId="DemoPartnerEmail4" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="participator4" contactMechId="DemoPartnerEmail4" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="participator4" primaryPostalAddressId="DemoPartnerAddress4" primaryTelecomNumberId="DemoPartnerPhone4" primaryEmailId="DemoPartnerEmail4" />
+            
+
+</entity-engine-xml>

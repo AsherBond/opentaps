@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+ -->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!-- This is a seed data file of the tax authorities in the USA.
+Specific tax rates for stores should be configured in Store.xml -->
+
+<entity-engine-xml>
+
+    <Party partyId="CA_BOE" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="CA_BOE" groupName="State of Calilfornia Board of Equalization"/>
+    <ContactMech contactMechId="CA_BOE_0" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="CA_BOE_0" toName="Board of Equalization" address1="P O BOX 942879" city="Sacramento" stateProvinceGeoId="CA" postalCode="94279" countryGeoId="USA"/>
+    <PartyContactMech partyId="CA_BOE" contactMechId="CA_BOE_0" fromDate="2000-01-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="CA_BOE" contactMechId="CA_BOE_0" contactMechPurposeTypeId="PAYMENT_LOCATION" fromDate="2000-01-01 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="CA_BOE" contactMechId="CA_BOE_0" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2000-01-01 00:00:00.000"/>
+    <PartyRole partyId="CA_BOE" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="CA" taxAuthPartyId="CA_BOE" includeTaxInPrice="N"/>
+
+    <Party partyId="NY_DTF" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="NY_DTF" groupName="New York Department of Taxation and Finance"/>
+    <ContactMech contactMechId="NY_DTF_0" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="NY_DTF_0" toName="NYS Sales Tax Processing" address1="JAF Building" address2="PO BOX 1205" city="New York" stateProvinceGeoId="NY" postalCode="11016" countryGeoId="USA"/>
+    <PartyContactMech partyId="NY_DTF" contactMechId="NY_DTF_0" fromDate="2000-01-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="NY_DTF" contactMechId="NY_DTF_0" contactMechPurposeTypeId="PAYMENT_LOCATION" fromDate="2000-01-01 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="NY_DTF" contactMechId="NY_DTF_0" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2000-01-01 00:00:00.000"/>
+    <PartyRole partyId="NY_DTF" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="NY" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+
+    <Party partyId="AK_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="AK_TAXMAN" groupName="Alaska Tax Division"/>
+    <PartyRole partyId="AK_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="AK" taxAuthPartyId="AK_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="AZ_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="AZ_TAXMAN" groupName="Arizona Department of Revenue"/>
+    <PartyRole partyId="AZ_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="AZ" taxAuthPartyId="AZ_TAXMAN" includeTaxInPrice="N"/>
+    
+    <Party partyId="AR_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="AR_TAXMAN" groupName="Arkansas Department of Finances and Administration - Office of Income Tax Administration"/>
+    <PartyRole partyId="AR_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="AR" taxAuthPartyId="AR_TAXMAN" includeTaxInPrice="N"/>
+
+    <Party partyId="CO_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="CO_TAXMAN" groupName="Colorado Department of Revenue"/>
+    <PartyRole partyId="CO_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="CO" taxAuthPartyId="CO_TAXMAN" includeTaxInPrice="N"/>        
+    
+    <Party partyId="CT_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="CT_TAXMAN" groupName="Connecticut Department of Revenue Services"/>
+    <PartyRole partyId="CT_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="CT" taxAuthPartyId="CT_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="DE_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="DE_TAXMAN" groupName="Department of Finance: Division of Revenue"/>
+    <PartyRole partyId="DE_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="DE" taxAuthPartyId="DE_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="DC_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="DC_TAXMAN" groupName="Office of Tax and Revenue"/>
+    <PartyRole partyId="DC_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="DC" taxAuthPartyId="DC_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="FL_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="FL_TAXMAN" groupName="Florida Department of Revenue"/>
+    <PartyRole partyId="FL_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="FL" taxAuthPartyId="FL_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="GA_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="GA_TAXMAN" groupName="Georgia Department of Revenue - Taxpayer Services Division"/>
+    <PartyRole partyId="GA_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="GA" taxAuthPartyId="GA_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="HI_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="HI_TAXMAN" groupName="Department of Taxation"/>
+    <PartyRole partyId="HI_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="HI" taxAuthPartyId="HI_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="ID_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="ID_TAXMAN" groupName="Idaho State Tax Commission"/>
+    <PartyRole partyId="ID_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="ID" taxAuthPartyId="ID_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="IL_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="IL_TAXMAN" groupName="Illinois Department of Revenue"/>
+    <PartyRole partyId="IL_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="IL" taxAuthPartyId="IL_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="IN_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="IN_TAXMAN" groupName="Indiana Department of Revenue"/>
+    <PartyRole partyId="IN_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="IN" taxAuthPartyId="IN_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="IA_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="IA_TAXMAN" groupName="Iowa Department of Revenue"/>
+    <PartyRole partyId="IA_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="IA" taxAuthPartyId="IA_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="KS_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="KS_TAXMAN" groupName="Kansas Department of Revenue"/>
+    <PartyRole partyId="KS_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="KS" taxAuthPartyId="KS_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="KY_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="KY_TAXMAN" groupName="Kentucky Department of Revenue"/>
+    <PartyRole partyId="KY_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="KY" taxAuthPartyId="KY_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="LA_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="LA_TAXMAN" groupName="Louisiana Department of Revenue"/>
+    <PartyRole partyId="LA_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="LA" taxAuthPartyId="LA_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="ME_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="ME_TAXMAN" groupName="Department of Administration and Financial Services - Maine Revenue Services"/>
+    <PartyRole partyId="ME_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="ME" taxAuthPartyId="ME_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="MD_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="MD_TAXMAN" groupName="Comptroller of Maryland"/>
+    <PartyRole partyId="MD_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="MD" taxAuthPartyId="MD_TAXMAN" includeTaxInPrice="N"/>    
+
+    <Party partyId="MA_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="MA_TAXMAN" groupName="Massachusetts Department of Revenue"/>
+    <PartyRole partyId="MA_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="MA" taxAuthPartyId="MA_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="MI_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="MI_TAXMAN" groupName="Michigan Taxes - Department of Treasury"/>
+    <PartyRole partyId="MI_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="MI" taxAuthPartyId="MI_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="MN_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="MN_TAXMAN" groupName="Minnesota Department of Revenue"/>
+    <PartyRole partyId="MN_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="MN" taxAuthPartyId="MN_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="MS_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="MS_TAXMAN" groupName="Mississippi State Tax Commission"/>
+    <PartyRole partyId="MS_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="MS" taxAuthPartyId="MS_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="MO_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="MO_TAXMAN" groupName="Missouri Department of Revenue"/>
+    <PartyRole partyId="MO_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="MO" taxAuthPartyId="MO_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="MT_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="MT_TAXMAN" groupName="Montana Department of Revenue"/>
+    <PartyRole partyId="MT_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="MT" taxAuthPartyId="MT_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="NE_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="NE_TAXMAN" groupName="Nebraska Department of Revenue"/>
+    <PartyRole partyId="NE_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="NE" taxAuthPartyId="NE_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="NV_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="NV_TAXMAN" groupName="Nevada Department of Taxation"/>
+    <PartyRole partyId="NV_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="NV" taxAuthPartyId="NV_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="NH_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="NH_TAXMAN" groupName="New Hampshire Department of Revenue Administration"/>
+    <PartyRole partyId="NH_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="NH" taxAuthPartyId="NH_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="NJ_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="NJ_TAXMAN" groupName="State of New Jersey Division of Taxation"/>
+    <PartyRole partyId="NJ_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="NJ" taxAuthPartyId="NJ_TAXMAN" includeTaxInPrice="N"/>    
+
+    <Party partyId="NM_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="NM_TAXMAN" groupName="State of New Mexico Taxation and Revenue"/>
+    <PartyRole partyId="NM_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="NM" taxAuthPartyId="NM_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="NC_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="NC_TAXMAN" groupName="North Carolina Department of Revenue"/>
+    <PartyRole partyId="NC_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="NC" taxAuthPartyId="NC_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="ND_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="ND_TAXMAN" groupName="North Dakota State Tax Commission"/>
+    <PartyRole partyId="ND_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="ND" taxAuthPartyId="ND_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="OH_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="OH_TAXMAN" groupName="Ohio Department of Taxation"/>
+    <PartyRole partyId="OH_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="OH" taxAuthPartyId="OH_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="OK_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="OK_TAXMAN" groupName="Oklahoma Tax Commission"/>
+    <PartyRole partyId="OK_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="OK" taxAuthPartyId="OK_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="OR_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="OR_TAXMAN" groupName="State of Oregon Department of Revenue"/>
+    <PartyRole partyId="OR_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="OR" taxAuthPartyId="OR_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="PA_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="PA_TAXMAN" groupName="Pennsylvania Department of Revenue"/>
+    <PartyRole partyId="PA_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="PA" taxAuthPartyId="PA_TAXMAN" includeTaxInPrice="N"/>    
+
+    <Party partyId="RI_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="RI_TAXMAN" groupName="State of Rhode Island Department of Revenue - Division of Taxation"/>
+    <PartyRole partyId="RI_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="RI" taxAuthPartyId="RI_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="SC_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="SC_TAXMAN" groupName="South Carolina Dpartment of Revenue"/>
+    <PartyRole partyId="SC_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="SC" taxAuthPartyId="SC_TAXMAN" includeTaxInPrice="N"/>      
+
+    <Party partyId="SD_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="SD_TAXMAN" groupName="South Dakota Department of Revenue and Regulation"/>
+    <PartyRole partyId="SD_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="SD" taxAuthPartyId="SD_TAXMAN" includeTaxInPrice="N"/> 
+    
+    <Party partyId="TN_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="TN_TAXMAN" groupName="Tennessee Department of Revenue"/>
+    <PartyRole partyId="TN_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="TN" taxAuthPartyId="TN_TAXMAN" includeTaxInPrice="N"/>
+    
+    <Party partyId="TX_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="TX_TAXMAN" groupName="Texas Comptroller of Public Accounts"/>
+    <PartyRole partyId="TX_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="TX" taxAuthPartyId="TX_TAXMAN" includeTaxInPrice="N"/>
+    
+    <Party partyId="UT_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="UT_TAXMAN" groupName="Utah State Tax Commission"/>
+    <PartyRole partyId="UT_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="UT" taxAuthPartyId="UT_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="VT_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="VT_TAXMAN" groupName="Vermont Department of Taxes"/>
+    <PartyRole partyId="VT_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="VT" taxAuthPartyId="VT_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="VA_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="VA_TAXMAN" groupName="Virginia Department of Taxation"/>
+    <PartyRole partyId="VA_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="VA" taxAuthPartyId="VA_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="WA_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="WA_TAXMAN" groupName="Department of Revenue Washington State"/>
+    <PartyRole partyId="WA_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="WA" taxAuthPartyId="WA_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="WV_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="WV_TAXMAN" groupName="West Virginia Tax Commission"/>
+    <PartyRole partyId="WV_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="WV" taxAuthPartyId="WV_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="WI_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="WI_TAXMAN" groupName="Wisconsin Department of Revenue"/>
+    <PartyRole partyId="WI_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="WI" taxAuthPartyId="WI_TAXMAN" includeTaxInPrice="N"/>    
+    
+    <Party partyId="WY_TAXMAN" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="WY_TAXMAN" groupName="Wyoming Department of Revenue"/>
+    <PartyRole partyId="WY_TAXMAN" roleTypeId="TAX_AUTHORITY"/>
+    <TaxAuthority taxAuthGeoId="WY" taxAuthPartyId="WI_TAXMAN" includeTaxInPrice="N"/>    
+</entity-engine-xml>

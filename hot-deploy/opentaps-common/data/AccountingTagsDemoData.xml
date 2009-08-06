@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<entity-engine-xml>
+
+    <!-- Demo Accounting Tags -->
+
+    <!-- Departments tags -->
+    <EnumerationType enumTypeId="DEPARTMENT_TAG" parentTypeId="ACCOUNTING_TAG" description="Department Tag"/>
+    <Enumeration enumTypeId="DEPARTMENT_TAG" enumId="DPT_SALES"         enumCode="SALES"         sequenceId="01" description="Sales" />
+    <Enumeration enumTypeId="DEPARTMENT_TAG" enumId="DPT_MANUFACTURING" enumCode="MANUFACTURING" sequenceId="02" description="Manufacturing" />
+    <Enumeration enumTypeId="DEPARTMENT_TAG" enumId="DPT_WAREHOUSE"     enumCode="WAREHOUSE"     sequenceId="03" description="Warehouse" />
+    <Enumeration enumTypeId="DEPARTMENT_TAG" enumId="DPT_CUST_SERVICE"  enumCode="CUST_SERVICE"  sequenceId="04" description="Customer Service" />
+    <Enumeration enumTypeId="DEPARTMENT_TAG" enumId="DPT_ACCOUNTING"    enumCode="ACCOUNTING"    sequenceId="05" description="Accounting" />
+    <Enumeration enumTypeId="DEPARTMENT_TAG" enumId="DPT_CORPORATE"     enumCode="CORPORATE"     sequenceId="06" description="Corporate" />
+
+    <!-- Divisions tags -->
+    <EnumerationType enumTypeId="DIVISION_TAG" parentTypeId="ACCOUNTING_TAG" description="Division Tag" />
+    <Enumeration enumTypeId="DIVISION_TAG" enumId="DIV_CONSUMER"   enumCode="CONSUMER"   sequenceId="01" description="Consumer" />
+    <Enumeration enumTypeId="DIVISION_TAG" enumId="DIV_SMALL_BIZ"  enumCode="SMALL_BIZ"  sequenceId="02" description="Small Business" />
+    <Enumeration enumTypeId="DIVISION_TAG" enumId="DIV_ENTERPRISE" enumCode="ENTERPRISE" sequenceId="03" description="Enterprise" />
+    <Enumeration enumTypeId="DIVISION_TAG" enumId="DIV_GOV"        enumCode="GOVERNMENT" sequenceId="04" description="Government" />
+    <Enumeration enumTypeId="DIVISION_TAG" enumId="DIV_EDU"        enumCode="EDUCATION"  sequenceId="05" description="Education" />
+    <Enumeration enumTypeId="DIVISION_TAG" enumId="DIV_NONPROFIT"  enumCode="NONPROFIT"  sequenceId="06" description="Nonprofit" />
+
+    <!-- Activities codes -->
+    <EnumerationType enumTypeId="ACTIVITY_TAG" parentTypeId="ACCOUNTING_TAG" description="Activity Tag" />
+    <Enumeration enumTypeId="ACTIVITY_TAG" enumId="ACTI_RESEARCH"    enumCode="RESEARCH"    sequenceId="01" description="Research" />
+    <Enumeration enumTypeId="ACTIVITY_TAG" enumId="ACTI_PRODUCT"     enumCode="PRODUCT"     sequenceId="02" description="Product Development" />
+    <Enumeration enumTypeId="ACTIVITY_TAG" enumId="ACTI_MARKETING"   enumCode="MARKETING"   sequenceId="03" description="Marketing" />
+    <Enumeration enumTypeId="ACTIVITY_TAG" enumId="ACTI_TRAINING"    enumCode="TRAINING"    sequenceId="04" description="Training" />
+    <Enumeration enumTypeId="ACTIVITY_TAG" enumId="ACTI_MAINTENANCE" enumCode="MAINTENANCE" sequenceId="05" description="Maintenance" />
+
+    <!-- Accounting tag configuration: order and invoices are tagged by division, department, and activity
+     but payments and payables/receivalbes only by division,
+     so we can track expenses by division, department, activity
+     but financial statements just for division -->
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="FINANCIALS_REPORTS" enumTypeId1="DIVISION_TAG" enumTypeId2="DEPARTMENT_TAG" enumTypeId3="ACTIVITY_TAG" isTagEnum1Required="N" isTagEnum2Required="N" isTagEnum3Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="BALANCE_REPORTS" enumTypeId1="DIVISION_TAG" />
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="PRCH_INV_ITEMS" enumTypeId1="DIVISION_TAG" enumTypeId2="DEPARTMENT_TAG" enumTypeId3="ACTIVITY_TAG" isTagEnum1Required="N" isTagEnum2Required="N" isTagEnum3Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="SALES_INV_ITEMS" enumTypeId1="DIVISION_TAG" enumTypeId2="DEPARTMENT_TAG" enumTypeId3="ACTIVITY_TAG" isTagEnum1Required="N" isTagEnum2Required="N" isTagEnum3Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="COMM_INV_ITEMS" enumTypeId1="DIVISION_TAG" enumTypeId2="DEPARTMENT_TAG" enumTypeId3="ACTIVITY_TAG" isTagEnum1Required="N" isTagEnum2Required="N" isTagEnum3Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="PRCH_ORDER_ITEMS" enumTypeId1="DIVISION_TAG" enumTypeId2="DEPARTMENT_TAG" enumTypeId3="ACTIVITY_TAG" isTagEnum1Required="N" isTagEnum2Required="N" isTagEnum3Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="SALES_ORDER_ITEMS" enumTypeId1="DIVISION_TAG" enumTypeId2="DEPARTMENT_TAG" enumTypeId3="ACTIVITY_TAG" isTagEnum1Required="N" isTagEnum2Required="N" isTagEnum3Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="DISBURSEMENT" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="RECEIPT" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="ACCOUNTS_PAYABLE" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="ACCOUNTS_RECEIVABLE" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="COMMISSIONS_PAYABLE" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="TRANSACTION_ENTRY" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+    <AcctgTagEnumType organizationPartyId="Company" acctgTagUsageTypeId="CHECK_RUN" enumTypeId1="DIVISION_TAG" isTagEnum1Required="N"/>
+
+</entity-engine-xml>

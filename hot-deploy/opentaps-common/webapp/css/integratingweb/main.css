@@ -1,0 +1,61 @@
+@charset "UTF-8";
+/* CSS Document */
+
+body{
+font-family:Arial, Helvetica, sans-serif;
+}
+#top {
+height:30px;
+background:#333333;
+}
+#container{
+height:720px;
+width:100%;
+background-color:#FFFFFF;
+margin:0 0 0 0;}
+
+#header{
+height:122px;}
+
+#wrapper{
+float:left;
+width:1000px;}
+
+#form{
+float:left;
+width:260px;
+height:560px;
+border-right:2px dotted #333333;
+margin:30px 0 0 32px;}
+
+#button{
+margin-bottom:25px;
+float: left;
+width: 25%;
+width: 160px;
+}
+
+#button a{
+    /*prevents classic html colors when clicking on the link*/
+    color:#FFFFFF;
+}
+
+#appDescr{
+margin:30px 0px 0px 325px;
+width:600px;
+color:#FFFFFF;
+font-size:0.9em;
+}
+#footer {
+height:48px;
+background:#333333;
+}
+.serviceError{
+color:#333333;
+display:block;
+font-size:0.7em;
+margin-left:8px;
+text-align:left;
+width:238px;
+padding:6px 0 6px 6px;
+}

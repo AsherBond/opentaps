@@ -1,0 +1,28 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// This file initializes the opentaps macro system.  Call this if your ftl needs to use the <@import> or <@include> directives
+// and does not already use main-decorator.bsh (for example, standalone screens such as fo.ftl and lookups)
+
+// Add the import and include transforms
+// These will enable Freemarker include loading and global macros from a remote file.
+// Note that globalContext will allow access from all sections of the screen widget
+loader = Thread.currentThread().getContextClassLoader();
+globalContext.put("import", loader.loadClass("org.opentaps.common.template.freemarker.transform.ImportTransform").newInstance());
+globalContext.put("include", loader.loadClass("org.opentaps.common.template.freemarker.transform.IncludeTransform").newInstance());
+
+// Instead of using screens to define the uiLabelMap, grab it from UtilMessage
+globalContext.put("uiLabelMap", org.opentaps.common.util.UtilMessage.getUiLabels(locale));

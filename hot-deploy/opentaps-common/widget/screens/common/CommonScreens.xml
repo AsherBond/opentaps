@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <!--
+    This is the main decorator for all opentaps applications.  Its primary purpose is to set up a common layout
+    for all applications and to run a global script called main-decorator.bsh.  Remember that this script
+    executes *after* all other screen scripts run.  It should be used only to provide useful context for widgets.
+    -->
+    <screen name="main-decorator">
+        <section>
+            <actions>
+                <property-map resource="opentaps" map-name="configProperties" global="true"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/main-decorator.bsh"/>
+            </actions>
+            <widgets>
+                <!-- Instead of using the screen widget to do layout, we'll use an FTL file. -->
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/main-decorator.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- This is called within main-decorator.ftl because we need to invoke the decorator-section-include directive. -->
+    <screen name="main-body">
+        <section>
+            <widgets>
+                <decorator-section-include name="application-layout"/>  <!-- this will be defined in the application's main decorator -->
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Because all sections within an application share the same common layout, they should all include-screen this, or do their own layout. -->
+    <screen name="main-section-template">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/asterisks/enableAsterisk.bsh"/>
+            </actions>   
+            <widgets>     
+               <decorator-screen name="main-application-decorator" location="${parameters.mainApplicationDecoratorLocation}">
+                    <decorator-section name="section-layout">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/includes/main-section-decorator.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- This is called within main-section-decorator.ftl because we need to invoke the decorator-section-include directive. -->
+    <screen name="main-section-body">
+        <section>
+            <widgets>
+                <decorator-section-include name="section-body"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- All application tab bars are pretty much the same.  They just need to define a list of maps called applicationSections. -->
+    <screen name="applicationTabBar">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/includes/applicationTabBar.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- The none decorator when no section is selected.  This is triggered by using this file as the location of the decorator-screen "main-section-decorator". -->
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="none" global="true"/>
+                <set field="sectionStyle" value="singleColumn"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Common login template for all applications. -->
+    <screen name="login">
+        <section>
+            <widgets>
+                <decorator-screen name="main-application-decorator" location="${parameters.mainApplicationDecoratorLocation}">
+                    <decorator-section name="section-layout">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/includes/login.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- TODO: separate lookup screen file -->
+    <screen name="LookupLot">
+        <section>
+            <actions>
+                <property-map resource="WarehouseUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="title" value="${uiLabelMap.WarehouseLookupLot}"/>
+                <set field="queryString" from-field="result.queryString"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="LookupDecorator" location="component://common/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <include-form name="lookupLot" location="component://opentaps-common/widget/forms/lookup/LookupForms.xml"/>
+                        <include-form name="listLookupLot" location="component://opentaps-common/widget/forms/lookup/LookupForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Use this screen when a user should be denied permission to view a PDF. -->
+    <screen name="permissionDeniedPDF">
+        <section>
+            <actions>
+                <!-- 
+                <set field="defaultFontFamily" value="DejaVuSans"/>
+                -->
+                <property-map resource="OpentapsErrorLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/includes/permissionDenied.fo.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="selectOrganizationForm">
+        <section>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="selectOrganization"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="selectOrganization">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/selectOrganization.bsh"/>
+            </actions>
+            <widgets>
+                <container style="subSection">
+                    <container style="screenlet-header">
+                        <label style="boxhead">${uiLabelMap.OpentapsSelectOrganization}</label>
+                    </container>
+                    <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/selectOrganization.ftl"/></html></platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- all edit contact mech screens should include-screen this screen, which will check complex security and invoke the editcontactmech script and ftl -->
+    <screen name="CommonEditContactMech">
+        <section>
+            <actions>
+                <!-- Note that security must be provided by the calling application, -->
+                <!-- by setting "allowed" in the context.                            -->
+                <set field="sectionHeaderUiLabel" value="PartyCreateNewContact"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/contactmech/editcontactmech.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/contactmech/editcontactmech.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Organization header and footer screens - it will remain common for all the pdf -->
+
+    <screen name="OrganizationHeader">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/companyHeader.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/companyHeader.fo.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="OrganizationFooter">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/footer.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/footer.fo.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="javascriptUiLabels.js">
+        <section>
+            <widgets>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/js/javascriptUiLabels.js.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="navigationHistory">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/nav-history.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/nav-history-create.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/includes/nav-history.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Parametrized contact mech screen.  TODO:  Make all screens that show contact info section use this, either from screen widget or from ftl.  -->
+    <screen name="viewContactMechs">
+         <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/contactmech/viewprofile.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/contactmech/viewprofile.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="newMessageSummary">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://opentaps-common/webapp/common/includes/newMessageSummary.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <!-- this is the toplevel writeEmail screen to be called from the uri -->
+    <screen name="writeEmail">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmWriteEmail"/>
+                <set field="sectionHeaderUiLabel" value="CrmWriteEmail"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/getMergeFormsForCurrentUser.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="writeEmailScreen"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- this is the includable screen for writing emails -->
+    <screen name="writeEmailScreen">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/writeEmail.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/writeEmail.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <!-- helper screen to decide whether to show the writeEmail.ftl file and form or viewEmail -->
+    <screen name="viewOrWriteEmailScreen">
+        <section>
+            <condition><if-compare field-name="pendingEmail" operator="equals" value="true" type="Boolean"/></condition>
+            <widgets>
+                <container style="subSectionBlock">
+                    <include-screen name="writeEmailScreen"/>
+                </container>
+            </widgets>
+            <fail-widgets>
+                <container style="subSectionBlock">
+                    <include-screen name="viewEmailScreen"/>
+                </container>
+            </fail-widgets>
+        </section>
+    </screen>
+    
+    <!-- this screen is for rendering emails -->
+    <screen name="viewEmailScreen">
+        <section>
+            <actions>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/viewEmail.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/viewEmail.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>            
+</screens>

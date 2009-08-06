@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+    <form name="listLookupProduct" list-name="products" title="" type="list" separate-columns="true" 
+          default-widget-style="tabletext" default-tooltip-style="tabletext" default-title-style="tableheadtext" 
+          default-table-style="commonListTable" header-row-style="commonListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+          paginate-target="${lookupAction}">
+        <field name="productId" title="" widget-style="buttontext">
+            <hyperlink also-hidden="false" target-type="plain" description="${productId}" target="javascript:set_values('${productId}', '${internalName}')"/>
+        </field>
+        <field name="goodIdentificationTypeId" title="${goodIdentificationTypeIdDescription}"><display/></field>
+        <field name="idValue" title="${goodIdentificationTypeDescription}"><display/></field>
+        <field name="productTypeId" title="${uiLabelMap.ProductProductType}"><display/></field>
+        <field name="brandName" title="${uiLabelMap.ProductBrandName}"><display/></field>
+        <field name="internalName" title="${uiLabelMap.ProductInternalName}"><display/></field>
+    </form>
+
+    <!-- Lookup product and price -->
+    <form name="lookupProductAndPrice" target="LookupProductAndPrice" title="" type="single"
+        default-title-style="tableheadtext" default-tooltip-style="tabletext" default-widget-style="inputBox">
+        <field name="productId" title="${uiLabelMap.ProductProductId}"><text-find/></field>
+        <field name="internalName" title="${uiLabelMap.ProductInternalName}"><text-find/></field>
+        <field name="productTypeId" title="${uiLabelMap.ProductProductType}">
+            <drop-down allow-empty="true">
+                <entity-options entity-name="ProductType" description="${description}">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+             </drop-down>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><text-find/></field>
+        <field name="primaryProductCategoryId">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="ProductCategory" key-field-name="productCategoryId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="currencyUomId" title="${uiLabelMap.CommonCurrency}">
+            <drop-down allow-empty="false" no-current-selected-key="${defaultCurrencyUomId}">
+                <entity-options description="${uomId} - ${description}" entity-name="Uom" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="productPriceTypeId" title="${uiLabelMap.ProductPriceType}">
+            <drop-down allow-empty="false" no-current-selected-key="DEFAULT_PRICE">
+                <entity-options description="${description}" entity-name="ProductPriceType" key-field-name="productPriceTypeId">
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="productPricePurposeId">
+            <drop-down allow-empty="false" no-current-selected-key="PURCHASE">
+                <entity-options description="${description}" entity-name="ProductPricePurpose" key-field-name="productPricePurposeId">
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="price" title="${uiLabelMap.ProductPrice}"><range-find/></field>
+
+        <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field> 
+        <field name="filterByDate"><hidden value="Y"/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonLookup}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+    <form name="listLookupProductAndPrice" list-name="listIt" title="" type="list"
+        default-title-style="tableheadtext"  default-tooltip-style="tabletext" default-widget-style="tabletext"
+        paginate-target="LookupProductAndPrice">
+        <actions>
+            <service service-name="performFind" result-map-name="result" result-map-list-name="listIt">
+                <field-map field-name="inputFields" env-name="parameters"/>
+                <field-map field-name="entityName" value="ProductAndPriceAndGoodIdentificationView"/>
+            </service>
+        </actions>
+        <field name="productId" title="" widget-style="buttontext">
+            <hyperlink also-hidden="false" target-type="plain" description="${productId}" target="javascript:set_values('${productId}', '${internalName}')"/>
+        </field>
+        <field name="internalName" title="${uiLabelMap.ProductInternalName}"><display/></field>
+        <field name="productTypeId" title="${uiLabelMap.ProductProductType}"><display-entity entity-name="ProductType"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CommonCurrency}"><display/></field>
+        <field name="price" title="${uiLabelMap.ProductPrice}"><display/></field>
+        <field name="fromDate" title="${uiLabelMap.CommonFromDate}"><display/></field>
+        <field name="thruDate" title="${uiLabelMap.CommonThruDate}"><display/></field>
+        <field name="salesDiscontinuationDate" title="${uiLabelMap.ProductSalesThruDate}"><display/></field>
+        <field name="searchVariants" title="" widget-style="buttontext" use-when="isVirtual!=null&amp;&amp;&quot;${isVirtual}&quot;.equals(&quot;Y&quot;)">
+            <hyperlink also-hidden="false" target-type="plain" description="${uiLabelMap.ProductVariants}" target="LookupVariantProduct?productId=${productId}"/>
+        </field>
+    </form>
+
+
+    <form name="FindLot" type="single" target="${findLotsTarget}"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="lotId" title="${uiLabelMap.ProductLotId}" widget-style="inputBox">
+            <text/>
+        </field>
+        <field name="supplierPartyId" title="${uiLabelMap.ProductSupplier}" widget-style="inputBox">
+            <text/>
+        </field>
+        <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit">
+            <submit/>
+        </field>
+    </form>
+
+    <form name="ListLots" type="list" separate-columns="true"
+        title="${uiLabelMap.WarehouseLots}" default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="commonListTable" header-row-style="commonListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListLots" paginate-size-field="lotsSize" paginate-index-field="lotsIndex"
+        list-name="lotListIt">
+        <field name="lotId" widget-style="buttontext" title="${uiLabelMap.ProductLotId}" widget-area-style="fieldWidth3000"
+            use-when="(isLookup!=void) &amp;&amp; (isLookup!=null) &amp;&amp; (isLookup.equals(&quot;true&quot;))">
+            <hyperlink also-hidden="false" target-type="plain" description="${lotId}" target="javascript:set_value('${lotId}')"/>
+        </field>
+        <field name="lotId" widget-style="buttontext" title="${uiLabelMap.ProductLotId}" widget-area-style="fieldWidth3000"
+            use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))">
+            <hyperlink description="${lotId}" target="lotDetail?lotId=${lotId}"/>
+        </field>
+        <field name="supplierPartyName" title="${uiLabelMap.ProductSupplier}" widget-area-style="fieldWidth200"><display/></field>
+        <field name="creationDate" title="${uiLabelMap.ProductCreatedDate}" widget-area-style="fieldWidth200"><display/></field>
+        <field name="expirationDate" title="${uiLabelMap.ProductExpireDate}" widget-area-style="fieldWidth200"><display/></field>
+    </form>
+</forms>

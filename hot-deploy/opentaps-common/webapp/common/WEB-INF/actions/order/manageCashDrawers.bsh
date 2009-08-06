@@ -1,0 +1,84 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.accounting.util.UtilAccounting;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.order.UtilOrder;
+
+List assembleCashDrawers(drawerValues) {
+  cashDrawers = new ArrayList();
+  dit = drawerValues.iterator();
+  while (dit.hasNext()) {
+    drawer = dit.next();
+    drawerMap = drawer.getAllFields();
+    drawerMap.put("balance", UtilOrder.calculateCashDrawerBalance(drawer));
+    drawerTrans = delegator.findByAnd("CashDrawerTransPaymentAndMType", UtilMisc.toMap("cashDrawerId", drawer.get("cashDrawerId")), UtilMisc.toList("paymentMethodTypeId", "cashDrawerItemSeqId"));
+    cashDrawerTransactions = new ArrayList();
+    otherDrawerTransactions = new ArrayList();
+    dtit = drawerTrans.iterator();
+    while (dtit.hasNext()) {
+      drawerTransaction = dtit.next();
+      drawerTransactionMap = drawerTransaction.getAllFields();
+      isDisbursement = UtilAccounting.isDisbursement(drawerTransaction); 
+      if (isDisbursement) {
+        drawerTransactionMap.put("amount", new Double(0 - drawerTransactionMap.get("amount").doubleValue()));
+      }
+      customerName = PartyHelper.getPartyName(delegator, isDisbursement ? drawerTransactionMap.get("partyIdTo") : drawerTransactionMap.get("partyIdFrom"), false);
+      drawerTransactionMap.put("customerName", customerName);
+      drawerTransactionMap.put("description", drawerTransaction.get("description", locale));
+      if ("CASH".equals(drawerTransactionMap.get("paymentMethodTypeId"))) {
+        cashDrawerTransactions.add(drawerTransactionMap);
+      } else {
+        otherDrawerTransactions.add(drawerTransactionMap);
+      }
+    }
+    drawerMap.put("cashTransactions", cashDrawerTransactions);
+    drawerMap.put("otherTransactions", otherDrawerTransactions);
+    cashDrawers.add(drawerMap);
+  }
+  return cashDrawers;
+}
+
+cond = UtilMisc.toList(new EntityExpr("openTimestamp", EntityOperator.NOT_EQUAL, null), new EntityExpr("closeTimestamp", EntityOperator.EQUALS, null));
+activeDrawerValues = delegator.findByCondition("CashDrawer", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("openTimestamp"));
+activeCashDrawers = assembleCashDrawers(activeDrawerValues);
+context.put("activeCashDrawers", activeCashDrawers);
+
+performFind = "Y".equals(parameters.get("performFind"));
+if (performFind) {
+  userLoginId = parameters.get("userLoginId");
+  cond = UtilMisc.toList(new EntityExpr("closeTimestamp", EntityOperator.NOT_EQUAL, null));
+  if (UtilValidate.isNotEmpty(userLoginId)) {
+    cond.add(new EntityExpr("operatorUserLoginId", EntityOperator.EQUALS, userLoginId));
+  }
+  closedDrawerValues = delegator.findByCondition("CashDrawer", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("openTimestamp"));
+  closedCashDrawers = assembleCashDrawers(closedDrawerValues);
+  context.put("closedCashDrawers", closedCashDrawers);
+}
+
+context.put("now", UtilDateTime.nowTimestamp());
+
+// These values are populated by the closeCashDrawer service - if a cash variance exists it
+//  will return to this page to make the user 'force close' the drawer
+cashVariance = parameters.get("cashVariance");
+if (UtilValidate.isNotEmpty(cashVariance)) {
+  context.put("cashVariance", cashVariance);
+  mustForceCloseCashDrawerId = parameters.get("cashDrawerId");
+  context.put("mustForceCloseCashDrawerId", mustForceCloseCashDrawerId);
+}

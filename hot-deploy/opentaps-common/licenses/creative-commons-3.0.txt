@@ -1,0 +1,10 @@
+Creative Commons Licenses:
+
+Attribution-Share Alike 3.0
+---------------------------
+
+  Human Readable form of license:
+  http://creativecommons.org/licenses/by-sa/3.0/
+
+  Legal code of license:
+  http://creativecommons.org/licenses/by-sa/3.0/legalcode

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- Common GWT requests -->
+
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+
+    <description>Opentaps Common JSON Controller</description>
+    <owner>Open Source Strategies, Inc. (c) 2006-2009</owner>
+
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+
+    <!-- Accounting tag configuration loader requests -->
+    <request-map uri="gwtFindAccountingTagsConfiguration">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.AccountingTagConfigurationLookupService" invoke="findAccountingTagsConfiguration"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- Order Items in Cart lookup requests -->
+    <request-map uri="gwtFindOrderItemsCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.OrderItemsLookupService" invoke="findOrderItemsCart"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtPostOrderItemsCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.form.CUDOrderItemService" invoke="postOrderItemsCart"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtPostOrderItemsCartBatch">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.form.CUDOrderItemService" invoke="postOrderItemsCartBatch"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtFindProductInfoForCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.OrderItemsLookupService" invoke="getProductInfoForCart"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- Invoice Item lookup requests -->
+    <request-map uri="gwtFindInvoiceItems">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.InvoiceItemLookupService" invoke="findInvoiceItems"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtPostInvoiceItems">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.form.CUDInvoiceItemService" invoke="postInvoiceItem"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtPostInvoiceItemsBatch">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.form.CUDInvoiceItemService" invoke="postInvoiceItemBatch"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtGetProductInfoForInvoice">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.ProductInfoForInvoiceLookupService" invoke="getProductInfoForInvoice"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- Party lookup requests -->
+    <request-map uri="gwtFindContacts">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="findContacts"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtFindAccounts">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="findAccounts"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtFindLeads">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="findLeads"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtFindPartners">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="findPartners"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtFindSuppliers">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="findSuppliers"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSuggestContacts">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestContacts"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSuggestAccounts">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyLookupService" invoke="suggestAccounts"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSuggestClassifications">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.PartyClassificationLookupService" invoke="suggestClassifications"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- Country / State lookup requests -->
+    <request-map uri="gwtSuggestCountries">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.CountryStateLookupService" invoke="suggestCountries"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtSuggestStates">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.CountryStateLookupService" invoke="suggestStates"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- Tax Authority lookup request -->
+    <request-map uri="gwtSuggestTaxAuth">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.TaxAuthorityLookupService" invoke="suggestTaxAuthorities"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- Term Type lookup request -->
+    <request-map uri="gwtSuggestTermType">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.TermTypeLookupService" invoke="suggestTermType"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- GL Account lookup request -->
+    <request-map uri="gwtSuggestGlAccount">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.GlAccountLookupService" invoke="suggestGlAccount"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- Product lookup request -->
+    <request-map uri="gwtSuggestProduct">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.ProductLookupService" invoke="suggestProduct"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- Invoice Item Type lookup request -->
+    <request-map uri="gwtSuggestInvoiceItemType">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.InvoiceItemTypeLookupService" invoke="suggestInvoiceItemType"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- Asterisk request -->
+    <request-map uri="gwtCallInAccount">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.AsteriskLookupService" invoke="callInAccount"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map> 
+    <request-map uri="gwtAsteriskCheckFrequency">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.lookup.AsteriskLookupService" invoke="asteriskCheckFrequencySeconds"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <!-- CRMSFA / Orders / Inventory re-reservation  -->
+    <request-map uri="gwtReReserveProduct">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.gwt.common.server.form.WarehouseService" invoke="reReserveProduct"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+</site-conf>

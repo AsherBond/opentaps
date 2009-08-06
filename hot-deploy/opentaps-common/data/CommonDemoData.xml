@@ -1,0 +1,89 @@
+<entity-engine-xml>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+    <!-- Set up supplemental data for company, which is required for some features such as PDF printing to work. -->
+    <PartySupplementalData partyId="Company" companyName="Your Company Name Here" currencyUomId="USD" primaryPostalAddressId="9000" />
+
+    <!-- Turn this off so the demo store could add additional shipping charges during order packing -->
+    <ProductStore productStoreId="9000" prorateShipping="N"/>
+
+    <!-- Give the admin user an email -->
+    <ContactMech contactMechId="admin_email" contactMechTypeId="EMAIL_ADDRESS" infoString="admin@opentaps.org"/>
+    <PartyContactMech partyId="admin" contactMechId="admin_email" fromDate="2007-01-01 00:00:00"/>
+    <PartyContactMechPurpose partyId="admin" contactMechId="admin_email" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2007-01-01 00:00:00"/>
+
+    <!-- Expire the demo billing account from ofbiz, since it is intended for use as a revolving credit account, which our UI doesn't allow -->
+    <BillingAccount billingAccountId="9010" fromDate="2001-01-01 00:00:00" thruDate="2008-05-06 00:00:00"/>
+
+    <!-- For opentaps applications statusId must be filled. This items modifies Ofbiz demo data. -->
+    <Agreement agreementId="9000" statusId="AGR_ACTIVE" fromDate="2005-01-01 00:00:00"/>
+    <Agreement agreementId="AGR_TEST" statusId="AGR_ACTIVE" fromDate="2005-01-01 00:00:00"/>
+    <Agreement agreementId="1000" statusId="AGR_ACTIVE" fromDate="2005-01-01 00:00:00"/>
+    <Agreement agreementId="1001" statusId="AGR_ACTIVE" fromDate="2005-01-01 00:00:00"/>
+    <Agreement agreementId="1002" statusId="AGR_ACTIVE" fromDate="2005-01-01 00:00:00"/>
+
+    <PartyGroup partyId="USA_IRS" groupName="Internal Revenue Service"/>
+
+    <!-- Here's a postal address for use by various demo parties. -->
+    <ContactMech contactMechId="DemoAddress" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoAddress" toName="Demo Address" address1="535 Eighth Ave" address2="18th Floor" city="New York" stateProvinceGeoId="NY" postalCode="10018" countryGeoId="USA"/>
+
+    <!-- And a telephone number for use by various demo parties. -->
+    <ContactMech contactMechId="DemoPhone" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPhone" countryCode="1" areaCode="555" contactNumber="123-4567" askForName="Ask for This Person"/>
+
+    <!-- CarrierReturnServices -->
+    <CarrierReturnService carrierReturnServiceId="UPS_1_ATTEMPT" carrierPartyId="UPS" shipmentMethodTypeId="GROUND" carrierServiceCode="3" description="UPS 1-Attempt Return Service"/>
+    <CarrierReturnService carrierReturnServiceId="UPS_3_ATTEMPT" carrierPartyId="UPS" shipmentMethodTypeId="GROUND" carrierServiceCode="5" description="UPS 3-Attempt Return Service"/>
+
+    <!-- Daily run site map generation -->
+    <RuntimeData runtimeDataId="SITEMAP_9000">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+            <ofbiz-ser>
+              <map-HashMap>
+                <map-Entry>
+                  <map-Key>
+                    <std-String value="productStoreId"/>
+                  </map-Key>
+                  <map-Value>
+                    <std-String value="9000"/>
+                  </map-Value>
+                </map-Entry>
+              </map-HashMap>
+            </ofbiz-ser>
+        ]]></runtimeInfo>
+    </RuntimeData>
+    <RecurrenceRule recurrenceRuleId="SM_DAILY" frequency="DAILY" intervalNumber="1" countNumber="-1"/>
+    <RecurrenceInfo recurrenceInfoId="SITEMAP_DAILY" startDateTime="2007-01-01 00:00:00.000" recurrenceRuleId="SM_DAILY" recurrenceCount="0"/>
+    <JobSandbox jobId="OPENTAPS_SITEMAP" jobName="Generate product catalog site map" runTime="2007-01-01 00:00:00.000" serviceName="opentaps.generateSiteMapFile" poolId="pool" runAsUser="system" recurrenceInfoId="SITEMAP_DAILY" runtimeDataId="SITEMAP_9000"/>
+
+    <!--
+    Here's an example of a custom shipment method where the customer can pick up directly if in the state of WA.
+    It must be associated with a carrier even though there is none, so we use the _NA_ carrier.
+    To make it free, we include a shipment cost estimate rule to mark of 100% of the shipment price, whatever it might be.
+     -->
+    <ShipmentMethodType shipmentMethodTypeId="CUSTOMER_PICKUP" description="Customer Pickup"/>
+    <CarrierShipmentMethod partyId="_NA_" roleTypeId="CARRIER" shipmentMethodTypeId="CUSTOMER_PICKUP"/>
+    <ProductStoreShipmentMeth productStoreShipMethId="DEMO_PICKUP_METHOD" productStoreId="9000" partyId="_NA_" includeNoChargeItems="N" allowUspsAddr="Y" requireUspsAddr="N" roleTypeId="CARRIER"
+        shipmentMethodTypeId="CUSTOMER_PICKUP" includeGeoId="WA"/>
+    <ShipmentCostEstimate shipmentCostEstimateId="DEMO_PICKUP_ESTIMATE" productStoreId="9000" carrierPartyId="_NA_" shippingPricePercent="-100" carrierRoleTypeId="CARRIER" shipmentMethodTypeId="CUSTOMER_PICKUP"/>
+
+    <!-- The ProductStoreShipmentMeth.description field is what's used to describe the choice to the users -->
+    <ProductStoreShipmentMeth productStoreShipMethId="DEMO_PICKUP_METHOD" sequenceNumber="0" userDescription="Free Customer Pickup in Washington"/>
+
+</entity-engine-xml>

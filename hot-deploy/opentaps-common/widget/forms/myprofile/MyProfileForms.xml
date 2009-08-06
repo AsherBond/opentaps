@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <!-- list of visits for the userLogin -->
+    <form name="ListVisits" type="list"
+        title="List of Visits"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="myProfile"  list-name="visitListIt">
+        <field name="visitId" title="${uiLabelMap.PartyVisitId}" widget-style="buttontext">
+            <hyperlink target="visitdetail?visitId=${visitId}" description="${visitId}"/>
+        </field>
+        <field name="partyId" title="${uiLabelMap.CommonUsername}">
+            <display-entity entity-name="PartyNameView" key-field-name="partyId" description="${firstName} ${middleName} ${lastName} ${groupName}"/>
+        </field>
+        <field name="userLoginId"><display/></field>
+        <field name="clientIpAddress"><display/></field>
+        <field name="fromDate" title="${uiLabelMap.CommonFromDate}" red-when="never" use-when="fromDate!=void&amp;&amp;fromDate!=null">
+            <display description="${bsh:fromDate.toString().substring(0,19)}"/>
+        </field>
+        <field name="thruDate" title="${uiLabelMap.CommonThruDate}" red-when="never" use-when="thruDate!=void&amp;&amp;thruDate!=null">
+            <display description="${bsh:thruDate.toString().substring(0,19)}"/>
+        </field>
+    </form>
+
+</forms>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/service-eca.xsd">
+
+    <eca service="storeOrder" event="commit">
+        <condition field-name="orderTypeId" operator="equals" value="SALES_ORDER"/>
+        <condition field-name="statusId" operator="equals" value="ORDER_CREATED"/>
+        <action service="autoApproveThirdPartyOrder" mode="sync" run-as-user="system"/>
+    </eca>
+    <eca service="createSalesOrderWithOneItem" event="commit">
+        <action service="autoApproveThirdPartyOrder" mode="sync" run-as-user="system"/>
+    </eca>
+
+    <!-- cancel order items -->
+    <!-- Note: this redefines the similar secas from Ofbiz which must then be commented out -->
+    <eca service="cancelOrderItem" event="commit">
+        <action service="recreateOrderAdjustments" mode="sync"/>
+        <action service="recalcShippingTotal" mode="sync"/>
+        <action service="recalcTaxTotal" mode="sync"/>
+        <action service="resetGrandTotal" mode="sync"/>
+        <action service="sendOrderChangeNotification" mode="async" persist="true"/>
+    </eca>
+
+    <!-- Each receipt of cash, check, money order. and disbursement of cash
+            should be recorded in a CashDrawer transaction -->
+    <eca service="createPayment" event="commit">
+        <action service="opentaps.recordCashDrawerTransaction" mode="sync"/>
+    </eca>
+
+    <!-- Check if items added to a created order should be approved -->
+    <eca service="appendOrderItem" event="commit">
+        <action service="opentaps.approveAppendedOrderItems" mode="sync"/>
+    </eca>
+    
+    <!-- Set the quantity on all order item billing records of the invoice to zero when invoice is canceled or voided. -->
+    <eca service="setInvoiceStatus" event="commit">
+        <condition field-name="invoiceId" operator="is-not-empty"/>
+        <condition field-name="statusId" operator="equals" value="INVOICE_CANCELLED"/>
+        <action service="opentaps.cancelOrderItemBilling" mode="sync"/>
+    </eca>
+
+    <!-- keep ProductStoreFacilityByAddress updated whenever a postal address is updated -->
+    <eca service="updatePostalAddress" event="commit">
+        <action service="opentaps.updatePostalAddressForProductStoreFacilityByAddress" mode="sync"/>
+    </eca>
+
+</service-eca>
