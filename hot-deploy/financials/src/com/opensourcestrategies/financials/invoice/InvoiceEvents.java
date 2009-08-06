@@ -100,9 +100,9 @@ public final class InvoiceEvents {
 
         // get the selected invoiceIds
         List<String> invoiceIds = FastList.newInstance();
-        Collection<Map<Object, String>> data = UtilHttp.parseMultiFormData(parameters);
-        for (Map<Object, String> row : data) {
-            invoiceIds.add(row.get("invoiceId"));
+        Collection<Map<String, Object>> data = UtilHttp.parseMultiFormData(parameters);
+        for (Map<String, Object> row : data) {
+            invoiceIds.add((String) row.get("invoiceId"));
         }
 
         // call our service and put the invoiceId in the request
