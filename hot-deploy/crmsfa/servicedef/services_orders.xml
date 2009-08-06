@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Data Source Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="crmsfa.getOrderPriorityList" engine="java"
+            location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="getOrderPriorityList" auth="true">
+        <description>Retrieves records from the OrderShipGroupPriority entity, ordered by priorityValue/orderId/shipGroupSeqId, and constructs a JSON string</description>
+        <attribute name="onlyApprovedOrders" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="containsProductId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderPriorityList" type="List" mode="OUT"/>
+    </service>
+
+    <service name="crmsfa.resequenceOrderShipGroupPriorities" engine="java" transaction-timeout="7200"
+            location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="resequenceOrderShipGroupPriorities" auth="true">
+        <description>Updates the OrderShipGroupPriority entity priorityValue fields according to the sequence of parameters</description>
+        <attribute name="orderIds" type="Map" string-map-prefix="orderIds_" mode="IN" optional="true"/>
+        <attribute name="shipGroupSeqIds" type="Map" string-map-prefix="shipGroupSeqIds_" mode="IN" optional="true"/>
+        <attribute name="shipByDates" type="Map" string-map-prefix="shipByDates_" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.rescheduleOrderShipDates" engine="java" transaction-timeout="7200"
+            location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="rescheduleOrderShipDates" auth="true">
+        <description>Updates the OrderShipGroup entity shipByDate field according to the sequence of parameters</description>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="shipGroupSeqId" type="String" mode="IN" optional="true"/>
+        <attribute name="shipByDate" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.reReserveInventoryByOrderPriority" engine="java" transaction-timeout="7200"
+            location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="reReserveInventoryByOrderPriority" auth="true">
+        <description>Cancels and re-reserves all orderItemShipGrpInvRes in a sequence defined by the OrderShipGroupPriority entity, so that
+            inventory is reallocated by order priority.</description>
+    </service>
+
+    <service name="crmsfa.reReserveInventoryOnSalesOrderStatusChange" engine="java" transaction-timeout="7200"
+            location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="reReserveInventoryOnSalesOrderStatusChange" auth="true">
+        <description>Wrapper for crmsfa.reReserveInventoryByOrderPriority, to be run by secas which should trigger for sales orders only. Runs 
+            crmsfa.reReserveInventoryByOrderPriority synchronously or asynchronously according to the property crmsfa.order.reservations.rereserveSync
+            in crmsfa.properties.</description>
+        <attribute name="orderId" type="String" mode="INOUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.createOrderShipGroupPriority" engine="java"
+            location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="createOrderShipGroupPriority" auth="true">
+        <description>Creates an OrderShipGroupPriority record for each order ship group, with priorityValues higher than the highest existing
+            value (lowest priority)</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.deleteOrderShipGroupPriority" engine="java"
+            location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="deleteOrderShipGroupPriority" auth="true">
+        <description>Removes all OrderShipGroupPriority records for an order</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.createCommissionInvoices" engine="java"
+        location="com.opensourcestrategies.crmsfa.commission.CommissionServices" invoke="createCommissionInvoices" auth="true">
+        <description>Creates a Commission Invoice for each of the agents associated with an Invoice</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceIds" type="List" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="createSalesOrderWithOneItem" engine="java"
+        location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="createSalesOrderWithOneItem" auth="true">
+        <description>Creates a sales order with one product for the specified customer.</description>
+        <attribute name="billToPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentMethodId" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="invoiceAndCaptureOrder" engine="java"
+        location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="invoiceAndCaptureOrder" auth="true">
+        <description>his service will invoice and capture the given order.  Order must have a payment preference set up.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.addCreditCardToOrder" engine="java"
+        location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="addCreditCardToOrder" auth="true">
+        <description>Add a credit card to an existing order for a given amount.  This method validates CVV2, which is the securityCode input.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="paymentMethodId" type="String" mode="IN" optional="false"/>
+        <attribute name="securityCode" type="String" mode="IN" optional="false"/>
+        <attribute name="amount" type="Double" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.prepareOrderConfirmationEmail" engine="java" use-transaction="false"
+             location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="prepareOrderConfirmationEmail">
+        <description>Send an email to someone in the system. Associate a completed Order and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the OrderId of the saved data.
+            No security at the moment.</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="sendTo" type="String" mode="IN" optional="false"/>
+        <attribute name="webSiteId" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
+        <attribute name="communicationEventId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.markServicesAsPerformed" engine="java" transaction-timeout="7200"
+            location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="markServicesAsPerformed" auth="true">
+        <description>Mark non physical order items, such as service, as ITEM_PERFORMED</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderItemSeqId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.createShipGroup" engine="java" transaction-timeout="7200"
+            location="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderServices" invoke="createShipGroup" auth="true">
+        <description>Create a new ship group for an order</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="contactMechId" type="String" mode="IN" optional="false"/>
+        <attribute name="shippingMethod" type="String" mode="IN" optional="false"/>
+        <attribute name="maySplit" type="String" mode="IN" optional="false"/>
+        <attribute name="isGift" type="String" mode="IN" optional="false"/>
+        <attribute name="giftMessage" type="String" mode="IN" optional="true"/>
+        <attribute name="shippingInstructions" type="String" mode="IN" optional="true"/>
+        <attribute name="thirdPartyAccountNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="thirdPartyPostalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="thirdPartyCountryCode" type="String" mode="IN" optional="true"/>
+        <attribute name="shipByDate" type="Timestamp" mode="IN" optional="true"/>
+        <!-- order items -->
+        <attribute name="_rowSubmit" type="Map" mode="IN" optional="false" string-map-prefix="_rowSubmit_o_"/>
+        <attribute name="orderIds" type="Map" mode="IN" optional="false" string-map-prefix="orderId_o_"/>
+        <attribute name="orderItemSeqIds" type="Map" mode="IN" optional="false" string-map-prefix="orderItemSeqId_o_"/>
+        <attribute name="shipGroupSeqIds" type="Map" mode="IN" optional="false" string-map-prefix="shipGroupSeqId_o_"/>
+        <attribute name="qtiesToTransfer" type="Map" mode="IN" optional="false" string-map-prefix="qtyToTransfer_o_"/>
+        
+    </service>
+
+</services>
+

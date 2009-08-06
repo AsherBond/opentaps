@@ -1,0 +1,38 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.content.survey.SurveyWrapper;
+
+delegator = request.getAttribute("delegator");
+
+// create a new survey wrapper for the CATRQ_SURVEY survey.  This wrapper basically generates the survey.  See Javadocs for more info.
+surveyWrapper = new SurveyWrapper(delegator, "CATRQ_SURVEY");
+context.put("surveyWrapper", surveyWrapper);
+
+// marketing campaigns - should cache this search because of high number of lookups versus how frequently new campaigns come out
+campaigns = delegator.findByAndCache("MarketingCampaign", UtilMisc.toMap("parentCampaignId", "CATRQ_CAMPAIGNS"), UtilMisc.toList("campaignName"));
+context.put("campaigns", campaigns);
+
+// US States
+assocs = delegator.findByAndCache("GeoAssoc", UtilMisc.toMap("geoIdTo", "USCN"));
+states = EntityUtil.orderBy( EntityUtil.getRelatedCache("MainGeo", assocs), UtilMisc.toList("abbreviation") );
+context.put("states", states);
+
+// Countries of the world
+countries = delegator.findByAndCache("Geo", UtilMisc.toMap("geoTypeId", "COUNTRY"), UtilMisc.toList("geoName"));
+context.put("countries", countries);

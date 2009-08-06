@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- 
+    Data for demonstrating the commission system.  This requires the opentaps financials module to be installed. 
+    For reference, see CommissionSeedData.xml in opentaps-common
+-->
+
+<entity-engine-xml>
+
+    <!-- To allow different rates for different groups of products, put the products in categories of type COMMISSION_CATEGORY. -->
+    <ProductCategory productCategoryId="COMM_CATEGORY_A" productCategoryTypeId="COMMISSION_CATEGORY" categoryName="Commission Category A"
+        description="Category A products that qualify for commission."/>
+    <ProductCategory productCategoryId="COMM_CATEGORY_B" productCategoryTypeId="COMMISSION_CATEGORY" categoryName="Commission Category B"
+        description="Category B products that qualify for commission."/>
+    <ProductCategory productCategoryId="COMM_CATEGORY_C" productCategoryTypeId="COMMISSION_CATEGORY" categoryName="Commission Category C"
+        description="Category C products that qualify for commission."/>
+
+    <!-- Add some products in each commission category for demo purposes. -->
+    <ProductCategoryMember productId="GZ-7000" productCategoryId="COMM_CATEGORY_A" fromDate="2007-01-01 00:00:00.00"/>
+    <ProductCategoryMember productId="GZ-8544" productCategoryId="COMM_CATEGORY_A" fromDate="2007-01-01 00:00:00.00"/>
+    <ProductCategoryMember productId="GZ-2002" productCategoryId="COMM_CATEGORY_B" fromDate="2007-01-01 00:00:00.00"/>
+    <ProductCategoryMember productId="GZ-5005" productCategoryId="COMM_CATEGORY_B" fromDate="2007-01-01 00:00:00.00"/>
+    <ProductCategoryMember productId="GZ-1000" productCategoryId="COMM_CATEGORY_C" fromDate="2007-01-01 00:00:00.00"/>
+    <ProductCategoryMember productId="GZ-1001" productCategoryId="COMM_CATEGORY_C" fromDate="2007-01-01 00:00:00.00"/>
+
+    <!-- Required order roles for commissions -->
+    <PartyRole partyId="DemoSalesRep1" roleTypeId="COMMISSION_AGENT"/>
+    <PartyRole partyId="DemoSalesRep2" roleTypeId="COMMISSION_AGENT"/>
+    <PartyRole partyId="DemoSalesRep3" roleTypeId="COMMISSION_AGENT"/>
+    <PartyRole partyId="DemoSalesRep4" roleTypeId="COMMISSION_AGENT"/>
+
+
+    <!-- Example:  Rep 1 earns 7% flat commission on all sales invoices where he is the commission agent.  -->
+    <Agreement agreementId="7000" agreementTypeId="COMMISSION_AGREEMENT" 
+        partyIdFrom="Company" roleTypeIdFrom="INTERNAL_ORGANIZATIO" partyIdTo="DemoSalesRep1" roleTypeIdTo="COMMISSION_AGENT" 
+        description="Flat Commission Agreement at 7% for Demo Sales Rep 1." fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+    <AgreementItem agreementId="7000" agreementItemSeqId="1" agreementItemTypeId="COMM_CUSTOMERS" agreementText="Applies to all orders where agent is named"/>
+    <AgreementTerm agreementTermId="7000" agreementId="7000" agreementItemSeqId="1" termTypeId="COMM_ORDER_ROLE" roleTypeId="COMMISSION_AGENT"/>
+    <AgreementItem agreementId="7000" agreementItemTypeId="COMM_RATES" agreementItemSeqId="2" currencyUomId="USD" agreementText="Flat 7% commission in USD."/>
+    <AgreementTerm agreementTermId="7001" agreementId="7000" agreementItemSeqId="2" termTypeId="FLAT_COMMISSION" termValue="7"/>
+    <!-- Note that commission timing is by default set to at invoicing, so this is not set here-->
+    
+    <!-- Example:  Rep 2 earns commission on all invoices where she is named as the commission agent for products in category A, B and C, with different rates for each. -->
+    <Agreement agreementId="7010" agreementTypeId="COMMISSION_AGREEMENT" 
+        partyIdFrom="Company" roleTypeIdFrom="INTERNAL_ORGANIZATIO" partyIdTo="DemoSalesRep2" roleTypeIdTo="COMMISSION_AGENT" 
+        description="Commission agreement with DemoSalesRep2" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+    <AgreementItem agreementId="7010" agreementItemSeqId="1" agreementItemTypeId="COMM_CUSTOMERS" agreementText="Applies to all orders where agent is named"/>
+    <AgreementTerm agreementTermId="7010" agreementId="7010" agreementItemSeqId="1" termTypeId="COMM_ORDER_ROLE" roleTypeId="COMMISSION_AGENT"/>
+
+    <AgreementItem agreementId="7010" agreementItemSeqId="2" agreementItemTypeId="COMM_RATES" currencyUomId="USD"/>
+    <AgreementTerm agreementTermId="7011" agreementId="7010" agreementItemSeqId="2" termTypeId="PROD_CAT_COMMISSION" termValue="25" description="25% on COMM_CATEGORY_A products" productCategoryId="COMM_CATEGORY_A"/>
+    <AgreementTerm agreementTermId="7012" agreementId="7010" agreementItemSeqId="2" termTypeId="PROD_CAT_COMMISSION" termValue="20" description="20% on COMM_CATEGORY_B products" productCategoryId="COMM_CATEGORY_B"/>
+    <AgreementTerm agreementTermId="7013" agreementId="7010" agreementItemSeqId="2" termTypeId="PROD_CAT_COMMISSION" termValue="15" description="15% on COMM_CATEGORY_C products" productCategoryId="COMM_CATEGORY_C"/>
+
+    <AgreementItem agreementId="7010" agreementItemTypeId="COMM_TIMING" agreementItemSeqId="3" agreementText="Commission is earned when customer is invoiced for sales"/>
+    <AgreementTerm agreementTermId="7014" agreementId="7010" agreementItemSeqId="3" termTypeId="COMM_TIMING_AT" valueEnumId="COMM_AT_INVOICE"/>
+
+    <!-- Example:  Rep 3 earns commission whenever an invoice is set to READY (no matter who places it) for DemoCustCompany.
+         He earns commission on products in category A, B and C with rates depending on quantity ordered in each category. -->
+    <Agreement agreementId="7020" agreementTypeId="COMMISSION_AGREEMENT" 
+        partyIdFrom="Company" roleTypeIdFrom="INTERNAL_ORGANIZATIO" partyIdTo="DemoSalesRep3" roleTypeIdTo="COMMISSION_AGENT" 
+        description="Commission Agreement between Sales Rep 3 and DemoCustCompany" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+
+    <AgreementItem agreementId="7020" agreementItemTypeId="COMM_CUSTOMERS" agreementItemSeqId="1" agreementText="Applies to any orders for the following customers"/>
+    <AgreementTerm agreementTermId="7020" agreementId="7020" agreementItemSeqId="1" termTypeId="COMM_PARTY_APPL" partyId="DemoCustCompany"/>
+
+    <AgreementItem agreementId="7020" agreementItemSeqId="2" agreementItemTypeId="COMM_RATES" currencyUomId="USD"/>
+    <AgreementTerm agreementTermId="7030" agreementId="7020" agreementItemSeqId="2" termTypeId="PROD_CAT_COMMISSION" termValue="30" description="30% commission on up to 9 of one category A products" minQuantity="0" maxQuantity="9" productCategoryId="COMM_CATEGORY_A"/>
+    <AgreementTerm agreementTermId="7031" agreementId="7020" agreementItemSeqId="2" termTypeId="PROD_CAT_COMMISSION" termValue="35" description="35% commission on 10 or more of one category A products" minQuantity="10" productCategoryId="COMM_CATEGORY_A"/>
+    <AgreementTerm agreementTermId="7032" agreementId="7020" agreementItemSeqId="2" termTypeId="PROD_GRP_COMMISSION" termValue="20" description="20% commission on up to 9 category B products combined" minQuantity="0" maxQuantity="9" productCategoryId="COMM_CATEGORY_B"/>
+    <AgreementTerm agreementTermId="7033" agreementId="7020" agreementItemSeqId="2" termTypeId="PROD_GRP_COMMISSION" termValue="25" description="25% commission on 10 or more category B products combined" minQuantity="10" productCategoryId="COMM_CATEGORY_B"/>
+    <AgreementTerm agreementTermId="7034" agreementId="7020" agreementItemSeqId="2" termTypeId="PROD_CAT_COMMISSION" termValue="15" description="15% commission on category C products, minimum quantity 10" minQuantity="10"  productCategoryId="COMM_CATEGORY_C"/>
+
+    <AgreementItem agreementId="7020" agreementItemTypeId="COMM_TIMING" agreementItemSeqId="3" agreementText="Commission is earned when customer is invoiced for sales"/>
+    <AgreementTerm agreementTermId="7035" agreementId="7020" agreementItemSeqId="3" termTypeId="COMM_TIMING_AT" valueEnumId="COMM_AT_INVOICE"/>
+
+    <!-- Example:  Rep 4 earns commission on 5% for invoices for DemoAccount1 and DemoCustCompany, but the commission invoice is created when the Payment from the customer is CONFIRMED. -->
+    <Agreement agreementId="7030" agreementTypeId="COMMISSION_AGREEMENT"
+            partyIdFrom="Company" roleTypeIdFrom="INTERNAL_ORGANIZATIO" partyIdTo="DemoSalesRep4" roleTypeIdTo="COMMISSION_AGENT"
+            description="Commission Agreement between Sales Rep 4 and his accounts" fromDate="2007-01-01 00:00:00.000" statusId="AGR_ACTIVE"/>
+
+    <AgreementItem agreementId="7030" agreementItemTypeId="COMM_CUSTOMERS" agreementItemSeqId="1" agreementText="Applies to any orders for the following customers"/>
+    <AgreementTerm agreementTermId="7040" agreementId="7030" agreementItemSeqId="1" termTypeId="COMM_PARTY_APPL" partyId="DemoAccount1"/>
+    <AgreementTerm agreementTermId="7041" agreementId="7030" agreementItemSeqId="1" termTypeId="COMM_PARTY_APPL" partyId="DemoCustCompany"/>
+    <AgreementItem agreementId="7030" agreementItemTypeId="COMM_RATES" agreementItemSeqId="2" currencyUomId="USD" agreementText="Flat 5% commission in USD."/>
+    <AgreementTerm agreementTermId="7042" agreementId="7030" agreementItemSeqId="2" termTypeId="FLAT_COMMISSION" termValue="5"/>
+    <AgreementItem agreementId="7030" agreementItemTypeId="COMM_TIMING" agreementItemSeqId="3" agreementText="Commission is earned when customer payment is confirmed"/>
+    <AgreementTerm agreementTermId="7043" agreementId="7030" agreementItemSeqId="3" termTypeId="COMM_TIMING_AT" valueEnumId="COMM_AT_PAYMENT"/>
+
+
+
+</entity-engine-xml>

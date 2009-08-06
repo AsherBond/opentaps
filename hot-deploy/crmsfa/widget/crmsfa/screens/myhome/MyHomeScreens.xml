@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2004-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author   Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains screens for the MyHome section -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="myHome" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/myhome/MyHomeScreens.xml#leftBarScreen"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/myhome/screenlets/shortcuts.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="myHome">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmMyHome"/>  
+                <set field="sectionHeaderUiLabel" value="CrmMyHome"/>
+                <set field="listSortTarget" value="myHome"/> <!-- pending  list sorting target -->
+                <!-- calendar parameters -->
+                <set field="defaultCalendarScreen" value="CalendarDay"/>
+                <set field="calendarView" value="${parameters.calendarView}"/>
+                <set field="calendarTarget" value="myHome"/>
+                <set field="currentPage" value="myHome"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/setMyActivities.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/findActivities.bsh"/> 
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/calendar/calendar-common.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/pendingEmails.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <!-- Calendar -->
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/calendar/submenus/calendar.ftl"/></html></platform-specific>
+                        </container>
+
+                        <!-- pending activities -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/pendingActivities.ftl"/></html></platform-specific>
+		                </container>
+
+			            <!-- pending emails -->
+                        <container style="subSectionBlock">
+		            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/pendingEmails.ftl"/></html></platform-specific>
+		        </container>
+                        <container style="subSectionBlock">
+		            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/pendingOutboundEmails.ftl"/></html></platform-specific>
+		        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewDashboard">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmDashboard"/>  
+                <set field="sectionHeaderUiLabel" value="CrmDashboard"/>
+                <set field="currentPage" value="viewDashboard"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/myhome/dashboard.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <!-- dashboard -->
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/myhome/dashboard.ftl"/></html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- include this screen to use the calendars -->
+    <screen name="Calendar">
+        <section>
+            <!-- do an if-else tree to see what calendar view to display -->
+            <condition><if-compare field-name="calendarView" operator="equals" value="day"/></condition>
+            <widgets><include-screen name="CalendarDay"/></widgets>
+            <fail-widgets>
+                <section>
+                    <condition><if-compare field-name="calendarView" operator="equals" value="week"/></condition>
+                    <widgets><include-screen name="CalendarWeek"/></widgets>
+                    <fail-widgets>
+                        <section>
+                            <condition><if-compare field-name="calendarView" operator="equals" value="month"/></condition>
+                            <widgets><include-screen name="CalendarMonth"/></widgets>
+                            <fail-widgets><include-screen name="${defaultCalendarScreen}"/></fail-widgets>
+                        </section>
+                    </fail-widgets>
+                </section>
+            </fail-widgets>
+        </section>
+    </screen>
+    <screen name="CalendarDay">
+        <section>
+            <actions>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/calendar/day.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/calendar/day.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="CalendarWeek">
+        <section>
+            <actions>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/calendar/week.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/calendar/week.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="CalendarMonth">
+        <section>
+            <actions>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/calendar/month.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/calendar/month.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+</screens>
+

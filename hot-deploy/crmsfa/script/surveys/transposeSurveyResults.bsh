@@ -1,0 +1,123 @@
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+/*
+ This script transposes survey results into a new ModelEntity where the fields (columns) are the questions and each row is a different respondent's answer.
+ The raw data is taken from Survey, SurveyResponse, and SurveyResponseAnswer.
+ 
+ This script is meant to be run from a beanshell console
+ */
+
+import java.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.model.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.jdbc.*;
+import org.ofbiz.entity.util.*;
+
+delegator = GenericDelegator.getGenericDelegator("default");
+
+// CHANGE THIS to be your suvey
+surveyId = "MY-SURVEY";
+entityName = "pgsqlsurvey";
+groupName = "org.ofbiz";
+
+survey = delegator.findByPrimaryKey("Survey", UtilMisc.toMap("surveyId", surveyId));
+
+// create a new entity to hold the transposed survey.  surveyResponseId remains the primary key
+// 1. create a model entity 
+transposedSurvey = new ModelEntity();
+transposedSurvey.setEntityName(entityName);
+transposedSurvey.setTableName(ModelUtil.javaNameToDbName(entityName));
+// 2. register it with the delegator
+reader = delegator.getModelReader();
+reader.getEntityCache().put(entityName, transposedSurvey);
+// 3. register its group reader
+delegator.getModelGroupReader().getGroupCache().put(entityName, groupName);
+
+// 4. now add fields
+transposedSurvey.addField(new ModelField("surveyResponseId", "id-ne", "surveyResponseId", true));
+
+// create the fields of the transposed survey
+questions = survey.getRelatedByAnd("SurveyQuestionAppl", new HashMap());
+questions = EntityUtil.orderBy(questions, UtilMisc.toList("sequenceNum"));
+
+questionTypeFields = UtilMisc.toMap("OPTION", "id", "BOOLEAN", "indicator");  // map question types to entity engine types
+questionSequence = new LinkedList();  // used to keep the questions in the correct sequence, for later displaying the transposed results
+
+// create the model entity based on survey questions.  If we don't have a mapping, then skip it
+for (qi = questions.iterator(); qi.hasNext(); ) {
+   question = qi.next().getRelatedOne("SurveyQuestion");
+   if (questionTypeFields.get(question.getString("surveyQuestionTypeId")) != null) {
+       transposedSurvey.addField(new ModelField(question.getString("surveyQuestionId"), questionTypeFields.get(question.getString("surveyQuestionTypeId")), 
+            question.getString("surveyQuestionId"), false));
+       questionSequence.add(question.getString("surveyQuestionId"));
+   } else {
+       Debug.log("Skipped " + question.getString("surveyQuestionId") + " because it is of type " + question.getString("surveyQuestionTypeId"));
+   }
+}
+
+// actually create the table in the database
+//fieldsToRepair = new ArrayList();
+//messages = new LinkedList();
+//helperName = delegator.getGroupHelperName(groupName);
+
+responses = survey.getRelated("SurveyResponse");
+transposedResponses = new LinkedList();
+
+for (ri = responses.iterator(); ri.hasNext(); ) {
+    response = ri.next();
+    responseValues = UtilMisc.toMap("surveyResponseId", response.getString("surveyResponseId"));
+    answers = response.getRelated("SurveyResponseAnswer");
+    for (ai = answers.iterator(); ai.hasNext(); ) {
+        answer = ai.next();
+        question = answer.getRelatedOne("SurveyQuestion");
+        if (question.getString("surveyQuestionTypeId").equals("OPTION")) {
+            responseValues.put(question.getString("surveyQuestionId"), answer.getString("surveyOptionSeqId")); 
+        } else if (question.getString("surveyQuestionTypeId").equals("BOOLEAN")) {
+            responseValues.put(question.getString("surveyQuestionId"), answer.getString("booleanResponse"));
+        }
+    }
+    transposedResponses.add(delegator.makeValue(transposedSurvey.getEntityName(), responseValues));
+}
+
+// first print a header of the questions
+tStr = new StringBuffer();
+tStr.append("responseId,");
+for (qsi = questionSequence.iterator(); qsi.hasNext(); ) {
+    tStr.append(qsi.next());
+    tStr.append(",");
+}
+print(tStr);
+
+// now loop through all the transpoed survey entities, using the list of questionSequence to guide the order of response entries
+for (tri = transposedResponses.iterator(); tri.hasNext(); ) {
+    response = tri.next();
+    tStr = new StringBuffer();
+    tStr.append(response.getString("surveyResponseId"));
+    tStr.append(",");
+    for (qsi = questionSequence.iterator(); qsi.hasNext(); ) {
+        questionId = qsi.next();
+        if (response.getString(questionId) != null) {
+            tStr.append(response.getString(questionId));
+        }
+        tStr.append(",");
+    }
+    print(tStr);
+}
+
+print("success");

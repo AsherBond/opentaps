@@ -1,0 +1,49 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.model.ModelEntity;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+
+if (parameters.get("partyId") != null) {
+    context.put("internalPartyId", parameters.get("partyId"));
+}
+
+// default this to now
+if (parameters.get("estimatedStartDate") == null) {
+    context.put("estimatedStartDate", UtilDateTime.nowTimestamp());
+}
+
+scopeEnumList = delegator.findByConditionCache("Enumeration", new EntityExpr("enumId", EntityOperator.IN, UtilMisc.toList("WES_PUBLIC", "WES_CONFIDENTIAL")),
+                                    UtilMisc.toList("enumId", "description"), UtilMisc.toList("sequenceId"));
+    
+// fill in scopeEnumMap with overrides for ofbiz default enum descriptions (configured in OpentapsEntityLabels.properties)
+localizedScopeEnumList = new LinkedList();
+for (iter = scopeEnumList.iterator(); iter.hasNext(); ) {
+    scopeEnum = iter.next();
+    scopeEnumMap = new HashMap();
+    scopeEnumMap.put("enumId", scopeEnum.getString("enumId"));
+    scopeEnumMap.put("description", scopeEnum.get("description", "OpentapsEntityLabels", context.get("locale")));
+    localizedScopeEnum = GenericValue.create(delegator.getModelEntity("Enumeration"), scopeEnumMap);
+    localizedScopeEnumList.add(localizedScopeEnum);
+}
+context.put("localizedScopeEnumList", localizedScopeEnumList);
+ 

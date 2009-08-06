@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="FindOrders" type="single" target="${findOrdersTarget}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="orderId" title="${uiLabelMap.OrderOrderId}" position="1">
+            <text/>
+        </field>
+        <field name="externalId" title="${uiLabelMap.OrderExternalId}" position="2">
+            <text/>
+        </field>
+        <field name="orderName" title="${uiLabelMap.OrderOrderName}">
+            <text/>
+        </field>
+        <field name="partyIdSearch" title="${uiLabelMap.ProductCustomer}" position="1">
+            <lookup target-form-name="LookupClients" size="20" maxlength="20" default-value="${parameters.partyId}"/>
+        </field>
+        <field name="productStoreId" title="${uiLabelMap.ProductProductStore}" position="2">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options description="${storeName}" entity-name="ProductStore" key-field-name="productStoreId">
+                    <entity-constraint name="payToPartyId" operator="equals" value="${configProperties.organizationPartyId}"/>
+                    <entity-order-by field-name="storeName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options description="${description}" entity-name="StatusItem" key-field-name="statusId">
+                    <entity-constraint name="statusTypeId" operator="equals" value="ORDER_STATUS"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="correspondingPoId" title="${uiLabelMap.OpentapsPONumber}">
+            <text/>
+        </field>
+        <field name="fromDate" title="${uiLabelMap.CommonFromDate}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="thruDate" title="${uiLabelMap.CommonThruDate}" position="2">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="createdBy" title="${uiLabelMap.CommonCreatedBy}">
+            <text/>
+        </field>
+        <field name="lotId" title="${uiLabelMap.ProductLotId}">
+            <lookup target-form-name="LookupLot" size="20" maxlength="20" default-value="${parameters.lotId}"/>
+        </field>
+        <field name="serialNumber" title="${uiLabelMap.ProductSerialNumber}">
+            <text/>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CrmFindOrders}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+    <form name="ListOrders" type="list" 
+        title="Orders"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListOrders" paginate-size-field="ordersSize" paginate-index-field="ordersIndex"
+        list-name="ordersListIt">
+        <field name="orderDate" title="${uiLabelMap.OrderOrderDate}"
+            header-link="${listSortTarget}?ordersOrderBy=orderDate&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
+            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(orderDate, org.ofbiz.base.util.UtilDateTime.getDateTimeFormat(locale), timeZone, locale)}"/>
+        </field>
+        <field name="orderId" title="${uiLabelMap.CrmOrderNameID}" widget-style="linktext"
+            use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))">
+            header-link="${listSortTarget}?ordersOrderBy=orderName&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
+            <hyperlink also-hidden="false" target-type="plain" description="${orderName} (${orderId})" target="orderview?orderId=${orderId}"/>
+        </field>
+        <field name="orderId" title="${uiLabelMap.CrmOrderNameID}" widget-style="linktext"
+            use-when="(isLookup!=void) &amp;&amp; (isLookup!=null) &amp;&amp; (isLookup.equals(&quot;true&quot;))"
+            header-link="${listSortTarget}?ordersOrderBy=orderName&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
+            <hyperlink also-hidden="false" target-type="plain" description="${orderName} (${orderId})" target="javascript:set_value('${orderId}')"/>
+        </field>
+        <field name="correspondingPoId" title="${uiLabelMap.OpentapsPONumber}"
+               header-link="${listSortTarget}?ordersOrderBy=correspondingPoId&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
+            <display/>
+        </field>
+        <field name="partyId" title="${uiLabelMap.CrmCustomer}"
+            header-link="${listSortTarget}?ordersOrderBy=partyId&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
+            <display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/>
+        </field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}"
+            header-link="${listSortTarget}?ordersOrderBy=statusId&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="StatusItem"/>
+        </field>
+        <field name="shipByDate" title="${uiLabelMap.OrderShipBeforeDate}">
+            <display description="${bsh:org.opentaps.common.order.UtilOrder.getEarliestShipByDate(delegator, orderId, timeZone, locale);}"/>
+        </field>
+        <field name="grandTotal" title="${uiLabelMap.OrderAmount}"
+            header-link="${listSortTarget}?ordersOrderBy=grandTotal&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
+            <display type="currency" currency="${currencyUom}"/>
+        </field>
+    </form>
+</forms>

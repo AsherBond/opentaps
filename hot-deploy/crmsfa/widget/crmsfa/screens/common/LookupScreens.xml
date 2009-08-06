@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2004-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains lookup screens for all sections.  These are the screens that show up when you click on the lookup box next to fields.
+    The screens have a simple layout. -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <!-- all lookup screens should use this decorator TODO: migrate to the decorator in opentaps-common LookupScreens -->
+    <screen name="CommonLookup">
+        <section>
+            <actions>
+                <!-- this is a lot like main-decorator, so replicate that screen -->
+                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OpentapsUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="crmsfa" map-name="configProperties" global="true"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/main-decorator.bsh"/>
+                <!-- this tells the various list forms that they are part of a lookup, so they will use the right target -->
+                <set field="isLookup" value="true" global="true"/>
+                <set field="sectionName" value="lookup" global="true"/> <!-- TODO: use  sectionName.equals("lookup") instead if isLookup in forms -->
+                <set field="opentapsApplicationName" value="crmsfa" global="true"/>                
+            </actions>
+            <widgets>
+                <!-- lookup header -->
+                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/includes/lookup.ftl"/></html></platform-specific>
+                <!-- body -->
+                <decorator-section-include name="lookup-body"/>
+                <!-- footer -->
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/footer.ftl"/></html></platform-specific>
+                <!-- end -->
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/includes/bottom.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- finds accounts, contacts or leads -->
+    <screen name="LookupClients">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindClients"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="1"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+                <set field="parameters.partyType" value="CLIENT"/> <!-- make find script restrict roles to client roles -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/LookupCrmsfaParties.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindClients}</label></container>
+                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaParties.ftl"/></html>
+                        </platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/ListInternalParties.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- similar to findAccounts -->
+    <screen name="LookupAccounts">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.accounts.accounts" global="true"/>
+                <set field="pageTitleLabel" value="CrmFindAccounts"/>
+                <set field="findPartyWidget" value="lookupAccounts"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindAccounts}</label></container>
+                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaParties.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- similar to findContacts -->
+    <screen name="LookupContacts">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.contacts.contacts" global="true"/>
+                <set field="pageTitleLabel" value="CrmFindContacts"/>
+                <set field="findPartyWidget" value="lookupContacts"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindContacts}</label></container>
+                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaParties.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- similar to findLeads -->
+    <screen name="LookupLeads">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.leads.leads" global="true"/>
+                <set field="pageTitleLabel" value="CrmFindLeads"/>
+                <set field="findPartyWidget" value="lookupLeads"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindLeads}</label></container>
+                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaParties.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- similar to findCases -->
+    <screen name="LookupCases">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindCases"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindCases"/>
+                <set field="listSortTarget" value="findCases"/> <!-- targets for order by links -->
+                <set field="parameters.listIteratorNameToUse" value="casesListIt"/> <!-- iterator for list of cases -->
+                <set field="casePaginatorName" value="findCases"/>                
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/cases/findCases.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/cases/listCases.bsh"/>                
+                <set field="findCasesTarget" value="LookupCases"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindCases}</label></container>
+                            <include-form name="FindCasesForm" location="component://crmsfa/widget/crmsfa/forms/cases/CasesForms.xml"/>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmCases}</label></container>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/cases/listCases.ftl"/></html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="LookupOpportunities">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindOpportunities"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindOpportunities"/>
+                <set field="parameters.listIteratorNameToUse" value="opportunitiesListIt"/> <!-- iterator for list of opportunities -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/opportunities/findOpportunities.bsh"/>
+                <set field="findOpportunitiesTarget" value="LookupOpportunities"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindOpportunities}</label></container>
+                            <include-form name="FindOpportunitiesForm" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmOpportunities}</label></container>
+                            <include-form name="ListOpportunities" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="LookupTeamMembers">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindTeamMembers"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindTeamMembers"/>
+                <set field="parameters.listIteratorNameToUse" value="accountTeamMembers"/> <!-- iterator for list of teamMembers -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/findPartiesByToRole.bsh"/>
+                <set field="findTeamMembersTarget" value="LookupTeamMembers"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindTeamMembers}</label></container>
+                            <include-form name="FindTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTeamMembers}</label></container>
+                            <include-form name="ListTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="LookupSalesOrders">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindOrders"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindOrders"/>
+                <set field="parameters.listIteratorNameToUse" value="ordersListIt"/> <!-- list of quotes -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/findOrders.bsh"/>
+                <set field="findOrdersTarget" value="LookupSalesOrders"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindOrders}</label></container>
+                            <include-form name="FindOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.OrderOrders}</label></container>
+                            <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>    
+
+    <!-- similar to findQuotes -->
+    <screen name="LookupQuotes">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindQuotes"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindQuotes"/>
+                <set field="parameters.listIteratorNameToUse" value="quoteList"/> <!-- list of quotes -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/quotes/findQuotes.bsh"/>
+                <set field="findQuotesTarget" value="LookupQuotes"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmFindQuotes}</label></container>
+                            <include-form name="FindQuotesForm" location="component://crmsfa/widget/crmsfa/forms/quotes/QuotesForms.xml"/>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.OrderOrderQuotes}</label></container>
+                            <include-form name="ListQuotes" location="component://crmsfa/widget/crmsfa/forms/quotes/QuotesForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="LookupContactList">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindContactLists"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindContactLists"/>
+
+                <set field="queryString" from-field="result.queryString"/>
+                <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer" default-value="0"/>
+                <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="20"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/LookupContactList.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonLookup" location="component://opentaps-common/widget/screens/common/LookupScreens.xml">
+                    <decorator-section name="lookup-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <platform-specific><html>
+                                    <html-template location="component://crmsfa/webapp/crmsfa/marketing/LookupContactList.ftl"/></html>
+                                </platform-specific>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <include-form name="listLookupContactList" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
+

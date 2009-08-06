@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- This file contains screens for the Team section -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+   <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="teams" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/teams/TeamScreens.xml#leftBarScreen"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/teams/screenlets/shortcuts.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/teams/screenlets/quickCreateTeam.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findTeams">
+        <section>
+            <actions>
+                <set field="sectionHeaderUiLabel" value="CrmFindTeams"/>
+                <set field="listSortTarget" value="findTeams"/>
+                <set field="findTeamsTarget" value="findTeams"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/teams/findTeams.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <include-form name="FindTeams" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTeams}</label></container>
+                            <include-form name="ListTeams" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewTeam">
+        <section>
+            <actions>
+                <set field="sectionHeaderUiLabel" value="CrmViewTeam"/>
+                <set field="listSortTarget" value="viewTeam"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/teams/viewTeam.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/teams/submenus/viewTeamMenu.ftl"/></html></platform-specific>
+                            <container style="form">
+                                <include-form name="viewTeam" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTeamMembers}</label></container>
+                            <include-form name="ListTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                            <!-- If the user can add team members, include the relevant form -->
+                            <section>
+                                <condition><if-compare field-name="hasTeamAssignPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <widgets>
+                                    <include-form name="addTeamMemberForm" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                                </widgets>
+                            </section>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createTeamForm">
+        <section>
+            <actions>
+                <set field="sectionHeaderUiLabel" value="CrmCreateTeam"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/teams/viewTeam.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <include-form name="createTeamForm" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateTeamForm">
+        <section>
+            <actions>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateTeam"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/teams/viewTeam.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <include-form name="updateTeamForm" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

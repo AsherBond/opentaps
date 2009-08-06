@@ -1,0 +1,212 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.order.order.*;
+import org.ofbiz.party.contact.*;
+import org.opentaps.common.util.*;
+import org.opentaps.common.order.UtilOrder;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+
+// get selected order
+orderId = parameters.get("orderId");
+
+if (UtilValidate.isEmpty(orderId)) {
+    UtilMessage.addError(request, "CrmErrorOrderNotFound", UtilMisc.toMap("orderId", null));
+    return "error";
+}
+orderHeader = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
+if (orderHeader == null) {
+    UtilMessage.addError(request, "CrmErrorOrderNotFound", UtilMisc.toMap("orderId", orderId));
+    return "error";
+}
+
+// must be a sales order
+if ( ! "SALES_ORDER".equals(orderHeader.getString("orderTypeId")) ) {
+    UtilMessage.addError(request, "OpentapsError_OrderNotSalesOrder", UtilMisc.toMap("orderId", orderId));
+    return "error";
+}
+orderReadHelper = new OrderReadHelper(orderHeader);
+context.put("orderId", orderId);
+context.put("orderHeader", orderHeader);
+
+// get the customer party and party Id
+customerParty = orderReadHelper.getPlacingParty();
+customerPartyId = customerParty.getString("partyId");
+
+// set the customer link and info
+context.put("customerLink", PartyHelper.createViewPageLink(customerPartyId, delegator, externalLoginKey));   
+context.put("customerPartyId", customerPartyId);
+context.put("customerParty", customerParty);
+
+
+// set the list of all the POSTAL_ADDRESS for the customer 
+fromCustomer = ContactHelper.getContactMech(customerParty, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);
+// add the postal addresses from the ordercontactMech
+fromOrder = delegator.findByAnd("OrderContactMech", UtilMisc.toMap("orderId", orderId, "contactMechPurposeTypeId", "SHIPPING_LOCATION"));
+// may have a new contact mech id from the session
+newContactMechId = parameters.get("newContactMechId");
+context.put("newContactMechId", newContactMechId);
+// merge all contactMechIds in a list
+contactMechs = new ArrayList();
+if (UtilValidate.isNotEmpty(fromCustomer)) contactMechs.addAll(EntityUtil.getFieldListFromEntityList(fromCustomer, "contactMechId", true));
+if (UtilValidate.isNotEmpty(fromOrder)) contactMechs.addAll(EntityUtil.getFieldListFromEntityList(fromOrder, "contactMechId", true));
+if (UtilValidate.isNotEmpty(newContactMechId)) contactMechs.add(newContactMechId);
+// remove duplicates
+contactMechSet = new HashSet();
+contactMechSet.addAll(contactMechs);
+// remove _NA_
+contactMechSet.remove("_NA_");
+contactMechs.clear();
+contactMechs.addAll(contactMechSet);
+Debug.logWarning("list of shipping addresses: "+contactMechs, "");
+// get all postal addresses
+shippingAddresses = delegator.findByAnd("PostalAddress", UtilMisc.toList(new EntityExpr("contactMechId", EntityOperator.IN, contactMechs)), UtilMisc.toList("contactMechId"));
+context.put("shippingAddresses", shippingAddresses);
+// filter out the outdated addresses
+
+
+// set the list of all the shipmentMethods from the view named "ProductStoreShipmentMethView".
+productStoreId = orderHeader.getString("productStoreId");
+productStoreShipmentMethList = delegator.findByAndCache("ProductStoreShipmentMethView", UtilMisc.toMap("productStoreId", productStoreId), UtilMisc.toList("sequenceNumber"));
+context.put("productStoreShipmentMethList", productStoreShipmentMethList);
+
+// set the list of distinct combinations of account#/postalCode/countryCode from PartyCarrierAccount, broken down by carrierPartyId
+thirdPartyInfo = org.opentaps.common.party.PartyHelper.getPartyCarrierAccounts(customerPartyId, delegator);
+context.put("thirdPartyInfo", thirdPartyInfo);
+
+// get the order ship groups, the primary will be the first of the list unless we are given a shipGroupSeqId
+// we will use its shipping options as default values for the new ship group
+if (UtilValidate.isNotEmpty(parameters.get("shipGroupSeqId"))) {
+    primaryShipGroupSeqId = parameters.get("shipGroupSeqId");
+    primaryShipGroup = delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderId, "shipGroupSeqId", primaryShipGroupSeqId));
+    if (UtilValidate.isEmpty(primaryShipGroup)) {
+        UtilMessage.addError(request, "OpentapsShipGroupNotFound", UtilMisc.toMap("orderId", orderId, "shipGroupSeqId", primaryShipGroupSeqId));
+        return "error";
+    }
+} else {
+    shipGroups = orderReadHelper.getOrderItemShipGroups();
+    if (UtilValidate.isEmpty(shipGroups)) {
+        UtilMessage.addError(request, "OrderNoShipGroupsDefined");
+        return "error";
+    }
+    primaryShipGroup = EntityUtil.getFirst(shipGroups);
+    primaryShipGroupSeqId = primaryShipGroup.getString("shipGroupSeqId");
+}
+context.put("shipGroupSeqId", primaryShipGroupSeqId);
+
+// get the shipping options: Address
+// in the form for the new ship group
+primaryShippingAddress = orderReadHelper.getShippingAddress(primaryShipGroupSeqId); // returns a PostalAddress
+
+// decide which value should be selected
+if (UtilValidate.isNotEmpty(parameters.get("contactMechId"))) {
+    selectedContactMechId = parameters.get("contactMechId");
+} else if (UtilValidate.isNotEmpty(newContactMechId)) {
+    selectedContactMechId = newContactMechId;
+} else {
+    selectedContactMechId = primaryShippingAddress.get("contactMechId");
+}
+context.put("contactMechId", selectedContactMechId);
+
+// get the selected shipping method
+if (UtilValidate.isNotEmpty(parameters.get("shippingMethod"))) {
+    selectedShippingMethodCode = parameters.get("shippingMethod");
+} else {
+    selectedShippingMethodCode = orderReadHelper.getShippingMethodCode(primaryShipGroupSeqId); // returns shipmentMethodTypeId @ carrierPartyId
+}
+context.put("shippingMethodCode", selectedShippingMethodCode);
+
+// get may split / is gift options
+if (UtilValidate.isNotEmpty(parameters.get("maySplit"))) {
+    maySplit = parameters.get("maySplit");
+} else {
+    maySplit = primaryShipGroup.get("maySplit");
+}
+if (UtilValidate.isNotEmpty(maySplit)) {
+    context.put("maySplit", maySplit);
+} else {
+    context.put("maySplit", "N");
+}
+if (UtilValidate.isNotEmpty(parameters.get("isGift"))) {
+    isGift = parameters.get("isGift");
+} else {
+    isGift = primaryShipGroup.get("isGift");
+}
+if (UtilValidate.isNotEmpty(isGift)) {
+    context.put("isGift", isGift);
+} else {
+    context.put("isGift", "N");
+}
+if (UtilValidate.isNotEmpty(parameters.get("giftMessage"))) {
+    giftMessage = parameters.get("giftMessage");
+} else {
+    giftMessage = primaryShipGroup.get("giftMessage");
+}
+context.put("giftMessage", giftMessage);
+if (UtilValidate.isNotEmpty(parameters.get("shippingInstructions"))) {
+    shippingInstructions = parameters.get("shippingInstructions");
+} else {
+    shippingInstructions = primaryShipGroup.get("shippingInstructions");
+}
+context.put("shippingInstructions", shippingInstructions);
+
+// get the third party info
+primaryThirdPartyAccountNumber = primaryShipGroup.getString("thirdPartyAccountNumber");
+primaryThirdPartyPostalCode = primaryShipGroup.getString("thirdPartyPostalCode");
+primaryThirdPartyCountryGeoCode = primaryShipGroup.getString("thirdPartyCountryGeoCode");
+context.put("billToAccountNumber", primaryThirdPartyAccountNumber);
+context.put("billToAccountZipCode", primaryThirdPartyPostalCode);
+context.put("billToAccountGeoCode", primaryThirdPartyCountryGeoCode);
+
+// get the order items that can be reassigned (not cancelled/rejected or completed)
+//orderItems = EntityUtil.filterByAnd(orderReadHelper.getOrderItemAndShipGroupAssoc(), UtilMisc.toList(
+orderItems = delegator.findByAnd("OrderItemAndShipGroupAssoc", UtilMisc.toList(
+                new EntityExpr("orderId",  EntityOperator.EQUALS, orderId),
+                new EntityExpr("shipGroupSeqId",  EntityOperator.EQUALS, primaryShipGroupSeqId),
+                new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "ITEM_CANCELLED"),
+                new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "ITEM_REJECTED"),
+                new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "ITEM_COMPLETED")),
+                UtilMisc.toList("shipGroupSeqId", "productId"));
+orderItemsProcessed = new ArrayList();
+// process the list
+for (orderItem : orderItems) {
+    // skip non physical items such as services
+    if (!UtilOrder.isItemPhysical(orderItem)) {
+        continue;
+    }
+    oi = orderItem.getAllFields();
+    // get the qty can can be reassigned
+    orderedQty = orderItem.get("quantity");
+    if (UtilValidate.isEmpty(orderedQty)) {
+        orderedQty = 0;
+    }
+    cancelledQty = orderItem.get("cancelQuantity");
+    if (UtilValidate.isEmpty(cancelledQty)) {
+        cancelledQty = 0;
+    }
+    remainingQty = orderedQty - cancelledQty;
+    if (remainingQty == 0) {
+        // skip that item as we cannot transfer any item from it
+        continue;
+    }
+    oi.put("remainingQty", remainingQty);
+    orderItemsProcessed.add(oi);
+}
+context.put("orderItems", orderItemsProcessed);

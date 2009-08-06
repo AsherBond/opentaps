@@ -1,0 +1,72 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ import org.ofbiz.base.util.UtilValidate;
+ import org.ofbiz.base.util.UtilMisc;
+ import org.ofbiz.entity.condition.EntityOperator;
+ import org.ofbiz.entity.condition.EntityExpr;
+ import org.ofbiz.party.party.PartyHelper;
+ import org.opentaps.common.builder.*;
+ import org.opentaps.common.pagination.*;
+ import org.opentaps.common.util.UtilCommon;
+ import javolution.util.FastMap;
+ import javolution.util.FastList;
+
+ // check permissions
+ hasViewSltPermission = security.hasEntityPermission("CRMSFA_SLT", "_VIEW", userLogin);
+ hasUpdateSltPermission = security.hasEntityPermission("CRMSFA_SLT", "_UPDATE", userLogin);
+ context.put("hasViewSltPermission", hasViewSltPermission);
+ context.put("hasUpdateSltPermission", hasUpdateSltPermission);
+
+ shoppingListId = UtilCommon.getParameter(context, "shoppingListId");
+ if (shoppingListId == null) return;
+
+ shoppingList = delegator.findByPrimaryKey("ShoppingList", UtilMisc.toMap("shoppingListId", shoppingListId));
+ if (shoppingList == null) return;
+
+ shoppingListDetails = FastMap.newInstance();
+ shoppingListDetails.putAll(shoppingList.getAllFields());
+ shoppingListDetails.put("shoppingListTypeDescription", shoppingList.getRelatedOne("ShoppingListType").getString("description"));
+ shoppingListDetails.put("productStoreName", shoppingList.getRelatedOne("ProductStore").getString("storeName"));
+ shoppingListDetails.put("partyName", PartyHelper.getPartyName(shoppingList.getRelatedOne("Party")));
+ context{"shoppingListDetails"} = shoppingListDetails;
+
+ // set entry in navigation history
+ listName = shoppingListDetails.get("listName");
+ context{"history"} = UtilCommon.makeHistoryEntry(UtilValidate.isNotEmpty(listName) ? listName : shoppingListDetails.get("shoppingListId"), "viewShoppingList", UtilMisc.toList("shoppingListId"));
+
+ shoppingListItemBuilder(shoppingListId, delegator) {
+     entityName = "ShoppingListItem";
+     where = FastList.newInstance();
+     where.add(new EntityExpr("shoppingListId", EntityOperator.EQUALS, shoppingListId));
+     orderBy = UtilMisc.toList("shoppingListItemSeqId");
+
+     build(page){
+         newPage = FastList.newInstance();
+         for (shoppingListItem : page) {
+             newRow = FastMap.newInstance();
+
+             newRow.putAll(shoppingListItem.getAllFields());
+             product = shoppingListItem.getRelatedOne("Product");
+             newRow.put("internalName", product.getString("internalName"));
+             newRow.put("brandName", product.getString("brandName"));
+
+             newPage.add(newRow);
+         }
+         return newPage;
+     }
+     return this;
+ }
+ context.put("shoppingListItemBuilder", shoppingListItemBuilder(shoppingListId, delegator));

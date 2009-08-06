@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+        
+<!-- This file may have been based on one or more Apache OFBIZ files but has been modified by Open Source Strategies, Inc. -->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!--
+ *  @author   Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains screens for the create Order section.  -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <!-- this section leaves sectionStyle up to the implementing decorators -->
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="orders" global="true"/>
+                <set field="requiredPermission" value="CRMSFA_ORDERS"/>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.orders.orders" global="true"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Order entry decorator with a single column. -->
+    <screen name="order-entry-decorator">
+        <section>
+            <actions>
+                <set field="sectionStyle" value="singleColumn"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <decorator-section-include name="order-entry-body"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- 
+      This is the main layout for the order entry screen, with order header info on the upper left, shortcuts in lower left, and main content in center.
+      Screens that use this should call createOrderInitialization.bsh to initialize the cart.  Note that this script cannot be put here globally because
+      OFBIZ screens render actions in the included screens first, then the parent decorator screens, so the cart must be run in the
+      actual screen itself, not in the decorator.
+    -->
+    <screen name="order-entry-header-decorator">
+        <section>
+            <actions>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="leftBarClass" value="left-content-column-two"/>
+                <set field="centerContentClass" value="center-content-column-two"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#orderEntryLeftBar"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <decorator-section-include name="order-entry-header-body"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="orderEntryLeftBar">
+        <section>
+            <actions>
+                <!-- Any data that is used for the screenlets in the left bar (order header, etc.) should be retrieved in this bsh. -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderLeftBar.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/getPartyReader.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/orderHeaderForm.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/orderSummary.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/entry/promocodes.ftl"/></html>
+                </platform-specific>
+                <include-screen name="browseCatalog" location="component://crmsfa/widget/crmsfa/screens/orders/CatalogBrowseScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- This is the main order entry screen where items can be entered -->
+    <screen name="createOrderMainScreen">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OrderCreateOrder"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/getPartyReader.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/getOrderAccountingTags.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/getOrderEntryPreference.bsh"/>
+            </actions>
+            <widgets>
+              <decorator-screen name="order-entry-header-decorator">
+                <decorator-section name="order-entry-header-body">
+                  <section>
+                    <condition>
+                      <if-compare field-name="useGwt" operator="equals" value="false"/>
+                    </condition>
+                    <widgets>
+                      <include-screen name="addOrderItemForm"/>
+                      <container style="subSectionBlock">
+                        <include-screen name="orderItemListForm"/>
+                      </container>
+                      <container style="subSectionBlock">
+                        <include-screen name="listAssocProductsForEntry"/>
+                      </container>
+                    </widgets>
+                    <fail-widgets>
+                      <platform-specific>
+                        <html><html-template location="component://crmsfa/webapp/crmsfa/orders/addOrderItemFormGwt.ftl"/></html>
+                      </platform-specific>
+                    </fail-widgets>
+                  </section>
+                </decorator-section>
+              </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- split the big order entry screen a bit: add order item form and menu bar -->
+    <screen name="addOrderItemForm">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/addOrderItemForm.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- split the big order entry screen a bit: integrated showcartitems from ordermgr -->
+    <screen name="orderItemListForm">
+        <section>
+            <actions>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/showcart.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/orders/submenus/orderItemsMenu.ftl"/></html></platform-specific>
+                <container style="form">
+                    <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/orders/entry/showcartitems.ftl"/></html></platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- split the big order entry screen a bit: list of associated products -->
+    <screen name="listAssocProductsForEntry">
+        <section>
+            <actions>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listAssocProductsForEntry.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/entry/listAssocProductsForEntry.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- custom shipment setting page -->
+    <screen name="crmsfaShipmentSetting">
+        <section>
+            <actions>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/showcart.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/shipsettings.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/crmsfaShipmentSetting.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-decorator">
+                    <decorator-section name="order-entry-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/submenus/shipSettingMenu.ftl"/></html>
+                        </platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/shipSetting.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+ 
+    <!-- This is the OFBiz order review screen reappropriated for CRMSFA layout -->
+    <screen name="reviewOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OrderReviewOrder"/>
+                <set field="sectionHeaderUiLabel" value="OrderReviewOrder"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/setShoppingCart.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/checkoutreview.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/getOrderAdjustmentByType.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/getOrderAccountingTags.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-decorator">
+                    <decorator-section name="order-entry-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/submenus/reviewOrderMenu.ftl"/></html>
+                        </platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/entry/review/reviewOrder.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+
+    <screen name="configureProduct">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmConfigureProduct"/>
+                <set field="sectionHeaderUiLabel" value="CrmConfigureProduct"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/configureProduct.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-decorator">
+                    <decorator-section name="order-entry-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/entry/configureProduct.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findMatchingSalesProducts">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OrderCreateOrder"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/findMatchingSalesProducts.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-header-decorator">
+                    <decorator-section name="order-entry-header-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/findMatchingSalesProducts.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="chooseVariantProduct">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OrderCreateOrder"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/chooseVariantProduct.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-header-decorator">
+                    <decorator-section name="order-entry-header-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/findMatchingSalesProducts.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- CRMSFA Quick Checkout -->
+    <screen name="crmsfaQuickCheckout">
+        <section>
+            <actions>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/shipsettings.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/crmsfaShipmentSetting.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/crmsfaPaymentSetting.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-decorator">
+                    <decorator-section name="order-entry-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/entry/crmsfaQuickCheckout.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <!-- Using modified versions of the party manager's edit payment method screens until they can be replaced -->
+    <screen name="ordersEditCreditCard">
+        <section>
+            <actions>
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/HasPartyPermissions.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-decorator">
+                    <decorator-section name="order-entry-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/payment/editCreditCard.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="ordersEditEftAccount">
+        <section>
+            <actions>
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/HasPartyPermissions.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-decorator">
+                    <decorator-section name="order-entry-body">
+                        <platform-specific>
+                            <html><html-template location="component://party/webapp/partymgr/party/editeftaccount.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="showPromotionDetails">
+        <section>
+            <actions>
+                <set field="title" value="Show Promotion Details"/>
+                <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/cart/showPromotionDetails.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-header-decorator">
+                    <decorator-section name="order-entry-header-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader">
+                                <label style="subSectionTitle">${uiLabelMap.CrmOrderPromotions}</label>
+                                <container style="subMenuBar">
+                                    <link style="subMenuButton" target="createOrderMainScreen" text="${uiLabelMap.CrmViewOrder}"/>
+                                </container>
+                            </container>
+                        </container>
+                        <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/cart/promotiondetails.ftl"/></html></platform-specific>
+                        <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/cart/promotioncategories.ftl"/></html></platform-specific>
+                        <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/cart/promotionproducts.ftl"/></html></platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createOrderPartyForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateNewCustomer"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateNewCustomer"/>
+                <!-- This fieled is required for the expYear dropdown to be populated.  TODO: the ccyears.ftl should just use nowTimestamp from context, because it's always set. That would require contrib back to ofbiz. -->
+                <set field="thisDate" from-field="nowTimestamp"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="order-entry-decorator">
+                    <decorator-section name="order-entry-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/entry/createOrderPartyForm.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+</screens>

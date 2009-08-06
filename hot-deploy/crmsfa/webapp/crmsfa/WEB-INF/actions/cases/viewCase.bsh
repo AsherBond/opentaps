@@ -1,0 +1,83 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.common.util.UtilView;
+import org.opentaps.common.util.UtilCommon;
+
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import com.opensourcestrategies.crmsfa.cases.UtilCase;
+import com.opensourcestrategies.crmsfa.content.ContentHelper;
+
+custRequestId = parameters.get("custRequestId");
+
+custRequest = delegator.findByPrimaryKey("CustRequest", UtilMisc.toMap("custRequestId", custRequestId));
+if (custRequest == null) { return; }
+
+caseMap = custRequest.getAllFields();
+// get the primary account and contact for this case
+caseMap.put("accountPartyId", UtilCase.getCasePrimaryAccountPartyId(delegator, custRequestId));
+caseMap.put("contactPartyId", UtilCase.getCasePrimaryContactPartyId(delegator, custRequestId));
+context.put("case", caseMap);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(custRequest.get("custRequestName"), "viewCase", UtilMisc.toList("custRequestId"));
+
+// see if the case is closed
+caseActive = true;
+statusId = custRequest.getString("statusId");
+if (statusId.equals("CRQ_COMPLETED") || statusId.equals("CRQ_CANCELLED") || statusId.equals("CRQ_REJECTED")) {
+    context.put("caseClosed", true);
+    caseActive = false;
+}
+
+// find notes
+results = delegator.findByAnd("CustRequestNoteView", UtilMisc.toMap("custRequestId", custRequestId), UtilMisc.toList("noteDateTime DESC"));
+context.put("notesList", results);
+
+// get the status change history
+caseHistoryList = delegator.findByAnd("CustRequestStatus", UtilMisc.toMap("custRequestId", custRequestId), UtilMisc.toList("statusDatetime DESC"));
+context.put("caseHistoryList", caseHistoryList);
+
+if (caseActive) {
+    // possible actions based on security
+    userLogin = request.getAttribute("userLogin");
+    security = request.getAttribute("security");
+
+    if (CrmsfaSecurity.hasCasePermission(security, "_UPDATE", userLogin, custRequestId)) {
+        context.put("hasUpdatePermission", true);
+
+        // this also means activiites may be created, but only if user has CRMSFA_ACT_CREATE
+        if (security.hasEntityPermission("CRMSFA_ACT", "_CREATE", userLogin)) {
+            context.put("hasNewActivityPermission", true);
+        }
+    }
+    if (CrmsfaSecurity.hasCasePermission(security, "_CLOSE", userLogin, custRequestId)) {
+        context.put("hasClosePermission", true);
+    }
+}
+
+// whether case is closed or open, should still be able to view its activities
+context.put("validView", true); 
+
+// and also view attached content
+context.put("content", ContentHelper.getContentInfoForCase(custRequestId, delegator));
+
+// finally mark the customer request as viewed
+UtilView.markAsViewed(custRequest, userLogin.getString("userLoginId"));

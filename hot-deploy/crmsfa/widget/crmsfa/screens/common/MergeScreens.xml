@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!-- @author Leon Torres (leon@opensourcestrategies.com) -->
+
+<!-- This file contains merge party screens for merging two contacts, accounts or leads. They are here because they are all nearly the same. -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="mergeAccountsForm">
+        <section>
+            <actions>
+                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="pageTitleLabel" value="CrmMergeAccounts"/>
+                <set field="sectionHeaderUiLabel" value="CrmMergeAccounts"/>
+                <set field="mergeFormTarget" value="confirmMergeAccountsForm"/> <!-- URI target of the merge form -->
+                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromAccount}" />
+                <set field="toPartyTitle" value="${uiLabelMap.CrmToAccount}" />
+                <set field="lookupTarget" value="LookupAccounts"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="MergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="confirmMergeAccountsForm">
+        <section>
+            <actions>
+                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="pageTitleLabel" value="CrmConfirmMergeAccounts"/>
+                <set field="sectionHeaderUiLabel" value="CrmConfirmMergeAccounts"/>
+                <set field="mergeFormTarget" value="mergeAccounts"/> <!-- URI target of the confirm merge form -->
+                <set field="mergeFormChangeTarget" value="mergeAccountsForm"/>  <!-- how to get back to the first merge form -->
+                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromAccount}" />
+                <set field="toPartyTitle" value="${uiLabelMap.CrmToAccount}" />
+                <set field="viewTarget" value="viewAccount"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <container style="subSectionBlock">
+                                <label style="requiredField">${uiLabelMap.CrmMergePartiesConfirmMessage}</label>
+                            </container>
+                            <include-form name="ConfirmMergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="mergeContactsForm">
+        <section>
+            <actions>
+                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="pageTitleLabel" value="CrmMergeContacts"/>
+                <set field="sectionHeaderUiLabel" value="CrmMergeContacts"/>
+                <set field="mergeFormTarget" value="confirmMergeContactsForm"/> <!-- URI target of the merge form -->
+                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromContact}" />
+                <set field="toPartyTitle" value="${uiLabelMap.CrmToContact}" />
+                <set field="lookupTarget" value="LookupContacts"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="MergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="confirmMergeContactsForm">
+        <section>
+            <actions>
+                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="pageTitleLabel" value="CrmConfirmMergeContacts"/>
+                <set field="sectionHeaderUiLabel" value="CrmConfirmMergeContacts"/>
+                <set field="mergeFormTarget" value="mergeContacts"/> <!-- URI target of the confirm merge form -->
+                <set field="mergeFormChangeTarget" value="mergeContactsForm"/>  <!-- how to get back to the first merge form -->
+                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromContact}" />
+                <set field="toPartyTitle" value="${uiLabelMap.CrmToContact}" />
+                <set field="viewTarget" value="viewContact"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <container style="subSectionBlock">
+                                <label style="requiredField">${uiLabelMap.CrmMergePartiesConfirmMessage}</label>
+                            </container>
+                            <include-form name="ConfirmMergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="mergeLeadsForm">
+        <section>
+            <actions>
+                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="pageTitleLabel" value="CrmMergeLeads"/>
+                <set field="sectionHeaderUiLabel" value="CrmMergeLeads"/>
+                <set field="mergeFormTarget" value="confirmMergeLeadsForm"/> <!-- URI target of the merge form -->
+                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromLead}" />
+                <set field="toPartyTitle" value="${uiLabelMap.CrmToLead}" />
+                <set field="lookupTarget" value="LookupLeads"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="MergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="confirmMergeLeadsForm">
+        <section>
+            <actions>
+                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="pageTitleLabel" value="CrmConfirmMergeLeads"/>
+                <set field="sectionHeaderUiLabel" value="CrmConfirmMergeLeads"/>
+                <set field="mergeFormTarget" value="mergeLeads"/> <!-- URI target of the confirm merge form -->
+                <set field="mergeFormChangeTarget" value="mergeLeadsForm"/>  <!-- how to get back to the first merge form -->
+                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromLead}" />
+                <set field="toPartyTitle" value="${uiLabelMap.CrmToLead}" />
+                <set field="viewTarget" value="viewLead"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <container style="subSectionBlock">
+                                <label style="requiredField">${uiLabelMap.CrmMergePartiesConfirmMessage}</label>
+                            </container>
+                            <include-form name="ConfirmMergePartyForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
+

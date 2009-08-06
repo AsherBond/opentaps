@@ -1,0 +1,50 @@
+<entity-engine-xml>
+
+
+    <!--
+     * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the Honest Public License.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * Honest Public License for more details.
+     *
+     * You should have received a copy of the Honest Public License
+     * along with this program; if not, write to Funambol,
+     * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+     *
+    -->
+
+    <!-- This file contains a sample Account with a credit limit set up via an agreement. -->
+    <Party partyId="accountlimit100" partyTypeId="PARTY_GROUP" description="Sales account with a credit limit of $100 USD" preferredCurrencyUomId="USD"/>
+    <PartyGroup partyId="accountlimit100" groupName="Credit Limited Account"/>
+    <PartyRole partyId="accountlimit100" roleTypeId="ACCOUNT"/>
+    <PartyRelationship partyIdFrom="accountlimit100" roleTypeIdFrom="ACCOUNT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" securityGroupId="SALES_MANAGER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesManager is assigned to democreditlimit.  He already has SALES_MANAGER security group so there's no need to assign it again."/>
+
+    <!-- for contact info, we use the demo ones in CommonDemoData.xml -->
+    <PartyContactMech partyId="accountlimit100" contactMechId="DemoAddress" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="accountlimit100" contactMechId="DemoAddress" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="accountlimit100" contactMechId="DemoAddress" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="accountlimit100" contactMechId="DemoAddress" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMech partyId="accountlimit100" contactMechId="DemoPhone" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="accountlimit100" contactMechId="DemoPhone" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="accountlimit100" primaryPostalAddressId="DemoAddress" primaryTelecomNumberId="DemoPhone" />
+
+    <!-- credit card for making sure credit limit is ignored for credit card orders -->
+    <PaymentMethod paymentMethodId="accountlimit100cc" paymentMethodTypeId="CREDIT_CARD" partyId="accountlimit100" fromDate="2007-01-01 00:00:00.000"/>
+    <CreditCard paymentMethodId="accountlimit100cc" cardType="Visa" cardNumber="4111111111111111" expireDate="01/2012"
+        firstNameOnCard="Credit" middleNameOnCard="Limit" lastNameOnCard="$100 USD" contactMechId="DemoAddress"/>
+
+    <!-- Credit Limit:  This is defined as a sales greement with a CREDIT_LIMIT term. -->
+    <Agreement agreementId="DemoCreditLimitAgr" partyIdFrom="Company" partyIdTo="accountlimit100" agreementTypeId="SALES_AGREEMENT"
+        description="Credit Limit of $100 USD for Sales Orders" fromDate="2007-01-01 00:00:00.000"  statusId="AGR_ACTIVE"/>
+    <AgreementItem agreementId="DemoCreditLimitAgr" agreementItemSeqId="00001" agreementItemTypeId="AGREEMENT_CREDIT"/> <!-- this is necessary only to have agreementItemSeqId -->
+    <AgreementTerm agreementTermId="DemoCreditLimitTerm" termTypeId="CREDIT_LIMIT" agreementId="DemoCreditLimitAgr" agreementItemSeqId="00001" termValue="100" currencyUomId="USD" description="Credit Limit of $100 USD"/>
+    <AgreementTerm agreementTermId="DemoNetPaytTerm" termTypeId="FIN_PAYMENT_TERM" agreementId="DemoCreditLimitAgr" agreementItemSeqId="00001" termDays="30" currencyUomId="USD" description="Net Payment Due in 30 Days"/>
+    <AgreementTerm agreementTermId="DemoDiscountPayTerm" termTypeId="FIN_PAYMENT_DISC" agreementId="DemoCreditLimitAgr" agreementItemSeqId="00001" termDays="10" termValue="1" currencyUomId="USD" description="Discount 1% if Paid within 10 Days"/>
+
+</entity-engine-xml>

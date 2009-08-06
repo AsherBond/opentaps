@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2004-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains all the editcontactmech screens in one location -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <!-- all edit contact mech screens should include-screen this screen, which will check complex security and invoke the editcontactmech script and ftl -->
+    <screen name="CommonEditContactMech">
+        <section>
+            <actions>
+                <set field="sectionHeaderUiLabel" value="CrmCreateContactInfo"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contactmech/editcontactmech.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contactmech/editcontactmech.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="accountsEditContactMech">
+        <section>
+            <actions>
+                <set field="hasModulePermission" value="CRMSFA_ACCOUNT"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="donePage" value="viewAccount"/>
+                <set field="errorPage" value="accountsEditContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonEditContactMech"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="contactsEditContactMech">
+        <section>
+            <actions>
+                <set field="hasModulePermission" value="CRMSFA_CONTACT"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="donePage" value="viewContact"/>
+                <set field="errorPage" value="contactsEditContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonEditContactMech"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leadsEditContactMech">
+        <section>
+            <actions>
+                <set field="hasModulePermission" value="CRMSFA_LEAD"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="donePage" value="viewLead"/>
+                <set field="errorPage" value="leadsEditContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonEditContactMech"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="partnersEditContactMech">
+        <section>
+            <actions>
+                <set field="hasModulePermission" value="CRMSFA_PARTNER"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="donePage" value="viewPartner"/>
+                <set field="errorPage" value="partnersEditContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonEditContactMech"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="myProfileEditContactMech">
+        <section>
+            <actions>
+                <set field="donePage" value="myProfile"/>
+                <set field="errorPage" value="myProfileEditContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://opentaps-common/widget/screens/common/CommonScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonEditContactMech"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ordersEditContactMech">
+        <section>
+            <actions>
+                <set field="donePage" value="crmsfaQuickCheckout"/>
+                <set field="forCart"  value="${parameters.forCart}"/>
+                <set field="errorPage" value="ordersEditContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonEditContactMech"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="orderViewEditContactMech">
+        <section>
+            <actions>
+                <set field="donePage" value="orderview"/>
+                <set field="orderId"  value="${parameters.orderId}"/>
+                <set field="shipGroupSeqId" value="${parameters.shipGroupSeqId}"/>
+                <set field="oldContactMechId" value="${parameters.oldContactMechId}"/>
+                <set field="errorPage" value="orderViewEditContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonEditContactMech"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="newShipGroupEditContactMech">
+        <section>
+            <actions>
+                <set field="donePage" value="newShipGroup"/>
+                <set field="orderId"  value="${parameters.orderId}"/>
+                <set field="errorPage" value="newShipGroupEditContactMech"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonEditContactMech"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+</screens>

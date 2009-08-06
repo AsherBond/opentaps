@@ -1,0 +1,64 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// script to get the associated upsell and cross-sell products for use in order entry
+
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.order.UtilOrder;
+
+cart = session.getAttribute("shoppingCart");
+if (!cart.isSalesOrder()) return;
+
+// build a set of existing productIds in the cart
+productIds = new java.util.HashSet();
+for (iter = cart.iterator(); iter.hasNext(); ) {
+    item = iter.next();
+    productIds.add(item.getProductId());
+}
+if (productIds.size() == 0) return;
+
+// instead of calling the service for each, which can be slow, we'll do direct entity ops
+fields = UtilMisc.toList("productId", "productIdTo", "productAssocTypeId", "reason");
+orderBy = UtilMisc.toList("productAssocTypeId", "productIdTo");
+conditions = UtilMisc.toList(
+        new EntityExpr("productId", EntityOperator.IN, productIds),
+        new EntityExpr("productIdTo", EntityOperator.NOT_IN, productIds),
+        new EntityExpr("productAssocTypeId", EntityOperator.IN, UtilMisc.toList("PRODUCT_COMPLEMENT", "PRODUCT_UPGRADE")),
+        EntityUtil.getFilterByDateExpr());
+associations = delegator.findByCondition("ProductAssoc", new EntityConditionList(conditions, EntityOperator.AND), fields, orderBy);
+
+// to avoid cluttering the FTL with <#assign> and <#if> directives and to optimize some routines, we gather all information required for display here
+map = FastMap.newInstance();
+for (iter = associations.iterator(); iter.hasNext(); ) {
+  association = iter.next();
+  product = association.getRelatedOne("AssocProduct");
+
+  // let's show the product only once, even if it has a different association
+  if (map.get(product.get("productId")) != null) continue;
+
+  // get all required product data 
+  productMap = UtilOrder.getProductInfo(request, product);
+  productAssocType = association.getRelatedOneCache("ProductAssocType");
+  productMap.put("productAssocTypeId", association.get("productAssocTypeId"));
+  productMap.put("productAssocDescription", productAssocType.get("description"));
+
+  map.put(product.get("productId"), productMap);
+}
+context.put("associatedProducts", map.values());

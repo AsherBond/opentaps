@@ -1,0 +1,102 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/*
+ * Pagination helper script. 
+ * This is designed to handle all pagination, we just call it when the screen does any kind of pagination.
+ */
+
+defaultSize = 20;
+
+// get the configured pagination size for all lists
+configProperties = org.ofbiz.base.util.UtilProperties.getProperties("crmsfa.properties");
+sizeString = configProperties.get("crmsfa.pagination.size.default");
+if (sizeString != null) try {
+    defaultSize = Integer.parseInt(sizeString);
+} catch (NumberFormatException e) {
+    // use defaultSize = 20;
+}
+
+contactsIndex = parameters.get("contactsIndex");
+contactsSize = parameters.get("contactsSize");
+context.put("contactsIndex", (contactsIndex == null ? 0 : contactsIndex));
+context.put("contactsSize", (contactsSize == null ? defaultSize : contactsSize));
+
+oppsIndex = parameters.get("oppsIndex");
+oppsSize = parameters.get("oppsSize");
+context.put("oppsIndex", (oppsIndex == null ? 0 : oppsIndex));
+context.put("oppsSize", (oppsSize == null ? defaultSize : oppsSize));
+
+leadsIndex = parameters.get("leadsIndex");
+leadsSize = parameters.get("leadsSize");
+context.put("leadsIndex", (leadsIndex == null ? 0 : leadsIndex));
+context.put("leadsSize", (leadsSize == null ? defaultSize : leadsSize));
+
+casesIndex = parameters.get("casesIndex");
+casesSize = parameters.get("casesSize");
+context.put("casesIndex", (casesIndex == null ? 0 : casesIndex));
+context.put("casesSize", (casesSize == null ? defaultSize : casesSize));
+
+accountsIndex = parameters.get("accountsIndex");
+accountsSize = parameters.get("accountsSize");
+context.put("accountsIndex", (accountsIndex == null ? 0 : accountsIndex));
+context.put("accountsSize", (accountsSize == null ? defaultSize : accountsSize));
+
+ordersIndex = parameters.get("ordersIndex");
+ordersSize = parameters.get("ordersSize");
+context.put("ordersIndex", (ordersIndex == null ? 0 : ordersIndex));
+context.put("ordersSize", (ordersSize == null ? defaultSize : ordersSize));
+
+campaignsIndex = parameters.get("campaignsIndex");
+campaignsSize = parameters.get("campaignsSize");
+context.put("campaignsIndex", (campaignsIndex == null ? 0 : campaignsIndex));
+context.put("campaignsSize", (campaignsSize == null ? defaultSize : campaignsSize));
+
+contactListsIndex = parameters.get("contactListsIndex");
+contactListsSize = parameters.get("contactListsSize");
+context.put("contactListsIndex", (contactListsIndex == null ? 0 : contactListsIndex));
+context.put("contactListsSize", (contactListsSize == null ? defaultSize : contactListsSize));
+
+contactListPartiesIndex = parameters.get("contactListPartiesIndex");
+contactListPartiesSize = parameters.get("contactListPartiesSize");
+context.put("contactListPartiesIndex", (contactListPartiesIndex == null ? 0 : contactListPartiesIndex));
+context.put("contactListPartiesSize", (contactListPartiesSize == null ? defaultSize : contactListPartiesSize));
+
+actPendIndex = parameters.get("actPendIndex");
+actPendSize = parameters.get("actPendSize");
+context.put("actPendIndex", (actPendIndex == null ? 0 : actPendIndex));
+context.put("actPendSize", (actPendSize == null ? defaultSize : actPendSize));
+
+actHistIndex = parameters.get("actHistIndex");
+actHistSize = parameters.get("actHistSize");
+context.put("actHistIndex", (actHistIndex == null ? 0 : actHistIndex));
+context.put("actHistSize", (actHistSize == null ? defaultSize : actHistSize));
+
+uspsSortIndex = parameters.get("uspsSortIndex");
+uspsSortSize = parameters.get("uspsSortSize");
+context.put("uspsSortIndex", (uspsSortIndex == null ? 0 : uspsSortIndex));
+context.put("uspsSortSize", (uspsSortSize == null ? defaultSize : uspsSortSize));
+
+teamsIndex = parameters.get("teamsIndex");
+teamsSize = parameters.get("teamsSize");
+context.put("teamsIndex", (teamsIndex == null ? 0 : teamsIndex));
+context.put("teamsSize", (teamsSize == null ? defaultSize : teamsSize));
+
+trackingCodesIndex = parameters.get("trackingCodesIndex");
+trackingCodesSize = parameters.get("trackingCodesSize");
+context.put("trackingCodesIndex", (trackingCodesIndex == null ? 0 : trackingCodesIndex));
+context.put("trackingCodesSize", (trackingCodesSize == null ? defaultSize : trackingCodesSize));

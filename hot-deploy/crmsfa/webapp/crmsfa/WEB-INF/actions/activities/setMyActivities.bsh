@@ -1,0 +1,35 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/* Basically a helper script to set parameters for findActivites.bsh to get the activities of the
+   current logged in user */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+
+userLogin = request.getAttribute("userLogin");
+
+context.put("findActivitiesKey", "partyId");
+parameters.put("partyId", userLogin.get("partyId"));
+context.put("validView", true);
+
+// this will filter out emails from pending activities - note that we must explicitly allow null values and wrap the OR into a List for the service call
+context.put("pendingActsAddConditions", UtilMisc.toList(new EntityConditionList(UtilMisc.toList(
+    new EntityExpr("workEffortPurposeTypeId", EntityOperator.NOT_EQUAL, "WEPT_TASK_EMAIL"),
+    new EntityExpr("workEffortPurposeTypeId", EntityOperator.EQUALS, null)),
+    EntityOperator.OR)));
+

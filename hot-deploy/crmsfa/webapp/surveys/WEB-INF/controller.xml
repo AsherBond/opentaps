@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2001-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
+
+    <description>CRMSFA External Surveys Module Site Configuration File</description>
+    <owner>Open Source Strategies, Inc. (c) 2005-2006 </owner>
+    <errorpage>/error/error.jsp</errorpage>
+
+   <!-- event handlers -->
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+    <!-- <handler name="soap" type="request" class="org.ofbiz.webapp.event.SOAPEventHandler"/> -->
+    <handler name="service" type="request" class="org.ofbiz.webapp.event.ServiceEventHandler"/>
+    <handler name="service-multi" type="request" class="org.ofbiz.webapp.event.ServiceMultiEventHandler"/>
+    <!--
+    <handler name="simple" type="request" class="org.ofbiz.webapp.event.SimpleEventHandler"/>
+    <handler name="bsf" type="request" class="org.ofbiz.webapp.event.BsfEventHandler"/>
+    -->
+
+    <!-- view handlers -->
+    <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
+
+    <!--
+    <handler name="ftl" type="view" class="org.ofbiz.webapp.ftl.FreeMarkerViewHandler"/>
+    <handler name="jsp" type="view" class="org.ofbiz.webapp.view.JspViewHandler"/>
+    <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopPdfViewHandler"/>
+
+    <handler name="http" type="view" class="org.ofbiz.webapp.view.HttpViewHandler"/>
+    <handler name="datavision" type="view" class="org.ofbiz.webapp.view.DataVisionViewHandler"/>
+    <handler name="jasperreportspdf" type="view" class="org.ofbiz.webapp.view.JasperReportsPdfViewHandler"/>
+    <handler name="jasperreportsxml" type="view" class="org.ofbiz.webapp.view.JasperReportsXmlViewHandler"/>
+    -->
+
+    <preprocessor>
+        <!-- Events to run on every request before security (chains exempt) -->
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkExternalLoginKey"/>
+    </preprocessor>
+    <postprocessor>
+        <!-- Events to run on every request after all other processing (chains exempt) -->
+    </postprocessor>
+
+    <!-- Request Mappings -->
+
+    <!-- These are general purpose information pages -->
+    <request-map uri="main">
+        <response name="success" type="view" value="main"/>
+    </request-map>
+    <request-map uri="survey">
+        <response name="success" type="view" value="survey"/>
+    </request-map>
+    <request-map uri="createResponse">
+        <event type="service" invoke="createSurveyResponse"/>
+        <response name="success" type="request-redirect" value="surveyDone"/> <!-- change to surveyResponses if we want user to see it -->
+        <response name="error" type="view" value="survey"/>
+    </request-map>
+    <request-map uri="surveyDone">
+        <response name="success" type="view" value="surveyDone"/>
+    </request-map>
+    <request-map uri="sampleAd">
+        <response name="success" type="view" value="sampleAd"/>
+    </request-map>
+
+    <!-- Catalog Request and Lead creation Note these are using https because they have personal information -->
+    <request-map uri="catalogRequestForm">
+        <security https="true" auth="false"/>
+        <response name="success" type="view" value="catalogRequestForm"/>
+    </request-map>
+    <request-map uri="createCatalogRequest">
+        <security https="true" auth="false"/>
+        <event type="service" invoke="createCatalogRequestWithSurvey"/>
+        <!-- request-redirect to avoid double posting, noparam to trim URL strings -->
+        <response name="success" type="request-redirect-noparam" value="catalogRequestForm"/>
+        <response name="error" type="view" value="catalogRequestForm"/>
+    </request-map>
+
+    <!-- end of request mappings -->
+
+    <!-- View Mappings -->
+
+    <view-map name="error" page="/error/error.jsp"/>
+    <view-map name="main" type="screen" page="component://crmsfa/widget/surveys/screens/surveys/SurveyScreens.xml#main"/>
+    <view-map name="survey" type="screen" page="component://crmsfa/widget/surveys/screens/surveys/SurveyScreens.xml#survey"/>
+    <view-map name="surveyDone" type="screen" page="component://crmsfa/widget/surveys/screens/surveys/SurveyScreens.xml#surveyDone"/>
+    <view-map name="sampleAd" type="screen" page="component://crmsfa/widget/surveys/screens/surveys/SurveyScreens.xml#sampleAd"/>
+
+    <view-map name="catalogRequestForm" type="screen" page="component://crmsfa/widget/surveys/screens/surveys/SurveyScreens.xml#catalogRequestForm"/>
+    
+    <!-- end of view mappings -->
+</site-conf>

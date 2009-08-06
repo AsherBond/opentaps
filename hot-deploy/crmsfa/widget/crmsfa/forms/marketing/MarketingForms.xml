@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="viewMarketingCampaign" type="single" title="View Marketing Campaign" default-map-name="marketingCampaign"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="campaignName" title="${uiLabelMap.CommonName}" position="1"><display/></field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}" position="2">
+            <display-entity entity-name="StatusItem"/>
+        </field>
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1"><display/></field>
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1"><display/></field>
+        <field name="budgetedCost" title="${uiLabelMap.CrmMarketingBudgetedCost}" position="1">
+            <display type="currency" currency="${marketingCampaign.currencyUomId}"/>
+        </field>
+        <field name="estimatedCost" title="${uiLabelMap.CrmMarketingEstimatedCost}" position="1">
+            <display type="currency" currency="${marketingCampaign.currencyUomId}"/>
+        </field>
+        <field name="actualCost" title="${uiLabelMap.CrmMarketingActualCost}" position="1">
+            <display type="currency" currency="${marketingCampaign.currencyUomId}"/>
+        </field>
+        <field name="campaignSummary" title="${uiLabelMap.CommonDescription}"><display/></field>
+    </form>
+
+    <form name="createMarketingCampaignForm" type="single" title="Create Marketing Campaign" target="createMarketingCampaign"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="campaignName" title="${uiLabelMap.CommonName}"><text/></field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}"><hidden value="MKTG_CAMP_PLANNED"/></field>
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="budgetedCost" title="${uiLabelMap.CrmMarketingBudgetedCost}" position="1"><text size="20" maxlength="20"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CommonCurrency}" position="2">
+            <drop-down allow-empty="true" current="selected"  no-current-selected-key="${configProperties.defaultCurrencyUomId}">
+                <entity-options description="${uomId} - ${description}" entity-name="Uom" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="estimatedCost" title="${uiLabelMap.CrmMarketingEstimatedCost}" position="1"><text size="20" maxlength="20"/></field>
+        <field name="campaignSummary" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+
+        <field name="submitButton" title="${uiLabelMap.CrmCreateMarketingCampaign}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="updateMarketingCampaignForm" type="single" title="Create Marketing Campaign" default-map-name="marketingCampaign" target="updateMarketingCampaign"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="marketingCampaignId"><hidden/></field>
+        <field name="campaignName" title="${uiLabelMap.CommonName}"><text/></field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}" position="1">
+            <drop-down allow-empty="false">
+                <entity-options entity-name="StatusItem" key-field-name="statusId" description="${description}">
+                    <entity-constraint name="statusTypeId" value="MKTG_CAMP_STATUS"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="budgetedCost" title="${uiLabelMap.CrmMarketingBudgetedCost}" position="1"><text size="20" maxlength="20"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CommonCurrency}" position="2">
+            <drop-down allow-empty="true" current="selected"  no-current-selected-key="${configProperties.defaultCurrencyUomId}">
+                <entity-options description="${uomId} - ${description}" entity-name="Uom" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="estimatedCost" title="${uiLabelMap.CrmMarketingEstimatedCost}" position="1"><text size="20" maxlength="20"/></field>
+        <field name="actualCost" title="${uiLabelMap.CrmMarketingActualCost}" position="1"><text size="20" maxlength="20"/></field>
+        <field name="campaignSummary" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="FindMarketingCampaign" type="single" target="${findMarketingCampaignsTarget}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="campaignName" title="${uiLabelMap.CommonName}"><text/></field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}" position="1">
+            <drop-down allow-empty="true" no-current-selected-key="MKTG_CAMP_INPROGRESS">
+                <entity-options entity-name="StatusItem" description="${description}">
+                    <entity-constraint name="statusTypeId" value="MKTG_CAMP_STATUS"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CrmFindMarketingCampaigns}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+    <form name="ListMarketingCampaigns" type="list" separate-columns="true" 
+        title="MarketingCampaigns"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListMarketingCampaigns" paginate-size-field="campaignsSize" paginate-index-field="campaignsIndex"
+        list-name="campaignsListIt">
+
+        <field name="campaignName" title="${uiLabelMap.CommonName}" widget-style="linktext"
+            header-link="${listSortTarget}?campaignsOrderBy=campaignName${findParams}#ListMarketingCampaigns" header-link-style="orderByHeaderLink">
+            <hyperlink description="${campaignName} (${marketingCampaignId})" target="viewMarketingCampaign?marketingCampaignId=${marketingCampaignId}"/>
+        </field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}"
+            header-link="${listSortTarget}?campaignsOrderBy=statusId${findParams}#ListMarketingCampaigns" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="StatusItem"/>
+        </field>
+        <field name="fromDate" red-when="never" title="${uiLabelMap.CommonFrom}"><display/></field>
+        <field name="thruDate" red-when="never" title="${uiLabelMap.CommonThru}"><display/></field>
+        <field name="budgetedCost" title="${uiLabelMap.CrmMarketingBudgetedCost}">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="estimatedCost" title="${uiLabelMap.CrmMarketingEstimatedCost}">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="actualCost" title="${uiLabelMap.CrmMarketingActualCost}">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+    </form>   
+
+    <form name="ListSurveys" type="list" separate-columns="true" 
+        title="Surveys"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="listSurveys"  list-name="surveys">
+
+        <field name="surveyName" widget-style="linktext" title="${uiLabelMap.CrmMarketingSurveys}" widget-area-style="fieldWidth300">
+            <hyperlink description="${surveyName} (${surveyId})" target="viewSurveyResponses?surveyId=${surveyId}"/>
+        </field>
+        <field name="description" widget-style="tabletext" title="${uiLabelMap.CommonDescription}">
+            <display/>
+        </field>
+    </form>   
+
+    <form name="createTrackingCodeForm" type="single" title="Create Tracking Code" target="createTrackingCode"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="marketingCampaignId"><hidden value="${parameters.marketingCampaignId}"/></field>
+        <field name="trackingCodeId" title="${uiLabelMap.CrmTrackingCode}" title-style="requiredField"><text size="20" maxlength="20"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><text size="60"/></field>
+        <field name="trackingCodeTypeId" title="${uiLabelMap.CommonType}">
+            <drop-down allow-empty="false" current="selected">
+                <option key="INTERNAL" description="Internal"/>
+                <option key="EXTERNAL" description="External"/>
+            </drop-down>
+        </field>
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="billableLifetime" title="${uiLabelMap.CrmBillableLifetime}" position="1" tooltip="${uiLabelMap.CrmBillableLifetimeTip}"><text size="6"/></field>
+        <field name="trackableLifetime" title="${uiLabelMap.CrmTrackableLifetime}" position="1" tooltip="${uiLabelMap.CrmTrackableLifetimeTip}"><text size="6"/></field>
+        
+        <!-- Extended TrackingCode entity to provide a field to store the 
+            DNIS-trackingCode mappings as support for the retrieveTrackingCodeFromFacetPhoneServer service -->
+        <field name="dnis" title="DNIS"><text size="6"/></field>
+        <field name="submitButton" title="${uiLabelMap.CrmCreateTrackingCode}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="ListTrackingCodes" type="list"
+        title="Tracking Codes"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListTrackingCodes" paginate-size-field="trackingCodesSize" paginate-index-field="trackingCodesIndex"
+        list-name="trackingCodes">
+
+        <field name="trackingCodeId" title="${uiLabelMap.CrmTrackingCode}"><display/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
+        <field name="trackingCodeTypeId" title="${uiLabelMap.CommonType}">
+            <display-entity entity-name="TrackingCodeType"/>
+        </field>
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}"><display/></field>
+        <field name="thruDate" title="${uiLabelMap.CommonThru}"><display/></field>
+
+        <!-- Extended TrackingCode entity to provide a field to store the 
+            DNIS-trackingCode mappings as support for the retrieveTrackingCodeFromFacetPhoneServer service -->
+        <field name="dnis" title="DNIS"><display/></field>
+    </form>
+
+    <form name="marketingCampaignReportForm" type="single" title="Marketing Campaign Report Form" target="marketingCampaignReport"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="marketingCampaignId" title="${uiLabelMap.CrmMarketingCampaign}">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options description="${campaignName}" entity-name="MarketingCampaign" filter-by-date="true">
+                    <entity-order-by field-name="campaignName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="trackingCodeReportForm" type="single" title="Tracking Code Report Form" target="trackingCodeReport"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="trackingCodeId" title="${uiLabelMap.CrmTrackingCode}">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options description="${trackingCodeId}" entity-name="TrackingCode" filter-by-date="true">
+                    <entity-order-by field-name="trackingCodeId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonSubmit}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="addContactListToMarketingCampaignForm" type="single" target="addContactListToMarketingCampaign"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="marketingCampaignId"><hidden/></field>
+        <field name="contactListId" title="${uiLabelMap.CrmContactList}" title-style="requiredField"><lookup target-form-name="LookupContactList" size="15"/></field>
+        <field name="trackingCode" title="${uiLabelMap.CrmTrackingCode}" ><text size="20" maxlength="20"/></field>
+
+        <field name="submitButton" title="${uiLabelMap.CrmAddContactList}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="listLookupContactList"  list-name="contactLists" title="" type="list" separate-columns="true" 
+          default-widget-style="tabletext" default-tooltip-style="tabletext" default-title-style="tableheadtext" 
+          default-table-style="commonListTable" header-row-style="commonListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+          paginate-target="LookupContactList">
+
+        <field name="contactListId" title="Contact List"  widget-style="smallSubmit">
+            <hyperlink also-hidden="false" target-type="plain" description="${contactListId}" target="javascript:set_value('${contactListId}')"/>
+        </field>
+        <field name="contactListName" title="${uiLabelMap.CommonName}"><display/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
+    </form>
+
+</forms>

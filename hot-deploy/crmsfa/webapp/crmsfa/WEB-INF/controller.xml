@@ -1,0 +1,2850 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2001-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+
+Portions of this file came from the Apache OFBIZ Project and have been modified by Open Source Strategies, Inc.
+-->
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <!-- Special ofbiz legacy requests we should be paring down as we replace these screens with our own. -->
+    <include location="component://crmsfa/webapp/crmsfa/WEB-INF/legacy-controller.xml"/>
+
+    <!-- Include requests for common opentaps features. -->
+    <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
+
+    <description>CRMSFA Module Site Configuration File</description>
+    <owner>Open Source Strategies, Inc. (c) 2005-2006 </owner>
+    <errorpage>/error/error.jsp</errorpage>
+
+    <!-- event handlers -->
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+    <handler name="service" type="request" class="org.ofbiz.webapp.event.ServiceEventHandler"/>
+    <handler name="service-multi" type="request" class="org.ofbiz.webapp.event.ServiceMultiEventHandler"/>
+    <handler name="simple" type="request" class="org.ofbiz.webapp.event.SimpleEventHandler"/>
+    <handler name="gwtservice" type="request" class="org.opentaps.gwt.common.server.event.GwtServiceEventHandler"/>
+
+    <!-- view handlers -->
+    <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
+    <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
+    <handler name="ftl" type="view" class="org.ofbiz.webapp.ftl.FreeMarkerViewHandler"/>
+    <handler name="jpublish" type="view" class="org.ofbiz.webapp.view.JPublishViewHandler"/>
+    <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>
+    <handler name="json" type="request" class="org.ofbiz.webapp.event.JSONServiceEventHandler"/>
+
+    <!-- Merge Form Handler -->
+    <handler name="mergeformfop" type="view" class="com.opensourcestrategies.crmsfa.handlers.CrmsfaMergeFormsFopViewHandler"/>
+
+    <preprocessor>
+        <!-- Events to run on every request before security (chains exempt) -->
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkExternalLoginKey"/>
+    </preprocessor>
+    <postprocessor>
+        <!-- Events to run on every request after all other processing (chains exempt) -->
+    </postprocessor>
+
+
+    <!-- ================= -->
+    <!-- Security Mappings -->
+    <!-- ================= -->
+
+    <request-map uri="checkLogin" edit="false">
+        <description>Verify a user is logged in.</description>
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkLogin" />
+        <response name="success" type="view" value="myHomeMain" />
+        <response name="error" type="view" value="login" />
+    </request-map>
+    <request-map uri="login">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login"/>
+        <response name="success" type="view" value="myHomeMain"/>
+        <response name="error" type="view" value="login"/>
+    </request-map>
+    <request-map uri="logout">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="logout"/>
+        <response name="success" type="request" value="checkLogin"/>
+        <response name="error" type="view" value="myHomeMain"/>
+    </request-map>
+
+
+    <!-- ====================== -->
+    <!-- Basic Request Mappings -->
+    <!-- ====================== -->
+
+    <request-map uri="view">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="myHomeMain"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+    <request-map uri="authview">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+    <request-map uri="setSessionLocale">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.common.CommonEvents" invoke="setSessionLocale"/>
+        <response name="success" type="request" value="myHomeMain"/>
+        <response name="error" type="request" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="main">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="test">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="test"/>
+    </request-map>
+    <request-map uri="testCalendar">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="testCalendar"/>
+    </request-map>
+    <request-map uri="testDates">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="testDates"/>
+    </request-map>
+    <request-map uri="testDateTimeInput">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="testDateTimeInput"/>
+        <response name="success" type="view" value="testDates"/>
+        <response name="error" type="view" value="testDates"/>
+    </request-map>
+
+
+    <!-- ========================= -->
+    <!-- CRMSFA Main Request Maps -->
+    <!-- ======================== -->
+
+    <request-map uri="myHomeMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHomeMain"/>
+    </request-map>
+    <request-map uri="accountsMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountsMain"/>
+    </request-map>
+    <request-map uri="contactsMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="contactsMain"/>
+    </request-map>
+    <request-map uri="opportunitiesMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="opportunitiesMain"/>
+    </request-map>
+    <request-map uri="leadsMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="leadsMain"/>
+    </request-map>
+    <request-map uri="casesMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="casesMain"/>
+    </request-map>
+    <request-map uri="activitiesMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="activitiesMain"/>
+    </request-map>
+    <request-map uri="forecastsMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="forecastsMain"/>
+    </request-map>
+    <request-map uri="partnersMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="partnersMain"/>
+    </request-map>
+    <request-map uri="ordersMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myOrders"/>
+    </request-map>
+    <request-map uri="quotesMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="quotesMain"/>
+    </request-map>
+    <request-map uri="marketingMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="marketingMain"/>
+    </request-map>
+    <request-map uri="teamsMain">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="teamsMain"/>
+    </request-map>
+
+    <!-- call this request when you have a donePage that you want to go to after finishing a service -->
+    <request-map uri="donePageRequestHelper">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="donePageRequestHelper"/>
+        <response name="viewContact" type="request" value="viewContact"/>
+        <response name="viewAccount" type="request" value="viewAccount"/>
+        <response name="viewLead" type="request" value="viewLead"/>
+        <response name="viewPartner" type="request" value="viewPartner"/>
+        <response name="viewActivity" type="request" value="viewActivity"/>
+        <response name="myOrders" type="request" value="myOrders"/>
+        <response name="viewCase" type="request" value="viewCase"/>
+        <response name="viewOpportunity" type="request" value="viewOpportunity"/>
+        <response name="myAccounts" type="request" value="myAccounts"/>
+        <response name="myCases" type="request" value="myCases"/>
+        <response name="myContacts" type="request" value="myContacts"/>
+        <response name="myOpportunities" type="request" value="myOpportunities"/>
+        <response name="myHome" type="request" value="myHome"/>
+        <response name="myProfile" type="request" value="myProfile"/>
+        <response name="pendingEmails" type="request-redirect-noparam" value="pendingEmails"/>
+        <response name="shipmentSetting" type="request" value="shipmentSetting"/>
+        <response name="viewContactList" type="request" value="viewContactList"/>
+        <response name="viewMarketingCampaign" type="request" value="viewMarketingCampaign"/>
+        <response name="crmsfaQuickCheckout" type="request" value="crmsfaQuickCheckout"/>
+        <response name="createCatalogRequestForm" type="request" value="createCatalogRequestForm"/>
+        <response name="orderview" type="request" value="orderview"/>
+        <response name="ViewQuote" type="request" value="ViewQuote"/>
+        <response name="newShipGroup" type="request" value="newShipGroup"/>
+        <!-- mostly for error redirects -->
+        <response name="myProfileEditContactMech" type="request" value="myProfileEditContactMech"/>
+        <response name="accountsEditContactMech" type="request" value="accountsEditContactMech"/>
+        <response name="contactsEditContactMech" type="request" value="contactsEditContactMech"/>
+        <response name="leadsEditContactMech" type="request" value="leadsEditContactMech"/>
+        <response name="partnersEditContactMech" type="request" value="partnersEditContactMech"/>
+        <response name="ordersEditContactMech" type="request" value="ordersEditContactMech"/>
+        <response name="orderViewEditContactMech" type="request" value="orderViewEditContactMech"/>
+        <response name="newShipGroupEditContactMech" type="request" value="newShipGroupEditContactMech"/>
+        <!-- default -->
+        <response name="error" type="view" value="myHome"/>
+        <response name="" type="request" value="myHome"/>
+    </request-map>
+
+    <!-- set user preferences -->
+    <request-map uri="setViewPreference">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.setViewPreference"/>
+        <!-- use the helper to get back to the correct view page -->
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+
+    <!-- a service that checks the role of the party and redirect to the correct page -->
+    <request-map uri="viewPartyPassword">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.util.UtilCommon" invoke="getPartyRole"/>
+        <response name="contact" type="request" value="updateContactPassword"/>
+        <response name="account" type="request" value="updateAccountPassword"/>
+        <response name="lead"    type="request" value="updateLeadPassword"/>
+        <response name="partner" type="request" value="updatePartnerPassword"/>
+        <response name="error"   type="view"    value="myHome"/>
+        <response name="" type="request" value="myHome"/>
+    </request-map>
+
+    <!-- ===================== -->
+    <!-- Accounts Request Maps -->
+    <!-- ===================== -->
+
+    <request-map uri="myAccounts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myAccounts"/>
+    </request-map>
+    <request-map uri="createAccountForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createAccountForm"/>
+    </request-map>
+    <request-map uri="createAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createAccount"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId" allowed-attributes="partyId" />
+        <response name="error" type="view" value="createAccountForm"/>
+    </request-map>
+    <!-- AJAX request for quick creation of Leads -->
+    <request-map uri="createAccountJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="createAccount"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="updateAccountForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateAccountForm"/>
+    </request-map>
+    <request-map uri="updateAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateAccount"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="error" type="view" value="updateAccountForm"/>
+    </request-map>
+    <request-map uri="findAccounts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findAccounts"/>
+    </request-map>
+    <request-map uri="viewAccount">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="checkAccount"/>
+        <response name="success" type="view" value="viewAccount"/>
+        <response name="error" type="view" value="invalidAccountError"/>
+    </request-map>
+    <request-map uri="deactivateAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.deactivateAccount"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map>
+    <request-map uri="accountsEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountsEditContactMech"/>
+    </request-map>
+    <request-map uri="reassignAccountResponsibleParty">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.reassignAccountResponsibleParty"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map>
+    <request-map uri="removeContactFromAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeContactFromAccount"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map>
+    <request-map uri="addAccountDataSource">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addAccountDataSource"/>
+        <response name="success" type="request-redirect" value="updateAccountForm"/>
+        <response name="error" type="view" value="updateAccountForm"/>
+    </request-map>
+    <request-map uri="removeAccountDataSource">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeAccountDataSource"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map>
+    <request-map uri="addAccountMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addAccountMarketingCampaign"/>
+        <response name="success" type="request-redirect" value="updateAccountForm"/>
+        <response name="error" type="view" value="updateAccountForm"/>
+    </request-map>
+    <request-map uri="removeAccountMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeAccountMarketingCampaign"/>
+        <response name="success" type="request-redirect" value="updateAccountForm"/>
+        <response name="error" type="view" value="updateAccountForm"/>
+    </request-map>
+   <!-- the difference between these two is in the re-direct: the first one is used to add contact to account and return
+       you to the account view; the second one is used to add account to contact and return you to view contact -->
+    <request-map uri="assignContactToAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.assignContactToAccount"/>
+        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map>
+    <request-map uri="assignAccountToContact">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.assignContactToAccount"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="view" value="viewContact"/>
+    </request-map>
+
+    <!-- ============= -->
+    <!-- Note Requests -->
+    <!-- ============= -->
+
+    <request-map uri="createAccountNoteForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createAccountNoteForm"/>
+    </request-map>
+    <request-map uri="createAccountNote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createAccountNote"/>
+        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="error" type="view" value="createAccountNoteForm"/>
+    </request-map>
+    <request-map uri="createContactNoteForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createContactNoteForm"/>
+    </request-map>
+    <request-map uri="createContactNote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createContactNote"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="view" value="createContactNoteForm"/>
+    </request-map>
+    <request-map uri="createLeadNoteForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createLeadNoteForm"/>
+    </request-map>
+    <request-map uri="createLeadNote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createLeadNote"/>
+        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="error" type="view" value="createLeadNoteForm"/>
+    </request-map>
+    <request-map uri="createPartnerNoteForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPartnerNoteForm"/>
+    </request-map>
+    <request-map uri="createPartnerNote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createPartnerNote"/>
+        <response name="success" type="request-redirect" value="viewPartner"/>
+        <response name="error" type="view" value="createPartnerNoteForm"/>
+    </request-map>
+    <request-map uri="createCaseNoteForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createCaseNoteForm"/>
+    </request-map>
+    <request-map uri="createCaseNote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createCaseNote"/>
+        <response name="success" type="request-redirect" value="viewCase"/>
+        <response name="error" type="view" value="createCaseNoteForm"/>
+    </request-map>
+
+
+    <!-- ===================== -->
+    <!-- Contact Mech Requests -->
+    <!-- ===================== -->
+
+    <!-- section-specific uris -->
+    <request-map uri="accountsEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountsEditContactMech"/>
+    </request-map>
+    <request-map uri="contactsEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="contactsEditContactMech"/>
+    </request-map>
+    <request-map uri="leadsEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="leadsEditContactMech"/>
+    </request-map>
+    <request-map uri="ordersEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ordersEditContactMech"/>
+    </request-map>
+    <request-map uri="orderViewEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="orderViewEditContactMech"/>
+    </request-map>
+    <request-map uri="newShipGroupEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="newShipGroupEditContactMech"/>
+    </request-map>
+    <request-map uri="createCatalogRequestForParty">
+        <description>This request is called from viewprofile.ftl and is for autogenerating a simple request.  TODO: this could be enhanced by calling a bsh script to pull the first name, last name and other details of the party and autofilling the createCatalogRequestForm, in which case this request is removed in favor of the other.</description>
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createCustRequest"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="createPostalAddressAndPurpose">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="createPartyPostalAddress"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updatePostalAddress">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="updatePostalAddress"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+
+
+    <!-- ======================= -->
+    <!-- Payment Method Requests -->
+    <!-- ======================= -->
+
+    <!-- note that these requests also use the update and create requests defined further down -->
+    <!-- TODO might want to move some more of the donePageRequestHelper actions on Parties to myprofile-controller.xml.  -->
+    <request-map uri="accountsEditCreditCard">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountsEditCreditCard"/>
+    </request-map>
+    <request-map uri="contactsEditCreditCard">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="contactsEditCreditCard"/>
+    </request-map>
+    <request-map uri="accountsEditGiftCard">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountsEditGiftCard"/>
+    </request-map>
+    <request-map uri="contactsEditGiftCard">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="contactsEditGiftCard"/>
+    </request-map>
+    <request-map uri="accountsEditEftAccount">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountsEditEftAccount"/>
+    </request-map>
+    <request-map uri="contactsEditEftAccount">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="contactsEditEftAccount"/>
+    </request-map>
+    <request-map uri="accountsEditTaxAuthPartyInfo">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountsEditTaxAuthPartyInfo"/>
+    </request-map>
+    <request-map uri="contactsEditTaxAuthPartyInfo">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="contactsEditTaxAuthPartyInfo"/>
+    </request-map>
+    <request-map uri="accountsEditShippingAccount">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="accountsEditShippingAccount"/>
+    </request-map>
+    <request-map uri="contactsEditShippingAccount">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="contactsEditShippingAccount"/>
+    </request-map>
+    <request-map uri="createGiftCard">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createGiftCard"/>
+        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="address" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updateGiftCard">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateGiftCard"/>
+        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="address" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="createPartyTaxAuthInfo">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="crmsfa.createPartyTaxAuthInfo"/>
+        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updatePartyTaxAuthInfo">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="crmsfa.updatePartyTaxAuthInfo"/>
+        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="deletePaymentMethod">
+        <security https="true" auth="true"/>
+        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="deletePaymentMethod"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="ViewGatewayResponse">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ViewGatewayResponse"/>
+    </request-map>
+    <request-map uri="AuthorizeTransaction">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="AuthorizeTransaction"/>
+    </request-map>
+    <request-map uri="CaptureTransaction">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="CaptureTransaction"/>
+    </request-map>
+    <request-map uri="processAuthorizeTransaction">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="authOrderPaymentPreference"/>
+        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="error" type="view" value="AuthorizeTransaction"/>
+    </request-map>
+    <request-map uri="processCaptureTransaction">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="captureOrderPayments"/>
+        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="error" type="view" value="CaptureTransaction"/>
+    </request-map>
+
+
+    <!-- ===================== -->
+    <!-- Contacts Request Maps -->
+    <!-- ===================== -->
+
+    <request-map uri="myContacts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myContacts"/>
+    </request-map>
+    <request-map uri="createContactForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createContactForm"/>
+    </request-map>
+    <request-map uri="createContact">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createContact"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="view" value="createContactForm"/>
+    </request-map>
+    <!-- AJAX request for quick creation of Parties -->
+    <request-map uri="gwtQuickNewContact">
+        <security https="true" auth="true"/>
+        <event type="gwtservice" invoke="crmsfa.createContact"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtQuickNewAccount">
+        <security https="true" auth="true"/>
+        <event type="gwtservice" invoke="crmsfa.createAccount"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtQuickNewLead">
+        <security https="true" auth="true"/>
+        <event type="gwtservice" invoke="crmsfa.createLead"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="gwtQuickNewCase">
+        <security https="true" auth="true"/>
+        <event type="gwtservice" invoke="crmsfa.createCase"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <!-- AJAX request for quick creation of Leads -->
+    <request-map uri="createContactJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="createContact"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="updateContactForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContactForm"/>
+    </request-map>
+    <request-map uri="updateContact">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateContact"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="view" value="updateContactForm"/>
+    </request-map>
+    <request-map uri="findContacts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findContacts"/>
+    </request-map>
+    <request-map uri="viewContact">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewContact"/>
+    </request-map>
+    <request-map uri="deactivateContact">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.deactivateContact"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="view" value="viewContact"/>
+    </request-map>
+    <request-map uri="assignContactToParty">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.assignParty"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="view" value="viewContact"/>
+    </request-map>
+    <request-map uri="unassignPartyFromContact">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.unassignParty"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="view" value="viewContact"/>
+    </request-map>
+    <request-map uri="addContactMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addContactMarketingCampaign"/>
+        <response name="success" type="request-redirect" value="updateContactForm"/>
+        <response name="error" type="view" value="updateContactForm"/>
+    </request-map>
+    <request-map uri="removeContactMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeContactMarketingCampaign"/>
+        <response name="success" type="request-redirect" value="updateContactForm"/>
+        <response name="error" type="view" value="updateContactForm"/>
+    </request-map>
+
+    <!-- user password view and update -->
+    <request-map uri="updateContactPassword">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContactPassword"/>
+    </request-map>
+    <request-map uri="updateAccountPassword">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateAccountPassword"/>
+    </request-map>
+    <request-map uri="updateLeadPassword">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateLeadPassword"/>
+    </request-map>
+    <request-map uri="updatePartnerPassword">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updatePartnerPassword"/>
+    </request-map>
+    <request-map uri="updatePartyPassword">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updatePartyPassword"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="viewPartyPassword"/>
+    </request-map>
+
+    <!-- Merge Forms -->
+    <request-map uri="generateFormLetter">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="generateFormLetter"/>
+    </request-map>
+    <request-map uri="createMergeForm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createMergeForm"/>
+        <response name="success" type="view" value="ManageMergeForms"/>
+        <response name="error" type="view" value="EditMergeForm"/>
+    </request-map>
+    <request-map uri="updateMergeForm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateMergeForm"/>
+        <response name="success" type="view" value="ManageMergeForms"/>
+        <response name="error" type="view" value="EditMergeForm"/>
+    </request-map>
+    <request-map uri="deleteMergeForm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteMergeForm"/>
+        <response name="success" type="request-redirect-noparam" value="ManageMergeForms"/>
+        <response name="error" type="view" value="EditMergeForm"/>
+    </request-map>
+    <request-map uri="ManageMergeForms">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ManageMergeForms"/>
+    </request-map>
+    <request-map uri="EditMergeForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditMergeForm"/>
+    </request-map>
+    <request-map uri="createMergeFormCategory">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createMergeFormCategory"/>
+        <response name="success" type="view" value="ManageMergeForms"/>
+        <response name="error" type="view" value="EditMergeFormCategory"/>
+    </request-map>
+    <request-map uri="updateMergeFormCategory">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateMergeFormCategory"/>
+        <response name="success" type="view" value="ManageMergeForms"/>
+        <response name="error" type="view" value="EditMergeFormCategory"/>
+    </request-map>
+    <request-map uri="deleteMergeFormCategory">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteMergeFormCategory"/>
+        <response name="success" type="request-redirect-noparam" value="ManageMergeForms"/>
+        <response name="error" type="view" value="EditMergeFormCategory"/>
+    </request-map>
+    <request-map uri="EditMergeFormCategory">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditMergeFormCategory"/>
+    </request-map>
+    <request-map uri="assignCategoryToMergeFormJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="assignCategoryToMergeFormJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="removeCategoryFromMergeFormJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="removeCategoryFromMergeFormJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getMergedFormForEmailJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="getMergedFormForEmailJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+
+    <!-- ===================== -->
+    <!-- Leads Request Maps    -->
+    <!-- ===================== -->
+
+    <request-map uri="myLeads">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myLeads"/>
+    </request-map>
+    <request-map uri="findLeads">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findLeads"/>
+    </request-map>
+
+    <request-map uri="viewLead">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewLead"/>
+    </request-map>
+    <request-map uri="createLeadForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createLeadForm"/>
+    </request-map>
+    <request-map uri="duplicateLeadForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="duplicateLeadForm"/>
+    </request-map>
+    <request-map uri="createLead">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createLead"/>
+        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="error" type="view" value="createLeadForm"/>
+    </request-map>
+    <!-- AJAX request for quick creation of Leads -->
+    <request-map uri="createLeadJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="createLead"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="updateLeadForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateLeadForm"/>
+    </request-map>
+    <request-map uri="updateLead">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateLead"/>
+        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="error" type="view" value="updateLeadForm"/>
+    </request-map>
+    <!-- this is designed really just to update lead status for qualify lead, and then show view lead again -->
+    <request-map uri="updateLeadStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setPartyStatus"/>
+        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="error" type="view" value="updateLeadForm"/>
+    </request-map>
+    <!-- this will call setPartyStatus, then an ECA chain will handle the conversion step -->
+    <request-map uri="convertLeadForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="convertLeadForm"/>
+    </request-map>
+    <request-map uri="convertLead">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.convertLead"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="view" value="viewLead"/>
+    </request-map>
+    <request-map uri="reassignContactResponsibleParty">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.reassignContactResponsibleParty"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="view" value="viewContact"/>
+    </request-map>
+    <request-map uri="addLeadDataSource">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addLeadDataSource"/>
+        <response name="success" type="request-redirect" value="updateLeadForm"/>
+        <response name="error" type="view" value="updateLeadForm"/>
+    </request-map>
+    <request-map uri="removeLeadDataSource">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeLeadDataSource"/>
+        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="error" type="view" value="viewLead"/>
+    </request-map>
+    <request-map uri="addLeadMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addLeadMarketingCampaign"/>
+        <response name="success" type="request-redirect" value="updateLeadForm"/>
+        <response name="error" type="view" value="updateLeadForm"/>
+    </request-map>
+    <request-map uri="removeLeadMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeLeadMarketingCampaign"/>
+        <response name="success" type="request-redirect" value="updateLeadForm"/>
+        <response name="error" type="view" value="updateLeadForm"/>
+    </request-map>
+    <request-map uri="reassignLeadResponsibleParty">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.reassignLeadResponsibleParty"/>
+        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="error" type="view" value="viewLead"/>
+    </request-map>
+    <request-map uri="deleteLead">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.deleteLead"/>
+        <response name="success" type="request-redirect" value="leadsMain"/>
+        <response name="error" type="view" value="viewLead"/>
+    </request-map>
+
+
+    <!-- ============================= -->
+    <!-- Opportunities Request Maps    -->
+    <!-- ============================= -->
+
+    <request-map uri="myOpportunities">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myOpportunities"/>
+    </request-map>
+    <request-map uri="findOpportunities">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findOpportunities"/>
+    </request-map>
+    <request-map uri="viewOpportunity">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewOpportunity"/>
+    </request-map>
+    <request-map uri="viewOpportunityHistory">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewOpportunityHistory"/>
+    </request-map>
+    <request-map uri="createOpportunityForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createOpportunityForm"/>
+    </request-map>
+    <request-map uri="createOpportunity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity"/>
+        <response name="error" type="view" value="createOpportunityForm"/>
+    </request-map>
+    <request-map uri="updateOpportunityForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateOpportunityForm"/>
+    </request-map>
+    <request-map uri="updateOpportunity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity"/>
+        <response name="error" type="view" value="updateOpportunityForm"/>
+    </request-map>
+    <request-map uri="addContactToOpportunity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addContactToOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity"/>
+        <response name="error" type="request-redirect" value="viewOpportunity"/>
+    </request-map>
+    <request-map uri="removeContactFromOpportunity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeContactFromOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity"/>
+        <response name="error" type="view" value="viewOpportunity"/>
+    </request-map>
+
+
+    <!-- =============== -->
+    <!-- MyHome Requests -->
+    <!-- =============== -->
+
+    <request-map uri="myHome">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myHome"/>
+    </request-map>
+    <request-map uri="viewDashboard">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewDashboard"/>
+    </request-map>
+
+    <!-- ============== -->
+    <!-- Cases Requests -->
+    <!-- ============== -->
+
+    <request-map uri="myCases">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myCases"/>
+    </request-map>
+    <request-map uri="viewCase">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewCase"/>
+    </request-map>
+    <request-map uri="createCaseForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createCaseForm"/>
+    </request-map>
+    <request-map uri="createCase">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createCase"/>
+        <response name="success" type="request-redirect" value="viewCase"/>
+        <response name="error" type="view" value="createCaseForm"/>
+    </request-map>
+    <request-map uri="createCaseForActivityForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createCaseForActivityForm"/>
+    </request-map>
+    <request-map uri="createCaseForActivity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createCase"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="createCaseForm"/>
+    </request-map>
+    <request-map uri="updateCaseForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateCaseForm"/>
+    </request-map>
+    <request-map uri="updateCase">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateCase"/>
+        <response name="success" type="request-redirect" value="viewCase"/>
+        <response name="error" type="view" value="updateCaseForm"/>
+    </request-map>
+    <request-map uri="closeCase">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.closeCase"/>
+        <response name="success" type="request-redirect" value="viewCase"/>
+        <response name="error" type="view" value="viewCase"/>
+    </request-map>
+    <request-map uri="findCases">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findCases"/>
+    </request-map>
+
+    <!-- =================== -->
+    <!-- Activities Requests -->
+    <!-- =================== -->
+
+    <request-map uri="pendingEmails">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="pendingEmails"/>
+    </request-map>
+    <request-map uri="writeQuoteEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.prepareQuoteEmail"/>
+        <response name="success" type="request" value="writeEmail"/>
+    </request-map>
+    <request-map uri="writeOrderEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.prepareSalesOrderEmail"/>
+        <response name="success" type="request" value="writeEmail"/>
+    </request-map>
+    <request-map uri="writeOrderConfirmationEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.prepareOrderConfirmationEmail"/>
+        <response name="success" type="request" value="writeEmail"/>
+    </request-map>
+    <request-map uri="removeEmailAttachment">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeEmailAttachment"/>
+        <response name="error" type="view" value="viewActivity"/>
+        <response name="success" type="view" value="viewActivity"/>
+    </request-map>
+
+    <request-map uri="createEventForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createEventForm"/>
+    </request-map>
+    <request-map uri="createTaskForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createTaskForm"/>
+    </request-map>
+    <request-map uri="createEvent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="createEventForm"/>
+    </request-map>
+    <request-map uri="createTask">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="createTaskForm"/>
+    </request-map>
+    <request-map uri="updateEventForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateEventForm"/>
+    </request-map>
+    <request-map uri="updateTaskForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateTaskForm"/>
+    </request-map>
+    <request-map uri="updateEvent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="updateEventForm"/>
+    </request-map>
+    <request-map uri="updateTask">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="updateTaskForm"/>
+    </request-map>
+    <request-map uri="updateActivityAssociation">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateActivityAssociation"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="viewActivity"/>
+    </request-map>
+    <request-map uri="updateActivityWithoutAssoc">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateActivityWithoutAssoc"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="viewActivity"/>
+    </request-map>
+    <request-map uri="updateEmailActivity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateActivityWithoutAssoc"/>
+        <response name="success" type="request-redirect" value="pendingEmails"/>
+        <response name="error" type="view" value="viewActivity"/>
+    </request-map>
+    <request-map uri="updatePendingInboundEmailAssocs">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="crmsfa.updateActivityAssociation"/>
+        <response name="success" type="request-redirect" value="pendingEmails"/>
+        <response name="error" type="view" value="viewActivity"/>
+    </request-map>
+    <request-map uri="deleteEmails">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="crmsfa.deleteActivityEmail"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="view" value="pendingEmails"/>
+    </request-map>
+    <request-map uri="viewActivity">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewActivity"/>
+    </request-map>
+    <request-map uri="logTaskForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="logTaskForm"/>
+    </request-map>
+    <request-map uri="logTaskFormAndDial">
+        <security auth="true" https="true"/>
+        <event type="java" path="org.opentaps.common.event.AsteriskEvents" invoke="makeOutgoingCall"/>
+        <response name="success" type="request-redirect" value="logTaskForm"/>
+        <response name="error" type="request-redirect" value="logTaskForm"/>
+    </request-map>
+    <request-map uri="logTask">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.logTask"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="logTaskForm"/>
+    </request-map>
+    <request-map uri="addWorkEffortPartyAssignment">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addWorkEffortPartyAssignment"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="viewActivity"/>
+    </request-map>
+    <request-map uri="removeWorkEffortPartyAssignment">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeWorkEffortPartyAssignment"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="viewActivity"/>
+    </request-map>
+    <request-map uri="updateWorkEffortPartyAssignment">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateWorkEffortPartyAssignment"/>
+        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="error" type="view" value="viewActivity"/>
+    </request-map>
+
+    <!-- ====================== -->
+    <!-- Forecasts Request Maps -->
+    <!-- ====================== -->
+
+    <request-map uri="viewForecast">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewForecast"/>
+    </request-map>
+    <request-map uri="createForecastForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createForecastForm"/>
+    </request-map>
+    <!-- each child period is computed by a multi-service -->
+    <request-map uri="createForecast">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="crmsfa.computeForecastPeriod"/>
+        <response name="success" type="request" value="computeForecastParentPeriod"/>
+        <response name="error" type="view" value="forecastsMain"/> <!-- this is to avoid problems with re-submitting the multi form -->
+    </request-map>
+    <!-- then the parent period is computed by passing the request here -->
+    <request-map uri="computeForecastParentPeriod">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.computeForecastParentPeriod"/>
+        <response name="success" type="request-redirect" value="viewForecast"/>
+        <response name="error" type="view" value="createForecastForm"/>
+    </request-map>
+    <request-map uri="updateForecast">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateForecast"/>
+        <response name="success" type="request-redirect" value="viewForecast"/>
+        <response name="error" type="request-redirect" value="viewForecast"/>
+    </request-map>
+    <request-map uri="findForecasts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findForecasts"/>
+    </request-map>
+
+
+    <!-- =================== -->
+    <!-- Quotes Request Maps -->
+    <!-- =================== -->
+
+    <request-map uri="myQuotes">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myQuotes"/>
+    </request-map>
+    <request-map uri="findQuotes">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findQuotes"/>
+    </request-map>
+    <request-map uri="removeQuoteFromOpportunity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeQuoteFromOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity"/>
+        <response name="error" type="request-redirect" value="viewOpportunity"/>
+    </request-map>
+    <request-map uri="addQuoteToOpportunity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addQuoteToOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity"/>
+        <response name="error" type="request-redirect" value="viewOpportunity"/>
+    </request-map>
+    <request-map uri="createQuoteFromCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="createQuoteFromCart"/>
+        <response name="success" type="request" value="destroyCartAndViewQuote"/>
+        <response name="error" type="request" value="orderentry"/>
+    </request-map>
+    <request-map uri="destroyCartAndViewQuote">
+        <security https="true" auth="true" direct-request="false"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="crmsfaDestroyCart"/>
+        <response name="success" type="request" value="ViewQuote"/>
+        <response name="error" type="request" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="ViewQuote">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="updateQuoteItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateQuoteItem"/>
+        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="removeQuoteItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeQuoteItem"/>
+        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="finalizeQuoteStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setQuoteStatus"/>
+        <response name="success" type="request" value="loadCartFromQuote"/>
+        <response name="error" type="view" value="finalizeQuote"/>
+    </request-map>
+    <request-map uri="setQuoteStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setQuoteStatus"/>
+        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="setQuoteItemOption">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setQuoteItemOption"/>
+        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="unsetQuoteItemOption">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="unsetQuoteItemOption"/>
+        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="addQuoteItemOption">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="addQuoteItemOption"/>
+        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="updateQuoteItemOption">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateQuoteItemOption"/>
+        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="updateQuoteItemOptions">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="updateQuoteItemOption"/>
+        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="removeQuoteItemOption">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeQuoteItemOption"/>
+        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="finalizeQuote">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="finalizeQuote"/>
+    </request-map>
+    <request-map uri="finalizeQuoteItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateQuoteItem"/>
+        <response name="success" type="request-redirect-filterparam" value="finalizeQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="finalizeQuote"/>
+    </request-map>
+    <request-map uri="setFinalizeQuoteItemOption">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="setQuoteItemOption"/>
+        <response name="success" type="request-redirect-filterparam" value="finalizeQuote" allowed-params="quoteId"/>
+        <response name="error" type="view" value="finalizeQuote"/>
+    </request-map>
+    <request-map uri="AddQuoteNote">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="AddQuoteNote"/>
+    </request-map>
+    <request-map uri="CreateQuoteNote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createQuoteNote"/>
+        <response name="success" type="view" value="ViewQuote"/>
+        <response name="error" type="view" value="AddQuoteNote"/>
+    </request-map>
+    <request-map uri="copyQuote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="copyQuote"/>
+        <response name="success" type="request-redirect-filterparam" value="EditQuote" allowed-attributes="quoteId" allowed-params="quoteId"/>
+        <response name="error" type="view" value="EditQuote"/>
+    </request-map>
+
+
+    <!-- ====================== -->
+    <!-- Marketing Request Maps -->
+    <!-- ====================== -->
+
+    <request-map uri="viewMarketingCampaign">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewMarketingCampaign"/>
+    </request-map>
+    <request-map uri="createMarketingCampaignForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createMarketingCampaignForm"/>
+    </request-map>
+    <request-map uri="createMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createMarketingCampaign"/>
+        <response name="error" type="view" value="createMarketingCampaignForm"/>
+        <response name="success" type="request-redirect" value="viewMarketingCampaign"/>
+    </request-map>
+    <request-map uri="updateMarketingCampaignForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateMarketingCampaignForm"/>
+    </request-map>
+    <request-map uri="updateMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateMarketingCampaign"/>
+        <response name="error" type="view" value="updateMarketingCampaignForm"/>
+        <response name="success" type="request-redirect" value="viewMarketingCampaign"/>
+    </request-map>
+    <request-map uri="findMarketingCampaigns">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findMarketingCampaigns"/>
+    </request-map>
+    <request-map uri="marketingReports">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="marketingReports"/>
+    </request-map>
+    <request-map uri="marketingCampaignReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="marketingCampaignReport"/>
+    </request-map>
+    <request-map uri="createCatalogRequestForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createCatalogRequestForm"/>
+    </request-map>
+    <request-map uri="createCatalogRequest">
+        <security https="true" auth="false"/>
+        <event type="service" invoke="createCatalogRequestWithSurvey"/>
+        <!-- request-redirect to avoid double posting, noparam to trim URL strings -->
+        <response name="success" type="request-redirect-noparam" value="createCatalogRequestForm"/>
+        <response name="error" type="view" value="createCatalogRequestForm"/>
+    </request-map>
+
+
+    <!-- tracking codes -->
+    <request-map uri="createTrackingCodeForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createTrackingCodeForm"/>
+    </request-map>
+    <request-map uri="createTrackingCode">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createTrackingCode"/>
+        <response name="success" type="request-redirect-filterparam" value="viewMarketingCampaign" allowed-params="marketingCampaignId"/>
+        <response name="error" type="view" value="createTrackingCodeForm"/>
+    </request-map>
+    <request-map uri="trackingCodeReport">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="trackingCodeReport"/>
+    </request-map>
+
+    <!-- ContactList and MarketingCampaigns -->
+    <request-map uri="addContactListToMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addContactListToMarketingCampaign"/>
+        <response name="success" type="request-redirect-filterparam" value="viewMarketingCampaign" allowed-params="marketingCampaignId"/>
+        <response name="error" type="view" value="viewMarketingCampaign"/>
+    </request-map>
+    <request-map uri="removeContactListFromMarketingCampaign">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeContactListFromMarketingCampaign"/>
+        <response name="success" type="request-redirect-filterparam" value="viewMarketingCampaign" allowed-params="marketingCampaignId"/>
+        <response name="error" type="view" value="viewMarketingCampaign"/>
+    </request-map>
+
+    <!-- ContactList -->
+    <request-map uri="viewContactList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewContactList"/>
+    </request-map>
+    <request-map uri="createContactListForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createContactListForm"/>
+    </request-map>
+    <request-map uri="createContactList">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createContactList"/>
+        <response name="error" type="view" value="createContactListForm"/>
+        <response name="success" type="request-redirect-noparam" value="viewContactList" />
+    </request-map>
+    <request-map uri="updateContactListForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContactListForm"/>
+    </request-map>
+    <request-map uri="updateContactList">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateContactList"/>
+        <response name="error" type="view" value="updateContactListForm"/>
+        <response name="success" type="request-redirect-filterparam" value="viewContactList" allowed-params="contactListId"/>
+    </request-map>
+    <request-map uri="findContactLists">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findContactLists"/>
+    </request-map>
+    <request-map uri="calculate3605Postage">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="calculate3605Postage"/>
+    </request-map>
+    <request-map uri="sortUSPSBusinessMail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.sortUSPSBusinessMail"/>
+        <response name="error" type="view" value="viewContactList"/>
+        <response name="success" type="request-redirect" value="viewUSPSSortResult"/>
+    </request-map>
+    <request-map uri="viewUSPSSortResult">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewUSPSSortResult"/>
+    </request-map>
+    <request-map uri="viewUSPSZip5">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewUSPSZip5"/>
+    </request-map>
+    <request-map uri="viewUSPSZip3">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewUSPSZip3"/>
+    </request-map>
+    <request-map uri="viewUSPSBMC">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewUSPSBMC"/>
+    </request-map>
+    <request-map uri="viewUSPSOther">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewUSPSOther"/>
+    </request-map>
+    <request-map uri="uspsBulkMailLabels.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uspsBulkMailLabelsPDF"/>
+    </request-map>
+    <request-map uri="completeCatalogMailing">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.completeCatalogMailing"/>
+        <response name="success" type="view" value="viewUSPSSortResult"/>
+        <response name="success" type="view" value="viewUSPSSortResult"/>
+    </request-map>
+
+    <!-- ContactListParty -->
+    <request-map uri="addContactListPartiesForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContactListPartiesForm"/>
+    </request-map>
+    <request-map uri="addContactListParties">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="createContactListParty"/>
+        <response name="error" type="view" value="addContactListPartiesForm"/>
+        <response name="success" type="view" value="addContactListPartiesForm"/>
+    </request-map>
+    <request-map uri="removeContactListParties">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="updateContactListParty"/>
+        <response name="error" type="view" value="viewContactList"/>
+        <response name="success" type="view" value="viewContactList"/>
+    </request-map>
+    <request-map uri="addNewCatalogRequestsToContactList">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addNewCatalogRequestsToContactList"/>
+        <response name="error" type="request-redirect" value="viewContactList"/>
+        <response name="success" type="request-redirect" value="viewContactList"/>
+    </request-map>
+
+    <!-- surveys -->
+    <request-map uri="listSurveys">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="listSurveys"/>
+    </request-map>
+    <request-map uri="viewSurveyResponses">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewSurveyResponses"/>
+    </request-map>
+    <request-map uri="sendMarketingCampaignEmail">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.sendMarketingCampaignEmail"/>
+        <response name="success" type="request" value="donePageRequestHelper"/> <!-- use the helper to get back to the correct view page -->
+        <response name="error" type="view" value="writeEmail"/>
+    </request-map>
+
+
+    <!-- ============= -->
+    <!-- Team Requests -->
+    <!-- ============= -->
+
+    <request-map uri="viewTeam">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewTeam"/>
+    </request-map>
+    <request-map uri="createTeamForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createTeamForm"/>
+    </request-map>
+    <request-map uri="createTeam">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createTeam"/>
+        <response name="success" type="request-redirect" value="viewTeam"/>
+        <response name="error" type="view" value="createTeamForm"/>
+    </request-map>
+    <request-map uri="updateTeamForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateTeamForm"/>
+    </request-map>
+    <request-map uri="updateTeam">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateTeam"/>
+        <response name="success" type="request-redirect" value="viewTeam"/>
+        <response name="error" type="view" value="updateTeamForm"/>
+    </request-map>
+    <request-map uri="findTeams">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findTeams"/>
+    </request-map>
+    <request-map uri="deactivateTeam">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.deactivateTeam"/>
+        <response name="success" type="view" value="viewTeam"/>
+        <response name="error" type="view" value="viewTeam"/>
+    </request-map>
+    <request-map uri="addTeamMemberInviewTeam">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addTeamMember"/>
+        <response name="success" type="request-redirect" value="viewTeam"/>
+        <response name="error" type="request-redirect" value="viewTeam"/>
+    </request-map>
+    <request-map uri="addTeamMemberInviewAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addTeamMember"/>
+        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="error" type="request-redirect" value="viewAccount"/>
+    </request-map>
+    <request-map uri="removeTeamMemberInviewTeam">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeTeamMember"/>
+        <response name="success" type="request-redirect" value="viewTeam"/>
+        <response name="error" type="request-redirect" value="viewTeam"/>
+    </request-map>
+    <request-map uri="removeTeamMemberInviewAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeTeamMember"/>
+        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="error" type="request-redirect" value="viewAccount"/>
+    </request-map>
+    <request-map uri="setTeamMemberSecurityGroupInviewTeam">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.setTeamMemberSecurityGroup"/>
+        <response name="success" type="request-redirect" value="viewTeam"/>
+        <response name="error" type="view" value="viewTeam"/>
+    </request-map>
+    <request-map uri="setTeamMemberSecurityGroupInviewAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.setTeamMemberSecurityGroup"/>
+        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map>
+    <request-map uri="assignTeamToAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.assignTeamToAccount"/>
+        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="error" type="view" value="viewAccount"/>
+    </request-map>
+
+
+    <!-- ==================== -->
+    <!-- Partner Tab Requests -->
+    <!-- ==================== -->
+
+    <request-map uri="viewPartner">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewPartner"/>
+    </request-map>
+    <request-map uri="createPartnerForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPartnerForm"/>
+    </request-map>
+    <request-map uri="createPartner">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createPartner"/>
+        <response name="success" type="request-redirect" value="viewPartner"/>
+        <response name="error" type="view" value="createPartnerForm"/>
+    </request-map>
+    <!-- AJAX request for quick creation of Leads -->
+    <request-map uri="createPartnerJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="createPartner"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="updatePartnerForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updatePartnerForm"/>
+    </request-map>
+    <request-map uri="updatePartner">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updatePartner"/>
+        <response name="success" type="request-redirect" value="viewPartner"/>
+        <response name="error" type="view" value="updatePartnerForm"/>
+    </request-map>
+    <request-map uri="findPartners">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findPartners"/>
+    </request-map>
+    <request-map uri="partnersEditContactMech">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="partnersEditContactMech"/>
+    </request-map>
+    <!-- TODO:  these requests should be PartnerSalesAgreement -->
+    <request-map uri="viewPartnerAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="changePartnerAgreementStatus">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="view" value="viewPartnerAgreement"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="editPartnerAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processUpdateAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreement"/>
+        <response name="success" type="view" value="viewPartnerAgreement"/>
+        <response name="error" type="view" value="editPartnerAgreement"/>
+    </request-map>
+    <request-map uri="createPartnerAgreement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processCreateAgreement">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createPartnerSalesAgreement"/>
+        <response name="success" type="request" value="initialAgreementItemsAndTerms"/>
+        <response name="error" type="view" value="createPartnerAgreement"/>
+    </request-map>
+    <request-map uri="initialAgreementItemsAndTerms">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processCreateAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processRemoveAgreementItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeAgreementItemAndTerms"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processCreateAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createAgreementTerm"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="error" type="view" value="createAgreementTerm"/>
+    </request-map>
+    <request-map uri="processUpdateAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateAgreementTerm"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+    <request-map uri="processRemoveAgreementTerm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteAgreementTerm"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="error" type="view" value="viewPartnerAgreement"/>
+    </request-map>
+
+
+    <!-- ================ -->
+    <!-- Content Requests -->
+    <!-- ================ -->
+
+    <request-map uri="addContentUrlForAccount">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContentUrlForAccount"/>
+    </request-map>
+    <request-map uri="addContentUrlForLead">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContentUrlForLead"/>
+    </request-map>
+    <request-map uri="addContentUrlForContact">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContentUrlForContact"/>
+    </request-map>
+    <request-map uri="addContentUrlForPartner">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContentUrlForPartner"/>
+    </request-map>
+    <request-map uri="addContentUrlForCase">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContentUrlForCase"/>
+    </request-map>
+    <request-map uri="addContentUrlForOpportunity">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContentUrlForOpportunity"/>
+    </request-map>
+    <request-map uri="addContentUrlForActivity">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContentUrlForActivity"/>
+    </request-map>
+    <request-map uri="addContentUrlForOrder">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContentUrlForOrder"/>
+    </request-map>
+    <request-map uri="uploadContentForAccount">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadContentForAccount"/>
+    </request-map>
+    <request-map uri="uploadContentForLead">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadContentForLead"/>
+    </request-map>
+    <request-map uri="uploadContentForContact">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadContentForContact"/>
+    </request-map>
+    <request-map uri="uploadContentForPartner">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadContentForPartner"/>
+    </request-map>
+    <request-map uri="uploadContentForCase">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadContentForCase"/>
+    </request-map>
+    <request-map uri="uploadContentForOpportunity">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadContentForOpportunity"/>
+    </request-map>
+    <request-map uri="uploadContentForActivity">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadContentForActivity"/>
+    </request-map>
+    <request-map uri="uploadContentForOrder">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadContentForOrder"/>
+    </request-map>
+    <!-- TODO: error must go to correct add/upload form: would require disambiguation of createContent for bookmark url vs upload file -->
+    <request-map uri="createContentForParty">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createContentForParty"/>
+        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="error" type="request-redirect" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="createContentForCase">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createContentForCase"/>
+        <response name="success" type="request" value="viewCase"/>
+        <response name="error" type="request" value="viewCase"/>
+    </request-map>
+    <request-map uri="createContentForOpportunity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createContentForOpportunity"/>
+        <response name="success" type="request" value="viewOpportunity"/>
+        <response name="error" type="request" value="viewOpportunity"/>
+    </request-map>
+    <request-map uri="createContentForActivity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createContentForActivity"/>
+        <response name="success" type="request" value="viewActivity"/>
+        <response name="error" type="request" value="viewActivity"/>
+    </request-map>
+    <request-map uri="createContentForOrder">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createContentForOrder"/>
+        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="error" type="request" value="orderview"/>
+    </request-map>
+    <request-map uri="updateContentForAccountForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContentForAccount"/>
+    </request-map>
+    <request-map uri="updateContentForContactForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContentForContact"/>
+    </request-map>
+    <request-map uri="updateContentForLeadForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContentForLead"/>
+    </request-map>
+    <request-map uri="updateContentForCaseForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContentForCase"/>
+    </request-map>
+    <request-map uri="updateContentForPartnerForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContentForPartner"/>
+    </request-map>
+    <request-map uri="updateContentForOpportunityForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContentForOpportunity"/>
+    </request-map>
+    <request-map uri="updateContentForActivityForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContentForActivity"/>
+    </request-map>
+    <request-map uri="updateContentForOrderForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContentForOrder"/>
+    </request-map>
+    <request-map uri="updateContentForParty">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateContentForParty"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updateContentForCase">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateContentForCase"/>
+        <response name="success" type="request" value="viewCase"/>
+        <response name="error" type="request" value="viewCase"/>
+    </request-map>
+    <request-map uri="updateContentForOpportunity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateContentForOpportunity"/>
+        <response name="success" type="request" value="viewOpportunity"/>
+        <response name="error" type="request" value="viewOpportunity"/>
+    </request-map>
+    <request-map uri="updateContentForActivity">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateContentForActivity"/>
+        <response name="success" type="request" value="viewActivity"/>
+        <response name="error" type="request" value="viewActivity"/>
+    </request-map>
+    <request-map uri="updateContentForOrder">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateContentForOrder"/>
+        <response name="success" type="request" value="orderview"/>
+        <response name="error" type="request" value="orderview"/>
+    </request-map>
+    <request-map uri="downloadPartyContent">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.content.ContentEvents" invoke="downloadPartyContent"/>
+        <response name="success" type="none"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+    <request-map uri="downloadCaseContent">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.content.ContentEvents" invoke="downloadCaseContent"/>
+        <response name="success" type="none"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+    <request-map uri="downloadOpportunityContent">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.content.ContentEvents" invoke="downloadOpportunityContent"/>
+        <response name="success" type="none"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+    <request-map uri="downloadActivityContent">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.content.ContentEvents" invoke="downloadActivityContent"/>
+        <response name="success" type="none"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+    <request-map uri="downloadOrderContent">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.content.ContentEvents" invoke="downloadOrderContent"/>
+        <response name="success" type="none"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+    <request-map uri="removeContent">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.removeContent"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="addContentUrlForQuote">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addContentUrlForQuote"/>
+    </request-map>
+    <request-map uri="uploadContentForQuote">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="uploadContentForQuote"/>
+    </request-map>
+    <request-map uri="updateContentForQuoteForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="updateContentForQuote"/>
+    </request-map>
+    <request-map uri="downloadQuoteContent">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.content.ContentEvents" invoke="downloadQuoteContent"/>
+        <response name="success" type="none"/>
+        <response name="error" type="view" value="error"/>
+    </request-map>
+    <request-map uri="createContentForQuote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createContentForQuote"/>
+        <response name="success" type="request-redirect" value="ViewQuote"/>
+        <response name="error" type="request" value="ViewQuote"/>
+    </request-map>
+    <request-map uri="updateContentForQuote">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateContentForQuote"/>
+        <response name="success" type="request" value="ViewQuote"/>
+        <response name="error" type="request" value="ViewQuote"/>
+    </request-map>
+
+
+    <!-- =================== -->
+    <!-- Lookup Request Maps -->
+    <!-- =================== -->
+
+    <request-map uri="LookupClients">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupClients"/>
+    </request-map>
+    <request-map uri="LookupAccounts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupAccounts"/>
+    </request-map>
+    <request-map uri="LookupContacts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupContacts"/>
+    </request-map>
+    <request-map uri="LookupLeads">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupLeads"/>
+    </request-map>
+    <request-map uri="LookupCases">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupCases"/>
+    </request-map>
+    <request-map uri="LookupOpportunities">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupOpportunities"/>
+    </request-map>
+    <request-map uri="LookupTeamMembers">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupTeamMembers"/>
+    </request-map>
+    <request-map uri="LookupQuotes">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupQuotes"/>
+    </request-map>
+    <request-map uri="LookupContactList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="LookupContactList"/>
+    </request-map>
+
+
+    <!-- ==================== -->
+    <!-- Merge Party Requests -->
+    <!-- ==================== -->
+
+    <request-map uri="mergeAccountsForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="mergeAccountsForm"/>
+    </request-map>
+    <request-map uri="mergeContactsForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="mergeContactsForm"/>
+    </request-map>
+    <request-map uri="mergeLeadsForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="mergeLeadsForm"/>
+    </request-map>
+    <request-map uri="confirmMergeAccountsForm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.validateMergeCrmParties"/>
+        <response name="success" type="view" value="confirmMergeAccountsForm"/>
+        <response name="error" type="request-redirect" value="mergeAccountsForm"/>
+    </request-map>
+    <request-map uri="confirmMergeContactsForm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.validateMergeCrmParties"/>
+        <response name="success" type="view" value="confirmMergeContactsForm"/>
+        <response name="error" type="request-redirect" value="mergeContactsForm"/>
+    </request-map>
+    <request-map uri="confirmMergeLeadsForm">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.validateMergeCrmParties"/>
+        <response name="success" type="view" value="confirmMergeLeadsForm"/>
+        <response name="error" type="request-redirect" value="mergeLeadsForm"/>
+    </request-map>
+    <request-map uri="mergeAccounts">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.mergeCrmParties"/>
+        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="error" type="request-redirect" value="mergeAccountsForm"/>
+    </request-map>
+    <request-map uri="mergeContacts">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.mergeCrmParties"/>
+        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="error" type="request-redirect" value="mergeContactsForm"/>
+    </request-map>
+    <request-map uri="mergeLeads">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.mergeCrmParties"/>
+        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="error" type="request-redirect" value="mergeLeadsForm"/>
+    </request-map>
+
+
+    <!-- ======================= -->
+    <!-- Orders Integration Maps -->
+    <!-- ======================= -->
+
+    <request-map uri="myOrders">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="myOrders"/>
+    </request-map>
+    <request-map uri="findOrders">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findOrders"/>
+    </request-map>
+    <request-map uri="quickCreateOrder">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="quickCreateOrder"/>
+        <response name="success" type="request-redirect" value="createOrderMainScreen"/>
+        <!-- on error we still have a new cart with good values -->
+        <response name="error" type="view" value="createOrderMainScreen"/>
+        <response name="survey" type="request" value="addOrderItem"/>
+    </request-map>
+    <request-map uri="newOrder">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="crmsfaDestroyCart"/>
+        <response name="success" type="view" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="createOrderMainScreen">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="resumeOrder">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="resumeOrder"/>
+        <response name="success" type="request-redirect" value="createOrderMainScreen"/>
+        <response name="error" type="request-redirect" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="clearCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="clearCart"/>
+        <response name="success" type="view" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="addOrderItemSurvey">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createSurveyResponse"/>
+        <response name="success" type="request" value="addOrderItem"/>
+        <response name="error" type="request" value="addOrderItem"/>
+    </request-map>
+    <request-map uri="addOrderItem">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="addOrderItem"/>
+        <response name="success" type="request-redirect-noparam" value="createOrderMainScreen"/>
+        <response name="error" type="request" value="createOrderMainScreen"/>
+        <!-- If the product has a survey and the survey has not been submitted yet, then we render the survey. -->
+        <response name="survey" type="view" value="orderItemSurvey"/>
+        <!-- when the user enters a configurable, we should take them to a screen where they can configure or choose a variant -->
+        <response name="configureProduct" type="view" value="configureProduct"/>
+        <!-- if the productId does not match any Product, perform a lookup -->
+        <response name="findMatchingProducts" type="request" value="countMatchingProducts"/>
+        <response name="chooseVariantProduct" type="request" value="chooseVariantProduct"/>
+    </request-map>
+    <request-map uri="additem">
+        <description>
+            Override legacy request to replicate new one above.  For some reason just doing
+            a "request" to above does not work, probably because of /additem/keywordsearch in URI.
+            This method works, however.
+        </description>
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="addOrderItem"/>
+        <response name="success" type="request-redirect-noparam" value="createOrderMainScreen"/>
+        <response name="error" type="request-redirect-noparam" value="createOrderMainScreen"/>
+        <!-- If the product has a survey and the survey has not been submitted yet, then we render the survey. -->
+        <response name="survey" type="view" value="orderItemSurvey"/>
+        <!-- when the user enters a configurable, we should take them to a screen where they can configure or choose a variant -->
+        <response name="configureProduct" type="view" value="configureProduct"/>
+        <!-- if the productId does not match any Product, perform a lookup -->
+        <response name="findMatchingProducts" type="request" value="countMatchingProducts"/>
+        <response name="chooseVariantProduct" type="request" value="chooseVariantProduct"/>
+    </request-map>
+    <request-map uri="updateOrderItems">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.updateOrderItems"/>
+        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="error" type="view" value="editorderitems"/>
+    </request-map>
+    <request-map uri="countMatchingProducts">
+        <security https="true" auth="true" direct-request="false"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="countMatchingProducts"/>
+        <response name="success" type="request" value="findMatchingSalesProducts"/>
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="chooseVariantProduct">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="chooseVariantProduct"/>
+    </request-map>
+    <request-map uri="findMatchingSalesProducts">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findMatchingSalesProducts"/>
+    </request-map>
+    <request-map uri="modifycart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="modifyCart"/>
+        <response name="success" type="request-redirect-noparam" value="createOrderMainScreen" />
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="shipmentSetting">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipmentSetting"/>
+    </request-map>
+    <!-- override legacy call -->
+    <request-map uri="setShipping">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipmentSetting"/>
+    </request-map>
+    <request-map uri="setShipmentOption">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="crmsfaSetShipmentOptionMulti"/>
+        <response name="success" type="view" value="shipmentSetting"/>
+        <response name="finished" type="view" value="billsetting"/>
+        <response name="error" type="view" value="shipmentSetting"/>
+    </request-map>
+    <request-map uri="editOrderItems">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="editorderitems"/>
+    </request-map>
+    <request-map uri="updateOrderHeaderInfo">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="updateOrderHeaderInfo"/>
+        <response name="success" type="request" value="createOrderMainScreen"/>
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="updateOrderHeaderInfoAndRecalculatePrices">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="updateOrderHeaderInfo"/>
+        <response name="success" type="request" value="recalculatePrices"/>
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="recalculatePrices">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="recalculatePrices"/>
+        <response name="success" type="request" value="createOrderMainScreen"/>
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="destroyCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="crmsfaDestroyCart"/>
+        <response name="success" type="request-redirect-noparam" value="ordersMain"/>
+        <response name="error" type="request" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="reviewOrder">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="updateCartShippingEstimates"/>
+        <response name="success" type="request" value="validateOrderShippingOptions"/>
+        <response name="error" type="request" value="crmsfaQuickCheckout"/>
+    </request-map>
+    <request-map uri="validateOrderShippingOptions">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="validateOrderShippingOptions"/>
+        <response name="success" type="view" value="confirm"/>
+        <response name="error" type="request" value="crmsfaQuickCheckout"/>
+    </request-map>
+    <request-map uri="configureProduct">
+        <response name="success" type="view" value="configureProduct"/>
+    </request-map>
+    <request-map uri="createOrderPartyForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createOrderPartyForm"/>
+    </request-map>
+    <request-map uri="createOrderPartyValidation">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="createOrderPartyValidation"/>
+        <response name="error" type="view" value="createOrderPartyForm"/>
+        <response name="success" type="request" value="createOrderParty"/>
+    </request-map>
+    <request-map uri="createOrderParty">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="createOrderParty"/>
+        <response name="error" type="view" value="createOrderPartyForm"/>
+        <response name="success" type="request" value="crmsfaQuickCheckout"/>
+    </request-map>
+    <request-map uri="receiveOfflinePayments">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.OrderManagerEvents" invoke="receiveOfflinePayment"/>
+        <response name="success" type="request" value="disburseChange"/>
+        <response name="error" type="view" value="receivepayment"/>
+    </request-map>
+    <request-map uri="disburseChange">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.disburseChangeForOrder"/>
+        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="error" type="view" value="receivepayment"/>
+    </request-map>
+    <request-map uri="receiveOfflinePaymentsAndDisburseChange">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="receiveOfflinePaymentsAndDisburseChange"/>
+        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="error" type="view" value="receivepayment"/>
+    </request-map>
+    <request-map uri="createPartyCarrierAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createPartyCarrierAccount"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updatePartyCarrierAccount">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updatePartyCarrierAccount"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="processorder">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="crmsfaCreateOrder"/>
+        <response name="sales_order" type="request" value="checkBlackList"/>
+        <response name="work_order" type="request" value="checkBlackList"/>
+        <response name="purchase_order" type="request" value="clearpocart"/>
+        <response name="error" type="view" value="confirm"/>
+    </request-map>
+    <request-map uri="shipGroups.pdf">
+        <security https="true" auth="true"/><response name="success" type="view" value="ShipGroupsPDF"/>
+    </request-map>
+    <request-map uri="PackingSlip.pdf">
+        <security https="true" auth="true"/><response name="success" type="view" value="PackingSlipPDF"/>
+    </request-map>
+
+    <!-- Order ship groups management -->
+    <request-map uri="newShipGroup">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="newShipGroup"/>
+    </request-map>
+    <request-map uri="createShipGroup">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createShipGroup"/>
+        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="error" type="view" value="newShipGroup"/>
+    </request-map>
+
+    <!-- Order View requests -->
+    <request-map uri="addCreditCardToOrder">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.addCreditCardToOrder"/>
+        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="error" type="view" value="orderview"/>
+    </request-map>
+
+    <!-- Order Queue Management requests -->
+    <request-map uri="manageOrderQueue">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="manageOrderQueue"/>
+    </request-map>
+    <request-map uri="resequenceOrderShipGroupPriorities">
+        <security auth="true" https="true"/>
+        <event type="service" invoke="crmsfa.resequenceOrderShipGroupPriorities" path=""/>
+        <response name="success" type="request-redirect-noparam" value="manageOrderQueue"/>
+        <response name="error" type="view" value="manageOrderQueue"/>
+    </request-map>
+    <request-map uri="rescheduleOrderShipDates">
+        <security auth="true" https="true"/>
+        <event type="service-multi" invoke="crmsfa.rescheduleOrderShipDates" path=""/>
+        <response name="success" type="request-redirect-noparam" value="manageOrderQueue"/>
+        <response name="error" type="view" value="manageOrderQueue"/>
+    </request-map>
+
+    <!-- Service Management requests -->
+    <request-map uri="markServicePerformed">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="markServicePerformed"/>
+    </request-map>
+    <request-map uri="markServicesAsPerformed">
+        <security auth="true" https="true"/>
+        <event type="service-multi" invoke="crmsfa.markServicesAsPerformed" path=""/>
+        <response name="success" type="request-redirect-noparam" value="markServicePerformed"/>
+        <response name="error" type="view" value="markServicePerformed"/>
+    </request-map>
+
+
+    <!-- QuickCheckout requests -->
+    <request-map uri="crmsfaQuickCheckout">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="crmsfaQuickCheckout"/>
+    </request-map>
+    <request-map uri="updateShipGroup">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="updateShipGroup"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="updateCheckoutPayment">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="finalizeOrderEntry"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+        <response name="paymentError" type="none"/>
+        <response name="payment" type="none"/>
+    </request-map>
+    <request-map uri="ordersEditCreditCard">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ordersEditCreditCard"/>
+    </request-map>
+    <request-map uri="createCreditCard">
+        <security https="true" auth="true"/>
+        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="createCreditCard"/>
+        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="address" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="error" type="request-redirect" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updateCreditCard">
+        <security https="true" auth="true"/>
+        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="updateCreditCard"/>
+        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="address" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="ordersEditEftAccount">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="ordersEditEftAccount"/>
+    </request-map>
+    <request-map uri="createEftAccount">
+        <security https="true" auth="true"/>
+        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="createEftAccount"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="updateEftAccount">
+        <security https="true" auth="true"/>
+        <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="updateEftAccount"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
+    </request-map>
+    <request-map uri="addpromocode">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addProductPromoCode"/>
+        <response name="success" type="view" value="createOrderMainScreen"/>
+        <response name="error" type="view" value="createOrderMainScreen"/>
+    </request-map>
+    <request-map uri="setCVV">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="setCVV"/>
+        <response name="success" type="none"/>
+    </request-map>
+
+    <request-map uri="appendItemToOrder">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.order.OrderEvents" invoke="appendItemToOrder"/>
+        <response name="survey" type="view" value="orderItemSurvey"/>
+        <response name="success" type="request" value="appendItemToOrder2"/>
+        <response name="error" type="view" value="editorderitems"/>
+    </request-map>
+    <request-map uri="appendItemToOrderSurvey">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createSurveyResponse"/>
+        <response name="success" type="request" value="appendItemToOrder"/>
+        <response name="error" type="request" value="appendItemToOrder"/>
+    </request-map>
+    <request-map uri="appendItemToOrder2">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.appendOrderItem"/>
+        <response name="success" type="request-redirect-noparam" value="orderview"/>
+        <response name="error" type="view" value="editorderitems"/>
+    </request-map>
+
+    <!-- return requests -->
+    <request-map uri="pendingReturns">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="pendingReturns"/>
+    </request-map>
+    <request-map uri="findReturns">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findReturns"/>
+    </request-map>
+    <request-map uri="createReturnForm">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createReturnForm"/>
+    </request-map>
+    <request-map uri="viewReturn">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewReturn"/>
+    </request-map>
+    <request-map uri="createReturnFromOrder">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.createReturnFromOrder"/>
+        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="error" type="view" value="createReturnForm"/>
+    </request-map>
+    <request-map uri="updateReturnHeader">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.updateReturnHeader"/>
+        <response name="success" type="request-redirect-filterparam" value="viewReturn" allowed-params="returnId"/>
+        <response name="error" type="view" value="viewReturn"/>
+    </request-map>
+    <request-map uri="createReturnItems">
+        <security https="true" auth="true" direct-request="true"/>
+        <event type="service-multi" invoke="createReturnItemOrAdjustment"/>
+        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="error" type="view" value="viewReturn"/>
+    </request-map>
+    <request-map uri="updateReturnItems">
+        <security https="true" auth="true"/>
+        <event type="service-multi" invoke="updateReturnItemOrAdjustment"/>
+        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="error" type="view" value="viewReturn"/>
+    </request-map>
+    <request-map uri="removeReturnItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeReturnItem"/>
+        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="error" type="view" value="viewReturn"/>
+    </request-map>
+    <request-map uri="removeReturnAdjustment">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeReturnAdjustment"/>
+        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="error" type="view" value="viewReturn"/>
+    </request-map>
+    <request-map uri="createAndConfirmReturnShipment">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="opentaps.createAndConfirmReturnShipment"/>
+        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="error" type="view" value="viewReturn"/>
+    </request-map>
+    <request-map uri="acceptReturn">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="crmsfa.acceptReturn"/>
+        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="error" type="view" value="viewReturn"/>
+    </request-map>
+
+    <!-- shopping list requests -->
+    <request-map uri="findShoppingList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="findShoppingList"/>
+    </request-map>
+    <request-map uri="viewShoppingList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewShoppingList"/>
+    </request-map>
+    <request-map uri="updateShoppingListItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateShoppingListItem"/>
+        <response name="success" type="request-redirect" value="viewShoppingList"/>
+        <response name="error" type="view" value="viewShoppingList"/>
+    </request-map>
+    <request-map uri="removeShoppingListItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="removeShoppingListItem"/>
+        <response name="success" type="request-redirect" value="viewShoppingList"/>
+        <response name="error" type="view" value="viewShoppingList"/>
+    </request-map>
+
+    <!-- JSON requests -->
+    <request-map uri="getOrderPriorityList">
+        <security https="true" auth="true"/>
+        <event type="json" invoke="crmsfa.getOrderPriorityList"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getCartShipEstimatesJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="getCartShipEstimatesJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getPartyCarrierAccountsJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.event.AjaxEvents" invoke="getPartyCarrierAccountsJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="getProductWarningsDataJSON">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.opensourcestrategies.crmsfa.ajax.AjaxEvents" invoke="getProductWarningsDataJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="saveNotesJSON">
+        <event type="java" path="com.opensourcestrategies.crmsfa.common.NoteEvents" invoke="saveNotesJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+    <request-map uri="deleteNotesJSON">
+        <event type="java" path="com.opensourcestrategies.crmsfa.common.NoteEvents" invoke="deleteNotesJSON"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
+
+    <request-map uri="invoice.pdf">
+        <security https="true" auth="true"/>
+        <event type="java" invoke="checkInvoiceReportPermissions" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents"/>
+        <response name="success" type="request-redirect" value="processInvoicePDF"/>
+        <response name="error" type="view" value="myOrders"/>
+    </request-map>
+    <request-map uri="processInvoicePDF">
+        <security https="true" auth="true"/>
+        <event type="java" invoke="prepareInvoiceReport" path="org.opentaps.common.invoice.InvoiceEvents"/>
+        <response name="success" type="view" value="InvoiceJR"/>
+        <response name="error" type="view" value="myOrders"/>
+    </request-map>
+    <request-map uri="InvoiceJR">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="InvoiceJR"/>
+    </request-map>
+    <request-map uri="order.pdf">
+        <security https="true" auth="true"/>
+        <event type="java" invoke="prepareOrderReport" path="org.opentaps.common.order.OrderEvents"/>
+        <response name="success" type="view" value="OrderJR"/>
+        <response name="error" type="view" value="orderview"/>
+    </request-map>
+    <request-map uri="OrderJR">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="OrderJR"/>
+    </request-map>
+    <request-map uri="orderold.pdf">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="OrderPDF"/>
+    </request-map>
+
+    <request-map uri="quote.pdf">
+       <security https="true" auth="true"/>
+       <event type="java" invoke="prepareQuoteReport" path="org.opentaps.common.quote.QuoteEvents"/>
+       <response name="success" type="view" value="QuoteJR"/>
+    </request-map>
+    <request-map uri="QuoteJR">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="QuoteJR"/>
+    </request-map>
+
+    <request-map uri="QuoteReport">
+       <security https="true" auth="true"/>
+       <response name="success" type="view" value="QuoteReport"/>
+    </request-map>
+
+    <!-- ============= -->
+    <!-- View Mappings -->
+    <!-- ============= -->
+
+    <view-map name="error" page="/error/error.jsp"/>
+    <view-map name="login" type="screen" page="component://opentaps-common/widget/screens/common/CommonScreens.xml#login"/>
+    <view-map name="test" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/CommonScreens.xml#test"/>
+    <view-map name="testCalendar" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/CommonScreens.xml#testCalendar"/>
+    <view-map name="testDates" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/CommonScreens.xml#testDates"/>
+
+    <!-- main screens for each section -->
+    <view-map name="myHomeMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/myhome/MyHomeScreens.xml#myHome"/>
+    <view-map name="accountsMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#myAccounts"/>
+    <view-map name="contactsMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#myContacts"/>
+    <view-map name="opportunitiesMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#myOpportunities"/>
+    <view-map name="leadsMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#myLeads"/>
+    <view-map name="casesMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml#myCases"/>
+    <view-map name="activitiesMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#main"/>
+    <view-map name="forecastsMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/forecasts/ForecastsScreens.xml#main"/>
+    <view-map name="partnersMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml#findPartners"/>
+    <view-map name="quotesMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml#myQuotes"/>
+    <view-map name="marketingMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#findMarketingCampaigns"/>
+    <view-map name="teamsMain" type="screen" page="component://crmsfa/widget/crmsfa/screens/teams/TeamScreens.xml#findTeams"/>
+
+    <!-- common screens -->
+    <view-map name="accountsEditContactMech" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/ContactScreens.xml#accountsEditContactMech"/>
+    <view-map name="contactsEditContactMech" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/ContactScreens.xml#contactsEditContactMech"/>
+    <view-map name="leadsEditContactMech" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/ContactScreens.xml#leadsEditContactMech"/>
+    <view-map name="partnersEditContactMech" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/ContactScreens.xml#partnersEditContactMech"/>
+    <view-map name="ordersEditContactMech" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/ContactScreens.xml#ordersEditContactMech"/>
+    <view-map name="orderViewEditContactMech" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/ContactScreens.xml#orderViewEditContactMech"/>
+    <view-map name="newShipGroupEditContactMech" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/ContactScreens.xml#newShipGroupEditContactMech"/>
+    <view-map name="createAccountNoteForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/NoteScreens.xml#createAccountNoteForm"/>
+    <view-map name="createContactNoteForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/NoteScreens.xml#createContactNoteForm"/>
+    <view-map name="createLeadNoteForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/NoteScreens.xml#createLeadNoteForm"/>
+    <view-map name="createPartnerNoteForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/NoteScreens.xml#createPartnerNoteForm"/>
+    <view-map name="createCaseNoteForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/NoteScreens.xml#createCaseNoteForm"/>
+    <view-map name="mergeAccountsForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/MergeScreens.xml#mergeAccountsForm"/>
+    <view-map name="mergeContactsForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/MergeScreens.xml#mergeContactsForm"/>
+    <view-map name="mergeLeadsForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/MergeScreens.xml#mergeLeadsForm"/>
+    <view-map name="confirmMergeAccountsForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/MergeScreens.xml#confirmMergeAccountsForm"/>
+    <view-map name="confirmMergeContactsForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/MergeScreens.xml#confirmMergeContactsForm"/>
+    <view-map name="confirmMergeLeadsForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/MergeScreens.xml#confirmMergeLeadsForm"/>
+    <view-map name="accountsEditEftAccount" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#accountsEditEftAccount"/>
+    <view-map name="accountsEditGiftCard" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#accountsEditGiftCard"/>
+    <view-map name="accountsEditCreditCard" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#accountsEditCreditCard"/>
+    <view-map name="accountsEditTaxAuthPartyInfo" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#accountsEditTaxAuthPartyInfo"/>
+    <view-map name="accountsEditShippingAccount" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#accountsEditShippingAccount"/>
+    <view-map name="contactsEditEftAccount" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#contactsEditEftAccount"/>
+    <view-map name="contactsEditGiftCard" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#contactsEditGiftCard"/>
+    <view-map name="contactsEditCreditCard" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#contactsEditCreditCard"/>
+    <view-map name="contactsEditTaxAuthPartyInfo" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#contactsEditTaxAuthPartyInfo"/>
+    <view-map name="contactsEditShippingAccount" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml#contactsEditShippingAccount"/>
+    <view-map name="ViewGatewayResponse" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/TransactionScreens.xml#viewGatewayResponse"/>
+    <view-map name="AuthorizeTransaction" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/TransactionScreens.xml#authorizeTransaction"/>
+    <view-map name="CaptureTransaction" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/TransactionScreens.xml#captureTransaction"/>
+
+    <!-- myHome screens -->
+    <view-map name="myHome" type="screen" page="component://crmsfa/widget/crmsfa/screens/myhome/MyHomeScreens.xml#myHome"/>
+    <view-map name="viewDashboard" type="screen" page="component://crmsfa/widget/crmsfa/screens/myhome/MyHomeScreens.xml#viewDashboard"/>
+
+    <!-- accounts screens -->
+    <view-map name="myAccounts" type="screen" page="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#myAccounts"/>
+    <view-map name="viewAccount" type="screen" page="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#viewAccount"/>
+    <view-map name="findAccounts" type="screen" page="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#findAccounts"/>
+    <view-map name="createAccountForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#createAccount"/>
+    <view-map name="updateAccountForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#updateAccountForm"/>
+    <view-map name="updateAccountPassword" type="screen" page="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#updateAccountPassword" />
+    <view-map name="invalidAccountError" type="screen" page="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#invalidAccountError" />
+
+    <!-- contacts screens -->
+    <view-map name="myContacts" type="screen" page="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#myContacts"/>
+    <view-map name="viewContact" type="screen" page="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#viewContact"/>
+    <view-map name="findContacts" type="screen" page="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#findContacts"/>
+    <view-map name="createContactForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#createContact"/>
+    <view-map name="updateContactForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#updateContactForm"/>
+    <view-map name="updateContactPassword" type="screen" page="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#updateContactPassword" />
+    <view-map name="generateFormLetter" type="mergeformfop" page="null" content-type="text/html" encoding="none"/>
+
+    <!-- leads screens -->
+    <view-map name="myLeads" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#myLeads"/>
+    <view-map name="viewLead" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#viewLead"/>
+    <view-map name="findLeads" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#findLeads"/>
+    <view-map name="createLeadForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#createLead"/>
+    <view-map name="updateLeadForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#updateLeadForm"/>
+    <view-map name="duplicateLeadForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#duplicateLeadForm"/>
+    <view-map name="convertLeadForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#convertLeadForm"/>
+    <view-map name="updateLeadPassword" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#updateLeadPassword" />
+
+    <!-- opportunities screens -->
+    <view-map name="myOpportunities" type="screen" page="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#myOpportunities"/>
+    <view-map name="viewOpportunity" type="screen" page="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#viewOpportunity"/>
+    <view-map name="viewOpportunityHistory" type="screen" page="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#viewOpportunityHistory"/>
+    <view-map name="findOpportunities" type="screen" page="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#findOpportunities"/>
+    <view-map name="createOpportunityForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#createOpportunityForm"/>
+    <view-map name="updateOpportunityForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml#updateOpportunityForm"/>
+
+    <!-- cases screens -->
+    <view-map name="myCases" type="screen" page="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml#myCases"/>
+    <view-map name="viewCase" type="screen" page="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml#viewCase"/>
+    <view-map name="createCaseForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml#createCaseForm"/>
+    <view-map name="createCaseForActivityForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml#createCaseForActivityForm"/>
+    <view-map name="updateCaseForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml#updateCaseForm"/>
+    <view-map name="findCases" type="screen" page="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml#findCases"/>
+
+    <!-- activities screens -->
+    <view-map name="pendingEmails" type="screen" page="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#pendingEmails"/>
+    <view-map name="createEventForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#createEventForm"/>
+    <view-map name="createTaskForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#createTaskForm"/>
+    <view-map name="updateEventForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#updateEventForm"/>
+    <view-map name="updateTaskForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#updateTaskForm"/>
+    <view-map name="viewActivity" type="screen" page="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#viewActivityMaster"/>
+    <view-map name="logTaskForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#logTaskForm"/>
+
+    <!-- forecasts screens -->
+    <view-map name="viewForecast" type="screen" page="component://crmsfa/widget/crmsfa/screens/forecasts/ForecastsScreens.xml#viewForecast"/>
+    <view-map name="createForecastForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/forecasts/ForecastsScreens.xml#createForecastForm"/>
+    <view-map name="findForecasts" type="screen" page="component://crmsfa/widget/crmsfa/screens/forecasts/ForecastsScreens.xml#findForecasts"/>
+
+    <!-- quote screens -->
+    <view-map name="myQuotes" type="screen" page="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml#myQuotes"/>
+    <view-map name="findQuotes" type="screen" page="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml#findQuotes"/>
+    <view-map name="ViewQuote" type="screen" page="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml#ViewQuote"/>
+    <view-map name="EditQuote" type="screen" page="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml#EditQuote"/>
+    <view-map name="finalizeQuote" type="screen" page="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml#finalizeQuote"/>
+    <view-map name="AddQuoteNote" type="screen" page="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml#AddQuoteNote"/>
+
+    <!-- marketing screens -->
+    <view-map name="viewMarketingCampaign" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#viewMarketingCampaign"/>
+    <view-map name="createMarketingCampaignForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#createMarketingCampaignForm"/>
+    <view-map name="updateMarketingCampaignForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#updateMarketingCampaignForm"/>
+    <view-map name="findMarketingCampaigns" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#findMarketingCampaigns"/>
+    <view-map name="marketingReports" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#marketingReports"/>
+    <view-map name="marketingCampaignReport" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#marketingCampaignReport"/>
+    <view-map name="createCatalogRequestForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml#createCatalogRequestForm"/>
+    <view-map name="ManageMergeForms" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#ManageMergeForms"/>
+    <view-map name="EditMergeForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#EditMergeForm"/>
+    <view-map name="EditMergeFormCategory" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#EditMergeFormCategory"/>
+
+    <view-map name="createTrackingCodeForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#createTrackingCodeForm"/>
+    <view-map name="trackingCodeReport" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#trackingCodeReport"/>
+
+    <view-map name="viewContactList" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#viewContactList"/>
+    <view-map name="createContactListForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#createContactListForm"/>
+    <view-map name="updateContactListForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#updateContactListForm"/>
+    <view-map name="findContactLists" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#findContactLists"/>
+    <view-map name="addContactListPartiesForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#addContactListPartiesForm"/>
+
+    <view-map name="listSurveys" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#Surveys"/>
+    <view-map name="viewSurveyResponses" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#ViewSurveyResponses"/>
+    <view-map name="viewUSPSSortResult" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#viewUSPSSortResult"/>
+    <view-map name="viewUSPSZip5" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#viewUSPSZip5"/>
+    <view-map name="viewUSPSZip3" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#viewUSPSZip3"/>
+    <view-map name="viewUSPSBMC" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#viewUSPSBMC"/>
+    <view-map name="viewUSPSOther" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#viewUSPSOther"/>
+    <view-map name="calculate3605Postage" type="screen" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#calculate3605Postage"/>
+    <view-map name="uspsBulkMailLabelsPDF" type="screenfop" page="component://crmsfa/widget/crmsfa/screens/marketing/ContactListScreens.xml#uspsBulkMailLabelsPDF"
+        content-type="application/pdf" encoding="none"/>
+
+    <!-- teams screens -->
+    <view-map name="viewTeam" type="screen" page="component://crmsfa/widget/crmsfa/screens/teams/TeamScreens.xml#viewTeam"/>
+    <view-map name="createTeamForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/teams/TeamScreens.xml#createTeamForm"/>
+    <view-map name="updateTeamForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/teams/TeamScreens.xml#updateTeamForm"/>
+    <view-map name="findTeams" type="screen" page="component://crmsfa/widget/crmsfa/screens/teams/TeamScreens.xml#findTeams"/>
+
+    <!-- partners screens -->
+    <view-map name="viewPartner" type="screen" page="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml#viewPartner"/>
+    <view-map name="createPartnerForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml#createPartner"/>
+    <view-map name="updatePartnerForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml#updatePartnerForm"/>
+    <view-map name="findPartners" type="screen" page="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml#findPartners"/>
+    <view-map name="viewPartnerAgreement" type="screen" page="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml#viewPartnerAgreement"/>
+    <view-map name="editPartnerAgreement" type="screen" page="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml#editPartnerAgreement"/>
+    <view-map name="createPartnerAgreement" type="screen" page="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml#createPartnerAgreement"/>
+    <view-map name="updatePartnerPassword" type="screen" page="component://crmsfa/widget/crmsfa/screens/partners/PartnersScreens.xml#updatePartnerPassword" />
+
+    <!-- orders screens -->
+    <view-map name="myOrders" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#myOrders"/>
+    <view-map name="findOrders" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#findOrders"/>
+    <view-map name="createOrderMainScreen" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#createOrderMainScreen"/>
+    <view-map name="createOrderPartyForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#createOrderPartyForm"/>
+    <view-map name="shipmentSetting" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#crmsfaShipmentSetting"/>
+    <view-map name="orderview" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#viewOrder"/>
+    <view-map name="editorderitems" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#editOrder"/>
+    <view-map name="confirm" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#reviewOrder"/>
+    <view-map name="configureProduct" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#configureProduct"/>
+    <view-map name="findMatchingSalesProducts" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#findMatchingSalesProducts"/>
+    <view-map name="chooseVariantProduct" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#chooseVariantProduct"/>
+    <view-map name="manageOrderQueue" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#manageOrderQueue"/>
+    <view-map name="crmsfaQuickCheckout" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#crmsfaQuickCheckout"/>
+    <view-map name="ordersEditCreditCard" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#ordersEditCreditCard"/>
+    <view-map name="ordersEditEftAccount" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#ordersEditEftAccount"/>
+    <view-map name="showPromotionDetails" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml#showPromotionDetails"/>
+    <view-map name="receivepayment" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#receivePayment"/>
+    <view-map name="orderItemSurvey" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#orderItemSurvey"/>
+    <view-map name="createnewnote" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#OrderNewNote"/>
+
+    <!-- this survey view map is triggered by adding to cart from search page -->
+    <view-map name="survey" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#orderItemSurvey"/>
+    <!--  Ship Group management screens -->
+    <view-map name="newShipGroup"  type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#newShipGroup"/>
+    <!-- service management screens -->
+    <view-map name="markServicePerformed"  type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#markServicePerformed"/>
+
+    <!-- return screens -->
+    <view-map name="pendingReturns" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/ReturnScreens.xml#pendingReturns"/>
+    <view-map name="findReturns" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/ReturnScreens.xml#findReturns"/>
+    <view-map name="createReturnForm" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/ReturnScreens.xml#createReturnForm"/>
+    <view-map name="viewReturn" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/ReturnScreens.xml#viewReturn"/>
+
+    <!-- shopping list screens -->
+    <view-map name="findShoppingList" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/ShoppingListScreens.xml#findShoppingList"/>
+    <view-map name="viewShoppingList" type="screen" page="component://crmsfa/widget/crmsfa/screens/orders/ShoppingListScreens.xml#viewShoppingList"/>
+
+    <!-- content screens -->
+    <view-map name="addContentUrlForAccount" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForAccount"/>
+    <view-map name="addContentUrlForLead" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForLead"/>
+    <view-map name="addContentUrlForContact" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForContact"/>
+    <view-map name="addContentUrlForPartner" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForPartner"/>
+    <view-map name="addContentUrlForCase" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForCase"/>
+    <view-map name="addContentUrlForOpportunity" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForOpportunity"/>
+    <view-map name="addContentUrlForActivity" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForActivity"/>
+    <view-map name="uploadContentForAccount" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForAccount"/>
+    <view-map name="uploadContentForLead" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForLead"/>
+    <view-map name="uploadContentForContact" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForContact"/>
+    <view-map name="uploadContentForPartner" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForPartner"/>
+    <view-map name="uploadContentForCase" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForCase"/>
+    <view-map name="uploadContentForOpportunity" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForOpportunity"/>
+    <view-map name="uploadContentForActivity" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForActivity"/>
+    <view-map name="updateContentForAccount" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForAccount"/>
+    <view-map name="updateContentForLead" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForLead"/>
+    <view-map name="updateContentForContact" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForContact"/>
+    <view-map name="updateContentForPartner" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForPartner"/>
+    <view-map name="updateContentForCase" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForCase"/>
+    <view-map name="updateContentForOpportunity" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForOpportunity"/>
+    <view-map name="updateContentForActivity" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForActivity"/>
+    <view-map name="addContentUrlForOrder" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForOrder"/>
+    <view-map name="uploadContentForOrder" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForOrder"/>
+    <view-map name="updateContentForOrder" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForOrder"/>
+    <view-map name="addContentUrlForQuote" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#addContentUrlForQuote"/>
+    <view-map name="uploadContentForQuote" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#uploadContentForQuote"/>
+    <view-map name="updateContentForQuote" type="screen" page="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml#updateContentForQuote"/>
+
+    <!-- lookup screens -->
+    <view-map name="LookupClients" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupClients"/>
+    <view-map name="LookupAccounts" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupAccounts"/>
+    <view-map name="LookupContacts" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupContacts"/>
+    <view-map name="LookupLeads" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupLeads"/>
+    <view-map name="LookupCases" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupCases"/>
+    <view-map name="LookupOpportunities" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupOpportunities"/>
+    <view-map name="LookupTeamMembers" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupTeamMembers"/>
+    <view-map name="LookupQuotes" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupQuotes"/>
+    <view-map name="LookupContactList" type="screen" page="component://crmsfa/widget/crmsfa/screens/common/LookupScreens.xml#LookupContactList"/>
+
+    <!-- Ajax ftl: The response mime type is text/xml so that we can treat the response as a DOM object using xhr.responseXML() -->
+    <view-map name="autocompleteAccounts" type="ftl" page="/ajax/autocompleteAccounts.ftl" content-type="text/xml"/>
+    <view-map name="autocompleteParties" type="ftl" page="/ajax/autocompleteParties.ftl" content-type="text/xml"/>
+
+    <!-- PDFs  -->
+    <view-map name="OrderJR" type="jasperreports" page="component://crmsfa/webapp/crmsfa/reports/repository/orderPDF/Order.jrxml" content-type="application/pdf" encoding="none"/>
+    <view-map name="ReturnPDF" type="screenfop" page="component://crmsfa/widget/crmsfa/screens/orders/ReturnScreens.xml#ReturnPDF" content-type="application/pdf" encoding="none"/>
+    <view-map name="InvoiceJR" type="jasperreports" page="component://financials/webapp/financials/reports/repository/Invoice.jrxml" content-type="application/pdf" encoding="none"/>
+    <view-map name="ShipGroupsPDF" type="screenfop" page="component://warehouse/widget/warehouse/screens/shipping/OrderPrintForms.xml#ShipGroupsPDF" content-type="application/pdf" encoding="none"/>
+    <view-map name="PackingSlipPDF" type="screenfop" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#PackingSlip.fo" content-type="application/pdf" encoding="none"/>
+    <view-map name="OrderPDF" type="screenfop" page="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#OrderPDF" content-type="application/pdf" encoding="none"/>
+    <view-map name="QuoteReport" type="screenfop" page="component://order/widget/ordermgr/QuoteScreens.xml#QuoteReport" content-type="application/pdf" encoding="none"/>
+    <view-map name="QuoteJR" type="jasperreports" page="component://crmsfa/webapp/crmsfa/reports/repository/quotePDF/Quote.jrxml" content-type="application/pdf" encoding="none"/>
+
+</site-conf>

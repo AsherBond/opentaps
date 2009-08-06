@@ -1,0 +1,57 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.opentaps.common.util.UtilCommon;
+
+marketingCampaignId = UtilCommon.getParameter(request, "marketingCampaignId");
+marketingCampaign = delegator.findByPrimaryKey("MarketingCampaign", UtilMisc.toMap("marketingCampaignId", marketingCampaignId));
+if (marketingCampaign == null) {
+    context.put("validView", false);
+    return;
+}
+
+context.put("marketingCampaign", marketingCampaign);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(marketingCampaign.get("campaignName"), "viewMarketingCampaign", UtilMisc.toList("marketingCampaignId"));
+
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+
+if (security.hasEntityPermission("CRMSFA_CAMP", "_UPDATE", userLogin)) {
+    context.put("hasUpdatePermission", true);
+}
+
+// get the associated contact lists
+conditions = new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("marketingCampaignId", EntityOperator.EQUALS, marketingCampaignId),
+            EntityUtil.getFilterByDateExpr()
+        ), EntityOperator.AND);
+marketingCampaignContactLists = delegator.findListIteratorByCondition("TrackingCodeAndContactListAndMarketingCampaign", conditions, null, null, UtilMisc.toList("fromDate"), UtilCommon.DISTINCT_READ_OPTIONS);
+context.put("marketingCampaignContactLists", marketingCampaignContactLists);
+
+// get tracking codes
+conditions = new EntityConditionList( UtilMisc.toList(
+            new EntityExpr("marketingCampaignId", EntityOperator.EQUALS, marketingCampaignId),
+            EntityUtil.getFilterByDateExpr()
+        ), EntityOperator.AND);
+trackingCodes = delegator.findListIteratorByCondition("TrackingCode", conditions, null, null, UtilMisc.toList("fromDate"), UtilCommon.DISTINCT_READ_OPTIONS);
+context.put("trackingCodes", trackingCodes);

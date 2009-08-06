@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Data Source Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="createQuote" default-entity-name="Quote" engine="simple"
+                location="org/ofbiz/order/quote/QuoteServices.xml" invoke="createQuote" auth="true">
+        <description>Creates an Quote</description>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <auto-attributes include="pk" mode="OUT" optional="true"/>
+        <override name="partyId" optional="false"/>
+    </service>
+
+    <service name="createQuoteItem" default-entity-name="QuoteItem" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="createQuoteItem" auth="true">
+        <description>Creates a QuoteItem</description>
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="quantities" type="Map" mode="IN" optional="true" string-map-prefix="quantities_o_"/>
+        <attribute name="unitPrices" type="Map" mode="IN" optional="true" string-map-prefix="unitPrices_o_"/>
+    </service>
+    <service name="updateQuoteItem" default-entity-name="QuoteItem" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="updateQuoteItem" auth="true">
+        <description>Update a QuoteItem</description>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="removeQuoteItem" default-entity-name="QuoteItem" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="removeQuoteItem" auth="true">
+        <description>Remove a QuoteItem</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="setQuoteStatus" default-entity-name="Quote" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="setQuoteStatus" auth="true">
+        <description>Sets the status of a Quote</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <attribute name="statusId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="setQuoteItemOption" default-entity-name="QuoteItemOption" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="setQuoteItemOption" auth="true">
+        <description>Sets a QuoteItemOption values in its related QuoteItem</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+    <service name="unsetQuoteItemOption" default-entity-name="QuoteItem" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="unsetQuoteItemOption" auth="true">
+        <description>Unsets the QuoteItemOption values from the given QuoteItem</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="updateQuoteItemOption" default-entity-name="QuoteItemOption" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="updateQuoteItemOption" auth="true">
+        <description>Removes a QuoteItemOption</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="removeQuoteItemOption" default-entity-name="QuoteItemOption" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="removeQuoteItemOption" auth="true">
+        <description>Removes a QuoteItemOption</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="addQuoteItemOption" default-entity-name="QuoteItemOption" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="addQuoteItemOption" auth="true">
+        <description>Adds a QuoteItemOption to a QuoteItem</description>
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="quoteId" type="String" mode="IN" optional="false"/>
+        <attribute name="quoteItemSeqId" type="String" mode="IN" optional="false"/>
+        <override name="quantity" optional="false" />
+    </service>
+
+    <service name="copyQuote" default-entity-name="Quote" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="copyQuote" auth="true">
+        <description>Copy a Quote</description>
+        <auto-attributes include="pk" mode="INOUT" optional="false"/>
+        <attribute name="copyQuoteRoles" type="String" mode="IN" optional="true"/>
+        <attribute name="copyQuoteAttributes" type="String" mode="IN" optional="true"/>
+        <attribute name="copyQuoteCoefficients" type="String" mode="IN" optional="true"/>
+        <attribute name="copyQuoteItems" type="String" mode="IN" optional="true"/>
+        <attribute name="copyQuoteAdjustments" type="String" mode="IN" optional="true"/>
+        <attribute name="copyQuoteItemOptions" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="copyQuoteItem" default-entity-name="QuoteItem" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="copyQuoteItem" auth="true">
+        <description>Copy a QuoteItem</description>
+        <auto-attributes include="pk" mode="INOUT" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="quoteIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="quoteItemSeqIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="copyQuoteAdjustments" type="String" mode="IN" optional="true"/>
+        <attribute name="copyQuoteItemOptions" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="finalizeQuote" default-entity-name="Quote" engine="java"
+                location="com.opensourcestrategies.crmsfa.quotes.QuoteServices" invoke="finalizeQuote" auth="true">
+        <description>Finalize a Quote, check all items have all required fields to proceed.</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createQuoteNote" engine="java"
+        location="com.opensourcestrategies.crmsfa.quotes.QuoteServices"
+        invoke="createQuoteNote" auth="true">
+        <description>Create a note item and associate with a quote</description>
+        <attribute name="quoteId" type="String" mode="IN" />
+        <attribute name="note" type="String" mode="IN" />
+        <attribute name="internalNote" type="String" mode="IN" />
+    </service>
+
+    <service name="crmsfa.prepareQuoteEmail" engine="java" use-transaction="false"
+             location="org.opentaps.common.content.EmailServices" invoke="prepareQuoteEmail">
+        <description>Send an email to someone in the system. Associate a completed Quote and a completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the QuoteId of the saved data.
+            No security at the moment.</description>
+        <attribute name="quoteId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
+    </service>
+    
+</services>

@@ -1,0 +1,1 @@
+${newPartyName} ${uiLabelMap.CrmNotificationEmail_Lead_ResponsibleFor} <a href="${url}">${leadPartyName}</a>.    

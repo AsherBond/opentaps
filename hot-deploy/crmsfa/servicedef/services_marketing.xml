@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Marketing Campaign Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>0.8</version>
+
+    <service name="crmsfa.addAccountMarketingCampaign" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="addAccountMarketingCampaign">
+        <description>Adds a MarketingCampaign to the Account. The userLogin is required to have CRMSFA_ACCOUNT_UPDATE permission on this account.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.removeAccountMarketingCampaign" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="removeAccountMarketingCampaign">
+        <description>Removes a MarketingCampaign from the Account. The userLogin is required to have CRMSFA_ACCOUNT_UPDATE permission on this account.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.addContactMarketingCampaign" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="addContactMarketingCampaign">
+        <description>Adds a MarketingCampaign to the Contact. The userLogin is required to have CRMSFA_CONTACT_UPDATE permission on this account.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.removeContactMarketingCampaign" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="removeContactMarketingCampaign">
+        <description>Removes a MarketingCampaign from the Contact. The userLogin is required to have CRMSFA_CONTACT_UPDATE permission on this account.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.addLeadMarketingCampaign" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="addLeadMarketingCampaign">
+        <description>Adds a MarketingCampaign to the Lead. The userLogin is required to have CRMSFA_LEAD_UPDATE permission on this lead.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="createContactList" default-entity-name="ContactList" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="createContactList" auth="true">
+        <description>Create a ContactList record and associate with crmsfa.addContactListToMarketingCampaign rather than the marketingCampaignId field</description>
+        <permission-service service-name="marketingPermissionService" main-action="UPDATE"/>
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="contactListTypeId" optional="false"/>
+        <override name="contactListName" optional="false"/>
+    </service>
+    <service name="updateContactList" default-entity-name="ContactList" engine="simple"
+            location="org/ofbiz/marketing/contact/ContactListServices.xml" invoke="updateContactList" auth="true">
+        <description>Update a ContactList record</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="contactListName" optional="false"/>
+    </service>
+
+    <service name="crmsfa.removeLeadMarketingCampaign" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="removeLeadMarketingCampaign">
+        <description>Removes a MarketingCampaign from the Lead. The userLogin is required to have CRMSFA_LEAD_UPDATE permission on this lead.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.addContactListToMarketingCampaign" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="addContactListToMarketingCampaign">
+        <description>Add a ContactList to a Marketing Campaign with an optional tracking code</description>
+        <permission-service service-name="marketingPermissionService" main-action="UPDATE"/>
+        <attribute name="contactListId" type="String" mode="IN" optional="false"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="false"/>
+        <attribute name="trackingCode" type="String" mode="IN" optional="true"/>
+        <attribute name="campaignListId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.removeContactListFromMarketingCampaign" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="removeContactListFromMarketingCampaign">
+        <description>Expire a ContactList from a Marketing Campaign and its tracking code (if any)</description>
+        <permission-service service-name="marketingPermissionService" main-action="UPDATE"/>
+        <attribute name="campaignListId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.sendMarketingCampaignEmail" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="sendMarketingCampaignEmail">
+        <description>send email to a marketing campaign which sends it to all contact lists on the marketing campaign.</description>
+        <implements service="crmsfa.emailInterface"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="false"/>
+        <attribute name="toEmail" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="sendEmailToContactList" engine="java"
+             location="com.opensourcestrategies.crmsfa.communication.CommunicationEventServices" invoke="sendEmailToContactList" auth="true"
+             use-transaction="false" max-retry="3">
+      <description>
+        Send emails to members of a contact list, wrapping each email in its own transaction and tagging each member
+        that has been sent, so if the whole effort is aborted, it can start over from the middle.
+        The max-retry is important because if some emails cannot be sent, it will start again later and try again.
+        Overrides the Ofbiz service in order to perform template substitution for each recipient.
+      </description>
+      <attribute name="contactListId" type="String" mode="IN" optional="false"/>
+      <attribute name="communicationEventId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.addNewCatalogRequestsToContactList" engine="java" 
+        location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="addNewCatalogRequestsToContactList"
+        transaction-timeout="3600">
+        <description>
+            Adds all parties that have submitted a catalog request to the given postal address contact list.
+            If includeCountryGeoId is specified, then parties will be restricted to given country.
+            If excludeCountryGeoId is specified, then parties will be excluded if they are from given country.
+            Service is designed to be as efficient as possible for long transactions.
+        </description>
+        <attribute name="contactListId" type="String" mode="IN" optional="false"/>
+        <attribute name="includeCountryGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="excludeCountryGeoId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.sortUSPSBusinessMail" engine="java" 
+        location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="sortUSPSBusinessMail"
+        transaction-timeout="3600">
+        <description>Sorts the postal addresses of the given contact list according to USPS bulk mailing categories.</description>
+        <attribute name="contactListId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="retrieveTrackingCodeFromFacetPhoneServer" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="retrieveTrackingCodeFromFacetPhoneServer">
+        <description>Retrieves the DNIS of the latest call for the user from the FacetPhone server and matches it against a TrackingCode. Returns error only if VoIP.properties is
+            misconfigured - otherwise returns failure if something goes wrong.</description>
+        <attribute name="trackingCode" type="GenericValue" mode="OUT" optional="true"/>
+    </service>
+    
+    <service name="crmsfa.completeCatalogMailing" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" invoke="completeCatalogMailing"
+        transaction-timeout="3600">
+        <description>Expires each contactListParty record of a contact list, and attempts to update each related
+            CustRequest (catalog request) with completed status and a fulfilled datetime.
+            USPS sort results are intentionally kept around for review or for calculating postage.</description>
+        <attribute name="contactListId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.migrateContactLists" engine="java" location="com.opensourcestrategies.crmsfa.marketing.MarketingCampaignServices" 
+             invoke="migrateContactLists" auth="true" use-transaction="false">
+        <description>
+          Migrate old ContactList association to MarketingCampaign to the new N-N relationship.
+          It checks all ContactList that have a non null marketingCampaignId, removes it and creates
+          an active MarketingCampaignContactList entity instead.
+        </description>
+        <attribute name="success" type="Long" mode="OUT" optional="false"/>
+        <attribute name="error" type="Long" mode="OUT" optional="false"/>
+    </service>
+
+</services>
+

@@ -1,0 +1,227 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/* This file has been modified by Open Source Strategies, Inc.   It was originally orderview.bsh in ordermgr. */
+
+// for crmsfa, we need to start overriding this file to do special things, such as load the PartyReader
+
+import java.util.*;
+import java.sql.Timestamp;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.collections.*;
+import org.ofbiz.order.order.*;
+import org.ofbiz.party.contact.*;
+import org.ofbiz.product.inventory.InventoryWorker;
+import org.ofbiz.accounting.payment.*;
+
+import org.opentaps.common.party.PartyReader;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilCommon;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.order.Order;
+import org.opentaps.domain.base.entities.Shipment;
+import org.opentaps.foundation.exception.FoundationException;
+import org.opentaps.foundation.repository.ofbiz.Repository;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import com.opensourcestrategies.crmsfa.content.ContentHelper;
+
+domainsLoader = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+orderDomain = domainsLoader.loadDomainsDirectory().getOrderDomain();
+orderRepository = orderDomain.getOrderRepository();
+
+orderId = parameters.get("orderId");
+context.put("orderId", orderId);
+
+workEffortId = parameters.get("workEffortId");
+assignPartyId = parameters.get("partyId");
+assignRoleTypeId = parameters.get("roleTypeId");
+fromDate = parameters.get("fromDate");
+delegate = parameters.get("delegate");
+if (delegate != null && parameters.get("toFromDate") != null) {
+    fromDate = parameters.get("toFromDate");
+}
+context.put("workEffortId", workEffortId);
+context.put("assignPartyId", assignPartyId);
+context.put("assignRoleTypeId", assignRoleTypeId);
+context.put("fromDate", fromDate);
+context.put("delegate", delegate);
+context.put("toDayDate", (new java.sql.Date(System.currentTimeMillis())).toString());
+
+Order order = null;
+if (UtilValidate.isNotEmpty(orderId)) {
+    try {
+        order = orderRepository.getOrderById(orderId);
+    } catch (FoundationException e) {
+        return;
+    }
+}
+
+if (order != null) {
+    // put to history
+    context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("CrmNavHistoryOrder", locale, UtilMisc.toMap("orderId", order.getOrderId(), "orderName", order.getOrderName() == null ? "" : order.getOrderName())), "orderview", UtilMisc.toList("orderId"));
+    
+    // note these are overridden in the orderviewwebsecure.bsh script if run
+    context.put("hasPermission", true);
+    context.put("canViewInternalDetails", true);
+
+    context.put("order", order);
+    context.put("orderHeader", Repository.genericValueFromEntity(delegator, order));
+
+    // list of possible order adjustment to select in order edit
+    context.put("orderAdjustmentTypes", orderRepository.getOrderAdjustmentTypes());
+
+    // get inventory summary for each shopping cart product item (from all of Facility)
+    inventorySummary = dispatcher.runSync("getProductInventorySummaryForItems", UtilMisc.toMap("orderItems", Repository.genericValueFromEntity(delegator, "OrderItem", order.getItems())));
+    context.put("availableToPromiseMap", inventorySummary.get("availableToPromiseMap"));
+    context.put("quantityOnHandMap", inventorySummary.get("quantityOnHandMap"));
+    context.put("mktgPkgATPMap", inventorySummary.get("mktgPkgATPMap"));
+    context.put("mktgPkgQOHMap", inventorySummary.get("mktgPkgQOHMap"));
+
+    // INVENTORY: construct a Set of productIds in the order for use in querying for inventory, otherwise these queries can get expensive
+    productIds = order.getProductIds();
+
+    // INVENTORY: get the production quantity for each product and store the results in a map of productId -> quantity
+    productionMap = new HashMap();
+    // PURCHASING: get the estimated delivery dates for the products in a map productId -> List of delivery date (orderId, estimatedReadyDate)
+    deliveryDateMap = new HashMap();
+    for (iter = productIds.iterator(); iter.hasNext(); ) {
+        productId = iter.next();
+        if (productId == null) continue;  // avoid order items without productIds, such as bulk order items
+        contextInput = UtilMisc.toMap("productId", productId, "userLogin", userLogin);
+        resultOutput = dispatcher.runSync("getProductManufacturingSummaryByFacility", contextInput);
+        manufacturingInQuantitySummaryByFacility = resultOutput.get("summaryInByFacility");
+        Double productionQuantity = (Double) manufacturingInQuantitySummaryByFacility.get("estimatedQuantityTotal");
+        productionMap.put(productId, productionQuantity);
+        // get the purchase order items for this product which are CREATED or APPROVED
+        conditions = UtilMisc.toList(
+          new EntityExpr("productId", EntityOperator.EQUALS, productId),
+          new EntityExpr("orderTypeId", EntityOperator.EQUALS, "PURCHASE_ORDER"),
+          new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("ITEM_APPROVED", "ITEM_CREATED")),
+          new EntityExpr("estimatedReadyDate", EntityOperator.NOT_EQUAL, null)
+        );
+        deliveryDates = delegator.findByAnd("OrderHeaderItemAndOrderDeliverySchedule", conditions, UtilMisc.toList("estimatedReadyDate", "-quantity"));
+        deliveryDateMap.put(productId, deliveryDates);
+    }
+    context.put("productionProductQuantityMap", productionMap);
+    context.put("productDeliveryDateMap", deliveryDateMap);
+
+    // INVENTORY: find the number of products in outstanding sales orders for the same product store
+    requiredMap = InventoryWorker.getOutstandingProductQuantitiesForSalesOrders(productIds, delegator);
+    context.put("requiredProductQuantityMap", requiredMap);
+
+    // INVENTORY: find the quantity of each product in outstanding purchase orders
+    onOrderMap = InventoryWorker.getOutstandingProductQuantitiesForPurchaseOrders(productIds, delegator);
+    context.put("onOrderProductQuantityMap", onOrderMap);
+}
+
+paramString = "";
+if (orderId != null) paramString = paramString + "orderId=" + orderId;
+if (workEffortId != null) paramString = paramString + "&workEffortId=" + workEffortId;
+if (assignPartyId != null) paramString = paramString + "&partyId=" + assignPartyId;
+if (assignRoleTypeId != null) paramString = paramString + "&roleTypeId=" + assignRoleTypeId;
+if (fromDate != null) paramString = paramString + "&fromDate=" + fromDate;
+context.put("paramString", paramString);
+
+workEffortStatus = null;
+if (workEffortId != null && assignPartyId != null && assignRoleTypeId != null && fromDate != null) {
+    fields = UtilMisc.toMap("workEffortId", workEffortId, "partyId", assignPartyId, "roleTypeId", assignRoleTypeId, "fromDate", fromDate);
+    wepa = delegator.findByPrimaryKey("WorkEffortPartyAssignment", fields);
+
+    if (wepa != null && wepa.get("statusId") != null && wepa.getString("statusId").equals("CAL_ACCEPTED")) {
+        workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
+        workEffortStatus = workEffort.getString("currentStatusId");
+        if (workEffortStatus != null) {
+            context.put("workEffortStatus", workEffortStatus);
+            if (workEffortStatus.equals("WF_RUNNING") || workEffortStatus.equals("WF_SUSPENDED"))
+                context.put("inProcess", new Boolean(true));
+        }
+
+        if (workEffort != null) {
+            if ((delegate != null && delegate.equals("true")) || (workEffortStatus != null && workEffortStatus.equals("WF_RUNNING"))) {
+                actFields = UtilMisc.toMap("packageId", workEffort.getString("workflowPackageId"), "packageVersion", workEffort.getString("workflowPackageVersion"), "processId", workEffort.getString("workflowProcessId"), "processVersion", workEffort.getString("workflowProcessVersion"), "activityId", workEffort.getString("workflowActivityId"));
+                activity = delegator.findByPrimaryKey("WorkflowActivity", actFields);
+                if (activity != null) {
+                    transitions = activity.getRelated("FromWorkflowTransition", null, UtilMisc.toList("-transitionId"));
+                    context.put("wfTransitions", transitions);
+                }
+            }
+        }
+    }
+}
+
+// Get related emails
+ohwe = delegator.findByAnd("OrderHeaderWorkEffort", UtilMisc.toMap("orderId", orderId), UtilMisc.toList("workEffortId"));
+if (ohwe != null && ohwe.size() > 0) {
+    emailVals = delegator.findByCondition("WorkEffortCommunicationEventView", new EntityExpr("workEffortId", EntityOperator.IN, EntityUtil.getFieldListFromEntityList(ohwe, "workEffortId", true)), null, UtilMisc.toList("workEffortId"));
+    emails = new ArrayList();
+    for (emailVal : emailVals) {
+        email = emailVal.getAllFields();
+        if (UtilValidate.isNotEmpty(email.get("partyIdFrom"))) {
+            email{"partyIdFromUrl"} = PartyHelper.createViewPageURL(email.get("partyIdFrom"), delegator, parameters.get("externalLoginKey"));
+            email{"partyFromName"} = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, email.get("partyIdFrom"), false);
+        }
+        if (UtilValidate.isNotEmpty(email.get("partyIdTo"))) {
+            email{"partyIdToUrl"} = PartyHelper.createViewPageURL(email.get("partyIdTo"), delegator, parameters.get("externalLoginKey"));
+            email{"partyToName"} = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, email.get("partyIdTo"), false);
+        }
+
+        // Getting 'toString' blows up in FTL, amusingly
+        if (UtilValidate.isNotEmpty(email.get("toString"))) email{"toAddressString"} = email.get("toString");        
+        emails.add(email);
+    }
+    context.put("emails", emails);
+}
+
+// Get the first order email contact mech
+ocm = EntityUtil.getFirst(delegator.findByAnd("OrderContactMech", UtilMisc.toMap("orderId", orderId, "contactMechPurposeTypeId", "ORDER_EMAIL"), UtilMisc.toList("lastUpdatedStamp DESC")));
+if (ocm != null) context.put("newEmailAddress", ocm.getRelatedOne("ContactMech"));
+
+// Get list of facilities
+facilities = delegator.findAll("Facility");
+if (UtilValidate.isNotEmpty(facilities)) {
+    context.put("facilities", facilities);
+}
+
+// and also view any attached content
+context.put("content", ContentHelper.getContentInfoForOrder(orderId, delegator));

@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2004-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author   Leon Torres (leon@opensourcestrategies.com)
+ *  @author   Si Chen (sichen@opensourcestrategies.com)
+-->
+
+<!-- This file contains screens for the Activities section -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="activities" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml#leftBarScreen"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <actions>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/activityAssoc.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/screenlets/shortcuts.ftl"/></html></platform-specific>
+                <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/screenlets/activityAssoc.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- main is the default screen of the sectoin -->
+    <screen name="main">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmActivities"/>  
+                <set field="sectionHeaderUiLabel" value="CrmActivities"/>
+                <set field="listSortTarget" value="activitiesMain"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/findActivitiesByName.bsh"/>
+                <set field="findActivitiesTarget" value="activitiesMain"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/activities/findActivities.ftl"/></html>
+                        </platform-specific>
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/submenus/generalActivitiesMenu.ftl"/></html></platform-specific>
+                            <container style="form">
+                                <label style="head2" text="${uiLabelMap.CrmPendingActivities}"/>
+                                <include-form name="ListPendingActivities" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                            </container>
+                            <container style="form">
+                                <label style="head2" text="${uiLabelMap.CrmCompletedActivitiesList}"/>
+                                <include-form name="ListCompletedActivities" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- these are meant to be used throughout as include-screens -->
+    <screen name="pendingEmails">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmActivitiesPendingEmails"/>
+                <set field="sectionHeaderUiLabel" value="CrmActivitiesPendingEmails"/>
+                <set field="currentPage" value="pendingEmails"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/pendingEmails.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                    <container style="subSectionBlock">
+                        <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/pendingEmails.ftl"/></html></platform-specific>
+                        <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/pendingOutboundEmails.ftl"/></html></platform-specific>
+                    </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+
+ 
+    <!-- these are meant to be used throughout as include-screens -->
+    <screen name="pendingActivities">
+        <section>
+            <widgets>
+                <container style="subSectionBlock">
+                    <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/submenus/pendingActivitiesMenu.ftl"/></html></platform-specific>
+                    <include-form name="ListPendingActivities" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="completedActivities">
+        <section>
+            <widgets>
+                <container style="subSectionBlock">
+                    <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/submenus/completedActivitiesMenu.ftl"/></html></platform-specific>
+                    <include-form name="ListCompletedActivities" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createEventForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateEvent"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateEvent"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/createActivity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="createEventForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createTaskForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateTask"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateTask"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/createActivity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="createTaskForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateEventForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateEvent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateEvent"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/viewActivity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexActivitySecurity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="updateEventForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateTaskForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateTask"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateTask"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/viewActivity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexActivitySecurity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="updateTaskForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="logTaskForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmLogTask"/>
+                <set field="sectionHeaderUiLabel" value="CrmLogTask"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/logTaskForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="logTaskForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- A master screen to re-direct to either the viewEmailActivity or the regular viewActivity screen-->
+    <screen name="viewActivityMaster">
+        <section>
+            <actions>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/viewActivityMaster.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/activities/viewActivityMaster.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- A view email screen -->
+    <screen name="viewEmailActivity">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsEmailViewEmail"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsEmailViewEmail"/>
+                <set field="hasOperationPermission" value="_VIEW"/>
+                <set field="parameters.donePage" value="viewActivity"/>
+                <set field="parameters.thisPage" value="viewActivity"/> <!-- to tell the writeEmailForm how to get back to itself -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexActivitySecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/viewActivity.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/getMergeFormsForCurrentUser.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/submenus/emailOptions.ftl"/></html></platform-specific>
+
+                        <include-screen name="viewOrWriteEmailScreen" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!--
+    View activities screen. This screen comes in two parts: The top half is to display the work effort. We label it TASK or EVENT according to its type.
+    The bottom half displays a view for the comm event according to the comm event type and status.
+    -->
+    <screen name="viewActivity">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmViewActivity"/>
+                <set field="sectionHeaderUiLabel" value="CrmViewActivity"/> 
+                <set field="hasOperationPermission" value="_VIEW"/>
+                <set field="parameters.donePage" value="viewActivity"/>
+                <set field="parameters.thisPage" value="viewActivity"/> <!-- to tell the writeEmailForm how to get back to itself -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexActivitySecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/viewActivity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <section>
+                            <!-- make sure the workEffort exists, or else a bad ID was passed -->
+                            <condition><not><if-empty field-name="workEffort"/></not></condition>
+                            <widgets>
+
+                                <!-- show the work effort -->
+                                <container style="subSectionBlock">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://crmsfa/webapp/crmsfa/activities/submenus/activityDetailMenu.ftl"/>
+                                        </html>
+                                    </platform-specific>
+                                    <container style="form">
+                                        <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/activities/viewActivity.ftl"/></html></platform-specific>
+                                        <include-screen name="startActivityForm"/>
+                                        <include-screen name="endActivityForm"/>
+                                    </container>
+                                </container>
+
+                                <!-- display all other kinds of comm events -->
+                                <section>
+                                    <condition><and>
+                                            <not><if-empty field-name="isCrmEmail"/></not>
+                                            <if-compare field-name="isCrmEmail" operator="equals" value="false" type="Boolean"/>
+                                    </and></condition>
+                                    <widgets><include-screen name="viewCommEvent"/></widgets>
+                                </section>
+
+                                <!-- list of associated parties -->
+                                <container style="subSectionBlock">
+                                    <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.CrmActivityParticipants}</label></container></container>
+                                    <include-form name="ListAssociatedParties" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                                    <section>
+                                        <condition><if-compare field-name="hasUpdatePartiesPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                        <widgets>
+                                            <include-form name="AddAssociatedParty" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                                        </widgets>
+                                    </section>
+                                </container>
+
+                                <!-- attached content -->
+                                <include-screen name="contentList" location="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml"/>
+
+                            </widgets>
+                            <fail-widgets><label style="head2">Unknown Activity with ID [${parameters.workEffortId}]</label></fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+
+
+    <!-- small form for input of start time for a scheduled activity -->
+    <screen name="startActivityForm">
+        <section>
+            <condition><if-compare field-name="isScheduled" operator="equals" value="true" type="Boolean"/></condition>
+            <widgets>
+                <include-form name="startActivityForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    
+    <!-- small form for input of end time for a scheduled activity -->
+    <screen name="endActivityForm">
+        <section>
+            <condition><if-compare field-name="isStarted" operator="equals" value="true" type="Boolean"/></condition>
+            <widgets>
+                <include-form name="endActivityForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- this screen displays a communication event -->
+    <screen name="viewCommEvent">
+        <section>
+            <condition><not><if-empty field-name="communicationEvent"/></not></condition>
+            <widgets>
+                <container style="subSectionBlock">
+                    <container style="form">
+                        <include-form name="viewCommEvent" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
+                    </container>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

@@ -1,0 +1,178 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.Arrays;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+// this form is used by many pages so the iterator name might vary
+listIteratorNameToUse = parameters.get("listIteratorNameToUse");
+
+// order by
+orderParam = parameters.get("ordersOrderBy");
+if (UtilValidate.isEmpty(orderParam)) orderParam = "orderDate DESC";
+orderBy = UtilMisc.toList(orderParam);
+
+// possible fields we're searching by
+partyId = UtilCommon.getParameter(request, "partyIdSearch");
+if (partyId == null) partyId = parameters.get("partyId"); // from URL GET request if form field wasn't set
+statusId = UtilCommon.getParameter(request, "statusId");
+correspondingPoId = UtilCommon.getParameter(request, "correspondingPoId");
+orderId = UtilCommon.getParameter(request, "orderId");
+orderName = UtilCommon.getParameter(request, "orderName");
+lotId = UtilCommon.getParameter(request, "lotId");
+serialNumber = UtilCommon.getParameter(request, "serialNumber");
+fromDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "fromDate", locale), timeZone, locale);
+thruDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "thruDate", locale), timeZone, locale);
+createdBy = UtilCommon.getParameter(request, "createdBy");
+externalId = UtilCommon.getParameter(request, "externalId");
+productStoreId = UtilCommon.getParameter(request, "productStoreId");
+
+// TODO: Create a version of "makeParamValueFromComposite" which accepts any general-purpose
+// parameter map, so that we can pass "parameters" to it instead of "request", as it is done
+// now.
+
+if (UtilValidate.isEmpty(fromDate)) {
+    context.put("fromDate", fromDate);
+}
+
+if (UtilValidate.isEmpty(thruDate)) {
+    context.put("thruDate", thruDate);
+}
+
+// must specify minimum required fields so that the distinct select works
+fieldsToSelect = UtilMisc.toList("orderName", "orderId", "correspondingPoId", "statusId", "grandTotal", "partyId");
+fieldsToSelect.add("orderDate");
+fieldsToSelect.add("currencyUom");
+
+// search conditions
+searchConditions = new ArrayList();
+
+// find parameters for the sorting headers
+findParams = "";
+
+// construct search conditions and find parameters
+searchConditions = new ArrayList();
+if (!UtilValidate.isEmpty(partyId)) {
+    searchConditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, partyId));
+    findParams += "&partyId=" + partyId;
+}
+if (!UtilValidate.isEmpty(statusId)) {
+    searchConditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
+    findParams += "&statusId=" + statusId;
+}
+if (!UtilValidate.isEmpty(correspondingPoId)) {
+    searchConditions.add(new EntityExpr("correspondingPoId", true, EntityOperator.LIKE, correspondingPoId + "%", true));
+    findParams += "&correspondingPoId=" + correspondingPoId;
+}
+if (!UtilValidate.isEmpty(orderId)) {
+    searchConditions.add(new EntityExpr("orderId", true, EntityOperator.LIKE, orderId + "%", true));
+    findParams += "&orderId=" + orderId;
+}
+if (!UtilValidate.isEmpty(orderName)) {
+    searchConditions.add(new EntityExpr("orderName", true, EntityOperator.LIKE, orderName + "%", true));
+    findParams += "&orderName=" + orderName;
+}
+if (!UtilValidate.isEmpty(lotId)) {
+    searchConditions.add(new EntityExpr("lotId", true, EntityOperator.LIKE, lotId + "%", true));
+    findParams += "&lotId=" + lotId;
+}
+if (!UtilValidate.isEmpty(serialNumber)) {
+    searchConditions.add(new EntityExpr("serialNumber", true, EntityOperator.LIKE, serialNumber + "%", true));
+    findParams += "&serialNumber=" + serialNumber;
+}
+if (!UtilValidate.isEmpty(fromDate)) {
+    searchConditions.add(new EntityExpr("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+    findParams += "&fromDate=" + fromDate;
+}
+if (!UtilValidate.isEmpty(thruDate)) {
+    searchConditions.add(new EntityExpr("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate));
+    findParams += "&thruDate=" + thruDate;
+}
+if (!UtilValidate.isEmpty(createdBy)) {
+    searchConditions.add(new EntityExpr("createdBy", EntityOperator.EQUALS, createdBy));
+    findParams += "&createdBy=" + createdBy;
+}
+if (!UtilValidate.isEmpty(externalId)) {
+    searchConditions.add(new EntityExpr("externalId", EntityOperator.LIKE, externalId + "%"));
+    findParams += "&externalId=" + externalId;
+}
+if (!UtilValidate.isEmpty(productStoreId)) {
+    searchConditions.add(new EntityExpr("productStoreId", EntityOperator.EQUALS, productStoreId));
+    findParams += "&productStoreId=" + productStoreId;
+}
+
+if (searchConditions.size() == 0) return;
+
+// restrict search results to the company set up for CRM
+organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
+searchConditions.add(new EntityExpr("billFromPartyId", EntityOperator.EQUALS, organizationPartyId));
+
+// other conditions to limit the list
+searchConditions.add(new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"));
+searchConditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER"));
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+// this must be done as two queries joined at the end because order items link to inventory items via OrderItemShipGrpInvRes
+// or ItemIssuance depending on the status of the Order (pending vs completed).  You can't get cute by checking the status first
+// to determine which entity to use because you must be able to supply the same lotId and get both pending an completed orders.
+
+List orders = new LinkedList();
+listIt = delegator.findListIteratorByCondition("OrderHeaderItemAndRolesAndInvCompleted", searchConditionList, null,
+        fieldsToSelect,  // fields to select
+        orderBy, // fields to order by
+        UtilCommon.DISTINCT_READ_OPTIONS);
+
+// if some orders were found for the first go around, then make sure that those orderIds don't show up on the second search
+// this is important--the two view entities would both turn up results if the search is by anything not related to InventoryItem:
+// ie, orderId, customer id, etc. etc.
+if (listIt != null) {
+    orders.addAll(listIt.getCompleteList());
+    orderIds = EntityUtil.getFieldListFromEntityList(orders, "orderId", true);
+    if (UtilValidate.isNotEmpty(orderIds)) {
+        searchConditions.add(new EntityExpr("orderId", EntityOperator.NOT_IN, orderIds));
+        searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+    }
+}
+
+
+listIt = delegator.findListIteratorByCondition("OrderHeaderItemAndRolesAndInvPending", searchConditionList, null,
+        fieldsToSelect,  // fields to select
+        orderBy, // fields to order by
+        UtilCommon.DISTINCT_READ_OPTIONS);
+if (listIt != null) {
+    orders.addAll(listIt.getCompleteList());
+}
+
+// now order the orders
+orders = EntityUtil.orderBy(orders, orderBy);
+
+// note that this is no longer a list iterator but a list, but the form widget in opentaps 1.0 uses list-name for iterators and lists
+context.put(listIteratorNameToUse, orders);
+
+// and parameters for the sort headers
+context.put("findParams", findParams);

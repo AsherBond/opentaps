@@ -1,0 +1,55 @@
+/* Styles for highlighting activities by status */
+
+tr.activity_updated td {
+    font-weight: bold;
+}
+
+tr.activity_EVENT_SCHEDULED {
+    background-color: white;
+}
+tr.activity_EVENT_CONFIRMED {
+    background-color: #FFFF99;
+}
+tr.activity_EVENT_STARTED {
+    background-color: #FFCC66;
+}
+tr.activity_EVENT_STARTED td {
+    background-color: #FFCC66;
+}
+tr.activity_EVENT_COMPLETED {
+    background-color: #E0E0E0;
+}
+tr.activity_EVENT_ON_HOLD {
+    background-color: #E0E0E0;
+}
+tr.activity_EVENT_REJECTED {
+    background-color: #FFCCCC;
+}
+tr.activity_EVENT_CANCELLED {
+    background-color: #FFCCCC;
+}
+
+tr.activity_TASK_SCHEDULED {
+    background-color: white;
+}
+tr.activity_TASK_CONFIRMED {
+    background-color: #FFFF99;
+}
+tr.activity_TASK_STARTED {
+    background-color: #FFCC66;
+}
+tr.activity_TASK_STARTED td {
+    background-color: #FFCC66;
+}
+tr.activity_TASK_COMPLETED {
+    background-color: #E0E0E0;
+}
+tr.activity_TASK_ON_HOLD {
+    background-color: #E0E0E0;
+}
+tr.activity_TASK_REJECTED {
+    background-color: #FFCCCC;
+}
+tr.activity_TASK_CANCELLED {
+    background-color: #FFCCCC;
+}

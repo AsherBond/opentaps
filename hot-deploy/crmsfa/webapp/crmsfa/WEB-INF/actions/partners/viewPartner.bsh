@@ -1,0 +1,103 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.agreement.UtilAgreement;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.content.ContentHelper;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+partyId = parameters.get("partyId");
+
+// make sure that the partyId is actually a PARTNER before trying to display it as once
+delegator = request.getAttribute("delegator");
+validRoleTypeId = PartyHelper.getFirstValidRoleTypeId(partyId, UtilMisc.toList("PARTNER"), delegator);
+
+// if not, return right away (otherwise we get spaghetti code)
+if ((validRoleTypeId == null) || (!validRoleTypeId.equals("PARTNER")))  {
+    context.put("validView", false);
+    return;
+}
+
+// is the partner still active?  if there are no longer any current PARTNER PartyRelationships, then the answer is no
+partnerActive = true;
+activeRelationships = EntityUtil.filterByDate(delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", partyId, "roleTypeIdFrom", "PARTNER")));
+if ((activeRelationships == null) || (activeRelationships.size() == 0)) {
+    partnerActive = false;
+}
+if (!partnerActive) {
+    context.put("validView", true);
+    context.put("partnerDeactivated", true);
+}
+
+dispatcher = request.getAttribute("dispatcher");
+
+// partner summary data
+partySummary = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
+context.put("partySummary", partySummary);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(partySummary.get("groupName"), "viewPartner", UtilMisc.toList("partyId"));
+
+// get the generic content metadata for partner, which should always be visible, even if partner is deactivated
+context.put("content", ContentHelper.getContentInfoForParty(partyId, "PARTNER", delegator));
+
+if (partnerActive) {
+
+    // set this flag to allow contact mechs to be shown
+    request.setAttribute("displayContactMechs", "Y");
+
+    // partner notes
+    results = dispatcher.runSync("performFind", UtilMisc.toMap("entityName", "PartyNoteView",
+                "inputFields", UtilMisc.toMap("targetPartyId", partyId), "orderBy", "noteDateTime DESC"));
+    context.put("notesListIt", results.get("listIt"));
+
+    // permission to update partner information
+    if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_PARTNER", "_UPDATE", request.getAttribute("userLogin"), partyId)) {
+        context.put("hasUpdatePermission", true);
+
+        // this implies ability to remove contacts too
+        context.put("hasContactRemoveAbility", true);
+
+        // this also means activiites may be created, but only if user has CRMSFA_ACT_CREATE
+        if (security.hasEntityPermission("CRMSFA_ACT", "_CREATE", userLogin)) {
+            context.put("hasNewActivityPermission", true);
+        }
+    }
+
+    // permission to update password
+    if (CrmsfaSecurity.hasPartyRelationSecurity(request.getAttribute("security"), "CRMSFA_PASS", "_UPDATE", request.getAttribute("userLogin"), partyId)) {
+        context.put("hasPassPermission", true);
+    }
+
+    where = UtilMisc.toList(
+        new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyId),
+        new EntityExpr("agreementTypeId", EntityOperator.EQUALS, "PARTNER_SALES_AGR"),
+        EntityUtil.getFilterByDateExpr()
+    );
+    context.put("agreementsPaginatorName", "partnerToCustomerAgreements");
+    context.put("agreementsListBuilder", UtilAgreement.getAgreementsListBuilder(new EntityConditionList(where, EntityOperator.AND), null, locale));
+
+    // valid view => active and existing partner, tells later scripts whether to fetch data and tells ftl how to render
+    context.put("validView", true);
+}

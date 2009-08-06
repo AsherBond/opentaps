@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2004-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author   Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains screens for the Accounts section -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.accounts.accounts" global="true"/>
+                <set field="sectionName" value="accounts" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="requiredPermission" value="CRMSFA_ACCOUNTS"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#leftBarScreen"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/screenlets/shortcuts.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/screenlets/accountShortcuts.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/screenlets/quickCreateAccount.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/common/quickFormLetter.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="sectionHeaderScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/myAccountsMenu.ftl"/></html>
+                </platform-specific>                
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- show a list of the accounts of the logged in user -->
+    <screen name="myAccounts">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAccounts" />    <!-- this is uiLabelMap property for the title of the HTML page -->
+                <set field="sectionHeaderUiLabel" value="CrmAccounts" />  <!-- this is for the main section of this page, ie <h2> -->
+                <set field="findPartyWidget" value="myAccounts" />
+                <set field="sectionHeaderScreen" value="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml#sectionHeaderScreen"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaParties.ftl" />
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findAccounts">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindAccounts"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindAccounts"/>
+                <set field="findPartyWidget" value="findAccounts"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaParties.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+
+    <screen name="createAccount">
+        <section>
+            <condition><if-has-permission permission="CRMSFA_ACCOUNT" action="_CREATE"/></condition>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateAccount"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateAccount"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/createOrUpdateAccount.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/createOrUpdateAccount.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
+        </section>
+    </screen>
+
+    <screen name="updateAccountForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateAccount"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateAccount"/>
+                <set field="hasModulePermission" value="CRMSFA_ACCOUNT"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/viewAccount.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/createOrUpdateAccount.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/createOrUpdateAccount.ftl"/></html>
+                        </platform-specific>
+
+                        <!-- account data sources -->
+                        <include-screen name="viewAccountDataSources"/>
+
+                        <!-- account marketing campaigns -->
+                        <include-screen name="viewAccountMarketingCampaigns"/>
+
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateAccountPassword">
+        <section>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="updatePartyPassword" location="component://crmsfa/widget/crmsfa/screens/common/PartyScreens.xml"/>
+                    </decorator-section>>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- this screen is an example of how to check complex permissions and display multiple subsections with submenus -->
+    <screen name="viewAccount">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmViewAccount"/>
+                <set field="sectionHeaderUiLabel" value="CrmViewAccount"/> 
+                <set field="hasModulePermission" value="CRMSFA_ACCOUNT"/>
+                <set field="hasOperationPermission" value="_VIEW"/>
+                <set field="editContactMechPage" value="accountsEditContactMech"/>
+                <set field="donePage" value="viewAccount"/>
+                <set field="findActivitiesKey" value="partyId"/>  <!-- we want activities based on the partyId parameter -->
+                <!-- target for order by and pagination links -->
+                <set field="listSortTarget" value="viewAccount"/>
+                <set field="casePaginatorName" value="accountsCases"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/viewAccount.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/accounts/viewSalesPaymentPerYear.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/cases/listCases.bsh"/>                
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contactmech/viewprofile.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/findActivities.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/getCatalogRequests.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/getMergeFormsForCurrentUser.bsh" />
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <!-- Main accounts section -->
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/viewAccountDetail.ftl"/></html>
+                        </platform-specific>
+
+                        <!-- If the user can assign teams and there are no team members already, include the relevant form -->
+                        <section>
+                            <condition><if-compare field-name="hasTeamMembers" operator="equals" value="false" type="Boolean"/></condition>
+                            <widgets>
+                                <container style="subSectionBlock">
+                                    <container style="form">
+                                        <include-form name="assignTeamToAccountForm" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                                    </container>
+                                </container>
+                            </widgets>
+                        </section>
+
+                        <!-- account contact info -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contactmech/viewprofile.ftl"/></html></platform-specific>
+                        </container>
+
+                        <!-- pending activities -->
+                        <include-screen name="pendingActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
+
+                        <!-- Contacts section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html>
+                                <html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountContacts.ftl"/>
+                            </html></platform-specific>
+                            <include-form name="ListContacts" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
+                            <!-- If the user can update accounts, include this form -->
+                            <section>
+                                <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <widgets>
+                                    <include-form name="assignContactToAccountForm" location="component://crmsfa/widget/crmsfa/forms/accounts/AccountsForms.xml"/>
+                                </widgets>
+                            </section>
+                        </container>
+
+                        <!-- payment methods -->
+                        <container style="subSectionBlock">
+                            <include-screen name="listAccountPaymentMethods" location="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml"/>
+                        </container>
+
+                        <!-- Orders section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html>
+                                <html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountOrdersMenu.ftl"/>
+                            </html></platform-specific>
+                            <section>
+                                <condition><if-compare field-name="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <widgets>
+                                    <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
+                                </widgets>
+                            </section>
+                        </container>
+
+                        <!-- Opportunities section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountOpportunities.ftl"/></html></platform-specific>
+                            <include-form name="ListOpportunities" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
+                        </container>
+
+                        <!-- cases section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/casesMenu.ftl"/></html></platform-specific>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/cases/listCases.ftl"/></html></platform-specific>
+                        </container>
+
+                        <!-- completed activities -->
+                        <include-screen name="completedActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
+
+                        <!-- Catalog requests -->
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/includes/catalogRequests.ftl"/></html>
+                        </platform-specific>
+
+                        <!-- attached content -->
+                        <include-screen name="contentList" location="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml"/>
+
+                        <!-- Notes section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountNotes.ftl"/></html></platform-specific>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/common/ListNotes.ftl"/></html></platform-specific>
+                        </container>
+
+                        <!-- team members -->
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.CrmTeamMembersAssignedToAccount}</label></container></container>
+                            <include-form name="ListTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                            <!-- If the user can add team members, include the relevant form -->
+                            <section>
+                                <condition><if-compare field-name="hasTeamAssignPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <widgets>
+                                    <include-form name="addTeamMemberForm" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
+                                </widgets>
+                            </section>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- account data sources -->
+    <screen name="viewAccountDataSources">
+        <section>
+            <actions>
+                <!-- set the form parameters -->
+                <set field="addDataSourceFormTarget" value="addAccountDataSource"/>
+                <set field="removeDataSourceFormTarget" value="removeAccountDataSource"/>
+            </actions>
+            <widgets>
+                <include-screen name="viewDataSources" location="component://crmsfa/widget/crmsfa/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- account marketing campaigns -->
+    <screen name="viewAccountMarketingCampaigns">
+        <section>
+            <actions>
+                <!-- set the form parameters -->
+                <set field="addMarketingCampaignFormTarget" value="addAccountMarketingCampaign"/>
+                <set field="removeMarketingCampaignFormTarget" value="removeAccountMarketingCampaign"/>
+            </actions>
+            <widgets>
+                <include-screen name="viewMarketingCampaigns" location="component://crmsfa/widget/crmsfa/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- error screen when the given partyId doesn't exist or is not an Account -->
+    <screen name="invalidAccountError">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmError"/>
+                <set field="sectionHeaderUiLabel" value="CrmError"/> 
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/accounts/invalidAccountError.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

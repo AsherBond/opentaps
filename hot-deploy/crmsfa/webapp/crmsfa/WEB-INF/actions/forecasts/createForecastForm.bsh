@@ -1,0 +1,34 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/*
+ * Given a customTimePeriodId, gets the immediate children of the time period for the form
+ */
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import org.ofbiz.base.util.UtilMisc;
+
+customTimePeriodId = parameters.get("customTimePeriodId");
+if (customTimePeriodId == null) return;
+
+periods = delegator.findByAndCache("CustomTimePeriod", UtilMisc.toMap("parentPeriodId", customTimePeriodId), UtilMisc.toList("thruDate"));
+context.put("periods", periods);
+
+// for checking if this time period already has forecasts
+userLogin = request.getAttribute("userLogin");
+context.put("internalPartyId", userLogin.getString("partyId"));

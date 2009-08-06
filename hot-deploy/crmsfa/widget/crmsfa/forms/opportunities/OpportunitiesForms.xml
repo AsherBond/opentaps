@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="FindOpportunitiesForm" type="single" target="${findOpportunitiesTarget}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="opportunityName" title="${uiLabelMap.CommonName}">
+            <text/>
+        </field>
+        <field name="opportunityStageId" title="${uiLabelMap.CrmStage}">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="SalesOpportunityStage">
+                    <entity-order-by field-name="sequenceNum"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="typeEnumId" title="${uiLabelMap.CommonType}">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="SO_TYPES"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmFindOpportunities}" widget-style="smallSubmit">
+        	<submit/>
+        </field>
+    </form>
+
+    <form name="ListOpportunities" type="list" 
+        title="Opportunities"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListOpportunities" paginate-size-field="oppsSize" paginate-index-field="oppsIndex"
+        list-name="opportunitiesListIt">
+        <field name="opportunityName" widget-style="linktext" title="${uiLabelMap.CrmOpportunityName}" widget-area-style="fieldWidth50pct"
+            use-when="sectionName.equals(&quot;lookup&quot;)">
+            <hyperlink also-hidden="false" target-type="plain" description="${opportunityName} (${salesOpportunityId})" 
+                target="javascript:set_value('${salesOpportunityId}')"/>
+        </field>
+        <field name="opportunityName" widget-style="linktext" title="${uiLabelMap.CrmOpportunityName}" widget-area-style="fieldWidth50pct"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;opportunitiesOrderBy=opportunityName&amp;${findParams}#ListOpportunities" header-link-style="orderByHeaderLink"
+            use-when="!sectionName.equals(&quot;lookup&quot;)">
+            <hyperlink description="${opportunityName} (${salesOpportunityId})" target="viewOpportunity?salesOpportunityId=${salesOpportunityId}"/>
+        </field>
+        <field name="opportunityStageId" title="${uiLabelMap.CrmStage}" position="1" widget-area-style="fieldWidth100"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;opportunitiesOrderBy=opportunityStageId&amp;${findParams}#ListOpportunities" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="SalesOpportunityStage"/>
+        </field>
+        <field name="estimatedAmount" title="${uiLabelMap.CrmOpportunityAmount}" widget-area-style="fieldWidth200"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;opportunitiesOrderBy=estimatedAmount%20DESC&amp;${findParams}#ListOpportunities" header-link-style="orderByHeaderLink">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" widget-area-style="fieldWidth200"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;opportunitiesOrderBy=estimatedCloseDate&amp;${findParams}#ListOpportunities" header-link-style="orderByHeaderLink">
+            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(estimatedCloseDate, org.ofbiz.base.util.UtilDateTime.getDateFormat(locale), timeZone, locale)}"/>
+        </field>
+        <!-- it has to be this way, because form-widget can't hide a column when no use-when condition causes it to show -->
+        <field name="partyIdFrom" use-when="sectionName.equals(&quot;opportunities&quot;)" title="${uiLabelMap.CrmOpportunityFor}" widget-area-style="fieldWidth300">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.party.PartyHelper.createViewPageLink(partyIdFrom, delegator, externalLoginKey);}"/>
+        </field>
+    </form>   
+
+    <form name="createOpportunityForm" type="single" target="createOpportunity" title="" 
+        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        <field name="opportunityName" title="${uiLabelMap.CrmOpportunityName}" position="1" title-style="requiredField"><text size="30" maxlength="100"/></field>
+        
+        <!-- if the account party id is known, then display the account's name.  otherwise, give the user a lookup for the accountPartyId --> 
+        <field name="accountPartyId" title="${uiLabelMap.CrmInitialAccount}" position="1" widget-style="tabletext" title-style="requiredField" 
+            use-when="account!=void&amp;&amp;account!=null">
+            <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} (${partyId})" also-hidden="true"/>
+        </field>
+        <field name="accountPartyId" title="${uiLabelMap.CrmInitialAccount}" position="1" title-style="requiredField" 
+            use-when="(lead==void||lead==null) &amp;&amp; (account==void || account==null)">
+            <lookup target-form-name="LookupAccounts" size="20" maxlength="20"/>
+        </field>
+
+        <!-- if the lead party id is known, then display the lead's name.  otherwise, give the user a lookup for the leadPartyId --> 
+        <field name="leadPartyId" title="${uiLabelMap.CrmInitialLead}" position="1" widget-style="tabletext" title-style="requiredField"
+            use-when="lead!=void&amp;&amp;lead!=null">
+            <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${firstName} ${lastName} (${partyId})" also-hidden="true"/>
+        </field>
+        <field name="leadPartyId" title="${uiLabelMap.CrmInitialLead}" position="1" title-style="requiredField"
+            use-when="(lead==void||lead==null) &amp;&amp; (account==void || account==null)">
+            <lookup target-form-name="LookupLeads" size="20" maxlength="20"/>
+        </field>
+
+        <!-- always allow changing of the contact --> 
+        <field name="contactPartyId" title="${uiLabelMap.CrmInitialContact}" position="1">
+            <lookup target-form-name="LookupContacts" size="20" maxlength="20"/>
+        </field>
+
+        <field name="opportunityStageId" title="${uiLabelMap.CrmInitialStage}" position="1" title-style="requiredField">
+            <drop-down allow-empty="false">
+                <entity-options description="${description}" entity-name="SalesOpportunityStage">
+                    <entity-order-by field-name="sequenceNum"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="typeEnumId" title="${uiLabelMap.CommonType}" position="2">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="SO_TYPES"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+       
+        <field name="estimatedAmount" title="${uiLabelMap.CrmEstimatedAmount}" position="1"><text size="20" maxlength="20"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CommonCurrency}" position="2">
+            <drop-down allow-empty="true" current="selected"  no-current-selected-key="${configProperties.defaultCurrencyUomId}">
+                <entity-options description="${uomId} - ${description}" entity-name="Uom" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="marketingCampaignId" title="${uiLabelMap.CrmMarketingCampaign}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${campaignName}" entity-name="MarketingCampaign"/>
+            </drop-down>
+        </field>
+        <field name="dataSourceId" title="${uiLabelMap.CrmDataSource}" position="2">
+            <drop-down allow-empty="true">
+                <entity-options entity-name="DataSource" description="${description}">
+                    <entity-constraint name="dataSourceTypeId" value="LEAD_GENERATION"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" position="1" title-style="requiredField"><date-time type="date"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+        <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><textarea/></field>
+        <field name="submitButton" title="${uiLabelMap.CrmCreateOpportunity}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="updateOpportunityForm" type="single" target="updateOpportunity" title="" default-map-name="opportunityAndParty"
+        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        <field name="salesOpportunityId"><hidden/></field>
+        <field name="opportunityName" title="${uiLabelMap.CrmOpportunityName}" position="1" title-style="requiredField"><text size="30" maxlength="100"/></field>
+        <field name="opportunityStageId" title="${uiLabelMap.CrmStage}" position="1" title-style="requiredField">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options description="${description}" entity-name="SalesOpportunityStage" key-field-name="opportunityStageId">
+                    <entity-order-by field-name="sequenceNum"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="typeEnumId" title="${uiLabelMap.CommonType}" position="2">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="SO_TYPES"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="estimatedAmount" title="${uiLabelMap.CrmEstimatedAmount}" position="1"><text size="20" maxlength="20"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CommonCurrency}" position="2">
+            <drop-down allow-empty="true" current="selected"  no-current-selected-key="${configProperties.defaultCurrencyUomId}">
+                <entity-options description="${uomId} - ${description}" entity-name="Uom" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="estimatedProbability" title="${uiLabelMap.CrmEstimatedProbability}" position="1"><text size="20" maxlength="20"/></field>
+        <field name="marketingCampaignId" title="${uiLabelMap.CrmMarketingCampaign}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${campaignName}" entity-name="MarketingCampaign"/>
+            </drop-down>
+        </field>
+        <field name="dataSourceId" title="${uiLabelMap.CrmDataSource}" position="2">
+            <drop-down allow-empty="true">
+                <entity-options entity-name="DataSource" description="${description}">
+                    <entity-constraint name="dataSourceTypeId" value="LEAD_GENERATION"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" position="1" title-style="requiredField"><date-time type="date"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+        <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><textarea/></field>
+        <field name="changeNote" title="${uiLabelMap.CrmChangeNote}" title-style="requiredField"><textarea/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="viewOpportunity" type="single" default-map-name="opportunityAndParty" target="" title="" 
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="opportunityName" title="${uiLabelMap.CrmOpportunityName}" position="1" title-style="requiredField"><display/></field>
+
+        <field name="accountPartyId" widget-style="tabletext" title="${uiLabelMap.CrmAccountName}" widget-area-style="fieldWidth300" 
+            use-when="opportunityAndParty!=null&amp;&amp;opportunityAndParty.get(&quot;accountPartyId&quot;)!=null">
+            <display-entity entity-name="PartySummaryCRMView" description="${groupName}" key-field-name="partyId">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount?partyId=${opportunityAndParty.accountPartyId}"/>
+            </display-entity>
+        </field>
+        <field name="leadPartyId" widget-style="tabletext" title="${uiLabelMap.CrmLeadName}" widget-area-style="fieldWidth300" 
+            use-when="opportunityAndParty!=null&amp;&amp;opportunityAndParty.get(&quot;leadPartyId&quot;)!=null">
+            <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName}" key-field-name="partyId">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewLead?partyId=${opportunityAndParty.leadPartyId}"/>
+            </display-entity>
+        </field>
+
+        <field name="opportunityStageId" title="${uiLabelMap.CrmStage}" position="1" widget-style="tabletext">
+            <display-entity entity-name="SalesOpportunityStage"/>
+        </field>
+        <field name="typeEnumId" title="${uiLabelMap.CommonType}" position="2" widget-style="tabletext">
+            <display-entity entity-name="Enumeration" key-field-name="enumId"/>
+        </field>
+
+        <field name="estimatedAmount" title="${uiLabelMap.CrmEstimatedAmount}" position="1"><display type="currency" currency="${opportunityAndParty.currencyUomId}"/></field>
+        <field name="estimatedProbability" title="${uiLabelMap.CrmEstimatedProbability}" position="1">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(opportunityAndParty.get(&quot;estimatedProbability&quot;))}"/>
+        </field>
+        <field name="marketingCampaignId" title="${uiLabelMap.CrmMarketingCampaign}" position="1" widget-style="tabletext">
+            <display-entity entity-name="MarketingCampaign" description="${campaignName}"/>
+        </field>
+        <field name="dataSourceId" title="${uiLabelMap.CrmDataSource}" position="2" widget-style="tabletext">
+            <display-entity entity-name="DataSource"/>
+        </field>
+        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" position="1">
+            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.ofbiz.base.util.UtilDateTime.getDateFormat(locale), timeZone, locale)}"/>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
+        <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><display/></field>
+    </form>
+
+    <form name="ListContacts" type="list" separate-columns="true" 
+        title="Contacts"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="findContacts"  list-name="contacts">
+        <field name="partyId" title="${uiLabelMap.CrmContactName}" widget-area-style="fieldWidth300" widget-style="tabletext">
+            <display-entity entity-name="PartySummaryCRMView" description="${firstName} ${lastName} (${partyId})">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewContact?partyId=${partyId}"/>
+            </display-entity>
+        </field>
+        <field name="primaryEmail" title="${uiLabelMap.CrmPrimaryEmail}" widget-area-style="fieldWidth100">
+            <display description="${bsh:org.opentaps.common.party.PartyContactHelper.getElectronicAddressByPurpose(partyId, &quot;EMAIL_ADDRESS&quot;, &quot;PRIMARY_EMAIL&quot;, delegator);}"/>
+        </field>
+        <field name="primaryPhone" title="${uiLabelMap.CrmPrimaryPhone}" widget-area-style="fieldWidth100">
+            <display description="${bsh:org.opentaps.common.party.PartyContactHelper.getTelecomNumberByPurpose(partyId, &quot;PRIMARY_PHONE&quot;, delegator);}"/>
+        </field>
+        <!-- since this form is re-usable, define hasContactRemoveAbility when the Remove option should be visible -->
+        <field name="Remove" title="" use-when="hasUpdatePermission==true" widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CommonRemove}" 
+                target="removeContactFromOpportunity?contactPartyId=${partyId}&amp;salesOpportunityId=${parameters.salesOpportunityId}"/>
+        </field>
+    </form>   
+
+    <!-- form to add a contact to an opportunity -->
+    <form name="addContactToOpportunityForm" type="single" target="addContactToOpportunity"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="salesOpportunityId"><hidden value="${parameters.salesOpportunityId}"/></field>
+        <field name="contactPartyId" position="1" title="${uiLabelMap.CrmNewContact}" widget-style="inputBox">
+            <lookup target-form-name="LookupContacts" size="20" maxlength="20"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- display the history of an opportunity -->
+    <form name="listOpportunityHistory" type="list" list-name="opportunityHistory"
+        default-title-style="tableheadtext" target=""
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="modifiedTimestamp" title="${uiLabelMap.CommonLastUpdated}" widget-style="linktext" widget-area-style="fieldWidth200">
+                <hyperlink description="${modifiedTimestamp}"
+                    target="viewOpportunityHistory?salesOpportunityHistoryId=${salesOpportunityHistoryId}"/>
+        </field>
+        <field name="opportunityStageId" title="${uiLabelMap.CrmStage}">
+            <display-entity entity-name="SalesOpportunityStage"/>
+        </field>
+        <field name="estimatedProbability" title="${uiLabelMap.CrmEstimatedProbability}" widget-area-style="fieldWidth200">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(estimatedProbability)}"/>
+        </field>
+        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" widget-area-style="fieldWidth200">
+            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(estimatedCloseDate, org.ofbiz.base.util.UtilDateTime.getDateFormat(locale), timeZone, locale)}"/>
+        </field>
+        <field name="estimatedAmount" title="${uiLabelMap.CrmOpportunityAmount}" widget-area-style="fieldWidth200">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="modifiedByUserLogin" title="${uiLabelMap.CrmModifiedBy}">
+            <display/> <!-- TODO: figure out how to get a firstName and lastName (PartyAndUserLoginAndPerson has 2 primary keys: userLoginId, partyId -->
+        </field>
+    </form>   
+
+    <!-- for viewing a particular SalesOpportunityHistory -->
+    <form name="viewOpportunityHistory" type="single" default-map-name="opportunityHistoryAndParty" 
+        target="" title="" 
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="modifiedTimestamp" title="${uiLabelMap.CommonLastUpdated}" widget-style="linktext" widget-area-style="fieldWidth200" position="1">
+            <display/>
+        </field>
+        <field name="modifiedByUserLogin" title="${uiLabelMap.CrmModifiedBy}" position="2">
+            <display/>
+        </field>
+        <field name="salesOpportunityId" title="${uiLabelMap.CrmOpportunityName}" widget-area-style="fieldWidth300" widget-style="tabletext">
+            <display-entity entity-name="SalesOpportunity" description="${opportunityName}"/>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
+        <field name="opportunityStageId" title="${uiLabelMap.CrmStage}" position="1" widget-area-style="fieldWidth100">
+            <display-entity entity-name="SalesOpportunityStage"/>
+        </field>
+        <field name="estimatedAmount" title="${uiLabelMap.CrmOpportunityAmount}" widget-area-style="fieldWidth200">
+            <display type="currency" currency="${opportunityHistoryAndParty.currencyUomId}"/>
+        </field>
+        <field name="estimatedProbability" title="${uiLabelMap.CrmEstimatedProbability}">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(opportunityHistoryAndParty.get(&quot;estimatedProbability&quot;))}"/>
+        </field>
+        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" widget-area-style="fieldWidth200">
+            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.ofbiz.base.util.UtilDateTime.getDateFormat(locale), timeZone, locale)}"/>
+        </field>
+        <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><display/></field>
+        <field name="changeNote" title="${uiLabelMap.CrmChangeNote}"><display/></field>
+        <field name="submitButton" title=" " widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CommonBack}"
+                target="viewOpportunity?salesOpportunityId=${opportunityHistoryAndParty.salesOpportunityId}"/>
+        </field>
+    </form>
+
+</forms>

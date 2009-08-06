@@ -1,0 +1,264 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/*
+ * Provides a way to find ACCOUNTS, CONTACTS, etc. by groupName, lastName, (TODO: add more).
+ * In order to use this script, set the roleTypeIdFrom={ACCOUNTS, CONTACTS, etc} in the parameters.
+ * The result is a list iterator named which should be used in the form widget.  The name of the list iterator
+ * is passed in as a parameter (listIteratorNameToUse) because the forms use different list iterators, which
+ * allows those forms to be reused on their own or inside other screens
+ *
+ * Another way to use this list is to let roleTypeIdFrom be null and specify the partyType parameter which has
+ * the following possible values and effects:
+ *
+ *   CLIENT -  gets all matching parties that are ACCOUNTS, CONTACTS or PROSPECTS (leads)
+ *   TEAM   -  gets all matching parties that are ACCOUNT_MANAGER ACCOUNT_REP or CUST_SERVICE_REP
+ *   null   -  gets all matching parties in any of these roles
+ */
+ 
+import javolution.util.FastList;
+import javolution.util.FastMap; 
+ 
+import java.util.Arrays;
+import java.util.ArrayList;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.entity.model.ModelKeyMap;
+import org.opentaps.common.util.UtilCommon;
+
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+
+// provide default properties from crmsfa.properties
+ configProperties = UtilProperties.getProperties("crmsfa.properties");
+ defaultCountryCode = configProperties.get("defaultCountryCode");
+ context.put("defaultCountryCode", defaultCountryCode);
+
+// Provide current PartyClassificationGroups to the search options
+groups = delegator.findAll("PartyClassificationGroup");
+context.put("partyClassificationGroups", groups);
+
+roleTypeIdFrom = parameters.get("roleTypeIdFrom");
+
+// possible fields we're searching by
+lookupPartyId = UtilCommon.getParameter(parameters, "lookupPartyId");
+groupName = UtilCommon.getParameter(parameters, "groupName");
+lastName = UtilCommon.getParameter(parameters, "lastName");
+firstName = UtilCommon.getParameter(parameters, "firstName");
+companyName = UtilCommon.getParameter(parameters, "companyName");
+generalAddress = UtilCommon.getParameter(parameters, "generalAddress");
+generalCity = UtilCommon.getParameter(parameters, "generalCity");
+stateProvinceGeoId = UtilCommon.getParameter(parameters, "stateProvinceGeoId");
+countryGeoId = UtilCommon.getParameter(parameters, "countryGeoId");
+generalPostalCode = UtilCommon.getParameter(parameters, "generalPostalCode");
+partyClassificationGroupId = UtilCommon.getParameter(parameters, "partyClassificationGroupId");
+phoneCountryCode = UtilCommon.getParameter(parameters, "phoneCountryCode");
+phoneAreaCode = UtilCommon.getParameter(parameters, "phoneAreaCode");
+phoneNumber = UtilCommon.getParameter(parameters, "phoneNumber");
+
+searchByName = false;
+searchByPhone = false;
+searchById = false;
+advancedSearch = false;
+searchOption = parameters.get("searchOption");
+if ((searchOption == null) || ("searchByName".equals(searchOption))) {
+    searchByName = true;
+    context.put("searchByName", true);
+} else if ("searchByPhone".equals(searchOption)) {
+    searchByPhone = true;
+    context.put("searchByPhone", true);
+} else if ("searchById".equals(searchOption)) {
+    searchById = true;
+    context.put("searchById", true);
+} else if ("advancedSearch".equals(searchOption)) {
+    advancedSearch = true;
+    context.put("advancedSearch", true);
+}
+
+List fieldsToSelect = new ArrayList();
+fieldsToSelect.addAll(Arrays.asList(new String[]{"firstName", "lastName", "groupName", "partyId", "companyName", "primaryEmailId", "primaryPostalAddressId", "primaryTelecomNumberId",
+    "primaryToName", "primaryAttnName", "primaryAddress1", "primaryAddress2", "primaryCity", "primaryStateProvinceGeoId", "primaryCountryGeoId", "primaryPostalCode", "primaryPostalCodeExt",  
+    "primaryEmail",
+    "primaryCountryCode", "primaryAreaCode", "primaryContactNumber"}));
+
+// construct role conditions
+roleConditions = new ArrayList();
+if (UtilValidate.isNotEmpty(roleTypeIdFrom)) {
+    roleConditions.add(new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeIdFrom));
+} else {
+    partyType = parameters.get("partyType");
+    roleList = new ArrayList();
+    if (partyType == null || partyType.equals("CLIENT")) {
+        roleList.addAll(PartyHelper.CLIENT_PARTY_ROLES);
+    }
+    if (partyType == null || partyType.equals("TEAM")) {
+        roleList.addAll(PartyHelper.TEAM_MEMBER_ROLES);
+    }
+    for (iter = roleList.iterator(); iter.hasNext(); ) {
+        roleConditions.add(new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, iter.next()));
+    }
+}
+roleConditionList = new EntityConditionList(roleConditions, EntityOperator.OR);
+
+// construct search conditions
+searchConditions = new ArrayList();
+
+if (searchByPhone) {
+  if (UtilValidate.isNotEmpty(phoneCountryCode)) {
+      searchConditions.add(new EntityExpr("countryCode", EntityOperator.EQUALS, phoneCountryCode));
+  }
+  if (UtilValidate.isNotEmpty(phoneAreaCode)) {
+      searchConditions.add(new EntityExpr("areaCode", EntityOperator.EQUALS, phoneAreaCode));
+  }
+  if (UtilValidate.isNotEmpty(phoneNumber)) {
+      searchConditions.add(new EntityExpr("contactNumber", EntityOperator.LIKE, "%" + phoneNumber + "%"));
+  }
+  searchConditions.add(EntityUtil.getFilterByDateExpr("partyContactMechFromDate", "partyContactMechThruDate"));
+  fieldsToSelect.addAll(UtilMisc.toList("countryCode", "areaCode", "contactNumber"));
+} else if (searchById) {
+  // filter on partyId
+  if (lookupPartyId != null) {
+      searchConditions.add(new EntityExpr("partyId", true, EntityOperator.LIKE, "%" + lookupPartyId + "%", true));
+  }  
+} else if (searchByName) {
+  if (groupName != null) {
+      searchConditions.add(new EntityExpr("groupName", true, EntityOperator.LIKE, "%" + groupName + "%", true));
+  }
+  if (lastName != null) {
+      searchConditions.add(new EntityExpr("lastName", true, EntityOperator.LIKE, "%" + lastName + "%", true));
+  }
+  if (firstName != null) {
+      searchConditions.add(new EntityExpr("firstName", true, EntityOperator.LIKE, "%" + firstName + "%", true));
+  }
+  if (companyName != null) {
+      searchConditions.add(new EntityExpr("companyName", true, EntityOperator.LIKE, "%" + companyName + "%", true));
+  }
+} else if (advancedSearch) {
+  // filter on generalAddress
+  if (generalAddress != null) {
+      EntityConditionList addressCond = new EntityConditionList(
+          UtilMisc.toList(new EntityExpr("address1", true, EntityOperator.LIKE, "%" + generalAddress + "%", true),
+                          new EntityExpr("address2", true, EntityOperator.LIKE, "%" + generalAddress + "%", true)),
+          EntityOperator.OR);
+      searchConditions.add(addressCond);
+  
+  }
+  // filter on generalCity
+  if (generalCity != null) {
+      searchConditions.add(new EntityExpr("city", true, EntityOperator.LIKE, "%" + generalCity + "%", true));
+  }
+  // filter on countryGeoId
+  if (countryGeoId != null) {
+      searchConditions.add(new EntityExpr("countryGeoId", true, EntityOperator.LIKE, "%" + countryGeoId + "%", true));
+  }
+  // filter on stateProvinceGeoId
+  if (stateProvinceGeoId != null) {
+      searchConditions.add(new EntityExpr("stateProvinceGeoId", true, EntityOperator.LIKE, "%" + stateProvinceGeoId + "%", true));
+  }
+  // filter on generalPostalCode
+  if (generalPostalCode != null) {
+      EntityConditionList postalCodeCond = new EntityConditionList(
+          UtilMisc.toList(new EntityExpr("postalCode", true, EntityOperator.LIKE, "%" + generalPostalCode + "%", true),
+                          new EntityExpr("postalCodeExt", true, EntityOperator.LIKE, "%" + generalPostalCode + "%", true)),
+          EntityOperator.OR);  
+      searchConditions.add(postalCodeCond);
+  }
+  // filter on partyClassificationGroupId
+  if (partyClassificationGroupId != null) {
+      searchConditions.add(new EntityExpr("partyClassificationGroupId", true, EntityOperator.LIKE, "%" + partyClassificationGroupId + "%", true));
+  }
+}
+
+if (searchConditions.size() == 0) {
+    if (roleTypeIdFrom == null) return;
+    combinedConditions= UtilMisc.toList(roleConditionList);
+} else {
+    searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+    combinedConditions = UtilMisc.toList(searchConditionList, roleConditionList);
+}
+
+// these conditions are specified to negate certain results
+negateConditions = new ArrayList();
+if (roleTypeIdFrom != null && roleTypeIdFrom.equals("PROSPECT")) {
+    negateConditions.add(new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PTYLEAD_CONVERTED"));
+}
+
+//  combine roles, searches, and possibly negate conditions with AND
+if (negateConditions.size() > 0) {
+    negateConditionsList = new EntityConditionList(negateConditions, EntityOperator.AND);
+    combinedConditions.add(negateConditionsList);
+}
+conditionList = new EntityConditionList(combinedConditions, EntityOperator.AND);
+
+// use a page builder to fetch the crm party list, because we need some extra data
+buildCrmPartyList(delegator, conditions) {
+    entityName = "PartyFromByRelnAndContactInfoAndPartyClassification";
+    fieldsToSelect = fieldsToSelect;
+    orderBy = UtilMisc.toList("groupName", "lastName");
+    where = conditions;
+    searchByPhone = searchByPhone;
+
+    build(page) {
+        newPage = FastList.newInstance();
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            crmParty = iter.next();
+            // TODO: check view permission for this party first
+            row = FastMap.newInstance();
+            row.putAll(crmParty.getAllFields());
+            row.put("parameters", parameters);
+            row.put("entityValue", crmParty);
+            row.put("searchByPhone", searchByPhone);
+            row.put("sectionName", context.get("sectionName"));
+            row.put("hasAccountsRemoveAbility", context.get("hasAccountsRemoveAbility"));
+            
+            pCity = crmParty.get("primaryCity");
+            pState = crmParty.get("primaryStateProvinceGeoId");
+            abbrevPostalAddressByPurpose = "";
+            if (UtilValidate.isNotEmpty(pCity)) {
+                abbrevPostalAddressByPurpose =  pCity;
+            }
+            if (UtilValidate.isNotEmpty(pState)) {
+                abbrevPostalAddressByPurpose += ", " + pState;
+            }
+            row.put("abbrevPostalAddressByPurpose", abbrevPostalAddressByPurpose);
+
+            telecomNumberByPurpose = "";
+            pCountryCode = crmParty.get("primaryCountryCode");
+            pAreaCode = crmParty.get("primaryAreaCode");
+            pContactNumber = crmParty.get("primaryContactNumber");
+            if (UtilValidate.isNotEmpty(pCountryCode)) {
+                telecomNumberByPurpose = pCountryCode;
+            }
+            if (UtilValidate.isNotEmpty(pAreaCode)) {
+                telecomNumberByPurpose += " (" + pAreaCode + ")";
+            }
+            if (UtilValidate.isNotEmpty(pContactNumber)) {
+                telecomNumberByPurpose += " " + pContactNumber;
+            }
+            row.put("telecomNumberByPurpose", telecomNumberByPurpose);
+
+            electronicAddressByPurpose = crmParty.get("primaryEmail");
+            row.put("electronicAddressByPurpose", electronicAddressByPurpose);
+            newPage.add(row);
+        }
+        return newPage;
+    }
+    return this; // remember this, very important
+}
+context.put("crmPartyListBuilder", buildCrmPartyList(delegator, conditionList));

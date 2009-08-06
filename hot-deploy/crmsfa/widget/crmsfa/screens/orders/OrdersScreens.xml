@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+        
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!--
+ *  @author   Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains screens for the Orders section.  -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.orders.orders" global="true"/>
+                <set field="sectionName" value="orders" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="requiredPermission" value="CRMSFA_ORDERS"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml#leftBarScreen"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/shortcuts.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/returnShortcuts.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/shoppingListShortcuts.ftl"/></html>
+                </platform-specific>
+                
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/screenlets/quickCreateOrder.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- show a list of the orders of the logged in user -->
+    <screen name="myOrders">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OrderOrders"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
+                <set field="sectionHeaderUiLabel" value="OrderOrders"/>  <!-- this is for the main section of this page, ie <h2> -->
+                <!-- these will be reused in the script -->
+                <set field="parameters.partyIdTo" from-field="userLogin.partyId"/>
+                <set field="parameters.roleTypeIdFrom" value="ACCOUNT"/>
+                <set field="parameters.listIteratorNameToUse" value="ordersListIt"/>
+                <set field="listSortTarget" value="myOrders"/>
+                <!-- this script will do the lookup and pass results to the widgets below -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/myOrders.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmMyOrders}</label></container>
+                        <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+   <screen name="findOrders">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindOrders"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindOrders"/>
+                <set field="parameters.listIteratorNameToUse" value="ordersListIt"/> <!-- iterator for list of orders -->
+                <set field="listSortTarget" value="findOrders"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/findOrders.bsh"/>
+                <set field="findOrdersTarget" value="findOrders"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <include-form name="FindOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.OrderOrders}</label></container>
+                            <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+
+    <!-- This is the OFBiz orderview screen reappropriated for CRMSFA layout -->
+    <screen name="viewOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmViewOrder"/>
+                <set field="sectionHeaderUiLabel" value="CrmViewOrder"/>
+                <set field="customerDetailLink" value="/partymgr/control/viewprofile?partyId=" global="true"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/viewOrder.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/orderviewwebsecure.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/getOrderAccountingTags.bsh"/>
+                <!-- parameters for reuse contentList.ftl widgets -->
+                <set field="donePage" value="orderview"/>                
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/viewOrder.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+
+    <!-- This is the OFBiz editOrderItem screen reappropriated for CRMSFA layout -->
+    <screen name="editOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmEditOrder"/>
+                <set field="sectionHeaderUiLabel" value="CrmEditOrder"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/viewOrder.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/orderviewwebsecure.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/editOrder.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/getOrderAccountingTags.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/editOrder.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+
+    <!-- This is the OFBiz OrderNewNote screen reappropriated for CRMSFA layout -->
+
+    <screen name="OrderNewNote">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OrderAddNote"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/newnote.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/orders/orderview/newnote.ftl"/></html></platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Screen to manage order ship group priorities -->
+    <screen name="manageOrderQueue">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmOrderQueue"/>
+                <set field="sectionHeaderUiLabel" value="CrmOrderQueue"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/filterOrderQueue.bsh"/>   
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/orders/submenus/orderQueueMenu.ftl"/></html></platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/manageOrderQueue.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+
+    <screen name="receivePayment">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OrderReceiveOfflinePayments"/>
+                <set field="sectionHeaderUiLabel" value="OrderReceiveOfflinePayments"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/viewOrder.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/order/getPaymentMethodTypes.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/receivepayment.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="OrderPDF">
+        <section>
+            <actions>
+                <!-- 
+                <set field="defaultFontFamily" value="DejaVuSans"/>
+                -->
+                <set field="title" value="Order"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/viewOrder.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/orderview.bsh"/>
+                            
+            </actions>
+            <widgets>
+                <decorator-screen name="FoReportDecorator" location="component://common/widget/CommonScreens.xml">
+                    <decorator-section name="topLeft">
+                        <section>
+                            <widgets>
+                                <include-screen name="OrganizationHeader" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                    <decorator-section name="topRight">
+                        <section>
+                            <widgets>
+                                <platform-specific>
+                                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/orderReportHeaderInfo.fo.ftl"/></html>
+                                </platform-specific>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <platform-specific>
+                                    <html><html-template location="component://opentaps-common/webapp/common/order/orderReportContactMechs.fo.ftl"/></html>
+                                </platform-specific>
+                                <platform-specific>
+                                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/orderReportBody.fo.ftl"/></html>
+                                </platform-specific>
+                                <platform-specific>
+                                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/orderReportPayment.fo.ftl"/></html>
+                                </platform-specific>
+                                <platform-specific>
+                                    <html><html-template location="component://crmsfa/webapp/crmsfa/orders/orderReportConditions.fo.ftl"/></html>
+                                </platform-specific>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="PackingSlip.fo">
+        <section>
+            <actions>
+                <!-- 
+                <set field="defaultFontFamily" value="DejaVuSans"/>
+                -->
+                <set field="shipmentId" from-field="parameters.shipmentId"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.bsh"/>
+                <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/PackingSlip.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
+            </actions>
+            <widgets>
+                <section>
+                    <condition>
+                        <and>
+                            <not><if-empty field-name="hasPermission"/></not>
+                            <if-compare field-name="hasPermission" operator="equals" type="Boolean" value="true"/>
+                        </and>
+                    </condition>
+                    <widgets>
+                        <platform-specific>
+                            <html><html-template location="component://warehouse/webapp/warehouse/shipping/PackingSlip.fo.ftl"/></html>
+                        </platform-specific>
+                    </widgets>
+                    <fail-widgets>
+                        <include-screen name="permissionDeniedPDF" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+                    </fail-widgets>
+                </section>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="markServicePerformed">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmMarkAsPerformed"/>
+                <set field="sectionHeaderUiLabel" value="CrmMarkAsPerformed"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/markServicePerformed.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/markServicePerformed.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="newShipGroup">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmOrderNewShipGroup"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/newShipGroup.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/orders/newShipGroup.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    
+
+</screens>

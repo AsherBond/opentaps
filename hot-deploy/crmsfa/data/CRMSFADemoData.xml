@@ -1,0 +1,618 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- this file contains demo data -->
+
+<entity-engine-xml>
+    
+    <!-- demo users with user logins and security permissions.  the passwords are encrypted versions of "crmsfa" -->
+    
+    <!-- this is a demo sales manager -->
+    <Party partyId="DemoSalesManager" partyTypeId="PERSON"/>
+    <Person partyId="DemoSalesManager" firstName="Demo" lastName="Sales Manager"/>
+    <UserLogin partyId="DemoSalesManager" userLoginId="DemoSalesManager" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="DemoSalesManager" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+
+    <!-- this user login is used for negative testing: even though it is for the sales manager, it should only be able to login and not be able
+        to see or modify any data -->
+    <UserLogin partyId="DemoSalesManager" userLoginId="demologinonly" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="demologinonly" groupId="CRMSFA_LOGIN_ONLY" fromDate="2005-12-01 00:00:00"/>    
+    <AsteriskUser extension="800" fromDate="2005-12-01 00:00:00" userLoginId="demologinonly"/>   
+    <PartyRole partyId="DemoSalesManager" roleTypeId="ACCOUNT_MANAGER"/>
+    <ContactMech contactMechId="DemoMgrEmail1" contactMechTypeId="EMAIL_ADDRESS" infoString="salesmanager@opentaps.org"/>
+    <PartyContactMech partyId="DemoSalesManager" contactMechId="DemoMgrEmail1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/> 
+    <PartyContactMechPurpose partyId="DemoSalesManager" contactMechId="DemoMgrEmail1" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoSalesManager" primaryEmailId="DemoMgrEmail1" />
+    
+    <!-- these are some sample sales reps -->
+    <Party partyId="DemoSalesRep1" partyTypeId="PERSON"/>
+    <Person partyId="DemoSalesRep1" firstName="Demo" lastName="Sales Rep 1"/>
+    <UserLogin partyId="DemoSalesRep1" userLoginId="DemoSalesRep1"  currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="DemoSalesRep1" groupId="SALES_REP_LIMITED" fromDate="2005-12-01 00:00:00"/>
+    <AsteriskUser extension="801" fromDate="2005-12-01 00:00:00" userLoginId="DemoSalesRep1"/>   
+    <PartyRole partyId="DemoSalesRep1" roleTypeId="ACCOUNT_MANAGER"/>  <!-- this rep can be an account manager or a rep on an account -->
+    <PartyRole partyId="DemoSalesRep1" roleTypeId="ACCOUNT_REP"/>
+    <PartyRole partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/> <!-- TODO: needed this to fix bug, find out why (CustRequestRole required this) -->
+    <ContactMech contactMechId="DemoRepEmail1" contactMechTypeId="EMAIL_ADDRESS" infoString="salesrep1@opentaps.org"/>
+    <PartyContactMech partyId="DemoSalesRep1" contactMechId="DemoRepEmail1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/> 
+    <PartyContactMechPurpose partyId="DemoSalesRep1" contactMechId="DemoRepEmail1" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoSalesRep1" primaryEmailId="DemoRepEmail1" />
+    
+    <Party partyId="DemoSalesRep2" partyTypeId="PERSON"/>
+    <Person partyId="DemoSalesRep2" firstName="Demo" lastName="Sales Rep 2"/>
+    <UserLogin partyId="DemoSalesRep2" userLoginId="DemoSalesRep2" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="DemoSalesRep2" groupId="SALES_REP_LIMITED" fromDate="2005-12-01 00:00:00"/>
+    <AsteriskUser extension="802" fromDate="2005-12-01 00:00:00" userLoginId="DemoSalesRep2"/>   
+    <PartyRole partyId="DemoSalesRep2" roleTypeId="ACCOUNT_MANAGER"/>  <!-- this rep can be an account manager or a rep on an account -->
+    <PartyRole partyId="DemoSalesRep2" roleTypeId="ACCOUNT_REP"/> 
+    <ContactMech contactMechId="DemoRepEmail2" contactMechTypeId="EMAIL_ADDRESS" infoString="salesrep2@opentaps.org"/>
+    <PartyContactMech partyId="DemoSalesRep2" contactMechId="DemoRepEmail2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/> 
+    <PartyContactMechPurpose partyId="DemoSalesRep2" contactMechId="DemoRepEmail2" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoSalesRep2" primaryEmailId="DemoRepEmail2" />
+        
+    <Party partyId="DemoSalesRep3" partyTypeId="PERSON"/>
+    <Person partyId="DemoSalesRep3" firstName="Demo" lastName="Sales Rep 3"/>
+    <UserLogin partyId="DemoSalesRep3" userLoginId="DemoSalesRep3" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="DemoSalesRep3" groupId="SALES_REP_LIMITED" fromDate="2005-12-01 00:00:00"/>
+    <AsteriskUser extension="803" fromDate="2005-12-01 00:00:00" thruDate="2008-01-01 00:00:00" userLoginId="DemoSalesRep3"/>   
+    <PartyRole partyId="DemoSalesRep3" roleTypeId="ACCOUNT_REP"/>
+    <ContactMech contactMechId="DemoRepEmail3" contactMechTypeId="EMAIL_ADDRESS" infoString="salesrep3@opentaps.org"/>
+    <PartyContactMech partyId="DemoSalesRep3" contactMechId="DemoRepEmail3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/> 
+    <PartyContactMechPurpose partyId="DemoSalesRep3" contactMechId="DemoRepEmail3" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoSalesRep3" primaryEmailId="DemoRepEmail3" />
+
+    <Party partyId="DemoSalesRep4" partyTypeId="PERSON"/>
+    <Person partyId="DemoSalesRep4" firstName="Demo" lastName="Sales Rep 4"/>
+    <UserLogin partyId="DemoSalesRep4" userLoginId="DemoSalesRep4" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="DemoSalesRep4" groupId="SALES_REP_TRAINEE" fromDate="2005-12-01 00:00:00"/>
+    <AsteriskUser extension="803" fromDate="2008-02-01 00:00:00" userLoginId="DemoSalesRep4"/>   
+    <PartyRole partyId="DemoSalesRep4" roleTypeId="ACCOUNT_REP"/>
+    <ContactMech contactMechId="DemoRepEmail4" contactMechTypeId="EMAIL_ADDRESS" infoString="salesrep4@opentaps.org"/>
+    <PartyContactMech partyId="DemoSalesRep4" contactMechId="DemoRepEmail4" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/> 
+    <PartyContactMechPurpose partyId="DemoSalesRep4" contactMechId="DemoRepEmail4" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoSalesRep4" primaryEmailId="DemoRepEmail4" />
+
+    <Party partyId="DemoCSR" partyTypeId="PERSON"/>
+    <Person partyId="DemoCSR" firstName="Demo" lastName="B2B CSR"/>
+    <UserLogin partyId="DemoCSR" userLoginId="DemoCSR" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="DemoCSR" groupId="CSR" fromDate="2005-12-01 00:00:00"/>
+    <AsteriskUser extension="805" fromDate="2005-12-01 00:00:00" userLoginId="DemoCSR"/>   
+    <PartyRole partyId="DemoCSR" roleTypeId="CUST_SERVICE_REP"/>
+    <ContactMech contactMechId="DemoCSREmail" contactMechTypeId="EMAIL_ADDRESS" infoString="democsr@opentaps.org"/>
+    <PartyContactMech partyId="DemoCSR" contactMechId="DemoCSREmail" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="DemoCSR" contactMechId="DemoCSREmail" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <ContactMech contactMechId="DemoServiceEmail" contactMechTypeId="EMAIL_ADDRESS" infoString="customerservice@mycompany.com"/>
+    <PartyContactMech partyId="DemoCSR" contactMechId="DemoServiceEmail" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="DemoCSR" contactMechId="DemoServiceEmail" contactMechPurposeTypeId="RECEIVE_EMAIL_OWNER" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoCSR" primaryEmailId="DemoCSREmail" />
+
+    <Party partyId="DemoCSR2" partyTypeId="PERSON"/>
+    <Person partyId="DemoCSR2" firstName="Demo" lastName="B2C CSR"/>
+    <UserLogin partyId="DemoCSR2" userLoginId="DemoCSR2" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="DemoCSR2" groupId="CSR_B2C" fromDate="2005-12-01 00:00:00"/>
+    <AsteriskUser extension="806" fromDate="2005-12-01 00:00:00" userLoginId="DemoCSR2"/>   
+    <PartyRole partyId="DemoCSR2" roleTypeId="CUST_SERVICE_REP"/>
+    <ContactMech contactMechId="DemoCSR2Email" contactMechTypeId="EMAIL_ADDRESS" infoString="DemoCSR2@opentaps.org"/>
+    <PartyContactMech partyId="DemoCSR2" contactMechId="DemoCSR2Email" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="DemoCSR2" contactMechId="DemoCSR2Email" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoCSR2" primaryEmailId="DemoCSR2Email" />
+    
+    <Party partyId="DemoCalUser" partyTypeId="PERSON"/>
+    <Person partyId="DemoCalUser" firstName="Demo" lastName="Calendar User"/>
+    <UserLogin partyId="DemoCalUser" userLoginId="DemoCalUser" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="DemoCalUser" groupId="CRMSFA_TASKS_ONLY" fromDate="2005-12-01 00:00:00"/>
+    <AsteriskUser extension="807" fromDate="2005-12-01 00:00:00" userLoginId="DemoCalUser"/>   
+    <PartyRole partyId="DemoCalUser" roleTypeId="ACCOUNT_REP"/>
+    <ContactMech contactMechId="DemoCalEmail" contactMechTypeId="EMAIL_ADDRESS" infoString="democaluser@opentaps.org"/>
+    <PartyContactMech partyId="DemoCalUser" contactMechId="DemoCalEmail" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="DemoCalUser" contactMechId="DemoCalEmail" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoCalUser" primaryEmailId="DemoCalEmail" />
+
+    <Party partyId="DemoCalContact" partyTypeId="PERSON"/>
+    <Person partyId="DemoCalContact" firstName="Demo" lastName="Calendar and Contacts User"/>
+    <UserLogin partyId="DemoCalContact" userLoginId="DemoCalContact" currentPassword="e2d31ae349173f7a62c9b09cc33846cd46029068" passwordHint="c r m s f a"/>
+    <UserLoginSecurityGroup userLoginId="DemoCalContact" groupId="CRMSFA_CONTACT_TASKS" fromDate="2005-12-01 00:00:00"/>
+    <AsteriskUser extension="808" fromDate="2005-12-01 00:00:00" userLoginId="DemoCalContact"/>   
+    <PartyRole partyId="DemoCalContact" roleTypeId="ACCOUNT_REP"/>
+    <ContactMech contactMechId="DemoCalContactEmail" contactMechTypeId="EMAIL_ADDRESS" infoString="DemoCalContact@opentaps.org"/>
+    <PartyContactMech partyId="DemoCalContact" contactMechId="DemoCalContactEmail" fromDate="2005-12-01 00:00:00.000" allowSolicitation="N"/>
+    <PartyContactMechPurpose partyId="DemoCalContact" contactMechId="DemoCalContactEmail" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoCalContact" primaryEmailId="DemoCalContactEmail" />
+
+    <!-- a word about OFBIZ PartyRelationship usage: it may seem backwards, but if A is a customer of B, the relationship needs to be set up as
+        partyIdTo=B, partyIdFrom=A  We're following the same convention here for consistency's sake -->
+        
+    <!-- a sample sales teams -->
+    <Party partyId="DemoSalesTeam1" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"/>  <!-- could also be TEAM, but not sure there's any added benefit, so using PARTY_GROUP for now -->
+    <PartyGroup partyId="DemoSalesTeam1" groupName="Demo Sales Team No. 1"/>
+    <PartyRole partyId="DemoSalesTeam1" roleTypeId="ACCOUNT_TEAM"/>
+    <PartyRelationship partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" partyIdFrom="DemoSalesTeam1" roleTypeIdFrom="ACCOUNT_TEAM" securityGroupId="SALES_MANAGER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesManager is an account manager for DemoSalesTeam1, so he has same privileges as a Sales Manager"/>
+    <PartyRelationship partyIdTo="DemoSalesRep1" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoSalesTeam1" roleTypeIdFrom="ACCOUNT_TEAM" securityGroupId="SALES_MANAGER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesRep1 is the account manager for DemoSalesTeam1, so he has same privileges as a Sales Manager"/>
+    <PartyRelationship partyIdTo="DemoSalesRep2" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoSalesTeam1" roleTypeIdFrom="ACCOUNT_TEAM" securityGroupId="SALES_REP"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesRep2 is assigned to DemoSalesTeam1 as a Sales Rep, so he would have more privileges on this account than on other accounts"/>
+    <PartyRelationship partyIdTo="DemoSalesRep3" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoSalesTeam1" roleTypeIdFrom="ACCOUNT_TEAM" securityGroupId="SALES_REP"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesRep3 is assigned to DemoSalesTeam1, so he would have more privileges on this account than on other accounts"/>
+
+    <!-- another sample sales team -->
+    <Party partyId="DemoSalesTeam2" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED"/>  <!-- could also be TEAM, but not sure there's any added benefit, so using PARTY_GROUP for now -->
+    <PartyGroup partyId="DemoSalesTeam2" groupName="Demo Sales Team No. 2"/>
+    <PartyRole partyId="DemoSalesTeam2" roleTypeId="ACCOUNT_TEAM"/>
+    <PartyRelationship partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" partyIdFrom="DemoSalesTeam2" roleTypeIdFrom="ACCOUNT_TEAM" securityGroupId="SALES_MANAGER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesManager is an account manager for DemoSalesTeam1, so he has same privileges as a Sales Manager"/>
+    <PartyRelationship partyIdTo="DemoSalesRep1" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoSalesTeam2" roleTypeIdFrom="ACCOUNT_TEAM" securityGroupId="SALES_REP"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesRep1 is assigned to DemoSalesTeam2 as a Sales Rep, so he would have more privileges on this account than on other accounts"/>
+    <PartyRelationship partyIdTo="DemoSalesRep2" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoSalesTeam2" roleTypeIdFrom="ACCOUNT_TEAM" securityGroupId="SALES_MANAGER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesRep2 is the account manager for DemoSalesTeam2, so he has same privileges as a Sales Manager"/>
+    <PartyRelationship partyIdTo="DemoSalesRep4" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoSalesTeam2" roleTypeIdFrom="ACCOUNT_TEAM" securityGroupId="SALES_REP"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesRep4 is assigned to DemoSalesTeam2 as a Sales Rep, so he would have more privileges on this account than on other accounts"/>
+
+
+    <!-- a sample account -->
+    <Party partyId="DemoAccount1" partyTypeId="PARTY_GROUP" description="A sample sales account" preferredCurrencyUomId="USD"/>
+    <PartyGroup partyId="DemoAccount1" groupName="Demo Sales Account No. 1"/>
+    <PartyRole partyId="DemoAccount1" roleTypeId="ACCOUNT"/>    
+    <PartyRelationship partyIdTo="DemoSalesRep3" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoAccount1" roleTypeIdFrom="ACCOUNT" securityGroupId="ACCOUNT_OWNER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR" comments="DemoSalesRep3 is responsible for DemoAccount1, which means he acts as the account owner"/>
+    <PartyRelationship partyIdTo="DemoSalesRep2" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoAccount1" roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesRep2 is a full rep for DemoAccount1, with view/update permissions"/>
+    <PartyRelationship partyIdTo="DemoSalesRep1" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoAccount1" roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_REP_LIMITED"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesRep1 is a limited rep for DemoAccount1, with view permission only"/>
+
+    <!-- a subsidiary of DemoAccount1 -->
+    <Party partyId="DemoAccount1Sub" partyTypeId="PARTY_GROUP" description="A subsidiary of a sample sales account" preferredCurrencyUomId="USD"/>
+    <PartyGroup partyId="DemoAccount1Sub" groupName="Demo Sales Account No. 1 Subsidiary"/>
+    <PartyRole partyId="DemoAccount1Sub" roleTypeId="ACCOUNT"/>    
+    <PartySupplementalData partyId="DemoAccount1Sub" parentPartyId="DemoAccount1"/>    
+    <PartyRelationship partyIdTo="DemoSalesRep1" roleTypeIdTo="ACCOUNT_REP" partyIdFrom="DemoAccount1Sub" roleTypeIdFrom="ACCOUNT" securityGroupId="ACCOUNT_OWNER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR" comments="DemoSalesRep1 is responsible for DemoAccount1Sub, which means he acts as the account owner"/>
+
+    <!-- an address -->
+    <ContactMech contactMechId="DemoAddress1" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoAddress1" toName="Demo Account No. 1" address1="12345 Wilshire Blvd" city="Los Angeles" stateProvinceGeoId="CA" postalCode="90025" countryGeoId="USA"/>
+    <!-- this one is a general, billing, and shipping address -->
+    <PartyContactMech partyId="DemoAccount1" contactMechId="DemoAddress1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoAccount1" contactMechId="DemoAddress1" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="DemoAccount1" contactMechId="DemoAddress1" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="DemoAccount1" contactMechId="DemoAddress1" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="DemoAccount1" contactMechId="DemoAddress1" contactMechPurposeTypeId="PRIMARY_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+
+    <!-- another address -->
+    <ContactMech contactMechId="DemoAddress2" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoAddress2" toName="Demo Account No. 1" attnName="Warehouse Manager" address1="251 West 30th Street" city="New York" stateProvinceGeoId="NY" postalCode="10001" countryGeoId="USA"/>
+    <!-- this one is shipping address only -->
+    <PartyContactMech partyId="DemoAccount1" contactMechId="DemoAddress2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoAccount1" contactMechId="DemoAddress2" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+
+    <!-- a phone number --> 
+    <ContactMech contactMechId="DemoPhone1" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPhone1" countryCode="1" areaCode="310" contactNumber="472-1234" askForName="Ask for This Person"/>
+    <!-- all contact mechs (phone, address, email) must be associated with a party this way -->
+    <PartyContactMech partyId="DemoAccount1" contactMechId="DemoPhone1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoAccount1" contactMechId="DemoPhone1" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+
+    <!-- an email and a web URL for this account -->
+    <ContactMech contactMechId="DemoEmail1" contactMechTypeId="EMAIL_ADDRESS" infoString="somebody@demoaccount1.com"/>
+    <PartyContactMech partyId="DemoAccount1" contactMechId="DemoEmail1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>  <!-- allow solicitation flag is for DO NOT CALL/MAIL lists -->
+    <PartyContactMechPurpose partyId="DemoAccount1" contactMechId="DemoEmail1" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <ContactMech contactMechId="DemoURL1" contactMechTypeId="WEB_ADDRESS" infoString="www.demoaccount1.com"/>
+    <PartyContactMech partyId="DemoAccount1" contactMechId="DemoURL1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>  
+    <PartyContactMechPurpose partyId="DemoAccount1" contactMechId="DemoURL1" contactMechPurposeTypeId="PRIMARY_WEB_URL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoAccount1" primaryPostalAddressId="DemoAddress1" primaryTelecomNumberId="DemoPhone1" primaryEmailId="DemoEmail1" />
+        
+    <!-- associate a salesperson with this account.  Note that securityGroupId here is not strictly necessary, since it does not grant 
+         the DemoSalesManager more privileges than he already he has as a SALES_MANAGER, but it does allow his role to show up in the team lists
+         for accounts.  -->
+    <PartyRelationship partyIdFrom="DemoAccount1" roleTypeIdFrom="ACCOUNT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" 
+        securityGroupId="SALES_MANAGER" 
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoSalesManager is assigned to DemoAccount1.  He already has SALES_MANAGER security group so there's no need to assign it again."/>
+        
+    <!-- a sample contact with an address, phone, and email -->
+    <Party partyId="DemoContact1" partyTypeId="PERSON"/>
+    <Person partyId="DemoContact1" firstName="Demo" lastName="First Contact"/>
+    <PartyRole partyId="DemoContact1" roleTypeId="CONTACT"/>
+    <!-- we can just reuse some existing address and phone numbers -->
+    <PartyContactMech partyId="DemoContact1" contactMechId="DemoAddress1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoAccount1" contactMechId="DemoAddress1" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMech partyId="DemoContact1" contactMechId="DemoPhone1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoContact1" contactMechId="DemoPhone1" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    <ContactMech contactMechId="DemoEmail2" contactMechTypeId="EMAIL_ADDRESS" infoString="democontact1@demoaccount1.com"/>
+    <PartyContactMech partyId="DemoContact1" contactMechId="DemoEmail2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>  <!-- allow solicitation flag is for DO NOT CALL/MAIL lists -->
+    <PartyContactMechPurpose partyId="DemoContact1" contactMechId="DemoEmail2" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoContact1" primaryTelecomNumberId="DemoPhone1" primaryEmailId="DemoEmail2" />
+
+    <!-- relationship of contact to account.   -->
+    <PartyRelationship partyIdFrom="DemoContact1" roleTypeIdFrom="CONTACT" partyIdTo="DemoAccount1" roleTypeIdTo="ACCOUNT" 
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="CONTACT_REL_INV" comments="DemoContact1 is a contact of DemoAccount1"/>
+    <PartyRelationship partyIdFrom="DemoContact1" roleTypeIdFrom="CONTACT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" securityGroupId="SALES_MANAGER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="CONTACT_REL_INV" comments="DemoContact1 is a contact of DemoSalesManager"/>
+
+    <!-- sample opportunity for an account -->
+    <SalesOpportunity salesOpportunityId="DemoOpportunity1" opportunityName="Major Sale to Demo Account1"
+        description="This is a potentially major sale to DemoAccount1." estimatedAmount="1000000" estimatedProbability="0.20" currencyUomId="USD"
+        estimatedCloseDate="2006-03-01 00:00:00" opportunityStageId="SOSTG_PROPOSAL" typeEnumId="SOTYP_NEWBIZ"/>
+    <SalesOpportunityRole salesOpportunityId="DemoOpportunity1" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <SalesOpportunity salesOpportunityId="DemoOpportunity2" opportunityName="Routine support contract renewal"
+        description="Just routine renewal of some support contracts." estimatedAmount="20000" estimatedProbability="0.90" currencyUomId="USD"
+        estimatedCloseDate="2006-01-15 00:00:00" opportunityStageId="SOSTG_QUOTED" typeEnumId="SOTYP_RENEW"/>
+    <SalesOpportunityRole salesOpportunityId="DemoOpportunity2" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    
+    <SalesOpportunity salesOpportunityId="DemoOpportunity5" opportunityName="Major Sale to Demo Account1Sub"
+        description="This is a potentially major sale to DemoAccount1Sub." estimatedAmount="10000" estimatedProbability="0.70" currencyUomId="USD"
+        estimatedCloseDate="2009-12-31 00:00:00" opportunityStageId="SOSTG_PROPOSAL" typeEnumId="SOTYP_NEWBIZ"/>
+    <SalesOpportunityRole salesOpportunityId="DemoOpportunity5" partyId="DemoAccount1Sub" roleTypeId="ACCOUNT"/>
+        
+    <!-- a free floating contact not associated with any account -->
+    <Party partyId="DemoContact2" partyTypeId="PERSON"/>
+    <Person partyId="DemoContact2" firstName="Demo" lastName="Second Contact"/>
+    <PartyRole partyId="DemoContact2" roleTypeId="CONTACT"/>
+    <PartyRelationship partyIdFrom="DemoContact2" roleTypeIdFrom="CONTACT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" securityGroupId="CONTACT_OWNER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR" comments="DemoSalesManager is the contact owner for DemoContact2"/>
+    <PartyRelationship partyIdFrom="DemoContact2" roleTypeIdFrom="CONTACT" partyIdTo="DemoSalesRep1" roleTypeIdTo="ACCOUNT_REP"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoContact2 is a contact of DemoSalesRep1"/>
+    <PartyRelationship partyIdFrom="DemoContact2" roleTypeIdFrom="CONTACT" partyIdTo="DemoSalesRep2" roleTypeIdTo="ACCOUNT_REP" 
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="DemoContact2 is a contact of DemoSalesRep2"/>
+
+    <!-- a sample lead.  a lead is simply a Person with role of PROSPECT which has some supplemental data like companyName that could be
+        later used to create an Account with entity PartyGroup.  This is again a break with orthodox OFBIZ practices but will make the
+        code much simpler, eliminating a whole bunch of entities associated with defining a PartyGroup and relationships just to store
+        basically a company name for a lead -->
+    <Party partyId="DemoLead1" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_ASSIGNED"/>
+    <Person partyId="DemoLead1" firstName="Demo" lastName="First Lead"/>
+    <PartyRole partyId="DemoLead1" roleTypeId="PROSPECT"/>    
+    <!-- another sample lead -->
+    <Party partyId="DemoLeadA" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_ASSIGNED"/>
+    <Person partyId="DemoLeadA" firstName="Demo" lastName="Second Lead"/>
+    <PartyRole partyId="DemoLeadA" roleTypeId="PROSPECT"/>        
+    <!-- another sample lead -->
+    <Party partyId="DemoLeadB" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_ASSIGNED"/>
+    <Person partyId="DemoLeadB" firstName="Demo" lastName="Third Lead"/>
+    <PartyRole partyId="DemoLeadB" roleTypeId="PROSPECT"/>    
+    <!-- another sample lead -->
+    <Party partyId="DemoLeadC" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_ASSIGNED"/>
+    <Person partyId="DemoLeadC" firstName="TS" lastName="4th Lead"/>
+    <PartyRole partyId="DemoLeadC" roleTypeId="PROSPECT"/>    
+                
+    <!-- contact mech information for a lead/PROSPECT.   -->
+    <ContactMech contactMechId="DemoAddress3" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoAddress3" toName="Demo Lead No. 1" address1="47 West Broadway" city="Bangor" stateProvinceGeoId="ME" postalCode="04401" countryGeoId="USA"/>
+    <PartyContactMech partyId="DemoLead1" contactMechId="DemoAddress3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLead1" contactMechId="DemoAddress3" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+
+    <ContactMech contactMechId="DemoPhone2" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPhone2" countryCode="1" areaCode="212" contactNumber="681-3029" askForName="Ask for Demo at Demo Lead"/>
+    <PartyContactMech partyId="DemoLead1" contactMechId="DemoPhone2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLead1" contactMechId="DemoPhone2" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    
+    <ContactMech contactMechId="DemoEmail3" contactMechTypeId="EMAIL_ADDRESS" infoString="demo@demolead1.com"/>
+    <PartyContactMech partyId="DemoLead1" contactMechId="DemoEmail3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>  <!-- allow solicitation flag is for DO NOT CALL/MAIL lists -->
+    <PartyContactMechPurpose partyId="DemoLead1" contactMechId="DemoEmail3" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+
+    <!-- supplemental data is just entered like this -->
+    <PartySupplementalData partyId="DemoLead1" companyName="Demo Lead Company" numberEmployees="500" industryEnumId="IND_SOFTWARE" primaryPostalAddressId="DemoAddress3" primaryTelecomNumberId="DemoPhone2" primaryEmailId="DemoEmail3" />
+
+
+    <!-- some ContactMechs for the DemoLeadA -->
+    <!-- a address --> 
+    <ContactMech contactMechId="DemoLeadAddress2" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoLeadAddress2" toName="Demo Lead Account No. 2" address1="91 East 8th Street" city="New York" stateProvinceGeoId="NY" postalCode="10001" countryGeoId="USA"/>
+    <PartyContactMech partyId="DemoLeadA" contactMechId="DemoLeadAddress2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLeadA" contactMechId="DemoLeadAddress2" contactMechPurposeTypeId="PRIMARY_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <!-- a phone number --> 
+    <ContactMech contactMechId="DemoLeadPhone2" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoLeadPhone2" countryCode="1" areaCode="310" contactNumber="322-5111" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="DemoLeadA" contactMechId="DemoLeadPhone2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLeadA" contactMechId="DemoLeadPhone2" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    <!-- a email address --> 
+    <ContactMech contactMechId="DemoLeadEmail2" contactMechTypeId="EMAIL_ADDRESS" infoString="DemoLeadA@DemoLeadA.com"/>
+    <PartyContactMech partyId="DemoLeadA" contactMechId="DemoLeadEmail2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLeadA" contactMechId="DemoLeadEmail2" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoLeadA" primaryPostalAddressId="DemoLeadAddress2" primaryTelecomNumberId="DemoLeadPhone2" primaryEmailId="DemoLeadEmail2" />
+    <!-- some ContactMechs for the DemoLeadB -->
+    <!-- a address --> 
+    <ContactMech contactMechId="DemoLeadAddress3" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoLeadAddress3" toName="Demo Lead Account No. 3" address1="11 NORTH 97th Street" city="New York" stateProvinceGeoId="NY" postalCode="10001" countryGeoId="USA"/>
+    <PartyContactMech partyId="DemoLeadB" contactMechId="DemoLeadAddress3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLeadB" contactMechId="DemoLeadAddress3" contactMechPurposeTypeId="PRIMARY_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <!-- a phone number --> 
+    <ContactMech contactMechId="DemoLeadPhone3" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoLeadPhone3" countryCode="1" areaCode="310" contactNumber="765-3423" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="DemoLeadB" contactMechId="DemoLeadPhone3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLeadB" contactMechId="DemoLeadPhone3" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    <!-- a email address --> 
+    <ContactMech contactMechId="DemoLeadEmail3" contactMechTypeId="EMAIL_ADDRESS" infoString="DemoLeadB@DemoLeadB.com"/>
+    <PartyContactMech partyId="DemoLeadB" contactMechId="DemoLeadEmail3" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLeadB" contactMechId="DemoLeadEmail3" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoLeadB" primaryPostalAddressId="DemoLeadAddress3" primaryTelecomNumberId="DemoLeadPhone3" primaryEmailId="DemoLeadEmail3" />
+    <!-- some ContactMechs for the DemoLeadC -->
+    <!-- a address --> 
+    <ContactMech contactMechId="DemoLeadAddress4" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="DemoLeadAddress4" toName="Demo Lead Account No. 4" address1="823 West Broadway" city="Bangor" stateProvinceGeoId="ME" postalCode="04401" countryGeoId="USA"/>
+    <PartyContactMech partyId="DemoLeadC" contactMechId="DemoLeadAddress4" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLeadC" contactMechId="DemoLeadAddress4" contactMechPurposeTypeId="PRIMARY_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <!-- a phone number --> 
+    <ContactMech contactMechId="DemoLeadPhone4" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoLeadPhone4" countryCode="1" areaCode="207" contactNumber="134-3793" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="DemoLeadC" contactMechId="DemoLeadPhone4" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLeadC" contactMechId="DemoLeadPhone4" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    <!-- a email address --> 
+    <ContactMech contactMechId="DemoLeadEmail4" contactMechTypeId="EMAIL_ADDRESS" infoString="DemoLeadC@DemoLeadC.com"/>
+    <PartyContactMech partyId="DemoLeadC" contactMechId="DemoLeadEmail4" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoLeadC" contactMechId="DemoLeadEmail4" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="DemoLeadC" primaryPostalAddressId="DemoLeadAddress4" primaryTelecomNumberId="DemoLeadPhone4" primaryEmailId="DemoLeadEmail4" />
+
+    <!-- associate the lead to a sales person -->
+    <PartyRelationship partyIdFrom="DemoLead1" roleTypeIdFrom="PROSPECT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" securityGroupId="LEAD_OWNER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR" comments="DemoSalesManager is the lead owner for DemoLead1"/>
+    <PartyRelationship partyIdFrom="DemoLeadA" roleTypeIdFrom="PROSPECT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" securityGroupId="LEAD_OWNER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR" comments="DemoSalesManager is the lead owner for DemoLeadA"/>
+    <PartyRelationship partyIdFrom="DemoLeadB" roleTypeIdFrom="PROSPECT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" securityGroupId="LEAD_OWNER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR" comments="DemoSalesManager is the lead owner for DemoLeadB"/>
+    <PartyRelationship partyIdFrom="DemoLeadC" roleTypeIdFrom="PROSPECT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" securityGroupId="LEAD_OWNER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR" comments="DemoSalesManager is the lead owner for DemoLeadC"/>
+
+    <!-- a sample case.  note that most of the functionality is tied to CustRequestRole, which allows to handle multiple parties on a case, but
+        CustRequest.fromPartyId is filled in for consistency with ofbiz.  See comments in CaseServices.java as well  -->
+    <CustRequest custRequestId="DemoCase1" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_SUBMITTED" priority="5" 
+        fromPartyId="DemoContact1"
+        custRequestName="Demo customer request" description="This is a sample customer request.  Actually nothing is wrong.  Thank you for your attention."/>
+    <CustRequestRole custRequestId="DemoCase1" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
+    <CustRequestRole custRequestId="DemoCase1" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <CustRequestRole custRequestId="DemoCase1" partyId="DemoContact1" roleTypeId="CONTACT"/>
+
+    <!-- an OFBiz WorkEffort can be an event or a task (or a manufacturing step, for that matter).  They can be associated with customer requests, communications,
+        sales opportunities, orders, quotes, and parties.  Why do we associate accounts and contacts with WorkEfforts directly?  Because a WorkEffort can
+        actually be associated with many accounts or cases.  Also, when there is no CustRequest, we would still need some way to associate WorkEffort back
+        to the account or contact party -->
+
+    <!-- a sample event -->
+    <WorkEffort workEffortId="DemoMeeting1" workEffortTypeId="EVENT" workEffortPurposeTypeId="WEPT_MEETING" currentStatusId="EVENT_SCHEDULED" 
+        workEffortName="Sample Meeting about DemoCase1"
+        description="Sample meeting about DemoCase1.  Will discuss customer request and resolution strategies." 
+        estimatedStartDate="2006-01-30 09:00:00" estimatedCompletionDate="2006-01-30 10:00:00"
+        scopeEnumId="WES_PUBLIC"/>
+    <!-- parties of this event.  people who participate are either OWNER (who set up the event) or ATTENDEE (who participated).  ACCOUNT or CONTACT
+        are just related -->
+    <PartyRole partyId="DemoSalesRep1" roleTypeId="CAL_OWNER"/>
+    <PartyRole partyId="DemoSalesRep2" roleTypeId="CAL_ATTENDEE"/>    
+    <PartyRole partyId="DemoSalesManager" roleTypeId="CAL_ATTENDEE"/>    
+    <WorkEffortPartyAssignment workEffortId="DemoMeeting1" partyId="DemoSalesRep1" roleTypeId="CAL_OWNER" fromDate="2007-01-25 00:00:00" statusId="PRTYASGN_ASSIGNED"/>
+    <WorkEffortPartyAssignment workEffortId="DemoMeeting1" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2007-01-25 00:00:00" statusId="PRTYASGN_ASSIGNED"/>
+    <WorkEffortPartyAssignment workEffortId="DemoMeeting1" partyId="DemoContact1" roleTypeId="CONTACT" fromDate="2007-01-25 00:00:00" statusId="PRTYASGN_ASSIGNED"/>
+    <WorkEffortPartyAssignment workEffortId="DemoMeeting1" partyId="DemoSalesRep2" roleTypeId="CAL_ATTENDEE" fromDate="2007-01-25 00:00:00" statusId="PRTYASGN_ASSIGNED"/>
+    <WorkEffortPartyAssignment workEffortId="DemoMeeting1" partyId="DemoSalesManager" roleTypeId="CAL_ATTENDEE" fromDate="2007-01-25 00:00:00" statusId="PRTYASGN_ASSIGNED"/>
+
+    <CustRequestWorkEffort custRequestId="DemoCase1" workEffortId="DemoMeeting1"/>
+    
+    <!-- a sample task -->
+    <WorkEffort workEffortId="DemoTask1" workEffortTypeId="TASK" workEffortPurposeTypeId="WEPT_SUPPORT" currentStatusId="TASK_SCHEDULED"
+        workEffortName="Something to do about DemoCase1"
+        description="A sample task about DemoCase1 which we should take care of."
+        estimatedStartDate="2006-01-30 10:00:00" estimatedCompletionDate="2006-01-30 14:00:00"
+        scopeEnumId="WES_PUBLIC"/>
+    <CustRequestWorkEffort custRequestId="DemoCase1" workEffortId="DemoTask1"/>
+    <WorkEffortPartyAssignment workEffortId="DemoTask1" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2007-01-25 00:00:00" statusId="PRTYASGN_ASSIGNED"/>
+    <WorkEffortPartyAssignment workEffortId="DemoTask1" partyId="DemoContact1" roleTypeId="CONTACT" fromDate="2007-01-25 00:00:00" statusId="PRTYASGN_ASSIGNED"/>
+
+    <!-- a sample private task for DemoSaleRep1 -->
+    <WorkEffort workEffortId="DemoPrivateTask1" workEffortTypeId="TASK" workEffortPurposeTypeId="WEPT_SUPPORT" currentStatusId="TASK_SCHEDULED"
+        workEffortName="DemoSalesRep1 private task"
+        description="A sample private task - top secret."
+        estimatedStartDate="2006-01-30 10:00:00" estimatedCompletionDate="2006-01-30 14:00:00"
+        scopeEnumId="WES_CONFIDENTIAL"/>
+    <WorkEffortPartyAssignment workEffortId="DemoPrivateTask1" partyId="DemoSalesRep1" roleTypeId="CAL_OWNER" fromDate="2007-01-25 00:00:00" statusId="PRTYASGN_ASSIGNED"/>
+    
+    <!-- a sample private task for DemoSaleRep2 -->
+    <WorkEffort workEffortId="DemoPrivateTask2" workEffortTypeId="TASK" workEffortPurposeTypeId="WEPT_SUPPORT" currentStatusId="TASK_SCHEDULED"
+        workEffortName="DemoSalesRep2 private task"
+        description="A sample private task - top secret."
+        estimatedStartDate="2006-01-30 10:00:00" estimatedCompletionDate="2006-01-30 14:00:00"
+        scopeEnumId="WES_CONFIDENTIAL"/>
+    <WorkEffortPartyAssignment workEffortId="DemoPrivateTask2" partyId="DemoSalesRep2" roleTypeId="CAL_OWNER" fromDate="2007-01-25 00:00:00" statusId="PRTYASGN_ASSIGNED"/>    
+ 
+    <!-- Sameple quotes -->
+    <Quote quoteId="DemoQuote1" partyId="DemoAccount1" issueDate="2006-03-01 00:00:00.000" quoteTypeId="PROPOSAL" statusId="QUO_APPROVED" currencyUomId="USD" productStoreId="9000"
+        salesChannelEnumId="WEB_SALES_CHANNEL" quoteName="First Offer to DemoAccount1" description="Here is our first offer as approved in the last meeting."/>
+    <QuoteItem quoteId="DemoQuote1" quoteItemSeqId="00001" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote1" quoteItemSeqId="00002" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote1" quoteItemSeqId="00003" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+
+    <Quote quoteId="DemoQuote2" partyId="DemoAccount1" issueDate="2006-04-01 00:00:00.000" quoteTypeId="PRODUCT_QUOTE" statusId="QUO_APPROVED" currencyUomId="USD" productStoreId="9000"
+        salesChannelEnumId="WEB_SALES_CHANNEL" quoteName="Standard Offer" description="Propose the standard offer for support contracts."/>
+    <QuoteItem quoteId="DemoQuote2" quoteItemSeqId="00001" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote2" quoteItemSeqId="00002" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote2" quoteItemSeqId="00003" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote2" quoteItemSeqId="00004" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+
+    <Quote quoteId="DemoQuote3" partyId="DemoAccount1" issueDate="2006-04-01 00:00:00.000" quoteTypeId="PRODUCT_QUOTE" statusId="QUO_APPROVED" currencyUomId="USD" productStoreId="9000"
+            salesChannelEnumId="WEB_SALES_CHANNEL" quoteName="Big Quote" description="Quote with lots of items."/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00001" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00002" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00003" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00004" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00005" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00006" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00007" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00008" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00009" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00010" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00011" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00012" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00013" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00014" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00015" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00016" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00017" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00018" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00019" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00020" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00021" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00022" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00023" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00024" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00025" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00026" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00027" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00028" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00029" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00030" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00031" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00032" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00033" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00034" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00035" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00036" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00037" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00038" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00039" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00040" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00041" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00042" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00043" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00044" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00045" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00046" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00047" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00048" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00049" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00050" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00051" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00052" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00053" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00054" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00055" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00056" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00057" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00058" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00059" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00060" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00061" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00062" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00063" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00064" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00065" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00066" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00067" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00068" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00069" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00070" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00071" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00072" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00073" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00074" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00075" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00076" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00077" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00078" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00079" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00080" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00081" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00082" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00083" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00084" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00085" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00086" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00087" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00088" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00089" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00090" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00091" productId="GZ-1006-1" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00092" productId="GZ-1006-2" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00093" productId="GZ-1006-3" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00094" productId="GZ-1006-4" quantity="1.0" quoteUnitPrice="1.00" isPromo="N"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00095" productId="GZ-2644" quantity="10.0" quoteUnitPrice="30.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00096" productId="GZ-8544" quantity="10.0" quoteUnitPrice="230.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00097" productId="WG-5569" quantity="5.0" quoteUnitPrice="40.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00098" productId="GZ-1000" quantity="8.0" quoteUnitPrice="15.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00099" productId="GZ-1001" quantity="9.0" quoteUnitPrice="12.00" isPromo="Y"/>
+    <QuoteItem quoteId="DemoQuote3" quoteItemSeqId="00100" productId="GZ-1004" quantity="5.0" quoteUnitPrice="3.00" isPromo="Y"/>
+
+    <!-- Associate the sample quotes with the demo opportunities -->
+    <SalesOpportunityQuote quoteId="DemoQuote1" salesOpportunityId="DemoOpportunity1"/>
+    <SalesOpportunityQuote quoteId="DemoQuote2" salesOpportunityId="DemoOpportunity2"/>
+
+    <!-- Assign the admin user to an account for demo purposes --> 
+   <UserLoginSecurityGroup userLoginId="flexadmin" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+   <UserLoginSecurityGroup userLoginId="ltdadmin" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+    <PartyRelationship partyIdTo="admin" roleTypeIdTo="ACCOUNT_MANAGER" partyIdFrom="DemoAccount1" roleTypeIdFrom="ACCOUNT" securityGroupId="SALES_MANAGER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="ASSIGNED_TO" comments="admin is now a full rep for DemoAccount1, with view/update permissions"/>
+        
+    <!-- Demo marketing campaign with email and outbound phone lists -->
+    <MarketingCampaign marketingCampaignId="DEMO_MKTG_CAMP" statusId="MKTG_CAMP_INPROGRESS" campaignName="Demo Marketing Campaign" fromDate="2006-01-01 00:00:00"/> 
+    <ContactList contactListId="DEMO_LIST_EMAIL" contactListTypeId="MARKETING" contactMechTypeId="EMAIL_ADDRESS" marketingCampaignId="DEMO_MKTG_CAMP" contactListName="Demo Email List" ownerPartyId="Company"/>
+    <MarketingCampaignContactList campaignListId="DEMO_LE_MC" contactListId="DEMO_LIST_EMAIL" marketingCampaignId="DEMO_MKTG_CAMP" fromDate="2006-01-01 00:00:00"/>
+    <ContactList contactListId="DEMO_LIST_PHONEOUT" contactListTypeId="MARKETING" contactMechTypeId="TELECOM_NUMBER" marketingCampaignId="DEMO_MKTG_CAMP" contactListName="Demo Outbound Phone List" ownerPartyId="Company"/>
+
+    <!-- Party classification for privileged customers -->
+    <PartyClassificationGroup partyClassificationGroupId="PRIVILEGED_CUSTOMERS" partyClassificationTypeId="PCT_PRICING" description="Privileged Customers"/>
+
+    <!-- Price rule for privileged customers -->
+    <ProductPriceRule productPriceRuleId="PrivCustPR1" ruleName="25% Discount for Privileged Customers" isSale="Y"/>
+    <ProductPriceCond condValue="PRIVILEGED_CUSTOMERS" inputParamEnumId="PRIP_PARTY_CLASS" operatorEnumId="PRC_EQ" productPriceCondSeqId="01" productPriceRuleId="PrivCustPR1"/>
+    <ProductPriceAction amount="-25.0" productPriceActionSeqId="01" productPriceActionTypeId="PRICE_POL" productPriceRuleId="PrivCustPR1"/>
+    
+    <!-- Demo privileged customer -->
+    <Party partyId="DemoPrivilegedCust" partyTypeId="PERSON"/>
+    <Person partyId="DemoPrivilegedCust" firstName="Demo" lastName="Privileged Customer"/>
+    <UserLogin partyId="DemoPrivilegedCust" userLoginId="DemoPrivilegedCust"/>
+    <PartyRole partyId="DemoPrivilegedCust" roleTypeId="CUSTOMER"/>
+    <PartyRole partyId="DemoPrivilegedCust" roleTypeId="BILL_TO_CUSTOMER"/>
+    <PartyClassification partyId="DemoPrivilegedCust" partyClassificationGroupId="PRIVILEGED_CUSTOMERS" fromDate="2007-01-01 00:00:00"/>
+    <ContactMech contactMechId="PrivCustCM1" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="PrivCustCM1" toName="Demo Privileged Customer" address1="315 Bowery" city="New York" stateProvinceGeoId="NY" postalCode="10003-7105" countryGeoId="USA"/>
+    <PartyContactMech partyId="DemoPrivilegedCust" contactMechId="PrivCustCM1" fromDate="2007-01-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoPrivilegedCust" contactMechId="PrivCustCM1" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2007-01-01 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="DemoPrivilegedCust" contactMechId="PrivCustCM1" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2007-01-01 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="DemoPrivilegedCust" contactMechId="PrivCustCM1" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2007-01-01 00:00:00.000"/>
+    <ContactMech contactMechId="PrivCustCM2" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="PrivCustCM2" areaCode="800" contactNumber="555-5555"/>
+    <PartyContactMech partyId="DemoPrivilegedCust" contactMechId="PrivCustCM2" fromDate="2007-01-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoPrivilegedCust" contactMechId="PrivCustCM2" contactMechPurposeTypeId="PHONE_HOME" fromDate="2007-01-01 00:00:00.000"/>
+    <ContactMech contactMechId="PrivCustCM3" contactMechTypeId="EMAIL_ADDRESS" infoString="demoprivcust@opentaps.org"/>
+    <PartyContactMech partyId="DemoPrivilegedCust" contactMechId="PrivCustCM3" fromDate="2007-01-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoPrivilegedCust" contactMechId="PrivCustCM3" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2007-01-01 00:00:00.000"/>
+    <PaymentMethod paymentMethodId="PrivCustPM1" paymentMethodTypeId="CREDIT_CARD" partyId="DemoPrivilegedCust" fromDate="2007-01-01 00:00:00.000"/>
+    <CreditCard paymentMethodId="PrivCustPM1" cardType="Visa" cardNumber="4111111111111111" expireDate="01/2012"
+        firstNameOnCard="Demo" middleNameOnCard="Privileged" lastNameOnCard="Customer" suffixOnCard="" contactMechId="PrivCustCM1"/>
+    <PartySupplementalData partyId="DemoPrivilegedCust" importantNote="This customer gets 25% off because he's part of the PRIVILEDGED_CUSTOMERS PartyClassificationGroup" primaryPostalAddressId="PrivCustCM1" primaryEmailId="PrivCustCM3" />
+
+    <!-- Special "don't ship to me" party to prevent shipping logic for some kinds of customers. -->
+    <Party partyId="dontship2me" partyTypeId="PERSON"/>
+    <Person partyId="dontship2me" firstName="Don't Ship" lastName="To Me"/>
+    <PartyRole partyId="dontship2me" roleTypeId="CONTACT"/>
+    <PartyRelationship partyIdFrom="dontship2me" roleTypeIdFrom="CONTACT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" securityGroupId="SALES_MANAGER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="CONTACT_REL_INV" comments="dontship2me is a contact of DemoSalesManager"/>
+    <PartyClassification partyId="dontship2me" partyClassificationGroupId="DONOTSHIP_CUSTOMERS" fromDate="2007-01-01 00:00:00.000"/>
+    <PartyContactMech partyId="dontship2me" contactMechId="DemoAddress" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="dontship2me" contactMechId="DemoAddress" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="dontship2me" contactMechId="DemoAddress" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMechPurpose partyId="dontship2me" contactMechId="DemoAddress" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartyContactMech partyId="dontship2me" contactMechId="DemoPhone" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="dontship2me" contactMechId="DemoPhone" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000"/>
+    <PartySupplementalData partyId="dontship2me" primaryPostalAddressId="DemoAddress" primaryTelecomNumberId="DemoPhone" />
+
+    <!-- Specific "DemoContact1" party to GOOD_CUSTOMERS & NEW_CUSTOMERS partyClassification. -->
+    <PartyClassification partyId="DemoContact1" partyClassificationGroupId="GOOD_CUSTOMERS" fromDate="2007-01-01 00:00:00.000"/>
+    <PartyClassification partyId="DemoContact1" partyClassificationGroupId="NEW_CUSTOMERS" fromDate="2007-01-01 00:00:00.000"/>
+
+    <!-- Specific classification of content for the CRM application -->
+    <Enumeration description="Schematics" enumCode="1" enumId="SCHEMATICS" sequenceId="01" enumTypeId="CONTENT_CLASS"/>
+    <Enumeration description="Artwork" enumCode="2" enumId="ARTWORK" sequenceId="02" enumTypeId="CONTENT_CLASS"/>
+    <Enumeration description="Contract" enumCode="3" enumId="CONTRACT" sequenceId="03" enumTypeId="CONTENT_CLASS"/>
+    <Enumeration description="Other" enumCode="9" enumId="OTHER" sequenceId="09" enumTypeId="CONTENT_CLASS"/>
+</entity-engine-xml>

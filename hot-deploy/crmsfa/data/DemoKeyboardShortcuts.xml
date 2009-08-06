@@ -1,0 +1,43 @@
+<entity-engine-xml>
+<!--
+ * Copyright (c) 2009 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+ 
+    <!-- Crmsfa Keyboard shortcuts demo data -->
+    <KeyboardShortcut shortcutId="CRMSFA_FIND_LEADS" sequenceNum="110" shortcut="shift+f1" actionTypeId="KB_URL" actionTarget="findLeads" applicationName="crmsfa" description="Find Leads" />
+    <KeyboardShortcut shortcutId="CRMSFA_CREATE_LEADS" sequenceNum="111" shortcut="f1" actionTypeId="KB_URL" actionTarget="createLeadForm" applicationName="crmsfa" description="Create a Lead" />
+
+    <KeyboardShortcut shortcutId="CRMSFA_FIND_CTACTS" sequenceNum="112" shortcut="shift+f2" actionTypeId="KB_URL" actionTarget="findContacts" applicationName="crmsfa" description="Find Contacts" />
+    <KeyboardShortcut shortcutId="CRMSFA_CREATE_CTACTS" sequenceNum="113" shortcut="f2" actionTypeId="KB_URL" actionTarget="createContactForm" applicationName="crmsfa" description="Create a Contact" />
+
+    <KeyboardShortcut shortcutId="CRMSFA_FIND_ACCNTS" sequenceNum="114" shortcut="shift+f3" actionTypeId="KB_URL" actionTarget="findAccounts" applicationName="crmsfa" description="Find Accounts" />
+    <KeyboardShortcut shortcutId="CRMSFA_CREATE_ACCNTS" sequenceNum="115" shortcut="f3" actionTypeId="KB_URL" actionTarget="createAccountForm" applicationName="crmsfa" description="Create an Account" />
+
+    <KeyboardShortcut shortcutId="CRMSFA_FIND_CASES" sequenceNum="116" shortcut="shift+f4" actionTypeId="KB_URL" actionTarget="findCases" applicationName="crmsfa" description="Find Cases" />
+
+    <KeyboardShortcut shortcutId="CRMSFA_FIND_ACTVTS" sequenceNum="118" shortcut="shift+f5" actionTypeId="KB_URL" actionTarget="activitiesMain" applicationName="crmsfa" description="Find Activities" />
+    <KeyboardShortcut shortcutId="CRMSFA_CREATE_ACTVTS" sequenceNum="119" shortcut="f4" actionTypeId="KB_URL" actionTarget="createCaseForm" applicationName="crmsfa" description="Create an Activity" />
+
+    <KeyboardShortcut shortcutId="CRMSFA_FIND_OPPRT" sequenceNum="120" shortcut="shift+f6" actionTypeId="KB_URL" actionTarget="findOpportunities" applicationName="crmsfa" description="Find Opportunities" />
+    <KeyboardShortcut shortcutId="CRMSFA_CREATE_OPPRTS" sequenceNum="121" shortcut="f6" actionTypeId="KB_URL" actionTarget="createOpportunityForm" applicationName="crmsfa" description="Create an Opportunity" />
+
+    <KeyboardShortcut shortcutId="CRMSFA_FIND_QUOTES" sequenceNum="122" shortcut="shift+f7" actionTypeId="KB_URL" actionTarget="findQuotes" applicationName="crmsfa" description="Find Quotes" />
+    <KeyboardShortcut shortcutId="CRMSFA_CREATE_QUOTES" sequenceNum="123" shortcut="f7" actionTypeId="KB_URL" actionTarget="EditQuote" applicationName="crmsfa" description="Create a Quote" />
+
+    <KeyboardShortcut shortcutId="CRMSFA_FIND_ORDERD" sequenceNum="124" shortcut="shift+f8" actionTypeId="KB_URL" actionTarget="findOrders" applicationName="crmsfa" description="Find Orders" />
+    <KeyboardShortcut shortcutId="CRMSFA_CREATE_ORDERS" sequenceNum="125" shortcut="f8" actionTypeId="KB_URL" actionTarget="createOrderMainScreen" applicationName="crmsfa" description="Create an Order" />
+
+</entity-engine-xml>

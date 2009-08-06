@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- Catalog request survey demo -->
+
+<entity-engine-xml>
+
+    <!-- this is the parent marketing campaign of all the marketing campaigns to be shown on the catalog request page.
+        you can customize/extend it by creating your own marketing campaigns, and as long as their parentCampaignId is this campaign,
+        they will also show up on the catalog request page -->
+    <MarketingCampaign marketingCampaignId="CATRQ_CAMPAIGNS" statusId="MKTG_CAMP_INPROGRESS" campaignName="Catalog Generating Marketing Campaigns" fromDate="2006-01-01 00:00:00"/> 
+
+    <MarketingCampaign marketingCampaignId="CATRQ_ROADNTRACK" parentCampaignId="CATRQ_CAMPAIGNS" statusId="MKTG_CAMP_INPROGRESS" campaignName="Road and Track" fromDate="2006-01-01 00:00:00"/>
+    <MarketingCampaign marketingCampaignId="CATRQ_CARNDRIVER" parentCampaignId="CATRQ_CAMPAIGNS" statusId="MKTG_CAMP_INPROGRESS" campaignName="Car and Driver" fromDate="2006-01-01 00:00:00"/>
+    <MarketingCampaign marketingCampaignId="CATRQ_AUTOMOBILE" parentCampaignId="CATRQ_CAMPAIGNS" statusId="MKTG_CAMP_INPROGRESS" campaignName="Automobile" fromDate="2006-01-01 00:00:00"/>
+
+    <TrackingCode trackingCodeId="ROADNTRACK1" trackingCodeTypeId="EXTERNAL" marketingCampaignId="CATRQ_ROADNTRACK" trackableLifetime="2592000" billableLifetime="2592000" description="Road and Track Advertisement"/>
+    
+    <!-- some sample contact lists for fulfilling catalog requests -->
+    <ContactList contactListId="CATRQ_MAILING_1" contactListTypeId="MARKETING" contactMechTypeId="POSTAL_ADDRESS" marketingCampaignId="CATRQ_CAMPAIGNS" contactListName="Catalog Request Mailing - Domestic List" ownerPartyId="Company"/>
+    <ContactList contactListId="CATRQ_MAILING_2" contactListTypeId="MARKETING" contactMechTypeId="POSTAL_ADDRESS" marketingCampaignId="CATRQ_CAMPAIGNS" contactListName="Catalog Request Mailing - Foreign List" ownerPartyId="Company"/>
+
+    
+    <!-- this survey is for creating catalog requests. -->  
+    <SurveyQuestionCategory surveyQuestionCategoryId="CATRQ" description="Catalog Request Survey Questions"/>
+    <Survey surveyId="CATRQ_SURVEY" surveyName="Catalog Request Survey" description="This survey will be rendered on the catalog request page" submitCaption="Request Catalog" comments="To request a catalog, please fill out the fields below." isAnonymous="Y" allowMultiple="Y" allowUpdate="N" lastUpdatedStamp="2004-11-15 00:00:00.000" lastUpdatedTxStamp="2004-11-15 00:00:00.000"/>
+
+    <SurveyQuestion surveyQuestionId="CATRQ_WHY_REQD" surveyQuestionCategoryId="CATRQ" surveyQuestionTypeId="OPTION" description="Requesting catalog for:" question="I am requesting this catalog for:" lastUpdatedStamp="2004-11-15 00:00:00.000" lastUpdatedTxStamp="2004-11-15 00:00:00.000"/>
+    <SurveyQuestion surveyQuestionId="CATRQ_CAR_TYPE" surveyQuestionCategoryId="CATRQ" surveyQuestionTypeId="OPTION" description="Car type" question="My car is a:" lastUpdatedStamp="2004-11-15 00:00:00.000" lastUpdatedTxStamp="2004-11-15 00:00:00.000"/>
+    <SurveyQuestion surveyQuestionId="CATRQ_CAR_TYPE_OT" surveyQuestionCategoryId="CATRQ" surveyQuestionTypeId="TEXT_LONG" description="Car type (other)" question="Describe your car" lastUpdatedStamp="2004-11-15 00:00:00.000" lastUpdatedTxStamp="2004-11-15 00:00:00.000"/>
+        
+    <SurveyQuestionAppl surveyId="CATRQ_SURVEY" surveyQuestionId="CATRQ_WHY_REQD" fromDate="2001-01-01 00:00:00.0" requiredField="Y" sequenceNum="1" lastUpdatedStamp="2004-11-15 00:00:00.000" lastUpdatedTxStamp="2004-11-15 00:00:00.000"/>
+    <SurveyQuestionAppl surveyId="CATRQ_SURVEY" surveyQuestionId="CATRQ_CAR_TYPE" fromDate="2001-01-01 00:00:00.0" requiredField="N" sequenceNum="2" lastUpdatedStamp="2004-11-15 00:00:00.000" lastUpdatedTxStamp="2004-11-15 00:00:00.000"/>
+    <SurveyQuestionAppl surveyId="CATRQ_SURVEY" surveyQuestionId="CATRQ_CAR_TYPE_OT" fromDate="2001-01-01 00:00:00.0" requiredField="N" sequenceNum="3" lastUpdatedStamp="2004-11-15 00:00:00.000" lastUpdatedTxStamp="2004-11-15 00:00:00.000"/>
+    
+    <!-- the surveyOptionSeqId should correspond to a geoId in the system framework/common/data/GeoData_X.xml -->
+    <SurveyQuestionOption surveyQuestionId="CATRQ_WHY_REQD" surveyOptionSeqId="01" description="Personal" sequenceNum="1"/>
+    <SurveyQuestionOption surveyQuestionId="CATRQ_WHY_REQD" surveyOptionSeqId="02" description="Business" sequenceNum="2"/>
+  
+    <SurveyQuestionOption surveyQuestionId="CATRQ_CAR_TYPE" surveyOptionSeqId="01" description="Sunbeam Alpine" sequenceNum="1"/>
+    <SurveyQuestionOption surveyQuestionId="CATRQ_CAR_TYPE" surveyOptionSeqId="02" description="Aston Martin DB-5" sequenceNum="2"/>
+    <SurveyQuestionOption surveyQuestionId="CATRQ_CAR_TYPE" surveyOptionSeqId="03" description="Bentley Continental R" sequenceNum="3"/>
+    <SurveyQuestionOption surveyQuestionId="CATRQ_CAR_TYPE" surveyOptionSeqId="04" description="Toyota 2000" sequenceNum="4"/>
+    <SurveyQuestionOption surveyQuestionId="CATRQ_CAR_TYPE" surveyOptionSeqId="05" description="Aston Martin DBS" sequenceNum="5"/>
+    <SurveyQuestionOption surveyQuestionId="CATRQ_CAR_TYPE" surveyOptionSeqId="06" description="Lotus Esprit" sequenceNum="6"/>
+    <SurveyQuestionOption surveyQuestionId="CATRQ_CAR_TYPE" surveyOptionSeqId="07" description="Citroen 2CV" sequenceNum="7"/>
+    <SurveyQuestionOption surveyQuestionId="CATRQ_CAR_TYPE" surveyOptionSeqId="08" description="Aston Martin Volante" sequenceNum="8"/>
+    <SurveyQuestionOption surveyQuestionId="CATRQ_CAR_TYPE" surveyOptionSeqId="09" description="BMW Z3" sequenceNum="9"/>
+
+    <TrackingCode trackingCodeId="9100" trackingCodeTypeId="INTERNAL" marketingCampaignId="CATRQ_ROADNTRACK" description="Road N Track Ad"/> 
+    <TrackingCode trackingCodeId="9101" trackingCodeTypeId="INTERNAL" marketingCampaignId="CATRQ_CARNDRIVER" description="Car and Driver Ad"/> 
+    <TrackingCode trackingCodeId="9102" trackingCodeTypeId="INTERNAL" marketingCampaignId="CATRQ_AUTOMOBILE" description="Automobile Mag Ad"/> 
+
+    
+</entity-engine-xml>

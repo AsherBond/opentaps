@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <!-- this form uses donePageRequestHelper to get back to donePage -->
+    <form name="addContentUrlForm" type="single" target="${formTarget}?donePage=${donePage}" title=""
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="classificationEnumId" title="${uiLabelMap.OpentapsContentClassification}">
+            <drop-down allow-empty="false" no-current-selected-key="${defaultContentClassId}">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="CONTENT_CLASS"/>                
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>        
+        <field name="url" title="${uiLabelMap.CrmUrlAddress}" title-style="requiredField"><text size="60" default-value="http://"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+        <field name="partyId" use-when="parameters.get(&quot;orderId&quot;)==null"><hidden/></field>
+        <field name="custRequestId"><hidden/></field>
+        <field name="salesOpportunityId"><hidden/></field>
+        <field name="workEffortId"><hidden/></field>
+        <field name="orderId"><hidden/></field>
+        <field name="quoteId"><hidden/></field>
+        <field name="contentTypeId"><hidden value="HYPERLINK"/></field>
+        <field name="submitButton" title="${uiLabelMap.CrmAddUrl}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="uploadContentForm" type="upload" target="${formTarget}" title=""
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="donePage"><hidden/></field>
+        <field name="classificationEnumId" title="${uiLabelMap.OpentapsContentClassification}">
+            <drop-down allow-empty="false" no-current-selected-key="${defaultContentClassId}">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="CONTENT_CLASS"/>                
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>        
+        <field name="uploadedFile"><file/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+        <field name="partyId" use-when="parameters.get(&quot;orderId&quot;)==null"><hidden/></field>
+        <field name="custRequestId"><hidden/></field>
+        <field name="salesOpportunityId"><hidden/></field>
+        <field name="workEffortId"><hidden/></field>
+        <field name="orderId"><hidden/></field>
+        <field name="quoteId"><hidden/></field>
+        <field name="contentTypeId"><hidden value="FILE"/></field>
+        <field name="submitButton" title="" use-when="parameters.get(&quot;orderId&quot;)!=null" widget-style="smallSubmit">
+            <hyperlink also-hidden="false" description="${uiLabelMap.CommonUpload}" target="javascript:opentaps.checkUploadFile(document.uploadContentForm, '${parameters.orderId}', document.uploadContentForm.uploadedFile.value, '${uiLabelMap.OpentapsConfirmOverwriteContent}');" target-type="plain"/> 
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpload}" widget-style="smallSubmit"  use-when="parameters.get(&quot;orderId&quot;)==null"><submit button-type="button"/></field>
+    </form>
+
+    <form name="updateContentForm" type="single" target="${formTarget}?donePage=${donePage}" title="" default-map-name="contentInfo"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="classificationEnumId" title="${uiLabelMap.OpentapsContentClassification}">
+            <drop-down allow-empty="false" no-current-selected-key="${defaultContentClassId}">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="CONTENT_CLASS"/>                
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>        
+        <field name="url" title="${uiLabelMap.CrmUrlAddress}" title-style="requiredField"
+            use-when="&quot;HYPERLINK&quot;.equals(parameters.get(&quot;contentTypeId&quot;))">
+            <text size="60"/>
+        </field>
+        <field name="contentName" title="${uiLabelMap.CommonName}" title-style="requiredField"
+            use-when="&quot;HYPERLINK&quot;.equals(parameters.get(&quot;contentTypeId&quot;))">
+            <text size="40"/>
+        </field>
+        <field name="contentName" title="${uiLabelMap.CommonName}" title-style="requiredField" widget-style="tabletext"
+            use-when="&quot;FILE&quot;.equals(parameters.get(&quot;contentTypeId&quot;))">
+            <display/>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+        <field name="contentId"><hidden/></field>
+        <field name="partyId" use-when="parameters.get(&quot;orderId&quot;)==null"><hidden value="${parameters.partyId}"/></field>
+        <field name="custRequestId"><hidden value="${parameters.custRequestId}"/></field>
+        <field name="salesOpportunityId"><hidden value="${parameters.salesOpportunityId}"/></field>
+        <field name="workEffortId"><hidden value="${parameters.workEffortId}"/></field>
+        <field name="orderId"><hidden value="${parameters.orderId}"/></field>
+        <field name="quoteId"><hidden value="${parameters.quoteId}"/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+</forms>

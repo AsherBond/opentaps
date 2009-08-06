@@ -1,0 +1,115 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/* This script simply finds activities by workEffortName from parameter, it is used by findActivities */
+
+import java.sql.Timestamp ;
+import org.ofbiz.base.util.* ;
+import org.ofbiz.entity.condition.* ;
+import org.ofbiz.entity.util.*;
+import com.opensourcestrategies.crmsfa.activities.UtilActivity;
+import com.opensourcestrategies.crmsfa.activities.ActivitiesHelper;
+import org.opentaps.common.util.UtilDate;
+import org.opentaps.common.util.UtilCommon;
+
+timeZone = UtilHttp.getTimeZone(request);
+locale = UtilHttp.getLocale(request);
+
+workEffortName = parameters.get( "workEffortName" ) ;
+currentStatusId = parameters.get( "currentStatusId" ) ;
+fromDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "fromDate", locale), timeZone, locale);
+thruDate = UtilDate.toTimestamp(UtilHttp.makeParamValueFromComposite(request, "thruDate", locale), timeZone, locale);
+
+// don't do anything if no input (it's harder to have a default find all)
+if ( UtilValidate.isEmpty( workEffortName ) && UtilValidate.isEmpty( currentStatusId ) && UtilValidate.isEmpty( fromDate ) && UtilValidate.isEmpty( thruDate ) ) return;
+workEffortName = UtilFormatOut.checkNull( workEffortName ).trim() ;
+currentStatusId = UtilFormatOut.checkNull( currentStatusId ).trim() ;
+
+searchConditions = UtilMisc.toList( new EntityExpr( "workEffortTypeId" , EntityOperator.IN , ActivitiesHelper.ACTIVITY_WORKEFFORT_IDS ) ) ;
+
+if ( ! UtilValidate.isEmpty( workEffortName ) ) {
+    searchConditions.add( new EntityExpr( "workEffortName" , true, EntityOperator.LIKE , "%" + workEffortName + "%" , true ) ) ;        
+}
+
+fieldsToSelect = UtilMisc.toList( "workEffortId" , "workEffortName" , "workEffortTypeId"  , "workEffortPurposeTypeId", "currentStatusId" ) ;
+fieldsToSelect.add( "actualStartDate" ) ;     
+fieldsToSelect.add( "actualCompletionDate" ) ;     
+fieldsToSelect.add( "estimatedStartDate" ) ;     
+fieldsToSelect.add( "estimatedCompletionDate" ) ;
+
+// this may have to be expanded later if we mean to only show activities of this user and hence search on distinct
+// activities in WorkEffortPartyAssign.  See findParties... scripts for examples.
+
+if ( UtilValidate.isEmpty( currentStatusId ) ) {
+    acceptableStatusIds = UtilMisc.toList( "TASK_STARTED" , "TASK_COMPLETED" , "TASK_CANCELLED" , "EVENT_STARTED" , "EVENT_COMPLETED" , "EVENT_CANCELLED" ) ;
+    acceptableStatusIds.add( "TASK_SCHEDULED" ) ;
+    acceptableStatusIds.add( "EVENT_SCHEDULED" ) ;
+    acceptableStatusIds.add( "TASK_ON_HOLD" ) ;
+    acceptableStatusIds.add( "EVENT_ON_HOLD" ) ;
+    searchConditions.add( new EntityExpr( "currentStatusId" , EntityOperator.IN , acceptableStatusIds ) ) ;        
+} else {
+    searchConditions.add( new EntityExpr( "currentStatusId" , EntityOperator.IN , UtilMisc.toList( "TASK" + currentStatusId , "EVENT" + currentStatusId ) ) ) ;        
+}
+
+// if user has activity admin permission he/she can view all activities
+// if he/she doesn't we must filter with additional security scope conditions
+if (!security.hasEntityPermission("CRMSFA", "_ACT_ADMIN", userLogin)) {
+    // additional security scope conditions for users WITHOUT CRMSFA_ACT_ADMIN permission
+    securityScopeMainCond = UtilActivity.getSecurityScopeCondition(userLogin);
+    searchConditions.add(securityScopeMainCond);
+    searchConditions.add(EntityUtil.getFilterByDateExpr());    
+}    
+
+activities = delegator.findByCondition("WorkEffortAndPartyAssign",
+                            new EntityConditionList(searchConditions, EntityOperator.AND),
+                            null,
+                            fieldsToSelect,
+                            UtilMisc.toList( "actualStartDate" , "estimatedStartDate" ),
+                            UtilCommon.DISTINCT_READ_OPTIONS);    
+
+completedActivities = new ArrayList() ;        
+pendingActivities = new ArrayList() ;        
+
+if( activities != null ) {        
+    ait = activities.iterator() ;
+    while( ait.hasNext() ) {
+        activity = ait.next() ;        
+        statusId = activity.getString( "currentStatusId" ) ;        
+        if ( statusId.equals( "EVENT_COMPLETED" ) || statusId.equals( "TASK_COMPLETED" ) ) {
+            completedActivities.add( activity ) ;
+        } else {
+            pendingActivities.add( activity ) ;
+        }
+    }
+}
+            
+if ( ! UtilValidate.isEmpty( fromDate ) ) {
+    completedActivities = EntityUtil.filterByCondition( completedActivities , new EntityConditionList( UtilMisc.toList( new EntityExpr( "actualStartDate" , EntityOperator.NOT_EQUAL , null ) , new EntityExpr( "actualStartDate" , EntityOperator.GREATER_THAN_EQUAL_TO , fromDate ) ) , EntityOperator.AND ) ) ;
+    pendingActivities = EntityUtil.filterByCondition( pendingActivities , new EntityConditionList( UtilMisc.toList( new EntityExpr( "estimatedStartDate" , EntityOperator.NOT_EQUAL , null ) , new EntityExpr( "estimatedStartDate" , EntityOperator.GREATER_THAN_EQUAL_TO , fromDate ) ) , EntityOperator.AND ) ) ;
+}
+if ( ! UtilValidate.isEmpty( thruDate ) ) {
+    completedActivities = EntityUtil.filterByCondition( completedActivities , new EntityConditionList( UtilMisc.toList( new EntityExpr( "actualStartDate" , EntityOperator.NOT_EQUAL , null ) , new EntityExpr( "actualStartDate" , EntityOperator.LESS_THAN_EQUAL_TO , thruDate ) ) , EntityOperator.AND ) ) ;
+    pendingActivities = EntityUtil.filterByCondition( pendingActivities , new EntityConditionList( UtilMisc.toList( new EntityExpr( "estimatedStartDate" , EntityOperator.NOT_EQUAL , null ) , new EntityExpr( "estimatedStartDate" , EntityOperator.LESS_THAN_EQUAL_TO , thruDate ) ) , EntityOperator.AND ) ) ;
+}
+
+context.put("completedActivities", completedActivities);
+context.put("pendingActivities", pendingActivities);
+
+// since this is a find script, we need to put the search parameters in a map for use by the form header-links
+context.put("activityValueParams", "workEffortName=" + workEffortName);
+context.put("fromDate",fromDate);
+context.put("thruDate",thruDate);

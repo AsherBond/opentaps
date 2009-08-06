@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  @author Si Chen (sichen@opensourcestrategies.com)
+ *  @author Leon Torres (leon@opensourcestrategies.com) 
+-->
+
+<!-- name of the component which is used in references starting with "component://" throughout.  Also must not duplicate any other component name -->
+<ofbiz-component name="crmsfa"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+    <resource-loader name="main" type="component"/>
+
+    <!-- class path for Java build files, config properties files, and script files -->
+    <classpath type="dir" location="config"/>
+    <classpath type="dir" location="script"/>
+    <classpath type="jar" location="lib/*"/>
+    <classpath type="jar" location="build/lib/*"/>
+
+    <!-- seed data which will be loaded on "ant run install" and "ant run install-seed" -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/CRMSFASeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/CRMSFASecurityData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/CRMSFACatalogRequestData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/CRMSFAReturnSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/USPS_SeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ContextHelpResourceSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/ReportSeedData.xml"/>
+
+    <!-- demo data which will be loaded only on "ant run install" -->
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFASampleSeedData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFAOFBizSecurityData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFADemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFADemoCatalogRequest.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFADemoChartData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/CRMSFADemoCommission.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/USPS_DemoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoCreditLimit.xml"/>
+
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoMergeForm.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoCountyTaxRate.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/DemoKeyboardShortcuts.xml"/>
+
+    <!-- this file defines the data model specific to this application -->
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_usps.xml"/>
+    <!-- this file associates the data model's entities (analogous to tables or objects) with a "group" which is then associated with a
+        delegator in entityengine.xml.  The delegator is then associated with a database -->
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+
+    <!-- Entity ECAs -->
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_activities.xml"/>
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_party.xml"/>
+
+    <!-- service definition files -->
+    <service-resource type="model" loader="main" location="servicedef/services_accounts.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_common.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_contacts.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_content.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_leads.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_partners.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_opportunities.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_cases.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_activities.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_forecasts.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_teams.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_party.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_notes.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_datasources.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_marketing.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_orders.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_voip.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_returns.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_quotes.xml"/>
+
+    <!-- eca service chain files -->
+    <service-resource type="eca" loader="main" location="servicedef/secas_accounts.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_activities.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_contacts.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_leads.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_orders.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_teams.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_returns.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_cases.xml"/>    
+    <service-resource type="eca" loader="main" location="servicedef/secas_party.xml"/> 
+    <service-resource type="eca" loader="main" location="servicedef/secas_quotes.xml"/>   
+
+    
+    <!-- this MCA or mail-condition-action is used for sorting incoming emails -->
+    <service-resource type="mca" loader="main" location="servicedef/smcas.xml"/>
+
+    <!-- These are here for reference, should we ever need them.
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_foo.xml"/>
+    <service-resource type="group" loader="main" location="servicedef/groups_foo.xml"/>
+    -->
+
+   <!-- webapps
+     "location" is the directory of the files for this webapp
+     "mount-point" is where this is mounted for the web server 
+     "base-permission" is the prefix of security permission required for accessing this webapp.  In this case, the user must have
+     CRMSFA_VIEW or CRMSFA_MANAGER permission.
+     "app-bar-display" controls if the application will show up on the OFBIZ app header along with Accounting, Catalog, Order, etc.-->
+    <webapp name="crmsfa"
+        title="CRMSFA"
+        server="default-server"
+        location="webapp/crmsfa"
+        mount-point="/crmsfa"
+        base-permission="CRMSFA"
+        app-bar-display="true"/>
+    <webapp name="crmsfagwt"
+        title="GWT Part of CRMSFA"
+        server="default-server"
+        location="webapp/crmsfagwt"
+        mount-point="/crmsfagwt"
+        app-bar-display="false"/>
+   <webapp name="crm_images"
+        title="Images for the CRM Application"
+        server="default-server"
+        location="webapp/crm_images" 
+        mount-point="/crm_images"    
+        app-bar-display="false"/>    
+    <webapp name="crm_surveys" 
+    	    title="CRM External Surveys" 
+    	    server="default-server" 
+    	    location="webapp/surveys" 
+    	    mount-point="/surveys"
+    	    app-bar-display="false"/>     
+
+</ofbiz-component>
+
+

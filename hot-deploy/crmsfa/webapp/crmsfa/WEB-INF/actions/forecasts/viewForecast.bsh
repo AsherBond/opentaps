@@ -1,0 +1,79 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilDateTime;
+
+userLogin = request.getAttribute("userLogin");
+
+salesForecastId = parameters.get("salesForecastId");
+forecasts = delegator.findByAndCache("SalesForecastAndCustomTimePeriod", UtilMisc.toMap("salesForecastId", salesForecastId));
+if (forecasts.size() == 0) {
+    context.put("allowed", false);
+    return;
+}
+forecast = forecasts.get(0);
+context.put("forecast", forecast);
+
+// if user isn't the internalPartyId of the forecast
+if (!forecast.getString("internalPartyId").equals(userLogin.getString("partyId"))) {
+
+    // then check if user has viewall permission
+    if (!security.hasEntityPermission("CRMSFA", "_4C_VIEWALL", userLogin)) {
+
+        // if not, then permission denied
+        context.put("allowed", false);
+        return;
+    }
+}
+
+// allow permission (may be redundant, but place here anyway)
+context.put("allowed", true);
+
+// check if closed, this means checking both the isClosed flag from period and if the thruDate is past
+isClosed = false;
+if (forecast.getString("isClosed").equals("Y") || forecast.getDate("thruDate").before(UtilDateTime.nowTimestamp())) {
+    isClosed = true;
+}
+context.put("isClosed", isClosed);
+
+// find children
+forecasts = delegator.findByAnd("SalesForecastAndCustomTimePeriod", 
+        UtilMisc.toMap("internalPartyId", forecast.getString("internalPartyId"), "parentPeriodId", forecast.getString("customTimePeriodId")),
+        UtilMisc.toList("fromDate"));
+
+// create a pseudo forecast from the main forecast to serve as the "sum" row of the list of monthly forecasts
+if (forecasts.size() > 0) {
+    pseudoForecast = forecast.getAllFields();
+    pseudoForecast.remove("salesForecastId"); // remove this so that the form displays "Forecast Totals"
+    pseudoForecast.remove("internalPartyId"); // remove this as well
+    forecasts.add(pseudoForecast);
+}
+context.put("forecasts", forecasts);
+
+// forecast history
+forecastHistory = delegator.findByAnd("SalesForecastHistory", UtilMisc.toMap("salesForecastId", salesForecastId), UtilMisc.toList("salesForecastHistoryId DESC"));
+context.put("forecastHistory", forecastHistory);
+
+if (!isClosed) {
+    security = request.getAttribute("security");
+
+    // check for update, which is currently a check for _4C_UPDATE and if the period is a month
+    if (security.hasEntityPermission("CRMSFA", "_4C_UPDATE", userLogin) && forecast.getString("periodTypeId").equals("FISCAL_MONTH")) {
+        context.put("hasUpdatePermission", true);
+    }
+}

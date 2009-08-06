@@ -1,0 +1,155 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.GenericValue;
+
+List members = new ArrayList();
+options = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
+
+// get the contact list members for printing
+// TODO: re-factor all of these into a method, instead of this copy-pasted code to lookup zip 5, zip3, and bmc like this
+contactListId = parameters.get("contactListId");
+conditions = new EntityConditionList( UtilMisc.toList(
+      new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
+      new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
+      new EntityExpr("sortResult", EntityOperator.LIKE, "5%")
+      ), EntityOperator.AND);
+orderBy = UtilMisc.toList("postalCode","toName");
+
+membersZip5 = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
+if(membersZip5!=null && membersZip5.size()>0) {
+members.addAll(membersZip5);
+}
+
+conditions = new EntityConditionList( UtilMisc.toList(
+      new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
+      new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
+      new EntityExpr("sortResult", EntityOperator.LIKE, "3%")
+      ), EntityOperator.AND);
+membersZip3 = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
+
+if(membersZip3!=null && membersZip3.size()>0) {
+members.addAll(membersZip3);
+}
+
+
+conditions = new EntityConditionList( UtilMisc.toList(
+      new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
+      new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
+      new EntityExpr("sortResult", EntityOperator.LIKE, "B%")
+      ), EntityOperator.AND);
+
+membersBulk = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
+
+if(membersBulk!=null && membersBulk.size()>0) {
+members.addAll(membersBulk);
+}
+
+
+conditions = new EntityConditionList( UtilMisc.toList(
+      new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
+      new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
+      new EntityExpr("sortResult", EntityOperator.LIKE, "M%")
+      ), EntityOperator.AND);
+membersMixed = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
+if(membersMixed!=null && membersMixed.size()>0) {
+   members.addAll(membersMixed);
+}
+
+
+conditions = new EntityConditionList( UtilMisc.toList(
+      new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
+      new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null),
+      new EntityExpr("sortResult", EntityOperator.EQUALS, "OTHER")
+      ), EntityOperator.AND);
+membersOther = delegator.findByCondition("UspsContactListSortAndPostalAddressView", conditions, null, null, orderBy, options); 
+if(membersOther!=null && membersOther.size()>0) {
+   members.addAll(membersOther);
+}
+
+
+// end of list getting
+
+context.put("members", members);
+
+// default page height and width
+pageWidth = 8.5;
+pageHeight = 11;
+
+// determine the label page measurements based on the labelEnumId
+addressLabelId = parameters.get("addressLabelId");
+GenericValue addressLabelSpec=delegator.findByPrimaryKey("AddressLabelSpecification",UtilMisc.toMap("addressLabelId",addressLabelId));
+if (addressLabelSpec != null) {
+    //TODO: this is dangerous and there should be a UtilNumber which does this but inserts a null checking
+    topMargin = addressLabelSpec.getDouble("topMargin").doubleValue();
+    bottomMargin = addressLabelSpec.getDouble("bottomMargin").doubleValue();
+    leftMargin = addressLabelSpec.getDouble("leftMargin").doubleValue();
+    rightMargin = addressLabelSpec.getDouble("rightMargin").doubleValue();
+    pageColumns = addressLabelSpec.getDouble("pageColumns").doubleValue();
+    pageRows = addressLabelSpec.getDouble("pageRows").doubleValue();
+    labelWidth = addressLabelSpec.getDouble("labelWidth").doubleValue();
+    labelHeight = addressLabelSpec.getDouble("labelHeight").doubleValue();
+    heightBtwLabel = addressLabelSpec.getDouble("heightBtwLabel").doubleValue();
+    widthBtwLabel = addressLabelSpec.getDouble("widthBtwLabel").doubleValue();
+    pageWidth = addressLabelSpec.getDouble("pageWidth").doubleValue();
+    pageHeight = addressLabelSpec.getDouble("pageHeight").doubleValue();
+    uom = addressLabelSpec.getString("uomId");
+} else {
+    // default to Avery 5160/8160 (dimensions in in)
+    pageColumns = 3.0;
+    pageRows = 10.0;
+    labelWidth = 2.625;
+    labelHeight = 1.0;
+    topMargin = 0.5;
+    bottomMargin = 1.0;
+    leftMargin = 0.5;
+    rightMargin = 1.0;
+    heightBtwLabel = 0.2;
+    widthBtwLabel = 0.2;
+    uom = "in";
+}
+
+
+// actual number of rows
+actualRows = Math.ceil(members.size() / (1.0 * pageColumns));
+context.put("actualRows", actualRows);
+
+continuousFeed = ("Y".equals(addressLabelSpec.get("continuousFeed")));
+context.put("continuousFeed", continuousFeed);
+
+// calculate continuous feed dimensions
+if (continuousFeed) {
+  pageHeight = topMargin + bottomMargin;
+  pageHeight += actualRows * (labelHeight + 2 * heightBtwLabel);
+  pageRows = actualRows;
+}
+
+context.put("pageWidth", pageWidth);
+context.put("pageHeight", pageHeight);
+context.put("labelWidth", labelWidth);
+context.put("labelHeight", labelHeight);
+context.put("pageColumns", pageColumns);
+context.put("pageRows", pageRows);
+context.put("topMargin", topMargin);
+context.put("bottomMargin", bottomMargin);
+context.put("leftMargin", leftMargin);
+context.put("rightMargin", rightMargin);
+context.put("heightBtwLabel", heightBtwLabel);
+context.put("widthBtwLabel", widthBtwLabel);
+context.put("uom", uom);

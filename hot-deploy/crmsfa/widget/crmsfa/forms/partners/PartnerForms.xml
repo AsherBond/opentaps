@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- To save time, these are just a copy paste of the partners. -->
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="createPartnerForm" type="single" target="createPartner" title="" 
+        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        <field name="organizationPartyId"><hidden value="${configProperties.organizationPartyId}"/></field>
+        <field name="groupName" title="${uiLabelMap.OpentapsPartnerName}" position="1" title-style="requiredField"><text size="30" maxlength="60"/></field>
+        <!-- PartyGroup -->
+        <field name="groupNameLocal" title="${uiLabelMap.CrmLocalName}" position="1"><text size="30" maxlength="100"/></field>
+        <field name="officeSiteName" title="${uiLabelMap.CrmSiteName}" position="2"><text size="30" maxlength="100"/></field>
+        <!-- PartySupplementalData -->
+        <field name="annualRevenue" title="${uiLabelMap.CrmAnnualRevenue}" position="1"><text size="15" maxlength="15"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CrmPreferredCurrency}" position="2">
+            <drop-down allow-empty="true" current="selected" no-current-selected-key="${configProperties.defaultCurrencyUomId}">
+                <entity-options description="${uomId} - ${description}" entity-name="Uom" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="industryEnumId" title="${uiLabelMap.CrmIndustry}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="PARTY_INDUSTRY"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="numberEmployees" title="${uiLabelMap.CrmNumberOfEmployees}" position="2"><text size="30" maxlength="60"/></field>
+        <field name="ownershipEnumId" title="${uiLabelMap.CrmOwnership}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="PARTY_OWNERSHIP"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="sicCode" title="${uiLabelMap.CrmSICCode}" position="1"><text size="30" maxlength="60"/></field>
+        <field name="tickerSymbol" title="${uiLabelMap.CrmTickerSymbol}" position="2"><text size="30" maxlength="60"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+        <field name="importantNote" title="${uiLabelMap.CrmImportantNote}"><textarea/></field>
+        <!-- primary contact info -->
+        <field name=" " widget-area-style="formSectionHeader" widget-style="formSectionHeaderTitle"><display description="${uiLabelMap.PartyContactInformation}"/> </field>
+        <field name="primaryPhoneCountryCode" title="${uiLabelMap.PartyCountryCode}"><text default-value="${configProperties.defaultCountryCode}" size="6" maxlength="10"/></field>
+        <field name="primaryPhoneAreaCode" title="${uiLabelMap.PartyAreaCode}" position="1"><text size="6" maxlength="10"/></field>
+        <field name="primaryPhoneNumber" title="${uiLabelMap.PartyPhoneNumber}" position="2"><text size="10" maxlength="20"/></field>
+        <field name="primaryPhoneExtension" title="${uiLabelMap.PartyExtension}" position="1"><text size="10" maxlength="20"/></field>
+        <field name="primaryPhoneAskForName" title="${uiLabelMap.CrmPhoneAskForName}" position="2"><text size="30" maxlength="60"/></field>
+        <field name="primaryEmail" title="${uiLabelMap.PartyEmailAddress}" position="1"><text size="30" maxlength="60"/></field>
+        <field name="primaryWebUrl" title="${uiLabelMap.CrmWebUrl}" position="2"><text size="30" maxlength="60"/></field>
+        <!-- general correspondence postal address -->
+        <field name="" widget-area-style="formSectionHeader" widget-style="formSectionHeaderTitle"><display description="${uiLabelMap.CrmPrimaryAddress}"/> </field>
+        <field name="generalToName" title="${uiLabelMap.PartyToName}" position="1"><text size="30" maxlength="100"/></field>
+        <field name="generalAttnName" title="${uiLabelMap.PartyAttentionName}" position="2"><text size="30" maxlength="100"/></field>
+        <field name="generalAddress1" title="${uiLabelMap.PartyAddressLine1}" position="1"><text size="30" maxlength="100"/></field>
+        <field name="generalAddress2" title="${uiLabelMap.PartyAddressLine2}" position="2"><text size="30" maxlength="100"/></field>
+        <field name="generalCity" title="${uiLabelMap.PartyCity}" position="1"><text size="30" maxlength="100"/></field>
+        <field name="generalStateProvinceGeoId" title="${uiLabelMap.PartyState}" position="2">
+            <drop-down allow-empty="true">
+                <entity-options description="${geoName}" entity-name="GeoAssocAndGeoTo" key-field-name="geoId">
+                    <entity-constraint name="geoAssocTypeId" operator="equals" value="REGIONS"/>
+                    <entity-constraint name="geoIdFrom" operator="equals" value="${configProperties.defaultCountryGeoId}"/>
+                    <entity-order-by field-name="geoName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="generalPostalCode" title="${uiLabelMap.PartyZipCode}" position="1"><text size="30" maxlength="100"/></field>
+        <field name="generalCountryGeoId" title="${uiLabelMap.CommonCountry}" position="2" event="onChange" action="opentaps.swapStatesInDropdown(this, 'generalStateProvinceGeoId')">
+            <drop-down allow-empty="true" current="selected" no-current-selected-key="${configProperties.defaultCountryGeoId}">
+                <entity-options description="${geoName}" entity-name="Geo" key-field-name="geoId">
+                    <entity-constraint name="geoTypeId" operator="equals" value="COUNTRY"/>
+                    <entity-order-by field-name="geoName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="generalPostalCodeExt" title="${uiLabelMap.CrmPostalCodeExt}" position="1"><text size="5" maxlength="100"/></field>
+
+        <field name="submitButton" title="${uiLabelMap.OpentapsCreatePartner}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="updatePartnerForm" type="single" target="updatePartner" title="" default-map-name="partySummary"
+        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden/></field>
+        <field name="groupName" title="${uiLabelMap.OpentapsPartnerName}" position="1" title-style="requiredField"><text size="30" maxlength="60"/></field>
+        <field name="groupNameLocal" title="${uiLabelMap.CrmLocalName}" position="1"><text size="30" maxlength="100"/></field>
+        <field name="officeSiteName" title="${uiLabelMap.CrmSiteName}" position="2"><text size="30" maxlength="100"/></field>
+        <field name="annualRevenue" title="${uiLabelMap.CrmAnnualRevenue}" position="1"><text size="15" maxlength="15"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CrmPreferredCurrency}" position="2">
+            <drop-down allow-empty="true" current="selected" no-current-selected-key="${configProperties.defaultCurrencyUomId}">
+                <option key="USD" description="USD - American Dollar"/>
+                <entity-options description="${uomId} - ${description}" entity-name="Uom" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="industryEnumId" title="${uiLabelMap.CrmIndustry}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="PARTY_INDUSTRY"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="numberEmployees" title="${uiLabelMap.CrmNumberOfEmployees}" position="2"><text size="30" maxlength="60"/></field>
+        <field name="ownershipEnumId" title="${uiLabelMap.CrmOwnership}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="PARTY_OWNERSHIP"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="sicCode" title="${uiLabelMap.CrmSICCode}" position="1"><text size="30" maxlength="60"/></field>
+        <field name="tickerSymbol" title="${uiLabelMap.CrmTickerSymbol}" position="2"><text size="30" maxlength="60"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+        <field name="importantNote" title="${uiLabelMap.CrmImportantNote}"><textarea/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="viewPartner" type="single" default-map-name="partySummary" target="" title=""
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="groupName" title="${uiLabelMap.OpentapsPartnerName}" position="1" title-style="requiredField"><display/></field>
+        <field name="groupNameLocal" title="${uiLabelMap.CrmLocalName}" position="1"><display/></field>
+        <field name="officeSiteName" title="${uiLabelMap.CrmSiteName}" position="2"><display/></field>
+        <field name="annualRevenue" title="${uiLabelMap.CrmAnnualRevenue}" position="1"><display type="currency" currency="${partySummary.currencyUomId}"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CrmPreferredCurrency}" position="2">
+            <display-entity entity-name="Uom" key-field-name="uomId" description="${uomId} - ${description}"/>
+        </field>
+        <field name="industryEnumId" title="${uiLabelMap.CrmIndustry}" position="1">
+            <display-entity entity-name="Enumeration" key-field-name="enumId"/>
+        </field>
+        <field name="numberEmployees" title="${uiLabelMap.CrmNumberOfEmployees}" position="2"><display/></field>
+        <field name="ownershipEnumId" title="${uiLabelMap.CrmOwnership}" position="1">
+            <display-entity entity-name="Enumeration" key-field-name="enumId"/>
+        </field>
+        <field name="sicCode" title="${uiLabelMap.CrmSICCode}" position="1"><display/></field>
+        <field name="tickerSymbol" title="${uiLabelMap.CrmTickerSymbol}" position="2"><display/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
+        <field name="importantNote" title="${uiLabelMap.CrmImportantNote}"><display/></field>
+    </form>
+
+</forms>

@@ -1,0 +1,74 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ /* This script is to get data associated with an activity for the short cuts on the left */
+ 
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import com.opensourcestrategies.crmsfa.activities.UtilActivity;
+import com.opensourcestrategies.crmsfa.party.*;
+import com.opensourcestrategies.crmsfa.teams.TeamHelper;
+import javolution.util.FastList;
+
+// extract the work effort again
+workEffort = context.get("workEffort");
+if (workEffort == null) return;
+workEffortId = workEffort.get("workEffortId");
+workEffort = delegator.findByPrimaryKeyCache("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
+
+// set flag for whether activity is still active -- ie, modifiable
+isActive = true;
+if (UtilActivity.activityIsInactive(workEffort)) {
+   isActive = false;
+}
+context.put("isActive", isActive);
+ 
+// get the related information: right now just getting one opportunity and case but later may be expanded
+opportunities = workEffort.getRelated("SalesOpportunityWorkEffort");
+if (opportunities.size() > 0) {
+    context.put("salesOpportunity", opportunities.get(0).getRelatedOne("SalesOpportunity"));
+}
+cases = workEffort.getRelated("CustRequestWorkEffort");
+if (cases.size() > 0) {
+    context.put("custRequest", cases.get(0).getRelatedOne("CustRequest"));
+}
+
+// get activity owner
+activityOwnerParty = UtilActivity.getActivityOwner(workEffortId, delegator);
+if (UtilValidate.isNotEmpty(activityOwnerParty)) {
+    context{"activityOwnerParty"} = activityOwnerParty;
+}
+
+// get list of team members
+teamMembers = TeamHelper.getActiveTeamMembers(delegator);
+if (UtilValidate.isNotEmpty(teamMembers)) {
+	context{"teamMembers"} = teamMembers;
+}
+
+// get list of contact parties and first client party for the activity association's new case button
+contactParties = UtilActivity.getActivityParties(delegator, workEffortId, UtilMisc.toList("CONTACT"));
+context.put("firstContactParty", EntityUtil.getFirst(contactParties));
+
+//check if the user has permission to change activity owner
+//(must have CRMSFA_ACT_ADMIN or be owner of this activity)
+context.put("hasChangeOwnerPermission", CrmsfaSecurity.hasChangeActivityOwnerPermission(delegator, security, userLogin, workEffortId));
+
+// Get the related order
+ohwe = EntityUtil.getFirst(delegator.findByAnd("OrderHeaderWorkEffort", UtilMisc.toMap("workEffortId", parameters.get("workEffortId")), UtilMisc.toList("orderId")));
+if (ohwe != null) context.put("orderHeader", ohwe.getRelatedOne("OrderHeader"));

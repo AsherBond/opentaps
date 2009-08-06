@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <!-- update account form -->
+    <form name="updateAccountForm" type="single" target="updateAccount" title="" default-map-name="partySummary"
+        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden/></field>
+        <field name="groupName" title="${uiLabelMap.CrmAccountName}" position="1" title-style="requiredField"><text size="30" maxlength="60"/></field>
+        <field name="parentPartyId" title="${uiLabelMap.CrmParentParty}" position="2">
+            <lookup target-form-name="LookupAccounts" size="20" maxlength="20"/>
+        </field>
+        <field name="groupNameLocal" title="${uiLabelMap.CrmLocalName}" position="1"><text size="30" maxlength="100"/></field>
+        <field name="officeSiteName" title="${uiLabelMap.CrmSiteName}" position="2"><text size="30" maxlength="100"/></field>
+        <field name="annualRevenue" title="${uiLabelMap.CrmAnnualRevenue}" position="1"><text size="15" maxlength="15"/></field>
+        <field name="currencyUomId" title="${uiLabelMap.CrmPreferredCurrency}" position="2">
+            <drop-down allow-empty="true" current="selected" no-current-selected-key="${configProperties.defaultCurrencyUomId}">
+                <option key="USD" description="USD - American Dollar"/>
+                <entity-options description="${uomId} - ${description}" entity-name="Uom" key-field-name="uomId">
+                    <entity-constraint name="uomTypeId" operator="equals" value="CURRENCY_MEASURE"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="industryEnumId" title="${uiLabelMap.CrmIndustry}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="PARTY_INDUSTRY"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="numberEmployees" title="${uiLabelMap.CrmNumberOfEmployees}" position="2"><text size="30" maxlength="60"/></field>
+        <field name="ownershipEnumId" title="${uiLabelMap.CrmOwnership}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
+                    <entity-constraint name="enumTypeId" operator="equals" value="PARTY_OWNERSHIP"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="sicCode" title="${uiLabelMap.CrmSICCode}" position="1"><text size="30" maxlength="60"/></field>
+        <field name="tickerSymbol" title="${uiLabelMap.CrmTickerSymbol}" position="2"><text size="30" maxlength="60"/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+        <field name="importantNote" title="${uiLabelMap.CrmImportantNote}"><textarea/></field>
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- present a list of accounts -->
+    <form name="ListAccounts" type="list" separate-columns="true" 
+        title="Accounts"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListAccounts" paginate-size-field="accountsSize" paginate-index-field="accountsIndex"
+        list-name="accountsListIt">
+        <!-- this switching of the target links will make it possible for us to reuse the list of accounts form in the main application or in the lookup buttons. -->
+        <field name="groupName" widget-style="linktext" title="${uiLabelMap.CrmAccountName}" widget-area-style="fieldWidth50pct"
+            use-when="(isLookup!=void) &amp;&amp; (isLookup!=null) &amp;&amp; (isLookup.equals(&quot;true&quot;))">
+            <hyperlink also-hidden="false" target-type="plain" description="${groupName} (${partyId})" target="javascript:set_value('${partyId}')"/>
+        </field>
+        <field name="groupName" widget-style="linktext" title="${uiLabelMap.CrmAccountName}" widget-area-style="fieldWidth50pct"
+            use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))">
+            <hyperlink description="${groupName} (${partyId})" target="viewAccount?partyId=${partyId}"/>
+        </field>
+        <field name="primaryPostalAddressId" title="${uiLabelMap.CommonCity}">
+          <display description="${primaryCity} ${primaryStateProvinceGeoId}" />
+        </field>
+        <field name="primaryEmailId" title="${uiLabelMap.CrmPrimaryEmail}">
+          <display description="${primaryEmail}" />
+        </field>
+        <field name="primaryTelecomNumberId" title="${uiLabelMap.CrmPrimaryPhone}">
+          <display description="${primaryCountryCode} ${primaryAreaCode} ${primaryContactNumber}" />
+        </field>
+        <!-- The hasAccountsRemoveAbility is defined in viewContact.bsh  "/viewContact" tells controller to take us back to viewContact after removing contact from account.  
+        (Normally, the next step is viewAccount.)  The first partyId is for /viewContact to know which contact.   -->
+        <field name="Remove" title="" use-when="hasAccountsRemoveAbility==true" widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeContactFromAccount/viewContact?partyId=${parameters.partyId}&amp;contactPartyId=${parameters.partyId}&amp;accountPartyId=${partyId}"/>
+        </field>
+    </form>   
+
+    <!-- form to assign a contact to an account -->
+    <!-- remove this form -->
+    <form name="assignContactToAccountForm" type="single" target="assignContactToAccount"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field> <!-- this one allows the form to return to viewAccount with the correct partyId -->
+        <field name="accountPartyId"><hidden value="${parameters.partyId}"/></field>
+        <field name="contactPartyId" position="1" title="${uiLabelMap.CrmNewContact}" widget-style="inputBox">
+            <lookup target-form-name="LookupContacts" size="20" maxlength="20"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmAssign}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+</forms>

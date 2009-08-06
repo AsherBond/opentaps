@@ -1,0 +1,70 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.accounting.payment.PaymentWorker;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.party.PartyHelper;
+
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+partyId = parameters.get("partyId");
+
+// Check if user has the CRMSFA_PAY_VIEW for this party (the specific CRMSFA_ACCOUNT_VIEW and so on are already implied)
+hasPaymentViewPermission = CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_PAY", "_VIEW", userLogin, partyId);
+context.put("hasPaymentViewPermission", hasPaymentViewPermission);
+
+// Check if user has the CRMSFA_PAY_UPDATE for this party.  The party must first have update permission on the party in general. (CRMSFA_ACCOUNT_UPDATE, etc)
+hasUpdatePermission = context.get("hasUpdatePermission");
+hasPaymentUpdatePermission = false;
+if (hasUpdatePermission != null && hasUpdatePermission) {
+  hasPaymentUpdatePermission = CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_PAY", "_UPDATE", userLogin, partyId);
+}
+context.put("hasPaymentUpdatePermission", hasPaymentUpdatePermission);
+
+if (!hasPaymentViewPermission) return;
+
+// Get the payment methods
+paymentMethods = PaymentWorker.getPartyPaymentMethodValueMaps(delegator, partyId, false);
+context.put("paymentMethodValueMaps", paymentMethods);
+
+cond = UtilMisc.toList(new EntityExpr("partyId", EntityOperator.EQUALS, partyId), EntityUtil.getFilterByDateExpr());
+partyCarrierAccountValues = delegator.findByCondition("PartyCarrierAccount", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("accountNumber"));
+partyCarrierAccounts = new ArrayList();
+pcat = partyCarrierAccountValues.iterator();
+while (pcat.hasNext()) {
+    partyCarrierAccount = pcat.next();
+    pcaMap = partyCarrierAccount.getAllFields();
+    carrierPartyId = partyCarrierAccount.getString("carrierPartyId");
+    carrierName = PartyHelper.getPartyName(delegator, carrierPartyId, false);
+    pcaMap.put("carrierName", carrierName);
+    partyCarrierAccounts.add(pcaMap);
+}
+context.put("partyCarrierAccounts", partyCarrierAccounts);
+context.put("now", UtilDateTime.nowTimestamp());
+
+// get tax authority list
+partyTaxAuthInfoList = new LinkedList();
+partyTaxAuthInfos = delegator.findByCondition("PartyTaxAuthInfo", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("taxAuthGeoId", "taxAuthPartyId", "fromDate"));
+for (iter = partyTaxAuthInfos.iterator(); iter.hasNext(); ) {
+    partyTaxAuthInfo = iter.next();
+    partyTaxAuthInfoMap = partyTaxAuthInfo.getAllFields();
+    partyTaxAuthInfoMap.put("partyTaxAuthName", PartyHelper.getPartyName(delegator, partyTaxAuthInfo.get("taxAuthPartyId"), false));
+    partyTaxAuthInfoList.add(partyTaxAuthInfoMap);    
+}
+context.put("partyTaxAuthInfoList", partyTaxAuthInfoList);

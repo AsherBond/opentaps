@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- this file contains seed data for the CRM application -->
+
+<entity-engine-xml>
+
+    <!-- sales opportunity stages -->
+    <SalesOpportunityStage description="Prospect" defaultProbability="0.05" opportunityStageId="SOSTG_PROSPECT" sequenceNum="01"/>
+    <SalesOpportunityStage description="Proposal" defaultProbability="0.20" opportunityStageId="SOSTG_PROPOSAL" sequenceNum="02"/>
+    <SalesOpportunityStage description="Quoted" defaultProbability="0.40" opportunityStageId="SOSTG_QUOTED" sequenceNum="03"/>
+    <SalesOpportunityStage description="Closed" defaultProbability="1" opportunityStageId="SOSTG_CLOSED" sequenceNum="04"/>
+    <SalesOpportunityStage description="Lost" defaultProbability="0" opportunityStageId="SOSTG_LOST" sequenceNum="99"/>
+
+    <!-- new CRM/SFA roles -->
+    <RoleType description="Account" hasTable="N" parentTypeId="CUSTOMER" roleTypeId="ACCOUNT"/>
+    <RoleType description="Account Manager" hasTable="N" parentTypeId="SALES_REP" roleTypeId="ACCOUNT_MANAGER"/>
+    <RoleType description="Account Rep" hasTable="N" parentTypeId="SALES_REP" roleTypeId="ACCOUNT_REP"/>
+    <RoleType description="Customer Service Rep" hasTable="N" parentTypeId="SALES_REP" roleTypeId="CUST_SERVICE_REP"/>
+    <RoleType description="Account Team" hasTable="N" parentTypeId="INTERNAL_ORGANIZATIO" roleTypeId="ACCOUNT_TEAM"/>
+    <RoleType description="Email Correspondent" hasTable="N" roleTypeId="EMAIL_CORRESPONDENT"/>
+    <RoleType description="Email Sender" hasTable="N" parentTypeId="EMAIL_CORRESPONDENT" roleTypeId="EMAIL_SENDER"/>
+    <RoleType description="To: Email Recipient" hasTable="N" parentTypeId="EMAIL_CORRESPONDENT" roleTypeId="EMAIL_RECIPIENT_TO"/>
+    <RoleType description="CC: Email Recipient" hasTable="N" parentTypeId="EMAIL_CORRESPONDENT" roleTypeId="EMAIL_RECIPIENT_CC"/>
+    <RoleType description="BCC: Email Recipient" hasTable="N" parentTypeId="EMAIL_CORRESPONDENT" roleTypeId="EMAIL_RECIPIENT_BCC"/>
+     
+    <!-- NOTE: The partyRelationshipName describes the TO party, ie A is a customer of B, so A is the partyTo and B is the partyFrom -->
+    <PartyRelationshipType description="An account or contact owner is someone who is responsible for that account"  
+        hasTable="N" parentTypeId="" partyRelationshipName="Responsible Owner" partyRelationshipTypeId="RESPONSIBLE_FOR" roleTypeIdValidFrom="" roleTypeIdValidTo=""/>
+    <PartyRelationshipType description="A rep or manager on an account team is assigned to that team.  This is a different concept than GROUP_ROLLUP which implies membership." 
+        hasTable="N" parentTypeId="" partyRelationshipName="Assigned To" partyRelationshipTypeId="ASSIGNED_TO" roleTypeIdValidFrom="" roleTypeIdValidTo=""/> 
+    <!-- to avoid confusion with OFBIZ's contact relationships, we'll use this other relationship type.  Not sure what to call it:
+          If A is a Contact of B, then B is the _____ of A? -->
+    <PartyRelationshipType description="The opposite of CONTACT_REL in OFBIZ, this relationship is used for contact relationships in the CRM/SFA application." 
+        hasTable="N" parentTypeId="" partyRelationshipName="Contact Endpoint" partyRelationshipTypeId="CONTACT_REL_INV" roleTypeIdValidFrom="" roleTypeIdValidTo=""/> 
+
+    <!-- status codes for leads -->
+    <StatusType statusTypeId="PARTY_STATUS" hasTable="N" description="Party status"/>
+    <StatusType statusTypeId="PARTY_LEAD_STATUS" hasTable="N" parentTypeId="PARTY_STATUS" description="Status codes for parties which are leads (role = PROSPECT)"/>
+    <StatusItem statusId="PTYLEAD_NEW" statusTypeId="PARTY_LEAD_STATUS" statusCode="NEW" sequenceId="01" description="New"/>
+    <StatusItem statusId="PTYLEAD_ASSIGNED" statusTypeId="PARTY_LEAD_STATUS" statusCode="ASSIGNED" sequenceId="10" description="Assigned"/>
+    <StatusItem statusId="PTYLEAD_QUALIFIED" statusTypeId="PARTY_LEAD_STATUS" statusCode="QUALIFIED" sequenceId="20" description="Qualified"/>
+    <StatusItem statusId="PTYLEAD_CONVERTED" statusTypeId="PARTY_LEAD_STATUS" statusCode="CONVERTED" sequenceId="30" description="Converted"/>
+    <StatusItem statusId="PTYLEAD_RECYCLED" statusTypeId="PARTY_LEAD_STATUS" statusCode="RECYCLED" sequenceId="40" description="Recycled"/>
+    <StatusItem statusId="PTYLEAD_DEAD" statusTypeId="PARTY_LEAD_STATUS" statusCode="DEAD" sequenceId="99" description="Dead"/>
+    
+    <StatusValidChange statusId="PTYLEAD_NEW" statusIdTo="PTYLEAD_ASSIGNED" transitionName="Assigned"/>
+    <StatusValidChange statusId="PTYLEAD_ASSIGNED" statusIdTo="PTYLEAD_QUALIFIED" transitionName="Qualified"/>
+    <StatusValidChange statusId="PTYLEAD_QUALIFIED" statusIdTo="PTYLEAD_CONVERTED" transitionName="Converted"/>
+    <StatusValidChange statusId="PTYLEAD_NEW" statusIdTo="PTYLEAD_DEAD" transitionName="Dead"/>
+    <StatusValidChange statusId="PTYLEAD_ASSIGNED" statusIdTo="PTYLEAD_DEAD" transitionName="Dead"/>
+    <StatusValidChange statusId="PTYLEAD_QUALIFIED" statusIdTo="PTYLEAD_DEAD" transitionName="Dead"/>
+    <StatusValidChange statusId="PTYLEAD_DEAD" statusIdTo="PTYLEAD_RECYCLED" transitionName="Recycled"/>
+    <StatusValidChange statusId="PTYLEAD_RECYCLED" statusIdTo="PTYLEAD_ASSIGNED" transitionName="Assigned"/>
+    <StatusValidChange statusId="PTYLEAD_RECYCLED" statusIdTo="PTYLEAD_DEAD" transitionName="Dead"/>
+
+    <!-- Task statuses and valid changes. 
+        Note that these are meant to override those defined in applications/workeffort/data/WorkEffortTypeData.xml -->
+    <StatusItem description="Scheduled" sequenceId="01" statusCode="ACCEPTED" statusId="TASK_SCHEDULED" statusTypeId="TASK_STATUS"/>
+    <StatusItem description="Confirmed" sequenceId="02" statusCode="CONFIRMED" statusId="TASK_CONFIRMED" statusTypeId="TASK_STATUS"/> <!-- not actively used -->
+    <StatusItem description="Started" sequenceId="03" statusCode="STARTED" statusId="TASK_STARTED" statusTypeId="TASK_STATUS"/>
+    <StatusItem description="Completed" sequenceId="04" statusCode="COMPLETED" statusId="TASK_COMPLETED" statusTypeId="TASK_STATUS"/>
+    <StatusItem description="On Hold" sequenceId="05" statusCode="ON HOLD" statusId="TASK_ON_HOLD" statusTypeId="TASK_STATUS"/>
+    <StatusItem description="Rejected" sequenceId="06" statusCode="REJECTED" statusId="TASK_REJECTED" statusTypeId="TASK_STATUS"/>
+    <StatusItem description="Cancelled" sequenceId="07" statusCode="CANCELLED" statusId="TASK_CANCELLED" statusTypeId="TASK_STATUS"/>
+    <StatusValidChange condition="" statusId="TASK_SCHEDULED" statusIdTo="TASK_CONFIRMED" transitionName="Confirm"/>
+    <StatusValidChange condition="" statusId="TASK_SCHEDULED" statusIdTo="TASK_STARTED" transitionName="Start"/>
+    <StatusValidChange condition="" statusId="TASK_CONFIRMED" statusIdTo="TASK_STARTED" transitionName="Start"/>
+    <StatusValidChange condition="" statusId="TASK_STARTED" statusIdTo="TASK_COMPLETED" transitionName="Complete"/>
+    <StatusValidChange condition="" statusId="TASK_SCHEDULED" statusIdTo="TASK_ON_HOLD" transitionName="Put on Hold"/>
+    <StatusValidChange condition="" statusId="TASK_CONFIRMED" statusIdTo="TASK_ON_HOLD" transitionName="Put on Hold"/>
+    <StatusValidChange condition="" statusId="TASK_SCHEDULED" statusIdTo="TASK_REJECTED" transitionName="Reject"/>
+    <StatusValidChange condition="" statusId="TASK_CONFIRMED" statusIdTo="TASK_REJECTED" transitionName="Reject"/>
+    <StatusValidChange condition="" statusId="TASK_SCHEDULED" statusIdTo="TASK_CANCELLED" transitionName="Cancel"/>
+    <StatusValidChange condition="" statusId="TASK_STARTED" statusIdTo="TASK_CANCELLED" transitionName="Cancel"/>
+    <StatusValidChange condition="" statusId="TASK_CONFIRMED" statusIdTo="TASK_CANCELLED" transitionName="Cancel"/>
+    <!-- Warning: Do not create a valid transition from On Hold to Started, because then the form would not require a start time to be logged for a started event -->
+    <StatusValidChange condition="" statusId="TASK_ON_HOLD" statusIdTo="TASK_SCHEDULED" transitionName="Re-schedule"/>
+    <StatusValidChange condition="" statusId="TASK_ON_HOLD" statusIdTo="TASK_CANCELLED" transitionName="Cancel"/>
+
+    <!-- Event statuses and valid changes
+        Note that these are in addition to those defined in applications/workeffort/data/WorkEffortTypeData.xml -->
+    <StatusItem description="Scheduled" sequenceId="01" statusCode="ACCEPTED" statusId="EVENT_SCHEDULED" statusTypeId="EVENT_STATUS"/>
+    <StatusItem description="Confirmed" sequenceId="02" statusCode="CONFIRMED" statusId="EVENT_CONFIRMED" statusTypeId="EVENT_STATUS"/>
+    <StatusItem description="Started" sequenceId="03" statusCode="STARTED" statusId="EVENT_STARTED" statusTypeId="EVENT_STATUS"/>
+    <StatusItem description="Completed" sequenceId="04" statusCode="COMPLETED" statusId="EVENT_COMPLETED" statusTypeId="EVENT_STATUS"/>
+    <StatusItem description="On Hold" sequenceId="05" statusCode="ON HOLD" statusId="EVENT_ON_HOLD" statusTypeId="EVENT_STATUS"/>
+    <StatusItem description="Rejected" sequenceId="06" statusCode="REJECTED" statusId="EVENT_REJECTED" statusTypeId="EVENT_STATUS"/>
+    <StatusItem description="Cancelled" sequenceId="07" statusCode="CANCELLED" statusId="EVENT_CANCELLED" statusTypeId="EVENT_STATUS"/>
+    <StatusValidChange condition="" statusId="EVENT_SCHEDULED" statusIdTo="EVENT_CONFIRMED" transitionName="Confirm"/>
+    <StatusValidChange condition="" statusId="EVENT_SCHEDULED" statusIdTo="EVENT_STARTED" transitionName="Start"/>
+    <StatusValidChange condition="" statusId="EVENT_CONFIRMED" statusIdTo="EVENT_STARTED" transitionName="Start"/>
+    <StatusValidChange condition="" statusId="EVENT_STARTED" statusIdTo="EVENT_COMPLETED" transitionName="Complete"/>
+    <StatusValidChange condition="" statusId="EVENT_SCHEDULED" statusIdTo="EVENT_ON_HOLD" transitionName="Put on Hold"/>
+    <StatusValidChange condition="" statusId="EVENT_CONFIRMED" statusIdTo="EVENT_ON_HOLD" transitionName="Put on Hold"/>
+    <StatusValidChange condition="" statusId="EVENT_SCHEDULED" statusIdTo="EVENT_REJECTED" transitionName="Reject"/>
+    <StatusValidChange condition="" statusId="EVENT_CONFIRMED" statusIdTo="EVENT_REJECTED" transitionName="Reject"/>
+    <StatusValidChange condition="" statusId="EVENT_SCHEDULED" statusIdTo="EVENT_CANCELLED" transitionName="Cancel"/>
+    <StatusValidChange condition="" statusId="EVENT_CONFIRMED" statusIdTo="EVENT_CANCELLED" transitionName="Cancel"/>
+    <!-- Warning: Do not create a valid transition from On Hold to Started, because then the form would not require a start time to be logged for a started event -->
+    <StatusValidChange condition="" statusId="EVENT_ON_HOLD" statusIdTo="EVENT_SCHEDULED" transitionName="Re-schedule"/>
+    <StatusValidChange condition="" statusId="EVENT_ON_HOLD" statusIdTo="EVENT_CANCELLED" transitionName="Cancel"/>
+
+    <!-- Event statuses and valid changes
+        Note that these are in addition to those defined in applications/order/data/OrderTypeData.xml -->
+    <StatusItem description="Reopened" sequenceId="05" statusCode="REOPENED" statusId="CRQ_REOPENED" statusTypeId="CUSTREQ_STTS"/>
+    <StatusValidChange statusId="CRQ_COMPLETED" statusIdTo="CRQ_REOPENED" transitionName="Reopened"/>
+
+    <!-- Enumerations for content purposes in CRMSFA -->
+    <EnumerationType description="Content Purposes for CRMSFA" enumTypeId="PTYCNT_PRP_CRMSFA" hasTable="N"/>
+    <Enumeration description="CRMSFA General" enumCode="GENL CONT" enumId="PTYCNT_CRMSFA" enumTypeId="PTYCNT_PRP_CRMSFA"/>
+
+    <!-- Content and DataResource types for CRMSFA -->
+    <ContentType contentTypeId="HYPERLINK" hasTable="N" description="Hyperlink"/>
+    <ContentType contentTypeId="FILE" hasTable="N" description="File"/>
+
+    <!-- Enumerated view preferences -->
+    <EnumerationType description="View Preferences" enumTypeId="VIEW_PREFERENCE" hasTable="N"/>
+    <EnumerationType description="CRM/SFA View Preferences" enumTypeId="CRMSFA_PREFERENCE" hasTable="N" parentTypeId="VIEW_PREFERENCE"/>
+    <Enumeration description="Show for Me Only" enumCode="MY VALUES" enumId="MY_VALUES" sequenceId="01" enumTypeId="CRMSFA_PREFERENCE"/>
+    <Enumeration description="Show for My Team" enumCode="TEAM VALUES" enumId="TEAM_VALUES" sequenceId="02" enumTypeId="CRMSFA_PREFERENCE"/>
+
+    <!-- View preference types and configuration -->
+    <EnumerationType enumTypeId="VIEW_PREFERENCE" description="View preference choices" hasTable="N" parentEnumTypeId=""/>
+    <ViewPrefValueType viewPrefValueTypeId="VPREF_VALTYPE_ENUM" description="View preference value is an Enumeration"/>
+    <ViewPrefValueType viewPrefValueTypeId="VPREF_VALTYPE_STRING" description="View preference value is a String"/>
+
+    <!-- View preferences for My stuff vs. Team stuff -->
+    <ViewPrefType viewPrefTypeId="MY_OR_TEAM_ACCOUNTS" application="crmsfa" applicationSection="accounts" description="View my accounts or my team's accounts" />
+    <ViewPrefType viewPrefTypeId="MY_OR_TEAM_CONTACTS" application="crmsfa" applicationSection="contacts" description="View my contacts or my team's contacts" />
+    <ViewPrefType viewPrefTypeId="MY_OR_TEAM_CASES" application="crmsfa" applicationSection="cases" description="View my cases or team's cases" />
+    <ViewPrefType viewPrefTypeId="MY_OR_TEAM_OPPS" application="crmsfa" applicationSection="opportunities" description="View my opportunities or team's opportunities" />
+    <ViewPrefType viewPrefTypeId="MY_OR_TEAM_CALENDAR" application="crmsfa" applicationSection="myHome" description="View my events or my team's events" />
+
+    <EnumerationType description="Priority level" enumTypeId="PRIORITY_LEV" hasTable="N"/>
+    <Enumeration description="Critical (1)" enumCode="1" enumId="PRIORITY_LEV1" sequenceId="01" enumTypeId="PRIORITY_LEV"/>
+    <Enumeration description="High (3)" enumCode="3" enumId="PRIORITY_LEV3" sequenceId="03" enumTypeId="PRIORITY_LEV"/>
+    <Enumeration description="Medium (5)" enumCode="5" enumId="PRIORITY_LEV5" sequenceId="05" enumTypeId="PRIORITY_LEV"/>
+    <Enumeration description="Low (7)" enumCode="7" enumId="PRIORITY_LEV7" sequenceId="07" enumTypeId="PRIORITY_LEV"/>
+    <Enumeration description="On Hold (9)" enumCode="9" enumId="PRIORITY_LEV9" sequenceId="09" enumTypeId="PRIORITY_LEV"/>    
+    
+    <!-- Address label specifications -->
+    <!-- right margin should be right margin minus the width between label -->
+    <AddressLabelSpecification addressLabelId="AVERY_5160" description="AVERY 5160" pageWidth="8.5" pageHeight="11" continuousFeed="N" topMargin="0.5" bottomMargin="0.5" leftMargin="0.1875" rightMargin="0.1875" pageColumns="3" pageRows="10" labelHeight="1.0" labelWidth="2.625" heightBtwLabel="0" widthBtwLabel="0.111111111111" uomId="in"/>
+    <AddressLabelSpecification addressLabelId="AVERY_8160" description="AVERY 8160" pageWidth="8.5" pageHeight="11" continuousFeed="N" topMargin="0.5" bottomMargin="0.5" leftMargin="0.1875" rightMargin="0.1875" pageColumns="3" pageRows="10" labelHeight="1.0" labelWidth="2.625" heightBtwLabel="0" widthBtwLabel="0.111111111111" uomId="in"/>
+    <AddressLabelSpecification addressLabelId="AVERY_4014" description="AVERY 4014" pageWidth="4.5" pageHeight="11" continuousFeed="N" topMargin="0.0" bottomMargin="0.0" leftMargin="0.237" rightMargin="0" pageColumns="1" pageRows="10" labelHeight="1.43754" labelWidth="4" heightBtwLabel="0" widthBtwLabel="0.0" uomId="in"/>
+
+    <!-- this is an alternative definition of the Avery 4014 as a continuously fed label.  This works in the OS X Preview and Linux gpdf but does not work with Adobe Acrobat reader 
+    <AddressLabelSpecification addressLabelId="AVERY_4014" description="AVERY 4014" pageWidth="4.5" pageHeight="11" continuousFeed="Y" topMargin="0.571" bottomMargin="0.413" leftMargin="0.237" rightMargin="0" pageColumns="1" pageRows="10" labelHeight="1.43754" labelWidth="4" heightBtwLabel="0" widthBtwLabel="0.0" uomId="in"/>
+    -->
+    
+    <!-- A party to handle auto-assignment of responsibility when parties are created in OFBiz -->
+    <Party partyId="AutoResponsibleParty" partyTypeId="PERSON"/>
+    <Person partyId="AutoResponsibleParty" firstName="Auto" lastName="ResponsibleParty"/>
+    <PartyRole partyId="AutoResponsibleParty" roleTypeId="ACCOUNT_REP"/>
+
+    <!-- content classification enumeration type, for the Content entity -->
+    <EnumerationType enumTypeId="CONTENT_CLASS" description="Content Classification" hasTable="N" parentEnumTypeId=""/>
+
+    <!-- new quote status and changes -->
+    <StatusType description="Quote Status" hasTable="N" parentTypeId="" statusTypeId="QUOTE_STATUS"/>
+    <StatusItem description="Created" sequenceId="01" statusCode="CREATED" statusId="QUO_CREATED" statusTypeId="QUOTE_STATUS"/>
+    <StatusItem description="Approved" sequenceId="02" statusCode="APPROVED" statusId="QUO_APPROVED" statusTypeId="QUOTE_STATUS"/>
+    <StatusItem description="Sent" sequenceId="03" statusCode="SENT" statusId="QUO_SENT" statusTypeId="QUOTE_STATUS"/>
+    <StatusItem description="Finalized" sequenceId="04" statusCode="FINALIZED" statusId="QUO_FINALIZED" statusTypeId="QUOTE_STATUS"/>
+    <StatusItem description="Ordered" sequenceId="05" statusCode="ORDERED" statusId="QUO_ORDERED" statusTypeId="QUOTE_STATUS"/>
+    <StatusItem description="Cancelled" sequenceId="97" statusCode="CANCELLED" statusId="QUO_CANCELLED" statusTypeId="QUOTE_STATUS"/>
+    <StatusItem description="Rejected" sequenceId="98" statusCode="REJECTED" statusId="QUO_REJECTED" statusTypeId="QUOTE_STATUS"/>
+    <StatusValidChange condition="" statusId="QUO_CREATED" statusIdTo="QUO_APPROVED" transitionName="Accept Quote"/>
+    <StatusValidChange condition="" statusId="QUO_CREATED" statusIdTo="QUO_CANCELLED" transitionName="Cancel Quote"/>
+    <StatusValidChange condition="" statusId="QUO_APPROVED" statusIdTo="QUO_SENT" transitionName="Send Quote"/>
+    <StatusValidChange condition="" statusId="QUO_APPROVED" statusIdTo="QUO_CANCELLED" transitionName="Cancel Quote"/>
+    <StatusValidChange condition="" statusId="QUO_SENT" statusIdTo="QUO_FINALIZED" transitionName="Finalize Quote"/>
+    <StatusValidChange condition="" statusId="QUO_SENT" statusIdTo="QUO_REJECTED" transitionName="Reject Quote"/>
+    <StatusValidChange condition="" statusId="QUO_FINALIZED" statusIdTo="QUO_ORDERED" transitionName="Order Quote"/>
+    <StatusValidChange condition="" statusId="QUO_FINALIZED" statusIdTo="QUO_REJECTED" transitionName="Reject Quote"/>
+
+</entity-engine-xml>

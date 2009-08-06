@@ -1,0 +1,24 @@
+/*
+
+TODO: Test cases: (write them down as I think of them or do them)
+
+1.  What happens if <#nested> is left out?  Can I hide this? - Nope can't hide, and can't do anything about lack of nested.
+2.  Bug when clearing cache then pressing next page
+3.  Need to spit out a user error if they press next page but the session expires.  right now this only logs.
+4.  new interface to compare two objects for arbitrary sorting algorithms
+    Example:  outstanding balances on a list of Payments (for find payment screen)
+
+    compareField("amountOutstanding", something);  // bind a field to a comparison somehow
+
+    // when page builds, if the orderBy is this field, then it will run the comparator
+    comparator.compare(left, right) {
+       outstandingLeft = PaymentHelper.getAmountOutstanding(left.paymentId);
+       outstandingRight = PaymentHelper.getAmountOutstanding(right.paymentId);
+       return (outstandingLeft.compareTo(outstandingRight));
+    }
+
+5.  <@paginate rememberOrderBy=false rememberPage=false />
+    a.  rememberPage:  Allows the paginator to forget the page when user revisits the formlet, useful for find forms.
+    b.  rememberOrderBy:  Allows the paginator to forget the orderBy when user revisits the formlet, useful for priority lists
+
+*/

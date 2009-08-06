@@ -1,0 +1,127 @@
+<entity-engine-xml>
+
+
+    <!--
+     * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+     *
+     * This program is free software; you can redistribute it and/or modify
+     * it under the terms of the Honest Public License.
+     *
+     * This program is distributed in the hope that it will be useful,
+     * but WITHOUT ANY WARRANTY; without even the implied warranty of
+     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+     * Honest Public License for more details.
+     *
+     * You should have received a copy of the Honest Public License
+     * along with this program; if not, write to Funambol,
+     * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+     *
+    -->
+
+    <ContextHelpResource contextHelpResourceId="1000" screenName="myHomeMain" applicationName="crmsfa" remotePageName="My_Home_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1001" screenName="leadsMain" applicationName="crmsfa" remotePageName="My_Leads_Page" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1002" screenName="myLeads" applicationName="crmsfa" remotePageName="View_Lead_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1102" screenName="viewLead"  applicationName="crmsfa" remotePageName="View_Lead_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1003" screenName="createLeadForm" applicationName="crmsfa" remotePageName="Create_Lead_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1004" screenName="findLeads" applicationName="crmsfa" remotePageName="Find_Leads_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1005" screenName="mergeLeadsForm" applicationName="crmsfa" remotePageName="Merge_Leads_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1006" screenName="contactsMain" applicationName="crmsfa" remotePageName="My_Contacts_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1007" screenName="createContactForm" applicationName="crmsfa" remotePageName="Create_Contact_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1008" screenName="findContacts" applicationName="crmsfa" remotePageName="Find_Contact_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1009" screenName="myContacts" applicationName="crmsfa" remotePageName="View_Contact_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1010" screenName="mergeContactsForm" applicationName="crmsfa" remotePageName="Merge_Contacts_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1011" screenName="PartyMergeForms" applicationName="crmsfa" remotePageName="Contact_Forms_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1012" screenName="EditPartyMergeForm" applicationName="crmsfa" remotePageName="Edit_Contact_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1013" screenName="accountsMain" applicationName="crmsfa" remotePageName="My_Accounts/My_Teams%27_Accounts_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1014" screenName="createAccountForm" applicationName="crmsfa" remotePageName="Create_Account_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1015" screenName="findAccounts" applicationName="crmsfa" remotePageName="Find_Accounts_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1016" screenName="mergeAccountsForm" applicationName="crmsfa" remotePageName="Merge_Accounts_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1017" screenName="viewAccount" applicationName="crmsfa" remotePageName="Account_Details_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1018" screenName="casesMain" applicationName="crmsfa" remotePageName="My_Cases/My_Teams%27_Cases_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1019" screenName="createCaseForm" applicationName="crmsfa" remotePageName="Create_Case_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1020" screenName="findCases" applicationName="crmsfa" remotePageName="Find_Cases_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1021" screenName="viewCase" applicationName="crmsfa" remotePageName="View_Case_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1022" screenName="activitiesMain" applicationName="crmsfa" remotePageName="My_Home_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1023" screenName="createEventForm" applicationName="crmsfa" remotePageName="Create_Event_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1024" screenName="createTaskForm" applicationName="crmsfa" remotePageName="Create_Task_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1025" screenName="activitiesMain" applicationName="crmsfa" remotePageName="Find_Activities_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1026" screenName="viewActivity" applicationName="crmsfa" remotePageName="Activity_Details_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1027" screenName="viewActivity" applicationName="crmsfa" remotePageName="View_Email_Screen" remotePageVersion="0" screenState="viewEmail" />
+    <ContextHelpResource contextHelpResourceId="1028" screenName="updateTaskForm" applicationName="crmsfa" remotePageName="Edit_Activity_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1029" screenName="logTaskForm" applicationName="crmsfa" remotePageName="Log_Task_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1030" screenName="writeEmail" applicationName="crmsfa" remotePageName="Write_Email_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1031" screenName="pendingEmails" applicationName="crmsfa" remotePageName="Pending_Emails_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1032" screenName="opportunitiesMain" applicationName="crmsfa" remotePageName="My_Opportunities/My_Teams%27_Opportunities_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1033" screenName="createOpportunityForm" applicationName="crmsfa" remotePageName="Create_Opportunity_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1034" screenName="findOpportunities" applicationName="crmsfa" remotePageName="Find_Opportunity_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1035" screenName="viewOpportunity" applicationName="crmsfa" remotePageName="View_Opportunity_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1036" screenName="updateOpportunityForm" applicationName="crmsfa" remotePageName="Edit_Opportunity_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1037" screenName="createQuote" applicationName="crmsfa" remotePageName="Create_Quote_Shortcut" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1038" screenName="quotesMain" applicationName="crmsfa" remotePageName="My_Quotes_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1039" screenName="findQuotes" applicationName="crmsfa" remotePageName="Find_Quotes_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1040" screenName="ViewQuote" applicationName="crmsfa" remotePageName="Viewing_a_Quote" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="CRM_MYQUOTE" screenName="myQuotes" applicationName="crmsfa" remotePageName="My_Quotes_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="CRM_EDITQUOTE" screenName="EditQuote" applicationName="crmsfa" remotePageName="Edit_Quote_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="CRM_FINQUOTE" screenName="finalizeQuote" applicationName="crmsfa" remotePageName="Finalize_Quote_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1041" screenName="myOrders" applicationName="crmsfa" remotePageName="My_Orders_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1042" screenName="ordersMain" applicationName="crmsfa" remotePageName="My_Orders_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1043" screenName="createOrderMainScreen" applicationName="crmsfa" remotePageName="Create_Orders_Screen_CRMSFA" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1044" screenName="createOrderPartyForm" applicationName="crmsfa" remotePageName="Create_New_Customer_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1045" screenName="crmsfaQuickCheckout" applicationName="crmsfa" remotePageName="Finalize_Order_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1046" screenName="confirm" applicationName="crmsfa" remotePageName="Review_Order_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1047" screenName="findOrders" applicationName="crmsfa" remotePageName="Find_Orders_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1048" screenName="orderview" applicationName="crmsfa" remotePageName="View_Order_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1049" screenName="editOrderItems" applicationName="crmsfa" remotePageName="Edit_Order_Items_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1050" screenName="manageOrderQueue" applicationName="crmsfa" remotePageName="Order_Queue_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1051" screenName="pendingReturns" applicationName="crmsfa" remotePageName="Pending_Returns" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1052" screenName="findReturns" applicationName="crmsfa" remotePageName="Find_Return" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1053" screenName="createReturnForm" applicationName="crmsfa" remotePageName="Create_Return" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1054" screenName="viewReturn" applicationName="crmsfa" remotePageName="View_and_Edit_Return" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1055" screenName="accountsEditCreditCard" applicationName="crmsfa" remotePageName="Create_Payment_Methods#Create_New_Credit_Card" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1056" screenName="contactsEditCreditCard" applicationName="crmsfa" remotePageName="Create_Payment_Methods#Create_New_Credit_Card" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1057" screenName="accountsEditGiftCard" applicationName="crmsfa" remotePageName="Create_Payment_Methods#Create_New_Gift_Card" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1058" screenName="contactsEditGiftCard" applicationName="crmsfa" remotePageName="Create_Payment_Methods#Create_New_Gift_Card" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1059" screenName="accountsEditEftAccount" applicationName="crmsfa" remotePageName="Create_Payment_Methods#Create_New_EFT_Account" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1060" screenName="contactsEditEftAccount" applicationName="crmsfa" remotePageName="Create_Payment_Methods#Create_New_EFT_Account" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1061" screenName="accountsEditTaxAuthPartyInfo" applicationName="crmsfa" remotePageName="Create_Tax_ID_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1000" screenName="contactsEditTaxAuthPartyInfo" applicationName="crmsfa" remotePageName="Create_Tax_ID_Screen" remotePageVersion="0" />
+    
+    <ContextHelpResource contextHelpResourceId="1062" screenName="forecastsMain" applicationName="crmsfa" remotePageName="Forcasts_Home_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1063" screenName="findForecasts" applicationName="crmsfa" remotePageName="Find_Forcasts_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1064" screenName="viewForecast" applicationName="crmsfa" remotePageName="View_Forcast_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1065" screenName="marketingMain" applicationName="crmsfa" remotePageName="Find_Campaigns_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1066" screenName="createMarketingCampaignForm" applicationName="crmsfa" remotePageName="Create_Campaigns_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1067" screenName="marketingCampaigns" applicationName="crmsfa" remotePageName="Find_Campaigns_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1068" screenName="findMarketingCampaigns" applicationName="crmsfa" remotePageName="Find_Campaigns_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1069" screenName="viewMarketingCampaign" applicationName="crmsfa" remotePageName="View_Campaign_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1070" screenName="createContactListForm" applicationName="crmsfa" remotePageName="Create_Contact_List_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1071" screenName="findContactLists" applicationName="crmsfa" remotePageName="Find_Contact_List_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1072" screenName="viewContactList" applicationName="crmsfa" remotePageName="View_Contact_List_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1073" screenName="updateContactListForm" applicationName="crmsfa" remotePageName="Edit_Contact_List_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1074" screenName="sortUSPSBusinessMail" applicationName="crmsfa" remotePageName="USPS_Business_Mail_Sorting_Details_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1075" screenName="listSurveys" applicationName="crmsfa" remotePageName="Survey_Results_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1076" screenName="marketingReports" applicationName="crmsfa" remotePageName="Reports_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1077" screenName="teamsMain" applicationName="crmsfa" remotePageName="Find_Teams_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1078" screenName="findTeams" applicationName="crmsfa" remotePageName="Find_Teams_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1079" screenName="createTeamForm" applicationName="crmsfa" remotePageName="Create_Team_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1080" screenName="viewTeam" applicationName="crmsfa" remotePageName="View_Team_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1081" screenName="accountsEditTaxAuthPartyInfo" applicationName="crmsfa" remotePageName="Create_Tax_ID_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1082" screenName="contactsEditTaxAuthPartyInfo" applicationName="crmsfa" remotePageName="Create_Tax_ID_Screen" remotePageVersion="0" />
+
+    <ContextHelpResource contextHelpResourceId="1083" screenName="markServicePerformed" applicationName="crmsfa" remotePageName="Mark_as_Performed_Screen" remotePageVersion="0" />
+    <ContextHelpResource contextHelpResourceId="1084" screenName="newShipGroup" applicationName="crmsfa" remotePageName="New_Ship_Group_Screen" remotePageVersion="0" />
+
+
+</entity-engine-xml>

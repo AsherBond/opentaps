@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+<!-- Apache license applies to the Quote decorators.  
+These were copied here due to the original screens not parametrizing these decorators so they can be linked without having to copy them like this.   -->
+
+
+<!--
+This is the framework used to wrap ofbiz screen "as a whole" within our application.
+That means that we can use any ofbiz screen without having to change it.  It will still be wrapped
+inside of the crmsfa tab that we want it to be in.
+
+In order to wrap an ofbiz screen in this application,
+
+1.  Define the mainDecoratorLocation parameter in web.xml and point to this file.
+2.  Make sure the ofbiz screen defines a headerItem.  This is usually the case.
+3.  In the crmsfa/config/headerItemSections.properties file, map this headerItem value to the section it should appear in.
+4.  Include the request and view map from the ofbiz application in the crmsfa legacy-controller.xml file.
+    There is no need to change the values of these, because this system works automagically.
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <!-- The basis for this solution is this screen.  When the original ofbiz screen definition is parsed, it will learn that the main-decorator it should be using is this specific one (via web.xml) -->
+    <screen name="main-decorator">
+        <section>
+            <actions>
+                <!-- This script take the header item properties and determines what section the screen should appear in, as well as some display options such as the header title -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/integration.bsh"/>
+            </actions>
+            <widgets>
+                <!-- The second critical part of this solution is to render the section skin that the headerItem is mapped to.  -->
+                <decorator-screen name="main-section-decorator" location="${sectionDecoratorLocation}">
+                    <decorator-section name="section-body">
+                        <include-screen name="OfbizImportScreen"/> 
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- 
+    The ofbiz import screen is responsible for rendering ofbiz screens with a crmsfa skin around it. When the application detects an ofbiz screen,
+    usually by existance of headerItem parameter, it will call this screen. This is basically a stripped down GlobalDecorator fromcommon/widgets/CommonScreens.xml, which
+    includes all important parts of an ofbiz screen: the optional leftbar, the column style, and a paramatrized link. It leaves out the ofbiz stuff that
+    we don't need, such as the ofbiz application tab bar and section tab bar.
+    -->
+    <screen name="OfbizImportScreen">
+        <section>
+            <actions>
+                <set field="MainColumnStyle" value="nocolumns" global="true"/>
+                <!-- XXX TODO global link to the details of a party, which can vary by application (needs to be parametrized according to party type)  -->
+                <set field="customerDetailLink" value="/crmsfa/control/viewAccount?partyId=" global="true"/>
+            </actions>
+            <widgets>
+                <container style="centerarea">
+                    <container style="contentarea">
+                        <container id="column-container">
+
+                            <!-- by default will render left-bar only if leftbarScreen value not empty -->
+                            <include-screen name="${leftbarScreenName}" location="${leftbarScreenLocation}"/>
+
+                            <container style="${MainColumnStyle}">
+                                <decorator-section-include name="body"/>
+                            </container>
+                            <container style="endcolumns"><label text="&amp;nbsp;"/></container>
+                        </container>
+                    </container>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- The OFBIZ quote screens have special common decorators that are not parametrized and must be in the same file as the main-decorator screen.  So here they are. -->
+    <screen name="CommonQuoteDecorator">
+        <section>
+            <actions>
+                <set field="headerItem" value="quote"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator">
+                    <decorator-section name="body">
+                        <section>
+                            <!-- This will check generally if the user has CRMSFA_QUOTES_VIEW permission, ie permission to the view the Quotes tab.  
+                                Later we should do a more sophisticated check to see if the user might also have permission to view this quote of this customer -->
+                            <condition>
+                                <if-has-permission permission="CRMSFA" action="_QUOTES_VIEW"/>
+                            </condition>
+                            <widgets>
+                                <platform-specific>
+                                    <html><html-template location="component://order/webapp/ordermgr/quote/QuoteTabBar.ftl"/></html>
+                                </platform-specific>
+                                <container>
+                                    <label style="head1">${quote.quoteName} (${quote.quoteId})</label>
+                                </container>
+                                
+                                <decorator-section-include name="body"/>
+                                
+                            </widgets>
+                            <fail-widgets>
+                                <label style="head3">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                            </fail-widgets>
+                        </section>                    
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="CommonQuotePriceDecorator">
+        <section>
+            <widgets>
+                <decorator-screen name="main-decorator">
+                    <decorator-section name="body">
+                        <section>
+                            <!-- do check for ORDERMGR, _QUOTE_PRICE permission -->
+                            <condition>
+                                <and>
+                                    <if-has-permission permission="ORDERMGR" action="_QUOTE_PRICE"/>	
+                                    <if-has-permission permission="CRMSFA" action="_QUOTES_VIEW"/>
+                                </and>
+                            </condition>
+                            <widgets>
+                                <platform-specific>
+                                    <html><html-template location="component://order/webapp/ordermgr/quote/QuoteTabBar.ftl"/></html>
+                                </platform-specific>
+                                <container>
+                                    <label style="head1">${quote.quoteName} (${quote.quoteId})</label>
+                                </container>
+                                
+                                <decorator-section-include name="body"/>
+                                
+                            </widgets>
+                            <fail-widgets>
+                                <label style="head3">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                            </fail-widgets>
+                        </section>                    
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

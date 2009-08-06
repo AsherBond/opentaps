@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Entity definitions for USPS Business Mail features</title>
+    <copyright>Copyright (c) 2006 - 2007 Open Source Strategies Inc.</copyright>
+    <author>Leon Torres</author>
+
+    <!-- ========================================= -->
+    <!-- com.opensourcestrategies.crmsfa.usps      -->
+    <!-- ========================================- -->
+
+    <entity entity-name="UspsBmcCode"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Bulk Mail Centers (BMC) identified by an internal bmcCode key field.">
+        <field name="bmcCode" type="id-ne"></field>
+        <field name="description" type="description"></field>
+        <prim-key field="bmcCode"/>
+    </entity>
+
+    <entity entity-name="UspsZipToBmcCode"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Mapping of what 3 digit zip codes go to what BMC and a note of the USPS postalZone">
+        <field name="zip3" type="id"/>
+        <field name="bmcCode" type="id-ne"/>
+        <field name="postalZone" type="numeric"/>
+        <prim-key field="zip3"/>
+        <relation fk-name="UZTBC_BMC_CODE" rel-entity-name="UspsBmcCode" type="one">
+            <key-map field-name="bmcCode"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="UspsBPMZoneMap"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Mapping of 3-digit ZIP to BPM rate zones">
+        <field name="zip3" type="id"/>
+        <field name="uspsBPMRateZone" type="id"/>
+        <prim-key field="zip3"/>
+        <relation fk-name="BPMZONE_RATE" rel-entity-name="UspsBPMRatesByZone" type="one">
+            <key-map field-name="uspsBPMRateZone"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="UspsBPMRatesByZone"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="USPS BPM Rates by Zone">
+        <field name="uspsBPMRateZone" type="id"/>
+        <field name="ratePerPiece" type="currency-precise"/>
+        <field name="ratePerPound" type="currency-precise"/>
+        <prim-key field="uspsBPMRateZone"/>
+    </entity>
+
+    <entity entity-name="UspsContactListSort"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Stores contact list addresses and a string identifying what destination group they will be going to, such as by bulk to a BMC center.">
+        <field name="uspsContactListSortId" type="id-ne"/>
+        <field name="contactListId" type="id-ne"/>
+        <field name="contactMechId" type="id-ne"/>
+        <field name="zip5" type="id"/>
+        <field name="zip3" type="id"/>
+        <field name="bmcCode" type="id"/>
+        <field name="sortResult" type="description">
+            <description>
+                This field stores either the UspsBmcCode.description,
+                a string "5-digit ZIP ${postalCode}" or a string "3-digit ZIP ${postalCode.substring(3)}"
+                depending on whether this address will be sent bulk via BMC, 3-digit ZIP or 5 digit ZIP.
+                Non-US mail is stored as "OTHER". 
+            </description>
+        </field>
+        <field name="processedTimestamp" type="date-time"/>
+        <prim-key field="uspsContactListSortId"/>
+        <relation fk-name="USPSCLS_PA" rel-entity-name="PostalAddress" type="one">
+            <key-map field-name="contactMechId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="UspsContactListCountZip5"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Counts the addresses in each zip5 zone">
+        <member-entity entity-alias="UCLS" entity-name="UspsContactListSort"/>
+        <alias entity-alias="UCLS" name="contactListId" group-by="true"/>
+        <alias entity-alias="UCLS" name="contactMechId" function="count"/>
+        <alias entity-alias="UCLS" name="zip5" group-by="true"/>
+        <alias entity-alias="UCLS" name="processedTimestamp" group-by="false"/>
+    </view-entity>
+
+    <view-entity entity-name="UspsContactListCountZip3"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Counts the addresses in each zip3 zone">
+        <member-entity entity-alias="UCLS" entity-name="UspsContactListSort"/>
+        <alias entity-alias="UCLS" name="contactListId" group-by="true"/>
+        <alias entity-alias="UCLS" name="contactMechId" function="count"/>
+        <alias entity-alias="UCLS" name="zip3" group-by="true"/>
+        <alias entity-alias="UCLS" name="sortResult" group-by="false">
+            <description>To count those sorted by zip3, have to do sortResult LIKE '3-digit ZIP%'</description>
+        </alias>
+        <alias entity-alias="UCLS" name="processedTimestamp" group-by="false"/>
+    </view-entity>
+
+    <view-entity entity-name="UspsContactListCountBmc"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Counts the addresses in each BMC zone">
+        <member-entity entity-alias="UCLS" entity-name="UspsContactListSort"/>
+        <alias entity-alias="UCLS" name="contactListId" group-by="true"/>
+        <alias entity-alias="UCLS" name="contactMechId" function="count"/>
+        <alias entity-alias="UCLS" name="bmcCode" group-by="true"/>
+        <alias entity-alias="UCLS" name="processedTimestamp" group-by="false"/>
+    </view-entity>
+
+    <view-entity entity-name="UspsContactListCountSortResult"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Counts the addresses in each sortResult">
+        <member-entity entity-alias="UCLS" entity-name="UspsContactListSort"/>
+        <alias entity-alias="UCLS" name="contactListId" group-by="true"/>
+        <alias entity-alias="UCLS" name="contactMechId" function="count"/>
+        <alias entity-alias="UCLS" name="sortResult" group-by="true"/>
+        <alias entity-alias="UCLS" name="processedTimestamp" group-by="false"/>
+    </view-entity>
+
+    <entity entity-name="AddressLabelSpecification"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Predefined specification for address labels.  All values must be filled, so specify 0 if the field does not apply.">
+        <field name="addressLabelId" type="id-ne"></field>        
+        <field name="description" type="description"></field>
+        <field name="topMargin" type="floating-point"></field>
+        <field name="bottomMargin" type="floating-point"></field>        
+        <field name="leftMargin" type="floating-point"></field>
+        <field name="rightMargin" type="floating-point"></field>
+        <field name="pageColumns" type="floating-point"></field>
+        <field name="pageRows" type="floating-point"></field>
+        <field name="labelHeight" type="floating-point"></field>
+        <field name="labelWidth" type="floating-point"></field>       
+        <field name="heightBtwLabel" type="floating-point"></field>
+        <field name="widthBtwLabel" type="floating-point"></field>        
+        <field name="pageWidth" type="floating-point"></field>        
+        <field name="pageHeight" type="floating-point"></field>        
+        <field name="continuousFeed" type="indicator"><description>If continuous feed, then no page breaks based on number of rows</description></field>
+        <field name="uomId" type="id"></field>
+        <prim-key field="addressLabelId"/>
+    </entity>
+    
+    <view-entity entity-name="UspsContactListSortAndPostalAddressView"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Usps Sorted list and Postal Address">
+      <member-entity entity-alias="UCLS" entity-name="UspsContactListSort"/>        
+      <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+      <alias-all entity-alias="UCLS"/>  
+      <alias entity-alias="PA" name="address1"/>  
+      <alias entity-alias="PA" name="address2"/>  
+      <alias entity-alias="PA" name="toName"/>
+      <alias entity-alias="PA" name="attnName"/>
+      <alias entity-alias="PA" name="city"/>  
+      <alias entity-alias="PA" name="postalCode"/>
+      <alias entity-alias="PA" name="stateProvinceGeoId"/>  
+      <view-link entity-alias="PA" rel-entity-alias="UCLS">
+        <key-map field-name="contactMechId" />
+      </view-link>      
+    </view-entity>
+
+    <view-entity entity-name="UspsBPMRateZoneCount"
+            package-name="com.opensourcestrategies.crmsfa.usps"
+            title="Counts number of pieces going to each BPM rate zone">
+
+        <member-entity entity-alias="ZONES" entity-name="UspsBPMZoneMap"/>
+        <member-entity entity-alias="RATES" entity-name="UspsBPMRatesByZone"/>
+        <member-entity entity-alias="SORT" entity-name="UspsContactListSort"/>
+
+        <alias entity-alias="RATES" name="uspsBPMRateZone" group-by="true"/>
+        <alias entity-alias="RATES" name="ratePerPiece" group-by="true"/>
+        <alias entity-alias="RATES" name="ratePerPound" group-by="true"/>
+        <alias entity-alias="ZONES" name="zip3" group-by="false"/>
+        <alias entity-alias="SORT" name="sortResult" group-by="false"/>
+        <alias entity-alias="SORT" name="contactMechId" function="count"/>
+        <alias entity-alias="SORT" name="contactListId" group-by="true"/>
+
+        <view-link entity-alias="RATES" rel-entity-alias="ZONES">
+            <key-map field-name="uspsBPMRateZone"/>
+        </view-link>
+        <view-link entity-alias="ZONES" rel-entity-alias="SORT">
+            <key-map field-name="zip3"/>
+        </view-link>
+    </view-entity>
+
+</entitymodel>

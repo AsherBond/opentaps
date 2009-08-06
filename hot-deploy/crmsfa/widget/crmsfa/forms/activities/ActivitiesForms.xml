@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <!-- we need separate forms for pending and historical activities because the fields are different,
+        and because they both need to show up onthe same page, so we need different list iterator names -->
+    <form name="ListPendingActivities" type="list" separate-columns="true" 
+        title="PendingActivities"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListPendingActivities" paginate-size-field="actPendSize" paginate-index-field="actPendIndex"
+        list-name="pendingActivities">
+        <field name="workEffortTypeId" title="${uiLabelMap.CommonType}"
+            header-link="${listSortTarget}?${activityValueParams}&amp;pendingActivitiesOrderBy=workEffortTypeId#ListPendingActivities" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="WorkEffortType"/>
+        </field>
+        <field name="workEffortPurposeTypeId" title="${uiLabelMap.CrmPurpose}" 
+            header-link="${listSortTarget}?${activityValueParams}&amp;pendingActivitiesOrderBy=workEffortPurposeTypeId#ListPendingActivities" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="WorkEffortPurposeType"/>
+        </field>
+        <field name="workEffortName" title="${uiLabelMap.CrmActivity}" widget-style="linktext" widget-area-style="fieldWidth50pct"
+            header-link="${listSortTarget}?${activityValueParams}&amp;pendingActivitiesOrderBy=workEffortName#ListPendingActivities" header-link-style="orderByHeaderLink">
+            <hyperlink description="${workEffortName} (${workEffortId})" target="viewActivity?workEffortId=${workEffortId}"/>
+        </field>
+        <field name="currentStatusId" title="${uiLabelMap.CommonStatus}"
+            header-link="${listSortTarget}?${activityValueParams}&amp;activitiesOrderBy=currentStatusId#ListPendingActivities" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="StatusItem" key-field-name="statusId"/>
+        </field>
+        <field name="estimatedStartDate" title="${uiLabelMap.CrmActivityScheduledDate}"
+            header-link="${listSortTarget}?${activityValueParams}&amp;pendingActivitiesOrderBy=estimatedStartDate#ListPendingActivities" header-link-style="orderByHeaderLink">
+            <display/>
+        </field>
+        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmActivityDueDate}"
+            header-link="${listSortTarget}?${activityValueParams}&amp;pendingActivitiesOrderBy=estimatedCompletionDate#ListPendingActivities" header-link-style="orderByHeaderLink">
+            <display/>
+        </field>
+    </form>   
+
+    <form name="ListCompletedActivities" type="list" separate-columns="true" 
+        title="CompletedActivites"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListCompletedActivities" paginate-size-field="actHistSize" paginate-index-field="actHistIndex"
+        list-name="completedActivities">
+        <field name="workEffortTypeId" title="${uiLabelMap.CommonType}"
+            header-link="${listSortTarget}?${activityValueParams}&amp;completedActivitiesOrderBy=workEffortTypeId#ListCompletedActivities" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="WorkEffortType"/>
+        </field>
+        <field name="workEffortPurposeTypeId" title="${uiLabelMap.CrmPurpose}" 
+            header-link="${listSortTarget}?${activityValueParams}&amp;pendingActivitiesOrderBy=workEffortPurposeTypeId#ListCompletedActivities" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="WorkEffortPurposeType"/>
+        </field>
+        <field name="workEffortName" title="${uiLabelMap.CrmActivity}" widget-style="linktext" widget-area-style="fieldWidth50pct"
+            header-link="${listSortTarget}?${activityValueParams}&amp;completedActivitiesOrderBy=workEffortName#ListCompletedActivities" header-link-style="orderByHeaderLink">
+            <hyperlink description="${workEffortName} (${workEffortId})" target="viewActivity?workEffortId=${workEffortId}"/>
+        </field>
+        <field name="currentStatusId" title="${uiLabelMap.CommonStatus}"
+            header-link="${listSortTarget}?${activityValueParams}&amp;completedActivitiesOrderBy=currentStatusId#ListCompletedActivities" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="StatusItem" key-field-name="statusId"/>
+        </field>
+        <field name="actualStartDate" title="${uiLabelMap.CrmActivityActualStartDate}"
+            header-link="${listSortTarget}?${activityValueParams}&amp;completedActivitiesOrderBy=estimatedStartDate#ListCompletedActivities" header-link-style="orderByHeaderLink">
+            <display/>
+        </field>
+        <field name="actualCompletionDate" title="${uiLabelMap.CrmActivityActualCompletionDate}"
+            header-link="${listSortTarget}?${activityValueParams}&amp;completedActivitiesOrderBy=estimatedCompletionDate#ListCompletedActivities" header-link-style="orderByHeaderLink">
+            <display/>
+        </field>
+    </form>   
+
+    <form name="createEventForm" type="single" target="createEvent" title=""
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="workEffortTypeId"><hidden value="EVENT"/></field>
+        <field name="currentStatusId"><hidden value="EVENT_SCHEDULED"/></field>
+
+        <field name="workEffortName" title="${uiLabelMap.CommonName}" title-style="requiredField">
+            <text size="60"/>
+        </field>
+        <field name="scopeEnumId" title="${uiLabelMap.CrmActivitySecurityScope}">
+            <drop-down allow-empty="false">
+                <list-options key-name="enumId" list-name="localizedScopeEnumList" description="${description}"/>
+            </drop-down>        
+        </field>      
+        <field name="internalPartyId" title="${uiLabelMap.CrmRelatedParty}">
+            <lookup target-form-name="LookupClients" size="20" maxlength="20"/>
+        </field>
+        <field name="salesOpportunityId" title="${uiLabelMap.CrmOpportunity}">
+            <lookup target-form-name="LookupOpportunities" size="20" maxlength="20"/>
+        </field>
+        <field name="custRequestId" title="${uiLabelMap.CrmCase}">
+            <lookup target-form-name="LookupCases" size="20" maxlength="20"/>
+        </field>
+        <field name="estimatedStartDate" title="${uiLabelMap.CrmScheduledDateAndTime}" title-style="requiredField">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="duration" title="${uiLabelMap.CrmDuration}">
+            <text default-value="1:00"/>
+        </field>
+        <field name="locationDesc" title="${uiLabelMap.CrmLocation}">
+            <text size="60"/>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}">
+            <textarea/>
+        </field>
+        <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options entity-name="StatusItem" key-field-name="statusId" description="${description}">
+                    <entity-constraint name="statusTypeId" value="WEPA_AVAILABILITY"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down> 
+        </field>
+        <field name="forceIfConflicts" title="${uiLabelMap.CrmForceIfConflicts}">
+            <drop-down allow-empty="false">
+                <option description="${uiLabelMap.CommonNo}" key="N"/>
+                <option description="${uiLabelMap.CommonYes}" key="Y"/>
+            </drop-down>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+ 
+    <form name="createTaskForm" type="single" target="createTask" title=""
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="workEffortTypeId"><hidden value="TASK"/></field>
+        <field name="currentStatusId"><hidden value="TASK_SCHEDULED"/></field>
+
+        <field name="workEffortName" title="${uiLabelMap.PartySubject}" title-style="requiredField">
+            <text size="60"/>
+        </field>
+        <field name="scopeEnumId" title="${uiLabelMap.CrmActivitySecurityScope}">
+            <drop-down allow-empty="false">
+                <list-options key-name="enumId" list-name="localizedScopeEnumList" description="${description}"/>
+            </drop-down>        
+        </field>
+        <field name="internalPartyId" title="${uiLabelMap.CrmRelatedParty}">
+            <lookup target-form-name="LookupClients" size="20" maxlength="20"/>
+        </field>
+        <field name="salesOpportunityId" title="${uiLabelMap.CrmOpportunity}">
+            <lookup target-form-name="LookupOpportunities" size="20" maxlength="20"/>
+        </field>
+        <field name="custRequestId" title="${uiLabelMap.CrmCase}">
+            <lookup target-form-name="LookupCases" size="20" maxlength="20"/>
+        </field>
+        <field name="workEffortPurposeTypeId" title="${uiLabelMap.CommonPurpose}">
+            <drop-down allow-empty="true" current="selected">
+                <option description="Email" key="WEPT_TASK_EMAIL"/>
+                <option description="Phone Call" key="WEPT_TASK_PHONE_CALL"/>
+            </drop-down>
+        </field>
+        <field name="estimatedStartDate" title="${uiLabelMap.CrmStartDateAndTime}" title-style="requiredField">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="duration" title="${uiLabelMap.CrmDuration}">
+            <text default-value="1:00"/>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}">
+            <textarea/>
+        </field>
+        <!-- TODO: do these really need to be here? if not, will have to modify service and service def too -->
+        <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options entity-name="StatusItem" key-field-name="statusId" description="${description}">
+                    <entity-constraint name="statusTypeId" value="WEPA_AVAILABILITY"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down> 
+        </field>
+        <field name="forceIfConflicts" title="${uiLabelMap.CrmForceIfConflicts}">
+            <drop-down allow-empty="false">
+                <option description="${uiLabelMap.CommonNo}" key="N"/>
+                <option description="${uiLabelMap.CommonYes}" key="Y"/>
+            </drop-down>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+ 
+    <form name="updateEventForm" type="single" target="updateEvent" title="" default-map-name="workEffort"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="workEffortId"><hidden/></field>
+        <field name="workEffortTypeId"><hidden/></field>
+
+        <field name="workEffortName" title="${uiLabelMap.CommonName}" title-style="requiredField">
+            <text size="60"/>
+        </field>
+        <field name="currentStatusId" title="${uiLabelMap.CommonStatus}" position="1">
+            <drop-down allow-empty="false" current-description="${uiLabelMap.CommonSelectOne}">
+                <entity-options entity-name="StatusValidChangeToDetail" key-field-name="statusIdTo" description="${transitionName}">
+                    <entity-constraint name="statusId" value="${workEffort.currentStatusId}"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down> 
+        </field>
+        <field name="scopeEnumId" title="${uiLabelMap.CrmActivitySecurityScope}" use-when="hasUpdateSecurityScopePermission">
+            <drop-down allow-empty="false">
+                <list-options key-name="enumId" list-name="localizedScopeEnumList" description="${description}"/>
+            </drop-down>        
+        </field>
+        <field name="scopeEnumId" title="${uiLabelMap.CrmActivitySecurityScope}" use-when="!hasUpdateSecurityScopePermission">
+            <display description="${localizedScopeEnumDescription}"/>
+        </field>        
+        <field name="internalPartyId" title="${uiLabelMap.CrmRelatedParty}">
+            <lookup target-form-name="LookupClients" size="20" maxlength="20"/>
+        </field>
+        <field name="salesOpportunityId" title="${uiLabelMap.CrmOpportunity}">
+            <lookup target-form-name="LookupOpportunities" size="20" maxlength="20"/>
+        </field>
+        <field name="custRequestId" title="${uiLabelMap.CrmCase}">
+            <lookup target-form-name="LookupCases" size="20" maxlength="20"/>
+        </field>
+        <field name="estimatedStartDate" title="${uiLabelMap.CrmScheduledDateAndTime}" title-style="requiredField">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="duration" title="${uiLabelMap.CrmDuration}">
+            <text default-value="1:00"/>
+        </field>
+        <field name="locationDesc" title="${uiLabelMap.CrmLocation}">
+            <text size="60"/>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}">
+            <textarea/>
+        </field>
+        <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options entity-name="StatusItem" key-field-name="statusId" description="${description}">
+                    <entity-constraint name="statusTypeId" value="WEPA_AVAILABILITY"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down> 
+        </field>
+        <field name="forceIfConflicts" title="${uiLabelMap.CrmForceIfConflicts}">
+            <drop-down allow-empty="false">
+                <option description="${uiLabelMap.CommonNo}" key="N"/>
+                <option description="${uiLabelMap.CommonYes}" key="Y"/>
+            </drop-down>
+        </field>
+       
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="updateTaskForm" type="single" target="updateTask" title="" default-map-name="workEffort"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="workEffortId"><hidden/></field>
+        <field name="workEffortTypeId"><hidden/></field>
+
+        <field name="workEffortName" title="${uiLabelMap.PartySubject}" title-style="requiredField">
+            <text size="60"/>
+        </field>
+        <field name="currentStatusId" title="${uiLabelMap.CommonStatus}" position="1">
+            <drop-down allow-empty="false" current-description="${uiLabelMap.CommonSelectOne}">
+                <entity-options entity-name="StatusValidChangeToDetail" key-field-name="statusIdTo" description="${transitionName}">
+                    <entity-constraint name="statusId" value="${workEffort.currentStatusId}"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down> 
+        </field>
+        <field name="scopeEnumId" title="${uiLabelMap.CrmActivitySecurityScope}" use-when="hasUpdateSecurityScopePermission">
+            <drop-down allow-empty="false">
+                <list-options key-name="enumId" list-name="localizedScopeEnumList" description="${description}"/>
+            </drop-down>        
+        </field>
+        <field name="localizedScopeEnumDescription" title="${uiLabelMap.CrmActivitySecurityScope}" use-when="!hasUpdateSecurityScopePermission">
+            <display/>
+        </field>
+        <field name="internalPartyId" title="${uiLabelMap.CrmRelatedParty}">
+            <lookup target-form-name="LookupClients" size="20" maxlength="20"/>
+        </field>
+        <field name="salesOpportunityId" title="${uiLabelMap.CrmOpportunity}">
+            <lookup target-form-name="LookupOpportunities" size="20" maxlength="20"/>
+        </field>
+        <field name="custRequestId" title="${uiLabelMap.CrmCase}">
+            <lookup target-form-name="LookupCases" size="20" maxlength="20"/>
+        </field>
+        <field name="workEffortPurposeTypeId" title="${uiLabelMap.CommonPurpose}" title-style="requiredField">
+            <drop-down allow-empty="true" current="selected">
+                <option description="Email" key="WEPT_TASK_EMAIL"/>
+                <option description="Phone Call" key="WEPT_TASK_PHONE_CALL"/>
+            </drop-down>
+        </field>
+        <field name="estimatedStartDate" title="${uiLabelMap.CrmStartDateAndTime}" title-style="requiredField">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="duration" title="${uiLabelMap.CrmDuration}">
+            <text default-value="1:00"/>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}">
+            <textarea/>
+        </field>
+        <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options entity-name="StatusItem" key-field-name="statusId" description="${description}">
+                    <entity-constraint name="statusTypeId" value="WEPA_AVAILABILITY"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down> 
+        </field>
+        <field name="forceIfConflicts" title="${uiLabelMap.CrmForceIfConflicts}">
+            <drop-down allow-empty="false">
+                <option description="${uiLabelMap.CommonNo}" key="N"/>
+                <option description="${uiLabelMap.CommonYes}" key="Y"/>
+            </drop-down>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+ 
+    <form name="startActivityForm" type="single" target="updateActivityWithoutAssoc" default-widget-style="inputBox">
+        <field name="workEffortId"><hidden value="${workEffort.workEffortId}"/></field>
+        <field name="currentStatusId" use-when="workEffort.get(&quot;workEffortTypeId&quot;).equals(&quot;TASK&quot;)"><hidden value="TASK_STARTED"/></field>
+        <field name="currentStatusId" use-when="workEffort.get(&quot;workEffortTypeId&quot;).equals(&quot;EVENT&quot;)"><hidden value="EVENT_STARTED"/></field>
+        <field name="actualStartDate" title="${uiLabelMap.CrmStartTime}" title-style="requiredField">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmStart}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="endActivityForm" type="single" target="updateActivityWithoutAssoc" default-widget-style="inputBox">
+        <field name="workEffortId"><hidden value="${workEffort.workEffortId}"/></field>
+        <field name="currentStatusId" use-when="workEffort.get(&quot;workEffortTypeId&quot;).equals(&quot;TASK&quot;)"><hidden value="TASK_COMPLETED"/></field>
+        <field name="currentStatusId" use-when="workEffort.get(&quot;workEffortTypeId&quot;).equals(&quot;EVENT&quot;)"><hidden value="EVENT_COMPLETED"/></field>
+        <field name="actualCompletionDate" title="${uiLabelMap.CrmFinishTime}" title-style="requiredField">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmFinish}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- this form is dual-purpose: it can either log an email or log a phone call -->
+    <form name="logTaskForm" type="single" target="logTask" title=""
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <!-- this is passed in as a parameter and defines whether we are logging a phone call or email -->
+        <field name="workEffortPurposeTypeId" title="${uiLabelMap.CommonType}" widget-style="tabletext">
+            <display-entity entity-name="WorkEffortPurposeType"/>
+        </field>
+        <field name="outbound" title="${uiLabelMap.CrmInboundOutbound}" title-style="requiredField">
+            <drop-down allow-empty="false">
+                <option description="${uiLabelMap.CrmOutbound}" key="Y"/>
+                <option description="${uiLabelMap.CrmInbound}" key="N"/>
+            </drop-down>
+        </field>
+        <field name="fromPartyId" title="${uiLabelMap.CrmInternalParty}" title-style="requiredField">
+            <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>
+        </field>
+        <field name="internalPartyId" title="${uiLabelMap.CrmExternalParty}">
+            <lookup target-form-name="LookupClients" size="20" maxlength="20"/>
+        </field>
+        <field name="salesOpportunityId" title="${uiLabelMap.CrmOpportunity}">
+            <lookup target-form-name="LookupOpportunities" size="20" maxlength="20"/>
+        </field>
+        <field name="custRequestId" title="${uiLabelMap.CrmCase}">
+            <lookup target-form-name="LookupCases" size="20" maxlength="20"/>
+        </field>
+        <field name="workEffortName" title="${uiLabelMap.PartySubject}" title-style="requiredField">
+            <text size="60"/>
+        </field>
+        <field name="content" title="${uiLabelMap.CommonMessage}"> <!-- this is a field of CommunicationEvent -->
+            <textarea/>
+        </field>
+        <field name="actualStartDate" title="${uiLabelMap.CrmActivityStartDate}">
+            <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
+        </field>
+        <field name="duration" title="${uiLabelMap.CrmDuration}">
+            <text default-value="1:00"/>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- present a list of WorkEffortAndPartyAssign -->
+    <form name="ListAssociatedParties" type="list" separate-columns="true" 
+        title="Internal Parties"  default-title-style="tableheadtext" target="updateWorkEffortPartyAssignment"
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="NotSupportedYet" list-name="associatedParties">
+        <field name="workEffortId"><hidden value="${parameters.workEffortId}"/></field>
+        <field name="partyId" title="${uiLabelMap.CommonName}" widget-area-style="fieldWidth50pct">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.party.PartyHelper.createViewPageLink(partyId, delegator, externalLoginKey);}"/>
+        </field>
+        <field name="roleTypeId" title="${uiLabelMap.PartyRole}" widget-area-style="fieldWidth100">
+            <display-entity entity-name="RoleType"/> 
+        </field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}" widget-area-style="fieldWidth100">
+            <display-entity entity-name="StatusItem"/> 
+        </field>
+        <field name="Remove" title="" use-when="!hasUpdatePartiesPermission">
+            <display/> 
+        </field>        
+        <field name="Remove" title="" widget-style="buttontext" use-when="hasUpdatePartiesPermission">
+            <hyperlink description="${uiLabelMap.CommonRemove}" 
+                target="removeWorkEffortPartyAssignment?workEffortId=${workEffortId}&amp;partyId=${partyId}"/> 
+        </field>
+        <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}" widget-area-style="fieldWidth100"
+            use-when="!hasUpdatePartiesPermission">
+            <display-entity entity-name="StatusItem" key-field-name="statusId"/> 
+        </field>
+        <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}" widget-style="inputBox" 
+            use-when="hasUpdatePartiesPermission">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options entity-name="StatusItem" key-field-name="statusId" description="${description}">
+                    <entity-constraint name="statusTypeId" value="WEPA_AVAILABILITY"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down> 
+        </field>
+        <field name="Update" title="${uiLabelMap.CrmChangeAvailability}" use-when="hasUpdatePartiesPermission" widget-style="buttontext">
+            <submit button-type="text-link"/>
+        </field>
+    </form>
+
+    <!-- small form to add a work effort party assignment -->
+    <form name="AddAssociatedParty" type="single" target="addWorkEffortPartyAssignment"
+        default-title-style="tableheadtext" default-widget-style="inputBox">
+        <field name="workEffortId"><hidden value="${parameters.workEffortId}"/></field>
+        <field name="partyId" title="${uiLabelMap.CrmNewAttendee}">
+            <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="viewCommEvent" type="single" default-map-name="communicationEvent"
+        default-title-style="tableheadtext" default-widget-style="tabletext">
+        <field name="partyIdFrom" title="${uiLabelMap.CommonFrom}">
+            <display-entity entity-name="PartyNameView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId"/>
+        </field>
+        <field name="partyIdTo" title="${uiLabelMap.CommonTo}">
+            <display-entity entity-name="PartyNameView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId"/>
+        </field>
+        <field name="subject" title="${uiLabelMap.PartySubject}"><display/></field>
+        <field name="content" title="${uiLabelMap.CommonMessage}"><display/></field>
+    </form>
+
+</forms>

@@ -1,0 +1,169 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/*
+ *  Copyright (c) 2005-2006 Open Source Strategies, Inc.
+ *  Copyright (c) 2003-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
+// @author Leon Torres (leon@opensourcestrategies.com)
+
+// This file is called by main-decorator and is executed for most screens. Its purpose is to retrieve resources common to all screens.
+import javolution.util.FastMap;
+import org.ofbiz.base.util.*;
+import org.opentaps.common.party.ViewPrefWorker;
+
+import org.opentaps.common.util.UtilConfig;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+
+context.put("javascriptFiles", UtilConfig.getJavascriptFiles("crmsfa", locale));
+context.put("stylesheetFiles", UtilConfig.getStylesheetFiles("crmsfa"));
+
+// userLogin
+userLogin = request.getAttribute("userLogin");
+if (userLogin == null) { // this should *never* happen
+    return;
+}
+context.put("userLogin", userLogin);
+
+// security
+security = request.getAttribute("security"); 
+context.put("security", security);
+
+// external login key
+extLogin = request.getAttribute("externalLoginKey"); 
+if (extLogin != null) {
+    context.put("externalKeyParam", "externalLoginKey=" + requestAttributes.get("externalLoginKey"));
+}
+
+// context path
+context.put("contextPath", request.getContextPath());
+
+
+// decide what sections to display according to security
+accountsView = false;
+if (security.hasEntityPermission("CRMSFA_ACCOUNTS", "_VIEW", userLogin)) {
+    accountsView = true;
+} 
+contactsView = false;
+if (security.hasEntityPermission("CRMSFA_CONTACTS", "_VIEW", userLogin)) {
+    contactsView = true;
+} 
+opportunitiesView = false;
+if (security.hasEntityPermission("CRMSFA_OPPS", "_VIEW", userLogin)) {
+    opportunitiesView = true;
+} 
+leadsView = false;
+if (security.hasEntityPermission("CRMSFA_LEADS", "_VIEW", userLogin)) {
+    leadsView = true;
+} 
+casesView = false;
+if (security.hasEntityPermission("CRMSFA_CASES", "_VIEW", userLogin)) {
+    casesView = true;
+}
+activitiesView = true;
+forecastsView = false;
+partnersView = false;
+if (security.hasEntityPermission("CRMSFA_PARTNER", "_VIEW", userLogin)) {
+    partnersView = true;
+}
+quotesView = false;
+if (security.hasEntityPermission("CRMSFA_4C", "_VIEW", userLogin)) {
+    forecastsView = true;
+}
+if (security.hasEntityPermission("CRMSFA_QUOTES", "_VIEW", userLogin)) {
+    quotesView = true;
+}
+ordersView = false;
+if (security.hasEntityPermission("CRMSFA_ORDER", "_VIEW", userLogin)) {
+    ordersView = true;
+}
+marketingView = false;
+if (security.hasEntityPermission("CRMSFA_MKTG", "_VIEW", userLogin)) {
+    marketingView = true;
+}
+teamsView = false;
+if (security.hasEntityPermission("CRMSFA_TEAM", "_VIEW", userLogin)) {
+    teamsView = true;
+}
+
+reportsView = false;
+if (security.hasEntityPermission("CRMSFA_RPT", "_VIEW", userLogin)) {
+    reportsView = true;
+}
+
+
+// define sections
+sections = new ArrayList();
+sections.add(UtilMisc.toMap("uiLabel", "CrmMyHome", "uri", "/myHomeMain", "sectionName", "myHome", "hasPermission", true));
+sections.add(UtilMisc.toMap("uiLabel", "CrmLeads", "uri", "/leadsMain", "sectionName", "leads", "hasPermission", leadsView));
+sections.add(UtilMisc.toMap("uiLabel", "CrmContacts", "uri", "/contactsMain", "sectionName", "contacts", "hasPermission", contactsView));
+sections.add(UtilMisc.toMap("uiLabel", "CrmAccounts", "uri", "/accountsMain", "sectionName", "accounts", "hasPermission", accountsView));
+sections.add(UtilMisc.toMap("uiLabel", "CrmCases", "uri", "/casesMain", "sectionName", "cases", "hasPermission", casesView));
+sections.add(UtilMisc.toMap("uiLabel", "CrmActivities", "uri", "/activitiesMain", "sectionName", "activities", "hasPermission", activitiesView));
+sections.add(UtilMisc.toMap("uiLabel", "CrmOpportunities", "uri", "/opportunitiesMain", "sectionName", "opportunities", "hasPermission", opportunitiesView));
+sections.add(UtilMisc.toMap("uiLabel", "OrderOrderQuotes", "uri", "/quotesMain", "sectionName", "quotes", "hasPermission", quotesView));
+sections.add(UtilMisc.toMap("uiLabel", "OrderOrders", "uri", "/ordersMain", "sectionName", "orders", "hasPermission", ordersView));
+sections.add(UtilMisc.toMap("uiLabel", "CrmForecasts", "uri", "/forecastsMain", "sectionName", "forecasts", "hasPermission", forecastsView));
+sections.add(UtilMisc.toMap("uiLabel", "CrmMarketing", "uri", "/marketingMain", "sectionName", "marketing", "hasPermission", marketingView));
+sections.add(UtilMisc.toMap("uiLabel", "OpentapsPartners", "uri", "/partnersMain", "sectionName", "partners", "hasPermission", partnersView));
+sections.add(UtilMisc.toMap("uiLabel", "CrmTeams", "uri", "/teamsMain", "sectionName", "teams", "hasPermission", teamsView));
+sections.add(UtilMisc.toMap("uiLabel", "OpentapsReports", "uri", "/manageReports", "sectionName", "reports", "hasPermission", reportsView));
+
+// show the ofbiz tab last if so desired
+showOfbizTab = UtilConfig.getPropertyBoolean("crmsfa", "crmsfa.tab.ofbiz.show", false);
+if (showOfbizTab) {
+    ofbizTabLabel = UtilConfig.getPropertyValue("crmsfa", "crmsfa.tab.ofbiz.label");
+    ofbizTabTarget = UtilConfig.getPropertyValue("crmsfa", "crmsfa.tab.ofbiz.target");
+    if (ofbizTabLabel != null && ofbizTabTarget != null) {
+        sections.add(UtilMisc.toMap("uiLabel", ofbizTabLabel, "uri", ofbizTabTarget, "sectionName", "ofbiz", "hasPermission", true, "isExternal", true));
+    }
+}
+
+//NOTE: ModelScreenWidget.java:545 uses context.get("sections"), so this would crash if we put "sections" into the map.  Hence the name "applicationSections"
+context.put("applicationSections", sections);
+
+// user view preferences for this section
+viewPreferences = ViewPrefWorker.getViewPreferencesByLocation(userLogin, "crmsfa", context.get("sectionName"));
+context.get("globalContext").put("viewPreferences", viewPreferences);
+
+// Add the import and include transforms
+// These will enable Freemarker include loading and global macros from a remote file.
+// Note that globalContext will allow access from all sections of the screen widget
+loader = Thread.currentThread().getContextClassLoader();
+globalContext.put("import", loader.loadClass("org.opentaps.common.template.freemarker.transform.ImportTransform").newInstance());
+globalContext.put("include", loader.loadClass("org.opentaps.common.template.freemarker.transform.IncludeTransform").newInstance());
+globalContext.put("paginateTransform", loader.loadClass("org.opentaps.common.webapp.transform.PaginateTransform").newInstance());
+
+// Indicator for VoIP integration active
+globalContext.put("voipIntegrate", "true".equalsIgnoreCase(UtilProperties.getPropertyValue("VoIP", "facetPhone.integrate", "")));

@@ -1,0 +1,180 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.contact.ContactHelper;
+import org.ofbiz.party.party.PartyHelper;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.util.UtilConfig;
+import org.opentaps.common.util.UtilCommon;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+returnId = parameters.get("returnId");
+if (returnId == null) {
+    UtilMessage.addError(request, "OpentapsError_ReturnNotFound", UtilMisc.toMap("returnId", returnId));
+    return;
+}
+returnHeader = delegator.findByPrimaryKey("ReturnHeader", UtilMisc.toMap("returnId", returnId));
+if (returnHeader == null) {
+    UtilMessage.addError(request, "OpentapsError_ReturnNotFound", UtilMisc.toMap("returnId", returnId));
+    return;
+}
+context.put("returnId", returnId);
+context.put("returnHeader", returnHeader);
+context.put("returnStatus", returnHeader.getRelatedOneCache("StatusItem"));
+
+customerParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", returnHeader.get("fromPartyId")));
+customerName = PartyHelper.getPartyName(customerParty, false);
+context.put("customerName", customerName);
+
+//put to history
+context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("CrmNavHistoryReturn", locale, UtilMisc.toMap("returnId", returnId, "customerName", customerName)), "viewReturn", UtilMisc.toList("returnId"));
+
+// check if return can be accepted and get the transition name
+if (security.hasEntityPermission("CRMSFA", "_RETURN_ACCEPT", userLogin)) {
+    acceptStatus = delegator.findByPrimaryKeyCache("StatusValidChangeToDetail", UtilMisc.toMap("statusId", returnHeader.get("statusId"), "statusIdTo", "RETURN_ACCEPTED"));
+    if (acceptStatus != null) context.put("canAcceptReturn", true);
+}
+
+// check if return can be canceled and get the transition data
+if (security.hasEntityPermission("CRMSFA", "_RETURN_CANCEL", userLogin)) {
+    cancelStatus = delegator.findByPrimaryKeyCache("StatusValidChangeToDetail", UtilMisc.toMap("statusId", returnHeader.get("statusId"), "statusIdTo", "RETURN_CANCELLED"));
+    if (cancelStatus != null) context.put("canCancelReturn", true);
+}
+
+// check if return can be canceled and get the transition data
+if (security.hasEntityPermission("CRMSFA", "_RETURN_COMP", userLogin)) {
+    cancelStatus = delegator.findByPrimaryKeyCache("StatusValidChangeToDetail", UtilMisc.toMap("statusId", returnHeader.get("statusId"), "statusIdTo", "RETURN_COMPLETED"));
+    if (cancelStatus != null) context.put("canForceCompleteReturn", true);
+}
+
+// get data for the edit header form
+if ("RETURN_REQUESTED".equals(returnHeader.get("statusId"))) {
+
+    // customer return addresses TODO maybe a helper method to generate this data?
+    contactMechs = ContactHelper.getContactMech(customerParty, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);
+    if (contactMechs == null) contactMechs = FastList.newInstance();
+    addresses = FastList.newInstance();
+    for (iter = contactMechs.iterator(); iter.hasNext(); ) {
+        mech = iter.next();
+        address = FastMap.newInstance();
+        postal = mech.getRelatedOne("PostalAddress");
+        state = postal.getRelatedOneCache("StateProvinceGeo");
+        country = postal.getRelatedOneCache("CountryGeo");
+
+        address.putAll( postal.getAllFields() );
+        if (state != null) address{"stateName"} = state.get("geoName");
+        if (country != null) address{"countryName"} = country.get("abbreviation");
+        addresses.add( address );
+    }
+    context.put("addresses", addresses);
+
+    // customer billing accounts
+    conditions = UtilMisc.toList(
+        new EntityExpr("partyId", EntityOperator.EQUALS, customerParty.get("partyId")),
+        new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
+        EntityUtil.getFilterByDateExpr()
+    );
+    billingAccounts = delegator.findByAnd("BillingAccountAndRole", conditions);
+
+    // special account for the new billing account option
+    newAccount = delegator.makeValue("BillingAccount", null);
+    newAccount{"billingAccountId"} = "NEW_ACCOUNT";
+    newAccount{"description"} = UtilMessage.expandLabel("AccountingNewAccount", locale);
+    billingAccounts.add(0, newAccount);
+
+    context.put("billingAccounts", billingAccounts);
+
+    // warehouses for return organization
+    conditions = UtilMisc.toList(
+        new EntityExpr("ownerPartyId", EntityOperator.EQUALS, returnHeader.get("toPartyId")),
+        EntityUtil.getFilterByDateExpr("openedDate", "closedDate")
+    );
+    warehouses = delegator.findByAnd("Facility", conditions, UtilMisc.toList("facilityName"));
+    context.put("warehouses", warehouses);
+
+    returnServices = delegator.findAll("CarrierReturnService");
+    for (returnService : returnServices) {
+      returnService.set("description", returnService.get("description", locale));
+    }
+    context.put("returnServices", returnServices);
+
+    context.put("phoneNumbers", org.opentaps.common.party.PartyHelper.getPhoneNumbersForParty(customerParty.get("partyId"), delegator));
+} else { // the form is read only, so get the current data for display
+
+    address = delegator.findByPrimaryKey("PostalAddress", UtilMisc.toMap("contactMechId", returnHeader.get("originContactMechId")));
+    if (address != null) { // TODO: really need a helper method
+        returnAddress = FastMap.newInstance();
+        returnAddress.putAll( address.getAllFields() );
+        state = address.getRelatedOneCache("StateProvinceGeo");
+        country = address.getRelatedOneCache("CountryGeo");
+        if (state != null) returnAddress{"stateName"} = state.get("geoName");
+        if (country != null) returnAddress{"countryName"} = country.get("abbreviation");
+        context.put("returnAddress", returnAddress);
+    }
+
+    if (returnHeader.get("billingAccountId") != null) {
+        conditions = UtilMisc.toList(
+            new EntityExpr("billingAccountId", EntityOperator.EQUALS, returnHeader.get("billingAccountId")),
+            new EntityExpr("partyId", EntityOperator.EQUALS, customerParty.get("partyId")),
+            new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
+            EntityUtil.getFilterByDateExpr()
+        );
+        billingAccount = EntityUtil.getFirst( delegator.findByAnd("BillingAccountAndRole", conditions, UtilMisc.toList("fromDate DESC")) );
+        context.put("billingAccount", billingAccount);
+    }
+}
+
+context.put("returnService", returnHeader.getRelatedOne("CarrierReturnService"));
+if (UtilValidate.isNotEmpty(returnHeader.getString("originPhoneContactMechId"))) {
+  context.put("originTelecomNumber", delegator.findByPrimaryKey("TelecomNumber", UtilMisc.toMap("contactMechId", returnHeader.get("originPhoneContactMechId"))));
+}
+
+// Return shipment
+cond = UtilMisc.toList(new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("PURCH_SHIP_CREATED", "PURCH_SHIP_RECEIVED")),
+                       new EntityExpr("shipmentTypeId", EntityOperator.EQUALS, "SALES_RETURN"),
+                       new EntityExpr("returnId", EntityOperator.EQUALS, returnId));
+returnShipment = EntityUtil.getFirst(delegator.findByCondition("Shipment", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("shipmentId DESC")));
+context.put("returnShipment", returnShipment);
+if (UtilValidate.isNotEmpty(returnShipment)) {
+  context.put("returnShipmentId", returnShipment.get("shipmentId"));
+  returnShipmentRouteSegment = delegator.findByPrimaryKey("ShipmentRouteSegment", UtilMisc.toMap("shipmentId", returnShipment.get("shipmentId"), "shipmentRouteSegmentId", "00001"));
+  context.put("returnShipmentRouteSegment", returnShipmentRouteSegment);
+  if (UtilValidate.isNotEmpty(returnShipmentRouteSegment)) {
+    context.put("carrierName", PartyHelper.getPartyName(delegator, returnShipmentRouteSegment.get("carrierPartyId"), false));
+    shipmentMethod = returnShipmentRouteSegment.getRelatedOne("ShipmentMethodType");
+    if (UtilValidate.isNotEmpty(shipmentMethod)) {
+      context.put("shipmentMethodDescription", shipmentMethod.get("description"));
+    }
+  }
+}
+
+returnFacility = delegator.findByPrimaryKey("Facility", UtilMisc.toMap("facilityId", returnHeader.get("destinationFacilityId")));
+context.put("returnFacility", returnFacility);
+
+// Try to get the defaultWeightUomId first from the facility, then from the shipment properties, and finally defaulting to kilos
+defaultWeightUomId = null; 
+if (! UtilValidate.isEmpty(returnFacility)) {
+    defaultWeightUomId = returnFacility.getString("defaultWeightUomId");
+}
+if (UtilValidate.isEmpty(defaultWeightUomId)) {
+    defaultWeightUomId = UtilProperties.getPropertyValue("shipment.properties", "shipment.default.weight.uom", "WT_kg");
+}
+context.put("defaultWeightUomId", defaultWeightUomId);
+

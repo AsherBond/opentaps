@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2001-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Activities Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <!-- note that our services are prefixed with "crmsfa." to easily distinguish them from other services; perhaps a namespace system would be useful here -->
+
+    <service name="crmsfa.emailInterface" engine="interface" location="" invoke="">
+        <!-- comm event and work effort -->
+        <attribute name="contactMechIdFrom" type="String" mode="IN" optional="false"/>
+        <attribute name="contactMechIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="toEmail" type="String" mode="IN" optional="false"/>
+        <attribute name="ccEmail" type="String" mode="IN" optional="true"/>
+        <attribute name="bccEmail" type="String" mode="IN" optional="true"/>
+        <attribute name="subject" type="String" mode="IN" optional="false"/>
+        <attribute name="content" type="String" mode="IN" optional="false"/>
+        <attribute name="contentMimeTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="note" type="String" mode="IN" optional="true"/>
+        <!-- TODO: this will become a date/time/duration trio of input -->
+        <attribute name="datetimeStarted" type="Timestamp" mode="IN" optional="true"/>
+        <!-- saved emails can be sent/saved by passing in these parameters -->
+        <attribute name="communicationEventId" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
+        <!-- to handle uploaded attachments -->
+        <attribute name="multiPartMap" type="Map" mode="IN" optional="true"/>
+        <!-- used when replying or forwarding emails -->
+        <attribute name="origCommEventId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.activityAssociationInterface" engine="interface" location="" invoke="">
+        <description>For activity services that need to associate with an internal party, case, or opportunity</description>
+        <attribute name="internalPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="custRequestId" type="String" mode="IN" optional="true"/>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.sendActivityEmail" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="sendActivityEmail">
+        <description>Send an email to someone in the system. Creats a completed Task (WorkEffort) and an associated, completed CommunicationEvent. 
+            To send a saved email, pass in the communicationEventId and the workEffortId of the saved data.
+            No security at the moment.</description>
+        <implements service="crmsfa.emailInterface"/>
+        <implements service="crmsfa.activityAssociationInterface"/>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.saveActivityEmail" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="saveActivityEmail">
+        <description>Saves an email to someone in the system. Creates an in-progress Task (WorkEffort) and an associated, pending CommunicationEvent.
+            To save an email that's already saved, pass in the communicationEventId and the workEffortId of the saved data.
+            No security at the moment.</description>
+        <implements service="crmsfa.emailInterface"/>
+        <implements service="crmsfa.activityAssociationInterface"/>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.updateActivityAssociation" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="updateActivityAssociation">
+        <description>Updates any CustRequestWorkEffort records associated with an activity.</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="custRequestId" type="String" mode="IN" optional="true"/>
+        <attribute name="newOwnerPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.sendActivityNotificationEmails" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="sendActivityNotificationEmails">
+        <description>Sends notification emails to all internal parties attached to an activity. Calls crmsfa.sendCrmNotificationEmails.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.findActivities" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="findActivities">
+        <description>Finds activities based on parameters IN THIS ORDER: if partyId is provided, finds activities related to the party.  If salesOpportunityId is
+            provided, finds activities for that opportunity.  If custRequestId is input, finds activities of that customer request.
+            If none of the above is provided, returns an error.  Returns two Lists: completed and pending (not completed) activities, ordered by
+            their respective _orderByFields.
+        The _AddConditions are used to parametrize additional conditions for pending and completed activities finds.
+        </description>
+        <!-- this is written as a service because it is actually very flexible for passing arbitrary combination of parameters around.
+            if it were a Java method we'd have all sorts of method/parameter combinations -->
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="true"/>
+        <attribute name="custRequestId" type="String" mode="IN" optional="true"/>
+        <attribute name="pendingOrderByFields" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="pendingActsAddConditions" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="completedActsAddConditions" type="java.util.List" mode="IN" optional="true"/> 
+        <attribute name="completedOrderByFields" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="pendingActivities" type="java.util.List" mode="OUT" optional="true"/>
+        <attribute name="completedActivities" type="java.util.List" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="crmsfa.activityInterface" engine="interface" location="" invoke="">
+        <implements service="crmsfa.activityAssociationInterface"/>
+        <attribute name="availabilityStatusId" type="String" mode="IN" optional="false"/>
+        <attribute name="forceIfConflicts" type="String" mode="IN" optional="false"/>
+        <!-- work effort -->
+        <attribute name="workEffortName" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortPurposeTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="currentStatusId" type="String" mode="IN" optional="false"/>
+        <attribute name="locationDesc" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <!-- time, which is a combination of start date duration in hours -->
+        <attribute name="estimatedStartDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="estimatedCompletionDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="duration" type="String" mode="IN" optional="true"/>
+        <attribute name="scopeEnumId" type="String" mode="IN" optional="true"/>        
+    </service>
+
+    <service name="crmsfa.createActivity" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="createActivity">
+        <description>Create an Event or Task. Will create associations between the resulting WorkEffort and the party, case and opportunity specified.
+            In order to complete this successfully, the userLogin must have the correct _UPDATE permissions for the associated party, case and opportunity in
+            addition to basic CRMSFA_ACT_CREATE permission.</description>
+        <implements service="crmsfa.activityInterface"/>
+        <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.updateActivity" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="updateActivity">
+        <description>Updates an Event or Task. Will create associations between the WorkEffort and the party, case and opportunity specified and erase any old
+            associations. In order to complete this successfully, the userLogin must have the correct _UPDATE permissions for the associated party, case and 
+            opportunity in addition to basic CRMSFA_ACT_UPDATE permission.</description>
+        <implements service="crmsfa.activityInterface"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.updateActivityWithoutAssoc" default-entity-name="WorkEffort" engine="java"
+        location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="updateActivityWithoutAssoc">
+        <description>Updates an Event or Task without modifying any associations. The userLogin must still have _UPDATE permissions for the associated parties,
+            cases and opportunities as well as basic CRMSFA_ACT_UPDATE permission.</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.changeActivityOwner" engine="java"
+        location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="changeActivityOwner">
+        <description>Change activity owner to some new of team members</description>
+        <attribute name="workEffortId" mode="IN" type="String"/>
+        <attribute name="newOwnerPartyId" mode="IN" type="String"/>
+    </service>
+
+    <service name="crmsfa.logTask" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="logTask">
+        <description>Logs an email, phone call, or specified work effort purpose type. The userLogin must have _UPDATE permissions for the associated parties,
+            cases and opportunities as well as basic CRMSFA_ACT_CREATE permission. Note that we aren't associating any contact mechs for now.</description>
+        <implements service="crmsfa.activityAssociationInterface"/>
+        <attribute name="fromPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="outbound" type="String" mode="IN" optional="false"/>
+        <!-- work effort (type=TASK is implied) -->
+        <attribute name="workEffortName" type="String" mode="IN" optional="false"/>
+        <attribute name="workEffortPurposeTypeId" type="String" mode="IN" optional="true"/>
+        <!-- comm event -->
+        <attribute name="content" type="String" mode="IN" optional="true"/>
+        <!-- time, which is a combination of start date duration in hours -->
+        <attribute name="actualStartDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="duration" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <!-- work effort party assignment wrapper services -->
+
+    <service name="crmsfa.addWorkEffortPartyAssignment" default-entity-name="WorkEffortPartyAssignment" engine="java" 
+        location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="addWorkEffortPartyAssignment">
+        <description>Add a participant with role CAL_ATTENDEE to an event or activity. Requires _UPDATE permission on all associated parties, cases, and
+            opportunities.</description>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+    </service>
+    <service name="crmsfa.removeWorkEffortPartyAssignment" default-entity-name="WorkEffortPartyAssignment" engine="java" 
+        location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="removeWorkEffortPartyAssignment">
+        <description>Remove a participant with role CAL_ATTENDEE from the event or activity. Requires _UPDATE permission on all associated parties, cases, and
+            opportunities.</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+    </service>
+    <service name="crmsfa.updateWorkEffortPartyAssignment" default-entity-name="WorkEffortPartyAssignment" engine="java" 
+        location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="updateWorkEffortPartyAssignment">
+        <description>Updates an event or task participant with any role. Requires _UPDATE permission on all associated parties, cases, and
+            opportunities.</description>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.processIncomingEmail" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="processIncomingEmail">
+        <description>Process an incoming email by calling storeIncomingEmail to create a CommunicationEvent wrapped in a WorkEffort. This WorkEffort is then
+            associated with the partyIdFrom of the CommunicationEvent.</description>
+        <attribute name="messageWrapper" type="org.ofbiz.service.mail.MimeMessageWrapper" mode="IN"/>
+    </service>
+
+    <service name="crmsfa.updateActivityCommEvent" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="updateActivityCommEvent">
+        <description>Updates the status of the CommunicationEvents associated with a WorkEffort. 
+            If WorkEffort status is started then change the status of related CommunicationEvents from entered to pending. 
+            If WorkEffort status is completed then change the status of related CommunicationEvents from pending to completed.</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="autoCreateTimesheetEntryForActivity" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="autoCreateTimesheetEntryForActivity">
+        <description>If the workeffort is a completed task or event(TASK_COMPLETED or EVENT_COMPLETED), automatically creates a timesheet entry for all timesheets active during the time period
+            of the activity and for all the participants, both internal and clients </description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.deleteCancelledActivityEmail" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="deleteCancelledActivityEmail" default-entity-name="WorkEffort">
+        <description>Removes associated communicationEvents and attachments when a pending email task is cancelled.</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.deleteActivityEmail" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="deleteActivityEmail">
+        <description>Removes a communicationEventWorkEff, communicationEvent and by default the attachments as well.</description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="communicationEventId" type="String" mode="IN" optional="false"/>
+        <attribute name="delContentDataResource" type="String" mode="IN" optional="true"/>
+        <attribute name="donePage" type="String" mode="INOUT" optional="true"/>
+    </service>
+
+    <service name="crmsfa.updateActivityEmailsAssocs" engine="java" location="com.opensourcestrategies.crmsfa.activities.ActivitiesServices" invoke="updateActivityEmailsAssocs">
+        <description>Update all communicationEventWorkEff that concerns the email address and associate with the corresponding party.</description>
+        <attribute name="emailAddress" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="contactMechId" type="String" mode="IN" optional="false"/>
+    </service>
+
+</services>
+

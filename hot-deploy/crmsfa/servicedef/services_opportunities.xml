@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2001-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Leads Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>0.8</version>
+
+    <!-- note that our services are prefixed with "crmsfa." to easily distinguish them from other services; perhaps a namespace system would be useful here -->
+
+    <service name="crmsfa.createOpportunity" engine="java" location="com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices" invoke="createOpportunity">
+        <description>Creates an Opportunity for an account or lead. The userLogin must have CRMSFA_OPP_CREATE permission on this account or lead. 
+            Specify the account or lead with internalPartyId. Alternatively, the accountPartyId or leadPartyId may be specified.</description>
+        <attribute name="opportunityName" type="String" mode="IN" optional="false"/>
+        <!-- TODO: once the form widget accepts autocomplete, remove accountPartyId and leadPartyId in favor of internalPartyId -->
+        <attribute name="internalPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="accountPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="leadPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="contactPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="nextStep" type="String" mode="IN" optional="true"/>
+        <attribute name="estimatedAmount" type="Double" mode="IN" optional="true"/>
+        <attribute name="opportunityStageId" type="String" mode="IN" optional="true"/>
+        <attribute name="typeEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="true"/>
+        <attribute name="dataSourceId" type="String" mode="IN" optional="true"/>
+        <attribute name="estimatedCloseDate" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="salesOpportunityId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.updateOpportunity" engine="java" location="com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices" invoke="updateOpportunity">
+        <description>Updates an Opportunity of an account. The userLogin must have CRMSFA_OPP_UPDATE permission on this account.</description>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="false"/>
+        <attribute name="opportunityName" type="String" mode="IN" optional="false"/>
+        <attribute name="nextStep" type="String" mode="IN" optional="true"/>
+        <attribute name="estimatedAmount" type="Double" mode="IN" optional="true"/>
+        <attribute name="estimatedProbability" type="Double" mode="IN" optional="true"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="true"/>
+        <attribute name="dataSourceId" type="String" mode="IN" optional="true"/>
+        <attribute name="opportunityStageId" type="String" mode="IN" optional="true"/>
+        <attribute name="typeEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="estimatedCloseDate" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="changeNote" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.assignOpportunityToAccount" engine="java" 
+        location="com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices" invoke="assignOpportunityToAccount">
+        <description>Assigns a SalesOpportunity to an Account provided the userLogin has CRMSFA_ACCOUNT_UPDATE permission on this account.</description>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="false"/>
+        <attribute name="accountPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.assignOpportunityToLead" engine="java" 
+        location="com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices" invoke="assignOpportunityToLead">
+        <description>Assigns a SalesOpportunity to a Lead provided the userLogin has CRMSFA_LEAD_UPDATE permission on this lead.</description>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="false"/>
+        <attribute name="leadPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.addContactToOpportunity" engine="java" 
+        location="com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices" invoke="addContactToOpportunity">
+        <description>Adds a contact to an opportunity provided the userLogin has CRMSFA_OPP_UPDATE permission on this opportunity's account.</description>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="false"/>
+        <attribute name="contactPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.removeContactFromOpportunity" engine="java" 
+        location="com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices" invoke="removeContactFromOpportunity">
+        <description>Removes a contact from an opportunity provided the userLogin has CRMSFA_OPP_UPDATE permission on this opportunity's account.</description>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="false"/>
+        <attribute name="contactPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.addQuoteToOpportunity" engine="java" 
+        location="com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices" invoke="addQuoteToOpportunity">
+        <description>Adds a quote to an opportunity provided user has CRMSFA_OPP_UPDATE permission on this opportunity's account </description>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="false"/>
+        <attribute name="quoteId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.removeQuoteFromOpportunity" engine="java" 
+        location="com.opensourcestrategies.crmsfa.opportunities.OpportunitiesServices" invoke="removeQuoteFromOpportunity">
+        <description>Removes a quote from an opportunity provided user has CRMSFA_OPP_UPDATE permission on this opportunity's account.</description>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="false"/>
+        <attribute name="quoteId" type="String" mode="IN" optional="false"/>
+    </service>
+
+</services>
+

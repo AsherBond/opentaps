@@ -1,0 +1,68 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/*
+ * This script is used to find both pending activities and completed activities for any party, be it a lead,
+ * contact, account or partner, or opportunity or case (cust request.)  Everything is based on the
+ * findActivitiesKey set in the screen-widget.  It really helps to modularize the code across these similar things.
+ * .bsh is much easier than .java because of heavy interaction with the context, request, and parameters 
+ */
+
+import org.ofbiz.base.util.*;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+
+dispatcher = request.getAttribute("dispatcher");
+
+// what will we be looking for activities based on?  Use <set > in the screen-widget to "configure" this script
+findActivitiesKey = context.get("findActivitiesKey");
+findActivitiesValue = parameters.get(findActivitiesKey);
+
+// don't do anything if no input (it's harder to have a default find all)
+if (findActivitiesValue == null || findActivitiesValue.trim().length() == 0) return;
+findActivitiesValue = findActivitiesValue.trim();
+
+
+// this is set in the context by other pages like viewAccounts.bsh, viewLead.bsh, viewContact.bsh and tells this script
+// to prepare the activities info.  This is to prevent the hacking of this application--somebody using it to view the activities
+// of the admin user, for example, by passing in ?partyId=admin
+validView = context.get("validView");
+
+if (validView != null && validView) {
+    // activities for this party.  there are active activities and non-active ones.
+    pendingActivitiesOrderBy = parameters.get("pendingActivitiesOrderBy");
+    if (pendingActivitiesOrderBy == null) {
+        pendingActivitiesOrderBy = "estimatedStartDate";
+    }
+    completedActivitiesOrderBy = parameters.get("completedActivitiesOrderBy");
+    if (completedActivitiesOrderBy == null) {
+        completedActivitiesOrderBy = "actualCompletionDate DESC";
+    }
+    serviceParams = UtilMisc.toMap(findActivitiesKey, findActivitiesValue, "pendingOrderByFields", UtilMisc.toList(pendingActivitiesOrderBy),
+            "completedOrderByFields", UtilMisc.toList(completedActivitiesOrderBy), "userLogin", userLogin);
+    if (UtilValidate.isNotEmpty(context.get("pendingActsAddConditions"))) {
+        serviceParams.put("pendingActsAddConditions", context.get("pendingActsAddConditions"));
+    }
+    if (UtilValidate.isNotEmpty(context.get("completedActsAddConditions"))) {
+        serviceParams.put("completedActsAddConditions", context.get("completedActsAddConditions"));
+    }
+    results = dispatcher.runSync("crmsfa.findActivities", serviceParams);
+    context.put("pendingActivities", results.get("pendingActivities"));
+    context.put("completedActivities", results.get("completedActivities")); 
+
+    // parameters for creating a new activity based on this page, which is also now used for pagination, but don't want to 
+    context.put("activityValueParams", findActivitiesKey + "=" + findActivitiesValue);
+}

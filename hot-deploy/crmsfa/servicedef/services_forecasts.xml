@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2001-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Forecasts Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>0.8</version>
+
+    <!-- note that our services are prefixed with "crmsfa." to easily distinguish them from other services; perhaps a namespace system would be useful here -->
+
+    <service name="crmsfa.computeForecastPeriod" engine="java"
+        location="com.opensourcestrategies.crmsfa.forecasts.ForecastsServices" invoke="computeForecastPeriod">
+        <description>Computes a forecast for a given time period from the opportunities in that time period using a supplied quota amount. 
+            The opportunities are those that belong to the given organization and internal party. If a salesForecastId is supplied, then
+            it will be updated with the computed values, otherwise a new forecast will be created.</description>
+        <attribute name="customTimePeriodId" type="String" mode="IN" optional="false"/>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
+        <attribute name="quotaAmount" type="Double" mode="IN" optional="true"/>
+        <!-- in case of update, these will get passed -->
+        <attribute name="salesForecastId" type="String" mode="IN" optional="true"/>
+        <attribute name="changeNote" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.computeForecastParentPeriod" engine="java"
+        location="com.opensourcestrategies.crmsfa.forecasts.ForecastsServices" invoke="computeForecastParentPeriod">
+        <description>Computes a forecast for a given time period by summing up the amounts of its children. If a salesForecastId is supplied, 
+            then it will be updated with the computed values, otherwise a new forecast will be created.</description>
+        <attribute name="parentPeriodId" type="String" mode="IN" optional="false"/>
+        <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
+        <!-- in case of update, these will get passed -->
+        <attribute name="salesForecastId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="changeNote" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.updateForecast" engine="java"
+        location="com.opensourcestrategies.crmsfa.forecasts.ForecastsServices" invoke="updateForecast">
+        <description>Updates a particular sales forecast. Checks that user has ORDERMGR_4C_UPDATE</description>
+        <required-permissions join-type="AND">
+            <check-permission permission="CRMSFA" action="_4C_UPDATE"/>
+        </required-permissions>
+        <attribute name="salesForecastId" type="String" mode="IN" optional="false"/>
+        <attribute name="quotaAmount" type="Double" mode="IN" optional="false"/>
+        <attribute name="changeNote" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.updateForecastsRelatedToOpportunity" engine="java"
+        location="com.opensourcestrategies.crmsfa.forecasts.ForecastsServices" invoke="updateForecastsRelatedToOpportunity">
+        <description>When an opportunity is created or updated, forecasts for the opportunity's estimatedCloseDate must be updated to include
+            the opportunity data. In addition, if the estimatedCloseDate changed such that it lies in a different period, then both periods will be updated.
+        </description>
+        <required-permissions join-type="AND">
+            <check-permission permission="CRMSFA" action="_4C_UPDATE"/>
+        </required-permissions>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="false"/>
+        <attribute name="previousEstimatedCloseDate" type="java.sql.Timestamp" mode="IN" optional="true"/>
+        <attribute name="changeNote" type="String" mode="IN" optional="true"/>
+   </service>
+
+</services>
+

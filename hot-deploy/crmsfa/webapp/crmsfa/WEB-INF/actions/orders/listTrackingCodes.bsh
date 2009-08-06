@@ -1,0 +1,29 @@
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.contact.ContactHelper;
+import com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents;
+import org.opentaps.common.util.UtilConfig;
+
+// get the tracking codes available for selection
+dateFilter = EntityUtil.getFilterByDateExpr();
+conditions = UtilMisc.toList(new EntityExpr("statusId", EntityOperator.EQUALS, "MKTG_CAMP_INPROGRESS"), dateFilter);
+campaigns = delegator.findByAnd("MarketingCampaign", conditions);
+campaignIds = new HashSet();
+for (iter = campaigns.iterator(); iter.hasNext(); ) {
+    campaign = iter.next();
+    campaignIds.add(campaign.get("marketingCampaignId"));
+}
+conditions = UtilMisc.toList(new EntityExpr("trackingCodeTypeId", EntityOperator.EQUALS, "INTERNAL"), dateFilter);
+trackingCodes = delegator.findByAnd("TrackingCode", conditions, UtilMisc.toList("description"));
+context.put("trackingCodes", trackingCodes);
+
+// Get the trackingCodeId by querying the phone server for DNIS and matching against a tracking code
+facetPhoneIntegrate = "true".equalsIgnoreCase(UtilProperties.getPropertyValue("VoIP", "facetPhone.integrate", ""));
+if (facetPhoneIntegrate) {
+    retrieveTrackingCodeFromFacetPhoneServerMap = dispatcher.runSync("retrieveTrackingCodeFromFacetPhoneServer", UtilMisc.toMap("userLogin", userLogin));
+    if (! UtilValidate.isEmpty(retrieveTrackingCodeFromFacetPhoneServerMap) && retrieveTrackingCodeFromFacetPhoneServerMap.containsKey("trackingCode")) {
+        trackingCode = retrieveTrackingCodeFromFacetPhoneServerMap.get("trackingCode");
+        session.setAttribute("trackingCodeId", trackingCode.get("trackingCodeId"));
+    }
+}

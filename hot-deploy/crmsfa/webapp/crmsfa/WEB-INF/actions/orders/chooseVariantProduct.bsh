@@ -1,0 +1,83 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// this script is identical to matching sales products, except we search variants
+import javolution.util.*;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.product.store.ProductStoreWorker;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.domain.DomainsLoader;
+import com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents;
+import javolution.util.FastSet;
+
+// fetch the search string, which is inputted as productId
+searchString = UtilCommon.getParameter(request, "productId");
+if (searchString == null) return;
+
+// fetch the cart
+cart = session.getAttribute("shoppingCart");
+if (cart == null) return;
+
+// get the virtual productId
+productId = UtilCommon.getParameter(request, "productId");
+if (productId == null) return;
+
+// load product
+dl = new DomainsLoader(request);
+domains = dl.loadDomainsDirectory();
+productRepository = domains.getProductDomain().getProductRepository();
+product = productRepository.getProductById(productId);
+
+// first build a list of all variant productIds to constrain the search
+variantProductIds = new FastSet();
+for (variant : product.getVariants()) {
+    variantProductIds.add(variant.getProductId());
+}
+
+// make a builder method and use <@paginate> to build the list
+matchingSalesProducts(searchString, delegator, variantIds) {
+    variantProductIds = variantIds; // this will cache the variants with the paginator 
+    entityName = "ProductAndGoodIdentification";
+    fieldsToSelect = UtilMisc.toList("productId", "internalName", "idValue", "brandName");
+
+    // since we already have a list of variants, we're just searching them directly
+    where = new EntityExpr("productId", EntityOperator.IN, variantProductIds); 
+
+    // we also want to add what order item type each product should be set to
+    build(page) {
+        newPage = FastList.newInstance();
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            product = iter.next();
+            newRow = FastMap.newInstance();
+            newRow.putAll( product.getAllFields() );
+
+            // check if it has a survey
+            surveys = ProductStoreWorker.getProductSurveys(delegator, cart.getProductStoreId(), product.getString("productId"), "CART_ADD");
+            newRow.put("isSurvey", surveys != null && surveys.size() > 0);
+
+            type = delegator.findByPrimaryKeyCache("ProductOrderItemType", UtilMisc.toMap("orderTypeId", "SALES_ORDER", "productTypeId", product.get("productTypeId")));
+            if (type != null) {
+                newRow.put("itemType", type.get("orderItemTypeId"));
+            }
+            newPage.add( newRow );
+        }
+        return newPage;
+    }
+    return this; // must return reference to this closure
+}
+context.put("matchingSalesProducts", matchingSalesProducts(searchString, delegator, variantProductIds));

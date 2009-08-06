@@ -1,0 +1,99 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.common.util.UtilView;
+
+// order by
+orderParam = parameters.get("casesOrderBy");
+if (orderParam == null || orderParam.length() == 0) orderParam = "custRequestName";
+casesOrderBy = UtilMisc.toList(orderParam);
+
+// possible fields we're searching by
+priority = parameters.get("priority");
+custRequestName = parameters.get("custRequestName");
+custRequestTypeId = parameters.get("custRequestTypeId");
+custRequestCategoryId = parameters.get("custRequestCategoryId");
+statusId = parameters.get("statusId");
+
+// trim text input
+if (custRequestName != null) custRequestName = custRequestName.trim();
+
+// normalize empty fields to null
+if ("".equals(priority)) priority = null;
+if ("".equals(custRequestName)) custRequestName = null;
+if ("".equals(custRequestTypeId)) custRequestTypeId = null;
+if ("".equals(custRequestCategoryId)) custRequestCategoryId = null;
+if ("".equals(statusId)) statusId = null;
+
+// don't do anything if no input specified (default find all is harder)
+if (priority == null && custRequestName == null && custRequestTypeId == null && custRequestCategoryId == null && statusId == null) {
+    return;
+}
+
+// search conditions
+searchConditions = new ArrayList();
+
+// find parameters for the sorting headers
+findParams = "";
+
+// construct search conditions and find parameters
+if (priority != null) {
+    searchConditions.add(new EntityExpr("priority", EntityOperator.EQUALS, priority));
+    findParams += "&priority="+priority;
+}
+if (custRequestName != null) {
+    searchConditions.add(new EntityExpr("custRequestName", true, EntityOperator.LIKE, "%" + custRequestName + "%", true));
+    findParams += "&custRequestName=" + custRequestName;
+}
+if (custRequestTypeId != null) {
+    searchConditions.add(new EntityExpr("custRequestTypeId", EntityOperator.EQUALS, custRequestTypeId));
+    findParams += "&custRequestTypeId=" + custRequestTypeId;
+}
+if (custRequestCategoryId != null) {
+    searchConditions.add(new EntityExpr("custRequestCategoryId", EntityOperator.EQUALS, custRequestCategoryId));
+    findParams += "&custRequestCategoryId=" + custRequestCategoryId;
+}
+if (statusId != null) {
+    searchConditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
+    findParams += "&statusId=" + statusId;
+}
+if (searchConditions.size() == 0) return;
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+// prepare conditions to the case page builder in listCases.bsh
+context.put("entityName", "CustRequest");
+fieldsToSelect = UtilMisc.toList("custRequestId", "priority", "custRequestName", "statusId");
+fieldsToSelect.add("custRequestTypeId");
+fieldsToSelect.add("custRequestCategoryId");    
+context.put("fieldsToSelect", fieldsToSelect);
+if (UtilValidate.isNotEmpty(casesOrderBy)) {
+    orderBy = UtilMisc.toList(casesOrderBy);
+} else {
+    orderBy = UtilMisc.toList("priority DESC");        
+}    
+context.put("orderBy", orderBy);
+context.put("conditions", searchConditionList);

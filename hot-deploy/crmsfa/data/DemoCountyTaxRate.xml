@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+     <!-- Set up your zip codes and counties -->
+     <Geo abbreviation="90049" geoCode="90049" geoId="USA-90049" geoName="90049" geoTypeId="POSTAL_CODE"/>
+     <Geo abbreviation="94590" geoCode="94590" geoId="USA-94590" geoName="94590" geoTypeId="POSTAL_CODE"/>
+
+     <Geo abbreviation="LA CO." geoCode="LA" geoId="CA-LA" geoName="Los Angeles County" geoTypeId="COUNTY"/>
+     <Geo abbreviation="SOLANO CO." geoCode="SOLANO" geoId="CA-SOLANO" geoName="Solano County" geoTypeId="COUNTY"/>
+     <!-- Make your zip code a part of your county -->
+     <GeoAssoc geoId="CA-LA" geoIdTo="USA-90049" geoAssocTypeId="REGIONS"/>
+     <GeoAssoc geoId="CA-SOLANO" geoIdTo="USA-94590" geoAssocTypeId="REGIONS"/>
+     <!-- Make your county a part of your state -->
+     <GeoAssoc geoId="CA" geoIdTo="CA-LA" geoAssocTypeId="REGIONS"/>
+     <GeoAssoc geoId="CA" geoIdTo="CA-SOLANO" geoAssocTypeId="REGIONS"/>
+
+     <!-- Set up the ADDITIONAL sales tax for each county geo
+
+     In California, you report sales tax for the state first, then add the surcharge for your district.
+     For example, in Los Angeles, California = 6%, County = 0.25%, City = 1%, District = 1%. (see BOE-401-A)
+
+     This setup is cumulative: based on your country, state/province, and county geos, it will expand to find a Set of all
+     related Geos and add the tax rate in each Geo which is applicable-->
+
+     <TaxAuthority taxAuthGeoId="CA-LA" taxAuthPartyId="CA_BOE" includeTaxInPrice="N"/>
+     <TaxAuthorityRateProduct taxAuthorityRateSeqId="CA-LA" taxAuthGeoId="CA-LA" taxAuthPartyId="CA_BOE" taxAuthorityRateTypeId="SALES_TAX"
+         productStoreId="9000" taxPercentage="1.00" fromDate="2000-01-01 00:00:00"/>
+    <!-- This would allow inheritance from state to county -->
+     <TaxAuthorityAssoc taxAuthGeoId="CA" taxAuthPartyId="CA_BOE" toTaxAuthGeoId="CA-LA" toTaxAuthPartyId="CA_BOE" taxAuthorityAssocTypeId="EXEMPT_INHER"
+              fromDate="2000-01-01 00:00:00"/>
+
+     <TaxAuthority taxAuthGeoId="CA-SOLANO" taxAuthPartyId="CA_BOE" includeTaxInPrice="N"/>
+     <TaxAuthorityRateProduct taxAuthorityRateSeqId="CA-SOLANO" taxAuthGeoId="CA-SOLANO" taxAuthPartyId="CA_BOE" taxAuthorityRateTypeId="SALES_TAX"
+         productStoreId="9000" taxPercentage="0.125" fromDate="2000-01-01 00:00:00"/>
+     <TaxAuthorityAssoc taxAuthGeoId="CA" taxAuthPartyId="CA_BOE" toTaxAuthGeoId="CA-SOLANO" toTaxAuthPartyId="CA_BOE" taxAuthorityAssocTypeId="EXEMPT_INHER"
+              fromDate="2000-01-01 00:00:00"/>
+
+     <Party partyId="ca1" partyTypeId="PERSON"/>
+     <Person partyId="ca1" firstName="Junipero" lastName="Serra"/>
+     <PartyRole partyId="ca1" roleTypeId="CONTACT"/>
+     <PartyRelationship partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" partyIdFrom="ca1" roleTypeIdFrom="CONTACT" partyRelationshipTypeId="CONTACT_REL_INV"
+                        fromDate="2005-12-01 00:00:00"/>
+
+     <ContactMech contactMechId="ca1address1" contactMechTypeId="POSTAL_ADDRESS"/>
+     <PostalAddress contactMechId="ca1address1" toName="Junipero Serra" address1="11980 Wilshire Blvd" city="Los Angeles" stateProvinceGeoId="CA" postalCode="90049" countryGeoId="USA"/>
+     <PartyContactMech partyId="ca1" contactMechId="ca1address1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+     <PartyContactMechPurpose partyId="ca1" contactMechId="ca1address1" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ca1" contactMechId="ca1address1" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ca1" contactMechId="ca1address1" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+
+     <ContactMech contactMechId="ca1address2" contactMechTypeId="POSTAL_ADDRESS"/>
+     <PostalAddress contactMechId="ca1address2" toName="Junipero Serra" address1="555 Santa Clara Street" city="Vallejo" stateProvinceGeoId="CA" postalCode="94590" countryGeoId="USA"/>
+     <PartyContactMech partyId="ca1" contactMechId="ca1address2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+     <PartyContactMechPurpose partyId="ca1" contactMechId="ca1address2" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ca1" contactMechId="ca1address2" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ca1" contactMechId="ca1address2" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartySupplementalData partyId="ca1" primaryPostalAddressId="ca1address2" />
+
+     <Party partyId="ca2" partyTypeId="PERSON"/>
+     <Person partyId="ca2" firstName="Pio" lastName="Pico"/>
+     <PartyRole partyId="ca2" roleTypeId="CONTACT"/>
+     <PartyRelationship partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" partyIdFrom="ca2" roleTypeIdFrom="CONTACT" partyRelationshipTypeId="CONTACT_REL_INV"
+                        fromDate="2005-12-01 00:00:00"/>
+
+     <ContactMech contactMechId="ca2address1" contactMechTypeId="POSTAL_ADDRESS"/>
+     <PostalAddress contactMechId="ca2address1" toName="Pio Pico" address1="11980 Wilshire Blvd" city="Los Angeles" stateProvinceGeoId="CA" postalCode="90049" countryGeoId="USA"/>
+     <PartyContactMech partyId="ca2" contactMechId="ca2address1" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+     <PartyContactMechPurpose partyId="ca2" contactMechId="ca2address1" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ca2" contactMechId="ca2address1" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ca2" contactMechId="ca2address1" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+
+     <ContactMech contactMechId="ca2address2" contactMechTypeId="POSTAL_ADDRESS"/>
+     <PostalAddress contactMechId="ca2address2" toName="Pio Pico" address1="555 Santa Clara Street" city="Vallejo" stateProvinceGeoId="CA" postalCode="94590" countryGeoId="USA"/>
+     <PartyContactMech partyId="ca2" contactMechId="ca2address2" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+     <PartyContactMechPurpose partyId="ca2" contactMechId="ca2address2" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ca2" contactMechId="ca2address2" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+     <PartyContactMechPurpose partyId="ca2" contactMechId="ca2address2" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2001-05-13 00:00:00.000"/>
+    <PartySupplementalData partyId="ca2" primaryPostalAddressId="ca2address2" />
+
+
+     <PartyTaxAuthInfo partyId="ca2" taxAuthGeoId="CA" taxAuthPartyId="CA_BOE" fromDate="2000-01-01 00:00:00" partyTaxId="000001" isExempt="Y" />
+
+
+ </entity-engine-xml>

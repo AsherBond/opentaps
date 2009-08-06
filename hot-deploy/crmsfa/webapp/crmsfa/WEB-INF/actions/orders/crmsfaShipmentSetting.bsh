@@ -1,0 +1,150 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
+import org.opentaps.common.order.OrderEvents;
+import org.opentaps.common.party.PartyContactHelper;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+/*
+ * Purpose is to generate data for the set shipment forms and determine the
+ * state of the form.  For each item, we have to determine the default
+ * shipment method type, carrier party and shipping address.
+ */
+
+delegator = request.getAttribute("delegator");
+dispatcher = request.getAttribute("dispatcher");
+
+cart = session.getAttribute("shoppingCart");
+productStoreId = cart.getProductStoreId();
+
+shippingApplies = cart.shippingApplies();
+context.put("shippingApplies", shippingApplies);
+
+productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+context.put("noShipOnDropShipGroups", "Y".equals(productStore.get("noShipOnDropShipGroups")));
+context.put("showCheckoutGiftOptions", ! "N".equals(productStore.get("showCheckoutGiftOptions")));
+
+storeDefaultCarrierPartyId = null;
+storeDefaultShipmentMethodTypeId = null;
+if (productStore.get("defaultShippingCarrierPartyId") != null && productStore.get("defaultShipmentMethodTypeId") != null) {
+    storeDefaultCarrierPartyId = productStore.getString("defaultShippingCarrierPartyId");
+    storeDefaultShipmentMethodTypeId = productStore.getString("defaultShipmentMethodTypeId");
+    if (storeDefaultCarrierPartyId != null && storeDefaultShipmentMethodTypeId != null) {
+        context.put("storeDefaultCarrierPartyId", storeDefaultCarrierPartyId);
+        context.put("storeDefaultShipmentMethodTypeId", storeDefaultShipmentMethodTypeId);
+    }
+}
+
+carrierShipmentMethods = new HashMap();
+// get contact mech that are only associated to the order and not to the customer
+currentOrderContactMechs = new HashMap();
+shipGroups = cart.getShipGroups();
+sgit = shipGroups.iterator();
+while (sgit.hasNext()) {
+    shipGroup = sgit.next();
+    shipGroupSeqId = shipGroups.indexOf(shipGroup);
+
+    cmId = cart.getShippingContactMechId(shipGroupSeqId);
+    if (UtilValidate.isNotEmpty(cmId)) {
+        cm = delegator.findByPrimaryKey("ContactMech", UtilMisc.toMap("contactMechId", cmId));
+        if (cm != null) {
+            cmParties = cm.getRelated("PartyContactMech");
+            if (UtilValidate.isEmpty(cmParties)) {
+                currentOrderContactMechs.put(shipGroupSeqId, cm);
+            }
+        }
+    }
+
+    // Assemble shipping estimates based on the contactMechId
+    carrierShipmentMethodList = OrderEvents.getCartShipEstimates(request, shipGroupSeqId);
+    carrierShipmentMethods.put(shipGroupSeqId, carrierShipmentMethodList);
+
+    // Assign carrierPartyIds and shipmentMethodTypeIds to any ship group missing them, based on the
+    //  list from above
+    defaultCarrierPartyId = null;
+    defaultShipmentMethodTypeId = null;
+    if (UtilValidate.isEmpty(carrierShipmentMethodList)) {
+    
+        // Revert the ship group to no address and NO_SHIPPING if there are no available shipping methods for the ship group
+        OrderEvents.updateShipGroup(dispatcher, delegator, cart, shipGroupSeqId, null, null, "NO_SHIPPING", null, null, null, null, null, null, null, null, null, null, timeZone, locale);
+    } else {
+        // TODO this is kind of inefficient, we can move it to just above the OrderEvents.updateShipGroup line below (and rearrange the conditions) 
+        defaultCarrierAndMethod = carrierShipmentMethodList.get(0);
+
+        // if the store default is set up, then use that as the default method if it's in the list
+        if (storeDefaultCarrierPartyId != null && storeDefaultShipmentMethodTypeId != null) {
+            found = false;
+            for (estimate : carrierShipmentMethodList) {
+                if (storeDefaultCarrierPartyId.equals(estimate.get("carrierPartyId")) && storeDefaultShipmentMethodTypeId.equals(estimate.get("shipmentMethodTypeId"))) {
+                    defaultCarrierAndMethod = estimate;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                newEstimate = UtilMisc.toMap("carrierPartyId", storeDefaultCarrierPartyId, "shipmentMethodTypeId", storeDefaultShipmentMethodTypeId);
+                carrierShipmentMethodList.add(newEstimate);
+                defaultCarrierAndMethod = newEstimate;
+            }
+        }
+
+      	defaultCarrierPartyId = UtilValidate.isNotEmpty(defaultCarrierAndMethod.get("carrierPartyId")) ? defaultCarrierAndMethod.get("carrierPartyId") : "_NA_";
+        defaultShipmentMethodTypeId = defaultCarrierAndMethod.get("shipmentMethodTypeId");
+    }
+    if (shippingApplies && UtilValidate.isEmpty(cart.getCarrierPartyId(shipGroupSeqId)) && UtilValidate.isEmpty(cart.getShipmentMethodTypeId(shipGroupSeqId))) {
+        if (UtilValidate.isNotEmpty(defaultCarrierPartyId) && UtilValidate.isNotEmpty(defaultShipmentMethodTypeId)) {
+            if (! "NO_SHIPPING".equals(cart.getShipmentMethodTypeId(shipGroupSeqId))) {
+                OrderEvents.updateShipGroup(dispatcher, delegator, cart, shipGroupSeqId, cart.getShippingContactMechId(shipGroupSeqId), defaultCarrierPartyId, defaultShipmentMethodTypeId, null, null, null, null, null, null, null, null, null, null, timeZone, locale);
+            }
+        }
+    }
+}
+context.put("carrierShipmentMethods", carrierShipmentMethods);
+context.put("currentOrderContactMechs", currentOrderContactMechs);
+
+// get the BILLING LOCATION of the cart party for setting into the bill-to zip code and country code
+// TODO: Use the new ofbiz svn entity for party shipper accounts here too
+
+defaultBillToZipCode = "";
+defaultBillToCountryCode = "";
+
+billToAddress = PartyContactHelper.getPostalAddressValueByPurpose(cart.getPartyId(), "BILLING_LOCATION", true, delegator);
+if (UtilValidate.isNotEmpty(billToAddress)) {
+    defaultBillToZipCode = billToAddress.getString("postalCode");
+    // not sure if the Geo.geoCode always corresponds to the code UPS is looking for but at least it is right for USA
+    billToGeo = billToAddress.getRelatedOneCache("CountryGeo");
+    if (UtilValidate.isNotEmpty(billToGeo)) {
+        defaultBillToCountryCode = billToGeo.getString("geoCode");
+    }
+}
+
+context.put("billToAccountZipCode", defaultBillToZipCode);
+context.put("billToAccountGeoCode", defaultBillToCountryCode);
+
+// a link to go back to the customer page, in case updates need to be made
+if ((cart != null) && (cart.getPartyId() != null)) {
+    context.put("customerLink", PartyHelper.createViewPageURL(cart.getPartyId(), delegator, externalLoginKey));   
+}
+
+// Provide the list of distinct combinations of account#/postalCode/countryCode from PartyCarrierAccount, broken down by carrierPartyId
+if (UtilValidate.isNotEmpty(cart)) {
+  thirdPartyInfo = org.opentaps.common.party.PartyHelper.getPartyCarrierAccounts(cart.getPartyId(), delegator);
+  context.put("thirdPartyInfo", thirdPartyInfo);
+}

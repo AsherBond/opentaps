@@ -1,0 +1,26 @@
+/* Styles for highlighting case states by status */
+
+tr.case_updated td {
+    font-weight: bold;
+}
+
+tr.case_CRQ_SUBMITTED {
+    background-color: white;
+}
+tr.case_CRQ_ACCEPTED {
+    background-color: #FFFF99;
+}
+tr.case_CRQ_REVIEWED {
+    background-color: #FFCC66;
+}
+tr.case_CRQ_COMPLETED {
+    background-color: #E0E0E0;
+}
+tr.case_CRQ_REJECTED {
+    background-color: #FFCCCC;
+}
+tr.case_CRQ_CANCELLED {
+    background-color: #FFCCCC;
+}
+
+

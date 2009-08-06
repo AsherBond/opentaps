@@ -1,0 +1,132 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// TODO This is a great test for pagination system's ListBuilder issues
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.*;
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import java.util.TreeMap;
+
+// data for report header
+contactListId = parameters.get("contactListId");
+contactList = delegator.findByPrimaryKeyCache("ContactList", UtilMisc.toMap("contactListId", contactListId));
+context.put("contactList", contactList);
+addressLabelSpecifications = delegator.findAll("AddressLabelSpecification");
+context.put("addressLabelSpecs", addressLabelSpecifications);
+
+// data for report itself
+weightPerPieceString = parameters.get("weightPerPiece");
+if (UtilValidate.isEmpty(weightPerPieceString)) return;
+
+weightPerPiece = 0;
+try {
+    weightPerPiece = Double.parseDouble(weightPerPieceString);
+} catch (NumberFormatException e) {
+    weightPerPiece = 0;
+}
+if (weightPerPiece <= 0) return;
+
+// Build a report summarizing how many pieces per zone, pounds per zone (based on weight input), and the cost for pieces and for weight
+
+totalPieces = 0.0;
+totalPounds = 0.0;
+piecesGrandTotal = 0.0;
+poundsGrandTotal = 0.0;
+
+conditions = new EntityConditionList( UtilMisc.toList(
+    new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
+    new EntityExpr("sortResult", EntityOperator.LIKE, "3-digit ZIP%")
+    ), EntityOperator.AND);
+rates = delegator.findByCondition("UspsBPMRateZoneCount", conditions, UtilMisc.toList("uspsBPMRateZone", "contactMechId", "ratePerPiece", "ratePerPound"), UtilMisc.toList("uspsBPMRateZone"));
+
+report = new TreeMap(); // keyed to zone
+for (iter = rates.iterator(); iter.hasNext(); ) {
+    data = iter.next();
+
+    bpmZone = data.get("uspsBPMRateZone");
+    pieces = (data.get("contactMechId") == null ? 0 : data.getLong("contactMechId").longValue());
+    ratePerPiece = (data.get("ratePerPiece") == null ? 0 : data.getDouble("ratePerPiece").doubleValue());
+    ratePerPound = (data.get("ratePerPound") == null ? 0 : data.getDouble("ratePerPound").doubleValue());
+
+    pounds = weightPerPiece * pieces;
+    piecesSubtotal = pieces * ratePerPiece;
+    poundsSubtotal = pounds * ratePerPound;
+
+    row = FastMap.newInstance();
+    row.put("uspsBPMRateZone", bpmZone);
+    row.put("pieces", new Long(pieces));
+    row.put("pounds", new Double(pounds));
+    row.put("ratePerPiece", ratePerPiece);
+    row.put("ratePerPound", ratePerPound);
+    row.put("piecesSubtotal", piecesSubtotal);
+    row.put("poundsSubtotal", poundsSubtotal);
+    row.put("total", piecesSubtotal + poundsSubtotal);
+    report.put(bpmZone, row);
+
+    totalPieces += pieces;
+    totalPounds += pounds;
+    piecesGrandTotal += piecesSubtotal;
+    poundsGrandTotal += poundsSubtotal;
+}
+
+// group zone 1 and 2 (yeah I know, but it's a requirement)
+row1 = report.remove("1");
+row2 = report.remove("2");
+if (row1 == null && row2 == null) {
+    rate = delegator.findByPrimaryKey("UspsBPMRatesByZone", UtilMisc.toMap("uspsBPMRateZone", "1"));
+    data = UtilMisc.toMap("uspsBPMRateZone", "1 & 2", "ratePerPiece", rate.get("ratePerPiece"), "ratePerPound", rate.get("ratePerPound"));
+    report.put("1", data);
+} else {
+    if (row1 == null) {
+        row2.put("uspsBPMRateZone", "1 & 2");
+        report.put("1", row2);
+    } else if (row2 == null) {
+        row1.put("uspsBPMRateZone", "1 & 2");
+        report.put("1", row1);
+    } else {
+        pieces = row1.get("pieces").doubleValue() + row2.get("pieces").doubleValue();
+        pounds = row1.get("pounds").doubleValue() + row2.get("pounds").doubleValue();
+        piecesSubtotal = row1.get("piecesSubtotal").doubleValue() + row2.get("piecesSubtotal").doubleValue();
+        poundsSubtotal = row1.get("poundsSubtotal").doubleValue() + row2.get("poundsSubtotal").doubleValue();
+        row1.put("pieces", pieces);
+        row1.put("pounds", pounds);
+        row1.put("piecesSubtotal", piecesSubtotal);
+        row1.put("poundsSubtotal", poundsSubtotal);
+        row1.put("total", piecesSubtotal + poundsSubtotal);
+        row1.put("uspsBPMRateZone", "1 & 2");
+        report.put("1", row1);
+    }
+}
+
+// fill out empty zones
+for (i = 3; i < 9; i++) {
+    key = Integer.toString(i);
+    data = report.get(key);
+    if (data == null) {
+        rate = delegator.findByPrimaryKey("UspsBPMRatesByZone", UtilMisc.toMap("uspsBPMRateZone", key));
+        data = UtilMisc.toMap("uspsBPMRateZone", key, "ratePerPiece", rate.get("ratePerPiece"), "ratePerPound", rate.get("ratePerPound"));    
+        report.put(key, data);
+    }
+}
+
+
+context.put("report", report.values());
+context.put("totals", UtilMisc.toMap("totalPieces", totalPieces, "totalPounds", totalPounds, "piecesGrandTotal", piecesGrandTotal, "poundsGrandTotal", poundsGrandTotal, "grandTotal", (piecesGrandTotal + poundsGrandTotal)));

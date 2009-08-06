@@ -1,0 +1,224 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+ * This scrip performs a find on PartyContactInfoAndContactList
+ * using input parameters or reasonable defaults.  It will also
+ * determine what form to use for display.  The intent is to
+ * be able to use this for both viewing the members of a contact
+ * list and adding new contact list members in batch.
+ */
+
+module="findContactListParties.bsh";
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+
+contactList = context.get("contactList");
+
+// whether we're searching contact list party members or not (set this in screen widget actions)
+isContactListSearch = ("Y".equals(context.get("isContactListSearch")) ? true : false);
+
+// construct the uiLabelMap since it doesn't seem to be in the request attributes
+uiLabelMap = UtilMessage.getUiLabels(locale);
+
+// tell the view (form widget) whether this is a email, phone or address list and what the column label should be for them
+isEmailList = false;
+isPhoneList = false;
+isAddressList = false;
+contactMechColumnNameLabel ="";
+if ("EMAIL_ADDRESS".equals(contactList.get("contactMechTypeId"))) {
+    isEmailList = true;
+    contactMechColumnNameLabel = "CommonEmail";
+} else if ("POSTAL_ADDRESS".equals(contactList.get("contactMechTypeId"))) {
+    isAddressList = true;
+    contactMechColumnNameLabel = "CommonAddresses";
+} else if ("TELECOM_NUMBER".equals(contactList.get("contactMechTypeId"))) {
+    isPhoneList = true;
+    contactMechColumnNameLabel = "PartyPhoneNumber";
+} else {
+    Debug.logWarning("Contact List type [" + contactList.get("contactMechTypeId") + "] not supported yet.", module);
+    return;
+}
+context.put("isEmailList", isEmailList);
+context.put("isPhoneList", isPhoneList);
+context.put("isAddressList", isAddressList);
+context.put("contactMechColumnName", uiLabelMap.get(contactMechColumnNameLabel));
+
+// form target, which tells us wheter we are a remove or a add form
+target = context.get("listContactListPartiesTarget");
+
+isRemoveForm = false;
+if ("removeContactListParties".equals(target)) {
+    isRemoveForm = true;
+} else if ("addContactListParties".equals(target)) {
+    isRemoveForm = false;
+} else {
+    Debug.logWarning("Invalid listContactListPartiesTarget target.  Please specify either addContactListParties or removeContactListParties in the screen widget.", module);
+    return;
+}
+context.put("isRemoveForm", isRemoveForm);
+
+// need to set the form widget submit button names here because it's the only way to parametrize <field title="${}">
+if (isRemoveForm) {
+    context.put("listFormSubmitButtonName", uiLabelMap.get("CrmRemoveSelected"));
+    context.put("findFormSubmitButtonName", uiLabelMap.get("CrmFindContactListParties"));
+
+    // add now timestamp so we can remove the ContactListParty (update the thruDate to now)
+    context.put("nowTimestamp", UtilDateTime.nowTimestamp());
+} else {
+    context.put("listFormSubmitButtonName", uiLabelMap.get("CrmAddSelected"));
+    context.put("findFormSubmitButtonName", uiLabelMap.get("CrmFindPartyContactInfo"));
+}
+
+// determine what fields to order by
+orderBy = UtilMisc.toList("firstName", "lastName", "groupName");
+requestOrderBy = UtilCommon.getParameter(request, "contactListPartyOrderBy");
+if (requestOrderBy != null) {
+    if ("name".equals(requestOrderBy)) {
+        // use the default
+    } else if ("description".equals(requestOrderBy)) {
+        // otherwise order by the contact mech info, either infoString, phone number, or address
+        if (isEmailList) {
+            orderBy = UtilMisc.toList("infoString");
+        } else if (isPhoneList) {
+            orderBy = UtilMisc.toList("areaCode", "contactNumber");
+        } else if (isAddressList) {
+            orderBy = UtilMisc.toList("stateProvinceGeoId", "city", "postalCode", "address1");
+        }
+    } else {
+        // use the parameter as the only order by field
+        orderBy = UtilMisc.toList(requestOrderBy.trim());
+    }
+}
+
+// possible fields we're searching by
+firstName = UtilCommon.getParameter(request, "firstName");
+lastName = UtilCommon.getParameter(request, "lastName");
+groupName = UtilCommon.getParameter(request, "groupName");
+infoString = UtilCommon.getParameter(request, "infoString");
+areaCode = UtilCommon.getParameter(request, "areaCode");
+contactNumber = UtilCommon.getParameter(request, "contactNumber");
+address1 = UtilCommon.getParameter(request, "address1");
+city = UtilCommon.getParameter(request, "city");
+stateProvinceGeoId = UtilCommon.getParameter(request, "stateProvinceGeoId");
+postalCode = UtilCommon.getParameter(request, "postalCode");
+partyClassificationGroupId = UtilCommon.getParameter(request, "partyClassificationGroupId");
+// search conditions
+searchConditions = new ArrayList();
+searchConditions.add(EntityUtil.getFilterByDateExpr());   // this filters out expired contact mechs using PartyContactMech
+
+// find parameters for the sorting headers
+findParams = "";
+
+// construct search conditions and find parameters
+if (firstName != null) {
+    searchConditions.add(new EntityExpr("firstName", true, EntityOperator.LIKE, "%" + firstName + "%", true));
+    findParams += "&firstName="+firstName;
+}
+if (lastName != null) {
+    searchConditions.add(new EntityExpr("lastName", true, EntityOperator.LIKE, "%" + lastName + "%", true));
+    findParams += "&lastName="+lastName;
+}
+if (groupName != null) {
+    searchConditions.add(new EntityExpr("groupName", true, EntityOperator.LIKE, "%" + groupName + "%", true));
+    findParams += "&groupName="+groupName;
+}
+if (infoString != null) {
+    searchConditions.add(new EntityExpr("infoString", true, EntityOperator.LIKE, "%" + infoString + "%", true));
+    findParams += "&infoString="+infoString;
+}
+if (areaCode != null) {
+    searchConditions.add(new EntityExpr("areaCode", true, EntityOperator.LIKE, "%" + areaCode + "%", true));
+    findParams += "&areaCode="+areaCode;
+}
+if (contactNumber != null) {
+    searchConditions.add(new EntityExpr("contactNumber", true, EntityOperator.LIKE, "%" + contactNumber + "%", true));
+    findParams += "&contactNumber="+contactNumber;
+}
+if (address1 != null) {
+    searchConditions.add(new EntityExpr("address1", true, EntityOperator.LIKE, "%" + address1 + "%", true));
+    findParams += "&address1="+address1;
+}
+if (city != null) {
+    searchConditions.add(new EntityExpr("city", true, EntityOperator.LIKE, "%" + city + "%", true));
+    findParams += "&city="+city;
+}
+if (stateProvinceGeoId != null) {
+    searchConditions.add(new EntityExpr("stateProvinceGeoId", true, EntityOperator.LIKE, "%" + stateProvinceGeoId + "%", true));
+    findParams += "&stateProvinceGeoId="+stateProvinceGeoId;
+}
+if (postalCode != null) {
+    searchConditions.add(new EntityExpr("postalCode", true, EntityOperator.LIKE, "%" + postalCode + "%", true));
+    findParams += "&postalCode="+postalCode;
+}
+
+if (partyClassificationGroupId != null) {
+    searchConditions.add(new EntityExpr("partyClassificationGroupId", true, EntityOperator.LIKE, "%" + partyClassificationGroupId + "%", true));
+    findParams += "&partyClassificationGroupId="+partyClassificationGroupId;
+}
+
+// show only the active, accepted contact list members from PartyContactInfoAndContactList if we are a remove form (viewContactList)
+entityToUse = null;
+if (isRemoveForm) {
+    searchConditions.add(new EntityExpr("contactListId", EntityOperator.EQUALS, contactList.get("contactListId")));
+    searchConditions.add(new EntityExpr("memberStatusId", EntityOperator.EQUALS, "CLPT_ACCEPTED"));
+    searchConditions.add(EntityUtil.getFilterByDateExpr("memberFromDate", "memberThruDate"));
+} else {
+    // otherwise just list all active parties restricted by the list's contactMechTypeId
+    searchConditions.add(new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, contactList.get("contactMechTypeId")));
+}
+
+// not include partyClassificationGroupId, else might repeat result
+if (isContactListSearch) {
+    fieldsToSelect = UtilMisc.toListArray(new String[] {"contactListId", "partyId", "memberFromDate", "memberThruDate", "memberStatusId", "groupName", "firstName", "lastName", "fromDate", "thruDate", "contactMechId", "infoString", "contactMechTypeId"});
+    entityName = "PartyContactInfoAndContactList";
+} else {
+    fieldsToSelect = UtilMisc.toListArray(new String[] {"partyId", "groupName", "firstName", "lastName", "fromDate", "thruDate", "contactMechId", "infoString", "contactMechTypeId"});
+    entityName = "PartyContactInfo";
+    // if a contactListId is given, filter out parties that are already member of this contact list
+    contactListId = UtilCommon.getParameter(request, "contactListId");
+    if (contactListId != null) {
+        alreadyMembersConditions = UtilMisc.toList(
+                                                 new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId),
+                                                 EntityUtil.getFilterByDateExpr("memberFromDate", "memberThruDate"));
+        alreadyMembers = delegator.findByCondition("PartyContactInfoAndContactList", new EntityConditionList(alreadyMembersConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList("partyId"));
+        alreadyMembersPartyIds = EntityUtil.getFieldListFromEntityList(alreadyMembers, "partyId", true);
+        if (UtilValidate.isNotEmpty(alreadyMembersPartyIds)) {
+            searchConditions.add(new EntityExpr("partyId", EntityOperator.NOT_IN, alreadyMembersPartyIds));
+        }
+    }
+}
+
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+// get the contact list members as a list iterator for pagination purposes (these lists can be large)
+members = delegator.findListIteratorByCondition(entityName, searchConditionList,  null, fieldsToSelect, orderBy,
+        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
+context.put("contactListParties", members);
+

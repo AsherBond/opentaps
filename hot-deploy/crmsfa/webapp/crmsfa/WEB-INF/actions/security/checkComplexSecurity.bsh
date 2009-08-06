@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/*
+ * This file is called by each screen that has complex security requirements.
+ * To use this script, define the security requirements in the subject screen
+ * as in the following example:
+ *
+ * <actions>
+ *   <set field="hasModulePermission" value="ACCOUNT"/>
+ *   <set field="hasOperationPermission" value="_VIEW"/>
+ *   <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+ * </actions>
+ *
+ * The partyIdFor is retrieved from the parameters.
+ *
+ * The script will create a parameter named "allowed" with the Boolean result of the security checks.
+ * By default, the script will return false.
+ *
+ * @author      Leon Torres (leon@opensourcestrategies.com)
+ */
+
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+
+module = context.get("hasModulePermission");
+operation = context.get("hasOperationPermission");
+
+// partyIdFor is the party we're trying to access the operation on.
+partyIdFor = parameters.get("partyIdFor");
+if (partyIdFor == null) {
+    partyIdFor = parameters.get("partyId");  // TODO: partyFor is in the parameters, don't know if this will work
+}
+
+/*
+ * If we're not suppllied with a partyIdFor, then allow the user to view the form.  This should never happen on a view form--we must
+ * know the partyId or what are we viewing?  It may happen on a create form, such as create opportunity, because the user has not told us
+ * what party he is creating information for.  In that case, just let him see the create form and then tell us the party for which 
+ * he wants to create data.  If he actually doesn't have the permission, the service should always kick him back out anyway.
+ */
+if (partyIdFor == null) {
+    context.put("allowed", true);
+}
+
+
+if ((module == null) || (operation == null)) {
+    context.put("allowed", false);
+    return;
+}
+
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+
+if (CrmsfaSecurity.hasPartyRelationSecurity(security, module, operation, userLogin, partyIdFor)) {
+    context.put("allowed", true);
+    return;
+}
+context.put("allowed", false);

@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- This file contains screens for the Partner section -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+   <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.partners.partners" global="true"/>
+                <set field="sectionName" value="partners" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/shortcuts.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findPartners">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsFindPartners"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsFindPartners"/>
+                <set field="findPartyWidget" value="findPartners"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaParties.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewPartner">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsViewPartner"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsViewPartner"/>
+                <set field="hasModulePermission" value="CRMSFA_PARTNER"/>
+                <set field="hasOperationPermission" value="_VIEW"/>
+                <set field="editContactMechPage" value="partnersEditContactMech"/>
+                <set field="donePage" value="viewPartner"/>
+                <set field="findActivitiesKey" value="partyId"/>  <!-- we want activities based on the partyId parameter -->
+                <set field="listSortTarget" value="viewPartner"/>
+                <set field="agreementViewer" value="viewPartnerAgreement"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/viewPartner.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contactmech/viewprofile.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/partnerAgreementPermissions.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/findActivities.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/partners/viewPartner.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewPartnerForm">
+        <section>
+            <widgets>
+                <include-form name="viewPartner" location="component://crmsfa/widget/crmsfa/forms/partners/PartnerForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createPartnerForm">
+        <section>
+            <widgets>
+                <include-form name="createPartnerForm" location="component://crmsfa/widget/crmsfa/forms/partners/PartnerForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createPartner">
+        <section>
+            <condition><if-has-permission permission="CRMSFA_PARTNER" action="_CREATE"/></condition>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsCreatePartner"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsCreatePartner"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/partners/createPartner.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
+        </section>
+    </screen>
+
+    <screen name="updatePartnerForm">
+         <section>
+             <actions>
+                 <set field="sectionHeaderUiLabel" value="OpentapsUpdatePartner"/>
+                 <set field="hasModulePermission" value="CRMSFA_PARTNER"/>
+                 <set field="hasOperationPermission" value="_UPDATE"/>
+                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/viewPartner.bsh"/>
+             </actions>
+             <widgets>
+                 <decorator-screen name="main-section-decorator">
+                     <decorator-section name="section-body">
+                         <container style="form">
+                             <include-form name="updatePartnerForm" location="component://crmsfa/widget/crmsfa/forms/partners/PartnerForms.xml"/>
+                         </container>
+                     </decorator-section>
+                 </decorator-screen>
+             </widgets>
+         </section>
+     </screen>
+
+    <screen name="updatePartnerPassword">
+        <section>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="updatePartyPassword" location="component://crmsfa/widget/crmsfa/screens/common/PartyScreens.xml"/>
+                    </decorator-section>>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewPartnerAgreement">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="PurchViewAgreement"/>
+                <set field="sectionHeaderUiLabel" value="PurchViewAgreement"/>
+                <set field="screenMode" value="VIEW"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/partnerAgreementPermissions.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementItems.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container>
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/partners/viewPartnerAgreementHeader.ftl"/></html>
+                            </platform-specific>
+                            <platform-specific>
+                                <html><html-template location="component://opentaps-common/webapp/common/agreements/viewAgreement.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+     </screen>
+
+    <screen name="editPartnerAgreement">
+        <section>
+            <actions>
+                <set field="screenMode" value="EDIT"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/partnerAgreementPermissions.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/agreements/editAgreement.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createPartnerAgreement">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OpentapsCreatePartnerSalesAgreement"/>
+                <set field="sectionHeaderUiLabel" value="OpentapsCreatePartnerSalesAgreement"/>
+                <set field="screenMode" value="CREATE"/>
+                <!-- Initial values used when create purchase agreement -->
+                <set field="agreementTypeId" value="PARTNER_SALES_AGR"/>
+                <set field="partyIdFrom" from-field="parameters.partyIdFrom"/>
+                <set field="roleTypeIdFrom" value="PARTNER"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/partnerAgreementPermissions.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://opentaps-common/webapp/common/agreements/createAgreement.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

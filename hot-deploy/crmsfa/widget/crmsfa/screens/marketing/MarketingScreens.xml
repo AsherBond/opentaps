@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2004-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author   Si Chen (sichen@opensourcestrategies.com)
+ *  @author   Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains screens for the Marketing section -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="marketing" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="requiredPermission" value="CRMSFA_MKTG"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/marketing/MarketingScreens.xml#leftBarScreen"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/marketing/screenlets/shortcuts.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Marketing Campaigns -->
+
+    <screen name="viewMarketingCampaign">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmViewMarketingCampaign"/>
+                <set field="sectionHeaderUiLabel" value="CrmViewMarketingCampaign"/>
+                <set field="listSortTarget" value="viewMarketingCampaign"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/viewMarketingCampaign.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/marketing/submenus/viewMarketingCampaign.ftl"/></html></platform-specific>
+                            <container style="form">
+                                <include-form name="viewMarketingCampaign" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                            </container>
+                        </container>
+
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/marketing/submenus/contactListsMenu.ftl"/></html></platform-specific>
+                            <include-form name="ListMarketingCampaignContactLists" location="component://crmsfa/widget/crmsfa/forms/marketing/ContactListForms.xml"/>
+                            <include-form name="addContactListToMarketingCampaignForm" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                        </container>
+
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/marketing/submenus/trackingCodesMenu.ftl"/></html></platform-specific>
+                            <include-form name="ListTrackingCodes" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createMarketingCampaignForm">
+        <section>
+            <condition><if-has-permission permission="CRMSFA_CAMP" action="_CREATE"/></condition>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateMarketingCampaign"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateMarketingCampaign"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="createMarketingCampaignForm" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
+        </section>
+    </screen>
+
+    <screen name="updateMarketingCampaignForm">
+        <section>
+            <condition><if-has-permission permission="CRMSFA_CAMP" action="_UPDATE"/></condition>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateMarketingCampaign"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateMarketingCampaign"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/viewMarketingCampaign.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="updateMarketingCampaignForm" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
+        </section>
+    </screen>
+
+    <screen name="findMarketingCampaigns">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindMarketingCampaigns"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindMarketingCampaigns"/>
+                <set field="parameters.listIteratorNameToUse" value="campaignsListIt"/> <!-- iterator for list of accounts -->
+                <set field="listSortTarget" value="findMarketingCampaigns"/>
+                <set field="findMarketingCampaignsTarget" value="findMarketingCampaigns"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/findMarketingCampaigns.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <include-form name="FindMarketingCampaign" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmMarketingCampaigns}</label></container>
+                            <include-form name="ListMarketingCampaigns" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- show a list of all available surveys -->
+    <screen name="Surveys">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmMarketing"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
+                <set field="sectionHeaderUiLabel" value="CrmMarketing"/>  <!-- this is for the main section of this page, ie <h2> -->
+                <!-- this script will do the lookup and pass results to the widgets below -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/findSurveys.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/marketing/submenus/surveysMenu.ftl"/></html></platform-specific>
+                        <include-form name="ListSurveys" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+   <screen name="ViewSurveyResponses">
+       <section>
+           <actions>
+               <set field="pageTitleLabel" value="CrmMarketingSurveyResults"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
+               <set field="sectionHeaderUiLabel" value="CrmMarketingSurveyResults"/>  <!-- this is for the main section of this page, ie <h2> -->
+                
+               <!-- find the survey first -->
+               <set field="surveyId" from-field="parameters.surveyId"/>
+               <entity-one entity-name="Survey" value-name="survey"/>
+               <!-- now prepare the responses -->
+               <script location="component://content/webapp/content/WEB-INF/actions/survey/ViewSurveyResponses.bsh"/>
+           </actions>
+           <widgets>
+           	    <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <platform-specific>
+                                <html><html-template location="component://content/webapp/content/survey/ViewSurveyResponses.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+           </widgets>
+       </section>
+   </screen>
+
+    <screen name="createTrackingCodeForm">
+        <section>
+            <condition><if-has-permission permission="CRMSFA_CAMP" action="_UPDATE"/></condition>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateTrackingCode"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateTrackingCode"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <include-form name="createTrackingCodeForm" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
+        </section>
+    </screen>
+
+    <screen name="marketingReports">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CommonReports"/>
+                <set field="sectionHeaderUiLabel" value="CommonReports"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmMarketingCampaignReport}</label></container>
+                            <container style="form">
+                                <include-form name="marketingCampaignReportForm" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTrackingCodeReport}</label></container>
+                            <container style="form">
+                                <include-form name="trackingCodeReportForm" location="component://crmsfa/widget/crmsfa/forms/marketing/MarketingForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="marketingCampaignReport">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmMarketingReports"/>
+                <set field="sectionHeaderUiLabel" value="CrmMarketingReports"/>
+                <script location="component://marketing/webapp/marketing/WEB-INF/actions/reports/MarketingCampaignReport.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmMarketingCampaignReport}</label></container>
+                            <container style="form">
+                                <include-form name="MarketCampaignReport" location="component://marketing/widget/ReportForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="trackingCodeReport">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmMarketingReports"/>
+                <set field="sectionHeaderUiLabel" value="CrmMarketingReports"/>
+                <script location="component://marketing/webapp/marketing/WEB-INF/actions/reports/TrackingCodeReport.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTrackingCodeReport}</label></container>
+                            <container style="form">
+                                <include-form name="TrackingCodeReport" location="component://marketing/widget/ReportForms.xml"/>
+                            </container>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Merge Forms -->
+    <screen name="ManageMergeForms">
+        <section> 
+            <condition><if-has-permission permission="CRMSFA_CAMP" action="_UPDATE"/></condition>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFormLetterTemplates"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
+                <set field="sectionHeaderUiLabel" value="CrmFormLetterTemplates"/>  <!-- this is for the main section of this page, ie <h2> -->
+                <set field="mergeFormLookupEntity" value="MergeFormAndCategory"/>  <!-- Override the entity name in getMergeFormsForCurrentUser.bsh -->
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/getMergeFormsForCurrentUser.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">                     
+                        <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/marketing/forms/ListMergeForms.ftl"/></html></platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="EditMergeForm">
+        <section>
+            <condition><if-has-permission permission="CRMSFA_CAMP" action="_UPDATE"/></condition>
+            <actions>
+                <set field="tabButtonItem" value="${uiLabelMap.CrmFormLetterTemplates}"/>
+                <set field="pageTitleLabel" value="CrmFormLetterTemplates"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
+                <set field="sectionHeaderUiLabel" value="CrmFormLetterTemplates"/> <!-- this is for the main section of this page, ie <h2> -->
+                <!-- this script will do the lookup and pass results to the widgets below -->   
+                <set field="mergeFormId" from-field="parameters.mergeFormId"/>   
+                <set field="partyId" value="${userLogin.partyId}"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/getMergeForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">                
+                    <decorator-section name="section-body">
+                         <platform-specific>
+                          <html><html-template location="component://crmsfa/webapp/crmsfa/marketing/forms/mergeForm.ftl"/></html>
+                        </platform-specific> 
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="EditMergeFormCategory">
+        <section>
+            <condition><if-has-permission permission="CRMSFA_CAMP" action="_UPDATE"/></condition>
+            <actions>
+                <set field="tabButtonItem" value="${uiLabelMap.CrmFormLetterTemplates}"/>
+                <set field="pageTitleLabel" value="CrmFormLetterTemplateCategories"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
+                <set field="sectionHeaderUiLabel" value="CrmFormLetterTemplateCategories"/> <!-- this is for the main section of this page, ie <h2> -->
+                <!-- this script will do the lookup and pass results to the widgets below -->   
+                <set field="mergeFormCategoryId" from-field="parameters.mergeFormCategoryId"/>   
+                <set field="partyId" value="${userLogin.partyId}"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/getMergeFormCategory.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">                
+                    <decorator-section name="section-body">
+                         <platform-specific>
+                          <html><html-template location="component://crmsfa/webapp/crmsfa/marketing/forms/mergeFormCategory.ftl"/></html>
+                        </platform-specific> 
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
+

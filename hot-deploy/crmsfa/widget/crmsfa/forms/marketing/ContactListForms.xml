@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="viewContactList" type="single" title="View Contact List" default-map-name="contactList"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="contactListName" title="${uiLabelMap.CommonName}" position="1"><display/></field>
+        <field name="contactMechTypeId" title="${uiLabelMap.CrmContactType}" position="1">
+            <display-entity entity-name="ContactMechType"/>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
+        <field name="numberOfMembers" title="${uiLabelMap.CrmNumberOfMembers}">
+            <display/>
+        </field>
+        <field name="calculate3605Postage" title="" widget-style="buttontext" 
+            use-when="&quot;POSTAL_ADDRESS&quot;.equals(contactList.get(&quot;contactMechTypeId&quot;))">
+            <hyperlink description="${uiLabelMap.CrmCalculate3605Postage}" target="calculate3605Postage?contactListId=${contactList.contactListId}"/>
+        </field>
+        <field name="sortUSPSBusinessMail" title="" widget-style="buttontext"
+            use-when="&quot;POSTAL_ADDRESS&quot;.equals(contactList.get(&quot;contactMechTypeId&quot;))">
+            <hyperlink description="${uiLabelMap.CrmSortUSPSBusinessMail}" target="sortUSPSBusinessMail?contactListId=${contactList.contactListId}"/>
+        </field>
+        <field name="viewUSPSSortResult" title="" widget-style="buttontext" 
+            use-when="&quot;POSTAL_ADDRESS&quot;.equals(contactList.get(&quot;contactMechTypeId&quot;))">
+            <hyperlink description="${uiLabelMap.CrmReportUSPSHeader}" target="viewUSPSSortResult?contactListId=${contactList.contactListId}"/>
+        </field>
+    </form>
+
+    <form name="createContactListForm" type="single" title="Create Contact List" target="createContactList"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="contactListName" title="${uiLabelMap.CommonName}" title-style="requiredField"><text/></field>
+        <field name="contactListTypeId"><hidden value="MARKETING"/></field>
+        <field name="marketingCampaignId" title="${uiLabelMap.CrmMarketingCampaign}">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options description="${campaignName}" entity-name="MarketingCampaign">
+                    <entity-constraint name="statusId" operator="not-equals" value="MKTG_CAMP_CANCELLED"/>
+                    <entity-constraint name="statusId" operator="not-equals" value="MKTG_CAMP_COMPLETED"/>
+                    <entity-order-by field-name="campaignName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="contactMechTypeId" title="${uiLabelMap.CrmContactType}" title-style="requiredField" position="1">
+            <drop-down allow-empty="false">
+                <option key="EMAIL_ADDRESS" description="Email Address"/>
+                <option key="POSTAL_ADDRESS" description="Postal Address"/>
+                <option key="TELECOM_NUMBER" description="Phone Number"/>
+            </drop-down>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+
+        <field name="submitButton" title="${uiLabelMap.CrmCreateContactList}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="updateContactListForm" type="single" title="Create Contact List" default-map-name="contactList" target="updateContactList"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="contactListId"><hidden/></field>
+        <field name="contactListName" title="${uiLabelMap.CommonName}" title-style="requiredField"><text/></field>
+        <field name="marketingCampaignId" title="${uiLabelMap.CrmMarketingCampaign}">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options description="${campaignName}" entity-name="MarketingCampaign">
+                    <entity-constraint name="statusId" operator="not-equals" value="MKTG_CAMP_CANCELLED"/>
+                    <entity-constraint name="statusId" operator="not-equals" value="MKTG_CAMP_COMPLETED"/>
+                    <entity-order-by field-name="campaignName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="FindContactList" type="single" target="${findContactListsTarget}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="lookup"><hidden value="Y"/></field>
+        <field name="contactListId"><hidden/></field>
+        <field name="contactListName" title="${uiLabelMap.CommonName}"><text/></field>
+        <field name="contactMechTypeId" title="${uiLabelMap.CrmContactType}" position="1">
+            <drop-down allow-empty="true">
+                <option key="EMAIL_ADDRESS" description="Email Address"/>
+                <option key="POSTAL_ADDRESS" description="Postal Address"/>
+                <option key="TELECOM_NUMBER" description="Phone Number"/>
+            </drop-down>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CrmFindContactLists}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+    <form name="FindContactListParties" type="single" target="${findContactListPartiesTarget}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="partyClassificationGroupId" title="${uiLabelMap.CrmPartyClassification}">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="PartyClassificationGroup">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="contactListId"><hidden value="${parameters.contactListId}"/></field>
+        <field name="firstName" title="${uiLabelMap.PartyFirstName}"><text/></field>
+        <field name="lastName" title="${uiLabelMap.PartyLastName}"><text/></field>
+        <field name="groupName" title="${uiLabelMap.CrmCompanyName}"><text/></field>
+
+        <field name="infoString" title="${uiLabelMap.CommonEmail}" use-when="isEmailList==true"><text/></field>
+
+        <field name="areaCode" title="${uiLabelMap.PartyAreaCode}" use-when="isPhoneList==true"><text size="3" maxlength="3"/></field>
+        <field name="contactNumber" title="${uiLabelMap.PartyPhoneNumber}" use-when="isPhoneList==true"><text size="10" maxlength="10"/></field>
+
+        <field name="address1" title="${uiLabelMap.PartyAddressLine1}" use-when="isAddressList==true"><text/></field>
+        <field name="city" title="${uiLabelMap.PartyCity}" use-when="isAddressList==true"><text/></field>
+        <field name="stateProvinceGeoId" title="${uiLabelMap.PartyState}" use-when="isAddressList==true">
+            <drop-down allow-empty="true">
+                <entity-options description="${geoName}" entity-name="Geo" key-field-name="geoId">
+                    <entity-constraint name="geoTypeId" operator="equals" value="STATE"/>
+                    <!-- TODO: find a way to add PROVINCE, which requires a combine of OR -->
+                    <entity-order-by field-name="geoName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="postalCode" title="${uiLabelMap.PartyZipCode}" use-when="isAddressList==true"><text/></field>
+
+        <field name="submitButton" title="${findFormSubmitButtonName}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+    <!-- TODO: pagination and sort for this list -->
+    <form name="ListContactLists" type="list" separate-columns="true" 
+        title="List Contact Lists"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}"  paginate-target-anchor="ListContactLists"
+        paginate-size-field="contactListsSize" paginate-index-field="contactListsIndex"
+        list-name="contactLists">
+
+        <field name="contactListId" title="${uiLabelMap.CommonName}" widget-area-style="fieldWidth300" widget-style="linktext">
+            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList?contactListId=${contactListId}"/>
+        </field>
+        <field name="contactMechTypeId" title="${uiLabelMap.CrmContactType}">
+            <display-entity entity-name="ContactMechType"/>
+        </field>
+        <field name="" title="${uiLabelMap.CrmNumberOfMembers}">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactListId, delegator)}"/>
+        </field>
+    </form>  
+
+    <form name="ListMarketingCampaignContactLists" type="list" separate-columns="true" 
+        title="List Marketing Campaign Contact Lists"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="marketingCampaignContactLists">
+        
+        <field name="trackingCodeId" title="Tracking Code"><display/></field>
+
+        <field name="parentContactListId" title="List" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId!=null">
+            <hyperlink description="${parentContactListName} (${parentContactListId})" target="viewContactList?contactListId=${parentContactListId}"/>
+        </field>
+        <field name="contactListId" title="Segment" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId!=null">
+            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList?contactListId=${contactListId}"/>
+        </field>
+
+        <field name="parentContactListId" title="List" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId==null">
+            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList?contactListId=${contactListId}"/>
+        </field>
+        <field name="contactListId" title="List" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId==null">
+          <display description=" "/>
+        </field>
+        <field name="contactMechTypeId" title="${uiLabelMap.CrmContactType}">
+            <display-entity entity-name="ContactMechType"/>
+        </field>
+        <field name="" title="${uiLabelMap.CrmNumberOfMembers}">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactListId, delegator)}"/>
+        </field>
+
+        <field name="remove" title="" widget-style="buttontext">
+          <hyperlink target="removeContactListFromMarketingCampaign?marketingCampaignId=${marketingCampaignId}&amp;campaignListId=${campaignListId}" description="${uiLabelMap.CommonRemove}" />
+        </field>
+    </form> 
+
+    <!-- note these three forms have identical setup and only differ in data to be displayed -->
+    <form name="ListContactListParties" type="multi" separate-columns="false" use-row-submit="true"
+        title="Contact List Parties"  default-title-style="tableheadtext" target="${listContactListPartiesTarget}?contactListId=${parameters.contactListId}"
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListContactListParties" 
+        paginate-size-field="contactListPartiesSize" paginate-index-field="contactListPartiesIndex"
+        list-name="contactListParties">
+
+        <!-- display the name as a link to viewAccount, viewContact or viewLead according to the role type -->
+        <field name="partyId" title="${uiLabelMap.CommonName}" widget-style="linktext"
+            header-link="${listSortTarget}?contactListId=${parameters.contactListId}&amp;contactListPartyOrderBy=name&amp;${findParams}#ListContactListParties" 
+            header-link-style="orderByHeaderLink">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.party.PartyHelper.createViewPageLink(partyId, delegator, externalLoginKey);}"/>
+        </field>
+        <!-- for adding member -->
+        <field name="statusId" use-when="isRemoveForm!=true"><hidden value="CLPT_ACCEPTED"/></field>
+        <field name="preferredContactMechId" use-when="isRemoveForm!=true"><hidden value="${contactMechId}"/></field>
+
+        <!-- for removing member (with partyId) -->
+        <field name="contactMechId" use-when="isRemoveForm==true"><hidden/></field>
+        <field name="fromDate" use-when="isRemoveForm==true"><hidden value="${memberFromDate}"/></field>
+        <field name="thruDate" use-when="isRemoveForm==true"><hidden value="${nowTimestamp}"/></field>
+
+        <!-- TODO: the description should be generated using a Java helper, which in turn relies on localized formatters -->
+        <field name="infoString" title="${contactMechColumnName}"
+            header-link="${listSortTarget}?contactListId=${parameters.contactListId}&amp;contactListPartyOrderBy=description&amp;${findParams}#ListContactListParties" 
+            header-link-style="orderByHeaderLink">
+            <display description="${bsh:
+                if (&quot;EMAIL_ADDRESS&quot;.equals(contactMechTypeId)) return infoString; 
+                if (&quot;TELECOM_NUMBER&quot;.equals(contactMechTypeId)) return &quot;(&quot;+areaCode+&quot;) &quot;+contactNumber;
+                if (! &quot;POSTAL_ADDRESS&quot;.equals(contactMechTypeId)) return null;
+                buff = new StringBuffer();
+                if (address1 != null) buff.append(address1).append(&quot;, &quot;);
+                if (city != null) buff.append(city).append(&quot;, &quot;);
+                if (stateProvinceGeoId != null) buff.append(stateProvinceGeoId).append(' ');
+                if (postalCode != null) buff.append(postalCode);
+                return buff.toString();}"/>
+        </field>
+
+        <!-- convenience log a call shortcut -->
+        <field name="logCall" title=" " use-when="isPhoneList==true&amp;&amp;isRemoveForm==true" widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CrmLogCall}"
+                target="logTaskForm?partyId=${partyId}&amp;workEffortPurposeTypeId=WEPT_TASK_PHONE_CALL"/>
+        </field>
+        <!-- convenience write email shortcut -->
+        <field name="writeEmail" title=" " use-when="isEmailList==true&amp;&amp;isRemoveForm==true" widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CrmWriteEmail}"
+                target="writeEmail?contactMechIdTo=${contactMechId}&amp;internalPartyId=${partyId}&amp;donePage=viewContactList&amp;contactListId=${contactListId}"/>
+        </field>
+        <!-- above fields will misalign Select column for address, so force aligment with a dummy field -->
+        <field name="dummyField" title=" " use-when="isAddressList==true||isRemoveForm==false">
+            <display description=" "/>
+        </field>
+
+        <!-- add a create order link for the removable party list -->
+        <field name="createOrder" title=" " widget-style="buttontext" use-when="isRemoveForm==true">
+            <hyperlink description="${uiLabelMap.OpentapsCreateOrder}" target="newOrder?partyId=${partyId}"/>
+        </field>
+        <!-- another dummy field to compensate for create order column -->
+        <field name="dummyField2" title="  " use-when="isRemoveForm==false">
+            <display description=" "/>
+        </field>
+
+        <field name="_rowSubmit" title="${uiLabelMap.CommonSelect}" use-when="hasUpdatePermission!=void&amp;&amp;hasUpdatePermission==true"><check/></field>
+
+        <!-- since the form action could be to add or remove selected, the button name must be set in a .bsh file (no other method seems to work) -->
+        <field name="submitButton" title="${listFormSubmitButtonName}" widget-style="smallSubmit" 
+            use-when="hasUpdatePermission!=void&amp;&amp;hasUpdatePermission==true">
+            <submit/>
+        </field>
+    </form>   
+
+    <form name="viewUSPSHeader" type="single" default-map-name="contactList"
+        default-title-style="tableheadtext" default-widget-style="tabletext">
+        <field name="contactListId" title="${uiLabelMap.CrmContactList}" widget-style="linktext">
+            <hyperlink target="viewContactList?contactListId=${contactList.contactListId}" description="${contactList.contactListName} (${contactList.contactListId})"/>
+        </field>
+        <field name="numberOfMembers" title="${uiLabelMap.CrmNumberSorted}">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactList.get(&quot;contactListId&quot;), delegator)}"/>
+        </field>
+        <field name="option1" title="" widget-style="buttontext">
+            <hyperlink target="viewUSPSSortResult?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSSortResults}"/>
+        </field>
+        <field name="option2" title="" widget-style="buttontext">
+            <hyperlink target="viewUSPSZip5?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSZip5}"/>
+        </field>
+        <field name="option3" title="" widget-style="buttontext">
+            <hyperlink target="viewUSPSZip3?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSZip3}"/>
+        </field>
+        <field name="option4" title="" widget-style="buttontext">
+            <hyperlink target="viewUSPSBMC?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSBMC}"/>
+        </field>
+        <field name="option5" title="" widget-style="buttontext">
+            <hyperlink target="viewUSPSOther?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSOther}"/>
+        </field>
+    </form>
+
+    <form name="ListUSPSSortBySortResult" type="list" list-name="sortResultRows"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
+        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        even-row-style="rowWhite" odd-row-style="rowLightGray">
+        <field name="sortResult" widget-area-style="fieldWidth300"><display/></field>
+        <field name="contactMechId" title="Number"><display/></field>
+    </form>
+    <form name="ListUSPSSortByZip5" type="list" list-name="zip5Rows"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
+        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        even-row-style="rowWhite" odd-row-style="rowLightGray">
+        <field name="zip5" widget-area-style="fieldWidth300"><display/></field>
+        <field name="contactMechId" title="Number"><display/></field>
+    </form>
+    <form name="ListUSPSSortByZip3" type="list" list-name="zip3Rows"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
+        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        even-row-style="rowWhite" odd-row-style="rowLightGray">
+        <field name="zip3" widget-area-style="fieldWidth300"><display/></field>
+        <field name="contactMechId" title="Number"><display/></field>
+    </form>
+    <form name="ListUSPSSortByBMC" type="list" list-name="bmcRows"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
+        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        even-row-style="rowWhite" odd-row-style="rowLightGray">
+        <field name="bmcCode" widget-area-style="fieldWidth300"><display/></field>
+        <field name="contactMechId" title="Number"><display/></field>
+    </form>
+    <form name="ListUSPSSortByOTHER" type="list" list-name="otherRows"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-table-style="crmsfaListTable"
+        paginate-target="${listSortTarget}" paginate-size-field="uspsSortSize" paginate-index-field="uspsSortIndex"
+        even-row-style="rowWhite" odd-row-style="rowLightGray">
+        <field name="bmcCode" widget-area-style="fieldWidth300"><display/></field>
+        <field name="contactMechId" title="Number"><display/></field>
+    </form>
+
+</forms>

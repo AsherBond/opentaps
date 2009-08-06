@@ -1,0 +1,161 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import javolution.util.FastList;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.model.DynamicViewEntity;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityListIterator;
+
+import org.opentaps.common.util.UtilConfig;
+import org.opentaps.common.util.UtilMessage;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+
+partyId = parameters.get("partyId");
+delegator = request.getAttribute("delegator");
+
+// is the account still active?
+accountActive = PartyHelper.isActive(partyId, delegator);
+
+// gather data that should only be available for active accounts
+if (accountActive) {
+
+    // Get Total Sales per Year
+    // create the dynamic view entity
+    dynamicView = new DynamicViewEntity();
+
+    // default view settings
+    dynamicView.addMemberEntity("OH", "OrderHeader");
+    dynamicView.addAlias("OH", "orderDate");
+    dynamicView.addAlias("OH", "orderTypeId");
+    dynamicView.addAlias("OH", "statusId");
+    dynamicView.addAlias("OH", "billFromPartyId");
+    dynamicView.addAlias("OH", "billToPartyId");
+    dynamicView.addAlias("OH", "grandTotal", null, null, null, null, "sum");
+
+    organizationPartyId = UtilConfig.getPropertyValue("opentaps", "organizationPartyId");
+
+    // fields we need to select; will be used to set distinct
+    fieldsToSelect = FastList.newInstance();
+    fieldsToSelect.add("grandTotal");
+
+    // define the main condition & expression list
+    andExprs = FastList.newInstance();
+    mainCond = null;
+    andExprs.add(new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"));
+
+    statusExprs = new EntityExpr(
+                                 new EntityExpr("statusId", EntityOperator.EQUALS, "ORDER_APPROVED"),
+                                 EntityOperator.OR,
+                                 new EntityExpr("statusId", EntityOperator.EQUALS, "ORDER_COMPLETED"));
+    statusExprs = new EntityExpr(
+                                 statusExprs,
+                                 EntityOperator.OR,
+                                 new EntityExpr("statusId", EntityOperator.EQUALS, "ORDER_HELD"));
+
+    andExprs.add(statusExprs);
+    andExprs.add(new EntityExpr("billFromPartyId", EntityOperator.EQUALS, organizationPartyId));
+    andExprs.add(new EntityExpr("billToPartyId", EntityOperator.EQUALS, partyId));
+
+    // set distinct on so we only get one row per order
+    findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, false);
+    salesYear = FastList.newInstance();
+    salesList = FastList.newInstance();
+
+    for(int i = 0; i < 4; i++) {
+        yearstart = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.YEAR, -i);
+        yearstart = UtilDateTime.getYearStart(yearstart);
+        tempCal = UtilDateTime.toCalendar(yearstart);
+        salesYear.add(tempCal.get(Calendar.YEAR));
+
+        yearend = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.YEAR, -i + 1);
+        yearend = UtilDateTime.getYearStart(yearend);
+
+        thisCond = new FastList();
+        thisCond.addAll(andExprs);
+        thisCond.add(new EntityExpr("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, yearstart));
+        thisCond.add(new EntityExpr("orderDate", EntityOperator.LESS_THAN, yearend));
+        mainCond = new EntityConditionList(thisCond, EntityOperator.AND);
+
+        // using list iterator
+        sli = delegator.findListIteratorByCondition(dynamicView, mainCond, null, fieldsToSelect, null, findOpts);
+
+        // get the list
+        salesList.addAll(sli.getCompleteList());
+
+        // close the list iterator
+        sli.close();
+    }
+
+    context{"salesYear"} = salesYear;
+    context{"salesList"} = salesList;
+
+    // Payment received this year
+    yearstart = UtilDateTime.getYearStart(UtilDateTime.nowTimestamp());
+    tempCal = UtilDateTime.toCalendar(yearstart);
+    context{"paymentReceivedYear"} = tempCal.get(Calendar.YEAR);
+
+    // create the dynamic view entity
+    dynamicView = new DynamicViewEntity();
+
+    // default view settings
+    dynamicView.addMemberEntity("P", "Payment");
+    dynamicView.addAlias("P", "partyIdFrom");
+    dynamicView.addAlias("P", "partyIdTo");
+    dynamicView.addAlias("P", "statusId");
+    dynamicView.addAlias("P", "effectiveDate");
+    dynamicView.addAlias("P", "amount", null, null, null, null, "sum");
+
+    // fields we need to select; will be used to set distinct
+    fieldsToSelect = FastList.newInstance();
+    fieldsToSelect.add("amount");
+
+    // define the main condition & expression list
+    andExprs = FastList.newInstance();
+    mainCond = null;
+
+    statusExprs = new EntityExpr(
+                                 new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_RECEIVED"),
+                                 EntityOperator.OR,
+                                 new EntityExpr("statusId", EntityOperator.EQUALS, "PMNT_CONFIRMED"));
+    andExprs.add(statusExprs);
+    andExprs.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyId));
+    andExprs.add(new EntityExpr("partyIdTo", EntityOperator.EQUALS, organizationPartyId));
+
+    // set distinct on so we only get one row per order
+    findOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, false);
+
+    andExprs.add(new EntityExpr("effectiveDate", EntityOperator.GREATER_THAN_EQUAL_TO, yearstart));
+    mainCond = new EntityConditionList(andExprs, EntityOperator.AND);
+
+    // using list iterator
+    sli = delegator.findListIteratorByCondition(dynamicView, mainCond, null, fieldsToSelect, null, findOpts);
+
+    // get the list
+    paymentList = sli.getCompleteList();
+
+    // close the list iterator
+    sli.close();
+
+    if (UtilValidate.isNotEmpty(paymentList)) {
+        context{"paymentReceived"} = paymentList.get(0);
+    }
+}

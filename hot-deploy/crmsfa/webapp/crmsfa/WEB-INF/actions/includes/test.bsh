@@ -1,0 +1,10 @@
+import org.opentaps.common.builder.*;
+import org.opentaps.common.pagination.*;
+
+/*
+ * Demonstration of entity list builder
+ *
+ */
+
+statusListBuilder = new EntityListBuilder("StatusItem");
+context.put("statusListBuilder", statusListBuilder);

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- Static USPS data -->
+
+<entity-engine-xml>
+
+    <!-- USPS Bulk Mail Centers (BMC) and the internal bmcCode key we use to identify them. -->
+    <UspsBmcCode bmcCode="BMC_NJ_00102" description="BMC NEW JERSEY JN 00102"/>
+    <UspsBmcCode bmcCode="SCF_PR_006" description="SCF SAN JUAN PR 006"/>
+    <UspsBmcCode bmcCode="BMC_FL_32099" description="BMC JAXVILLE FL 32099"/>
+    <UspsBmcCode bmcCode="BMC_MA_05500" description="BMC SPFLD MA 05500"/>
+    <UspsBmcCode bmcCode="BMC_PA_19205" description="BMC PHILA PA 19205"/>
+    <UspsBmcCode bmcCode="BMC_PA_15195" description="BMC PITTSBURG PA 15195"/>
+    <UspsBmcCode bmcCode="BMC_DC_20499" description="BMC WASHINGTON DC 20499"/>
+    <UspsBmcCode bmcCode="BMC_NC_27075" description="BMC GREENSBORO NC 27075"/>
+    <UspsBmcCode bmcCode="BMC_OH_45900" description="BMC CINCINN OH 45900"/>
+    <UspsBmcCode bmcCode="BMC_GA_31195" description="BMC ATLANTA GA 31195"/>
+    <UspsBmcCode bmcCode="BMC_TN_38999" description="BMC MEMPHIS TN 38999"/>
+    <UspsBmcCode bmcCode="BMC_MO_63299" description="BMC ST LOUIS MO 63299"/>
+    <UspsBmcCode bmcCode="BMC_MI_48399" description="BMC DETROIT MI 48399"/>
+    <UspsBmcCode bmcCode="BMC_IL_60808" description="BMC CHICAGO IL 60808"/>
+    <UspsBmcCode bmcCode="BMC_MN_55202" description="BMC MPLS/STP MN 55202"/>
+    <UspsBmcCode bmcCode="BMC_IA_50999" description="BMC DES MOINES IA 50999"/>
+    <UspsBmcCode bmcCode="BMC_CO_80088" description="BMC DENVER CO 80088"/>
+    <UspsBmcCode bmcCode="BMC_KS_64399" description="BMC KANS CITY KS 64399"/>
+    <UspsBmcCode bmcCode="BMC_TX_75199" description="BMC DALLAS TX 75199"/>
+    <UspsBmcCode bmcCode="BMC_WA_98000" description="BMC SEATTLE WA 98000"/>
+    <UspsBmcCode bmcCode="BMC_CA_90901" description="BMC LOS ANGELES CA 90901"/>
+    <UspsBmcCode bmcCode="BMC_CA_94850" description="BMC SAN FRAN CA 94850"/>
+
+    <!-- Catch all code for international addresses. -->
+    <UspsBmcCode bmcCode="OTHER" description="OTHER"/>
+
+    <!-- Piece and pound rates for USPS 3605-R for Carrier Route Non-barcoded, non special entry -->
+    <UspsBPMRatesByZone uspsBPMRateZone="1" ratePerPiece="1.178" ratePerPound="0.122"/>
+    <UspsBPMRatesByZone uspsBPMRateZone="2" ratePerPiece="1.178" ratePerPound="0.122"/>
+    <UspsBPMRatesByZone uspsBPMRateZone="3" ratePerPiece="1.178" ratePerPound="0.148"/>
+    <UspsBPMRatesByZone uspsBPMRateZone="4" ratePerPiece="1.178" ratePerPound="0.195"/>
+    <UspsBPMRatesByZone uspsBPMRateZone="5" ratePerPiece="1.178" ratePerPound="0.249"/>
+    <UspsBPMRatesByZone uspsBPMRateZone="6" ratePerPiece="1.178" ratePerPound="0.311"/>
+    <UspsBPMRatesByZone uspsBPMRateZone="7" ratePerPiece="1.178" ratePerPound="0.359"/>
+    <UspsBPMRatesByZone uspsBPMRateZone="8" ratePerPiece="1.178" ratePerPound="0.477"/>
+
+</entity-engine-xml>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <!-- form for creating an case -->
+    <form name="createCaseForm" type="single" target="${postTarget}" title="" 
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <field name="accountPartyId" title="${uiLabelMap.CrmInitialAccount}" position="1">
+            <lookup target-form-name="LookupAccounts" size="20" maxlength="20"/>
+        </field>
+        <field name="contactPartyId" title="${uiLabelMap.CrmInitialContact}" position="1">
+            <lookup target-form-name="LookupContacts" size="20" maxlength="20"/>
+        </field>
+        <field name="priority" title="${uiLabelMap.CommonPriority}" position="1">
+            <drop-down allow-empty="false" no-current-selected-key="${configProperties.defaultCustRequestPriority}">
+                <entity-options entity-name="Enumeration" description="${description}" key-field-name="enumCode">
+                    <entity-constraint name="enumTypeId" value="PRIORITY_LEV"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="custRequestTypeId" title="${uiLabelMap.CommonType}"  position="1">
+            <drop-down allow-empty="false" no-current-selected-key="${configProperties.defaultCustRequestTypeId}">
+                <entity-options description="${description}" entity-name="CustRequestType" key-field-name="custRequestTypeId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="custRequestCategoryId" title="${uiLabelMap.CrmReason}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="CustRequestCategory" key-field-name="custRequestCategoryId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="custRequestName" title="${uiLabelMap.PartySubject}" position="1" title-style="requiredField"><text/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}" position="1"><textarea/></field>
+        <field name="note" title="${uiLabelMap.CrmInternalNote}" position="1"><textarea/></field>
+        <field name="workEffortId"><hidden /></field>
+        <field name="submitButton" title="${uiLabelMap.CrmCreateCase}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- update case form TODO: this is vastly different from above -->
+    <form name="updateCaseForm" type="single" target="updateCase" title="" default-map-name="case"
+        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        <field name="custRequestId"><hidden/></field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}" position="1">
+            <drop-down allow-empty="false">
+                <entity-options entity-name="StatusItem" description="${description}">
+                    <entity-constraint name="statusTypeId" value="CUSTREQ_STTS"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <!-- use this one if we have StatusValidChange
+        <field name="statusId" title="${uiLabelMap.CommonStatus}" position="1">
+            <drop-down allow-empty="false" current-description="${uiLabelMap.CommonSelectOne}">
+                <entity-options entity-name="StatusValidChangeToDetail" key-field-name="statusIdTo" description="${transitionName}">
+                    <entity-constraint name="statusId" value="${statusId}"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        -->
+        <field name="priority" title="${uiLabelMap.CommonPriority}" position="1">
+            <drop-down allow-empty="false">
+                <entity-options entity-name="Enumeration" description="${description}" key-field-name="enumCode">
+                    <entity-constraint name="enumTypeId" value="PRIORITY_LEV"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="custRequestTypeId" title="${uiLabelMap.CommonType}" position="1">
+            <drop-down allow-empty="false">
+                <entity-options description="${description}" entity-name="CustRequestType" key-field-name="custRequestTypeId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="custRequestCategoryId" title="${uiLabelMap.CrmReason}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="CustRequestCategory" key-field-name="custRequestCategoryId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="custRequestName" title="${uiLabelMap.PartySubject}" title-style="requiredField" position="1"><text/></field>
+        <field name="description" title="${uiLabelMap.CommonDescription}" position="1"><textarea/></field>
+        <field name="note" title="${uiLabelMap.CrmChangeNote}" position="1"><textarea/></field>
+
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- display a case -->
+    <form name="viewCase" type="single" default-map-name="case" target="" title=""
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="custRequestName" title="${uiLabelMap.PartySubject}" title-style="requiredField"><display/></field>
+        <field name="accountPartyId" widget-style="tabletext" title="${uiLabelMap.CrmAccountName}" widget-area-style="fieldWidth300" position="1"
+            use-when="accountPartyId!=null">
+            <display-entity entity-name="PartySummaryCRMView" description="${groupName} (${partyId})" key-field-name="partyId">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount?partyId=${case.accountPartyId}"/>
+            </display-entity>
+        </field>
+        <field name="contactPartyId" widget-style="tabletext" title="${uiLabelMap.CrmContactName}" widget-area-style="fieldWidth300" position="1"
+            use-when="contactPartyId!=null">
+            <display-entity entity-name="PartySummaryCRMView" description="${firstName} ${lastName} (${partyId})" key-field-name="partyId">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewContact?partyId=${case.contactPartyId}"/>
+            </display-entity>
+        </field>
+        <field name="priority" title="${uiLabelMap.CommonPriority}"><display/></field> <!-- TODO: translate the number to a value somehow -->
+        <field name="contactPartyId" widget-style="tabletext" title="${uiLabelMap.CrmContact}" widget-area-style="fieldWidth300" position="2" use-when="contactPartyId!=void&amp;&amp;contactPartyId!=null">
+            <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewContact?partyId=${case.contactPartyId}"/>
+            </display-entity>
+        </field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}" position="1">
+            <display-entity entity-name="StatusItem"/>
+        </field>
+        <field name="custRequestTypeId" title="${uiLabelMap.CommonType}" position="1">
+            <display-entity entity-name="CustRequestType"/>
+        </field>
+        <field name="custRequestCategoryId" title="${uiLabelMap.CrmReason}">
+            <display-entity entity-name="CustRequestCategory"/>
+        </field>
+        <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
+    </form>
+
+    <!-- present a list of cases (this is a re-usable form) -->
+    <form name="ListCases" type="list" separate-columns="true" 
+        title="Cases"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-target-anchor="ListCases" paginate-size-field="casesSize" paginate-index-field="casesIndex"
+        list-name="casesListIt">
+        <field name="priority" title="${uiLabelMap.CommonPriority}"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=priority${findParams}#ListCases" header-link-style="orderByHeaderLink">
+            <display/>
+        </field>
+        <!-- show either the link to viewCase or a javascript set_value depending on whether we're in a lookup -->
+        <field name="custRequestName" title="${uiLabelMap.PartySubject}" widget-style="linktext" widget-area-style="fieldWidth50pct"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=custRequestName${findParams}#ListCases" header-link-style="orderByHeaderLink"
+            use-when="(isLookup==void)||(isLookup==null)||(isLookup.equals(&quot;false&quot;))">
+            <hyperlink description="${custRequestName} (${custRequestId})" target="viewCase?custRequestId=${custRequestId}"/>
+        </field>
+        <field name="custRequestName" title="${uiLabelMap.PartySubject}" widget-style="linktext" widget-area-style="fieldWidth50pct"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=custRequestName${findParams}#ListCases" header-link-style="orderByHeaderLink"
+            use-when="(isLookup!=void)&amp;&amp;(isLookup!=null)&amp;&amp;(isLookup.equals(&quot;true&quot;))">
+            <hyperlink also-hidden="false" target-type="plain" description="${custRequestName} (${custRequestId})" target="javascript:set_value('${custRequestId}')"/>
+        </field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=statusId${findParams}#ListCases" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="StatusItem"/>
+        </field>
+        <field name="custRequestTypeId" title="${uiLabelMap.CommonType}"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=custRequestTypeId${findParams}#ListCases" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="CustRequestType"/>
+        </field>
+        <field name="custRequestCategoryId" title="${uiLabelMap.CrmReason}"
+            header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;casesOrderBy=custRequestCategoryId${findParams}#ListCases" header-link-style="orderByHeaderLink">
+            <display-entity entity-name="CustRequestCategory"/>
+        </field>
+    </form>   
+
+    <!-- shows the status change history (CustRequestStatus) -->
+    <form name="listCaseHistory" type="list" separate-columns="true" 
+        title="Cases"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="NeedsParametrization"  list-name="caseHistoryList">
+        <field name="statusId" title="${uiLabelMap.CommonStatus}">
+            <display-entity entity-name="StatusItem"/>
+        </field>
+        <field name="statusDatetime" title="${uiLabelMap.CommonDate}">
+            <display/>
+        </field>
+    </form>   
+
+    <form name="FindCasesForm" type="single" target="${findCasesTarget}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="custRequestName" title="${uiLabelMap.PartySubject}">
+              <text/>
+        </field>
+        <field name="priority" title="${uiLabelMap.CommonPriority}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options entity-name="Enumeration" description="${description}" key-field-name="enumCode">
+                    <entity-constraint name="enumTypeId" value="PRIORITY_LEV"/>
+                    <entity-order-by field-name="sequenceId"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="statusId" title="${uiLabelMap.CommonStatus}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options entity-name="StatusItem" description="${description}">
+                    <entity-constraint name="statusTypeId" value="CUSTREQ_STTS"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="custRequestTypeId" title="${uiLabelMap.CommonType}" position="1">
+            <drop-down allow-empty="true">
+                <entity-options description="${description}" entity-name="CustRequestType" key-field-name="custRequestTypeId">
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmFindCases}" widget-style="smallSubmit">
+            <submit/>
+        </field>
+    </form>
+
+</forms>

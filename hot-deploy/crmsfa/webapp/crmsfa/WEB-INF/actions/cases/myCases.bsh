@@ -1,0 +1,99 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+// finds all cases for all accounts that the userLogin is a member of or all contacts that the user is responsible for
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.common.util.UtilView;
+import org.opentaps.common.party.ViewPrefWorker;
+
+import org.ofbiz.base.util.Debug;
+
+userLogin = request.getAttribute("userLogin");
+
+// get orderBy from the parameters
+casesOrderBy = parameters.get("casesOrderBy");
+if (casesOrderBy == null) casesOrderBy = "priority";
+
+// get the user preferences for this section
+userLogin = request.getAttribute("userLogin");
+showPartyPref = ViewPrefWorker.getViewPreferenceString(userLogin, "MY_OR_TEAM_CASES");
+
+// condition to find all cases where userLogin is the request taker
+takerCond = new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("partyId", EntityOperator.EQUALS, userLogin.getString("partyId")), 
+            new EntityExpr("roleTypeId", EntityOperator.EQUALS, "REQ_TAKER")
+            ), EntityOperator.AND);
+
+// or condition to find all cases for all accounts and contacts which the userLogin can view
+roleCond = new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT"), 
+            new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT")
+            ), EntityOperator.OR);
+accountContactCond = new EntityConditionList(UtilMisc.toList(
+            roleCond,
+            new EntityExpr("partyIdTo", EntityOperator.EQUALS, userLogin.getString("partyId")),
+            EntityUtil.getFilterByDateExpr() // filter out expired accounts and contacts
+            ), EntityOperator.AND);
+
+// decide which condition to use based on preferences (default is team)
+prefCond = null;
+if ("MY_VALUES".equals(showPartyPref)) {
+    prefCond = takerCond;
+    context.put("MY_OR_TEAM_CASES", "MY_VALUES");
+} else {
+    prefCond = accountContactCond;
+    context.put("MY_OR_TEAM_CASES", "TEAM_VALUES");
+}
+
+// build the main condition
+conditionList = new EntityConditionList(
+        UtilMisc.toList(
+            // exclude these case statuses
+            new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "CRQ_COMPLETED"),
+            new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "CRQ_REJECTED"),
+            new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "CRQ_CANCELLED"),
+
+            // catalog requests should not be counted as cases
+            new EntityExpr("custRequestTypeId", EntityOperator.NOT_EQUAL, "RF_CATALOG"),
+            
+            // the my or team preference condition
+            prefCond
+            ), EntityOperator.AND);
+
+// prepare conditions to the case page builder in listCases.bsh
+context.put("entityName", "PartyRelationshipAndCaseRole");
+fieldsToSelect = UtilMisc.toList("custRequestId", "priority", "custRequestName", "statusId");
+fieldsToSelect.add("custRequestTypeId");
+fieldsToSelect.add("custRequestCategoryId");    
+context.put("fieldsToSelect", fieldsToSelect);
+if (UtilValidate.isNotEmpty(casesOrderBy)) {
+    orderBy = UtilMisc.toList(casesOrderBy);
+} else {
+    orderBy = UtilMisc.toList("priority DESC");        
+}    
+context.put("orderBy", orderBy);
+context.put("conditions", conditionList);

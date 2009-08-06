@@ -1,0 +1,80 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// finds all orders for all accounts that the userLogin is a member of or all contacts that the user is responsible for
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.model.*;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.party.ViewPrefWorker;
+
+userLogin = request.getAttribute("userLogin");
+
+desiredOrderStatuses = UtilMisc.toList("ORDER_APPROVED", "ORDER_CREATED", "ORDER_HOLD", "ORDER_PROCESSING");
+
+ordersOrderBy = parameters.get("ordersOrderBy");
+if (ordersOrderBy == null) ordersOrderBy = "orderDate DESC";
+
+// must specify minimum required fields so that the distinct select works
+fieldsToSelect = UtilMisc.toList("orderName", "orderId", "correspondingPoId", "statusId", "grandTotal", "partyId");
+fieldsToSelect.add("orderDate");
+fieldsToSelect.add("currencyUom");
+
+organizationPartyId = UtilProperties.getPropertyValue("opentaps", "organizationPartyId");
+
+// build the main condition
+conditionList = new EntityConditionList(UtilMisc.toList(
+            new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
+            new EntityExpr("createdBy", EntityOperator.EQUALS, userLogin.getString("userLoginId")),
+            new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER"),
+            new EntityExpr("statusId", EntityOperator.IN, desiredOrderStatuses),
+            new EntityExpr("billFromPartyId", EntityOperator.EQUALS, organizationPartyId)
+            ), EntityOperator.AND);
+
+// here's the fun part -- build a dynamic view entity for the query
+dv = new DynamicViewEntity();
+dv.addMemberEntity("OH", "OrderHeader");
+dv.addMemberEntity("OI", "OrderItem");
+dv.addMemberEntity("ORE", "OrderRole");
+dv.addAlias("OH", "orderId");
+dv.addAlias("OH", "orderName");
+dv.addAlias("OH", "statusId");
+dv.addAlias("OH", "grandTotal");
+dv.addAlias("OH", "orderTypeId");
+dv.addAlias("OH", "orderDate");
+dv.addAlias("OH", "currencyUom");
+dv.addAlias("OH", "createdBy");
+dv.addAlias("OH", "billFromPartyId");
+dv.addAlias("ORE", "roleTypeId");
+dv.addAlias("ORE", "partyId");
+dv.addAlias("OI", "correspondingPoId");
+dv.addViewLink("OH", "OI", Boolean.FALSE, ModelKeyMap.makeKeyMapList("orderId"));
+dv.addViewLink("OH", "ORE", Boolean.FALSE, ModelKeyMap.makeKeyMapList("orderId"));
+
+// perform the find
+myOrders = delegator.findListIteratorByCondition(dv, conditionList, null, 
+        fieldsToSelect, // fields to select (null => all)
+        UtilMisc.toList(ordersOrderBy), // fields to order by
+        // the first true here is for "specifyTypeAndConcur"
+        // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
+        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
+
+context.put("ordersListIt", myOrders);

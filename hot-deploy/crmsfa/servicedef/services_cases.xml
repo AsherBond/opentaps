@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2001-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Case Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>0.8</version>
+
+    <!-- note that our services are prefixed with "crmsfa." to easily distinguish them from other services; perhaps a namespace system would be useful here -->
+
+    <service name="crmsfa.createCase" engine="java" location="com.opensourcestrategies.crmsfa.cases.CasesServices" invoke="createCase">
+        <description>Creates a Case with an optional initial account, initial contact, and note. Either an account or a contact must be supplied. There
+            can be no stand-alone cases. Requires CRMSFA_CASE_CREATE permission for the specified account or contact.</description>
+        <attribute name="accountPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="contactPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="priority" type="Double" mode="IN" optional="true"/>
+        <attribute name="custRequestTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="custRequestCategoryId" type="String" mode="IN" optional="true"/>
+        <attribute name="custRequestName" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="note" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
+        <attribute name="custRequestId" type="String" mode="OUT" optional="false"/>
+        <attribute name="workEffortId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="crmsfa.updateCase" engine="java" location="com.opensourcestrategies.crmsfa.cases.CasesServices" invoke="updateCase">
+        <description>Updates a Case. Requires CRMSFA_CASE_UPDATE on any of the accounts or contacts associated with case.</description>
+        <attribute name="custRequestId" type="String" mode="IN" optional="false"/>
+        <attribute name="statusId" type="String" mode="IN" optional="false"/>
+        <attribute name="priority" type="Double" mode="IN" optional="true"/>
+        <attribute name="custRequestTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="custRequestCategoryId" type="String" mode="IN" optional="true"/>
+        <attribute name="custRequestName" type="String" mode="IN" optional="false"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="note" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.closeCase" engine="java" location="com.opensourcestrategies.crmsfa.cases.CasesServices" invoke="closeCase">
+        <description>Close a case. Requires CRMSFA_CASE_CLOSE on any of the accounts or contacts associated with the case.</description>
+        <attribute name="custRequestId" type="String" mode="IN" optional="false"/>
+    </service>
+
+</services>
+

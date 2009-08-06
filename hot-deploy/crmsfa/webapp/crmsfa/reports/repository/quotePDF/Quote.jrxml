@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="Quote"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="612"
+		 pageHeight="792"
+		 columnWidth="541"
+		 columnSpacing="0"
+		 leftMargin="43"
+		 rightMargin="28"
+		 topMargin="28"
+		 bottomMargin="28"
+		 whenNoDataType="AllSectionsNoDetail"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+	<import value="org.ofbiz.content.report.*" />
+	<import value="org.opentaps.common.reporting.UtilReports" />
+
+	<parameter name="chargeList" isForPrompting="false" class="net.sf.jasperreports.engine.JRDataSource"/>
+	<parameter name="quoteId" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="quoteStatus" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationLogoImageUrl" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationCompanyName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationAddress1" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationAddress2" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationCity" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="organizationPostalCode" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="countryName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="stateProvinceAbbrv" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="website" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="email" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="primaryPhone" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="primaryFax" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="quotePartyName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="eftAccountBankName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="eftAccountBankRoutingNumber" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="eftAccountBankAccountNumber" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="quoteName" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="description" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="validFromDate" isForPrompting="false" class="java.sql.Timestamp"/>
+	<parameter name="validThruDate" isForPrompting="false" class="java.sql.Timestamp"/>
+	<parameter name="issueDate" isForPrompting="false" class="java.sql.Timestamp"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="currencyUomId" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["USD"]]></defaultValueExpression>
+	</parameter>
+
+	<field name="productName" class="java.lang.String"/>
+	<field name="productId" class="java.lang.String"/>
+	<field name="quoteItemSeqId" class="java.lang.String"/>
+	<field name="itemDescription" class="java.lang.String"/>
+	<field name="quantity" class="java.math.BigDecimal"/>
+	<field name="quoteUnitPrice" class="java.math.BigDecimal"/>
+	<field name="quoteItemAmount" class="java.math.BigDecimal"/>
+	<field name="isQuoteItem" class="java.lang.Boolean"/>
+	<field name="comments" class="java.lang.String"/>
+
+
+		<group  name="quoteItemSeqId" >
+			<groupExpression><![CDATA[$F{quoteItemSeqId}]]></groupExpression>
+			<groupHeader>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="71"
+						y="0"
+						width="230"
+						height="16"
+						key="textField-34"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{productName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="71"
+						height="16"
+						key="textField-38"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{productId}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="###0;-###0" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="301"
+						y="0"
+						width="80"
+						height="16"
+						key="textField-40">
+							<printWhenExpression><![CDATA[$F{isQuoteItem}]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{quantity}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="381"
+						y="0"
+						width="80"
+						height="16"
+						key="textField-41">
+							<printWhenExpression><![CDATA[$F{isQuoteItem}]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{quoteUnitPrice}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="461"
+						y="0"
+						width="80"
+						height="16"
+						key="textField-42">
+							<printWhenExpression><![CDATA[$F{isQuoteItem}]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{quoteItemAmount}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="90"
+						y="0"
+						width="430"
+						height="16"
+						key="textField-44"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement verticalAlignment="Middle">
+						<font pdfFontName="Helvetica-Oblique" size="8" isItalic="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{comments}]]></textFieldExpression>
+				</textField>
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="137"  isSplitAllowed="true" >
+				<subreport  isUsingCache="false">
+					<reportElement
+						x="0"
+						y="46"
+						width="240"
+						height="87"
+						key="subreport-1"/>
+					<subreportParameter  name="countryName">
+						<subreportParameterExpression><![CDATA[$P{countryName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="primaryPhone">
+						<subreportParameterExpression><![CDATA[$P{primaryPhone}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="organizationAddress1">
+						<subreportParameterExpression><![CDATA[$P{organizationAddress1}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="organizationAddress2">
+						<subreportParameterExpression><![CDATA[$P{organizationAddress2}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="organizationCity">
+						<subreportParameterExpression><![CDATA[$P{organizationCity}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="organizationPostalCode">
+						<subreportParameterExpression><![CDATA[$P{organizationPostalCode}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="website">
+						<subreportParameterExpression><![CDATA[$P{website}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="email">
+						<subreportParameterExpression><![CDATA[$P{email}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="eftAccountBankName">
+						<subreportParameterExpression><![CDATA[$P{eftAccountBankName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="eftAccountBankRoutingNumber">
+						<subreportParameterExpression><![CDATA[$P{eftAccountBankRoutingNumber}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="eftAccountBankAccountNumber">
+						<subreportParameterExpression><![CDATA[$P{eftAccountBankAccountNumber}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="organizationCompanyName">
+						<subreportParameterExpression><![CDATA[$P{organizationCompanyName}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="primaryFax">
+						<subreportParameterExpression><![CDATA[$P{primaryFax}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="stateProvinceAbbrv">
+						<subreportParameterExpression><![CDATA[$P{stateProvinceAbbrv}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://crmsfa/webapp/crmsfa/reports/repository/quotePDF/CompanyInfo.jrxml")]]></subreportExpression>
+				</subreport>
+				<subreport  isUsingCache="false">
+					<reportElement
+						x="279"
+						y="0"
+						width="257"
+						height="114"
+						key="subreport-2"/>
+					<subreportParameter  name="quoteId">
+						<subreportParameterExpression><![CDATA[$P{quoteId}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="quoteStatus">
+						<subreportParameterExpression><![CDATA[$P{quoteStatus}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="validFromDate">
+						<subreportParameterExpression><![CDATA[$P{validFromDate}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="validThruDate">
+						<subreportParameterExpression><![CDATA[$P{validThruDate}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="issueDate">
+						<subreportParameterExpression><![CDATA[$P{issueDate}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://crmsfa/webapp/crmsfa/reports/repository/quotePDF/QuoteHeader.jrxml")]]></subreportExpression>
+				</subreport>
+				<image  isLazy="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="241"
+						height="40"
+						key="companyLogo-1"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[new Boolean($P{organizationLogoImageUrl} != null)]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.net.URL"><![CDATA[new URL($P{organizationLogoImageUrl})]]></imageExpression>
+				</image>
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="33"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="71"
+						y="19"
+						width="230"
+						height="13"
+						key="textField-29"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{QuoteReportItemProductName}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="301"
+						y="19"
+						width="80"
+						height="13"
+						key="textField-30"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{QuoteReportItemQuantity}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="381"
+						y="19"
+						width="80"
+						height="13"
+						key="textField-31"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{QuoteReportItemUnitPrice}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="461"
+						y="19"
+						width="80"
+						height="13"
+						key="textField-32"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{QuoteReportItemSubtotal}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="19"
+						width="71"
+						height="13"
+						key="textField-33"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{QuoteReportItemID}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="250"
+						height="13"
+						key="textField-39"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="8" isBold="true"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{QuoteReportProductItemTitle}]]></textFieldExpression>
+				</textField>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="16"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="###0;-###0" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="301"
+						y="0"
+						width="80"
+						height="16"
+						key="textField-35"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf(!$F{isQuoteItem}.booleanValue())]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{quantity}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="381"
+						y="0"
+						width="80"
+						height="16"
+						key="textField-36"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf(!$F{isQuoteItem}.booleanValue())]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{quoteUnitPrice}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="461"
+						y="0"
+						width="80"
+						height="16"
+						key="textField-37"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf(!$F{isQuoteItem}.booleanValue())]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{quoteItemAmount}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="71"
+						y="0"
+						width="230"
+						height="16"
+						key="textField-43"
+						isRemoveLineWhenBlank="true">
+							<printWhenExpression><![CDATA[Boolean.valueOf(!$F{isQuoteItem}.booleanValue())]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$R{Option} + " " + $F{itemDescription} + ":"]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="49"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="6"
+						y="3"
+						width="531"
+						height="42"
+						key="staticText-1"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font pdfFontName="Helvetica" size="8" isItalic="false"/>
+					</textElement>
+				<text><![CDATA[Notice: Our acceptance of a purchase order does not necessarily constitute acceptance of all terms specified therein. Quotes are subject to all catalog terms and our approval when your order is placed. Terms are net 30. Shipping is FOB factory. There may be a variance in product dimensions and a +/- 10% over/underrun factor.]]></text>
+				</staticText>
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="48"  isSplitAllowed="true" >
+				<subreport  isUsingCache="false">
+					<reportElement
+						x="0"
+						y="0"
+						width="540"
+						height="48"
+						key="subreport-3"
+						isRemoveLineWhenBlank="true"
+						isPrintWhenDetailOverflows="true">
+							<printWhenExpression><![CDATA[new Boolean($P{chargeList} != null)]]></printWhenExpression>
+						</reportElement>
+					<subreportParameter  name="REPORT_DATA_SOURCE">
+						<subreportParameterExpression><![CDATA[$P{chargeList}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="REPORT_RESOURCE_BUNDLE">
+						<subreportParameterExpression><![CDATA[$P{REPORT_RESOURCE_BUNDLE}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportExpression  class="net.sf.jasperreports.engine.JasperReport"><![CDATA[UtilReports.getReportObject("component://crmsfa/webapp/crmsfa/reports/repository/quotePDF/QuoteCharges.jrxml")]]></subreportExpression>
+				</subreport>
+			</band>
+		</summary>
+</jasperReport>

@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2008 Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.util.EntityUtil;
+
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
+
+salesOpportunityHistoryId = parameters.get("salesOpportunityHistoryId");
+
+// get the opportunity history
+opportunityHistory = delegator.findByPrimaryKey("SalesOpportunityHistory", UtilMisc.toMap("salesOpportunityHistoryId", salesOpportunityHistoryId));
+if (opportunityHistory == null) return;
+opportunityHistoryAndParty = opportunityHistory.getAllFields();
+
+// add the opportunity fields
+opportunity = opportunityHistory.getRelatedOne("SalesOpportunity");
+opportunityHistoryAndParty.putAll(opportunity.getAllFields());
+
+// and the opportunity account partyId
+accountPartyId = UtilOpportunity.getOpportunityAccountPartyId(opportunity);
+if (accountPartyId != null) opportunityHistoryAndParty.put("accountPartyId", accountPartyId);
+
+// add the opportunity lead partyId
+leadPartyId = UtilOpportunity.getOpportunityLeadPartyId(opportunity);
+if (leadPartyId != null) opportunityHistoryAndParty.put("leadPartyId", leadPartyId);
+
+// check that party has view permission
+context.put("allowed", true);
+security = request.getAttribute("security");
+
+if (accountParty != null && !CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_OPP", "_VIEW", userLogin, accountPartyId)) {
+    context.put("allowed", false);
+    return;
+} else if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_OPP", "_VIEW", userLogin, leadPartyId)) {
+    context.put("allowed", false);
+    return;
+}
+
+// put history in the context
+context.put("opportunityHistoryAndParty", opportunityHistoryAndParty);

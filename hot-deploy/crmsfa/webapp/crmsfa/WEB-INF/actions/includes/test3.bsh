@@ -1,0 +1,42 @@
+// Test of closures
+import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.common.builder.*;
+import org.opentaps.common.pagination.*;
+
+import javolution.util.*;
+
+/*
+ *  Demonstration of using a closure!
+ *
+ */
+
+// it's like a method definition, we'll pass in the arguments later
+glAccountBuilder(organizationPartyId) {
+
+    // set the conditions here as method variables
+    entityName = "GlAccountOrganizationAndClass";
+    where = UtilMisc.toList(
+        new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+        EntityUtil.getFilterByDateExpr()
+    );
+
+    // define the PageBuilder build method here
+    build( page ) {
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            glAccount = iter.next();
+            description = glAccount.get("accountName") + " (" + glAccount.get("glAccountId") + ")";
+            glAccount.set("description", description);
+        }
+        return page;
+    }
+
+    // critical return statement
+    return this;
+}
+
+// then all we have to do is invoke the method and pass it to the <@paginate> macro as the list argument
+context.put("glAccountBuilder", glAccountBuilder("Company"));

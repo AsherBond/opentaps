@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="createNoteForm" type="single" target="${createNoteFormTarget}" title=""
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="note" title="${uiLabelMap.CommonNote}" widget-style="inputBox"><textarea/></field>
+        <field name="partyId"><hidden/></field>
+        <field name="custRequestId"><hidden/></field> <!-- this is here because Cases can also have notes -->
+        <field name="submitButton" title="${uiLabelMap.CrmCreateNote}" widget-style="smallSubmit"><submit button-type="button"/></field>
+        <field name="doneScreen"><hidden value="${doneScreen}"/></field>
+        <field name="doneScreenLocation"><hidden value="${doneScreenLocation}"/></field>
+    </form>
+
+    <form name="listNotes" type="list" separate-columns="true" 
+        title="" default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="notesListIt" >
+        <field name="noteInfo" widget-area-style="fieldWidth50pct"><display/></field>
+        <field name="noteParty" title="${uiLabelMap.CommonCreatedBy}">
+            <display-entity entity-name="PartyNameView" key-field-name="partyId" description="${firstName} ${middleName} ${lastName} ${groupName}"/>
+        </field>
+        <field name="noteDateTime"><display/></field>
+    </form>   
+
+    <!-- parametrized data sources list -->
+    <form name="listDataSources" type="list" separate-columns="true" 
+        default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="dataSources">
+        <field name="dataSourceId" title="${uiLabelMap.CrmDataSource}" widget-area-style="fieldWidth300">
+            <display-entity entity-name="DataSource"/>
+        </field>
+        <field name="fromDate" title="${uiLabelMap.CommonFromDate}" widget-area-style="fieldWidth200"><display/></field>
+        <!-- TODO: need a way to check complex security here (maybe use-when?) also for marketing campaigns below
+        <field name="Remove" widget-style="buttontext" title=" ">
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="${removeDataSourceFormTarget}?partyId=${parameters.partyId}&amp;dataSourceId=${dataSourceId}"/>
+        </field>
+        -->
+    </form>
+
+    <!-- parametrized add data source form -->
+    <form name="addDataSourceForm" type="single" target="${addDataSourceFormTarget}?partyId=${parameters.partyId}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="dataSourceId" title="${uiLabelMap.CrmNewDataSource}">
+            <drop-down allow-empty="false">
+                <entity-options entity-name="DataSource" description="${description}">
+                    <entity-constraint name="dataSourceTypeId" value="LEAD_GENERATION"/>
+                    <entity-order-by field-name="description"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallsubmit"><submit/></field>
+    </form>
+
+    <!-- simple, parameterized marketing campaigns list (the full one is in MarketingForms.xml) -->
+    <form name="listMarketingCampaigns" type="list" separate-columns="true" 
+        default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="marketingCampaigns">
+        <field name="campaignName" title="${uiLabelMap.CrmMarketingCampaign}" widget-style="linktext">
+            <hyperlink description="${campaignName} (${marketingCampaignId})" target="viewMarketingCampaign?marketingCampaignId=${marketingCampaignId}"/>
+        </field>
+        <field name="Remove" widget-style="buttontext" widget-area-style="tabletextright" title=" " 
+            use-when="hasUpdatePermission!=void&amp;&amp;hasUpdatePermission==true">
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="${removeMarketingCampaignFormTarget}?partyId=${parameters.partyId}&amp;marketingCampaignId=${marketingCampaignId}"/>
+        </field>
+    </form>
+
+    <!-- parametrized add marketing campaign form -->
+    <form name="addMarketingCampaignForm" type="single" target="${addMarketingCampaignFormTarget}?partyId=${parameters.partyId}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="marketingCampaignId" title="${uiLabelMap.CrmNewMarketingCampaign}">
+            <drop-down allow-empty="false">
+                <entity-options entity-name="MarketingCampaign" description="${campaignName}">
+                    <entity-order-by field-name="campaignName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallsubmit"><submit/></field>
+    </form>
+
+    <!-- for merging parties, present two input fields -->
+    <form name="MergePartyForm" type="single" target="${mergeFormTarget}"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="partyIdFrom" title="${fromPartyTitle}" title-style="requiredField" widget-style="inputBox">
+            <lookup target-form-name="${lookupTarget}" size="20" maxlength="20"/>
+        </field>
+        <field name="partyIdTo" title="${toPartyTitle}" title-style="requiredField" widget-style="inputBox">
+            <lookup target-form-name="${lookupTarget}" size="20" maxlength="20"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmMerge}" widget-style="smallSubmit">
+        	<submit/>
+        </field>
+    </form>
+
+    <!-- confirm merging two parties -->
+    <form name="ConfirmMergePartyForm" type="single" target="${mergeFormTarget}"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext" title="Timestamp">
+        <!-- this field is for linking back to viewAccount, etc. -->
+        <field name="partyId"><hidden value="${parameters.partyIdTo}"/></field>
+        <field name="partyIdFrom" title="${fromPartyTitle}" title-style="requiredField">
+            <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} ${firstName} ${lastName} (${partyId})" also-hidden="true">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="${viewTarget}?partyId=${parameters.partyIdFrom}"
+                    target-window="top"/>
+            </display-entity>
+        </field>
+        <field name="partyIdTo" title="${toPartyTitle}" title-style="requiredField">
+            <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} ${firstName} ${lastName} (${partyId})" also-hidden="true">
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="${viewTarget}?partyId=${parameters.partyIdTo}"
+                    target-window="top"/>
+            </display-entity>
+        </field>
+        <field name="goBack" title="" widget-style="buttontext">
+            <hyperlink target="${mergeFormChangeTarget}?partyIdFrom=${parameters.partyIdFrom}&amp;partyIdTo=${parameters.partyIdTo}" description="${uiLabelMap.CommonChange}" also-hidden="false"/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmConfirmMerge}" widget-style="smallSubmit">
+            <submit/>
+        </field>
+    </form>
+
+    <form name="testDateTime" type="single" title="Test form" target="testDateTimeInput" 
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext" >
+        <field name="sampleTimestamp" title="Timestamp"><date-time default-value="${testTimestampValue}" input-method="jscalendar" type="date"/></field>
+        <field name="submitButton" title="Submit" widget-style="smallsubmit"><submit/></field>
+    </form>   
+
+</forms>

@@ -1,0 +1,71 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+// this script should be called in a screens XML after the ordermanager orderview.bsh and enhanced the view
+
+import java.math.BigDecimal;
+import java.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.party.party.PartyHelper;
+
+// Ship groups - make the ship carrier name and shipment method types descriptive
+shipGroups = delegator.findByAnd("OrderItemShipGroup", UtilMisc.toMap("orderId", orderId), UtilMisc.toList("shipGroupSeqId"));
+shipGroupMaps = new ArrayList();
+sgit = shipGroups.iterator();
+while (sgit.hasNext()) {
+    shipGroup = sgit.next();
+    shipGroupMap = shipGroup.getAllFields();
+    carrier = shipGroup.getRelatedOne("CarrierParty");
+    carrierName = PartyHelper.getPartyName(carrier);
+    shipmentMethodType = shipGroup.getRelatedOne("ShipmentMethodType");
+    shipGroupMap.put("carrierName", carrierName);
+    shipGroupMap.put("shipmentMethodType", shipmentMethodType);
+    shipGroupMaps.add(shipGroupMap);
+}
+context.put("shipGroups", shipGroupMaps);
+
+// Get a default billing address if there is none defined with the order
+cmvm = context.get("orderContactMechValueMaps");
+if (UtilValidate.isEmpty(cmvm)) {
+    cmvm = new ArrayList();
+}
+billingLocations = delegator.findByAnd("OrderContactMech", UtilMisc.toMap("orderId", orderId, "contactMechPurposeTypeId", "BILLING_LOCATION"));
+billingLocation = null;
+if (UtilValidate.isEmpty(billingLocations)) {
+    billToPartyId = order.getBillToCustomerPartyId();
+    billToMechCond = new ArrayList();
+    billToMechCond.add(new EntityExpr("partyId", EntityOperator.EQUALS, billToPartyId));
+    billToMechCond.add(new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, "POSTAL_ADDRESS"));
+    billToMechCond.add(new EntityExpr("contactMechPurposeTypeId", EntityOperator.IN, UtilMisc.toList("BILLING_LOCATION", "GENERAL_LOCATION")));
+    billToMechCond.add(EntityUtil.getFilterByDateExpr());
+    billToMechCond.add(EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate"));
+    List orderBy = UtilMisc.toList("contactMechPurposeTypeId"); // this will cause BILLING_LOCATION to be ordered before GENERAL_LOCATION
+    List partyContactPurposes = delegator.findByCondition("PartyContactDetailByPurpose", new EntityConditionList(billToMechCond, EntityOperator.AND), null, orderBy);
+    billingLocation = EntityUtil.getFirst(partyContactPurposes);
+}
+if (UtilValidate.isNotEmpty(billingLocation)) {
+    contactMechValueMap = new HashMap();
+    contactMechValueMap.put("contactMech", billingLocation);
+    contactMechValueMap.put("contactMechType", delegator.findByPrimaryKeyCache("ContactMechType", UtilMisc.toMap("contactMechTypeId", billingLocation.get("contactMechTypeId"))));
+    contactMechValueMap.put("contactMechPurposeType", delegator.findByPrimaryKeyCache("ContactMechPurposeType", UtilMisc.toMap("contactMechPurposeTypeId", billingLocation.get("contactMechPurposeTypeId"))));
+    contactMechValueMap.put("postalAddress", billingLocation);
+    cmvm.add(0, contactMechValueMap);
+}
+
+context.put("organizationPartyId", order.getBillFromVendorPartyId());

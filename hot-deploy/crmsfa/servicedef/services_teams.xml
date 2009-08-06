@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2001-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Team Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>0.8</version>
+
+    <service name="crmsfa.createTeam" engine="java" location="com.opensourcestrategies.crmsfa.teams.TeamServices" invoke="createTeam">
+        <description>Creates a team and assigns the userLogin as the team leader. Requires CRMSFA_TEAM_CREATE permission.</description>
+        <attribute name="groupName" type="String" mode="IN" optional="false"/>
+        <attribute name="comments" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.updateTeam" engine="java" location="com.opensourcestrategies.crmsfa.teams.TeamServices" invoke="updateTeam">
+        <description>Updates a team. Requires CRMSFA_TEAM_UPDATE permission on the team partyId.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="groupName" type="String" mode="IN" optional="false"/>
+        <attribute name="comments" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.deactivateTeam" engine="java" location="com.opensourcestrategies.crmsfa.teams.TeamServices" invoke="deactivateTeam">
+        <description>Deactivates a team. Requires CRMSFA_TEAM_DEACTIVATE permission on the team.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+    </service>
+ 
+    <service name="crmsfa.assignTeamToAccount" engine="java" location="com.opensourcestrategies.crmsfa.teams.TeamServices" invoke="assignTeamToAccount">
+        <description>Assigns a team to an account. The userLogin must have CRMSFA_TEAM_ASSIGN permission on this account.</description>
+        <attribute name="accountPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="teamPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.addTeamMember" engine="java" location="com.opensourcestrategies.crmsfa.teams.TeamServices" invoke="addTeamMember">
+        <description>Adds a team member to the specified account or account team. 
+            The userLogin must have CRMSFA_TEAM_ASSIGN permission on this account or team.</description>
+        <attribute name="teamMemberPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="accountTeamPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="securityGroupId" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="crmsfa.removeTeamMember" engine="java" location="com.opensourcestrategies.crmsfa.teams.TeamServices" invoke="removeTeamMember">
+        <description>Removes a team member from the specified account or account team. 
+            The userLogin must have CRMSFA_TEAM_ASSIGN permission on this account or account team.</description>
+        <attribute name="teamMemberPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="accountTeamPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.setTeamMemberSecurityGroup" engine="java" location="com.opensourcestrategies.crmsfa.teams.TeamServices" invoke="setTeamMemberSecurityGroup">
+        <description>Changes a team member's security group (privilege). This only works on team members ASSIGNED_TO the account.
+            The userLogin must have CRMSFA_TEAM_UPDATE permission on this account or account team.</description>
+        <attribute name="teamMemberPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="accountTeamPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="securityGroupId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.sendTeamAssignmentNotificationEmails" engine="java" location="com.opensourcestrategies.crmsfa.teams.TeamServices" invoke="sendTeamAssignmentNotificationEmails">
+        <description>Calls crmsfa.sendAccountTeamMemberNotificationEmails service for each account team member in order to send notification emails of team assignment to an account.</description>
+        <attribute name="teamPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="accountPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+</services>
+
+

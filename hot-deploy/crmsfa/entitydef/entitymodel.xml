@@ -1,0 +1,1069 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2001-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Entity definitions for the CRM/SFA Application</title>
+    <copyright>Copyright (c) 2005 - 2006 Open Source Strategies Inc.</copyright>
+    <author>Si Chen</author>
+
+    <view-entity entity-name="PartyFromByRelnAndContactInfo"
+                 package-name="com.opensourcestrategies.crmsfa.party"
+                 title="PartySummary related from the fromPartyId of a PartyRelationship, plus contact info">
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
+        <member-entity entity-alias="P" entity-name="Party"/>
+        <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PER" entity-name="Person"/>
+        <member-entity entity-alias="PSD" entity-name="PartySupplementalData"/>
+        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="CM" entity-name="ContactMech"/>
+        <member-entity entity-alias="TN" entity-name="TelecomNumber"/>
+        <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+
+        <alias-all entity-alias="P"/>
+        <alias-all entity-alias="PER">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PSD"/>
+        <alias-all entity-alias="PG">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PR">
+            <exclude field="comments"/>
+            <exclude field="statusId"/>
+        </alias-all>
+        <alias-all entity-alias="TN">
+            <exclude field="contactMechId"/>
+        </alias-all>
+        <alias-all entity-alias="PA">
+            <exclude field="contactMechId"/>
+        </alias-all>
+        <alias entity-alias="PR" name="relationshipStatusId" field="statusId"/>
+        <alias entity-alias="PCM" name="partyContactMechFromDate" field="fromDate"/> 
+        <alias entity-alias="PCM" name="partyContactMechThruDate" field="thruDate"/> 
+        <alias entity-alias="PCM" name="extension" field="extension"/>
+        <alias entity-alias="CM" name="contactMechId" field="contactMechId"/>
+        <alias entity-alias="CM" name="contactMechTypeId" field="contactMechTypeId"/>
+        <alias entity-alias="CM" name="infoString" field="infoString"/>
+        <view-link entity-alias="PR" rel-entity-alias="P">
+            <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PG" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PER" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PSD" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PCM" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="CM" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="TN" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="PA" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+    </view-entity>
+    
+    <view-entity entity-name="PartyFromByRelnAndContactInfoAndPartyClassification"
+                 package-name="com.opensourcestrategies.crmsfa.party"
+                 title="PartySummary related from the fromPartyId of a PartyRelationship, plus contact info and party classification group">
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
+        <member-entity entity-alias="P" entity-name="Party"/>
+        <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PER" entity-name="Person"/>
+        <member-entity entity-alias="PSD" entity-name="PartySupplementalData"/>
+        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="CM" entity-name="ContactMech"/>
+        <member-entity entity-alias="TN" entity-name="TelecomNumber"/>
+        <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+        <member-entity entity-alias="PC" entity-name="PartyClassification"/>        
+        <member-entity entity-alias="PCG" entity-name="PartyClassificationGroup"/>   
+        <member-entity entity-alias="PMPA" entity-name="PostalAddress"/>
+        <member-entity entity-alias="PMTN" entity-name="TelecomNumber"/>
+        <member-entity entity-alias="CMEM" entity-name="ContactMech"/>     
+        <member-entity entity-alias="STTG" entity-name="Geo"/>
+        <member-entity entity-alias="CTYG" entity-name="Geo"/>
+        <member-entity entity-alias="CTRYG" entity-name="Geo"/>
+
+        <alias-all entity-alias="P"/>
+        <alias-all entity-alias="PER">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PSD"/>
+        <alias-all entity-alias="PG">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PR">
+            <exclude field="comments"/>
+            <exclude field="statusId"/>
+        </alias-all>
+        <alias-all entity-alias="TN">
+            <exclude field="contactMechId"/>
+        </alias-all>
+        <alias-all entity-alias="PA">
+            <exclude field="contactMechId"/>
+        </alias-all>
+        <alias-all entity-alias="PC"/>
+        <alias-all entity-alias="PCG"/>
+        <alias entity-alias="PR" name="relationshipStatusId" field="statusId"/>
+        <alias entity-alias="PCM" name="partyContactMechFromDate" field="fromDate"/> 
+        <alias entity-alias="PCM" name="partyContactMechThruDate" field="thruDate"/> 
+        <alias entity-alias="PCM" name="extension" field="extension"/>
+        <alias entity-alias="CM" name="contactMechId" field="contactMechId"/>
+        <alias entity-alias="CM" name="contactMechTypeId" field="contactMechTypeId"/>
+        <alias entity-alias="CM" name="infoString" field="infoString"/>
+        <alias entity-alias="PMPA" name="primaryToName" field="toName"/>
+        <alias entity-alias="PMPA" name="primaryAttnName" field="attnName"/>
+        <alias entity-alias="PMPA" name="primaryAddress1" field="address1"/>
+        <alias entity-alias="PMPA" name="primaryAddress2" field="address2"/>
+        <alias entity-alias="PMPA" name="primaryDirections" field="directions"/>
+        <alias entity-alias="PMPA" name="primaryCity" field="city"/>
+        <alias entity-alias="PMPA" name="primaryPostalCode" field="postalCode"/>
+        <alias entity-alias="PMPA" name="primaryPostalCodeExt" field="postalCodeExt"/>
+        <alias entity-alias="PMPA" name="primaryCountryGeoId" field="countryGeoId"/>
+        <alias entity-alias="PMPA" name="primaryStateProvinceGeoId" field="stateProvinceGeoId"/>
+        <alias entity-alias="PMPA" name="primaryCountyGeoId" field="countyGeoId"/>
+        <alias entity-alias="PMPA" name="primaryPostalCodeGeoId" field="postalCodeGeoId"/>
+        <alias entity-alias="PMTN" name="primaryCountryCode" field="countryCode"/>
+        <alias entity-alias="PMTN" name="primaryAreaCode" field="areaCode"/>
+        <alias entity-alias="PMTN" name="primaryContactNumber" field="contactNumber"/>
+        <alias entity-alias="PMTN" name="primaryAskForName" field="askForName"/>
+        <alias entity-alias="CMEM" name="primaryEmail" field="infoString"/>
+        <alias entity-alias="CTRYG" name="primaryCountryAbbreviation" field="abbreviation"/>
+        <alias entity-alias="STTG" name="primaryStateProvinceAbbreviation" field="abbreviation"/>
+        <alias entity-alias="CTYG" name="primaryCountyAbbreviation" field="abbreviation"/>
+        <view-link entity-alias="PR" rel-entity-alias="P">
+            <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PG" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PER" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PSD" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PCM" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="CM" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="TN" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="PA" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PC" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>        
+        <view-link entity-alias="PC" rel-entity-alias="PCG" rel-optional="true">
+            <key-map field-name="partyClassificationGroupId"/>
+        </view-link> 
+        <view-link entity-alias="PSD" rel-entity-alias="PMPA" rel-optional="true">
+            <key-map field-name="primaryPostalAddressId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="PMTN" rel-optional="true">
+            <key-map field-name="primaryTelecomNumberId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="CMEM" rel-optional="true">
+            <key-map field-name="primaryEmailId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PMPA" rel-entity-alias="STTG" rel-optional="true">
+            <key-map field-name="stateProvinceGeoId" rel-field-name="geoId"/>
+        </view-link>
+        <view-link entity-alias="PMPA" rel-entity-alias="CTYG" rel-optional="true">
+            <key-map field-name="countyGeoId" rel-field-name="geoId"/>
+        </view-link>
+        <view-link entity-alias="PMPA" rel-entity-alias="CTRYG" rel-optional="true">
+            <key-map field-name="countryGeoId" rel-field-name="geoId"/>
+        </view-link>               
+    </view-entity>      
+          
+
+    <view-entity entity-name="PartyFromSummaryByRelationship"
+                 package-name="com.opensourcestrategies.crmsfa.party"
+                 title="Full PartySummary view related from the fromPartyId of a PartyRelationship, designed to give
+                 us full party information of accounts, contacts, leads related to a party">
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
+        <member-entity entity-alias="P" entity-name="Party"/>
+        <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PER" entity-name="Person"/>
+        <member-entity entity-alias="PSD" entity-name="PartySupplementalData"/>
+        <member-entity entity-alias="PMPA" entity-name="PostalAddress"/>
+        <member-entity entity-alias="PMTN" entity-name="TelecomNumber"/>
+        <member-entity entity-alias="CMEM" entity-name="ContactMech"/>
+        <alias-all entity-alias="P"/>
+        <alias-all entity-alias="PER">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PSD"/>
+        <alias-all entity-alias="PG">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PR">
+            <exclude field="comments"/>
+            <exclude field="statusId"/>
+        </alias-all>
+        <alias entity-alias="PR" name="relationshipStatusId" field="statusId"/>
+        <alias entity-alias="PMPA" name="primaryToName" field="toName"/>
+        <alias entity-alias="PMPA" name="primaryAttnName" field="attnName"/>
+        <alias entity-alias="PMPA" name="primaryAddress1" field="address1"/>
+        <alias entity-alias="PMPA" name="primaryAddress2" field="address2"/>
+        <alias entity-alias="PMPA" name="primaryDirections" field="directions"/>
+        <alias entity-alias="PMPA" name="primaryCity" field="city"/>
+        <alias entity-alias="PMPA" name="primaryPostalCode" field="postalCode"/>
+        <alias entity-alias="PMPA" name="primaryPostalCodeExt" field="postalCodeExt"/>
+        <alias entity-alias="PMPA" name="primaryCountryGeoId" field="countryGeoId"/>
+        <alias entity-alias="PMPA" name="primaryStateProvinceGeoId" field="stateProvinceGeoId"/>
+        <alias entity-alias="PMPA" name="primaryCountyGeoId" field="countyGeoId"/>
+        <alias entity-alias="PMPA" name="primaryPostalCodeGeoId" field="postalCodeGeoId"/>
+        <alias entity-alias="PMTN" name="primaryCountryCode" field="countryCode"/>
+        <alias entity-alias="PMTN" name="primaryAreaCode" field="areaCode"/>
+        <alias entity-alias="PMTN" name="primaryContactNumber" field="contactNumber"/>
+        <alias entity-alias="PMTN" name="primaryAskForName" field="askForName"/>
+        <alias entity-alias="CMEM" name="primaryEmail" field="infoString"/>
+        <view-link entity-alias="PR" rel-entity-alias="P">
+            <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PG" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PER" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PSD" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="PMPA" rel-optional="true">
+            <key-map field-name="primaryPostalAddressId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="PMTN" rel-optional="true">
+            <key-map field-name="primaryTelecomNumberId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PSD" rel-entity-alias="CMEM" rel-optional="true">
+            <key-map field-name="primaryEmailId" rel-field-name="contactMechId"/>
+        </view-link>
+    </view-entity>      
+
+    <view-entity entity-name="PartyToSummaryByRelationship"
+                 package-name="com.opensourcestrategies.crmsfa.party"
+                 title="Full PartySummary view related from the fromPartyId of a PartyRelationship, designed to give
+                 us full party information of accounts, contacts, leads related to a party">
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
+        <member-entity entity-alias="P" entity-name="Party"/>
+        <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PER" entity-name="Person"/>
+        <member-entity entity-alias="PSD" entity-name="PartySupplementalData"/>
+        <alias-all entity-alias="P"/>
+        <alias-all entity-alias="PER">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PSD"/>
+        <alias-all entity-alias="PG">
+            <exclude field="comments"/>
+        </alias-all>
+        <alias-all entity-alias="PR">
+            <exclude field="comments"/>
+            <exclude field="statusId"/>
+        </alias-all>
+        <alias entity-alias="PR" name="relationshipStatusId" field="statusId"/>
+        <view-link entity-alias="PR" rel-entity-alias="P">
+            <key-map field-name="partyIdTo" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PG" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PER" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PSD" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+    </view-entity>      
+
+    <!-- TODO: join in Geo description for postal code and maybe for country -->
+
+    <!-- View to capture all person, partyGroup, and contactMech displayable data for parties.  Main join
+      is through PartyContactMech.  The from and thru dates define when the particular contact information
+      is valid.  The infoString contains email address or web address for those contactMechTypes. -->
+    <view-entity entity-name="PartyContactInfo"
+                 package-name="com.opensourcestrategies.crmsfa.party"
+                 title="View that contains full contact information for parties.  Used to lookup and display data for emails, postal addresses, phone numbers, etc.">
+        <member-entity entity-alias="P" entity-name="Party"/>
+        <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PER" entity-name="Person"/>
+        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="CM" entity-name="ContactMech"/>
+        <member-entity entity-alias="TN" entity-name="TelecomNumber"/>
+        <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+        <member-entity entity-alias="PC" entity-name="PartyClassification"/>
+        <alias-all entity-alias="TN">
+            <exclude field="contactMechId"/>
+        </alias-all>
+        <alias-all entity-alias="PA">
+            <exclude field="contactMechId"/>
+        </alias-all>
+        <alias entity-alias="P" name="partyId"/>
+        <alias entity-alias="PG" name="groupName"/>
+        <alias entity-alias="PER" name="firstName"/>
+        <alias entity-alias="PER" name="lastName"/>
+        <alias entity-alias="PCM" name="fromDate"/>
+        <alias entity-alias="PCM" name="thruDate"/>
+        <alias entity-alias="CM" name="contactMechId"/>
+        <alias entity-alias="CM" name="infoString"/>
+        <alias entity-alias="CM" name="contactMechTypeId"/>
+        <alias entity-alias="PC" name="partyClassificationGroupId"/>
+        <view-link entity-alias="P" rel-entity-alias="PG" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PER" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PCM">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="CM">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="TN" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="PA" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="P" rel-entity-alias="PC" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+    </view-entity>
+ 
+    <!-- As PartyContactInfo, but the main join is through ContactListParty.partyId.  
+      Essentially, this view captures all person, partyGroup and contactMech displayable data 
+      for the members of a contact list.  Note that ContactMech is optional, since one might 
+      not be assigned yet.  The join to ContactMechParty is goverend by ContactListParty.
+      Note that the fields mirror those of PartyContactInfo.  The intent is that both views 
+      can share the same codebase for display, such as the form widgets. -->
+    <view-entity entity-name="PartyContactInfoAndContactList"
+                 package-name="com.opensourcestrategies.crmsfa.party"
+                 title="View that contains full contact information for members of contact lists.  Used to lookup and display data for emails, postal addresses, phone numbers, etc.">
+        <member-entity entity-alias="CLP" entity-name="ContactListParty"/>
+        <member-entity entity-alias="CL" entity-name="ContactList"/>
+        <member-entity entity-alias="PG" entity-name="PartyGroup"/>
+        <member-entity entity-alias="PER" entity-name="Person"/>
+        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>
+        <member-entity entity-alias="CM" entity-name="ContactMech"/>
+        <member-entity entity-alias="TN" entity-name="TelecomNumber"/>
+        <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+        <member-entity entity-alias="PC" entity-name="PartyClassification"/>
+        <alias-all entity-alias="TN">
+            <exclude field="contactMechId"/>
+        </alias-all>
+        <alias-all entity-alias="PA">
+            <exclude field="contactMechId"/>
+        </alias-all>
+        <alias entity-alias="CL" name="contactListId"/>
+        <alias entity-alias="CLP" name="partyId"/>
+        <alias entity-alias="CLP" name="memberFromDate" field="fromDate"/>
+        <alias entity-alias="CLP" name="memberThruDate" field="thruDate"/>
+        <alias entity-alias="CLP" name="memberStatusId" field="statusId"/>
+        <alias entity-alias="PG" name="groupName"/>
+        <alias entity-alias="PER" name="firstName"/>
+        <alias entity-alias="PER" name="lastName"/>
+        <alias entity-alias="PCM" name="fromDate"/>
+        <alias entity-alias="PCM" name="thruDate"/>
+        <alias entity-alias="CM" name="contactMechId"/>
+        <alias entity-alias="CM" name="infoString"/>
+        <alias entity-alias="CM" name="contactMechTypeId"/>
+        <alias entity-alias="PC" name="partyClassificationGroupId"/>        
+        <view-link entity-alias="CLP" rel-entity-alias="CL">
+            <key-map field-name="contactListId"/>
+        </view-link>
+        <view-link entity-alias="CLP" rel-entity-alias="PCM" rel-optional="true">
+            <key-map field-name="partyId"/>
+            <key-map field-name="preferredContactMechId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="PCM" rel-entity-alias="CM">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="CLP" rel-entity-alias="PG" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="CLP" rel-entity-alias="PER" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="CM" rel-entity-alias="TN" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="CM" rel-entity-alias="PA" rel-optional="true">
+            <key-map field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="CLP" rel-entity-alias="PC" rel-optional="true">
+            <key-map field-name="partyId"/>
+        </view-link>        
+    </view-entity>
+
+    <entity entity-name="PartyMergeCandidates" package-name="com.opensourcestrategies.crmsfa.party" 
+            title="Entity to store candidates for party merge service">
+        <field name="partyIdFrom" type="id-ne"></field>
+        <field name="partyIdTo" type="id-ne"></field>
+        <field name="processedTimestamp" type="date-time"></field>
+        <field name="doNotMerge" type="indicator"></field>
+        <field name="hasOrderRoles" type="indicator"></field>
+        <field name="mergeRationale" type="very-long"></field>
+        <field name="comments" type="comment"></field>
+        <prim-key field="partyIdFrom"/>
+        <prim-key field="partyIdTo"/>
+    </entity>
+    
+    <view-entity entity-name="PartyAndStatus"
+        package-name="com.opensourcestrategies.crmsfa.party">
+        <member-entity entity-alias="PT" entity-name="Party"/>
+        <member-entity entity-alias="SI" entity-name="StatusItem"/>
+        <alias-all entity-alias="PT"/>
+        <alias-all entity-alias="SI"/>
+        <view-link entity-alias="PT" rel-entity-alias="SI">
+            <key-map field-name="statusId"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="PartyRelationshipAndPermission"
+                 package-name="com.opensourcestrategies.crmsfa.security"
+                 title="Used to find security permissions in a party relationship based on securityGroupId">
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
+        <member-entity entity-alias="SGP" entity-name="SecurityGroupPermission"/>
+        <alias-all entity-alias="PR"/>
+        <alias-all entity-alias="SGP"/>
+        <view-link entity-alias="PR" rel-entity-alias="SGP">
+            <key-map field-name="securityGroupId" rel-field-name="groupId"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="PartyRelationshipAndSalesOpportunity"
+                 package-name="com.opensourcestrategies.crmsfa.opportunity"
+                 title="Used to find opportunities of accounts that a userLogin can view.">
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
+        <member-entity entity-alias="SOR" entity-name="SalesOpportunityRole"/>
+        <member-entity entity-alias="SO" entity-name="SalesOpportunity"/>
+        <alias-all entity-alias="SO"/>
+        <alias entity-alias="PR" name="partyIdFrom"/>
+        <alias entity-alias="PR" name="roleTypeIdFrom"/>
+        <alias entity-alias="PR" name="partyIdTo"/>
+        <alias entity-alias="PR" name="partyRelationshipTypeId"/>
+        <alias entity-alias="PR" name="fromDate"/>
+        <alias entity-alias="PR" name="thruDate"/>
+        <view-link entity-alias="PR" rel-entity-alias="SOR">
+            <key-map field-name="partyIdFrom" rel-field-name="partyId"/>
+        </view-link>
+        <view-link entity-alias="SOR" rel-entity-alias="SO">
+            <key-map field-name="salesOpportunityId"/>
+        </view-link>
+        <relation fk-name="PRASO_SOQ" rel-entity-name="SalesOpportunityQuote" type="many">
+            <key-map field-name="salesOpportunityId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="SalesOpportunityAndRole"
+                 package-name="com.opensourcestrategies.crmsfa.opportunity"
+                 title="Agglomeration to help with searching for the opportunities of a particular party or role">
+        <member-entity entity-alias="SO" entity-name="SalesOpportunity"/>
+        <member-entity entity-alias="SOR" entity-name="SalesOpportunityRole"/>
+        <alias-all entity-alias="SO"/>
+        <alias-all entity-alias="SOR"/>
+        <view-link entity-alias="SO" rel-entity-alias="SOR">
+            <key-map field-name="salesOpportunityId"/>
+        </view-link>
+        <relation fk-name="SO_RL_PARTYVIEW" rel-entity-name="PartySummaryCRMView" type="one">
+            <key-map field-name="partyId"/>
+        </relation>
+    </view-entity>
+    
+    <view-entity entity-name="SalesOpportunityEstimatedAmountTotalByStage"
+                 package-name="com.opensourcestrategies.crmsfa.reports">
+        <member-entity entity-alias="SO" entity-name="SalesOpportunity"/>
+        <alias entity-alias="SO" name="opportunityStageId" group-by="true"/>
+        <alias entity-alias="SO" name="currencyUomId" group-by="true"/>
+        <alias entity-alias="SO" name="estimatedAmountTotal" field="estimatedAmount" function="sum"/>
+    </view-entity>
+
+    <entity entity-name="SalesTeamRoleSecurity"
+            package-name="com.opensourcestrategies.crmsfa.teams"
+            default-resource-name="CRMSFAEntityLabels"
+            title="Convenience entity to associate security permission groups and descriptions of team roles">
+        <field name="securityGroupId" type="id-ne"/>
+        <field name="roleDescription" type="description"/>
+        <field name="sequenceNum" type="numeric"/>
+        <prim-key field="securityGroupId"/>
+        <relation fk-name="TEAM_SECGROUP" rel-entity-name="SecurityGroup" type="one">
+            <key-map field-name="securityGroupId" rel-field-name="groupId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="PartyRelationshipAndCaseRole"
+                 package-name="com.opensourcestrategies.crmsfa.case"
+                 title="Used to find cases of accounts and customers that a userLogin can view">
+        <member-entity entity-alias="CR" entity-name="CustRequest"/>
+        <member-entity entity-alias="CRR" entity-name="CustRequestRole"/>
+        <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
+        <alias-all entity-alias="CR"/>
+        <alias entity-alias="CRR" name="partyId"/>
+        <alias entity-alias="CRR" name="roleTypeId"/>
+        <alias entity-alias="PR" name="partyIdTo"/>
+        <alias entity-alias="PR" name="partyIdFrom"/>
+        <alias entity-alias="PR" name="roleTypeIdFrom"/>
+        <alias entity-alias="PR" name="fromDate"/>
+        <alias entity-alias="PR" name="thruDate"/>
+        <view-link entity-alias="CRR" rel-entity-alias="CR">
+            <key-map field-name="custRequestId"/>
+        </view-link>
+        <view-link entity-alias="CRR" rel-entity-alias="PR" rel-optional="true">
+            <key-map field-name="partyId" rel-field-name="partyIdFrom"/>
+        </view-link>
+        <relation fk-name="PTYR_CRL_STITM" rel-entity-name="StatusItem" type="one">
+            <key-map field-name="statusId"/>
+        </relation>
+       <relation fk-name="PTYR_CRL_CST_RQ" rel-entity-name="CustRequest" type="one">
+            <key-map field-name="custRequestId"/>
+        </relation>         
+        <relation fk-name="PTYR_CRL_CST_RQ_TP" rel-entity-name="CustRequestType" type="one">
+            <key-map field-name="custRequestTypeId"/>
+        </relation>        
+        <relation fk-name="PTYR_CRL_CST_RQ_CT" rel-entity-name="CustRequestCategory" type="one">
+            <key-map field-name="custRequestCategoryId"/>
+        </relation>                                
+    </view-entity>
+
+
+    <!-- ========================================= -->
+    <!-- com.opensourcestrategies.crmsfa.marketing -->
+    <!-- ========================================- -->
+
+    <view-entity entity-name="ContactListPartyCount"
+                 package-name="com.opensourcestrategies.crmsfa.marketing"
+                 title="Counts the number of Contact List members">
+        <member-entity entity-alias="CLP" entity-name="ContactListParty"/>
+        <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+        <member-entity entity-alias="PCM" entity-name="PartyContactMech"/>        
+        <alias entity-alias="CLP" name="contactListId" group-by="true"/>
+        <alias entity-alias="CLP" name="partyId" function="count"/>
+        <alias entity-alias="CLP" name="contactMechFromDate" field="fromDate"/>
+        <alias entity-alias="CLP" name="contactMechThruDate" field="thruDate"/>
+        <alias entity-alias="CLP" name="statusId" group-by="true"/>
+        <alias entity-alias="PA" name="countryGeoId" group-by="false"/>
+        <alias entity-alias="PCM" name="fromDate"/>
+        <alias entity-alias="PCM" name="thruDate"/>        
+        <view-link entity-alias="CLP" rel-entity-alias="PA" rel-optional="true">
+            <key-map field-name="preferredContactMechId" rel-field-name="contactMechId"/>
+        </view-link>
+        <view-link entity-alias="CLP" rel-entity-alias="PCM" rel-optional="true">
+            <key-map field-name="partyId"/>
+            <key-map field-name="preferredContactMechId" rel-field-name="contactMechId"/>
+        </view-link>        
+    </view-entity>
+
+    <view-entity entity-name="ContactListPartyAndAddress"
+            package-name="com.opensourcestrategies.crmsfa.marketing"
+            title="Joins the ContactListParty with PostalAddress for obtaining address details for postal lists">
+        <member-entity entity-alias="CLP" entity-name="ContactListParty"/>
+        <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+        <alias-all entity-alias="CLP"/>
+        <alias-all entity-alias="PA"/>
+        <view-link entity-alias="CLP" rel-entity-alias="PA" rel-optional="false">
+            <key-map field-name="preferredContactMechId" rel-field-name="contactMechId"/>
+        </view-link>
+    </view-entity>
+
+    <view-entity entity-name="CustRequestAndAddress"
+                 package-name="com.opensourcestrategies.crmsfa.marketing"
+                 title="Customer requests that have fulfillment postal addresses">
+        <member-entity entity-alias="CR" entity-name="CustRequest"/>
+        <member-entity entity-alias="PA" entity-name="PostalAddress"/>
+        <alias entity-alias="CR" name="custRequestId"/>
+        <alias entity-alias="CR" name="custRequestTypeId"/>
+        <alias entity-alias="CR" name="custRequestDate"/>
+        <alias entity-alias="CR" name="statusId"/>
+        <alias entity-alias="CR" name="fromPartyId"/>
+        <alias entity-alias="PA" name="contactMechId"/>
+        <alias entity-alias="PA" name="countryGeoId"/>
+        <view-link entity-alias="CR" rel-entity-alias="PA">
+            <key-map field-name="fulfillContactMechId" rel-field-name="contactMechId"/>
+        </view-link>
+        <relation fk-name="CRAA_CR" rel-entity-name="CustRequest" type="one">
+            <key-map field-name="custRequestId"/>
+        </relation>
+    </view-entity>
+
+
+    <!-- ======================================== -->
+    <!-- com.opensourcestrategies.crmsfa.content  -->
+    <!-- ======================================== -->
+
+
+    <entity entity-name="SalesOpportunityContent"
+            package-name="com.opensourcestrategies.crmsfa.content"
+            title="Content attachments, urls, etc for opportunities.">
+        <field name="contentId" type="id-ne"></field>
+        <field name="salesOpportunityId" type="id-ne"></field>
+        <field name="fromDate" type="date-time"></field>
+        <field name="thruDate" type="date-time"></field>
+        <prim-key field="contentId"/>
+        <prim-key field="salesOpportunityId"/>
+        <prim-key field="fromDate"/>
+        <relation type="one" fk-name="SALESOPP_CNT_OPP" rel-entity-name="SalesOpportunity">
+            <key-map field-name="salesOpportunityId"/>
+        </relation>
+        <relation type="one" fk-name="SALESOPP_CNT_CNT" rel-entity-name="Content">
+            <key-map field-name="contentId"/>
+        </relation>
+    </entity>
+
+
+    <entity entity-name="CustRequestContent"
+            package-name="com.opensourcestrategies.crmsfa.content"
+            title="Content attachments, urls, etc for cases.">
+        <field name="contentId" type="id-ne"></field>
+        <field name="custRequestId" type="id-ne"></field>
+        <field name="fromDate" type="date-time"></field>
+        <field name="thruDate" type="date-time"></field>
+        <prim-key field="contentId"/>
+        <prim-key field="custRequestId"/>
+        <prim-key field="fromDate"/>
+        <relation type="one" fk-name="SALESOPP_CRQ_CRQ" rel-entity-name="CustRequest">
+            <key-map field-name="custRequestId"/>
+        </relation>
+        <relation type="one" fk-name="SALESOPP_CRQ_CNT" rel-entity-name="Content">
+            <key-map field-name="contentId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="ContentAndSalesOpportunity"
+        package-name="com.opensourcestrategies.crmsfa.content"
+        title="View to select content associated with an opportunity">
+        <member-entity entity-alias="C" entity-name="Content"/>
+        <member-entity entity-alias="SOC" entity-name="SalesOpportunityContent"/>
+        <alias-all entity-alias="C"/>
+        <alias entity-alias="SOC" name="salesOpportunityId"/>
+        <alias entity-alias="SOC" name="fromDate"/>
+        <alias entity-alias="SOC" name="thruDate"/>
+        <view-link entity-alias="C" rel-entity-alias="SOC">
+            <key-map field-name="contentId"/>
+        </view-link>
+        <relation type="one-nofk" rel-entity-name="ContentType">
+            <key-map field-name="contentTypeId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="DataResource">
+            <key-map field-name="dataResourceId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="ContentAndCustRequest"
+        package-name="com.opensourcestrategies.crmsfa.content"
+        title="View to select content associated with a case">
+        <member-entity entity-alias="C" entity-name="Content"/>
+        <member-entity entity-alias="CRC" entity-name="CustRequestContent"/>
+        <alias-all entity-alias="C"/>
+        <alias entity-alias="CRC" name="custRequestId"/>
+        <alias entity-alias="CRC" name="fromDate"/>
+        <alias entity-alias="CRC" name="thruDate"/>
+        <view-link entity-alias="C" rel-entity-alias="CRC">
+            <key-map field-name="contentId"/>
+        </view-link>
+        <relation type="one-nofk" rel-entity-name="ContentType">
+            <key-map field-name="contentTypeId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="DataResource">
+            <key-map field-name="dataResourceId"/>
+        </relation>
+    </view-entity>
+
+    <view-entity entity-name="ContentAndWorkEffort"
+        package-name="com.opensourcestrategies.crmsfa.content"
+        title="View to select content associated with a workeffort (activity or event)">
+        <member-entity entity-alias="C" entity-name="Content"/>
+        <member-entity entity-alias="WEC" entity-name="WorkEffortContent"/>
+        <alias-all entity-alias="C"/>
+        <alias entity-alias="WEC" name="workEffortId"/>
+        <alias entity-alias="WEC" name="fromDate"/>
+        <alias entity-alias="WEC" name="thruDate"/>
+        <view-link entity-alias="C" rel-entity-alias="WEC">
+            <key-map field-name="contentId"/>
+        </view-link>
+        <relation type="one-nofk" rel-entity-name="ContentType">
+            <key-map field-name="contentTypeId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="DataResource">
+            <key-map field-name="dataResourceId"/>
+        </relation>
+    </view-entity>
+
+   <entity entity-name="OrderHeaderContent"
+            package-name="com.opensourcestrategies.crmsfa.content"
+            title="Content attachments, urls, etc for order.">
+        <field name="contentId" type="id-ne"></field>
+        <field name="orderId" type="id-ne"></field>
+        <field name="fromDate" type="date-time"></field>
+        <field name="thruDate" type="date-time"></field>
+        <prim-key field="contentId"/>
+        <prim-key field="orderId"/>
+        <prim-key field="fromDate"/>
+        <relation type="one" fk-name="ORDER_CNT_OH" rel-entity-name="OrderHeader">
+            <key-map field-name="orderId"/>
+        </relation>
+        <relation type="one" fk-name="ORDER_CNT_CNT" rel-entity-name="Content">
+            <key-map field-name="contentId"/>
+        </relation>
+    </entity>
+
+    
+    <!-- Extend the Content entity to provide a field to store the 
+        content classification -->
+    <extend-entity entity-name="Content">
+        <field name="classificationEnumId" type="id-ne"></field>
+        <relation title="Classification" fk-name="CNT_CLSFI_ENUM" rel-entity-name="Enumeration" type="one">
+            <key-map field-name="classificationEnumId" rel-field-name="enumId"/>
+         </relation>        
+    </extend-entity> 
+    
+    <extend-entity entity-name="ContentAndRole">
+        <relation type="one-nofk" rel-entity-name="Enumeration">
+            <key-map field-name="classificationEnumId" rel-field-name="enumId"/>
+        </relation>      
+    </extend-entity>    
+    
+    <view-entity entity-name="ContentAndOrder"
+        package-name="com.opensourcestrategies.crmsfa.content"
+        title="View to select content associated with an order">
+        <member-entity entity-alias="C" entity-name="Content"/>
+        <member-entity entity-alias="OC" entity-name="OrderHeaderContent"/>
+        <alias-all entity-alias="C"/>
+        <alias entity-alias="OC" name="orderId"/>
+        <alias entity-alias="OC" name="fromDate"/>
+        <alias entity-alias="OC" name="thruDate"/>
+        <view-link entity-alias="C" rel-entity-alias="OC">
+            <key-map field-name="contentId"/>
+        </view-link>
+        <relation type="one-nofk" rel-entity-name="ContentType">
+            <key-map field-name="contentTypeId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="DataResource">
+            <key-map field-name="dataResourceId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="Enumeration">
+            <key-map field-name="classificationEnumId" rel-field-name="enumId"/>
+        </relation>        
+    </view-entity>
+
+    <entity entity-name="QuoteContent" package-name="com.opensourcestrategies.crmsfa.content"
+        title="Content attachments, urls, etc for quote">
+        <field name="contentId" type="id-ne"/>
+        <field name="quoteId" type="id-ne"/>
+        <field name="fromDate" type="date-time"/>
+        <field name="thruDate" type="date-time"/>
+        <prim-key field="contentId"/>
+        <prim-key field="quoteId"/>
+        <prim-key field="fromDate"/>
+        <relation type="one" fk-name="QUOTE_CNT_Q" rel-entity-name="Quote">
+            <key-map field-name="quoteId" />
+        </relation>
+        <relation type="one" fk-name="QUOTE_CNT_CNT" rel-entity-name="Content">
+            <key-map field-name="contentId" />
+        </relation>
+    </entity>
+
+    <view-entity entity-name="ContentAndQuote"
+        package-name="com.opensourcestrategies.crmsfa.content"
+        title="View to select content associated with a quote">
+        <member-entity entity-alias="C" entity-name="Content"/>
+        <member-entity entity-alias="QC" entity-name="QuoteContent"/>
+        <alias-all entity-alias="C"/>
+        <alias entity-alias="QC" name="quoteId"/>
+        <alias entity-alias="QC" name="fromDate"/>
+        <alias entity-alias="QC" name="thruDate"/>
+        <view-link entity-alias="C" rel-entity-alias="QC">
+            <key-map field-name="contentId"/>
+        </view-link>
+        <relation type="one-nofk" rel-entity-name="ContentType">
+            <key-map field-name="contentTypeId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="DataResource">
+            <key-map field-name="dataResourceId"/>
+        </relation>
+        <relation type="one-nofk" rel-entity-name="Enumeration">
+            <key-map field-name="classificationEnumId" rel-field-name="enumId"/>
+        </relation>        
+    </view-entity>
+
+    <!-- ======================================= -->
+    <!-- com.opensourcestrategies.crmsfa.product -->
+    <!-- ======================================= -->
+
+    <!-- Note: in order for this lookup to work, the ProductStores must be mapped to ProductStoreGroup in ProductStoreGroupMember -->
+    <view-entity entity-name="ProductLookup"
+        package-name="com.opensourcestrategies.crmsfa.product"
+        title="Product joined with ProductPrice and optional GoodIdentification for use with product lookups.">
+      <member-entity entity-alias="PR" entity-name="Product"/>
+      <member-entity entity-alias="GI" entity-name="GoodIdentification"/>
+      <member-entity entity-alias="PP" entity-name="ProductPrice"/>
+      <member-entity entity-alias="PSGM" entity-name="ProductStoreGroupMember"/>
+      <alias-all entity-alias="PR" />
+      <alias-all entity-alias="GI" />
+      <!-- For now ignore the from and thru date in PSGM -->
+      <alias entity-alias="PSGM" name="productStoreId"/>
+      <alias entity-alias="PSGM" name="productStoreGroupId"/>
+      <alias entity-alias="PP" name="productPriceTypeId"/>
+      <alias entity-alias="PP" name="productPricePurposeId"/>
+      <alias entity-alias="PP" name="currencyUomId"/>
+      <alias entity-alias="PP" name="productPriceFromDate" field="fromDate"/>
+      <alias entity-alias="PP" name="productPriceThruDate" field="thruDate"/>
+      <view-link entity-alias="PR" rel-entity-alias="PP">
+        <key-map field-name="productId"/>
+      </view-link>
+      <view-link entity-alias="PP" rel-entity-alias="PSGM">
+        <key-map field-name="productStoreGroupId"/>
+      </view-link>
+      <view-link entity-alias="PR" rel-entity-alias="GI" rel-optional="true">
+        <key-map field-name="productId"/>
+      </view-link>
+    </view-entity>
+
+    <!-- ======================================== -->
+    <!-- com.opensourcestrategies.crmsfa.orders   -->
+    <!-- ======================================== -->
+
+    <entity entity-name="OrderShipGroupPriority"
+            package-name="com.opensourcestrategies.crmsfa.orders"
+            title="Prioritization entity for order ship groups">
+        <field name="orderId" type="id-ne"></field>
+        <field name="shipGroupSeqId" type="id-ne"></field>
+        <field name="priorityValue" type="floating-point"></field>
+        <prim-key field="orderId"/>
+        <prim-key field="shipGroupSeqId"/>
+        <relation type="one" fk-name="OSGP_OH" rel-entity-name="OrderHeader">
+            <key-map field-name="orderId"/>
+        </relation>
+        <relation type="one" fk-name="OSGP_OISG" rel-entity-name="OrderItemShipGroup">
+          <key-map field-name="orderId"/>
+          <key-map field-name="shipGroupSeqId"/>
+        </relation>
+    </entity>
+
+    <view-entity entity-name="OrderShipGroupAndPriority"
+            package-name="com.opensourcestrategies.crmsfa.orders"
+            title="Join priority and order shipping group">
+        <member-entity entity-alias="OSGP" entity-name="OrderShipGroupPriority"/>
+        <member-entity entity-alias="OH" entity-name="OrderHeader"/>
+        <alias-all entity-alias="OSGP" />
+        <alias entity-alias="OH" name="orderTypeId"/>
+        <alias entity-alias="OH" name="statusId"/>
+        <view-link entity-alias="OSGP" rel-entity-alias="OH">
+          <key-map field-name="orderId"/>
+        </view-link>
+        <relation type="one" fk-name="OSGAP_OISG" rel-entity-name="OrderItemShipGroup">
+          <key-map field-name="orderId"/>
+          <key-map field-name="shipGroupSeqId"/>
+        </relation>
+    </view-entity>
+
+    <!-- Extend the TrackingCode entity to provide a field to store the 
+        DNIS-trackingCode mappings as support for the retrieveTrackingCodeFromFacetPhoneServer service -->
+    <extend-entity entity-name="TrackingCode">
+        <field name="dnis" type="id"></field>
+    </extend-entity>
+
+    <!-- Extend the PaymentMethod entity to provide a field to store the 
+        email mappings as support for the retrieveTrackingCodeFromFacetPhoneServer service -->
+    <extend-entity entity-name="PaymentMethod">
+        <field name="emailAddress" type="email"></field>
+    </extend-entity>
+
+    <!-- view to list the contact list associated to a Marketing campaign -->
+    <view-entity entity-name="TrackingCodeAndContactListAndMarketingCampaign"
+                 package-name="com.opensourcestrategies.crmsfa.campaign"
+                 title="Supplemental detail about marketing campaign"> 
+      <member-entity entity-alias="MKCL" entity-name="MarketingCampaignContactList"/>
+      <member-entity entity-alias="CC" entity-name="ContactList"/>
+      <member-entity entity-alias="PCC" entity-name="ContactList"/>
+      <member-entity entity-alias="TC" entity-name="TrackingCode"/>
+
+      <alias name="campaignListId" entity-alias="MKCL"/>
+      <alias name="contactListId" entity-alias="MKCL"/>
+      <alias name="marketingCampaignId" entity-alias="MKCL"/>
+      <alias name="fromDate" entity-alias="MKCL"/>
+      <alias name="thruDate" entity-alias="MKCL"/>
+      <alias name="contactListName" entity-alias="CC"/>
+      <alias name="trackingCodeId" entity-alias="TC"/>
+      <alias name="trackingCodeTypeId" entity-alias="TC"/>
+      <alias name="tcFromDate" field="fromDate" entity-alias="TC"/>
+      <alias name="tcThruDate" field="thruDate" entity-alias="TC"/>
+      <alias name="parentContactListId" entity-alias="CC"/>
+      <alias name="parentContactListName" field="contactListName" entity-alias="PCC"/>
+      <alias name="contactMechTypeId" entity-alias="CC"/>
+
+      <view-link entity-alias="MKCL" rel-entity-alias="CC">
+        <key-map field-name="contactListId"/>
+      </view-link>
+      <view-link entity-alias="MKCL" rel-entity-alias="TC" rel-optional="true">
+        <key-map field-name="campaignListId"/>
+      </view-link>
+      <view-link entity-alias="CC" rel-entity-alias="PCC" rel-optional="true">
+        <key-map field-name="parentContactListId" rel-field-name="contactListId"/>
+      </view-link>
+        
+    </view-entity>
+
+    <!-- Extend the InventoryItemDetail entity to provide returnId/returnItemSeqId to store the 
+        return value of receive Invetory -->
+    <extend-entity entity-name="InventoryItemDetail">
+      <field name="returnId" type="id"></field>
+      <field name="returnItemSeqId" type="id"></field>
+    </extend-entity>
+    
+  <!-- ========================================================= -->
+  <!-- com.opensourcestrategies.crmsfa.quotes                    -->
+  <!-- ========================================================= -->
+
+    <entity entity-name="QuoteItemOption"
+            package-name="com.opensourcestrategies.crmsfa.quotes"
+            title="Associate multiple option sets to a QuoteItem">
+        <field name="quoteId" type="id-ne"></field>
+        <field name="quoteItemSeqId" type="id-ne"></field>
+        <field name="quoteItemOptionSeqId" type="id-ne"></field>
+        <field name="quantity" type="floating-point"></field>
+        <field name="quoteUnitPrice" type="currency-amount"></field>
+        <prim-key field="quoteId"/>
+        <prim-key field="quoteItemSeqId"/>
+        <prim-key field="quoteItemOptionSeqId"/>
+        <relation type="one" fk-name="QIO_QO" rel-entity-name="Quote">
+            <key-map field-name="quoteId"/>
+        </relation>
+        <relation type="one" fk-name="QIO_QOI" rel-entity-name="QuoteItem">
+            <key-map field-name="quoteId"/>
+            <key-map field-name="quoteItemSeqId"/>
+        </relation>
+    </entity>
+
+    <extend-entity entity-name="Quote">
+      <field name="contactPartyId" type="id"/>
+      <field name="createdByPartyId" type="id"/>
+      <relation type="one" fk-name="QO_CREATE" rel-entity-name="Party" title="CreatedBy">
+        <key-map field-name="createdByPartyId" rel-field-name="partyId"/>
+      </relation>
+      <relation type="one" rel-entity-name="Party" fk-name="QUOTE_CONTACT" title="Contact">
+        <key-map field-name="contactPartyId" rel-field-name="partyId"/>
+      </relation>
+    </extend-entity>
+
+    <entity entity-name="QuoteItem"
+            package-name="org.ofbiz.order.quote"
+            title="Quote Item Entity">
+      <field name="quoteId" type="id-ne"></field>
+      <field name="quoteItemSeqId" type="id-ne"></field>
+      <field name="productId" type="id"></field>
+      <field name="productFeatureId" type="id"></field>
+      <field name="deliverableTypeId" type="id"></field>
+      <field name="skillTypeId" type="id"></field>
+      <field name="uomId" type="id"></field>
+      <field name="workEffortId" type="id"></field>
+      <field name="custRequestId" type="id"></field>
+      <field name="custRequestItemSeqId" type="id"></field>
+      <field name="quantity" type="floating-point"></field>
+      <field name="selectedAmount" type="floating-point"></field>
+      <field name="quoteUnitPrice" type="currency-amount"></field>
+      <field name="estimatedDeliveryDate" type="date-time"></field>
+      <field name="description" type="description"></field>
+      <field name="comments" type="comment"></field>
+      <field name="isPromo" type="indicator"></field>
+      <prim-key field="quoteId"/>
+      <prim-key field="quoteItemSeqId"/>
+      <relation type="one" fk-name="QUOTE_ITM_QTE" rel-entity-name="Quote">
+        <key-map field-name="quoteId"/>
+      </relation>
+      <relation type="one" fk-name="QUOTE_ITM_PROD" rel-entity-name="Product">
+        <key-map field-name="productId"/>
+      </relation>
+      <relation type="one" fk-name="QUOTE_ITM_PFEAT" rel-entity-name="ProductFeature">
+        <key-map field-name="productFeatureId"/>
+      </relation>
+      <relation type="one" fk-name="QUOTE_ITM_DELT" rel-entity-name="DeliverableType">
+        <key-map field-name="deliverableTypeId"/>
+      </relation>
+      <relation type="one" fk-name="QUOTE_ITM_SKLT" rel-entity-name="SkillType">
+        <key-map field-name="skillTypeId"/>
+      </relation>
+      <relation type="one" fk-name="QUOTE_ITM_UOM" rel-entity-name="Uom">
+        <key-map field-name="uomId"/>
+      </relation>
+      <relation type="one" fk-name="QUOTE_ITM_WKEFF" rel-entity-name="WorkEffort">
+        <key-map field-name="workEffortId"/>
+      </relation>
+      <relation type="one" fk-name="QUOTE_ITM_CSRQ" rel-entity-name="CustRequest">
+        <key-map field-name="custRequestId"/>
+      </relation>
+      <relation type="one" fk-name="QUOTE_ITM_CSRITM" rel-entity-name="CustRequestItem">
+        <key-map field-name="custRequestId"/>
+        <key-map field-name="custRequestItemSeqId"/>
+      </relation>
+    </entity>
+
+    <entity entity-name="QuoteNote"
+            package-name="com.opensourcestrategies.crmsfa.quotes"
+            never-cache="true"
+            title="Quote Notes">
+      <field name="quoteId" type="id-ne"></field>
+      <field name="noteId" type="id-ne"></field>
+      <field name="internalNote" type="indicator"></field>
+      <prim-key field="quoteId"/>
+      <prim-key field="noteId"/>
+      <relation type="one" fk-name="QUOTE_QHN" rel-entity-name="Quote">
+        <key-map field-name="quoteId"/>
+      </relation>
+      <relation type="one" fk-name="NOTEDATA_QHN" rel-entity-name="NoteData">
+        <key-map field-name="noteId"/>
+      </relation>
+    </entity>
+
+</entitymodel>

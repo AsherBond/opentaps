@@ -1,0 +1,156 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+import java.util.*;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.opentaps.common.util.UtilConfig;
+import com.opensourcestrategies.crmsfa.forecasts.UtilForecast;
+
+userLogin = request.getAttribute("userLogin");
+
+// get organizationPartyId for looking up time periods
+organizationPartyId = UtilConfig.getPropertyValue("opentaps", "organizationPartyId");
+
+// get quarters that are not closed, are not in the past, and which have no forecasts for the period
+conditions = UtilMisc.toList(
+    new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+    new EntityExpr("isClosed", EntityOperator.EQUALS, "N"),
+    new EntityExpr("periodTypeId", EntityOperator.EQUALS, "FISCAL_QUARTER"),
+    new EntityExpr("thruDate", EntityOperator.GREATER_THAN, UtilDateTime.nowTimestamp())
+);
+timePeriods = delegator.findByCondition("CustomTimePeriod", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("thruDate"));
+
+// now create a list of available time periods to create new forecasts by screening out periods for which we already have forecasts
+availablePeriods = new ArrayList();
+for (tPi = timePeriods.iterator(); tPi.hasNext(); ) {
+    timePeriod = tPi.next();
+    existingForecasts = delegator.findByAnd("SalesForecast", UtilMisc.toMap("organizationPartyId", organizationPartyId, "internalPartyId", userLogin.getString("partyId"), "customTimePeriodId", timePeriod.getString("customTimePeriodId")));
+    if ((existingForecasts != null) && (existingForecasts.size() > 0)) {
+       // the nothing
+    } else {
+        availablePeriods.add(timePeriod);
+    }
+}
+
+// put it in context only if there are results so we can test for empty in screen widgets
+if (availablePeriods.size() > 0) {
+    context.put("availablePeriods", availablePeriods);
+}
+
+// get non-closed quarterly forecasts belonging to the userLogin
+forecasts = delegator.findByAnd("SalesForecastAndCustomTimePeriod", 
+        UtilMisc.toMap("internalPartyId", userLogin.getString("partyId"), "isClosed", "N", "periodTypeId", "FISCAL_QUARTER"),
+        UtilMisc.toList("fromDate"));
+
+// the sum row at the bottom of My Forecasts has to be computed by hand because there is no one superperiod for a set of arbitrary quarters
+if (forecasts.size() > 0) {
+    quotaSum = UtilForecast.ZERO;
+    closedSum = UtilForecast.ZERO;
+    forecastSum = UtilForecast.ZERO;
+    bestCaseSum = UtilForecast.ZERO;
+    percentOfQuotaForecast = UtilForecast.ZERO;
+    percentOfQuotaClosed = UtilForecast.ZERO;
+
+    // add up the amounts
+    for (iter = forecasts.iterator(); iter.hasNext(); ) {
+        forecast = iter.next();
+        quotaSum = quotaSum.add(forecast.getBigDecimal("quotaAmount"));
+        closedSum = closedSum.add(forecast.getBigDecimal("closedAmount"));
+        forecastSum = forecastSum.add(forecast.getBigDecimal("forecastAmount"));
+        bestCaseSum = bestCaseSum.add(forecast.getBigDecimal("bestCaseAmount"));
+    }
+
+    // compute the total percents
+    if (quotaSum.signum() != 0) {
+        percentOfQuotaForecast = forecastSum.divide(quotaSum, UtilForecast.BD_FORECAST_PERCENT_DECIMALS, UtilForecast.BD_FORECAST_PERCENT_ROUNDING);
+        percentOfQuotaClosed = closedSum.divide(quotaSum, UtilForecast.BD_FORECAST_PERCENT_DECIMALS, UtilForecast.BD_FORECAST_PERCENT_ROUNDING);
+    }
+
+    // create a pseudo-forecast Map from the sums (with a void salesForecastId)
+    pseudoForecast = UtilMisc.toMap("quotaAmount", quotaSum, "closedAmount", closedSum, "forecastAmount", forecastSum, "bestCaseAmount", bestCaseSum);
+    pseudoForecast.put("percentOfQuotaForecast", percentOfQuotaForecast);
+    pseudoForecast.put("percentOfQuotaClosed", percentOfQuotaClosed);
+
+    // finally add it to the bottom of the list of quarters
+    forecasts.add(pseudoForecast);
+}
+
+// store the forecasts for display
+context.put("forecasts", forecasts);
+
+// if the userLogin is an ACCOUNT_MANAGER, get all forecasts for all team members on all teams where user is ACCOUNT_MANAGER
+roles = delegator.findByAndCache("PartyRole", UtilMisc.toMap("partyId", userLogin.getString("partyId"), "roleTypeId", "ACCOUNT_MANAGER"));
+if (roles.size() > 0) {
+    dateCondition = EntityUtil.getFilterByDateExpr();
+
+    // get all teams where user is ACCOUNT_MANAGER 
+    managerConditions = UtilMisc.toList(
+            dateCondition,
+            new EntityExpr("partyIdTo", EntityOperator.EQUALS, userLogin.getString("partyId")),
+            new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, "ACCOUNT_MANAGER"),
+            new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT_TEAM")
+            );
+    managerConditionList = new EntityConditionList(UtilMisc.toList(managerConditions), EntityOperator.AND);
+    teams = delegator.findByConditionCache("PartyRelationship", managerConditionList, null, null);
+
+    // prepare the query to find all team members in a team
+    teamConditions = UtilMisc.toList(
+            dateCondition,
+            new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT_TEAM"),
+            new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "ASSIGNED_TO")
+            );
+
+    // collect all the team member partyIds in a hash set (this ensures each party is included once)
+    parties = new HashSet();
+    for (iter = teams.iterator(); iter.hasNext(); ) {
+        team = iter.next();
+
+        // build the condition
+        teamConditions.add(new EntityExpr("partyIdTo", EntityOperator.EQUALS, team.getString("partyIdTo")));
+        teamConditionList = new EntityConditionList(UtilMisc.toList(teamConditions), EntityOperator.AND);
+        teams = delegator.findByConditionCache("PartyRelationship", teamConditionList, null, null);
+        teamMembers = delegator.findByAndCache("PartyRelationship", UtilMisc.toMap("partyIdFrom", team.getString("partyIdFrom"), "roleTypeIdFrom", "ACCOUNT_TEAM", "partyRelationshipTypeId", "ASSIGNED_TO"));
+        for (subiter = teamMembers.iterator(); subiter.hasNext(); ) {
+           teamMember = subiter.next();
+           parties.add(teamMember.getString("partyIdTo"));
+        }
+        // pop the team partyId condition
+        teamConditions.remove(teamConditions.size() - 1);
+    }
+
+    // remove the userLogin from the set
+    parties.remove(userLogin.getString("partyId"));
+
+    // for each remaining party, get the related forecasts (use a WHERE IN query)
+    if (parties.size() > 0) {
+        conditions = new EntityConditionList(UtilMisc.toList(
+                    new EntityExpr("internalPartyId", EntityOperator.IN, parties),
+                    new EntityExpr("isClosed", EntityOperator.EQUALS, "N"),
+                    new EntityExpr("periodTypeId", EntityOperator.EQUALS, "FISCAL_QUARTER")
+                    ), EntityOperator.AND);
+        teamForecasts = delegator.findByCondition("SalesForecastAndCustomTimePeriod", conditions, null, UtilMisc.toList("fromDate"));
+        context.put("teamForecasts", teamForecasts);
+    }
+}
+

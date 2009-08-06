@@ -1,0 +1,250 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+import java.util.HashMap;
+
+import com.opensourcestrategies.crmsfa.activities.UtilActivity;
+import com.opensourcestrategies.crmsfa.content.ContentHelper;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.model.ModelEntity;
+import org.ofbiz.entity.util.*;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
+import org.opentaps.common.workeffort.WorkEffortHelper;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+// find the work effort and the association IDs, used by both viewActivity and updateTaskForm/updateEventForm
+
+workEffortId = parameters.get("workEffortId");
+
+if (workEffortId == null) return;
+
+workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
+
+if (workEffort == null) return;
+
+// make sure it is a TASK or EVENT
+workEffortTypeId = workEffort.getString("workEffortTypeId");
+if (!(workEffortTypeId.equals("TASK") || workEffortTypeId.equals("EVENT"))) {
+    return;
+}
+
+// prepare workEffort map to put in context because we need aditional fields (localizedScopeEnumDescription for example)
+workEffortMap = workEffort.getAllFields();
+
+// get localized activity current status and add it to workEffort map
+statusItem = delegator.findByPrimaryKeyCache("StatusItem", UtilMisc.toMap("statusId", workEffort.get("currentStatusId")));
+workEffortMap.put("localizedCurrentStatus", statusItem.get("description", "CommonEntityLabels", locale));
+
+// get activity security and add OpentapsEntityLabels.properties overriding scopeEnum description
+scopeEnum = delegator.findByPrimaryKeyCache("Enumeration", UtilMisc.toMap("enumId", workEffort.get("scopeEnumId")));
+if (scopeEnum != null) workEffortMap.put("localizedScopeEnumDescription", scopeEnum.get("description", "OpentapsEntityLabels", context.get("locale")));
+
+// put workEffort map in context with additional fields
+context.put("workEffort", workEffortMap);
+
+// Put to history
+context{"history"} = UtilCommon.makeHistoryEntry(workEffort.get("workEffortName"), "viewActivity", UtilMisc.toList("workEffortId"));
+
+// some helper parameters for the menus
+activityValueParams = "workEffortId=" + workEffortId;
+context.put("activityValueParams", activityValueParams);
+
+if (workEffort.getString("workEffortTypeId").equals("EVENT")) {
+   context.put("cancelActivityParams", "currentStatusId=EVENT_CANCELLED");
+} else if (workEffort.getString("workEffortTypeId").equals("TASK")) {
+   context.put("cancelActivityParams", "currentStatusId=TASK_CANCELLED");
+}
+
+// put the association IDs in the workEffort context map (for forms) and in the context (for security, etc.)
+List parties = UtilActivity.getActivityParties(delegator, workEffort.getString("workEffortId"), PartyHelper.CLIENT_PARTY_ROLES);
+if (parties.size() > 0) {
+    internalPartyId = parties.get(0).getString("partyId");
+    context.get("workEffort").put("internalPartyId", internalPartyId);
+
+    // also get the role and set the view page target for it
+    viewPage = null;
+    roleTypeId = PartyHelper.getFirstValidInternalPartyRoleTypeId(internalPartyId, delegator);
+    if (roleTypeId.equals("ACCOUNT")) viewPage = "viewAccount";
+    else if (roleTypeId.equals("CONTACT")) viewPage = "viewContact";
+    else if (roleTypeId.equals("PROSPECT")) viewPage = "viewLead";
+    context.put("internalPartyRoleTypeId", roleTypeId);
+    context.put("viewPage", viewPage);
+    context.put("internalPartyId", internalPartyId);
+}
+opportunities = workEffort.getRelated("SalesOpportunityWorkEffort");
+if (opportunities.size() > 0) {
+    id =  opportunities.get(0).getString("salesOpportunityId");
+    context.get("workEffort").put("salesOpportunityId", id);
+    context.put("salesOpportunityId", id);
+    // put salesOpportunity generic value into context to support opentaps form macro rendering
+    if (id != null) {
+        salesOpportunity = delegator.findByPrimaryKey("SalesOpportunity", UtilMisc.toMap("salesOpportunityId", id));
+        context.put("salesOpportunity", salesOpportunity);        
+    }
+}
+cases = workEffort.getRelated("CustRequestWorkEffort");
+if (cases.size() > 0) {
+    id = cases.get(0).getString("custRequestId");
+    context.get("workEffort").put("custRequestId", id);
+    context.put("custRequestId", id);
+    // put custRequest generic value into context to support opentaps form macro rendering
+    if (id != null) {
+        custRequest = delegator.findByPrimaryKey("CustRequest", UtilMisc.toMap("custRequestId", id));
+        context.put("custRequest", custRequest);        
+    }    
+}
+
+// check for update permission 
+hasUpdatePermission = false;
+if (CrmsfaSecurity.hasActivityPermission(security, "_UPDATE", userLogin, workEffortId)) {
+    hasUpdatePermission = true;
+}
+context.put("hasUpdatePermission", hasUpdatePermission);
+
+// check if the user has permission to add, update or remove parties from this activity
+// (must have CRMSFA_ACT_ADMIN permission - super user - or be an assignee of this activity)
+hasUpdatePartiesPermission = false;
+if ((hasUpdatePermission) && (CrmsfaSecurity.hasActivityUpdatePartiesPermission(security, userLogin, workEffortId, false))) {
+    hasUpdatePartiesPermission = true;
+}
+context.put("hasUpdatePartiesPermission", hasUpdatePartiesPermission);
+
+// check for activity security scope (visibility) permission
+hasUpdateSecurityScopePermission = CrmsfaSecurity.hasSecurityScopePermission(security, userLogin, workEffortId, true);
+context.put("hasUpdateSecurityScopePermission", hasUpdateSecurityScopePermission);            
+
+// check scope security for private and confidential activities
+// if scope is private or confidential and user it's neither owner or superuser don't allow him/her to view activity
+if (("WES_PRIVATE".equals(workEffort.get("scopeEnumId"))) || ("WES_CONFIDENTIAL".equals(workEffort.get("scopeEnumId")))) {
+    if (!CrmsfaSecurity.hasSecurityScopePermission(security, userLogin, workEffortId, false)) {
+       context.put("allowed", false);
+       return;
+    }
+}
+
+// get the ofbiz default scopeEnum descriptions overrides in OpentapsEntityLabels.properties
+// only need to do the query when the user has update permission
+if (hasUpdatePermission) {
+    scopeEnumList = delegator.findByCondition("Enumeration",
+        new EntityConditionList( UtilMisc.toList( 
+                                    new EntityExpr("enumId", EntityOperator.IN, UtilMisc.toList("WES_PUBLIC", "WES_CONFIDENTIAL")),
+                                    new EntityExpr("enumTypeId", EntityOperator.EQUALS, "WORK_EFF_SCOPE"),
+                                    new EntityExpr("enumId", EntityOperator.NOT_EQUAL, "WES_PRIVATE")
+                                 ), EntityOperator.AND
+                               ), UtilMisc.toList("enumId", "description"), UtilMisc.toList("sequenceId")
+                             );
+    
+    // fill in scopeEnumMap with overrides for ofbiz default enum descriptions (configured in OpentapsEntityLabels.properties)
+    localizedScopeEnumList = new LinkedList();
+    for (iter = scopeEnumList.iterator(); iter.hasNext(); ) {
+        scopeEnum = iter.next();
+        scopeEnumMap = new HashMap();
+        scopeEnumMap.put("enumId", scopeEnum.getString("enumId"));
+        scopeEnumMap.put("description", scopeEnum.get("description", "OpentapsEntityLabels", context.get("locale")));
+        localizedScopeEnum = GenericValue.create(delegator.getModelEntity("Enumeration"), scopeEnumMap);
+        localizedScopeEnumList.add(localizedScopeEnum);
+    }
+    context.put("localizedScopeEnumList", localizedScopeEnumList);
+}
+                       
+// staus
+statusId = workEffort.getString("currentStatusId");
+
+// notify screen widget if the activity is scheduled
+context.put("isScheduled", false);
+if (statusId.equals("TASK_SCHEDULED") || statusId.equals("EVENT_SCHEDULED")) {
+    context.put("isScheduled", true);
+}
+
+// notify screen widget if the activity is started
+context.put("isStarted", false);
+if (statusId.equals("TASK_STARTED") || statusId.equals("EVENT_STARTED")) {
+    context.put("isStarted", true);
+}
+
+// Do things when the work effort is a Task
+
+// isCrmEmail tells the system whether communication events associated with task are to be viewed as email or generic communication events
+// isPending tells the system whether that email should be editable
+if (workEffort.get("workEffortTypeId").equals("TASK")) {
+    context.put("isCrmEmail", false);
+
+    // get the first related comm event (we're supposed to have only one but the data model is too flexible)
+    candidates = workEffort.getRelated("CommunicationEventWorkEff");
+    if (candidates.size() > 0) {
+        communicationEvent = candidates.get(0).getRelatedOne("CommunicationEvent");
+        context.put("communicationEvent", communicationEvent);
+
+        // check for emails
+        if (communicationEvent.getString("communicationEventTypeId").equals("EMAIL_COMMUNICATION")) {
+
+            // ignore logged emails or those without contact mech info
+                context.put("isCrmEmail", true);
+
+                // If we have a pending email, tell the screen to include writeEmail.ftl
+                context.put("pendingEmail", false);
+                if (communicationEvent.getString("statusId").equals("COM_PENDING")) {
+                    context.put("pendingEmail", true);
+                    context.put("isStarted", false);  // also disable the "finish" form because the finish time is taken care of by the service
+                }
+            
+        }
+        // auto-received emails are to be viewed as email but are never to be editable
+        else if(communicationEvent.getString("communicationEventTypeId").equals("AUTO_EMAIL_COMM")) {
+                // ignore logged emails or those without contact mech info
+                context.put("isCrmEmail", true);
+                context.put("pendingEmail", false);
+        }
+    }
+}
+
+// put in the availability status of the userLogin
+input = UtilMisc.toMap("workEffortId", workEffortId, "partyId", userLogin.getString("partyId"));
+assocs = EntityUtil.filterByDate(delegator.findByAnd("WorkEffortPartyAssignment", input));
+if ((assocs != null) && (assocs.size() > 0)) {
+    context.get("workEffort").put("availabilityStatusId", assocs.get(0).getString("availabilityStatusId"));
+}
+
+// put the duration if the work effort has start and end times
+start = workEffort.getTimestamp("estimatedStartDate");
+end = workEffort.getTimestamp("estimatedCompletionDate");
+if (start != null && end != null) {
+    context.get("workEffort").put("duration", UtilCommon.getDuration(start, end, timeZone, locale));
+}
+
+// default times for the start/finish mini form in viewActivity (note these won't override the ones in workEffort)
+context.put("actualStartDate", UtilDateTime.nowTimestamp());
+context.put("actualCompletionDate", UtilDateTime.nowTimestamp());
+
+// list of associated parties
+parties = EntityUtil.filterByDate(delegator.findByAnd("WorkEffortAndPartyAssign", UtilMisc.toMap("workEffortId", workEffortId), UtilMisc.toList("partyId")));
+context.put("associatedParties", parties);
+
+// get the generic content metadata for activity
+context.put("content", ContentHelper.getContentInfoForActivity(workEffortId, delegator));
+
+// finally mark the work effort as viewed
+WorkEffortHelper.markAsViewed(workEffort, userLogin.getString("userLoginId"));

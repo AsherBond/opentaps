@@ -1,0 +1,98 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/*
+ * Provides a way to find ACCOUNT_MANAGERS, ACCOUNT_REPS, etc. by lastName, firstName, (TODO: add more).
+ * The to roles that are looked up come from PartyHelper.TEAM_MEMBER_ROLES. If a specific role is
+ * desired, pass it in as roleTypeIdTo in the parameters.
+ * The result is a list iterator named which should be used in the form widget.  The name of the list iterator
+ * is passed in as a parameter (listIteratorNameToUse) because the forms use different list iterators, which
+ * allows those forms to be reused on their own or inside other screens
+ */
+ 
+import java.util.ArrayList;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+
+listIteratorNameToUse = parameters.get("listIteratorNameToUse");
+if (listIteratorNameToUse == null) return;
+
+// possible fields we're searching by
+lastName = parameters.get("lastName");
+firstName = parameters.get("firstName");
+
+// optional specific role type to
+roleTypeIdTo = parameters.get("roleTypeIdTo");
+
+// construct role conditions
+roleConditions = new ArrayList();
+if (roleTypeIdTo != null) {
+    roleConditions.add(new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, roleTypeIdTo));
+} else {
+    // construct from the default party role to list
+    for (iter = PartyHelper.TEAM_MEMBER_ROLES.iterator(); iter.hasNext(); ) {
+        roleConditions.add(new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, iter.next()));
+    }
+}
+roleConditionList = new EntityConditionList(roleConditions, EntityOperator.OR);
+
+// construct search conditions
+searchConditions = new ArrayList();
+if (lastName != null && !lastName.equals("")) {
+    searchConditions.add(new EntityExpr("lastName", true, EntityOperator.LIKE, "%" + lastName + "%", true));
+}
+if (firstName != null && !firstName.equals("")) {
+    searchConditions.add(new EntityExpr("firstName", true, EntityOperator.LIKE, "%" + firstName + "%", true));
+}
+if (searchConditions.size() == 0) return;
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.OR);
+
+// these conditions are specified to negate certain results
+negateConditions = new ArrayList();
+
+// combine roles, searches, and possibly negate conditions with AND
+combinedConditions = UtilMisc.toList(roleConditionList, searchConditionList);
+if (negateConditions.size() > 0) {
+    negateConditionsList = new EntityConditionList(negateConditions, EntityOperator.AND);
+    combinedConditions.add(negateConditionsList);
+}
+conditionList = new EntityConditionList(combinedConditions, EntityOperator.AND);
+
+// We need to get a list iterator because 1) the forms are all set to use list iterators and 2) that seems to be the only way to find distinct records
+listIt = delegator.findListIteratorByCondition("PartyToSummaryByRelationship", conditionList, null, 
+        UtilMisc.toList("firstName", "lastName", "partyId"), // fields to select 
+        UtilMisc.toList("lastName", "firstName"), // fields to order by
+        // the first true here is for "specifyTypeAndConcur"
+        // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
+        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
+
+// this is the iterator to use in form-widgets
+context.put(listIteratorNameToUse, listIt);
+
+// this debugging code is kind of helpful so I'll keep it around for now 
+
+/*
+listIt = context.get(listIteratorNameToUse);
+print("******* list iterator values: ***********");
+if (listIt != null) { while ((next = listIt.next()) != null) { print(next); } }
+else { print("No list iterator found"); }
+print("*****************************************");
+*/

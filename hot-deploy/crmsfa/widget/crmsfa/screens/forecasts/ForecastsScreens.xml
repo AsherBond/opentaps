@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2004-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author   Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains screens for the Forecasts section -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="forecasts" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/forecasts/ForecastsScreens.xml#leftBarScreen"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/forecasts/screenlets/shortcuts.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- main is the default screen of the sectoin -->
+    <screen name="main">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmForecasts"/>  
+                <set field="sectionHeaderUiLabel" value="CrmForecasts"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/forecasts/myForecasts.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <!-- show create forecast form only if we have available periods -->
+                        <section>
+                            <condition><not><if-empty field-name="availablePeriods"/></not></condition>
+                            <widgets>
+                                <container style="subSectionBlock">
+                                    <container style="form">
+                                        <include-form name="selectQuarterForm" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                                    </container>
+                                </container>
+                            </widgets>
+                        </section>
+
+                        <!-- quarterly forecasts -->
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmForecastQuarters}</label></container>
+                            <include-form name="ListForecasts" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                        </container>
+
+                        <!-- team member forecasts if this user is the team leader -->
+                        <include-screen name="myTeamForecasts"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="myTeamForecasts">
+        <section>
+            <condition><not><if-empty field-name="teamForecasts"/></not></condition>
+            <widgets>
+                <container style="subSectionBlock">
+                    <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTeamForecastQuarters}</label></container>
+                    <include-form name="ListTeamForecasts" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findForecasts">
+        <section>
+            <condition><if-has-permission permission="CRMSFA" action="_4C_VIEWALL"/></condition>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindForecasts"/>  
+                <set field="sectionHeaderUiLabel" value="CrmFindForecasts"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/forecasts/findForecasts.bsh"/>
+                <set field="findForecastsTarget" value="findForecasts"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <include-form name="findForecastsForm" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                            </container>
+                        </container>
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmForecasts}</label></container>
+                            <include-form name="ListForecasts" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
+        </section>
+    </screen>
+
+    <screen name="createForecastForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmForecastEnterQuotas"/>  
+                <set field="sectionHeaderUiLabel" value="CrmForecastEnterQuotas"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/forecasts/createForecastForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-form name="createForecastForm" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewForecast">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmViewForecast"/>  
+                <set field="sectionHeaderUiLabel" value="CrmViewForecast"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/forecasts/viewForecast.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <!-- forecast header info -->
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/forecasts/submenus/forecastDetails.ftl"/></html>
+                            </platform-specific>
+                            <container style="form">
+                                <include-form name="viewForecast" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                            </container>
+                        </container>
+
+                        <!-- show the child forecasts, but only if they exist -->
+                        <section>
+                            <condition><not><if-empty field-name="forecasts"/></not></condition>
+                            <widgets>
+                                <container style="subSectionBlock">
+                                    <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmForecastSubPeriods}</label></container>
+                                    <include-form name="ListForecasts" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                                </container>
+                            </widgets>
+                        </section>
+
+                        <!-- put the update form here as well -->
+                        <section>
+                            <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                            <widgets>
+                                <container style="subSectionBlock">
+                                    <container style="form">
+                                        <include-form name="updateForecastForm" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                                    </container>
+                                </container>
+                            </widgets>
+                        </section>
+
+                        <!-- show the forecast history -->
+                        <container style="subSectionBlock">
+                            <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmForecastChangeHistory}</label></container>
+                            <include-form name="ListForecastHistory" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
+

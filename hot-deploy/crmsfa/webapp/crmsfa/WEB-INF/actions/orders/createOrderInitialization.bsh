@@ -1,0 +1,75 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.contact.ContactHelper;
+import org.ofbiz.order.shoppingcart.ShoppingCart;
+
+/*
+ * This script serves to initialize the order entry process.  It will
+ * determine whether a new shopping cart should be initialized or
+ * whether to use an existing one.  This supercedes the initialization
+ * of a cart in ShoppingCartEvents.getCartObject().
+ *
+ * The product store to use is configured in crmsfa.properties
+ * and is initialized in the sesssion in main-decorator.bsh.
+ *
+ * TODO: This is really messy.  The script is only intended to retrieve the cart
+ * or to initialize it.  The other data should be put in separate scripts.  There
+ * is now a createOrderLeftBar.bsh for retrieving data that goes into order header
+ * box and so on.
+ */
+
+import com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents;
+import org.opentaps.common.util.UtilConfig;
+
+// get the cart from our special get/initialize method
+cart = CrmsfaOrderEvents.crmsfaGetOrInitializeCart(request);
+
+if (cart == null)
+    return;
+
+// the session  and context is shoppingCart for compatibility with legacy
+context.put("shoppingCart", cart);
+
+// notify the screen widget if there is a order party defined or not
+hasParty = false;
+orderPartySupplementalData = null;
+if (cart != null) {
+    if (cart.getOrderPartyId() != null) {
+        hasParty = true;
+        orderPartySupplementalData = delegator.findByPrimaryKey("PartySupplementalData",  UtilMisc.toMap("partyId", cart.getOrderPartyId()));
+    }
+}
+context.put("hasParty", hasParty);
+context.put("orderPartySupplementalData", orderPartySupplementalData);
+
+// for some reason putting this in main-decorator.bsh didn't work
+organizationPartyId = UtilConfig.getPropertyValue("opentaps", "organizationPartyId");
+
+// get the produt store that's presently set and put in context
+productStoreId = session.getAttribute("productStoreId");
+productStore = delegator.findByPrimaryKeyCache("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+context.put("productStore", productStore);
+
+// and if the cart has no items, a list of product stores which we could set the cart to
+if (cart.size() == 0) {
+  productStores = delegator.findByAndCache("ProductStore", UtilMisc.toMap("payToPartyId", organizationPartyId), UtilMisc.toList("storeName"));
+  context.put("productStores", productStores);
+}
+

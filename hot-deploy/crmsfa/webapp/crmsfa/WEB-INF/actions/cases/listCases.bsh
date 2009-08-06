@@ -1,0 +1,81 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+
+import org.opentaps.common.util.UtilView;
+
+// prevent crash if script invoked without object, such as if viewAccount?partyId=democontact1
+if (context.get("entityName") == null) return;
+
+// use a page builder to fetch the case list, because we need some extra data
+buildCaseList(delegator, conditions) {
+    entityName = context.get("entityName");
+    fieldsToSelect = context.get("fieldsToSelect");
+    if (fieldsToSelect == null) fieldsToSelect = new ArrayList();
+    fieldsToSelect.add("custRequestTypeId");
+    fieldsToSelect.add("custRequestCategoryId");
+    orderBy = context.get("orderBy");
+    where = conditions;
+
+    build(page) {
+        newPage = FastList.newInstance();
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            crmCase = iter.next();
+            row = FastMap.newInstance();
+            row.putAll(crmCase.getAllFields());
+                            
+            status = crmCase.getRelatedOneCache("StatusItem");
+            type = crmCase.getRelatedOneCache("CustRequestType");
+            reason = crmCase.getRelatedOneCache("CustRequestCategory");
+            
+            statusDescription = null;
+            typeDescription = null;
+            reasonDescription = null;    
+            if (status != null) {statusDescription = status.get("description");}    
+            if (type != null) {typeDescription = type.get("description");}
+            if (reason != null) {reasonDescription = reason.get("description");}
+                
+            if (statusDescription != null) {row.put("statusDescription", crmCase.getRelatedOneCache("StatusItem").get("description"));}
+            if (typeDescription != null) {row.put("typeDescription", crmCase.getRelatedOneCache("CustRequestType").get("description"));}
+            if (reasonDescription != null) {row.put("reasonDescription", crmCase.getRelatedOneCache("CustRequestCategory").get("description"));}
+            
+            updated = true;
+            entityName = crmCase.getEntityName().trim();            
+            if ("CustRequest".equals(entityName)) {
+                updated = UtilView.isUpdatedSinceLastView(crmCase, userLogin.getString("userLoginId"));
+            } else {
+                updated = UtilView.isUpdatedSinceLastView(crmCase.getRelatedOne("CustRequest"), userLogin.getString("userLoginId"));
+            }            
+            row.put("updated", updated);
+            row.put("sectionName", context.get("sectionName"));
+            newPage.add(row);
+        }
+        return newPage;
+    }
+    return this; // remember this, very important
+}
+caseCond = context.get("conditions");
+context.put("caseListBuilder", buildCaseList(delegator, caseCond));

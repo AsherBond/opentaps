@@ -1,0 +1,57 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+ * The purpose of this script is to make the createOpportunityForm form intelligent.
+ *
+ * There are three input cases: basic create opportunity, create opportunity for
+ * account, create opportunity for lead. In the latter two, an accountPartyId or
+ * leadPartyId will be supplied. If these IDs resolved to real accounts and leads,
+ * then we present a view of the form with the Initial Account or Initial Lead filled
+ * in with the full name of the party displayed. If the ID was invalid or for all other
+ * cases, we present the basic form.
+ *
+ * If the form returns an error, then we always present the basic form. This is to avoid
+ * issues with locking the user into an unusable form where the Initial Account or Lead
+ * names are filled in and undeditable.
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+
+// don't do anything if both account and lead are specified
+if (parameters.get("accountPartyId") != null && parameters.get("leadPartyId") != null) return;
+
+// get the account or lead party Id (not both) from the parameters
+partyId = parameters.get("accountPartyId");
+if (partyId == null) partyId = parameters.get("leadPartyId");
+
+// if neither are specified, do nothing
+if (partyId == null) return null;
+
+// get the account or lead and store it
+opportunityParty = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
+if (opportunityParty == null) return;
+
+if (parameters.get("accountPartyId") != null) context.put("account", opportunityParty);
+else if (parameters.get("leadPartyId") != null) context.put("lead", opportunityParty);
+
+// get the contact if an account is present (TODO: note this is highly debatable, prevents user from changing it)
+contactPartyId = parameters.get("contactPartyId");
+if (accountPartyId != null && contactPartyId != null) {
+    contact = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", contactPartyId));
+    context.put("contact", contact);
+}
+

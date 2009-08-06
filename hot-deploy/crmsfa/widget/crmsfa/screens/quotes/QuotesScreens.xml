@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  @author   Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains screens for the Quotes section -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="sectionName" value="quotes" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="requiredPermission" value="CRMSFA_QUOTES"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/quotes/shortcuts.bsh"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml#leftBarScreen"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <widgets>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- show a list of the quotes of the logged in user -->
+    <screen name="myQuotes">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmMyQuotes"/>
+                <set field="sectionHeaderUiLabel" value="CrmMyQuotes"/>
+                <set field="quoteListName" value="CrmMyQuotes"/>
+                <set field="listSortTarget" value="myQuotes"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/quotes/myQuotes.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/listQuotes.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findQuotes">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindQuotes"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindQuotes"/>
+                <set field="quoteListName" value="OrderOrderQuotes"/>
+                <set field="listSortTarget" value="findQuotes"/>
+                <set field="findQuotesTarget" value="findQuotes"/>
+                <set field="tabButtonItem" value="findQuotes"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/quotes/findQuotes.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                              <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/findQuotes.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                              <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/listQuotes.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+ 
+    <screen name="ViewQuote">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="OrderViewQuote"/>
+                <set field="sectionHeaderUiLabel" value="OrderViewQuote"/>
+                <!-- parameters for reuse contentList.ftl widgets -->
+                <set field="donePage" value="ViewQuote"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/quote/viewQuote.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/viewQuoteMenu.ftl"/></html>
+                        </platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/viewQuote.ftl"/></html>
+                        </platform-specific>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/addQuoteItem.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/viewQuoteItems.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/content/contentList.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <container style="subSectionBlock">
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/quoteNotes.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/copyQuote.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+ 
+    <screen name="finalizeQuote">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmQuoteFinalize"/>
+                <set field="sectionHeaderUiLabel" value="CrmQuoteFinalize"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/quote/viewQuote.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/finalizeQuoteMenu.ftl"/></html>
+                        </platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/viewQuote.ftl"/></html>
+                        </platform-specific>
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/finalizeQuoteItems.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditQuote">
+        <section>
+            <actions>
+                <set field="tabButtonItem" value="EditQuote"/>
+                <property-to-field field="defaultCurrencyUomId" resource="general" property="currency.uom.id.default" default="USD"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/quote/editQuote.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/editQuote.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+     <screen name="AddQuoteNote">
+        <section>
+            <actions>
+                <set field="titleProperty" value="OrderAddNote"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/quotes/newNote.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/quotes/newNote.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+ 
+</screens>

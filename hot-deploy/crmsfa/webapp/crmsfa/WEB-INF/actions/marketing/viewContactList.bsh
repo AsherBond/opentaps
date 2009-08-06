@@ -1,0 +1,41 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import com.opensourcestrategies.crmsfa.marketing.MarketingHelper;
+
+contactListId = parameters.get("contactListId");
+contactList = delegator.findByPrimaryKey("ContactList", UtilMisc.toMap("contactListId", contactListId));
+if (contactList == null) {
+    context.put("validView", false);
+    return;
+}
+
+numberOfMembers = new Double(MarketingHelper.countContactListMembers(contactListId, delegator));
+numberOfUSAMembers = new Double(MarketingHelper.countContactListMembersByCountry(contactListId, "USA", delegator));
+
+contactListCombined = contactList.getAllFields();
+contactListCombined.put("numberOfMembers", numberOfMembers);
+contactListCombined.put("numberOfUSAMembers", numberOfUSAMembers);
+context.put("contactList", contactListCombined);
+
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+
+if (security.hasEntityPermission("CRMSFA_CAMP", "_UPDATE", userLogin)) {
+    context.put("hasUpdatePermission", true);
+}
+

@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="findForecastsForm" type="single" target="${findForecastsTarget}" title="" 
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="internalPartyId" title="${uiLabelMap.CrmTeamMember}">
+            <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>
+        </field>
+        <field name="customTimePeriodId" title="${uiLabelMap.CrmPeriod}">
+            <drop-down allow-empty="true" current="selected">
+                <entity-options entity-name="CustomTimePeriod" description="${periodName} ${periodNum}: ${thruDate} (${customTimePeriodId})" filter-by-date="false">
+                    <entity-constraint name="periodTypeId" operator="equals" value="FISCAL_QUARTER"/>
+                    <entity-order-by field-name="thruDate"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmFindForecasts}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="selectQuarterForm" type="single" target="createForecastForm" title="" 
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+
+        <!-- TODO: by organization as well -->
+        <field name="customTimePeriodId" title="${uiLabelMap.CrmForecastEnterQuotasFor}">
+            <drop-down allow-empty="false" current="selected">
+                <list-options description="${periodName} ${periodNum}: ${thruDate} (${customTimePeriodId})" list-name="availablePeriods" key-name="customTimePeriodId"/>
+            </drop-down>
+        </field>
+
+        <field name="submitButton" title="${uiLabelMap.CrmForecastEnterQuotas}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="createForecastForm" type="multi" title=""
+        target="createForecast?parentPeriodId=${parameters.customTimePeriodId}&amp;currencyUomId=${configProperties.defaultCurrencyUomId}&amp;organizationPartyId=${organizationPartyId}"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="periods">
+        <field name="customTimePeriodId"><hidden/></field>
+        <field name="salesForecastId"><hidden/></field>
+        <!-- TODO: organization is from config file until we implement organization -->
+        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
+        <!-- TODO: currency conversion from opportunity not implemented, so hardcode currencyUomId from config. when conversion is implemented, open this up -->
+        <field name="currencyUomId"><hidden value="${configProperties.defaultCurrencyUomId}"/></field>
+        <field name="periodName" title="${uiLabelMap.CrmPeriod}"><display description="${periodName} ${periodNum}"/></field>
+        <field name="fromDate" title="${uiLabelMap.CommonFromDate}" red-when="never"><display/></field>
+        <field name="thruDate" title="${uiLabelMap.CommonThruDate}" red-when="before-now"><display/></field>
+
+        <field name="quotaAmount" title="${uiLabelMap.CrmQuota}" widget-style="inputBox" use-when="com.opensourcestrategies.crmsfa.util.UtilCommon.isTimePeriodOpen(context.get(&quot;customTimePeriodId&quot;), delegator);"><text/></field>
+
+        <field name="submitButton" title="${uiLabelMap.CrmForecastEnterQuotas}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- present a list of forecasts -->
+    <form name="ListForecasts" type="list" separate-columns="true" 
+        title="Forecasts"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="forecasts">
+
+        <field name="customTimePeriodId" widget-style="linktext" title="${uiLabelMap.CrmForecast}" use-when="salesForecastId!=void">
+            <hyperlink description="${periodName} ${periodNum} ${uiLabelMap.CommonThru} ${thruDate} (${salesForecastId})" target="viewForecast?salesForecastId=${salesForecastId}"/>
+        </field>
+        <!-- this is for the dummy sum row -->
+        <field name="customTimePeriodId" widget-style="tableheadtext" title="${uiLabelMap.CrmForecast}" use-when="salesForecastId==void">
+            <display description="${uiLabelMap.CrmForecastTotals}"/>
+        </field>
+        <field name="internalPartyId" title="${uiLabelMap.CrmTeamMember}">
+            <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId"/>
+        </field>
+        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}"  widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}"  widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}"  widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  widget-area-style="tabletextright">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
+        </field>
+        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}"  widget-area-style="tabletextright">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
+        </field>
+    </form>   
+
+    <!-- present a list of forecasts TODO: find a way to include two forecast lists in the same page, this form is identical to the above -->
+    <form name="ListTeamForecasts" type="list" separate-columns="true" 
+        title="Forecasts"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="teamForecasts">
+
+        <field name="customTimePeriodId" widget-style="linktext" title="${uiLabelMap.CrmForecast}">
+            <hyperlink description="${periodName} ${periodNum} ${uiLabelMap.CommonThru} ${thruDate} (${salesForecastId})" target="viewForecast?salesForecastId=${salesForecastId}"/>
+        </field>
+        <field name="internalPartyId" title="${uiLabelMap.CrmTeamMember}">
+            <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId"/>
+        </field>
+        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}"  widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}"  widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}"  widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  widget-area-style="tabletextright">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
+        </field>
+        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}"  widget-area-style="tabletextright">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
+        </field>
+    </form>   
+
+
+    <form name="updateForecastForm" type="single" target="updateForecast"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <auto-fields-service service-name="crmsfa.updateForecast"/>
+
+        <field name="salesForecastId"><hidden value="${forecast.salesForecastId}"/></field>
+        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}"><text default-value="${forecast.quotaAmount}"/></field>
+        <field name="changeNote" title="${uiLabelMap.CrmChangeNote}" title-style="requiredField"><textarea/></field>
+
+        <field name="submitButton" title="${uiLabelMap.CrmForecastUpdateQuota}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <form name="viewForecast" type="single" default-map-name="forecast"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="customTimePeriodId" title="${uiLabelMap.CrmForecast}">
+            <display description="${forecast.periodName} ${forecast.periodNum} (${forecast.customTimePeriodId}) ${uiLabelMap.CommonFrom} ${forecast.fromDate} ${uiLabelMap.CommonThru} ${forecast.thruDate}"/>
+        </field>
+        <field name="internalPartyId" title="${uiLabelMap.CrmTeamMember}" position="1">
+            <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId">
+                <sub-hyperlink description="${uiLabelMap.CrmViewForecasts}" link-style="buttontext" target="findForecasts?partyId=${forecast.internalPartyId}"/>
+            </display-entity>
+        </field>
+        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" position="1">
+            <display type="currency" currency="${forecast.currencyUomId}"/>
+        </field>
+        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}" position="1">
+            <display type="currency" currency="${forecast.currencyUomId}"/>
+        </field>
+        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  position="2">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(forecast.getDouble(&quot;percentOfQuotaClosed&quot;))}"/>
+        </field>
+        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}" position="1">
+            <display type="currency" currency="${forecast.currencyUomId}"/>
+        </field>
+        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}" position="2">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(forecast.getDouble(&quot;percentOfQuotaForecast&quot;))}"/>
+        </field>
+        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}">
+            <display type="currency" currency="${forecast.currencyUomId}"/>
+        </field>
+    </form>
+
+    <!-- present a list of forecast history -->
+    <form name="ListForecastHistory" type="list" separate-columns="true" 
+        title="Forecasts"  default-title-style="tableheadtext" target=""
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        list-name="forecastHistory">
+        <field name="modifiedTimestamp" title="${uiLabelMap.CommonLastUpdated}">
+            <display/>
+        </field>
+        <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="closedAmount" title="${uiLabelMap.CrmForecastClosedAmount}" widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}" widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}" widget-area-style="tabletextright">
+            <display type="currency" currency="${currencyUomId}"/>
+        </field>
+        <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}" widget-area-style="tabletextright">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
+        </field>
+        <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}" widget-area-style="tabletextright">
+            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
+        </field>
+        <field name="modifiedByUserLoginId">
+            <display/>
+        </field>
+        <field name="changeNote" title="${uiLabelMap.CrmChangeNote}">
+            <display/>
+        </field>
+    </form>   
+
+</forms>

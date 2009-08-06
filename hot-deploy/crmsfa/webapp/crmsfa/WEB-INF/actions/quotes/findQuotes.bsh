@@ -1,0 +1,122 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilConfig;
+
+// get some data for the select inputs
+organizationPartyId = UtilConfig.getPropertyValue("opentaps", "organizationPartyId");
+
+context.put("quoteTypes", delegator.findAllCache("QuoteType"));
+context.put("productStores", delegator.findByAndCache("ProductStore", UtilMisc.toMap("payToPartyId", organizationPartyId), UtilMisc.toList("storeName")));
+context.put("salesChannels", UtilCommon.getEnumerations("ORDER_SALES_CHANNEL", delegator));
+context.put("quoteStatuses", UtilCommon.getStatuses("QUOTE_STATUS", delegator));
+
+// was the form submitted
+if (UtilCommon.getParameter(request, "performFind") == null) {
+    return;
+}
+
+// possible fields we're searching by
+quoteTypeId = UtilCommon.getParameter(request, "quoteTypeId");
+customerPartyId = UtilCommon.getParameter(request, "partyId");
+quoteId = UtilCommon.getParameter(request, "quoteId");
+quoteName = UtilCommon.getParameter(request, "quoteName");
+statusId = UtilCommon.getParameter(request, "statusId");
+productStoreId = UtilCommon.getParameter(request, "productStoreId");
+salesChannelEnumId = UtilCommon.getParameter(request, "salesChannelEnumId");
+
+// construct search conditions
+searchConditions = new ArrayList();
+if (quoteTypeId != null) {
+    searchConditions.add(new EntityExpr("quoteTypeId", EntityOperator.EQUALS, quoteTypeId));
+}
+if (customerPartyId != null) {
+    searchConditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, customerPartyId));
+}
+if (quoteTypeId != null) {
+    searchConditions.add(new EntityExpr("quoteTypeId", EntityOperator.EQUALS, quoteTypeId));
+}
+if (quoteId != null) {
+    searchConditions.add(new EntityExpr("quoteId", EntityOperator.EQUALS, quoteId));
+}
+if (quoteName != null) {
+    searchConditions.add(new EntityExpr("quoteName", true, EntityOperator.LIKE, "%" + quoteName + "%", true));
+}
+if (statusId != null) {
+    searchConditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, statusId));
+}
+if (productStoreId != null) {
+    searchConditions.add(new EntityExpr("productStoreId", EntityOperator.EQUALS, productStoreId));
+}
+if (salesChannelEnumId != null) {
+    searchConditions.add(new EntityExpr("salesChannelEnumId", EntityOperator.EQUALS, salesChannelEnumId));
+}
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+// get orderBy from the parameters
+quotesOrderBy = parameters.get("quotesOrderBy");
+if (quotesOrderBy == null) quotesOrderBy = "issueDate DESC";
+
+
+listQuoteBuilder() {
+    entityName = "Quote";
+    orderBy = UtilMisc.toList(quotesOrderBy);
+    where = searchConditionList;
+
+    build(page) {
+        newPage = new ArrayList();
+        for (row : page) {
+            crmQuote = row.getAllFields();
+            partyId = row.getString("partyId");
+            partyName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false);
+            if (partyName != null) {
+                crmQuote{"partyName"} = partyName;
+            }
+
+            status = row.getRelatedOneCache("StatusItem");
+            if (status != null) {
+                statusDescription = status.get("description", locale);
+                if (statusDescription != null) {
+                    crmQuote{"statusDescription"} = statusDescription;
+                }
+            }
+
+            quoteType = row.getRelatedOneCache("QuoteType");
+            if (quoteType != null) {
+                quoteTypeDescription = quoteType.get("description", locale);
+                if (quoteTypeDescription != null) {
+                    crmQuote{"quoteTypeDescription"} = quoteTypeDescription;
+                }
+            }
+
+            newPage.add(crmQuote);
+        }
+        return newPage;
+    }
+
+    return this;
+}
+
+context.put("quotes", listQuoteBuilder());

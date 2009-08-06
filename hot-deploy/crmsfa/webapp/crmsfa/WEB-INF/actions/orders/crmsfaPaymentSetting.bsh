@@ -1,0 +1,106 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.accounting.payment.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.common.util.UtilConfig;
+import com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents;
+
+delegator = request.getAttribute("delegator");
+dispatcher = request.getAttribute("dispatcher");
+cart = CrmsfaOrderEvents.crmsfaGetOrInitializeCart(request);
+context.put("cart", cart);
+
+productStoreId = cart.getProductStoreId();
+
+findOpt = new EntityFindOptions();
+findOpt.setDistinct(true);
+
+productStorePaymentSettings = delegator.findByCondition("ProductStorePaymentSetting", new EntityExpr("productStoreId", EntityOperator.EQUALS, productStoreId), null, UtilMisc.toList("paymentMethodTypeId"), null, findOpt);
+productStorePaymentMethodTypeIds = EntityUtil.getFieldListFromEntityList(productStorePaymentSettings, "paymentMethodTypeId", true);
+
+externalPaymentMethodTypes = EntityUtil.filterByCondition(productStorePaymentSettings, new EntityExpr("paymentMethodTypeId", EntityOperator.LIKE, "EXT_%"));
+nonExternalPaymentMethodTypes = EntityUtil.filterOutByCondition(productStorePaymentSettings, new EntityExpr("paymentMethodTypeId", EntityOperator.LIKE, "EXT_%"));
+
+// Hack to make billing accounts list out in the FTL
+billingAcctType = EntityUtil.getFirst(EntityUtil.filterByCondition(productStorePaymentSettings, new EntityExpr("paymentMethodTypeId", EntityOperator.EQUALS, "EXT_BILLACT")));
+if (! UtilValidate.isEmpty(billingAcctType)) {
+    externalPaymentMethodTypes.remove(billingAcctType);
+    nonExternalPaymentMethodTypes.add(billingAcctType);
+}
+
+context.put("externalPaymentMethodTypes", externalPaymentMethodTypes);
+context.put("nonExternalPaymentMethodTypes", nonExternalPaymentMethodTypes);
+
+orderPartyId = cart.getPartyId();
+context.put("orderPartyId", orderPartyId);
+orderPartyPaymentMethods = new HashMap();
+if (UtilValidate.isNotEmpty(orderPartyId)) {
+    if (productStorePaymentMethodTypeIds.contains("CREDIT_CARD")) {
+        creditCards = delegator.findByCondition("PaymentMethodAndCreditCard", new EntityExpr("partyId", EntityOperator.EQUALS, orderPartyId), null, null);
+        creditCards = EntityUtil.filterByDate(creditCards);
+        orderPartyPaymentMethods.put("CREDIT_CARD", UtilValidate.isEmpty(creditCards) ? new ArrayList() : creditCards);
+    }
+    
+    if (productStorePaymentMethodTypeIds.contains("EFT_ACCOUNT")) {
+        eftAccounts = delegator.findByCondition("PaymentMethodAndEftAccount", new EntityExpr("partyId", EntityOperator.EQUALS, orderPartyId), null, null);
+        eftAccounts = EntityUtil.filterByDate(eftAccounts);
+        orderPartyPaymentMethods.put("EFT_ACCOUNT", UtilValidate.isEmpty(eftAccounts) ? new ArrayList() : eftAccounts);
+    }
+        
+    if (productStorePaymentMethodTypeIds.contains("GIFT_CARD")) {
+        giftCards = delegator.findByCondition("PaymentMethodAndGiftCard", new EntityExpr("partyId", EntityOperator.EQUALS, orderPartyId), null, null);
+        giftCards = EntityUtil.filterByDate(giftCards);
+        orderPartyPaymentMethods.put("GIFT_CARD", UtilValidate.isEmpty(giftCards) ? new ArrayList() : giftCards);
+    }
+
+    // get list of billing accounts, filtering out those which don't have enough balance.  Splitting payments between billing account and another method is
+    // currently disabled.  You can always use offline payment and apply the credit later to the outstanding sales invoice.
+    if (productStorePaymentMethodTypeIds.contains("EXT_BILLACT")) {
+        billingAccounts = BillingAccountWorker.makePartyBillingAccountList(userLogin, cart.getCurrency(), orderPartyId, delegator, dispatcher);
+        if (! UtilValidate.isEmpty(billingAccounts)) {
+            cartGrandTotal = cart.getGrandTotal();
+            bait = billingAccounts.iterator();
+            while (bait.hasNext()) {
+                billingAccount = bait.next();
+                availableBalance = com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, billingAccount.get("billingAccountId"));
+                if (availableBalance < cartGrandTotal) {
+                    Debug.logInfo("crmsfaPaymentSetting.bsh: Billing account [" + billingAccount.get("billingAccountId") + "] was excluded from list of payments because its balance [" + availableBalance + "] is below the cart total of [" + cartGrandTotal + "]", "");
+                    billingAccounts.remove(billingAccount);
+                }
+            }
+        }
+        orderPartyPaymentMethods.put("EXT_BILLACT", UtilValidate.isEmpty(billingAccounts) ? new ArrayList() : billingAccounts);
+    }
+}
+context.put("orderPartyPaymentMethods", orderPartyPaymentMethods);
+
+// get the default payment method type
+configProperties = UtilConfig.getConfigProperties("crmsfa");
+defaultPaymentMethodTypeId = configProperties.get("crmsfa.order.paymentMethodTypeId");
+context.put("defaultPaymentMethodTypeId", defaultPaymentMethodTypeId);
+
+// XXX because the default payment method is checked, we need to set the cart payment method to this default now, otherwise we get a UI issue
+defaultPartyPaymentMethodSet = orderPartyPaymentMethods.get(defaultPaymentMethodTypeId);
+if ("EXT_OFFLINE".equals(defaultPaymentMethodTypeId)) {
+    cart.addPayment("EXT_OFFLINE");
+} else if (cart.selectedPayments() == 0 && defaultPartyPaymentMethodSet != null && defaultPartyPaymentMethodSet.size() > 0) {
+    method = defaultPartyPaymentMethodSet.get(0);
+    methodId = (method.get("paymentMethodId") == null ? method.get("paymentMethodTypeId") : method.get("paymentMethodId"));
+    cart.addPayment(methodId);
+}

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- this file contains extra demo data for purposes of populating the dashboard and orther charts -->
+
+<entity-engine-xml>
+
+    <!-- Leads with various statuses -->
+    <Party partyId="DemoLead2" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_ASSIGNED"/>
+    <Person partyId="DemoLead2" firstName="Demo" lastName="Second Lead"/>
+    <PartyRole partyId="DemoLead2" roleTypeId="PROSPECT"/>    
+
+    <Party partyId="DemoLead3" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_QUALIFIED"/>
+    <Person partyId="DemoLead3" firstName="Demo" lastName="Third Lead"/>
+    <PartyRole partyId="DemoLead3" roleTypeId="PROSPECT"/>    
+
+    <Party partyId="DemoLead4" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_RECYCLED"/>
+    <Person partyId="DemoLead4" firstName="Demo" lastName="Fourth Lead"/>
+    <PartyRole partyId="DemoLead4" roleTypeId="PROSPECT"/>    
+
+    <Party partyId="DemoLead5" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_ASSIGNED"/>
+    <Person partyId="DemoLead5" firstName="Demo" lastName="Fifth Lead"/>
+    <PartyRole partyId="DemoLead5" roleTypeId="PROSPECT"/>    
+
+    <Party partyId="DemoLead6" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_NEW"/>
+    <Person partyId="DemoLead6" firstName="Demo" lastName="Sixth Lead"/>
+    <PartyRole partyId="DemoLead6" roleTypeId="PROSPECT"/>    
+
+    <Party partyId="DemoLead7" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_QUALIFIED"/>
+    <Person partyId="DemoLead7" firstName="Demo" lastName="Seventh Lead"/>
+    <PartyRole partyId="DemoLead7" roleTypeId="PROSPECT"/>    
+
+    <Party partyId="DemoLead8" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_QUALIFIED"/>
+    <Person partyId="DemoLead8" firstName="Demo" lastName="Eigth Lead"/>
+    <PartyRole partyId="DemoLead8" roleTypeId="PROSPECT"/>    
+
+    <Party partyId="DemoLead9" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_RECYCLED"/>
+    <Person partyId="DemoLead9" firstName="Demo" lastName="Nineth Lead"/>
+    <PartyRole partyId="DemoLead9" roleTypeId="PROSPECT"/>    
+
+    <Party partyId="DemoLead10" partyTypeId="PERSON" description="A sample lead" preferredCurrencyUomId="USD" statusId="PTYLEAD_QUALIFIED"/>
+    <Person partyId="DemoLead10" firstName="Demo" lastName="Tenth Lead"/>
+    <PartyRole partyId="DemoLead10" roleTypeId="PROSPECT"/>    
+
+    <!-- sample opportunity for an account -->
+    <SalesOpportunity salesOpportunityId="DemoOpportunity3" opportunityName="Sale to Demo Account1"
+        description="This is a sale to DemoAccount1." estimatedAmount="500000" estimatedProbability="0.50" currencyUomId="USD"
+        estimatedCloseDate="2006-03-01 00:00:00" opportunityStageId="SOSTG_PROSPECT" typeEnumId="SOTYP_NEWBIZ"/>
+    <SalesOpportunityRole salesOpportunityId="DemoOpportunity3" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <SalesOpportunity salesOpportunityId="DemoOpportunity4" opportunityName="Routine support contract renewal"
+        description="Just routine renewal of some support contracts." estimatedAmount="70000" estimatedProbability="0.90" currencyUomId="USD"
+        estimatedCloseDate="2006-01-15 00:00:00" opportunityStageId="SOSTG_QUOTED" typeEnumId="SOTYP_RENEW"/>
+    <SalesOpportunityRole salesOpportunityId="DemoOpportunity3" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+
+    <!-- Cases with various statuses, all for demo sales rep 1 from demo account 1 -->
+    <CustRequest custRequestId="DemoCase2" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_SUBMITTED" priority="7"
+        fromPartyId="DemoAccount1"
+        custRequestName="Missing items in shipment of GZ-1000" description="Account reports that their shipment of 1000 GZ-1000 is missing a few items.  Find out what the PO number is."/>
+    <CustRequestRole custRequestId="DemoCase2" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
+    <CustRequestRole custRequestId="DemoCase2" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+
+    <CustRequest custRequestId="DemoCase3" custRequestTypeId="RF_BUGFIX" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_REOPENED" priority="3"
+        fromPartyId="DemoAccount1"
+        custRequestName="Bug causing WG-1111 to malfunction" description="Account reports a bug in the software that drives WG-1111 is causing it to malfunction.  Our initial fix was insufficient due to a corner case, reopened."/>
+    <CustRequestRole custRequestId="DemoCase3" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
+    <CustRequestRole custRequestId="DemoCase3" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+
+    <CustRequest custRequestId="DemoCase4" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_ACCEPTED" priority="5"
+        fromPartyId="DemoAccount1"
+        custRequestName="Support request for training with GZ-2002" description="Account wants to learn how to use GZ-2002."/>
+    <CustRequestRole custRequestId="DemoCase4" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
+    <CustRequestRole custRequestId="DemoCase4" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+
+    <CustRequest custRequestId="DemoCase5" custRequestTypeId="RF_FEATURE" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_ACCEPTED" priority="1"
+        fromPartyId="DemoAccount1"
+        custRequestName="New sprocket needed on WG-9943-B3 ASAP" description="Urgent redesign on WG-9943-B3 to add new sprocket."/>
+    <CustRequestRole custRequestId="DemoCase5" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
+    <CustRequestRole custRequestId="DemoCase5" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+
+    <CustRequest custRequestId="DemoCase6" custRequestTypeId="RF_QUOTE" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_SUBMITTED" priority="5"
+        fromPartyId="DemoAccount1"
+        custRequestName="Quote for another order of GZ-1000" description="Account wants to call about ordering another batch of GZ-1000."/>
+    <CustRequestRole custRequestId="DemoCase6" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
+    <CustRequestRole custRequestId="DemoCase6" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+
+    <CustRequest custRequestId="DemoCase7" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_REOPENED" priority="5"
+        fromPartyId="DemoAccount1"
+        custRequestName="Configuration of GZ-9290 required." description="Configuration of GZ-9290 requested by Account.  Reopened because their requirements changed and we need to reconfigure it."/>
+    <CustRequestRole custRequestId="DemoCase7" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
+    <CustRequestRole custRequestId="DemoCase7" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+
+    <CustRequest custRequestId="DemoCase8" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_REVIEWED" priority="3"
+        fromPartyId="DemoAccount1"
+        custRequestName="Set up of multiple PC001 required." description="Client ordered 100 PC001 and requests support in setting up a suitable configuration.  Please review this issue for cost and time."/>
+    <CustRequestRole custRequestId="DemoCase8" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
+    <CustRequestRole custRequestId="DemoCase8" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+
+</entity-engine-xml>

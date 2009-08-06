@@ -1,0 +1,665 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- this file contains security definitions -->
+
+<entity-engine-xml>
+    
+    <!-- these are discrete security permissions which are associated with specific operations, typically either a service call or a UI view request -->
+    <SecurityPermission description="Access to the Accounts function of the application." permissionId="CRMSFA_ACCOUNTS_VIEW"/>
+    <SecurityPermission description="View any Account." permissionId="CRMSFA_ACCOUNT_VIEW"/>
+    <SecurityPermission description="Create a new account." permissionId="CRMSFA_ACCOUNT_CREATE"/>    
+    <SecurityPermission description="Update any existing account." permissionId="CRMSFA_ACCOUNT_UPDATE"/>    
+    <SecurityPermission description="Deactivate any existing account." permissionId="CRMSFA_ACCOUNT_DEACTIVATE"/>    
+    <SecurityPermission description="Reassign owner of an existing account." permissionId="CRMSFA_ACCOUNT_REASSIGN"/>    
+
+    <SecurityPermission description="Access to the Contacts function of the application." permissionId="CRMSFA_CONTACTS_VIEW"/>
+    <SecurityPermission description="View any Contact." permissionId="CRMSFA_CONTACT_VIEW"/>
+    <SecurityPermission description="Create a new Contact." permissionId="CRMSFA_CONTACT_CREATE"/>    
+    <SecurityPermission description="Update any existing Contact." permissionId="CRMSFA_CONTACT_UPDATE"/>    
+    <SecurityPermission description="Deactivate any existing Contact." permissionId="CRMSFA_CONTACT_DEACTIVATE"/>    
+    <SecurityPermission description="Reassign owner of an existing contact." permissionId="CRMSFA_CONTACT_REASSIGN"/>    
+
+    <SecurityPermission description="Access to the Leads function of the application." permissionId="CRMSFA_LEADS_VIEW"/>
+    <SecurityPermission description="View any Lead." permissionId="CRMSFA_LEAD_VIEW"/>
+    <SecurityPermission description="Create a new Lead." permissionId="CRMSFA_LEAD_CREATE"/>    
+    <SecurityPermission description="Update any existing Lead." permissionId="CRMSFA_LEAD_UPDATE"/>    
+    <SecurityPermission description="Deactivate any existing Lead." permissionId="CRMSFA_LEAD_DEACTIVATE"/>    
+    <SecurityPermission description="Reassign owner of an existing lead." permissionId="CRMSFA_LEAD_REASSIGN"/>    
+    <SecurityPermission description="Delete a lead that hasn't been converted." permissionId="CRMSFA_LEAD_DELETE"/>    
+
+    <SecurityPermission description="Access to the Opportunities function of the application." permissionId="CRMSFA_OPPS_VIEW"/>
+    <SecurityPermission description="View any Opportunity." permissionId="CRMSFA_OPP_VIEW"/>
+    <SecurityPermission description="Create a new Opportunity." permissionId="CRMSFA_OPP_CREATE"/>    
+    <SecurityPermission description="Update any existing Opportunity." permissionId="CRMSFA_OPP_UPDATE"/>    
+    <SecurityPermission description="Deactivate any existing Opportunity." permissionId="CRMSFA_OPP_DEACTIVATE"/>    
+
+    <SecurityPermission description="Access to the Cases function of the application." permissionId="CRMSFA_CASES_VIEW"/>
+    <SecurityPermission description="View a Case." permissionId="CRMSFA_CASE_VIEW"/>
+    <SecurityPermission description="Create a new Case." permissionId="CRMSFA_CASE_CREATE"/>
+    <SecurityPermission description="Update an existing Case." permissionId="CRMSFA_CASE_UPDATE"/>
+    <SecurityPermission description="Close an existing Case." permissionId="CRMSFA_CASE_CLOSE"/>
+
+    <SecurityPermission description="Access to the Activities function of the application." permissionId="CRMSFA_ACTS_VIEW"/>
+    <SecurityPermission description="View an Activity: Event or Task." permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityPermission description="Create a new Activity: Event or Task." permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityPermission description="Update an existing Activity: Event or Task." permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityPermission description="Close an existing Activity: Event or Task." permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityPermission description="View and set scope for public, private and confidential activities." permissionId="CRMSFA_ACT_ADMIN"/>
+
+    <SecurityPermission description="Access to the Team Management function of the application." permissionId="CRMSFA_TEAM_VIEW"/>
+    <SecurityPermission description="Create a new sales team" permissionId="CRMSFA_TEAM_CREATE"/>
+    <SecurityPermission description="Assign new members to an account or team" permissionId="CRMSFA_TEAM_ASSIGN"/>
+    <SecurityPermission description="Remove account or team member" permissionId="CRMSFA_TEAM_REMOVE"/>
+    <SecurityPermission description="Update roles of account or team member" permissionId="CRMSFA_TEAM_UPDATE"/>
+    <SecurityPermission description="Deactivate a sales team" permissionId="CRMSFA_TEAM_DEACTIVATE"/>
+    <SecurityPermission description="See team's calendar events" permissionId="CRMSFA_TEAM_CALVIEW"/>
+
+    <SecurityPermission description="Access to forecast function of application." permissionId="CRMSFA_4C_VIEW"/>
+    <SecurityPermission description="Create a forecast" permissionId="CRMSFA_4C_CREATE"/>
+    <SecurityPermission description="Update a forecast" permissionId="CRMSFA_4C_UPDATE"/>
+    <SecurityPermission description="View all forecasts" permissionId="CRMSFA_4C_VIEWALL"/>
+
+    <SecurityPermission description="Access to the Partners function of the application." permissionId="CRMSFA_PARTNER_VIEW"/>
+    <SecurityPermission description="Create a new Partner." permissionId="CRMSFA_PARTNER_CREATE"/>
+    <SecurityPermission description="Update any existing Partner." permissionId="CRMSFA_PARTNER_UPDATE"/>
+
+    <SecurityPermission description="Access to the Quotes function of the application." permissionId="CRMSFA_QUOTES_VIEW"/>
+    <SecurityPermission description="View any Quote." permissionId="CRMSFA_QUOTE_VIEW"/>
+    <SecurityPermission description="Create a new Quote." permissionId="CRMSFA_QUOTE_CREATE"/>    
+    <SecurityPermission description="Update any existing Quote." permissionId="CRMSFA_QUOTE_UPDATE"/>    
+
+    <SecurityPermission description="Access to the Orders function of the application." permissionId="CRMSFA_ORDERS_VIEW"/>
+    <SecurityPermission description="View any Order." permissionId="CRMSFA_ORDER_VIEW"/>
+    <SecurityPermission description="Create a new Order." permissionId="CRMSFA_ORDER_CREATE"/>
+
+    <SecurityPermission description="Create returns." permissionId="CRMSFA_RETURN_CREATE"/>
+    <SecurityPermission description="Accept returns." permissionId="CRMSFA_RETURN_ACCEPT"/>
+    <SecurityPermission description="Cancel returns." permissionId="CRMSFA_RETURN_CANCEL"/>
+    <SecurityPermission description="Force complete returns." permissionId="CRMSFA_RETURN_COMP"/>
+
+    <SecurityPermission description="Update passwords for accounts/leads/contacts." permissionId="CRMSFA_PASS_UPDATE"/>
+    <SecurityPermission description="View shopping lists." permissionId="CRMSFA_SLT_VIEW"/>
+    <SecurityPermission description="Update shopping lists." permissionId="CRMSFA_SLT_UPDATE"/>
+
+    <SecurityPermission description="View an invoice." permissionId="CRMSFA_INVOICE_VIEW"/>
+
+    <SecurityPermission description="Access to the Marketing function of the application" permissionId="CRMSFA_MKTG_VIEW"/>
+    <SecurityPermission description="Create marketing campaigns in CRMSFA." permissionId="CRMSFA_CAMP_CREATE"/>
+    <SecurityPermission description="Update marketing campaigns in CRMSFA and add, update or remove contact lists to them." permissionId="CRMSFA_CAMP_UPDATE"/>
+    <SecurityPermission description="View survey results from CRMSFA." permissionId="CRMSFA_SURVEY_VIEW"/>
+
+    <SecurityPermission description="View payment methods of a party." permissionId="CRMSFA_PAY_VIEW"/>
+    <SecurityPermission description="Update payment methods of a party" permissionId="CRMSFA_PAY_UPDATE"/>
+
+    <SecurityPermission description="Access to the CRM/SFA Application" permissionId="CRMSFA_VIEW"/>
+    
+    <SecurityPermission description="Access to the dashboard Application." permissionId="CRMSFA_DASH_VIEW"/>
+    
+    <SecurityPermission description="View operations in the  [Reports] tab and all of the reports inside it." permissionId="CRMSFA_RPT_VIEW"/>    
+    
+
+    <!-- These are groups of permissions which, when assigned to a user login, give the logged in user a set of permissions in the system 
+        Note that some of the permissions referred to here may be defined elsewhere in OFBIZ.  The idea is that we give the user permission
+        to run a finite set of services they need from OFBIZ but not necessarily permissions to go in to an OFBIZ application -->
+    <SecurityGroup groupId="SALES_MANAGER" description="Sales Manager with permissions for all accounts, contacts, leads, opportunities, teams, etc."/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEADS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_OPPS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CASES_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_QUOTES_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ORDERS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_DEACTIVATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACCOUNT_REASSIGN"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_DEACTIVATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CONTACT_REASSIGN"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_DEACTIVATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_REASSIGN"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_LEAD_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_OPP_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_OPP_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_OPP_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_OPP_DEACTIVATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CASE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CASE_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CASE_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CASE_CLOSE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CASE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ACT_ADMIN"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_TEAM_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_TEAM_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_TEAM_ASSIGN"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_TEAM_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_TEAM_REMOVE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_TEAM_DEACTIVATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_TEAM_CALVIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_PARTNER_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_PARTNER_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_PARTNER_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_QUOTE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_QUOTE_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_QUOTE_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ORDER_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ORDER_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_RETURN_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_RETURN_ACCEPT"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_RETURN_CANCEL"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_RETURN_COMP"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_INVOICE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_SURVEY_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_MKTG_VIEW"/>    
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_STS_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_GRP_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_REL_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_REL_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_ROLE_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_PCM_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_PCM_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_PCM_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_SRC_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_CME_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_CME_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_CME_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_NOTE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="ORDERMGR_NOTE"/>
+    <!-- Permission to view and update payments for a party.  The PAY_INFO permissions are for ofbiz specific services. -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_PAY_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_PAY_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PAY_INFO_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PAY_INFO_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PAY_INFO_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="ORDERMGR_CRQ_CREATE"/>
+    <!-- the ordermgr forecast permisions are given to everyone because of secas that update forecast -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="ORDERMGR_4C_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="ORDERMGR_4C_UPDATE"/>
+    <!-- The manager can create, update and view all forecasts -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_4C_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_4C_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_4C_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_4C_VIEWALL"/>
+    <!-- for now, only manager can perform operations on marketing campaigns -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CAMP_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_CAMP_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="MARKETING_CREATE"/> <!-- is this a bit redundant after all? -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="MARKETING_UPDATE"/> <!-- is this a bit redundant after all? -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="ORDERMGR_ADMIN"/>
+    <!-- Permission to use the Cash Drawer functions, including disbursement of change -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="OPENTAPS_CSHDRWR"/>
+    <!-- Required for accepting returns -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="FACILITY_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="FACILITY_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="WORKEFFORTMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_PASS_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_SLT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_SLT_UPDATE"/>
+    <!-- Required to update/delete shopping list item -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="PARTYMGR_DELETE"/>
+    <!-- Required to see the dashboard application -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_DASH_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_RPT_VIEW"/>
+
+    <!-- A sales rep has the ability to view and update accounts, contacts, and leads but does not have the ability
+        to manage team members or deactivate accounts.  Only in the context of relationship to their accounts do they
+        have such permissions, as defined in PatyRelationship.securityGroupId -->
+    <SecurityGroup groupId="SALES_REP" description="Sales Representative with ability to create, view, and update accounts, leads, contacts, etc. but not manage teams or deactivate accounts"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEADS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_OPPS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_QUOTES_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ORDERS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CASES_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACCOUNT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CONTACT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_LEAD_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_OPP_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_OPP_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_OPP_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_OPP_DEACTIVATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CASE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CASE_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_CASE_UPDATE"/>
+    <!-- only sales manager can close a case -->
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_QUOTE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_QUOTE_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_QUOTE_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ORDER_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ORDER_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_INVOICE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_MKTG_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_SURVEY_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_STS_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_GRP_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_REL_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_REL_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_ROLE_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_PCM_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_PCM_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_PCM_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_CME_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_CME_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_CME_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_SRC_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_NOTE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_PAY_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_PAY_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_PAY_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PAY_INFO_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PAY_INFO_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PAY_INFO_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="ORDERMGR_CRQ_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="ORDERMGR_NOTE"/>
+    <!-- both ORDERMGR_4C_CREATE and _UPDATE are needed because of the secas used to create and then update forecasts
+        call the basic ofbiz services.  The CRMSFA_4C permissions are used by the CRM/SFA app to judge if a user can
+        create or update a forecast -->
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_4C_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="ORDERMGR_4C_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="ORDERMGR_4C_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_4C_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="ORDERMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="WORKEFFORTMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_SLT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_SLT_UPDATE"/>
+    <!-- Required to update/delete shopping list item -->
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="PARTYMGR_DELETE"/>
+
+    <!-- This is permissions available to a sales rep when he/she has been assigned to an acccount -->
+    <SecurityGroup groupId="SALES_REP_LIMITED" description="Sales Rep with ability to view only."/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACCOUNTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CONTACTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_LEADS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_OPPS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CASES_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_QUOTES_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ORDERS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACCOUNT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CONTACT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_LEAD_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACCOUNT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CONTACT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_LEAD_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_OPP_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_CASE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ACT_UPDATE"/>
+    <!-- view only sales rep: should only be able to view orders and quotes -->
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_QUOTE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ORDER_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_INVOICE_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_MKTG_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_SURVEY_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_STS_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_GRP_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_REL_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_REL_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_ROLE_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_PCM_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_PCM_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_PCM_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_CME_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_CME_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_CME_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_SRC_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_NOTE"/>
+    <!-- only view the party's payment methods, not update them -->
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_PAY_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="ORDERMGR_CRQ_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="ORDERMGR_4C_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="ORDERMGR_4C_UPDATE"/>
+
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_4C_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_4C_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="ORDERMGR_NOTE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="ORDERMGR_SEND_CONFIRMATION"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="WORKEFFORTMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_SLT_VIEW"/>
+
+    <!-- This permission is for a trainee rep who cannot view any account/contact/lead he has not bee assigned
+        or did not create himself.  Alternatively, it can be used to set up a sales organization where reps can't
+        even see other reps' accounts. -->
+    <SecurityGroup groupId="SALES_REP_TRAINEE" description="Sales Rep with access to apps and create new records but only view records he has been assigned to"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_ACCOUNTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_CONTACTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_LEADS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_OPPS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_CASES_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_ACTS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_QUOTES_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_ORDERS_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_MKTG_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_SURVEY_VIEW"/>    
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_VIEW"/>    
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_ACCOUNT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="CRMSFA_CONTACT_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_STS_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_GRP_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_REL_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_REL_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_ROLE_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_PCM_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_PCM_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_PCM_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_CME_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_CME_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_CME_DELETE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_SRC_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PARTYMGR_NOTE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PAY_INFO_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="PAY_INFO_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="ORDERMGR_CRQ_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="ORDERMGR_4C_CREATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="ORDERMGR_4C_UPDATE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="ORDERMGR_NOTE"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="WORKEFFORTMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="SALES_REP_TRAINEE" permissionId="ORDERMGR_SEND_CONFIRMATION"/>
+    <!-- trainee is not allowed to create forecasts, but you can add it here if you'd like him to be able to -->
+    
+    <!-- a B2B customer service rep -->
+    <SecurityGroup groupId="CSR" description="B2B Customer Service Rep with permissions accounts, leads, contacts, cases, activities, opportunities, quotes, orders"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNTS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACTS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEADS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_OPPS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CASES_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACTS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ORDERS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNT_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACT_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <!-- should customer service reps be able to do anything with opportunities? if so, add them here -->
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_4C_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_4C_UPDATE"/>
+
+    <!-- a customer service rep has the ability to work on cases but not close them -->
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CASE_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CASE_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_CASE_UPDATE"/>
+
+    <!-- customer service rep has the ability to create information about his/her own activities -->
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ACT_UPDATE"/>
+
+    <!-- giving CSR ability to view and create quotes and orders.  change if you need to -->
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_QUOTES_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_QUOTE_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ORDER_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_INVOICE_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_QUOTE_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ORDER_CREATE"/>
+
+    <!-- give CSR ability to create and cancel returns (but not accept) -->
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_RETURN_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_RETURN_CANCEL"/>
+
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_STS_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_GRP_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_REL_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_REL_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_ROLE_DELETE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_PCM_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_PCM_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_PCM_DELETE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_CME_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_CME_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_CME_DELETE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_SRC_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_NOTE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_PAY_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_PAY_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PAY_INFO_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PAY_INFO_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_CRQ_CREATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_SALES_CREATE"/>        <!-- create sales but not purchase orders -->
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_CREATE"/>              <!-- required to create quote from cart ß-->
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_DELETE"/>              <!-- required to change order addresses -->
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_UPDATE"/>              <!-- required to change order status at this point -->
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_NOTE"/>
+    <!-- Permission to use the Cash Drawer functions, including disbursement of change -->
+    <SecurityGroupPermission groupId="CSR" permissionId="OPENTAPS_CSHDRWR"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="WORKEFFORTMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="ORDERMGR_SEND_CONFIRMATION"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_SLT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_SLT_UPDATE"/>
+    <!-- Required to update/delete shopping list item -->
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR" permissionId="PARTYMGR_DELETE"/>
+    <!-- Required to work with billing accounts -->
+    <SecurityGroupPermission groupId="CSR" permissionId="ACCOUNTING_ADMIN"/>
+
+    <!-- a B2C customer service rep -->
+    <SecurityGroup groupId="CSR_B2C" description="B2C Customer Service Rep with permissions accounts, leads, contacts, cases, activities, orders"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNTS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACTS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEADS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CASES_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACTS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ORDERS_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNT_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACT_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_LEAD_UPDATE"/>
+
+    <!-- a customer service rep has the ability to work on cases but not close them. -->
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CASE_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CASE_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_CASE_UPDATE"/>
+
+    <!-- customer service rep has the ability to create information about his/her own activities -->
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ACT_UPDATE"/>
+
+    <!-- giving CSR_B2C ability to view and create orders.  change if you need to -->
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ORDER_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_ORDER_CREATE"/>
+
+    <!-- give CSR_B2C ability to create and cancel returns (but not accept) -->
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_RETURN_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_RETURN_CANCEL"/>
+
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_INVOICE_VIEW"/>
+
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_STS_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_GRP_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_REL_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_REL_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_ROLE_DELETE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_PCM_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_PCM_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_PCM_DELETE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_CME_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_CME_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_CME_DELETE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_SRC_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_NOTE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_PAY_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_PAY_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PAY_INFO_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PAY_INFO_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="ORDERMGR_CRQ_CREATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="ORDERMGR_SALES_CREATE"/>        <!-- create sales but not purchase orders -->
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="ORDERMGR_DELETE"/>              <!-- required to change order addresses -->
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="ORDERMGR_UPDATE"/>              <!-- required to change order status at this point -->
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="ORDERMGR_CREATE"/>              <!-- required to create quote from cart -->
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="ORDERMGR_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="ORDERMGR_NOTE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="WORKEFFORTMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="ORDERMGR_SEND_CONFIRMATION"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_SLT_VIEW"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="CRMSFA_SLT_UPDATE"/>
+    <!-- Required to update/delete shopping list item -->
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_UPDATE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="PARTYMGR_DELETE"/>
+    <SecurityGroupPermission groupId="CSR_B2C" permissionId="ACCOUNTING_ADMIN"/>
+
+    <SecurityGroup groupId="CRMSFA_LOGIN_ONLY" description="For testing: Permission to login and view basic screens only.  No permission to see or modify data"/>
+    <SecurityGroupPermission groupId="CRMSFA_LOGIN_ONLY" permissionId="CRMSFA_VIEW"/>
+
+    <!-- these are specialized permissions which grant a user privileges for being the owner of an account/contact/lead.
+        they are not designed to be used on their own.  Note that these don't need the OFBIZ PARTYMGR_ permissions because
+        those must be associated directly with the UserLogin through a SecurityGroup, because OFBIZ Party Manager doesn't
+        check for relationship-based security. -->
+    <SecurityGroup groupId="ACCOUNT_OWNER" description="Permissions granted to account owners, including view and update on the contacts of the account"/>        
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACCOUNT_VIEW"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACCOUNT_UPDATE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACCOUNT_DEACTIVATE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_ACCOUNT_REASSIGN"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_CONTACT_VIEW"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <!-- these give the account owner, in addition to the sales manager and sales leader(s) on the account,
+         permission to assign/update/remove team members from an account.  remove these if this is not what you want -->
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_TEAM_ASSIGN"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_TEAM_UPDATE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_TEAM_REMOVE"/>
+    <!-- allow the account owner/creator to create/view/update opportunities for the account -->
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_OPP_VIEW"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_OPP_CREATE"/>
+    <SecurityGroupPermission groupId="ACCOUNT_OWNER" permissionId="CRMSFA_OPP_UPDATE"/>
+
+    <SecurityGroup groupId="CONTACT_OWNER" description="Permissions granted to conact owners"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_VIEW"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_DEACTIVATE"/>
+    <SecurityGroupPermission groupId="CONTACT_OWNER" permissionId="CRMSFA_CONTACT_REASSIGN"/>
+
+    <SecurityGroup groupId="LEAD_OWNER" description="Permissions granted to lead owners"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_VIEW"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_UPDATE"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_DEACTIVATE"/>    
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_REASSIGN"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_LEAD_DELETE"/>
+    <!-- allow the lead owner/creator to create/view/update opportunities for the lead -->
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_OPP_VIEW"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_OPP_CREATE"/>
+    <SecurityGroupPermission groupId="LEAD_OWNER" permissionId="CRMSFA_OPP_UPDATE"/>
+
+    <SecurityGroup groupId="PARTNER_OWNER" description="Permissions granted to parnter owners"/>
+    <SecurityGroupPermission groupId="PARTNER_OWNER" permissionId="CRMSFA_PARTNER_VIEW"/>
+    <SecurityGroupPermission groupId="PARTNER_OWNER" permissionId="CRMSFA_PARTNER_UPDATE"/>
+
+    <!-- this is for somebody who would use opentaps CRMSFA for tasks, calendars, activities, and emails only" -->
+    <SecurityGroup groupId="CRMSFA_TASKS_ONLY" description="Use CRMSFA for tasks, activities, and emails only"/>
+    <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_VIEW"/>
+    <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_ACTS_VIEW"/>
+    <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_TASKS_ONLY" permissionId="CRMSFA_ACT_CLOSE"/>
+
+    <SecurityGroup groupId="CRMSFA_CONTACT_TASKS" description="Use CRMSFA for tasks, activities, and emails only"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_VIEW"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_ACTS_VIEW"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_ACT_VIEW"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_ACT_CREATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_ACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_ACT_CLOSE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACTS_VIEW"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_VIEW"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_CREATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_UPDATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_DEACTIVATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="CRMSFA_CONTACT_REASSIGN"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_STS_UPDATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_GRP_UPDATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_REL_CREATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_REL_UPDATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_ROLE_DELETE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_PCM_CREATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_PCM_UPDATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_PCM_DELETE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_CME_CREATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_CME_UPDATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_CME_DELETE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_SRC_CREATE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="PARTYMGR_NOTE"/>
+    <SecurityGroupPermission groupId="CRMSFA_CONTACT_TASKS" permissionId="WORKEFFORTMGR_ADMIN"/>
+
+    <!-- sales team role and related security permissions.  Customize to say whatever you need -->
+    <SalesTeamRoleSecurity securityGroupId="SALES_MANAGER" roleDescription="Team Leader" sequenceNum="01"/>
+    <SalesTeamRoleSecurity securityGroupId="SALES_REP" roleDescription="Full Team Member" sequenceNum="02"/>
+    <SalesTeamRoleSecurity securityGroupId="SALES_REP_LIMITED" roleDescription="View-Only Team Member" sequenceNum="03"/>
+    <SalesTeamRoleSecurity securityGroupId="CSR" roleDescription="Customer Service Rep" sequenceNum="04"/>
+
+    <!-- the "system" user needs to be granted privileges so automatic updates of forecasts can be done -->
+    <SecurityGroup groupId="CRMSFA_SYSTEM" description="System user privileges for automatically performed functions in CRM/SFA"/>
+    <SecurityGroupPermission groupId="CRMSFA_SYSTEM" permissionId="CRMSFA_4C_UPDATE"/>
+    <UserLoginSecurityGroup userLoginId="system" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+    
+</entity-engine-xml>

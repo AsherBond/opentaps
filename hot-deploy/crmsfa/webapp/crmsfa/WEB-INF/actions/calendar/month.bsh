@@ -1,0 +1,112 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2008 Open Source Strategies, Inc. */
+
+/*
+ *  Copyright (c) 2003 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a 
+ *  copy of this software and associated documentation files (the "Software"), 
+ *  to deal in the Software without restriction, including without limitation 
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense, 
+ *  and/or sell copies of the Software, and to permit persons to whom the 
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included 
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT 
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR 
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *@author     Johan Isacsson
+ *@author     David E. Jones (jonesde@ofbiz.org)
+ *@version    $Rev: 364 $
+ *@since      2.2
+ */
+
+import java.util.*;
+import org.ofbiz.security.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.webapp.pseudotag.*;
+import org.ofbiz.workeffort.workeffort.*;
+import java.sql.Timestamp;
+import java.util.Calendar;
+
+timeZone = UtilHttp.getTimeZone(request);
+
+startParam = parameters.get("start");
+
+facilityId = parameters.get("facilityId");
+fixedAssetId = parameters.get("fixedAssetId");
+
+eventsParam = "";
+if (facilityId != null) {
+    eventsParam = "facilityId=" + facilityId;
+}
+if (fixedAssetId != null) {
+    eventsParam = "fixedAssetId=" + fixedAssetId;
+}
+
+now = UtilDateTime.getMonthStart(UtilDateTime.nowTimestamp(), timeZone, locale);
+start = null;
+if(startParam != null) {
+    start = new Timestamp(Long.parseLong(startParam));
+}
+if(start == null) {
+    start = now;
+} else {
+    start = UtilDateTime.getMonthStart(start, timeZone, locale);
+}
+
+tempCal = Calendar.getInstance(timeZone, locale);
+tempCal.setTime(new java.util.Date(start.getTime()));
+numDays = tempCal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+prev = UtilDateTime.getMonthStart(start, -1, timeZone, locale);
+next = UtilDateTime.getDayStart(start, numDays+1, timeZone, locale);
+end = UtilDateTime.getDayStart(start, numDays, timeZone, locale);
+
+//Find out what date to get from
+getFrom = null;
+prevMonthDays =  tempCal.get(Calendar.DAY_OF_WEEK) - tempCal.getFirstDayOfWeek();
+if(prevMonthDays < 0) prevMonthDays = 7 + prevMonthDays;
+tempCal.add(Calendar.DATE,-(prevMonthDays));
+numDays += prevMonthDays;
+getFrom = new Timestamp(tempCal.getTime().getTime());
+
+serviceCtx = UtilMisc.toMap("userLogin", userLogin, "start", getFrom,"numPeriods", new Integer(numDays));
+serviceCtx.put("partyIds", context.get("partyIds"));
+serviceCtx.put("facilityId", facilityId);
+serviceCtx.put("fixedAssetId", fixedAssetId);
+serviceCtx.put("filterOutCanceledEvents", new Boolean(true));
+serviceCtx.put("periodType", new Integer(Calendar.DATE));
+
+result = dispatcher.runSync("getWorkEffortEventsByPeriod", serviceCtx);
+
+context.put("periods",result.get("periods"));
+context.put("maxConcurrentEntries", result.get("maxConcurrentEntries"));
+context.put("start", start);
+context.put("end", end);
+context.put("prev", prev);
+context.put("next", next);
+context.put("now", now);
+context.put("eventsParam", eventsParam);

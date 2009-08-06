@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!--
+General notes on the way Content works in OFBiz and CRMSFA.
+
+In OFBiz, there is the concept of a DataResource, which is information about where a particular piece of data is located,
+what kind of data it is (file, hyperlink, electronic text, image, etc.), its mime type, and similar information.  When a file 
+is uploaded into OFBiz or a bookmark created, a DataResource is used to keep track of it.
+
+Each DataResource might have multiple uses and roles in a business.  The Content entity tracks useful context-specific
+metadata such as the name of the resource, its status, description, and who owns it.  Different applications might have
+different Content for the same DataResource, hence there is a many-to-one relationship from Content to DataResource.
+
+Finally, each entity is associated to a Content using entities such as PartyContent, ContentRole, WorkEffortContent,
+and so on.  These association entities contain from and thru dates to help expire the content without having to delete
+the DataResource from the system.
+
+Uploaded Files are placed on the server filesystem using the uploadFile service, which also
+creates the relevant DataResource and Content entities.  To create the association entities such as WorkEffortContent
+and SalesOpportunityContent, we put them in a service group with uploadFile.  Some of these are
+defined in ofbiz, and we define some of our own here.
+
+Hyperlinks and other text content that behave like URLs are created using a special set of service groups with names
+ending in UrlResource.  
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Content Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <!-- note that our services are prefixed with "crmsfa." to easily distinguish them from other services; perhaps a namespace system would be useful here -->
+
+    <service name="crmsfa.removeContent" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" invoke="removeContent" auth="true">
+        <attribute name="contentId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="workEffortId" type="String" mode="IN" optional="true"/>
+        <attribute name="custRequestId" type="String" mode="IN" optional="true"/>
+        <attribute name="salesOpportunityId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="quoteId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.createContentInterface" engine="interface" location="" invoke="">
+        <attribute name="contentName" type="String" mode="IN" optional="true"/> <!-- this should really be false for urls -->
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="contentTypeId" type="String" mode="IN" optional="false"/> <!-- the type of content.  in crmsfa, we have general FILE and HYPERLINK types, which can be made more specific.  the ideal is to create a tree of CRMSFA_CONTENT which would be the supported types. -->
+        <attribute name="contentPurposeEnumId" type="String" mode="IN" optional="true"/> <!-- defaults to CRMSFA_GENERAL, which is defined as the main association.  other purposes could be defined for specific implementations, such as a separate section for formal legal documents, and so on -->
+        <attribute name="url" type="String" mode="IN" optional="true"/>
+        <!-- Because we could either be uploading or creating a simple text content, these file metadata fields are optional. -->
+        <attribute name="uploadedFile" type="org.ofbiz.entity.util.ByteWrapper" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="true"/>
+        <attribute name="classificationEnumId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.createContentForParty" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" invoke="createContentForParty" auth="true">
+        <description>
+            Creates content for a CRMSFA party in a given role.  Content are uploadable or plain text info such as a URL Bookmark, 
+            PDF file, image file, text document, and so on.  This service will upload binary data into the system if provided, 
+            so that it can later be served.
+        </description>
+        <implements service="crmsfa.createContentInterface"/>
+        <attribute name="partyId" type="String" mode="INOUT" optional="false"/> <!-- Using OUT here allows the donePageRequestHelper to work correctly because multipart forms don't pass their fields down the chain. -->
+        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.createContentForCase" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createContentForCase" auth="true">
+        <description>Creates uploadable or simple content for Cases.</description>
+        <implements service="crmsfa.createContentInterface"/>
+        <attribute name="custRequestId" type="String" mode="INOUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.createContentForOpportunity" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createContentForOpportunity" auth="true">
+        <description>Creates uploadable or simple content for Opportunities.</description>
+        <implements service="crmsfa.createContentInterface"/>
+        <attribute name="salesOpportunityId" type="String" mode="INOUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.createContentForActivity" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createContentForActivity" auth="true">
+        <description>Creates uploadable or simple content for Activities.</description>
+        <implements service="crmsfa.createContentInterface"/>
+        <attribute name="workEffortId" type="String" mode="INOUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.createPartyContent" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createPartyContent" default-entity-name="PartyContent" auth="true">
+        <description>Creates a PartyContent entry and required roles</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.createCustRequestContent" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createCustRequestContent" default-entity-name="CustRequestContent" auth="true">
+        <description>Creates a CustRequestContent entry</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="fromDate" optional="true"/>
+    </service>
+
+    <service name="crmsfa.createSalesOpportunityContent" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createSalesOpportunityContent" default-entity-name="SalesOpportunityContent" auth="true">
+        <description>Creates a SalesOpportunityContent entry</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="fromDate" optional="true"/>
+    </service>
+
+    <service name="crmsfa.removeEmailAttachment" engine="group" transaction-timeout="300">
+        <description>Remove an email attachment by removing CommEventContentAssoc, Content and DataResource</description>
+        <group>
+            <invoke name="removeCommEventContentAssoc" result-to-context="true"/>
+            <invoke name="removeContent" result-to-context="true"/>
+            <invoke name="removeDataResource"/>
+        </group>
+    </service>
+
+    <service name="crmsfa.updateContentInterface" engine="interface" location="" invoke="">
+        <attribute name="contentId" type="String" mode="IN" optional="false"/>
+        <attribute name="contentName" type="String" mode="IN" optional="true"/> <!-- this should really be false for urls -->
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="classificationEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="url" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.updateContentForParty" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" invoke="updateContentForParty" auth="true">
+        <description>Updates a party content.</description>
+        <implements service="crmsfa.updateContentInterface"/>
+        <attribute name="partyId" type="String" mode="INOUT" optional="false"/> <!-- Using OUT here allows the donePageRequestHelper to work correctly because multipart forms don't pass their fields down the chain. -->
+        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.updateContentForCase" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="updateContentForCase" auth="true">
+        <description>Updates uploadable or simple content for Cases.</description>
+        <implements service="crmsfa.updateContentInterface"/>
+        <attribute name="custRequestId" type="String" mode="INOUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.updateContentForOpportunity" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="updateContentForOpportunity" auth="true">
+        <description>Updates uploadable or simple content for Opportunities.</description>
+        <implements service="crmsfa.updateContentInterface"/>
+        <attribute name="salesOpportunityId" type="String" mode="INOUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.updateContentForActivity" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="updateContentForActivity" auth="true">
+        <description>Updates uploadable or simple content for Activities.</description>
+        <implements service="crmsfa.updateContentInterface"/>
+        <attribute name="workEffortId" type="String" mode="INOUT" optional="false"/>
+    </service>
+    
+    <service name="crmsfa.createOrderContent" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createOrderContent" default-entity-name="OrderHeaderContent" auth="true">
+        <description>Creates a OrderHeaderContent entry</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="fromDate" optional="true"/>
+    </service>
+     
+    <service name="crmsfa.createQuoteContent" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createQuoteContent" default-entity-name="QuoteContent" auth="true">
+        <description>Creates a QuoteContent entry</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <override name="fromDate" optional="true"/>
+    </service>
+    
+    <service name="crmsfa.createContentForOrder" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createContentForOrder" auth="true">
+        <description>Creates uploadable or simple content for Order.</description>
+        <implements service="crmsfa.createContentInterface"/>
+        <attribute name="orderId" type="String" mode="INOUT" optional="false"/>
+    </service>    
+    <service name="crmsfa.updateContentForOrder" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="updateContentForOrder" auth="true">
+        <description>Updates uploadable or simple content for order.</description>
+        <implements service="crmsfa.updateContentInterface"/>
+        <attribute name="orderId" type="String" mode="INOUT" optional="false"/>
+    </service>
+    
+    <service name="crmsfa.createContentForQuote" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="createContentForQuote" auth="true">
+        <description>Creates uploadable or simple content for Order.</description>
+        <implements service="crmsfa.createContentInterface"/>
+        <attribute name="quoteId" type="String" mode="INOUT" optional="false"/>
+    </service>    
+    <service name="crmsfa.updateContentForQuote" engine="java" location="com.opensourcestrategies.crmsfa.content.ContentServices" 
+        invoke="updateContentForQuote" auth="true">
+        <description>Updates uploadable or simple content for order.</description>
+        <implements service="crmsfa.updateContentInterface"/>
+        <attribute name="quoteId" type="String" mode="INOUT" optional="false"/>
+    </service>
+    
+</services>

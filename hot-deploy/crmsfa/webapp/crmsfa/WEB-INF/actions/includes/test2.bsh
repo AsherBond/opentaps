@@ -1,0 +1,44 @@
+import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.base.util.UtilMisc;
+
+import org.opentaps.common.builder.*;
+import org.opentaps.common.pagination.*;
+
+import javolution.util.*;
+
+/*
+ * Demonstration of PageBuilder.
+ *
+ * TODO: demonstrate how to hide page builder here
+ */
+
+// notice how we pass in values from the bsh context
+pageBuilder = new PageBuilder(userLogin, delegator) {
+
+    // this method gets called by the paginator to process the lookup data
+    build(page) {
+        newPage = FastList.newInstance();
+        for (iter = page.iterator(); iter.hasNext(); ) {
+            supplierProduct = iter.next();
+            newRow = FastMap.newInstance();
+            newRow.putAll(supplierProduct.getAllFields());
+
+            // we can use the passed in delegator like this
+            newRow.put("supplierName", PartyHelper.getPartyName(delegator, supplierProduct.get("partyId"), false));
+
+            // join in some product data
+            product = supplierProduct.getRelatedOne("Product");
+            newRow.putAll(product.getAllFields());
+
+            newPage.add(newRow);
+        }
+        return newPage;
+    }
+
+};
+
+// make a list builder with our page builder
+productListBuilder = new EntityListBuilder("SupplierProduct", null, UtilMisc.toList("partyId", "productId"));
+productListBuilder.setPageBuilder(pageBuilder);
+
+context.put("productListBuilder", productListBuilder);

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2004-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains Note screens for all sections. They are collected here because they are all essentially the same. -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <!-- all create note forms should include-screen this one, which will take care of common tasks including checking complex security -->
+    <screen name="CommonCreateNoteForm">
+        <section>
+            <actions>
+                <set field="partyId" from-field="parameters.partyId"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+            </actions>
+            <widgets>
+                <container style="form">
+                    <include-form name="createNoteForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createAccountNoteForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateNote"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateNote"/>
+                <set field="hasModulePermission" value="CRMSFA_ACCOUNT"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="createNoteFormTarget" value="createAccountNote"/>
+                <set field="donePage" value="viewAccount"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonCreateNoteForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createContactNoteForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateNote"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateNote"/>
+                <set field="hasModulePermission" value="CRMSFA_CONTACT"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="createNoteFormTarget" value="createContactNote"/>
+                <set field="donePage" value="viewContact"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonCreateNoteForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createLeadNoteForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateNote"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateNote"/>
+                <set field="hasModulePermission" value="CRMSFA_LEAD"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="createNoteFormTarget" value="createLeadNote"/>
+                <set field="donePage" value="viewLead"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonCreateNoteForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createPartnerNoteForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateNote"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateNote"/>
+                <set field="hasModulePermission" value="CRMSFA_PARTNER"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="createNoteFormTarget" value="createPartnerNote"/>
+                <set field="donePage" value="viewPartner"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonCreateNoteForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- security for this one is different, hence it is explicit -->
+    <screen name="createCaseNoteForm">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateNote"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateNote"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="createNoteFormTarget" value="createCaseNote"/>
+                <set field="donePage" value="viewCase"/>
+                <set field="custRequestId" from-field="parameters.custRequestId"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexCaseSecurity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-form name="createNoteForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Hook to let ftl render a note list from the form widget -->
+    <screen name="listNotesForm">
+        <section>
+            <widgets>
+                <include-form name="listNotes" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
+

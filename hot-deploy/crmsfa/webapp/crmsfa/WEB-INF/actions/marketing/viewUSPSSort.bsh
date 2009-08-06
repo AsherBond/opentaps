@@ -1,0 +1,77 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/**
+ * Obtains the UspsContactListCount report based on reportField.
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.common.util.UtilCommon;
+
+// options for report
+reportField = context.get("reportField");
+contactListId = parameters.get("contactListId");
+contactListCond = new EntityExpr("contactListId", EntityOperator.EQUALS, contactListId);
+sizeCond = new EntityExpr("contactMechId", EntityOperator.GREATER_THAN_EQUAL_TO, 10);
+order = null;
+
+// data for report header
+contactList = delegator.findByPrimaryKeyCache("ContactList", UtilMisc.toMap("contactListId", contactListId));
+context.put("contactList", contactList);
+addressLabelSpecifications = delegator.findAll("AddressLabelSpecification");
+context.put("addressLabelSpecs", addressLabelSpecifications);
+
+// get the results by sortResult
+if ("sortResult".equals(reportField)) {
+    fields = UtilMisc.toList("sortResult", "contactMechId");
+    order = UtilMisc.toList("sortResult");
+    sortResultRows = delegator.findListIteratorByCondition("UspsContactListCountSortResult", contactListCond, null, fields, order, UtilCommon.DISTINCT_READ_OPTIONS);
+    context.put("sortResultRows", sortResultRows);
+}
+
+// get the results by zip5
+if ("zip5".equals(reportField)) {
+    fields = UtilMisc.toList("zip5", "contactMechId");
+    order = UtilMisc.toList("zip5");
+    zip5Rows = delegator.findListIteratorByCondition("UspsContactListCountZip5", contactListCond, sizeCond, fields, order, UtilCommon.DISTINCT_READ_OPTIONS);
+    context.put("zip5Rows", zip5Rows);
+}
+
+// get the results by zip3
+if ("zip3".equals(reportField)) {
+    fields = UtilMisc.toList("zip3", "contactMechId");
+    order = UtilMisc.toList("zip3");
+    zip3Rows = delegator.findListIteratorByCondition("UspsContactListCountZip3", contactListCond, sizeCond, fields, order, UtilCommon.DISTINCT_READ_OPTIONS);
+    context.put("zip3Rows", zip3Rows);
+}
+
+// get the results by bmc
+if ("bmcCode".equals(reportField)) {
+    fields = UtilMisc.toList("bmcCode", "contactMechId");
+    order = UtilMisc.toList("bmcCode");
+    bmcRows = delegator.findListIteratorByCondition("UspsContactListCountBmc", contactListCond, sizeCond, fields, order, UtilCommon.DISTINCT_READ_OPTIONS);
+    context.put("bmcRows", bmcRows);
+}
+
+// get international addresses
+if ("OTHER".equals(reportField)) {
+    fields = UtilMisc.toList("bmcCode", "contactMechId");
+    order = UtilMisc.toList("bmcCode");
+    bmcRows = delegator.findListIteratorByCondition("UspsContactListCountBmc", contactListCond, sizeCond, fields, order, UtilCommon.DISTINCT_READ_OPTIONS);
+    context.put("otherRows", bmcRows);
+}
+

@@ -1,0 +1,69 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.UtilCommon;
+
+listIteratorNameToUse = parameters.get("listIteratorNameToUse");
+
+// order by
+orderParam = UtilCommon.getParameter(request, "contactListsOrderBy");
+if (orderParam == null) {
+    orderParam = "contactListName";
+}
+orderBy = UtilMisc.toList(orderParam);
+
+// possible fields we're searching by
+contactListName = UtilCommon.getParameter(request, "contactListName");
+contactMechTypeId = UtilCommon.getParameter(request, "contactMechTypeId");
+
+// search conditions
+searchConditions = new ArrayList();
+
+// find parameters for the sorting headers
+findParams = "";
+
+// construct search conditions and find parameters
+if (contactListName != null) {
+    searchConditions.add(new EntityExpr("contactListName", true, EntityOperator.LIKE, "%" + contactListName + "%", true));
+    findParams += "&contactListName=" + contactListName;
+}
+if (contactMechTypeId != null) {
+    searchConditions.add(new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, contactMechTypeId));
+    findParams += "&contactMechTypeId=" + contactMechTypeId;
+}
+if (searchConditions.size() == 0 && !"Y".equals(UtilCommon.getParameter(request, "lookup"))) {
+    return;
+}
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+listIt = delegator.findListIteratorByCondition("ContactList", searchConditionList, null, 
+        null,  // fields to select
+        orderBy, // fields to order by
+        // the first true here is for "specifyTypeAndConcur"
+        // the second true is for a distinct select.  Apparently this is the only way the entity engine can do a distinct query
+        new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
+
+// this is the iterator to use in form-widgets
+context.put(listIteratorNameToUse, listIt);
+
+// and parameters for the sort headers
+context.put("findParams", findParams);

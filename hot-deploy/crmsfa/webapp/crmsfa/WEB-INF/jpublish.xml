@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<jpublish>
+    <name>CRM SFA Application</name>		
+    
+    <page-root>WEB-INF/jpublish/pagedefs</page-root>
+    <template-root>WEB-INF/jpublish/templates</template-root>
+    <action-root>WEB-INF/actions</action-root>
+	    
+    <view-renderer classname="org.ofbiz.webapp.ftl.FreeMarkerViewRenderer"/>
+    <page-renderer name="freemarker" classname="org.ofbiz.webapp.ftl.FreeMarkerViewRenderer"/>
+    	
+    <repository name="pages" classname="org.jpublish.repository.filesystem.ExtendedFileSystemRepository">        
+        <config-dir>WEB-INF/jpublish/pagedefs</config-dir>
+        <root>.</root>
+    </repository>
+    <repository name="common" classname="org.jpublish.repository.filesystem.ExtendedFileSystemRepository">
+        <config-dir>WEB-INF/jpublish/pagedefs</config-dir>
+        <root>../../../../framework/common/webcommon</root>
+    </repository>
+
+    <global-action name="/includes/main-decorator.bsh"/>
+    <global-action name="/includes/JPublishGlobalAction.bsh"/>
+
+    <character-encoding-map path="*">
+        <page-encoding>UTF-8</page-encoding>
+        <template-encoding>UTF-8</template-encoding>
+        <request-encoding>UTF-8</request-encoding>
+        <response-encoding>UTF-8</response-encoding>
+    </character-encoding-map>
+    
+    <mime-mapping ext="ftl" mimetype="text/html"/>
+    <mime-mapping ext="htm" mimetype="text/html"/>
+    <mime-mapping ext="html" mimetype="text/html"/>
+
+    <mime-mapping ext="gif" mimetype="image/gif"/>
+    <mime-mapping ext="jpg" mimetype="image/jpeg"/>
+    <mime-mapping ext="png" mimetype="image/png"/>    
+
+    <mime-mapping ext="txt" mimetype="text/plain"/>
+	
+    <!-- <debug>true</debug> -->
+
+</jpublish>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- Catalog request survey seed data -->
+
+<entity-engine-xml>
+
+    <!-- Define a Party and Person that will take the catalog requests. This party has permission to do everything a Customer Service Rep can
+         and will be the Assigned to party for any Leads created by the catalog request. -->
+    <Party partyId="AUTO_REQ_TAKER" partyTypeId="PERSON"/>
+    <Person partyId="AUTO_REQ_TAKER" firstName="Auto Request" lastName="Taker"/>
+    <UserLogin partyId="AUTO_REQ_TAKER" userLoginId="autorqtaker" enabled="N"/>
+    <UserLoginSecurityGroup userLoginId="autorqtaker" groupId="CSR" fromDate="2006-01-01 00:00:00"/>
+    <PartyRole partyId="AUTO_REQ_TAKER" roleTypeId="CUST_SERVICE_REP"/>
+
+</entity-engine-xml>

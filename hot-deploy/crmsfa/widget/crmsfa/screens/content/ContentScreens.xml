@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- This file contains screens related to Content attachments. -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="contentList">
+        <section>
+            <widgets>
+                <container style="subSectionBlock">
+                    <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/content/contentList.ftl"/></html></platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- all non-party content forms should include-screen this one -->
+    <screen name="CommonContentForm">
+        <section>
+            <widgets>
+                <container style="form">
+                    <include-form name="${formName}" location="component://crmsfa/widget/crmsfa/forms/content/ContentForms.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- all party content forms hsould include-screen this one instead -->
+    <screen name="CommonPartyContentForm">
+        <section>
+            <actions>
+                <set field="partyId" from-field="parameters.partyId"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+            </actions>
+            <widgets>
+                <include-screen name="CommonContentForm"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Add URL Resource screens -->
+
+    <screen name="addContentUrlForAccount">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAddUrl"/>
+                <set field="sectionHeaderUiLabel" value="CrmAddUrl"/>
+                <set field="hasModulePermission" value="CRMSFA_ACCOUNT"/>
+                <set field="formName" value="addContentUrlForm"/>
+                <set field="formTarget" value="createContentForParty"/>
+                <set field="donePage" value="viewAccount"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addContentUrlForLead">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAddUrl"/>
+                <set field="sectionHeaderUiLabel" value="CrmAddUrl"/>
+                <set field="hasModulePermission" value="CRMSFA_LEAD"/>
+                <set field="formName" value="addContentUrlForm"/>
+                <set field="formTarget" value="createContentForParty"/>
+                <set field="donePage" value="viewLead"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addContentUrlForContact">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAddUrl"/>
+                <set field="sectionHeaderUiLabel" value="CrmAddUrl"/>
+                <set field="hasModulePermission" value="CRMSFA_CONTACT"/>
+                <set field="formName" value="addContentUrlForm"/>
+                <set field="formTarget" value="createContentForParty"/>
+                <set field="donePage" value="viewContact"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addContentUrlForPartner">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAddUrl"/>
+                <set field="sectionHeaderUiLabel" value="CrmAddUrl"/>
+                <set field="hasModulePermission" value="CRMSFA_PARTNER"/>
+                <set field="formName" value="addContentUrlForm"/>
+                <set field="formTarget" value="createContentForParty"/>
+                <set field="donePage" value="viewPartner"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addContentUrlForCase">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAddUrl"/>
+                <set field="sectionHeaderUiLabel" value="CrmAddUrl"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="formName" value="addContentUrlForm"/>
+                <set field="formTarget" value="createContentForCase"/>
+                <set field="donePage" value="viewCase"/>
+                <set field="custRequestId" from-field="parameters.custRequestId"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexCaseSecurity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addContentUrlForOpportunity">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAddUrl"/>
+                <set field="sectionHeaderUiLabel" value="CrmAddUrl"/>
+                <set field="donePage" value="viewOpportunity"/>
+                <set field="formName" value="addContentUrlForm"/>
+                <set field="formTarget" value="createContentForOpportunity"/>
+                <set field="donePage" value="viewOpportunity"/>
+                <set field="salesOpportunityId" from-field="parameters.salesOpportunityId"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addContentUrlForActivity">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAddUrl"/>
+                <set field="sectionHeaderUiLabel" value="CrmAddUrl"/>
+                <set field="hasOperationPermission" value="_VIEW"/>
+                <set field="formName" value="addContentUrlForm"/>
+                <set field="formTarget" value="createContentForActivity"/>
+                <set field="donePage" value="viewActivity"/>
+                <set field="workEffortId" from-field="parameters.workEffortId"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexActivitySecurity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Upload file screens -->
+
+    <screen name="uploadContentForAccount">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadFile"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadFile"/>
+                <set field="hasModulePermission" value="CRMSFA_ACCOUNT"/>
+                <set field="formName" value="uploadContentForm"/>
+                <set field="formTarget" value="createContentForParty"/>
+                <set field="donePage" value="viewAccount"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="uploadContentForLead">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadFile"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadFile"/>
+                <set field="hasModulePermission" value="CRMSFA_LEAD"/>
+                <set field="formName" value="uploadContentForm"/>
+                <set field="formTarget" value="createContentForParty"/>
+                <set field="donePage" value="viewLead"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="uploadContentForContact">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadFile"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadFile"/>
+                <set field="hasModulePermission" value="CRMSFA_CONTACT"/>
+                <set field="formName" value="uploadContentForm"/>
+                <set field="formTarget" value="createContentForParty"/>
+                <set field="donePage" value="viewContact"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="uploadContentForPartner">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadFile"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadFile"/>
+                <set field="hasModulePermission" value="CRMSFA_PARTNER"/>
+                <set field="formName" value="uploadContentForm"/>
+                <set field="formTarget" value="createContentForParty"/>
+                <set field="donePage" value="viewPartner"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="uploadContentForCase">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadFile"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadFile"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="formName" value="uploadContentForm"/>
+                <set field="formTarget" value="createContentForCase"/>
+                <set field="donePage" value="viewCase"/>
+                <set field="custRequestId" from-field="parameters.custRequestId"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexCaseSecurity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="uploadContentForOpportunity">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadFile"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadFile"/>
+                <set field="donePage" value="viewOpportunity"/>
+                <set field="formName" value="uploadContentForm"/>
+                <set field="formTarget" value="createContentForOpportunity"/>
+                <set field="donePage" value="viewOpportunity"/>
+                <set field="salesOpportunityId" from-field="parameters.salesOpportunityId"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="uploadContentForActivity">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadFile"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadFile"/>
+                <set field="hasOperationPermission" value="_VIEW"/>
+                <set field="formName" value="uploadContentForm"/>
+                <set field="formTarget" value="createContentForActivity"/>
+                <set field="donePage" value="viewActivity"/>
+                <set field="workEffortId" from-field="parameters.workEffortId"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexActivitySecurity.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- for updating, the contentTypeId is passed as a parameter and is either HYPERLINK or FILE, which determines the form to use -->
+
+    <screen name="updateContentForAccount">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateContent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContent"/>
+                <set field="hasModulePermission" value="CRMSFA_ACCOUNT"/>
+                <set field="formName" value="updateContentForm"/>
+                <set field="formTarget" value="updateContentForParty"/>
+                <set field="donePage" value="viewAccount"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/content/updateContentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateContentForLead">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateContent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContent"/>
+                <set field="hasModulePermission" value="CRMSFA_LEAD"/>
+                <set field="formName" value="updateContentForm"/>
+                <set field="formTarget" value="updateContentForParty"/>
+                <set field="donePage" value="viewLead"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/content/updateContentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/leads/LeadsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateContentForContact">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateContent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContent"/>
+                <set field="hasModulePermission" value="CRMSFA_CONTACT"/>
+                <set field="formName" value="updateContentForm"/>
+                <set field="formTarget" value="updateContentForParty"/>
+                <set field="donePage" value="viewContact"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/content/updateContentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateContentForPartner">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateContent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContent"/>
+                <set field="hasModulePermission" value="CRMSFA_PARTNER"/>
+                <set field="formName" value="updateContentForm"/>
+                <set field="formTarget" value="updateContentForParty"/>
+                <set field="donePage" value="viewPartner"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/content/updateContentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/partners/PartnerScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonPartyContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateContentForCase">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateContent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContent"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <set field="formName" value="updateContentForm"/>
+                <set field="formTarget" value="updateContentForCase"/>
+                <set field="donePage" value="viewCase"/>
+                <set field="custRequestId" from-field="parameters.custRequestId"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexCaseSecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/content/updateContentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateContentForOpportunity">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateContent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContent"/>
+                <set field="donePage" value="viewOpportunity"/>
+                <set field="formName" value="updateContentForm"/>
+                <set field="formTarget" value="updateContentForOpportunity"/>
+                <set field="donePage" value="viewOpportunity"/>
+                <set field="salesOpportunityId" from-field="parameters.salesOpportunityId"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/content/updateContentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/opportunities/OpportunitiesScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateContentForActivity">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateContent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContent"/>
+                <set field="hasOperationPermission" value="_VIEW"/>
+                <set field="formName" value="updateContentForm"/>
+                <set field="formTarget" value="updateContentForActivity"/>
+                <set field="donePage" value="viewActivity"/>
+                <set field="workEffortId" from-field="parameters.workEffortId"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexActivitySecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/content/updateContentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addContentUrlForOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAddUrl"/>
+                <set field="sectionHeaderUiLabel" value="CrmAddUrl"/>
+                <set field="donePage" value="orderview"/>
+                <set field="formName" value="addContentUrlForm"/>
+                <set field="formTarget" value="createContentForOrder"/>
+                <set field="orderId" from-field="parameters.orderId"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="uploadContentForOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadFile"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadFile"/>
+                <set field="donePage" value="orderview"/>
+                <set field="formName" value="uploadContentForm"/>
+                <set field="formTarget" value="createContentForOrder"/>
+                <set field="orderId" from-field="parameters.orderId"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="updateContentForOrder">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateContent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContent"/>
+                <set field="donePage" value="orderview"/>
+                <set field="formName" value="updateContentForm"/>
+                <set field="formTarget" value="updateContentForOrder"/>
+                <set field="donePage" value="orderview"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/content/updateContentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/OrdersScreens.xml">
+                    <decorator-section name="section-body"><include-screen name="CommonContentForm"/></decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addContentUrlForQuote">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmAddUrl"/>
+                <set field="sectionHeaderUiLabel" value="CrmAddUrl"/>
+                <set field="donePage" value="ViewQuote"/>
+                <set field="formName" value="addContentUrlForm"/>
+                <set field="formTarget" value="createContentForQuote"/>
+                <set field="quoteId" from-field="parameters.quoteId"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-screen name="CommonContentForm"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="uploadContentForQuote">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUploadFile"/>
+                <set field="sectionHeaderUiLabel" value="CrmUploadFile"/>
+                <set field="donePage" value="ViewQuote"/>
+                <set field="formName" value="uploadContentForm"/>
+                <set field="formTarget" value="createContentForQuote"/>
+                <set field="quoteId" from-field="parameters.quoteId"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-screen name="CommonContentForm"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="updateContentForQuote">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmUpdateContent"/>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContent"/>
+                <set field="donePage" value="ViewQuote"/>
+                <set field="formName" value="updateContentForm"/>
+                <set field="formTarget" value="updateContentForQuote"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/content/updateContentForm.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/quotes/QuotesScreens.xml">
+                    <decorator-section name="section-body">
+                        <include-screen name="CommonContentForm"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

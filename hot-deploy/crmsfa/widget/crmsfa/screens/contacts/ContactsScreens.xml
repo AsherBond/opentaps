@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2004-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ *
+ *  $Id: $
+ *
+ *  @author   Leon Torres (leon@opensourcestrategies.com)
+-->
+
+<!-- This file contains screens for the Contacts section -->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+                <set field="gwtScripts[]" value="crmsfagwt/org.opentaps.gwt.crmsfa.contacts.contacts" global="true"/>
+                <set field="sectionName" value="contacts" global="true"/>
+                <set field="sectionStyle" value="twoColumn"/>
+                <set field="requiredPermission" value="CRMSFA_CONTACTS"/>
+                <set field="leftBarScreen" value="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml#leftBarScreen"/>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="leftBarScreen">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/screenlets/shortcuts.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/screenlets/contactShortcuts.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/screenlets/quickCreateContact.ftl"/></html>
+                </platform-specific>
+                <platform-specific>
+                    <html><html-template location="component://crmsfa/webapp/crmsfa/common/quickFormLetter.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- show a list of the contacts of the logged in user -->
+    <screen name="myContacts">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmContacts"/>    <!-- this is uiLabelMap property for the title of the HTML page -->
+                <set field="sectionHeaderUiLabel" value="CrmContacts"/>  <!-- this is for the main section of this page, ie <h2> -->
+                <set field="findPartyWidget" value="myContacts"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaParties.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="findContacts">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmFindContacts"/>
+                <set field="sectionHeaderUiLabel" value="CrmFindContacts"/>
+                <set field="findPartyWidget" value="findContacts"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/common/FindCrmsfaParties.ftl"/></html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>    
+    </screen>
+    
+    <screen name="createContactForm">
+        <section>
+            <widgets>
+                <include-form name="createContactForm" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createContact">
+        <section>
+            <condition><if-has-permission permission="CRMSFA_CONTACT" action="_CREATE"/></condition>
+            <actions>
+                <set field="pageTitleLabel" value="CrmCreateContact"/>
+                <set field="sectionHeaderUiLabel" value="CrmCreateContact"/>
+                <!-- set the initial accountPartyId for the form -->
+                <set field="accountpartyId" value="parameters.accountPartyId"/>
+                <set field="layoutSettings.javaScripts[]" value="/opentaps_js/opentapsPostalAddressValidation.js"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <container style="form">
+                            <platform-specific>
+                                <html><html-template location="component://crmsfa/webapp/crmsfa/contacts/createContact.ftl"/></html>
+                            </platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+            <fail-widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <label style="head2">${uiLabelMap.CrmErrorPermissionDenied}</label>
+                    </decorator-section>
+                </decorator-screen>
+            </fail-widgets>
+        </section>
+    </screen>
+
+    <screen name="updateContactForm">
+        <section>
+            <actions>
+                <set field="sectionHeaderUiLabel" value="CrmUpdateContact"/>
+                <set field="hasModulePermission" value="CRMSFA_CONTACT"/>
+                <set field="hasOperationPermission" value="_UPDATE"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contacts/viewContact.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                    
+                        <container style="subSectionBlock">
+                            <container style="form">
+                                <include-form name="updateContactForm" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
+                            </container>
+                        </container>
+
+                        <!-- contact marketing campaigns -->
+                        <include-screen name="viewContactMarketingCampaigns"/>
+
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="updateContactPassword">
+        <section>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+                        <include-screen name="updatePartyPassword" location="component://crmsfa/widget/crmsfa/screens/common/PartyScreens.xml"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- this screen is an example of how to check complex permissions and display multiple subsections with submenus -->
+    <screen name="viewContact">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="CrmViewContact"/>
+                <set field="sectionHeaderUiLabel" value="CrmViewContact"/> 
+                <!-- for permissions -->
+                <set field="hasModulePermission" value="CRMSFA_CONTACT"/>
+                <set field="hasOperationPermission" value="_VIEW"/>
+                <set field="findActivitiesKey" value="partyId"/>  <!-- we want activities based on the partyId parameter -->
+                <set field="casePaginatorName" value="contactsCases"/>                
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/pagination.bsh"/>
+                <!-- data for the various subsections -->
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contacts/viewContact.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/cases/listCases.bsh"/>                
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/contactmech/viewprofile.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/activities/findActivities.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/includes/getCatalogRequests.bsh"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/getMergeFormsForCurrentUser.bsh"/>
+                <!-- parameters for re-usable widgets -->
+                <set field="editContactMechPage" value="contactsEditContactMech"/>
+                <set field="donePage" value="viewContact"/>
+                <set field="listSortTarget" value="viewContact"/> <!-- contacts list sorting target -->
+            </actions>
+            <widgets>
+                <decorator-screen name="main-section-decorator">
+                    <decorator-section name="section-body">
+
+                        <!-- Main contacts section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contacts/submenus/contactDetailsMenu.ftl"/></html></platform-specific>
+                            <container style="form">
+                                <include-form name="viewContact" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
+                                <include-form name="viewResponsibleFor" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
+
+                                <!-- If the user can reassign contacts, include the reassign form -->
+                                <section>
+                                    <condition><if-compare field-name="isReassignRendered" operator="equals" value="true" type="Boolean"/></condition>
+                                    <widgets>
+                                        <include-form name="reassignToForm" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
+                                    </widgets>
+                                </section>
+                            </container>
+                        </container>
+
+                        <!-- address information -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contactmech/viewprofile.ftl"/></html></platform-specific>
+                        </container>
+
+                        <!-- pending activities -->
+                        <include-screen name="pendingActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
+
+                        <!-- Accounts section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contacts/submenus/contactAccountsMenu.ftl"/></html></platform-specific>
+                            <include-form name="ListAccounts" location="component://crmsfa/widget/crmsfa/forms/accounts/AccountsForms.xml"/>
+                            <!-- assign accounts to this contact -->
+                            <section>
+                                <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <widgets>
+                                    <include-form name="assignAccountToContactForm" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
+                                </widgets>
+                            </section>
+                        </container>
+                        
+                        <!-- Orders section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html>
+                                <html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountOrdersMenu.ftl"/>
+                            </html></platform-specific>
+                            <section>
+                                <condition><if-compare field-name="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <widgets>
+                                    <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
+                                </widgets>
+                            </section>
+                        </container>
+                        <!-- Opportunities section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contacts/submenus/contactOpportunities.ftl"/></html></platform-specific>
+                            <include-form name="ListOpportunities" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
+                        </container>
+
+                        <!-- payment methods -->
+                        <container style="subSectionBlock">
+                            <include-screen name="listContactPaymentMethods" location="component://crmsfa/widget/crmsfa/screens/common/PaymentMethodScreens.xml"/>
+                        </container>
+
+                        <!-- cases section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contacts/submenus/casesMenu.ftl"/></html></platform-specific>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/cases/listCases.ftl"/></html></platform-specific>                            
+                        </container>
+
+                        <!-- completed activities -->
+                        <include-screen name="completedActivities" location="component://crmsfa/widget/crmsfa/screens/activities/ActivitiesScreens.xml"/>
+
+                        <!-- Catalog requests -->
+                        <platform-specific>
+                            <html><html-template location="component://crmsfa/webapp/crmsfa/includes/catalogRequests.ftl"/></html>
+                        </platform-specific>
+
+                        <!-- attached content -->
+                        <include-screen name="contentList" location="component://crmsfa/widget/crmsfa/screens/content/ContentScreens.xml"/>
+
+                        <!-- Notes section -->
+                        <container style="subSectionBlock">
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/contacts/submenus/contactNotesMenu.ftl"/></html></platform-specific>
+                            <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/common/ListNotes.ftl"/></html></platform-specific>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- contact marketing campaigns -->
+    <screen name="viewContactMarketingCampaigns">
+        <section>
+            <actions>
+                <!-- set the form parameters -->
+                <set field="addMarketingCampaignFormTarget" value="addContactMarketingCampaign"/>
+                <set field="removeMarketingCampaignFormTarget" value="removeContactMarketingCampaign"/>
+            </actions>
+            <widgets>
+                <include-screen name="viewMarketingCampaigns" location="component://crmsfa/widget/crmsfa/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>
+

@@ -1,0 +1,67 @@
+/*
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilConfig;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+statusList = delegator.findByAndCache("StatusItem", UtilMisc.toMap("statusTypeId", "ORDER_RETURN_STTS"), UtilMisc.toList("sequenceId"));
+context.put("statusList", statusList);
+
+// check if the form was submitted, and if not then don't do lookup (allows no condition lookup)
+performFind = UtilCommon.getParameter(context, "performFind");
+if (! "Y".equals(performFind)) return;
+
+// fields to search
+returnId = UtilCommon.getParameter(context, "returnId");
+fromPartyId = UtilCommon.getParameter(context, "fromPartyId");
+statusId = UtilCommon.getParameter(context, "statusId");
+
+// build the conditions
+conditions = FastList.newInstance();
+if (returnId != null) conditions.add( new EntityExpr("returnId", EntityOperator.EQUALS, returnId) );
+if (fromPartyId != null) conditions.add( new EntityExpr("fromPartyId", EntityOperator.EQUALS, fromPartyId) );
+if (statusId != null) conditions.add( new EntityExpr("statusId", EntityOperator.EQUALS, statusId) );
+
+// required conditions
+organizationPartyId = UtilConfig.getPropertyValue("opentaps", "organizationPartyId");
+conditions.add( new EntityExpr("toPartyId", EntityOperator.EQUALS, organizationPartyId) );
+conditions.add( new EntityExpr("returnHeaderTypeId", EntityOperator.EQUALS, "CUSTOMER_RETURN") );
+
+findReturnsBuilder(conditions) {
+    entityName = "ReturnHeader";
+    where = conditions;
+    orderBy = UtilMisc.toList("entryDate DESC"); //default order by most recent request
+
+    build(page) {
+        newPage = FastList.newInstance();
+        for (returnHeader : page) {
+            newRow = FastMap.newInstance();
+            newRow.putAll( returnHeader.getAllFields() );
+            newRow{"returnPartyName"} = PartyHelper.createViewPageLink(returnHeader.getString("fromPartyId"), delegator, externalLoginKey);
+            newRow{"statusDescription"} = returnHeader.getRelatedOneCache("StatusItem").get("description");
+            newPage.add( newRow );
+        }
+        return newPage;
+    }
+
+    return this;
+}
+context.put("findReturnsBuilder", findReturnsBuilder(conditions));

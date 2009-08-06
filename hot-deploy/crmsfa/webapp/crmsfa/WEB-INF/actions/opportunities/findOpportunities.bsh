@@ -1,0 +1,87 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2008 Open Source Strategies, Inc. */
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.UtilProperties;
+import org.opentaps.common.util.UtilConfig;
+import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
+
+listIteratorNameToUse = parameters.get("listIteratorNameToUse");
+opportunitiesOrderBy = parameters.get("opportunitiesOrderBy");
+
+if (opportunitiesOrderBy==null) opportunitiesOrderBy = "salesOpportunityId DESC";
+
+// possible fields we're searching by
+opportunityName = parameters.get("opportunityName");
+description = parameters.get("description");
+opportunityStageId = parameters.get("opportunityStageId");
+typeEnumId = parameters.get("typeEnumId");
+
+// trim text input
+if (opportunityName != null) opportunityName = opportunityName.trim();
+if (description != null) description = description.trim();
+
+// normalize empty fields to null
+if ("".equals(opportunityName)) opportunityName = null;
+if ("".equals(description)) description = null;
+if ("".equals(opportunityStageId)) opportunityStageId = null;
+if ("".equals(typeEnumId)) typeEnumId = null;
+
+// don't do anything if no input specified (default find all is harder)
+if (opportunityName == null && description == null && opportunityStageId == null && typeEnumId == null) {
+    return;
+}
+
+//find parameters for the sorting headers
+findParams = "";
+
+// construct search conditions
+searchConditions = new ArrayList();
+if (opportunityName != null) {
+    searchConditions.add(new EntityExpr("opportunityName", true, EntityOperator.LIKE, "%" + opportunityName + "%", true));
+    findParams += "&opportunityName=" + opportunityName;
+}
+if (description != null) {
+    searchConditions.add(new EntityExpr("description", true, EntityOperator.LIKE, "%" + opportunityName + "%", true));
+    findParams += "&description=" + description;    
+}
+if (opportunityStageId != null) {
+    searchConditions.add(new EntityExpr("opportunityStageId", EntityOperator.EQUALS, opportunityStageId));
+    findParams += "&opportunityStageId=" + opportunityStageId;    
+}
+if (typeEnumId != null) {
+    searchConditions.add(new EntityExpr("typeEnumId", EntityOperator.EQUALS, typeEnumId));
+    findParams += "&typeEnumId=" + typeEnumId;    
+}
+if (searchConditions.size() == 0) return;
+searchConditionList = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+organizationPartyId = UtilConfig.getPropertyValue("opentaps", "organizationPartyId");
+
+listIt = UtilOpportunity.getOpportunities(organizationPartyId,  null,
+            searchConditionList, UtilMisc.toList(opportunitiesOrderBy), delegator);
+
+// this is the iterator to use in form-widgets
+context.put(listIteratorNameToUse, listIt);
+
+//and parameters for the sort headers
+context.put("findParams", findParams);

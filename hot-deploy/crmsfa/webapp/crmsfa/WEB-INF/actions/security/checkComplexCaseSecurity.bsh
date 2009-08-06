@@ -1,0 +1,53 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* Copyright (c) 2005-2006 Open Source Strategies, Inc. */
+
+/*
+ * This file is called by each screen that has complex Case security requirements.
+ * To use this script, define the security requirements in the subject screen
+ * as in the following example:
+ *
+ * <actions>
+ *   <set field="hasOperationPermission" value="_VIEW"/>
+ *   <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexCaseSecurity.bsh"/>
+ * </actions>
+ *
+ * The custRequestId is retrieved from the parameters.
+ *
+ * The script will create a parameter named "allowed" with the Boolean result of the security checks.
+ * By default, the script will return false.
+ *
+ * @author      Leon Torres (leon@opensourcestrategies.com)
+ */
+
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+
+operation = context.get("hasOperationPermission");
+custRequestId = parameters.get("custRequestId");
+
+if ((operation == null) || (custRequestId == null)) {
+    context.put("allowed", false);
+    return;
+}
+
+security = request.getAttribute("security");
+userLogin = request.getAttribute("userLogin");
+
+if (CrmsfaSecurity.hasCasePermission(security, operation, userLogin, custRequestId)) {
+    context.put("allowed", true);
+    return;
+}
+context.put("allowed", false);

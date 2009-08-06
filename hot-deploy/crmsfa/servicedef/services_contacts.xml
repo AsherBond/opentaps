@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  Copyright (c) 2001-2005 The Open For Business Project - www.ofbiz.org
+ *
+ *  Permission is hereby granted, free of charge, to any person obtaining a
+ *  copy of this software and associated documentation files (the "Software"),
+ *  to deal in the Software without restriction, including without limitation
+ *  the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ *  and/or sell copies of the Software, and to permit persons to whom the
+ *  Software is furnished to do so, subject to the following conditions:
+ *
+ *  The above copyright notice and this permission notice shall be included
+ *  in all copies or substantial portions of the Software.
+ *
+ *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ *  OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ *  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ *  CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+ *  OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
+ *  THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>CRM SFA Contacts Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>0.8</version>
+
+    <!-- note that our services are prefixed with "crmsfa." to easily distinguish them from other services; perhaps a namespace system would be useful here -->
+
+    <service name="crmsfa.createContact" engine="java" location="com.opensourcestrategies.crmsfa.contacts.ContactsServices" invoke="createContact">
+        <description>Creates an Contact, which is a combination of Party, Person, and PartySupplementalData.
+            Contacts can be created by anyone with CRMSFA_CONTACT_CREATE permission.</description>
+        <implements service="crmsfa.createBasicContactInfoForParty"/> 
+        <!-- Party and Person fields -->
+        <attribute name="firstName" type="String" mode="IN" optional="false"/>
+        <attribute name="lastName" type="String" mode="IN" optional="false"/>
+        <attribute name="firstNameLocal" type="String" mode="IN" optional="true"/>
+        <attribute name="lastNameLocal" type="String" mode="IN" optional="true"/>
+        <attribute name="personalTitle" type="String" mode="IN" optional="true"/>
+        <attribute name="birthDate" type="java.sql.Date" mode="IN" optional="true"/>
+        <attribute name="preferredCurrencyUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="marketingCampaignId" type="String" mode="IN" optional="true"/> <!-- initial marketing campaign -->
+        <!-- PartySupplementalData fields -->
+        <attribute name="generalProfTitle" type="String" mode="IN" optional="true"/>
+        <attribute name="departmentName" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="OUT" optional="false"/>
+        <attribute name="importantNote" type="String" mode="IN" optional="true"/>
+        <!-- necessary for chaining with assignContactToAccount -->
+        <attribute name="accountPartyId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="contactPartyId" type="String" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="crmsfa.updateContact" engine="java" location="com.opensourcestrategies.crmsfa.contacts.ContactsServices" invoke="updateContact">
+        <description>Updates a Contact. The userLogin must have CRMSFA_CONTACT_UPDATE permission on this partyId</description>
+        <!-- Party and Person fields -->
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="firstName" type="String" mode="IN" optional="false"/>
+        <attribute name="lastName" type="String" mode="IN" optional="false"/>
+        <attribute name="firstNameLocal" type="String" mode="IN" optional="true"/>
+        <attribute name="lastNameLocal" type="String" mode="IN" optional="true"/>
+        <attribute name="personalTitle" type="String" mode="IN" optional="true"/>
+        <attribute name="birthDate" type="java.sql.Date" mode="IN" optional="true"/>
+        <attribute name="preferredCurrencyUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <!-- PartySupplementalData fields -->
+        <attribute name="generalProfTitle" type="String" mode="IN" optional="true"/>
+        <attribute name="departmentName" type="String" mode="IN" optional="true"/>
+        <attribute name="importantNote" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="crmsfa.assignContactToAccount" engine="java" location="com.opensourcestrategies.crmsfa.contacts.ContactsServices" invoke="assignContactToAccount">
+        <description>Assigns a Contact (partyId) to an Account (accountPartyId) provided the userLogin has CRMSFA_ACCOUNT_UPDATE permission on this account.</description>
+        <attribute name="contactPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="accountPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.removeContactFromAccount" engine="java" location="com.opensourcestrategies.crmsfa.contacts.ContactsServices" invoke="removeContactFromAccount">
+        <description>Removes a Contact (partyId) from an Account (accountPartyId) provided the userLogin has CRMSFA_ACCOUNT_UPDATE permission on this account.</description>
+        <attribute name="contactPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="accountPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.reassignContactResponsibleParty" engine="java"
+        location="com.opensourcestrategies.crmsfa.contacts.ContactsServices" invoke="reassignContactResponsibleParty" auth="true">
+        <description>Reassigns the person RESPONSIBLE_FOR an contact</description>
+        <attribute name="contactPartyId" type="String" mode="IN" optional="false"/>
+        <attribute name="newPartyId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="crmsfa.deactivateContact" engine="java" location="com.opensourcestrategies.crmsfa.contacts.ContactsServices" invoke="deactivateContact">
+        <description>Deactivates an accout by expiring all party relationships with the contact. 
+            Checks if userLogin has permission CRMSFA_CONTACT_DEACTIVATE on the contact.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="expireDate" type="Timestamp" mode="IN" optional="true"/>
+    </service>
+
+</services>
+

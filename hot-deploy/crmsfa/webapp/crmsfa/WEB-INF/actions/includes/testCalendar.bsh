@@ -1,0 +1,4 @@
+
+import org.ofbiz.base.util.UtilDateTime;
+
+context{"testTimestampValue"} = UtilDateTime.nowTimestamp();

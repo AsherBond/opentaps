@@ -1,0 +1,148 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.*;
+
+import com.opensourcestrategies.crmsfa.activities.UtilActivity;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import com.opensourcestrategies.crmsfa.teams.TeamHelper;
+
+import org.opentaps.common.util.*;
+import org.opentaps.common.party.ViewPrefWorker;
+
+//Êtakes the List of WorkEffortPartyAssignmentCommEvent GenericValues and returns a List of Maps with useful information like names, orders, etc.
+// second variable inboundList determines if it's an inbound or outbound list and uses it for securities and URL's, etc.
+List processEmailList(List WorkEffortPartyAssignmentCommEvents, boolean inboundList) {
+    processedEmails = new ArrayList();
+    for (GenericValue WEPACE:WorkEffortPartyAssignmentCommEvents) {
+        emailMap = ((GenericValue) WEPACE).getAllFields();
+
+        activityOwner = UtilActivity.getActivityOwner(emailMap{"workEffortId"}, delegator);;
+        if (UtilValidate.isNotEmpty(activityOwner)) {
+            emailMap{"activityOwnerPartyId"} = activityOwner.get("partyId");
+        }
+
+        // in reality only the from url is needed for incoming emails and to url for outgoing emails, but we'll do it for both just in case it's needed later
+        if (UtilValidate.isNotEmpty(emailMap.get("partyIdFrom"))) {
+            emailMap{"partyIdFromUrl"} = PartyHelper.createViewPageURL(emailMap.get("partyIdFrom"), delegator, parameters.get("externalLoginKey"));
+        }
+        if (UtilValidate.isNotEmpty(emailMap.get("partyIdTo"))) {
+            emailMap{"partyIdToUrl"} = PartyHelper.createViewPageURL(emailMap.get("partyIdTo"), delegator, parameters.get("externalLoginKey"));
+        }
+        if (UtilValidate.isNotEmpty(emailMap.get("partyIdFrom"))) {
+            emailMap{"partyFromName"} = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, emailMap.get("partyIdFrom"), false);
+        }
+        if (UtilValidate.isNotEmpty(emailMap.get("partyIdTo"))) {
+            emailMap{"partyToName"} = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, emailMap.get("partyIdTo"), false);
+        }
+
+        // put in links for orders and cases, but only if user has security to view them, which is related to partyIdFrom for inbound emails and partyIdTo for outbound emails
+        if ((inboundList && CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CASE", "_VIEW", userLogin, emailMap{"partyIdFrom"})) ||
+                (!inboundList && CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CASE", "_VIEW", userLogin, emailMap{"partyIdTo"}))) {
+            if (UtilValidate.isNotEmpty(WEPACE.getRelated("OrderHeaderWorkEffort"))) {
+                ohwe = EntityUtil.getFirst(WEPACE.getRelated("OrderHeaderWorkEffort"));
+                if (UtilValidate.isNotEmpty(ohwe)) { emailMap{"assocOrder"} = ohwe.getRelatedOne("OrderHeader"); }
+            }
+
+        }
+        if ((inboundList && CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CASE", "_VIEW", userLogin, emailMap{"partyIdFrom"})) ||
+                (!inboundList && CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CASE", "_VIEW", userLogin, emailMap{"partyIdTo"}))) {
+            if (UtilValidate.isNotEmpty(WEPACE.getRelated("CustRequestWorkEffort"))) {
+                crwe = EntityUtil.getFirst(WEPACE.getRelated("CustRequestWorkEffort"));
+                if (UtilValidate.isNotEmpty(crwe)) { emailMap{"assocCase"} = crwe.getRelatedOne("CustRequest"); }
+            }
+        }
+
+        // determine if we can update the permission
+        emailMap{"hasChangeOwnerPermission"} = CrmsfaSecurity.hasChangeActivityOwnerPermission(delegator, security, userLogin, emailMap{"workEffortId"});
+        emailMap{"hasDeleteEmailPermission"} = CrmsfaSecurity.hasActivityPermission(security, "_UPDATE", userLogin, emailMap{"workEffortId"});
+
+        // Getting 'toString' blows up in FTL because it conflicts with the java method toString
+        if (UtilValidate.isNotEmpty(emailMap.get("toString"))) emailMap{"toAddressString"} = emailMap.get("toString");        
+        processedEmails.add(emailMap);
+    }
+    return processedEmails;
+}
+
+// figure out which emails the user would like to view
+existingViewPref = ViewPrefWorker.getViewPreferenceString(userLogin, "PENDING_EMAILS_IN", "EMAILS_MINE_ALL");  // default is EMAILS_MINE_ALL: All emails I'm assigned to somehow
+viewPref = parameters.get("viewPrefTypeId");
+if (UtilValidate.isEmpty(viewPref)) {
+    viewPref = existingViewPref;
+}
+// reset the view pref if it is not the same as the stored one
+if (!viewPref.equals(existingViewPref)) {
+    tmpResult = dispatcher.runSync("opentaps.setViewPreference", UtilMisc.toMap("viewPrefTypeId", "PENDING_EMAILS_IN", "viewPrefValue", viewPref, "userLogin", userLogin));
+}
+context.put("viewPref", viewPref);
+context.put("viewPrefOther", ("EMAILS_MINE_ALL".equals(viewPref) ? "EMAILS_MINE_OWNED" : "EMAILS_MINE_ALL"));
+
+// condition common to all pending emails, inbound or outbound
+commonConditions = UtilMisc.toList(
+    // this list may be too restrictive and need to be modified over time
+    new EntityExpr("workEffortTypeId", EntityOperator.EQUALS, "TASK"),
+    new EntityExpr("workEffortPurposeTypeId", EntityOperator.EQUALS, "WEPT_TASK_EMAIL"),
+    new EntityExpr("currentStatusId", EntityOperator.IN, UtilMisc.toList("TASK_SCHEDULED", "TASK_STARTED")),
+    // new EntityExpr("commEventStatusId", EntityOperator.EQUALS, "COM_ENTERED"),  // if from party is unkonwn the status is COM_UNKNOWN_PARTY
+    new EntityExpr("assignmentStatusId", EntityOperator.EQUALS, "PRTYASGN_ASSIGNED"),
+    EntityUtil.getFilterByDateExpr()                  // for the fromDate/thruDate from WorkEffortPartyAssignment
+);
+
+// WorkEffortPartyAssignment.partyId - used to constrain search to emails assigned to userLogin's partyId
+commonConditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, userLogin.get("partyId")));
+
+// the roles an internal user could be related to an email
+emailRoles = new ArrayList();   // otherwise each time this bsh is called, it will basically use the last emailRoles
+if ("EMAILS_MINE_ALL".equals(viewPref)) {
+    emailRoles.addAll(PartyHelper.TEAM_MEMBER_ROLES);
+}
+emailRoles.add("CAL_OWNER");
+
+// team members for assigning emails
+teamMembers = TeamHelper.getActiveTeamMembers(delegator);
+if (UtilValidate.isNotEmpty(teamMembers)) {
+    context{"teamMembers"} = teamMembers;
+}
+
+// so far the ofbiz processIncomingEmail stores its emails as AUTO_EMAIL_COMM for inbound, and we create EMAIL_COMMUNICATION for outbound
+inboundConditions = UtilMisc.toList(
+                        new EntityExpr("communicationEventTypeId", EntityOperator.EQUALS, "AUTO_EMAIL_COMM"),
+                        new EntityExpr("roleTypeId", EntityOperator.IN, emailRoles)
+                    );
+inboundConditions.addAll(commonConditions);
+
+// these should be sufficient
+fieldsToSelect = UtilMisc.toList("workEffortId", "datetimeEnded", "partyIdFrom", "partyIdTo", "subject", "toString");
+fieldsToSelect.add("communicationEventId");
+fieldsToSelect.add("fromString");
+
+inboundEmails = delegator.findByCondition("WorkEffortPartyAssignCommEvent", new EntityConditionList(inboundConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList("lastStatusUpdate DESC"));
+context.put("inboundEmails", processEmailList(inboundEmails, true));
+
+outboundConditions = UtilMisc.toList(new EntityExpr("communicationEventTypeId", EntityOperator.EQUALS, "EMAIL_COMMUNICATION"));
+outboundConditions.addAll(commonConditions);
+
+// get outbound emails
+fieldsToSelect.add("datetimeStarted");   // datetimeEnded is not relevant for unfinished emails
+outboundEmails = delegator.findByCondition("WorkEffortPartyAssignCommEvent", new EntityConditionList(outboundConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList("lastStatusUpdate DESC"));
+context.put("outboundEmails", processEmailList(outboundEmails, true));
+
+// put into history
+//context{"history"} = UtilCommon.makeHistoryEntry(UtilMessage.expandLabel("CrmActivitiesPendingEmails", locale));
+

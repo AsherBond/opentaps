@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
+
+    <form name="viewTeam" type="single" default-map-name="team"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="groupName" title="${uiLabelMap.CommonName}"><display/></field>
+        <field name="comments" title="${uiLabelMap.CommonComments}"><display/></field>
+    </form>
+
+    <form name="createTeamForm" type="single" default-map-name="team" target="createTeam"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="groupName" title="${uiLabelMap.CommonName}"><text/></field>
+        <field name="comments" title="${uiLabelMap.CommonComments}"><textarea/></field>
+        <field name="submitButton" title="${uiLabelMap.CrmCreateTeam}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+    <form name="updateTeamForm" type="single" default-map-name="team" target="updateTeam"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden/></field>
+        <field name="groupName" title="${uiLabelMap.CommonName}"><text/></field>
+        <field name="comments" title="${uiLabelMap.CommonComments}"><textarea/></field>
+        <field name="submitButton" title="${uiLabelMap.CrmUpdateTeam}" widget-style="smallSubmit"><submit/></field>
+    </form>
+
+    <form name="FindTeams" type="single" target="${findTeamsTarget}"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="groupName" title="${uiLabelMap.CommonName}" widget-style="inputBox">
+              <text/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmFindTeams}" widget-style="smallSubmit">
+        	<submit/>
+        </field>
+    </form>
+
+    <form name="FindTeamMembers" type="single" target="${findTeamMembersTarget}"
+        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
+        <field name="firstName" title="${uiLabelMap.PartyFirstName}" widget-style="inputBox">
+              <text/>
+        </field>
+        <field name="lastName" title="${uiLabelMap.PartyLastName}" widget-style="inputBox">
+              <text/>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmFindTeamMembers}" widget-style="smallSubmit">
+          <submit/>
+        </field>
+    </form>
+
+    <form name="ListTeams" type="list" separate-columns="false"
+        title="List Teams"  default-title-style="tableheadtext"
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="${listSortTarget}" paginate-size-field="teamsSize" paginate-index-field="teamsIndex"
+        list-name="teams">
+        <field name="groupName" title="${uiLabelMap.CommonName}" widget-style="linktext">
+            <hyperlink description="${groupName} (${partyId})" target="viewTeam?partyId=${partyId}"/>
+        </field>
+        <field name="partyId" title="${uiLabelMap.CommonComments}">
+            <display-entity entity-name="PartyGroup" key-field-name="partyId" description="${comments}"/>
+        </field>
+    </form>   
+
+    <form name="ListTeamMembers" type="list" separate-columns="false"
+        title="List Team Members"  default-title-style="tableheadtext" target="setTeamMemberSecurityGroupIn${listSortTarget}?partyId=${parameters.partyId}"
+        default-widget-style="tabletext" default-tooltip-style="tabletext"
+        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
+        paginate-target="" list-name="accountTeamMembers">
+        <!-- memberName is either a display field (when not a lookup form) or a hyperlink set_value field (when is a lookup form) -->
+        <field name="memberName" title="${uiLabelMap.CommonName}" widget-area-style="fieldWidth300" use-when="(isLookup==void)||(isLookup==null)||((isLookup!=void)&amp;&amp;(isLookup!=null)&amp;&amp;(!isLookup.equals(&quot;true&quot;)))">
+            <display description="${firstName} ${lastName} (${partyId})"/>
+        </field>
+        <field name="memberName" widget-style="linktext" title="${uiLabelMap.CommonName}" widget-area-style="fieldWidth300" use-when="(isLookup!=void)&amp;&amp;(isLookup!=null)&amp;&amp;(isLookup.equals(&quot;true&quot;))">
+            <hyperlink also-hidden="false" target-type="plain" description="${firstName} ${lastName} (${partyId})" target="javascript:set_value('${partyId}')"/>
+        </field>
+        <!-- privilege update -->
+        <field name="accountTeamPartyId"><hidden value="${parameters.partyId}"/></field>
+        <field name="teamMemberPartyId"><hidden value="${partyId}"/></field>
+        <field name="securityGroupId" title="${uiLabelMap.PartyRole}" use-when="hasTeamUpdatePermission==false">
+            <display-entity entity-name="SalesTeamRoleSecurity" key-field-name="securityGroupId" description="${roleDescription}"/>
+        </field>
+        <field name="securityGroupId" title="${uiLabelMap.PartyRole}" use-when="hasTeamUpdatePermission==true" widget-style="inputBox">
+            <drop-down allow-empty="false" current="selected">
+                <entity-options description="${roleDescription}" entity-name="SalesTeamRoleSecurity">
+                    <entity-order-by field-name="sequenceNum"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="Update" title="${uiLabelMap.CommonUpdate}" use-when="hasTeamUpdatePermission==true" widget-style="buttontext">
+            <submit button-type="text-link"/>
+        </field>
+        <field name="Remove" title="" use-when="hasTeamRemovePermission==true" widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeTeamMemberIn${listSortTarget}?partyId=${parameters.partyId}&amp;teamMemberPartyId=${partyId}&amp;accountTeamPartyId=${parameters.partyId}"/>
+        </field>
+    </form>   
+
+    <!-- form to add a team member: TODO maybe in ftl instead? -->
+    <form name="addTeamMemberForm" type="single" target="addTeamMemberIn${listSortTarget}?partyId=${parameters.partyId}"
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="accountTeamPartyId"><hidden value="${parameters.partyId}"/></field>
+        <field name="teamMemberPartyId" position="1" title="${uiLabelMap.CrmNewTeamMember}" widget-style="inputBox">
+            <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>
+        </field>
+        <field name="securityGroupId" title="${uiLabelMap.PartyRole}">
+            <drop-down allow-empty="false">
+                <entity-options description="${roleDescription}" entity-name="SalesTeamRoleSecurity">
+                    <entity-order-by field-name="sequenceNum"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CommonAdd}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+    <!-- form to assign a team to an account -->
+    <form name="assignTeamToAccountForm" type="single" target="assignTeamToAccount?partyId=${parameters.partyId}"
+        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        <field name="accountPartyId"><hidden value="${parameters.partyId}"/></field>
+        <field name="teamPartyId" title="${uiLabelMap.CrmAssignTeam}" position="1">
+            <drop-down allow-empty="false">
+                <entity-options description="${groupName}" entity-name="PartyRoleAndPartyDetail" key-field-name="partyId">
+                    <entity-constraint name="statusId" operator="not-equals" value="PARTY_DISABLED"/>
+                    <entity-constraint name="roleTypeId" operator="equals" value="ACCOUNT_TEAM"/>
+                    <entity-order-by field-name="groupName"/>
+                </entity-options>
+            </drop-down>
+        </field>
+        <field name="submitButton" title="${uiLabelMap.CrmAssign}" widget-style="smallSubmit"><submit button-type="button"/></field>
+    </form>
+
+</forms>

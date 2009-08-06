@@ -1,0 +1,479 @@
+/* TODO: opentaps-commons opentaps.css is loaded before this file, so it's ok to start striipping this down */
+
+/* redefine h styles */
+h1 {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 14pt;
+  font-weight: bold;
+}
+h2 {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+/* new ofbizmessage style */
+ul.ofbizErrorMessagesList {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+/* the small bar that separates the tabs on top from the content */
+.tabseparatordown {
+    height: 6px;
+    border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
+    margin: 0px;
+}
+.tabseparatorup {
+    height: 7px;
+    border-bottom: 1px solid gray;
+    margin: 0px;
+}
+
+/* These container styles allow for a fixed size left column bar and a variable width center column  */
+#one-column {
+    position: absolute;
+    left: 8px;
+    right: 8px;
+}
+
+#left-content-column {
+    position: absolute;
+    left: 8px;
+    width: 160px;
+}
+
+#center-content-column {
+    position: absolute;
+    left: 175px;
+    right: 8px;
+}
+/* version two allows for a wider left column */
+#left-content-column-two {
+    position: absolute;
+    left: 8px;
+    width: 245px;
+}
+#left-content-column-two select {
+    max-width:230px;
+}
+#center-content-column-two {
+    position: absolute;
+    left: 260px;
+    right: 8px;
+}
+#crmsfa-footer {
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
+}
+
+/* block containing messages (errors, service messages) */
+.messages {
+    font: 10pt Verdana, Arial, Helvetica, sans-serif;
+    background-color: #FFFFFF;
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px dotted gray;
+}
+.messageLink {
+    font: 8pt Verdana, Arial, Helvetica, sans-serif;
+    color: blue;
+    text-decoration: underline;
+}
+
+/* form widget styles */
+.requiredField {
+    text-decoration: none;
+    font: bold 10px Verdana, Arial, Helvetica, sans-serif;
+    color: #AA0000;
+}
+.requiredFieldNormal {
+    text-decoration: none;
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    color: #AA0000;
+}
+.fieldWidth100 {
+    width: 100px;
+}
+.fieldWidth200 {
+    width: 200px;
+}
+.fieldWidth300 {
+    width: 300px;
+}
+.fieldWidth400 {
+    width: 400px;
+}
+.fieldWidth500 {
+    width: 500px;
+}
+.fieldWidth600 {
+    width: 600px;
+}
+.fieldWidth25pct {
+    width: 25%;
+}
+.fieldWidth50pct {
+    width: 50%;
+}
+/* form widget dividers */
+.formSectionHeader {
+    background-color: #EEEEEE;
+    width: 100%;
+}
+.formSectionHeaderTitle {
+    font: bold 12px Verdana, Arial, Helvetica, sans-serif;
+    padding-left: 5px;
+    color: #000099;
+}
+.rowWhite {
+    background-color: white;
+}
+.rowLightGray {
+    background-color: #EEEEEE;
+}
+/* table styles */
+.crmsfaListTable {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #AAAAAA;
+}
+.crmsfaListTableHeader {
+    border: 1px solid #AAAAAA;
+}
+/* add padding to the list cells, and whatever else we need */
+.crmsfaListTable TR TD {
+    padding-left: 3px;
+    padding-right: 3px;
+}
+.orderByHeaderLink {
+    color: #000099;
+    text-decoration: underline;
+}
+.orderByHeaderLink:hover {
+    color: red;
+}
+/* miscellaneous that need to be reviewed */
+a img.imageLinkBorderless {
+    border: 0px;
+}
+
+/* form styles */
+div.form {
+    white-space: nowrap;
+    margin: 0px auto;
+    margin-left: 0px;
+    padding: 5px;
+    border: 1px solid #999999;
+}
+div.formRow {
+    clear: both;
+    padding-top: 5px;
+}
+div.formRow span.formLabel {
+    font: bold 10px Verdana, Arial, Helvetica, sans-serif;
+    float: left;
+    width: 13%;
+    text-align: right;
+}
+div.formRow span.formLabelLeftSmall {
+    font: bold 10px Verdana, Arial, Helvetica, sans-serif;
+    float: left;
+    width: 8%;
+    background-color: #eeeeee;
+    text-align: left;
+}
+div.formRow span.formLabelRequired {
+    font: bold 10px Verdana, Arial, Helvetica, sans-serif;
+    float: left;
+    width: 13%;
+    text-align: right;
+    color: #AA0000;
+}
+div.formRow span.formLabelNormal {
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    float: left;
+    width: 13%;
+    text-align: right;
+    color: #AA0000;
+}
+div.formRow span.formInputSpan {
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    float: right;
+    width: 85%;
+    text-align: left;
+}
+div.formRow span.formInputSpanBig {
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    float: right;
+    width: 92%;
+    text-align: left;
+}
+
+div.formRow span.formInputSpanSpaced {
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    float: right;
+    width: 85%;
+    text-align: left;
+    line-height: 1.5em;
+}
+
+div.formRow span.formFullRowText {
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    float: left;
+    width: 100%;
+    text-align: left;
+    line-height: 1.5em;
+}
+
+div.spacer { clear: both; height: 5px; }
+
+/* custom contact mech table styles */
+table.contactTable {
+    border-collapse: collapse;
+    margin-left: 60px;
+    margin-right: 0px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+table.contactTable th {
+    padding-bottom: 10px;
+}
+table.contactTable td {
+    border-top: 1px solid black;
+    padding: 10px;
+    vertical-align: top;
+}
+table.contactTable td.contactTableCenter {
+    text-align: center;
+}
+
+/* shortcut link style */
+
+ul.shortcuts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    font: normal 10px Verdana, Arial, Helvetica, sans-serif;
+    width: 100%;
+}
+ul.shortcuts li {
+    background-color: white;
+    margin: 0;
+    margin-bottom: 2px;
+}
+ul.shortcuts li a {
+    display: block; /* this is how we make the whole block clickable, but note html>body hack below */
+    text-decoration: none;
+    padding: .25em;
+    border: solid 1px #AAAAAA;
+    width: 100%;
+}
+/* see http://www.alistapart.com/articles/taminglists/ for explanation */
+html>body ul.shortcuts li a {
+    width: auto;
+}
+ul.shortcuts a:hover, a:active {
+    color: black;
+    background-color: #EEEEEE;
+    border: solid 1px black;
+    text-decoration: none;
+}
+
+
+/*  address selector in order entry */
+/*  Deprecated by quickCheckout classes 
+table.shipSetting {
+    width: 100%;
+    border: solid 1px #999999;
+    border-collapse: collapse;
+}
+
+table.shipSetting tr th {
+    text-align: left;
+    font: bold 10pt Verdana, Arial, Helvetica, sans-serif;
+    background-color: #DDDDDD;
+}
+
+table.shipSetting td {
+    padding: 3px;
+    vertical-align: top;
+    border-top: solid 1px #999999;
+    border-bottom: solid 1px #999999;
+}
+table.shipSettingAddressList {
+    border-collapse: collapse;
+}
+table.shipSettingAddressList td {
+    padding: 1px;
+    border: none;
+}
+*/
+
+table.filteringTable {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 0.9em;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+}
+table.filteringTable td, table.filteringTable th {
+    font-size: 0.9em;
+    padding: 2px;
+    font-weight: normal;
+}
+table.filteringTable tbody tr td {
+    border-bottom: 1px solid #ddd;
+}
+table.filteringTable tbody tr:hover td{
+    background: #a6c2e7;
+}
+
+/*  Quick checkout */
+div.shipGroupHeader {
+    width: 97%;
+    height: 1.3em;
+    text-align: left;
+    font: bold 1em Verdana, Arial, Helvetica, sans-serif;
+    background-color: #DDD;
+    border: solid 1px #999999;
+    padding-top:2px;
+    padding-left: 12px;
+    margin: 5px 2% 5px 1%;
+}
+
+table.shipGroupItems {
+    width: 100%;
+}  
+
+table.shipGroupItems th {
+    text-align: left;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-size: 1.0em;
+}
+
+table.shipGroupItems td {
+    vertical-align: top;
+}
+
+table.shipGroupItems td.itemQuantity, table.shipGroupItems th.itemQuantity {
+    text-align: center;
+}
+table.shipGroupItems colgroup#itemId, table.shipGroupItems colgroup#itemQuantity {
+    width: 8%;
+}
+table.shipGroupItems colgroup#itemName {
+    width: 19%;
+}
+
+span.shipGroupLabel,
+div.shipGroupSectionHeader {
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+span.shipGroupLabel {
+    font-size: 0.65em;
+    float: left;
+    margin-top: 3px;
+}
+
+div.shipGroupSectionHeader {
+    font-size: 0.8em;
+    margin-bottom: 10px;
+}
+
+div.shipGroup_items {
+    width: 33%;
+    float: left;
+    margin-left: 2%
+}
+div.shipGroup_shippingAddressAndMethod {
+    width: 31%;
+    float: left;
+    padding-left: 2%;
+}
+div.shipGroup_shippingAddressAndMethod select.shippingAddressAndMethod {
+    width: 100%;
+}
+div.shipGroup_shippingInstructions {
+    width: 28%;
+    float: left;
+    padding-left: 2%;
+}
+div.shipGroup_shippingInstructions textarea {
+    width: 100%;
+}
+div.quickPaymentSetting {
+    text-align: left;
+    font-family:Verdana, Arial, Helvetica, sans-serif;
+    font-size: 0.8em;
+    margin-top: 15px;
+    margin-left: 3%;
+}
+
+div.quickPaymentSetting div.paymentSettingHeader {
+    font-weight:bold;
+}
+
+div.paymentSettingHeader {
+    margin-top: 15px;
+}
+
+
+/* Section header images */
+
+
+div#sectionHeaderTitle_leads {
+    background-image: url('/opentaps_images/openclipart.org/headset_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_accounts {
+    background-image: url('/opentaps_images/openclipart.org/handshake_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_activities {
+    background-image: url('/opentaps_images/openclipart.org/folder_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_cases {
+    background-image: url('/opentaps_images/openclipart.org/clipboard_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_contacts {
+    background-image: url('/opentaps_images/openclipart.org/ppl3_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_forecasts {
+    background-image: url('/opentaps_images/openclipart.org/histogram_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_marketing {
+    background-image: url('/opentaps_images/openclipart.org/lampada_di_aladino_alad_01_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_myHome {
+    background-image: url('/opentaps_images/openclipart.org/folders_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_opportunities {
+    background-image: url('/opentaps_images/openclipart.org/ringing_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_partners {
+    background-image: url('/opentaps_images/openclipart.org/earth_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_quotes {
+    background-image: url('/opentaps_images/openclipart.org/clipboard_and_pen_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_teams {
+    background-image: url('/opentaps_images/openclipart.org/ppls_24x24.png');
+    padding-left: 40px;
+}
+div#sectionHeaderTitle_orders {
+    background-image: url('/opentaps_images/openclipart.org/calcolatrice_architetto__01_24x24.png');
+    padding-left: 40px;
+}

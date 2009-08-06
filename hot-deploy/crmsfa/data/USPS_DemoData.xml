@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<!-- Sample of USPS data for origin mailing ZIP code 900 -->
+
+<entity-engine-xml>
+
+    <!-- Map of 3 digit Zip codes postalZone for 900 origin ZIP -->
+    <UspsZipToBmcCode zip3="100" postalZone="8"/>
+    <UspsZipToBmcCode zip3="101" postalZone="8"/>
+    <UspsZipToBmcCode zip3="102" postalZone="8"/>
+    <UspsZipToBmcCode zip3="103" postalZone="8"/>
+    <UspsZipToBmcCode zip3="104" postalZone="8"/>
+    <UspsZipToBmcCode zip3="105" postalZone="8"/>
+    <UspsZipToBmcCode zip3="900" postalZone="1"/>
+    <UspsZipToBmcCode zip3="901" postalZone="1"/>
+    <UspsZipToBmcCode zip3="902" postalZone="1"/>
+    <UspsZipToBmcCode zip3="903" postalZone="1"/>
+    <UspsZipToBmcCode zip3="904" postalZone="1"/>
+    <UspsZipToBmcCode zip3="905" postalZone="1"/>
+    <UspsZipToBmcCode zip3="906" postalZone="1"/>
+    <UspsZipToBmcCode zip3="907" postalZone="1"/>
+    <UspsZipToBmcCode zip3="908" postalZone="1"/>
+    <UspsZipToBmcCode zip3="909" postalZone="1"/>
+    <UspsZipToBmcCode zip3="910" postalZone="1"/>
+    <UspsZipToBmcCode zip3="911" postalZone="1"/>
+    <UspsZipToBmcCode zip3="940" postalZone="4"/>
+    <UspsZipToBmcCode zip3="941" postalZone="4"/>
+
+</entity-engine-xml>
