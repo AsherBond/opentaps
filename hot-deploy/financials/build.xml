@@ -56,7 +56,6 @@
             <fileset dir="${ofbiz.dir}/framework/webapp/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/webapp/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/common/build/lib" includes="*.jar"/>
-            <fileset dir="${ofbiz.dir}/framework/workflow/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/party/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/product/build/lib" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/applications/marketing/build/lib" includes="*.jar"/>
