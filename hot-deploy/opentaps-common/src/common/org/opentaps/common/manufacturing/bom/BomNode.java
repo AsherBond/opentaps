@@ -37,6 +37,7 @@
 
 package org.opentaps.common.manufacturing.bom;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -751,7 +752,7 @@ public class BomNode {
     public Timestamp getStartDate(String facilityId, Timestamp requiredBydate, boolean allNodes) {
         Timestamp minStartDate = requiredBydate;
         if ("WIP".equals(getProduct().getString("productTypeId")) || allNodes) {
-            ProposedOrder proposedOrder = new ProposedOrder(getProduct(), facilityId, facilityId, true, requiredBydate, getQuantity());
+            ProposedOrder proposedOrder = new ProposedOrder(getProduct(), facilityId, facilityId, true, requiredBydate, BigDecimal.valueOf(getQuantity()));
             proposedOrder.calculateStartDate(0, null, delegator, dispatcher, userLogin);
             Timestamp startDate = proposedOrder.getRequirementStartDate();
             minStartDate = startDate;
