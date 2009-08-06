@@ -289,15 +289,16 @@ public class PartyServices {
                 Debug.logError(UtilMessage.expandLabel("OpentapsError_InternalMessageNoRecipientPermission", locale, UtilMisc.toMap("partyId", party)), module);
                 continue;
             }
-            Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+            Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
             input.put("communicationEventTypeId", "INTERNAL_MESSAGE");
             input.put("statusId", "COM_ENTERED");
             input.put("partyIdFrom", partyIdFrom);
             input.put("partyIdTo", party);
             input.put("entryDate", UtilDateTime.nowTimestamp());
             input.put("content", message);
-            if (UtilValidate.isNotEmpty(subject))
+            if (UtilValidate.isNotEmpty(subject)) {
                 input.put("subject", subject);
+            }
 
             try {
                 dispatcher.runAsync("createCommunicationEvent", input);

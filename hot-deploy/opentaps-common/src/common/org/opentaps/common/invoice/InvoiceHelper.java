@@ -315,7 +315,7 @@ public final class InvoiceHelper {
         List validItemTypeIds = EntityUtil.getFieldListFromEntityList(validItemTypes, "agreementItemTypeId", true);
 
         // Get any agreements between the parties and retrieve the AgreementTerms
-        List<EntityExpr> conditions = UtilMisc.toList(
+        List<EntityCondition> conditions = UtilMisc.toList(
             new EntityExpr("agreementTypeId", EntityOperator.EQUALS, agreementTypeId),
             new EntityExpr("partyIdFrom", EntityOperator.EQUALS, invoice.get(isReceipt ? "partyIdFrom" : "partyId")),
             new EntityExpr("partyIdTo", EntityOperator.EQUALS, invoice.get(isReceipt ? "partyId" : "partyIdFrom")),

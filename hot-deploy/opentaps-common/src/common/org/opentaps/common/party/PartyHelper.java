@@ -523,7 +523,7 @@ public class PartyHelper {
             String postalCode = partyCarrierAccount.getString("postalCode");
             String countryGeoCode = partyCarrierAccount.getString("countryGeoCode");
             String isDefault = partyCarrierAccount.getString("isDefault");
-            Map<String, Object> accountMap = UtilMisc.toMap("carrierName", carrierName, "accountNumber", accountNumber, "postalCode", postalCode, "countryGeoCode", countryGeoCode, "isDefault", isDefault);
+            Map<String, Object> accountMap = UtilMisc.<String, Object>toMap("carrierName", carrierName, "accountNumber", accountNumber, "postalCode", postalCode, "countryGeoCode", countryGeoCode, "isDefault", isDefault);
             if (!carrierInfo.contains(accountMap)) {
                 carrierInfo.add(accountMap);
             }

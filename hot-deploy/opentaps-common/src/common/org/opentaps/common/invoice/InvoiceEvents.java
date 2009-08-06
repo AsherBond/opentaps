@@ -169,8 +169,8 @@ public final class InvoiceEvents {
             jrParameters.put("invoiceAddress", invoiceAddress);
         } else {
             // get party name that appears in place of address if there is no billing address
-            Map<String, String> results = dispatcher.runSync("getPartyNameForDate", UtilMisc.toMap("partyId", (isReceipt || isPartner) ? invoice.getPartyId() : invoice.getPartyIdFrom(), "compareDate", invoice.getInvoiceDate(), "userLogin", userLogin));
-            String billingPartyName = results.get("fullName");
+            Map<String, Object> results = dispatcher.runSync("getPartyNameForDate", UtilMisc.toMap("partyId", (isReceipt || isPartner) ? invoice.getPartyId() : invoice.getPartyIdFrom(), "compareDate", invoice.getInvoiceDate(), "userLogin", userLogin));
+            String billingPartyName = (String) results.get("fullName");
             jrParameters.put("defaultBillingPartyName", billingPartyName);
         }
 
@@ -218,7 +218,7 @@ public final class InvoiceEvents {
                 for (GenericValue payment : orderPaymentList) {
                     GenericValue paymentMethodType = payment.getRelatedOne("PaymentMethodType");
                     if (UtilValidate.isNotEmpty(paymentMethodType)) {
-                        extraDetails.add(UtilMisc.toMap("title", UtilMessage.expandLabel("FinancialsPaymentMethod", locale), "message", paymentMethodType.get("description", locale)));
+                        extraDetails.add(UtilMisc.<String, String>toMap("title", UtilMessage.expandLabel("FinancialsPaymentMethod", locale), "message", paymentMethodType.get("description", locale)));
                     }
                 }
             }

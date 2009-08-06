@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -22,9 +22,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -116,7 +116,7 @@ public class ProductServices {
                             // if more than one match and not the same product, then this is an error we should report (use failure, since we don't want to cause rollback)
                             Map map = UtilMisc.toMap("idValue", productId);
                             String msg = UtilProperties.getMessage(errorResource, "OpentapsError_GoodIdentificationDupe", map, locale);
-                            return ServiceUtil.returnFailure(msg); 
+                            return ServiceUtil.returnFailure(msg);
                         }
                     }
                 }
@@ -219,10 +219,10 @@ public class ProductServices {
             return ServiceUtil.returnError(ex.getMessage());
         }
     }
-     
+
     /**
      * Return error message in case when user tries assign to product not unique identifier
-     * 
+     *
      * @param dctx
      * @param context
      * @return
@@ -230,7 +230,7 @@ public class ProductServices {
     public static Map checkGoodIdentifierUniqueness(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale)context.get("locale");
-        
+
         String goodIdentificationTypeId = (String)context.get("goodIdentificationTypeId");
         String productId = (String)context.get("productId");
         String idValue = (String)context.get("idValue");
@@ -250,18 +250,18 @@ public class ProductServices {
                 GenericValue product = EntityUtil.getFirst(products);
                 return UtilMessage.createAndLogServiceError("OpentapsError_ProductUpcCodeNotUnique", UtilMisc.toMap("goodIdentificationTypeId", goodIdentificationTypeId, "idValue", idValue, "productId", product.getString("productId")), locale, module);
             }
-            
+
         } catch (GenericEntityException gee) {
             return UtilMessage.createAndLogServiceError(gee, locale, module);
         }
-        
+
         return ServiceUtil.returnSuccess();
     }
 
     /**
-     * Service goes over product catalog and generate site map in HTML format 
+     * Service goes over product catalog and generate site map in HTML format
      * for given product store. HTML output bases on FreeMarker template.
-     * 
+     *
      * @param DispatchContext dctx
      * @param Map context
      * @return Map
@@ -284,8 +284,8 @@ public class ProductServices {
         String fileOutputLocation = (String)context.get("fileOutputLocation");
         if (UtilValidate.isEmpty(fileOutputLocation)) {
             String defaultDir = UtilConfig.getPropertyValue("opentaps", "opentaps.sitemap.default.output.dir");
-            fileOutputLocation = String.format("%1$s%2$s%3$s%4$shtml", 
-                    System.getProperty("ofbiz.home"), 
+            fileOutputLocation = String.format("%1$s%2$s%3$s%4$shtml",
+                    System.getProperty("ofbiz.home"),
                     defaultDir.startsWith("/") ? defaultDir : ("/" + defaultDir),
                     templateLocation.substring(templateLocation.lastIndexOf('/'), templateLocation.lastIndexOf('.')),
                     outputLocale.equals(Locale.getDefault()) ? "." : ("_" + outputLocale.toString() + ".")
@@ -371,7 +371,7 @@ public class ProductServices {
      * @param String parentCategoryId
      * @param Document catalogXMLMap
      * @param Element parentElement
-     * 
+     *
      * @throws GenericEntityException
      */
     protected static void writeChildCategories(GenericDelegator delegator, LocalDispatcher dispatcher, Locale locale, String parentCategoryId, Document catalogXMLMap, Element parentElement, boolean excludeProducts) throws GenericEntityException {
@@ -380,10 +380,10 @@ public class ProductServices {
         Set<String> childCategoryIds = new LinkedHashSet<String>();
 
         List<GenericValue> productCategoryRollups = delegator.findByCondition("ProductCategoryRollup", new EntityConditionList(UtilMisc.toList(new EntityExpr("parentProductCategoryId", EntityOperator.EQUALS, parentCategoryId), EntityUtil.getFilterByDateExpr()), EntityOperator.AND), Arrays.asList("productCategoryId"), Arrays.asList("sequenceNum"));
-        childCategoryIds.addAll(EntityUtil.getFieldListFromEntityList(productCategoryRollups, "productCategoryId", true));
+        childCategoryIds.addAll(EntityUtil.<String>getFieldListFromEntityList(productCategoryRollups, "productCategoryId", true));
 
         List<GenericValue> productCategories = delegator.findByAnd("ProductCategory", UtilMisc.toMap("productCategoryTypeId", "CATALOG_CATEGORY", "primaryParentCategoryId", parentCategoryId));
-        childCategoryIds.addAll(EntityUtil.getFieldListFromEntityList(productCategories, "productCategoryId", true));
+        childCategoryIds.addAll(EntityUtil.<String>getFieldListFromEntityList(productCategories, "productCategoryId", true));
         if (UtilValidate.isEmpty(childCategoryIds)) return;
 
         // get all categories
@@ -430,20 +430,20 @@ public class ProductServices {
      * @param String productCategoryId
      * @param Document catalogXMLMap
      * @param Element parentElement
-     * 
+     *
      * @return TODO
      * @throws GenericEntityException
      */
     protected static int writeCategoryProducts(GenericDelegator delegator, LocalDispatcher dispatcher, Locale locale, String productCategoryId, Document catalogXMLMap, Element parentElement, boolean excludeProducts) throws GenericEntityException {
 
         int productsCount = 0;
-        
+
         // collect IDs of category products
         Set<String> productIds = new LinkedHashSet<String>();
         List<GenericValue> productCategoryMembers = delegator.findByCondition("ProductCategoryMember", new EntityConditionList(Arrays.asList(new EntityExpr("productCategoryId", EntityOperator.EQUALS, productCategoryId), EntityUtil.getFilterByDateExpr()), EntityOperator.AND), Arrays.asList("productId"), null);
-        productIds.addAll(EntityUtil.getFieldListFromEntityList(productCategoryMembers, "productId", true));
+        productIds.addAll(EntityUtil.<String>getFieldListFromEntityList(productCategoryMembers, "productId", true));
         List<GenericValue> products = delegator.findByAnd("Product", UtilMisc.toMap("primaryProductCategoryId", productCategoryId));
-        productIds.addAll(EntityUtil.getFieldListFromEntityList(products, "productId", true));
+        productIds.addAll(EntityUtil.<String>getFieldListFromEntityList(products, "productId", true));
         if (UtilValidate.isEmpty(productIds)) return productsCount;
 
         // get list of products
@@ -456,7 +456,7 @@ public class ProductServices {
             return (int)delegator.findCountByCondition("Product", conditionList, null);
         List<GenericValue> categoryProducts = delegator.findByCondition("Product", conditionList, null, Arrays.asList("productName"));
         if (UtilValidate.isEmpty(categoryProducts)) return productsCount;
-        
+
         productsCount = categoryProducts.size();
 
         for (GenericValue product : categoryProducts) {
@@ -465,8 +465,8 @@ public class ProductServices {
             Element productElement = catalogXMLMap.createElement("product");
             parentElement.appendChild(productElement);
             productElement.setAttribute("id", product.getString("productId"));
-            ProductContentWrapper wrapper = new ProductContentWrapper(dispatcher, product, locale, null); 
-            productElement.setAttribute("name", wrapper.get("PRODUCT_NAME"));
+            ProductContentWrapper wrapper = new ProductContentWrapper(dispatcher, product, locale, null);
+            productElement.setAttribute("name", wrapper.get("PRODUCT_NAME").toString());
 
             List<GenericValue> categoryMember = product.getRelatedByAnd("ProductCategoryMember", UtilMisc.toMap("productCategoryId", productCategoryId));
             if (UtilValidate.isNotEmpty(categoryMember)) {
@@ -479,14 +479,14 @@ public class ProductServices {
                 }
             }
         }
-        
+
         return productsCount;
     }
 
     /**
      * Service calculate the productPrice using the calculateProductPrice ofbiz service
      * and adding the MIN_ADV_PRICE
-     * 
+     *
      * @param DispatchContext dctx
      * @param Map context
      * @return Map
@@ -544,7 +544,7 @@ public class ProductServices {
                 productStoreGroupId = "_NA_";
             }
         }
-        
+
         // if currencyUomId is null get from properties file, if nothing there assume USD (USD: American Dollar) for now
         String currencyUomId = (String) context.get("currencyUomId");
         if (UtilValidate.isEmpty(currencyUomId)) {
@@ -586,11 +586,11 @@ public class ProductServices {
 
         List productPriceEcList = FastList.newInstance();
         productPriceEcList.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
-        // this funny statement is for backward compatibility purposes; the productPricePurposeId is a new pk field on the ProductPrice entity and in order databases may not be populated, until the pk is updated and such; this will ease the transition somewhat 
+        // this funny statement is for backward compatibility purposes; the productPricePurposeId is a new pk field on the ProductPrice entity and in order databases may not be populated, until the pk is updated and such; this will ease the transition somewhat
         if ("PURCHASE".equals(productPricePurposeId)) {
             productPriceEcList.add(new EntityExpr(
-                    new EntityExpr("productPricePurposeId", EntityOperator.EQUALS, productPricePurposeId), 
-                    EntityOperator.OR, 
+                    new EntityExpr("productPricePurposeId", EntityOperator.EQUALS, productPricePurposeId),
+                    EntityOperator.OR,
                     new EntityExpr("productPricePurposeId", EntityOperator.EQUALS, null)));
         } else {
             productPriceEcList.add(new EntityExpr("productPricePurposeId", EntityOperator.EQUALS, productPricePurposeId));
