@@ -45,15 +45,15 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
     @SuppressWarnings("unchecked")
     public SupplierProduct getSupplierProduct(String supplierPartyId, String productId, BigDecimal quantityToPurchase, String currencyUomId) throws RepositoryException {
         GenericValue supplierProduct = null;
-        Map params = UtilMisc.toMap("productId", productId,
+        Map<String, Object> params = UtilMisc.<String, Object>toMap("productId", productId,
                                     "partyId", supplierPartyId,
                                     "currencyUomId", currencyUomId,
                                     "quantity", quantityToPurchase.doubleValue());
         try {
-            Map result = getDispatcher().runSync("getSuppliersForProduct", params);
-            List productSuppliers = (List) result.get("supplierProducts");
+            Map<String, Object> result = getDispatcher().runSync("getSuppliersForProduct", params);
+            List<GenericValue> productSuppliers = (List<GenericValue>) result.get("supplierProducts");
             if ((productSuppliers != null) && (productSuppliers.size() > 0)) {
-                supplierProduct = (GenericValue) productSuppliers.get(0);
+                supplierProduct = productSuppliers.get(0);
             }
         } catch (GenericServiceException e) {
             Debug.logError(e.getMessage(), MODULE);
@@ -67,9 +67,8 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public void createSupplierProduct(SupplierProduct supplierProduct) throws RepositoryException {
-        Map supplierProductMap = UtilMisc.toMap("productId", supplierProduct.getProductId());
+        Map<String, Object> supplierProductMap = UtilMisc.<String, Object>toMap("productId", supplierProduct.getProductId());
         supplierProductMap.put("supplierProductId", supplierProduct.getSupplierProductId());
         // contruct parameters for call service
         supplierProductMap.put("partyId", supplierProduct.getPartyId());
@@ -108,7 +107,7 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
         supplierProductMap.put("userLogin", getInfrastructure().getSystemUserLogin());
         try {
             //call service to create supplierProduct
-            Map results = getDispatcher().runSync("createSupplierProduct", supplierProductMap);
+            Map<String, Object> results = getDispatcher().runSync("createSupplierProduct", supplierProductMap);
             if (ServiceUtil.isError(results)) {
                 throw new RepositoryException("can not create supplier product");
             }

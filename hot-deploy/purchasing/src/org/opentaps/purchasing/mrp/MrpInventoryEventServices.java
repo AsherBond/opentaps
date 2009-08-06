@@ -37,7 +37,9 @@
 
 package org.opentaps.purchasing.mrp;
 
+import java.math.BigDecimal;
 import java.util.*;
+
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -57,8 +59,8 @@ public final class MrpInventoryEventServices {
      * Describe <code>createOrUpdateMrpInventoryEvent</code> method here.
      *
      * @param mrpInventoryEventKeyMap a <code>Map</code> value
-     * @param newQuantity a <code>Double</code> value
-     * @param netQoh a <code>Double</code> value
+     * @param newQuantity a <code>BigDecimal</code> value
+     * @param netQoh a <code>BigDecimal</code> value
      * @param eventName a <code>String</code> value
      * @param isLate a <code>boolean</code> value
      * @param mrpInventoryEventDetailInput a <code>Map</code> value
@@ -66,7 +68,7 @@ public final class MrpInventoryEventServices {
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static void createOrUpdateMrpInventoryEvent(Map mrpInventoryEventKeyMap, Double newQuantity, Double netQoh, String eventName, boolean isLate, Map mrpInventoryEventDetailInput, GenericDelegator delegator) throws GenericEntityException {
+    public static void createOrUpdateMrpInventoryEvent(Map mrpInventoryEventKeyMap, BigDecimal newQuantity, BigDecimal netQoh, String eventName, boolean isLate, Map mrpInventoryEventDetailInput, GenericDelegator delegator) throws GenericEntityException {
         GenericValue mrpInventoryEvent = null;
         mrpInventoryEvent = delegator.findByPrimaryKey("MrpInventoryEvent", mrpInventoryEventKeyMap);
         if (mrpInventoryEvent == null) {
@@ -78,8 +80,8 @@ public final class MrpInventoryEventServices {
             mrpInventoryEvent.create();
         } else {
             if (newQuantity != null) {
-                double qties = newQuantity.doubleValue() + ((Double) mrpInventoryEvent.get("eventQuantity")).doubleValue();
-                mrpInventoryEvent.put("eventQuantity", new Double(qties));
+                BigDecimal qties = newQuantity.add(mrpInventoryEvent.getBigDecimal("eventQuantity"));
+                mrpInventoryEvent.put("eventQuantity", qties);
             }
             if (netQoh != null) {
                 //double qties = netQoh.doubleValue() + ((Double)mrpInventoryEvent.get("netQoh")).doubleValue();
@@ -106,12 +108,12 @@ public final class MrpInventoryEventServices {
      *
      * @param mrpInventoryEventKeyMap a <code>Map</code> value
      * @param mrpInventoryEventDetailInput a <code>Map</code> value
-     * @param newQuantity a <code>Double</code> value
+     * @param newQuantity a <code>BigDecimal</code> value
      * @param delegator a <code>GenericDelegator</code> value
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static void createMrpInventoryEventDetail(Map mrpInventoryEventKeyMap, Map mrpInventoryEventDetailInput, Double newQuantity, GenericDelegator delegator) throws GenericEntityException {
+    public static void createMrpInventoryEventDetail(Map mrpInventoryEventKeyMap, Map mrpInventoryEventDetailInput, BigDecimal newQuantity, GenericDelegator delegator) throws GenericEntityException {
         String mrpInventoryEventTypeId = (String) mrpInventoryEventKeyMap.get("inventoryEventPlanTypeId");
         if ("SALES_ORDER_SHIP".equals(mrpInventoryEventTypeId) && UtilValidate.isNotEmpty(mrpInventoryEventDetailInput)) {
             mrpInventoryEventKeyMap.putAll(mrpInventoryEventDetailInput);
@@ -124,8 +126,8 @@ public final class MrpInventoryEventServices {
                 delegator.setNextSubSeqId(mrpInventoryEventDetail, "mrpInvEvtDetSeqId", MRP_INVENTORY_EVENT_DETAIL_PADDING, 1);
                 mrpInventoryEventDetail.create();
             } else {
-                double qties = newQuantity.doubleValue() + ((Double) mrpInventoryEventDetail.get("quantity")).doubleValue();
-                mrpInventoryEventDetail.put("quantity", new Double(qties));
+                BigDecimal qties = newQuantity.add(mrpInventoryEventDetail.getBigDecimal("quantity"));
+                mrpInventoryEventDetail.put("quantity", qties);
                 mrpInventoryEventDetail.store();
             }
         }

@@ -78,10 +78,10 @@ public class BomNode {
     private GenericValue productAssoc; // the product assoc record (from ProductAssoc entity) in which the current product is in productIdTo
     private List<GenericValue> children = new ArrayList<GenericValue>(); // current node's children (ProductAssocs)
     private List<BomNode> childrenNodes = new ArrayList<BomNode>(); // current node's children nodes (BomNode)
-    private double quantityMultiplier = 1; // the necessary quantity as declared in the bom (from ProductAssocs or ProductManufacturingRule)
-    private double scrapFactor = 1; // the scrap factor as declared in the bom (from ProductAssocs)
+    private BigDecimal quantityMultiplier = BigDecimal.ONE; // the necessary quantity as declared in the bom (from ProductAssocs or ProductManufacturingRule)
+    private BigDecimal scrapFactor = BigDecimal.ONE; // the scrap factor as declared in the bom (from ProductAssocs)
     private int depth = 0; // the depth of this node in the current tree
-    private double quantity = 0; // the quantity of this node in the current tree
+    private BigDecimal quantity = BigDecimal.ZERO; // the quantity of this node in the current tree
     private String bomTypeId; // the type of the current tree
 
     /**
@@ -224,11 +224,11 @@ public class BomNode {
                 String ruleCondition = rule.getString("productFeature");
                 String ruleOperator = rule.getString("ruleOperator");
                 String newPart = rule.getString("productIdInSubst");
-                double ruleQuantity = 0;
+                BigDecimal ruleQuantity = BigDecimal.ZERO;
                 try {
-                    ruleQuantity = rule.getDouble("quantity").doubleValue();
+                    ruleQuantity = rule.getBigDecimal("quantity");
                 } catch (Exception exc) {
-                    ruleQuantity = 0;
+                    ruleQuantity = BigDecimal.ZERO;
                 }
 
                 boolean ruleSatisfied = false;
@@ -256,7 +256,7 @@ public class BomNode {
                         oneChildNode.setRuleApplied(rule);
                         oneChildNode.setProductAssoc(origNode.getProductAssoc());
                         oneChildNode.setScrapFactor(origNode.getScrapFactor());
-                        if (ruleQuantity > 0) {
+                        if (ruleQuantity.signum() > 0) {
                             oneChildNode.setQuantityMultiplier(ruleQuantity);
                         } else {
                             oneChildNode.setQuantityMultiplier(origNode.getQuantityMultiplier());
@@ -277,23 +277,23 @@ public class BomNode {
         oneChildNode.setTree(tree);
         oneChildNode.setProductAssoc(node);
         try {
-            oneChildNode.setQuantityMultiplier(node.getDouble("quantity").doubleValue());
+            oneChildNode.setQuantityMultiplier(node.getBigDecimal("quantity"));
         } catch (Exception nfe) {
-            oneChildNode.setQuantityMultiplier(1);
+            oneChildNode.setQuantityMultiplier(BigDecimal.ONE);
         }
         try {
-            double percScrapFactor = node.getDouble("scrapFactor").doubleValue();
-
+            BigDecimal percScrapFactor = node.getBigDecimal("scrapFactor");
+            BigDecimal hundred = new BigDecimal(100);
             // A negative scrap factor is a salvage factor
-            if (percScrapFactor > -100 && percScrapFactor < 100) {
-                percScrapFactor = 1 + percScrapFactor / 100;
+            if (percScrapFactor.compareTo(hundred.negate()) > 0 && percScrapFactor.compareTo(hundred) < 0) {
+                percScrapFactor = BigDecimal.ONE.add(percScrapFactor.divide(hundred));
             } else {
                 Debug.logWarning("A scrap factor of [" + percScrapFactor + "] was ignored", MODULE);
-                percScrapFactor = 1;
+                percScrapFactor = BigDecimal.ONE;
             }
             oneChildNode.setScrapFactor(percScrapFactor);
         } catch (Exception nfe) {
-            oneChildNode.setScrapFactor(1);
+            oneChildNode.setScrapFactor(BigDecimal.ONE);
         }
         BomNode newNode = oneChildNode;
         // CONFIGURATOR
@@ -464,10 +464,10 @@ public class BomNode {
 
     /**
      * Debugs the Nodes by writing in the log.
-     * @param quantity a <code>double</code> value
+     * @param quantity a <code>BigDecimal</code> value
      * @param depth an <code>int</code> value
      */
-    public void debug(double quantity, int depth) {
+    public void debug(BigDecimal quantity, int depth) {
         StringBuffer sb = new StringBuffer();
         for (int i = 0; i < depth; i++) {
             sb.append(" ");
@@ -482,15 +482,15 @@ public class BomNode {
         depth++;
         for (int i = 0; i < children.size(); i++) {
             oneChild = children.get(i);
-            double bomQuantity = 0;
+            BigDecimal bomQuantity = BigDecimal.ZERO;
             try {
-                bomQuantity = oneChild.getDouble("quantity").doubleValue();
+                bomQuantity = oneChild.getBigDecimal("quantity");
             } catch (Exception exc) {
-                bomQuantity = 1;
+                bomQuantity = BigDecimal.ONE;
             }
             oneChildNode = childrenNodes.get(i);
             if (oneChildNode != null) {
-                oneChildNode.debug(quantity * bomQuantity, depth);
+                oneChildNode.debug(quantity.multiply(bomQuantity), depth);
             }
         }
     }
@@ -499,10 +499,10 @@ public class BomNode {
      * Method used for TEST and DEBUG purposes.
      *
      * @param sb a <code>StringBuffer</code> value
-     * @param quantity a <code>double</code> value
+     * @param quantity a <code>BigDecimal</code> value
      * @param depth an <code>int</code> value
      */
-    public void print(StringBuffer sb, double quantity, int depth) {
+    public void print(StringBuffer sb, BigDecimal quantity, int depth) {
         for (int i = 0; i < depth; i++) {
             sb.append("<b>&nbsp;*&nbsp;</b>");
         }
@@ -514,16 +514,16 @@ public class BomNode {
         depth++;
         for (int i = 0; i < children.size(); i++) {
             oneChild = children.get(i);
-            double bomQuantity = 0;
+            BigDecimal bomQuantity = BigDecimal.ZERO;
             try {
-                bomQuantity = oneChild.getDouble("quantity").doubleValue();
+                bomQuantity = oneChild.getBigDecimal("quantity");
             } catch (Exception exc) {
-                bomQuantity = 1;
+                bomQuantity = BigDecimal.ONE;
             }
             oneChildNode = childrenNodes.get(i);
             sb.append("<br/>");
             if (oneChildNode != null) {
-                oneChildNode.print(sb, (quantity * bomQuantity), depth);
+                oneChildNode.print(sb, quantity.multiply(bomQuantity), depth);
             }
         }
     }
@@ -532,12 +532,12 @@ public class BomNode {
      * Describe <code>print</code> method here.
      *
      * @param arr an <code>List</code> value
-     * @param quantity a <code>double</code> value
+     * @param quantity a <code>BigDecimal</code> value
      * @param depth an <code>int</code> value
      * @param excludeWIPs a <code>boolean</code> value
      */
     @SuppressWarnings("unchecked")
-    public void print(List<BomNode> arr, double quantity, int depth, boolean excludeWIPs) {
+    public void print(List<BomNode> arr, BigDecimal quantity, int depth, boolean excludeWIPs) {
         // Now we set the depth and quantity of the current node
         // in this breakdown.
         this.depth = depth;
@@ -553,7 +553,7 @@ public class BomNode {
             }
         }
         if (serviceName != null) {
-            Map arguments = UtilMisc.toMap("neededQuantity", new Double(quantity * quantityMultiplier), "amount", new Double((tree != null ? tree.getRootAmount() : 0)));
+            Map arguments = UtilMisc.toMap("neededQuantity", quantity.multiply(quantityMultiplier).doubleValue(), "amount", (tree != null ? tree.getRootAmount().doubleValue() : 0.0));
             Double width = null;
             if (getProduct().get("productWidth") != null) {
                 width = getProduct().getDouble("productWidth");
@@ -567,13 +567,13 @@ public class BomNode {
                 Map result = dispatcher.runSync(serviceName, inputContext);
                 Double calcQuantity = (Double) result.get("quantity");
                 if (calcQuantity != null) {
-                    this.quantity = calcQuantity.doubleValue();
+                    this.quantity = BigDecimal.valueOf(calcQuantity);
                 }
             } catch (GenericServiceException e) {
                 Debug.logError(e, "Problem calling the getManufacturingComponents service", MODULE);
             }
         } else {
-            this.quantity = quantity * quantityMultiplier * scrapFactor;
+            this.quantity = quantity.multiply(quantityMultiplier).multiply(scrapFactor);
         }
         // First of all we visit the current node.
         arr.add(this);
@@ -592,15 +592,15 @@ public class BomNode {
     /**
      * Collects Nodes in the given <code>List</code> for which the product has a <code>shipmentBoxTypeId</code>.
      * @param nodes the <code>List</code> where to collect the Nodes
-     * @param quantity a <code>double</code> value
+     * @param quantity a <code>BigDecimal</code> value
      * @param depth an <code>int</code> value
      * @param excludeWIPs a <code>boolean</code> value
      */
-    public void getProductsInPackages(List<BomNode> nodes, double quantity, int depth, boolean excludeWIPs) {
+    public void getProductsInPackages(List<BomNode> nodes, BigDecimal quantity, int depth, boolean excludeWIPs) {
         // Now we set the depth and quantity of the current node
         // in this breakdown.
         this.depth = depth;
-        this.quantity = quantity * quantityMultiplier * scrapFactor;
+        this.quantity = quantity.multiply(quantityMultiplier).multiply(scrapFactor);
         // First of all we visit the current node.
         if (this.getProduct().getString("shipmentBoxTypeId") != null) {
             nodes.add(this);
@@ -631,7 +631,7 @@ public class BomNode {
         }
 
         // Now we add the current quantity to the node
-        sameNode.setQuantity(sameNode.getQuantity() + quantity);
+        sameNode.setQuantity(sameNode.getQuantity().add(quantity));
 
         // Now (recursively) we visit the children.
         for (BomNode node : childrenNodes) {
@@ -708,7 +708,7 @@ public class BomNode {
                 serviceContext.put("workEffortName", "SP_" + shipmentId + "_" + serviceContext.get("productId"));
             }
 
-            serviceContext.put("pRQuantity", new Double(getQuantity()));
+            serviceContext.put("pRQuantity", getQuantity().doubleValue());
             if (UtilValidate.isNotEmpty(maxEndDate)) {
                 serviceContext.put("startDate", maxEndDate);
             } else {
@@ -752,7 +752,7 @@ public class BomNode {
     public Timestamp getStartDate(String facilityId, Timestamp requiredBydate, boolean allNodes) {
         Timestamp minStartDate = requiredBydate;
         if ("WIP".equals(getProduct().getString("productTypeId")) || allNodes) {
-            ProposedOrder proposedOrder = new ProposedOrder(getProduct(), facilityId, facilityId, true, requiredBydate, BigDecimal.valueOf(getQuantity()));
+            ProposedOrder proposedOrder = new ProposedOrder(getProduct(), facilityId, facilityId, true, requiredBydate, getQuantity());
             proposedOrder.calculateStartDate(0, null, delegator, dispatcher, userLogin);
             Timestamp startDate = proposedOrder.getRequirementStartDate();
             minStartDate = startDate;
@@ -773,7 +773,6 @@ public class BomNode {
      * meaning that no active stock targets are set for this product.
      * @return if this Node product is managed in a warehouse
      */
-    @SuppressWarnings("unchecked")
     public boolean isWarehouseManaged() {
         boolean isWarehouseManaged = false;
         try {
@@ -802,7 +801,6 @@ public class BomNode {
      * @param ignoreSupplierProducts if set will not check for expired SupplierProducts
      * @return if this Node product is considered manufactured
      */
-    @SuppressWarnings("unchecked")
     public boolean isManufactured(boolean ignoreSupplierProducts) {
         List<GenericValue> supplierProducts = null;
         if (!ignoreSupplierProducts) {
@@ -854,7 +852,7 @@ public class BomNode {
      * Gets this Node quantity.
      * @return this Node quantity
      */
-    public double getQuantity() {
+    public BigDecimal getQuantity() {
         return quantity;
     }
 
@@ -862,7 +860,7 @@ public class BomNode {
      * Sets this Node quantity.
      * @param quantity this Node quantity
      */
-    public void setQuantity(double quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
     }
 
@@ -942,7 +940,7 @@ public class BomNode {
      * Gets the quantity multiplier for this Node.
      * @return the quantity multiplier for this Node
      */
-    public double getQuantityMultiplier() {
+    public BigDecimal getQuantityMultiplier() {
         return quantityMultiplier;
     }
 
@@ -950,7 +948,7 @@ public class BomNode {
      * Sets the quantity multiplier for this Node.
      * @param quantityMultiplier the quantity multiplier
      */
-    public void setQuantityMultiplier(double quantityMultiplier) {
+    public void setQuantityMultiplier(BigDecimal quantityMultiplier) {
         this.quantityMultiplier = quantityMultiplier;
     }
 
@@ -974,7 +972,7 @@ public class BomNode {
      * Gets the scrap factor for this Node, defaults to 1.
      * @return the scrap factor for this Node, defaults to 1
      */
-    public double getScrapFactor() {
+    public BigDecimal getScrapFactor() {
         return scrapFactor;
     }
 
@@ -982,7 +980,7 @@ public class BomNode {
      * Sets the scrap factor for this Node, defaults to 1.
      * @param scrapFactor the scrap factor
      */
-    public void setScrapFactor(double scrapFactor) {
+    public void setScrapFactor(BigDecimal scrapFactor) {
         this.scrapFactor = scrapFactor;
     }
 
@@ -1034,7 +1032,6 @@ public class BomNode {
         return tree;
     }
 
-    @SuppressWarnings("unchecked")
     private List<GenericValue> getProductAssocs(String productId, String routingId, String partBomTypeId, Date inDate) throws GenericEntityException {
         List<GenericValue> rows = delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId", productId, "productAssocTypeId", partBomTypeId, "specificRoutingWorkEffortId", routingId), UtilMisc.toList("sequenceNum"));
         return EntityUtil.filterByDate(rows, inDate);

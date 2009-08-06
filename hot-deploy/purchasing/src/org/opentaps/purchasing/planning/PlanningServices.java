@@ -16,22 +16,17 @@
 
 package org.opentaps.purchasing.planning;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javolution.util.FastList;
-
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
@@ -72,17 +67,16 @@ public final class PlanningServices {
         String organizationPartyId = (String) context.get("organizationPartyId");
 
         try {
-            List searchConditions = UtilMisc.toList(
-                                    new EntityExpr("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(organizationPartyId, delegator)),
-                                    new EntityConditionList(
-                                        UtilMisc.toList(new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_CREATED"),
-                                                        new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")),
-                                       EntityOperator.OR));
+            EntityCondition searchConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                    EntityCondition.makeCondition("facilityId", EntityOperator.IN, UtilCommon.getOrgReceivingFacilityIds(organizationPartyId, delegator)),
+                                    EntityCondition.makeCondition(EntityOperator.OR,
+                                                                  EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_CREATED"),
+                                                                  EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")));
 
             // this service is probably only called when there are lots of requirements, so best be safe and use a list iterator
-            EntityListIterator eli = delegator.findListIteratorByCondition("Requirement", new EntityConditionList(searchConditions, EntityOperator.AND), UtilMisc.toList("requirementId"), UtilMisc.toList("requirementId"));
+            EntityListIterator eli = delegator.findListIteratorByCondition("Requirement", searchConditions, UtilMisc.toList("requirementId"), UtilMisc.toList("requirementId"));
             GenericValue requirement = null;
-            while ((requirement = (GenericValue) eli.next()) != null) {
+            while ((requirement = eli.next()) != null) {
                 Map tmpResult = dispatcher.runSync("approveRequirement", UtilMisc.toMap("requirementId", requirement.getString("requirementId"), "userLogin", userLogin));
                 if (ServiceUtil.isError(tmpResult)) {
                     return tmpResult;
@@ -119,15 +113,15 @@ public final class PlanningServices {
         try {
 
             // Get list of requirementId with approved status and assigned to partyId
-            List searchConditions = FastList.newInstance();
-            searchConditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, partyId));
-            searchConditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, "SUPPLIER"));
-            searchConditions.add(new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT"));
-            searchConditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_APPROVED"));
+            List<EntityCondition> searchConditions = FastList.newInstance();
+            searchConditions.add(EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId));
+            searchConditions.add(EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "SUPPLIER"));
+            searchConditions.add(EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT"));
+            searchConditions.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_APPROVED"));
 
             List selectList = UtilMisc.toList("requirementId");
 
-            requirements = delegator.findByCondition("RequirementAndRole", new EntityConditionList(searchConditions, EntityOperator.AND), selectList, null);
+            requirements = delegator.findByCondition("RequirementAndRole", EntityCondition.makeCondition(searchConditions, EntityOperator.AND), selectList, null);
 
             List listReqIds = EntityUtil.getFieldListFromEntityList(requirements, "requirementId", true);
             canceledRequirements = listReqIds.size();

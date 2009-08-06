@@ -48,10 +48,10 @@ import org.opentaps.foundation.repository.RepositoryException;
  */
 public class OpentapsProductionRun extends ProductionRun {
 
-    private  Map<String, Double> productsToProduce = null;
-    private  Map<String, Double> productsProduced = null;
+    private  Map<String, BigDecimal> productsToProduce = null;
+    private  Map<String, BigDecimal> productsProduced = null;
 
-    private  Map<String, Double> productsPlannedToProduce = null;
+    private  Map<String, BigDecimal> productsPlannedToProduce = null;
 
     private User user;
     private Infrastructure infrastructure;
@@ -131,7 +131,7 @@ public class OpentapsProductionRun extends ProductionRun {
      * @exception GenericEntityException if an error occurs
      * @see #getProductsProduced
      */
-    public Map<String, Double> getProductsToProduce() throws GenericEntityException {
+    public Map<String, BigDecimal> getProductsToProduce() throws GenericEntityException {
         if (productsToProduce != null) {
             return productsToProduce;
         }
@@ -145,8 +145,8 @@ public class OpentapsProductionRun extends ProductionRun {
      * @return the quantity of the given product being produced
      * @exception GenericEntityException if an error occurs
      */
-    public Double getQuantityToProduce(String productId) throws GenericEntityException {
-        Map<String, Double> map = getProductsToProduce();
+    public BigDecimal getQuantityToProduce(String productId) throws GenericEntityException {
+        Map<String, BigDecimal> map = getProductsToProduce();
         return map.get(productId);
     }
 
@@ -158,8 +158,8 @@ public class OpentapsProductionRun extends ProductionRun {
      * @exception GenericEntityException if an error occurs
      * @see #getQuantityToProduce
      */
-    public Double getQuantityPlannedToProduce(String productId) throws GenericEntityException {
-        Map<String, Double> map = getProductsPlannedToProduce();
+    public BigDecimal getQuantityPlannedToProduce(String productId) throws GenericEntityException {
+        Map<String, BigDecimal> map = getProductsPlannedToProduce();
         return map.get(productId);
     }
 
@@ -170,7 +170,7 @@ public class OpentapsProductionRun extends ProductionRun {
      * @exception GenericEntityException if an error occurs
      * @see #getProductsToProduce
      */
-    public Map<String, Double> getProductsPlannedToProduce() throws GenericEntityException {
+    public Map<String, BigDecimal> getProductsPlannedToProduce() throws GenericEntityException {
         if (productsPlannedToProduce == null) {
             productsPlannedToProduce = getWegsProductSums("PRUN_PROD_DELIV", false);
         }
@@ -183,7 +183,7 @@ public class OpentapsProductionRun extends ProductionRun {
      * @exception GenericEntityException if an error occurs
      * @see #getProductsToProduce
      */
-    public Map<String, Double> getProductsProduced() throws GenericEntityException {
+    public Map<String, BigDecimal> getProductsProduced() throws GenericEntityException {
         if (productsProduced != null) {
             return productsProduced;
         }
@@ -197,24 +197,24 @@ public class OpentapsProductionRun extends ProductionRun {
      * @return the quantity of the given product that was produced
      * @exception GenericEntityException if an error occurs
      */
-    public double getQuantityProduced(String productId) throws GenericEntityException {
-        Map<String, Double> map = getProductsProduced();
-        Double produced = map.get(productId);
+    public BigDecimal getQuantityProduced(String productId) throws GenericEntityException {
+        Map<String, BigDecimal> map = getProductsProduced();
+        BigDecimal produced = map.get(productId);
         if (produced == null) {
-            return 0;
+            return BigDecimal.ZERO;
         } else {
             return produced;
         }
     }
 
     // helper method for sum of all active wegs (status is ignored)
-    private Map<String, Double> getWegsProductSums(String workEffortGoodStdTypeId) throws GenericEntityException {
+    private Map<String, BigDecimal> getWegsProductSums(String workEffortGoodStdTypeId) throws GenericEntityException {
         return getWegsProductSums(workEffortGoodStdTypeId, true);
     }
 
     // helper method for sum of all active wegs (status is ignored)
     @SuppressWarnings("unchecked")
-    private Map<String, Double> getWegsProductSums(String workEffortGoodStdTypeId, boolean filterFutureWegs) throws GenericEntityException {
+    private Map<String, BigDecimal> getWegsProductSums(String workEffortGoodStdTypeId, boolean filterFutureWegs) throws GenericEntityException {
         List<GenericValue> wegsList = productionRun.getRelatedByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortGoodStdTypeId", workEffortGoodStdTypeId));
         if (filterFutureWegs) {
             wegsList = EntityUtil.filterByDate(wegsList);
@@ -225,7 +225,7 @@ public class OpentapsProductionRun extends ProductionRun {
             if (!filterFutureWegs && UtilValidate.isNotEmpty(produced.get("thruDate"))) {
                 continue;
             }
-            UtilMisc.addToDoubleInMap(productSums, produced.get("productId"), produced.getDouble("estimatedQuantity"));
+            UtilMisc.addToBigDecimalInMap(productSums, produced.get("productId"), produced.getBigDecimal("estimatedQuantity"));
         }
         return productSums;
     }
@@ -270,15 +270,15 @@ public class OpentapsProductionRun extends ProductionRun {
             }
             return false;
         }
-        Map<String, Double> toProduce = getProductsToProduce();
-        Map<String, Double> produced = getProductsProduced();
+        Map<String, BigDecimal> toProduce = getProductsToProduce();
+        Map<String, BigDecimal> produced = getProductsProduced();
         for (String productId : toProduce.keySet()) {
-            double quantityToProduce = toProduce.get(productId);
-            if (quantityToProduce <= 0) {
+            BigDecimal quantityToProduce = toProduce.get(productId);
+            if (quantityToProduce.signum() <= 0) {
                 continue;
             }
-            Double quantityProduced = produced.get(productId);
-            if (quantityProduced == null || quantityToProduce > quantityProduced.doubleValue()) {
+            BigDecimal quantityProduced = produced.get(productId);
+            if (quantityProduced == null || quantityToProduce.compareTo(quantityProduced) > 0) {
                 return true;
             }
         }

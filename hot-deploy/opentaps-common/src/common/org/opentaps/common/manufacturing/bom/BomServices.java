@@ -38,6 +38,7 @@
 
 package org.opentaps.common.manufacturing.bom;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -111,10 +112,10 @@ public final class BomServices {
         }
         if (tree != null) {
             if (quantity != null) {
-                tree.setRootQuantity(quantity.doubleValue());
+                tree.setRootQuantity(BigDecimal.valueOf(quantity));
             }
             if (amount != null) {
-                tree.setRootAmount(amount.doubleValue());
+                tree.setRootAmount(BigDecimal.valueOf(amount));
             }
         }
 
@@ -221,8 +222,8 @@ public final class BomServices {
         List<BomNode> components = new ArrayList<BomNode>();
         try {
             tree = new BomTree(productId, "MANUF_COMPONENT", fromDate, BomTree.EXPLOSION_SINGLE_LEVEL, bomRoutingId, delegator, dispatcher, userLogin);
-            tree.setRootQuantity(quantity.doubleValue());
-            tree.setRootAmount(amount.doubleValue());
+            tree.setRootQuantity(BigDecimal.valueOf(quantity));
+            tree.setRootAmount(BigDecimal.valueOf(amount));
             Debug.logInfo("Debugging BomTree for product [" + productId + "] and routing [" + routingId + "]", MODULE);
             tree.debug();
             tree.print(components, excludeWIPs.booleanValue());
@@ -241,7 +242,7 @@ public final class BomServices {
         for (BomNode node : components) {
             Map componentMap = new HashMap();
             componentMap.put("product", node.getProduct());
-            componentMap.put("quantity", new Double(node.getQuantity()));
+            componentMap.put("quantity", node.getQuantity().doubleValue());
             componentsMap.add(componentMap);
         }
         result.put("componentsMap", componentsMap);

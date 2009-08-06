@@ -21,8 +21,6 @@ import javolution.util.FastList;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.domain.base.entities.Requirement;
@@ -61,10 +59,10 @@ public class PlanningRepository extends Repository implements PlanningRepository
     /** {@inheritDoc} */
     public List<RequirementRole> getSupplierRequirementRoles(Requirement requirement) throws RepositoryException {
         List<EntityCondition> conditions = new FastList<EntityCondition>();
-        conditions.add(new EntityExpr(RequirementRole.Fields.requirementId.name(), EntityOperator.EQUALS, requirement.getRequirementId()));
-        conditions.add(new EntityExpr(RequirementRole.Fields.roleTypeId.name(), EntityOperator.EQUALS, "SUPPLIER"));
+        conditions.add(EntityCondition.makeCondition(RequirementRole.Fields.requirementId.name(), EntityOperator.EQUALS, requirement.getRequirementId()));
+        conditions.add(EntityCondition.makeCondition(RequirementRole.Fields.roleTypeId.name(), EntityOperator.EQUALS, "SUPPLIER"));
         conditions.add(EntityUtil.getFilterByDateExpr());
-        EntityConditionList conditionList = new EntityConditionList(conditions, EntityOperator.AND);
+        EntityCondition conditionList = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 
         return findList(RequirementRole.class, conditionList);
     }
@@ -72,11 +70,11 @@ public class PlanningRepository extends Repository implements PlanningRepository
     /** {@inheritDoc} */
     public List<RequirementRole> getSupplierRequirementRoles(Requirement requirement, String supplierId) throws RepositoryException {
         List<EntityCondition> conditions = new FastList<EntityCondition>();
-        conditions.add(new EntityExpr(RequirementRole.Fields.requirementId.name(), EntityOperator.EQUALS, requirement.getRequirementId()));
-        conditions.add(new EntityExpr(RequirementRole.Fields.roleTypeId.name(), EntityOperator.EQUALS, "SUPPLIER"));
-        conditions.add(new EntityExpr(RequirementRole.Fields.partyId.name(), EntityOperator.EQUALS, supplierId));
+        conditions.add(EntityCondition.makeCondition(RequirementRole.Fields.requirementId.name(), EntityOperator.EQUALS, requirement.getRequirementId()));
+        conditions.add(EntityCondition.makeCondition(RequirementRole.Fields.roleTypeId.name(), EntityOperator.EQUALS, "SUPPLIER"));
+        conditions.add(EntityCondition.makeCondition(RequirementRole.Fields.partyId.name(), EntityOperator.EQUALS, supplierId));
         conditions.add(EntityUtil.getFilterByDateExpr());
-        EntityConditionList conditionList = new EntityConditionList(conditions, EntityOperator.AND);
+        EntityCondition conditionList = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 
         return findList(RequirementRole.class, conditionList);
     }

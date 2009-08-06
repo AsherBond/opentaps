@@ -36,6 +36,7 @@
 /* This file has been modified by Open Source Strategies, Inc. */
 package org.opentaps.purchasing.order;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.HashMap;
@@ -45,7 +46,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -58,8 +58,8 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityListIterator;
@@ -214,17 +214,13 @@ public final class PurchasingOrderEvents {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         ShoppingCart cart = purchasingGetOrInitializeCart(request);
         String searchString = UtilCommon.getParameter(request, "productId");
-        List where = UtilMisc.toList(
-                new EntityConditionList(
-                        UtilMisc.toList(
-                                new EntityExpr("productId", true, EntityOperator.LIKE, searchString + "%", true),
-                                new EntityExpr("supplierProductId", true, EntityOperator.LIKE, searchString + "%", true),
-                                new EntityExpr("idValue", true, EntityOperator.LIKE, searchString + "%", true)
-                        ), EntityOperator.OR
-                ),
-                new EntityExpr("partyId", EntityOperator.EQUALS, cart.getOrderPartyId()),
-                EntityUtil.getFilterByDateExpr("availableFromDate", "availableThruDate")
-        );
+        EntityCondition where =  EntityCondition.makeCondition(EntityOperator.AND,
+                                   EntityCondition.makeCondition(EntityOperator.OR,
+                                     EntityCondition.makeCondition(EntityFunction.UPPER("productId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
+                                     EntityCondition.makeCondition(EntityFunction.UPPER("supplierProductId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
+                                     EntityCondition.makeCondition(EntityFunction.UPPER("idValue"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%"))),
+                                   EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, cart.getOrderPartyId()),
+                                   EntityUtil.getFilterByDateExpr("availableFromDate", "availableThruDate"));
         try {
             List matches = delegator.findByAnd("SupplierProductGoodIdentification", where);
             if (matches.size() == 0) {
@@ -360,10 +356,10 @@ public final class PurchasingOrderEvents {
         EntityListIterator eli = null;
 
         try {
-            EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("partyId", EntityOperator.EQUALS, cart.getOrderPartyId()),
-                    new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_APPROVED"),
-                    new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT")), EntityOperator.AND);
+            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, cart.getOrderPartyId()),
+                    EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_APPROVED"),
+                    EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT"));
             TransactionUtil.begin();
             eli = delegator.findListIteratorByCondition("RequirementAndRole", conditions, null, UtilMisc.toList("productId", "requiredByDate"));
             TransactionUtil.commit();
@@ -379,25 +375,25 @@ public final class PurchasingOrderEvents {
             GenericValue requirement = null;
             Timestamp groupDate = null;
             String groupProductId = null;
-            Double groupQuantity = 0.0;
+            BigDecimal groupQuantity = BigDecimal.ZERO;
             LinkedHashSet<String> requirementIds = new LinkedHashSet<String>();
             try {
-                while ((requirement = (GenericValue) eli.next()) != null) {
+                while ((requirement = eli.next()) != null) {
 
                     String requirementId = requirement.getString("requirementId");
                     String productId = requirement.getString("productId");
-                    Double quantDbl = requirement.getDouble("quantity");
+                    BigDecimal quantity = requirement.getBigDecimal("quantity");
                     Timestamp requiredByDate = requirement.getTimestamp("requiredByDate");
 
-                    Debug.logInfo("createCartForAllSupplierRequirements, req [" + requirementId + "] of product " + productId + " x " + quantDbl, MODULE);
+                    Debug.logInfo("createCartForAllSupplierRequirements, req [" + requirementId + "] of product " + productId + " x " + quantity, MODULE);
 
-                    if (quantDbl == null) {
+                    if (quantity == null) {
                         continue;
                     }
 
                     if (groupItems && productId.equals(groupProductId)) {
                         // same product, group
-                        groupQuantity += quantDbl;
+                        groupQuantity = groupQuantity.add(quantity);
                         requirementIds.add(requirementId);
                         // get the new required by date for the group as the earliest of all requirements
                         if (requiredByDate != null) {
@@ -412,7 +408,7 @@ public final class PurchasingOrderEvents {
                     addRequirementItemToCart(request, cart, requirementIds, groupProductId, groupQuantity, groupDate);
 
                     // reset group values
-                    groupQuantity = quantDbl;
+                    groupQuantity = quantity;
                     groupProductId = productId;
                     groupDate = requiredByDate;
                     requirementIds = new LinkedHashSet<String>();
@@ -447,9 +443,9 @@ public final class PurchasingOrderEvents {
     }
 
     @SuppressWarnings("unchecked")
-    private static void addRequirementItemToCart(HttpServletRequest request, OpentapsShoppingCart cart, LinkedHashSet<String> requirementIds, String productId, Double quantity, Timestamp requiredByDate) throws CartItemModifyException, ItemNotFoundException {
+    private static void addRequirementItemToCart(HttpServletRequest request, OpentapsShoppingCart cart, LinkedHashSet<String> requirementIds, String productId, BigDecimal quantity, Timestamp requiredByDate) throws CartItemModifyException, ItemNotFoundException {
         // skip item if no quantity
-        if (quantity == null || quantity == 0.0) {
+        if (quantity == null || quantity.signum() == 0) {
             return;
         }
 
@@ -495,7 +491,6 @@ public final class PurchasingOrderEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return a <code>String</code> value
      */
-    @SuppressWarnings("unchecked")
     public static String createCartFromRequirements(HttpServletRequest request, HttpServletResponse response) {
 
         // destroy the cart first, because we are creating an order from scratch
@@ -511,7 +506,7 @@ public final class PurchasingOrderEvents {
         // get the list of selected requirements to use for the order
         Set<String> requirements = new HashSet<String>();
         // associate the input quantities to the requirements ids
-        Map<String, Double> quantities = new HashMap<String, Double>();
+        Map<String, BigDecimal> quantities = new HashMap<String, BigDecimal>();
         // loop the posted parameters from the form
         Collection<Map<String, Object>> data = UtilHttp.parseMultiFormData(UtilHttp.getParameterMap(request));
         try {
@@ -544,7 +539,7 @@ public final class PurchasingOrderEvents {
 
                 // add requirement to the list
                 requirements.add(requirementId);
-                quantities.put(requirementId, quantDbl);
+                quantities.put(requirementId, BigDecimal.valueOf(quantDbl));
             }
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogEventError(request, e, cart.getLocale(), MODULE);
@@ -556,21 +551,21 @@ public final class PurchasingOrderEvents {
         // for grouping
         Timestamp groupDate = null;
         String groupProductId = null;
-        Double groupQuantity = 0.0;
+        BigDecimal groupQuantity = BigDecimal.ZERO;
         LinkedHashSet<String> requirementIds = new LinkedHashSet<String>();
 
         // loop through the requirements
         try {
-            List<GenericValue> requirementValues = delegator.findByAnd("Requirement", UtilMisc.toList(new EntityExpr("requirementId", EntityOperator.IN, requirements)), UtilMisc.toList("productId", "requiredByDate"));
+            List<GenericValue> requirementValues = delegator.findByAnd("Requirement", EntityCondition.makeCondition("requirementId", EntityOperator.IN, requirements), UtilMisc.toList("productId", "requiredByDate"));
             for (GenericValue requirement : requirementValues) {
                 String productId = requirement.getString("productId");
                 String requirementId = requirement.getString("requirementId");
-                double quantity = quantities.get(requirementId);
+                BigDecimal quantity = quantities.get(requirementId);
                 Timestamp requiredByDate = requirement.getTimestamp("requiredByDate");
 
                 if (groupItems && productId.equals(groupProductId)) {
                     // same product, group
-                    groupQuantity += quantity;
+                    groupQuantity = groupQuantity.add(quantity);
                     requirementIds.add(requirementId);
                     // get the new required by date for the group as the earliest of all requirements
                     if (requiredByDate != null) {
@@ -719,6 +714,9 @@ public final class PurchasingOrderEvents {
     /**
      * Purchase order initialization.<br/>
      * Creates <code>OpentapsShoppingCart</code> beforehand to <code>ShoppingCartEvents.setOrderCurrencyAgreementShipDates(HttpServletRequest, HttpServletResponse)</code> call.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
      */
     public static String initializePurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
 

@@ -37,6 +37,7 @@
 
 package org.opentaps.common.manufacturing.bom;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -73,8 +74,8 @@ public class BomTree {
 
     // same as BOMTree, need to redefine
     private BomNode root;
-    private double rootQuantity;
-    private double rootAmount;
+    private BigDecimal rootQuantity;
+    private BigDecimal rootAmount;
     private Date inDate;
     private String bomTypeId;
     private GenericValue inputProduct;
@@ -234,8 +235,8 @@ public class BomTree {
         }
         this.bomTypeId = bomTypeId;
         this.inDate = inDate;
-        rootQuantity = 1;
-        rootAmount = 0;
+        rootQuantity = BigDecimal.ONE;
+        rootAmount = BigDecimal.ZERO;
     }
 
     /**
@@ -335,7 +336,7 @@ public class BomTree {
      * Gets the root quantity for this BOM Tree.
      * @return the root quantity for this BOM Tree
      */
-    public double getRootQuantity() {
+    public BigDecimal getRootQuantity() {
         return rootQuantity;
     }
 
@@ -343,7 +344,7 @@ public class BomTree {
      * Sets the root quantity for this BOM Tree.
      * @param rootQuantity the root quantity
      */
-    public void setRootQuantity(double rootQuantity) {
+    public void setRootQuantity(BigDecimal rootQuantity) {
         this.rootQuantity = rootQuantity;
         // cascade the quantity to the nodes according to the BOM
         print(new ArrayList<BomNode>());
@@ -353,7 +354,7 @@ public class BomTree {
      * Gets the root amount for this BOM Tree.
      * @return the root amount for this BOM Tree
      */
-    public double getRootAmount() {
+    public BigDecimal getRootAmount() {
         return rootAmount;
     }
 
@@ -361,7 +362,7 @@ public class BomTree {
      * Sets the root amount for this BOM Tree.
      * @param rootAmount the root amount
      */
-    public void setRootAmount(double rootAmount) {
+    public void setRootAmount(BigDecimal rootAmount) {
         this.rootAmount = rootAmount;
     }
 

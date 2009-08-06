@@ -37,9 +37,11 @@ import java.util.Map;
 /**
  * Facility services specific to the purchasing application.
  */
-public class FacilityServices {
+public final class FacilityServices {
 
-    public static final String module = FacilityServices.class.getName();
+    private FacilityServices() { }
+
+    private static final String MODULE = FacilityServices.class.getName();
 
     public static Map createFacilityAssoc(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
@@ -47,13 +49,15 @@ public class FacilityServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         Timestamp fromDate = (Timestamp) context.get("fromDate");
-        if (fromDate == null) fromDate = UtilDateTime.nowTimestamp();
+        if (fromDate == null) {
+            fromDate = UtilDateTime.nowTimestamp();
+        }
         try {
-            if (! security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
+            if (!security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
                 return ServiceUtil.returnError(UtilMessage.getPermissionDeniedError((Locale) context.get("locale")));
             }
 
-            GenericValue assoc = delegator.makeValue("FacilityAssoc", null);
+            GenericValue assoc = delegator.makeValue("FacilityAssoc");
             assoc.set("facilityId", context.get("facilityId"));
             assoc.set("facilityIdTo", context.get("facilityIdTo"));
             assoc.set("facilityAssocTypeId", context.get("facilityAssocTypeId"));
@@ -75,11 +79,11 @@ public class FacilityServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
         try {
-            if (! security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
+            if (!security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
                 return ServiceUtil.returnError(UtilMessage.getPermissionDeniedError(locale));
             }
 
-            Map lookup = FastMap.newInstance();
+            Map<String, Object> lookup = FastMap.newInstance();
             lookup.put("facilityId", context.get("facilityId"));
             lookup.put("facilityIdTo", context.get("facilityIdTo"));
             lookup.put("facilityAssocTypeId", context.get("facilityAssocTypeId"));
@@ -103,38 +107,47 @@ public class FacilityServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        
+
         String ownerPartyId = (String) context.get("ownerPartyId");
         String organizationPartyId = (String) context.get("organizationPartyId");
         try {
-            if (! security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
+            if (!security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
                 return ServiceUtil.returnError(UtilMessage.getPermissionDeniedError((Locale) context.get("locale")));
-            }            
+            }
 
-            Map input = UtilMisc.toMap("userLogin", userLogin);
+            Map<String, Object> input = FastMap.newInstance();
+            input.put("userLogin", userLogin);
             input.put("facilityTypeId", "WAREHOUSE");
             input.put("openedDate", context.get("fromDate"));
             input.put("ownerPartyId", ownerPartyId);
             input.put("defaultInventoryItemTypeId", context.get("defaultInventoryItemTypeId"));
             input.put("facilityName", context.get("facilityName"));
-            Map results = dispatcher.runSync("createFacility", input);
-            if (ServiceUtil.isError(results)) return results;
+            Map<String, Object> results = dispatcher.runSync("createFacility", input);
+            if (ServiceUtil.isError(results)) {
+                return results;
+            }
             String facilityId = (String) results.get("facilityId");
 
             // make the organization the receiving inventory role of the facility unless the owner is the organization, in which case this is unnecessary
-            if (ownerPartyId != organizationPartyId ) {
+            if (ownerPartyId != organizationPartyId) {
                 results = dispatcher.runSync("ensurePartyRole", UtilMisc.toMap("partyId", organizationPartyId, "roleTypeId", "RECV_INV_FOR"));
-                if (ServiceUtil.isError(results)) return results;
-                input = UtilMisc.toMap("userLogin", userLogin);
+                if (ServiceUtil.isError(results)) {
+                    return results;
+                }
+                input = FastMap.newInstance();
+                input.put("userLogin", userLogin);
                 input.put("facilityId", facilityId);
                 input.put("partyId", organizationPartyId);
                 input.put("roleTypeId", "RECV_INV_FOR");
                 results = dispatcher.runSync("addPartyToFacility", input);
-                if (ServiceUtil.isError(results)) return results;
+                if (ServiceUtil.isError(results)) {
+                    return results;
+                }
             }
 
             // make backup association
-            input = UtilMisc.toMap("userLogin", userLogin);
+            input = FastMap.newInstance();
+            input.put("userLogin", userLogin);
             input.put("facilityId", facilityId);
             input.put("facilityIdTo", context.get("facilityIdTo"));
             input.put("facilityAssocTypeId", "BACKUP_INVENTORY");
@@ -142,10 +155,13 @@ public class FacilityServices {
             input.put("thruDate", context.get("thruDate"));
             input.put("sequenceNum", context.get("sequenceNum"));
             results = dispatcher.runSync("createFacilityAssoc", input);
-            if (ServiceUtil.isError(results)) return results;
+            if (ServiceUtil.isError(results)) {
+                return results;
+            }
 
             // create an accounting preference for the owner party in the given currency if none exists yet
-            input =  UtilMisc.toMap("partyId", ownerPartyId);
+            input = FastMap.newInstance();
+            input.put("userLogin", userLogin);
             GenericValue pref = delegator.findByPrimaryKey("PartyAcctgPreference", UtilMisc.toMap("partyId", ownerPartyId));
             if (pref == null) {
                 input.put("baseCurrencyUomId", context.get("currencyUomId"));
@@ -155,25 +171,34 @@ public class FacilityServices {
 
             // if the owner party has any shipping addresses, then also use it for facility shipping (if none, try using the general address)
             List<GenericValue> addresses = PartyContactHelper.getContactMechsByPurpose(ownerPartyId, "POSTAL_ADDRESS", "SHIPPING_LOCATION", true, delegator);
-            if (addresses.size() == 0) addresses = PartyContactHelper.getContactMechsByPurpose(ownerPartyId, "POSTAL_ADDRESS", "GENERAL_LOCATION", true, delegator);
+            if (addresses.size() == 0) {
+                addresses = PartyContactHelper.getContactMechsByPurpose(ownerPartyId, "POSTAL_ADDRESS", "GENERAL_LOCATION", true, delegator);
+            }
             for (GenericValue address : addresses) {
-                input = UtilMisc.toMap("userLogin", userLogin);
+                input = FastMap.newInstance();
+                input.put("userLogin", userLogin);
                 input.put("facilityId", facilityId);
                 input.put("contactMechId", address.get("contactMechId"));
                 results = dispatcher.runSync("createFacilityContactMech", input);
-                if (ServiceUtil.isError(results)) return results;
+                if (ServiceUtil.isError(results)) {
+                    return results;
+                }
 
                 input.put("contactMechPurposeTypeId", "SHIPPING_LOCATION");
                 results = dispatcher.runSync("createFacilityContactMechPurpose", input);
-                if (ServiceUtil.isError(results)) return results;
+                if (ServiceUtil.isError(results)) {
+                    return results;
+                }
 
                 input.put("contactMechPurposeTypeId", "SHIP_ORIG_LOCATION");
                 results = dispatcher.runSync("createFacilityContactMechPurpose", input);
-                if (ServiceUtil.isError(results)) return results;
+                if (ServiceUtil.isError(results)) {
+                    return results;
+                }
             }
 
             // assign the given manager party as the manager of the facility (note: this is not the user login)
-            GenericValue permission = delegator.makeValue("FacilityPartyPermission", null);
+            GenericValue permission = delegator.makeValue("FacilityPartyPermission");
             permission.set("facilityId", facilityId);
             permission.set("partyId", context.get("managerPartyId"));
             permission.set("securityGroupId", "WRHS_MANAGER");

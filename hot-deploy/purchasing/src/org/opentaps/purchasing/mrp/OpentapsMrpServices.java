@@ -63,7 +63,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
@@ -143,63 +142,63 @@ public final class OpentapsMrpServices {
             List mrpRunProductIds = getMrpRunProductIds(mrpTargetProductId, supplierPartyId, delegator);
 
             // remove zombie records from old ofbiz mrp runs
-            removeOldMrpInventoryEventRecords(new EntityExpr("facilityId", EntityOperator.EQUALS, null), delegator);
+            removeOldMrpInventoryEventRecords(EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, null), delegator);
 
             //Erases the old table for the moment unless reinitialize is turned off
             if (!(Boolean.FALSE.equals(reInitialize))) {
                 Debug.logInfo("Reinitializing: removing all MrpInventoryEvent", MODULE);
                 if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
                     // AG22012008 - if this is a productId specific MRP run then filter by target product Id
-                    removeOldMrpInventoryEventRecords(new EntityConditionList(UtilMisc.toList(
-                            new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                            new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds)), EntityOperator.AND), delegator);
+                    removeOldMrpInventoryEventRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                            EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                            EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds)), delegator);
                 } else {
-                    removeOldMrpInventoryEventRecords(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId), delegator);
+                    removeOldMrpInventoryEventRecords(EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId), delegator);
                 }
             } else {
                 Debug.logInfo("Not reinitializing: only removing proposed MrpInventoryEvent", MODULE);
                 if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
                     // AG22012008 - if this is a productId specific MRP run then filter by target product Id
-                    removeOldMrpInventoryEventRecords(new EntityConditionList(UtilMisc.toList(
-                            new EntityExpr("inventoryEventPlanTypeId", EntityOperator.IN, Arrays.asList("INITIAL_QOH", "PEND_MANUF_O_RECP", "PROP_MANUF_O_RECP", "PROP_PUR_O_RECP", "PROP_INV_XFER_IN", "PROP_INV_XFER_OUT", "MRP_REQUIREMENT")),
-                            new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds)), EntityOperator.AND), delegator);
+                    removeOldMrpInventoryEventRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                            EntityCondition.makeCondition("inventoryEventPlanTypeId", EntityOperator.IN, Arrays.asList("INITIAL_QOH", "PEND_MANUF_O_RECP", "PROP_MANUF_O_RECP", "PROP_PUR_O_RECP", "PROP_INV_XFER_IN", "PROP_INV_XFER_OUT", "MRP_REQUIREMENT")),
+                            EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds)), delegator);
                 } else {
-                    removeOldMrpInventoryEventRecords(new EntityExpr("inventoryEventPlanTypeId", EntityOperator.IN, Arrays.asList("INITIAL_QOH", "PEND_MANUF_O_RECP", "PROP_MANUF_O_RECP", "PROP_PUR_O_RECP", "PROP_INV_XFER_IN", "PROP_INV_XFER_OUT", "MRP_REQUIREMENT")), delegator);
+                    removeOldMrpInventoryEventRecords(EntityCondition.makeCondition("inventoryEventPlanTypeId", EntityOperator.IN, Arrays.asList("INITIAL_QOH", "PEND_MANUF_O_RECP", "PROP_MANUF_O_RECP", "PROP_PUR_O_RECP", "PROP_INV_XFER_IN", "PROP_INV_XFER_OUT", "MRP_REQUIREMENT")), delegator);
                 }
             }
 
             // Proposed requirements and requirement commitments should always be deleted
             if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
                 // AG22012008 - if this is a productId specific MRP run then filter by target product Id
-                removeOldRequirementRecords(new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT"),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_PROPOSED"),
-                        new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds)), EntityOperator.AND), true, delegator);
-                removeOldRequirementRecords(new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "INTERNAL_REQUIREMENT"),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_PROPOSED"),
-                        new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds)), EntityOperator.AND), false, delegator);
-                removeOldRequirementRecords(new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "PENDING_INTERNAL_REQ"),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_PROPOSED"),
-                        new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds)), EntityOperator.AND), false, delegator);
-                removeOldRequirementRecords(new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "TRANSFER_REQUIREMENT"),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_PROPOSED"),
-                        new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds)), EntityOperator.AND), false, delegator);
+                removeOldRequirementRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT"),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_PROPOSED"),
+                        EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds)), true, delegator);
+                removeOldRequirementRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "INTERNAL_REQUIREMENT"),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_PROPOSED"),
+                        EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds)), false, delegator);
+                removeOldRequirementRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "PENDING_INTERNAL_REQ"),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_PROPOSED"),
+                        EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds)), false, delegator);
+                removeOldRequirementRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "TRANSFER_REQUIREMENT"),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_PROPOSED"),
+                        EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds)), false, delegator);
             } else {
-                removeOldRequirementRecords(new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT"),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")), EntityOperator.AND), true, delegator);
-                removeOldRequirementRecords(new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "PENDING_INTERNAL_REQ"),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")), EntityOperator.AND), false, delegator);
-                removeOldRequirementRecords(new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "INTERNAL_REQUIREMENT"),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")), EntityOperator.AND), false, delegator);
-                removeOldRequirementRecords(new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("requirementTypeId", EntityOperator.EQUALS, "TRANSFER_REQUIREMENT"),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")), EntityOperator.AND), false, delegator);
+                removeOldRequirementRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "PRODUCT_REQUIREMENT"),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")), true, delegator);
+                removeOldRequirementRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "PENDING_INTERNAL_REQ"),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")), false, delegator);
+                removeOldRequirementRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "INTERNAL_REQUIREMENT"),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")), false, delegator);
+                removeOldRequirementRecords(EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("requirementTypeId", EntityOperator.EQUALS, "TRANSFER_REQUIREMENT"),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "REQ_PROPOSED")), false, delegator);
             }
 
             /*
@@ -231,14 +230,14 @@ public final class OpentapsMrpServices {
                 String productId =  genericResult.getString("productId");
                 // usually we want to use the reserved quantity, because facilityId is only available on the InventoryItem record, so only OISGIR tells us how many of the II is reserved
                 // if it's not available then we'll try OrderItem quantities but that's dangerous because the item could have been partially shipped already
-                Double eventQuantityTmp = new Double(0.0);
+                BigDecimal eventQuantityTmp = BigDecimal.ZERO;
                 if (genericResult.get("quantityReserved") == null) {
                     Debug.logWarning("No quantity reserved found for order [" + genericResult.get("orderId") + "] item [" + genericResult.get("orderItemSeqId") + "].  Will be using order quantity of [" + genericResult.get("quantity") + "] and cancel quantity [" + genericResult.get("cancelQuantity") + "]", MODULE);
-                    eventQuantityTmp = new Double(-1.0 * getNetOrderedQuantity(genericResult));
+                    eventQuantityTmp = getNetOrderedQuantity(genericResult).negate();
                 } else {
-                    eventQuantityTmp = new Double(-1.0 * genericResult.getDouble("quantityReserved").doubleValue());
+                    eventQuantityTmp = genericResult.getBigDecimal("quantityReserved").negate();
                 }
-                if (eventQuantityTmp.doubleValue() == 0) {
+                if (eventQuantityTmp.signum() == 0) {
                     continue;
                 }
                 // This is the order in which order dates are considered.  Item dates override ship group dates:
@@ -279,16 +278,16 @@ public final class OpentapsMrpServices {
             // -------------------------------------------------------
             String orderId = null;
             GenericValue orderDeliverySchedule = null;
-            List searchConditions = UtilMisc.toList(new EntityExpr("orderTypeId", EntityOperator.EQUALS, "PURCHASE_ORDER"),
-                    new EntityExpr("itemStatusId", EntityOperator.IN, UtilMisc.toList("ITEM_CREATED", "ITEM_APPROVED")),
-                    new EntityExpr("shipGroupContactMechId", EntityOperator.IN, UtilCommon.getFacilityContactMechIds(facilityId, delegator)));
+            List searchConditions = UtilMisc.toList(EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "PURCHASE_ORDER"),
+                    EntityCondition.makeCondition("itemStatusId", EntityOperator.IN, UtilMisc.toList("ITEM_CREATED", "ITEM_APPROVED")),
+                    EntityCondition.makeCondition("shipGroupContactMechId", EntityOperator.IN, UtilCommon.getFacilityContactMechIds(facilityId, delegator)));
 
             // AG22012008 - if this is a productId specific MRP run then filter by target product Id
             if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
-                searchConditions.add(new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds));
+                searchConditions.add(EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds));
             }
             List fieldsToSelect = UtilMisc.toList("orderId", "orderItemSeqId", "productId", "quantity", "cancelQuantity", "itemEstimatedDeliveryDate");
-            resultList = delegator.findByCondition("MrpOrderInfo", new EntityConditionList(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList("orderDate")); // order list of PO's by OrderDate
+            resultList = delegator.findByCondition("MrpOrderInfo", EntityCondition.makeCondition(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList("orderDate")); // order list of PO's by OrderDate
             for (GenericValue genericResult : resultList) {
                 String newOrderId =  genericResult.getString("orderId");
                 if (!newOrderId.equals(orderId)) {
@@ -298,7 +297,7 @@ public final class OpentapsMrpServices {
                 }
                 String productId =  genericResult.getString("productId");
                 // this will net out received quantities with ItemIssuances
-                Double eventQuantityTmp = getNetPurchaseOrderItemQuantity(genericResult);
+                BigDecimal eventQuantityTmp = getNetPurchaseOrderItemQuantity(genericResult);
                 GenericValue orderItemDeliverySchedule = null;
                 orderItemDeliverySchedule = delegator.findByPrimaryKey("OrderDeliverySchedule", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", genericResult.getString("orderItemSeqId")));
                 Timestamp estimatedShipDate = null;
@@ -334,21 +333,21 @@ public final class OpentapsMrpServices {
             // active production runs which have inventory requirement in WorkEffortGoodStandard of PRUNT_PROD_NEEDED (product needed, not template)
             List validProductionRunStatuses = Arrays.asList("PRUN_CREATED", "PRUN_RUNNING", "PRUN_STARTED", "PRUN_SCHEDULED", "PRUN_DOC_PRINTED", "PRUN_OUTSRCD", "PRUN_OUTSRCD_PEND");
             searchConditions = UtilMisc.toList(
-                    new EntityExpr("currentStatusId", EntityOperator.IN, validProductionRunStatuses),
-                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"),
-                    new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                    new EntityExpr("statusId", EntityOperator.EQUALS, "WEGS_CREATED"));
+                    EntityCondition.makeCondition("currentStatusId", EntityOperator.IN, validProductionRunStatuses),
+                    EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"),
+                    EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                    EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "WEGS_CREATED"));
 
             // AG22012008 - if this is a productId specific MRP run then filter by target product Id
             if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
-                searchConditions.add(new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds));
+                searchConditions.add(EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds));
             }
 
             resultList = delegator.findByAnd("WorkEffortAndGoods", searchConditions);
 
             for (GenericValue genericResult : resultList) {
                 String productId =  genericResult.getString("productId");
-                Double eventQuantityTmp = new Double(-1.0 * genericResult.getDouble("estimatedQuantity").doubleValue());
+                BigDecimal eventQuantityTmp = genericResult.getBigDecimal("estimatedQuantity").negate();
                 Timestamp estimatedShipDate = genericResult.getTimestamp("estimatedStartDate");
                 if (estimatedShipDate == null) {
                     estimatedShipDate = now;
@@ -363,35 +362,35 @@ public final class OpentapsMrpServices {
             // PRODUCTION Run: product produced
             // ----------------------------------------
             validProductionRunStatuses = Arrays.asList("PRUN_COMPLETED", "PRUN_CREATED", "PRUN_RUNNING", "PRUN_STARTED", "PRUN_SCHEDULED", "PRUN_DOC_PRINTED", "PRUN_OUTSRCD", "PRUN_OUTSRCD_PEND");
-            List productionRunConditions = UtilMisc.toList(new EntityExpr("currentStatusId", EntityOperator.IN, validProductionRunStatuses),
-                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"),
-                    new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                    new EntityExpr("statusId", EntityOperator.EQUALS, "WEGS_CREATED"));
+            List productionRunConditions = UtilMisc.toList(EntityCondition.makeCondition("currentStatusId", EntityOperator.IN, validProductionRunStatuses),
+                    EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"),
+                    EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                    EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "WEGS_CREATED"));
 
             // AG22012008 - if this is a productId specific MRP run then filter by target product Id
             if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
-                productionRunConditions.add(new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds));
+                productionRunConditions.add(EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds));
             }
-            resultList = delegator.findByCondition("WorkEffortAndGoods", new EntityConditionList(productionRunConditions, EntityOperator.AND), UtilMisc.toList("workEffortId", "productId", "facilityId", "estimatedCompletionDate"), UtilMisc.toList("workEffortId"));
+            resultList = delegator.findByCondition("WorkEffortAndGoods", EntityCondition.makeCondition(productionRunConditions, EntityOperator.AND), UtilMisc.toList("workEffortId", "productId", "facilityId", "estimatedCompletionDate"), UtilMisc.toList("workEffortId"));
 
             for (GenericValue genericResult : resultList) {
                 Debug.logInfo("initInventoryEventPlanForApprovedRequirements: Found WEGS pending production: " + genericResult, MODULE);
                 OpentapsProductionRun prun = new OpentapsProductionRun(genericResult.getString("workEffortId"), dispatcher);
                 String prunProductId = genericResult.getString("productId");
-                Double qtyToProduce = prun.getQuantityPlannedToProduce(prunProductId);
+                BigDecimal qtyToProduce = prun.getQuantityPlannedToProduce(prunProductId);
                 if (qtyToProduce == null) {
-                    qtyToProduce = new Double(0);
+                    qtyToProduce = BigDecimal.ZERO;
                 }
-                Double qtyProduced = prun.getQuantityProduced(prunProductId);
+                BigDecimal qtyProduced = prun.getQuantityProduced(prunProductId);
                 if (qtyProduced == null) {
-                    qtyProduced = new Double(0);
+                    qtyProduced = BigDecimal.ZERO;
                 }
                 Debug.logInfo("initInventoryEventPlanForApprovedRequirements: qtyToProduce: " + qtyToProduce + " qtyProduced: " + qtyProduced, MODULE);
                 if (qtyProduced.compareTo(qtyToProduce) >= 0) {
                     continue;
                 }
-                double qtyDiff = qtyToProduce.doubleValue() - qtyProduced.doubleValue();
-                Double eventQuantityTmp = new Double(qtyDiff);
+                BigDecimal qtyDiff = qtyToProduce.subtract(qtyProduced);
+                BigDecimal eventQuantityTmp = qtyDiff;
                 Timestamp estimatedShipDate = genericResult.getTimestamp("estimatedCompletionDate");
                 if (estimatedShipDate == null) {
                     estimatedShipDate = now;
@@ -404,13 +403,13 @@ public final class OpentapsMrpServices {
             }
 
             // inbound inventory transfers
-            List inboundInventoryTransfersConditions = UtilMisc.toList(new EntityExpr("transferStatusId", EntityOperator.IN, UtilMisc.toList("IXF_REQUESTED", "IXF_SCHEDULED", "IXF_EN_ROUTE")),
-                    new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityId),
-                    new EntityExpr("sendDate", EntityOperator.NOT_EQUAL, null));
+            List inboundInventoryTransfersConditions = UtilMisc.toList(EntityCondition.makeCondition("transferStatusId", EntityOperator.IN, UtilMisc.toList("IXF_REQUESTED", "IXF_SCHEDULED", "IXF_EN_ROUTE")),
+                    EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, facilityId),
+                    EntityCondition.makeCondition("sendDate", EntityOperator.NOT_EQUAL, null));
 
             // AG22012008 - if this is a productId specific MRP run then filter by target product Id
             if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
-                inboundInventoryTransfersConditions.add(new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds));
+                inboundInventoryTransfersConditions.add(EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds));
             }
 
             List<GenericValue> tansfersAndItems = delegator.findByAnd("InventoryTransferAndItem",  inboundInventoryTransfersConditions);
@@ -424,13 +423,13 @@ public final class OpentapsMrpServices {
 
             // outbound inventory transfers
             List outboundInventoryTransfersConditions = UtilMisc.toList(
-                    new EntityExpr("transferStatusId", EntityOperator.IN, UtilMisc.toList("IXF_REQUESTED", "IXF_SCHEDULED", "IXF_EN_ROUTE")),
-                    new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                    new EntityExpr("sendDate", EntityOperator.NOT_EQUAL, null));
+                    EntityCondition.makeCondition("transferStatusId", EntityOperator.IN, UtilMisc.toList("IXF_REQUESTED", "IXF_SCHEDULED", "IXF_EN_ROUTE")),
+                    EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                    EntityCondition.makeCondition("sendDate", EntityOperator.NOT_EQUAL, null));
 
             // AG22012008 - if this is a productId specific MRP run then filter by target product Id
             if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
-                outboundInventoryTransfersConditions.add(new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds));
+                outboundInventoryTransfersConditions.add(EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds));
             }
 
             tansfersAndItems = delegator.findByAnd("InventoryTransferAndItem", outboundInventoryTransfersConditions);
@@ -438,18 +437,18 @@ public final class OpentapsMrpServices {
                 Timestamp sendDate = transferItem.getTimestamp("sendDate");
                 parameters = UtilMisc.toMap("productId", transferItem.getString("productId"), "eventDate", UtilCommon.laterOf(sendDate, now),
                         "inventoryEventPlanTypeId", "INVENTORY_XFER_OUT", "facilityId", facilityId);
-                MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, (-1.0 * getInventoryTransferQuantity(transferItem)), null, transferItem.getString("inventoryTransferId") + ": " + UtilDateTime.timeStampToString(transferItem.getTimestamp("sendDate"), UtilDateTime.getDateFormat(locale), timeZone, locale), transferItem.getTimestamp("sendDate").before(now), null, delegator);
+                MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, getInventoryTransferQuantity(transferItem).negate(), null, transferItem.getString("inventoryTransferId") + ": " + UtilDateTime.timeStampToString(transferItem.getTimestamp("sendDate"), UtilDateTime.getDateFormat(locale), timeZone, locale), transferItem.getTimestamp("sendDate").before(now), null, delegator);
             }
 
 
             // Use a percentage of salesforecast from the SalesForecastItem entity.
             if (percentageOfSalesForecastDbl != null) {
-                double percentageOfSalesForecast = percentageOfSalesForecastDbl.doubleValue();
-                if (percentageOfSalesForecast != 0.0) {
+                BigDecimal percentageOfSalesForecast = BigDecimal.valueOf(percentageOfSalesForecastDbl);
+                if (percentageOfSalesForecast.signum() != 0) {
                     // find sales forecast items which are after current timestamp
-                    searchConditions = UtilMisc.toList(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                            new EntityExpr("forecastDatetime", EntityOperator.GREATER_THAN, now));
-                    List<GenericValue> salesForecastItems = delegator.findByCondition("SalesForecastItem", new EntityConditionList(searchConditions, EntityOperator.AND), null, UtilMisc.toList("salesForecastId", "forecastDatetime"));
+                    searchConditions = UtilMisc.toList(EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                            EntityCondition.makeCondition("forecastDatetime", EntityOperator.GREATER_THAN, now));
+                    List<GenericValue> salesForecastItems = delegator.findByCondition("SalesForecastItem", EntityCondition.makeCondition(searchConditions, EntityOperator.AND), null, UtilMisc.toList("salesForecastId", "forecastDatetime"));
                     for (GenericValue nextForecastItem : salesForecastItems) {
                         String details = "Sales forecast item [" + nextForecastItem.getString("salesForecastItemId") + "] at [" + nextForecastItem.getString("forecastDatetime") + "]: quantity [" + nextForecastItem.getBigDecimal("forecastQuantity") + "] for product [" + nextForecastItem.getString("productId") + "]";
 
@@ -462,7 +461,7 @@ public final class OpentapsMrpServices {
                                 "eventDate", nextForecastItem.getTimestamp("forecastDatetime"),
                                 "inventoryEventPlanTypeId", "SALES_FORECAST", "facilityId", facilityId);
                         MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters,
-                                new Double(-1.0 * percentageOfSalesForecast / 100 * nextForecastItem.getBigDecimal("forecastQuantity").doubleValue()),
+                                percentageOfSalesForecast.negate().divide(new BigDecimal(100)).multiply(nextForecastItem.getBigDecimal("forecastQuantity")),
                                 null,    // don't set the netQOH -- it will be calculated for us
                                 details,    // name of the event
                                 false,   // this is not late -- we do not have old sales forecast items included in MRP
@@ -512,27 +511,27 @@ public final class OpentapsMrpServices {
      */
     @SuppressWarnings("unchecked")
     private static List<GenericValue> getMrpInfoForRequirements(String facilityId, String facilityIdTo, List requirementTypeIds, List statusIds, List mrpRunProductIds, GenericDelegator delegator) throws GenericEntityException {
-        List conditions = UtilMisc.toList(new EntityExpr("requirementTypeId", EntityOperator.IN, requirementTypeIds),
-                new EntityExpr("statusId", EntityOperator.IN, statusIds),
-                new EntityExpr("quantity", EntityOperator.NOT_EQUAL, null));
+        List conditions = UtilMisc.toList(EntityCondition.makeCondition("requirementTypeId", EntityOperator.IN, requirementTypeIds),
+                EntityCondition.makeCondition("statusId", EntityOperator.IN, statusIds),
+                EntityCondition.makeCondition("quantity", EntityOperator.NOT_EQUAL, null));
 
         // AG24012008 - if this is a product or supplier specific MRP run then filter by the associated product Ids
         if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
-            conditions.add(new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds));
+            conditions.add(EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds));
         } else {
             // otherwise -- always exclude null products
-            conditions.add(new EntityExpr("productId", EntityOperator.NOT_EQUAL, null));
+            conditions.add(EntityCondition.makeCondition("productId", EntityOperator.NOT_EQUAL, null));
         }
 
         // add facilityId to the condition based on whether facilityId or facilityIdTo is required
         if (facilityId != null) {
-            conditions.add(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
+            conditions.add(EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId));
         }
         if (facilityIdTo != null) {
-            conditions.add(new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityIdTo));
+            conditions.add(EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, facilityIdTo));
         }
 
-        List<GenericValue> resultList = delegator.findByCondition("Requirement", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        List<GenericValue> resultList = delegator.findByCondition("Requirement", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, null);
         return resultList;
     }
 
@@ -557,7 +556,7 @@ public final class OpentapsMrpServices {
         for (GenericValue genericResult : resultList) {
             String productId =  genericResult.getString("productId");
             String requirementTypeId = genericResult.getString("requirementTypeId");
-            Double eventQuantityTmp = genericResult.getDouble("quantity");
+            BigDecimal eventQuantityTmp = genericResult.getBigDecimal("quantity");
             Timestamp requiredByDate = genericResult.getTimestamp("requiredByDate");
             if (requiredByDate == null) {
                 requiredByDate = now;
@@ -567,7 +566,7 @@ public final class OpentapsMrpServices {
             String inventoryEventPlanTypeId = "PROD_REQ_RECP";  // default is for approved product requirement
             if ("TRANSFER_REQUIREMENT".equals(requirementTypeId)) {
                 inventoryEventPlanTypeId = "INV_XFER_REQ_OUT";
-                eventQuantityTmp = -eventQuantityTmp;           // need to negate the quantity for outbound transfers
+                eventQuantityTmp = eventQuantityTmp.negate();           // need to negate the quantity for outbound transfers
             } else if ("PENDING_INTERNAL_REQ".equals(requirementTypeId)) {
                 inventoryEventPlanTypeId = "PEND_MANUF_O_RECP";
             } else { // other requirements may have their own plans
@@ -586,7 +585,7 @@ public final class OpentapsMrpServices {
                 for (BomNode node : components) {
                     // add events for each component, the event date begin the same as the internal requirement date
                     parameters = UtilMisc.toMap("productId", node.getProductId(), "eventDate", inventoryEventTimestamp, "inventoryEventPlanTypeId", "MANUF_ORDER_REQ", "facilityId", genericResult.getString("facilityId"));
-                    MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, -node.getQuantity(), null, genericResult.getString("requirementId"), requiredByDate.before(now), null, delegator);
+                    MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, node.getQuantity().negate(), null, genericResult.getString("requirementId"), requiredByDate.before(now), null, delegator);
                 }
             }
         }
@@ -595,7 +594,7 @@ public final class OpentapsMrpServices {
         resultList = getMrpInfoForApprovedRequirements(null, facilityId, mrpRunProductIds, delegator);
         for (GenericValue genericResult : resultList) {
             String productId =  genericResult.getString("productId");
-            Double eventQuantityTmp = genericResult.getDouble("quantity");
+            BigDecimal eventQuantityTmp = genericResult.getBigDecimal("quantity");
             Timestamp requiredByDate = genericResult.getTimestamp("requiredByDate");
             if (requiredByDate == null) {
                 requiredByDate = now;
@@ -630,15 +629,15 @@ public final class OpentapsMrpServices {
         List resultList = new LinkedList();
         List fieldsToSelect = UtilMisc.toList("orderId", "orderItemSeqId", "productId", "quantity", "cancelQuantity", "quantityReserved");
         fieldsToSelect.addAll(UtilMisc.toList("itemShipBeforeDate", "itemShipAfterDate", "itemEstimatedDeliveryDate", "shipByDate", "shipAfterDate"));
-        List searchConditions = UtilMisc.toList(new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
-                new EntityExpr("itemStatusId", EntityOperator.EQUALS, "ITEM_APPROVED"),
-                new EntityExpr("orderStatusId", EntityOperator.EQUALS, "ORDER_APPROVED"),
-                new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
+        List searchConditions = UtilMisc.toList(EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
+                EntityCondition.makeCondition("itemStatusId", EntityOperator.EQUALS, "ITEM_APPROVED"),
+                EntityCondition.makeCondition("orderStatusId", EntityOperator.EQUALS, "ORDER_APPROVED"),
+                EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
                 EntityUtil.getFilterByDateExpr("introductionDate", "salesDiscontinuationDate"));
 
         // AG23012008 - if this is a product or supplier specific MRP run then filter by these product Ids
         if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
-            searchConditions.add(new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds));
+            searchConditions.add(EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds));
         }
 
         // If a productStore specific MRP run is to be executed then filter sales orders by the productStoreId.  Otherwise, and only if productStoreId is empty,
@@ -647,12 +646,12 @@ public final class OpentapsMrpServices {
         boolean isProductStoreSpecificMrpRun = false;
         if (UtilValidate.isNotEmpty(productStoreId)) {
             isProductStoreSpecificMrpRun = true;
-            productStoreConditions = UtilMisc.toList(new EntityExpr("productStoreId", EntityOperator.EQUALS, productStoreId));
+            productStoreConditions = UtilMisc.toList(EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, productStoreId));
         } else if (UtilValidate.isNotEmpty(productStoreGroupId)) {
             isProductStoreSpecificMrpRun = true;
             List productStoreIds = UtilMrp.getMrpProductStoreIdsFromGroup(productStoreGroupId, delegator);
             if (UtilValidate.isNotEmpty(productStoreIds)) {
-                productStoreConditions = UtilMisc.toList(new EntityExpr("productStoreId", EntityOperator.IN, productStoreIds));
+                productStoreConditions = UtilMisc.toList(EntityCondition.makeCondition("productStoreId", EntityOperator.IN, productStoreIds));
             }
         }
         if (UtilValidate.isNotEmpty(productStoreConditions)) {
@@ -661,7 +660,7 @@ public final class OpentapsMrpServices {
 
         // get mrp sales order inventory events
         if (!isProductStoreSpecificMrpRun || (isProductStoreSpecificMrpRun && UtilValidate.isNotEmpty(productStoreConditions))) {
-            resultList = delegator.findByCondition("MrpOrderInfo", new EntityConditionList(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList("reservedDatetime", "reserveSequenceId", "orderDate")); // order sales orders based on inventory reservation, then order date
+            resultList = delegator.findByCondition("MrpOrderInfo", EntityCondition.makeCondition(searchConditions, EntityOperator.AND), fieldsToSelect, UtilMisc.toList("reservedDatetime", "reserveSequenceId", "orderDate")); // order sales orders based on inventory reservation, then order date
         }
         return resultList;
     }
@@ -713,18 +712,18 @@ public final class OpentapsMrpServices {
      * @throws GenericEntityException
      */
     @SuppressWarnings("unchecked")
-    private static double getRoundedQuantityToStock(double qtyToStock, GenericValue inventoryEventForMRP, int decimals, RoundingMode interimRequirementRoundingMode, RoundingMode finalRequirementRoundingMode) throws GenericEntityException {
+    private static BigDecimal getRoundedQuantityToStock(BigDecimal qtyToStock, GenericValue inventoryEventForMRP, int decimals, RoundingMode interimRequirementRoundingMode, RoundingMode finalRequirementRoundingMode) throws GenericEntityException {
         GenericDelegator delegator = inventoryEventForMRP.getDelegator();
-        BigDecimal qtyToStockRounded = new BigDecimal(qtyToStock);
 
         Debug.logInfo("Getting rounded quantity for inventory event " + inventoryEventForMRP, MODULE);
-        Debug.logInfo("quantity to stock [" + qtyToStockRounded + "] from double [" + qtyToStock + "]", MODULE);
+        Debug.logInfo("quantity to stock [" + qtyToStock + "]", MODULE);
+        BigDecimal qtyToStockRounded = qtyToStock;
 
         // are there future inventory events?
 
         /**
          * Important Note: for some reason unknown to me (Si),
-         * new EntityExpr("eventDate", EntityOperator.GREATER_THAN, inventoryEventForMRP.getTimestamp("eventDate"))
+         * EntityCondition.makeCondition("eventDate", EntityOperator.GREATER_THAN, inventoryEventForMRP.getTimestamp("eventDate"))
          *
          * does not work!  It will return the event at 2008-11-30 23:59:59.998 even if the eventDate is 2008-11-30 23:59:59.998
          *
@@ -736,9 +735,9 @@ public final class OpentapsMrpServices {
         List futureInventoryEvents = null;
         if (UtilValidate.isNotEmpty(inventoryEventForMRP) && UtilValidate.isNotEmpty(inventoryEventForMRP.get("eventDate"))) {
             futureInventoryEvents = delegator.findByAnd("MrpFacilityInventoryEventPlanned", UtilMisc.toList(
-                    new EntityExpr("productId", EntityOperator.EQUALS, inventoryEventForMRP.getString("productId")),
-                    new EntityExpr("facilityId", EntityOperator.EQUALS, inventoryEventForMRP.getString("facilityId")),
-                    new EntityExpr("eventDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilCommon.afterMillisecs(inventoryEventForMRP.getTimestamp("eventDate"), UtilCommon.MSEC_IN_1_SEC))));
+                    EntityCondition.makeCondition("productId", EntityOperator.EQUALS, inventoryEventForMRP.getString("productId")),
+                    EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, inventoryEventForMRP.getString("facilityId")),
+                    EntityCondition.makeCondition("eventDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilCommon.afterMillisecs(inventoryEventForMRP.getTimestamp("eventDate"), UtilCommon.MSEC_IN_1_SEC))));
         }
 
         // Debug.logInfo("Future inventory events: " + futureInventoryEvents, MODULE);
@@ -751,7 +750,7 @@ public final class OpentapsMrpServices {
             Debug.logInfo("There are no more inventory events for [ " + inventoryEventForMRP.get("productId") + "] in facility [" + inventoryEventForMRP.get("facilityId") + "] after event timestamp [" + inventoryEventForMRP.get("eventDate") + " ], so rounded [" + qtyToStock + "] to [" + qtyToStockRounded + "]", MODULE);
         }
 
-        return qtyToStockRounded.doubleValue();
+        return qtyToStockRounded;
     }
 
     /**
@@ -760,12 +759,12 @@ public final class OpentapsMrpServices {
      * @return
      * @throws GenericEntityException
      */
-    private static double getNetPurchaseOrderItemQuantity(GenericValue genericResult) throws GenericEntityException {
+    private static BigDecimal getNetPurchaseOrderItemQuantity(GenericValue genericResult) throws GenericEntityException {
         OrderReadHelper orh = new OrderReadHelper(genericResult.getDelegator(), genericResult.getString("orderId"));
-        double netOrderedQuantity = getNetOrderedQuantity(genericResult);
-        BigDecimal shippedQuantity = orh.getItemShippedQuantityBd(genericResult.getRelatedOne("OrderItem"));
+        BigDecimal netOrderedQuantity = getNetOrderedQuantity(genericResult);
+        BigDecimal shippedQuantity = orh.getItemShippedQuantity(genericResult.getRelatedOne("OrderItem"));
         if (shippedQuantity != null) {
-            netOrderedQuantity -= shippedQuantity.doubleValue();
+            netOrderedQuantity = netOrderedQuantity.subtract(shippedQuantity);
         }
         return netOrderedQuantity;
     }
@@ -775,21 +774,21 @@ public final class OpentapsMrpServices {
      * @param transferItem
      * @return
      */
-    private static double getInventoryTransferQuantity(GenericValue transferItem) {
+    private static BigDecimal getInventoryTransferQuantity(GenericValue transferItem) {
         if ("SERIALIZED_INV_ITEM".equals(transferItem.getString("inventoryItemTypeId"))) {
             // the item should be transferred, but we add all these states to be sured
             if (("INV_AVAILABLE".equals(transferItem.getString("statusId")))
                     || ("INV_BEING_TRANSFERRED".equals(transferItem.getString("statusId")))
                     || ("INV_BEING_TRANS_PRM".equals(transferItem.getString("statusId")))) {
-                return 1.0;
+                return BigDecimal.ONE;
             } else {
-                return 0.0;
+                return BigDecimal.ZERO;
             }
         } else {
             if (transferItem.get("quantityOnHandTotal") != null) {
-                return transferItem.getDouble("quantityOnHandTotal");
+                return transferItem.getBigDecimal("quantityOnHandTotal");
             } else {
-                return 0.0;
+                return BigDecimal.ZERO;
             }
         }
     }
@@ -799,14 +798,14 @@ public final class OpentapsMrpServices {
      * @param item an <code>OrderItem</code> <code>GenericValue</code>
      * @return the net ordered quantity
      */
-    private static double getNetOrderedQuantity(GenericValue item) {
-        Double shipGroupQuantity = item.getDouble("quantity");
-        Double cancelledQuantity = item.getDouble("cancelQuantity");
+    private static BigDecimal getNetOrderedQuantity(GenericValue item) {
+        BigDecimal shipGroupQuantity = item.getBigDecimal("quantity");
+        BigDecimal cancelledQuantity = item.getBigDecimal("cancelQuantity");
         if (UtilValidate.isEmpty(shipGroupQuantity)) {
-            shipGroupQuantity = new Double(0);
+            shipGroupQuantity = BigDecimal.ZERO;
         }
         if (UtilValidate.isNotEmpty(cancelledQuantity)) {
-            shipGroupQuantity = (shipGroupQuantity.doubleValue() - cancelledQuantity.doubleValue());
+            shipGroupQuantity = shipGroupQuantity.subtract(cancelledQuantity);
         }
         return shipGroupQuantity;
     }
@@ -816,7 +815,7 @@ public final class OpentapsMrpServices {
      *   Before inserting in the entity, test if there is the record already existing to add quantity rather to create a new one.
      * @param product a <code>GenericValue</code> value
      * @param facilityId a <code>String</code> value
-     * @param eventQuantity a <code>double</code> value
+     * @param eventQuantity a <code>BigDecimal</code> value
      * @param startDate a <code>Timestamp</code> value
      * @param now a <code>Timestamp</code> value
      * @param routingTaskStartDate a <code>Map</code> value
@@ -826,7 +825,7 @@ public final class OpentapsMrpServices {
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static void processBomComponent(GenericValue product, String facilityId, double eventQuantity, Timestamp startDate, Timestamp now, Map routingTaskStartDate, List listComponent, TimeZone timeZone, Locale locale) throws GenericEntityException {
+    public static void processBomComponent(GenericValue product, String facilityId, BigDecimal eventQuantity, Timestamp startDate, Timestamp now, Map routingTaskStartDate, List listComponent, TimeZone timeZone, Locale locale) throws GenericEntityException {
         GenericDelegator delegator = product.getDelegator();
 
         if (listComponent != null && listComponent.size() > 0) {
@@ -844,8 +843,8 @@ public final class OpentapsMrpServices {
                     parameters.put("eventDate", UtilCommon.laterOf(eventDate, now));
                     parameters.put("inventoryEventPlanTypeId", "MRP_REQUIREMENT");
                     parameters.put("facilityId", facilityId);
-                    double componentEventQuantity = node.getQuantity();
-                    MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, new Double(-1.0 * componentEventQuantity), null, product.get("productId") + ": " + UtilDateTime.timeStampToString(eventDate, UtilDateTime.getDateFormat(locale), timeZone, locale), eventDate.before(now), null, delegator);
+                    BigDecimal componentEventQuantity = node.getQuantity();
+                    MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(parameters, componentEventQuantity.negate(), null, product.get("productId") + ": " + UtilDateTime.timeStampToString(eventDate, UtilDateTime.getDateFormat(locale), timeZone, locale), eventDate.before(now), null, delegator);
 
                 }
             }
@@ -921,7 +920,7 @@ public final class OpentapsMrpServices {
             if (UtilValidate.isEmpty(facilityGroupId)) {
                 facilityIds = Arrays.asList(facilityId);
             } else {
-                List<GenericValue> facilities = delegator.findByAnd("FacilityGroupMember", Arrays.asList(new EntityExpr("facilityGroupId", EntityOperator.EQUALS, facilityGroupId),
+                List<GenericValue> facilities = delegator.findByAnd("FacilityGroupMember", Arrays.asList(EntityCondition.makeCondition("facilityGroupId", EntityOperator.EQUALS, facilityGroupId),
                         EntityUtil.getFilterByDateExpr()), Arrays.asList("sequenceNum"));
                 facilityIds = EntityUtil.getFieldListFromEntityList(facilities, "facilityId", true);
             }
@@ -1012,15 +1011,15 @@ public final class OpentapsMrpServices {
 
         try {
             int bomLevelWithNoEvent = 0;
-            double stockTmp = 0;
-            double initialQoh = 0;
+            BigDecimal stockTmp = BigDecimal.ZERO;
+            BigDecimal initialQoh = BigDecimal.ZERO;
             String oldProductId = null;
             String productId = null;
             GenericValue product = null;
-            double eventQuantity = 0;
+            BigDecimal eventQuantity = BigDecimal.ZERO;
             Timestamp eventDate = null;
-            double reorderQuantity = 0;
-            double minimumStock = 0;
+            BigDecimal reorderQuantity = BigDecimal.ZERO;
+            BigDecimal minimumStock = BigDecimal.ZERO;
             int daysToShip = 0;
             List components = null;
             boolean isBuilt = false;
@@ -1071,7 +1070,7 @@ public final class OpentapsMrpServices {
                     bomLevelWithNoEvent = 0;
                     iteratorListInventoryEventForMRP = listInventoryEventForMRP.listIterator();
 
-                    Map<String, Double> qtyCoveredByReq = FastMap.newInstance();
+                    Map<String, BigDecimal> qtyCoveredByReq = FastMap.newInstance();
                     oldProductId = "";
                     while (iteratorListInventoryEventForMRP.hasNext()) {
                         inventoryEventForMRP = (GenericValue) iteratorListInventoryEventForMRP.next();
@@ -1079,20 +1078,18 @@ public final class OpentapsMrpServices {
                         productId = inventoryEventForMRP.getString("productId");
 
                         // assume a default event quantity of 0.  This will force the stockTmp vs minimumStock check later and create requirements
-                        eventQuantity = (inventoryEventForMRP.get("eventQuantity") != null ? inventoryEventForMRP.getDouble("eventQuantity").doubleValue() : 0);
+                        eventQuantity = (inventoryEventForMRP.get("eventQuantity") != null ? inventoryEventForMRP.getBigDecimal("eventQuantity") : BigDecimal.ZERO);
 
                         if (!productId.equals(oldProductId)) {
                             // It's a new product, so it's necessary to get the product's QOH and create an InventoryEventPlanned for it
                             product = inventoryEventForMRP.getRelatedOneCache("Product");
-                            stockTmp = MrpServices.findProductMrpQoh(product, facilityId, dispatcher, delegator);
-                            MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(UtilMisc.toMap("productId", product.getString("productId"), "inventoryEventPlanTypeId", "INITIAL_QOH", "eventDate", now, "facilityId", facilityId),
-                                    new Double(stockTmp), new Double(stockTmp), null, false,
-                                    null, delegator);
+                            stockTmp = MrpServices.findProductMrpQoh(/* mrpId */ null, product, facilityId, dispatcher, delegator);
+                            MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(UtilMisc.toMap("productId", product.getString("productId"), "inventoryEventPlanTypeId", "INITIAL_QOH", "eventDate", now, "facilityId", facilityId), stockTmp, stockTmp, null, false, null, delegator);
                             // days to ship is only relevant for sales order to plan for preparatory days to ship.  Otherwise MRP will push event dates for manufacturing parts
                             // as well and cause problems
                             daysToShip = 0;
-                            reorderQuantity = (inventoryEventForMRP.getDouble("reorderQuantity") != null ? inventoryEventForMRP.getDouble("reorderQuantity").doubleValue() : -1);
-                            minimumStock = (inventoryEventForMRP.getDouble("minimumStock") != null ? inventoryEventForMRP.getDouble("minimumStock").doubleValue() : 0);
+                            reorderQuantity = (inventoryEventForMRP.get("reorderQuantity") != null ? inventoryEventForMRP.getBigDecimal("reorderQuantity") : new BigDecimal("-1"));
+                            minimumStock = (inventoryEventForMRP.get("minimumStock") != null ? inventoryEventForMRP.getBigDecimal("minimumStock") : BigDecimal.ZERO);
                             if ("SALES_ORDER_SHIP".equals(inventoryEventForMRP.getString("inventoryEventPlanTypeId"))) {
                                 daysToShip = (inventoryEventForMRP.getLong("daysToShip") != null ? inventoryEventForMRP.getLong("daysToShip").intValue() : 0);
                             }
@@ -1101,7 +1098,7 @@ public final class OpentapsMrpServices {
                         }
 
                         initialQoh = stockTmp;
-                        stockTmp = stockTmp + eventQuantity;
+                        stockTmp = stockTmp.add(eventQuantity);
 
 
                         Debug.logInfo("before creating backup inventory transfers, product [" + productId + "] has stock ["  + stockTmp + "] and minimum stock [" + minimumStock + "] and days to ship [" + daysToShip + "]" , MODULE);
@@ -1110,18 +1107,17 @@ public final class OpentapsMrpServices {
                         // First try to create inventory transfers from backup inventory facilities.
                         // If the reorderQuantity from ProductFacility is greater than the shortfall (minStock - current stock)
                         // then transfer the full reorderQuantity.  The quantity to transfer is rounded according to MRP parameters.
-                        if (stockTmp < minimumStock) {
-                            double totalTransferredQuantity = transferInventoryForMrp(productId, facilityId,
-                                    new BigDecimal(Math.max(getRoundedQuantityToStock((minimumStock - stockTmp), inventoryEventForMRP, reqQtyDecimals, interimRequirementRoundingMode, finalRequirementRoundingMode), reorderQuantity)),
-                                    inventoryEventForMRP.getTimestamp("eventDate"), receiptEventBufferMilliseconds, initialQoh, now, createTransferRequirements, dispatcher, locale, userLogin).doubleValue();
+                        if (stockTmp.compareTo(minimumStock) < 0) {
+                            BigDecimal totalTransferredQuantity = transferInventoryForMrp(productId, facilityId, getRoundedQuantityToStock((minimumStock.subtract(stockTmp)), inventoryEventForMRP, reqQtyDecimals, interimRequirementRoundingMode, finalRequirementRoundingMode).max(reorderQuantity),
+                                    inventoryEventForMRP.getTimestamp("eventDate"), receiptEventBufferMilliseconds, initialQoh, now, createTransferRequirements, dispatcher, locale, userLogin);
                             Debug.logInfo("transferred quantity = [" + totalTransferredQuantity + "]", MODULE);
-                            stockTmp = stockTmp + totalTransferredQuantity;
+                            stockTmp = stockTmp.add(totalTransferredQuantity);
                         }
 
                         Debug.logInfo("after creating backup inventory transfers, product [" + productId + "] has stock ["  + stockTmp + "] and minimum stock [" + minimumStock + "] and days to ship [" + daysToShip + "]" , MODULE);
 
                         // now use MRP to create requirements
-                        if (stockTmp < minimumStock) {
+                        if (stockTmp.compareTo(minimumStock) < 0) {
 
                             /**
                              * If at any time as we recurse through inventory events, our stock falls below minimum stock, then we need to build or order the product and
@@ -1133,15 +1129,15 @@ public final class OpentapsMrpServices {
                             // would get manufacturing components for all products, even those that have no inventory event planned records
                             // -----------------------------------------------------
                             // The components are also loaded thru the configurator
-                            double positiveEventQuantity = (eventQuantity > 0 ? eventQuantity: -1 * eventQuantity);
-                            serviceResponse = dispatcher.runSync("getManufacturingComponents", UtilMisc.toMap("productId", product.getString("productId"), "quantity", new Double(positiveEventQuantity), "excludeWIPs", Boolean.FALSE, "userLogin", userLogin));
+                            BigDecimal positiveEventQuantity = (eventQuantity.signum() > 0 ? eventQuantity : eventQuantity.negate());
+                            serviceResponse = dispatcher.runSync("getManufacturingComponents", UtilMisc.<String, Object>toMap("productId", product.getString("productId"), "quantity", positiveEventQuantity.doubleValue(), "excludeWIPs", Boolean.FALSE, "userLogin", userLogin));
 
                             // Lack of workEffortId signify some routings for the product and
                             // with min/max quantity exist but don't match requested quantity.
                             boolean handleMinMaxQty = UtilValidate.isEmpty((String) serviceResponse.get("workEffortId"));
                             if (handleMinMaxQty) {
                                 // check all such routings to find minimal quantity
-                                stockTmp = (ensureMinQuantity((stockTmp * -1.0), productId, delegator) * -1.0);
+                                stockTmp = ensureMinQuantity(stockTmp.negate(), productId, delegator).negate();
                             }
 
                             components = (List) serviceResponse.get("components");
@@ -1174,7 +1170,7 @@ public final class OpentapsMrpServices {
                              * In the final period will it round normally.  In all other periods, it will round down.
                              */
 
-                            double qtyToStock = getRoundedQuantityToStock(((handleMinMaxQty ? 0 : minimumStock) - stockTmp), inventoryEventForMRP, reqQtyDecimals, interimRequirementRoundingMode, finalRequirementRoundingMode);
+                            BigDecimal qtyToStock = getRoundedQuantityToStock((handleMinMaxQty ? BigDecimal.ZERO : minimumStock).subtract(stockTmp), inventoryEventForMRP, reqQtyDecimals, interimRequirementRoundingMode, finalRequirementRoundingMode);
 
                             eventDate = (inventoryEventForMRP.get("eventDate") != null ? inventoryEventForMRP.getTimestamp("eventDate") : now);
                             // to be just before the requirement
@@ -1187,9 +1183,9 @@ public final class OpentapsMrpServices {
                             // for the product.
                             List<OpentapsProposedOrder> proposedOrders = FastList.newInstance();
                             if (handleMinMaxQty) {
-                                List<Double> proposedOrderQuantities = splitJob(qtyToStock, productId, delegator);
+                                List<BigDecimal> proposedOrderQuantities = splitJob(qtyToStock, productId, delegator);
                                 if (UtilValidate.isNotEmpty(proposedOrderQuantities)) {
-                                    for (Double chunkSize : proposedOrderQuantities) {
+                                    for (BigDecimal chunkSize : proposedOrderQuantities) {
                                         proposedOrders.add(new OpentapsProposedOrder(product, facilityId, facilityId, isBuilt, eventDate, chunkSize, createPendingManufacturingRequirements));
                                     }
                                 }
@@ -1206,7 +1202,7 @@ public final class OpentapsMrpServices {
 
                                 // -----------------------------------------------------
                                 // The components are also loaded thru the configurator
-                                serviceResponse = dispatcher.runSync("getManufacturingComponents", UtilMisc.toMap("productId", product.getString("productId"), "quantity", new Double(proposedOrder.getQuantity()), "excludeWIPs", Boolean.FALSE, "userLogin", userLogin));
+                                serviceResponse = dispatcher.runSync("getManufacturingComponents", UtilMisc.<String, Object>toMap("productId", product.getString("productId"), "quantity", proposedOrder.getQuantity().doubleValue(), "excludeWIPs", Boolean.FALSE, "userLogin", userLogin));
                                 components = (List) serviceResponse.get("components");
                                 String routingId = (String) serviceResponse.get("workEffortId");
                                 if (routingId != null) {
@@ -1221,10 +1217,10 @@ public final class OpentapsMrpServices {
                                     isBuilt = false;
                                 }
 
-                                Double productQtyInReq = qtyCoveredByReq.get(productId);
+                                BigDecimal productQtyInReq = qtyCoveredByReq.get(productId);
                                 // ensure initial value is initialized
                                 if (productQtyInReq == null) {
-                                    productQtyInReq = Double.valueOf(0.0);
+                                    productQtyInReq = BigDecimal.ZERO;
                                 }
 
                                 String requirementId = null;
@@ -1244,11 +1240,11 @@ public final class OpentapsMrpServices {
 
                                     // create the  ProposedOrder (only if the product is warehouse managed), and the InventoryEventPlanned associated
                                     requirementId = proposedOrder.create(ctx, userLogin);
-                                    productQtyInReq += proposedOrder.getQuantity();
+                                    productQtyInReq = productQtyInReq.add(proposedOrder.getQuantity());
                                 }
 
                                 // decrease and store allocated quantity to use in next iteration 
-                                productQtyInReq -= positiveEventQuantity;
+                                productQtyInReq = productQtyInReq.subtract(positiveEventQuantity);
                                 qtyCoveredByReq.put(productId, productQtyInReq);
 
                                 // create OrderRequirementCommitments to associate this requirement to the original sales order shipment that caused it
@@ -1256,8 +1252,8 @@ public final class OpentapsMrpServices {
                                 if ("SALES_ORDER_SHIP".equals(inventoryEventForMRP.getString("inventoryEventPlanTypeId"))) {
                                     // get the inventory event details associated with this mrp inventory event ordered by insert order (OISGIR priority order)
                                     if (UtilValidate.isNotEmpty(mrpInventoryEventDetails)) {
-                                        double initialQohTmp = initialQoh;
-                                        double unAllocatedQuantity = proposedOrder.getQuantity();
+                                        BigDecimal initialQohTmp = initialQoh;
+                                        BigDecimal unAllocatedQuantity = proposedOrder.getQuantity();
                                         for (GenericValue mrpInventoryEventDetail : mrpInventoryEventDetails) {
                                             boolean skipAllocation = false;
                                             Map<String, String> orderRequirementCommitmentInput = new HashMap<String, String>();
@@ -1267,30 +1263,30 @@ public final class OpentapsMrpServices {
                                             GenericValue orderRequirementCommitment = delegator.makeValue("OrderRequirementCommitment", orderRequirementCommitmentInput);
 
                                             // allocate requirement quantities according with OISGIR priority order which is the default order by which MrpInventoryEventDetails where created
-                                            double inventoryEventDetailQuantity  = mrpInventoryEventDetail.getDouble("quantity").doubleValue();
-                                            double positiveInventoryEventDetailQuantity = (inventoryEventDetailQuantity > 0 ? inventoryEventDetailQuantity: -1 * inventoryEventDetailQuantity);
-                                            double deltaQoh = initialQohTmp - positiveInventoryEventDetailQuantity;
-                                            double quantityToAllocate = 0;
-                                            if ((initialQohTmp > 0) && ((deltaQoh - minimumStock) >= 0)) {
+                                            BigDecimal inventoryEventDetailQuantity  = mrpInventoryEventDetail.getBigDecimal("quantity");
+                                            BigDecimal positiveInventoryEventDetailQuantity = inventoryEventDetailQuantity.abs();
+                                            BigDecimal deltaQoh = initialQohTmp.subtract(positiveInventoryEventDetailQuantity);
+                                            BigDecimal quantityToAllocate = BigDecimal.ZERO;
+                                            if ((initialQohTmp.signum() > 0) && (deltaQoh.subtract(minimumStock).signum() >= 0)) {
                                                 // if there is stock and if the stock is sufficient to fulfill the order
                                                 // then skip allocation to purchase/manufacturing requirement
                                                 skipAllocation = true;
-                                            } else if ((initialQohTmp > 0) && ((deltaQoh - minimumStock) < 0)) {
+                                            } else if ((initialQohTmp.signum() > 0) && (deltaQoh.subtract(minimumStock).signum() < 0)) {
                                                 // if there is stock and the existing stock does not completely fulfill the order
                                                 // then try to allocate the order quantity not fulfilled by the stock to the purchase/manufacturing requirement
-                                                double positiveDeltaQoh = (deltaQoh > 0 ? deltaQoh: -1 * deltaQoh);
+                                                BigDecimal positiveDeltaQoh = deltaQoh.abs();
                                                 quantityToAllocate = positiveDeltaQoh;
-                                            } else if (initialQohTmp <= 0) {
+                                            } else if (initialQohTmp.signum() <= 0) {
                                                 // if there is no stock then try to allocate the full order quantity amount
                                                 quantityToAllocate =  positiveInventoryEventDetailQuantity;
                                             } else {
                                                 skipAllocation = true;
                                             }
 
-                                            if ((unAllocatedQuantity >= quantityToAllocate) && (quantityToAllocate > 0)) {
-                                                orderRequirementCommitment.put("quantity", new Double(quantityToAllocate));
-                                            } else if ((unAllocatedQuantity < quantityToAllocate) && (unAllocatedQuantity > 0)) {
-                                                orderRequirementCommitment.put("quantity", new Double(unAllocatedQuantity));
+                                            if ((unAllocatedQuantity.compareTo(quantityToAllocate) >= 0) && (quantityToAllocate.signum() > 0)) {
+                                                orderRequirementCommitment.put("quantity", quantityToAllocate);
+                                            } else if ((unAllocatedQuantity.compareTo(quantityToAllocate) < 0) && (unAllocatedQuantity.signum() > 0)) {
+                                                orderRequirementCommitment.put("quantity", unAllocatedQuantity);
                                             } else {
                                                 Debug.logWarning("Order [" + mrpInventoryEventDetail.getString("orderId") + "] item [" + mrpInventoryEventDetail.getString("orderItemSeqId") + "] "
                                                         + " had open quantity of [" + inventoryEventDetailQuantity + "] but unallocated quantity is now [" + unAllocatedQuantity + "], so the Requirement [" + requirementId
@@ -1300,9 +1296,9 @@ public final class OpentapsMrpServices {
 
                                             if (!skipAllocation && UtilValidate.isNotEmpty(requirementId)) {
                                                 orderRequirementCommitment.create();
-                                                unAllocatedQuantity = unAllocatedQuantity - quantityToAllocate;
+                                                unAllocatedQuantity = unAllocatedQuantity.subtract(quantityToAllocate);
                                             }
-                                            initialQohTmp = initialQohTmp - positiveInventoryEventDetailQuantity;
+                                            initialQohTmp = initialQohTmp.subtract(positiveInventoryEventDetailQuantity);
                                         }
                                     } else {
                                         Debug.logWarning("Failed to create OrderRequirementCommitment link between sales order items and requirement [" + requirementId + "]", MODULE);
@@ -1331,8 +1327,8 @@ public final class OpentapsMrpServices {
 
                                 // don't create event if requirement hasn't been created
                                 if (UtilValidate.isNotEmpty(requirementId)) {
-                                    MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(eventMap, new Double(proposedOrder.getQuantity()), new Double(initialQoh + proposedOrder.getQuantity()), eventName, proposedOrder.getRequirementStartDate().before(now), null, delegator);
-                                    stockTmp = stockTmp + proposedOrder.getQuantity();
+                                    MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(eventMap, proposedOrder.getQuantity(), initialQoh.add(proposedOrder.getQuantity()), eventName, proposedOrder.getRequirementStartDate().before(now), null, delegator);
+                                    stockTmp = stockTmp.add(proposedOrder.getQuantity());
                                 }
                             }
 
@@ -1365,13 +1361,6 @@ public final class OpentapsMrpServices {
     }
 
     /**
-     * 
-     */
-     private Double getUncoveredQuantity() {
-         return null;
-     }
-
-    /**
      * Returns the list of inventory event planned for MRP.  They are ordered by billOfMaterialLevel.
      * @param facilityId
      * @param productStoreId
@@ -1386,19 +1375,19 @@ public final class OpentapsMrpServices {
     private static List getInventoryEventPlanned(String facilityId, String productStoreId, String productStoreGroupId, List mrpRunProductIds, int bomLevel, GenericDelegator delegator) throws GenericEntityException {
         EntityCondition bomLevelCondition = null;
         if (bomLevel == 0) {
-            bomLevelCondition = new EntityExpr(new EntityExpr("billOfMaterialLevel", EntityOperator.EQUALS, null),
+            bomLevelCondition = EntityCondition.makeCondition(EntityCondition.makeCondition("billOfMaterialLevel", EntityOperator.EQUALS, null),
                     EntityOperator.OR,
-                    new EntityExpr("billOfMaterialLevel", EntityOperator.EQUALS, bomLevel));
+                    EntityCondition.makeCondition("billOfMaterialLevel", EntityOperator.EQUALS, bomLevel));
         } else {
-            bomLevelCondition = new EntityExpr("billOfMaterialLevel", EntityOperator.EQUALS, bomLevel);
+            bomLevelCondition = EntityCondition.makeCondition("billOfMaterialLevel", EntityOperator.EQUALS, bomLevel);
         }
         // (billOfMaterialLevel condition) AND (facilityId=facilityId)
         List lookupConditions = UtilMisc.toList(bomLevelCondition,
-                new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
+                EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
                 EntityUtil.getFilterByDateExpr("introductionDate", "salesDiscontinuationDate"));
 
         if (UtilValidate.isNotEmpty(mrpRunProductIds)) {
-            lookupConditions.add(new EntityExpr("productId", EntityOperator.IN, mrpRunProductIds));
+            lookupConditions.add(EntityCondition.makeCondition("productId", EntityOperator.IN, mrpRunProductIds));
         }
 
         List orderBy = UtilMisc.toList("productId", "eventDate");
@@ -1410,13 +1399,13 @@ public final class OpentapsMrpServices {
         List fieldsToSelect = mrpFacilityInventoryEventPlanned.getAllFieldNames();
         fieldsToSelect.remove("eventName");
         if (UtilValidate.isNotEmpty(productStoreId)) {
-            lookupConditions.add(new EntityExpr("productStoreId", EntityOperator.EQUALS, productStoreId));
-            mrpInventoryEvents = delegator.findByCondition("FacilityProductAndMrpEventAndDetailAndOrder", new EntityConditionList(lookupConditions, EntityOperator.AND), null, fieldsToSelect, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);
+            lookupConditions.add(EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, productStoreId));
+            mrpInventoryEvents = delegator.findByCondition("FacilityProductAndMrpEventAndDetailAndOrder", EntityCondition.makeCondition(lookupConditions, EntityOperator.AND), null, fieldsToSelect, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);
         } else if (UtilValidate.isNotEmpty(productStoreGroupId)) {
-            lookupConditions.add(new EntityExpr("productStoreGroupId", EntityOperator.EQUALS, productStoreGroupId));
-            mrpInventoryEvents = delegator.findByCondition("FacilityProductAndMrpEventAndDetailAndOrderAndProductStoreGroup", new EntityConditionList(lookupConditions, EntityOperator.AND), null, fieldsToSelect, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);
+            lookupConditions.add(EntityCondition.makeCondition("productStoreGroupId", EntityOperator.EQUALS, productStoreGroupId));
+            mrpInventoryEvents = delegator.findByCondition("FacilityProductAndMrpEventAndDetailAndOrderAndProductStoreGroup", EntityCondition.makeCondition(lookupConditions, EntityOperator.AND), null, fieldsToSelect, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);
         } else {
-            mrpInventoryEvents = delegator.findByCondition("MrpFacilityInventoryEventPlanned", new EntityConditionList(lookupConditions, EntityOperator.AND), null, orderBy);
+            mrpInventoryEvents = delegator.findByCondition("MrpFacilityInventoryEventPlanned", EntityCondition.makeCondition(lookupConditions, EntityOperator.AND), null, orderBy);
         }
 
         return mrpInventoryEvents;
@@ -1433,7 +1422,7 @@ public final class OpentapsMrpServices {
      * @param maxTransferQuantity a <code>BigDecimal</code> value
      * @param eventDate a <code>Timestamp</code> value
      * @param receiptEventBufferMilliseconds a <code>Double</code> value
-     * @param initialQoh a <code>double</code> value
+     * @param initialQoh a <code>BigDecimal</code> value
      * @param now a <code>Timestamp</code> value
      * @param createTransferRequirements a <code>Boolean</code> value
      * @param dispatcher a <code>LocalDispatcher</code> value
@@ -1444,7 +1433,7 @@ public final class OpentapsMrpServices {
      * @exception GenericServiceException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static BigDecimal transferInventoryForMrp(String productId, String facilityId, BigDecimal maxTransferQuantity, Timestamp eventDate, Double receiptEventBufferMilliseconds, double initialQoh, Timestamp now, Boolean createTransferRequirements, LocalDispatcher dispatcher, Locale locale, GenericValue userLogin) throws GenericEntityException, GenericServiceException {
+    private static BigDecimal transferInventoryForMrp(String productId, String facilityId, BigDecimal maxTransferQuantity, Timestamp eventDate, Double receiptEventBufferMilliseconds, BigDecimal initialQoh, Timestamp now, Boolean createTransferRequirements, LocalDispatcher dispatcher, Locale locale, GenericValue userLogin) throws GenericEntityException, GenericServiceException {
 
         GenericDelegator delegator = dispatcher.getDelegator();
 
@@ -1478,8 +1467,8 @@ public final class OpentapsMrpServices {
         if (!hasSpecifiedFacility) {
             // get the associated backup warehouses facilities where inventory could be transferred from
             List backupWarehousesConditions = UtilMisc.toList(
-                    new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityId),
-                    new EntityExpr("facilityAssocTypeId", EntityOperator.EQUALS, "BACKUP_INVENTORY"),
+                    EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, facilityId),
+                    EntityCondition.makeCondition("facilityAssocTypeId", EntityOperator.EQUALS, "BACKUP_INVENTORY"),
                     EntityUtil.getFilterByDateExpr()
             );
             List<GenericValue> backupFacilities = delegator.findByAnd("FacilityAssoc", backupWarehousesConditions, UtilMisc.toList("sequenceNum"));
@@ -1511,9 +1500,9 @@ public final class OpentapsMrpServices {
                 // order search results in increasing order of the scheduled transfer date/time so that we can pick the first one
                 Timestamp transferTimestamp = defaultTransferTimestamp;
                 List<GenericValue> facilityTransferPlans = delegator.findByAnd("FacilityTransferPlan", UtilMisc.toList(
-                        new EntityExpr("facilityIdFrom", EntityOperator.EQUALS, backupFacilityId),
-                        new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityId),
-                        new EntityExpr("scheduledTransferDatetime", EntityOperator.GREATER_THAN, transferTimestamp)
+                        EntityCondition.makeCondition("facilityIdFrom", EntityOperator.EQUALS, backupFacilityId),
+                        EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, facilityId),
+                        EntityCondition.makeCondition("scheduledTransferDatetime", EntityOperator.GREATER_THAN, transferTimestamp)
                 ), UtilMisc.toList("scheduledTransferDatetime"));
                 if (UtilValidate.isNotEmpty(facilityTransferPlans)) {
                     GenericValue earliestTransferPlan = EntityUtil.getFirst(facilityTransferPlans);
@@ -1577,7 +1566,7 @@ public final class OpentapsMrpServices {
 
                     Double quantityThisTransferDb = (Double) tmpResult.get("quantityTransferred");
                     List inventoryTransferIds = (List) tmpResult.get("inventoryTransferIds");
-                    BigDecimal quantityThisTransfer = new BigDecimal(quantityThisTransferDb.doubleValue());
+                    BigDecimal quantityThisTransfer = BigDecimal.valueOf(quantityThisTransferDb);
                     quantityToTransfer = quantityToTransfer.subtract(quantityThisTransfer).setScale(decimals + 1, defaultRoundingMode);
                     quantityTransferred = quantityTransferred.add(quantityThisTransfer).setScale(decimals + 1, defaultRoundingMode);
 
@@ -1588,12 +1577,11 @@ public final class OpentapsMrpServices {
 
                 // create inventory events for other MRP planning.  Except for changes in description, it should be the same
                 MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(UtilMisc.toMap("productId", productId, "eventDate", UtilCommon.beforeMillisecs(UtilCommon.laterOf(transferTimestamp, now), receiptEventBufferMilliseconds), "inventoryEventPlanTypeId", "PROP_INV_XFER_IN", "facilityId", facilityId),
-                        new Double(quantityTransferred.doubleValue()), new Double(quantityTransferred.doubleValue() +  initialQoh),
-                        transferFromEventDescription, transferTimestamp.before(now), null, delegator);
+                                                                          quantityTransferred, quantityTransferred.add(initialQoh), transferFromEventDescription, transferTimestamp.before(now), null, delegator);
 
                 MrpInventoryEventServices.createOrUpdateMrpInventoryEvent(UtilMisc.toMap("productId", productId, "eventDate", UtilCommon.laterOf(transferTimestamp, now), "inventoryEventPlanTypeId", "PROP_INV_XFER_OUT", "facilityId", backupFacilityId),
-                        new Double(-quantityTransferred.doubleValue()), new Double(-quantityTransferred.doubleValue() +  initialQoh),
-                        transferToEventDescription, transferTimestamp.before(now), null, delegator);
+                                                                          quantityTransferred.negate(), quantityTransferred.negate().add(initialQoh),
+                                                                          transferToEventDescription, transferTimestamp.before(now), null, delegator);
 
 
 
@@ -1844,26 +1832,26 @@ public final class OpentapsMrpServices {
      * @throws GenericEntityException
      */
     @SuppressWarnings("unchecked")
-    private static Double ensureMinQuantity(Double qty, String productId, GenericDelegator delegator) throws GenericEntityException {
+    private static BigDecimal ensureMinQuantity(BigDecimal qty, String productId, GenericDelegator delegator) throws GenericEntityException {
         List<EntityExpr> conditions = Arrays.asList(
-                new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
-                new EntityExpr("minQuantity", EntityOperator.NOT_EQUAL, null),
-                new EntityExpr("minQuantity", EntityOperator.GREATER_THAN, qty)
+                EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
+                EntityCondition.makeCondition("minQuantity", EntityOperator.NOT_EQUAL, null),
+                EntityCondition.makeCondition("minQuantity", EntityOperator.GREATER_THAN, qty)
         );
 
         List<GenericValue> prodLinks = delegator.findByCondition(
                 "WorkEffortGoodStandard",
-                new EntityConditionList(conditions, EntityOperator.AND),
+                EntityCondition.makeCondition(conditions, EntityOperator.AND),
                 null, Arrays.asList("minQuantity ASC")
         );
 
         // iterate over all possible records skipping those
         // have null minQuantity.
         if (UtilValidate.isNotEmpty(prodLinks)) {
-            Double minValue = null;
+            BigDecimal minValue = null;
             for (GenericValue wegs : prodLinks) {
-                Double minQuantity = wegs.getDouble("minQuantity");
+                BigDecimal minQuantity = wegs.getBigDecimal("minQuantity");
                 if (minQuantity != null && (minValue == null || minQuantity.compareTo(minValue) < 0)) {
                     minValue = minQuantity;
                 }
@@ -1888,18 +1876,18 @@ public final class OpentapsMrpServices {
      * @throws GenericEntityException on error
      */
     @SuppressWarnings("unchecked")
-    private static List<Double> splitJob(Double qty, String productId, GenericDelegator delegator)  throws GenericEntityException {
+    private static List<BigDecimal> splitJob(BigDecimal qty, String productId, GenericDelegator delegator)  throws GenericEntityException {
         // select WEGS for product which has max quantity in descending order
         List<EntityExpr> conditions = Arrays.asList(
-                new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
-                new EntityExpr("maxQuantity", EntityOperator.NOT_EQUAL, null),
-                new EntityExpr("maxQuantity", EntityOperator.LESS_THAN, qty)
+                EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
+                EntityCondition.makeCondition("maxQuantity", EntityOperator.NOT_EQUAL, null),
+                EntityCondition.makeCondition("maxQuantity", EntityOperator.LESS_THAN, qty)
         );
 
         List<GenericValue> prodLinks = delegator.findByCondition(
                 "WorkEffortGoodStandard",
-                new EntityConditionList(conditions, EntityOperator.AND),
+                EntityCondition.makeCondition(conditions, EntityOperator.AND),
                 null, Arrays.asList("maxQuantity DESC")
         );
 
@@ -1908,43 +1896,43 @@ public final class OpentapsMrpServices {
             return null;
         }
 
-        Double remainingQuantity = qty;
+        BigDecimal remainingQuantity = qty;
 
         // last chunk should be aligned to minimal quantity, so we have to find its value.
         conditions = Arrays.asList(
-                new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
-                new EntityExpr("minQuantity", EntityOperator.NOT_EQUAL, null)
+                EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
+                EntityCondition.makeCondition("minQuantity", EntityOperator.NOT_EQUAL, null)
         );
 
         List<GenericValue> prodLinksForMinQty = delegator.findByCondition(
                 "WorkEffortGoodStandard",
-                new EntityConditionList(conditions, EntityOperator.AND),
+                EntityCondition.makeCondition(conditions, EntityOperator.AND),
                 null, Arrays.asList("minQuantity ASC")
         );
 
-        Double minQuantity = null;
+        BigDecimal minQuantity = null;
         if (UtilValidate.isNotEmpty(prodLinksForMinQty)) {
-            minQuantity = EntityUtil.getFirst(prodLinksForMinQty).getDouble("minQuantity");
+            minQuantity = EntityUtil.getFirst(prodLinksForMinQty).getBigDecimal("minQuantity");
         }
 
-        List<Double> result = FastList.newInstance();
+        List<BigDecimal> result = FastList.newInstance();
 
         for (GenericValue wegs : prodLinks) {
-            Double maxQuantity = wegs.getDouble("maxQuantity");
+            BigDecimal maxQuantity = wegs.getBigDecimal("maxQuantity");
 
             // for each max quantity as many chunks as possible
-            while (remainingQuantity >= maxQuantity) {
+            while (remainingQuantity.compareTo(maxQuantity) >= 0) {
                 if (remainingQuantity.compareTo(maxQuantity) > 0) {
                     result.add(maxQuantity);
-                    remainingQuantity -= maxQuantity;
+                    remainingQuantity = remainingQuantity.subtract(maxQuantity);
                     continue;
                 } else if (remainingQuantity.compareTo(minQuantity) >= 0) {
-                    remainingQuantity = 0.0;
+                    remainingQuantity = BigDecimal.ZERO;
                     result.add(remainingQuantity);
                     break;
                 } else {
-                    remainingQuantity = 0.0;
+                    remainingQuantity = BigDecimal.ZERO;
                     result.add(minQuantity);
                     break;
                 }
@@ -1952,7 +1940,7 @@ public final class OpentapsMrpServices {
         }
 
         // handle remainder
-        if (remainingQuantity.compareTo(0.0) > 0) {
+        if (remainingQuantity.signum() > 0) {
             result.add((minQuantity == null || remainingQuantity.compareTo(minQuantity) >= 0) ? remainingQuantity : minQuantity);
         }
 
