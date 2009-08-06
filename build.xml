@@ -43,6 +43,11 @@ under the License.
         <antcall target="build"/>
     </target>
 
+    <target name="refresh-server">
+        <antcall target="clean"/>
+        <antcall target="server"/>
+    </target>
+
     <target name="clean-all">
         <antcall target="clean-data"/>
         <antcall target="clean-logs"/>
@@ -50,6 +55,7 @@ under the License.
         <antcall target="clean-xtra"/>
         <antcall target="clean-catalina"/>
         <antcall target="clean-cache"/>
+        <antcall target="clean-gwt"/>
         <antcall target="clean"/>
     </target>
 
@@ -118,6 +124,22 @@ under the License.
         <echo message="[clean] ========== Done Cleaning =========="/>
     </target>
 
+    <target name="refresh-gwt">
+        <antcall target="clean-gwt"/>
+        <antcall target="gwt"/>
+    </target>
+
+    <target name="clean-gwt" depends="">
+        <subant inheritall="false" target="clean-gwt">
+            <filelist dir="." files="hot-deploy/opentaps-common"/>
+            <filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
+            <filelist dir="." files="hot-deploy/financials/build.xml"/>
+            <filelist dir="." files="hot-deploy/purchasing/build.xml"/>
+            <filelist dir="." files="hot-deploy/warehouse/build.xml"/>
+        </subant>
+    </target>
+
+
     <target name="svninfo">
         <echo message="Creating svninfo..."/>
         <exec executable="svn" dir="." output="runtime/svninfo_tmp.xml">
@@ -139,10 +161,53 @@ under the License.
     </target>
 
     <!-- ================================================================== -->
+    <!-- Build GWT Modules                                                  -->
+    <!-- ================================================================== -->
+
+    <target name="gwt" depends="gwt-code"/>
+
+    <target name="gwt-code">
+        <echo message="[gwt code] ========== Start Building GWT Code (Compile) =========="/>
+        <subant inheritall="false" target="gwt-code">
+            <filelist dir="." files="hot-deploy/opentaps-common/build.xml"/>
+            <filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
+            <filelist dir="." files="hot-deploy/financials/build.xml"/>
+            <filelist dir="." files="hot-deploy/purchasing/build.xml"/>
+            <filelist dir="." files="hot-deploy/warehouse/build.xml"/>
+            <filelist dir="." files="hot-deploy/analytics/build.xml"/>
+        </subant>
+        <echo message="[gwt code] ========== Done Building GWT Code (Compile) =========="/>
+    </target>
+
+    <target name="gwt-labels">
+        <echo message="[gwt-labels] ========== Start Building GWT Labels (Compile) =========="/>
+        <subant inheritall="false" target="gwt-labels">
+                <filelist dir="." files="hot-deploy/opentaps-common/build.xml"/>
+        </subant>
+        <echo message="[gwt-labels] ========== Done Building GWT Labels (Compile) =========="/>
+    </target>
+
+
+    <!-- ================================================================== -->
     <!-- Build Components                                                   -->
     <!-- ================================================================== -->
 
-    <target name="build">
+    <target name="prebuild">
+        <subant inheritall="false">
+            <filelist dir="." files="framework/build.xml"/>
+        </subant>
+        <subant inheritall="false" failonerror="false">
+            <filelist dir="." files="applications/build.xml"/>
+        </subant>
+        <subant inheritall="false" failonerror="false">
+            <filelist dir="." files="specialpurpose/build.xml"/>
+        </subant>
+        <subant target="prebuild">
+            <filelist dir="." files="hot-deploy/opentaps-common/build.xml"/>
+        </subant>
+    </target>
+
+    <target name="server">
         <echo message="[build] ========== Start Building (Compile) =========="/>
 
         <subant inheritall="false">
@@ -164,6 +229,9 @@ under the License.
 
         <echo message="[build] ========== Done Building (Compile) =========="/>
     </target>
+
+    <target name="build" depends="server, gwt" />
+
 
     <!-- ================================================================== -->
     <!-- Build JavaDocs                                                     -->
