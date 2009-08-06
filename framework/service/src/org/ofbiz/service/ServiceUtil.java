@@ -64,6 +64,14 @@ public class ServiceUtil {
         return ModelService.RESPOND_FAIL.equals(results.get(ModelService.RESPONSE_MESSAGE));
     }
 
+    public static boolean isSuccess(Map results) {
+        if (results == null || results.get(ModelService.RESPONSE_MESSAGE) == null) {
+            return false;
+        }
+        return ModelService.RESPOND_SUCCESS.equals(results.get(ModelService.RESPONSE_MESSAGE));
+    }
+
+
     /** A small routine used all over to improve code efficiency, make a result map with the message and the error response code */
     public static Map<String, Object> returnError(String errorMessage) {
         return returnProblem(ModelService.RESPOND_ERROR, errorMessage, null, null, null);
