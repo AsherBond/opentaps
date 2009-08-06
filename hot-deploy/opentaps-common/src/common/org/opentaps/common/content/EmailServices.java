@@ -614,15 +614,15 @@ public class EmailServices {
     /**
      * Parse a comma-delimited string of email addresses and validate each.
      * @param emailAddressString Comma-delimited string of email addresses
-     * @param requireDot if require dot
+     * @param requireDot if require dot, ignored, not supported by <code>UtilValidate</code> anymore, TODO: see if that breaks anything
      * @return Set of valid email addresses
      */
-    private static Set getValidEmailAddressesFromString(String emailAddressString, boolean requireDot) {
+    @Deprecated private static Set getValidEmailAddressesFromString(String emailAddressString, boolean requireDot) {
         Set emailAddresses = new TreeSet();
         if (UtilValidate.isNotEmpty(emailAddressString)) {
             String[] emails = emailAddressString.split(",");
             for (int x = 0; x < emails.length; x++) {
-                if (!UtilValidate.isEmail(emails[x], requireDot)) {
+                if (!UtilValidate.isEmail(emails[x])) {
                     Debug.logInfo("Ignoring invalid email address: " + emails[x], MODULE);
                     continue;
                 }
