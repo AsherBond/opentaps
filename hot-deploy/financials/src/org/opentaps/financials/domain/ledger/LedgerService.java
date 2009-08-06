@@ -91,7 +91,7 @@ public class LedgerService extends Service implements LedgerServiceInterface {
             if (tagNotBalance == null) {
                 throw new LedgerException("FinancialsError_CannotPostFailedTrialBalance", UtilMisc.toMap("acctgTransId", transaction.getAcctgTransId(), "credit", transaction.getCreditTotal(), "debit", transaction.getDebitTotal()));
             } else {
-                throw new LedgerException("FinancialsError_CannotPostFailedTagBalance", UtilMisc.toMap("acctgTransId", transaction.getAcctgTransId(), "credit", tagNotBalance.getCredit(), "debit", tagNotBalance.getDebit(), "tagIndex", tagNotBalance.getIndex(), "tagValue", tagNotBalance.getTagValue()));
+                throw new LedgerException("FinancialsError_CannotPostFailedTagBalance", UtilMisc.<String, Object>toMap("acctgTransId", transaction.getAcctgTransId(), "credit", tagNotBalance.getCredit(), "debit", tagNotBalance.getDebit(), "tagIndex", tagNotBalance.getIndex(), "tagValue", tagNotBalance.getTagValue()));
             }
         }
 
