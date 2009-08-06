@@ -220,12 +220,12 @@ public class OrderItemsLookupService extends EntityLookupService {
         while (iter.hasNext()) {
             ShoppingCartItem i = iter.next();
             CartOrderItem item = new CartOrderItem();
-            item.setQuantity(new Double(i.getQuantity()).toString());
-            item.setUnitPrice(new Double(i.getBasePrice()).toString());
+            item.setQuantity(i.getQuantity().toString());
+            item.setUnitPrice(i.getBasePrice().toString());
             item.setDescription(i.getName());
             item.setProductId(i.getProductId());
             item.setItemId(new Integer(cart.getItemIndex(i)).toString());
-            item.setAdjustment(new Double(i.getOtherAdjustments()).toString());
+            item.setAdjustment(i.getOtherAdjustments().toString());
             if (i.getIsPromo()) {
                 item.setIsPromo("Y");
                 setEntityPermissions(item, new Permissions(false));
@@ -242,7 +242,7 @@ public class OrderItemsLookupService extends EntityLookupService {
             GenericValue adj = iterAdj.next();
             CartOrderItem item = new CartOrderItem();
             item.setItemId("Adj");
-            item.setAdjustment(org.ofbiz.order.order.OrderReadHelper.calcOrderAdjustmentBd(adj, BigDecimal.valueOf(cart.getSubTotal())).toString());
+            item.setAdjustment(org.ofbiz.order.order.OrderReadHelper.calcOrderAdjustment(adj, cart.getSubTotal()).toString());
             setEntityPermissions(item, new Permissions(false));
 
             items.add(item);
