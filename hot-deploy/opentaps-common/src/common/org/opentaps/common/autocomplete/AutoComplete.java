@@ -294,21 +294,21 @@ public class AutoComplete {
             String partyId = party == null ? null : party.getString("partyId");
             String compositeName = PartyReader.getPartyCompositeName(party);
 
-            return UtilMisc.toMap("name", compositeName, "partyId", partyId);
+            return UtilMisc.<String, Object>toMap("name", compositeName, "partyId", partyId);
         }
     }
 
     public static class GlAccountSelectionBuilder implements SelectionBuilder {
         public Map<String, Object> buildRow(Object element) {
             GenericValue account = (GenericValue) element;
-            return UtilMisc.toMap("name", account.getString("accountCode") + ":" + account.getString("accountName"), "glAccountId", account.getString("glAccountId"));
+            return UtilMisc.<String, Object>toMap("name", account.getString("accountCode") + ":" + account.getString("accountName"), "glAccountId", account.getString("glAccountId"));
         }
     }
 
     public static class ProductSelectionBuilder implements SelectionBuilder {
         public Map<String, Object> buildRow(Object element) {
             GenericValue product = (GenericValue) element;
-            return UtilMisc.toMap("name", product.getString("productId") + ":" + product.getString("internalName"), "productId", product.getString("productId"));
+            return UtilMisc.<String, Object>toMap("name", product.getString("productId") + ":" + product.getString("internalName"), "productId", product.getString("productId"));
         }
     }
 
