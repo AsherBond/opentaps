@@ -28,12 +28,10 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
-
 import org.opentaps.common.util.UtilCommon;
 
 /**
@@ -66,14 +64,12 @@ public class ShippingHelper {
      * @throws GenericEntityException if a database exception occurred
      * @return the list of OISGIRs
      */
-    @SuppressWarnings("unchecked")
     public List<GenericValue> getOISGIRlist()
         throws GenericEntityException {
-        List<EntityExpr> generalConditions = new ArrayList<EntityExpr>();
-        generalConditions.add(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
-        generalConditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, "ORDER_APPROVED"));
-        generalConditions.add(new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"));
-        EntityConditionList conditions = new EntityConditionList(generalConditions, EntityOperator.AND);
+        EntityCondition conditions = EntityCondition.makeCondition(
+            EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+            EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_APPROVED"),
+            EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"));
         return delegator.findByCondition("OdrItShpGrpHdrInvResAndInvItem", conditions, null, null);
     }
 
@@ -83,16 +79,15 @@ public class ShippingHelper {
      * @throws GenericEntityException if a database exception occurred
      * @return the list of active picklists
      */
-    @SuppressWarnings("unchecked")
     public List<GenericValue> getActivePicklists()
         throws GenericEntityException {
-        EntityConditionList conditions =  new EntityConditionList(UtilMisc.toList(
-                   new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                   new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_CANCELLED"),
-                   new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_PICKED"),
-                   new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_COMPLETED"),
-                   new EntityExpr("itemStatusId", EntityOperator.NOT_EQUAL, "PICKITEM_CANCELLED"),
-                   new EntityExpr("itemStatusId", EntityOperator.NOT_EQUAL, "PICKITEM_COMPLETED")), EntityOperator.AND);
+        EntityCondition conditions = EntityCondition.makeCondition(
+                   EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                   EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_CANCELLED"),
+                   EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_PICKED"),
+                   EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_COMPLETED"),
+                   EntityCondition.makeCondition("itemStatusId", EntityOperator.NOT_EQUAL, "PICKITEM_CANCELLED"),
+                   EntityCondition.makeCondition("itemStatusId", EntityOperator.NOT_EQUAL, "PICKITEM_COMPLETED"));
 
         return delegator.findByCondition("PicklistAndBinAndItem", conditions, null, null);
     }
@@ -197,7 +192,9 @@ public class ShippingHelper {
                 if (orderIsReady && !onActivePicklist) {
                     // Create an EntityCondition for this order/shipGroup
                     Debug.logInfo("Adding condition for [" + orderId + "/" + shipGroupSeqId + "]", MODULE);
-                    EntityConditionList osgCondition = new EntityConditionList(UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId), new EntityExpr("shipGroupSeqId", EntityOperator.EQUALS, shipGroupSeqId)), EntityOperator.AND);
+                    EntityCondition osgCondition = EntityCondition.makeCondition(
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("shipGroupSeqId", EntityOperator.EQUALS, shipGroupSeqId));
                     orderIsReadyConditionList.add(osgCondition);
                 }
             }
@@ -248,13 +245,13 @@ public class ShippingHelper {
         if (orderIsReadyConditionList.size() > 0) {
             Debug.logInfo("Found orderIsReadyConditionList: " + orderIsReadyConditionList, MODULE);
             // This condition list will result in a query like: ... WHERE (orderId=w AND shipGroupSeqId=x) OR (orderId=y AND shipGroupSeqId=z) ...
-            EntityConditionList orderIsReadyConditions = new EntityConditionList(orderIsReadyConditionList, EntityOperator.OR);
+            EntityCondition orderIsReadyConditions = EntityCondition.makeCondition(orderIsReadyConditionList, EntityOperator.OR);
 
             // The value of these fields are the same for all rows for a given order/shipGroup, so limiting the query to these ensures that a DISTINCT select won't
             //  result in any duplicate rows
-            List fieldsToSelect = UtilMisc.toList("orderId", "shipGroupSeqId", "orderDate", "contactMechId");
+            List<String> fieldsToSelect = UtilMisc.toList("orderId", "shipGroupSeqId", "orderDate", "contactMechId");
             fieldsToSelect.addAll(UtilMisc.toList("carrierPartyId", "shipmentMethodTypeId", "shipByDate", "billToPartyId"));
-            List orderBy = UtilMisc.toList("orderDate");
+            List<String> orderBy = UtilMisc.toList("orderDate");
 
             EntityListIterator readyToShipIt = delegator.findListIteratorByCondition("OdrItShpGrpHdrInvResAndInvItem", orderIsReadyConditions, null, fieldsToSelect, orderBy, UtilCommon.DISTINCT_READ_OPTIONS);
 

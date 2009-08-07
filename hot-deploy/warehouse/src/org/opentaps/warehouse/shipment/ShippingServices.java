@@ -38,6 +38,9 @@
 
 package org.opentaps.warehouse.shipment;
 
+import java.math.BigDecimal;
+import java.util.*;
+
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
@@ -46,8 +49,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.party.party.PartyHelper;
 import org.ofbiz.service.DispatchContext;
@@ -56,18 +58,17 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.warehouse.shipment.packing.PackingSession;
 
-import java.math.BigDecimal;
-import java.util.*;
-
 /**
  * Services for Warehouse application Shipping section.
  *
  * @author     <a href="mailto:cliberty@opensourcestrategies.com">Chris Liberty</a>
  * @version    $Rev: 8604 $
  */
-public class ShippingServices {
+public final class ShippingServices {
 
-    public static final String module = ShippingServices.class.getName();
+    private ShippingServices() { }
+
+    private static final String MODULE = ShippingServices.class.getName();
     public static final String warehouseResource = "warehouse";
     public static final String errorResource = "OpentapsErrorLabels";
     public static final String resource = "WarehouseUiLabels";
@@ -105,7 +106,7 @@ public class ShippingServices {
     }
 
     // TODO: ideally this can use a FacililtyShipmentSetting where the confirm services can be set up for a facility and carrierPartyId
-    private static Map quickScheduleShipmentRouteSegment(DispatchContext dctx, Map context, boolean runSynchronously) {
+    private static Map<String, Object> quickScheduleShipmentRouteSegment(DispatchContext dctx, Map<String, Object> context, boolean runSynchronously) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -120,28 +121,28 @@ public class ShippingServices {
             GenericValue shipment = delegator.findByPrimaryKey("Shipment", UtilMisc.toMap("shipmentId", shipmentId));
             if (UtilValidate.isEmpty(shipment)) {
                 String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentNotFound", context, locale);
-                Debug.logError(errorMessage, module);
+                Debug.logError(errorMessage, MODULE);
                 return ServiceUtil.returnError(errorMessage);
             }
 
             // Check the shipment status
             if (!"SHIPMENT_PACKED".equals(shipment.getString("statusId"))) {
                 String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentNotPacked", context, locale);
-                Debug.logError(errorMessage, module);
+                Debug.logError(errorMessage, MODULE);
                 return ServiceUtil.returnError(errorMessage);
             }
 
             GenericValue shipmentRouteSegment = delegator.findByPrimaryKeyCache("ShipmentRouteSegment", UtilMisc.toMap("shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId));
             if (UtilValidate.isEmpty(shipmentRouteSegment)) {
                 String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentRouteSegmentNotFound", context, locale);
-                Debug.logError(errorMessage, module);
+                Debug.logError(errorMessage, MODULE);
                 return ServiceUtil.returnError(errorMessage);
             }
 
             // Check the shipmentRouteSegment carrierServiceStatus
             if (!"SHRSCS_NOT_STARTED".equals(shipmentRouteSegment.getString("carrierServiceStatusId"))) {
                 String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentRouteSegmentAlreadyStarted", context, locale);
-                Debug.logError(errorMessage, module);
+                Debug.logError(errorMessage, MODULE);
                 return ServiceUtil.returnError(errorMessage);
             }
 
@@ -156,11 +157,11 @@ public class ShippingServices {
                 GenericValue carrierPartyRole = delegator.findByPrimaryKey("PartyRole", UtilMisc.toMap("partyId", carrierPartyId, "roleTypeId", "CARRIER"));
                 if (UtilValidate.isEmpty(carrierPartyRole)) {
                     String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorInvalidCarrier", context, locale);
-                    Debug.logError(errorMessage, module);
+                    Debug.logError(errorMessage, MODULE);
                     return ServiceUtil.returnError(errorMessage);
                 }
 
-                Map updateShipmentRouteSegmentResult = dispatcher.runSync("updateShipmentRouteSegment", UtilMisc.toMap("shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId, "carrierPartyId", carrierPartyId, "userLogin", userLogin));
+                Map<String, Object> updateShipmentRouteSegmentResult = dispatcher.runSync("updateShipmentRouteSegment", UtilMisc.toMap("shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId, "carrierPartyId", carrierPartyId, "userLogin", userLogin));
                 if (ServiceUtil.isError(updateShipmentRouteSegmentResult)) {
                     return updateShipmentRouteSegmentResult;
                 }
@@ -168,12 +169,12 @@ public class ShippingServices {
 
             // if we're doing this asynchronously, write some helpful info in the log
             if (!runSynchronously) {
-                Debug.logInfo("Asynchronously confirming " + carrierPartyId + " ShipmentRouteSegment with shipmentId [" + shipmentId + "] shipmentRouteSegmentId [" + shipmentRouteSegmentId + "] ", module);
+                Debug.logInfo("Asynchronously confirming " + carrierPartyId + " ShipmentRouteSegment with shipmentId [" + shipmentId + "] shipmentRouteSegmentId [" + shipmentRouteSegmentId + "] ", MODULE);
             }
 
             // confirm the shipment with the carrier, which should result in the label being generated and pickup confirmed
-            Map confirmShipmentContext = UtilMisc.toMap("shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId, "userLogin", userLogin);
-            Map confirmShipmentResult = null;
+            Map<String, Object> confirmShipmentContext = UtilMisc.toMap("shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId, "userLogin", userLogin);
+            Map<String, Object> confirmShipmentResult = null;
             if (carrierPartyId.equals("DHL")) {
                 if (runSynchronously) {
                     confirmShipmentResult = dispatcher.runSync("dhlShipmentConfirm", confirmShipmentContext);
@@ -206,10 +207,10 @@ public class ShippingServices {
             }
 
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return ServiceUtil.returnError(e.getMessage());
         } catch (GenericServiceException se) {
-            Debug.logError(se, se.getMessage(), module);
+            Debug.logError(se, se.getMessage(), MODULE);
         }
 
         return ServiceUtil.returnSuccess();
@@ -219,15 +220,15 @@ public class ShippingServices {
      * Service group to run UPS shipment confirm and accept synchronously.  Meant to be called asynchronously by scheduling service above.
      * Putting this here for now since we don't have a general place to place UPS services in opentaps.
      */
-    public static Map upsShipmentConfirmAndAccept(DispatchContext dctx, Map context) {
+    public static Map<String, Object> upsShipmentConfirmAndAccept(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         try {
             // copy the context to avoid re-using a polluted input map
-            Map context2 = new FastMap();
+            Map<String, Object> context2 = new FastMap<String, Object>();
             context2.putAll(context);
 
             // confirm first, check for errors
-            Map results = dispatcher.runSync("upsShipmentConfirm", context);
+            Map<String, Object> results = dispatcher.runSync("upsShipmentConfirm", context);
             if (ServiceUtil.isError(results)) {
                 return results;
             }
@@ -235,7 +236,7 @@ public class ShippingServices {
             // accept second, return error or success
             return dispatcher.runSync("upsShipmentAccept", context2);
         } catch (GenericServiceException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return ServiceUtil.returnError(e.getMessage());
         }
     }
@@ -246,7 +247,7 @@ public class ShippingServices {
      * @param context Map
      * @return Map
      */
-    public static Map printPackageShippingLabels(DispatchContext dctx, Map context) {
+    public static Map<String, Object> printPackageShippingLabels(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -276,17 +277,17 @@ public class ShippingServices {
             }
 
             // Retrieve the shipment packages
-            List cond = UtilMisc.toList(
-                    new EntityExpr("shipmentId", EntityOperator.EQUALS, shipmentId),
-                    new EntityExpr("shipmentRouteSegmentId", EntityOperator.EQUALS, shipmentRouteSegmentId),
-                    new EntityExpr("labelImage", EntityOperator.NOT_EQUAL, null)
+            EntityCondition cond = EntityCondition.makeCondition(
+                    EntityCondition.makeCondition("shipmentId", EntityOperator.EQUALS, shipmentId),
+                    EntityCondition.makeCondition("shipmentRouteSegmentId", EntityOperator.EQUALS, shipmentRouteSegmentId),
+                    EntityCondition.makeCondition("labelImage", EntityOperator.NOT_EQUAL, null)
             );
-            List shipmentPackages = delegator.findByCondition("ShipmentPackageRouteSeg", new EntityConditionList(cond, EntityOperator.AND), null, UtilMisc.toList("shipmentPackageSeqId"));
+            List<GenericValue> shipmentPackages = delegator.findByCondition("ShipmentPackageRouteSeg", cond, null, UtilMisc.toList("shipmentPackageSeqId"));
 
             // Assemble the parameters for the BatchPrintShippingLabels FO
-            Map parameters = new HashMap();
+            Map<String, Object> parameters = new HashMap<String, Object>();
             for (int x = 0; x < shipmentPackages.size(); x++) {
-                GenericValue shipmentPackage = (GenericValue) shipmentPackages.get(x);
+                GenericValue shipmentPackage = shipmentPackages.get(x);
                 parameters.put("_rowSubmit_o_" + x, "Y");
                 parameters.put("shipmentId_o_" + x, shipmentId);
                 parameters.put("shipmentRouteSegmentId_o_" + x, shipmentRouteSegmentId);
@@ -298,33 +299,33 @@ public class ShippingServices {
 
             // Call the sendPrintFromScreen service on the BatchPrintShippingLabels screen, which will print the aggregated package labels
             // Service is called synchronously so that the service will fail if the labels fail to print
-            Map sendPrintFromScreenContext = UtilMisc.toMap("screenLocation", batchPrintScreenLocation, "screenContext", UtilMisc.toMap("parameters", parameters, "urlPrefix", urlPrefix), "printerName", printerName, "locale", locale, "userLogin", userLogin);
-            Map sendPrintFromScreenResult = dispatcher.runSync("sendPrintFromScreen", sendPrintFromScreenContext);
+            Map<String, Object> sendPrintFromScreenContext = UtilMisc.toMap("screenLocation", batchPrintScreenLocation, "screenContext", UtilMisc.toMap("parameters", parameters, "urlPrefix", urlPrefix), "printerName", printerName, "locale", locale, "userLogin", userLogin);
+            Map<String, Object> sendPrintFromScreenResult = dispatcher.runSync("sendPrintFromScreen", sendPrintFromScreenContext);
             if (ServiceUtil.isError(sendPrintFromScreenResult)) {
                 return sendPrintFromScreenResult;
             }
 
             // Update the labelPrinted flag of the ShipmentPackageRouteSeg
             for (int x = 0; x < shipmentPackages.size(); x++) {
-                GenericValue shipmentPackage = (GenericValue) shipmentPackages.get(x);
-                Map updateContext = UtilMisc.toMap("labelPrinted", "Y", "shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId, "shipmentPackageSeqId", shipmentPackage.get("shipmentPackageSeqId"), "locale", locale, "userLogin", userLogin);
-                Map updateResult = dispatcher.runSync("updateShipmentPackageRouteSeg", updateContext);
+                GenericValue shipmentPackage = shipmentPackages.get(x);
+                Map<String, Object> updateContext = UtilMisc.toMap("labelPrinted", "Y", "shipmentId", shipmentId, "shipmentRouteSegmentId", shipmentRouteSegmentId, "shipmentPackageSeqId", shipmentPackage.get("shipmentPackageSeqId"), "locale", locale, "userLogin", userLogin);
+                Map<String, Object> updateResult = dispatcher.runSync("updateShipmentPackageRouteSeg", updateContext);
                 if (ServiceUtil.isError(updateResult)) {
                     return updateResult;
                 }
             }
 
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return ServiceUtil.returnError(e.getMessage());
         } catch (GenericServiceException se) {
-            Debug.logError(se, se.getMessage(), module);
+            Debug.logError(se, se.getMessage(), MODULE);
         }
 
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map insurePackedShipment(DispatchContext dctx, Map context) {
+    public static Map<String, Object> insurePackedShipment(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -333,7 +334,7 @@ public class ShippingServices {
         boolean setValues = "true".equals(UtilProperties.getPropertyValue(warehouseResource, "warehouse.package.insured.setPackageInsuredValues"));
         if (!setValues) {
             String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetPackageValuesTurnedOff", context, locale);
-            Debug.logInfo(errorMessage, module);
+            Debug.logInfo(errorMessage, MODULE);
             return ServiceUtil.returnSuccess();
         }
 
@@ -344,7 +345,7 @@ public class ShippingServices {
             GenericValue shipment = delegator.findByPrimaryKey("Shipment", UtilMisc.toMap("shipmentId", shipmentId));
             if (UtilValidate.isEmpty(shipment)) {
                 String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentNotFound", context, locale);
-                Debug.logError(errorMessage, module);
+                Debug.logError(errorMessage, MODULE);
                 return ServiceUtil.returnError(errorMessage);
             }
 
@@ -355,7 +356,7 @@ public class ShippingServices {
             String currencyUomId = shipment.getString("currencyUomId");
             if (UtilValidate.isEmpty(currencyUomId)) {
                 String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetPackageValuesNoCurrency", context, locale);
-                Debug.logInfo(errorMessage, module);
+                Debug.logInfo(errorMessage, MODULE);
                 return ServiceUtil.returnFailure(errorMessage);
             }
 
@@ -368,43 +369,45 @@ public class ShippingServices {
             try {
                 threshold = new BigDecimal(thresholdStr);
             } catch (NumberFormatException e) {
-                Debug.logError("Cannot insure package:  warehouse.package.insured.threshold defines unkown currency amount [" + thresholdStr + "]", module);
+                Debug.logError("Cannot insure package:  warehouse.package.insured.threshold defines unkown currency amount [" + thresholdStr + "]", MODULE);
                 return ServiceUtil.returnSuccess();
             }
 
             // get the package values and set the insured value if it is greater than the threshold
-            List packages = delegator.findByAnd("ShipmentPackage", UtilMisc.toMap("shipmentId", shipmentId));
-            Map input = UtilMisc.toMap("userLogin", userLogin, "shipmentId", shipmentId, "currencyUomId", currencyUomId);
-            for (Iterator iter = packages.iterator(); iter.hasNext();) {
-                GenericValue pkg = (GenericValue) iter.next();
+            List<GenericValue> packages = delegator.findByAnd("ShipmentPackage", UtilMisc.toMap("shipmentId", shipmentId));
+            Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin, "shipmentId", shipmentId, "currencyUomId", currencyUomId);
+            for (Iterator<GenericValue> iter = packages.iterator(); iter.hasNext();) {
+                GenericValue pkg = iter.next();
                 input.put("shipmentPackageSeqId", pkg.get("shipmentPackageSeqId"));
-                Map results = dispatcher.runSync("getShipmentPackageValueFromOrders", input);
+                Map<String, Object> results = dispatcher.runSync("getShipmentPackageValueFromOrders", input);
                 if (ServiceUtil.isError(results)) {
                     return results;
                 }
                 if (UtilValidate.isEmpty(results.get("packageValue"))) {
                     String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetPackageValueNoValue", context, locale);
-                    Debug.logInfo(errorMessage, module);
+                    Debug.logInfo(errorMessage, MODULE);
                     return ServiceUtil.returnFailure(errorMessage);
                 }
                 BigDecimal packageValue = (BigDecimal) results.get("packageValue");
                 if (packageValue.compareTo(threshold) < 0) {
                     String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetPackageValueTooLow", context, locale);
-                    Debug.logInfo(errorMessage, module);
-                    Debug.logInfo("packageValue = " + packageValue + ", threshold = " + threshold, module);
+                    Debug.logInfo(errorMessage, MODULE);
+                    Debug.logInfo("packageValue = " + packageValue + ", threshold = " + threshold, MODULE);
                     return ServiceUtil.returnSuccess();
                 }
 
-                Map updateShipmentPackageContext = UtilMisc.toMap("shipmentId", shipmentId, "shipmentPackageSeqId", pkg.getString("shipmentPackageSeqId"), "insuredValue", new Double(packageValue.doubleValue()), "userLogin", userLogin, "locale", locale);
-                Map updateShipmentPackageResult = dispatcher.runSync("updateShipmentPackage", updateShipmentPackageContext);
-                if (ServiceUtil.isError(updateShipmentPackageResult)) return updateShipmentPackageResult;
+                Map<String, Object> updateShipmentPackageContext = UtilMisc.<String, Object>toMap("shipmentId", shipmentId, "shipmentPackageSeqId", pkg.getString("shipmentPackageSeqId"), "insuredValue", new Double(packageValue.doubleValue()), "userLogin", userLogin, "locale", locale);
+                Map<String, Object> updateShipmentPackageResult = dispatcher.runSync("updateShipmentPackage", updateShipmentPackageContext);
+                if (ServiceUtil.isError(updateShipmentPackageResult)) {
+                    return updateShipmentPackageResult;
+                }
             }
 
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return ServiceUtil.returnError(e.getMessage());
         } catch (GenericServiceException e) {
-            Debug.logError(e, e.getMessage(), module);
+            Debug.logError(e, e.getMessage(), MODULE);
             return ServiceUtil.returnError(e.getMessage());
         }
 
@@ -417,7 +420,7 @@ public class ShippingServices {
      * @param context Map
      * @return Map
      */
-    public static Map setShipmentCurrency(DispatchContext dctx, Map context) {
+    public static Map<String, Object> setShipmentCurrency(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -431,7 +434,7 @@ public class ShippingServices {
             GenericValue shipment = delegator.findByPrimaryKey("Shipment", UtilMisc.toMap("shipmentId", shipmentId));
             if (UtilValidate.isEmpty(shipment)) {
                 String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorShipmentNotFound", context, locale);
-                Debug.logError(errorMessage, module);
+                Debug.logError(errorMessage, MODULE);
                 return ServiceUtil.returnError(errorMessage);
             }
 
@@ -439,7 +442,7 @@ public class ShippingServices {
                 GenericValue originFacility = shipment.getRelatedOne("OriginFacility");
                 if (UtilValidate.isEmpty(originFacility)) {
                     String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetCurrencyNoFacility", context, locale);
-                    Debug.logInfo(errorMessage, module);
+                    Debug.logInfo(errorMessage, MODULE);
                     return ServiceUtil.returnFailure(errorMessage);
                 }
 
@@ -447,28 +450,28 @@ public class ShippingServices {
                 GenericValue partyAcctgPreference = delegator.findByPrimaryKey("PartyAcctgPreference", UtilMisc.toMap("partyId", ownerPartyId));
                 if (UtilValidate.isEmpty(partyAcctgPreference) || UtilValidate.isEmpty(partyAcctgPreference.getString("baseCurrencyUomId"))) {
                     String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorNotSetCurrencyNoCurrency", context, locale);
-                    Debug.logInfo(errorMessage, module);
+                    Debug.logInfo(errorMessage, MODULE);
                     return ServiceUtil.returnFailure(errorMessage);
                 }
                 currencyUomId = partyAcctgPreference.getString("baseCurrencyUomId");
             }
 
-            Map updateShipmentResult = dispatcher.runSync("updateShipment", UtilMisc.toMap("shipmentId", shipmentId, "currencyUomId", currencyUomId, "userLogin", userLogin, "locale", locale));
+            Map<String, Object> updateShipmentResult = dispatcher.runSync("updateShipment", UtilMisc.toMap("shipmentId", shipmentId, "currencyUomId", currencyUomId, "userLogin", userLogin, "locale", locale));
             if (ServiceUtil.isError(updateShipmentResult)) {
                 return updateShipmentResult;
             }
 
         } catch (GenericEntityException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return ServiceUtil.returnError(e.getMessage());
         } catch (GenericServiceException se) {
-            Debug.logError(se, se.getMessage(), module);
+            Debug.logError(se, se.getMessage(), MODULE);
         }
 
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map calcPackSessionAdditionalShippingCharge(DispatchContext dctx, Map context) {
+    public static Map<String, Object> calcPackSessionAdditionalShippingCharge(DispatchContext dctx, Map<String, Object> context) {
         PackingSession session = (PackingSession) context.get("packingSession");
         Map packageWeights = (Map) context.get("packageWeights");
         String weightUomId = (String) context.get("weightUomId");
@@ -478,14 +481,13 @@ public class ShippingServices {
         String carrierRoleTypeId = (String) context.get("carrierRoleTypeId");
         String productStoreId = (String) context.get("productStoreId");
 
-        BigDecimal shippableWeight = org.ofbiz.shipment.packing.PackingServices.setSessionPackageWeights(session, packageWeights);
         session.setWeightUomId(weightUomId);
         BigDecimal estimatedShipCost = session.getShipmentCostEstimate(shippingContactMechId, shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId, productStoreId);
         if (UtilValidate.isNotEmpty(estimatedShipCost)) {
             session.setAdditionalShippingCharge(estimatedShipCost);
         }
 
-        Map result = ServiceUtil.returnSuccess();
+        Map<String, Object> result = ServiceUtil.returnSuccess();
         result.put("additionalShippingCharge", estimatedShipCost);
         return result;
     }

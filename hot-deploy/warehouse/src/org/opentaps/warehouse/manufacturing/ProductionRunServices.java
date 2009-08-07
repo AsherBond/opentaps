@@ -64,9 +64,7 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityDateFilterCondition;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.manufacturing.jobshopmgt.ProductionRun;
@@ -142,12 +140,12 @@ public final class ProductionRunServices {
         }
 
         try {
-            List<EntityExpr> inventoryItemConds = new LinkedList<EntityExpr>();
-            inventoryItemConds.add(new EntityExpr("availableToPromiseTotal", EntityOperator.GREATER_THAN, new Double(0.0)));
-            inventoryItemConds.add(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityIdFrom));
-            inventoryItemConds.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
+            EntityCondition inventoryItemConds = EntityCondition.makeCondition(
+                    EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.GREATER_THAN, new Double(0.0)),
+                    EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityIdFrom),
+                    EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
             //The last parameter is very important -- it is the sequence of inventory items to be used.  See service definition for details.
-            List<GenericValue> inventoryItemList = delegator.findByCondition("InventoryItemAndLocation", new EntityConditionList(inventoryItemConds, EntityOperator.AND), null,
+            List<GenericValue> inventoryItemList = delegator.findByCondition("InventoryItemAndLocation", inventoryItemConds, null,
                     UtilMisc.toList("-locationTypeEnumId", "inventoryItemTypeId", "locationSeqId", "-availableToPromiseTotal"));
 
             if (UtilValidate.isEmpty(inventoryItemList)) {
@@ -222,18 +220,19 @@ public final class ProductionRunServices {
         try {
             // first find created, scheduled, and confirmed (DOC_PRINTED) production runs in the production facility and the parts required for them
             // in the WorkEffortAndGoods entity.  Create a Map of productId -> totalQuantity which is the quantity of parts needed for these runs
-            List<EntityCondition> findOutgoingProductionRunsConds = new LinkedList<EntityCondition>();
-            findOutgoingProductionRunsConds.add(new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"));
-            findOutgoingProductionRunsConds.add(new EntityExpr("statusId", EntityOperator.EQUALS, "WEGS_CREATED"));
-            findOutgoingProductionRunsConds.add(new EntityExpr("estimatedStartDate", EntityOperator.GREATER_THAN, fromDate));
-            findOutgoingProductionRunsConds.add(new EntityExpr("estimatedStartDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate));
-            List<EntityExpr> findOutgoingProductionRunsStatusConds = new LinkedList<EntityExpr>();
-            findOutgoingProductionRunsStatusConds.add(new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_CREATED"));
-            findOutgoingProductionRunsStatusConds.add(new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_SCHEDULED"));
-            findOutgoingProductionRunsStatusConds.add(new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_DOC_PRINTED"));
-            findOutgoingProductionRunsConds.add(new EntityConditionList(findOutgoingProductionRunsStatusConds, EntityOperator.OR));
+            EntityCondition findOutgoingProductionRunsStatusConds = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition("currentStatusId", EntityOperator.EQUALS, "PRUN_CREATED"),
+                EntityCondition.makeCondition("currentStatusId", EntityOperator.EQUALS, "PRUN_SCHEDULED"),
+                EntityCondition.makeCondition("currentStatusId", EntityOperator.EQUALS, "PRUN_DOC_PRINTED"));
 
-            List<GenericValue> resultList = delegator.findByCondition("WorkEffortAndGoods", new EntityConditionList(findOutgoingProductionRunsConds, EntityOperator.AND), null, UtilMisc.toList("-estimatedStartDate"));
+            EntityCondition findOutgoingProductionRunsConds = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"),
+                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "WEGS_CREATED"),
+                EntityCondition.makeCondition("estimatedStartDate", EntityOperator.GREATER_THAN, fromDate),
+                EntityCondition.makeCondition("estimatedStartDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate),
+                findOutgoingProductionRunsStatusConds);
+
+            List<GenericValue> resultList = delegator.findByCondition("WorkEffortAndGoods", findOutgoingProductionRunsConds, null, UtilMisc.toList("-estimatedStartDate"));
 
             Iterator<GenericValue> iteratorResult = resultList.iterator();
             while (iteratorResult.hasNext()) {
@@ -267,16 +266,17 @@ public final class ProductionRunServices {
                     Debug.logError(e, "Error counting inventory, assuming qoh = 0 for product [" + productId + "] in facility [" + productionFacilityId + "].", MODULE);
                 }
                 // get the outstanding transfers
-                List<EntityCondition> transferConds = new LinkedList<EntityCondition>();
-                transferConds.add(new EntityExpr("facilityId", EntityOperator.EQUALS, warehouseFacilityId));
-                transferConds.add(new EntityExpr("facilityIdTo", EntityOperator.EQUALS, productionFacilityId));
-                transferConds.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
-                List<EntityExpr> transferStatusConds = new LinkedList<EntityExpr>();
-                transferStatusConds.add(new EntityExpr("transferStatusId", EntityOperator.EQUALS, "IXF_REQUESTED"));
-                transferStatusConds.add(new EntityExpr("transferStatusId", EntityOperator.EQUALS, "IXF_SCHEDULED"));
-                transferStatusConds.add(new EntityExpr("transferStatusId", EntityOperator.EQUALS, "IXF_EN_ROUTE"));
-                transferConds.add(new EntityConditionList(transferStatusConds, EntityOperator.OR));
-                List<GenericValue> transferList = delegator.findByCondition("InventoryTransferAndItem", new EntityConditionList(transferConds, EntityOperator.AND), null, UtilMisc.toList("inventoryTransferId"));
+                EntityCondition transferStatusConds = EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("transferStatusId", EntityOperator.EQUALS, "IXF_REQUESTED"),
+                    EntityCondition.makeCondition("transferStatusId", EntityOperator.EQUALS, "IXF_SCHEDULED"),
+                    EntityCondition.makeCondition("transferStatusId", EntityOperator.EQUALS, "IXF_EN_ROUTE"));
+
+                EntityCondition transferConds = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, warehouseFacilityId),
+                    EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, productionFacilityId),
+                    EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                    transferStatusConds);
+                List<GenericValue> transferList = delegator.findByCondition("InventoryTransferAndItem", transferConds, null, UtilMisc.toList("inventoryTransferId"));
                 Iterator<GenericValue> transferIt = transferList.iterator();
                 double transferQuantityTotal = 0.0;
                 while (transferIt.hasNext()) {
@@ -437,8 +437,8 @@ public final class ProductionRunServices {
                 productionRunTempl = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", routingId));
             } else {
                 List<EntityCondition> conditions = Arrays.asList(
-                        new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                        new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
+                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                        EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
                         EntityUtil.getFilterByDateExpr()
                 );
                 productionRunTempl = EntityUtil.getFirst(delegator.findByAnd("WorkEffortGoodStandard", conditions));
@@ -454,8 +454,8 @@ public final class ProductionRunServices {
 
             // the outsourced products for this template are the WorkEffortGoodStandards of type ROU_OUTSOURCE_PROD where workEffortId is in routingComponentsId
             List<EntityCondition> conditions = Arrays.asList(
-                    new EntityExpr("workEffortId", EntityOperator.IN, routingComponentIds),
-                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_OUTSOURCE_PROD"),
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.IN, routingComponentIds),
+                    EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_OUTSOURCE_PROD"),
                     EntityUtil.getFilterByDateExpr()
             );
             List<GenericValue> templateProducts = delegator.findByAnd("WorkEffortGoodStandard", conditions);
@@ -617,8 +617,8 @@ public final class ProductionRunServices {
             GenericValue productionRun = outsourcedTask.getRelatedOne("ParentWorkEffort");
 
             List<EntityCondition> conditions = Arrays.asList(
-                    new EntityExpr("workEffortId", EntityOperator.EQUALS, routingTaskId),
-                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_OUTSOURCE_PROD"),
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, routingTaskId),
+                    EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_OUTSOURCE_PROD"),
                     EntityUtil.getFilterByDateExpr()
             );
             List<GenericValue> templateProducts = delegator.findByAnd("WorkEffortGoodStandard", conditions);
@@ -676,8 +676,7 @@ public final class ProductionRunServices {
             List<GenericValue> tasks = productionRun.getRelated("ChildWorkEffort");
             List taskIds = EntityUtil.getFieldListFromEntityList(tasks, "workEffortId", true);
 
-            List<EntityExpr> conditions = Arrays.asList(new EntityExpr("workEffortId", EntityOperator.IN, taskIds));
-            List<GenericValue> assocs = delegator.findByAnd("WorkRequirementFulfillment", conditions);
+            List<GenericValue> assocs = delegator.findByAnd("WorkRequirementFulfillment", EntityCondition.makeCondition("workEffortId", EntityOperator.IN, taskIds));
             for (Iterator<GenericValue> iter = assocs.iterator(); iter.hasNext();) {
                 GenericValue assoc = iter.next();
                 GenericValue requirement = assoc.getRelatedOne("Requirement");
@@ -709,14 +708,13 @@ public final class ProductionRunServices {
         String productionRunId = (String) context.get("productionRunId");
         try {
             // get the created, scheduled or confirmed tasks that need to be changed to pending
-            List conditions = Arrays.asList(
-                    new EntityExpr("workEffortParentId", EntityOperator.EQUALS, productionRunId),
-                    new EntityConditionList(Arrays.asList(
-                            new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_CREATED"),
-                            new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_PROPOSED"),
-                            new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_DOC_PRINTED"),
-                            new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_SCHEDULED")
-                    ), EntityOperator.OR)
+            EntityCondition conditions = EntityCondition.makeCondition(
+                    EntityCondition.makeCondition("workEffortParentId", EntityOperator.EQUALS, productionRunId),
+                    EntityCondition.makeCondition(EntityOperator.OR,
+                            EntityCondition.makeCondition("currentStatusId", EntityOperator.EQUALS, "PRUN_CREATED"),
+                            EntityCondition.makeCondition("currentStatusId", EntityOperator.EQUALS, "PRUN_PROPOSED"),
+                            EntityCondition.makeCondition("currentStatusId", EntityOperator.EQUALS, "PRUN_DOC_PRINTED"),
+                            EntityCondition.makeCondition("currentStatusId", EntityOperator.EQUALS, "PRUN_SCHEDULED"))
             );
             List<GenericValue> tasks = delegator.findByAnd("WorkEffort", conditions);
             if (UtilValidate.isEmpty(tasks)) {
@@ -725,10 +723,9 @@ public final class ProductionRunServices {
             List taskIds = EntityUtil.getFieldListFromEntityList(tasks, "workEffortId", true);
 
             // of these tasks, choose only the ones that are production tasks by seeing if they have a WEGS with PRUN_OUTSRC_PURCH
-            conditions = Arrays.asList(
-                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_OUTSRC_PURCH"),
-                    new EntityExpr("workEffortId", EntityOperator.IN, taskIds)
-            );
+            conditions = EntityCondition.makeCondition(
+                    EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_OUTSRC_PURCH"),
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.IN, taskIds));
             List<GenericValue> wegsList = delegator.findByAnd("WorkEffortGoodStandard", conditions);
             for (Iterator<GenericValue> iter = wegsList.iterator(); iter.hasNext();) {
                 GenericValue wegs = iter.next();
@@ -807,7 +804,7 @@ public final class ProductionRunServices {
             List taskIds = EntityUtil.getFieldListFromEntityList(tasks, "workEffortId", true);
 
             // cancel any requirements
-            List conditions = UtilMisc.toList(new EntityExpr("workEffortId", EntityOperator.IN, taskIds));
+            List conditions = UtilMisc.toList(EntityCondition.makeCondition("workEffortId", EntityOperator.IN, taskIds));
             List<GenericValue> assocs = delegator.findByAnd("WorkRequirementFulfillment", conditions);
             for (Iterator<GenericValue> iter = assocs.iterator(); iter.hasNext();) {
                 GenericValue assoc = iter.next();
@@ -864,9 +861,9 @@ public final class ProductionRunServices {
 
                     // now we have to make sure this task is an outsourced product by looking up its WorkEffortGoodStandard
                     List conditions = UtilMisc.toList(
-                        new EntityExpr("workEffortId", EntityOperator.EQUALS, task.get("workEffortId")),
-                        new EntityExpr("productId", EntityOperator.EQUALS, item.get("productId")),
-                        new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_OUTSRC_PURCH"),
+                        EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, task.get("workEffortId")),
+                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, item.get("productId")),
+                        EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_OUTSRC_PURCH"),
                         EntityUtil.getFilterByDateExpr()
                     );
                     List wegs = delegator.findByAnd("WorkEffortGoodStandard", conditions);
@@ -904,11 +901,11 @@ public final class ProductionRunServices {
             // what are the right order items?  the item should be completed, or the production run task would not be completed
             // the order status could be approved or completed--usually it should be approved but the last item could cause the order to be completed
             List<GenericValue> workEffortAndOrderItems = delegator.findByAnd("WorkOrderAndOrderItem", UtilMisc.toList(
-                    new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffort.getString("workEffortId")),
-                    new EntityExpr("orderTypeId", EntityOperator.EQUALS, "PURCHASE_ORDER"),
-                    new EntityExpr("orderStatusId", EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_COMPLETED")),
-                    new EntityExpr("orderItemTypeId", EntityOperator.EQUALS, "MFG_CONTRACT"),
-                    new EntityExpr("itemStatusId", EntityOperator.EQUALS, "ITEM_COMPLETED")));
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffort.getString("workEffortId")),
+                    EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "PURCHASE_ORDER"),
+                    EntityCondition.makeCondition("orderStatusId", EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_COMPLETED")),
+                    EntityCondition.makeCondition("orderItemTypeId", EntityOperator.EQUALS, "MFG_CONTRACT"),
+                    EntityCondition.makeCondition("itemStatusId", EntityOperator.EQUALS, "ITEM_COMPLETED")));
             if (UtilValidate.isEmpty(workEffortAndOrderItems)) {
                 return ServiceUtil.returnFailure("No purchase order items found for [" + workEffort.get("workEffortId") + "], will not be able to calculate costs");
             }
@@ -1059,11 +1056,11 @@ public final class ProductionRunServices {
         Timestamp now = UtilDateTime.nowTimestamp();
         try {
             List<EntityCondition> conditions = Arrays.asList(
-                    new EntityExpr("workEffortId", EntityOperator.EQUALS, productionRunId),
-                    new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_DELIV"),
-                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "WEGS_COMPLETED"),
-                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "WEGS_CANCELLED"),
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, productionRunId),
+                    EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                    EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_DELIV"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "WEGS_COMPLETED"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "WEGS_CANCELLED"),
                     EntityUtil.getFilterByDateExpr()
             );
             List<GenericValue> wegsList = delegator.findByAnd("WorkEffortGoodStandard", conditions);
@@ -1121,11 +1118,11 @@ public final class ProductionRunServices {
         Timestamp now = UtilDateTime.nowTimestamp();
         try {
             List conditions = UtilMisc.toList(
-                    new EntityExpr("workEffortId", EntityOperator.EQUALS, productionRunTaskId),
-                    new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"),
-                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "WEGS_COMPLETED"),
-                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "WEGS_CANCELLED"),
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, productionRunTaskId),
+                    EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                    EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "WEGS_COMPLETED"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "WEGS_CANCELLED"),
                     EntityUtil.getFilterByDateExpr()
             );
             List<GenericValue> wegsList = delegator.findByAnd("WorkEffortGoodStandard", conditions);
@@ -1155,10 +1152,10 @@ public final class ProductionRunServices {
         try {
             List<Map> productsRemoved = FastList.newInstance();
             List conditions = UtilMisc.toList(
-                    new EntityExpr("workEffortId", EntityOperator.EQUALS, productionRunTaskId),
-                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"),
-                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "WEGS_COMPLETED"),
-                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "WEGS_CANCELLED"),
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, productionRunTaskId),
+                    EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "WEGS_COMPLETED"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "WEGS_CANCELLED"),
                     EntityUtil.getFilterByDateExpr()
             );
             List<GenericValue> wegsList = delegator.findByAnd("WorkEffortGoodStandard", conditions);
@@ -1596,9 +1593,9 @@ public final class ProductionRunServices {
             // find the associated tasks, ordered by sequence
             List<GenericValue> tasks = null;
             if (routing != null) {
-                List<EntityExpr> conditions = Arrays.asList(
-                                  new EntityExpr("workEffortIdFrom", EntityOperator.EQUALS, routing.get("workEffortId")),
-                                  new EntityExpr("workEffortAssocTypeId", EntityOperator.EQUALS, "ROUTING_COMPONENT"),
+                EntityCondition conditions = EntityCondition.makeCondition(
+                                  EntityCondition.makeCondition("workEffortIdFrom", EntityOperator.EQUALS, routing.get("workEffortId")),
+                                  EntityCondition.makeCondition("workEffortAssocTypeId", EntityOperator.EQUALS, "ROUTING_COMPONENT"),
                                   EntityDateFilterCondition.makeCondition(applicableDate, "fromDate", "thruDate"));
                 tasks = delegator.findByAnd("WorkEffortAssoc", conditions, Arrays.asList("sequenceNum"));
             }
@@ -1619,47 +1616,46 @@ public final class ProductionRunServices {
     @SuppressWarnings("unchecked")
     private static String getProductRouting(String productId, String workEffortId, Timestamp applicableDate, Double quantity, boolean ignoreDefRouting, GenericDelegator delegator) throws GenericEntityException {
         // find active routings for the productId and workEffortId (optional)
-        List<EntityExpr> conditions = UtilMisc.toList(
-                                        new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                                        new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                                        EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
                                         EntityDateFilterCondition.makeCondition(applicableDate, "fromDate", "thruDate"));
         if (UtilValidate.isNotEmpty(workEffortId)) {
-            conditions.add(new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId));
+            conditions.add(EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId));
         }
 
         List<GenericValue> routings =
-            delegator.findByConditionCache("WorkEffortGoodStandard", new EntityConditionList(conditions, EntityOperator.AND), null, Arrays.asList("minQuantity"));
+            delegator.findByConditionCache("WorkEffortGoodStandard", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, Arrays.asList("minQuantity"));
 
         // if no routing was found, check if the product has any Variant product
         if (routings.isEmpty()) {
             Debug.logInfo("No routing found for product [" + productId + "] and routing [" + workEffortId + "] checking routing for its variants.", MODULE);
-            conditions = Arrays.asList(
-                            new EntityExpr("productIdTo", EntityOperator.EQUALS, productId),
-                            new EntityExpr("productAssocTypeId", EntityOperator.EQUALS, "PRODUCT_VARIANT"),
+            conditions = UtilMisc.<EntityCondition>toList(
+                            EntityCondition.makeCondition("productIdTo", EntityOperator.EQUALS, productId),
+                            EntityCondition.makeCondition("productAssocTypeId", EntityOperator.EQUALS, "PRODUCT_VARIANT"),
                             EntityDateFilterCondition.makeCondition(applicableDate, "fromDate", "thruDate"));
             List<GenericValue> virtuals = delegator.findByAnd("ProductAssoc", conditions);
             // get the virtual product ids
             List<String> virtualIds = EntityUtil.getFieldListFromEntityList(virtuals, "productId", true);
             // find routings applicable to those Variants
-            conditions = UtilMisc.toList(
-                            new EntityExpr("productId", EntityOperator.IN, virtualIds),
-                            new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
+            conditions = UtilMisc.<EntityCondition>toList(
+                            EntityCondition.makeCondition("productId", EntityOperator.IN, virtualIds),
+                            EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
                             EntityDateFilterCondition.makeCondition(applicableDate, "fromDate", "thruDate"));
             if (UtilValidate.isNotEmpty(workEffortId)) {
-                conditions.add(new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId));
+                conditions.add(EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId));
             }
 
-            routings = delegator.findByCondition("WorkEffortGoodStandard", new EntityConditionList(conditions, EntityOperator.AND), null, Arrays.asList("minQuantity"));
+            routings = delegator.findByCondition("WorkEffortGoodStandard", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, Arrays.asList("minQuantity"));
         }
 
         // check routings for quantity
         if (quantity != null) {
             List<GenericValue> routingsWithQuantities =
                 EntityUtil.filterByCondition(routings,
-                        new EntityConditionList(
-                                Arrays.asList(
-                                        new EntityExpr("minQuantity", EntityOperator.NOT_EQUAL, null),
-                                        new EntityExpr("maxQuantity", EntityOperator.NOT_EQUAL, null)), EntityOperator.OR)
+                               EntityCondition.makeCondition(EntityOperator.OR,
+                                    EntityCondition.makeCondition("minQuantity", EntityOperator.NOT_EQUAL, null),
+                                    EntityCondition.makeCondition("maxQuantity", EntityOperator.NOT_EQUAL, null))
                 );
             if (UtilValidate.isNotEmpty(routingsWithQuantities)) {
                 // there are routings that have mixQuantity or maxQuantity on value
@@ -1706,7 +1702,7 @@ public final class ProductionRunServices {
                 // if no workEffortId was given, remove routings that are involved in alternate BOMs as we are looking for a default routing
                 List<GenericValue> alternateBomRoutings = delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId", productId, "productAssocTypeId", "MANUF_COMPONENT"));
                 List<String> alternateBomRoutingIds = EntityUtil.getFieldListFromEntityList(alternateBomRoutings, "specificRoutingWorkEffortId", true);
-                List<GenericValue> routingsNoSpecialBom = EntityUtil.filterByAnd(routings, Arrays.asList(new EntityExpr("workEffortId", EntityOperator.NOT_IN, alternateBomRoutingIds)));
+                List<GenericValue> routingsNoSpecialBom = EntityUtil.filterByAnd(routings, Arrays.asList(EntityCondition.makeCondition("workEffortId", EntityOperator.NOT_IN, alternateBomRoutingIds)));
 
                 // do we have a routing with no special BOM ?
                 if (routingsNoSpecialBom.size() > 1) {
@@ -1746,9 +1742,9 @@ public final class ProductionRunServices {
             // Look for a disassembly template (routing) for the product if the routing is specified (workEffortId)
             if (workEffortId != null) {
                 List conditions = UtilMisc.toList(
-                        new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                        new EntityExpr("workEffortId", EntityOperator.EQUALS, workEffortId),
-                        new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_DISASMBL_TEMPL")
+                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                        EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, workEffortId),
+                        EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_DISASMBL_TEMPL")
                 );
                 if (applicableDate != null) {
                     conditions.add(EntityUtil.getFilterByDateExpr(applicableDate));
@@ -1761,7 +1757,7 @@ public final class ProductionRunServices {
                     GenericValue assoc = EntityUtil.getFirst(EntityUtil.filterByDate(assocs, applicableDate));
                     if (assoc != null) {
                         conditions.remove(0);
-                        conditions.add(new EntityExpr("productId", EntityOperator.EQUALS, assoc.get("productId")));
+                        conditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, assoc.get("productId")));
                         wegs = EntityUtil.getFirst(delegator.findByAnd("WorkEffortGoodStandard", conditions));
                     }
                 }
@@ -1874,9 +1870,9 @@ public final class ProductionRunServices {
 
             // use the WEGS type PRUN_PROD_PRODUCED to figure out what has already been produced
             List conditions = UtilMisc.toList(
-                    new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                    new EntityExpr("workEffortId", EntityOperator.EQUALS, productionRunId),
-                    new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_PRODUCED"),
+                    EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, productionRunId),
+                    EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_PRODUCED"),
                     EntityUtil.getFilterByDateExpr() // not really used per se, but might be in future... if it is used please note how here
             );
             List<GenericValue> wegsList = delegator.findByAnd("WorkEffortGoodStandard", conditions);

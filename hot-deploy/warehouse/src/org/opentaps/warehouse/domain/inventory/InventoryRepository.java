@@ -29,8 +29,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.opentaps.domain.base.entities.Facility;
@@ -120,16 +119,14 @@ public class InventoryRepository extends Repository implements InventoryReposito
 
     /** {@inheritDoc} */
     public List<InventoryItem> getInventoryItemsWithNegativeATP(String facilityId, String productId) throws RepositoryException {
-        EntityConditionList conditions1 = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr("availableToPromiseTotal", EntityOperator.EQUALS, null),
-                new EntityExpr("availableToPromiseTotal", EntityOperator.LESS_THAN, 0)),
-                EntityOperator.OR);
-        EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
+        EntityCondition conditions1 = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.EQUALS, null),
+                EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.LESS_THAN, 0));
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 conditions1,
-                new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId),
-                new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                new EntityExpr("inventoryItemTypeId", EntityOperator.EQUALS, "NON_SERIAL_INV_ITEM")),
-                EntityOperator.AND);
+                EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
+                EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                EntityCondition.makeCondition("inventoryItemTypeId", EntityOperator.EQUALS, "NON_SERIAL_INV_ITEM"));
         return findList(InventoryItem.class, conditions);
     }
 
@@ -173,14 +170,13 @@ public class InventoryRepository extends Repository implements InventoryReposito
 
     /** {@inheritDoc} */
     public List<PicklistAndBinAndItem> getOpenPicklistBinItems(String orderId, String shipGroupSeqId, String orderItemSeqId, String inventoryItemId) throws RepositoryException {
-        EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                new EntityExpr("shipGroupSeqId", EntityOperator.EQUALS, shipGroupSeqId),
-                new EntityExpr("orderItemSeqId", EntityOperator.EQUALS, orderItemSeqId),
-                new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
-                new EntityExpr("statusId", EntityOperator.NOT_EQUAL, PicklistAndBinAndItem.STATUS_PICKED),
-                new EntityExpr("statusId", EntityOperator.NOT_EQUAL, PicklistAndBinAndItem.STATUS_CANCELLED)),
-                EntityOperator.AND);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                EntityCondition.makeCondition("shipGroupSeqId", EntityOperator.EQUALS, shipGroupSeqId),
+                EntityCondition.makeCondition("orderItemSeqId", EntityOperator.EQUALS, orderItemSeqId),
+                EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, PicklistAndBinAndItem.STATUS_PICKED),
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, PicklistAndBinAndItem.STATUS_CANCELLED));
         return findList(PicklistAndBinAndItem.class, conditions);
     }
 
@@ -218,16 +214,16 @@ public class InventoryRepository extends Repository implements InventoryReposito
         // finally add order by ID, we should get the latest inventory at the end
         orderBy.add("inventoryItemId ASC");
 
-        List<EntityExpr> conditionList = FastList.newInstance();
-        conditionList.add(new EntityExpr("productId", EntityOperator.EQUALS, product.getProductId()));
+        List<EntityCondition> conditionList = FastList.newInstance();
+        conditionList.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, product.getProductId()));
         if (UtilValidate.isNotEmpty(facilityId)) {
-            conditionList.add(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
+            conditionList.add(EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId));
         }
         if (UtilValidate.isNotEmpty(containerId)) {
-            conditionList.add(new EntityExpr("containerId", EntityOperator.EQUALS, containerId));
+            conditionList.add(EntityCondition.makeCondition("containerId", EntityOperator.EQUALS, containerId));
         }
         if (UtilValidate.isNotEmpty(type)) {
-            conditionList.add(new EntityExpr("locationTypeEnumId", EntityOperator.EQUALS, type));
+            conditionList.add(EntityCondition.makeCondition("locationTypeEnumId", EntityOperator.EQUALS, type));
         }
 
         List<InventoryItemAndLocation> values = findList(InventoryItemAndLocation.class, conditionList, Arrays.asList("inventoryItemId"));
@@ -235,7 +231,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
             return null;
         }
 
-        List<InventoryItem> result = findList(InventoryItem.class, new EntityExpr("inventoryItemId", EntityOperator.IN, Entity.getDistinctFieldValues(values, InventoryItemAndLocation.Fields.inventoryItemId)), orderBy);
+        List<InventoryItem> result = findList(InventoryItem.class, EntityCondition.makeCondition("inventoryItemId", EntityOperator.IN, Entity.getDistinctFieldValues(values, InventoryItemAndLocation.Fields.inventoryItemId)), orderBy);
 
         if (UtilValidate.isEmpty(result)) {
             return null;
@@ -264,16 +260,12 @@ public class InventoryRepository extends Repository implements InventoryReposito
         return productRepository;
     }
 
-    /* (non-Javadoc)
-     * @see org.opentaps.domain.inventory.InventoryRepositoryInterface#getLotById(java.lang.String)
-     */
+    /** {@inheritDoc} */
     public Lot getLotById(String lotId) throws RepositoryException, EntityNotFoundException {
         return findOne(Lot.class, map(Lot.Fields.lotId, lotId));
     }
 
-    /* (non-Javadoc)
-     * @see org.opentaps.domain.inventory.InventoryRepositoryInterface#createInventoryTrace(org.opentaps.domain.base.entities.InventoryItem)
-     */
+    /** {@inheritDoc} */
     public InventoryItemTrace createInventoryTrace(org.opentaps.domain.base.entities.InventoryItem inventoryItem)  throws RepositoryException, InfrastructureException {
 
         InventoryItemTrace inventoryItemTrace = new InventoryItemTrace();
@@ -288,10 +280,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
         return inventoryItemTrace;
     }
 
-    /* (non-Javadoc)
-     * @see org.opentaps.domain.inventory.InventoryRepositoryInterface#createInventoryTraceEvent(org.opentaps.domain.base.entities.InventoryItemTraceDetail)
-     */
-    @SuppressWarnings("unchecked")
+    /** {@inheritDoc} */
     public void createInventoryTraceEvent(InventoryItemTraceDetail event, InventoryItemTrace traceEntry) throws RepositoryException {
         createOrUpdate(event);
 
@@ -304,41 +293,39 @@ public class InventoryRepository extends Repository implements InventoryReposito
         }
 
         // find the inventory item's variance
-        List<InventoryItemVariance> variances = 
-            findList(InventoryItemVariance.class, new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItemIdForVariance), Arrays.asList("physicalInventoryId"));
+        List<InventoryItemVariance> variances = findList(InventoryItemVariance.class, EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemIdForVariance), Arrays.asList("physicalInventoryId"));
         Debug.logVerbose("Found inventory item ID [" + event.getToInventoryItemId() + "] variances :" + variances, MODULE);
 
         // record all the variances which have not already been recorded.  We want each inventory variance to show up only once, ie the first time it is recorded
         if (UtilValidate.isNotEmpty(variances)) {
-            for (InventoryItemVariance variance : variances) { 
+            for (InventoryItemVariance variance : variances) {
                 // find existing trace details for this inventory variance.  Just physical inventory ID should be enough--each one should be unique
-                List<InventoryItemTraceDetail> existingVarianceTraceDetails =  findList(InventoryItemTraceDetail.class, 
-                        new EntityExpr(InventoryItemTraceDetail.Fields.physicalInventoryId.getName(), EntityOperator.EQUALS, variance.getPhysicalInventoryId()));
-                Debug.logVerbose("condition: " + new EntityExpr(InventoryItemTraceDetail.Fields.physicalInventoryId, EntityOperator.EQUALS, variance.getPhysicalInventoryId()), MODULE);
+                List<InventoryItemTraceDetail> existingVarianceTraceDetails =  findList(InventoryItemTraceDetail.class,
+                        EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.physicalInventoryId.getName(), EntityOperator.EQUALS, variance.getPhysicalInventoryId()));
+                Debug.logVerbose("condition: " + EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.physicalInventoryId, EntityOperator.EQUALS, variance.getPhysicalInventoryId()), MODULE);
                 Debug.logVerbose("existing variance trace details: " + existingVarianceTraceDetails, MODULE);
 
                 if (UtilValidate.isEmpty(existingVarianceTraceDetails)) {
                     // retrieve physical inventory
                     PhysicalInventory physicalInventory = variance.getPhysicalInventory();
 
-	                // create separate details for every physical variance
-	                InventoryItemTraceDetail adjustmentEvent = new InventoryItemTraceDetail();
-	                adjustmentEvent.setInventoryItemTraceId(event.getInventoryItemTraceId());
-	                adjustmentEvent.setInventoryItemTraceSeqId(traceEntry.getNextSeqNum());
-	                adjustmentEvent.setTraceLevel(event.getTraceLevel() + 1);  // put variance one level lower
-	                adjustmentEvent.setInventoryItemId(event.getToInventoryItemId());
-	                adjustmentEvent.setUsageDatetime(physicalInventory.getPhysicalInventoryDate());
-	                adjustmentEvent.setInventoryItemUsageTypeId("VARIANCE");
-	                adjustmentEvent.setQuantity(variance.getQuantityOnHandVar());
-	                adjustmentEvent.setPhysicalInventoryId(variance.getPhysicalInventoryId());
-	                adjustmentEvent.setVarianceReasonId(variance.getVarianceReasonId());
+                    // create separate details for every physical variance
+                    InventoryItemTraceDetail adjustmentEvent = new InventoryItemTraceDetail();
+                    adjustmentEvent.setInventoryItemTraceId(event.getInventoryItemTraceId());
+                    adjustmentEvent.setInventoryItemTraceSeqId(traceEntry.getNextSeqNum());
+                    adjustmentEvent.setTraceLevel(event.getTraceLevel() + 1);  // put variance one level lower
+                    adjustmentEvent.setInventoryItemId(event.getToInventoryItemId());
+                    adjustmentEvent.setUsageDatetime(physicalInventory.getPhysicalInventoryDate());
+                    adjustmentEvent.setInventoryItemUsageTypeId("VARIANCE");
+                    adjustmentEvent.setQuantity(variance.getQuantityOnHandVar());
+                    adjustmentEvent.setPhysicalInventoryId(variance.getPhysicalInventoryId());
+                    adjustmentEvent.setVarianceReasonId(variance.getVarianceReasonId());
 
-	                Debug.logVerbose("Added adjustment event [" + adjustmentEvent + "]", MODULE);
+                    Debug.logVerbose("Added adjustment event [" + adjustmentEvent + "]", MODULE);
 
-	                createOrUpdate(adjustmentEvent);
+                    createOrUpdate(adjustmentEvent);
                 } else {
-                    Debug.logVerbose("Inventory item id [" + variance.getInventoryItemId() + "] physical inventory ID [" + variance.getPhysicalInventoryId() + "] has already been recorded in InventoryItemTraceDetail and will be skipped for "
-                            + event , MODULE);
+                    Debug.logVerbose("Inventory item id [" + variance.getInventoryItemId() + "] physical inventory ID [" + variance.getPhysicalInventoryId() + "] has already been recorded in InventoryItemTraceDetail and will be skipped for " + event , MODULE);
                 }
             }
         }
@@ -360,7 +347,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
                 received = receiveDate;
                 firstTransfer = transfer;
                 continue;
-            };
+            }
 
             if (receiveDate.compareTo(received) >= 0) {
                 continue;
@@ -373,9 +360,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
         return firstTransfer;
     }
 
-    /* (non-Javadoc)
-     * @see org.opentaps.domain.inventory.InventoryRepositoryInterface#getDerivativeInventoryTraceEvents(org.opentaps.domain.base.entities.InventoryItem)
-     */
+    /** {@inheritDoc} */
     public List<InventoryItemTraceDetail> getDerivativeInventoryTraceEvents(org.opentaps.domain.base.entities.InventoryItem inventoryItem) throws RepositoryException {
         List<InventoryItemTraceDetail> details = FastList.newInstance();
 
@@ -384,9 +369,9 @@ public class InventoryRepository extends Repository implements InventoryReposito
         // find inventory item that were created by splitting
         List<InventoryItem> directChilds =
             findList(InventoryItem.class,
-                    Arrays.asList(new EntityExpr("parentInventoryItemId", EntityOperator.EQUALS, currentInventoryItemId)));
+                    Arrays.asList(EntityCondition.makeCondition("parentInventoryItemId", EntityOperator.EQUALS, currentInventoryItemId)));
         Debug.logVerbose("***directChilds from InventoryItem.parentInventoryItemId " + directChilds, MODULE);
-        
+
         if (UtilValidate.isNotEmpty(directChilds)) {
             for (InventoryItem item : directChilds) {
                 InventoryItemTraceDetail detailEvent = new InventoryItemTraceDetail();
@@ -415,11 +400,11 @@ public class InventoryRepository extends Repository implements InventoryReposito
         }
 
         Debug.logVerbose("details list after adding inventory transfers: " + details, MODULE);
-        
+
         // find issuances against orders.  These have been shipped.
         List<ItemIssuance> issuances =
             findList(ItemIssuance.class,
-                    Arrays.asList(new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItem.getInventoryItemId())));
+                    Arrays.asList(EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItem.getInventoryItemId())));
 
         if (UtilValidate.isNotEmpty(issuances)) {
             for (ItemIssuance issuance : issuances) {
@@ -434,11 +419,11 @@ public class InventoryRepository extends Repository implements InventoryReposito
         }
 
         Debug.logVerbose("details list after adding item issuances to orders (shipped): " + details, MODULE);
-        
+
         // find reservations against orders.  These have not been shipped.
         List<OrderItemShipGrpInvRes> orderReservations =
             findList(OrderItemShipGrpInvRes.class,
-                    Arrays.asList(new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItem.getInventoryItemId())));
+                    Arrays.asList(EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItem.getInventoryItemId())));
 
         if (UtilValidate.isNotEmpty(orderReservations)) {
             for (OrderItemShipGrpInvRes orderReservation : orderReservations) {
@@ -455,11 +440,11 @@ public class InventoryRepository extends Repository implements InventoryReposito
         }
 
         Debug.logVerbose("details list after adding reservations to orders (unshipped): " + details, MODULE);
-        
+
         // find inventories which are used in manufacturing
         List<WorkEffortInventoryAssign> assignedToProduction =
             findList(WorkEffortInventoryAssign.class,
-                    Arrays.asList(new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItem.getInventoryItemId())));
+                    Arrays.asList(EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItem.getInventoryItemId())));
 
         if (UtilValidate.isNotEmpty(assignedToProduction)) {
             for (WorkEffortInventoryAssign assignedItem : assignedToProduction) {
@@ -469,7 +454,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
                     if (productionRunHeader != null) {
                         List<WorkEffortInventoryProduced> producedItems =
                             findList(WorkEffortInventoryProduced.class,
-                                    Arrays.asList(new EntityExpr("workEffortId", EntityOperator.EQUALS, productionRunHeader.getWorkEffortId())));
+                                    Arrays.asList(EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, productionRunHeader.getWorkEffortId())));
 
                         if (UtilValidate.isNotEmpty(producedItems)) {
                             for (WorkEffortInventoryProduced producedItem : producedItems) {
@@ -499,22 +484,17 @@ public class InventoryRepository extends Repository implements InventoryReposito
                 }
             }
         }
-        
+
         Debug.logVerbose("details list after adding inventory assigned to manufacturing: " + details, MODULE);
-        
+
         return (details.size() > 0) ? details : null;
     }
 
-    /* (non-Javadoc)
-     * @see org.opentaps.domain.inventory.InventoryRepositoryInterface#getSoughtTraceEntry(java.lang.String, boolean)
-     */
+    /** {@inheritDoc} */
     public InventoryItemTraceDetail getSoughtTraceEntry(String inventoryItemId, boolean forward) throws RepositoryException {
-        EntityConditionList conditionList = new EntityConditionList(
-                Arrays.asList(
-                        new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemId.getName(), EntityOperator.EQUALS, inventoryItemId),
-                        new EntityExpr(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.EQUALS, inventoryItemId)),
-                        EntityOperator.OR
-        );
+        EntityCondition conditionList = EntityCondition.makeCondition(EntityOperator.OR,
+                        EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemId.getName(), EntityOperator.EQUALS, inventoryItemId),
+                        EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.EQUALS, inventoryItemId));
         // find all detail records that corresponds to given inventory item id
         List<InventoryItemTraceDetail> traceDetails = findList(InventoryItemTraceDetail.class, conditionList);
 
@@ -548,17 +528,14 @@ public class InventoryRepository extends Repository implements InventoryReposito
     /** {@inheritDoc} */
     public List<InventoryItemTraceDetail> findTraceEventAdjustments(InventoryItemTraceDetail traceDetail, boolean desc) throws RepositoryException {
         String inventoryItemId = "ORDER_ISSUED".equals(traceDetail.getInventoryItemUsageTypeId()) ? traceDetail.getInventoryItemId() : traceDetail.getToInventoryItemId();
-        List<EntityExpr> conditions = Arrays.asList(
-                new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemTraceId.getName(), EntityOperator.EQUALS, traceDetail.getInventoryItemTraceId()),
-                new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.EQUALS, "VARIANCE"),
-                new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemId.getName(), EntityOperator.EQUALS, inventoryItemId)
-        );
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemTraceId.getName(), EntityOperator.EQUALS, traceDetail.getInventoryItemTraceId()),
+                EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.EQUALS, "VARIANCE"),
+                EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemId.getName(), EntityOperator.EQUALS, inventoryItemId));
         return findList(InventoryItemTraceDetail.class, conditions, Arrays.asList(String.format("inventoryItemTraceSeqId %1$s", desc ? "DESC" : "ASC")));
     }
 
-    /* (non-Javadoc)
-     * @see org.opentaps.domain.inventory.InventoryRepositoryInterface#collectTraceEventsBackward(org.opentaps.domain.base.entities.InventoryItemTraceDetail)
-     */
+    /** {@inheritDoc} */
     public List<InventoryItemTraceDetail> collectTraceEventsBackward(InventoryItemTraceDetail traceDetail) throws RepositoryException {
         List<InventoryItemTraceDetail> ret = FastList.newInstance();
         ret.add(traceDetail);
@@ -567,7 +544,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
             ret.addAll(variances);
         }
 
-        List<EntityExpr> conditions;
+        EntityCondition conditions;
 
         if ("RECEIPT".equals(traceDetail.getInventoryItemUsageTypeId())) {
             return ret;
@@ -576,35 +553,33 @@ public class InventoryRepository extends Repository implements InventoryReposito
         // MANUF_RAW_MAT may has more than one parent and neighbor, we have to collect all of them
         if ("MANUF_RAW_MAT".equals(traceDetail.getInventoryItemUsageTypeId())) {
             // collect neighbors
-            List<EntityExpr> neighborConditions = FastList.newInstance();
-            neighborConditions.add(new EntityExpr("inventoryItemUsageTypeId", EntityOperator.EQUALS, "MANUF_RAW_MAT"));
-            neighborConditions.add(new EntityExpr("toInventoryItemId", EntityOperator.EQUALS, traceDetail.getToInventoryItemId()));
-            if (neighborConditions.size() > 0) {
-                List<InventoryItemTraceDetail> mfctRecords = findList(InventoryItemTraceDetail.class, neighborConditions);
-                ret.clear();
-                ret.addAll(mfctRecords);
-            }
+            EntityCondition neighborConditions = EntityCondition.makeCondition(
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.EQUALS, "MANUF_RAW_MAT"),
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.EQUALS, traceDetail.getToInventoryItemId()));
+            List<InventoryItemTraceDetail> mfctRecords = findList(InventoryItemTraceDetail.class, neighborConditions);
+            ret.clear();
+            ret.addAll(mfctRecords);
 
             // collect parents
-            conditions = Arrays.asList(
-                    new EntityExpr(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.EQUALS, traceDetail.getToInventoryItemId()),
-                    new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.NOT_EQUAL, "VARIANCE")
+            conditions = EntityCondition.makeCondition(
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.EQUALS, traceDetail.getToInventoryItemId()),
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.NOT_EQUAL, "VARIANCE")
             );
             List<InventoryItemTraceDetail> rawMaterials = findList(InventoryItemTraceDetail.class, conditions);
             List<String> rawMaterialIds = FastList.newInstance();
             for (InventoryItemTraceDetail material : rawMaterials) {
                 rawMaterialIds.add(material.getInventoryItemId());
             }
-            conditions = Arrays.asList(
-                    new EntityExpr(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.IN, rawMaterialIds),
-                    new EntityExpr(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.NOT_EQUAL, null),
-                    new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.NOT_EQUAL, "VARIANCE")
+            conditions = EntityCondition.makeCondition(
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.IN, rawMaterialIds),
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.NOT_EQUAL, null),
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.NOT_EQUAL, "VARIANCE")
             );
         } else {
-            conditions = Arrays.asList(
-                    new EntityExpr(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.EQUALS, traceDetail.getInventoryItemId()),
-                    new EntityExpr(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.NOT_EQUAL, null),
-                    new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.NOT_EQUAL, "VARIANCE")
+            conditions = EntityCondition.makeCondition(
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.EQUALS, traceDetail.getInventoryItemId()),
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.toInventoryItemId.getName(), EntityOperator.NOT_EQUAL, null),
+                    EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.NOT_EQUAL, "VARIANCE")
             );
         }
 
@@ -617,9 +592,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
         return ret;
     }
 
-    /* (non-Javadoc)
-     * @see org.opentaps.domain.inventory.InventoryRepositoryInterface#collectTraceEventsForward(org.opentaps.domain.base.entities.InventoryItemTraceDetail)
-     */
+    /** {@inheritDoc} */
     public List<InventoryItemTraceDetail> collectTraceEventsForward(InventoryItemTraceDetail traceDetail) throws RepositoryException {
         List<InventoryItemTraceDetail> ret = FastList.newInstance();
         ret.add(traceDetail);
@@ -628,7 +601,7 @@ public class InventoryRepository extends Repository implements InventoryReposito
             ret.addAll(variances);
         }
 
-        List<EntityExpr> conditions;
+        EntityCondition conditions;
 
         // ORDER_ISSUED always is final step in forward direction
         String usageTypeId = traceDetail.getInventoryItemUsageTypeId();
@@ -636,10 +609,10 @@ public class InventoryRepository extends Repository implements InventoryReposito
             return ret;
         }
 
-        conditions = Arrays.asList(
-                new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemId.getName(), EntityOperator.EQUALS, traceDetail.getToInventoryItemId()),
-                new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemTraceId.getName(), EntityOperator.EQUALS, traceDetail.getInventoryItemTraceId()),
-                new EntityExpr(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.NOT_EQUAL, "VARIANCE")
+        conditions = EntityCondition.makeCondition(
+                EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemId.getName(), EntityOperator.EQUALS, traceDetail.getToInventoryItemId()),
+                EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemTraceId.getName(), EntityOperator.EQUALS, traceDetail.getInventoryItemTraceId()),
+                EntityCondition.makeCondition(InventoryItemTraceDetail.Fields.inventoryItemUsageTypeId.getName(), EntityOperator.NOT_EQUAL, "VARIANCE")
         );
 
         // get usage log recursively
@@ -657,7 +630,6 @@ public class InventoryRepository extends Repository implements InventoryReposito
      * @return the <code>InventoryItemValueHistory</code> found
      * @throws RepositoryException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public InventoryItemValueHistory getLastInventoryItemValueHistoryByInventoryItem(
             InventoryItem inventoryItem) throws RepositoryException {
         List<String> orderBy = FastList.newInstance();
@@ -665,10 +637,11 @@ public class InventoryRepository extends Repository implements InventoryReposito
         orderBy.add("inventoryItemValueHistId DESC");
         EntityFindOptions findOpt = new EntityFindOptions();
         findOpt.setMaxRows(1);
-        List cond = UtilMisc.toList(new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItem.getInventoryItemId()),
-                                    new EntityExpr("unitCost", EntityOperator.NOT_EQUAL, null),
-                                    new EntityExpr("dateTime", EntityOperator.LESS_THAN, inventoryItem.getTimestamp("lastUpdatedStamp")));
-        List<InventoryItemValueHistory> inventoryItemValueHistories = findList(InventoryItemValueHistory.class, new EntityConditionList(cond, EntityOperator.AND), orderBy);
+        EntityCondition cond = EntityCondition.makeCondition(
+                                    EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItem.getInventoryItemId()),
+                                    EntityCondition.makeCondition("unitCost", EntityOperator.NOT_EQUAL, null),
+                                    EntityCondition.makeCondition("dateTime", EntityOperator.LESS_THAN, inventoryItem.getTimestamp("lastUpdatedStamp")));
+        List<InventoryItemValueHistory> inventoryItemValueHistories = findList(InventoryItemValueHistory.class, cond, orderBy);
         if (UtilValidate.isNotEmpty(inventoryItemValueHistories)) {
             return inventoryItemValueHistories.get(0);
         }

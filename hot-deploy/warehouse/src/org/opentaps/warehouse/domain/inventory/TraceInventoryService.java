@@ -30,7 +30,6 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.domain.base.entities.InventoryItem;
 import org.opentaps.domain.base.entities.InventoryItemTraceDetail;
@@ -63,12 +62,12 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
     private List<List<InventoryItemTraceDetail>> usageLog;
 
     /**
-     * During analyze InventoryItemTraceDetail separate logs are created for 
-     * each inventory item assigned to given lot. Logs that have common root 
+     * During analyze InventoryItemTraceDetail separate logs are created for
+     * each inventory item assigned to given lot. Logs that have common root
      * inventory item are merged if GROUP_USAGE_LOGS and appear as united group
      * in listing.
      */
-    private final boolean GROUP_USAGE_LOGS = true;
+    private static final boolean GROUP_USAGE_LOGS = true;
 
     /**
      * Default constructor.
@@ -113,11 +112,8 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
         return;
     }
 
-    /**
+    /*
      * Recursively go over all child of given inventory items and create trace events for each level.
-     *
-     * @throws RepositoryException
-     * @throws EntityNotFoundException
      */
     private List<InventoryItemTraceDetail> parseForward(InventoryItem item, long level, InventoryItemTrace inventoryItemTrace, InventoryRepositoryInterface repo) throws RepositoryException, EntityNotFoundException {
 
@@ -131,7 +127,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
         Debug.logVerbose("***Got child items for item [" + item.getInventoryItemId() + "]", MODULE);
         if (UtilValidate.isNotEmpty(child)) {
             for (InventoryItemTraceDetail event : child) {
-            	Debug.logVerbose("****child item for [" + item.getInventoryItemId() + "] is [" + event.getInventoryItemId() + "]", MODULE);
+                Debug.logVerbose("****child item for [" + item.getInventoryItemId() + "] is [" + event.getInventoryItemId() + "]", MODULE);
                 event.setInventoryItemTraceId(inventoryItemTrace.getInventoryItemTraceId());
                 event.setInventoryItemTraceSeqId(inventoryItemTrace.getNextSeqNum());
                 event.setTraceLevel(currentLevel);
@@ -201,17 +197,18 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
 
         // for all found parents recursively find their parents
         for (InventoryItem item : parents) {
-            results.addAll(findRootItems((InventoryItem) item, repository));
+            results.addAll(findRootItems(item, repository));
         }
 
         return results;
     }
 
     public void printInventoryItems(Collection<InventoryItem> items) {
-    	for (InventoryItem item: items) { Debug.logVerbose("***" + item.getInventoryItemId(), MODULE); }
-        
+        for (InventoryItem item : items) {
+            Debug.logVerbose("***" + item.getInventoryItemId(), MODULE);
+        }
     }
-    
+
     /** {@inheritDoc} */
     public void buildInventoryTrace() throws ServiceException {
 
@@ -226,14 +223,14 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
                 inventoryItems.add(invRepository.getInventoryItemById(inventoryItemId, InventoryItem.class));
             } else if (UtilValidate.isNotEmpty(lotId)) { // given lot ID
                 Lot lot = invRepository.getLotById(lotId);
-                inventoryItems.addAll((Collection<? extends InventoryItem>) lot.getInventoryItems());
+                inventoryItems.addAll(lot.getInventoryItems());
             } else { // nothing specified in service attributes, build all items
                 inventoryItems.addAll(((Repository) invRepository).findAll(InventoryItem.class));
             }
 
             Debug.logVerbose("Tracing started with inventory items:", MODULE);
             printInventoryItems(inventoryItems);
-            
+
             // some of the items isn't an root item but derivative item created after transfer or
             // product of manufacturing. Loop below builds collection where inventory items all are
             // first level items.
@@ -242,8 +239,8 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
                 List<? extends WorkEffortInventoryProduced> inventoryProduced = item.getWorkEffortInventoryProduceds();
                 if (UtilValidate.isNotEmpty(inventoryProduced) || UtilValidate.isNotEmpty(xfrs))
                 {
-                	Debug.logVerbose("Found root items: ", MODULE);
-                	printInventoryItems(findRootItems(item, invRepository));
+                    Debug.logVerbose("Found root items: ", MODULE);
+                    printInventoryItems(findRootItems(item, invRepository));
                     // find original inventory items
                     rootItems.addAll(findRootItems(item, invRepository));
                     continue;
@@ -305,7 +302,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
         GenericDelegator delegator = getInfrastructure().getDelegator();
 
         try {
-            EntityCondition dumbCondition = new EntityExpr("'1'", EntityOperator.EQUALS, Long.valueOf(1));
+            EntityCondition dumbCondition = EntityCondition.makeCondition("'1'", EntityOperator.EQUALS, Long.valueOf(1));
 
             // remove all records
             delegator.removeByCondition("InventoryItemTraceDetail", dumbCondition);
@@ -330,7 +327,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
                 inventoryItems.add(invRpst.getInventoryItemById(inventoryItemId));
             } else if (UtilValidate.isNotEmpty(lotId)) { // given lot ID
                 Lot lot = invRpst.getLotById(lotId);
-                inventoryItems.addAll((Collection<? extends InventoryItem>) lot.getInventoryItems());
+                inventoryItems.addAll(lot.getInventoryItems());
             } else { // nothing specified in service attributes, throw error
                 throw new ServiceException("WarehouseError_MissingAttributesForTrace");
             }
@@ -375,7 +372,6 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public void traceInventoryUsageBackward() throws ServiceException {
         Set<InventoryItem> inventoryItems = FastSet.newInstance();
         List<List<InventoryItemTraceDetail>> usageCollection = FastList.newInstance();
@@ -388,7 +384,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
                 inventoryItems.add(invRpst.getInventoryItemById(inventoryItemId));
             } else if (UtilValidate.isNotEmpty(lotId)) { // given lot ID
                 Lot lot = invRpst.getLotById(lotId);
-                inventoryItems.addAll((Collection<? extends InventoryItem>) lot.getInventoryItems());
+                inventoryItems.addAll(lot.getInventoryItems());
             } else { // nothing specified in service attributes, throw error
                 throw new ServiceException("WarehouseError_MissingAttributesForTrace");
             }
@@ -433,7 +429,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
     }
 
     /**
-     * Group inner lists by their items <code>inventoryItemTraceId</code>
+     * Group inner lists by their items <code>inventoryItemTraceId</code>.
      * @param logs list of logs
      * @param forward affects sort direction
      * @return

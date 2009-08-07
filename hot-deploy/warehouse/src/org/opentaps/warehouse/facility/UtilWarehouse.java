@@ -16,25 +16,28 @@
 
 package org.opentaps.warehouse.facility;
 
-import java.util.*;
-import java.io.*;
-import org.ofbiz.entity.*;
-import org.ofbiz.entity.condition.*;
-import org.ofbiz.base.util.*;
+import java.util.List;
+
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+
 
 /**
- * UtilWarehouse
- *
- * @author     Fabien Carrion
+ * UtilWarehouse.
  */
+public final class UtilWarehouse {
 
-public class UtilWarehouse {
+    private UtilWarehouse() { }
 
-    public static String module = UtilWarehouse.class.getName();
+    private static String MODULE = UtilWarehouse.class.getName();
 
     /**
      * Copy of the bsh located at
-     * component://product/webapp/facility/WEB-INF/actions/facility/FindFacilityTransfers.bsh
+     * component://product/webapp/facility/WEB-INF/actions/facility/FindFacilityTransfers.bsh.
      *
      * @param   facilityId        The Id of the warehouse to look on
      * @param   activeOnly        If true, get all the transfers which are not completed and not canceled, else get all the transfers
@@ -43,36 +46,39 @@ public class UtilWarehouse {
      * @param   delegator         The delegator object to look up on
      * @return  The list of the transfers elements
      */
+    public static List<GenericValue> findFacilityTransfer(String facilityId, boolean activeOnly, boolean completeRequested, boolean toTransfer, GenericDelegator delegator) throws GenericEntityException {
 
-    public static List findFacilityTransfer(String facilityId, boolean activeOnly, boolean completeRequested, boolean toTransfer, GenericDelegator delegator) throws GenericEntityException {
-
-        if (facilityId == null) return null;
+        if (facilityId == null) {
+            return null;
+        }
 
         GenericValue facility = delegator.findByPrimaryKey("Facility", UtilMisc.toMap("facilityId", facilityId));
-        if (facility == null) return null;
+        if (facility == null) {
+            return null;
+        }
 
         if (toTransfer) {
             // get the 'to' this facility transfers
-            List exprsTo = null;
+            EntityCondition exprsTo = null;
             if (activeOnly) {
-                exprsTo = UtilMisc.toList(new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityId), new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "IXF_COMPLETE"), new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "IXF_CANCELLED"));
+                exprsTo = EntityCondition.makeCondition(EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, facilityId), EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "IXF_COMPLETE"), EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "IXF_CANCELLED"));
             } else {
-                exprsTo = UtilMisc.toList(new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityId));
+                exprsTo = EntityCondition.makeCondition(EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, facilityId));
             }
             if (completeRequested) {
-                exprsTo = UtilMisc.toList(new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityId), new EntityExpr("statusId", EntityOperator.EQUALS, "IXF_REQUESTED"));
+                exprsTo = EntityCondition.makeCondition(EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, facilityId), EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "IXF_REQUESTED"));
             }
             return delegator.findByAnd("InventoryTransfer", exprsTo, UtilMisc.toList("sendDate"));
         } else {
             // get the 'from' this facility transfers
-            List exprsFrom = null;
+            EntityCondition exprsFrom = null;
             if (activeOnly) {
-                exprsFrom = UtilMisc.toList(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId), new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "IXF_COMPLETE"), new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "IXF_CANCELLED"));
+                exprsFrom = EntityCondition.makeCondition(EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId), EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "IXF_COMPLETE"), EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "IXF_CANCELLED"));
             } else {
-                exprsFrom = UtilMisc.toList(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId));
+                exprsFrom = EntityCondition.makeCondition(EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId));
             }
             if (completeRequested) {
-                exprsFrom = UtilMisc.toList(new EntityExpr("facilityId", EntityOperator.EQUALS, facilityId), new EntityExpr("statusId", EntityOperator.EQUALS, "IXF_REQUESTED"));
+                exprsFrom = EntityCondition.makeCondition(EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId), EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "IXF_REQUESTED"));
             }
             return delegator.findByAnd("InventoryTransfer", exprsFrom, UtilMisc.toList("sendDate"));
         }
@@ -80,34 +86,33 @@ public class UtilWarehouse {
     }
 
     /**
-     * Conveniance method to call findFacilityTransfer
+     * Conveniance method to call findFacilityTransfer.
      *
      * @param   facilityId        The Id of the warehouse to look on
      * @param   delegator         The delegator object to look up on
      * @return  The list of the transfers elements
      */
-
-    public static List findFacilitytoTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilitytoTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, false, false, true, delegator);
     }
 
-    public static List findFacilityfromTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityfromTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, false, false, false, delegator);
     }
 
-    public static List findFacilityActiveOnlytoTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityActiveOnlytoTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, true, false, true, delegator);
     }
 
-    public static List findFacilityActiveOnlyfromTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityActiveOnlyfromTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, true, false, false, delegator);
     }
 
-    public static List findFacilityCompleteReqtoTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityCompleteReqtoTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, false, true, true, delegator);
     }
 
-    public static List findFacilityCompleteReqfromTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> findFacilityCompleteReqfromTransfer(String facilityId, GenericDelegator delegator) throws GenericEntityException {
         return UtilWarehouse.findFacilityTransfer(facilityId, false, true, false, delegator);
     }
 

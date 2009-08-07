@@ -38,6 +38,9 @@
 
 package org.opentaps.warehouse.picking;
 
+import java.sql.Timestamp;
+import java.util.*;
+
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -47,18 +50,14 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.warehouse.security.WarehouseSecurity;
-
-import java.util.*;
-import java.sql.Timestamp;
 
 /**
  * Services for Warehouse application Picking section.
@@ -252,13 +251,12 @@ public final class PickingServices {
             // get all ship groups, and iterate over them for each order
             // Skip OISG_CANCELLED, OISG_COMPLETED and OISG_PACKED
             // Also skip those that have _NA_ as their shipping address (contactMechId)
-            EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                   new EntityConditionList(UtilMisc.toList(
-                       new EntityExpr("statusId", EntityOperator.NOT_IN, UtilMisc.toList("OISG_CANCELLED", "OISG_PACKED", "OISG_COMPLETED")),
-                       new EntityExpr("statusId", EntityOperator.EQUALS, null)), EntityOperator.OR),
-                   new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                   new EntityExpr("contactMechId", EntityOperator.NOT_EQUAL, "_NA_")
-                   ), EntityOperator.AND);
+            EntityCondition conditions = EntityCondition.makeCondition(
+                   EntityCondition.makeCondition(EntityOperator.OR,
+                       EntityCondition.makeCondition("statusId", EntityOperator.NOT_IN, UtilMisc.toList("OISG_CANCELLED", "OISG_PACKED", "OISG_COMPLETED")),
+                       EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, null)),
+                   EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                   EntityCondition.makeCondition("contactMechId", EntityOperator.NOT_EQUAL, "_NA_"));
             List<GenericValue> orderItemShipGroupList = delegator.findByCondition("OrderItemShipGroup", conditions, null, UtilMisc.toList("shipGroupSeqId"));
 
             if (UtilValidate.isEmpty(orderItemShipGroupList)) {
@@ -318,12 +316,12 @@ public final class PickingServices {
                            We are using entity-condition instead of get-related because we want to exclude some picklists by status
                         */
                         List cond = UtilMisc.toList(
-                                                    new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                                                    new EntityExpr("shipGroupSeqId", EntityOperator.EQUALS, shipGroupSeqId),
-                                                    new EntityExpr("orderItemSeqId", EntityOperator.EQUALS, oisgir.getString("orderItemSeqId")),
-                                                    new EntityExpr("inventoryItemId", EntityOperator.EQUALS, oisgir.getString("inventoryItemId")),
-                                                    new EntityExpr("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_CANCELLED"),
-                                                    new EntityExpr("itemStatusId", EntityOperator.NOT_EQUAL, "PICKITEM_CANCELLED")
+                                                    EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                                                    EntityCondition.makeCondition("shipGroupSeqId", EntityOperator.EQUALS, shipGroupSeqId),
+                                                    EntityCondition.makeCondition("orderItemSeqId", EntityOperator.EQUALS, oisgir.getString("orderItemSeqId")),
+                                                    EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, oisgir.getString("inventoryItemId")),
+                                                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_CANCELLED"),
+                                                    EntityCondition.makeCondition("itemStatusId", EntityOperator.NOT_EQUAL, "PICKITEM_CANCELLED")
                                                     );
                         List<GenericValue> picklistItemList = delegator.findByAnd("PicklistAndBinAndItem", cond);
 
@@ -455,7 +453,7 @@ public final class PickingServices {
 
         // find all ShipmentMethodType in order by sequenceNum, for each one get the value from
         // the pickMoveByShipmentMethodInfoMap and add it to the pickMoveByShipmentMethodInfoList
-        List <GenericValue> shipmentMethodTypeList = delegator.findAll("ShipmentMethodType", UtilMisc.toList("+sequenceNum"));
+        List<GenericValue> shipmentMethodTypeList = delegator.findAll("ShipmentMethodType", UtilMisc.toList("+sequenceNum"));
         for (GenericValue smt : shipmentMethodTypeList) {
             String smtId = smt.getString("shipmentMethodTypeId");
             Map info = (Map) pickMoveByShipmentMethodInfoMap.get(smtId);
