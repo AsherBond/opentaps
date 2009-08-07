@@ -70,43 +70,43 @@
     <CustRequest custRequestId="DemoCase2" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_SUBMITTED" priority="7"
         fromPartyId="DemoAccount1"
         custRequestName="Missing items in shipment of GZ-1000" description="Account reports that their shipment of 1000 GZ-1000 is missing a few items.  Find out what the PO number is."/>
-    <CustRequestRole custRequestId="DemoCase2" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
-    <CustRequestRole custRequestId="DemoCase2" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <CustRequestParty custRequestId="DemoCase2" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER" fromDate="2009-01-01 00:00:00" />
+    <CustRequestParty custRequestId="DemoCase2" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2009-01-01 00:00:00"/>
 
     <CustRequest custRequestId="DemoCase3" custRequestTypeId="RF_BUGFIX" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_REOPENED" priority="3"
         fromPartyId="DemoAccount1"
         custRequestName="Bug causing WG-1111 to malfunction" description="Account reports a bug in the software that drives WG-1111 is causing it to malfunction.  Our initial fix was insufficient due to a corner case, reopened."/>
-    <CustRequestRole custRequestId="DemoCase3" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
-    <CustRequestRole custRequestId="DemoCase3" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <CustRequestParty custRequestId="DemoCase3" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER" fromDate="2009-01-01 00:00:00"/>
+    <CustRequestParty custRequestId="DemoCase3" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2009-01-01 00:00:00"/>
 
     <CustRequest custRequestId="DemoCase4" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_ACCEPTED" priority="5"
         fromPartyId="DemoAccount1"
         custRequestName="Support request for training with GZ-2002" description="Account wants to learn how to use GZ-2002."/>
-    <CustRequestRole custRequestId="DemoCase4" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
-    <CustRequestRole custRequestId="DemoCase4" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <CustRequestParty custRequestId="DemoCase4" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER" fromDate="2009-01-01 00:00:00"/>
+    <CustRequestParty custRequestId="DemoCase4" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2009-01-01 00:00:00"/>
 
     <CustRequest custRequestId="DemoCase5" custRequestTypeId="RF_FEATURE" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_ACCEPTED" priority="1"
         fromPartyId="DemoAccount1"
         custRequestName="New sprocket needed on WG-9943-B3 ASAP" description="Urgent redesign on WG-9943-B3 to add new sprocket."/>
-    <CustRequestRole custRequestId="DemoCase5" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
-    <CustRequestRole custRequestId="DemoCase5" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <CustRequestParty custRequestId="DemoCase5" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER" fromDate="2009-01-01 00:00:00"/>
+    <CustRequestParty custRequestId="DemoCase5" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2009-01-01 00:00:00"/>
 
     <CustRequest custRequestId="DemoCase6" custRequestTypeId="RF_QUOTE" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_SUBMITTED" priority="5"
         fromPartyId="DemoAccount1"
         custRequestName="Quote for another order of GZ-1000" description="Account wants to call about ordering another batch of GZ-1000."/>
-    <CustRequestRole custRequestId="DemoCase6" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
-    <CustRequestRole custRequestId="DemoCase6" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <CustRequestParty custRequestId="DemoCase6" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER" fromDate="2009-01-01 00:00:00"/>
+    <CustRequestParty custRequestId="DemoCase6" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2009-01-01 00:00:00"/>
 
     <CustRequest custRequestId="DemoCase7" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_REOPENED" priority="5"
         fromPartyId="DemoAccount1"
         custRequestName="Configuration of GZ-9290 required." description="Configuration of GZ-9290 requested by Account.  Reopened because their requirements changed and we need to reconfigure it."/>
-    <CustRequestRole custRequestId="DemoCase7" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
-    <CustRequestRole custRequestId="DemoCase7" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <CustRequestParty custRequestId="DemoCase7" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER" fromDate="2009-01-01 00:00:00"/>
+    <CustRequestParty custRequestId="DemoCase7" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2009-01-01 00:00:00"/>
 
     <CustRequest custRequestId="DemoCase8" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_REVIEWED" priority="3"
         fromPartyId="DemoAccount1"
         custRequestName="Set up of multiple PC001 required." description="Client ordered 100 PC001 and requests support in setting up a suitable configuration.  Please review this issue for cost and time."/>
-    <CustRequestRole custRequestId="DemoCase8" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
-    <CustRequestRole custRequestId="DemoCase8" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <CustRequestParty custRequestId="DemoCase8" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER" fromDate="2009-01-01 00:00:00"/>
+    <CustRequestParty custRequestId="DemoCase8" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2009-01-01 00:00:00"/>
 
 </entity-engine-xml>

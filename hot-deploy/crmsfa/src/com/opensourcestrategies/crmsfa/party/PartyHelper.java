@@ -249,7 +249,7 @@ public class PartyHelper {
      * involving the partyId will be gone forever!
      */
     private static String[][] CRM_PARTY_DELETE_CASCADE = {
-        {"CustRequestRole", "partyId"},
+        {"CustRequestParty", "partyId"},
         {"PartyNote", "partyId"},
         {"PartyDataSource", "partyId"},
         {"WorkEffortPartyAssignment", "partyId"},
