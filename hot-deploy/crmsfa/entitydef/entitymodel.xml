@@ -543,6 +543,31 @@
         </relation>
     </entity>
 
+<!--deprecated, this entity is no login exist in applications/order/entitydef/entitymodel.xml, so move it here -->
+    <entity entity-name="CustRequestRole"
+            package-name="org.ofbiz.order.request"
+            title="Customer Request Role Entity">
+      <field name="custRequestId" type="id-ne"></field>
+      <field name="partyId" type="id-ne"></field>
+      <field name="roleTypeId" type="id-ne"></field>
+      <prim-key field="custRequestId"/>
+      <prim-key field="partyId"/>
+      <prim-key field="roleTypeId"/>
+      <relation type="one" fk-name="CUSTREQ_RL_CRQST" rel-entity-name="CustRequest">
+        <key-map field-name="custRequestId"/>
+      </relation>
+      <relation type="one" fk-name="CUSTREQ_RL_PARTY" rel-entity-name="Party">
+        <key-map field-name="partyId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="RoleType">
+        <key-map field-name="roleTypeId"/>
+      </relation>
+      <relation type="one" fk-name="CUSTREQ_RL_PROLE" rel-entity-name="PartyRole">
+        <key-map field-name="partyId"/>
+        <key-map field-name="roleTypeId"/>
+      </relation>
+    </entity>
+
     <view-entity entity-name="PartyRelationshipAndCaseRole"
                  package-name="com.opensourcestrategies.crmsfa.case"
                  title="Used to find cases of accounts and customers that a userLogin can view">
@@ -955,13 +980,7 @@
         
     </view-entity>
 
-    <!-- Extend the InventoryItemDetail entity to provide returnId/returnItemSeqId to store the 
-        return value of receive Invetory -->
-    <extend-entity entity-name="InventoryItemDetail">
-      <field name="returnId" type="id"></field>
-      <field name="returnItemSeqId" type="id"></field>
-    </extend-entity>
-    
+
   <!-- ========================================================= -->
   <!-- com.opensourcestrategies.crmsfa.quotes                    -->
   <!-- ========================================================= -->
