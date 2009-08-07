@@ -99,7 +99,6 @@ public class InventoryService extends Service implements InventoryServiceInterfa
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public void cancelInventoryTransfer() throws ServiceException {
         InventoryRepositoryInterface inventoryRepository = null;
         org.opentaps.domain.base.entities.InventoryItem originInventoryItem = null;
@@ -130,7 +129,7 @@ public class InventoryService extends Service implements InventoryServiceInterfa
                 }
 
                 Map<String, Object> createDetailMap =
-                    UtilMisc.toMap(
+                    UtilMisc.<String, Object>toMap(
                             "availableToPromiseDiff", atp.negate().doubleValue(),
                             "quantityOnHandDiff", qoh.negate().doubleValue(),
                             "inventoryItemId", destinationInventoryItem.getInventoryItemId(),
@@ -143,7 +142,7 @@ public class InventoryService extends Service implements InventoryServiceInterfa
                 }
 
                 createDetailMap =
-                    UtilMisc.toMap(
+                    UtilMisc.<String, Object>toMap(
                             "availableToPromiseDiff", qoh.doubleValue(),
                             "quantityOnHandDiff", qoh.doubleValue(),
                             "inventoryItemId", originInventoryItem.getInventoryItemId(),
