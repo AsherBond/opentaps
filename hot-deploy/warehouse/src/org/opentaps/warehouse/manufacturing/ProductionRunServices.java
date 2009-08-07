@@ -2295,8 +2295,8 @@ public final class ProductionRunServices {
 
         try {
             // first figure out how much of this product we already have in stock (ATP)
-            Map<String, Double> tmpResults = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", orderItem.getString("productId"), "facilityId", facilityId, "userLogin", userLogin));
-            Double existingAtp = tmpResults.get("availableToPromiseTotal").doubleValue();
+            Map<String, Object> tmpResults = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", orderItem.getString("productId"), "facilityId", facilityId, "userLogin", userLogin));
+            Double existingAtp = (Double) tmpResults.get("availableToPromiseTotal");
             if (existingAtp == null) {
                 existingAtp = 0.0;
             }
@@ -2442,7 +2442,7 @@ public final class ProductionRunServices {
             dispatcher.runSync("issueProductionRunTaskComponent", ctxt, -1, false);
 
             ctxt.clear();
-            ctxt = UtilMisc.toMap("userLogin", userLogin);
+            ctxt.put("userLogin", userLogin);
             ctxt.put("productionRunId", productionRunId);
             ctxt.put("workEffortId", taskId);
             dispatcher.runSync("changeProductionRunTaskStatus", ctxt, -1, false);
