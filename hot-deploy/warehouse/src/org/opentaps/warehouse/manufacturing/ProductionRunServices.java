@@ -1030,7 +1030,7 @@ public final class ProductionRunServices {
         String productId = (String) context.get("productId");
         Double quantity = (Double) context.get("quantity");
         try {
-            GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard", null);
+            GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard");
             wegs.set("workEffortId", productionRunId);
             wegs.set("productId", productId);
             wegs.set("estimatedQuantity", quantity);
@@ -1092,7 +1092,7 @@ public final class ProductionRunServices {
         String productId = (String) context.get("productId");
         Double quantity = (Double) context.get("quantity");
         try {
-            GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard", null);
+            GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard");
             wegs.set("workEffortId", productionRunTaskId);
             wegs.set("productId", productId);
             wegs.set("estimatedQuantity", quantity);
@@ -2049,7 +2049,7 @@ public final class ProductionRunServices {
             }
 
             // update WEGS for quantity produced, which involves adding another line item for it rather than adding an existing item in place
-            GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard", null);
+            GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard");
             wegs.set("workEffortId", productionRunId);
             wegs.set("productId", productId);
             wegs.set("statusId", "WEGS_COMPLETED");
