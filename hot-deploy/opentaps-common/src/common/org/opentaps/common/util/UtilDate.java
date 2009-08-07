@@ -225,11 +225,10 @@ public abstract class UtilDate {
 
     /**
      * Returns appropriate time format string.
-     * @deprecated was removed from ofbiz, re-added for backward compatibility
      * @param locale User's locale, may be <code>null</code>
      * @return Time format string
      */
-    @Deprecated public static String getTimeFormat(Locale locale) {
+    public static String getTimeFormat(Locale locale) {
         if (locale == null) {
             locale = Locale.getDefault();
         }
@@ -252,11 +251,10 @@ public abstract class UtilDate {
 
     /**
      * Returns appropriate date + time format string.
-     * @deprecated was removed from ofbiz, re-added for backward compatibility
      * @param locale User's locale, may be <code>null</code>.
      * @return Date/time format string
      */
-    @Deprecated public static String getDateTimeFormat(Locale locale) {
+    public static String getDateTimeFormat(Locale locale) {
         if (locale == null) {
             locale = Locale.getDefault();
         }
@@ -299,11 +297,10 @@ public abstract class UtilDate {
 
     /**
      * Returns appropriate date format string.
-     * @deprecated was removed from ofbiz, re-added for backward compatibility
      * @param locale User's locale, may be <code>null</code>
      * @return Date format string
      */
-    @Deprecated public static String getDateFormat(Locale locale) {
+    public static String getDateFormat(Locale locale) {
         if (locale == null) {
             locale = Locale.getDefault();
         }
