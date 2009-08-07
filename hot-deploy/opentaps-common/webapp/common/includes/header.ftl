@@ -49,16 +49,16 @@
     <#assign appName = Static["org.ofbiz.base.util.UtilHttp"].getApplicationName(request)/>
 
     <#list Static["org.opentaps.common.util.UtilConfig"].getStylesheetFiles(opentapsApplicationName) as stylesheet>
-      <link rel="stylesheet" href="<@ofbizContentUrl>${stylesheet}</@ofbizContentUrl>" type="text/css"/>
+      <link rel="stylesheet" href="<@ofbizContentUrl>${StringUtil.wrapString(stylesheet)}</@ofbizContentUrl>" type="text/css"/>
     </#list>
 
     <#-- here is where the dynamic CSS goes, for changing theme color, etc. To activate this, define sectionName = 'section' -->
     <#if sectionName?exists>
-      <#assign bgcolor = Static["org.opentaps.common.util.UtilConfig"].getSectionBgColor(opentapsApplicationName, sectionName)/>
-      <#assign fgcolor = Static["org.opentaps.common.util.UtilConfig"].getSectionFgColor(opentapsApplicationName, sectionName)/>
+      <#assign bgcolor = StringUtil.wrapString(Static["org.opentaps.common.util.UtilConfig"].getSectionBgColor(opentapsApplicationName, sectionName))/>
+      <#assign fgcolor = StringUtil.wrapString(Static["org.opentaps.common.util.UtilConfig"].getSectionFgColor(opentapsApplicationName, sectionName))/>
       <style type="text/css">
 h1, h2, .gwt-screenlet-header, .sectionHeader, .subSectionHeader, .subSectionTitle, .formSectionHeader, .formSectionHeaderTitle, .screenlet-header, .boxhead, .boxtop, div.boxtop, .toggleButtonDisabled {color: ${fgcolor}; background-color: ${bgcolor};}
-div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${fgcolor}; background-color: ${bgcolor};}
+div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${fgcolor?replace("&#35;", "#")}; background-color: ${bgcolor?replace("&#35;", "#")};}
       </style>
 
       <script type="text/javascript">
@@ -75,9 +75,9 @@ div.sectionTabBorder, ul.sectionTabBar li.sectionTabButtonSelected a {color: ${f
       <#list javascripts as javascript>
         <#if javascript?matches(".*dojo.*")>
           <#-- Unfortunately, due to Dojo's module-loading behaviour, it must be served locally -->
-          <script src="${javascript}" type="text/javascript" djConfig="isDebug: false, parseOnLoad: true <#if Static["org.ofbiz.base.util.UtilHttp"].getLocale(request)?exists>, locale: '${Static["org.ofbiz.base.util.UtilHttp"].getLocale(request).getLanguage()}'</#if>"></script>
+          <script src="${StringUtil.wrapString(javascript)}" type="text/javascript" djConfig="isDebug: false, parseOnLoad: true <#if Static["org.ofbiz.base.util.UtilHttp"].getLocale(request)?exists>, locale: '${Static["org.ofbiz.base.util.UtilHttp"].getLocale(request).getLanguage()}'</#if>"></script>
         <#else>
-          <script src="<@ofbizContentUrl>${javascript}</@ofbizContentUrl>" type="text/javascript"></script>
+          <script src="<@ofbizContentUrl>${StringUtil.wrapString(javascript)}</@ofbizContentUrl>" type="text/javascript"></script>
         </#if>
       </#list>
     </#if>
