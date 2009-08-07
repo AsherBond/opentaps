@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -37,6 +37,7 @@ import org.ofbiz.base.util.string.FlexibleStringExpander;
  * TODO: probably want to synch some of these and see if we can put the caches in ofbiz cache system instead
  */
 public class UtilConfig {
+
     public static final String module = UtilConfig.class.getName();
 
     private static Map configCache = null;
@@ -110,14 +111,14 @@ public class UtilConfig {
          * - all three calendar scripts loads in required order
          * - what script from lang/calendar-??.js will be loaded depend on user's locale
          * - we are trying to find lang/calendar-??-utf8.js first, lang/calendar-??.js than.
-         * - if there are no both, fall back to default lang/calendar-en.js    
+         * - if there are no both, fall back to default lang/calendar-en.js
          */
         String jscalendarFiles = UtilProperties.getPropertyValue("opentaps.properties", "opentaps.files.javascript.jscalendar");
         if (UtilValidate.isNotEmpty(jscalendarFiles)) {
             String language = locale != null ? locale.getLanguage() : "en";
             String[] files = FlexibleStringExpander.expandString(jscalendarFiles, UtilMisc.toMap("language", language)).split("\\s*,\\s*");
             for (String js : files) {
-                if (js.indexOf("-"+language) != -1) {
+                if (js.indexOf("-" + language) != -1) {
 
                     // check lang/calendar-??-utf8.js
                     String fileUtf8 = js.replace("/opentaps_js", "hot-deploy/opentaps-common/webapp/js");
@@ -140,7 +141,7 @@ public class UtilConfig {
                     js = js.replace(language + "-utf8", "en");
                     javascriptFiles.add(js);
                     continue;
-                };
+                }
 
                 javascriptFiles.add(js);
             }
@@ -156,13 +157,17 @@ public class UtilConfig {
 
     public static String getSectionBgColor(String opentapsApplicationName, String sectionName) {
         String color = UtilProperties.getPropertyValue(opentapsApplicationName + ".properties", opentapsApplicationName + ".theme.color.background." + sectionName);
-        if (UtilValidate.isNotEmpty(color)) return color;
+        if (UtilValidate.isNotEmpty(color)) {
+            return color;
+        }
         return "#000099";
     }
 
     public static String getSectionFgColor(String opentapsApplicationName, String sectionName) {
         String color = UtilProperties.getPropertyValue(opentapsApplicationName + ".properties", opentapsApplicationName + ".theme.color.foreground." + sectionName);
-        if (UtilValidate.isNotEmpty(color)) return color;
+        if (UtilValidate.isNotEmpty(color)) {
+            return color;
+        }
         return "white";
     }
 
@@ -176,9 +181,11 @@ public class UtilConfig {
         if (addressFunctionCache == null) {
             addressFunctionCache = FastMap.newInstance();
             Map properties = getConfigProperties("opentaps");
-            for (Iterator iter = properties.keySet().iterator(); iter.hasNext(); ) {
+            for (Iterator iter = properties.keySet().iterator(); iter.hasNext();) {
                 String key = (String) iter.next();
-                if (! key.startsWith(addressFormatKey)) continue;
+                if (!key.startsWith(addressFormatKey)) {
+                    continue;
+                }
 
                 String geoId = key.substring(addressFormatKey.length(), key.length());
                 String functionName = (String) properties.get(key);
@@ -211,7 +218,7 @@ public class UtilConfig {
         if (intValue != null) {
             try {
                 return Integer.parseInt(intValue);
-            } catch (NumberFormatException e) {};
+            } catch (NumberFormatException e) { }
         }
         return defaultValue;
     }
@@ -225,8 +232,12 @@ public class UtilConfig {
         String boolValue = getPropertyValue(opentapsApplicationName, property);
         if (boolValue != null) {
             boolValue = boolValue.toLowerCase();
-            if (boolValue.startsWith("y") || boolValue.startsWith("t")) return true;
-            if (boolValue.startsWith("n") || boolValue.startsWith("f")) return false;
+            if (boolValue.startsWith("y") || boolValue.startsWith("t")) {
+                return true;
+            }
+            if (boolValue.startsWith("n") || boolValue.startsWith("f")) {
+                return false;
+            }
         }
         return defaultValue;
     }
@@ -253,17 +264,23 @@ public class UtilConfig {
         String prefixWithPeriod = prefix + ".";
         int size = prefixWithPeriod.length();
         Map properties = getConfigProperties(opentapsApplicationName);
-        for (Iterator iter = properties.keySet().iterator(); iter.hasNext(); ) {
+        for (Iterator iter = properties.keySet().iterator(); iter.hasNext();) {
             String propertyKey = (String) iter.next();
 
             int index = propertyKey.indexOf(prefixWithPeriod);
-            if (index == -1 || propertyKey.length() == size) continue;
+            if (index == -1 || propertyKey.length() == size) {
+                continue;
+            }
 
             String key = propertyKey.substring(propertyKey.lastIndexOf('.') + 1, propertyKey.length()).trim();
-            if (UtilValidate.isEmpty(key)) continue;
+            if (UtilValidate.isEmpty(key)) {
+                continue;
+            }
 
             String value = (String) properties.get(propertyKey);
-            if (value != null) value = value.trim();
+            if (value != null) {
+                value = value.trim();
+            }
             if (UtilValidate.isNotEmpty(value)) {
                 map.put(key, properties.get(propertyKey));
             }
