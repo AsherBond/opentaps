@@ -88,7 +88,7 @@ public class CommunicationEventServices {
         TimeZone timeZone = (TimeZone) context.get("timeZone");
 
         if (timeZone == null) {
-            timeZone = UtilDate.getDefaultTimeZone();
+            timeZone = TimeZone.getDefault();
         }
 
         List<String> errorMessages = new ArrayList<String>();

@@ -223,31 +223,6 @@ public abstract class UtilDate {
         return new Integer((int) Math.abs(days));
     }
 
-    protected static TimeZone defaultTimeZone = null;
-
-    /**
-     * Returns the OFBiz default TimeZone object. The default time zone is configured in
-     * the <code>general.properties</code> file (<code>timeZone.default</code>).
-     * @see java.util.TimeZone
-     * @deprecated Start class now initializes the JVM default locale and time zone, use TimeZone.getDefault() instead
-     * @return the default <code>TimeZone</code>
-     */
-    @Deprecated public static TimeZone getDefaultTimeZone() {
-        if (defaultTimeZone == null) {
-            synchronized (UtilDateTime.class) {
-                if (defaultTimeZone == null) {
-                    String tzId = UtilProperties.getPropertyValue("framework/common/config/general.properties", "timeZone.default");
-                    if (UtilValidate.isNotEmpty(tzId)) {
-                        defaultTimeZone = TimeZone.getTimeZone(tzId);
-                    } else {
-                        defaultTimeZone = TimeZone.getDefault();
-                    }
-                }
-            }
-        }
-        return defaultTimeZone;
-    }
-
     /**
      * Returns appropriate time format string.
      * @deprecated was removed from ofbiz, re-added for backward compatibility
