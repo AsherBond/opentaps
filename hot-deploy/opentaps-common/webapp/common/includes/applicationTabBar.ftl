@@ -47,9 +47,9 @@
 <#list applicationSections as section> 
   <#if section.hasPermission>
     <#if section.isExternal?exists>
-      <#assign url=response.encodeURL(section.uri + "?" + externalKeyParam)/>
+      <#assign url=section.uri + "?" + response.encodeURL(externalKeyParam)/>
     <#else>
-      <#assign url=response.encodeURL("/" + opentapsApplicationName + "/control" + section.uri)/>
+      <#assign url="/" + opentapsApplicationName + "/control" + section.uri/>
     </#if>
     <#if sectionName?exists && section.sectionName == sectionName>
       <#assign tabClass = "sectionTabButtonSelected">
