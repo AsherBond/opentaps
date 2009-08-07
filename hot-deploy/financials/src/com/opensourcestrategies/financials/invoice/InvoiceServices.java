@@ -73,8 +73,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityListIterator;
@@ -186,7 +184,7 @@ public final class InvoiceServices {
             GenericValue agreement = null;
             if (UtilValidate.isNotEmpty(agreementId)) {
                 List conditions = UtilMisc.toList(
-                        new EntityExpr("agreementId", EntityOperator.EQUALS, agreementId),
+                        EntityCondition.makeCondition("agreementId", EntityOperator.EQUALS, agreementId),
                         EntityUtil.getFilterByDateExpr()
                 );
                 agreement = EntityUtil.getFirst(delegator.findByAnd("Agreement", conditions));
@@ -199,9 +197,9 @@ public final class InvoiceServices {
                 }
             } else if (UtilValidate.isNotEmpty(organizationPartyId) && UtilValidate.isNotEmpty(partnerPartyId)) {
                 List conditions = UtilMisc.toList(
-                        new EntityExpr("agreementTypeId", EntityOperator.EQUALS, "PARTNER_AGREEMENT"),
-                        new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
-                        new EntityExpr("partyIdTo", EntityOperator.EQUALS, partnerPartyId),
+                        EntityCondition.makeCondition("agreementTypeId", EntityOperator.EQUALS, "PARTNER_AGREEMENT"),
+                        EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
+                        EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partnerPartyId),
                         EntityUtil.getFilterByDateExpr()
                 );
                 agreement = EntityUtil.getFirst(delegator.findByAnd("Agreement", conditions, UtilMisc.toList("fromDate DESC")));
@@ -716,17 +714,11 @@ public final class InvoiceServices {
         try {
             Timestamp now = UtilDateTime.nowTimestamp();
 
-            ArrayList fromDateConditions = new ArrayList();
-            fromDateConditions.add(new EntityExpr("fromDate", EntityOperator.NOT_EQUAL, null));
-            fromDateConditions.add(new EntityExpr("fromDate", EntityOperator.LESS_THAN_EQUAL_TO, now));
-            EntityConditionList fromDateConditionList = new EntityConditionList(fromDateConditions, EntityOperator.AND);
+            EntityCondition fromDateConditionList = EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("fromDate", EntityOperator.NOT_EQUAL, null), EntityCondition.makeCondition("fromDate", EntityOperator.LESS_THAN_EQUAL_TO, now));
 
-            ArrayList thruDateConditions = new ArrayList();
-            thruDateConditions.add(new EntityExpr("thruDate", EntityOperator.EQUALS, null));
-            thruDateConditions.add(new EntityExpr("thruDate", EntityOperator.GREATER_THAN, now));
-            EntityConditionList thruDateConditionList = new EntityConditionList(thruDateConditions, EntityOperator.OR);
+            EntityCondition thruDateConditionList = EntityCondition.makeCondition(EntityOperator.OR, EntityCondition.makeCondition("thruDate", EntityOperator.EQUALS, null), EntityCondition.makeCondition("thruDate", EntityOperator.GREATER_THAN, now));
 
-            EntityConditionList fullConditionList = new EntityConditionList(UtilMisc.toList(fromDateConditionList, thruDateConditionList), EntityOperator.AND);
+            EntityCondition fullConditionList = EntityCondition.makeCondition(EntityOperator.AND, fromDateConditionList, thruDateConditionList);
 
             TransactionUtil.begin();
             EntityListIterator invoiceRecurrences = delegator.findListIteratorByCondition("InvoiceRecurrence", fullConditionList, null, null);
@@ -734,7 +726,7 @@ public final class InvoiceServices {
 
             GenericValue invoiceRecurrence = null;
             Map cloneInvoiceResult = null;
-            while ((invoiceRecurrence = (GenericValue) invoiceRecurrences.next()) != null) {
+            while ((invoiceRecurrence = invoiceRecurrences.next()) != null) {
 
                 String invoiceId = invoiceRecurrence.getString("invoiceId");
 
@@ -1121,7 +1113,7 @@ public final class InvoiceServices {
 
             // There should only be one term allowed to govern payment due date, so exclude these type of terms if one of them
             //  already exists for the invoice
-            List dueDateTerms = EntityUtil.filterByCondition(invoiceTerms, new EntityExpr("termTypeId", EntityOperator.IN, InvoiceHelper.invoiceDueDateAgreementTermTypeIds));
+            List dueDateTerms = EntityUtil.filterByCondition(invoiceTerms, EntityCondition.makeCondition("termTypeId", EntityOperator.IN, InvoiceHelper.invoiceDueDateAgreementTermTypeIds));
             if (InvoiceHelper.invoiceDueDateAgreementTermTypeIds.contains(context.get("termTypeId")) && UtilValidate.isNotEmpty(dueDateTerms)) {
                 return UtilMessage.createAndLogServiceFailure("FinancialsServiceErrorInvoiceTermOfPaymentTypeExists", context, locale, MODULE);
             }
@@ -1170,7 +1162,7 @@ public final class InvoiceServices {
 
             // Get the other invoice terms
             List invoiceTerms = delegator.findByAnd("InvoiceTerm", UtilMisc.toMap("invoiceId", invoiceId));
-            invoiceTerms = EntityUtil.filterOutByCondition(invoiceTerms, new EntityExpr("invoiceTermId", EntityOperator.EQUALS, invoiceTermId));
+            invoiceTerms = EntityUtil.filterOutByCondition(invoiceTerms, EntityCondition.makeCondition("invoiceTermId", EntityOperator.EQUALS, invoiceTermId));
 
             // If the termTypeId is being changed, check to make sure that a term doesn't already exist with the new termTypeId
             String termTypeId = (String) context.get("termTypeId");
@@ -1183,7 +1175,7 @@ public final class InvoiceServices {
 
             // There should only be one term allowed to govern payment due date, so don't update the term if the a term already exists which is of one
             //  of these types
-            List dueDateTerms = EntityUtil.filterByCondition(invoiceTerms, new EntityExpr("termTypeId", EntityOperator.IN, InvoiceHelper.invoiceDueDateAgreementTermTypeIds));
+            List dueDateTerms = EntityUtil.filterByCondition(invoiceTerms, EntityCondition.makeCondition("termTypeId", EntityOperator.IN, InvoiceHelper.invoiceDueDateAgreementTermTypeIds));
             if (InvoiceHelper.invoiceDueDateAgreementTermTypeIds.contains(termTypeId) && UtilValidate.isNotEmpty(dueDateTerms)) {
                 return UtilMessage.createAndLogServiceFailure("FinancialsServiceErrorInvoiceTermOfPaymentTypeExists", context, locale, MODULE);
             }
@@ -2037,8 +2029,8 @@ return results;
                 }
 
                 List conditions = UtilMisc.toList(
-                        new EntityExpr("shipmentId", EntityOperator.EQUALS, shipmentId),
-                        new EntityExpr("invoiceId", EntityOperator.IN, invoiceIds)
+                        EntityCondition.makeCondition("shipmentId", EntityOperator.EQUALS, shipmentId),
+                        EntityCondition.makeCondition("invoiceId", EntityOperator.IN, invoiceIds)
                 );
                 List<GenericValue> billings = delegator.findByAnd("ShipmentItemBilling", conditions);
                 List<String> invoices = EntityUtil.getFieldListFromEntityList(billings, "invoiceId", true);
@@ -2096,8 +2088,8 @@ return results;
 
             // get existing supplier products
             List conditions = UtilMisc.toList(
-                    new EntityExpr("partyId", EntityOperator.EQUALS, invoice.get("partyIdFrom")),
-                    new EntityExpr("productId", EntityOperator.IN, productIds),
+                    EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, invoice.get("partyIdFrom")),
+                    EntityCondition.makeCondition("productId", EntityOperator.IN, productIds),
                     EntityUtil.getFilterByDateExpr("availableFromDate", "availableThruDate")
                     );
             List supplierProducts = delegator.findByAnd("SupplierProduct", conditions);
@@ -2174,12 +2166,12 @@ return results;
                 // create a commission invoice for each commission agent associated with the invoice
                 for (String agentPartyId : agentIds) {
                     List<EntityCondition> conditions = Arrays.asList(
-                            new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
-                            new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
-                            new EntityExpr("partyIdTo", EntityOperator.EQUALS, agentPartyId),
-                            new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, "COMMISSION_AGENT"),
-                            new EntityExpr("agreementTypeId", EntityOperator.EQUALS, "COMMISSION_AGREEMENT"),
-                            new EntityExpr("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),
+                            EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
+                            EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
+                            EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, agentPartyId),
+                            EntityCondition.makeCondition("roleTypeIdTo", EntityOperator.EQUALS, "COMMISSION_AGENT"),
+                            EntityCondition.makeCondition("agreementTypeId", EntityOperator.EQUALS, "COMMISSION_AGREEMENT"),
+                            EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),
                             EntityUtil.getFilterByDateExpr()
                     );
                     List<GenericValue> agreements = delegator.findByAnd("Agreement", conditions, UtilMisc.toList("fromDate ASC"));

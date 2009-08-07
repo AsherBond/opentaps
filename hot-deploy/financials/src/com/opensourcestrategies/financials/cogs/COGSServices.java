@@ -17,7 +17,6 @@
 package com.opensourcestrategies.financials.cogs;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -33,8 +32,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
@@ -281,13 +279,10 @@ public final class COGSServices {
         String organizationPartyId = (String) context.get("organizationPartyId");
         Double averageCost = (Double) context.get("averageCost");
         try {
-            EntityConditionList conditionList = new EntityConditionList(
-                    Arrays.asList(
-                            new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                            new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                            new EntityExpr("thruDate", EntityOperator.EQUALS, null)
-                    )
-                    , EntityOperator.AND);
+            EntityCondition conditionList = EntityCondition.makeCondition(EntityOperator.AND,
+                            EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                            EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                            EntityCondition.makeCondition("thruDate", EntityOperator.EQUALS, null));
             List<GenericValue> productAverageCosts = delegator.findByCondition("ProductAverageCost", conditionList, null, null);
             for (GenericValue productAverageCost : productAverageCosts) {
                 productAverageCost.set("thruDate", UtilDateTime.nowTimestamp());

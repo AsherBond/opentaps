@@ -42,8 +42,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
@@ -233,14 +231,13 @@ public final class FinancialServices {
             if (("ACTUAL".equals(glFiscalTypeId)) && (isClosed)) {
                 // if the time period is closed and we're doing ACTUAL balance sheet, then we can use the posted GlAccountHistory
                 // first, find all the gl accounts' GlAccountHistory record for this time period
-                EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                        new EntityExpr("customTimePeriodId", EntityOperator.EQUALS, customTimePeriodId),
-                        new EntityConditionList(UtilMisc.toList(
+                EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                        EntityCondition.makeCondition("customTimePeriodId", EntityOperator.EQUALS, customTimePeriodId),
+                        EntityCondition.makeCondition(EntityOperator.OR,
                                 UtilFinancial.getAssetExpr(delegator),
                                 UtilFinancial.getLiabilityExpr(delegator),
-                                UtilFinancial.getEquityExpr(delegator)), EntityOperator.OR)),
-                                EntityOperator.AND);
+                                UtilFinancial.getEquityExpr(delegator)));
                 List selectedFields = UtilMisc.toList("glAccountId", "glAccountTypeId", "glAccountClassId", "accountName", "postedDebits", "postedCredits");
                 selectedFields.add("endingBalance");
                 List<GenericValue> accounts = delegator.findByCondition("GlAccountAndHistory", conditions, selectedFields, UtilMisc.toList("glAccountId"));
@@ -528,12 +525,12 @@ public final class FinancialServices {
 
             // TODO: This is just copied over from getIncomeStatementByDates for now.  We should implement a good version at some point.
             boolean isClosed = true;
-            EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                    new EntityExpr("isClosed", EntityOperator.NOT_EQUAL, "Y"),
-                    new EntityConditionList(UtilMisc.toList(
-                            new EntityExpr("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, lastClosedDate),
-                            new EntityExpr("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate)), EntityOperator.OR)), EntityOperator.AND);
+            EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                    EntityCondition.makeCondition("isClosed", EntityOperator.NOT_EQUAL, "Y"),
+                    EntityCondition.makeCondition(EntityOperator.OR,
+                            EntityCondition.makeCondition("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, lastClosedDate),
+                            EntityCondition.makeCondition("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate)));
             List timePeriods = delegator.findByCondition("CustomTimePeriod", conditions, UtilMisc.toList("customTimePeriodId"), UtilMisc.toList("customTimePeriodId"));
             if (timePeriods.size() > 0) {
                 isClosed = false;
@@ -593,29 +590,29 @@ public final class FinancialServices {
             // find all accounting transaction entries for this organizationPartyId and falling into this time period which are
             // of the specified types.  Note we are only getting posted transactions here.  This might change at some point.
             List searchConditions = UtilMisc.toList(
-                    new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                    new EntityExpr("isPosted", EntityOperator.EQUALS, "Y"),
-                    new EntityExpr("glFiscalTypeId", EntityOperator.EQUALS, glFiscalTypeId),
-                    new EntityExpr("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
-                    new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate));
+                    EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                    EntityCondition.makeCondition("isPosted", EntityOperator.EQUALS, "Y"),
+                    EntityCondition.makeCondition("glFiscalTypeId", EntityOperator.EQUALS, glFiscalTypeId),
+                    EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+                    EntityCondition.makeCondition("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate));
             if (glAccountClassesConsidered.size() > 0) {
-                searchConditions.add(new EntityConditionList(glAccountClassesConsidered, EntityOperator.OR));
+                searchConditions.add(EntityCondition.makeCondition(glAccountClassesConsidered, EntityOperator.OR));
             }
             if (glAccountTypes != null && glAccountTypes.size() > 0) {
-                searchConditions.add(new EntityExpr("glAccountTypeId", EntityOperator.IN, glAccountTypes));
+                searchConditions.add(EntityCondition.makeCondition("glAccountTypeId", EntityOperator.IN, glAccountTypes));
             }
             if (UtilValidate.isNotEmpty(productId)) {
-                searchConditions.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
+                searchConditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
             }
             if (UtilValidate.isNotEmpty(partyId)) {
-                searchConditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, partyId));
+                searchConditions.add(EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId));
             }
-            List<EntityExpr> tagConditions = UtilAccountingTags.buildTagConditions(organizationPartyId, accountingTagUsage, delegator, context);
+            List<EntityCondition> tagConditions = UtilAccountingTags.buildTagConditions(organizationPartyId, accountingTagUsage, delegator, context);
             if (UtilValidate.isNotEmpty(tagConditions)) {
                 searchConditions.addAll(tagConditions);
             }
 
-            EntityConditionList conditions = new EntityConditionList(searchConditions, EntityOperator.AND);
+            EntityCondition conditions = EntityCondition.makeCondition(searchConditions, EntityOperator.AND);
 
             List fieldsToGet = UtilMisc.toList("acctgTransId", "acctgTransTypeId", "acctgTransEntrySeqId", "glAccountId", "glAccountClassId", "amount");
             fieldsToGet.add("glAccountTypeId");
@@ -1561,12 +1558,12 @@ public final class FinancialServices {
         // in between these dates?  If so, then this accounting period has not been closed
         // TODO: this is not very good.  Implement a real service which checks through all interim periods correctly.
         boolean isClosed = true;
-        EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-              new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-              new EntityExpr("isClosed", EntityOperator.NOT_EQUAL, "Y"),
-              new EntityConditionList(UtilMisc.toList(
-                      new EntityExpr("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
-                      new EntityExpr("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate)), EntityOperator.OR)), EntityOperator.AND);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+              EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+              EntityCondition.makeCondition("isClosed", EntityOperator.NOT_EQUAL, "Y"),
+              EntityCondition.makeCondition(EntityOperator.OR,
+                      EntityCondition.makeCondition("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate),
+                      EntityCondition.makeCondition("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, thruDate)));
         List timePeriods = delegator.findByCondition("CustomTimePeriod", conditions, UtilMisc.toList("customTimePeriodId"), UtilMisc.toList("customTimePeriodId"));
         if (timePeriods.size() > 0) {
             isClosed = false;
@@ -1632,7 +1629,7 @@ public final class FinancialServices {
                 transactionEntries = (List) tmpResult.get("transactionEntries");
             }
             // very important - we do not want the PERIOD_CLOSING transactions as this will duplicate the net income
-            transactionEntries = EntityUtil.filterOutByCondition(transactionEntries, new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "PERIOD_CLOSING"));
+            transactionEntries = EntityUtil.filterOutByCondition(transactionEntries, EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "PERIOD_CLOSING"));
             // now add them up by account.  since we may have to deal with flipping the signs of transactions, we'd have analysis type of
             // transaction (debit/credit) vs class of account (debit/credit), so it wasn't possible to just use a view-entity to sum it all up
             Map<String, BigDecimal> glAccountSums = new HashMap<String, BigDecimal>();

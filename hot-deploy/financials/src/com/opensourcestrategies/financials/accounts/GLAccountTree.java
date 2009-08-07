@@ -22,7 +22,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 
@@ -261,8 +261,8 @@ public class GLAccountTree {
 
         // start with the root accounts
         List conditions = UtilMisc.toList(
-            new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-            new EntityExpr("parentGlAccountId", EntityOperator.EQUALS, null),
+            EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+            EntityCondition.makeCondition("parentGlAccountId", EntityOperator.EQUALS, null),
             EntityUtil.getFilterByDateExpr()
         );
         List<GenericValue> rootAccounts = delegator.findByAnd("GlAccountOrganizationAndClass", conditions, UtilMisc.toList("accountCode"));

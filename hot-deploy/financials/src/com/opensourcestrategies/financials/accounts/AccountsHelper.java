@@ -16,6 +16,10 @@
 
 package com.opensourcestrategies.financials.accounts;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.*;
+
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
@@ -23,8 +27,7 @@ import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
@@ -44,13 +47,9 @@ import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.*;
-
 public class AccountsHelper {
 
-    public static String module = AccountsHelper.class.getName();
+    private static String MODULE = AccountsHelper.class.getName();
 
     public static int decimals = UtilNumber.getBigDecimalScale("fin_arithmetic.properties", "financial.statements.decimals");
     public static int rounding = UtilNumber.getBigDecimalRoundingMode("fin_arithmetic.properties", "financial.statements.rounding");
@@ -64,56 +63,68 @@ public class AccountsHelper {
     /**
      * Find the sum of transaction entry amounts by partyId for the given parameters.
      *
-     * @param organizationPartyId
-     * @param glAccountTypeIds      A List of GlAccountIds to look up
-     * @param glFiscalTypeId
-     * @param debitCreditFlag
-     * @param partyId
-     * @param roleTypeId    Currently not used because it seems to cause problems when there is a receivable from a supplier or such.
-     * @param asOfDate
-     * @param delegator
-     * @return
-     * @throws GenericEntityException
+     * @param organizationPartyId filter transaction entry by this organizationPartyId
+     * @param glAccountTypeIds filter transaction entry by these glAccountTypeIds
+     * @param glFiscalTypeId filter transaction entry by this glFiscalTypeId
+     * @param debitCreditFlag filter transaction entry by this debitCreditFlag
+     * @param partyId filter transaction entry by this partyId, optional
+     * @param roleTypeId currently not used because it seems to cause problems when there is a receivable from a supplier or such.
+     * @param asOfDate filter transaction entry by transaction date less than or equal to this date
+     * @param delegator a <code>GenericDelegator</code>
+     * @return the list of <code>AcctgTransEntryPartySum</code> <code>GenericValue</code> found
+     * @throws GenericEntityException if an error occurs
      */
-    public static List getAcctgTransPartySums(String organizationPartyId, List glAccountTypeIds, String glFiscalTypeId, String debitCreditFlag, 
-            String partyId, String roleTypeId, Timestamp asOfDate, GenericDelegator delegator) throws GenericEntityException {
+    public static List<GenericValue> getAcctgTransPartySums(String organizationPartyId, List<String> glAccountTypeIds, String glFiscalTypeId, String debitCreditFlag, String partyId, String roleTypeId, Timestamp asOfDate, GenericDelegator delegator) throws GenericEntityException {
 
-        List conditions = UtilMisc.toList( 
-                new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("debitCreditFlag", EntityOperator.EQUALS, debitCreditFlag),
-                new EntityExpr("isPosted", EntityOperator.EQUALS, "Y"),
-                new EntityExpr("glAccountTypeId", EntityOperator.IN, glAccountTypeIds),
-                new EntityExpr("glFiscalTypeId", EntityOperator.EQUALS, glFiscalTypeId),
-                new EntityExpr("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate));
-        conditions.add(new EntityExpr("partyId", EntityOperator.NOT_EQUAL, null));
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("debitCreditFlag", EntityOperator.EQUALS, debitCreditFlag),
+                EntityCondition.makeCondition("isPosted", EntityOperator.EQUALS, "Y"),
+                EntityCondition.makeCondition("glAccountTypeId", EntityOperator.IN, glAccountTypeIds),
+                EntityCondition.makeCondition("glFiscalTypeId", EntityOperator.EQUALS, glFiscalTypeId),
+                EntityCondition.makeCondition("transactionDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate));
+        conditions.add(EntityCondition.makeCondition("partyId", EntityOperator.NOT_EQUAL, null));
         if (partyId != null) {
-            conditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, partyId));
+            conditions.add(EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId));
         }
         /* SC 20070515 commented this out as it seems to cause problems when there is a receivable from a supplier
         if (roleTypeId != null) {
-            conditions.add(new EntityExpr("roleTypeId", EntityOperator.EQUALS, roleTypeId));
+            conditions.add(EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, roleTypeId));
         }
         */
-        EntityConditionList findConditions = new EntityConditionList(conditions, EntityOperator.AND);
+        EntityCondition findConditions = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 
-        List fieldsToGet = UtilMisc.toList("partyId", "amount");
+        List<String> fieldsToGet = UtilMisc.toList("partyId", "amount");
 
-        List transactionEntries = delegator.findByCondition("AcctgTransEntryPartySum", findConditions, 
-                fieldsToGet, // get these fields 
+        List<GenericValue> transactionEntries = delegator.findByCondition("AcctgTransEntryPartySum", findConditions,
+                fieldsToGet, // get these fields
                 UtilMisc.toList("partyId")); // order by these fields
 
         return transactionEntries;
     }
 
-    /** As above, but for single glAccountTypeId.  Convenience method. */
-    public static List getAcctgTransPartySums(String organizationPartyId, String glAccountTypeId, String glFiscalTypeId, String debitCreditFlag, 
-            String partyId, String roleTypeId, Timestamp asOfDate, GenericDelegator delegator) throws GenericEntityException {
+    /**
+     * As above, but for single glAccountTypeId.
+     * Convenience method.
+     *
+     * @param organizationPartyId filter transaction entry by this organizationPartyId
+     * @param glAccountTypeId filter transaction entry by this glAccountTypeId
+     * @param glFiscalTypeId filter transaction entry by this glFiscalTypeId
+     * @param debitCreditFlag filter transaction entry by this debitCreditFlag
+     * @param partyId filter transaction entry by this partyId, optional
+     * @param roleTypeId currently not used because it seems to cause problems when there is a receivable from a supplier or such.
+     * @param asOfDate filter transaction entry by transaction date less than or equal to this date
+     * @param delegator a <code>GenericDelegator</code>
+     * @return the list of <code>AcctgTransEntryPartySum</code> <code>GenericValue</code> found
+     * @throws GenericEntityException if an error occurs
+     */
+    public static List<GenericValue> getAcctgTransPartySums(String organizationPartyId, String glAccountTypeId, String glFiscalTypeId, String debitCreditFlag, String partyId, String roleTypeId, Timestamp asOfDate, GenericDelegator delegator) throws GenericEntityException {
         return getAcctgTransPartySums(organizationPartyId, UtilMisc.toList(glAccountTypeId), glFiscalTypeId, debitCreditFlag,
                 partyId, roleTypeId, asOfDate, delegator);
     }
 
     /**
-     * Canonical method to get transaction balances by glAccountTypeid. 
+     * Canonical method to get transaction balances by glAccountTypeid.
      * Use one of the helper methods defined after this method.
      *
      * @param   glAccountTypeIds Kust if Account types to sum over. this determines the sign of the resulting balance.
@@ -129,36 +140,40 @@ public class AccountsHelper {
         // Set up convenience boolean for testing receivables/payables TODO this is not robust, can break in future
         boolean isReceivable = (glAccountTypeIds.contains("ACCOUNTS_RECEIVABLE") ? true : false);
 
-        // Query for debit and credit balances 
-        // NOTE: the set of accounts defined so far for commissions, customers and vendors are all the same type: receivalbes or payables.  
+        // Query for debit and credit balances
+        // NOTE: the set of accounts defined so far for commissions, customers and vendors are all the same type: receivalbes or payables.
         // Thus, it is ok to grab all Debits/Credits at once as done here.  If this assumption changes, will need to alter this logic to deal with the asymmetry.
-        List debitBalances = getAcctgTransPartySums(organizationPartyId, glAccountTypeIds, glFiscalTypeId, "D", partyId, roleTypeId,
-                asOfDateTime, delegator);
-        List creditBalances = getAcctgTransPartySums(organizationPartyId, glAccountTypeIds, glFiscalTypeId, "C", partyId, roleTypeId,
-                asOfDateTime, delegator);
+        List<GenericValue> debitBalances = getAcctgTransPartySums(organizationPartyId, glAccountTypeIds, glFiscalTypeId, "D", partyId, roleTypeId, asOfDateTime, delegator);
+        List<GenericValue> creditBalances = getAcctgTransPartySums(organizationPartyId, glAccountTypeIds, glFiscalTypeId, "C", partyId, roleTypeId, asOfDateTime, delegator);
 
         // return map has key partyId to value balance
         Map balances = FastMap.newInstance();
 
         // go through debits and put either the (debitBalance) for receivables or (ZERO - debitBalance) for payables
-        for (Iterator iter = debitBalances.iterator(); iter.hasNext(); ) {
-            GenericValue balance = (GenericValue) iter.next();
+        for (Iterator<GenericValue> iter = debitBalances.iterator(); iter.hasNext();) {
+            GenericValue balance = iter.next();
             BigDecimal balanceAmount = balance.getBigDecimal("amount").setScale(decimals, rounding);
-            if (!isReceivable) balanceAmount = ZERO.subtract(balanceAmount);
+            if (!isReceivable) {
+                balanceAmount = ZERO.subtract(balanceAmount);
+            }
 
-            // TODO: to be safe this should do the same check balance in Map and add to ZERO as is done for credit balances below 
+            // TODO: to be safe this should do the same check balance in Map and add to ZERO as is done for credit balances below
             balances.put(balance.get("partyId"), balanceAmount);
         }
 
         // now go through credits and add to debitBalance (default ZERO) the following: (creditBalance) for payables or (ZERO - creditBalance) for receivables
-        for (Iterator iter = creditBalances.iterator(); iter.hasNext(); ) {
-            GenericValue balance = (GenericValue) iter.next();
+        for (Iterator<GenericValue> iter = creditBalances.iterator(); iter.hasNext();) {
+            GenericValue balance = iter.next();
             BigDecimal balanceAmount = balance.getBigDecimal("amount").setScale(decimals, rounding);
-            if (isReceivable) balanceAmount = ZERO.subtract(balanceAmount);
+            if (isReceivable) {
+                balanceAmount = ZERO.subtract(balanceAmount);
+            }
 
             // see if a debitBalance exists, otherwise default to ZERO
             BigDecimal creditBalance = (BigDecimal) balances.get(balance.get("partyId"));
-            if (creditBalance == null) creditBalance = ZERO;
+            if (creditBalance == null) {
+                creditBalance = ZERO;
+            }
 
             // add them together and put in balance map
             balanceAmount = balanceAmount.add(creditBalance);
@@ -184,7 +199,7 @@ public class AccountsHelper {
     }
 
     /** Gets ACCOUNTS_RECEIVABLE balance for a given customer in an organizatoin up to the asOfDateTime. Returns the balance as a BigDecimal.  If there is no balance information, returns ZERO. */
-    public static BigDecimal getBalanceForCustomerPartyId(String customerPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) 
+    public static BigDecimal getBalanceForCustomerPartyId(String customerPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator)
         throws GenericEntityException {
         Map<String, BigDecimal> balances = getBalancesHelper(CUSTOMER_RECEIVABLE_ACCTS, organizationPartyId, customerPartyId, "BILL_TO_CUSTOMER", glFiscalTypeId, asOfDateTime, delegator);
         BigDecimal balance = balances.get(customerPartyId);
@@ -192,7 +207,7 @@ public class AccountsHelper {
     }
 
     /** Gets ACCOUNTS_PAYABLE balance for a given vendor in an organizatoin up to the asOfDateTime. Returns the balance as a BigDecimal.  If there is no balance information, returns ZERO. */
-    public static BigDecimal getBalanceForVendorPartyId(String vendorPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) 
+    public static BigDecimal getBalanceForVendorPartyId(String vendorPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator)
         throws GenericEntityException {
         Map<String, BigDecimal> balances = getBalancesHelper(VENDOR_PAYABLE_ACCTS, organizationPartyId, vendorPartyId, "BILL_FROM_VENDOR", glFiscalTypeId, asOfDateTime, delegator);
         BigDecimal balance = balances.get(vendorPartyId);
@@ -200,7 +215,7 @@ public class AccountsHelper {
     }
 
     /** Gets COMMISSIONS_PAYABLE balance for a given sales rep in an organizatoin up to the asOfDateTime. Returns the balance as a BigDecimal. If there is no balance information, returns ZERO. */
-    public static BigDecimal getBalanceForCommissionPartyId(String commissionPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator) 
+    public static BigDecimal getBalanceForCommissionPartyId(String commissionPartyId, String organizationPartyId, String glFiscalTypeId, Timestamp asOfDateTime, GenericDelegator delegator)
         throws GenericEntityException {
         Map<String, BigDecimal> balances = getBalancesHelper(COMMISSION_PAYABLE_ACCTS, organizationPartyId, commissionPartyId, "SALES_REP", glFiscalTypeId, asOfDateTime, delegator);
         BigDecimal balance = balances.get(commissionPartyId);
@@ -213,12 +228,12 @@ public class AccountsHelper {
      */
     public static Map getUnpaidInvoicesForCustomers(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
-        return getUnpaidInvoicesHelper(organizationPartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale); 	
+        return getUnpaidInvoicesHelper(organizationPartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
     public static Map getUnpaidInvoicesForCustomers(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
-        return getUnpaidInvoicesHelper(organizationPartyId, null, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale); 	
+        return getUnpaidInvoicesHelper(organizationPartyId, null, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
 
     /**
@@ -232,12 +247,12 @@ public class AccountsHelper {
 
     public static Map getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
-        return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale); 	
+        return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
 
     public static Map getUnpaidInvoicesForCustomer(String organizationPartyId, String payeePartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale, boolean useAgingDate)
         throws GenericEntityException, RepositoryException {
-        return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale, useAgingDate); 	
+        return getUnpaidInvoicesHelper(organizationPartyId, payeePartyId, "SALES_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale, useAgingDate);
     }
 
     /**
@@ -249,7 +264,7 @@ public class AccountsHelper {
         return getUnpaidInvoicesHelper(organizationPartyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
-    public static Map getUnpaidInvoicesForVendors(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale) 
+    public static Map getUnpaidInvoicesForVendors(String organizationPartyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
         return getUnpaidInvoicesHelper(organizationPartyId, null, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
@@ -260,12 +275,12 @@ public class AccountsHelper {
      */
     public static Map getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
-        return getUnpaidInvoicesHelper(organizationPartyId, partyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);   
+        return getUnpaidInvoicesHelper(organizationPartyId, partyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, delegator, timeZone, locale);
     }
 
     public static Map getUnpaidInvoicesForVendor(String organizationPartyId, String partyId, List daysOutstandingPoints, Timestamp asOfDateTime, List invoiceStatusIds, GenericDelegator delegator, TimeZone timeZone, Locale locale)
         throws GenericEntityException, RepositoryException {
-        return getUnpaidInvoicesHelper(organizationPartyId, partyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);     
+        return getUnpaidInvoicesHelper(organizationPartyId, partyId, "PURCHASE_INVOICE", daysOutstandingPoints, asOfDateTime, invoiceStatusIds, delegator, timeZone, locale);
     }
 
     /**
@@ -304,9 +319,9 @@ public class AccountsHelper {
      * Note:  The passed in asOfDate will be expanded to the end of that day.  This means, if your asOfDate is 2008-10-23 13:00:00, it will
      * be reinterpreted as 2008-10-23 23:59:59.999.  This prevents issues such as an invoice being created in the middle of the day
      * not showing up in some reports, such as customer statement, where the asOfDate is entered as 2008-10-23 00:00:00.000.
-     * 
+     *
      * @param organizationPartyId
-     * @param invoiceTypeId 
+     * @param invoiceTypeId
      * @param daysOutstandingPoints List of Integer (not int) days outstanding breakpoints, ie: UtilMisc.toList(new Integer(0), new Integer(30), new Integer(60), new Integer(90)
      * @param asOfDateTime
      * @param invoiceStatusIds List of Strings to filter invoice statuses
@@ -322,12 +337,12 @@ public class AccountsHelper {
 
         // make sure the as of date is at the end of the day, this normalization prevents issues such as invoices that were just created missing from a report
         asOfDateTime = UtilDateTime.getDayEnd(asOfDateTime);
-        
+
         // future asOfDateTime results are correct but unintuitive, so limit time range from anywhere in past to now
         Timestamp now = UtilDateTime.getDayEnd( UtilDateTime.nowTimestamp(), timeZone, locale );
         if (asOfDateTime.after(now)) asOfDateTime = now;
 
-        // which field is equal to the organizationPartyId?  Depends on the invoice type 
+        // which field is equal to the organizationPartyId?  Depends on the invoice type
         String organizationInvoiceField = null;
         String payeeInvoiceField = null;
         if (invoiceTypeId.equals("PURCHASE_INVOICE") || invoiceTypeId.equals("COMMISSION_INVOICE")) {
@@ -339,27 +354,26 @@ public class AccountsHelper {
         }
 
         // used to select invoices which are not paid by the as of date time but which are created before the as of date
-        EntityConditionList invoiceDateConditions = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr("paidDate", EntityOperator.GREATER_THAN, asOfDateTime),
-                new EntityExpr("paidDate", EntityOperator.EQUALS, null)), 
-                EntityOperator.OR); 
+        EntityCondition invoiceDateConditions = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition("paidDate", EntityOperator.GREATER_THAN, asOfDateTime),
+                EntityCondition.makeCondition("paidDate", EntityOperator.EQUALS, null));
 
-        List conditionList = UtilMisc.toList(
-                new EntityExpr("statusId", EntityOperator.NOT_IN, UtilMisc.toList("INVOICE_VOIDED", "INVOICE_WRITEOFF", "INVOICE_CANCELLED", "INVOICE_PAID")),
-                new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, invoiceTypeId),
-                new EntityExpr("invoiceDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime),
-                new EntityExpr(organizationInvoiceField, EntityOperator.EQUALS, organizationPartyId),
+        List<EntityCondition> conditionList = UtilMisc.<EntityCondition>toList(
+                EntityCondition.makeCondition("statusId", EntityOperator.NOT_IN, UtilMisc.toList("INVOICE_VOIDED", "INVOICE_WRITEOFF", "INVOICE_CANCELLED", "INVOICE_PAID")),
+                EntityCondition.makeCondition("invoiceTypeId", EntityOperator.EQUALS, invoiceTypeId),
+                EntityCondition.makeCondition("invoiceDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime),
+                EntityCondition.makeCondition(organizationInvoiceField, EntityOperator.EQUALS, organizationPartyId),
                 invoiceDateConditions) ;
 
-        if( payeePartyId != null ) {
-            conditionList.add(new EntityExpr(payeeInvoiceField, EntityOperator.EQUALS, payeePartyId)) ;
+        if (payeePartyId != null) {
+            conditionList.add(EntityCondition.makeCondition(payeeInvoiceField, EntityOperator.EQUALS, payeePartyId)) ;
         }
 
-        if (! UtilValidate.isEmpty(invoiceStatusIds)) {
-            conditionList.add(new EntityExpr("statusId", EntityOperator.IN, invoiceStatusIds));
+        if (UtilValidate.isNotEmpty(invoiceStatusIds)) {
+            conditionList.add(EntityCondition.makeCondition("statusId", EntityOperator.IN, invoiceStatusIds));
         }
 
-        EntityConditionList conditions = new EntityConditionList(conditionList, EntityOperator.AND);
+        EntityCondition conditions = EntityCondition.makeCondition(conditionList, EntityOperator.AND);
 
         // search and sort results on invoiceDate ascending
         List invoices = delegator.findByCondition("Invoice", conditions, null, UtilMisc.toList("invoiceDate"));
@@ -385,13 +399,14 @@ public class AccountsHelper {
      * Right now it's done by looking up only the receipts, as that's what we need.
      */
     public static Map getUnpaidInvoicesForPartyClassificationGroup(String organizationPartyId, String partyClassificationGroupId, List daysOutstandingPoints, Timestamp asOfDateTime, GenericDelegator delegator, boolean useAgingDate) throws GenericEntityException, RepositoryException {
-        EntityConditionList mainConditions = new EntityConditionList( UtilMisc.toList(
-                    new EntityExpr("partyClassificationGroupId", EntityOperator.EQUALS, partyClassificationGroupId),
-                    EntityUtil.getFilterByDateExpr()
-                    ), EntityOperator.AND);
+        EntityCondition mainConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("partyClassificationGroupId", EntityOperator.EQUALS, partyClassificationGroupId),
+                    EntityUtil.getFilterByDateExpr());
 
         // find receipts
-        List conditions = UtilMisc.toList(mainConditions, new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId));
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                        mainConditions,
+                                        EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId));
         List invoices = delegator.findByAnd("InvoiceAndPartyClassificationReceipt", conditions);
 
         // group the results into date buckets
@@ -407,7 +422,7 @@ public class AccountsHelper {
         // Create outstandingInvoices map, populate with empty buckets, and store the maximum days outstanding of all the break points
         Map outstandingInvoicesByAge = FastMap.newInstance();
         int maxDaysOutstanding = 0;
-        for (Iterator it = daysOutstandingPoints.iterator(); it.hasNext(); ) {
+        for (Iterator it = daysOutstandingPoints.iterator(); it.hasNext();) {
             Integer nextDaysOutstanding = (Integer) it.next();
             outstandingInvoicesByAge.put(nextDaysOutstanding, new LinkedList());
             if (nextDaysOutstanding.intValue() > maxDaysOutstanding) {
@@ -427,8 +442,8 @@ public class AccountsHelper {
             // Put this invoice into the List at the first days outstanding (DSO) break point which is greater than the current one, or
             // the last DSO break point in the list of DSO break points, whichever one comes first
             boolean foundDaysOutstandingPoint = false;
-            Iterator it = daysOutstandingPoints.iterator(); 
-            while ((it.hasNext()) && (!foundDaysOutstandingPoint) ) {
+            Iterator it = daysOutstandingPoints.iterator();
+            while ((it.hasNext()) && (!foundDaysOutstandingPoint)) {
                 Integer daysOutstandingPoint = (Integer) it.next();
                 if (numberOfDays.compareTo(daysOutstandingPoint) == -1) { // -1 is less than
                     List invoicesByDaysOutstanding = (LinkedList) outstandingInvoicesByAge.get(daysOutstandingPoint);
@@ -473,36 +488,36 @@ public class AccountsHelper {
 
         Map invoicesByAge = null;
         if (UtilValidate.isNotEmpty(invoiceToPartyId)) {
-            invoicesByAge = AccountsHelper.getUnpaidInvoicesForCustomer( organizationPartyId , invoiceToPartyId , UtilMisc.toList( gracePeriod, gracePeriod + 1 ), asOfDateTime, delegator, timeZone, locale) ;
-        } else if ( UtilValidate.isNotEmpty( partyClassificationGroupId ) ) {
-            invoicesByAge = AccountsHelper.getUnpaidInvoicesForPartyClassificationGroup( organizationPartyId , partyClassificationGroupId, UtilMisc.toList( gracePeriod, gracePeriod + 1 ), asOfDateTime, delegator, true) ;
+            invoicesByAge = AccountsHelper.getUnpaidInvoicesForCustomer(organizationPartyId, invoiceToPartyId, UtilMisc.toList(gracePeriod, gracePeriod + 1), asOfDateTime, delegator, timeZone, locale);
+        } else if (UtilValidate.isNotEmpty(partyClassificationGroupId)) {
+            invoicesByAge = AccountsHelper.getUnpaidInvoicesForPartyClassificationGroup(organizationPartyId, partyClassificationGroupId, UtilMisc.toList(gracePeriod, gracePeriod + 1), asOfDateTime, delegator, true);
         } else {
-            invoicesByAge = AccountsHelper.getUnpaidInvoicesForCustomers( organizationPartyId , UtilMisc.toList( gracePeriod, gracePeriod + 1 ), asOfDateTime, delegator, timeZone, locale) ;
+            invoicesByAge = AccountsHelper.getUnpaidInvoicesForCustomers(organizationPartyId, UtilMisc.toList(gracePeriod, gracePeriod + 1), asOfDateTime, delegator, timeZone, locale);
         }
 
         // The AccountsHelper.getUnpaidInvoices* methods return a map of lists of Invoice objects separated into aged tiers. We've instructed
         //  the method to use two tiers, so get the one which holds all invoices older than the grace period:
-        List<Invoice> invoicesWithOutstanding = (List<Invoice>) invoicesByAge.get( gracePeriod + 1 ) ;
+        List<Invoice> invoicesWithOutstanding = (List<Invoice>) invoicesByAge.get(gracePeriod + 1);
 
         // Now we have a list of InvoiceWithOutstandingBalance objects, so we need to loop through them and assemble a list of actual invoices, and
         //  a map of supporting data keyed by invoiceId, for the form widget to use
-        Map<Invoice, Map<String, BigDecimal>> invoiceData = new LinkedHashMap<Invoice, Map<String, BigDecimal>>() ;
+        Map<Invoice, Map<String, BigDecimal>> invoiceData = new LinkedHashMap<Invoice, Map<String, BigDecimal>>();
 
         for (Invoice invoice : invoicesWithOutstanding) {
 
             // We only care about invoices in the INVOICE_READY state
-            if( "INVOICE_READY".equals( invoice.getString( "statusId" ) ) ) {
+            if ("INVOICE_READY".equals(invoice.getString("statusId"))) {
 
                 // Days outstanding is the number of *whole* days outstanding. Always rounded down, even if the invoice is only 1ms short of a full day.
                 BigDecimal daysOutstanding = UtilCommon.asBigDecimal(invoice.getDaysOutstanding(asOfDateTime)); // legacy requires BigDecimal
                 BigDecimal outstandingAmount = invoice.getOpenAmount(asOfDateTime);
-                BigDecimal interestCharged = invoice.getInterestCharged() ;
+                BigDecimal interestCharged = invoice.getInterestCharged();
 
                 // Calculate the interest owing (days older than grace period * outstanding amount - interest already charged for the invoice)
-                BigDecimal daysPastDue = new BigDecimal(daysOutstanding.intValue() - gracePeriod).setScale( 0 , BigDecimal.ROUND_UNNECESSARY ) ;
-                BigDecimal interestAmount = dailyInterestRate.multiply( daysPastDue ).multiply( outstandingAmount ).subtract( interestCharged ).setScale( 2 , BigDecimal.ROUND_HALF_UP ) ;
+                BigDecimal daysPastDue = new BigDecimal(daysOutstanding.intValue() - gracePeriod).setScale(0, BigDecimal.ROUND_UNNECESSARY);
+                BigDecimal interestAmount = dailyInterestRate.multiply(daysPastDue).multiply(outstandingAmount).subtract(interestCharged).setScale(2, BigDecimal.ROUND_HALF_UP);
 
-                invoiceData.put(invoice, UtilMisc.toMap( "daysOutstanding", daysOutstanding, "outstandingAmount", outstandingAmount, "interestCharged", interestCharged, "interestAmount", interestAmount) ) ;
+                invoiceData.put(invoice, UtilMisc.toMap("daysOutstanding", daysOutstanding, "outstandingAmount", outstandingAmount, "interestCharged", interestCharged, "interestAmount", interestAmount));
             }
         }
 
@@ -526,29 +541,35 @@ public class AccountsHelper {
 
         // Check if party has an active credit limit agreement
         AgreementReader reader = AgreementReader.findAgreement(partyIdFrom, partyIdTo, "SALES_AGREEMENT", "CREDIT_LIMIT", "AGR_ACTIVE", delegator);
-        if (reader == null) return false;
+        if (reader == null) {
+            return false;
+        }
         Timestamp now = UtilDateTime.nowTimestamp();
 
         // Get the credit limit and convert it to the organization currency
         BigDecimal limit = reader.getTermValueBigDecimal("CREDIT_LIMIT");
         if (limit == null) {
-            throw new GenericServiceException("No credit limit value specified for agreement ["+reader.getAgreementId()+"].");
+            throw new GenericServiceException("No credit limit value specified for agreement [" + reader.getAgreementId() + "].");
         }
         String agreementCurrencyUomId = reader.getTermCurrency("CREDIT_LIMIT");
         if (agreementCurrencyUomId == null) {
             throw new GenericServiceException("No currency defined for credit limit term");
         }
-        if (! agreementCurrencyUomId.equals(currencyUomId) ) {
+        if (!agreementCurrencyUomId.equals(currencyUomId)) {
             Map result = dispatcher.runSync("convertUom", UtilMisc.toMap("originalValue", limit, "uomId", agreementCurrencyUomId, "uomIdTo", currencyUomId, "asOfDate", now));
-            if (ServiceUtil.isError(result)) throw new GenericServiceException(ServiceUtil.getErrorMessage(result));
+            if (ServiceUtil.isError(result)) {
+                throw new GenericServiceException(ServiceUtil.getErrorMessage(result));
+            }
             limit = new BigDecimal((Double) result.get("convertedValue"));
         }
         limit = limit.setScale(decimals, rounding);
-        Debug.logInfo("Found a credit limit of [" + limit + "] from party [" + partyIdFrom + "] to party [" + partyIdTo + "] in agreement [" + reader.getAgreementId() + "]", module);
+        Debug.logInfo("Found a credit limit of [" + limit + "] from party [" + partyIdFrom + "] to party [" + partyIdTo + "] in agreement [" + reader.getAgreementId() + "]", MODULE);
 
         // Get the GL balance of this customer in this organization, which will be in the organization's currency
         BigDecimal balance = AccountsHelper.getBalanceForCustomerPartyId(partyIdTo, partyIdFrom, "ACTUAL", now, delegator);
-        if (balance == null) balance = BigDecimal.ZERO;
+        if (balance == null) {
+            balance = BigDecimal.ZERO;
+        }
         balance = balance.setScale(decimals, rounding);
 
         // If the GL balance + amountToCheck exceeds credit limit, then customer has insufficient funds in the pipe to pay this amount
@@ -572,19 +593,25 @@ public class AccountsHelper {
 
     private static HashMap<String, GenericValue> getAccountParentsRec(GenericDelegator delegator, String glAccountId, HashMap<String, GenericValue> parents) throws GenericEntityException {
         if (parents == null) parents = new HashMap<String, GenericValue>();
-        if (glAccountId == null) return parents;
+        if (glAccountId == null) {
+            return parents;
+        }
         GenericValue account = delegator.findByPrimaryKey("GlAccount", UtilMisc.toMap("glAccountId", glAccountId));
-        if (account == null) return parents;
+        if (account == null) {
+            return parents;
+        }
         parents.put(glAccountId, account);
         GenericValue parent = EntityUtil.getFirst(delegator.findByAnd("GlAccount", UtilMisc.toMap("glAccountId", account.getString("parentGlAccountId"))));
-        if (parent == null) return parents;
+        if (parent == null) {
+            return parents;
+        }
         parents.put(account.getString("parentGlAccountId"), parent);
         return getAccountParentsRec(delegator, parent.getString("glAccountId"), parents);
     }
 
     /**
      * Prepares data to generate customer statement report.
-     * 
+     *
      * @param dl
      *     Domain loader
      * @param organizationPartyId
@@ -638,10 +665,10 @@ public class AccountsHelper {
                 Double over4N = 0.0;
 
                 // get all sales invoices in ready or sent state grouped by date bucket from the as of date time
-                List<Integer> periodList = Arrays.asList(statementPeriod, 2*statementPeriod, 3*statementPeriod, 4*statementPeriod, 999);
+                List<Integer> periodList = Arrays.asList(statementPeriod, 2 * statementPeriod, 3 * statementPeriod, 4 * statementPeriod, 999);
                 Map<Integer, Invoice> dateBuckets = AccountsHelper.getUnpaidInvoicesForCustomer(organizationPartyId, partyId, periodList, asOfDate, UtilMisc.toList("INVOICE_READY", "INVOICE_SENT"), delegator, timeZone, locale, useAgingDate);
 
-                // iterate through the date buckets and add up the total open amount while keeping track of bucket sums 
+                // iterate through the date buckets and add up the total open amount while keeping track of bucket sums
                 for (Integer bucket : (Set<Integer>) dateBuckets.keySet()) {
                     List<Invoice> invoices = (List<Invoice>) dateBuckets.get(bucket);
                     for (Invoice invoice : invoices) {
@@ -651,26 +678,26 @@ public class AccountsHelper {
 
                         // compute sums (note that these are brackets, they don't include amounts from other brackets)
                         Double openAmount = (Double) invoiceRow.get("open_amount");
-                        if (bucket == statementPeriod) current += openAmount;
-                        else if (bucket == 2*statementPeriod)    over1N += openAmount;
-                        else if (bucket == 3*statementPeriod)    over2N += openAmount;
-                        else if (bucket == 4*statementPeriod)    over3N += openAmount;
-                        else if (bucket == 999)                  over4N += openAmount;
+                        if (bucket == statementPeriod) { current += openAmount; }
+                        else if (bucket == 2 * statementPeriod) { over1N += openAmount; }
+                        else if (bucket == 3 * statementPeriod) { over2N += openAmount; }
+                        else if (bucket == 4 * statementPeriod) { over3N += openAmount; }
+                        else if (bucket == 999)                 { over4N += openAmount; }
                         totalOpen += openAmount;
                     }
                 }
 
                 // next get all received or confirmed payments applied to an invoice between the parties since the start date
-                List<EntityExpr> conditions = Arrays.asList(
-                        new EntityExpr("invoiceId", EntityOperator.NOT_EQUAL, null),
-                        new EntityExpr("partyIdTo", EntityOperator.EQUALS, organizationPartyId),
-                        new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyId),
-                        new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("PMNT_RECEIVED", "PMNT_CONFIRMED")),
-                        new EntityExpr("effectiveDate", EntityOperator.GREATER_THAN, startDate)
+                EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("invoiceId", EntityOperator.NOT_EQUAL, null),
+                        EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, organizationPartyId),
+                        EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, partyId),
+                        EntityCondition.makeCondition("statusId", EntityOperator.IN, UtilMisc.toList("PMNT_RECEIVED", "PMNT_CONFIRMED")),
+                        EntityCondition.makeCondition("effectiveDate", EntityOperator.GREATER_THAN, startDate)
                 );
-                List<GenericValue> payments = delegator.findByCondition("PaymentAndApplication", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+                List<GenericValue> payments = delegator.findByCondition("PaymentAndApplication", conditions, null, null);
                 for (GenericValue payment : payments) {
-                    partyReport.put(((String)payment.get("invoiceId")) + ((String)payment.get("paymentId")), createPaymentRow(payment, partyId));
+                    partyReport.put(((String) payment.get("invoiceId")) + ((String) payment.get("paymentId")), createPaymentRow(payment, partyId));
                     allInvoiceIds.add((String) payment.get("invoiceId"));
                 }
 
@@ -694,9 +721,13 @@ public class AccountsHelper {
                     if (address.getToName() != null) {
                         sb.append(address.getToName()).append("\n");
                     }
-                    if (address.getAttnName() != null) sb.append(address.getAttnName()).append("\n");
+                    if (address.getAttnName() != null) {
+                        sb.append(address.getAttnName()).append("\n");
+                    }
                     sb.append(address.getAddress1()).append("\n");
-                    if (address.getAddress2() != null) sb.append(address.getAddress2()).append("\n");
+                    if (address.getAddress2() != null) {
+                        sb.append(address.getAddress2()).append("\n");
+                    }
                     // TODO for now this is using the state province geo id, but when we use party domain it should be more robust
                     sb.append(address.getCity()).append(", ").append(address.getStateProvinceGeoId());
                     sb.append(" ").append(address.getPostalCode());
@@ -707,11 +738,11 @@ public class AccountsHelper {
 
                 // save the per party data (for the overages, we only show them if they're non zero)
                 partyData.put(partyId + "total_open", new Double(totalOpen));
-                if (current > 0.0) partyData.put(partyId + "current", new Double(current));
-                if (over1N > 0.0) partyData.put(partyId + "over_1N", new Double(over1N));
-                if (over2N > 0.0) partyData.put(partyId + "over_2N", new Double(over2N));
-                if (over3N > 0.0) partyData.put(partyId + "over_3N", new Double(over3N));
-                if (over4N > 0.0) partyData.put(partyId + "over_4N", new Double(over4N));
+                if (current > 0.0) { partyData.put(partyId + "current", new Double(current)); }
+                if (over1N > 0.0) { partyData.put(partyId + "over_1N", new Double(over1N)); }
+                if (over2N > 0.0) { partyData.put(partyId + "over_2N", new Double(over2N)); }
+                if (over3N > 0.0) { partyData.put(partyId + "over_3N", new Double(over3N)); }
+                if (over4N > 0.0) { partyData.put(partyId + "over_4N", new Double(over4N)); }
 
                 // print is past due if any of the over brackets have some amount
                 partyData.put(partyId + "is_past_due", (over1N + over2N + over3N + over4N > 0.0 ? Boolean.TRUE : Boolean.FALSE));
@@ -724,8 +755,8 @@ public class AccountsHelper {
     }
 
     /**
-     *  Function to generate the data for a payment row (note that field names have to be identical 
-     *  to keep things simple)
+     *  Function to generate the data for a payment row (note that field names have to be identical
+     *  to keep things simple).
      */
     // TODO: create and use a Payment domain class object
     private static Map<String, Object> createPaymentRow(GenericValue payment, String partyId) {
@@ -738,8 +769,10 @@ public class AccountsHelper {
         return row;
     }
 
-    /** Function to generate the data for an invoice row 
-     * @throws RepositoryException */
+    /**
+     * Function to generate the data for an invoice row.
+     * @throws RepositoryException
+     */
     private static Map<String, Object> createInvoiceRow(Invoice invoice, boolean open, String partyId, boolean useAgingDate) throws RepositoryException {
         Map<String, Object> row = FastMap.newInstance();
         row.put("type", "INV");
@@ -747,7 +780,7 @@ public class AccountsHelper {
         row.put("party_id", partyId);
         row.put("transaction_date", invoice.getInvoiceDate());
         Timestamp dueDate = invoice.getDueDate();
-        if (dueDate != null) row.put("due_date", dueDate);
+        if (dueDate != null) { row.put("due_date", dueDate); }
         // TODO: this isn't robust in the case of closed invoices because the payments we list might not completely cover a very old invoice paid bit by bit
         BigDecimal total = invoice.getInvoiceTotal();
         row.put("invoice_total", new Double(total.doubleValue()));

@@ -34,8 +34,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
@@ -50,9 +49,11 @@ import org.opentaps.domain.party.PartyRepositoryInterface;
  * serve preliminary reports that don't require a full
  * data warehouse solution.
  */
-public class CommissionReports {
+public final class CommissionReports {
 
-    public static String module = CommissionReports.class.getName();
+    private CommissionReports() { }
+
+    private static String MODULE = CommissionReports.class.getName();
 
     /**
      * A commission report with breakdown by agent, customer, PO#,
@@ -84,8 +85,12 @@ public class CommissionReports {
         String thruDateStr = UtilCommon.getParameter(request, "thruDate");
         Timestamp fromDate = null;
         Timestamp thruDate = null;
-        if (fromDateStr != null) fromDate = UtilDate.toTimestamp(fromDateStr, timeZone, locale);
-        if (thruDateStr != null) thruDate = UtilDate.toTimestamp(thruDateStr, timeZone, locale);
+        if (fromDateStr != null) {
+            fromDate = UtilDate.toTimestamp(fromDateStr, timeZone, locale);
+        }
+        if (thruDateStr != null) {
+            thruDate = UtilDate.toTimestamp(thruDateStr, timeZone, locale);
+        }
         if (fromDateStr != null && fromDate == null) {
             UtilMessage.addFieldError(request, "fromDate", "OpentapsFieldError_BadDateFormat", UtilMisc.toMap("format", UtilDate.getDateFormat(locale)));
             return "error";
@@ -104,19 +109,19 @@ public class CommissionReports {
 
             // main constraints
             List<String> orderBy = UtilMisc.toList("agentPartyId");
-            List conditions = UtilMisc.toList(
-                    new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, "SALES_INVOICE"),
-                    new EntityExpr("statusId", EntityOperator.IN, UtilMisc.toList("INVOICE_READY", "INVOICE_PAID", "INVOICE_CONFIRMED")),
-                    new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId)
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("invoiceTypeId", EntityOperator.EQUALS, "SALES_INVOICE"),
+                    EntityCondition.makeCondition("statusId", EntityOperator.IN, UtilMisc.toList("INVOICE_READY", "INVOICE_PAID", "INVOICE_CONFIRMED")),
+                    EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId)
             );
 
             // date constraint and also put in report parameters
             if (fromDate != null) {
-                conditions.add(new EntityExpr("billingDatetime", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+                conditions.add(EntityCondition.makeCondition("billingDatetime", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
                 jrParameters.put("reportFromDate", fromDateStr);
             }
             if (thruDate != null) {
-                conditions.add(new EntityExpr("billingDatetime", EntityOperator.LESS_THAN, thruDate));
+                conditions.add(EntityCondition.makeCondition("billingDatetime", EntityOperator.LESS_THAN, thruDate));
                 jrParameters.put("reportThruDate", thruDateStr);
             }
 
@@ -132,7 +137,7 @@ public class CommissionReports {
             fields.add("invoiceDate");
             fields.add("billingDatetime");
             List<Map<String, Object>> report = new FastList<Map<String, Object>>();
-            List<GenericValue> data = delegator.findByCondition("AgreementBillingAndInvoiceSum", new EntityConditionList(conditions, EntityOperator.AND), fields, orderBy);
+            List<GenericValue> data = delegator.findByCondition("AgreementBillingAndInvoiceSum", EntityCondition.makeCondition(conditions, EntityOperator.AND), fields, orderBy);
 
             // build the report lines
             for (GenericValue row : data) {
@@ -153,7 +158,7 @@ public class CommissionReports {
             JRMapCollectionDataSource datasource = new JRMapCollectionDataSource(report);
             request.setAttribute("jrDataSource", datasource);
         } catch (GeneralException e) {
-            return UtilMessage.createAndLogEventError(request, e, locale, module);
+            return UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
 
         request.setAttribute("jrParameters", jrParameters);

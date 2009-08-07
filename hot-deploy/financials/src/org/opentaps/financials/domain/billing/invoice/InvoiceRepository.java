@@ -15,7 +15,6 @@
  */
 package org.opentaps.financials.domain.billing.invoice;
 
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,8 +26,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.domain.DomainsDirectory;
@@ -96,7 +94,7 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
 
     /** {@inheritDoc} */
     public List<Invoice> getInvoicesByIds(Collection<String> invoiceIds) throws RepositoryException {
-        return findList(Invoice.class, new EntityExpr(Invoice.Fields.invoiceId.getName(), EntityOperator.IN, invoiceIds));
+        return findList(Invoice.class, EntityCondition.makeCondition(Invoice.Fields.invoiceId.getName(), EntityOperator.IN, invoiceIds));
     }
 
     /** {@inheritDoc} */
@@ -107,39 +105,35 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
     /** {@inheritDoc} */
     public List<InvoiceAndInvoiceItem> getRelatedInterestInvoiceItems(Invoice invoice) throws RepositoryException {
         return findList(InvoiceAndInvoiceItem.class, Arrays.asList(
-                    new EntityExpr(InvoiceAndInvoiceItem.Fields.itemParentInvoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()),
-                    new EntityExpr(InvoiceAndInvoiceItem.Fields.itemInvoiceItemTypeId.getName(), EntityOperator.EQUALS, "INV_INTRST_CHRG"),
-                    new EntityExpr(InvoiceAndInvoiceItem.Fields.statusId.getName(), EntityOperator.NOT_IN, UtilMisc.toList("INVOICE_CANCELLED", "INVOICE_WRITEOFF", "INVOICE_VOIDED"))));
+                    EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.itemParentInvoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()),
+                    EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.itemInvoiceItemTypeId.getName(), EntityOperator.EQUALS, "INV_INTRST_CHRG"),
+                    EntityCondition.makeCondition(InvoiceAndInvoiceItem.Fields.statusId.getName(), EntityOperator.NOT_IN, UtilMisc.toList("INVOICE_CANCELLED", "INVOICE_WRITEOFF", "INVOICE_VOIDED"))));
     }
 
     /** {@inheritDoc} */
     public List<PaymentAndApplication> getPaymentsApplied(Invoice invoice, Timestamp asOfDateTime) throws RepositoryException {
-        EntityConditionList dateCondition = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr(PaymentAndApplication.Fields.effectiveDate.getName(), EntityOperator.EQUALS, null),
-                new EntityExpr(PaymentAndApplication.Fields.effectiveDate.getName(), EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime)
-            ), EntityOperator.OR);
+        EntityCondition dateCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.effectiveDate.getName(), EntityOperator.EQUALS, null),
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.effectiveDate.getName(), EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime));
 
-        EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 dateCondition,
-                new EntityExpr(PaymentAndApplication.Fields.invoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()),
-                new EntityExpr(PaymentAndApplication.Fields.statusId.getName(), EntityOperator.IN, UtilMisc.toList("PMNT_RECEIVED", "PMNT_SENT", "PMNT_CONFIRMED"))
-            ), EntityOperator.AND);
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.invoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()),
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.statusId.getName(), EntityOperator.IN, UtilMisc.toList("PMNT_RECEIVED", "PMNT_SENT", "PMNT_CONFIRMED")));
 
         return findList(PaymentAndApplication.class, conditions, Arrays.asList(PaymentAndApplication.Fields.effectiveDate.getName()));
     }
 
     /** {@inheritDoc} */
     public List<PaymentAndApplication> getPendingPaymentsApplied(Invoice invoice, Timestamp asOfDateTime) throws RepositoryException {
-        EntityConditionList dateCondition = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr(PaymentAndApplication.Fields.effectiveDate.getName(), EntityOperator.EQUALS, null),
-                new EntityExpr(PaymentAndApplication.Fields.effectiveDate.getName(), EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime)
-            ), EntityOperator.OR);
+        EntityCondition dateCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.effectiveDate.getName(), EntityOperator.EQUALS, null),
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.effectiveDate.getName(), EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime));
 
-        EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 dateCondition,
-                new EntityExpr(PaymentAndApplication.Fields.invoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()),
-                new EntityExpr(PaymentAndApplication.Fields.statusId.getName(), EntityOperator.EQUALS, "PMNT_NOT_PAID")
-            ), EntityOperator.AND);
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.invoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()),
+                EntityCondition.makeCondition(PaymentAndApplication.Fields.statusId.getName(), EntityOperator.EQUALS, "PMNT_NOT_PAID"));
 
         return findList(PaymentAndApplication.class, conditions, Arrays.asList(PaymentAndApplication.Fields.effectiveDate.getName()));
     }
@@ -151,15 +145,13 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
 
     /** {@inheritDoc} */
     public List<InvoiceAdjustment> getAdjustmentsApplied(Invoice invoice, Timestamp asOfDateTime) throws RepositoryException {
-        EntityConditionList dateCondition = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr(InvoiceAdjustment.Fields.effectiveDate.getName(), EntityOperator.EQUALS, null),
-                new EntityExpr(InvoiceAdjustment.Fields.effectiveDate.getName(), EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime)
-            ), EntityOperator.OR);
+        EntityCondition dateCondition = EntityCondition.makeCondition(EntityOperator.OR,
+                EntityCondition.makeCondition(InvoiceAdjustment.Fields.effectiveDate.getName(), EntityOperator.EQUALS, null),
+                EntityCondition.makeCondition(InvoiceAdjustment.Fields.effectiveDate.getName(), EntityOperator.LESS_THAN_EQUAL_TO, asOfDateTime));
 
-        EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 dateCondition,
-                new EntityExpr(InvoiceAdjustment.Fields.invoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId())
-            ), EntityOperator.AND);
+                EntityCondition.makeCondition(InvoiceAdjustment.Fields.invoiceId.getName(), EntityOperator.EQUALS, invoice.getInvoiceId()));
 
         return findList(InvoiceAdjustment.class, conditions, Arrays.asList(InvoiceAdjustment.Fields.effectiveDate.getName()));
     }
@@ -173,21 +165,18 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
             typeIds = Entity.getDistinctFieldValues(String.class, agreements, AgreementInvoiceItemType.Fields.invoiceItemTypeIdFrom);
         } else {
             // for other invoice types, get invoice item types which have a GL account configured for them, either in InvoiceItemType.defaultGlAccountId or InvoiceItemTypeGlAccount entity.
-            EntityConditionList invoiceItemTypeCondition = new EntityConditionList(UtilMisc.toList(
-                new EntityConditionList(UtilMisc.toList(
-                        new EntityExpr(InvoiceItemTypeAndOrgGlAccount.Fields.defaultGlAccountId.name(), EntityOperator.NOT_EQUAL, null),
-                        new EntityConditionList(UtilMisc.toList(
-                                new EntityExpr(InvoiceItemTypeAndOrgGlAccount.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId),
-                                new EntityExpr(InvoiceItemTypeAndOrgGlAccount.Fields.orgGlAccountId.name(), EntityOperator.NOT_EQUAL, null)
-                                ),
-                          EntityOperator.AND)),
-                   EntityOperator.OR),
-                new EntityExpr(InvoiceItemTypeAndOrgGlAccount.Fields.invoiceTypeId.name(), EntityOperator.EQUALS, invoiceTypeId)
-                ), EntityOperator.AND);
+            EntityCondition invoiceItemTypeCondition = EntityCondition.makeCondition(EntityOperator.AND,
+                   EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.defaultGlAccountId.name(), EntityOperator.NOT_EQUAL, null),
+                        EntityCondition.makeCondition(EntityOperator.OR,
+                                EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId),
+                                EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.orgGlAccountId.name(), EntityOperator.NOT_EQUAL, null)
+                                )),
+                EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.invoiceTypeId.name(), EntityOperator.EQUALS, invoiceTypeId));
             List<InvoiceItemTypeAndOrgGlAccount> itemTypes = findListCache(InvoiceItemTypeAndOrgGlAccount.class, invoiceItemTypeCondition);
             typeIds = Entity.getDistinctFieldValues(String.class, itemTypes, InvoiceItemTypeAndOrgGlAccount.Fields.invoiceItemTypeId);
         }
-        return findListCache(InvoiceItemType.class, new EntityExpr(InvoiceItemType.Fields.invoiceItemTypeId.name(), EntityOperator.IN, typeIds));
+        return findListCache(InvoiceItemType.class, EntityCondition.makeCondition(InvoiceItemType.Fields.invoiceItemTypeId.name(), EntityOperator.IN, typeIds));
     }
 
     /** {@inheritDoc} */

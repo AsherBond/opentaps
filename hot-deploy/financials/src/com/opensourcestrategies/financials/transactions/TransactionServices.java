@@ -31,7 +31,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
@@ -319,11 +319,10 @@ public final class TransactionServices {
 
         List transactions = null;
         try {
-            List conditions = UtilMisc.toList(
-                    new EntityExpr("scheduledPostingDate", EntityOperator.NOT_EQUAL, null),
-                    new EntityExpr("scheduledPostingDate", EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.nowTimestamp()),
-                    new EntityExpr("isPosted", EntityOperator.EQUALS, "N")
-                    );
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                    EntityCondition.makeCondition("scheduledPostingDate", EntityOperator.NOT_EQUAL, null),
+                    EntityCondition.makeCondition("scheduledPostingDate", EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.nowTimestamp()),
+                    EntityCondition.makeCondition("isPosted", EntityOperator.EQUALS, "N"));
             transactions = delegator.findByAnd("AcctgTrans", conditions);
         } catch (GenericEntityException e) {
             Debug.logError(e.getMessage(), MODULE);

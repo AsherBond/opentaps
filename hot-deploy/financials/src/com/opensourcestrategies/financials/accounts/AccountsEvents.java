@@ -101,7 +101,9 @@ public class AccountsEvents {
         // statementPeriod is the interval in days for aging report: 30 means that the report will be 30, 60, 90 days
         int statementPeriod;
         String statementPeriodStr = UtilCommon.getParameter(request, "statementPeriod");
-        if (statementPeriodStr == null) statementPeriodStr = "30";
+        if (statementPeriodStr == null) {
+            statementPeriodStr = "30";
+        }
         try {
             statementPeriod = Integer.parseInt(statementPeriodStr);
         } catch (NumberFormatException e) {

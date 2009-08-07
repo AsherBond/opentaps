@@ -15,14 +15,11 @@
  */
 package org.opentaps.financials.domain.billing.lockbox;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.domain.base.entities.EftAccount;
@@ -73,7 +70,7 @@ public class LockboxRepository extends Repository implements LockboxRepositoryIn
 
     /** {@inheritDoc} */
     public List<LockboxBatch> getPendingBatches() throws RepositoryException {
-        return findList(LockboxBatch.class, new EntityExpr(LockboxBatch.Fields.outstandingAmount.getName(), EntityOperator.GREATER_THAN, 0));
+        return findList(LockboxBatch.class, EntityCondition.makeCondition(LockboxBatch.Fields.outstandingAmount.getName(), EntityOperator.GREATER_THAN, 0));
     }
 
     /** {@inheritDoc} */
@@ -102,10 +99,10 @@ public class LockboxRepository extends Repository implements LockboxRepositoryIn
 
     /** {@inheritDoc} */
     public PaymentMethodAndEftAccount getPaymentMethod(String accountNumber, String routingNumber) throws RepositoryException {
-        List<EntityCondition> conditions = new ArrayList<EntityCondition>();
-        conditions.add(new EntityExpr(PaymentMethodAndEftAccount.Fields.routingNumber.name(), EntityOperator.EQUALS, routingNumber));
-        conditions.add(EntityUtil.getFilterByDateExpr());
-        List<PaymentMethodAndEftAccount> results = findList(PaymentMethodAndEftAccount.class, new EntityConditionList(conditions, EntityOperator.AND));
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                                       EntityCondition.makeCondition(PaymentMethodAndEftAccount.Fields.routingNumber.name(), EntityOperator.EQUALS, routingNumber),
+                                       EntityUtil.getFilterByDateExpr());
+        List<PaymentMethodAndEftAccount> results = findList(PaymentMethodAndEftAccount.class, conditions);
         if (results.size() > 1) {
             Debug.logWarning("Found more than one active PaymentMethodAndEftAccount for given account number and routing number [" + routingNumber + "]", MODULE);
         }

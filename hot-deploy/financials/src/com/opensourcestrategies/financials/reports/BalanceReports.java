@@ -44,7 +44,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
@@ -165,7 +165,7 @@ public final class BalanceReports {
             Map results = ServiceUtil.returnSuccess();
             results.put("reportData", reportData);
             // add the tag descriptions so the report can use them for column labels
-            List<EnumerationType> enumerationTypes = organizationRepository.findList(EnumerationType.class, new EntityExpr(EnumerationType.Fields.enumTypeId.name(), EntityOperator.IN, accountingTags.values()));
+            List<EnumerationType> enumerationTypes = organizationRepository.findList(EnumerationType.class, EntityCondition.makeCondition(EnumerationType.Fields.enumTypeId.name(), EntityOperator.IN, accountingTags.values()));
             // group by id for easier access
             Map<String, List<EnumerationType>> grouped = Entity.groupByFieldValues(String.class, enumerationTypes, EnumerationType.Fields.enumTypeId);
             for (int i = 1; i <= UtilAccountingTags.TAG_COUNT; i++) {
@@ -441,11 +441,11 @@ public final class BalanceReports {
     private static void describeTagIds(List<Map<String, Object>> reportData, OrganizationRepositoryInterface repository) throws RepositoryException {
         // get the list of tags
         List<EnumerationType> enumerationTypes = repository.findList(EnumerationType.class, repository.map(EnumerationType.Fields.parentTypeId, "ACCOUNTING_TAG"), Arrays.asList(EnumerationType.Fields.enumTypeId.asc()));
-        List<Enumeration> enumerations = repository.findList(Enumeration.class, new EntityExpr(Enumeration.Fields.enumTypeId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(enumerationTypes, EnumerationType.Fields.enumTypeId)), Arrays.asList(Enumeration.Fields.sequenceId.asc()));
+        List<Enumeration> enumerations = repository.findList(Enumeration.class, EntityCondition.makeCondition(Enumeration.Fields.enumTypeId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(enumerationTypes, EnumerationType.Fields.enumTypeId)), Arrays.asList(Enumeration.Fields.sequenceId.asc()));
         // group by id for easier access
         Map<String, List<Enumeration>> grouped = Entity.groupByFieldValues(String.class, enumerations, Enumeration.Fields.enumId);
         // find parent enumerations of the primary tag
-        List<Enumeration> parents = repository.findList(Enumeration.class, new EntityExpr(Enumeration.Fields.enumId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(enumerations, Enumeration.Fields.parentEnumId)));
+        List<Enumeration> parents = repository.findList(Enumeration.class, EntityCondition.makeCondition(Enumeration.Fields.enumId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(enumerations, Enumeration.Fields.parentEnumId)));
         // group those parents by id for easier lookup
         Map<String, List<Enumeration>> groupedParents = Entity.groupByFieldValues(String.class, parents, Enumeration.Fields.enumId);
 

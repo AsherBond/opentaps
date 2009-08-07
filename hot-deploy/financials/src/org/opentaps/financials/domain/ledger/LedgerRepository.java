@@ -28,8 +28,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.domain.base.entities.AcctgTagPostingCheck;
@@ -294,21 +293,20 @@ public class LedgerRepository extends Repository implements LedgerRepositoryInte
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public List<AccountingTransaction> getPostedTransactions(String organizationPartyId, String glFiscalTypeId, Timestamp fromDate, Timestamp thruDate) throws RepositoryException {
-        List<EntityExpr> conditions = UtilMisc.toList(
-                new EntityExpr(AcctgTransAndEntries.Fields.isPosted.getName(), EntityOperator.EQUALS, "Y"),
-                new EntityExpr(AcctgTransAndEntries.Fields.organizationPartyId.getName(), EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr(AcctgTransAndEntries.Fields.glFiscalTypeId.getName(), EntityOperator.EQUALS, glFiscalTypeId),
-                new EntityExpr(AcctgTransAndEntries.Fields.transactionDate.getName(), EntityOperator.LESS_THAN_EQUAL_TO, thruDate)
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
+                EntityCondition.makeCondition(AcctgTransAndEntries.Fields.isPosted.getName(), EntityOperator.EQUALS, "Y"),
+                EntityCondition.makeCondition(AcctgTransAndEntries.Fields.organizationPartyId.getName(), EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition(AcctgTransAndEntries.Fields.glFiscalTypeId.getName(), EntityOperator.EQUALS, glFiscalTypeId),
+                EntityCondition.makeCondition(AcctgTransAndEntries.Fields.transactionDate.getName(), EntityOperator.LESS_THAN_EQUAL_TO, thruDate)
         );
 
         // add start time if any is specified
         if (fromDate != null) {
-            conditions.add(new EntityExpr(AcctgTransAndEntries.Fields.transactionDate.getName(), EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+            conditions.add(EntityCondition.makeCondition(AcctgTransAndEntries.Fields.transactionDate.getName(), EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
         }
 
-        List<AcctgTransAndEntries> transAndEntries = findList(AcctgTransAndEntries.class, new EntityConditionList(conditions, EntityOperator.AND), Arrays.asList("acctgTransId"));
+        List<AcctgTransAndEntries> transAndEntries = findList(AcctgTransAndEntries.class, EntityCondition.makeCondition(conditions, EntityOperator.AND), Arrays.asList("acctgTransId"));
 
         if (UtilValidate.isEmpty(transAndEntries)) {
             return FastList.newInstance();

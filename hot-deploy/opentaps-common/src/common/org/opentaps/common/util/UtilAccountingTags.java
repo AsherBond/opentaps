@@ -31,7 +31,6 @@ import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.common.domain.organization.OrganizationRepository;
 import org.opentaps.domain.base.entities.AcctgTagEnumType;
@@ -151,7 +150,7 @@ public final class UtilAccountingTags {
      * @throws RepositoryException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<EntityExpr> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Map context) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Map context) throws RepositoryException {
         return buildTagConditions(organizationPartyId, accountingTagUsageTypeId, delegator, context, TAG_PARAM_PREFIX);
     }
 
@@ -166,9 +165,9 @@ public final class UtilAccountingTags {
      * @throws RepositoryException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static List<EntityExpr> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Map context, String prefix) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, Map context, String prefix) throws RepositoryException {
         Map<Integer, String> tagTypes = getAccountingTagTypesForOrganization(organizationPartyId, accountingTagUsageTypeId, delegator);
-        List<EntityExpr> conditions = new ArrayList<EntityExpr>();
+        List<EntityCondition> conditions = new ArrayList<EntityCondition>();
 
         // get the values from the request
         for (Integer index : tagTypes.keySet()) {
@@ -203,7 +202,7 @@ public final class UtilAccountingTags {
      * @return the list of <code>EntityExpr</code> from the accounting tag given in the request
      * @throws RepositoryException if an error occurs
      */
-    public static List<EntityExpr> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, HttpServletRequest request) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, HttpServletRequest request) throws RepositoryException {
         return buildTagConditions(organizationPartyId, accountingTagUsageTypeId, delegator, request, TAG_PARAM_PREFIX);
     }
 
@@ -217,9 +216,9 @@ public final class UtilAccountingTags {
      * @return the list of <code>EntityExpr</code> from the accounting tag given in the request
      * @throws RepositoryException if an error occurs
      */
-    public static List<EntityExpr> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, HttpServletRequest request, String prefix) throws RepositoryException {
+    public static List<EntityCondition> buildTagConditions(String organizationPartyId, String accountingTagUsageTypeId, GenericDelegator delegator, HttpServletRequest request, String prefix) throws RepositoryException {
         Map<Integer, String> tagTypes = getAccountingTagTypesForOrganization(organizationPartyId, accountingTagUsageTypeId, delegator);
-        List<EntityExpr> conditions = new ArrayList<EntityExpr>();
+        List<EntityCondition> conditions = new ArrayList<EntityCondition>();
 
         // get the values from the request
         for (Integer index : tagTypes.keySet()) {

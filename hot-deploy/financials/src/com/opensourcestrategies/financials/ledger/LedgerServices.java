@@ -48,8 +48,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
@@ -2935,13 +2933,13 @@ public final class LedgerServices {
             // is there a previously closed time period?  If so, then find all of its GlAccountHistory and add their ending balances in
             if (lastClosedTimePeriodId != null) {
                 // find the previous period GL account histories.  We are ONLY carrying forward ASSET, LIABILITY, EQUITY accounts
-                EntityCondition previousPeriodConditions = new EntityConditionList(UtilMisc.toList(new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                          new EntityConditionList(UtilMisc.toList(
+                EntityCondition previousPeriodConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                          EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                          EntityCondition.makeCondition(EntityOperator.OR,
                                   UtilFinancial.getAssetExpr(delegator),
                                   UtilFinancial.getLiabilityExpr(delegator),
                                   UtilFinancial.getEquityExpr(delegator)),
-                          EntityOperator.OR),
-                   new EntityExpr("customTimePeriodId", EntityOperator.EQUALS, lastClosedTimePeriodId)), EntityOperator.AND);
+                          EntityCondition.makeCondition("customTimePeriodId", EntityOperator.EQUALS, lastClosedTimePeriodId));
 
                 List previousGlAccountHistories = delegator.findByCondition("GlAccountAndHistory", previousPeriodConditions,
                     UtilMisc.toList("organizationPartyId", "customTimePeriodId", "glAccountId", "postedDebits", "postedCredits", "endingBalance"), UtilMisc.toList("glAccountId"));
@@ -3045,14 +3043,14 @@ public final class LedgerServices {
 
             // find the REVENUE, EXPENSE, and INCOME gl accounts for the organization
             // IMPORTANT: also make sure the PROFIT_LOSS_ACCOUNT is included, even if it is classified differently
-            EntityCondition glAccountConditions = new EntityConditionList(UtilMisc.toList(new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                    new EntityConditionList(UtilMisc.toList(UtilFinancial.getGlAccountClassExpr("REVENUE", delegator),
+            EntityCondition glAccountConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                    EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                    EntityCondition.makeCondition(EntityOperator.OR,
+                        UtilFinancial.getGlAccountClassExpr("REVENUE", delegator),
                         UtilFinancial.getGlAccountClassExpr("EXPENSE", delegator),
                         UtilFinancial.getGlAccountClassExpr("INCOME", delegator),
-                        new EntityExpr("glAccountId", EntityOperator.EQUALS, UtilAccounting.getProductOrgGlAccountId(null, "PROFIT_LOSS_ACCOUNT", organizationPartyId, delegator))),
-                    EntityOperator.OR),
-                    new EntityExpr("postedBalance", EntityOperator.NOT_EQUAL, new Double(0.0))),
-                EntityOperator.AND);
+                        EntityCondition.makeCondition("glAccountId", EntityOperator.EQUALS, UtilAccounting.getProductOrgGlAccountId(null, "PROFIT_LOSS_ACCOUNT", organizationPartyId, delegator))),
+                    EntityCondition.makeCondition("postedBalance", EntityOperator.NOT_EQUAL, BigDecimal.ZERO));
 
             List glAccounts = delegator.findByCondition("GlAccountOrganizationAndClass", glAccountConditions,
                     UtilMisc.toList("organizationPartyId", "glAccountId", "postedBalance"), UtilMisc.toList("glAccountId"));
@@ -3567,8 +3565,8 @@ public final class LedgerServices {
 
             // get the sum of the WIP_INVENTORY by GL account -- there should only be one
             List<GenericValue> acctgTransAndEntries = delegator.findByAnd("AcctgTransAndEntries", UtilMisc.toList(
-                    new EntityExpr("workEffortId", EntityOperator.IN, workEffortIds),
-                    new EntityExpr("glAccountId", EntityOperator.EQUALS, glAccountId)));
+                    EntityCondition.makeCondition("workEffortId", EntityOperator.IN, workEffortIds),
+                    EntityCondition.makeCondition("glAccountId", EntityOperator.EQUALS, glAccountId)));
             Map<GenericValue, BigDecimal> glAccountSums = new HashMap<GenericValue, BigDecimal>();
             UtilFinancial.sumBalancesByAccount(glAccountSums, acctgTransAndEntries);
 

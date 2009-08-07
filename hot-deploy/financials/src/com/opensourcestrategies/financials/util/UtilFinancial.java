@@ -17,23 +17,6 @@
 package com.opensourcestrategies.financials.util;
 
 
-import javolution.util.FastList;
-import javolution.util.FastMap;
-import org.ofbiz.accounting.util.UtilAccounting;
-import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
-import org.ofbiz.entity.GenericEntityException;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.LocalDispatcher;
-import org.ofbiz.service.ModelService;
-import org.opentaps.common.util.UtilAccountingTags;
-import org.opentaps.common.util.UtilCommon;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
@@ -44,6 +27,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javolution.util.FastList;
+import javolution.util.FastMap;
+import org.ofbiz.accounting.util.UtilAccounting;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ModelService;
+import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.common.util.UtilCommon;
+
 /**
  * UtilFinancial - Utilities for financials.
  *
@@ -51,7 +51,6 @@ import java.util.Set;
  * @version    $Rev: 81 $
  * @since      2.2
  */
-
 public final class UtilFinancial {
 
     private UtilFinancial() { }
@@ -185,7 +184,7 @@ public final class UtilFinancial {
         GenericValue glAccountClass = delegator.findByPrimaryKeyCache("GlAccountClass", UtilMisc.toMap("glAccountClassId", rootGlAccountClassId));
         if (glAccountClass == null) {
             Debug.logWarning("Cannot find GlAccountClass [" + rootGlAccountClassId + "]", MODULE);
-            return new EntityExpr(new Integer(1), EntityOperator.EQUALS, new Integer(1));
+            return EntityCondition.makeCondition(new Integer(1), EntityOperator.EQUALS, new Integer(1));
         }
 
         // recursively build the list of ids that are of this class
@@ -193,7 +192,7 @@ public final class UtilFinancial {
         recurseGetGlAccountClassIds(glAccountClass, ids);
 
         // make a WHERE glAccountId IN (list of ids) expression
-        return new EntityExpr("glAccountClassId", EntityOperator.IN, ids);
+        return EntityCondition.makeCondition("glAccountClassId", EntityOperator.IN, ids);
     }
 
     /**
@@ -202,7 +201,6 @@ public final class UtilFinancial {
      * @param ids a List to populate with the children IDs
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static void recurseGetGlAccountClassIds(GenericValue glAccountClass, List<String> ids) throws GenericEntityException {
         ids.add(glAccountClass.getString("glAccountClassId"));
         List<GenericValue> children = glAccountClass.getRelatedCache("ChildGlAccountClass");
@@ -313,13 +311,12 @@ public final class UtilFinancial {
      * @return a <code>List</code> of <code>PaymentMethodType</code> entities
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getSimpleCustomerPaymentMethodTypes(GenericDelegator delegator) throws GenericEntityException {
         List<String> excludedPaymentMethodTypes = UtilMisc.toList("EXT_BILLACT", "GIFT_CARD", "GIFT_CERTIFICATE", "EXT_WORLDPAY", "FIN_ACCOUNT", "COMPANY_ACCOUNT");
         excludedPaymentMethodTypes.add("EXT_BILL_3RDPTY"); // internal
         excludedPaymentMethodTypes.add("EXT_OFFLINE");     // internal and for orders only, not for payments
 
-        EntityExpr condition = new EntityExpr("paymentMethodTypeId", EntityOperator.NOT_IN, excludedPaymentMethodTypes);
+        EntityExpr condition = EntityCondition.makeCondition("paymentMethodTypeId", EntityOperator.NOT_IN, excludedPaymentMethodTypes);
         return delegator.findByConditionCache("PaymentMethodType", condition, null, null);
     }
 
@@ -406,12 +403,11 @@ public final class UtilFinancial {
      * @return the paymentMethodId of the first <code>PaymentMethod</code> found, or null if none is found
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static String getBankSettlementPaymentMethodId(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
         String paymentMethodId = null;
         List<GenericValue> paymentMethods = delegator.findByAnd("PaymentMethod", UtilMisc.toList(
-                        new EntityExpr("glAccountId", EntityOperator.EQUALS, getOrgGlAccountId(organizationPartyId, "BANK_STLMNT_ACCOUNT", delegator)),
-                        new EntityExpr("partyId", EntityOperator.EQUALS, organizationPartyId),
+                        EntityCondition.makeCondition("glAccountId", EntityOperator.EQUALS, getOrgGlAccountId(organizationPartyId, "BANK_STLMNT_ACCOUNT", delegator)),
+                        EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, organizationPartyId),
                         EntityUtil.getFilterByDateExpr()));
         if (UtilValidate.isNotEmpty(paymentMethods)) {
             paymentMethodId = paymentMethods.get(0).getString("paymentMethodId"); // should be safe - no PaymentMethod should be without a paymentMethodId
@@ -492,17 +488,16 @@ public final class UtilFinancial {
      * @return a <code>GenericValue</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static GenericValue getBillingAddress(String partyId, GenericDelegator delegator) throws GenericEntityException {
-        List conditions = UtilMisc.toList(
-                new EntityExpr("partyId", EntityOperator.EQUALS, partyId),
-                new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, "POSTAL_ADDRESS"),
-                new EntityExpr("contactMechPurposeTypeId", EntityOperator.IN, UtilMisc.toList("BILLING_LOCATION", "GENERAL_LOCATION")),
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
+                EntityCondition.makeCondition("contactMechTypeId", EntityOperator.EQUALS, "POSTAL_ADDRESS"),
+                EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.IN, UtilMisc.toList("BILLING_LOCATION", "GENERAL_LOCATION")),
                 EntityUtil.getFilterByDateExpr(),
                 EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate")
                 );
-        List orderBy = UtilMisc.toList("contactMechPurposeTypeId"); // this will cause BILLING_LOCATION to be ordered before GENERAL_LOCATION
-        List partyContactPurposes = delegator.findByCondition("PartyContactDetailByPurpose", new EntityConditionList(conditions, EntityOperator.AND), null, orderBy);
+        List<String> orderBy = UtilMisc.toList("contactMechPurposeTypeId"); // this will cause BILLING_LOCATION to be ordered before GENERAL_LOCATION
+        List<GenericValue> partyContactPurposes = delegator.findByCondition("PartyContactDetailByPurpose", conditions, null, orderBy);
         return EntityUtil.getFirst(partyContactPurposes);
     }
 
@@ -632,12 +627,10 @@ public final class UtilFinancial {
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static boolean isGlAccountOrganizationInBalance(String organizationPartyId, GenericDelegator delegator, int decimals, RoundingMode rounding) throws GenericEntityException {
-         EntityConditionList conditions = new EntityConditionList(UtilMisc.toList(
-                new EntityExpr("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("postedBalance", EntityOperator.NOT_EQUAL, null)),
-            EntityOperator.AND);
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("postedBalance", EntityOperator.NOT_EQUAL, null));
         List<GenericValue> trialBalances = delegator.findByCondition("GlAccountOrganization", conditions, UtilMisc.toList("glAccountId", "postedBalance"), UtilMisc.toList("glAccountId"));
         BigDecimal debitTotal = BigDecimal.ZERO;
         BigDecimal creditTotal = BigDecimal.ZERO;
@@ -675,7 +668,6 @@ public final class UtilFinancial {
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static boolean isGlAccountHistoryInBalance(String organizationPartyId, String customTimePeriodId, GenericDelegator delegator, int decimals, RoundingMode rounding) throws GenericEntityException {
         GenericValue timePeriod = delegator.findByPrimaryKeyCache("CustomTimePeriod", UtilMisc.toMap("customTimePeriodId", customTimePeriodId));
         List<GenericValue> glAccountHistories = delegator.findByAnd("GlAccountHistory", UtilMisc.toMap("organizationPartyId", organizationPartyId, "customTimePeriodId", customTimePeriodId));
@@ -722,7 +714,6 @@ public final class UtilFinancial {
      * @return a <code>boolean</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static boolean areAllTrialBalancesEqual(String organizationPartyId, GenericDelegator delegator, int decimals, RoundingMode rounding) throws GenericEntityException {
         // first check GlAccountOrganization.  If it's not in balance, then return false
         if (!isGlAccountOrganizationInBalance(organizationPartyId, delegator, decimals, rounding)) {
@@ -748,7 +739,6 @@ public final class UtilFinancial {
      * @return a <code>Timestamp</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static Timestamp getTransactionDateForLastPostedTransaction(String organizationPartyId, GenericDelegator delegator) throws GenericEntityException {
         List<GenericValue> transactions = delegator.findByAnd("AcctgTransAndEntriesPostedTransDate", UtilMisc.toMap("organizationPartyId", organizationPartyId, "isPosted", "Y"));
         if (UtilValidate.isEmpty(transactions)) {

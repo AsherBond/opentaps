@@ -20,20 +20,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import javolution.util.FastList;
-
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.GenericTransactionException;
 import org.ofbiz.entity.transaction.TransactionUtil;
@@ -158,7 +157,7 @@ public final class InvoiceEvents {
             request.setAttribute("oldRefNum", referenceNumber);
 
             // match the reference number
-            List conditions = UtilMisc.toList(new EntityExpr("referenceNumber", true, EntityOperator.LIKE, referenceNumber, true));
+            List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition(EntityFunction.UPPER("referenceNumber"), EntityOperator.LIKE, EntityFunction.UPPER(referenceNumber)));
 
             String partyIdFrom = null;
             String partyId = null;
@@ -176,15 +175,15 @@ public final class InvoiceEvents {
                 partyIdFrom = invoice.getString("partyIdFrom");
                 partyId = invoice.getString("partyId");
                 // don't match self
-                conditions.add(new EntityExpr("invoiceId", EntityOperator.NOT_EQUAL, invoiceId));
+                conditions.add(EntityCondition.makeCondition("invoiceId", EntityOperator.NOT_EQUAL, invoiceId));
             } else {
                 partyIdFrom = UtilCommon.getParameter(request, "partyIdFrom");
                 partyId = UtilCommon.getParameter(request, "partyId");
             }
 
             // party matching conditions
-            conditions.add(new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyIdFrom));
-            conditions.add(new EntityExpr("partyId", EntityOperator.EQUALS, partyId));
+            conditions.add(EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, partyIdFrom));
+            conditions.add(EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId));
 
             List<GenericValue> matches = delegator.findByAnd("Invoice", conditions, UtilMisc.toList("invoiceDate DESC"));
             if (matches.size() > 0) {
@@ -200,5 +199,4 @@ public final class InvoiceEvents {
         return "success";
     }
 
- 
 }

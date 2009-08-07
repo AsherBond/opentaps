@@ -1,11 +1,24 @@
+/*
+ * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
 package com.opensourcestrategies.financials.accounts;
 
 import java.math.BigDecimal;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import javolution.util.FastList;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
@@ -15,26 +28,9 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.order.order.OrderReadHelper;
 
-/*
- * Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the Honest Public License.
- * 
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * Honest Public License for more details.
- * 
- * You should have received a copy of the Honest Public License
- * along with this program; if not, write to Funambol,
- * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
- */
 
 //A portion of this file may have come from the Apache OFBIZ project
 
@@ -59,10 +55,15 @@ import org.ofbiz.order.order.OrderReadHelper;
 
 /* This file has been modified by Open Source Strategies, Inc. */
 
-public class BillingAccountWorker {
+/**
+ * A worker class with some utility methods to deal with Billing Accounts.
+ */
+public final class BillingAccountWorker {
 
-    public static final String module = BillingAccountWorker.class.getName();
-    private static BigDecimal ZERO = new BigDecimal("0");
+    private BillingAccountWorker() { }
+
+    private static final String MODULE = BillingAccountWorker.class.getName();
+    private static BigDecimal ZERO = BigDecimal.ZERO;
     private static int decimals = -1;
     private static int rounding = -1;
     static {
@@ -70,23 +71,33 @@ public class BillingAccountWorker {
         rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
 
         // set zero to the proper scale
-        if (decimals != -1) ZERO = ZERO.setScale(decimals);
+        if (decimals != -1) {
+            ZERO = ZERO.setScale(decimals);
+        }
     }
 
     /**
      * Calculates the "available" balance of a billing account, which is the
      * net balance minus amount of pending (not canceled, rejected, or received) order payments.
      * When looking at using a billing account for a new order, you should use this method.
-     * @param billingAccountId
-     * @param delegator
-     * @return
-     * @throws GenericEntityException
+     * @param billingAccountId the billing account ID
+     * @param delegator a <code>GenericDelegator</code> value
+     * @return the billing account balance
+     * @throws GenericEntityException if an error occurs
      */
     public static BigDecimal getBillingAccountBalance(GenericDelegator delegator, String billingAccountId) throws GenericEntityException {
         GenericValue billingAccount = delegator.findByPrimaryKey("BillingAccount", UtilMisc.toMap("billingAccountId", billingAccountId));
         return getBillingAccountBalance(billingAccount);
     }
 
+    /**
+     * Calculates the "available" balance of a billing account, which is the
+     * net balance minus amount of pending (not canceled, rejected, or received) order payments.
+     * When looking at using a billing account for a new order, you should use this method.
+     * @param billingAccount a <code>GenericValue</code>
+     * @return the billing account balance
+     * @throws GenericEntityException if an error occurs
+     */
     public static BigDecimal getBillingAccountBalance(GenericValue billingAccount) throws GenericEntityException {
 
         GenericDelegator delegator = billingAccount.getDelegator();
@@ -96,12 +107,12 @@ public class BillingAccountWorker {
         BigDecimal balance = org.ofbiz.accounting.payment.BillingAccountWorker.getBillingAccountNetBalance(delegator, billingAccountId);
 
         // now the amounts of all the pending orders (not canceled, rejected or completed)
-        List orderHeaders = org.ofbiz.accounting.payment.BillingAccountWorker.getBillingAccountOpenOrders(delegator, billingAccountId);
+        List<GenericValue> orderHeaders = org.ofbiz.accounting.payment.BillingAccountWorker.getBillingAccountOpenOrders(delegator, billingAccountId);
 
         if (orderHeaders != null) {
-            Iterator ohi = orderHeaders.iterator();
+            Iterator<GenericValue> ohi = orderHeaders.iterator();
             while (ohi.hasNext()) {
-                GenericValue orderHeader = (GenericValue) ohi.next();
+                GenericValue orderHeader = ohi.next();
                 OrderReadHelper orh = new OrderReadHelper(orderHeader);
                 balance = balance.add(orh.getOrderGrandTotal());
             }
@@ -120,13 +131,12 @@ public class BillingAccountWorker {
 
     }
 
-
     /**
      * Returns the amount which could be charged to a billing account, which is defined as the accountLimit minus account balance and minus the balance of outstanding orders
-     * When trying to figure out how much of a billing account can be used to pay for an outstanding order, use this method
-     * @param billingAccount
-     * @return
-     * @throws GenericEntityException
+     * When trying to figure out how much of a billing account can be used to pay for an outstanding order, use this method.
+     * @param billingAccount a <code>GenericValue</code>
+     * @return the available balance
+     * @throws GenericEntityException if an error occurs
      */
     public static BigDecimal getBillingAccountAvailableBalance(GenericValue billingAccount) throws GenericEntityException {
         if ((billingAccount != null) && (billingAccount.get("accountLimit") != null)) {
@@ -134,11 +144,19 @@ public class BillingAccountWorker {
             BigDecimal availableBalance = accountLimit.subtract(getBillingAccountBalance(billingAccount)).setScale(decimals, rounding);
             return availableBalance;
         } else {
-            Debug.logWarning("Available balance requested for null billing account, returning zero", module);
+            Debug.logWarning("Available balance requested for null billing account, returning zero", MODULE);
             return ZERO;
         }
     }
 
+    /**
+     * Returns the amount which could be charged to a billing account, which is defined as the accountLimit minus account balance and minus the balance of outstanding orders
+     * When trying to figure out how much of a billing account can be used to pay for an outstanding order, use this method.
+     * @param billingAccountId the billing account ID
+     * @param delegator a <code>GenericDelegator</code> value
+     * @return the available balance
+     * @throws GenericEntityException if an error occurs
+     */
     public static BigDecimal getBillingAccountAvailableBalance(GenericDelegator delegator, String billingAccountId) throws GenericEntityException {
         GenericValue billingAccount = delegator.findByPrimaryKey("BillingAccount", UtilMisc.toMap("billingAccountId", billingAccountId));
         return getBillingAccountAvailableBalance(billingAccount);
@@ -147,40 +165,42 @@ public class BillingAccountWorker {
     /**
      * Returns the original amount of a billing account, which is defined as the sum of non invoiced payment applications for
      * given billing account.
-     * 
-     * @param billingAccount
+     *
+     * @param billingAccount a <code>GenericValue</code>
      * @return Billing account original balance
-     * @throws GenericEntityException
+     * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static BigDecimal getBillingAccountOriginalBalance(GenericValue billingAccount) throws GenericEntityException {
         if (billingAccount != null) {
             return getBillingAccountOriginalBalance(billingAccount.getDelegator(), billingAccount.getString("billingAccountId"));
         } else {
-            Debug.logWarning("Original balance requested for null billing account, returning zero", module);
+            Debug.logWarning("Original balance requested for null billing account, returning zero", MODULE);
             return ZERO;
         }
     }
 
     /**
+     * Returns the original amount of a billing account, which is defined as the sum of non invoiced payment applications for
+     * given billing account.
+     *
      * @see com.opensourcestrategies.financials.accounts.BillingAccountWorker#getBillingAccountOriginalBalance(GenericValue)
      * @param delegator GenericDelegator
      * @param billingAccountId Billing Account unique identifier.
      * @return Billing account original balance.
-     * @throws GenericEntityException
+     * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static BigDecimal getBillingAccountOriginalBalance(GenericDelegator delegator, String billingAccountId) throws GenericEntityException {
-        if (delegator == null || UtilValidate.isEmpty(billingAccountId))
+        if (delegator == null || UtilValidate.isEmpty(billingAccountId)) {
             throw new IllegalArgumentException("Neither delegator nor billingAccountId can be NULL.");
+        }
 
-        List<EntityCondition> conditionList = FastList.newInstance();
-        conditionList.add(new EntityExpr("billingAccountId", EntityOperator.EQUALS, billingAccountId));
-        conditionList.add(new EntityExpr("invoiceId", EntityOperator.EQUALS, null));
+        EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
+                                          EntityCondition.makeCondition("billingAccountId", EntityOperator.EQUALS, billingAccountId),
+                                          EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, null));
 
         Set<String> fieldsToSelect = UtilMisc.toSet("amount");
 
-        List<GenericValue> paymentAppls = delegator.findByCondition("PaymentAndApplication", new EntityConditionList(conditionList, EntityOperator.AND), fieldsToSelect, null);
+        List<GenericValue> paymentAppls = delegator.findByCondition("PaymentAndApplication", condition, fieldsToSelect, null);
         double originalBalance = 0.0;
         for (GenericValue appl : paymentAppls) {
             originalBalance += appl.getDouble("amount").doubleValue();

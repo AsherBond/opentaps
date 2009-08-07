@@ -15,11 +15,9 @@
  */
 package org.opentaps.financials.domain.billing.agreement;
 
-import java.util.Arrays;
 import java.util.List;
 
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.domain.base.entities.Agreement;
@@ -27,18 +25,19 @@ import org.opentaps.domain.billing.agreement.AgreementRepositoryInterface;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 
-public class AgreementRepository extends Repository implements
-        AgreementRepositoryInterface {
+/**
+ * Repository for Agreement entities to handle interaction of domain with the entity engine (database) and the service engine.
+ */
+public class AgreementRepository extends Repository implements AgreementRepositoryInterface {
 
-    /** {@inheritDoc} 
+    /** {@inheritDoc}
      * @throws RepositoryException */
     public List<? extends Agreement> getSupplierAgreements(String partyId, String organizationPartyId) throws RepositoryException {
-        return findList(Agreement.class, new EntityConditionList(Arrays.asList(
-                new EntityExpr("agreementTypeId", EntityOperator.EQUALS, "PURCHASE_AGREEMENT"),
-                new EntityExpr("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("partyIdTo", EntityOperator.EQUALS, partyId),
-                EntityUtil.getFilterByDateExpr()), EntityOperator.AND)
-        );
+        return findList(Agreement.class, EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("agreementTypeId", EntityOperator.EQUALS, "PURCHASE_AGREEMENT"),
+                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"),
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, partyId),
+                EntityUtil.getFilterByDateExpr()));
     }
 }

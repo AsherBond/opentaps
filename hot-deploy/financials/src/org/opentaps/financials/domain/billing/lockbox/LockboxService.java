@@ -37,7 +37,6 @@ import org.opentaps.domain.billing.lockbox.LockboxBatchItem;
 import org.opentaps.domain.billing.lockbox.LockboxBatchItemDetail;
 import org.opentaps.domain.billing.lockbox.LockboxRepositoryInterface;
 import org.opentaps.domain.billing.lockbox.LockboxServiceInterface;
-import org.opentaps.domain.billing.payment.PaymentMethod;
 import org.opentaps.domain.ledger.GeneralLedgerAccount;
 import org.opentaps.domain.ledger.LedgerRepositoryInterface;
 import org.opentaps.domain.party.Party;
@@ -92,7 +91,6 @@ public class LockboxService extends Service implements LockboxServiceInterface {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public void uploadLockboxFile() throws ServiceException {
         try {
 
@@ -382,7 +380,6 @@ public class LockboxService extends Service implements LockboxServiceInterface {
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public void processLockboxBatch() throws ServiceException {
         try {
 
@@ -435,17 +432,16 @@ public class LockboxService extends Service implements LockboxServiceInterface {
                     input.put("comments", expandLabel("FinancialsLockboxCommentPayment", UtilMisc.toMap("batchId", batch.getBatchId())));
                     // set the payment method, so that when the payment is posted, it will debit directly to the checking account and not the undeposited receipts account
                     if (item.getAccountNumber() != null) {
-                    	PaymentMethodAndEftAccount targetPaymentMethod = repository.getPaymentMethod(item.getAccountNumber(), item.getRoutingNumber());
-                    	if (targetPaymentMethod != null) {
-                    		input.put("paymentMethodId", targetPaymentMethod.getPaymentMethodId());
-                    	} else {
-                    		Debug.logWarning("No payment method found for lockbox batch [" + item.getLockboxBatchId() + "] and seq [" + item.getItemSeqId() + "]", MODULE);
-                    	}
+                    PaymentMethodAndEftAccount targetPaymentMethod = repository.getPaymentMethod(item.getAccountNumber(), item.getRoutingNumber());
+                    if (targetPaymentMethod != null) {
+                        input.put("paymentMethodId", targetPaymentMethod.getPaymentMethodId());
                     } else {
-                    	Debug.logWarning("No account number found for lockbox batch [" + item.getLockboxBatchId() + "] and seq [" + item.getItemSeqId() + "]", MODULE);
+                        Debug.logWarning("No payment method found for lockbox batch [" + item.getLockboxBatchId() + "] and seq [" + item.getItemSeqId() + "]", MODULE);
                     }
-                    
-                    
+                    } else {
+                        Debug.logWarning("No account number found for lockbox batch [" + item.getLockboxBatchId() + "] and seq [" + item.getItemSeqId() + "]", MODULE);
+                    }
+
                     // call the createPayment service
                     input.put("userLogin", getUser().getOfbizUserLogin());
                     Map<String, Object> results = runSync("financials.createPayment", input);
