@@ -100,6 +100,5 @@ globalContext.put("enableInternalMessaging", "true".equals(configProperties.get(
 globalContext.put("internalMessageCheckFrequencySeconds", configProperties.get("opentaps.internalMessageCheckFrequencySeconds"));
 
 // get the shortcuts
-Debug.logInfo(userLogin.toString(), "");
 shortcuts = UtilCommon.getKeyboardShortcuts(userLogin, opentapsApplicationName, screenName, delegator);
 globalContext.put("keyboardShortcuts", EntityUtil.orderBy(shortcuts, UtilMisc.toList("screenName", "applicationName", "sequenceNum")));

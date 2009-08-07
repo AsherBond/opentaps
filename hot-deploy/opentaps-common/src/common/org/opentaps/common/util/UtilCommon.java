@@ -1470,11 +1470,14 @@ public abstract class UtilCommon {
         }
         userLoginId = userLogin.getString("userLoginId");
 
-        List<GenericValue> shortcuts = delegator.findByAnd("KeyboardShortcutAndHandler", UtilMisc.toList(
-            EntityCondition.makeCondition(EntityOperator.AND,
-              EntityCondition.makeCondition("userLoginId", userLoginId), EntityOperator.OR, EntityCondition.makeCondition("userLoginId", null)),
-              EntityCondition.makeCondition(EntityCondition.makeCondition("applicationName", applicationName), EntityOperator.OR, EntityCondition.makeCondition("applicationName", null)),
-              EntityCondition.makeCondition(EntityCondition.makeCondition("screenName", screenName), EntityOperator.OR, EntityCondition.makeCondition("screenName", null))
+        List<GenericValue> shortcuts = delegator.findByAnd("KeyboardShortcutAndHandler",
+         UtilMisc.toList(
+                EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("userLoginId", EntityOperator.EQUALS, userLoginId) , EntityCondition.makeCondition("userLoginId", EntityOperator.EQUALS, null)),
+                EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("applicationName", applicationName), EntityCondition.makeCondition("applicationName", null)),
+                EntityCondition.makeCondition(EntityOperator.OR,
+                    EntityCondition.makeCondition("screenName", screenName), EntityCondition.makeCondition("screenName", null))
          ), UtilMisc.toList("shortcut", "userLoginId", "screenName", "applicationName")); // nulls are returned last
 
         // remove global shortcuts masked / overridden by more specific ones
