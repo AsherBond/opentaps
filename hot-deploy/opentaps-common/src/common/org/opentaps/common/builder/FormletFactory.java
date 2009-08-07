@@ -318,7 +318,7 @@ public class FormletFactory {
     // used by getConfiguration() to build the basic formlet configuration for an application
     private static Configuration createConfiguration(String applicationName) throws TemplateException {
         CacheStorage formletCache = getFormletCache(applicationName);
-        Configuration config = FreemarkerUtil.createDefaultConfiguration();
+        Configuration config = FreeMarkerWorker.getDefaultOfbizConfig();
         config.setCacheStorage(formletCache);
         return config;
     }
