@@ -73,7 +73,8 @@
     <service-resource type="model" loader="main" location="servicedef/services_custrequest.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_party.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_search.xml"/>
-    <service-resource type="model" loader="main" location="servicedef/services_email.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_orders.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_ofbiz.xml"/>
 
     <!-- Uncomment this, or better still, copy it to your own ofbiz-component.xml if you want all postal addresses to be upper case automatically. -->
     <!--service-resource type="eca" loader="main" location="servicedef/secas_postaladdress.xml"/-->
