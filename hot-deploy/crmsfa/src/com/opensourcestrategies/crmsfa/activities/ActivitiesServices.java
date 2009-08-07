@@ -339,7 +339,7 @@ public class ActivitiesServices {
                     String fileName = commEventContentDataResource.getString("drDataResourceName");
                     Map attachment = UtilMisc.toMap("type", mimeTypeId, "filename", fileName);
                     try {
-                        ByteWrapper byteWrapper = DataResourceWorker.getContentAsByteWrapper(delegator, dataResourceId, null, null, locale, null);
+                        ByteWrapper byteWrapper = UtilCommon.getContentAsByteWrapper(delegator, dataResourceId, null, null, locale, null);
                         attachment.put("content", byteWrapper.getBytes());
                     } catch( IOException e ) {
                         return UtilMessage.createAndLogServiceError("CrmErrorSendEmailUnableToGetDataResource", UtilMisc.toMap("dataResourceId", dataResourceId), locale, module);

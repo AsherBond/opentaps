@@ -65,7 +65,6 @@ import org.ofbiz.content.content.UploadContentAndImage;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.util.ByteWrapper;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.widget.html.HtmlScreenRenderer;
@@ -1181,17 +1180,5 @@ public class DataResourceWorker  implements org.ofbiz.widget.DataResourceWorkerI
     public void renderDataResourceAsTextExt(GenericDelegator delegator, String dataResourceId, Appendable out, Map templateContext,
             Locale locale, String targetMimeTypeId, boolean cache) throws GeneralException, IOException {
         renderDataResourceAsText(delegator, dataResourceId, out, templateContext, locale, targetMimeTypeId, cache);
-    }
-
-
-    /**
-     * @deprecated
-     * TODO: for upgrade ofbiz to new version only, refactor the code later.
-     */    
-    public static ByteWrapper getContentAsByteWrapper(GenericDelegator delegator, String dataResourceId, String https, String webSiteId, Locale locale, String rootDir) throws IOException, GeneralException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        streamDataResource(baos, delegator, dataResourceId, https, webSiteId, locale, rootDir);
-        ByteWrapper byteWrapper = new ByteWrapper(baos.toByteArray());
-        return byteWrapper;
     }
 }

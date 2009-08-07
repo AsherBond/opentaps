@@ -65,6 +65,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.template.freemarker.FreemarkerUtil;
+import org.opentaps.common.util.UtilDate;
 
 public class CommunicationEventServices {
 
@@ -87,7 +88,7 @@ public class CommunicationEventServices {
         TimeZone timeZone = (TimeZone) context.get("timeZone");
 
         if (timeZone == null) {
-            timeZone = UtilDateTime.getDefaultTimeZone();
+            timeZone = UtilDate.getDefaultTimeZone();
         }
 
         List<String> errorMessages = new ArrayList<String>();

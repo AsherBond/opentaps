@@ -30,6 +30,7 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 
 /**
@@ -212,4 +213,28 @@ public abstract class UtilDate {
         return new Integer((int) Math.abs(days));
     }
 
+    protected static TimeZone defaultTimeZone = null;
+
+    /**
+     * @deprecated
+     * TODO: for upgrade ofbiz to new version only, refactor the code later.
+     * Returns the OFBiz default TimeZone object. The default time zone is configured in
+     * the <code>general.properties</code> file (<code>timeZone.default</code>).
+     * @see java.util.TimeZone
+     */
+    public static TimeZone getDefaultTimeZone() {
+        if (defaultTimeZone == null) {
+            synchronized(UtilDateTime.class) {
+                if (defaultTimeZone == null) {
+                    String tzId = UtilProperties.getPropertyValue("framework/common/config/general.properties", "timeZone.default");
+                    if (UtilValidate.isNotEmpty(tzId)) {
+                        defaultTimeZone = TimeZone.getTimeZone(tzId);
+                    } else {
+                        defaultTimeZone = TimeZone.getDefault();
+                    }
+                }
+            }
+        }
+        return defaultTimeZone;
+    }
 }

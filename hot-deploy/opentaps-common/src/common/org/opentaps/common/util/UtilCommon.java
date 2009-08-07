@@ -16,6 +16,7 @@
 
 package org.opentaps.common.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -60,17 +61,20 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.ofbiz.base.component.ComponentConfig;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
+import org.ofbiz.content.data.DataResourceWorker;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.ByteWrapper;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
@@ -1487,4 +1491,14 @@ public abstract class UtilCommon {
         return shortcuts;
     }
 
+    /**
+     * @deprecated
+     * TODO: for upgrade ofbiz to new version only, refactor the code later.
+     */    
+    public static ByteWrapper getContentAsByteWrapper(GenericDelegator delegator, String dataResourceId, String https, String webSiteId, Locale locale, String rootDir) throws IOException, GeneralException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        DataResourceWorker.streamDataResource(baos, delegator, dataResourceId, https, webSiteId, locale, rootDir);
+        ByteWrapper byteWrapper = new ByteWrapper(baos.toByteArray());
+        return byteWrapper;
+    }
 }
