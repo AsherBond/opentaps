@@ -1,5 +1,3 @@
-package org.opentaps.common.event;
-
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  *
@@ -15,6 +13,8 @@ package org.opentaps.common.event;
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
+
+package org.opentaps.common.event;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -57,8 +57,8 @@ import org.opentaps.common.util.UtilMessage;
  * @author Leon Torres (leon@opensourcestrategies.com)
  */
 public class FormletEventHandler extends JavaEventHandler {
-    
-    public static final String module = FormletEventHandler.class.getName();
+
+    private static final String MODULE = FormletEventHandler.class.getName();
     public static final String MISSING_PAGINATOR_LABEL = "OpentapsError_MissingPaginator";
 
     /**
@@ -69,7 +69,9 @@ public class FormletEventHandler extends JavaEventHandler {
 
         Locale locale = UtilHttp.getLocale(request);
 
-        if ("error".equals(result)) return result;
+        if ("error".equals(result)) {
+            return result;
+        }
         if ("listBuilderException".equals(result)) {
             renderListBuilderException(request, response, locale);
             return "success";
@@ -82,7 +84,9 @@ public class FormletEventHandler extends JavaEventHandler {
         }
 
         // return if no formlet defined, this will pass through JSON objects and other raw data to javascript event handlers
-        if (! paginator.isFormlet()) return result;
+        if (!paginator.isFormlet()) {
+            return result;
+        }
 
         try {
             FormletFactory.renderFormlet(request, response.getWriter(), paginator, locale);
@@ -99,11 +103,11 @@ public class FormletEventHandler extends JavaEventHandler {
     private void renderListBuilderException(HttpServletRequest request, HttpServletResponse response, Locale locale) throws EventHandlerException {
         ListBuilderException e = (ListBuilderException) request.getAttribute("listBuilderException");
         String paginatorName = UtilCommon.getParameter(request, "paginatorName");
-        String errorMsg = "Error while building list for pagination named ["+paginatorName+"]: ";
+        String errorMsg = "Error while building list for pagination named [" + paginatorName + "]: ";
 
         // use the nested reason, such as a bsh.Eval error, otherwise the reason of the ListBuilderException itself
         Throwable cause = (e.getCause() == null ? e : e.getCause());
-        Debug.logError(cause, errorMsg, module);
+        Debug.logError(cause, errorMsg, MODULE);
         try {
             Writer out = response.getWriter();
             out.write(errorMsg);
@@ -120,7 +124,7 @@ public class FormletEventHandler extends JavaEventHandler {
     private void renderMissingPaginatorError(HttpServletRequest request, HttpServletResponse response, Locale locale) throws EventHandlerException {
         String paginatorName = UtilCommon.getParameter(request, "paginatorName");
         if (Debug.infoOn()) {
-            Debug.logInfo("Paginator ["+paginatorName+"] missing when attempting to fetch data for it.  This is probably due to user session expiring.", module);
+            Debug.logInfo("Paginator [" + paginatorName + "] missing when attempting to fetch data for it.  This is probably due to user session expiring.", MODULE);
         }
         try {
             Writer out = response.getWriter();
