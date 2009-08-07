@@ -94,7 +94,6 @@
   <!-- ========================================================= -->
 
     <entity-group group="org.ofbiz" entity="SalesOpportunityContent" />
-    <entity-group group="org.ofbiz" entity="CustRequestContent" />
     <entity-group group="org.ofbiz" entity="ContentAndSalesOpportunity" />
     <entity-group group="org.ofbiz" entity="ContentAndCustRequest" />
     <entity-group group="org.ofbiz" entity="ContentAndWorkEffort" />
@@ -137,7 +136,6 @@
   <!-- com.opensourcestrategies.crmsfa.quotes                    -->
   <!-- ========================================================= -->
 
-    <entity-group group="org.ofbiz" entity="QuoteItem" />
     <entity-group group="org.ofbiz" entity="QuoteItemOption" />
     <entity-group group="org.ofbiz" entity="QuoteNote" />
 

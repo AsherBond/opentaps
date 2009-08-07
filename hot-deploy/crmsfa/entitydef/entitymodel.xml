@@ -543,36 +543,11 @@
         </relation>
     </entity>
 
-<!--deprecated, this entity is no login exist in applications/order/entitydef/entitymodel.xml, so move it here -->
-    <entity entity-name="CustRequestRole"
-            package-name="org.ofbiz.order.request"
-            title="Customer Request Role Entity">
-      <field name="custRequestId" type="id-ne"></field>
-      <field name="partyId" type="id-ne"></field>
-      <field name="roleTypeId" type="id-ne"></field>
-      <prim-key field="custRequestId"/>
-      <prim-key field="partyId"/>
-      <prim-key field="roleTypeId"/>
-      <relation type="one" fk-name="CUSTREQ_RL_CRQST" rel-entity-name="CustRequest">
-        <key-map field-name="custRequestId"/>
-      </relation>
-      <relation type="one" fk-name="CUSTREQ_RL_PARTY" rel-entity-name="Party">
-        <key-map field-name="partyId"/>
-      </relation>
-      <relation type="one-nofk" rel-entity-name="RoleType">
-        <key-map field-name="roleTypeId"/>
-      </relation>
-      <relation type="one" fk-name="CUSTREQ_RL_PROLE" rel-entity-name="PartyRole">
-        <key-map field-name="partyId"/>
-        <key-map field-name="roleTypeId"/>
-      </relation>
-    </entity>
-
     <view-entity entity-name="PartyRelationshipAndCaseRole"
                  package-name="com.opensourcestrategies.crmsfa.case"
                  title="Used to find cases of accounts and customers that a userLogin can view">
         <member-entity entity-alias="CR" entity-name="CustRequest"/>
-        <member-entity entity-alias="CRR" entity-name="CustRequestRole"/>
+        <member-entity entity-alias="CRR" entity-name="CustRequestParty"/>
         <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
         <alias-all entity-alias="CR"/>
         <alias entity-alias="CRR" name="partyId"/>
@@ -682,25 +657,6 @@
             <key-map field-name="salesOpportunityId"/>
         </relation>
         <relation type="one" fk-name="SALESOPP_CNT_CNT" rel-entity-name="Content">
-            <key-map field-name="contentId"/>
-        </relation>
-    </entity>
-
-
-    <entity entity-name="CustRequestContent"
-            package-name="com.opensourcestrategies.crmsfa.content"
-            title="Content attachments, urls, etc for cases.">
-        <field name="contentId" type="id-ne"></field>
-        <field name="custRequestId" type="id-ne"></field>
-        <field name="fromDate" type="date-time"></field>
-        <field name="thruDate" type="date-time"></field>
-        <prim-key field="contentId"/>
-        <prim-key field="custRequestId"/>
-        <prim-key field="fromDate"/>
-        <relation type="one" fk-name="SALESOPP_CRQ_CRQ" rel-entity-name="CustRequest">
-            <key-map field-name="custRequestId"/>
-        </relation>
-        <relation type="one" fk-name="SALESOPP_CRQ_CNT" rel-entity-name="Content">
             <key-map field-name="contentId"/>
         </relation>
     </entity>
@@ -1015,58 +971,6 @@
         <key-map field-name="contactPartyId" rel-field-name="partyId"/>
       </relation>
     </extend-entity>
-
-    <entity entity-name="QuoteItem"
-            package-name="org.ofbiz.order.quote"
-            title="Quote Item Entity">
-      <field name="quoteId" type="id-ne"></field>
-      <field name="quoteItemSeqId" type="id-ne"></field>
-      <field name="productId" type="id"></field>
-      <field name="productFeatureId" type="id"></field>
-      <field name="deliverableTypeId" type="id"></field>
-      <field name="skillTypeId" type="id"></field>
-      <field name="uomId" type="id"></field>
-      <field name="workEffortId" type="id"></field>
-      <field name="custRequestId" type="id"></field>
-      <field name="custRequestItemSeqId" type="id"></field>
-      <field name="quantity" type="floating-point"></field>
-      <field name="selectedAmount" type="floating-point"></field>
-      <field name="quoteUnitPrice" type="currency-amount"></field>
-      <field name="estimatedDeliveryDate" type="date-time"></field>
-      <field name="description" type="description"></field>
-      <field name="comments" type="comment"></field>
-      <field name="isPromo" type="indicator"></field>
-      <prim-key field="quoteId"/>
-      <prim-key field="quoteItemSeqId"/>
-      <relation type="one" fk-name="QUOTE_ITM_QTE" rel-entity-name="Quote">
-        <key-map field-name="quoteId"/>
-      </relation>
-      <relation type="one" fk-name="QUOTE_ITM_PROD" rel-entity-name="Product">
-        <key-map field-name="productId"/>
-      </relation>
-      <relation type="one" fk-name="QUOTE_ITM_PFEAT" rel-entity-name="ProductFeature">
-        <key-map field-name="productFeatureId"/>
-      </relation>
-      <relation type="one" fk-name="QUOTE_ITM_DELT" rel-entity-name="DeliverableType">
-        <key-map field-name="deliverableTypeId"/>
-      </relation>
-      <relation type="one" fk-name="QUOTE_ITM_SKLT" rel-entity-name="SkillType">
-        <key-map field-name="skillTypeId"/>
-      </relation>
-      <relation type="one" fk-name="QUOTE_ITM_UOM" rel-entity-name="Uom">
-        <key-map field-name="uomId"/>
-      </relation>
-      <relation type="one" fk-name="QUOTE_ITM_WKEFF" rel-entity-name="WorkEffort">
-        <key-map field-name="workEffortId"/>
-      </relation>
-      <relation type="one" fk-name="QUOTE_ITM_CSRQ" rel-entity-name="CustRequest">
-        <key-map field-name="custRequestId"/>
-      </relation>
-      <relation type="one" fk-name="QUOTE_ITM_CSRITM" rel-entity-name="CustRequestItem">
-        <key-map field-name="custRequestId"/>
-        <key-map field-name="custRequestItemSeqId"/>
-      </relation>
-    </entity>
 
     <entity entity-name="QuoteNote"
             package-name="com.opensourcestrategies.crmsfa.quotes"
