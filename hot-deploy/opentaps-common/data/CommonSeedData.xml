@@ -168,6 +168,8 @@ under the License.
     <FacilityAssocType facilityAssocTypeId="BACKUP_INVENTORY" description="Holds backup inventory"/>
 
     <!-- Additional inventory event plan types for MRP -->
+    <!-- InventoryEventPlannedType no longer exist in applications/manufacturing/entitydef/entitymodel.xml, so comment it temporary -->
+    <!--
     <InventoryEventPlannedType inventoryEventPlanTypeId="INVENTORY_XFER_IN" description="Inbound Inventory Transfer" inOut="+"/>
     <InventoryEventPlannedType inventoryEventPlanTypeId="INVENTORY_XFER_OUT" description="Outbound Inventory Transfer" inOut="-"/>
     <InventoryEventPlannedType inventoryEventPlanTypeId="PROP_INV_XFER_IN" description="Proposed Inbound Inventory Transfer" inOut="+"/>
@@ -175,7 +177,8 @@ under the License.
     <InventoryEventPlannedType inventoryEventPlanTypeId="SALES_FORECAST" description="Sales Forecast" inOut="-"/>
     <InventoryEventPlannedType inventoryEventPlanTypeId="INV_XFER_REQ_IN" description="Inbound Inventory Transfer Requirement" inOut="+"/>
     <InventoryEventPlannedType inventoryEventPlanTypeId="INV_XFER_REQ_OUT" description="Outbound Inventory Transfer Requirement" inOut="-"/>
-
+	-->
+	
     <!-- Product features of this type will display on order entry -->
     <ProductFeatureType description="Warning" hasTable="N" parentTypeId="" productFeatureTypeId="WARNING"/>
 
