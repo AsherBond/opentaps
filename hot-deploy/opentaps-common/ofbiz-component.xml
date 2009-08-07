@@ -74,7 +74,6 @@
     <service-resource type="model" loader="main" location="servicedef/services_party.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_search.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_orders.xml"/>
-    <service-resource type="model" loader="main" location="servicedef/services_ofbiz.xml"/>
 
     <!-- Uncomment this, or better still, copy it to your own ofbiz-component.xml if you want all postal addresses to be upper case automatically. -->
     <!--service-resource type="eca" loader="main" location="servicedef/secas_postaladdress.xml"/-->
@@ -83,6 +82,7 @@
     <service-resource type="eca" loader="main" location="servicedef/secas_orders.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas_shipping.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas_agreements.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_ofbiz.xml"/>
     <!-- note that webapp/opentaps/ is not a bona fide application, just a storage location for common ftl and bsh files -->
 
     <webapp name="opentaps_images"
