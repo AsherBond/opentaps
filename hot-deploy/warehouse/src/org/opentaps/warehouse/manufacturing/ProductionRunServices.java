@@ -1209,6 +1209,12 @@ public final class ProductionRunServices {
         String productId = (String) context.get("productId");
         Timestamp startDate = (Timestamp) context.get("startDate");
         Double pRQuantity = (Double) context.get("pRQuantity");
+        BigDecimal pRQuantityBd = null;
+        if (pRQuantity != null) {
+            pRQuantityBd = BigDecimal.valueOf(pRQuantity);
+        }
+
+
         String facilityId = (String) context.get("facilityId");
         // Optional input fields
         String workEffortId = (String) context.get("routingId");
@@ -1342,7 +1348,7 @@ public final class ProductionRunServices {
         if (disassemble) {
             for (Iterator<BomNode> iter = components.iterator(); iter.hasNext();) {
                 BomNode node = iter.next();
-                productionList.add(UtilMisc.toMap("productId", node.getProduct().get("productId"), "quantity", new Double(node.getQuantity())));
+                productionList.add(UtilMisc.toMap("productId", node.getProduct().get("productId"), "quantity", node.getQuantity().doubleValue()));
             }
         } else {
             productionList.add(UtilMisc.toMap("productId", productId, "quantity", pRQuantity));
@@ -1398,7 +1404,7 @@ public final class ProductionRunServices {
                     Debug.logError(e.getMessage(), MODULE);
                 }
                 // Calculate the estimatedCompletionDate
-                long totalTime = ProductionRun.getEstimatedTaskTime(routingTask, pRQuantity, dispatcher);
+                long totalTime = ProductionRun.getEstimatedTaskTime(routingTask, pRQuantityBd, dispatcher);
                 Timestamp endDate = TechDataServices.addForward(TechDataServices.getTechDataCalendar(routingTask), startDate, totalTime);
 
                 serviceContext.clear();
@@ -1506,7 +1512,7 @@ public final class ProductionRunServices {
                             serviceContext.put("fromDate", productBom.get("fromDate"));
                             // Here we use the getQuantity method to get the quantity already
                             // computed by the getManufacturingComponents service
-                            serviceContext.put("estimatedQuantity", new Double(node.getQuantity()));
+                            serviceContext.put("estimatedQuantity", node.getQuantity().doubleValue());
                             serviceContext.put("userLogin", userLogin);
                             resultService = null;
                             try {
@@ -1825,7 +1831,8 @@ public final class ProductionRunServices {
         // Mandatory input fields
         String productionRunId = (String) context.get("workEffortId");
         String productId = (String) context.get("productId");
-        Double quantity = (Double) context.get("quantity");
+        Double quantityDbl = (Double) context.get("quantity");
+        BigDecimal quantity = (quantityDbl == null ? null : BigDecimal.valueOf(quantityDbl));
 
         // Optional input fields
         String inventoryItemTypeId = (String) context.get("inventoryItemTypeId");
@@ -1875,32 +1882,32 @@ public final class ProductionRunServices {
             List<GenericValue> wegsList = delegator.findByAnd("WorkEffortGoodStandard", conditions);
 
             // because a production run can produce several lines of the same produce, we'll need to add up the wegs
-            double produced = 0;
+            BigDecimal produced = BigDecimal.ZERO;
             for (GenericValue wegs : wegsList) {
-                produced += wegs.get("estimatedQuantity") == null ? 0 : wegs.getDouble("estimatedQuantity");
+                produced = produced.add(wegs.get("estimatedQuantity") == null ? BigDecimal.ZERO : wegs.getBigDecimal("estimatedQuantity"));
             }
-            Double quantityProduced = new Double(produced);
+            BigDecimal quantityProduced = produced;
 
             // get the quantity declared for this product
-            Double quantityDeclared = productionRun.getQuantityToProduce(productId);
+            BigDecimal quantityDeclared = productionRun.getQuantityToProduce(productId);
             if (quantityDeclared == null) {
                 return ServiceUtil.returnError("Produce [" + productId + "] is not being produced in production run [" + productionRunId + "].");
             }
 
             // If the quantity already produced is not lower than the quantity declared, no inventory is created.
-            double maxQuantity = quantityDeclared.doubleValue() - quantityProduced.doubleValue();
-            if (maxQuantity <= 0) {
+            BigDecimal maxQuantity = quantityDeclared.subtract(quantityProduced);
+            if (maxQuantity.signum() <= 0) {
                 Debug.logInfo("Attempt to produce [" + quantity + "] of product [" + productId + "] when it has been fully produced in production run [" + productionRunId + "].  Not producing anything.", MODULE);
                 return result;
             }
 
             // if quantity not supplied, assume issue all of it
             if (quantity == null) {
-                quantity = new Double(maxQuantity);
+                quantity = maxQuantity;
             }
 
             // cannot produce more than what's allowed
-            if (quantity.doubleValue() > maxQuantity) {
+            if (quantity.compareTo(maxQuantity) > 0) {
                 return UtilMessage.createAndLogServiceError("ManufacturingProductionRunProductProducedNotStillAvailable", locale, MODULE);
             }
 
@@ -2017,8 +2024,8 @@ public final class ProductionRunServices {
                     serviceContext.clear();
                     serviceContext.put("inventoryItemId", inventoryItemId);
                     serviceContext.put("workEffortId", productionRunId);
-                    serviceContext.put("availableToPromiseDiff", quantity);
-                    serviceContext.put("quantityOnHandDiff", quantity);
+                    serviceContext.put("availableToPromiseDiff", quantity.doubleValue());
+                    serviceContext.put("quantityOnHandDiff", quantity.doubleValue());
                     serviceContext.put("userLogin", userLogin);
                     resultService = dispatcher.runSync("createInventoryItemDetail", serviceContext);
                     // Recompute reservations
@@ -2053,7 +2060,7 @@ public final class ProductionRunServices {
             wegs.set("workEffortId", productionRunId);
             wegs.set("productId", productId);
             wegs.set("statusId", "WEGS_COMPLETED");
-            wegs.set("estimatedQuantity", new Double(quantity));
+            wegs.set("estimatedQuantity", quantity.doubleValue());
             wegs.set("fromDate", UtilDateTime.nowTimestamp());
             wegs.set("workEffortGoodStdTypeId", "PRUN_PROD_PRODUCED");
             wegs.create();

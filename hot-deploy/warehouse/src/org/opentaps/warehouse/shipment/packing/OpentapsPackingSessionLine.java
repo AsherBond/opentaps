@@ -42,18 +42,18 @@ public class OpentapsPackingSessionLine extends PackingSessionLine {
     // cache the values once computed
     protected BigDecimal rawValue = null;
 
-    public OpentapsPackingSessionLine(String orderId, String orderItemSeqId, String shipGroupSeqId, String productId, String inventoryItemId, double quantity, double weight, int packageSeq) {
+    public OpentapsPackingSessionLine(String orderId, String orderItemSeqId, String shipGroupSeqId, String productId, String inventoryItemId, BigDecimal quantity, BigDecimal weight, int packageSeq) {
         super(orderId, orderItemSeqId, shipGroupSeqId, productId, inventoryItemId, quantity, weight, packageSeq);
     }
 
     /** Clear the value caches when the quantity changes. */
-    public void setQuantity(double quantity) {
+    public void setQuantity(BigDecimal quantity) {
         super.setQuantity(quantity);
         clearCache();
     }
 
     /** Clear the value caches when the quantity changes. */
-    public void addQuantity(double quantity) {
+    public void addQuantity(BigDecimal quantity) {
         super.addQuantity(quantity);
         clearCache();
     }
@@ -76,7 +76,7 @@ public class OpentapsPackingSessionLine extends PackingSessionLine {
         if (item == null) return ZERO;
 
         // ratio of quantity allocated to quantity ordered
-        BigDecimal ratio = (new BigDecimal(this.quantity)).divide(item.getBigDecimal("quantity"), decimals + 3, rounding);
+        BigDecimal ratio = this.quantity.divide(item.getBigDecimal("quantity"), decimals + 3, rounding);
 
         // prorated value
         rawValue = ratio.multiply(item.getBigDecimal("unitPrice")).multiply(item.getBigDecimal("quantity")).setScale(decimals, rounding);

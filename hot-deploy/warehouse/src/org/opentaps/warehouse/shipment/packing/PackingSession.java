@@ -120,7 +120,7 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
     }
 
     // Override the line item creation to add our custom OpentapsPackingSessionLine.
-    protected void createPackLineItem(int checkCode, GenericValue res, String orderId, String orderItemSeqId, String shipGroupSeqId, String productId, double quantity, double weight, int packageSeqId) throws GeneralException {
+    protected void createPackLineItem(int checkCode, GenericValue res, String orderId, String orderItemSeqId, String shipGroupSeqId, String productId, BigDecimal quantity, BigDecimal weight, int packageSeqId) throws GeneralException {
         // process the result; add new item if necessary
         switch (checkCode) {
             case 0:
@@ -139,8 +139,8 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
         }
 
         // Add the line weight to the package weight
-        if (weight > 0) {
-            this.addToPackageWeight(packageSeqId, new Double(weight));
+        if (weight.signum() > 0) {
+            this.addToPackageWeight(packageSeqId, weight);
         }
 
         // update the package sequence
@@ -246,20 +246,20 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
     }
 
     @SuppressWarnings("unchecked")
-    @Override public double getCurrentReservedQuantity(String orderId, String orderItemSeqId, String shipGroupSeqId) {
-        double reserved = 0.0;
+    @Override public BigDecimal getCurrentReservedQuantity(String orderId, String orderItemSeqId, String shipGroupSeqId, String productId) {
+        BigDecimal reserved = BigDecimal.ZERO;
         try {
-            List<GenericValue> reservations = getDelegator().findByAnd("OrderItemShipGrpInvResAndItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "shipGroupSeqId", shipGroupSeqId, "facilityId", facilityId));
+            List<GenericValue> reservations = getDelegator().findByAnd("OrderItemShipGrpInvResAndItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "shipGroupSeqId", shipGroupSeqId, "facilityId", facilityId, "inventoryProductId", productId));
             for (GenericValue res : reservations) {
-                Double not = res.getDouble("quantityNotAvailable");
-                Double qty = res.getDouble("quantity");
+                BigDecimal not = res.getBigDecimal("quantityNotAvailable");
+                BigDecimal qty = res.getBigDecimal("quantity");
                 if (not == null) {
-                    not = new Double(0);
+                    not = BigDecimal.ZERO;
                 }
                 if (qty == null) {
-                    qty = new Double(0);
+                    qty = BigDecimal.ZERO;
                 }
-                reserved += (qty.doubleValue() - not.doubleValue());
+                reserved = reserved.add(qty).subtract(not);
             }
         } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
@@ -331,16 +331,16 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
     public List getShippableItemInfo(int packageSeqId) {
         List shippableItemInfo = new ArrayList();
         List<PackingSessionLine> lines;
-        Double packageWeight = null;
+        BigDecimal packageWeight = null;
         if (packageSeqId == -1) {
             lines = getLines();
-            packageWeight = new Double(getTotalWeight());
+            packageWeight = getTotalWeight();
         } else {
             lines = getLinesByPackage(packageSeqId);
             packageWeight = getPackageWeight(packageSeqId);
         }
         if (UtilValidate.isEmpty(packageWeight)) {
-            packageWeight = new Double(0);
+            packageWeight = BigDecimal.ZERO;
         }
         Iterator<PackingSessionLine> lit = lines.iterator();
         while (lit.hasNext()) {
@@ -348,7 +348,7 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
             Map shipInfo = new HashMap();
             shipInfo.put("productId", line.getProductId());
             shipInfo.put("weight", new Double(packageWeight.doubleValue() / lines.size()));
-            shipInfo.put("quantity", new Double(line.getQuantity()));
+            shipInfo.put("quantity", new Double(line.getQuantity().doubleValue()));
             shipInfo.put("piecesIncluded", new Long(1));
             shippableItemInfo.add(shipInfo);
         }
@@ -356,14 +356,14 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
     }
 
     @SuppressWarnings("unchecked")
-    @Override public void addOrIncreaseLine(String orderId, String orderItemSeqId, String shipGroupSeqId, String productId, double quantity, int packageSeqId, double weight, boolean update) throws GeneralException {
+    @Override public void addOrIncreaseLine(String orderId, String orderItemSeqId, String shipGroupSeqId, String productId, BigDecimal quantity, int packageSeqId, BigDecimal weight, boolean update) throws GeneralException {
         // reset the session if we just completed
         if (status == 0) {
             throw new GeneralException("Packing session has been completed; be sure to CLEAR before packing a new order! [000]");
         }
 
         // do nothing if we are trying to add a quantity of 0
-        if (!update && quantity == 0) {
+        if (!update && quantity.signum() == 0) {
             return;
         }
 
@@ -400,47 +400,47 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
         // find the inventoryItemId to use
         if (reservations.size() == 1) {
             GenericValue res = EntityUtil.getFirst(reservations);
-            int checkCode = this.checkLineForAdd(res, orderId, orderItemSeqId, shipGroupSeqId, quantity, packageSeqId, update);
+            int checkCode = this.checkLineForAdd(res, orderId, orderItemSeqId, shipGroupSeqId, productId, quantity, packageSeqId, update);
             this.createPackLineItem(checkCode, res, orderId, orderItemSeqId, shipGroupSeqId, productId, quantity, weight, packageSeqId);
         } else {
             // more than one reservation found
-            Map toCreateMap = FastMap.newInstance();
+            Map<GenericValue, BigDecimal> toCreateMap = FastMap.newInstance();
             Iterator<GenericValue> i = reservations.iterator();
-            double qtyRemain = quantity;
+            BigDecimal qtyRemain = quantity;
 
             // we need to prioritize the reservations that have quantity available
-            while (i.hasNext() && qtyRemain > 0) {
+            while (i.hasNext() && qtyRemain.signum() > 0) {
                 GenericValue res = i.next();
-                double resQty = res.getDouble("quantity").doubleValue();
-                Double resQtyNa = res.getDouble("quantityNotAvailable");
+                BigDecimal resQty = res.getBigDecimal("quantity");
+                BigDecimal resQtyNa = res.getBigDecimal("quantityNotAvailable");
                 if (resQtyNa == null) {
-                    resQtyNa = 0.0;
+                    resQtyNa = BigDecimal.ZERO;
                 }
 
-                if (resQtyNa > 0) {
+                if (resQtyNa.signum() > 0) {
                     Debug.logInfo("Skipping reservations with quantityNotAvailable on the first pass.", MODULE);
                     continue;
                 }
 
-                double resPackedQty = this.getPackedQuantity(orderId, orderItemSeqId, shipGroupSeqId, res.getString("inventoryItemId"), -1);
-                if (resPackedQty >= resQty) {
+                BigDecimal resPackedQty = this.getPackedQuantity(orderId, orderItemSeqId, shipGroupSeqId, res.getString("inventoryItemId"), -1);
+                if (resPackedQty.compareTo(resQty) >= 0) {
                     continue;
                 } else if (!update) {
-                    resQty -= resPackedQty;
+                    resQty = resQty.subtract(resPackedQty);
                 }
 
-                double thisQty = resQty > qtyRemain ? qtyRemain : resQty;
+                BigDecimal thisQty = (resQty.compareTo(qtyRemain) > 0) ? qtyRemain : resQty;
 
-                int thisCheck = this.checkLineForAdd(res, orderId, orderItemSeqId, shipGroupSeqId, thisQty, packageSeqId, update);
+                int thisCheck = this.checkLineForAdd(res, orderId, orderItemSeqId, shipGroupSeqId, productId, thisQty, packageSeqId, update);
                 switch (thisCheck) {
                     case 2:
                         Debug.log("Packing check returned '2' - new pack line will be created!", MODULE);
-                        toCreateMap.put(res, new Double(thisQty));
-                        qtyRemain -= thisQty;
+                        toCreateMap.put(res, thisQty);
+                        qtyRemain = qtyRemain.subtract(thisQty);
                         break;
                     case 1:
                         Debug.log("Packing check returned '1' - existing pack line has been updated!", MODULE);
-                        qtyRemain -= thisQty;
+                        qtyRemain = qtyRemain.subtract(thisQty);
                         break;
                     case 0:
                         Debug.log("Packing check returned '0' - doing nothing.", MODULE);
@@ -450,38 +450,38 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
                 }
             }
             // second pass considering reservations with quantity not available
-            while (i.hasNext() && qtyRemain > 0) {
+            while (i.hasNext() && qtyRemain.signum() > 0) {
                 GenericValue res = i.next();
-                double resQty = res.getDouble("quantity").doubleValue();
-                Double resQtyNa = res.getDouble("quantityNotAvailable");
+                BigDecimal resQty = res.getBigDecimal("quantity");
+                BigDecimal resQtyNa = res.getBigDecimal("quantityNotAvailable");
                 if (resQtyNa == null) {
-                    resQtyNa = 0.0;
+                    resQtyNa = BigDecimal.ZERO;
                 }
 
-                if (resQtyNa != 0) {
+                if (resQtyNa.signum() != 0) {
                     Debug.logInfo("Skipping reservations without quantityNotAvailable on the second pass.", MODULE);
                     continue;
                 }
 
-                double resPackedQty = this.getPackedQuantity(orderId, orderItemSeqId, shipGroupSeqId, res.getString("inventoryItemId"), -1);
-                if (resPackedQty >= resQty) {
+                BigDecimal resPackedQty = this.getPackedQuantity(orderId, orderItemSeqId, shipGroupSeqId, res.getString("inventoryItemId"), -1);
+                if (resPackedQty.compareTo(resQty) >= 0) {
                     continue;
                 } else if (!update) {
-                    resQty -= resPackedQty;
+                    resQty = resQty.subtract(resPackedQty);
                 }
 
-                double thisQty = resQty > qtyRemain ? qtyRemain : resQty;
+                BigDecimal thisQty = (resQty.compareTo(qtyRemain) > 0) ? qtyRemain : resQty;
 
-                int thisCheck = this.checkLineForAdd(res, orderId, orderItemSeqId, shipGroupSeqId, thisQty, packageSeqId, update);
+                int thisCheck = this.checkLineForAdd(res, orderId, orderItemSeqId, shipGroupSeqId, productId, thisQty, packageSeqId, update);
                 switch (thisCheck) {
                     case 2:
                         Debug.log("Packing check returned '2' - new pack line will be created!", MODULE);
-                        toCreateMap.put(res, new Double(thisQty));
-                        qtyRemain -= thisQty;
+                        toCreateMap.put(res, thisQty);
+                        qtyRemain = qtyRemain.subtract(thisQty);
                         break;
                     case 1:
                         Debug.log("Packing check returned '1' - existing pack line has been updated!", MODULE);
-                        qtyRemain -= thisQty;
+                        qtyRemain = qtyRemain.subtract(thisQty);
                         break;
                     case 0:
                         Debug.log("Packing check returned '0' - doing nothing.", MODULE);
@@ -491,12 +491,12 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
                 }
             }
 
-            if (qtyRemain == 0) {
+            if (qtyRemain.signum() == 0) {
                 Iterator x = toCreateMap.keySet().iterator();
                 while (x.hasNext()) {
                     GenericValue res = (GenericValue) x.next();
-                    Double qty = (Double) toCreateMap.get(res);
-                    this.createPackLineItem(2, res, orderId, orderItemSeqId, shipGroupSeqId, productId, qty.doubleValue(), weight, packageSeqId);
+                    BigDecimal qty = toCreateMap.get(res);
+                    this.createPackLineItem(2, res, orderId, orderItemSeqId, shipGroupSeqId, productId, qty, weight, packageSeqId);
                 }
             } else {
                 throw new GeneralException("Not enough inventory reservation available; cannot pack the item! [103]");
@@ -508,35 +508,35 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
     }
 
     @SuppressWarnings("unchecked")
-    public Double getShipmentCostEstimate(String shippingContactMechId, String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId, String productStoreId) {
-        double shipmentCostEstimate = 0;
+    public BigDecimal getShipmentCostEstimate(String shippingContactMechId, String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId, String productStoreId) {
+        BigDecimal shipmentCostEstimate = BigDecimal.ZERO;
         List packageSeqIds = getPackageSeqIds();
         Iterator psiit = packageSeqIds.iterator();
         while (psiit.hasNext()) {
             int packageSeqId = ((Integer) psiit.next()).intValue();
-            Double packageEstimate = getShipmentCostEstimate(shippingContactMechId, shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId, productStoreId, packageSeqId);
+            BigDecimal packageEstimate = getShipmentCostEstimate(shippingContactMechId, shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId, productStoreId, packageSeqId);
             if (UtilValidate.isNotEmpty(packageEstimate)) {
-                shipmentCostEstimate += packageEstimate.doubleValue();
+                shipmentCostEstimate = shipmentCostEstimate.add(packageEstimate);
             }
         }
-        return new Double(shipmentCostEstimate);
+        return shipmentCostEstimate;
     }
 
     @SuppressWarnings("unchecked")
-    public Double getShipmentCostEstimate(String shippingContactMechId, String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId,
+    public BigDecimal getShipmentCostEstimate(String shippingContactMechId, String shipmentMethodTypeId, String carrierPartyId, String carrierRoleTypeId,
                                           String productStoreId, int packageSeqId) {
-        Double packageWeight = getPackageWeight(packageSeqId);
+        BigDecimal packageWeight = getPackageWeight(packageSeqId);
         if (UtilValidate.isEmpty(packageWeight)) {
-            packageWeight = new Double(0);
+            packageWeight = BigDecimal.ZERO;
         }
         Map shipEstimate = ShippingEvents.getShipGroupEstimate(this.getDispatcher(), this.getDelegator(), null, shipmentMethodTypeId, carrierPartyId,
                                                                carrierRoleTypeId, shippingContactMechId, productStoreId, getShippableItemInfo(packageSeqId),
-                                                               packageWeight.doubleValue(), getPackedQuantity(packageSeqId), 0);
-        return (Double) shipEstimate.get("shippingTotal");
+                                                               packageWeight, getPackedQuantity(packageSeqId), BigDecimal.ZERO, /* party */ null, /* productStoreShipMethId */ null);
+        return (BigDecimal) shipEstimate.get("shippingTotal");
     }
 
     @SuppressWarnings("unchecked")
-    public Double getShipmentCostEstimate(GenericValue orderItemShipGroup, String productStoreId, Double shippableTotal, Double shippableWeight, Double shippableQuantity) {
+    public BigDecimal getShipmentCostEstimate(GenericValue orderItemShipGroup, String productStoreId, BigDecimal shippableTotal, BigDecimal shippableWeight, BigDecimal shippableQuantity) {
         String shippingContactMechId = orderItemShipGroup.getString("contactMechId");
         String shipmentMethodTypeId = orderItemShipGroup.getString("shipmentMethodTypeId");
         String carrierPartyId = orderItemShipGroup.getString("carrierPartyId");
@@ -544,18 +544,18 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
         List shippableItemInfo = getShippableItemInfo(-1);
 
         if (UtilValidate.isEmpty(shippableWeight)) {
-            shippableWeight = new Double(getTotalWeight());
+            shippableWeight = getTotalWeight();
         }
         if (UtilValidate.isEmpty(shippableQuantity)) {
-            shippableQuantity = new Double(getPackedQuantity(-1));
+            shippableQuantity = getPackedQuantity(-1);
         }
         if (UtilValidate.isEmpty(shippableTotal)) {
-            shippableTotal = new Double(0);
+            shippableTotal = BigDecimal.ZERO;
         }
         Map shipEstimate = ShippingEvents.getShipGroupEstimate(this.getDispatcher(), this.getDelegator(), null, shipmentMethodTypeId, carrierPartyId,
                                                                carrierRoleTypeId, shippingContactMechId, productStoreId, shippableItemInfo,
-                                                               shippableWeight.doubleValue(), shippableQuantity.doubleValue(), 0);
-        return (Double) shipEstimate.get("shippingTotal");
+                                                               shippableWeight, shippableQuantity, BigDecimal.ZERO, /* party */ null, /* productStoreShipMethId */ null);
+        return (BigDecimal) shipEstimate.get("shippingTotal");
     }
 
     @SuppressWarnings("unchecked")
@@ -579,12 +579,12 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
 
     @SuppressWarnings("unchecked")
     public Map getProductQuantities() {
-        Map productIds = new HashMap();
+        Map<String, BigDecimal> productIds = new HashMap<String, BigDecimal>();
         Iterator<PackingSessionLine> lit = getLines().iterator();
         while (lit.hasNext()) {
             PackingSessionLine line = lit.next();
-            double quantity = productIds.containsKey(line.getProductId()) ? ((Double) productIds.get(line.getProductId())).doubleValue() : 0;
-            productIds.put(line.getProductId(), new Double(quantity + line.getQuantity()));
+            BigDecimal quantity = productIds.containsKey(line.getProductId()) ? productIds.get(line.getProductId()) : BigDecimal.ZERO;
+            productIds.put(line.getProductId(), quantity.add(line.getQuantity()));
         }
         return productIds;
     }

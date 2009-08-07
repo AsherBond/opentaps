@@ -478,9 +478,9 @@ public class ShippingServices {
         String carrierRoleTypeId = (String) context.get("carrierRoleTypeId");
         String productStoreId = (String) context.get("productStoreId");
 
-        double shippableWeight = org.ofbiz.shipment.packing.PackingServices.setSessionPackageWeights(session, packageWeights);
+        BigDecimal shippableWeight = org.ofbiz.shipment.packing.PackingServices.setSessionPackageWeights(session, packageWeights);
         session.setWeightUomId(weightUomId);
-        Double estimatedShipCost = session.getShipmentCostEstimate(shippingContactMechId, shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId, productStoreId);
+        BigDecimal estimatedShipCost = session.getShipmentCostEstimate(shippingContactMechId, shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId, productStoreId);
         if (UtilValidate.isNotEmpty(estimatedShipCost)) {
             session.setAdditionalShippingCharge(estimatedShipCost);
         }
