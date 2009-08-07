@@ -122,10 +122,10 @@ public class InventoryEvents {
         }
 
         Boolean doForceComplete = false;
-        Collection<Map> issuanceData = null;
+        Collection<Map<String, Object>> issuanceData = null;
         String workEffortId = UtilCommon.getParameter(request, "workEffortId");
         if (workEffortId != null) {
-            Map fields = FastMap.newInstance();
+            Map<String, Object> fields = FastMap.newInstance();
             fields.put("workEffortId", workEffortId);
             fields.put("productId", UtilCommon.getParameter(request, "productId"));
             fields.put("quantity", UtilCommon.getParameter(request, "quantity"));
@@ -141,8 +141,8 @@ public class InventoryEvents {
         try {
             // the getInventoryAvailableByFacility service uses an EntityListIterator which will throw an ugly exception if no transaction is in place.
             TransactionUtil.begin();
-            for (Map issuance : issuanceData) {
-                Map results = hasInventoryForIssuance(request, issuance);
+            for (Map<String, Object> issuance : issuanceData) {
+                Map<String, Object> results = hasInventoryForIssuance(request, issuance);
                 if (ServiceUtil.isError(results)) {
                     return "error";
                 }
@@ -159,7 +159,7 @@ public class InventoryEvents {
         return (doForceComplete) ? "forceComplete" : "success";
     }
 
-    private static Map hasInventoryForIssuance(HttpServletRequest request, Map issuance) throws GeneralException {
+    private static Map<String, Object> hasInventoryForIssuance(HttpServletRequest request, Map<String, Object> issuance) throws GeneralException {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
@@ -169,7 +169,7 @@ public class InventoryEvents {
         String productId = (String) issuance.get("productId");
         String quantityStr = (String) issuance.get("quantity");
         if (UtilValidate.isEmpty(quantityStr)) {
-            Map results = ServiceUtil.returnSuccess();
+            Map<String, Object> results = ServiceUtil.returnSuccess();
             results.put("doForceComplete", doForceComplete);
             return results;
         }
@@ -186,12 +186,12 @@ public class InventoryEvents {
         }
 
         if (quantity <= 0.0) {
-            Map results = ServiceUtil.returnSuccess();
+            Map<String, Object> results = ServiceUtil.returnSuccess();
             results.put("doForceComplete", false);
             return results;
         }
 
-        Map serviceResult = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", productId, "facilityId", task.getString("facilityId"), "userLogin", userLogin));
+        Map<String, Object> serviceResult = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", productId, "facilityId", task.getString("facilityId"), "userLogin", userLogin));
 
         if (ServiceUtil.isError(serviceResult)) {
             return serviceResult;
@@ -203,7 +203,7 @@ public class InventoryEvents {
             doForceComplete = true;
         }
 
-        Map results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("doForceComplete", doForceComplete);
         return results;
     }
