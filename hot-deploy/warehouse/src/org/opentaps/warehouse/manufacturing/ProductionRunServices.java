@@ -919,7 +919,7 @@ public final class ProductionRunServices {
             for (Iterator<GenericValue> weoiIt = workEffortAndOrderItems.iterator(); weoiIt.hasNext();) {
                 GenericValue workEffortAndOrderItem = weoiIt.next();
                 OrderReadHelper orh = new OrderReadHelper(workEffortAndOrderItem.getRelatedOne("OrderHeader"));
-                cost = cost.add(orh.getOrderItemTotalBd(workEffortAndOrderItem.getRelatedOne("OrderItem"))).setScale(decimals + 1, rounding);
+                cost = cost.add(orh.getOrderItemTotal(workEffortAndOrderItem.getRelatedOne("OrderItem"))).setScale(decimals + 1, rounding);
                 Debug.logInfo("after item [ " + workEffortAndOrderItem + "] cost is now [" + cost + "]", MODULE);
             }
 
