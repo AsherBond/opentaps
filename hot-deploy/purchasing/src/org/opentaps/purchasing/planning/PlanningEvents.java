@@ -34,6 +34,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 
@@ -85,7 +86,7 @@ public final class PlanningEvents {
 
             // call the service
             Map results = dispatcher.runSync("createProductionRunsFromPendingInternalRequirements", UtilMisc.toMap("userLogin", userLogin, "requirementIds", requirementIds, "facilityIds", facilities, "routingIds", routings));
-            if (!ServiceUtil.isSuccess(results)) {
+            if (!UtilCommon.isSuccess(results)) {
                 return UtilMessage.createAndLogEventError(request, results, locale, MODULE);
             }
         } catch (GenericServiceException e) {

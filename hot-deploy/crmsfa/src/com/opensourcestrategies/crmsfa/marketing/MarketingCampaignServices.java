@@ -18,6 +18,8 @@ package com.opensourcestrategies.crmsfa.marketing;
 
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDelegator;
@@ -697,7 +699,7 @@ public class MarketingCampaignServices {
             // associate if marketingCampaignId was given
             if (UtilValidate.isNotEmpty(marketingCampaignId)) {
                 Map serviceResults = dispatcher.runSync("crmsfa.addContactListToMarketingCampaign", UtilMisc.toMap("contactListId", contactListId , "marketingCampaignId", marketingCampaignId, "userLogin", userLogin));
-                if (!ServiceUtil.isSuccess(serviceResults)) {
+                if (!UtilCommon.isSuccess(serviceResults)) {
                     return serviceResults;
                 }
             }
@@ -759,7 +761,7 @@ public class MarketingCampaignServices {
                     Map serviceResults = dispatcher.runSync("crmsfa.addContactListToMarketingCampaign", UtilMisc.toMap("contactListId", contactListId, "marketingCampaignId", marketingCampaignId, "userLogin", userLogin));
                     
                     // set the from date
-                    if (!ServiceUtil.isSuccess(serviceResults)) {
+                    if (!UtilCommon.isSuccess(serviceResults)) {
                         Debug.logError("crmsfa.addContactListToMarketingCampaign did not return success for contactList ["+contactListId+"]", module);
                         error++;
                         TransactionUtil.rollback();

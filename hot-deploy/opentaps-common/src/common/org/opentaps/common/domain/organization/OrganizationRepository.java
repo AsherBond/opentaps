@@ -36,6 +36,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.domain.base.entities.AcctgTagEnumType;
 import org.opentaps.domain.base.entities.AgreementTermTypesByDocumentType;
 import org.opentaps.domain.base.entities.CustomTimePeriod;
@@ -166,7 +167,7 @@ public class OrganizationRepository extends PartyRepository implements Organizat
                                                                                                  "uomIdTo", accountingPreference.getBaseCurrencyUomId(),
                                                                                                  "asOfDate", asOfDate), 1, false);  // no transaction for convertUom
 
-            if (ServiceUtil.isSuccess(tmpResult)) {
+            if (UtilCommon.isSuccess(tmpResult)) {
                 conversionFactor = BigDecimal.valueOf((Double) tmpResult.get("convertedValue"));
             } else {
                 throw new RepositoryException("Currency conversion failed: No currencyUomId defined in PartyAcctgPreference entity for organizationPartyId " + organization.getPartyId());

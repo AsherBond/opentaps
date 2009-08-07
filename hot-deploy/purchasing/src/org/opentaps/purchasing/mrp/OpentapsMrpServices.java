@@ -1642,7 +1642,7 @@ public final class OpentapsMrpServices {
             Debug.logInfo("Creating transfer [" + requirementId + "] ...", MODULE);
             Map tmpResult = dispatcher.runSync("createInventoryTransferForFacilityProduct", inventoryTransferParams);
             // the service can return error or failure, in which case we return its error message
-            if (!ServiceUtil.isSuccess(tmpResult)) {
+            if (!UtilCommon.isSuccess(tmpResult)) {
                 Debug.logError("createInventoryTransferForFacilityProduct error : " + tmpResult, MODULE);
                 return UtilMessage.createAndLogServiceError(tmpResult, "PurchError_RequirementNotTransferred", locale, MODULE);
             }
@@ -1650,7 +1650,7 @@ public final class OpentapsMrpServices {
             // set the requirement to closed
             Debug.logInfo("Closing requirement [" + requirementId + "] ...", MODULE);
             Map result2 = dispatcher.runSync("updateRequirement", UtilMisc.toMap("userLogin", userLogin, "requirementId", requirementId, "statusId", "REQ_CLOSED"));
-            if (!ServiceUtil.isSuccess(result2)) {
+            if (!UtilCommon.isSuccess(result2)) {
                 return UtilMessage.createAndLogServiceError(tmpResult, "PurchError_RequirementNotTransferred", locale, MODULE);
             }
 
@@ -1803,7 +1803,7 @@ public final class OpentapsMrpServices {
                         // set the requirements to Closed
                         for (GenericValue requirement : requirementList) {
                             Map statusResult = dispatcher.runSync("updateRequirement", UtilMisc.toMap("userLogin", userLogin, "requirementId", requirement.get("requirementId"), "statusId", "REQ_CLOSED"));
-                            if (!ServiceUtil.isSuccess(statusResult)) {
+                            if (!UtilCommon.isSuccess(statusResult)) {
                                 return UtilMessage.createAndLogServiceError(statusResult, "PurchError_CreateProdRunFromPendingRequirementsFail", locale, MODULE);
                             }
                         }

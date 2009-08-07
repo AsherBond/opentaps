@@ -78,6 +78,7 @@ import org.ofbiz.entity.util.ByteWrapper;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.ModelService;
 
 /**
  * UtilCommon - A place for common opentaps helper methods.
@@ -1500,5 +1501,12 @@ public abstract class UtilCommon {
         DataResourceWorker.streamDataResource(baos, delegator, dataResourceId, https, webSiteId, locale, rootDir);
         ByteWrapper byteWrapper = new ByteWrapper(baos.toByteArray());
         return byteWrapper;
+    }
+    
+    public static boolean isSuccess(Map results) {
+        if (results == null || results.get(ModelService.RESPONSE_MESSAGE) == null) {
+            return false;
+        }
+        return ModelService.RESPOND_SUCCESS.equals(results.get(ModelService.RESPONSE_MESSAGE));
     }
 }

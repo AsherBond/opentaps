@@ -62,7 +62,7 @@ public final class InvoiceEvents {
             Locale locale = UtilHttp.getLocale(request);
 
                 Map results = dispatcher.runSync("invoiceSuppliesOrWorkEffortOrderItems", UtilMisc.toMap("orderData", orderData, "userLogin", userLogin));
-                if (ServiceUtil.isSuccess(results)) {
+                if (UtilCommon.isSuccess(results)) {
                     return "success";
                 } else {
                     return UtilMessage.createAndLogEventError(request, results, locale, MODULE);

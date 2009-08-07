@@ -89,7 +89,7 @@ public final class TransactionServices {
                 createAcctgTransCtx.put("transactionDate", UtilDateTime.nowTimestamp());
             }
             Map results = dispatcher.runSync("createAcctgTrans", createAcctgTransCtx);
-            if (!ServiceUtil.isSuccess(results)) {
+            if (!UtilCommon.isSuccess(results)) {
                 return UtilMessage.createAndLogServiceError(results, MODULE);
             }
             String acctgTransId = (String) results.get("acctgTransId");

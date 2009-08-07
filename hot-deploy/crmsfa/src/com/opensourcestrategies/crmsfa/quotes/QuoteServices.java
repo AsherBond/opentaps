@@ -578,7 +578,7 @@ public final class QuoteServices {
             input.put("statusId", "QUO_CREATED");
 
             Map result = dispatcher.runSync("createQuote", input);
-            if (!ServiceUtil.isSuccess(result)) {
+            if (!UtilCommon.isSuccess(result)) {
                 return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote [" + quoteId + "]", locale, MODULE);
             }
             String newQuoteId = (String) result.get("quoteId");
@@ -596,7 +596,7 @@ public final class QuoteServices {
                     input.put("copyQuoteItemOptions", context.get("copyQuoteItemOptions"));
                     input.put("copyQuoteAdjustments", context.get("copyQuoteAdjustments"));
                     result = dispatcher.runSync("copyQuoteItem", input);
-                    if (!ServiceUtil.isSuccess(result)) {
+                    if (!UtilCommon.isSuccess(result)) {
                         return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote Item [" + quoteId + "/" + item.get("quoteItemSeqId") + "]", locale, MODULE);
                     }
                 }
@@ -612,7 +612,7 @@ public final class QuoteServices {
                     }
                     input.put("quoteId", newQuoteId);
                     result = dispatcher.runSync("createQuoteAdjustment", input);
-                    if (!ServiceUtil.isSuccess(result)) {
+                    if (!UtilCommon.isSuccess(result)) {
                         return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote Adjustment [" + quoteId + "/" + adj.get("quoteAdjustmentId") + "]", locale, MODULE);
                     }
                 }
@@ -633,7 +633,7 @@ public final class QuoteServices {
                     }
                     input.put("quoteId", newQuoteId);
                     result = dispatcher.runSync("createQuoteRole", input);
-                    if (!ServiceUtil.isSuccess(result)) {
+                    if (!UtilCommon.isSuccess(result)) {
                         return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote Role [" + quoteId + "/" + role.get("partyId") + "/" + role.get("roleTypeId") + "]", locale, MODULE);
                     }
                 }
@@ -649,7 +649,7 @@ public final class QuoteServices {
                     }
                     input.put("quoteId", newQuoteId);
                     result = dispatcher.runSync("createQuoteCoefficient", input);
-                    if (!ServiceUtil.isSuccess(result)) {
+                    if (!UtilCommon.isSuccess(result)) {
                         return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote Coefficient [" + quoteId + "/" + coeff.get("coeffName") + "]", locale, MODULE);
                     }
                 }
@@ -706,7 +706,7 @@ public final class QuoteServices {
             }
 
             Map result = dispatcher.runSync("createQuoteItem", input);
-            if (!ServiceUtil.isSuccess(result)) {
+            if (!UtilCommon.isSuccess(result)) {
                 return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote Item [" + quoteId + "]", locale, MODULE);
             }
             newQuoteId = (String) result.get("quoteId");
@@ -723,7 +723,7 @@ public final class QuoteServices {
                     input.put("quoteId", newQuoteId);
                     input.put("quoteItemSeqId", newQuoteItemSeqId);
                     result = dispatcher.runSync("createQuoteAdjustment", input);
-                    if (!ServiceUtil.isSuccess(result)) {
+                    if (!UtilCommon.isSuccess(result)) {
                         return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote Item Adjustment [" + quoteId + "/" + quoteItemSeqId + "/" + adj.get("quoteAdjustmentId") + "]", locale, MODULE);
                     }
                 }
@@ -740,7 +740,7 @@ public final class QuoteServices {
                     input.put("quoteId", newQuoteId);
                     input.put("quoteItemSeqId", newQuoteItemSeqId);
                     result = dispatcher.runSync("addQuoteItemOption", input);
-                    if (!ServiceUtil.isSuccess(result)) {
+                    if (!UtilCommon.isSuccess(result)) {
                         return UtilMessage.createAndLogServiceError(result, "Cannot copy Quote Item Option [" + quoteId + "/" + quoteItemSeqId + "/" + option.get("quoteItemOptionSeqId") + "]", locale, MODULE);
                     }
                 }

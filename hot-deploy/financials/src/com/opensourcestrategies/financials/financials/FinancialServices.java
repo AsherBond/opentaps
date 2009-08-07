@@ -183,7 +183,7 @@ public final class FinancialServices {
             input = dctx.getModelService("getIncomeStatementByDates").makeValid(input, ModelService.IN_PARAM);
             tmpResult = dispatcher.runSync("getIncomeStatementByDates", input);
 
-            if (!ServiceUtil.isSuccess(tmpResult)) {
+            if (!UtilCommon.isSuccess(tmpResult)) {
                 return tmpResult;  // probably an error message - pass it back up
             } else if (tmpResult.get("netIncome") == null) {
                 return ServiceUtil.returnError("Cannot calculate a net income"); // no error message, no net income either?

@@ -29,6 +29,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 
 /**
  * A simple helper for the storeOrder service.
@@ -117,7 +118,7 @@ public class SalesOrderFactory extends OrderFactory {
         }
 
         Map<String, Object> callResults = dispatcher.runSync("storeOrder", callCtxt);
-        if (ServiceUtil.isSuccess(callResults)) {
+        if (UtilCommon.isSuccess(callResults)) {
             orderId = (String) callResults.get("orderId");
             return orderId;
         } else {

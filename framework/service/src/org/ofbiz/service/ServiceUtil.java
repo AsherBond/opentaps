@@ -18,28 +18,37 @@
  *******************************************************************************/
 package org.ofbiz.service;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transaction;
+
 import javolution.util.FastList;
 import javolution.util.FastMap;
-import org.ofbiz.base.util.*;
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.GenericTransactionException;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
-import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.config.ServiceConfigUtil;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.transaction.Transaction;
-import java.sql.Timestamp;
-import java.util.*;
 
 /**
  * Generic Service Utility Class
@@ -62,13 +71,6 @@ public class ServiceUtil {
             return false;
         }
         return ModelService.RESPOND_FAIL.equals(results.get(ModelService.RESPONSE_MESSAGE));
-    }
-
-    public static boolean isSuccess(Map results) {
-        if (results == null || results.get(ModelService.RESPONSE_MESSAGE) == null) {
-            return false;
-        }
-        return ModelService.RESPOND_SUCCESS.equals(results.get(ModelService.RESPONSE_MESSAGE));
     }
 
 

@@ -240,7 +240,7 @@ public final class BalanceReports {
 
             // get the data
             Map<String, Object> results = dispatcher.runSync("balanceStatementReport", UtilMisc.toMap("userLogin", userLogin, "organizationPartyId", organizationPartyId, "fromDate", fromDate, "thruDate", thruDate));
-            if (!ServiceUtil.isSuccess(results)) {
+            if (!UtilCommon.isSuccess(results)) {
                 return UtilMessage.createAndLogEventError(request, results, locale, MODULE);
             }
 
