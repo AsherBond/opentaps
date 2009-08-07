@@ -3,13 +3,14 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import java.sql.Timestamp;
 import com.opensourcestrategies.financials.util.UtilFinancial;
+import org.opentaps.common.util.UtilDate;
 
 timeZone = UtilHttp.getTimeZone(request);
 
 context{"testTimestampValue"} = UtilDateTime.nowTimestamp();
 
 context{"userTimeZone"} = timeZone.getDisplayName(true, TimeZone.LONG, locale);
-context{"defaultTimeZone"} = UtilDateTime.getDefaultTimeZone().getDisplayName(true, TimeZone.LONG, locale);
+context{"defaultTimeZone"} = UtilDate.getDefaultTimeZone().getDisplayName(true, TimeZone.LONG, locale);
 
 baseTimestamp = Timestamp.valueOf("2008-01-25 22:00:00.000");
 context{"baseTimestamp"} = baseTimestamp;

@@ -45,6 +45,16 @@ public abstract class UtilDate {
 
     /** Number of milliseconds in a day. */
     private static final long MS_IN_A_DAY = 24 * 60 * 60 * 1000;
+    
+    /**
+     * JDBC escape format for java.sql.Date conversions.
+     */
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
+
+    /**
+     * JDBC escape format for java.sql.Time conversions.
+     */
+    public static final String TIME_FORMAT = "HH:mm:ss";
 
     /**
      * Parses a timestamp into fields suitable for selection of default values for AM/PM based form widgets.
@@ -77,7 +87,7 @@ public abstract class UtilDate {
             // There are no robust algorithm to split date/time in unconditioned format.
             // Let's try convert timestamp using different patterns and see at result.
             ParsePosition pos = new ParsePosition(0);
-            SimpleDateFormat df = new SimpleDateFormat(UtilDateTime.getTimeFormat(locale), locale);
+            SimpleDateFormat df = new SimpleDateFormat(getTimeFormat(locale), locale);
             //df.setTimeZone(timeZone);
             Date dateObj = df.parse(timestamp, pos);
             if (dateObj != null) {
@@ -85,7 +95,7 @@ public abstract class UtilDate {
             }
             if (dateObj == null) {
                 pos.setIndex(0);
-                String dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+                String dateTimeFormat = getDateTimeFormat(locale);
                 df = new SimpleDateFormat(dateTimeFormat, locale);
                 //df.setTimeZone(timeZone);
                 dateObj = df.parse(timestamp, pos);
@@ -96,7 +106,7 @@ public abstract class UtilDate {
             }
             if (dateObj == null) {
                 pos.setIndex(0);
-                String dateFormat = UtilDateTime.getDateFormat(locale);
+                String dateFormat = getDateFormat(locale);
                 df = new SimpleDateFormat(dateFormat, locale);
                 //df.setTimeZone(timeZone);
                 dateObj = df.parse(timestamp, pos);
@@ -112,7 +122,7 @@ public abstract class UtilDate {
             calendar.setTime(dateObj);
 
             if (hasDate) {
-                df = new SimpleDateFormat(UtilDateTime.getDateFormat(locale), locale);
+                df = new SimpleDateFormat(getDateFormat(locale), locale);
                 //df.setTimeZone(timeZone);
                 date = df.format(calendar.getTime());
             }
@@ -165,10 +175,10 @@ public abstract class UtilDate {
             dateFormat = "yyyy-MM-dd";
         } else if (timestampString.indexOf(" ") != -1) {
             // Date and time in localized format
-            dateFormat = UtilDateTime.getDateTimeFormat(locale);
+            dateFormat = getDateTimeFormat(locale);
         } else {
             // date in localized format
-            dateFormat = UtilDateTime.getDateFormat(locale);
+            dateFormat = getDateFormat(locale);
         }
 
         if (!UtilValidate.isDateTime(timestampString, dateFormat, locale)) {
@@ -236,5 +246,106 @@ public abstract class UtilDate {
             }
         }
         return defaultTimeZone;
+    }
+    
+    /**
+     * Returns appropriate time format string.
+     * @deprecated was removed from ofbiz, re-added for backward compatibility
+     * @param locale User's locale, may be <code>null</code>
+     * @return Time format string
+     */
+    @Deprecated public static String getTimeFormat(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+
+        int timeStyle = -1;
+
+        if (TIME_FORMAT == null || "DEFAULT".equals(TIME_FORMAT) || "SHORT".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.SHORT;
+        } else if ("MEDIUM".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.MEDIUM;
+        } else if ("LONG".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.LONG;
+        } else {
+            return TIME_FORMAT;
+        }
+
+        SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getTimeInstance(timeStyle, locale);
+        return df.toPattern();
+    }
+
+    /**
+     * Returns appropriate date + time format string.
+     * @deprecated was removed from ofbiz, re-added for backward compatibility
+     * @param locale User's locale, may be <code>null</code>.
+     * @return Date/time format string
+     */
+    @Deprecated public static String getDateTimeFormat(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+
+        int dateStyle = -1;
+        if (DATE_FORMAT == null || "DEFAULT".equals(DATE_FORMAT) || "SHORT".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.SHORT;
+        } else if ("MEDIUM".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.MEDIUM;
+        } else if ("LONG".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.LONG;
+        }
+
+        int timeStyle = -1;
+        if (TIME_FORMAT == null || "DEFAULT".equals(TIME_FORMAT) || "SHORT".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.SHORT;
+        } else if ("MEDIUM".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.MEDIUM;
+        } else if ("LONG".equals(TIME_FORMAT)) {
+            timeStyle = DateFormat.LONG;
+        }
+
+        if (dateStyle >= 0 && timeStyle >= 0) {
+            SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
+            return df.toPattern();
+        }
+
+        if (dateStyle >= 0 && timeStyle == -1) {
+            SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateInstance(dateStyle, locale);
+            return (df.toPattern() + " " + TIME_FORMAT);
+        }
+
+        if (dateStyle == -1 && timeStyle == -1) {
+            return DATE_FORMAT + " " + TIME_FORMAT;
+        }
+
+        SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getTimeInstance(timeStyle, locale);
+        return DATE_FORMAT + " " + df.toPattern();
+    }
+
+    /**
+     * Returns appropriate date format string.
+     * @deprecated was removed from ofbiz, re-added for backward compatibility
+     * @param locale User's locale, may be <code>null</code>
+     * @return Date format string
+     */
+    @Deprecated public static String getDateFormat(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+
+        int dateStyle = -1;
+
+        if (DATE_FORMAT == null || "DEFAULT".equals(DATE_FORMAT) || "SHORT".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.SHORT;
+        } else if ("MEDIUM".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.MEDIUM;
+        } else if ("LONG".equals(DATE_FORMAT)) {
+            dateStyle = DateFormat.LONG;
+        } else {
+            return DATE_FORMAT;
+        }
+
+        SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateInstance(dateStyle, locale);
+        return df.toPattern();
     }
 }

@@ -31,6 +31,7 @@ import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.foundation.infrastructure.*;
 import org.opentaps.domain.billing.invoice.*;
+import org.opentaps.common.util.UtilDate;
 
 // Finds invoices based on invoiceTypeId and various input parameters
 invoiceTypeId = context.get("invoiceTypeId");
@@ -137,7 +138,7 @@ if (processingStatusId != null) {
         search.add( new EntityExpr("processingStatusId", EntityOperator.EQUALS, processingStatusId.trim()) );
     }
 }
-String dateFormat = UtilDateTime.getDateFormat(locale);
+String dateFormat = UtilDate.getDateFormat(locale);
 if (invoiceDateFrom != null) {
     search.add( new EntityExpr("invoiceDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(invoiceDateFrom, dateFormat, timeZone, locale), timeZone, locale)) );
 }

@@ -58,6 +58,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.template.FreeMarkerWorker;
+import org.opentaps.common.util.UtilDate;
 
 /**
  * Utility methods for working with FTL templates.
@@ -222,9 +223,9 @@ public abstract class FreemarkerUtil {
         Locale locale = env.getLocale();
         Configuration config = new Configuration();
         config.setObjectWrapper(BeansWrapper.getDefaultInstance());
-        config.setSetting("datetime_format", UtilDateTime.getDateTimeFormat(locale));
-        config.setSetting("date_format", UtilDateTime.getDateFormat(locale));
-        config.setSetting("time_format", UtilDateTime.getTimeFormat(locale));
+        config.setSetting("datetime_format", UtilDate.getDateTimeFormat(locale));
+        config.setSetting("date_format", UtilDate.getDateFormat(locale));
+        config.setSetting("time_format", UtilDate.getTimeFormat(locale));
         config.setSetting("number_format", "0.##########");
         return config;
     }

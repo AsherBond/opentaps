@@ -239,7 +239,7 @@ public abstract class UtilCommon {
         try {
             cal.setTime(df.parse(duration));
         } catch (ParseException e) {
-            throw new IllegalArgumentException(String.format("Duration input must be in %1$s format.", UtilDateTime.getTimeFormat(locale)));
+            throw new IllegalArgumentException(String.format("Duration input must be in %1$s format.", UtilDate.getTimeFormat(locale)));
         }
 
         // extract the days, hours and minutes

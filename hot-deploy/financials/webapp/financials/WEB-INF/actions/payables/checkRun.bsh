@@ -28,11 +28,12 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import java.sql.Timestamp;
 import java.text.ParseException;
+import org.opentaps.common.util.UtilDate;
 
 delegator = request.getAttribute("delegator");
 locale = UtilHttp.getLocale(request);
 timeZone = UtilHttp.getTimeZone(request);
-dateTimeFormat = UtilDateTime.getDateTimeFormat(locale);
+dateTimeFormat = UtilDate.getDateTimeFormat(locale);
 
 DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
 dd = dl.loadDomainsDirectory();

@@ -31,6 +31,7 @@
  import org.opentaps.common.util.UtilMessage;
  import org.opentaps.analytics.UtilEtl;
  import java.text.ParseException;
+ import org.opentaps.common.util.UtilDate;
   
  GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
  locale = UtilHttp.getLocale(request.getSession());
@@ -45,7 +46,7 @@
  thruDate = null;
  
  try {
-     fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+     fromDate = UtilDateTime.getDayStart(UtilDateTime.stringToTimeStamp(fromDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
      // AG120208 : this is a better way to handle the localized date but it needs some more work
      // fromDate = UtilDateTime.stringToTimeStamp(UtilHttp.makeParamValueFromComposite(request, "fromDate", locale), timeZone, locale);     
  } catch (ParseException) {
@@ -56,7 +57,7 @@
  }
  
  try {
-     thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+     thruDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(thruDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
      // AG120208 : this is a better way to handle the localized date but it needs some more work 
      // thruDate = UtilDateTime.stringToTimeStamp(UtilHttp.makeParamValueFromComposite(request, "thruDate", locale), timeZone, locale);     
  } catch (ParseException) {

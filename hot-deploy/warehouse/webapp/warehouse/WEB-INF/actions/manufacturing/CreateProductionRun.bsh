@@ -17,11 +17,12 @@
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
+import org.opentaps.common.util.UtilDate;
 
 startDate = parameters.get("estimatedStartDate");
 
 if (UtilValidate.isEmpty(startDate)) {
-    startDate = UtilDateTime.nowDateString(UtilDateTime.getDateTimeFormat(UtilHttp.getLocale(request)));
+    startDate = UtilDateTime.nowDateString(UtilDate.getDateTimeFormat(UtilHttp.getLocale(request)));
 }
 
 context.put("startDate", startDate);

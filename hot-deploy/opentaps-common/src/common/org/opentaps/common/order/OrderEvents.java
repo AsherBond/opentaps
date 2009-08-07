@@ -240,9 +240,9 @@ public final class OrderEvents {
         String shipBeforeDateString = UtilCommon.getParameter(request, "shipBeforeDate");
         if (shipBeforeDateString != null) {
             try {
-                shipBeforeDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(shipBeforeDateString, UtilDateTime.getDateFormat(locale), timeZone, locale), timeZone, locale);
+                shipBeforeDate = UtilDateTime.getDayEnd(UtilDateTime.stringToTimeStamp(shipBeforeDateString, UtilDate.getDateFormat(locale), timeZone, locale), timeZone, locale);
             } catch (ParseException e) {
-                UtilMessage.addFieldError(request, "shipBeforeDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDateTime.getDateFormat(locale))));
+                UtilMessage.addFieldError(request, "shipBeforeDate", UtilMessage.expandLabel("OpentapsFieldError_BadDateFormat", locale, UtilMisc.toMap("format", UtilDate.getDateFormat(locale))));
                 return "error";
             }
         }

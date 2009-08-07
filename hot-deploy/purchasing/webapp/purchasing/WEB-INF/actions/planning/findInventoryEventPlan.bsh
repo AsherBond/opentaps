@@ -51,7 +51,7 @@ import org.ofbiz.base.util.Debug;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.purchasing.mrp.UtilMrp;
-
+import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilCommon;
 
 timeZone = UtilHttp.getTimeZone(request);
@@ -87,7 +87,7 @@ UtilDateTime fromDate = new UtilDateTime();
 Timestamp fromTs = fromDate.nowTimestamp();
 fromTs = fromDate.getDayStart( fromTs, timeZone, locale );
 
-String fromStr = UtilDateTime.timeStampToString(fromTs, UtilDateTime.getDateTimeFormat(locale), timeZone, locale);
+String fromStr = UtilDateTime.timeStampToString(fromTs, UtilDate.getDateTimeFormat(locale), timeZone, locale);
 
 context.put("eventDateStr", fromStr);
 

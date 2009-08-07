@@ -223,11 +223,11 @@ public final class BalanceReports {
             thruDate = UtilDate.toTimestamp(thruDateStr, timeZone, locale);
         }
         if (fromDateStr != null && fromDate == null) {
-            UtilMessage.addFieldError(request, "fromDate", "OpentapsFieldError_BadDateFormat", UtilMisc.toMap("format", UtilDateTime.getDateFormat(locale)));
+            UtilMessage.addFieldError(request, "fromDate", "OpentapsFieldError_BadDateFormat", UtilMisc.toMap("format", UtilDate.getDateFormat(locale)));
             return "error";
         }
         if (thruDateStr != null && thruDate == null) {
-            UtilMessage.addFieldError(request, "thruDate", "OpentapsFieldError_BadDateFormat", UtilMisc.toMap("format", UtilDateTime.getDateFormat(locale)));
+            UtilMessage.addFieldError(request, "thruDate", "OpentapsFieldError_BadDateFormat", UtilMisc.toMap("format", UtilDate.getDateFormat(locale)));
             return "error";
         }
         String currencyUomId = UtilCommon.getParameter(request, "currencyUomId");
