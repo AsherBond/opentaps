@@ -45,7 +45,7 @@ public abstract class UtilDate {
 
     /** Number of milliseconds in a day. */
     private static final long MS_IN_A_DAY = 24 * 60 * 60 * 1000;
-    
+
     /**
      * JDBC escape format for java.sql.Date conversions.
      */
@@ -226,15 +226,15 @@ public abstract class UtilDate {
     protected static TimeZone defaultTimeZone = null;
 
     /**
-     * @deprecated
-     * TODO: for upgrade ofbiz to new version only, refactor the code later.
      * Returns the OFBiz default TimeZone object. The default time zone is configured in
      * the <code>general.properties</code> file (<code>timeZone.default</code>).
      * @see java.util.TimeZone
+     * @deprecated Start class now initializes the JVM default locale and time zone, use TimeZone.getDefault() instead
+     * @return the default <code>TimeZone</code>
      */
-    public static TimeZone getDefaultTimeZone() {
+    @Deprecated public static TimeZone getDefaultTimeZone() {
         if (defaultTimeZone == null) {
-            synchronized(UtilDateTime.class) {
+            synchronized (UtilDateTime.class) {
                 if (defaultTimeZone == null) {
                     String tzId = UtilProperties.getPropertyValue("framework/common/config/general.properties", "timeZone.default");
                     if (UtilValidate.isNotEmpty(tzId)) {
@@ -247,7 +247,7 @@ public abstract class UtilDate {
         }
         return defaultTimeZone;
     }
-    
+
     /**
      * Returns appropriate time format string.
      * @deprecated was removed from ofbiz, re-added for backward compatibility
