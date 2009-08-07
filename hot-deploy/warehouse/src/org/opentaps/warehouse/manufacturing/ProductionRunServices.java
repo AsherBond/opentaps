@@ -330,7 +330,7 @@ public final class ProductionRunServices {
 
         String productId = (String) context.get("productId");
         Timestamp startDate = (Timestamp) context.get("startDate");
-        Double quantity = (Double) context.get("quantity");
+        Double quantityDbl = (Double) context.get("quantity");
         String facilityId = (String) context.get("facilityId");
         String workEffortName = (String) context.get("workEffortName");
         String description = (String) context.get("description");
@@ -338,15 +338,16 @@ public final class ProductionRunServices {
         String workEffortId = null;
 
         // default quantity to produce to 1.0
-        if (quantity == null) {
-            quantity = new Double(1.0);
+        BigDecimal quantity = BigDecimal.ONE;
+        if (quantityDbl != null) {
+            quantity = BigDecimal.valueOf(quantityDbl);
         }
 
         try {
             List components = new ArrayList();
             BomTree tree = new BomTree(productId, "MANUF_COMPONENT", startDate, BomTree.EXPLOSION_MANUFACTURING, routingId, delegator, dispatcher, userLogin);
-            tree.setRootQuantity(quantity.doubleValue());
-            tree.setRootAmount(0.0);
+            tree.setRootQuantity(quantity);
+            tree.setRootAmount(BigDecimal.ZERO);
             Debug.logInfo("Debugging BomTree, for product [" + productId + "] and routing [" + routingId + "]", MODULE);
             tree.debug();
             tree.print(components);
