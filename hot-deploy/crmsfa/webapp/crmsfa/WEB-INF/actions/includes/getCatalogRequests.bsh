@@ -45,7 +45,7 @@ while (crit.hasNext()) {
     if (UtilValidate.isNotEmpty(postalAddress)) {
       catRequest.putAll(postalAddress);
     }
-    takerRole = EntityUtil.getFirst(delegator.findByAnd("CustRequestParty", UtilMisc.toMap("custRequestId", custRequest.get("custRequestId"), "roleTypeId", "REQ_TAKER")));
+    takerRole = EntityUtil.getFirst(delegator.findByAnd("CustRequestRole", UtilMisc.toMap("custRequestId", custRequest.get("custRequestId"), "roleTypeId", "REQ_TAKER")));
     if (UtilValidate.isNotEmpty(takerRole)) {
       takerPartyId = takerRole.get("partyId");
       takerName = PartyHelper.getCrmsfaPartyName(delegator, takerPartyId);

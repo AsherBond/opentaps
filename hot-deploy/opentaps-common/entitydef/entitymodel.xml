@@ -2259,4 +2259,91 @@ under the License.
         </view-link>
     </view-entity>
 
+  <!-- it come from ofbiz applications/manufacturing/entitydef/entitymodel.xml, we move it here because it no longer exists in ofbiz codes -->
+  <!-- ========================================================= -->
+  <!-- org.ofbiz.manufacturing.mrp -->
+  <!-- ========================================================= -->
+
+    <entity entity-name="InventoryEventPlanned"
+            package-name="org.ofbiz.manufacturing.mrp"
+            title="Inventory event planned">
+      <description>
+        Contains all the planned InventoryEvent by ProductId to be able to check the product availability 
+        and if necessary generate some requirements
+      </description>
+      <field name="productId" type="id-ne"></field>
+      <field name="eventDate" type="date-time"></field>
+      <field name="inventoryEventPlanTypeId" type="id-ne"></field>
+      <field name="eventQuantity" type="floating-point"></field>
+      <field name="facilityId" type="id"></field>
+      <field name="eventName" type="very-long"></field>
+      <field name="isLate" type="indicator"></field>
+      <prim-key field="productId"/>
+      <prim-key field="eventDate"/>
+      <prim-key field="inventoryEventPlanTypeId"/>
+      <relation type="one" fk-name="INV_EVNT_PLN_PRDT" rel-entity-name="Product">
+        <key-map field-name="productId"/>
+      </relation>
+      <relation type="one" fk-name="INV_EVNT_PLN_TYP" rel-entity-name="InventoryEventPlannedType">
+        <key-map field-name="inventoryEventPlanTypeId"/>
+      </relation>
+      <relation type="one" fk-name="INV_EVNT_PLN_FAC" rel-entity-name="Facility">
+        <key-map field-name="facilityId"/>
+      </relation>
+    </entity>
+    <entity entity-name="InventoryEventPlannedType"
+            package-name="org.ofbiz.manufacturing.mrp"
+            default-resource-name="ManufacturingEntityLabels"
+            title="Inventory  event Planned type">
+      <description>Used to describe the InventoryEventPlanned and give the information if it's an in or out event</description>
+      <field name="inventoryEventPlanTypeId" type="id-ne"></field>
+      <field name="description" type="description"></field>
+      <field name="inOut" type="indicator"></field>
+      <prim-key field="inventoryEventPlanTypeId"/>
+    </entity>
+    <view-entity entity-name="MrpInventoryEventPlanned" package-name="org.ofbiz.manufacturing.mrp" 
+        title="Inventory Event Planned view for MRP process">
+      <description>Uses for the MRP process to be able to read the InventoryEventPlanned By billOfMaterialLevel and by eventDate</description>
+      <member-entity entity-alias="IEP" entity-name="InventoryEventPlanned"></member-entity>
+      <member-entity entity-alias="IEPT" entity-name="InventoryEventPlannedType"></member-entity>
+      <member-entity entity-alias="PR" entity-name="Product"></member-entity>
+      <alias-all entity-alias="IEP"></alias-all>
+      <alias entity-alias="PR" name="billOfMaterialLevel"></alias>
+      <alias entity-alias="IEPT" name="inOut"></alias>
+      <view-link entity-alias="IEP" rel-entity-alias="PR">
+        <key-map field-name="productId"></key-map>
+      </view-link>
+      <view-link entity-alias="IEP" rel-entity-alias="IEPT">
+        <key-map field-name="inventoryEventPlanTypeId"></key-map>
+      </view-link>
+      <relation rel-entity-name="Product" type="one-nofk">
+        <key-map field-name="productId"/>
+      </relation>
+    </view-entity>
+
+  <!-- it come from ofbiz applications/order/entitydef/entitymodel.xml, we move it here because it no longer exists in ofbiz codes -->
+    <entity entity-name="CustRequestRole"
+            package-name="org.ofbiz.order.request"
+            title="Customer Request Role Entity">
+      <field name="custRequestId" type="id-ne"></field>
+      <field name="partyId" type="id-ne"></field>
+      <field name="roleTypeId" type="id-ne"></field>
+      <prim-key field="custRequestId"/>
+      <prim-key field="partyId"/>
+      <prim-key field="roleTypeId"/>
+      <relation type="one" fk-name="CUSTREQ_RL_CRQST" rel-entity-name="CustRequest">
+        <key-map field-name="custRequestId"/>
+      </relation>
+      <relation type="one" fk-name="CUSTREQ_RL_PARTY" rel-entity-name="Party">
+        <key-map field-name="partyId"/>
+      </relation>
+      <relation type="one-nofk" rel-entity-name="RoleType">
+        <key-map field-name="roleTypeId"/>
+      </relation>
+      <relation type="one" fk-name="CUSTREQ_RL_PROLE" rel-entity-name="PartyRole">
+        <key-map field-name="partyId"/>
+        <key-map field-name="roleTypeId"/>
+      </relation>
+    </entity>
+
 </entitymodel>

@@ -167,9 +167,20 @@ under the License.
 
     <FacilityAssocType facilityAssocTypeId="BACKUP_INVENTORY" description="Holds backup inventory"/>
 
+
+    <!-- It come from ofbiz applications/manufacturing/data/ManufacturingData.xml, but it not exist in ofbiz no longer, so move it here -->
+    <InventoryEventPlannedType inventoryEventPlanTypeId="INITIAL_QOH" description="Initial QOH" inOut="+"/>
+    <InventoryEventPlannedType inventoryEventPlanTypeId="MRP_REQUIREMENT" description="Mrp requirement" inOut="-"/>
+    <InventoryEventPlannedType inventoryEventPlanTypeId="MANUF_ORDER_RECP" description="Manufacturing Order receipt" inOut="+"/>
+    <InventoryEventPlannedType inventoryEventPlanTypeId="MANUF_ORDER_REQ" description="Manufacturing Order requirement" inOut="-"/>
+    <InventoryEventPlannedType inventoryEventPlanTypeId="PROP_MANUF_O_RECP" description="Proposed Manufacturing Order receipt" inOut="+"/>
+    <InventoryEventPlannedType inventoryEventPlanTypeId="PUR_ORDER_RECP" description="Purchase Order receipt" inOut="+"/>
+    <InventoryEventPlannedType inventoryEventPlanTypeId="PROD_REQ_RECP" description="Product Requirement Receipt" inOut="+"/>
+    <InventoryEventPlannedType inventoryEventPlanTypeId="PROP_PUR_O_RECP" description="Proposed Purchase Order receipt" inOut="+"/>
+    <InventoryEventPlannedType inventoryEventPlanTypeId="SALES_ORDER_SHIP" description="Sales order shipment" inOut="-"/>
+    <InventoryEventPlannedType inventoryEventPlanTypeId="ERROR" description="Error"/>
+
     <!-- Additional inventory event plan types for MRP -->
-    <!-- InventoryEventPlannedType no longer exist in applications/manufacturing/entitydef/entitymodel.xml, so comment it temporary -->
-    <!--
     <InventoryEventPlannedType inventoryEventPlanTypeId="INVENTORY_XFER_IN" description="Inbound Inventory Transfer" inOut="+"/>
     <InventoryEventPlannedType inventoryEventPlanTypeId="INVENTORY_XFER_OUT" description="Outbound Inventory Transfer" inOut="-"/>
     <InventoryEventPlannedType inventoryEventPlanTypeId="PROP_INV_XFER_IN" description="Proposed Inbound Inventory Transfer" inOut="+"/>
@@ -177,7 +188,6 @@ under the License.
     <InventoryEventPlannedType inventoryEventPlanTypeId="SALES_FORECAST" description="Sales Forecast" inOut="-"/>
     <InventoryEventPlannedType inventoryEventPlanTypeId="INV_XFER_REQ_IN" description="Inbound Inventory Transfer Requirement" inOut="+"/>
     <InventoryEventPlannedType inventoryEventPlanTypeId="INV_XFER_REQ_OUT" description="Outbound Inventory Transfer Requirement" inOut="-"/>
-	-->
 	
     <!-- Product features of this type will display on order entry -->
     <ProductFeatureType description="Warning" hasTable="N" parentTypeId="" productFeatureTypeId="WARNING"/>

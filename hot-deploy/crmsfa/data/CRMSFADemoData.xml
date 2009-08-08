@@ -371,9 +371,9 @@
     <CustRequest custRequestId="DemoCase1" custRequestTypeId="RF_SUPPORT" custRequestCategoryId="CRCAT_NEW_PROB" statusId="CRQ_SUBMITTED" priority="5" 
         fromPartyId="DemoContact1"
         custRequestName="Demo customer request" description="This is a sample customer request.  Actually nothing is wrong.  Thank you for your attention."/>
-    <CustRequestParty custRequestId="DemoCase1" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER" fromDate="2009-01-01 00:00:00"/>
-    <CustRequestParty custRequestId="DemoCase1" partyId="DemoAccount1" roleTypeId="ACCOUNT" fromDate="2009-01-01 00:00:00"/>
-    <CustRequestParty custRequestId="DemoCase1" partyId="DemoContact1" roleTypeId="CONTACT" fromDate="2009-01-01 00:00:00"/>
+    <CustRequestRole custRequestId="DemoCase1" partyId="DemoSalesRep1" roleTypeId="REQ_TAKER"/>
+    <CustRequestRole custRequestId="DemoCase1" partyId="DemoAccount1" roleTypeId="ACCOUNT"/>
+    <CustRequestRole custRequestId="DemoCase1" partyId="DemoContact1" roleTypeId="CONTACT"/>
 
     <!-- an OFBiz WorkEffort can be an event or a task (or a manufacturing step, for that matter).  They can be associated with customer requests, communications,
         sales opportunities, orders, quotes, and parties.  Why do we associate accounts and contacts with WorkEfforts directly?  Because a WorkEffort can

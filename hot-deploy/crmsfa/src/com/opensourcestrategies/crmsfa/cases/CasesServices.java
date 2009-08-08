@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Iterator;
 
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -110,7 +109,7 @@ public class CasesServices {
                     return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
                 }
                 serviceResults = dispatcher.runSync("createCustRequestRole", 
-                        UtilMisc.toMap("custRequestId", custRequestId, "partyId", accountPartyId, "roleTypeId", "ACCOUNT", "fromDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin));
+                        UtilMisc.toMap("custRequestId", custRequestId, "partyId", accountPartyId, "roleTypeId", "ACCOUNT", "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
                     return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, module);
                 }
@@ -122,7 +121,7 @@ public class CasesServices {
                     return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
                 }
                 serviceResults = dispatcher.runSync("createCustRequestRole", 
-                        UtilMisc.toMap("custRequestId", custRequestId, "partyId", contactPartyId, "roleTypeId", "CONTACT", "fromDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin));
+                        UtilMisc.toMap("custRequestId", custRequestId, "partyId", contactPartyId, "roleTypeId", "CONTACT", "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
                     return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, module);
                 }

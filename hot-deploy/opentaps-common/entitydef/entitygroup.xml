@@ -183,4 +183,13 @@ under the License.
     <entity-group group="org.ofbiz" entity="KeyboardShortcutHandler"/>
     <entity-group group="org.ofbiz" entity="KeyboardShortcutAndHandler"/>
 
+    <!-- ========================================================= -->
+    <!-- org.ofbiz.manufacturing.mrp moved from ofbiz -->
+    <!-- ========================================================= -->
+
+    <entity-group group="org.ofbiz" entity="InventoryEventPlanned" />
+    <entity-group group="org.ofbiz" entity="InventoryEventPlannedType" />
+    <entity-group group="org.ofbiz" entity="MrpInventoryEventPlanned" />
+
+    <entity-group group="org.ofbiz" entity="CustRequestRole" />    
 </entitygroup>  
