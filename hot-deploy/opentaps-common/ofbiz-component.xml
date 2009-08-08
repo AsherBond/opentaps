@@ -82,7 +82,6 @@
     <service-resource type="eca" loader="main" location="servicedef/secas_orders.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas_shipping.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas_agreements.xml"/>
-    <service-resource type="eca" loader="main" location="servicedef/secas_ofbiz.xml"/>
     <!-- note that webapp/opentaps/ is not a bona fide application, just a storage location for common ftl and bsh files -->
 
     <webapp name="opentaps_images"
