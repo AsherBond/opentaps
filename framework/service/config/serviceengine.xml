@@ -58,6 +58,10 @@ under the License.
         <engine name="ofbiz-workflow" class="org.ofbiz.workflow.WorkflowEngine"/>
         <engine name="workflow" class="org.ofbiz.shark.service.SharkServiceEngine"/>
         <engine name="webslinger-server" class="org.ofbiz.webslinger.WebslingerServerEngine"/>
+        
+        <!-- the opentaps engine for executing standard java object services -->
+        <engine name="pojo" class="org.opentaps.foundation.service.ofbiz.POJOJavaEngine"/>
+        
 
         <service-location name="main-rmi" location="rmi://localhost:1099/RMIDispatcher"/>
         <service-location name="main-http" location="http://localhost:8080/webtools/control/httpService"/>
