@@ -1188,7 +1188,7 @@ For more information, please see documentation/opentapsFormMacros.html
 -->
 <#macro gwtModule widget>
   <#-- widget should be 'module/java_path' -->
-  <#assign arr = widget?split("/")>
+  <#assign arr = widget.split("/")>
   <#if arr?size == 2>
     <#assign module=arr[0] />
     <#assign path=arr[1] />
