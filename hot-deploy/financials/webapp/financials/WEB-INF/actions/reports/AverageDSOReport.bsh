@@ -24,7 +24,7 @@ import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.common.util.UtilCommon;
 import com.opensourcestrategies.financials.util.*;
-
+import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 
 timeZone = UtilHttp.getTimeZone(request);
@@ -114,8 +114,8 @@ while ((invoice = iterator.next()) != null) {
     if ("INVOICE_PAID".equals(invoice.getString("statusId"))) {
         dsoDate = (invoice.get("paidDate") != null ? invoice.get("paidDate") : invoiceDate);
     }
-    fromCal = UtilDateTime.toCalendar(invoiceDate, timeZone, locale);
-    thruCal = UtilDateTime.toCalendar(dsoDate, timeZone, locale);
+    fromCal = UtilDate.toCalendar(invoiceDate, timeZone, locale);
+    thruCal = UtilDate.toCalendar(dsoDate, timeZone, locale);
     dso = (thruCal.getTimeInMillis() - fromCal.getTimeInMillis())*1.0/1000/60/60/24;
 
     // keep running sum of DSO

@@ -218,7 +218,7 @@ public final class OpentapsMrpServices {
             // ----------------------------------------
             // This is the default required date for sales orders without dates specified
             Timestamp notAssignedDate = null;
-            Calendar calendar = UtilDateTime.toCalendar(now, timeZone, locale);
+            Calendar calendar = UtilDate.toCalendar(now, timeZone, locale);
             if (UtilValidate.isEmpty(defaultYearsOffset)) {
                 calendar.add(Calendar.DAY_OF_YEAR, 1);
             } else {

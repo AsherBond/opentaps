@@ -30,7 +30,6 @@ import java.util.TimeZone;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
-import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 
 /**
@@ -319,5 +318,32 @@ public abstract class UtilDate {
 
         SimpleDateFormat df = (SimpleDateFormat) SimpleDateFormat.getDateInstance(dateStyle, locale);
         return df.toPattern();
+    }
+
+    /**
+     * Returns a Calendar object initialized to the specified date/time, time zone,
+     * and locale.
+     *
+     * @param date date/time to use
+     * @param timeZone
+     * @param locale
+     * @return Calendar object
+     * @see java.util.Calendar
+     */
+    public static Calendar toCalendar(Date date, TimeZone timeZone, Locale locale) {
+        if (timeZone == null) {
+            timeZone = TimeZone.getDefault();
+            Debug.logWarning("Null timeZone, using default: " + timeZone, UtilDateTime.class.getName());
+        }
+        if (locale == null) {
+            locale = Locale.getDefault();
+            Debug.logWarning("Null locale, using default: " + locale, UtilDateTime.class.getName());
+        }
+        Calendar cal = Calendar.getInstance(timeZone, locale);
+
+        if (date != null) {
+            cal.setTime(date);
+        }
+        return cal;
     }
 }

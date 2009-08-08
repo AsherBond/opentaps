@@ -1251,7 +1251,7 @@ public final class InvoiceServices {
             // set the due date
             Timestamp dueDate = null;
             if (UtilValidate.isNotEmpty(cutoffDayOfMonth)) {
-                Calendar cal = UtilDateTime.toCalendar(invoice.getTimestamp("invoiceDate"), timeZone, locale);
+                Calendar cal = UtilDate.toCalendar(invoice.getTimestamp("invoiceDate"), timeZone, locale);
 
                 // If the invoice is created on or before the cutoff day of the month, then the invoice is due in the coming month.
                 //  Otherwise it's due in the month after the coming month.

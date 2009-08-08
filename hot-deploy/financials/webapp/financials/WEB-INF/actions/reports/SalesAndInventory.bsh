@@ -27,6 +27,7 @@ import org.ofbiz.accounting.util.UtilAccounting;
 import com.opensourcestrategies.financials.util.UtilFinancial;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
 
 timeZone = UtilHttp.getTimeZone(request);
 
@@ -46,8 +47,8 @@ includeProductIdCondition = (productId == null || productId.trim().length() == 0
 if (includeProductIdCondition) productIdExpr = new EntityExpr("productId", true, EntityOperator.LIKE, productId.trim() + "%", true);
 
 // compute days in period
-fromCal = UtilDateTime.toCalendar(fromDate, timeZone, locale);
-thruCal = UtilDateTime.toCalendar(thruDate, timeZone, locale);
+fromCal = UtilDate.toCalendar(fromDate, timeZone, locale);
+thruCal = UtilDate.toCalendar(thruDate, timeZone, locale);
 daysInPeriod = (thruCal.getTimeInMillis() - fromCal.getTimeInMillis())*1.0/1000/60/60/24;
 
 // constants

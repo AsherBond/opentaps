@@ -769,16 +769,7 @@ public class UtilDateTime {
      * @see java.util.Calendar
      */
     public static Calendar toCalendar(Date date, TimeZone timeZone, Locale locale) {
-        if (timeZone == null) {
-            timeZone = TimeZone.getDefault();
-            Debug.logWarning("Null timeZone, using default: " + timeZone, UtilDateTime.class.getName());
-        }
-        if (locale == null) {
-            locale = Locale.getDefault();
-            Debug.logWarning("Null locale, using default: " + locale, UtilDateTime.class.getName());
-        }
         Calendar cal = Calendar.getInstance(timeZone, locale);
-
         if (date != null) {
             cal.setTime(date);
         }
