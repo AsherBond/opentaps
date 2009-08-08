@@ -99,7 +99,8 @@ serviceCtx.put("facilityId", facilityId);
 serviceCtx.put("fixedAssetId", fixedAssetId);
 serviceCtx.put("filterOutCanceledEvents", new Boolean(true));
 serviceCtx.put("periodType", new Integer(Calendar.DATE));
-
+serviceCtx.put("timeZone", timeZone);
+serviceCtx.put("locale", locale);
 result = dispatcher.runSync("getWorkEffortEventsByPeriod", serviceCtx);
 
 context.put("periods",result.get("periods"));
