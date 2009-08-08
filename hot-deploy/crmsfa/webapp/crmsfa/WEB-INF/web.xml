@@ -124,15 +124,15 @@
         <url-pattern>/control/*</url-pattern>
     </servlet-mapping>
 
-    <servlet>
-        <servlet-name>QueryBuilderService</servlet-name>
-        <servlet-class>org.opentaps.analytics.gwt.query.server.QueryBuilderServiceImpl</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>QueryBuilderService</servlet-name>
-        <url-pattern>/control/gwtrpc/QueryBuilderService</url-pattern>
-    </servlet-mapping>
+<!--    <servlet>-->
+<!--        <servlet-name>QueryBuilderService</servlet-name>-->
+<!--        <servlet-class>org.opentaps.analytics.gwt.query.server.QueryBuilderServiceImpl</servlet-class>-->
+<!--        <load-on-startup>1</load-on-startup>-->
+<!--    </servlet>-->
+<!--    <servlet-mapping>-->
+<!--        <servlet-name>QueryBuilderService</servlet-name>-->
+<!--        <url-pattern>/control/gwtrpc/QueryBuilderService</url-pattern>-->
+<!--    </servlet-mapping>-->
 
     <session-config>
         <session-timeout>60</session-timeout> <!-- in minutes -->

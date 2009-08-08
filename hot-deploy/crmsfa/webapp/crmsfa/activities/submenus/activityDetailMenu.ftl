@@ -15,7 +15,7 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
-<#assign dateFormat = Static["org.ofbiz.base.util.UtilDateTime"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale))/>
+<#assign dateFormat = Static["org.opentaps.common.util.UtilDate"].getJsDateTimeFormat(Static["org.opentaps.common.util.UtilDate"].getDateFormat(locale))/>
 
 <script type="text/javascript">
 /*<![CDATA[*/
