@@ -1,0 +1,2 @@
+r12972
+remove OldCustRequestRole from ofbiz order entitydef, and re-add CustRequestRole/InventoryEventPlanned/InventoryEventPlannedType/MrpInventoryEventPlanned in opentaps common.
