@@ -134,8 +134,8 @@ under the License.
             <filelist dir="." files="hot-deploy/opentaps-common"/>
             <filelist dir="." files="hot-deploy/purchasing/build.xml"/>
             <filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
-            <!--filelist dir="." files="hot-deploy/financials/build.xml"/>
-            <filelist dir="." files="hot-deploy/warehouse/build.xml"/-->
+            <filelist dir="." files="hot-deploy/financials/build.xml"/>
+            <filelist dir="." files="hot-deploy/warehouse/build.xml"/>
         </subant>
     </target>
 
@@ -172,9 +172,9 @@ under the License.
             <filelist dir="." files="hot-deploy/opentaps-common/build.xml"/>
             <filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
             <filelist dir="." files="hot-deploy/purchasing/build.xml"/>
-            <!--filelist dir="." files="hot-deploy/financials/build.xml"/>
+            <filelist dir="." files="hot-deploy/financials/build.xml"/>
             <filelist dir="." files="hot-deploy/warehouse/build.xml"/>
-            <filelist dir="." files="hot-deploy/analytics/build.xml"/-->
+            <!--filelist dir="." files="hot-deploy/analytics/build.xml"/-->
         </subant>
         <echo message="[gwt code] ========== Done Building GWT Code (Compile) =========="/>
     </target>

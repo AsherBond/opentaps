@@ -25,10 +25,10 @@ under the License.
         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/component-loader.xsd">
     <load-component component-location="opentaps-common"/>
     <load-component component-location="crmsfa"/>
-    <!--
     <load-component component-location="financials"/>
     <load-component component-location="purchasing"/>
     <load-component component-location="warehouse"/>
+    <!--
     <load-component component-location="dataimport"/>
     <load-component component-location="livecatalog"/>
     <load-component component-location="analytics"/>
