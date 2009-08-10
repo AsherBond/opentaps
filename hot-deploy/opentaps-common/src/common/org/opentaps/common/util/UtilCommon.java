@@ -1496,6 +1496,23 @@ public abstract class UtilCommon {
     }
 
     /**
+     * Assuming theMap not null; if null will throw a NullPointerException
+     */
+    public static <K> BigDecimal addInMapOfBigDecimal(Map<K, BigDecimal> theMap, K mapKey, BigDecimal addNumber) {
+        BigDecimal currentNumber = theMap.get(mapKey);
+        if (currentNumber == null) {
+            currentNumber = BigDecimal.ZERO;
+        }
+
+        if (addNumber == null || addNumber.signum() == 0) {
+            return currentNumber;
+        }
+        currentNumber = currentNumber.add(addNumber);
+        theMap.put(mapKey, currentNumber);
+        return currentNumber;
+    }
+
+    /**
      * @deprecated
      * TODO: for upgrade ofbiz to new version only, refactor the code later.
      */    

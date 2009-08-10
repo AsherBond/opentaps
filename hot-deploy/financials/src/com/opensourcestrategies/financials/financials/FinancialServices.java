@@ -521,7 +521,7 @@ public final class FinancialServices {
             tmpResult = dispatcher.runSync("getIncomeStatementByDates", input);
             GenericValue retainedEarningsGlAccount = (GenericValue) tmpResult.get("retainedEarningsGlAccount");
             BigDecimal interimNetIncome = (BigDecimal) tmpResult.get("netIncome");
-            UtilMisc.addInMapOfBigDecimal(equityAccountBalances, retainedEarningsGlAccount, interimNetIncome);
+            UtilCommon.addInMapOfBigDecimal(equityAccountBalances, retainedEarningsGlAccount, interimNetIncome);
 
             // TODO: This is just copied over from getIncomeStatementByDates for now.  We should implement a good version at some point.
             boolean isClosed = true;

@@ -270,23 +270,6 @@ public class UtilMisc {
     /**
      * Assuming theMap not null; if null will throw a NullPointerException
      */
-    public static <K> BigDecimal addInMapOfBigDecimal(Map<K, BigDecimal> theMap, K mapKey, BigDecimal addNumber) {
-        BigDecimal currentNumber = theMap.get(mapKey);
-        if (currentNumber == null) {
-            currentNumber = ZERO_BD;
-        }
-
-        if (addNumber == null || ZERO_BD.equals(addNumber)) {
-            return currentNumber;
-        }
-        currentNumber = currentNumber.add(addNumber);
-        theMap.put(mapKey, currentNumber);
-        return currentNumber;
-    }
-
-    /**
-     * Assuming theMap not null; if null will throw a NullPointerException
-     */
     public static <K> BigDecimal addToBigDecimalInMap(Map<K, Object> theMap, K mapKey, BigDecimal addNumber) {
         Object currentNumberObj = theMap.get(mapKey);
         BigDecimal currentNumber = null;
