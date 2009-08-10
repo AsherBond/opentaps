@@ -1,2 +1,5 @@
 r12972
 remove OldCustRequestRole from ofbiz order entitydef, and re-add CustRequestRole/InventoryEventPlanned/InventoryEventPlannedType/MrpInventoryEventPlanned in opentaps common.
+
+ofbiz remove contentPurposeEnumId from entity PartyContent, also add partyContentTypeId as part of primary key.
+I re-add contentPurposeEnumId in r12982, and going to refactor relate codes. 
