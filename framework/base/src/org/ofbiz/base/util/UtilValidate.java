@@ -19,13 +19,9 @@
 package org.ofbiz.base.util;
 
 import java.util.Calendar;
-import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import org.apache.commons.validator.EmailValidator;
-import org.apache.commons.validator.routines.CalendarValidator;
 
 /**
  * General input/data validation methods
@@ -1356,31 +1352,4 @@ public class UtilValidate {
         }
         return isValid;
     }
-
-    /**
-     * Verify if date/time string match pattern and is valid.
-     */
-    public static boolean isDateTime(String value, String pattern, Locale locale, TimeZone timeZone) {
-        CalendarValidator validator = new CalendarValidator();
-        if (timeZone == null) {
-            return (validator.validate(value, pattern, locale) != null);
-        }
-        return (validator.validate(value, pattern, locale, timeZone) != null);
-    }
-
-    public static boolean isDateTime(String value, String pattern, Locale locale) {
-        return isDateTime(value, pattern, locale, null);
-    }
-
-    /**
-     * Verify either date/time string conforms timestamp pattern
-     */
-    public static boolean isTimestamp(String value) {
-        if (value.length() == 10) {
-            return isDateTime(value, "yyyy-MM-dd", Locale.getDefault());
-        } else {
-            return isDateTime(value, "yyyy-MM-dd HH:mm:ss.S", Locale.getDefault());
-        }
-    }
-
 }

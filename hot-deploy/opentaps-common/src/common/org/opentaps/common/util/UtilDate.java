@@ -32,9 +32,11 @@ import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 import javolution.util.FastMap;
+import org.apache.commons.validator.routines.CalendarValidator;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
+
 
 /**
  * UtilDate - A place for date helper methods.
@@ -58,10 +60,10 @@ public abstract class UtilDate {
      * JDBC escape format for java.sql.Time conversions.
      */
     public static final String TIME_FORMAT = "HH:mm:ss";
-    
+
     /**
      * Default pattern that <code>getJsDateTimeFormat</code> can return in case of error or
-     * if given pattern element isn't supported by jscalendar 
+     * if given pattern element isn't supported by jscalendar .
      */
     private final static String fallBackJSPattern = "%Y-%m-%d %H:%M:%S.0";
 
@@ -108,7 +110,7 @@ public abstract class UtilDate {
                 df = new SimpleDateFormat(dateTimeFormat, locale);
                 //df.setTimeZone(timeZone);
                 dateObj = df.parse(timestamp, pos);
-                if (dateObj != null && UtilValidate.isDateTime(timestamp, dateTimeFormat, locale, timeZone)) {
+                if (dateObj != null && UtilDate.isDateTime(timestamp, dateTimeFormat, locale, timeZone)) {
                     hasTime = true;
                     hasDate = true;
                 }
@@ -119,7 +121,7 @@ public abstract class UtilDate {
                 df = new SimpleDateFormat(dateFormat, locale);
                 //df.setTimeZone(timeZone);
                 dateObj = df.parse(timestamp, pos);
-                if (dateObj != null && UtilValidate.isDateTime(timestamp, dateFormat, locale, timeZone)) {
+                if (dateObj != null && UtilDate.isDateTime(timestamp, dateFormat, locale, timeZone)) {
                     hasDate = true;
                 }
             }
@@ -190,7 +192,7 @@ public abstract class UtilDate {
             dateFormat = getDateFormat(locale);
         }
 
-        if (!UtilValidate.isDateTime(timestampString, dateFormat, locale)) {
+        if (!UtilDate.isDateTime(timestampString, dateFormat, locale)) {
             // timestampString doesn't match pattern
             return null;
         }
@@ -359,11 +361,11 @@ public abstract class UtilDate {
         }
         return cal;
     }
-    
+
     /**
      * Method converts given date/time pattern in SimpleDateFormat style to form that can be used by
-     * jscalendar.<br>Called from FTL and form widget rendering code for setup calendar. 
-     * 
+     * jscalendar.<br>Called from FTL and form widget rendering code for setup calendar.
+     *
      * @param pattern Pattern to convert. Results of <code>getDate[Time]Format(locale)</code> as a rule.
      * @return Date/time format pattern that conforms to <b>jscalendar</b> requirements.
      */
@@ -378,10 +380,10 @@ public abstract class UtilDate {
          *   Row  {"%m", "%m", "%b", "%B"},   // M (Month)
          * represents how we should translate following patterns
          *   "M" -> "%m", "MM" -> "%m", "MMM" -> "%b", "MMMM" -> "%B"
-         *   
+         *
          * Translation inpissible if array element equals to null.
-         * This means usualy that jscalendar has no equivalent for some Java 
-         * pattern symbol and method returns fallBackJSPattern constant.  
+         * This means usualy that jscalendar has no equivalent for some Java
+         * pattern symbol and method returns fallBackJSPattern constant.
          */
         final String translationTable[][] = {
                 {null, null, null, null},   // G (Era designator)
@@ -410,7 +412,7 @@ public abstract class UtilDate {
         /* Unlocalized date/time pattern characters. */
         final String patternChars = "GyMdkHmsSEDFwWahKzZ";
 
-        // all others chars in source string are separators between fields. 
+        // all others chars in source string are separators between fields.
         List tokens = Arrays.asList(javaDateFormat.split("[" + patternChars + "]"));
         String separators = "";
         Iterator iterator = tokens.iterator();
@@ -463,5 +465,34 @@ public abstract class UtilDate {
 
         return jsDateFormat.toString();
 
+    }
+
+    /**
+     * Verify if date/time string match pattern and is valid.
+     */
+    public static boolean isDateTime(String value, String pattern, Locale locale, TimeZone timeZone) {
+        CalendarValidator validator = new CalendarValidator();
+        if (timeZone == null) {
+            return (validator.validate(value, pattern, locale) != null);
+        }
+        return (validator.validate(value, pattern, locale, timeZone) != null);
+    }
+
+    /**
+     * Verify if date/time string match pattern and is valid.
+     */
+    public static boolean isDateTime(String value, String pattern, Locale locale) {
+        return isDateTime(value, pattern, locale, null);
+    }
+
+    /**
+     * Verify either date/time string conforms timestamp pattern
+     */
+    public static boolean isTimestamp(String value) {
+        if (value.length() == 10) {
+            return isDateTime(value, "yyyy-MM-dd", Locale.getDefault());
+        } else {
+            return isDateTime(value, "yyyy-MM-dd HH:mm:ss.S", Locale.getDefault());
+        }
     }
 }
