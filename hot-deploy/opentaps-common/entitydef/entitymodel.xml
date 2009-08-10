@@ -2346,4 +2346,11 @@ under the License.
       </relation>
     </entity>
 
+   <!-- add miss field contentPurposeEnumId for PartyContent -->
+    <extend-entity entity-name="PartyContent">
+        <field name="contentPurposeEnumId" type="id-ne"></field>
+        <relation type="one" fk-name="PARTY_CNT_PENUM" rel-entity-name="Enumeration">
+           <key-map field-name="contentPurposeEnumId" rel-field-name="enumId"/>
+        </relation>
+    </extend-entity>
 </entitymodel>
