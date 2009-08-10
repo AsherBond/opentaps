@@ -340,19 +340,19 @@ public abstract class UtilDate {
      * and locale.
      *
      * @param date date/time to use
-     * @param timeZone
-     * @param locale
+     * @param timeZone the timezone, optional, will use the default timezone if <code>null</code>
+     * @param locale the locale, optional, will use the default locale if <code>null</code>
      * @return Calendar object
      * @see java.util.Calendar
      */
     public static Calendar toCalendar(Date date, TimeZone timeZone, Locale locale) {
         if (timeZone == null) {
             timeZone = TimeZone.getDefault();
-            Debug.logWarning("Null timeZone, using default: " + timeZone, UtilDateTime.class.getName());
+            Debug.logWarning("Null timeZone, using default: " + timeZone, MODULE);
         }
         if (locale == null) {
             locale = Locale.getDefault();
-            Debug.logWarning("Null locale, using default: " + locale, UtilDateTime.class.getName());
+            Debug.logWarning("Null locale, using default: " + locale, MODULE);
         }
         Calendar cal = Calendar.getInstance(timeZone, locale);
 
@@ -370,8 +370,9 @@ public abstract class UtilDate {
      * @return Date/time format pattern that conforms to <b>jscalendar</b> requirements.
      */
     public static String getJsDateTimeFormat(String pattern) {
-        if (UtilValidate.isEmpty(pattern))
+        if (UtilValidate.isEmpty(pattern)) {
             throw new IllegalArgumentException("UtilDateTime.getJsDateTimeFormat: Pattern string can't be empty.");
+        }
 
         /*
          * The table contains translation rules.
@@ -385,7 +386,7 @@ public abstract class UtilDate {
          * This means usualy that jscalendar has no equivalent for some Java
          * pattern symbol and method returns fallBackJSPattern constant.
          */
-        final String translationTable[][] = {
+        final String[][] translationTable = {
                 {null, null, null, null},   // G (Era designator)
                 {null, "%y", "%Y", "%Y"},   // y (Year)
                 {"%m", "%m", "%b", "%B"},   // M (Month)
@@ -413,13 +414,14 @@ public abstract class UtilDate {
         final String patternChars = "GyMdkHmsSEDFwWahKzZ";
 
         // all others chars in source string are separators between fields.
-        List tokens = Arrays.asList(javaDateFormat.split("[" + patternChars + "]"));
+        List<String> tokens = Arrays.asList(javaDateFormat.split("[" + patternChars + "]"));
         String separators = "";
-        Iterator iterator = tokens.iterator();
+        Iterator<String> iterator = tokens.iterator();
         while (iterator.hasNext()) {
-            String token = (String)iterator.next();
-            if (UtilValidate.isNotEmpty(token) && separators.indexOf(token) == -1)
+            String token = iterator.next();
+            if (UtilValidate.isNotEmpty(token) && separators.indexOf(token) == -1) {
                 separators += token;
+            }
         }
 
         // Going over pattern elements and replace it by those in translation table
@@ -427,8 +429,9 @@ public abstract class UtilDate {
         StringTokenizer tokenizer = new StringTokenizer(javaDateFormat, separators, true);
         while (tokenizer.hasMoreTokens()) {
             String token = tokenizer.nextToken();
-            if (UtilValidate.isEmpty(token))
+            if (UtilValidate.isEmpty(token)) {
                 continue;
+            }
 
             int index = patternChars.indexOf(token.charAt(0));
             if (index == -1) {
@@ -453,7 +456,7 @@ public abstract class UtilDate {
                 if (token.startsWith("S")) {
                     jsDateFormat.append("0");
                     continue;
-                };
+                }
                 // Source pattern contains something that we can't translate. Return fallback pattern.
                 Debug.logError("Translation of date/time pattern [" + javaDateFormat + "] to jscalendar format is failed as jscalendar doesn't support placeholder [" + token + "]. Returns fallback pattern " + fallBackJSPattern, MODULE);
                 return fallBackJSPattern;
@@ -469,6 +472,11 @@ public abstract class UtilDate {
 
     /**
      * Verify if date/time string match pattern and is valid.
+     * @param value a <code>String</code> value
+     * @param pattern a <code>String</code> value
+     * @param locale a <code>Locale</code> value
+     * @param timeZone a <code>TimeZone</code> value
+     * @return a <code>boolean</code> value
      */
     public static boolean isDateTime(String value, String pattern, Locale locale, TimeZone timeZone) {
         CalendarValidator validator = new CalendarValidator();
@@ -480,13 +488,19 @@ public abstract class UtilDate {
 
     /**
      * Verify if date/time string match pattern and is valid.
+     * @param value a <code>String</code> value
+     * @param pattern a <code>String</code> value
+     * @param locale a <code>Locale</code> value
+     * @return a <code>boolean</code> value
      */
     public static boolean isDateTime(String value, String pattern, Locale locale) {
         return isDateTime(value, pattern, locale, null);
     }
 
     /**
-     * Verify either date/time string conforms timestamp pattern
+     * Verify either date/time string conforms timestamp pattern.
+     * @param value a <code>String</code> value
+     * @return a <code>boolean</code> value
      */
     public static boolean isTimestamp(String value) {
         if (value.length() == 10) {
