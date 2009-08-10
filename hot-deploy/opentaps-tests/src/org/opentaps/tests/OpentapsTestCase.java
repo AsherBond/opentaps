@@ -857,7 +857,7 @@ public class OpentapsTestCase extends TestCase {
     @SuppressWarnings("unchecked")
     protected String createTestAssemblingRouting(String name, String assembleProductId, Double estimatedMilliSeconds, Double estimatedSetupMillis, Double minQuantity, Double maxQuantity) {
         // create a product routing definition for test purposes
-        Map<String, Object> productRoutingContext = UtilMisc.toMap("userLogin", admin);
+        Map<String, Object> productRoutingContext = UtilMisc.<String, Object>toMap("userLogin", admin);
         productRoutingContext.put("workEffortTypeId", "ROUTING");
         productRoutingContext.put("currentStatusId", "ROU_ACTIVE");
 
@@ -872,7 +872,7 @@ public class OpentapsTestCase extends TestCase {
         final String productRoutingId = (String) createProductRoutingResult.get("workEffortId");
 
         // create a routing task for the test product routing
-        Map<String, Object> routingTaskContext = UtilMisc.toMap("userLogin", admin);
+        Map<String, Object> routingTaskContext = UtilMisc.<String, Object>toMap("userLogin", admin);
         routingTaskContext.put("workEffortTypeId", "ROU_TASK");
         routingTaskContext.put("workEffortPurposeTypeId", "ROU_ASSEMBLING");
         routingTaskContext.put("currentStatusId", "ROU_ACTIVE");
@@ -889,7 +889,7 @@ public class OpentapsTestCase extends TestCase {
         final String routingTaskId = (String) createRoutingTaskResult.get("workEffortId");
 
         // create a WorkEffortAssoc between the product routing and the routing task for the test product routing
-        Map<String, Object> workEffortAssocContext = UtilMisc.toMap("userLogin", admin);
+        Map<String, Object> workEffortAssocContext = UtilMisc.<String, Object>toMap("userLogin", admin);
         workEffortAssocContext.put("workEffortIdFrom", productRoutingId);
         workEffortAssocContext.put("workEffortIdTo", routingTaskId);
         workEffortAssocContext.put("workEffortAssocTypeId", "ROUTING_COMPONENT");

@@ -438,9 +438,9 @@ public class TestObjectGenerator {
                 context.put("internalName", String.format("Product %1$d", i));
                 context.put("productName", String.format("Product %1$d", i));
 
-                Map<String, String> results = dispatcher.runSync("createProduct", context);
+                Map<String, Object> results = dispatcher.runSync("createProduct", context);
 
-                String productId = results.get("productId");
+                String productId = (String) results.get("productId");
                 if (UtilValidate.isNotEmpty(productId)) {
 
                     Map<String, Object> callCtxt = FastMap.newInstance();
