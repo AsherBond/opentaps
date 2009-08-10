@@ -37,7 +37,7 @@ public class RaceConditionTests extends OpentapsTestCase {
         // first create a fresh inventory item
         String inventoryItemId = delegator.getNextSeqId("InventoryItem");
 
-        GenericValue inventoryItem = delegator.makeValue("InventoryItem", null);
+        GenericValue inventoryItem = delegator.makeValue("InventoryItem");
         inventoryItem.put("inventoryItemId", inventoryItemId);
         inventoryItem.put("productId", "WG-1111");
         inventoryItem.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
@@ -106,7 +106,7 @@ public class RaceConditionTests extends OpentapsTestCase {
         public void resumeTest() { synchronized (this) { halted = false; } }
 
         public void run() {
-            GenericValue detail = delegator.makeValue("InventoryItemDetail", null);
+            GenericValue detail = delegator.makeValue("InventoryItemDetail");
             detail.put("inventoryItemId", inventoryItemId);
             detail.put("quantityOnHandDiff", 1.0);
             detail.put("availableToPromiseDiff", 1.0);

@@ -398,7 +398,7 @@ public class FinancialsTests extends FinancialsTestCase {
          * Create variance -5 products from inventory item at $15, average cost = 16.909091  [10 x 15$ + 10 x 20$ + 1 x 10$ + 1 x 12$ - 5 x avg] doesn't change the average cost
          */
         BigDecimal varianceQuantity = new BigDecimal("-5");
-        input = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemIdVar, "quantityOnHandVar", varianceQuantity.doubleValue(), "availableToPromiseVar", varianceQuantity.doubleValue(),  "varianceReasonId", "VAR_DAMAGED");
+        input = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemIdVar, "quantityOnHandVar", varianceQuantity.doubleValue(), "availableToPromiseVar", varianceQuantity.doubleValue(),  "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
@@ -415,7 +415,7 @@ public class FinancialsTests extends FinancialsTestCase {
          * Create variance -3 products from inventory item at $15, average cost = 16.909091  [10 x 15$ + 10 x 20$ + 1 x 10$ + 1 x 12$ - 8 x avg] doesn't change the average cost
          */
         varianceQuantity = new BigDecimal("-3");
-        input = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemIdVar, "quantityOnHandVar", varianceQuantity.doubleValue(), "availableToPromiseVar", varianceQuantity.doubleValue(),  "varianceReasonId", "VAR_DAMAGED");
+        input = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemIdVar, "quantityOnHandVar", varianceQuantity.doubleValue(), "availableToPromiseVar", varianceQuantity.doubleValue(),  "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
@@ -2357,7 +2357,7 @@ public class FinancialsTests extends FinancialsTestCase {
         createMainSupplierForProduct(productId, "DemoSupplier", 10.0, "USD", 1.0, admin);
 
         // set its standard cost (EST_STD_MAT_COST) to $35
-        runAndAssertServiceSuccess("createCostComponent", UtilMisc.toMap("userLogin", admin, "productId", productId, "costComponentTypeId", "EST_STD_MAT_COST", "cost", 35.0, "costUomId", "USD"));
+        runAndAssertServiceSuccess("createCostComponent", UtilMisc.<String, Object>toMap("userLogin", admin, "productId", productId, "costComponentTypeId", "EST_STD_MAT_COST", "cost", 35.0, "costUomId", "USD"));
 
         // Create a purchase order for 75 of this product from DemoSupplier
         Map<GenericValue, Double> orderSpec = new HashMap<GenericValue, Double>();
@@ -2381,13 +2381,13 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // set the amount of the product on the invoice to $11.25
         GenericValue invoiceItem = EntityUtil.getOnly(delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoice.getInvoiceId(), "productId", productId, "invoiceItemTypeId", "PINV_FPROD_ITEM")));
-        Map<String, Object> input = UtilMisc.toMap("userLogin", admin, "invoiceId", invoice.getInvoiceId(), "productId", productId, "invoiceItemTypeId", "PINV_FPROD_ITEM", "amount", 11.25);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", admin, "invoiceId", invoice.getInvoiceId(), "productId", productId, "invoiceItemTypeId", "PINV_FPROD_ITEM", "amount", 11.25);
         input.put("invoiceItemSeqId", invoiceItem.get("invoiceItemSeqId"));
         input.put("quantity", invoiceItem.get("quantity"));
         runAndAssertServiceSuccess("updateInvoiceItem", input);
 
         // add a second invoice item of "PITM_SHIP_CHARGES" for $58.39
-        input = UtilMisc.toMap("userLogin", admin, "invoiceId", invoice.getInvoiceId(), "invoiceItemTypeId", "PITM_SHIP_CHARGES", "amount", 58.39);
+        input = UtilMisc.<String, Object>toMap("userLogin", admin, "invoiceId", invoice.getInvoiceId(), "invoiceItemTypeId", "PITM_SHIP_CHARGES", "amount", 58.39);
         runAndAssertServiceSuccess("createInvoiceItem", input);
 
         // set the invoice as ready

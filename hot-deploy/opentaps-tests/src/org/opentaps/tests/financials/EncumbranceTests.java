@@ -165,7 +165,7 @@ public class EncumbranceTests extends FinancialsTestCase {
         runAndAssertServiceSuccess("warehouse.issueOrderItemToShipmentAndReceiveAgainstPO", ctxt);
         // Invoice 1000 of the supplies item
         orderData.clear();
-        orderData.add(UtilMisc.toMap("orderId", orderId5, "orderItemSeqId", supplyOrderItemSeqId, "quantity", "1000.00"));
+        orderData.add(UtilMisc.<String, Object>toMap("orderId", orderId5, "orderItemSeqId", supplyOrderItemSeqId, "quantity", "1000.00"));
         dispatcher.runSync("invoiceSuppliesOrWorkEffortOrderItems", UtilMisc.toMap("orderData", orderData, "userLogin", demopurch1));
 
         // Create PO #6 for 5000 physical item for $9 each with division tag=CONSUMER

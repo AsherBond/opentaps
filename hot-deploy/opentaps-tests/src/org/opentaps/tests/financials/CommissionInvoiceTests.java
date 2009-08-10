@@ -121,7 +121,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         // DemoSalesRep1 and _2 must be named as commission agents on the order -> invoice to get a commission but _3 does not: 
         // he has an agreement to get commission on any order/invoice with this customer
         // note that this implies both rep 1 and 2 created the order, something that cannot really happen but is useful for testing
-        Map<String, Object> input = UtilMisc.toMap("userLogin", demofinadmin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("invoiceId", invoiceId);
         input.put("partyId", "DemoSalesRep1");
         input.put("roleTypeId", "COMMISSION_AGENT");
@@ -175,9 +175,9 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         financialAsserts.createInvoiceItem(commissionInvoiceId2, "COMM_INV_ADJ", 1.0, -2.13, "Processing fee for this commission.");
         financialAsserts.createInvoiceItem(commissionInvoiceId3, "COMM_INV_ADJ", 1.0, -2.13, "Processing fee for this commission.");
 
-        BigDecimal commissionTotal1 = InvoiceWorker.getInvoiceTotalBd(commissionInvoice1);
-        BigDecimal commissionTotal2 = InvoiceWorker.getInvoiceTotalBd(commissionInvoice2);
-        BigDecimal commissionTotal3 = InvoiceWorker.getInvoiceTotalBd(commissionInvoice3);
+        BigDecimal commissionTotal1 = InvoiceWorker.getInvoiceTotal(commissionInvoice1);
+        BigDecimal commissionTotal2 = InvoiceWorker.getInvoiceTotal(commissionInvoice2);
+        BigDecimal commissionTotal3 = InvoiceWorker.getInvoiceTotal(commissionInvoice3);
 
         // these are the expected totals (these are calculated by hand)
         BigDecimal expectedTotal1 = asBigDecimal("14.94");
@@ -299,8 +299,8 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
 
         // 6. Receive Payment from DemoAccount1 to Company for $100 and apply $50 of it to invoice from (1) and $30 of it to invoice from (2)
         String paymentId1 = financialAsserts.createPayment(100.0, "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId1, "amountApplied", 50.0));
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId2, "amountApplied", 30.0));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId1, "amountApplied", 50.0));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId2, "amountApplied", 30.0));
 
         // 7. Set Payment to RECEIVED
         financialAsserts.updatePaymentStatus(paymentId1, "PMNT_RECEIVED");
@@ -322,24 +322,24 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         List<GenericValue> invoices = delegator.findByCondition("Invoice", new EntityConditionList(conditions, EntityOperator.AND), null, null);
         assertEquals("Wrong count of comission invoices", 2, invoices.size());
 
-        BigDecimal commInv1Total = InvoiceWorker.getInvoiceTotalBd(invoices.get(0));
+        BigDecimal commInv1Total = InvoiceWorker.getInvoiceTotal(invoices.get(0));
         assertEquals("Wrong commission amount", commInv1Total, BigDecimal.valueOf(2.5));
 
-        BigDecimal commInv2Total = InvoiceWorker.getInvoiceTotalBd(invoices.get(1));
+        BigDecimal commInv2Total = InvoiceWorker.getInvoiceTotal(invoices.get(1));
         assertEquals("Wrong commission amount", commInv2Total, BigDecimal.valueOf(1.5));
 
         now = UtilDateTime.nowTimestamp();
 
         // 11. Receive second Payment from DemoAccount1 to Company for $30, apply $30 of it to invoice from (1)
         String paymentId2 = financialAsserts.createPayment(30.0, "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("userLogin", demofinadmin, "paymentId", paymentId2, "invoiceId", invoiceId1, "amountApplied", 30.0));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId2, "invoiceId", invoiceId1, "amountApplied", 30.0));
 
         // 12. Set Payment to Cancelled
         financialAsserts.updatePaymentStatus(paymentId2, "PMNT_CANCELLED");
 
         // 13. Receive third Payment from DemoAccount1 to Company for $100, apply $50 of it to invoice from (1)
         String paymentId3 = financialAsserts.createPayment(100.0, "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("userLogin", demofinadmin, "paymentId", paymentId3, "invoiceId", invoiceId1, "amountApplied", 50.0));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId3, "invoiceId", invoiceId1, "amountApplied", 50.0));
 
         // 14. Set Payment to Received, then set Payment to VOID
         financialAsserts.updatePaymentStatus(paymentId3, "PMNT_RECEIVED");

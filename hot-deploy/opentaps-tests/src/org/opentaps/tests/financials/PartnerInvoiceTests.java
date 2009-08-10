@@ -62,7 +62,7 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
         assertEquals("Partner sales invoice is to demopartner1", invoice.getString("partyId"), "demopartner1");
 
         // verify the total is 70% of the partner invoice totals (133.33 * 3 * 0.70) = 279.993 -> 279.99
-        BigDecimal invoiceTotal = InvoiceWorker.getInvoiceTotalBd(invoice);
+        BigDecimal invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
         BigDecimal expectedAmount = asBigDecimal("279.99");
         assertEquals("Sales invoice to partner has expected total value.", invoiceTotal, expectedAmount);
 
@@ -101,7 +101,7 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
         assertEquals("Partner sales invoice is to demopartner1", invoice.getString("partyId"), "demopartner1");
 
         // verify the total is 70% of the partner invoice totals (133.33 * 3 * 0.70) = 279.993 -> 279.99
-        BigDecimal invoiceTotal = InvoiceWorker.getInvoiceTotalBd(invoice);
+        BigDecimal invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
         BigDecimal expectedAmount = asBigDecimal("279.99");
         assertEquals("Sales invoice to partner has expected total value.", invoiceTotal, expectedAmount);
 

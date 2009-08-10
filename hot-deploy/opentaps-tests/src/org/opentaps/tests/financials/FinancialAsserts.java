@@ -293,7 +293,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      */
     @SuppressWarnings("unchecked")
     public String createInvoice(String partyIdTo, String invoiceTypeId, Timestamp invoiceDate, Timestamp dueDate, String invoiceMessage, String referenceNumber, String description) {
-        Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceTypeId", invoiceTypeId);
         input.put("statusId", "INVOICE_IN_PROCESS");
         if (InvoiceSpecification.InvoiceTypeEnum.isReceivable(invoiceTypeId)) {
@@ -407,7 +407,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param accountingTags
      */
     public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, Double quantity, Double amount, String description, Map accountingTags) {
-        Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceId", invoiceId);
         input.put("invoiceItemTypeId", invoiceItemTypeId);
         input.put("productId", productId);
@@ -434,7 +434,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param accountingTags
      */
     public void updateInvoiceItem(String invoiceId, String invoiceItemSeqId, String invoiceItemTypeId, String productId, Double quantity, Double amount, String description, Map accountingTags) {
-        Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceId", invoiceId);
         input.put("invoiceItemSeqId", invoiceItemSeqId);
         input.put("invoiceItemTypeId", invoiceItemTypeId);
@@ -470,7 +470,7 @@ public class FinancialAsserts extends OpentapsTestCase {
     @SuppressWarnings("unchecked")
     public void updateInvoiceStatus(String invoiceId, String invoiceStatus, Timestamp invoiceDate) {
         // set invoice status
-        Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceId", invoiceId);
         if ("INVOICE_VOIDED".equals(invoiceStatus)) {
             // voiding invoice requires a special service call since there is no status valid change for it by design
@@ -545,7 +545,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @return
      */
     public String createPaymentAndApplication(double amount, String partyIdFrom, String partyIdTo, String paymentTypeId, String paymentMethodTypeId, String paymentMethodId, String invoiceId, String endStatus, Map accountingTags) {
-        Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("amount", new Double(amount));
         input.put("currencyUomId", "USD");
         input.put("partyIdFrom", partyIdFrom);
@@ -569,7 +569,7 @@ public class FinancialAsserts extends OpentapsTestCase {
         String paymentId = output.get("paymentId");
 
         if (UtilValidate.isNotEmpty(invoiceId)) {
-            input = UtilMisc.toMap("userLogin", userLogin);
+            input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
             input.put("paymentId", paymentId);
             input.put("invoiceId", invoiceId);
             input.put("amountApplied", new Double(amount));
@@ -592,7 +592,7 @@ public class FinancialAsserts extends OpentapsTestCase {
     @SuppressWarnings("unchecked")
     public void updatePaymentStatus(String paymentId, String paymentStatus) {
         // set invoice status
-        Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("paymentId", paymentId);
         input.put("statusId", paymentStatus);
         runAndAssertServiceSuccess("setPaymentStatus", input);

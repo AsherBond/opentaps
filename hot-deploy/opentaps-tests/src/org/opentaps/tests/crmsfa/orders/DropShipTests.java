@@ -261,15 +261,15 @@ public class DropShipTests extends OrderTestCase {
         assertEquals("Invoice statusId should be INVOICE_IN_PROCESS", "INVOICE_IN_PROCESS", dropShipInvoice2.getString("statusId"));
 
         // Verify that the total of salesInvoice1 + salesInvoice2 == grand total of the sales order (use InvoiceWorker.getInvoiceTotalBd for invoice totals)
-        double invoiceTotal = InvoiceWorker.getInvoiceTotalBd(delegator, salesInvoice1.getString("invoiceId")).doubleValue() + InvoiceWorker.getInvoiceTotalBd(delegator, salesInvoice2.getString("invoiceId")).doubleValue();
+        double invoiceTotal = InvoiceWorker.getInvoiceTotal(delegator, salesInvoice1.getString("invoiceId")).doubleValue() + InvoiceWorker.getInvoiceTotal(delegator, salesInvoice2.getString("invoiceId")).doubleValue();
         assertEquals("salesInvoice1 + salesInvoice2 == grand total of the sales order", sof.getGrandTotal(), invoiceTotal);
 
         // Verify that the total of dropShipInvoice1 + dropShipInvoice2 == (grand total of dropShip1PurchaseOrderId) + (grand total of dropShip2PurchaseOrderId)
-        double purchaseInvoiceTotal = InvoiceWorker.getInvoiceTotalBd(delegator, dropShipInvoice1.getString("invoiceId")).doubleValue() + InvoiceWorker.getInvoiceTotalBd(delegator, dropShipInvoice2.getString("invoiceId")).doubleValue();
+        double purchaseInvoiceTotal = InvoiceWorker.getInvoiceTotal(delegator, dropShipInvoice1.getString("invoiceId")).doubleValue() + InvoiceWorker.getInvoiceTotal(delegator, dropShipInvoice2.getString("invoiceId")).doubleValue();
 
         OrderReadHelper orh1 = new OrderReadHelper(dropShip1PurchaseOrder);
         OrderReadHelper orh2 = new OrderReadHelper(dropShip2PurchaseOrder);
-        double purchaseOrderTotal = orh1.getOrderGrandTotalBd().doubleValue() + orh2.getOrderGrandTotalBd().doubleValue();
+        double purchaseOrderTotal = orh1.getOrderGrandTotal().doubleValue() + orh2.getOrderGrandTotal().doubleValue();
         assertEquals("total of dropShipInvoice1 + dropShipInvoice2 == (grand total of dropShip1PurchaseOrderId) + (grand total of dropShip2PurchaseOrderId)", purchaseOrderTotal, purchaseInvoiceTotal);
 
     }

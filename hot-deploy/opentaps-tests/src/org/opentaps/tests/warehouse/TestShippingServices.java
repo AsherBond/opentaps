@@ -15,6 +15,7 @@
  */
 package org.opentaps.tests.warehouse;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -77,7 +78,7 @@ public final class TestShippingServices {
                 Debug.logInfo("Packing reservation: " + reservation, MODULE);
                 String shipGroupSeqId = reservation.getString("shipGroupSeqId");
                 String orderItemSeqId = reservation.getString("orderItemSeqId");
-                Double quantity = reservation.getDouble("quantity");
+                BigDecimal quantity = reservation.getBigDecimal("quantity");
 
                 if (UtilValidate.isNotEmpty(onlyShipGroupSeqId) && !onlyShipGroupSeqId.equals(shipGroupSeqId)) {
                     continue;
@@ -92,7 +93,7 @@ public final class TestShippingServices {
 
                 // pack whole reservation
                 Debug.logInfo("Packing item [" + orderId + "/" + shipGroupSeqId + "/" + orderItemSeqId + "] x " + quantity, MODULE);
-                packing.addOrIncreaseLine(orderId, orderItemSeqId, shipGroupSeqId, reservation.getString("productId"), quantity, packageSeqId++, 0, false);
+                packing.addOrIncreaseLine(orderId, orderItemSeqId, shipGroupSeqId, reservation.getString("productId"), quantity, packageSeqId++, BigDecimal.ZERO, false);
                 lastShipGroupSeqId = shipGroupSeqId;  // this better work as a copy rather than a reference copy
             }
 
@@ -155,7 +156,7 @@ public final class TestShippingServices {
                     Debug.logInfo("Packing item [" + orderId + "/" + shipGroupSeqId + "/" + orderItemSeqId + "] x " + quantity, MODULE);
                     GenericValue orderItem = delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
                     String productId = orderItem.getString("productId");
-                    packing.addOrIncreaseLine(orderId, orderItemSeqId, shipGroupSeqId, productId, quantity, packageSeqId++, 0, false);
+                    packing.addOrIncreaseLine(orderId, orderItemSeqId, shipGroupSeqId, productId, BigDecimal.valueOf(quantity), packageSeqId++, BigDecimal.ZERO, false);
                 }
             }
 

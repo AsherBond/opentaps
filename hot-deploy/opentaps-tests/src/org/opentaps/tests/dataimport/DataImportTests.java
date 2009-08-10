@@ -15,6 +15,11 @@
  */
 package org.opentaps.tests.dataimport;
 
+import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -23,16 +28,11 @@ import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.tests.OpentapsTestCase;
 import org.opentaps.tests.crmsfa.orders.OrderTests;
 import org.opentaps.tests.financials.AgreementTests;
 import org.opentaps.tests.financials.FinancialAsserts;
-
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 public class DataImportTests extends OpentapsTestCase {
 
@@ -154,7 +154,7 @@ public class DataImportTests extends OpentapsTestCase {
         // Importing services should check the importedRecords, because they always return success
         // here, we just check that non-zero records were imported, so we don't have to keep modifying this test as the data changes
         Map results = dispatcher.runSync("importCustomersCommissions", UtilMisc.toMap("userLogin", demofinadmin, "organizationPartyId", organizationPartyId));
-        assertTrue("importCustomersCommissions did not run successfully", ServiceUtil.isSuccess(results));
+        assertTrue("importCustomersCommissions did not run successfully", UtilCommon.isSuccess(results));
         assertNotEquals("importCustomersCommissions did not import any records", new BigDecimal((Integer) results.get("importedRecords")), new BigDecimal("0"));
          
         // 3.  For each primaryPartyId of customerIds 9005, 9006, 9007

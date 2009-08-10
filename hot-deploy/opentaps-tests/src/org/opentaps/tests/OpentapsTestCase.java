@@ -354,6 +354,19 @@ public class OpentapsTestCase extends TestCase {
      * Asserts that an entity has the expected accounting tags.
      * @param value the entity to test the tags for value
      * @param expected the expected tags
+     */
+    public void assertAccountingTagsEqual(GenericValue value, GenericValue expected) {
+        Map<String, String> foundTags = new HashMap<String, String>();
+        UtilAccountingTags.putAllAccountingTags(value, foundTags);
+        for (String tag : foundTags.keySet()) {
+            assertEquals("Entity: " + value + " is not tagged properly.", expected.get(tag), value.getString(tag));
+        }
+    }
+
+    /**
+     * Asserts that an entity has the expected accounting tags.
+     * @param value the entity to test the tags for value
+     * @param expected the expected tags
      * @exception Exception if an error occurs
      */
     public void assertAccountingTagsEqual(EntityInterface value, Map<String, String> expected) throws Exception {

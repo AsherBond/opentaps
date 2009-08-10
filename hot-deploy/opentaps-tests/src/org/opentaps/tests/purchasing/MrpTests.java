@@ -743,7 +743,7 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // run MRP in WebStoreWarehouse with createTransferRequirements set to TRUE
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "createTransferRequirements", true);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "createTransferRequirements", true);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify that a transfer requirement for 10 has been created from retail store facility to WebStoreWarehouse
@@ -778,7 +778,7 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // run MRP in WebStoreWarehouse with createTransferRequirements set to TRUE
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "createTransferRequirements", true);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "createTransferRequirements", true);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify that no transfer requirement has been created in the WebStoreWarehouse for the product
@@ -814,7 +814,7 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // run MRP in WebStoreWarehouse with createTransferRequirements set to TRUE
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "createTransferRequirements", true);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "createTransferRequirements", true);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify that a transfer requirement for 10 has been created from thirdPartyFacilityId to facilityId(WebStoreWarehouse)
@@ -849,7 +849,7 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // run MRP in WebStoreWarehouse with createTransferRequirements set to TRUE
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "createTransferRequirements", true);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "createTransferRequirements", true);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify that a transfer requirement for 10 has been created from retail store facility to facilityId(WebStoreWarehouse)
@@ -910,7 +910,7 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId, order4Date);
 
         // run the MRP
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", true);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", true);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify the proposed pending internal requirements
@@ -991,7 +991,7 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // run the MRP
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", true);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", true);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify the proposed pending internal requirements
@@ -1014,7 +1014,7 @@ public class MrpTests extends MrpTestCase {
         assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 30.0);
 
         // modify the Pending Internal Requirement's quantity to 100
-        runAndAssertServiceSuccess("updateRequirement", UtilMisc.toMap("userLogin", demopurch1, "requirementId", req1Id, "quantity", 100.0));
+        runAndAssertServiceSuccess("updateRequirement", UtilMisc.<String, Object>toMap("userLogin", demopurch1, "requirementId", req1Id, "quantity", 100.0));
 
         // run the MRP again and check the component requirements are still generated according to the new quantity
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
@@ -1141,8 +1141,8 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // 7. run the MRP for WebStoreWarehouse and product with flag to create pending internal requirements set to Y
-        Map<String, ?> runMrpContext = 
-            UtilMisc.toMap(
+        Map<String, Object> runMrpContext = 
+            UtilMisc.<String, Object>toMap(
                     "userLogin", demopurch1, 
                     "facilityId", facilityId,
                     "createPendingManufacturingRequirements", true
@@ -1325,7 +1325,7 @@ public class MrpTests extends MrpTestCase {
             );
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
-        Map<String, Object> conditions = UtilMisc.toMap(
+        Map<String, Object> conditions = UtilMisc.<String, Object>toMap(
                 "requirementTypeId", "INTERNAL_REQUIREMENT",
                 "productId", mftProductId,
                 "facilityId", facilityId,
@@ -1338,7 +1338,7 @@ public class MrpTests extends MrpTestCase {
 
         // 7. create outgoing transfer requirement
         Map<String, Object> requirement = 
-            UtilMisc.toMap(
+            UtilMisc.<String, Object>toMap(
                     "requirementId", delegator.getNextSeqId("Requirement"),
                     "requirementTypeId", "TRANSFER_REQUIREMENT",
                     "facilityId", facilityId,
@@ -1409,7 +1409,7 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // run MRP, this should create a proposed Production run of 10
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
         String req1Id = assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 10.0);
         // create the production run
@@ -1418,7 +1418,7 @@ public class MrpTests extends MrpTestCase {
         // update the production run to produce 6
         GenericValue prun = EntityUtil.getOnly(delegator.findByAnd("WorkEffortAndGoods", UtilMisc.toMap("productId", productId, "currentStatusId", "PRUN_CREATED")));
         String workEffortId = prun.getString("workEffortId");
-        runAndAssertServiceSuccess("updateProductionRun", UtilMisc.toMap("userLogin", demowarehouse1, "productionRunId", workEffortId, "quantity", 6.0, "estimatedStartDate", prun.getTimestamp("estimatedStartDate")));
+        runAndAssertServiceSuccess("updateProductionRun", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "productionRunId", workEffortId, "quantity", 6.0, "estimatedStartDate", prun.getTimestamp("estimatedStartDate")));
         // get the updated production run
         prun = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
         // check the quantity to produce was updated
@@ -1435,28 +1435,28 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("userLogin", demowarehouse1, "productionRunId", workEffortId, "workEffortId", taskId));
 
         // run MRP, and check:
-        runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);
+        runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
         // - it proposes a  Production run of 4
         assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 4.0);
         // - there is a receipt of 6 in the inventory event from the previous production run
-        GenericValue event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.toMap("productId", productId, "inventoryEventPlanTypeId", "MANUF_ORDER_RECP", "eventQuantity", 6.0)));
+        GenericValue event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.<String, Object>toMap("productId", productId, "inventoryEventPlanTypeId", "MANUF_ORDER_RECP", "eventQuantity", 6.0)));
         assertNotNull("No MANUF_ORDER_RECP x 6.0 found for product [" + productId + "].", event);
         // issue inventory required, and produce 2
         runAndAssertServiceSuccess("issueProductionRunTask", UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId));
         // produce 2 unit of product
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", workEffortId, "productId", productId, "quantity", 2.0));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", workEffortId, "productId", productId, "quantity", 2.0));
 
         // run MRP, and check:
-        runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);
+        runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
         // - it proposes a  Production run of 4
         assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 4.0);
         // - there is an INITIAL_QOH inventory event of 2
-        event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.toMap("productId", productId, "inventoryEventPlanTypeId", "INITIAL_QOH", "eventQuantity", 2.0)));
+        event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.<String, Object>toMap("productId", productId, "inventoryEventPlanTypeId", "INITIAL_QOH", "eventQuantity", 2.0)));
         assertNotNull("No INITIAL_QOH x 2.0 found for product [" + productId + "].", event);
         // - there is a receipt of 4 in the inventory event from the previous production run
-        event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.toMap("productId", productId, "inventoryEventPlanTypeId", "MANUF_ORDER_RECP", "eventQuantity", 4.0)));
+        event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.<String, Object>toMap("productId", productId, "inventoryEventPlanTypeId", "MANUF_ORDER_RECP", "eventQuantity", 4.0)));
         assertNotNull("No MANUF_ORDER_RECP x 4.0 found for product [" + productId + "].", event);
     }
 

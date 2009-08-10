@@ -398,9 +398,9 @@ public class TestObjectGenerator {
                 context.put("productCategoryTypeId", "CATALOG_CATEGORY");
                 context.put("categoryName", String.format("Category %1$d", i));
 
-                Map<String, String> results = dispatcher.runSync("createProductCategory", context);
+                Map<String, Object> results = dispatcher.runSync("createProductCategory", context);
 
-                String productCategoryId = results.get("productCategoryId");
+                String productCategoryId = (String) results.get("productCategoryId");
                 if (UtilValidate.isNotEmpty(productCategoryId)) {
                     productCategoryIds.add(productCategoryId);
                     dispatcher.runSync("addProductCategoryToCategory", UtilMisc.toMap("productCategoryId", productCategoryId, "parentProductCategoryId", "CATALOG1", "fromDate", fromDate, "userLogin", admin));

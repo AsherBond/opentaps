@@ -680,12 +680,12 @@ public class InventoryTests extends FinancialsTestCase {
         Number originalInventoryAccountBalance = originalBalances.get(inventoryGlAccountId) != null ? originalBalances.get(inventoryGlAccountId) : BigDecimal.ZERO;
 
         // Create an inventory variance for -1 of ATP and -1 of QOH as "Damaged"
-        Map varianceContext = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -1.0, "quantityOnHandVar", -1.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -1.0, "quantityOnHandVar", -1.0, "varianceReasonId", "VAR_DAMAGED");
         Map varianceResult = runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
         String damagedPhysicalInventoryItemId = (String) varianceResult.get("physicalInventoryId");
 
         // Create an inventory variance for -2 of ATP and -2 of QOH as "Lost/Damaged in Transit"
-        varianceContext = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_TRANSIT");
+        varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_TRANSIT");
         varianceResult = runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
         String transitPhysicalInventoryItemId = (String) varianceResult.get("physicalInventoryId");
 
@@ -757,12 +757,12 @@ public class InventoryTests extends FinancialsTestCase {
         Number originalInventoryAccountBalance = originalBalances.get(inventoryGlAccountId) != null ? originalBalances.get(inventoryGlAccountId) : BigDecimal.ZERO;
 
         // Create an inventory variance for -1 of ATP and -1 of QOH as "Damaged"
-        Map varianceContext = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -1.0, "quantityOnHandVar", -1.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -1.0, "quantityOnHandVar", -1.0, "varianceReasonId", "VAR_DAMAGED");
         Map varianceResult = runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
         String damagedPhysicalInventoryItemId = (String) varianceResult.get("physicalInventoryId");
 
         // Create an inventory variance for -2 of ATP and -2 of QOH as "Lost/Damaged in Transit"
-        varianceContext = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_TRANSIT");
+        varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_TRANSIT");
         varianceResult = runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
         String transitPhysicalInventoryItemId = (String) varianceResult.get("physicalInventoryId");
 
@@ -926,7 +926,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Update the InventoryItem with a real unitCost
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 5.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 5.00));
 
         // Should now be three InventoryItemValueHistory records - the third with a unitCost of $5.00
         invItemValHist = delegator.findByAnd("InventoryItemValueHistory", UtilMisc.toMap("inventoryItemId", receiveInventoryItemId, "unitCost", new BigDecimal("5.00")), UtilMisc.toList("dateTime DESC"));
@@ -934,7 +934,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Update the InventoryItem with the same unitCost
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 5.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 5.00));
 
         // Should still be three InventoryItemValueHistory records
         invItemValHist = delegator.findByAnd("InventoryItemValueHistory", UtilMisc.toMap("inventoryItemId", receiveInventoryItemId), UtilMisc.toList("dateTime DESC"));
@@ -1084,13 +1084,13 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Update the InventoryItem to unitCost $6.00 and then to $3.00
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 6.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 6.00));
 
         // make sure accounting and inventory items values equals
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 3.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 3.00));
 
         // make sure accounting and inventory items values equals
         inventoryAsserts.assertInventoryValuesEqual(productId);
@@ -1153,7 +1153,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Update the InventoryItem to unitCost $6.00 and then to $3.00
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 6.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 6.00));
 
         // make sure accounting and inventory items values equals
         inventoryAsserts.assertInventoryValuesEqual(productId1);
@@ -1166,7 +1166,7 @@ public class InventoryTests extends FinancialsTestCase {
         }
 
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 3.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 3.00));
 
         // make sure accounting and inventory items values equals
         inventoryAsserts.assertInventoryValuesEqual(productId1);
@@ -1485,7 +1485,7 @@ public class InventoryTests extends FinancialsTestCase {
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // transfers 10 of them
-        Map<String, Object> callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("facilityId", FROM_FACILITY);
         callCtxt.put("facilityIdTo", TO_FACILTY);
         callCtxt.put("inventoryItemId", inventoryItemId);
@@ -1494,7 +1494,7 @@ public class InventoryTests extends FinancialsTestCase {
         result = runAndAssertServiceSuccess("createInventoryTransfer", callCtxt);
         String inventoryTransferId  = (String) result.get("inventoryTransferId");
 
-        callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("inventoryTransferId", inventoryTransferId);
         pause("Workaround pause for MySQL");
         runAndAssertServiceSuccess("completeInventoryTransfer", callCtxt);
@@ -1554,7 +1554,7 @@ public class InventoryTests extends FinancialsTestCase {
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // transfers 5 of them
-        Map<String, Object> callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("facilityId", FROM_FACILITY);
         callCtxt.put("facilityIdTo", TO_FACILTY);
         callCtxt.put("inventoryItemId", inventoryItemId);
@@ -1563,7 +1563,7 @@ public class InventoryTests extends FinancialsTestCase {
         result = runAndAssertServiceSuccess("createInventoryTransfer", callCtxt);
         String inventoryTransferId  = (String) result.get("inventoryTransferId");
 
-        callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("inventoryTransferId", inventoryTransferId);
         pause("Workaround pause for MySQL");
         runAndAssertServiceSuccess("completeInventoryTransfer", callCtxt);
@@ -1634,7 +1634,7 @@ public class InventoryTests extends FinancialsTestCase {
         pause("Workaround pause for MySQL");
 
         // 2. Create a lot, assign the lot id to inventory items 1 and 2
-        Map<String, Object> callCtxt = UtilMisc.toMap("userLogin", admin);
+        Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("userLogin", admin);
         results = runAndAssertServiceSuccess("warehouse.createLot", callCtxt);
         String lotId = (String) results.get("lotId");
 
@@ -1643,7 +1643,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // 2. Transfer inventory item 1 to item 5
         pause("Workaround pause for MySQL");
-        callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("facilityId", FROM_FACILITY);
         callCtxt.put("facilityIdTo", TO_FACILTY);
         callCtxt.put("inventoryItemId", inventoryItemId1);
@@ -1652,7 +1652,7 @@ public class InventoryTests extends FinancialsTestCase {
         results = runAndAssertServiceSuccess("createInventoryTransfer", callCtxt);
         String inventoryTransferId  = (String) results.get("inventoryTransferId");
         pause("Workaround pause for MySQL");
-        callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("inventoryTransferId", inventoryTransferId);
         runAndAssertServiceSuccess("completeInventoryTransfer", callCtxt);
 
@@ -1751,7 +1751,7 @@ public class InventoryTests extends FinancialsTestCase {
         pause("Workaround pause for MySQL");
 
         // 4. Transfer 5 of inventoryItemId3 to inventoryItemId4
-        Map<String, Object> callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("facilityId", FROM_FACILITY);
         callCtxt.put("facilityIdTo", TO_FACILTY);
         callCtxt.put("inventoryItemId", inventoryItemId3);
@@ -1760,7 +1760,7 @@ public class InventoryTests extends FinancialsTestCase {
         results = runAndAssertServiceSuccess("createInventoryTransfer", callCtxt);
         String inventoryTransferId  = (String) results.get("inventoryTransferId");
 
-        callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("inventoryTransferId", inventoryTransferId);
         runAndAssertServiceSuccess("completeInventoryTransfer", callCtxt);
 

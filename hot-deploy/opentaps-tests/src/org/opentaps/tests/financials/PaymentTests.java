@@ -413,7 +413,7 @@ public class PaymentTests extends FinancialsTestCase {
         // try to apply 30.0 from this payment
         // this should fail as the payment amount was only 20.0
         // this verifies that we cannot create an application with amountApplied > payment amount
-        Map<String, Object> input = UtilMisc.toMap("userLogin", demofinadmin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", 30.0);
@@ -429,7 +429,7 @@ public class PaymentTests extends FinancialsTestCase {
         // try to update the payment application applied amount to 25.0
         // this should fail as the payment amount was only 20.0
         // this verifies that we cannot update an application with amountApplied > payment amount
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         input.put("amountApplied", 25.0);
         input.put("checkForOverApplication", Boolean.TRUE);
@@ -450,7 +450,7 @@ public class PaymentTests extends FinancialsTestCase {
         // try to create another application of the same payment to the same invoice with amount 15.0
         // this should fail as the payment unapplied amount is only 10.0
         // this verifies that we cannot create an application with amountApplied > payment not applied amount
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", 15.0);
@@ -478,7 +478,7 @@ public class PaymentTests extends FinancialsTestCase {
         // try to update the payment application applied amount to 12.0
         // this should fail as the payment not applied amount is only 10.0
         // this verifies that we cannot update an application with amountApplied > payment not applied amount
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         input.put("amountApplied", 12.0);
         input.put("checkForOverApplication", Boolean.TRUE);
@@ -495,7 +495,7 @@ public class PaymentTests extends FinancialsTestCase {
         // try to apply 30.0 from this payment
         // this should fail as the invoice outstanding amount is only 20.0
         // this verifies that we cannot create an application with amountApplied > invoice outstanding amount
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", payment2Id);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", 30.0);
@@ -511,7 +511,7 @@ public class PaymentTests extends FinancialsTestCase {
         // try to update the payment application applied amount to 22.0
         // this should fail as the invoice outstanding amount is only 20.0
         // this verifies that we cannot update an application with amountApplied > invoice outstanding amount
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         input.put("amountApplied", 22.0);
         input.put("checkForOverApplication", Boolean.TRUE);
@@ -547,7 +547,7 @@ public class PaymentTests extends FinancialsTestCase {
         financialAsserts.assertPaymentStatus(paymentId, "PMNT_NOT_PAID");
 
         // apply 10.0 from this payment
-        Map<String, Object> input = UtilMisc.toMap("userLogin", demofinadmin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", 10.0);
@@ -559,12 +559,12 @@ public class PaymentTests extends FinancialsTestCase {
         financialAsserts.updatePaymentStatus(paymentId, "PMNT_RECEIVED");
 
         // remove previous payment application
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         runAndAssertServiceSuccess("removePaymentApplication", input);
 
         // create a new application of amount 10.0
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", 10.0);
@@ -573,7 +573,7 @@ public class PaymentTests extends FinancialsTestCase {
         paymentApplicationId = (String) result.get("paymentApplicationId");
 
         // update the payment application to 20.0
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
@@ -585,16 +585,16 @@ public class PaymentTests extends FinancialsTestCase {
 
         // try to remove the payment application
         // this should fail as the payment is now CONFIRMED
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         runAndAssertServiceError("removePaymentApplication", input);
         // same for an update
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         input.put("amountApplied", 10.0);
         runAndAssertServiceError("updatePaymentApplication", input);
         // and finally for creating another payment application
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", 5.0);
@@ -630,7 +630,7 @@ public class PaymentTests extends FinancialsTestCase {
 
         // create a payment of amount 20.0, apply it and mark as RECEIVED
         String paymentId = financialAsserts.createPayment(20.0, customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
-        Map<String, Object> input = UtilMisc.toMap("userLogin", demofinadmin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", 20.0);
@@ -647,7 +647,7 @@ public class PaymentTests extends FinancialsTestCase {
         // create a second payment of amount 20.0, apply it
         pause("Workaround pause for MySQL duplicate timestamps");
         paymentId = financialAsserts.createPayment(20.0, customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", 20.0);
@@ -678,7 +678,7 @@ public class PaymentTests extends FinancialsTestCase {
 
         // update the payment application by reducing the applied amount
         pause("Workaround pause for MySQL duplicate timestamps");
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         input.put("amountApplied", 18.0);
         input.put("paymentId", paymentId);
@@ -694,7 +694,7 @@ public class PaymentTests extends FinancialsTestCase {
 
         // change back the applied amount to 20.0
         pause("Workaround pause for MySQL duplicate timestamps");
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         input.put("amountApplied", 20.0);
         input.put("paymentId", paymentId);
@@ -710,7 +710,7 @@ public class PaymentTests extends FinancialsTestCase {
 
         // remove the application
         pause("Workaround pause for MySQL duplicate timestamps");
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
         pause("Workaround MYSQL Timestamp PK collision");
         runAndAssertServiceSuccess("removePaymentApplication", input);
@@ -724,7 +724,7 @@ public class PaymentTests extends FinancialsTestCase {
 
         // create new application
         pause("Workaround pause for MySQL duplicate timestamps");
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", 20.0);
@@ -779,7 +779,7 @@ public class PaymentTests extends FinancialsTestCase {
         fa.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
         // 7. apply payment to invoice
-        Map<String, Object> input = UtilMisc.toMap("userLogin", demofinadmin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         input.put("amountApplied", amount);
@@ -841,14 +841,14 @@ public class PaymentTests extends FinancialsTestCase {
         String paymentId1 = fa.createPayment(200.0, accountPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
 
         // apply the payment to the invoice 1 and invoice 2 by creating a PaymentApplication
-        Map<String, Object> input = UtilMisc.toMap("userLogin", demofinadmin);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId1);
         input.put("invoiceId", invoiceId1);
         input.put("amountApplied", 100.0);
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceSuccess("createPaymentApplication", input);
 
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId1);
         input.put("invoiceId", invoiceId2);
         input.put("amountApplied", 100.0);
@@ -864,7 +864,7 @@ public class PaymentTests extends FinancialsTestCase {
 
         // Receive a payment for $50 from sub account 2 and apply it to invoice 2
         String paymentId2 = fa.createPayment(50.0, subAccountPartyId2, "CUSTOMER_PAYMENT", "PERSONAL_CHECK");
-        input = UtilMisc.toMap("userLogin", demofinadmin);
+        input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId2);
         input.put("invoiceId", invoiceId2);
         input.put("amountApplied", 50.0);

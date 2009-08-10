@@ -1738,14 +1738,14 @@ public class ProductionRunTests extends ProductionRunTestCase {
         pause("Workaround pause for MySQL");
 
         // complete the task, which should trigger production run completed
-        Map<String, Object> callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("productionRunId", productionRunId);
         callCtxt.put("workEffortId", taskId);
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", callCtxt);
         pause("Workaround pause for MySQL");
 
         // create and assign inventory for the product
-        callCtxt = UtilMisc.toMap("userLogin", demowarehouse1);
+        callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1);
         callCtxt.put("workEffortId", productionRunId);
         results = runAndAssertServiceSuccess("productionRunProduce", callCtxt);
         List<String> inventoryItemIds = (List<String>) results.get("inventoryItemIds");
@@ -1807,13 +1807,13 @@ public class ProductionRunTests extends ProductionRunTestCase {
         createBOMProductAssoc(productId, productComp5Id, alternateRoutingId, new Long("12"), new Double("5.0"), admin);
 
         // Run a BOM simulation for the default BOM (calling getBOMTree service)
-        Map result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "userLogin", demowarehouse1));
+        Map<String, Object> result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "userLogin", demowarehouse1));
         BomTree tree = (BomTree) result.get("tree");
         // check the result correspond the to the default BOM components
         assertBomTreeCorrect(tree, UtilMisc.toMap(productId, 1.0, productComp1Id, 7.0, productComp2Id, 3.0));
 
         // Run a BOM simulation for the alternative BOM (calling getBOMTree service)
-        result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "routingId", alternateRoutingId, "userLogin", demowarehouse1));
+        result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "routingId", alternateRoutingId, "userLogin", demowarehouse1));
         tree = (BomTree) result.get("tree");
         // check the result correspond the to the alternative BOM components
         assertBomTreeCorrect(tree, UtilMisc.toMap(productId, 1.0, productComp3Id, 1.0, productComp4Id, 2.0, productComp5Id, 5.0));
@@ -1879,7 +1879,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // complete the task
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunId, "workEffortId", taskId, "userLogin", demowarehouse1));
         // produce the products
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productId, "workEffortId", prunId, "quantity", 5.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productId, "workEffortId", prunId, "quantity", 5.0, "userLogin", demowarehouse1));
         // complete production run (close it)
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunId, "workEffortId", taskId, "userLogin", demowarehouse1));
         // check inventory
@@ -1902,7 +1902,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // complete the task
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunId, "workEffortId", taskId, "userLogin", demowarehouse1));
         // produce the products
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productId, "workEffortId", prunId, "quantity", 10.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productId, "workEffortId", prunId, "quantity", 10.0, "userLogin", demowarehouse1));
         // complete production run (close it)
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunId, "workEffortId", taskId, "userLogin", demowarehouse1));
         // check inventory
@@ -1962,7 +1962,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         createBOMProductAssoc(productComp2Id, productComp22Id, new Long("11"), 4.0, admin);
 
         // Run a BOM simulation for the default BOM (calling getBOMTree service)
-        Map result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "userLogin", demowarehouse1));
+        Map<String, Object> result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "userLogin", demowarehouse1));
         BomTree tree = (BomTree) result.get("tree");
         // check the result correspond the to the default BOM components
         Map expectedBom = UtilMisc.toMap(productId, 1.0, productComp1Id, 7.0, productComp11Id, 7.0, productComp12Id, 14.0);
@@ -2011,7 +2011,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         createBOMProductAssoc(productComp1Id, productComp14Id, alternateRoutingId, new Long("11"), 15.0, admin);
 
         // Run a BOM simulation for the alternate BOM (calling getBOMTree service)
-        result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "routingId", alternateRoutingId, "userLogin", demowarehouse1));
+        result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "routingId", alternateRoutingId, "userLogin", demowarehouse1));
         tree = (BomTree) result.get("tree");
         // check the result correspond the to the alternate BOM components
         expectedBom = UtilMisc.toMap(productId, 1.0, productComp1Id, 8.0, productComp13Id, 96.0, productComp14Id, 120.0);
@@ -2050,7 +2050,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // complete the task
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunIdComp, "workEffortId", taskId, "userLogin", demowarehouse1));
         // produce the products
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productComp1Id, "workEffortId", prunIdComp, "quantity", 35.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productComp1Id, "workEffortId", prunIdComp, "quantity", 35.0, "userLogin", demowarehouse1));
         // complete production run (close it)
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunIdComp, "workEffortId", taskId, "userLogin", demowarehouse1));
         // check inventory
@@ -2078,7 +2078,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // complete the task
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunIdComp, "workEffortId", taskId, "userLogin", demowarehouse1));
         // produce the products
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productComp2Id, "workEffortId", prunIdComp, "quantity", 15.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productComp2Id, "workEffortId", prunIdComp, "quantity", 15.0, "userLogin", demowarehouse1));
         // complete production run (close it)
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunIdComp, "workEffortId", taskId, "userLogin", demowarehouse1));
         // check inventory
@@ -2096,7 +2096,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // complete the task
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunId, "workEffortId", taskId, "userLogin", demowarehouse1));
         // produce the products
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productId, "workEffortId", prunId, "quantity", 5.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productId, "workEffortId", prunId, "quantity", 5.0, "userLogin", demowarehouse1));
         // complete production run (close it)
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunId, "workEffortId", taskId, "userLogin", demowarehouse1));
         // check inventory
@@ -2132,7 +2132,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // complete the task
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunIdComp, "workEffortId", taskId, "userLogin", demowarehouse1));
         // produce the products
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productComp1Id, "workEffortId", prunIdComp, "quantity", 80.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productComp1Id, "workEffortId", prunIdComp, "quantity", 80.0, "userLogin", demowarehouse1));
         // complete production run (close it)
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunIdComp, "workEffortId", taskId, "userLogin", demowarehouse1));
         // check inventory
@@ -2160,7 +2160,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // complete the task
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunIdComp, "workEffortId", taskId, "userLogin", demowarehouse1));
         // produce the products
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productComp2Id, "workEffortId", prunIdComp, "quantity", 90.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productComp2Id, "workEffortId", prunIdComp, "quantity", 90.0, "userLogin", demowarehouse1));
         // complete production run (close it)
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunIdComp, "workEffortId", taskId, "userLogin", demowarehouse1));
         // check inventory
@@ -2182,7 +2182,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // complete the task
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunId, "workEffortId", taskId, "userLogin", demowarehouse1));
         // produce the products
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productId, "workEffortId", prunId, "quantity", 10.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productId, "workEffortId", prunId, "quantity", 10.0, "userLogin", demowarehouse1));
         // complete production run (close it)
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunId, "workEffortId", taskId, "userLogin", demowarehouse1));
         // check inventory
@@ -2239,7 +2239,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         String taskId = startOnlyTask(prunId);
         // issue 5 product
-        runAndAssertServiceSuccess("issueProductionRunTaskComponent", UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", productId, "quantity", 5.0));
+        runAndAssertServiceSuccess("issueProductionRunTaskComponent", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", productId, "quantity", 5.0));
         // make sure WEGS is completed
         List wegsList = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", taskId, "productId", productId, "workEffortGoodStdTypeId", "PRUNT_PROD_NEEDED"));
         assertTrue("WEGS for material requirement of 5 [" + productId + "] exists.", wegsList.size() == 1);
@@ -2249,8 +2249,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // complete the task, which should trigger production run completed
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("userLogin", demowarehouse1, "productionRunId", prunId, "workEffortId", taskId));
         // produce the default BOM components
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productComp1Id, "workEffortId", prunId, "quantity", 35.0, "userLogin", demowarehouse1));
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productComp2Id, "workEffortId", prunId, "quantity", 15.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productComp1Id, "workEffortId", prunId, "quantity", 35.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productComp2Id, "workEffortId", prunId, "quantity", 15.0, "userLogin", demowarehouse1));
         // complete production run (close it)
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("productionRunId", prunId, "workEffortId", taskId, "userLogin", demowarehouse1));
 
@@ -2267,18 +2267,18 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         taskId = startOnlyTask(prunId);
         // issue 8 product
-        runAndAssertServiceSuccess("issueProductionRunTaskComponent", UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", productId, "quantity", 8.0));
+        runAndAssertServiceSuccess("issueProductionRunTaskComponent", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", productId, "quantity", 8.0));
         // make sure WEGS is completed
         wegsList = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", taskId, "productId", productId, "workEffortGoodStdTypeId", "PRUNT_PROD_NEEDED"));
         assertTrue("WEGS for material requirement of 8 [" + productId + "] exists.", wegsList.size() == 1);
         wegs = EntityUtil.getFirst(wegsList);
         assertEquals("Material Issuance failed:  [" + productId + "] WorkEffortGoodStandard was not marked completed.", wegs.getString("statusId"), "WEGS_COMPLETED");
         // complete the task, which should trigger production run completed
-        runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("userLogin", demowarehouse1, "productionRunId", prunId, "workEffortId", taskId));
+        runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "productionRunId", prunId, "workEffortId", taskId));
         // produce the alternate BOM components
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productComp3Id, "workEffortId", prunId, "quantity", 8.0, "userLogin", demowarehouse1));
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productComp4Id, "workEffortId", prunId, "quantity", 16.0, "userLogin", demowarehouse1));
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.toMap("productId", productComp5Id, "workEffortId", prunId, "quantity", 40.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productComp3Id, "workEffortId", prunId, "quantity", 8.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productComp4Id, "workEffortId", prunId, "quantity", 16.0, "userLogin", demowarehouse1));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("productId", productComp5Id, "workEffortId", prunId, "quantity", 40.0, "userLogin", demowarehouse1));
         // check inventory
         inventoryAsserts.assertInventoriesChange(productId, new BigDecimal("-13.0"), origProductInventories);
         inventoryAsserts.assertInventoriesChange(productComp1Id, new BigDecimal("35.0"), origProductInventories);

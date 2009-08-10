@@ -463,7 +463,7 @@ public class OrderTests extends OrderTestCase {
                 , EntityOperator.AND);
         List<GenericValue> inventoryItems = delegator.findByCondition("InventoryItem", conditionList, null, Arrays.asList("datetimeReceived DESC"));
         // get inventory item ids which should be reserved.
-        List<String> invIds = EntityUtil.getFieldListFromEntityList(inventoryItems, "inventoryItemId", false).subList(0, 5);
+        List<String> invIds = EntityUtil.<String>getFieldListFromEntityList(inventoryItems, "inventoryItemId", false).subList(0, 5);
 
         conditionList = new EntityConditionList(
                 Arrays.asList(
@@ -680,7 +680,7 @@ public class OrderTests extends OrderTestCase {
         String inventoryItemId = inventory.get("inventoryItemId");
 
         // create a physical inventory variance for -2.0 QOH and -2.0 ATP with reason "Damaged"
-        Map<String, Object> callCtxt = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", callCtxt);
 
         // check availability for the product. Expected QOH/ATP = 3
@@ -1126,7 +1126,7 @@ public class OrderTests extends OrderTestCase {
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("10.0"), new BigDecimal("3.0"), initialInventory);
 
         // 7. Use createPhysicalInventoryVariance to change ATP and QOH of the inventoryItem from +3 by -7 and from +10 by 0
-        Map varianceContext = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", -10.0, "quantityOnHandVar", -10.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", -10.0, "quantityOnHandVar", -10.0, "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
 
         // 8. check product QOH changed by +3.0 and ATP changed by -7.0 relative to initial inventory (QOH = 0.0, ATP = -7.0)
@@ -1256,7 +1256,7 @@ public class OrderTests extends OrderTestCase {
         inventoryItemIds.add(inventoryItemId);
 
         // 8. use createPhysicalInventoryVariance service to increase ATP and QOH of newly received item by +5 and +5
-        Map varianceContext = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", +5.0, "quantityOnHandVar", +5.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", +5.0, "quantityOnHandVar", +5.0, "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
 
         // 9. check product QOH changed by +13.0 and ATP changed by +3.0 relative to initial inventory (QOH = +13.0, ATP = +3.0)
@@ -1504,7 +1504,7 @@ public class OrderTests extends OrderTestCase {
         Map input = UtilMisc.toMap("userLogin", admin);
         input.put("orderId", orderId);
         input.put("shipGroupSeqId", "00001");
-        input.put("itemShipList", UtilMisc.toList(UtilMisc.toMap("orderItemSeqId", "00001", "inventoryItemId", inventoryItemId, "qtyShipped", 25.0)));
+        input.put("itemShipList", UtilMisc.toList(UtilMisc.<String, Object>toMap("orderItemSeqId", "00001", "inventoryItemId", inventoryItemId, "qtyShipped", 25.0)));
         input.put("originFacilityId", facilityId);
         runAndAssertServiceSuccess("quickShipOrderByItem", input);
 
@@ -1784,7 +1784,7 @@ public class OrderTests extends OrderTestCase {
         assignDefaultPrice(testProduct, 50.0, admin);
 
         // create a new shipping address
-        Map<String, Object> input = UtilMisc.toMap("partyId", partyId, "toName", "Shipping Address", "address1", "Test Street Version 1", "city", "New York");
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("partyId", partyId, "toName", "Shipping Address", "address1", "Test Street Version 1", "city", "New York");
         input.put("postalCode", "10001");
         input.put("countryGeoId", "USA");
         input.put("stateProvinceGeoId", "NY");
@@ -1794,7 +1794,7 @@ public class OrderTests extends OrderTestCase {
         String contactMechId = (String) results.get("contactMechId");
 
         // store it manually in ProductStoreFacilityByAddress, link it to my retail store warehouse
-        GenericValue facilityAddress = delegator.makeValue("ProductStoreFacilityByAddress", null);
+        GenericValue facilityAddress = delegator.makeValue("ProductStoreFacilityByAddress");
         facilityAddress.put("facilityId", "MyRetailStore");
         facilityAddress.put("productStoreId", productStoreId);
         facilityAddress.put("contactMechId", contactMechId);
@@ -1813,7 +1813,7 @@ public class OrderTests extends OrderTestCase {
         assertEquals("ATP of product went down by expected amount in MyRetailStore", -2.0, atp);
 
         // update the address and repeat test (we'll use updatePostalAddress since that's the core service called by all update address services)
-        input = UtilMisc.toMap("address1", "Test Street Version 2", "city", "New York");
+        input = UtilMisc.<String, Object>toMap("address1", "Test Street Version 2", "city", "New York");
         input.put("postalCode", "10002");
         input.put("contactMechId", contactMechId);
         input.put("userLogin", admin);
@@ -2317,7 +2317,7 @@ public class OrderTests extends OrderTestCase {
         Order order = repository.getOrderById(orderFactory.getOrderId());
 
         // ensure DemoAddress1 has associated facility the same as source facility for re-reservation.
-        Map<String, Object> conditions = UtilMisc.toMap("productStoreId", productStoreId, "facilityId", facilityId, "contactMechId", "DemoAddress1");
+        Map<String, Object> conditions = UtilMisc.<String, Object>toMap("productStoreId", productStoreId, "facilityId", facilityId, "contactMechId", "DemoAddress1");
         GenericValue psfa = delegator.makeValue("ProductStoreFacilityByAddress", conditions);
         delegator.removeValue(psfa);
         psfa.create();
