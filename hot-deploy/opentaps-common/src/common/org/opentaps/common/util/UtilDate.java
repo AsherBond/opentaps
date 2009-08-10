@@ -371,7 +371,7 @@ public abstract class UtilDate {
      */
     public static String getJsDateTimeFormat(String pattern) {
         if (UtilValidate.isEmpty(pattern)) {
-            throw new IllegalArgumentException("UtilDateTime.getJsDateTimeFormat: Pattern string can't be empty.");
+            throw new IllegalArgumentException("UtilDate.getJsDateTimeFormat: Pattern string can't be empty.");
         }
 
         /*
