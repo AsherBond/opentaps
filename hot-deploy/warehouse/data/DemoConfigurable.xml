@@ -23,12 +23,12 @@
     <SupplierProduct productId="MOD_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="10"/>
     <ProductFacility productId="ETH_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
     <SupplierProduct productId="ETH_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="15"/>
-    <ProductFacility productId="RAM256_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
-    <SupplierProduct productId="RAM256_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="100"/>
-    <ProductFacility productId="HD2GB_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
-    <SupplierProduct productId="HD2GB_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="190"/>
-    <ProductFacility productId="HD4GB_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
-    <SupplierProduct productId="HD4GB_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="380"/>
+    <ProductFacility productId="RAM1GB_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
+    <SupplierProduct productId="RAM1GB_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="100"/>
+    <ProductFacility productId="HD250GB_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
+    <SupplierProduct productId="HD250GB_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="190"/>
+    <ProductFacility productId="HD500GB_BRAND" facilityId="WebStoreWarehouse" minimumStock="0"/>
+    <SupplierProduct productId="HD500GB_BRAND" partyId="DemoSupplier" availableFromDate="2007-01-01 00:00:00" minimumOrderQuantity="0" supplierPrefOrderId="10_MAIN_SUPPL" currencyUomId="USD" lastPrice="380"/>
 
 
 </entity-engine-xml>
