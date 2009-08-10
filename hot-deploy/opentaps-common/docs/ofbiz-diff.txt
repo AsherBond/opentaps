@@ -1,5 +1,55 @@
-r12972
-remove OldCustRequestRole from ofbiz order entitydef, and re-add CustRequestRole/InventoryEventPlanned/InventoryEventPlannedType/MrpInventoryEventPlanned in opentaps common.
+
+Framework changes
+-----------------
+
+This list the changes made in the framework directory, from the 09.04 ofbiz release.
+
+
+framework/base/src/org/ofbiz/base/util/UtilFormatOut.java
+r12890 Added a formatCurrency method which does not require the maximumFractionDigits argument. It uses the default value for the locale. Added for backward compatibility.
+
+framework/entity/src/org/ofbiz/entity/GenericDelegator.java
+r12909 Removed depracation tags for the findXXX methods. Ofbiz deprecated them to be replaced with findOne, findList but the old methods are used in too many places to be refactored
+completely for now.
+
+framework/service/config/serviceengine.xml
+r12978 Added the POJOJavaEngine as a service engine. This is a needed part of opentaps.
+
+
+Applications changes
+--------------------
+
+This list the changes made in the applications directory, from the 09.04 ofbiz release.
+
+applications/order/servicedef/secas.xml
+r12967 removed receiveInventoryProduct service eca
+
+applications/order/src/org/ofbiz/order/shoppingcart/ShoppingCart.java
+r12896 made some methods / attributes protected instead of private, so we can access them in OpentapsShoppingCart
+
+applications/order/entitydef/entitymodel_old.xml
+r12972 removed OldCustRequestRole from ofbiz order entitydef
+related to this change:
+r12972 re-added CustRequestRole/InventoryEventPlanned/InventoryEventPlannedType/MrpInventoryEventPlanned in opentaps common.
 
 ofbiz remove contentPurposeEnumId from entity PartyContent, also add partyContentTypeId as part of primary key.
 I re-add contentPurposeEnumId in r12982, and going to refactor relate codes. 
+
+
+Other API Changes
+-----------------
+
+- UtilValidate no longer defines:
+ * isDateTime
+ * isTimestamp
+And UtilDateTime no longer defines:
+ * getDateFormat
+ * getTimeFormat
+ * getDateTimeFormat
+ * getJsDateTimeFormat
+ * ... and others ...
+those are now in org.opentaps.common.util.UtilDate
+
+- Since the move to generics, UtilMisc.addToBigDecimalInMap is not working for a Map<?, BigDecimal>, instead use UtilCommon.addInMapOfBigDecimal
+
+- ServiceUtil.isSucess was moved to UtilCommon
