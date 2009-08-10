@@ -57,3 +57,5 @@ Note: this only affects two services in WorkEffortServices.java : processWorkEff
 - Since the move to generics, UtilMisc.addToBigDecimalInMap is not working for a Map<?, BigDecimal>, instead use UtilCommon.addInMapOfBigDecimal
 
 - ServiceUtil.isSucess was moved to UtilCommon
+
+- The base users (admin, system, ...) and UserLogin seed data is no longer loaded by ofbiz, instead it is loaded as demo data. The needed data was added into CommonSecurityData.xml
