@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+    <Party partyId="LEDGER-TEST" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="LEDGER-TEST" groupName="Ledger Testing Organization"/>
+    <PartyRole partyId="LEDGER-TEST" roleTypeId="INTERNAL_ORGANIZATIO"/>
+
+    <PartyAcctgPreference partyId="LEDGER-TEST" baseCurrencyUomId="USD" cogsMethodId="COGS_AVG_COST"/>
+
+    <GlAccountOrganization glAccountId="110000" organizationPartyId="LEDGER-TEST" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="120000" organizationPartyId="LEDGER-TEST" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="300000" organizationPartyId="LEDGER-TEST" fromDate="2000-01-01 00:00:00"/>
+
+
+    <CustomTimePeriod customTimePeriodId="LT2007" organizationPartyId="LEDGER-TEST" periodTypeId="FISCAL_YEAR" fromDate="2007-01-01" thruDate="2008-01-01" isClosed="N" periodNum="2007" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="LT2008" organizationPartyId="LEDGER-TEST" periodTypeId="FISCAL_YEAR" fromDate="2008-01-01" thruDate="2009-01-01" isClosed="N" periodNum="2008" periodName="Fiscal Year"/>
+
+     <!-- First Quarter 2008 -->
+     <CustomTimePeriod customTimePeriodId="LT2008Q1" parentPeriodId="LT2008" organizationPartyId="LEDGER-TEST" periodTypeId="FISCAL_QUARTER" fromDate="2008-01-01" thruDate="2008-04-01" isClosed="N" periodNum="1" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="LT2008JAN" parentPeriodId="LT2008Q1" organizationPartyId="LEDGER-TEST"
+                       periodTypeId="FISCAL_MONTH" fromDate="2008-01-01" thruDate="2008-02-01" isClosed="N" periodNum="1" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="LT2008FEB" parentPeriodId="LT2008Q1" organizationPartyId="LEDGER-TEST"
+                       periodTypeId="FISCAL_MONTH" fromDate="2008-02-01" thruDate="2008-03-01" isClosed="N" periodNum="2" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="LT2008MAR" parentPeriodId="LT2008Q1" organizationPartyId="LEDGER-TEST"
+                       periodTypeId="FISCAL_MONTH" fromDate="2008-03-01" thruDate="2008-04-01" isClosed="N" periodNum="3" periodName="Month"/>
+
+     <!-- Second Quarter 2008 -->
+     <CustomTimePeriod customTimePeriodId="LT2008Q2" organizationPartyId="LEDGER-TEST" periodTypeId="FISCAL_QUARTER" fromDate="2008-04-01" thruDate="2008-07-01" isClosed="N" periodNum="2" periodName="Quarter"/>
+     <CustomTimePeriod customTimePeriodId="LT2008APR" parentPeriodId="LT2008Q2" organizationPartyId="LEDGER-TEST"
+                       periodTypeId="FISCAL_MONTH" fromDate="2008-04-01" thruDate="2008-05-01" isClosed="N" periodNum="4" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="LT2008MAY" parentPeriodId="LT2008Q2" organizationPartyId="LEDGER-TEST"
+                       periodTypeId="FISCAL_MONTH" fromDate="2008-05-01" thruDate="2008-06-01" isClosed="N" periodNum="5" periodName="Month"/>
+     <CustomTimePeriod customTimePeriodId="LT2008JUN" parentPeriodId="LT2008Q2" organizationPartyId="LEDGER-TEST"
+                       periodTypeId="FISCAL_MONTH" fromDate="2008-06-01" thruDate="2007-07-01" isClosed="N" periodNum="6" periodName="Month"/>
+
+    <CustomTimePeriod customTimePeriodId="LT2009" organizationPartyId="LEDGER-TEST" periodTypeId="FISCAL_YEAR" fromDate="2009-01-01" thruDate="2010-01-01" isClosed="N" periodNum="2009" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="LT2010" organizationPartyId="LEDGER-TEST" periodTypeId="FISCAL_YEAR" fromDate="2010-01-01" thruDate="2011-01-01" isClosed="N" periodNum="2010" periodName="Fiscal Year"/>
+
+
+    <AcctgTrans acctgTransId="LEDGER-TEST-1" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2008-02-28 10:08:48.033" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="LEDGER-TEST-1" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" glAccountId="110000" organizationPartyId="LEDGER-TEST" amount="100.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="LEDGER-TEST-1" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" glAccountId="120000" organizationPartyId="LEDGER-TEST" amount="200.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="LEDGER-TEST-1" acctgTransEntrySeqId="00003" acctgTransEntryTypeId="_NA_" glAccountId="300000" organizationPartyId="LEDGER-TEST" amount="300.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
+
+    <GlAccountTypeDefault glAccountTypeId="ACCOUNTS_RECEIVABLE" organizationPartyId="LEDGER-TEST" glAccountId="120000"/>
+
+    <!-- An unbalanced test transaction -->
+    <AcctgTrans acctgTransId="LEDGER-TEST-2" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2008-02-28 10:08:48.033" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="LEDGER-TEST-2" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" glAccountId="110000" organizationPartyId="LEDGER-TEST" amount="100.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="LEDGER-TEST-2" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" glAccountId="120000" organizationPartyId="LEDGER-TEST" amount="200.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
+
+</entity-engine-xml>

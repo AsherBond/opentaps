@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+    <!-- This is necessary so that inventory transfers from WebStoreWarehouse to MyRetailStore would post to the GL -->
+    <Facility facilityId="MyRetailStore" ownerPartyId="CompanySub1"/>
+
+    <!-- Minimal setup for CompanySub1 to enable an inventory transfer -->
+    <GlAccountOrganization glAccountId="140000" organizationPartyId="CompanySub1" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="214000" organizationPartyId="CompanySub1" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="215000" organizationPartyId="CompanySub1" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="125000" organizationPartyId="CompanySub1" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="515000" organizationPartyId="CompanySub1" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="149000" organizationPartyId="CompanySub1" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="500000" organizationPartyId="CompanySub1" fromDate="2000-01-01 00:00:00"/>
+    <!-- Must have this or the getIncomeStatementByDates will fail for not finding PROFIT_LOSS_ACCOUNT for CompanySub1 -->
+    <!-- GlAccountOrganization glAccountId="801000" organizationPartyId="CompanySub1" fromDate="2000-01-01 00:00:00"/ -->
+    <GlAccountOrganization glAccountId="336000" organizationPartyId="CompanySub1" fromDate="2000-01-01 00:00:00"/>
+    <!-- Must have this or the balance sheet won't run.  A problem of the findLastClosedDate service used by getBalanceSheet service -->
+    <CustomTimePeriod organizationPartyId="CompanySub1" customTimePeriodId="CS1_TEST_0001" periodTypeId="FISCAL_YEAR" periodNum="2007" periodName="Fiscal Year" fromDate="2007-01-01" thruDate="2008-01-01" isClosed="N"/>
+
+
+    <GlAccountTypeDefault glAccountTypeId="INVENTORY_ACCOUNT" organizationPartyId="CompanySub1" glAccountId="140000" />
+    <GlAccountTypeDefault glAccountTypeId="INVENTORY_XFER_IN" organizationPartyId="CompanySub1" glAccountId="215000" />
+    <GlAccountTypeDefault glAccountTypeId="INVENTORY_XFER_OUT" organizationPartyId="CompanySub1" glAccountId="125000" />
+    <GlAccountTypeDefault glAccountTypeId="INVENTORY_VAL_ADJ" organizationPartyId="CompanySub1" glAccountId="515000" />
+    <GlAccountTypeDefault glAccountTypeId="INV_ADJ_AVG_COST" organizationPartyId="CompanySub1" glAccountId="149000" />
+    <GlAccountTypeDefault glAccountTypeId="UNINVOICED_SHIP_RCPT" organizationPartyId="CompanySub1" glAccountId="214000" />
+    <GlAccountTypeDefault glAccountTypeId="COGS_ACCOUNT" organizationPartyId="CompanySub1" glAccountId="500000" />
+
+    <!-- Must have this or the getIncomeStatementByDates will fail for not finding PROFIT_LOSS_ACCOUNT for CompanySub1 -->
+    <!-- GlAccountTypeDefault glAccountTypeId="PROFIT_LOSS_ACCOUNT" organizationPartyId="CompanySub1" glAccountId="801000" / --> <!-- Income/Loss from Business -->
+    <GlAccountTypeDefault glAccountTypeId="RETAINED_EARNINGS" organizationPartyId="CompanySub1" glAccountId="336000" /> <!-- Retained Earnings -->
+
+    <!-- Must have this or the postInventoryItemOwnerChange will fail for not finding product average cost -->
+    <ProductAverageCost organizationPartyId="Company" productId="GZ-1004" averageCost="10.00" fromDate="2006-08-01 00:00:00"/>
+    <ProductAverageCost organizationPartyId="CompanySub1" productId="GZ-1004" averageCost="10.00" fromDate="2006-08-01 00:00:00"/>
+
+    <!-- Shipping method used to create test sales order -->
+    <ProductStoreShipmentMeth productStoreShipmentMethId="TEST_SHIP_METH" productStoreId="9000" partyId="_NA_" shipmentMethodTypeId="STANDARD" roleTypeId="CARRIER" />
+
+    <!-- Custom time periods for CompanySub1 so that we can have ledger postings for it.  Without these, postings for this organization are not made. -->
+    <CustomTimePeriod customTimePeriodId="TEST001" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2007-01-01" thruDate="2008-01-01" isClosed="N" periodNum="2007" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="TEST002" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2008-01-01" thruDate="2009-01-01" isClosed="N" periodNum="2008" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="TEST003" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2009-01-01" thruDate="2010-01-01" isClosed="N" periodNum="2009" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="TEST004" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2010-01-01" thruDate="2011-01-01" isClosed="N" periodNum="2010" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="TEST005" organizationPartyId="CompanySub1" periodTypeId="FISCAL_YEAR" fromDate="2011-01-01" thruDate="2012-01-01" isClosed="N" periodNum="2011" periodName="Fiscal Year"/>
+</entity-engine-xml>

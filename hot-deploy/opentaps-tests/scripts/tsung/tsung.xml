@@ -1,0 +1,487 @@
+<?xml version="1.0"?>
+<!DOCTYPE tsung SYSTEM "/usr/share/tsung/tsung-1.0.dtd">
+<tsung loglevel="notice" dumptraffic="true">
+
+  <!-- Client side setup -->
+  <clients>
+    <client host="localhost" use_controller_vm="true"/>
+  </clients>
+  
+  <!-- Server side setup -->
+  <servers>
+    <server host="localhost" port="8443" type="ssl"/>
+  </servers>
+
+  <!-- to start os monitoring (cpu, network, memory). Use an erlang
+  agent on the remote machine. The computer should have access to the
+  server remotly using a ssh passphrase --> 
+  <monitoring>
+    <monitor host="localhost" type="erlang"/>
+  </monitoring>
+
+  <load>
+  <!-- several arrival phases can be set: for each phase, you can set
+  the mean inter-arrival time between new clients and the phase
+  duration -->
+   <arrivalphase phase="1" duration="1" unit="minute">
+     <users interarrival="25" unit="second"/>
+   </arrivalphase>
+   <arrivalphase phase="2" duration="2" unit="minute">
+     <users interarrival="15" unit="second"/>
+   </arrivalphase>
+   <arrivalphase phase="3" duration="2" unit="minute">
+     <users interarrival="45" unit="second"/>
+   </arrivalphase>
+   <arrivalphase phase="4" duration="2" unit="minute">
+     <users interarrival="15" unit="second"/>
+   </arrivalphase>
+   <arrivalphase phase="5" duration="1" unit="minute">
+     <users interarrival="25" unit="second"/>
+   </arrivalphase>
+  </load>
+
+  <options>
+    <!-- which type of client are we going to fire -->
+   <option type="ts_http" name="user_agent">
+    <user_agent probability="80">Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.7.8) Gecko/20050513 Galeon/1.3.21</user_agent>
+    <user_agent probability="20">Mozilla/5.0 (Windows; U; Windows NT 5.2; fr-FR; rv:1.7.8) Gecko/20050511 Firefox/1.0.4</user_agent>
+   </option>
+    <!-- Each client has a random thinktime (time between two request) around 3 -->
+   <option name="thinktime" value="3" random="true" override="true"/>
+    <!-- TOBEMODIFIED Absolute path for the file from which we generate the login and password -->
+   <option name="file_server" value="userlist.csv"/>
+  </options>
+
+  <!-- start a session for a http user. the probability is the
+  frequency of this type os session. The sum of all session's
+  probabilities must be 100 -->
+
+ <sessions>
+ 
+   <!-- This session is going to create an order -->
+   <session name="salesOrderApprove" probability="55" type="ts_http">
+
+     <!-- A transaction is a way to agrupate requests and give them a name in the charts -->
+     <transaction name="login">
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/main" method="GET" version="1.1"/>
+       </request>
+
+       <!-- subst lets use a substitution in the http request -->
+       <request subst="true">
+         <!-- Match verify the http response -->
+         <match do="continue" when="match">Welcome</match>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/login" method="POST" version="1.1"
+               contents="%%readcsv:user%%"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/ordersMain" method="GET" version="1.1"/>
+       </request>
+
+     </transaction>
+
+     <transaction name="createSalesOrder">
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/createOrderMainScreen" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="continue" when="match">Demo Customer</match>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/updateOrderHeaderInfo" method="POST" version="1.1"
+               contents="productStoreId=9000&amp;salesChannelEnumId=WEB_SALES_CHANNEL&amp;partyId=DemoCustomer"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/addOrderItem" method="POST" version="1.1"
+               contents="productId=GZ-1000&amp;quantity=100"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/createOrderMainScreen" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/addOrderItem" method="POST" version="1.1"
+               contents="productId=GZ-1004&amp;quantity=10"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/createOrderMainScreen" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/finalizeOrder?finalizeMode=init" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/updateCheckoutPayment?checkOutPaymentId=EXT_OFFLINE&amp;finalizeMode=payment" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/updateShipGroup?shipGroupSeqId=0&amp;maySplit=N&amp;isGift=N&amp;isCOD=N&amp;contactMechId=9015&amp;carrierPartyId=UPS&amp;shipmentMethodTypeId=AIR&amp;thirdPartyAccountNumber=&amp;thirdPartyPostalCode=&amp;thirdPartyCountryCode=" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/finalizeOrder?finalizeMode=init&amp;finalizeReqShipInfo=false" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/processorder" method="GET" version="1.1"/>
+       </request>
+
+     </transaction>
+
+     <transaction name="approveSalesOrder">
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <!-- dyn_variable permits to create a new variable to reuse later in a substitution.
+              it is possible to use regexp -->
+         <dyn_variable name="orderId"/>
+         <http url="/crmsfa/control/orderview" method="GET" version="1.1"/>
+       </request>
+
+       <request subst="true">
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/changeOrderItemStatus?statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+       </request>
+     </transaction>
+
+   </session>
+
+   <!-- This session is going to create an order and then cancel it -->
+   <session name="salesOrderApproveCancel" probability="20" type="ts_http">
+
+     <!-- A transaction is a way to agrupate requests and give them a name in the charts -->
+     <transaction name="login">
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/main" method="GET" version="1.1"/>
+       </request>
+
+       <!-- subst lets use a substitution in the http request -->
+       <request subst="true">
+         <!-- Match verify the http response -->
+         <match do="continue" when="match">Welcome</match>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/login" method="POST" version="1.1"
+               contents="%%readcsv:user%%"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/ordersMain" method="GET" version="1.1"/>
+       </request>
+
+     </transaction>
+
+     <transaction name="createSalesOrder">
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/createOrderMainScreen" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="continue" when="match">Demo Customer</match>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/updateOrderHeaderInfo" method="POST" version="1.1"
+               contents="productStoreId=9000&amp;salesChannelEnumId=WEB_SALES_CHANNEL&amp;partyId=DemoCustomer"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/addOrderItem" method="POST" version="1.1"
+               contents="productId=GZ-1000&amp;quantity=100"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/createOrderMainScreen" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/addOrderItem" method="POST" version="1.1"
+               contents="productId=GZ-1004&amp;quantity=10"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/createOrderMainScreen" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/finalizeOrder?finalizeMode=init" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/updateCheckoutPayment?checkOutPaymentId=EXT_OFFLINE&amp;finalizeMode=payment" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/updateShipGroup?shipGroupSeqId=0&amp;maySplit=N&amp;isGift=N&amp;isCOD=N&amp;contactMechId=9015&amp;carrierPartyId=UPS&amp;shipmentMethodTypeId=AIR&amp;thirdPartyAccountNumber=&amp;thirdPartyPostalCode=&amp;thirdPartyCountryCode=" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/finalizeOrder?finalizeMode=init&amp;finalizeReqShipInfo=false" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/processorder" method="GET" version="1.1"/>
+       </request>
+
+     </transaction>
+
+     <transaction name="approveSalesOrder">
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <!-- dyn_variable permits to create a new variable to reuse later in a substitution.
+              it is possible to use regexp -->
+         <dyn_variable name="orderId"/>
+         <http url="/crmsfa/control/orderview" method="GET" version="1.1"/>
+       </request>
+
+       <request subst="true">
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/changeOrderItemStatus?statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+       </request>
+     </transaction>
+
+     <transaction name="cancelSalesOrder">
+       <request subst="true">
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/crmsfa/control/changeOrderItemStatus?statusId=ORDER_HOLD&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+       </request>
+     </transaction>
+
+   </session>
+
+   <!-- This session is going to create an order -->
+   <session name="purchaseOrderApprove" probability="15" type="ts_http">
+
+     <!-- A transaction is a way to agrupate requests and give them a name in the charts -->
+     <transaction name="login">
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/main" method="GET" version="1.1"/>
+       </request>
+
+       <!-- subst lets use a substitution in the http request -->
+       <request subst="true">
+         <match do="continue" when="match">Welcome</match>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/login" method="POST" version="1.1"
+               contents="%%readcsv:user%%"/>
+       </request>
+
+     </transaction>
+
+     <transaction name="createPurchaseOrder">
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/setOrganization" method="POST" version="1.1"
+               contents="organizationPartyId=Company"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/orderMain" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/orderentry" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/initorderentry" method="POST" version="1.1"
+               contents="finalizeMode=type&amp;orderMode=PURCHASE_ORDER&amp;supplierPartyId=EuroSupplier"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/setOrderCurrencyAgreementShipDates" method="POST" version="1.1"
+               contents="currencyUomId=USD"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/addOrderItem" method="POST" version="1.1"
+               contents="productId=GZ-1000&amp;quantity=100"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/addOrderItem" method="POST" version="1.1"
+               contents="productId=GZ-1001&amp;quantity=100"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/finalizeOrder?finalizeMode=init" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/finalizeOrder" method="POST" version="1.1"
+               contents="finalizeMode=term"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/finalizeOrder" method="POST" version="1.1"
+               contents="finalizeMode=ship&amp;0_shipping_contact_mech_id=9200"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/finalizeOrder" method="POST" version="1.1"
+               contents="finalizeMode=options&amp;0_shipping_method=NO_SHIPPING@_NA_&amp;0_may_split=false&amp;0_is_gift=false"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <!-- dyn_variable permits to create a new variable to reuse later in a substitution.
+              it is possible to use regexp -->
+         <dyn_variable name="orderId" regexp="&gt;Order #\(.*\)  Information&lt;"/>
+         <http url="/purchasing/control/processorder" method="GET" version="1.1"/>
+       </request>
+     </transaction>
+
+     <transaction name="approvePurchaseOrder">
+       <request subst="true">
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/changeOrderItemStatus?statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+       </request>
+     </transaction>
+
+   </session>
+
+   <!-- This session is going to create an order and then cancel it -->
+   <session name="purchaseOrderApproveCancel" probability="10" type="ts_http">
+
+     <!-- A transaction is a way to agrupate requests and give them a name in the charts -->
+     <transaction name="login">
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/main" method="GET" version="1.1"/>
+       </request>
+
+       <!-- subst lets use a substitution in the http request -->
+       <request subst="true">
+         <match do="continue" when="match">Welcome</match>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/login" method="POST" version="1.1"
+               contents="%%readcsv:user%%"/>
+       </request>
+
+     </transaction>
+
+     <transaction name="createPurchaseOrder">
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/setOrganization" method="POST" version="1.1"
+               contents="organizationPartyId=Company"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/orderMain" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/orderentry" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/initorderentry" method="POST" version="1.1"
+               contents="finalizeMode=type&amp;orderMode=PURCHASE_ORDER&amp;supplierPartyId=EuroSupplier"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/setOrderCurrencyAgreementShipDates" method="POST" version="1.1"
+               contents="currencyUomId=USD"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/addOrderItem" method="POST" version="1.1"
+               contents="productId=GZ-1000&amp;quantity=100"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/addOrderItem" method="POST" version="1.1"
+               contents="productId=GZ-1001&amp;quantity=100"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/finalizeOrder?finalizeMode=init" method="GET" version="1.1"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/finalizeOrder" method="POST" version="1.1"
+               contents="finalizeMode=term"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/finalizeOrder" method="POST" version="1.1"
+               contents="finalizeMode=ship&amp;0_shipping_contact_mech_id=9200"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/finalizeOrder" method="POST" version="1.1"
+               contents="finalizeMode=options&amp;0_shipping_method=NO_SHIPPING@_NA_&amp;0_may_split=false&amp;0_is_gift=false"/>
+       </request>
+
+       <request>
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <!-- dyn_variable permits to create a new variable to reuse later in a substitution.
+              it is possible to use regexp -->
+         <dyn_variable name="orderId" regexp="&gt;Order #\(.*\)  Information&lt;"/>
+         <http url="/purchasing/control/processorder" method="GET" version="1.1"/>
+       </request>
+     </transaction>
+
+     <transaction name="approvePurchaseOrder">
+       <request subst="true">
+         <match do="abort" when="match">The Following Errors Occurred</match>
+         <http url="/purchasing/control/changeOrderItemStatus?statusId=ITEM_APPROVED&amp;orderId=%%_orderId%%" method="GET" version="1.1"/>
+       </request>
+     </transaction>
+
+     <transaction name="cancelPurchaseOrder">
+       <request subst="true"><http url="/purchasing/control/changeOrderStatus/orderview?statusId=ORDER_HOLD&amp;orderId=%%_orderId%%" method="GET" version="1.1"/></request>
+     </transaction>
+   </session>
+
+ </sessions>
+</tsung>

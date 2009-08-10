@@ -1,0 +1,108 @@
+package org.opentaps.tests.service;
+
+import org.opentaps.tests.OpentapsTestCase;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilDateTime;
+
+import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
+import java.sql.Timestamp;
+import java.math.BigDecimal;
+
+/*
+* Copyright (c) 2007 - 2009 Open Source Strategies, Inc.
+* 
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the Honest Public License.
+* 
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* Honest Public License for more details.
+* 
+* You should have received a copy of the Honest Public License
+* along with this program; if not, write to Funambol,
+* 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+*/
+public class POJOServiceTests extends OpentapsTestCase {
+
+    private GenericValue user = null;
+    private String key1Value = "TEST";
+    private List key2Values = null;
+    private Timestamp testTimestamp = null;
+
+    public void setUp() throws Exception {
+        super.setUp();
+        user = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
+        //because different database timestamp not use same precision, so we just compare "yyyy-MM-dd HH:mm:ss" of timestamp.
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        java.util.Date timeDate = sdf.parse(sdf.format(UtilDateTime.nowTimestamp()));
+        testTimestamp = new java.sql.Timestamp(timeDate.getTime());
+
+        key2Values = UtilMisc.toList("Alpha", "Bravo", "Charlie", "Delta", "Echo", "Foxtrot");
+        // just to be sure -- if test crashed somehow last time, these might still be hanging around
+        removeTestingRecords(delegator);
+    }
+
+    public void tearDown() throws Exception {
+        super.tearDown();
+        // delegator is reset to null by super.tearDown() so we have to get it again
+        removeTestingRecords(GenericDelegator.getGenericDelegator(OpentapsTestCase.DELEGATOR_NAME));
+    }
+
+    private void removeTestingRecords(GenericDelegator delegator) throws GenericEntityException {
+        delegator.removeByCondition("ServiceTestRecord", new EntityExpr("key1", EntityOperator.EQUALS, "TEST"));
+    }
+
+    public void testErrorDueToMissingUserLogin() {
+        Map params = UtilMisc.toMap("key1Value", key1Value);
+        runAndAssertServiceError("pojoTest", params);
+    }
+
+
+    public void testErrorDueToMissingRequiredValues() {
+        Map params = UtilMisc.toMap("key1Value", key1Value, "userLogin", user);
+        runAndAssertServiceError("pojoTest", params);
+    }
+
+    public void testErrorOnTrigger() {
+        Map params = UtilMisc.toMap("key1Value", key1Value, "key2Values", key2Values, "errorTrigger", new Boolean(true), "userLogin", user);
+        runAndAssertServiceError("pojoTest", params);
+    }
+
+    public void testFailureOnTrigger() {
+        Map params = UtilMisc.toMap("key1Value", key1Value, "key2Values", key2Values, "failureTrigger", new Boolean(true), "userLogin", user);
+        runAndAssertServiceFailure("pojoTest", params);
+    }
+
+    public void testBasicSuccessfulRun() throws GenericEntityException {
+        Map params = UtilMisc.toMap("key1Value", key1Value, "key2Values", key2Values, "testTimestamp", testTimestamp, "userLogin", user);
+        runAndAssertServiceSuccess("pojoTest", params);
+        List<GenericValue> testValues = POJOTestServices.getAllValues(key1Value, key2Values, delegator);
+        assertEachTestValueIsCorrect(testValues, new BigDecimal(1.0), null, testTimestamp, "admin", null);
+    }
+
+
+    public void testSuccessfulRunWithSECA() throws GenericEntityException {
+        Map params = UtilMisc.toMap("key1Value", key1Value, "key2Values", key2Values, "testTimestamp", testTimestamp, "followupTrigger", new Boolean(true), "userLogin", user);
+        runAndAssertServiceSuccess("pojoTest", params);
+        List<GenericValue> testValues = POJOTestServices.getAllValues(key1Value, key2Values, delegator);
+        assertEachTestValueIsCorrect(testValues, new BigDecimal(2.0), new BigDecimal(1.0), testTimestamp, "admin", "admin");
+    }
+
+    private void assertEachTestValueIsCorrect(List<GenericValue> testValues, BigDecimal expectedValue1, BigDecimal expectedValue2, Timestamp expectedTimestamp, String expectedCreateUserLogin, String expectedModifiedUserLogin) {
+        for (GenericValue testValue: testValues) {
+            assertEquals(testValue + " value1 correct ", testValue.getBigDecimal("value1"), expectedValue1);
+            assertEquals(testValue + " value2 correct ", testValue.getBigDecimal("value2"), expectedValue2);
+            assertEquals(testValue + " testTimestamp correct ", testValue.getTimestamp("testTimestamp"), expectedTimestamp);
+            assertEquals(testValue + " created user login correct ", testValue.getString("createdByUserLogin"), expectedCreateUserLogin);
+            assertEquals(testValue + " modified user login correct ", testValue.getString("modifiedByUserLogin"), expectedModifiedUserLogin);
+        }
+    }
+}

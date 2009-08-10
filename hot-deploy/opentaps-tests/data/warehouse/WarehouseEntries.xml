@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+    <!-- more demo data for unit testing on reverting production runs -->
+    <Product productTypeId="FINISHED_GOOD" productId="GZ-MANUFACTURED" internalName="Internally Manufactured Product for Revert Production Runs Testing" productName="Internally Manufactured Product for Revert Production Runs Testing" description="This product is internally manufactured and used during production runs testing" isVirtual="N" isVariant="N" billOfMaterialLevel="0"/>
+    <ProductPrice productId="GZ-MANUFACTURED" productPricePurposeId="PURCHASE" productPriceTypeId="DEFAULT_PRICE" currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2001-05-13 12:00:00.0" price="455.99" createdDate="2001-05-13 12:00:00.0" createdByUserLogin="admin" lastModifiedDate="2001-05-13 12:00:00.0" lastModifiedByUserLogin="admin"/>
+    <ProductFacility productId="GZ-MANUFACTURED" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="1" daysToShip="1"/>
+
+    <Product productTypeId="RAW_MATERIAL" productId="MAT-MANUFACTURED-1" internalName="Material for MANUF 1" productName="Material for MANUF 1" description="Material for MANUF 1" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
+    <ProductFacility productId="MAT-MANUFACTURED-1" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <Product productTypeId="RAW_MATERIAL" productId="MAT-MANUFACTURED-2" internalName="Material for MANUF 2" productName="Material for MANUF 2" description="Material for MANUF 2" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
+    <ProductFacility productId="MAT-MANUFACTURED-2" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <Product productTypeId="RAW_MATERIAL" productId="MAT-MANUFACTURED-3" internalName="Material for MANUF 3" productName="Material for MANUF 3" description="Material for MANUF 3" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
+    <ProductFacility productId="MAT-MANUFACTURED-3" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <Product productTypeId="RAW_MATERIAL" productId="MAT-MANUFACTURED-4" internalName="Material for MANUF 4" productName="Material for MANUF 4" description="Material for MANUF 4" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
+    <ProductFacility productId="MAT-MANUFACTURED-4" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <Product productTypeId="RAW_MATERIAL" productId="MAT-MANUFACTURED-5" internalName="Material for MANUF 5" productName="Material for MANUF 5" description="Material for MANUF 5" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
+    <ProductFacility productId="MAT-MANUFACTURED-5" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <Product productTypeId="RAW_MATERIAL" productId="MAT-MANUFACTURED-6" internalName="Material for MANUF 6" productName="Material for MANUF 6" description="Material for MANUF 6" isVirtual="N" isVariant="N" billOfMaterialLevel="2"/>
+    <ProductFacility productId="MAT-MANUFACTURED-6" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+
+    <ProductAssoc productId="GZ-MANUFACTURED" productIdTo="MAT-MANUFACTURED-1" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="40" quantity="2.0"/>
+    <ProductAssoc productId="GZ-MANUFACTURED" productIdTo="MAT-MANUFACTURED-2" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="41" quantity="3.0"/>
+    <ProductAssoc productId="GZ-MANUFACTURED" productIdTo="MAT-MANUFACTURED-3" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="42" quantity="4.0"/>
+    <ProductAssoc productId="GZ-MANUFACTURED" productIdTo="MAT-MANUFACTURED-4" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="43" quantity="1.0"/>
+    <ProductAssoc productId="GZ-MANUFACTURED" productIdTo="MAT-MANUFACTURED-5" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="44" quantity="6.0"/>
+    <ProductAssoc productId="GZ-MANUFACTURED" productIdTo="MAT-MANUFACTURED-6" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="45" quantity="5.0"/>
+
+    <WorkEffort workEffortId="P_GZ_MANUF" workEffortTypeId="ROUTING" currentStatusId="ROU_ACTIVE" workEffortName="Production Run GZ-MANUFACTURED" description="Production Run Template for GZ-MANUFACTURED" revisionNumber="1" quantityToProduce="0"/>
+    <WorkEffort workEffortId="GZ_MANUF-1" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_ASSEMBLING" currentStatusId="ROU_ACTIVE" workEffortName="Get Parts" description="First Task to get the parts of GZ-MANUFACTURED" revisionNumber="1" fixedAssetId="WORKCENTER_COST" estimatedMilliSeconds="2000000" estimatedSetupMillis="50000"/>
+    <WorkEffort workEffortId="GZ_MANUF-2" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_ASSEMBLING" currentStatusId="ROU_ACTIVE" workEffortName="Assemble" description="Second Task to assemble GZ-MANUFACTURED" revisionNumber="1" fixedAssetId="WORKCENTER_COST" estimatedMilliSeconds="30000" estimatedSetupMillis="6000"/>
+
+    <WorkEffortAssoc workEffortIdFrom="P_GZ_MANUF" workEffortIdTo="GZ_MANUF-1" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="10" fromDate="2005-12-31 00:01:00.0"/>
+    <WorkEffortAssoc workEffortIdFrom="P_GZ_MANUF" workEffortIdTo="GZ_MANUF-2" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="11" fromDate="2005-12-31 00:01:00.0"/>
+
+    <WorkEffortGoodStandard workEffortId="P_GZ_MANUF" productId="GZ-MANUFACTURED" workEffortGoodStdTypeId="ROU_PROD_TEMPLATE" statusId="WEGS_CREATED" fromDate="2005-12-31 00:01:00.0"/>
+
+    <!-- machine time costs for the two tasks -->
+    <CostComponentCalc costComponentCalcId="COST_GZ_MANUF" description="Runtime cost for GZ-MANUFACTURED" costGlAccountTypeId="MFG_EXPENSE_INTERNAL" currencyUomId="USD" fixedCost="100" variableCost="10" perMilliSecond="60000"/> 
+    <WorkEffortCostCalc workEffortId="GZ_MANUF-1" costComponentTypeId="ROUTE_COST" costComponentCalcId="COST_GZ_MANUF" fromDate="2008-01-01 00:00:00"/>
+    <WorkEffortCostCalc workEffortId="GZ_MANUF-2" costComponentTypeId="ROUTE_COST" costComponentCalcId="COST_GZ_MANUF" fromDate="2008-01-01 00:00:00"/>
+</entity-engine-xml>

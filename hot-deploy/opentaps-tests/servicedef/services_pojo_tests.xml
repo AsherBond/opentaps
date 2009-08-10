@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Services for testing POJO tests</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="pojoTest" engine="pojo" auth="true"
+            location="org.opentaps.tests.service.POJOTestServices" invoke="pojoTest">
+        <description>A test service of the POJO service engine</description>
+        <attribute name="key1Value" mode="IN" type="String" optional="false"/>
+        <attribute name="key2Values" mode="IN" type="java.util.List" optional="false"/>
+        <attribute name="failTrigger" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="errorTrigger" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="followupTrigger" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="testTimestamp" mode="IN" type="Timestamp" optional="true"/>
+
+        <attribute name="key1Value" mode="OUT" type="String" optional="false"/>
+        <attribute name="key2Values" mode="OUT" type="java.util.List" optional="false"/>
+        <attribute name="triggerEca" mode="OUT" type="String" optional="true"/>
+    </service>
+    <service name="pojoTestFollowup" engine="java" auth="true"
+                location="org.opentaps.tests.service.POJOTestServices" invoke="pojoTestFollowup">
+            <description>A static java method test to run as SECA to pojoTest</description>
+        <attribute name="key1Value" mode="IN" type="String" optional="false"/>
+        <attribute name="key2Values" mode="IN" type="java.util.List" optional="false"/>
+    </service>
+    <service name="pojoTest2" engine="pojo" auth="true"
+            location="org.opentaps.tests.service.POJOTestServices" invoke="pojoTest2">
+        <description>A follow-on test to run as SECA</description>
+        <attribute name="key1Value" mode="IN" type="String" optional="false"/>
+        <attribute name="key2Values" mode="IN" type="java.util.List" optional="false"/>
+    </service>
+
+</services>

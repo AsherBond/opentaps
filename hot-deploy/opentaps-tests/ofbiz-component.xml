@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<ofbiz-component name="opentaps-tests"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+
+    <resource-loader name="main" type="component"/>
+
+    <classpath type="jar" location="build/lib/*"/>
+    <classpath type="dir" location="config"/>    
+    <classpath type="jar" location="lib/*"/>
+    <classpath type="dir" location="script"/>
+
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    
+    <!-- Data required for unit testing -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/setup/TestingSetup.xml"/>
+
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/crmsfa/PartyTestData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/financials/CompanySub1Setup.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/financials/ManufacturingEntries.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/financials/PayrollEntries.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/financials/InventoryEntries.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/financials/InvoicePaymentEntries.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/financials/LedgerPostingTestData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/financials/StatementsTestData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/financials/DetailedStatementTestData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/warehouse/ProductionRuns.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/warehouse/WarehouseEntries.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/TestGeoData.xml"/>
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/common/HibernateSearchTestData.xml"/>
+
+    <!-- Data required for tsung -->
+    <entity-resource type="data" reader-name="demo" loader="main" location="data/TsungDemoData.xml"/>
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_testentity.xml"/>
+
+    <service-resource type="model" loader="main" location="servicedef/services_test.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_analytics.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_pojo_tests.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas_pojo_tests.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_tests.xml"/>
+
+    <test-suite loader="main" location="testdef/opentaps_tests.xml"/>
+    
+</ofbiz-component>
+
+

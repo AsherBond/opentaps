@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+    <!-- This is necessary so that can runing PartyTests -->
+    <Party partyId="DemoContact5" partyTypeId="PERSON"/>
+    <Person partyId="DemoContact5" firstName="Demo" lastName="Fifth Contact"/>
+    <PartyRole partyId="DemoContact5" roleTypeId="CONTACT"/>
+    <PartyRelationship partyIdFrom="DemoContact5" roleTypeIdFrom="CONTACT" partyIdTo="DemoSalesManager" roleTypeIdTo="ACCOUNT_MANAGER" securityGroupId="CONTACT_OWNER"
+        fromDate="2005-12-01 00:00:00" partyRelationshipTypeId="RESPONSIBLE_FOR" comments="DemoSalesManager is the contact owner for DemoContact5"/>
+
+    <!-- primary phone number --> 
+    <ContactMech contactMechId="DemoPhone5" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPhone5" countryCode="86" areaCode="020" contactNumber="82584405" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="DemoContact5" contactMechId="DemoPhone5" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoContact5" contactMechId="DemoPhone5" contactMechPurposeTypeId="PRIMARY_PHONE" fromDate="2005-12-01 00:00:00.000" />
+    <!-- home phone number --> 
+    <ContactMech contactMechId="DemoPhone6" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPhone6" countryCode="86" areaCode="020" contactNumber="82584406" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="DemoContact5" contactMechId="DemoPhone6" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoContact5" contactMechId="DemoPhone6" contactMechPurposeTypeId="PHONE_HOME" fromDate="2005-12-01 00:00:00.000" />
+    <!-- mobile number --> 
+    <ContactMech contactMechId="DemoPhone7" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPhone7" countryCode="86" areaCode="" contactNumber="13512340007" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="DemoContact5" contactMechId="DemoPhone7" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoContact5" contactMechId="DemoPhone7" contactMechPurposeTypeId="PHONE_MOBILE" fromDate="2005-12-01 00:00:00.000" />
+    <!-- work phone number --> 
+    <ContactMech contactMechId="DemoPhone8" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPhone8" countryCode="86" areaCode="020" contactNumber="82584408" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="DemoContact5" contactMechId="DemoPhone8" fromDate="2005-12-01 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoContact5" contactMechId="DemoPhone8" contactMechPurposeTypeId="PHONE_WORK" fromDate="2005-12-01 00:00:00.000" />
+    <!-- second work phone number, it's expired --> 
+    <ContactMech contactMechId="DemoPhone9" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="DemoPhone9" countryCode="86" areaCode="020" contactNumber="82584409" askForName="Ask for This Person"/>
+    <PartyContactMech partyId="DemoContact5" contactMechId="DemoPhone9" fromDate="2005-12-01 00:00:00.000" thruDate="2005-12-31 00:00:00.000" allowSolicitation="Y"/>
+    <PartyContactMechPurpose partyId="DemoContact5" contactMechId="DemoPhone9" contactMechPurposeTypeId="PHONE_WORK_SEC" fromDate="2005-12-01 00:00:00.000" thruDate="2005-12-31 00:00:00.000" />
+          
+
+</entity-engine-xml>

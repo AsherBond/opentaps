@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+  <Product productId="MRP-TEST-PROD1" productTypeId="FINISHED_GOOD" internalName="MRP Test Product #1" isVirtual="N" isVariant="N" createdDate="2001-05-13 12:00:00.0"/>
+  <Product productId="MRP-TEST-PROD2" productTypeId="FINISHED_GOOD" internalName="MRP Test Product #2" isVirtual="N" isVariant="N" billOfMaterialLevel="0"/>
+  <Product productId="MRP-TEST-PROD3" productTypeId="FINISHED_GOOD" internalName="MRP Test Product #3" isVirtual="N" isVariant="N"/>
+  <Product productId="MRP-TEST-MAT1" productTypeId="RAW_MATERIAL" internalName="MRP Test Raw Material #1" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
+  <Product productId="MRP-TEST-MAT2" productTypeId="RAW_MATERIAL" internalName="MRP Test Raw Material #2" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
+
+  <ProductAssoc productId="MRP-TEST-PROD2" productIdTo="MRP-TEST-MAT1" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="10" quantity="2.0"/>
+  <ProductAssoc productId="MRP-TEST-PROD2" productIdTo="MRP-TEST-MAT1" productAssocTypeId="MANUF_COMPONENT" fromDate="2005-12-31 00:01:00.0" sequenceNum="20" quantity="3.0"/>
+
+  <ProductPrice productId="MRP-TEST-PROD1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2001-05-13 12:00:00.0" price="15.99"/>
+  <ProductPrice productId="MRP-TEST-PROD1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2001-05-13 12:00:00.0" price="15.0"/>
+  <ProductPrice productId="MRP-TEST-PROD2" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2001-05-13 12:00:00.0" price="455.99"/>
+  <ProductPrice productId="MRP-TEST-PROD3" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2001-05-13 12:00:00.0" price="269.99"/>
+  <ProductPrice productId="MRP-TEST-PROD3" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2001-05-13 12:00:00.0" price="270.0"/>
+
+  <ProductFacility productId="MRP-TEST-PROD3" facilityId="WebStoreWarehouse" minimumStock="10.0" reorderQuantity="50.0" daysToShip="1"/>
+  <ProductFacility productId="MRP-TEST-MAT1" facilityId="Demo3PL" minimumStock="1000.0" reorderQuantity="250.0" daysToShip="180"/>
+  <ProductFacility productId="MRP-TEST-MAT1" facilityId="WebStoreWarehouse" minimumStock="0.0" reorderQuantity="5.0" daysToShip="1"/>
+  <ProductFacility productId="MRP-TEST-MAT2" facilityId="Demo3PL" minimumStock="1000.0" reorderQuantity="250.0" daysToShip="180" />
+  <ProductFacility productId="MRP-TEST-MAT2" facilityId="WebStoreWarehouse" minimumStock="0.0" reorderQuantity="5.0" daysToShip="1"/>
+  <ProductFacility productId="MRP-TEST-PROD2" facilityId="WebStoreWarehouse" minimumStock="0.0" reorderQuantity="1.0" daysToShip="1"/>
+  <ProductFacility productId="MRP-TEST-PROD1" facilityId="Demo3PL" minimumStock="100000.0" reorderQuantity="25000.0" daysToShip="180"/>
+
+  <InventoryItem inventoryItemId="MRP-TEST-II1" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="MRP-TEST-MAT2" ownerPartyId="Company" datetimeReceived="2007-11-08 11:32:51.685" facilityId="Demo3PL" quantityOnHandTotal="1000.0" availableToPromiseTotal="1000.0" unitCost="7.0" currencyUomId="USD"/>
+  <InventoryItemValueHistory inventoryItemId="MRP-TEST-II1" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+  <InventoryItem inventoryItemId="MRP-TEST-II2" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="MRP-TEST-PROD1" ownerPartyId="Company" datetimeReceived="2007-11-08 11:34:14.299" facilityId="Demo3PL" quantityOnHandTotal="110000.0" availableToPromiseTotal="110000.0" unitCost="5.0" currencyUomId="USD"/>
+  <InventoryItemValueHistory inventoryItemId="MRP-TEST-II2" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+  <InventoryItem inventoryItemId="MRP-TEST-II3" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="MRP-TEST-PROD1" ownerPartyId="Company" datetimeReceived="2007-11-08 11:35:44.988" facilityId="WebStoreWarehouse" quantityOnHandTotal="50.0" availableToPromiseTotal="50.0" unitCost="5.0" currencyUomId="USD"/>
+  <InventoryItemValueHistory inventoryItemId="MRP-TEST-II3" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+  <InventoryItem inventoryItemId="MRP-TEST-II4" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="MRP-TEST-PROD3" ownerPartyId="Company" facilityId="WebStoreWarehouse" lotId="1000" locationSeqId="TLTLTLUL02" quantityOnHandTotal="15.0" availableToPromiseTotal="15.0" unitCost="110.0" currencyUomId="USD"/>
+  <InventoryItemValueHistory inventoryItemId="MRP-TEST-II4" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+  <InventoryItem inventoryItemId="MRP-TEST-II5" inventoryItemTypeId="NON_SERIAL_INV_ITEM" productId="MRP-TEST-PROD3" ownerPartyId="Company" facilityId="WebStoreWarehouse" lotId="1001" locationSeqId="TLTLTLLL02" quantityOnHandTotal="3.0" availableToPromiseTotal="3.0" unitCost="110.0" currencyUomId="USD"/>
+  <InventoryItemValueHistory inventoryItemId="MRP-TEST-II5" dateTime="2008-01-01 00:00:00.000" unitCost="0" setByUserLogin="system"/>
+
+  <InventoryItemDetail inventoryItemId="MRP-TEST-II4" inventoryItemDetailSeqId="0001" quantityOnHandDiff="15.0" availableToPromiseDiff="15.0"/>
+  <InventoryItemDetail inventoryItemId="MRP-TEST-II5" inventoryItemDetailSeqId="0001" quantityOnHandDiff="3.0" availableToPromiseDiff="3.0"/>
+  <InventoryItemDetail inventoryItemId="MRP-TEST-II1" inventoryItemDetailSeqId="0001" quantityOnHandDiff="1000.0" availableToPromiseDiff="1000.0"/>
+  <InventoryItemDetail inventoryItemId="MRP-TEST-II2" inventoryItemDetailSeqId="0001" quantityOnHandDiff="110000.0" availableToPromiseDiff="110000.0"/>
+  <InventoryItemDetail inventoryItemId="MRP-TEST-II3" inventoryItemDetailSeqId="0001" quantityOnHandDiff="50.0" availableToPromiseDiff="50.0"/>
+  
+</entity-engine-xml>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+
+  <UserLogin userLoginId="demoadmin0" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin0" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin0" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin1" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin1" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin1" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin2" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin2" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin2" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin3" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin3" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin3" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin4" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin4" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin4" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin5" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin5" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin5" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin6" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin6" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin6" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin7" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin7" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin7" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin8" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin8" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin8" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin9" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin9" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin9" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin10" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin10" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin10" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin11" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin11" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin11" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin12" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin12" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin12" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin13" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin13" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin13" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin14" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin14" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin14" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin15" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin15" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin15" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin16" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin16" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin16" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin17" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin17" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin17" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin18" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin18" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin18" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+  <UserLogin userLoginId="demoadmin19" partyId="admin" currentPassword="47ca69ebb4bdc9ae0adec130880165d2cc05db1a" passwordHint=""/>
+  <UserLoginSecurityGroup userLoginId="demoadmin19" groupId="SALES_MANAGER" fromDate="2005-12-01 00:00:00"/>
+  <UserLoginSecurityGroup userLoginId="demoadmin19" groupId="PRCH_MANAGER" fromDate="2007-01-01 00:00:00"/>
+
+</entity-engine-xml>

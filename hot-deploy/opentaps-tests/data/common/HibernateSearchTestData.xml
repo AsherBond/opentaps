@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+    <Content contentId="HBS_0001" contentTypeId="DOCUMENT" contentName="Usage of Hibernate Search" description="integrating the object-oriented domain model and full-text search" createdDate="2009-06-10 06:50:06.173" createdByUserLogin="admin" lastModifiedDate="2009-06-10 06:50:06.173" lastModifiedByUserLogin="admin" lastUpdatedStamp="2009-06-10 06:50:06.173" lastUpdatedTxStamp="2009-06-10 06:50:06.173" createdStamp="2009-06-10 06:50:06.173" createdTxStamp="2009-06-10 06:50:06.173"/>
+    <Content contentId="HBS_0002" contentTypeId="DOCUMENT" contentName="Feature of Hibernate Search" description="ease of use, domain model-centric, annotation-driven and focused on providing a unified experience to the developer" createdDate="2009-06-10 06:50:06.173" createdByUserLogin="admin" lastModifiedDate="2009-06-10 06:50:06.173" lastModifiedByUserLogin="admin" lastUpdatedStamp="2009-06-10 06:50:06.173" lastUpdatedTxStamp="2009-06-10 06:50:06.173" createdStamp="2009-06-10 06:50:06.173" createdTxStamp="2009-06-10 06:50:06.173"/>
+    <Content contentId="HBS_0003" contentTypeId="DOCUMENT" contentName="What's about Hibernate" description="An ORM lets you express your domain model in a pure object-oriented paradigm" createdDate="2009-06-10 06:50:06.173" createdByUserLogin="admin" lastModifiedDate="2009-06-10 06:50:06.173" lastModifiedByUserLogin="admin" lastUpdatedStamp="2009-06-10 06:50:06.173" lastUpdatedTxStamp="2009-06-10 06:50:06.173" createdStamp="2009-06-10 06:50:06.173" createdTxStamp="2009-06-10 06:50:06.173"/>
+    

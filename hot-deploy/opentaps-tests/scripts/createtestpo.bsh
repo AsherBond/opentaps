@@ -1,0 +1,91 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.service.GenericDispatcher;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import org.ofbiz.security.*;
+
+import org.opentaps.common.util.*;
+
+ofbSecurity = new OFBizSecurity();
+delegator = GenericDelegator.getGenericDelegator("default");
+dispatcher = GenericDispatcher.getLocalDispatcher("ecommerce", delegator);
+userLogin = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
+
+productIds = new ArrayList();
+// Make 5000 products
+for (i = 0; i < 5000; i++) {
+     nextProductId = delegator.getNextSeqId("Product");
+     product = delegator.makeValue("Product", UtilMisc.toMap("productId", nextProductId, "internalName", "Test Product " + i, "productTypeId", "FINISHED_GOOD"));
+     product.create();
+     productIds.add(nextProductId);
+}
+
+// make the order header
+orderId = delegator.getNextSeqId("OrderHeader");
+orderMap = UtilMisc.toMap("orderId", orderId, "orderTypeId", "PURCHASE_ORDER", "billFromPartyId", "DemoSupplier", "billToPartyId", "Company", "statusId", "ORDER_APPROVED");
+orderMap.put("orderDate", UtilDateTime.nowTimestamp());
+orderMap.put("productStoreId", "PURCHASING");
+orderMap.put("currencyUom", "USD");
+oh = delegator.makeValue("OrderHeader", orderMap);
+oh.create();
+
+// those order roles...
+or1 = delegator.makeValue("OrderRole", UtilMisc.toMap("orderId", orderId, "partyId", "Company", "roleTypeId", "BILL_TO_CUSTOMER"));
+or2 = delegator.makeValue("OrderRole", UtilMisc.toMap("orderId", orderId, "partyId", "DemoSupplier", "roleTypeId", "BILL_FROM_VENDOR"));
+or3 = delegator.makeValue("OrderRole", UtilMisc.toMap("orderId", orderId, "partyId", "DemoSupplier", "roleTypeId", "SHIP_FROM_VENDOR"));
+or4 = delegator.makeValue("OrderRole", UtilMisc.toMap("orderId", orderId, "partyId", "DemoSupplier", "roleTypeId", "SUPPLIER_AGENT"));
+or1.create();
+or2.create();
+or3.create();
+or4.create();
+
+// order ship group
+shipMap = UtilMisc.toMap("orderId", orderId, "shipGroupSeqId", "00001", "shipmentMethodTypeId", "NO_SHIPPING", "carrierPartyId", "_NA_", "contactMechId", "9200");
+shipMap.put("carrierRoleTypeId", "CARRIER");
+shipMap.put("maySplit", "N");
+shipMap.put("isGift", "N");
+
+oisg = delegator.makeValue("OrderItemShipGroup", shipMap);
+oisg.create();
+
+// order items
+i = 1;
+orderTotal = 0;
+for (pi = productIds.iterator(); pi.hasNext(); i++) {
+    productId = pi.next();
+    orderItemSeqId = 
+    itemMap = UtilMisc.toMap("orderId", orderId, "orderItemSeqId", i, "orderItemTypeId", "PRODUCT_ORDER_ITEM", "productId", productId, "itemDescription", "Test Product " + i);
+    quantity = (i % 100) + 1;
+    price = (i % 10) + 1;
+    orderTotal += quantity * price;
+    itemMap.put("quantity", quantity);
+    itemMap.put("unitPrice", price);
+    itemMap.put("unitListPrice", price);
+    itemMap.put("statusId", "ITEM_APPROVED");
+    oi = delegator.makeValue("OrderItem", itemMap);
+    oi.create();
+
+    oisga = delegator.makeValue("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", new Integer(i), "shipGroupSeqId", "00001", "quantity", new Double(quantity)));
+    oisga.create();
+}
+
+// set the total
+oh.set("grandTotal", orderTotal);
+oh.store();

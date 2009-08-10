@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+<entity-engine-xml>
+
+    <!-- Production run test product 1 -->
+    <Product productId="PRUNTEST_PROD1" productTypeId="FINISHED_GOOD" internalName="Prun Test Product 1" productName="Prun Test Product 1" description="Product for Production Run Tests" isVirtual="N" isVariant="N" billOfMaterialLevel="0"/>
+    <ProductPrice productId="PRUNTEST_PROD1" productPricePurposeId="PURCHASE" productPriceTypeId="DEFAULT_PRICE" currencyUomId="USD" productStoreGroupId="_NA_" fromDate="2008-01-01 12:00:00.0" price="649.00" />
+    <ProductFacility productId="PRUNTEST_PROD1" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="1" daysToShip="1"/>
+
+    <!-- Standard costing for a manufactured item -->
+    <CostComponent costComponentId="TESTCC01" costComponentTypeId="EST_STD_ROUTE_COST" productId="PRUNTEST_PROD1" fromDate="2008-10-17 15:39:39.0" cost="20.0" costUomId="USD" lastUpdatedStamp="2008-10-17 15:39:39.0" lastUpdatedTxStamp="2008-10-17 15:39:39.0" createdStamp="2008-10-17 15:39:39.0" createdTxStamp="2008-10-17 15:39:39.0"/>
+    <CostComponent costComponentId="TESTCC02" costComponentTypeId="EST_STD_OTHER_COST" productId="PRUNTEST_PROD1" fromDate="2008-10-17 15:39:09.0" cost="25.0" costUomId="USD" lastUpdatedStamp="2008-10-17 15:39:09.0" lastUpdatedTxStamp="2008-10-17 15:39:09.0" createdStamp="2008-10-17 15:39:09.0" createdTxStamp="2008-10-17 15:39:09.0"/>
+    <CostComponent costComponentId="TESTCC03" costComponentTypeId="EST_STD_LABOR_COST" productId="PRUNTEST_PROD1" fromDate="2008-10-17 15:38:49.0" cost="110.0" costUomId="USD" lastUpdatedStamp="2008-10-17 15:38:49.0" lastUpdatedTxStamp="2008-10-17 15:38:49.0" createdStamp="2008-10-17 15:38:49.0" createdTxStamp="2008-10-17 15:38:49.0"/>
+    <CostComponent costComponentId="TESTCC04" costComponentTypeId="EST_STD_MAT_COST" productId="PRUNTEST_PROD1" fromDate="2008-10-17 15:38:31.0" cost="39.0" costUomId="USD" lastUpdatedStamp="2008-10-17 15:38:31.0" lastUpdatedTxStamp="2008-10-17 15:38:31.0" createdStamp="2008-10-17 15:38:31.0" createdTxStamp="2008-10-17 15:38:31.0"/>
+
+    <!-- Component 1 of test product 1 -->
+    <Product productId="PRUNTEST_COMP1" productTypeId="RAW_MATERIAL" internalName="Demo Material A for Costing" description="Demo Material A for Standard Costing" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
+    <SupplierProduct partyId="DemoSupplier" productId="PRUNTEST_COMP1" minimumOrderQuantity="0" currencyUomId="USD" lastPrice="9.0" supplierProductId="PRUNTEST_COMP1" supplierProductName="Component 1 for Prun Test Product 1" availableFromDate="2008-01-01 12:00:00.0"/>
+    <ProductFacility productId="PRUNTEST_COMP1" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <CostComponent costComponentId="TESTPRUNCC1" costComponentTypeId="EST_STD_MAT_COST" productId="PRUNTEST_COMP1" fromDate="2008-01-01 12:00:00.0" costUomId="USD" cost="9"/>
+    <ProductGlAccount organizationPartyId="Company" productId="PRUNTEST_COMP1" glAccountTypeId="INVENTORY_ACCOUNT" glAccountId="141000"/>
+
+    <!-- Component 2 of test product 1 -->
+    <Product productId="PRUNTEST_COMP2" productTypeId="RAW_MATERIAL" internalName="Demo Material A for Costing" description="Demo Material A for Standard Costing" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
+    <SupplierProduct partyId="DemoSupplier" productId="PRUNTEST_COMP2" minimumOrderQuantity="0" currencyUomId="USD" lastPrice="7.0" supplierProductId="PRUNTEST_COMP2" supplierProductName="Component 2 for Prun Test Product 1" availableFromDate="2008-01-01 12:00:00.0"/>
+    <ProductFacility productId="PRUNTEST_COMP2" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
+    <CostComponent costComponentId="TESTPRUNCC2" costComponentTypeId="EST_STD_MAT_COST" productId="PRUNTEST_COMP2" fromDate="2008-01-01 12:00:00.0" costUomId="USD" cost="7"/>
+    <ProductGlAccount organizationPartyId="Company" productId="PRUNTEST_COMP2" glAccountTypeId="INVENTORY_ACCOUNT" glAccountId="141000"/>
+
+    <!-- BOM Definition:  Product is made of 2 of PRUNTEST_COMP1 and 3 of PRUNTEST_COMP2 -->
+    <ProductAssoc productId="PRUNTEST_PROD1" productIdTo="PRUNTEST_COMP1" productAssocTypeId="MANUF_COMPONENT" fromDate="2008-01-01 12:00:00.0" sequenceNum="1" quantity="2.0"/>
+    <ProductAssoc productId="PRUNTEST_PROD1" productIdTo="PRUNTEST_COMP2" productAssocTypeId="MANUF_COMPONENT" fromDate="2008-01-01 12:00:00.0" sequenceNum="2" quantity="3.0"/>
+
+    <!-- Task Definition -->
+    <WorkEffort workEffortId="PRUNTEST_TEMPL1" workEffortTypeId="ROUTING" currentStatusId="ROU_ACTIVE" workEffortName="Prun Template for producing PRUNTEST_PROD1" description="Prun Template for producing PRUNTEST_PROD1" revisionNumber="1" quantityToProduce="0"/>
+    <WorkEffort workEffortId="PRUNTEST_TASK1" workEffortTypeId="ROU_TASK" workEffortPurposeTypeId="ROU_ASSEMBLING" currentStatusId="ROU_ACTIVE" workEffortName="Demo Routing Task for Costing" description="Demo Routing Task for Costing" revisionNumber="1" fixedAssetId="WORKCENTER_COST" estimatedMilliSeconds="300000" estimatedSetupMillis="600000"/>
+    <WorkEffortAssoc workEffortIdFrom="PRUNTEST_TEMPL1" workEffortIdTo="PRUNTEST_TASK1" workEffortAssocTypeId="ROUTING_COMPONENT" sequenceNum="1" fromDate="2008-01-01 12:00:00.0"/>
+    <WorkEffortGoodStandard workEffortId="PRUNTEST_TEMPL1" productId="PRUNTEST_PROD1" workEffortGoodStdTypeId="ROU_PROD_TEMPLATE" statusId="WEGS_CREATED" fromDate="2008-01-01 12:00:00.0"/>
+    <CostComponentCalc costComponentCalcId="PRUNTEST_TASK1COST" description="Cost information for task" costGlAccountTypeId="MFG_EXPENSE_INTERNAL" currencyUomId="USD" fixedCost="50" variableCost="10" perMilliSecond="60000"/>
+    <WorkEffortCostCalc workEffortId="PRUNTEST_TASK1" costComponentTypeId="ROUTE_COST" costComponentCalcId="PRUNTEST_TASK1COST" fromDate="2008-01-01 12:00:00.0"/>
+
+</entity-engine-xml>

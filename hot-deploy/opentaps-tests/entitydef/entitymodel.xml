@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Entity definitions for Testing</title>
+    <copyright>Copyright (c) 2005 - 2008 Open Source Strategies Inc.</copyright>
+
+    <entity entity-name="ServiceTestRecord" package-name="org.opentaps.tests.service">
+        <field name="key1" type="id-ne"/>
+        <field name="key2" type="id-ne"/>
+        <field name="value1" type="currency-precise"/>
+        <field name="value2" type="currency-precise"/>
+        <field name="testTimestamp" type="date-time"/> 
+        <field name="createdByUserLogin" type="id-vlong-ne"/>
+        <field name="modifiedByUserLogin" type="id-vlong-ne"/>
+        <prim-key field="key1"/>
+        <prim-key field="key2"/>
+        <relation type="one" rel-entity-name="UserLogin" title="CreatedBy" fk-name="STR_CR_USERLOGIN">
+            <key-map field-name="createdByUserLogin" rel-field-name="userLoginId"/>
+        </relation>
+        <relation type="one" rel-entity-name="UserLogin" title="ModifiedBy" fk-name="STR_UP_USERLOGIN">
+            <key-map field-name="modifiedByUserLogin" rel-field-name="userLoginId"/>
+        </relation>
+
+    </entity>
+
+    <!-- ========================= -->
+    <!-- org.opentaps.common.test -->
+    <!-- ========================= -->
+    <entity entity-name="TestEntity" package-name="org.opentaps.test.entity">
+        <description></description>
+        <field name="testId" type="id-ne"/>
+        <field name="testStringField" type="short-varchar"/>
+        <field name="testDateTimeField" type="date-time"/>
+        <field name="testBlobField" type="blob"/>
+        <field name="testNumericField" type="numeric"/>
+        <field name="testFloatingPointField" type="floating-point"/>
+        <field name="testCurrencyPreciseField" type="currency-precise"/>
+        <field name="testCreditCardNumberField" type="credit-card-number"/>
+        <field name="testCreditCardDateField" type="credit-card-date"/>
+        <field name="testEmailField" type="email"/>
+        <field name="testUrlField" type="url"/>
+        <field name="testTelphoneField" type="tel-number"/>
+        <field name="enumId" type="id-ne"/>
+        <field name="testEncrypt" type="long-varchar" encrypt="true"/>                
+        <prim-key field="testId"/>
+        <relation rel-entity-name="Enumeration" type="one" fk-name="TEST_TO_ENUM">
+            <key-map field-name="enumId"/>
+        </relation>
+        <relation type="many" rel-entity-name="TestEntityItem">
+          <key-map field-name="testId" rel-field-name="testEntityId"/>
+        </relation>        
+    </entity>
+    <entity entity-name="TestEntityItem" package-name="org.opentaps.test.entity">
+        <description></description>
+        <field name="testEntityId" type="id-ne"></field>
+        <field name="testEntityItemSeqId" type="id-ne"></field>
+        <field name="itemValue" type="short-varchar"/>
+      <prim-key field="testEntityId"/>
+      <prim-key field="testEntityItemSeqId"/>
+      <relation type="one" fk-name="TEST_ITEM_ENTITY" rel-entity-name="TestEntity">
+        <key-map field-name="testEntityId" rel-field-name="testId"/>
+      </relation>        
+    </entity>    
+    <entity entity-name="TestEntityModifyHistory" package-name="org.opentaps.test.entity">
+        <description></description>
+        <field name="testEntityHistoryId" type="id-ne"/>
+        <field name="testId" type="id-ne"/>
+        <field name="modifyTimestamp" type="date-time"></field>
+        <prim-key field="testEntityHistoryId"/>
+    </entity>
+    
+
+    <!-- View to capture all TestEntity and TestEntityItem data.  Main table is TestEntityItem, and inner join TestEntity with testEntityId. -->
+    <view-entity entity-name="TestEntityAndItem"
+                 package-name="org.opentaps.test.entity"
+                 title="View that contains full information for testItems.">
+        <member-entity entity-alias="TEI" entity-name="TestEntityItem"/>
+        <member-entity entity-alias="TE" entity-name="TestEntity"/>
+        <alias-all entity-alias="TEI">
+        </alias-all>
+        <alias-all entity-alias="TE">
+            <exclude field="testBlobField"/>
+        </alias-all>
+        <view-link entity-alias="TEI" rel-entity-alias="TE" rel-optional="true">
+            <key-map field-name="testEntityId" rel-field-name="testId"/>
+        </view-link>
+    </view-entity>
+</entitymodel>

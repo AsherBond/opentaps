@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Opentaps Test Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+
+    <service name="opentaps.testReturnStoreTestEntitySeca" engine="java" 
+            location="org.opentaps.tests.service.TestEntityServices" invoke="logTestEntityHasUpdated">
+        <description>if testStringField equals GenericEntityException then just raise an GenericEntityException, else log a testEntity has updated.</description>
+        <attribute name="testId" type="String" mode="IN" />
+        <attribute name="testStringField" type="String" mode="IN" />
+    </service>
+    <service name="createTestEntityAndItems" engine="pojo" auth="true"
+            location="org.opentaps.tests.service.TestEntityPojoServices" invoke="createTestEntityAndItems" transaction-timeout="600">
+        <description>A follow-on test to run create specific number of TestEntityItem</description>
+        <attribute name="description" mode="IN" type="String" optional="false"/>
+        <attribute name="numberOfItems" mode="IN" type="Integer" optional="false"/>
+        <attribute name="testIds" type="java.util.List" mode="OUT" optional="true"/>
+    </service>    
+</services>

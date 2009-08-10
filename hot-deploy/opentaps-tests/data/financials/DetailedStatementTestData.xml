@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<!-- This file is very similar to StatementsTestData.xml, except that it is meant to test financial reports with accounting code
+details.  For more information about the setup, see StatementsTestData.xml
+
+This sample setup is similar to a case where there are several different investors or funds And cost centers.
+Tag 1 would be For an investor or fund, who would want a full Financial statements including income statements, balance sheet, and cash flow statements
+Tag 2 and 3 would be for cost centers, where you would want to track total spending, but not necessarily full financial statements
+For financial statements to be in balance, all transactions involving a particular tag must fully offset for that tag.  For example, if you allocate
+expenses to different funds, you must also allocate accounts payable in the same amounts to those funds.
+-->
+
+<!-- See the detailed statement entry sums spreadsheet for SQL queries for this file -->
+
+<entity-engine-xml>
+
+    <Party partyId="STATEMENT-DETAILS" partyTypeId="PARTY_GROUP"/>
+    <PartyGroup partyId="STATEMENT-DETAILS" groupName="Statement Details Testing Organization"/>
+    <PartyRole partyId="STATEMENT-DETAILS" roleTypeId="INTERNAL_ORGANIZATIO"/>
+
+    <PartyAcctgPreference partyId="STATEMENT-DETAILS" baseCurrencyUomId="USD" cogsMethodId="COGS_AVG_COST"/>
+
+    <GlAccountOrganization glAccountId="110000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="111400" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="120000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="140000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="171000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="210000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="221300" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222100" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222200" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222300" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222400" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="222600" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="223100" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="223200" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="240000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="336000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="340000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="341000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="401000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="500000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="601000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="604100" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="605100" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="608000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="611000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="612000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="680000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="821000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+    <GlAccountOrganization glAccountId="890000" organizationPartyId="STATEMENT-DETAILS" fromDate="2000-01-01 00:00:00"/>
+
+    <!-- this is for putting the initial balances at the end of FY 2007-->
+    <CustomTimePeriod customTimePeriodId="STD2007" organizationPartyId="STATEMENT-DETAILS" periodTypeId="FISCAL_YEAR" fromDate="2007-07-01" thruDate="2008-07-01" isClosed="N" periodNum="2007" periodName="Fiscal Year"/>
+    <!-- There must be quarters to match quarters and years to match years, or period closings would not work. -->
+    <CustomTimePeriod customTimePeriodId="STD2007Q4" parentPeriodId="STD2007" organizationPartyId="STATEMENT-DETAILS" periodTypeId="FISCAL_QUARTER" fromDate="2008-04-01" thruDate="2008-07-01" isClosed="N" periodNum="4" periodName="Fiscal Quarter"/>
+    <CustomTimePeriod customTimePeriodId="STD2008" organizationPartyId="STATEMENT-DETAILS" periodTypeId="FISCAL_YEAR" fromDate="2008-07-01" thruDate="2009-07-01" isClosed="N" periodNum="2008" periodName="Fiscal Year"/>
+    <CustomTimePeriod customTimePeriodId="STD2008Q1" parentPeriodId="STD2008" organizationPartyId="STATEMENT-DETAILS" periodTypeId="FISCAL_QUARTER" fromDate="2008-07-01" thruDate="2008-10-01" isClosed="N" periodNum="1" periodName="Fiscal Quarter"/>
+    <CustomTimePeriod customTimePeriodId="STD2008Q2" parentPeriodId="STD2008" organizationPartyId="STATEMENT-DETAILS" periodTypeId="FISCAL_QUARTER" fromDate="2008-10-01" thruDate="2009-01-01" isClosed="N" periodNum="2" periodName="Fiscal Quarter"/>
+    <CustomTimePeriod customTimePeriodId="STD2008Q3" parentPeriodId="STD2008" organizationPartyId="STATEMENT-DETAILS" periodTypeId="FISCAL_QUARTER" fromDate="2008-01-01" thruDate="2009-04-01" isClosed="N" periodNum="2" periodName="Fiscal Quarter"/>
+    <CustomTimePeriod customTimePeriodId="STD2008Q4" parentPeriodId="STD2008" organizationPartyId="STATEMENT-DETAILS" periodTypeId="FISCAL_QUARTER" fromDate="2008-04-01" thruDate="2009-07-01" isClosed="N" periodNum="2" periodName="Fiscal Quarter"/>
+
+    <!-- this classification is required for financial statements, specifically income statements, to work -->
+    <GlAccountTypeDefault glAccountTypeId="RETAINED_EARNINGS" organizationPartyId="STATEMENT-DETAILS" glAccountId="336000" /> <!-- Retained Earnings -->
+    <!-- this is required for closing time periods -->
+    <GlAccountTypeDefault glAccountTypeId="PROFIT_LOSS_ACCOUNT" organizationPartyId="STATEMENT-DETAILS" glAccountId="890000" /> <!-- Net Income account -->
+
+    <!-- Some sample tags -->
+    <EnumerationType enumTypeId="TEST_STMT_DTL_TAG1" parentTypeId="ACCOUNTING_TAG" description="Test Tag 1"/>
+    <Enumeration enumTypeId="TEST_STMT_DTL_TAG1" enumId="TEST_STDTL_TAG1_A" enumCode="TEST_STDTL_TAG1_A" sequenceId="01" description="Test Tag 1 A" />
+    <Enumeration enumTypeId="TEST_STMT_DTL_TAG1" enumId="TEST_STDTL_TAG1_B" enumCode="TEST_STDTL_TAG1_B" sequenceId="02" description="Test Tag 1 B" />
+    <Enumeration enumTypeId="TEST_STMT_DTL_TAG1" enumId="TEST_STDTL_TAG1_C" enumCode="TEST_STDTL_TAG1_C" sequenceId="03" description="Test Tag 1 C" />
+
+    <EnumerationType enumTypeId="TEST_STMT_DTL_TAG2" parentTypeId="ACCOUNTING_TAG" description="Test Tag 2"/>
+    <Enumeration enumTypeId="TEST_STMT_DTL_TAG2" enumId="TEST_STDTL_TAG2_A" enumCode="TEST_STDTL_TAG2_A" sequenceId="01" description="Test Tag 2 A" />
+    <Enumeration enumTypeId="TEST_STMT_DTL_TAG2" enumId="TEST_STDTL_TAG2_B" enumCode="TEST_STDTL_TAG2_B" sequenceId="02" description="Test Tag 2 B" />
+    <Enumeration enumTypeId="TEST_STMT_DTL_TAG2" enumId="TEST_STDTL_TAG2_C" enumCode="TEST_STDTL_TAG2_C" sequenceId="03" description="Test Tag 2 C" />
+
+    <EnumerationType enumTypeId="TEST_STMT_DTL_TAG3" parentTypeId="ACCOUNTING_TAG" description="Test Tag 3"/>
+    <Enumeration enumTypeId="TEST_STMT_DTL_TAG3" enumId="TEST_STDTL_TAG3_A" enumCode="TEST_STDTL_TAG3_A" sequenceId="01" description="Test Tag 3 A" />
+    <Enumeration enumTypeId="TEST_STMT_DTL_TAG3" enumId="TEST_STDTL_TAG3_B" enumCode="TEST_STDTL_TAG3_B" sequenceId="02" description="Test Tag 3 B" />
+    <Enumeration enumTypeId="TEST_STMT_DTL_TAG3" enumId="TEST_STDTL_TAG3_C" enumCode="TEST_STDTL_TAG3_C" sequenceId="03" description="Test Tag 3 C" />
+
+    <AcctgTagEnumType organizationPartyId="STATEMENT-DETAILS" acctgTagUsageTypeId="FINANCIALS_REPORTS" enumTypeId1="TEST_STMT_DTL_TAG1" enumTypeId2="TEST_STMT_DTL_TAG2" enumTypeId3="TEST_STMT_DTL_TAG3" isTagEnum1Required="N" isTagEnum2Required="N" isTagEnum3Required="N"/>
+
+    <AcctgTagPostingCheck organizationPartyId="STATEMENT-DETAILS" tagEnum1MustBalance="Y" />
+
+    <!-- initial capitalization with equity contribution and the cash portion split between the three tags-->
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D1" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2008-06-30 23:59:59.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D1" acctgTransEntrySeqId="00001" glAccountId="110000" amount="500000.0" debitCreditFlag="D"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D1" acctgTransEntrySeqId="00002" glAccountId="171000" amount="500000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D1" acctgTransEntrySeqId="00003" glAccountId="240000" amount="300000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D1" acctgTransEntrySeqId="00004" glAccountId="340000"  amount="10000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D1" acctgTransEntrySeqId="00005" glAccountId="341000" amount="690000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D0" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2008-06-30 23:59:59.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D0" acctgTransEntrySeqId="00001" glAccountId="111400" amount="300000.0" debitCreditFlag="D"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D0" acctgTransEntrySeqId="00002" glAccountId="111400" amount="200000.0" debitCreditFlag="D"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D0" acctgTransEntrySeqId="00003" glAccountId="111400" amount="100000.0" debitCreditFlag="D"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D0" acctgTransEntrySeqId="00010" glAccountId="341000" amount="300000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D0" acctgTransEntrySeqId="00011" glAccountId="341000" amount="200000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D0" acctgTransEntrySeqId="00012" glAccountId="341000" amount="100000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+
+    <!-- inventory With Accounts Payable broken out -->
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D2" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D2" acctgTransEntrySeqId="00001" glAccountId="140000" amount="750000.0" debitCreditFlag="D"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D2" acctgTransEntrySeqId="00010" glAccountId="210000" amount="350000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D2" acctgTransEntrySeqId="00011" glAccountId="210000" amount="400000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+
+    <!-- Revenue With Accounts Receivables, neither broken out -->
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D3" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D3" acctgTransEntrySeqId="00001" glAccountId="120000" amount="300000.0" debitCreditFlag="D"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D3" acctgTransEntrySeqId="00002" glAccountId="120000" amount="300000.0" debitCreditFlag="D"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D3" acctgTransEntrySeqId="00003" glAccountId="120000" amount="400000.0" debitCreditFlag="D"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D3" acctgTransEntrySeqId="00010" glAccountId="401000" amount="1000000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+
+    <!-- Cost of Goods Sold, not broken out -->
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D4" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D4" acctgTransEntrySeqId="00001" glAccountId="500000" amount="500000.0" debitCreditFlag="D"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D4" acctgTransEntrySeqId="00002" glAccountId="140000" amount="500000.0" debitCreditFlag="C" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+
+    <!-- Rent expenses, broken out between different combinations of tags against accounts payable -->
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D5" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D5" acctgTransEntrySeqId="00001" glAccountId="210000" amount="31000.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D5" acctgTransEntrySeqId="00002" glAccountId="210000" amount="22000.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D5" acctgTransEntrySeqId="00003" glAccountId="210000" amount="11000.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D5" acctgTransEntrySeqId="00004" glAccountId="210000" amount="6000.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D5" acctgTransEntrySeqId="00010" glAccountId="611000" amount="31000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D5" acctgTransEntrySeqId="00011" glAccountId="611000" amount="22000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D5" acctgTransEntrySeqId="00012" glAccountId="611000" amount="11000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D5" acctgTransEntrySeqId="00013" glAccountId="611000" amount="6000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_C"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D6" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D6" acctgTransEntrySeqId="00001" glAccountId="210000" amount="7000.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D6" acctgTransEntrySeqId="00002" glAccountId="210000" amount="3000.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D6" acctgTransEntrySeqId="00010" glAccountId="611000" amount="7000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D6" acctgTransEntrySeqId="00011" glAccountId="611000" amount="3000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_C" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+
+    <!-- Utilities -->
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D7" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D7" acctgTransEntrySeqId="00001" glAccountId="210000" amount="5000.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D7" acctgTransEntrySeqId="00002" glAccountId="210000" amount="4000.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D7" acctgTransEntrySeqId="00010" glAccountId="612000" amount="5000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D7" acctgTransEntrySeqId="00011" glAccountId="612000" amount="3000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_C" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D7" acctgTransEntrySeqId="00012" glAccountId="612000" amount="1000.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_C" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+
+    <!-- Travel: each travel expense is precisely tagged    The matching payable record is tagged only with the first accounting tag-->
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-1" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-1" acctgTransEntrySeqId="00001" glAccountId="210000" amount="1200.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-1" acctgTransEntrySeqId="00002" glAccountId="680000" amount="1200.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-2" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-2" acctgTransEntrySeqId="00001" glAccountId="210000" amount="350.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-2" acctgTransEntrySeqId="00002" glAccountId="680000" amount="350.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-3" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-3" acctgTransEntrySeqId="00001" glAccountId="210000" amount="2200.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-3" acctgTransEntrySeqId="00002" glAccountId="680000" amount="2200.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_C" acctgTagEnumId3="TEST_STDTL_TAG3_C"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-4" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-4" acctgTransEntrySeqId="00001" glAccountId="210000" amount="1700.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-4" acctgTransEntrySeqId="00002" glAccountId="680000" amount="1700.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_C" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-5" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-5" acctgTransEntrySeqId="00001" glAccountId="210000" amount="3300.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-5" acctgTransEntrySeqId="00002" glAccountId="680000" amount="3300.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-6" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-6" acctgTransEntrySeqId="00001" glAccountId="210000" amount="980.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-6" acctgTransEntrySeqId="00002" glAccountId="680000" amount="980.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-7" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-7" acctgTransEntrySeqId="00001" glAccountId="210000" amount="720.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-7" acctgTransEntrySeqId="00002" glAccountId="680000" amount="720.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-8" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-8" acctgTransEntrySeqId="00001" glAccountId="210000" amount="2450.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-8" acctgTransEntrySeqId="00002" glAccountId="680000" amount="2450.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_C" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-9" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-9" acctgTransEntrySeqId="00001" glAccountId="210000" amount="2820.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-9" acctgTransEntrySeqId="00002" glAccountId="680000" amount="2820.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-A" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-A" acctgTransEntrySeqId="00001" glAccountId="210000" amount="110.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-A" acctgTransEntrySeqId="00002" glAccountId="680000" amount="110.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_C" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-B" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-B" acctgTransEntrySeqId="00001" glAccountId="210000" amount="290.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-B" acctgTransEntrySeqId="00002" glAccountId="680000" amount="290.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D8-C" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00.0" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-C" acctgTransEntrySeqId="00001" glAccountId="210000" amount="930.0" debitCreditFlag="C"  currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D8-C" acctgTransEntrySeqId="00002" glAccountId="680000" amount="930.0" debitCreditFlag="D" currencyUomId="USD" organizationPartyId="STATEMENT-DETAILS" acctgTransEntryTypeId="_NA_" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+
+    <!-- Salary and wages  The offsetting payable entry and cash disbursement entry should only be tagged with the first accounting tag-->
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D9" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00016" acctgTransEntryTypeId="_NA_" glAccountId="221300" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00015" acctgTransEntryTypeId="_NA_" glAccountId="608000" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00014" acctgTransEntryTypeId="_NA_" glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00013" acctgTransEntryTypeId="_NA_" glAccountId="605100" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00012" acctgTransEntryTypeId="_NA_" glAccountId="223200" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00011" acctgTransEntryTypeId="_NA_" glAccountId="604100" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00010" acctgTransEntryTypeId="_NA_" glAccountId="223100" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00009" acctgTransEntryTypeId="_NA_" glAccountId="604100" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00008" acctgTransEntryTypeId="_NA_" glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" amount="400.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00007" acctgTransEntryTypeId="_NA_" glAccountId="222600" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00006" acctgTransEntryTypeId="_NA_" glAccountId="222300" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00005" acctgTransEntryTypeId="_NA_" glAccountId="222200" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00004" acctgTransEntryTypeId="_NA_" glAccountId="222400" organizationPartyId="STATEMENT-DETAILS" amount="4000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00003" acctgTransEntryTypeId="_NA_" glAccountId="222100" organizationPartyId="STATEMENT-DETAILS" amount="12500.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" glAccountId="110000" organizationPartyId="STATEMENT-DETAILS" amount="25100.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D9" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" glAccountId="601000" organizationPartyId="STATEMENT-DETAILS" amount="50000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_A" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D10" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00016" acctgTransEntryTypeId="_NA_" glAccountId="221300" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00015" acctgTransEntryTypeId="_NA_" glAccountId="608000" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00014" acctgTransEntryTypeId="_NA_" glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00013" acctgTransEntryTypeId="_NA_" glAccountId="605100" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00012" acctgTransEntryTypeId="_NA_" glAccountId="223200" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00011" acctgTransEntryTypeId="_NA_" glAccountId="604100" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00010" acctgTransEntryTypeId="_NA_" glAccountId="223100" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00009" acctgTransEntryTypeId="_NA_" glAccountId="604100" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00008" acctgTransEntryTypeId="_NA_" glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" amount="400.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00007" acctgTransEntryTypeId="_NA_" glAccountId="222600" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00006" acctgTransEntryTypeId="_NA_" glAccountId="222300" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00005" acctgTransEntryTypeId="_NA_" glAccountId="222200" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00004" acctgTransEntryTypeId="_NA_" glAccountId="222400" organizationPartyId="STATEMENT-DETAILS" amount="4000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00003" acctgTransEntryTypeId="_NA_" glAccountId="222100" organizationPartyId="STATEMENT-DETAILS" amount="12500.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" glAccountId="110000" organizationPartyId="STATEMENT-DETAILS" amount="25100.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D10" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" glAccountId="601000" organizationPartyId="STATEMENT-DETAILS" amount="50000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_B" acctgTagEnumId2="TEST_STDTL_TAG2_B" acctgTagEnumId3="TEST_STDTL_TAG3_B"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D11" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00016" acctgTransEntryTypeId="_NA_" glAccountId="221300" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00015" acctgTransEntryTypeId="_NA_" glAccountId="608000" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00014" acctgTransEntryTypeId="_NA_" glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00013" acctgTransEntryTypeId="_NA_" glAccountId="605100" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00012" acctgTransEntryTypeId="_NA_" glAccountId="223200" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00011" acctgTransEntryTypeId="_NA_" glAccountId="604100" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00010" acctgTransEntryTypeId="_NA_" glAccountId="223100" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00009" acctgTransEntryTypeId="_NA_" glAccountId="604100" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00008" acctgTransEntryTypeId="_NA_" glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" amount="400.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00007" acctgTransEntryTypeId="_NA_" glAccountId="222600" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00006" acctgTransEntryTypeId="_NA_" glAccountId="222300" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00005" acctgTransEntryTypeId="_NA_" glAccountId="222200" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00004" acctgTransEntryTypeId="_NA_" glAccountId="222400" organizationPartyId="STATEMENT-DETAILS" amount="4000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00003" acctgTransEntryTypeId="_NA_" glAccountId="222100" organizationPartyId="STATEMENT-DETAILS" amount="12500.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" glAccountId="110000" organizationPartyId="STATEMENT-DETAILS" amount="25100.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D11" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" glAccountId="601000" organizationPartyId="STATEMENT-DETAILS" amount="50000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_C"/>
+
+    <AcctgTrans acctgTransId="STATEMENT-TEST-D12" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00016" acctgTransEntryTypeId="_NA_" glAccountId="221300" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00015" acctgTransEntryTypeId="_NA_" glAccountId="608000" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00014" acctgTransEntryTypeId="_NA_" glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00013" acctgTransEntryTypeId="_NA_" glAccountId="605100" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00012" acctgTransEntryTypeId="_NA_" glAccountId="223200" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00011" acctgTransEntryTypeId="_NA_" glAccountId="604100" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00010" acctgTransEntryTypeId="_NA_" glAccountId="223100" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00009" acctgTransEntryTypeId="_NA_" glAccountId="604100" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00008" acctgTransEntryTypeId="_NA_" glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" amount="400.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00007" acctgTransEntryTypeId="_NA_" glAccountId="222600" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00006" acctgTransEntryTypeId="_NA_" glAccountId="222300" organizationPartyId="STATEMENT-DETAILS" amount="1000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00005" acctgTransEntryTypeId="_NA_" glAccountId="222200" organizationPartyId="STATEMENT-DETAILS" amount="2000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00004" acctgTransEntryTypeId="_NA_" glAccountId="222400" organizationPartyId="STATEMENT-DETAILS" amount="4000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00003" acctgTransEntryTypeId="_NA_" glAccountId="222100" organizationPartyId="STATEMENT-DETAILS" amount="12500.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" glAccountId="110000" organizationPartyId="STATEMENT-DETAILS" amount="25100.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C"/>
+
+    <AcctgTransEntry acctgTransId="STATEMENT-TEST-D12" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" glAccountId="601000" organizationPartyId="STATEMENT-DETAILS" amount="50000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+
+    <!-- test transaction, globally balanced but imbalanced regarding tag 1 -->
+    <AcctgTrans acctgTransId="BAD-STATEMENT-TEST-1" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="BAD-STATEMENT-TEST-1" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" glAccountId="221300" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" />
+    <AcctgTransEntry acctgTransId="BAD-STATEMENT-TEST-1" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" glAccountId="608000" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+    <AcctgTransEntry acctgTransId="BAD-STATEMENT-TEST-1" acctgTransEntrySeqId="00003" acctgTransEntryTypeId="_NA_" glAccountId="223500" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED"/>
+    <AcctgTransEntry acctgTransId="BAD-STATEMENT-TEST-1" acctgTransEntrySeqId="00004" acctgTransEntryTypeId="_NA_" glAccountId="605100" organizationPartyId="STATEMENT-DETAILS" amount="5000.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED"
+                     acctgTagEnumId1="TEST_STDTL_TAG1_C" acctgTagEnumId2="TEST_STDTL_TAG2_A" acctgTagEnumId3="TEST_STDTL_TAG3_A"/>
+
+    <!-- another example which should not be postable, because tag1 is not balanced -->
+    <AcctgTrans acctgTransId="BAD-STATEMENT-TEST-2" acctgTransTypeId="TEST_ACCTG_TRANS" transactionDate="2009-03-01 10:00:00" isPosted="N" glFiscalTypeId="ACTUAL"/>
+    <AcctgTransEntry acctgTransId="BAD-STATEMENT-TEST-2" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" glAccountId="221300" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED" acctgTagEnumId1="TEST_STDTL_TAG1_A"/>
+    <AcctgTransEntry acctgTransId="BAD-STATEMENT-TEST-2" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" glAccountId="608000" organizationPartyId="STATEMENT-DETAILS" amount="1200.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED" acctgTagEnumId1="TEST_STDTL_TAG1_B"/>
+
+</entity-engine-xml>

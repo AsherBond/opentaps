@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<entity-engine-xml>
+
+    <!-- Geo data for generation of random customers for testing analytics -->
+    <TestGeoData geoRowId="4781" city="Gainesville" stateGeoId="FL" postalCode="32603" countryGeoId="USA"/>
+    <TestGeoData geoRowId="25707" city="Philadephia" stateGeoId="PA" postalCode="19104" countryGeoId="USA"/>
+    <TestGeoData geoRowId="2838" city="San Francisco" stateGeoId="CA" postalCode="94122" countryGeoId="USA"/>
+    <TestGeoData geoRowId="2846" city="San Francisco" stateGeoId="CA" postalCode="94132" countryGeoId="USA"/>
+    <TestGeoData geoRowId="28411" city="Houston" stateGeoId="TX" postalCode="77063" countryGeoId="USA"/>
+    <TestGeoData geoRowId="20067" city="New York" stateGeoId="NY" postalCode="10017" countryGeoId="USA"/>
+    <TestGeoData geoRowId="20207" city="Scarsdale" stateGeoId="NY" postalCode="10583" countryGeoId="USA"/>
+    <TestGeoData geoRowId="1947" city="Los Angeles" stateGeoId="CA" postalCode="90049" countryGeoId="USA"/>
+
+</entity-engine-xml>
