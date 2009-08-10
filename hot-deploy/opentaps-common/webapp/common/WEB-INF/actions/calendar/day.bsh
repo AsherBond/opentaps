@@ -98,6 +98,7 @@ serviceCtx.put("facilityId", facilityId);
 serviceCtx.put("fixedAssetId", fixedAssetId);
 serviceCtx.put("periodType", new Integer(Calendar.HOUR));
 serviceCtx.put("locale", locale);
+serviceCtx.put("timeZone", timeZone);
 
 Map result = dispatcher.runSync("getWorkEffortEventsByPeriod",serviceCtx);
 

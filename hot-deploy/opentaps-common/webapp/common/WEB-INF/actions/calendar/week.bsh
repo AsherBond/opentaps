@@ -90,6 +90,7 @@ serviceCtx.put("fixedAssetId", fixedAssetId);
 serviceCtx.put("filterOutCanceledEvents", Boolean.TRUE);
 serviceCtx.put("periodType", new Integer(Calendar.DATE));
 serviceCtx.put("locale", locale);
+serviceCtx.put("timeZone", timeZone);
 
 Map result = dispatcher.runSync("getWorkEffortEventsByPeriod",serviceCtx);
 
