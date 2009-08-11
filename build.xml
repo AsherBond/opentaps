@@ -22,6 +22,8 @@ under the License.
     <property name="site.dir" value="../site"/>
     <property name="memory.initial.param" value="-Xms128M"/>
     <property name="memory.max.param" value="-Xmx512M"/>
+    <property name="permmemory.max.param" value="-XX:MaxPermSize=256m"/>
+
 
     <available file="applications/build.xml" property="applications.present"/>
     <available file="specialpurpose/build.xml" property="specialpurpose.present"/>
@@ -605,4 +607,16 @@ under the License.
               Restart OFBiz and then visit the URL: http://localhost:8080/${webapp-name}
         </echo>
     </target>
+
+    <target name="make-base-entities" depends="prebuild">
+        <delete verbose="on">
+            <fileset dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/entities/" includes="*.java"/>
+        </delete>
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${permmemory.max.param}"/>
+            <arg value="pojoentities"/>
+        </java>
+    </target>
+
 </project>
