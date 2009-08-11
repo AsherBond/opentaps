@@ -1,0 +1,40 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+/*
+ * This small script will post all of the balances imported for netsuite.
+ * It relies on the assumption that all nestuite partyIds are prefixed with
+ * NS as is done by default in the netsuite.importCustomers service.
+ */
+
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.service.GenericDispatcher;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.entity.condition.*;
+
+delegator = GenericDelegator.getGenericDelegator("default");
+dispatcher = GenericDispatcher.getLocalDispatcher("ecommerce", delegator);
+admin = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
+
+conditions = UtilMisc.toList(
+        new EntityExpr("isPosted", EntityOperator.EQUALS, "N"),
+        new EntityExpr("partyId", EntityOperator.NOT_EQUAL, null),
+        new EntityExpr("partyId", EntityOperator.LIKE, "NS%")
+        );
+transactions = delegator.findByAnd("AcctgTrans", conditions, UtilMisc.toList("acctgTransId"));
+for (trans : transactions) {
+    dispatcher.runSync("postAcctgTrans", UtilMisc.toMap("userLogin", admin, "acctgTransId", trans.get("acctgTransId")));
+}

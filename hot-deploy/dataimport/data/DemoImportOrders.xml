@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<!-- this file contains some sample customers for testing the data import routine -->
+<entity-engine-xml>
+
+    <!-- Sales Order that's closed -->
+    <DataImportOrderHeader orderId="DS10002" orderTypeId="SALES_ORDER" customerPartyId="DemoCustomer" orderDate="2008-01-01 00:00:00" currencyUomId="USD"
+        shippingTotal="10.00" taxTotal="7.95" adjustmentsTotal="-25.00" grandTotal="200.00"
+        comments="This is a test import order" orderClosed="Y"/>
+    <DataImportOrderItem orderId="DS10002" productId="GZ-1000" quantity="5" quantityShipped="5" price="15.99" itemAdjustmentsTotal="-10.00" customerPo="DC12345" comments="This is a test item"/>
+    <DataImportOrderItem orderId="DS10002" productId="GZ-1001" quantity="5" quantityShipped="3" price="15.99" itemAdjustmentsTotal="-10.00" customerPo="DC12345" comments="This is a second® test item"/>
+
+    <!-- Purchase Order that's closed -->
+    <DataImportOrderHeader orderId="DS10003" orderTypeId="PURCHASE_ORDER" supplierPartyId="DemoSupplier" orderDate="2008-01-01 00:00:00" currencyUomId="USD"
+        grandTotal="200.00" comments="This is a test import order" orderClosed="Y"/>
+    <DataImportOrderItem orderId="DS10003" productId="GZ-1000" quantity="5" quantityShipped="5" price="10" itemAdjustmentsTotal="0.00" comments="This is a test item"/>
+    <DataImportOrderItem orderId="DS10003" productId="GZ-1001" quantity="5" quantityShipped="5" price="10" itemAdjustmentsTotal="0.00" comments="This is a second® test item"/>
+
+    <!-- Purchase Order that's approved and ready to be received in warehouse -->
+    <DataImportOrderHeader orderId="DS10004" orderTypeId="PURCHASE_ORDER" supplierPartyId="DemoSupplier" orderDate="2008-01-01 00:00:00" currencyUomId="USD"
+        grandTotal="200.00" comments="This is a test import order which can be received into warehouse" orderClosed="N"/>
+    <DataImportOrderItem orderId="DS10004" productId="GZ-1000" quantity="10" quantityShipped="10" price="10" itemAdjustmentsTotal="0.00" comments="This is a test item"/>
+    <DataImportOrderItem orderId="DS10004" productId="GZ-1001" quantity="10" quantityShipped="10" price="10" itemAdjustmentsTotal="0.00" comments="This is a second® test item"/>
+</entity-engine-xml>
+

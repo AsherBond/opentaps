@@ -1,0 +1,127 @@
+/**
+ * This script will find self-referential BOM tress.
+ */
+import java.util.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.service.GenericDispatcher;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+delegator = GenericDelegator.getGenericDelegator("default");
+dispatcher = GenericDispatcher.getLocalDispatcher("ecommerce", delegator);
+admin = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
+
+// hard limit of recursions to print, set to -1 to find all
+limit = -1;
+
+// store all recursion productIds
+recursions = new HashSet();
+
+boms = delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productAssocTypeId", "MANUF_COMPONENT"));
+
+fromSet = new HashSet();
+toSet = new HashSet();
+for (iter = boms.iterator(); iter.hasNext(); ) {
+    bom = iter.next();
+
+    // detect self-referential entries
+    if (bom.get("productId").equals(bom.get("productIdTo"))) {
+        print("Self-referential entry detected:  productId ["+bom.get("productId")+"], productIdTo ["+bom.get("productIdTo")+"]");
+        recursions.add(bom.get("productId"));
+        iter.remove();
+        continue;
+    }
+
+    fromSet.add(bom.get("productId"));
+    toSet.add(bom.get("productIdTo"));
+}
+
+// find entries that aren't referenced in productIdTo
+rootBoms = new HashSet();
+for (iter = fromSet.iterator(); iter.hasNext(); ) {
+    from = iter.next();
+    if (!toSet.contains(from))
+        rootBoms.add(from);
+}
+rootSize = rootBoms.size();
+print("Root products detected: " + rootSize);
+
+// find all terminator products
+termBoms = new HashSet();
+for (iter = toSet.iterator(); iter.hasNext(); ) {
+    to = iter.next();
+    if (!fromSet.contains(to))
+        termBoms.add(to);
+}
+termSize = termBoms.size();
+print("Terminator products detected: " + termSize);
+
+// remove all root and terminator entries to speed things up
+for (iter = boms.iterator(); iter.hasNext(); ) {
+    bom = iter.next();
+    if (rootBoms.contains(bom.get("productId")))
+        iter.remove();
+    else if (termBoms.contains(bom.get("productIdTo")))
+        iter.remove();
+}
+
+// if a recursion is encountered, returns true
+boolean walkTree(String parentId, Set allChildren, int level, String rootId) {
+    hasRecursions = false;
+    directChildren = new HashSet();
+
+    line = "";
+    if (rootId != null) {
+        indent = "";
+        for (int i = 0; i < level; i++) indent += "-";
+        line = indent + (level == 0 ? "" : "> ") + parentId;
+    }
+
+    for (iter = boms.iterator(); iter.hasNext(); ) {
+        bom = iter.next();
+        if (parentId.equals(bom.get("productId"))) {
+            childId = bom.get("productIdTo");
+            if (recursions.contains(childId)) {
+                hasRecursions = true;
+                if (rootId != null && rootId.equals(childId)) line += "\n" + indent + "-> " + childId + " RECURSION";
+                continue;
+            } else if (allChildren.contains(childId)) { // TODO: this doesn't necessarily identify a recursion, it could identify a common terminus
+                recursions.add(childId);
+                hasRecursions = true;
+                if (rootId != null && rootId.equals(childId)) line += "\n" + indent + "-> " + childId + " RECURSION";
+                continue;
+            }
+            directChildren.add(childId);
+        }
+    }
+
+    if (rootId != null) print(line);
+
+    // walk the non-recursive children
+    allChildren.addAll(directChildren);
+    for (iter = directChildren.iterator(); iter.hasNext(); ) {
+        if (walkTree(iter.next(), allChildren, level + 1, rootId))
+            hasRecursions = true;
+    }
+    return hasRecursions;
+}
+
+// for each remaining node, traverse its children and look for a self-reference
+for (iter = boms.iterator(); iter.hasNext(); ) {
+    bom = iter.next();
+    productId = bom.get("productId");
+    if (recursions.contains(productId)) continue;
+    set = new HashSet();
+    set.add(productId);
+    if (!walkTree(productId, set, 0, null)) {
+        iter.remove(); // remove the non-recursive trees to speed things up
+    }
+    if (limit != -1 && recursions.size() >= limit) break;
+}
+
+// print the recursion trees found (note that those that have no children are not actually recursions, they're terminations)
+for (iter = recursions.iterator(); iter.hasNext(); ) {
+    id = iter.next();
+    set = new HashSet();
+    set.add(id);
+    walkTree(id, set, 0, id);
+}

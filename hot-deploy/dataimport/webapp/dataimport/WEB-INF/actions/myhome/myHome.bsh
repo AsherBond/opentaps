@@ -1,0 +1,67 @@
+/*
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+ 
+import javolution.util.FastList;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+ 
+customersProcessed = 0;
+customersNotProcessed = 0;
+productsProcessed = 0;
+productsNotProcessed = 0;
+inventoryProcessed = 0;
+inventoryNotProcessed = 0;
+orderHeadersProcessed = 0;
+orderHeadersNotProcessed = 0;
+orderItemsProcessed = 0;
+orderItemsNotProcessed = 0;
+
+/*
+GET PROCESSED
+*/
+searchConditions = FastList.newInstance();
+searchConditions.add(new EntityExpr("processedTimestamp", EntityOperator.NOT_EQUAL, null));
+allConditions = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+customersProcessed = delegator.findCountByCondition("DataImportCustomer", allConditions, null);
+productsProcessed = delegator.findCountByCondition("DataImportProduct", allConditions, null);
+inventoryProcessed = delegator.findCountByCondition("DataImportInventory", allConditions, null);
+orderHeadersProcessed = delegator.findCountByCondition("DataImportOrderHeader", allConditions, null);
+orderItemsProcessed = delegator.findCountByCondition("DataImportOrderItem", allConditions, null);
+
+/*
+GET NOT-PROCESSED
+*/
+searchConditions = FastList.newInstance();
+searchConditions.add(new EntityExpr("processedTimestamp", EntityOperator.EQUALS, null));
+allConditions = new EntityConditionList(searchConditions, EntityOperator.AND);
+
+customersNotProcessed = delegator.findCountByCondition("DataImportCustomer", allConditions, null);
+productsNotProcessed = delegator.findCountByCondition("DataImportProduct", allConditions, null);
+inventoryNotProcessed = delegator.findCountByCondition("DataImportInventory", allConditions, null);
+orderHeadersNotProcessed = delegator.findCountByCondition("DataImportOrderHeader", allConditions, null);
+orderItemsNotProcessed = delegator.findCountByCondition("DataImportOrderItem", allConditions, null);
+
+context.put("customersProcessed", customersProcessed);
+context.put("customersNotProcessed", customersNotProcessed);
+context.put("productsProcessed", productsProcessed);
+context.put("productsNotProcessed", productsNotProcessed);
+context.put("inventoryProcessed", inventoryProcessed);
+context.put("inventoryNotProcessed", inventoryNotProcessed);
+context.put("orderHeadersProcessed", orderHeadersProcessed);
+context.put("orderHeadersNotProcessed", orderHeadersNotProcessed);
+context.put("orderItemsProcessed", orderItemsProcessed);
+context.put("orderItemsNotProcessed", orderItemsNotProcessed);

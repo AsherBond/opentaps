@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!-- this file contains some sample products for testing the data import routine -->
+<entity-engine-xml>
+
+    <DataImportProduct productId="import1" productTypeId="FINISHED_GOOD" customId1="1234567890" customId2="ABCDEF" description="An imported product" price="10.00" priceCurrencyUomId="USD" supplierPartyId="DemoSupplier" purchasePrice="5.0"/>
+    <DataImportProduct productId="import2" productTypeId="FINISHED_GOOD" description="An imported product from a new supplier" price="10.00" priceCurrencyUomId="USD" supplierPartyId="NewSupplier" purchasePrice="5.0"/>
+    <DataImportProduct productId="import3" productTypeId="FINISHED_GOOD" description="An imported product from a new supplier" price="15.00" priceCurrencyUomId="USD" supplierPartyName="Another New Supplier" purchasePrice="7.5"/>
+    <DataImportProduct productId="import4" productTypeId="FINISHED_GOOD" description="Another imported product from a new supplier" price="11.00" priceCurrencyUomId="USD" supplierPartyName="Another New Supplier" purchasePrice="3.0"/>
+    <DataImportProduct productId="import5" productTypeId="FINISHED_GOOD" isInactive="Y" description="A discontinued imported product" price="10.00" priceCurrencyUomId="USD" supplierPartyId="DemoSupplier" purchasePrice="5.0"/>
+
+        
+</entity-engine-xml>

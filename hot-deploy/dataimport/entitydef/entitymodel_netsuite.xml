@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+
+    <title>NetSuite Data Import Entities</title>
+    <description>Defines intermediate entities for importing data from NetSuite into Opentaps</description>
+    <copyright>Copyright (c) 2008 - 2009 Open Source Strategies, Inc.</copyright>
+    <author>Leon Torres (leon@opensourcestrategies.com)</author>
+    <version>1.0</version>
+
+    <entity entity-name="NetSuiteItem" 
+            package-name="org.opentaps.dataimport.netsuite"
+            title="NetSuite Item Import Entity">
+        <field name="allowDropShip" type="very-short"/>
+        <field name="assetAccountId" type="id"/>
+        <field name="averagecost" type="currency-amount"/>
+        <field name="buildSubAssemblies" type="id"/> <!-- TODO change field type -->
+        <field name="classId" type="id"/> <!-- TODO change field type -->
+        <field name="cost_0" type="currency-amount"/>
+        <field name="costingMethod" type="very-short"/>
+        <field name="created" type="date-time"/>
+        <field name="currentOnOrderCount" type="floating-point"/> <!-- TODO change field type -->
+        <field name="dateOfLastTransaction" type="date-time"/>
+        <field name="departmentId" type="id"/>
+        <field name="deposit" type="very-short"/>
+        <field name="displayname" type="long-varchar"/>
+        <field name="expenseAccountId" type="id"/>
+        <field name="featureddescription" type="id"/> <!-- TODO change field type -->
+        <field name="featureditem" type="very-short"/>
+        <field name="fullName" type="long-varchar"/>
+        <field name="handlingCost" type="id"/> <!-- TODO change field type -->
+        <field name="incomeAccountId" type="id"/>
+        <field name="isinactive" type="very-short"/>
+        <field name="isonline" type="very-short"/>
+        <field name="istaxable" type="very-short"/>
+        <field name="itemExtid" type="id"/>
+        <field name="itemId" type="numeric"/> <!-- This must be an integer because importing depends on the order of this ID -->
+        <field name="lastCogsCorrection" type="currency-amount"/> <!-- TODO change field type -->
+        <field name="lastPurchasePrice" type="currency-amount"/> <!-- TODO change field type -->
+        <field name="locationId" type="id"/>
+        <field name="modified" type="date-time"/>
+        <field name="itemName" type="long-varchar"/>
+        <field name="offersupport" type="very-short"/>
+        <field name="onspecial" type="very-short"/>
+        <field name="parentId" type="id"/>
+        <field name="paymentMethodId" type="id"/> <!-- TODO change field type -->
+        <field name="prefPurchaseTaxId" type="id"/> <!-- TODO change field type -->
+        <field name="prefSaleTaxId" type="id"/> <!-- TODO change field type -->
+        <field name="printSubItems" type="very-short"/>
+        <field name="purchasedescription" type="long-varchar"/>
+        <field name="quantityavailable" type="floating-point"/>
+        <field name="quantityonhand" type="floating-point"/>
+        <field name="reorderpoint" type="id"/> <!-- TODO change field type -->
+        <field name="resalable" type="very-short"/>
+        <field name="salesdescription" type="very-long"/>
+        <field name="salesprice" type="currency-amount"/>
+        <field name="shippingcost" type="id"/> <!-- TODO change field type -->
+        <field name="specialsdescription" type="id"/> <!-- TODO change field type -->
+        <field name="specialWorkOrderItem" type="id"/> <!-- TODO change field type -->
+        <field name="storedescription" type="id"/> <!-- TODO change field type -->
+        <field name="storedetaileddescription" type="id"/> <!-- TODO change field type -->
+        <field name="storedisplayname" type="id"/> <!-- TODO change field type -->
+        <field name="itemSubtype" type="id"/> <!-- TODO change field type -->
+        <field name="taxItemId" type="id"/> <!-- TODO change field type -->
+        <field name="totalvalue" type="id"/> <!-- TODO change field type -->
+        <field name="typeName" type="id"/>
+        <field name="upcCode" type="id"/> <!-- TODO change field type -->
+        <field name="vendorname" type="name"/>
+        <field name="vendorId" type="id"/>
+        <field name="vsoeDeferral" type="id"/> <!-- TODO change field type -->
+        <field name="vsoeDelivered" type="very-short"/>
+        <field name="vsoeDiscount" type="id"/> <!-- TODO change field type -->
+        <field name="vsoePrice" type="id"/> <!-- TODO change field type -->
+        <field name="weight" type="floating-point"/>
+        <field name="weightUnitIndex" type="id"/>
+        <field name="productCatagory" type="name"/>
+        <field name="upcitemCode" type="id"/>
+
+        <!-- Fields for dataimport support -->
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.</description>
+        </field>
+
+        <prim-key field="itemId"/>
+    </entity>
+
+    <entity entity-name="NetSuiteCustomer"
+        package-name="org.opentaps.dataimport.netsuite"
+        title="NetSuite customers for importing.">
+        <field name="customerId" type="numeric"/>  <!-- This must be an integer because importing depends on the order of this ID -->
+        <field name="customerTypeId" type="id"/>
+        <field name="accountnumber" type="id"/>
+        <field name="email" type="email"/>
+        <field name="altemail" type="email"/>
+        <field name="phone" type="description"/>
+        <field name="homePhone" type="description"/>
+        <field name="mobilePhone" type="description"/>
+        <field name="altphone" type="description"/>
+        <field name="fax" type="description"/>
+        <field name="category_0" type="id"/>
+        <field name="comments" type="long-varchar"/>
+        <field name="companyName" type="name"/>
+        <field name="creditlimit" type="currency-amount"/>
+        <field name="currencyId" type="id"/>
+        <field name="expectedClose" type="date-time"/>
+        <field name="projectedEnd" type="date-time"/>
+        <field name="firstName" type="name"/>
+        <field name="middlename" type="name"/>
+        <field name="lastName" type="name"/>
+        <field name="salutation" type="name"/>
+        <field name="fullName" type="long-varchar"/>
+        <field name="customerName" type="long-varchar"><description>Matches the "name" field.</description></field>
+        <field name="isemailhtml" type="id"/>
+        <field name="isemailpdf" type="id"/>
+        <field name="isinactive" type="id"/>
+        <field name="istaxable" type="id"/>
+        <field name="isJob" type="id"/>
+        <field name="isPerson" type="id"/>
+        <field name="loginaccess" type="id"/>
+        <field name="multiplePriceId" type="id"/>
+        <field name="openbalance" type="currency-amount"/>
+        <field name="costEstimate" type="currency-amount"/>
+        <field name="amountComplete" type="currency-amount"/>
+        <field name="parentId" type="id"/>
+        <field name="partnerId" type="id"/>
+        <field name="paymentTermsId" type="id"/>
+        <field name="probability" type="floating-point"/>
+        <field name="reminderdays" type="numeric"/>
+        <field name="renewal" type="date-time"/>
+        <field name="resalenumber" type="description"/>
+        <field name="salesRepId" type="id"/>
+        <field name="salesTerritoryId" type="id"/>
+        <field name="state" type="id"/>
+        <field name="country" type="id"/>
+        <field name="statusId" type="name"/>
+        <field name="statusProbability" type="floating-point"/>
+        <field name="statusReadOnly" type="id"/>
+        <field name="subsidiaryId" type="id"/>
+        <field name="taxItemId" type="id"/>
+        <field name="dealerAgreementReceived" type="indicator"/>
+        <field name="creditApplicationReceived" type="indicator"/>
+        <field name="internetApproved" type="indicator"/>
+        <field name="dealerApprovedopen" type="indicator"/>
+        <field name="customerWarehouseLocationId" type="id"/>
+
+        <!-- Fields for dataimport support -->
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.</description>
+        </field>
+
+        <field name="contactPartyId" type="id"><description>Contact partyId created for this record.</description></field>
+        <field name="accountPartyId" type="id"><description>Account partyId created or used by this record.</description></field>
+
+        <prim-key field="customerId"/>
+    </entity>
+
+    <entity entity-name="NetSuiteAddressBook" 
+            package-name="org.opentaps.dataimport.netsuite"
+            title="NetSuite Address Book Import Entity">
+        <field name="address" type="very-long"/>
+        <field name="addressBookId" type="id"/>
+        <field name="addressLine1" type="long-varchar"/>
+        <field name="addressLine2" type="long-varchar"/>
+        <field name="attention" type="long-varchar"/>
+        <field name="city" type="long-varchar"/>
+        <field name="company" type="long-varchar"/>
+        <field name="country" type="long-varchar"/>
+        <field name="entityId" type="id"/>
+        <field name="isDefaultBillAddress" type="short-varchar"/>
+        <field name="isDefaultShipAddress" type="short-varchar"/>
+        <field name="addressName" type="long-varchar"/>
+        <field name="phone" type="long-varchar"/>
+        <field name="stateProvinceName" type="long-varchar"/>
+        <field name="zip" type="long-varchar"/>
+
+        <!-- Fields for dataimport support -->
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.</description>
+        </field>
+        
+        <field name="contactMechId" type="id"><description>Address contact mech created for this record.</description></field>
+        
+        <prim-key field="addressBookId"/>
+    </entity>
+    
+    <entity entity-name="NetSuiteCustomerType"
+        package-name="org.opentaps.dataimport.netsuite"
+        title="NetSuite customer types, which are mapped to opentaps industry Enumerations">
+        <field name="customerTypeId" type="id"/>
+        <field name="description" type="id"/>
+        <field name="enumId" type="id"><description>Enumeration created for the type.</description></field>
+
+        <!-- Fields for dataimport support -->
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.</description>
+        </field>
+
+        <prim-key field="customerTypeId"/>
+    </entity>
+
+    <entity entity-name="NetSuiteSalesOrderType"
+        package-name="org.opentaps.dataimport.netsuite"
+        title="NetSuite sales order types, which are mapped to opentaps sales channel Enumerations">
+        <field name="listId" type="id"/>
+        <field name="description" type="description"/>
+        <field name="enumId" type="id"><description>Enumeration created for the type.</description></field>
+
+        <!-- Fields for dataimport support -->
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.</description>
+        </field>
+
+        <prim-key field="listId"/>
+    </entity>
+
+    <entity entity-name="NetSuitePriceList" package-name="org.opentaps.dataimport.netsuite"
+        title="NetSuite price list">
+        <field name="isinactive" type="very-short"/>
+        <field name="priceListName" type="long-varchar"/>
+        <field name="discountPercentage" type="numeric"/>
+        <field name="isonline" type="very-short"/>
+        <field name="priceTypeExtid" type="id"/>
+        <field name="priceTypeId" type="numeric"/>
+
+        <!-- Fields for dataimport support -->
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.</description>
+        </field>
+
+        <prim-key field="priceTypeId"/>
+    </entity>
+
+    <entity entity-name="NetSuiteItemPrice" package-name="org.opentaps.dataimport.netsuite"
+        title="NetSuite item price">
+        <field name="priceId" type="numeric"><description>Fake pk field.</description></field>
+        <field name="isinactive" type="very-short"/>
+        <field name="itemPriceName" type="long-varchar"/>
+        <field name="isonline" type="very-short"/>
+        <field name="currencyId" type="id"/>
+        <field name="discountPercentage" type="numeric"/>
+        <field name="itemId" type="numeric"/>
+        <field name="itemPriceExtid" type="id"/>
+        <field name="itemPriceId" type="numeric"/>
+        <field name="itemQuantityId" type="numeric"/>
+        <field name="itemUnitPrice" type="currency-amount"/>
+
+        <!-- Fields for dataimport support -->
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.
+                Do not use for any other purpose.</description>
+        </field>
+
+        <prim-key field="priceId"/>
+    </entity>
+
+    <entity entity-name="NetSuitePaymentTerm"
+        package-name="org.opentaps.dataimport.netsuite"
+        title="NetSuite payment terms.  Supplemental data referenced by the customer import, but is not imported itself.">
+
+        <field name="paymentTermsId" type="id"/>
+        <field name="dateDriven" type="id"/>
+        <field name="daysUntilDue" type="numeric"/>
+        <field name="discountDays" type="numeric"/>
+        <field name="isInactive" type="id"/>
+        <field name="minimumDays" type="numeric"/>
+        <field name="termName" type="description"/>
+        <field name="paymentTermsExtid" type="id"/>
+        <field name="percentageDiscount" type="floating-point"/>
+
+        <prim-key field="paymentTermsId"/>
+    </entity>
+
+</entitymodel>

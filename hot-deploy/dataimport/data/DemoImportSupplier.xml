@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<entity-engine-xml>
+    <DataImportSupplier supplierId="SUPPLIER1" supplierName="supplierdemo 1" address1="address 1" address2="address 2" city="city 1" stateProvinceGeoId="TX" postalCode="75019" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="972" primaryPhoneNumber="561 6234" netPaymentDays="0" isIncorporated="Y" federalTaxId="20-1111183" requires1099="N" importStatusId="" processedTimestamp="" lastUpdatedStamp="2008-07-25 14:00:04.951" lastUpdatedTxStamp="2008-07-25 14:00:04.71"/>
+    <DataImportSupplier supplierId="SUPPLIER2" supplierName="supplierdemo 2" address1="address 1" address2="" city="city 2" stateProvinceGeoId="NJ" postalCode="08077" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="800" primaryPhoneNumber="245 7602" netPaymentDays="30" isIncorporated="Y" federalTaxId="22-2822221" requires1099="N" importStatusId="" processedTimestamp="" lastUpdatedStamp="2008-07-25 14:00:05.282" lastUpdatedTxStamp="2008-07-25 14:00:05.031"/>
+    <DataImportSupplier supplierId="SUPPLIER3" supplierName="supplierdemo 3" address1="address 1" address2="" city="city 3" stateProvinceGeoId="NY" postalCode="12180" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="518" primaryPhoneNumber="222 9220" netPaymentDays="30" isIncorporated="Y" federalTaxId="" requires1099="N" importStatusId="" processedTimestamp="" lastUpdatedStamp="2008-07-25 13:43:17.039" lastUpdatedTxStamp="2008-07-25 13:43:15.926"/>
+    <DataImportSupplier supplierId="SUPPLIER4" supplierName="supplierdemo 4" address1="address 1" address2="address 2" city="city 4" stateProvinceGeoId="MN" postalCode="55486" postalCodeExt="2200" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="763" primaryPhoneNumber="533 5331" netPaymentDays="10" isIncorporated="Y" federalTaxId="" requires1099="N" importStatusId="" processedTimestamp="" lastUpdatedStamp="2008-07-25 13:43:17.494" lastUpdatedTxStamp="2008-07-25 13:43:17.161"/>
+    <DataImportSupplier supplierId="SUPPLIER5" supplierName="supplierdemo 5" address1="address 1" address2="" city="city 5" stateProvinceGeoId="NY" postalCode="12024" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="518" primaryPhoneNumber="444 2445" netPaymentDays="30" isIncorporated="Y" federalTaxId="" requires1099="N" importStatusId="" processedTimestamp="" lastUpdatedStamp="2008-07-25 13:43:17.946" lastUpdatedTxStamp="2008-07-25 13:43:17.528"/>
+</entity-engine-xml>

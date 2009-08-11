@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *
+-->
+
+<!-- this file contains some sample inventory for testing the data import rooutine -->
+<entity-engine-xml>
+    <Product productId="IMPORT1" internalName="Import Test 1"/>
+    <Product productId="IMPORT2" internalName="Import Test 2"/>
+    <Product productId="IMPORT3" internalName="Import Test 3"/>
+    <Product productId="IMPORT4" internalName="Import Test 4"/>
+    <Product productId="IMPORT5" internalName="Import Test 5"/>
+
+
+    <DataImportInventory itemId="9000" productId="IMPORT1" facilityId="WebStoreWarehouse" availableToPromise="10" onHand="10" minimumStock="5" reorderQuantity="5" daysToShip="3" inventoryValue="100"/>
+    <DataImportInventory itemId="9001" productId="IMPORT1" facilityId="MyRetailStore" availableToPromise="5" onHand="5" minimumStock="2.5" reorderQuantity="1" daysToShip="1" inventoryValue="500"/>
+    <DataImportInventory itemId="9002" productId="IMPORT2" facilityId="WebStoreWarehouse" availableToPromise="100" onHand="100" inventoryValue="25"/>
+    <DataImportInventory itemId="9003" productId="IMPORT3" facilityId="WebStoreWarehouse" availableToPromise="5" onHand="10" inventoryValue="88"/>
+    <DataImportInventory itemId="9004" productId="IMPORT2" facilityId="MyRetailStore" availableToPromise="13" onHand="13" inventoryValue="42.77"/>
+    <DataImportInventory itemId="9005" productId="IMPORT4" facilityId="WebStoreWarehouse" availableToPromise="15" onHand="15" inventoryValue="190"/>
+    <DataImportInventory itemId="9006" productId="IMPORT5" facilityId="MyRetailStore" availableToPromise="22" onHand="22" inventoryValue="360"/>
+</entity-engine-xml>                            

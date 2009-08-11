@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Net Suite Data Import Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <service name="netsuite.importItems" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.netsuite.NetSuiteImportServices" invoke="importItems">
+        <description>
+            Import products, categories and features using NetSuiteItem entity.
+            Note that this service is not wrapped in a transaction.  Each record imported is in its
+            own transaction, so it can import as many good records as possible.
+
+            If desired, specify a parentCategoryId to put all created categories in, so the results
+            can be browsed in catalog manager.  This category must already exist.
+        </description>
+        <implements service="opentapsImporterInterface"/>
+        <attribute name="parentCategoryId" type="String" mode="IN" optional="true"/>
+        <attribute type="Integer" mode="OUT" name="importedRecords" optional="true"/>
+    </service>
+
+    <service name="netsuite.importCustomers" engine="java" use-transaction="false" auth="true"
+        location="org.opentaps.dataimport.netsuite.NetSuiteImportServices" invoke="importCustomers">
+        <description>
+            Import customers and the enumerations for industry and order type.
+            Note that this service is not wrapped in a transaction.  Each record imported is in its
+            own transaction, so it can import as many good records as possible.
+        </description>
+        <implements service="importCustomers"/>
+        <implements service="opentapsImporterInterface"/>
+        <attribute name="defaultTaxAuthGeoId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <service name="netsuite.importCustomerAddresses" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.netsuite.NetSuiteImportServices" invoke="importCustomerAddresses">
+        <description>
+            Import customers, their addresses and the enumerations for industry and order type.
+            Note that this service is not wrapped in a transaction.  Each record imported is in its
+            own transaction, so it can import as many good records as possible.
+        </description>
+        <implements service="opentapsImporterInterface"/>
+        <attribute type="Integer" mode="OUT" name="importedRecords" optional="true"/>
+    </service>
+
+</services>

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+  <!-- ========================================================= -->
+  <!-- ======================== Defaults ======================= -->
+  <!-- ========================================================= -->
+    <title>Customer Data Import Entities</title>
+    <description>Defines intermediate entities for importing customer data</description>
+    <copyright>Copyright (c) 2006 - 2007 Open Source Strategies, Inc.</copyright>
+    <author>Si Chen (sichen@opensourcestrategies.com)</author>
+    <version>1.0</version>
+
+    <!-- ================================= -->
+    <!-- org.opentaps.dataimport.customers -->  
+    <!-- ================================= -->
+
+    <!-- for precise definitions of the field types see the file framework/entity/fieldtype/fieldtypeXXX.xml for your database XXX -->
+
+    <entity entity-name="DataImportCustomer"
+        package-name="org.opentaps.dataimport.customers"
+        title="Intermediate import entity for customer data.">
+        <field name="customerId" type="id-ne"/>
+        <field name="companyName" type="name"/>
+        <field name="firstName" type="name"/>
+        <field name="lastName" type="name"/>
+        <field name="attnName" type="name"/>
+        <field name="address1" type="long-varchar"/>
+        <field name="address2" type="long-varchar"/>
+        <field name="city" type="name"></field>
+        <field name="stateProvinceGeoId" type="id">
+            <description>Must match OFBiz Geo.geoId</description>
+        </field>
+        <field name="postalCode" type="short-varchar"/>
+        <field name="postalCodeExt" type="short-varchar"/>
+        <field name="stateProvinceGeoName" type="name"/>
+        <field name="countryGeoId" type="id">
+            <description>Must match OFBiz Geo.geoId</description>
+        </field>
+        <field name="primaryPhoneCountryCode" type="very-short"/>
+        <field name="primaryPhoneAreaCode" type="very-short"/>
+        <field name="primaryPhoneNumber" type="short-varchar"/>
+        <field name="primaryPhoneExtension" type="long-varchar"/>
+        <field name="secondaryPhoneCountryCode" type="very-short"/>
+        <field name="secondaryPhoneAreaCode" type="very-short"/>
+        <field name="secondaryPhoneNumber" type="short-varchar"/>
+        <field name="secondaryPhoneExtension" type="long-varchar"/>
+        <field name="faxCountryCode" type="very-short"/>
+        <field name="faxAreaCode" type="very-short"/>
+        <field name="faxNumber" type="short-varchar"/>
+        <field name="didCountryCode" type="very-short"/>
+        <field name="didAreaCode" type="very-short"/>
+        <field name="didNumber" type="short-varchar"/>
+        <field name="didExtension" type="long-varchar"/>
+        <field name="emailAddress" type="long-varchar"/>
+        <field name="webAddress" type="long-varchar"/>
+        <field name="discount" type="floating-point"/>
+        <field name="partyClassificationTypeId" type="id"/>
+        <field name="creditCardNumber" type="short-varchar">
+            <description>All numeric no spaces</description>
+        </field>
+        <field name="creditCardExpDate" type="short-varchar">
+            <description>MMYY format</description>
+        </field>
+        <field name="outstandingBalance" type="currency-amount">
+            <description>Current balance on customer account</description>
+        </field>
+        <field name="creditLimit" type="currency-amount">
+            <description>Maximum amount customer is allowed to charge on credit</description>
+        </field>
+        <field name="currencyUomId" type="very-short"/>
+        <field name="disableShipping" type="indicator"><description>If set to Y, customer will be put into the "do not ship" classification.</description></field>
+        <field name="netPaymentDays" type="numeric"><description>Net payment days, ie 30 60 90</description></field>
+        <field name="shipToCompanyName" type="name"/>
+        <field name="shipToFirstName" type="name"/>
+        <field name="shipToLastName" type="name"/>
+        <field name="shipToAttnName" type="name"/>
+        <field name="shipToAddress1" type="long-varchar"/>
+        <field name="shipToAddress2" type="long-varchar"/>
+        <field name="shipToCity" type="name"></field>
+        <field name="shipToStateProvinceGeoId" type="id">
+            <description>Must match OFBiz Geo.geoId</description>
+        </field>
+        <field name="shipToPostalCode" type="short-varchar"/>
+        <field name="shipToPostalCodeExt" type="short-varchar"/>
+        <field name="shipToStateProvGeoName" type="id"/>
+        <field name="shipToCountryGeoId" type="id">
+            <description>Must match OFBiz Geo.geoId</description>            
+        </field>
+        <field name="note" type="very-long"/>
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>
+        <field name="primaryPartyId" type="id">
+            <description>Special field for system to record the primary party created against this customer record. 
+                Do not use for any other purpose.</description>
+        </field>
+        <field name="companyPartyId" type="id">
+            <description>Special field for system to record the company party created against this customer record. 
+                Do not use for any other purpose.</description>
+        </field>
+        <field name="personPartyId" type="id">
+            <description>Special field for system to record the person party created against this customer record. 
+                Do not use for any other purpose.</description>
+        </field>
+        <prim-key field="customerId"/>
+    </entity>
+
+    <entity entity-name="DataImportCustomerPassword"
+        package-name="org.opentaps.dataimport.customers"
+        title="Intermediate import entity for UserLogin password data.">
+        <field name="userLoginId" type="id-vlong-ne"/>
+        <field name="textPassword" type="short-varchar"/>
+        <prim-key field="userLoginId"/>
+    </entity>
+
+    <entity entity-name="DataImportCommissionRates"
+        package-name="org.opentaps.dataimport.customers"
+        title="These customers in DataImportCustomer are also commission agents and earn a commission"
+        table-name="DATA_IMP_COMM_RATES">
+        <field name="customerId" type="id-ne"/>
+        <field name="commissionRate" type="floating-point"/>
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="processedTimestamp" type="date-time"><description>When the record was processed</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <prim-key field="customerId"/>
+        <relation fk-name="DICR_DICUST" rel-entity-name="DataImportCustomer" type="one">
+            <key-map field-name="customerId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="DataImportCommissionCustomers"
+        package-name="org.opentaps.dataimport.customers"
+        title="Maps customers in DataImportCustomer to other customers on whose sales they collect a commission"
+        table-name="DATA_IMP_COMM_CUSTOMERS">
+        <field name="customerId" type="id-ne"/>
+        <field name="toCustomerId" type="id-ne"/>
+        <prim-key field="customerId"/>
+        <prim-key field="toCustomerId"/>
+        <relation fk-name="DICCUST_DIAGENT" title="Agent" rel-entity-name="DataImportCustomer" type="one">
+            <key-map field-name="customerId"/>
+        </relation>
+        <relation fk-name="DICCUST_DICUST" title="Customer" rel-entity-name="DataImportCustomer" type="one">
+            <key-map field-name="toCustomerId" rel-field-name="customerId"/>
+        </relation>
+    </entity>
+   
+</entitymodel>

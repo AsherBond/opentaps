@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="main-application-decorator">
+        <section>
+            <actions>
+                <property-map global="true" resource="dataimport" map-name="configProperties"/>
+                <set field="opentapsApplicationName" value="dataimport" global="true"/>
+                <script location="component://dataimport/webapp/dataimport/WEB-INF/actions/includes/main-decorator.bsh"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="component://opentaps-common/widget/screens/common/CommonScreens.xml">
+                    <decorator-section name="application-layout">
+                        <decorator-section-include name="section-layout"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

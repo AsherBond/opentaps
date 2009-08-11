@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/services.xsd">
+    <description>Data Import Services</description>
+    <vendor>Open Source Strategies, Inc.</vendor>
+    <version>1.0</version>
+
+    <service name="opentapsImporterInterface" engine="interface" location="" invoke="">
+        <description>
+            Interface for import services that implement OpentapsImporter.  Implementing
+            this interface will allow fine grained control over the import, such as
+            setting a maximum number to import, how many consecutive failures to have
+            before aborting the import, and similar configuration.
+        </description>
+        <attribute type="Integer" mode="IN" name="maxToImport" optional="true"/>
+        <attribute type="Integer" mode="IN" name="maxConsecutiveFailures" optional="true"/>
+    </service>
+
+    <service name="importCustomers" engine="java" use-transaction="false" auth="true"
+        location="org.opentaps.dataimport.CustomerImportServices" invoke="importCustomers">
+        <description>
+            Import customers using DataImportCustomer.  Specify the initial party that is responsible
+            for these records in CRMSFA.  Also specify the Accounts Receivable General Ledger account
+            with arGlAccountId, the offsetting account with offsettingGlAccountId, and the organization 
+            of these accounts with organizationPartyId.
+            Note that this service is not wrapped in a transaction.  Each customer record imported is in its
+            own transaction, so it can store as many good records as possible. 
+        </description>
+        <attribute type="String" mode="IN" name="initialResponsiblePartyId" optional="false"/>
+        <attribute type="String" mode="IN" name="arGlAccountId" optional="true"/>
+        <attribute type="String" mode="IN" name="offsettingGlAccountId" optional="true"/>
+        <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
+        <attribute type="Integer" mode="OUT" name="customersImported" optional="true"/>
+    </service>   
+
+    <service name="importShoppingLists" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.ShoppingListImportServices" invoke="importShoppingLists">
+        <description>
+            Import shopping lists using DataImportShoppingList and DataImportShoppingListItem.
+            Note that this service is not wrapped in a transaction.  Each record imported is in its
+            own transaction, so it can store as many good records as possible. 
+            The productStoreId parameters specify for which store to create the shopping lists.
+        </description>
+        <attribute type="String" mode="IN" name="productStoreId" optional="false"/>
+        <attribute type="Integer" mode="OUT" name="shoppingListsImported" optional="true"/>
+    </service> 
+   
+    <service name="importCustomersCommissions" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.CustomerImportServices" invoke="importCustomersCommissions">
+        <description>
+            Import customersCommissions using DataImportCommissionRates.
+            Note that this service is not wrapped in a transaction.  Each customerCommisions record imported is in its
+            own transaction, so it can store as many good records as possible. 
+        </description>
+        <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
+        <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
+    </service>   
+   
+    <service name="importSuppliers" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.SupplierImportServices" invoke="importSuppliers">
+        <description>
+            Import suppliers using DataImportSupplier.
+            Note that this service is not wrapped in a transaction.  Each supplier record imported is in its
+            own transaction, so it can store as many good records as possible. 
+        </description>
+        <attribute type="String" mode="IN" name="organizationPartyId" optional="false"/>
+        <attribute type="Integer" mode="OUT" name="importedRecords" optional="true"/>
+    </service>   
+   
+    <service name="importProducts" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.ProductImportServices" invoke="importProducts">
+        <description>
+            Import products using DataImportProduct.
+            Note that this service is not wrapped in a transaction.  Each product record imported is in its
+            own transaction, so it can store as many good records as possible. 
+            The goodIdentificationTypeIdN parameters correspond to the type of the customIdN fields in DataImportProduct.
+        </description>
+        <attribute type="String" mode="IN" name="goodIdentificationTypeId1" optional="true"/>
+        <attribute type="String" mode="IN" name="goodIdentificationTypeId2" optional="true"/>
+        <attribute type="Integer" mode="OUT" name="productsImported" optional="true"/>
+    </service>   
+ 
+    <service name="importOrders" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.OrderImportServices" invoke="importOrders">
+        <description>
+            Import orders using DataImportOrderHeader and DataImportOrderItems.
+            Note that this service is not wrapped in a transaction.  Each orderHeader/orderItems record set imported is in its
+                own transaction, so it can store as many good records as possible. 
+            companyPartyId is the ID of the billFromVendor for the orders.
+            productStoreId is the productStore that the orders should be related to.
+            prodCatalogId is the productCatalog that the orders should be related to (optional).
+            importEmptyOrders controls whether orderHeaders
+                with no corresponding orderItems should be imported or ignored.
+            calculateGrandTotal controls whether the grand total for the order should be taken from the DataImportOrderHeader.grandTotal
+                field or calculated from orderItems and orderAdjustments
+        </description>
+        <attribute type="String" mode="IN" name="companyPartyId" optional="false"/>
+        <attribute type="String" mode="IN" name="productStoreId" optional="false"/>
+        <attribute type="String" mode="IN" name="prodCatalogId" optional="true"/>
+        <attribute type="String" mode="IN" name="purchaseOrderShipToContactMechId" optional="true"/>
+        <attribute type="Boolean" mode="IN" name="importEmptyOrders" optional="false"/>
+        <attribute type="Boolean" mode="IN" name="calculateGrandTotal" optional="false"/>
+        <attribute type="Boolean" mode="IN" name="reserveInventory" optional="true"/>
+        <attribute type="Integer" mode="OUT" name="ordersImported" optional="true"/>
+    </service>   
+ 
+    <service name="importProductInventory" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.ProductImportServices" invoke="importProductInventory">
+        <description>
+            Import product inventory using DataImportInventory.
+            The organizationPartyId is the ownerPartyId of the facilityId, and all inventory values in DataImportInventory must
+            already be in the right currency.  One AcctgTrans plus many entries are created for each facility/ownerPartyId combination.
+            Both gl accounts must be configured for each owner of the inventory in the warehouse facilities.
+            Note that this service is not wrapped in a transaction.  Each inventory record set imported is in its
+                own transaction, so it can store as many good records as possible.
+            Will set a ProductFacility with minimumStock of 0 for the facilityId if no minimumStock is supplied and fill in reorderQuantity
+            and daysToShip as well.
+        </description>
+        <attribute name="inventoryGlAccountId" type="String" mode="IN" optional="false"/>
+        <attribute name="offsettingGlAccountId" type="String" mode="IN" optional="false"/>
+        <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="importUSTaxRates" engine="java" use-transaction="false"
+        location="org.opentaps.dataimport.TaxImportServices" invoke="importUSTaxRates">
+        <description>
+            Import US county based tax rates using DataImportUSZipCodes and DataImportUSCountyTax.
+            TODO: documentation on how this works.  Some of it is in javadoc at the moment.
+        </description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="importedRecords" type="Integer" mode="OUT" optional="true"/>
+    </service>
+
+</services>

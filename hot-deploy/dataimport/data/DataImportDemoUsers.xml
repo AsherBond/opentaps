@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<entity-engine-xml>
+
+    <Party partyId="DemoImportManager" partyTypeId="PERSON"/>
+    <Person partyId="DemoImportManager" firstName="Demo" lastName="DataImport Manager"/>
+    <!-- password is opentaps -->
+    <UserLogin partyId="DemoImportManager" userLoginId="demoimportmgr" currentPassword="a8c323ed5c6d3c9b5ba5fa13e75939de954de085" passwordHint="o p e n t a p s"/>
+    <UserLoginSecurityGroup userLoginId="demoimportmgr" groupId="DATAIMPORT_MANAGER" fromDate="2007-01-01 00:00:00"/>
+    
+    <!-- grant full access to some administrators -->
+    <UserLoginSecurityGroup userLoginId="admin" groupId="DATAIMPORT_MANAGER" fromDate="2007-01-01 00:00:00"/>
+    <UserLoginSecurityGroup userLoginId="flexadmin" groupId="DATAIMPORT_MANAGER" fromDate="2007-01-01 00:00:00"/>
+    
+
+</entity-engine-xml>

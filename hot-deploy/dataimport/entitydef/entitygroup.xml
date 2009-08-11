@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * Foundation, Inc., 51 Frankli
+n St, Fifth Floor, Boston, MA  02110-1301  USA
+-->
+
+<entitygroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitygroup.xsd">
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.customers   -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportCustomer"/>
+  <entity-group group="org.ofbiz" entity="DataImportCustomerPassword"/>
+  <entity-group group="org.ofbiz" entity="DataImportCommissionRates"/>
+  <entity-group group="org.ofbiz" entity="DataImportCommissionCustomers"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.suppliers   -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportSupplier"/>
+ 
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.products    -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportProduct"/>
+  <entity-group group="org.ofbiz" entity="DataImportInventory"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.shoppinglists    -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportShoppingList"/>
+  <entity-group group="org.ofbiz" entity="DataImportShoppingListItem"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.orders      -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportOrderHeader"/>
+  <entity-group group="org.ofbiz" entity="DataImportOrderItem"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.tax         -->
+  <!-- =================================== -->
+
+  <entity-group group="org.ofbiz" entity="DataImportUSZipCodes"/>
+  <entity-group group="org.ofbiz" entity="DataImportUSCountyTax"/>
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.mscrm       -->
+  <!-- =================================== -->
+<!--
+  <entity-group group="org.ofbiz" entity="MsAccountBase"/>
+  <entity-group group="org.ofbiz" entity="MsContactBase"/>
+  <entity-group group="org.ofbiz" entity="MsLeadBase"/>
+  <entity-group group="org.ofbiz" entity="MsCustomerAddress"/>
+-->
+
+  <!-- =================================== -->
+  <!-- org.opentaps.dataimport.netsuite    -->
+  <!-- =================================== -->
+  <entity-group group="org.ofbiz" entity="NetSuiteItem"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteCustomer"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteAddressBook"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteCustomerType"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteSalesOrderType"/>
+  <entity-group group="org.ofbiz" entity="NetSuitePaymentTerm"/>
+  <entity-group group="org.ofbiz" entity="NetSuitePriceList"/>
+  <entity-group group="org.ofbiz" entity="NetSuiteItemPrice"/>
+
+</entitygroup>

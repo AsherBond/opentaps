@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ *  
+-->
+
+<!-- this file contains some sample customers for testing the data import routine -->
+<entity-engine-xml>
+
+    <DataImportCustomer customerId="9000" companyName="Import Customer 1 Co." firstName="Joe" lastName="Customer" address1="123 E 45 St" address2="#678" city="New York" stateProvinceGeoId="NY" 
+        postalCode="10017" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="212" primaryPhoneNumber="345-6789" />
+    <DataImportCustomer customerId="9001" companyName="" firstName="Bob" lastName="Customer" address1="12345 E 67 St" city="Miami" stateProvinceGeoId="FL" 
+        postalCode="33000" countryGeoId="USA" creditCardNumber="4111111111111111" creditCardExpDate="0909"
+        outstandingBalance="0.0"
+        creditLimit="1000000.0" netPaymentDays="30"/>
+    <DataImportCustomer customerId="9002" companyName="Bad Import Customer 1 Co." firstName="James" lastName="Customer" address1="123 E 45 St" address2="#678" city="New York" stateProvinceGeoId="BAD" 
+        postalCode="10017" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="212" primaryPhoneNumber="345-6789" />
+     <DataImportCustomer customerId="9004" companyName=" " firstName="Bad Balance" lastName="Customer" address1="12345 E 67 St" city="Miami" stateProvinceGeoId="FL" 
+        postalCode="33000" countryGeoId="USA" creditCardNumber="5454545454545454" creditCardExpDate="0909"
+        outstandingBalance="0.0"
+        creditLimit="250000.0" currencyUomId="USD" netPaymentDays="60"/>
+    <DataImportCustomer customerId="9005" companyName="Import Customer 2 Co." firstName="Ann" lastName="Customer" address1="987 Somewhere St" city="Some City" stateProvinceGeoId="CA" 
+        postalCode="90000" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="213" primaryPhoneNumber="456-7890" 
+        secondaryPhoneCountryCode="1" secondaryPhoneAreaCode="626" secondaryPhoneNumber="987-6543"
+        faxCountryCode="1" faxAreaCode="818" faxNumber="555-8585"
+        creditCardNumber="5454 5454 5454 5454" creditCardExpDate="1210"
+        outstandingBalance="1000.00"
+        shipToCompanyName="Import Customer 2 Warehouse" shipToFirstName="Rick" shipToLastName="Customer" shipToAddress1="1234 Industrial Way" shipToAddress2="Suite 9"
+        shipToCity="City of Industry" shipToStateProvinceGeoId="CA" shipToPostalCode="91000" shipToCountryGeoId="USA"/>
+     <DataImportCustomer customerId="9006" companyName=" " firstName="Bill" lastName="Customer" address1="12345 E 67 St" city="Miami" stateProvinceGeoId="FL" 
+        postalCode="33000" countryGeoId="USA" creditCardNumber="4111111111111111" creditCardExpDate="0909"
+        outstandingBalance="0.0"
+        creditLimit="10000.0" currencyUomId="USD" netPaymentDays="15" disableShipping="Y"/>
+    <DataImportCustomer customerId="9007" companyName="Important Account" address1="6789 Westheimer Blvd" city="Houston" stateProvinceGeoId="TX" 
+        postalCode="77057" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="713" primaryPhoneNumber="783-4321"
+        outstandingBalance="0.0"
+        creditLimit="1000.0" netPaymentDays="45"/>
+    <DataImportCustomer customerId="9008" companyName="Import Customer for Automated Testing (keep this name unique)" address1="6789 Westheimer Blvd" city="Houston" stateProvinceGeoId="TX" 
+        postalCode="77057" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="713" primaryPhoneNumber="783-4321"
+        outstandingBalance="0.0"
+        creditLimit="100.0"  currencyUomId="USD" netPaymentDays="45" disableShipping="Y"/>
+
+    <!-- These are for commissions testing.  This setup enables 9010 to earn 10% on all orders for 9006 and 9007-->
+    <DataImportCustomer customerId="9010" firstName="Commission" lastName="Broker" address1="123 E 45 St #678" city="New York" stateProvinceGeoId="NY" 
+        postalCode="10016" countryGeoId="USA" primaryPhoneCountryCode="1" primaryPhoneAreaCode="212" primaryPhoneNumber="283-4829"/>
+    <DataImportCommissionRates customerId="9010" commissionRate="10.0"/>
+    <DataImportCommissionCustomers customerId="9010" toCustomerId="9007"/>
+    <DataImportCommissionCustomers customerId="9010" toCustomerId="9006"/>
+    <DataImportCommissionCustomers customerId="9010" toCustomerId="9005"/>
+
+
+
+</entity-engine-xml>

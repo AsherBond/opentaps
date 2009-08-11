@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+  <!-- ========================================================= -->
+  <!-- ======================== Defaults ======================= -->
+  <!-- ========================================================= -->
+    <title>MS CRM Data Import Entities</title>
+    <description>Defines intermediate entities for importing Accounts, Leads, Contacts and other MS CRM objects into Opentaps CRMSFA</description>
+    <copyright>Copyright (c) 2006 - 2007 Open Source Strategies, Inc.</copyright>
+    <author>Leon Torres (leon@opensourcestrategies.com)</author>
+    <version>1.0</version>
+
+    <!-- ============================= -->
+    <!-- org.opentaps.dataimport.mscrm -->  
+    <!-- ============================= -->
+
+    <!-- for precise definitions of the field types see the file framework/entity/fieldtype/fieldtypeXXX.xml for your database XXX -->
+
+    <entity entity-name="MsAccountBase"
+        package-name="org.opentaps.dataimport.mscrm"
+        title="Intermediate import entity for MS CRM Account data.">
+
+        <field name="accountId" type="id-vlong"/>
+        <field name="accountName" type="name"/>
+        <field name="description" type="very-long"/>
+        <field name="revenue" type="currency-amount"/>
+        <field name="numberOfEmployees" type="numeric"/>
+        <field name="sic" type="id"/>
+        <field name="tickerSymbol" type="id"/>
+        <field name="webSiteUrl" type="value"/>
+        <field name="emailAddress1" type="value"/>
+        <field name="emailAddress2" type="value"/>
+        <field name="emailAddress3" type="value"/>
+        <field name="telephone1" type="name"><description>The system is capable of decoding numbers like "(800) 123.456 x777 cell"</description></field>
+        <field name="telephone2" type="name"/>
+        <field name="telephone3" type="name"/>
+        <field name="fax" type="name"/>
+        <field name="createdOn" type="id"><description>Date format is 8/15/2006</description></field>
+        <field name="parentAccountId" type="id-vlong"/>
+        <field name="primaryContactId" type="id-vlong"/>
+
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>
+        <field name="partyId" type="id">
+            <description>When the Account is imported, its Opentaps partyId is stored here.</description>
+        </field>
+
+        <prim-key field="accountId"/>
+    </entity>
+
+    <entity entity-name="MsContactBase"
+        package-name="org.opentaps.dataimport.mscrm"
+        title="Intermediate import entity for MS CRM Contact data.">
+
+        <field name="contactId" type="id-vlong"/>
+        <field name="accountId" type="id-vlong"/>
+        <field name="salutation" type="name"/>
+        <field name="jobTitle" type="name"/>
+        <field name="firstName" type="name"/>
+        <field name="lastName" type="name"/>
+        <field name="department" type="name"/>
+        <!-- TODO: it's possible to create the nickname, middle name, and other Person fields, but the create service doesn't support that yet -->
+        <field name="birthDate" type="id"><description>Date format is 8/15/2006</description></field>
+        <field name="description" type="very-long"/>
+        <field name="webSiteUrl" type="value"/>
+        <field name="emailAddress1" type="value"/>
+        <field name="emailAddress2" type="value"/>
+        <field name="emailAddress3" type="value"/>
+        <field name="telephone1" type="name"><description>The system is capable of decoding numbers like "(800) 123.456 x777 cell"</description></field>
+        <field name="telephone2" type="name"/>
+        <field name="telephone3" type="name"/>
+        <field name="fax" type="name"/>
+        <field name="createdOn" type="id"><description>Date format is 8/15/2006</description></field>
+
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>
+        <field name="partyId" type="id">
+            <description>When the Contact is imported, its Opentaps partyId is stored here.</description>
+        </field>
+
+        <prim-key field="contactId"/>
+    </entity>
+
+    <entity entity-name="MsLeadBase"
+        package-name="org.opentaps.dataimport.mscrm"
+        title="Intermediate import entity for MS CRM Lead data.">
+
+        <field name="leadId" type="id-vlong"/>
+        <field name="companyName" type="name"/>
+        <field name="subject" type="very-long"><description>This gets stored as an important note</description></field>
+        <field name="description" type="very-long"/>
+        <field name="revenue" type="currency-amount"/>
+        <field name="numberOfEmployees" type="numeric"/>
+        <field name="sic" type="id"/>
+        <field name="tickerSymbol" type="id"/>
+        <field name="salutation" type="name"/>
+        <field name="jobTitle" type="name"/>
+        <field name="firstName" type="name"/>
+        <field name="lastName" type="name"/>
+        <field name="department" type="name"/>
+        <!-- TODO: it's possible to create the nickname, middle name, and other Person fields, but the create service doesn't support that yet -->
+        <field name="birthDate" type="id"><description>Date format is 8/15/2006</description></field>
+        <field name="webSiteUrl" type="value"/>
+        <field name="emailAddress1" type="value"/>
+        <field name="emailAddress2" type="value"/>
+        <field name="emailAddress3" type="value"/>
+        <field name="telephone1" type="name"><description>The system is capable of decoding numbers like "(800) 123.456 x777 cell"</description></field>
+        <field name="telephone2" type="name"/>
+        <field name="telephone3" type="name"/>
+        <field name="fax" type="name"/>
+        <field name="createdOn" type="id"><description>Date format is 8/15/2006</description></field>
+
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>
+        <field name="partyId" type="id">
+            <description>When the Lead is imported, its Opentaps partyId is stored here.</description>
+        </field>
+
+        <prim-key field="leadId"/>
+    </entity>
+
+    <entity entity-name="MsCustomerAddress"
+        package-name="org.opentaps.dataimport.mscrm"
+        title="Intermediate import entity for MS CRM address data.">
+
+        <field name="customerAddressId" type="id-vlong"/>
+        <field name="addressNumber" type="id"/>
+        <field name="parentId" type="id-vlong"><description>This is an accountId, contactId or leadId</description></field>
+        <field name="toName" type="name"><description>This is mapped onto PostalAddress.toName, but only if it is not duplicating the information in line1</description></field>
+        <field name="line1" type="name"/>
+        <field name="line2" type="name"/>
+        <field name="line3" type="name"><description>This miscellaneous field is not currently imported</description></field>
+        <field name="city" type="name"/>
+        <field name="stateOrProvince" type="name"/>
+        <field name="country" type="name"/>
+        <field name="postalCode" type="name"/>
+        <field name="telephone1" type="name"><description>Saved as a PHONE_SHIPPING phone number for the Account, Contact or Lead</description></field>
+
+        <field name="processedTimestamp" type="date-time">
+            <description>Special field for system to record when entry was successfully imported.  
+                Do not use for any other purpose.</description>
+        </field>
+
+        <prim-key field="customerAddressId"/>
+        <prim-key field="addressNumber"/>
+    </entity>
+
+</entitymodel>

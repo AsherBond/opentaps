@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+  <!-- ========================================================= -->
+  <!-- ======================== Defaults ======================= -->
+  <!-- ========================================================= -->
+    <title>Tax Import Entities</title>
+    <description>Defines intermediate entities for importing tax rate data</description>
+    <copyright>Copyright (c) 2006 - 2007 Open Source Strategies, Inc.</copyright>
+    <author>Leon Torres (leon@opensourcestrategies.com)</author>
+    <version>1.0</version>
+
+    <!-- =========================== -->
+    <!-- org.opentaps.dataimport.tax -->  
+    <!-- =========================== -->
+
+    <!-- for precise definitions of the field types see the file framework/entity/fieldtype/fieldtypeXXX.xml for your database XXX -->
+
+    <entity entity-name="DataImportUSZipCodes"
+        package-name="org.opentaps.dataimport.orders"
+        title="Maps a 5 digit US ZIP code to its county and state.">
+        <field name="zipCode" type="id-ne"><description>5 digit US Zip code</description></field>
+        <field name="county" type="description"><description>Name of the county preferrably in all upper case letters.</description></field>
+        <field name="stateCode" type="id-ne"><description>Two letter state code such as NY</description></field>
+        
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="processedTimestamp" type="date-time"><description>When the record was processed</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <prim-key field="zipCode"/>
+        <prim-key field="county"/>
+        <prim-key field="stateCode"/>
+        <!-- TODO foreign keys for created geo ids, etc. -->
+    </entity>
+
+    <entity entity-name="DataImportUSCountyTax"
+        package-name="org.opentaps.dataimport.orders"
+        title="Tax rates by county.">
+        <field name="county" type="description"><description>Name of the county preferrably in all upper case letters.  Must correspond to those in DataImportUSZipCodes</description></field>
+        <field name="stateCode" type="id-ne"><description>Two letter state code such as NY</description></field>
+        <field name="taxRate" type="floating-point"><description>Component rate for county that is added to any other tax rates for the jurdistiction.</description></field>
+        <field name="inheritExemptions" type="indicator"></field>
+
+        <field name="importStatusId" type="id-ne"><description>Status of record import.  Null is the same as DATAIMP_NOT_PROC.</description></field>
+        <field name="processedTimestamp" type="date-time"><description>When the record was processed</description></field>
+        <field name="importError" type="very-long"><description>Error report for failed imports.</description></field>
+        <prim-key field="county"/>
+        <prim-key field="stateCode"/>
+    </entity>
+
+</entitymodel>

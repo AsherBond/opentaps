@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<entity-engine-xml>
+
+    <!--
+        US County Tax Codes as of 2008-06-01.  These rates already include the state tax rate.
+        Make sure the TaxAuthorityRateProduct entries for state taxes (NY) are removed.
+    -->
+    <DataImportUSCountyTax stateCode="NY" county="ALBANY" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="ALLEGANY" taxRate="8.5" />
+    <DataImportUSCountyTax stateCode="NY" county="BROOME" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="CAYUGA" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="CHAUTAUQUA" taxRate="8.25" />
+    <DataImportUSCountyTax stateCode="NY" county="CHEMUNG" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="CHENANGO" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="CLINTON" taxRate="7.75" />
+    <DataImportUSCountyTax stateCode="NY" county="COLUMBIA" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="CORTLAND" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="DELAWARE" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="DUTCHESS" taxRate="8.125" />
+    <DataImportUSCountyTax stateCode="NY" county="ERIE" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="ESSEX" taxRate="7.75" />
+    <DataImportUSCountyTax stateCode="NY" county="FRANKLIN" taxRate="7" />
+    <DataImportUSCountyTax stateCode="NY" county="FULTON" taxRate="7" />
+    <DataImportUSCountyTax stateCode="NY" county="GENESEE" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="GREENE" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="HAMILTON" taxRate="7" />
+    <DataImportUSCountyTax stateCode="NY" county="HERKIMER" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="JEFFERSON" taxRate="7.75" />
+    <DataImportUSCountyTax stateCode="NY" county="LEWIS" taxRate="7.75" />
+    <DataImportUSCountyTax stateCode="NY" county="LIVINGSTON" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="MADISON" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="MONROE" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="MONTGOMERY" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="NASSAU" taxRate="8.625" />
+    <DataImportUSCountyTax stateCode="NY" county="NEW YORK CITY" taxRate="8.375" />
+    <DataImportUSCountyTax stateCode="NY" county="NIAGARA" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="ONEIDA" taxRate="9.5" />
+    <DataImportUSCountyTax stateCode="NY" county="ONONDAGA" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="ONTARIO" taxRate="7" />
+    <DataImportUSCountyTax stateCode="NY" county="ORANGE" taxRate="8.125" />
+    <DataImportUSCountyTax stateCode="NY" county="ORLEANS" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="OSWEGO" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="PUTNAM" taxRate="7.375" />
+    <DataImportUSCountyTax stateCode="NY" county="RENSSELAER" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="ROCKLAND" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="SAINT LAWRENCE" taxRate="7" />
+    <DataImportUSCountyTax stateCode="NY" county="SARATOGA" taxRate="7" />
+    <DataImportUSCountyTax stateCode="NY" county="SCHENECTADY" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="SCHOHARIE" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="SCHUYLER" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="SENECA" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="STEUBEN" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="SUFFOLK" taxRate="8.625" />
+    <DataImportUSCountyTax stateCode="NY" county="SULLIVAN" taxRate="7.5" />
+    <DataImportUSCountyTax stateCode="NY" county="TIOGA" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="TOMPKINS" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="ULSTER" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="WARREN" taxRate="7" />
+    <DataImportUSCountyTax stateCode="NY" county="WASHINGTON" taxRate="7" />
+    <DataImportUSCountyTax stateCode="NY" county="WAYNE" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="WESTCHESTER" taxRate="7.375" />
+    <DataImportUSCountyTax stateCode="NY" county="WYOMING" taxRate="8" />
+    <DataImportUSCountyTax stateCode="NY" county="YATES" taxRate="8" />
+
+</entity-engine-xml>

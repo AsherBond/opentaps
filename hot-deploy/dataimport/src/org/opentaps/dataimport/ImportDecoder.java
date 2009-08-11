@@ -1,0 +1,48 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+package org.opentaps.dataimport;
+
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.service.LocalDispatcher;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+/**
+ * Interface that defines a function to map a flat entity into
+ * a set of Opentaps entities.
+ *
+ * Note that optional arguments to decode() may be supplied via OpentapsImporter constructor.  Alternatively,
+ * an implementation of this could store the necessary parameters from construction.
+ */
+public interface ImportDecoder {
+
+    /**
+     * Decode the given flatEntity into a List of opentaps entities for importing.  Supplementary arguments may be provided.
+     * Exceptions from the entity or service engines are handled by the import system.  An importTime is provided by
+     * the import system if you wish to set a date equal to the time of import.
+     *
+     * You may also want to add the flatEntity to the return list as well, in case you want to update it.  For instance, if
+     * you wish to link the flatEntity.importedProductId to the Product.productId that is created.  Note that the
+     * import process will handle updating the importStatusId, exception and processedTimestamp fields.
+     *
+     * If this method throws *any* kind of exception, the import of this particular entity will be aborted and the import
+     * will continue to the next entry.
+     */
+    public List<GenericValue> decode(GenericValue flatEntity, Timestamp importTime, GenericDelegator delegator, LocalDispatcher dispatcher, Object... args) throws Exception;
+
+}
