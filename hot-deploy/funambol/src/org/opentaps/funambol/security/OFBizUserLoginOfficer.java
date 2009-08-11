@@ -81,7 +81,7 @@ public class OFBizUserLoginOfficer extends UserProvisioningOfficer
         
         try
         {
-            Map userData = _dispatcher.runSync("userLogin", UtilMisc.toMap("login.username", username, "login.password", password, "isServiceAuth", true));
+            Map userData = _dispatcher.runSync("userLogin", UtilMisc.<String, Object>toMap("login.username", username, "login.password", password, "isServiceAuth", true));
             GenericValue userLogin = (GenericValue)userData.get("userLogin");
             if(userLogin == null)
             {

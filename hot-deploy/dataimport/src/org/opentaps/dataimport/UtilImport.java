@@ -108,7 +108,7 @@ public class UtilImport {
 
         if (partySupplementalData == null) {
             // create a new partySupplementalData
-            Map<String, String> input = UtilMisc.toMap("partyId", partyId, fieldToUpdate, contactMech.get("contactMechId"));
+            Map<String, String> input = UtilMisc.toMap("partyId", partyId, fieldToUpdate, contactMech.getString("contactMechId"));
             return delegator.makeValue("PartySupplementalData", input);
         }
 

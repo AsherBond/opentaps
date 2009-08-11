@@ -65,7 +65,7 @@ public class CommissionRatesDecoder implements ImportDecoder {
         // 2.  call ensurePartyRole service to create COMMISSION_AGENT role for DICCR.primaryPartyId
         Map input = UtilMisc.toMap("partyId", dataImportCustomer.getString("primaryPartyId"));
         input.put("roleTypeId", "COMMISSION_AGENT");
-        Map<String, String> output = dispatcher.runSync("ensurePartyRole", input);
+        Map<String, Object> output = dispatcher.runSync("ensurePartyRole", input);
         if (ServiceUtil.isError(output)) {
             TransactionUtil.rollback();
             Debug.logWarning("Fail to import customer commission["+dataImportCustomer.getString("primaryPartyId")+"] because data was bad.  Check preceding warnings for reason.", module);

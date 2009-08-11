@@ -71,7 +71,7 @@ public class NetSuiteItemDecoder implements ImportDecoder {
                 GenericValue category = EntityUtil.getFirst( delegator.findByAndCache("ProductCategory", UtilMisc.toMap("categoryName", categoryName)) );
                 if (category == null) {
                     categoryId = delegator.getNextSeqId("ProductCategory");
-                    category = delegator.makeValue("ProductCategory", null);
+                    category = delegator.makeValue("ProductCategory");
                     category.put("productCategoryId", categoryId);
                     category.put("productCategoryTypeId", "CATALOG_CATEGORY");
                     category.put("categoryName", categoryName);
@@ -94,7 +94,7 @@ public class NetSuiteItemDecoder implements ImportDecoder {
         }
 
         // create a product based on the item values
-        GenericValue product = delegator.makeValue("Product", null);
+        GenericValue product = delegator.makeValue("Product");
         product.put("productId", productId);
         product.put("internalName", entry.get("itemName"));
         product.put("productName", entry.get("fullName"));
@@ -130,7 +130,7 @@ public class NetSuiteItemDecoder implements ImportDecoder {
 
         // add virtual products to the product category
         if (hasCategory && entry.get("parentId") == null) {
-            GenericValue pcm = delegator.makeValue("ProductCategoryMember", null);
+            GenericValue pcm = delegator.makeValue("ProductCategoryMember");
             pcm.put("productId", productId);
             pcm.put("productCategoryId", categoryId);
             pcm.put("fromDate", importTimestamp);
@@ -140,7 +140,7 @@ public class NetSuiteItemDecoder implements ImportDecoder {
         // import UPCA/UPCE or if it isn't a valid UPC, then OTHER_ID
         String upcValue = entry.getString("upcitemCode");
         if (upcValue != null) {
-            GenericValue upca = delegator.makeValue("GoodIdentification", null);
+            GenericValue upca = delegator.makeValue("GoodIdentification");
             upca.put("goodIdentificationTypeId", UtilProduct.isValidUPC(upcValue) ? (upcValue.length() == 12 ? "UPCA" : "UPCE") : "OTHER_ID");
             upca.put("productId", productId);
             upca.put("idValue", upcValue);
@@ -168,7 +168,7 @@ public class NetSuiteItemDecoder implements ImportDecoder {
         }
 
         // create a variant relationship
-        GenericValue assoc = delegator.makeValue("ProductAssoc", null);
+        GenericValue assoc = delegator.makeValue("ProductAssoc");
         assoc.put("productId", entry.get("parentId"));
         assoc.put("productIdTo", entry.getString("itemId"));
         assoc.put("productAssocTypeId", "PRODUCT_VARIANT");
@@ -215,7 +215,7 @@ public class NetSuiteItemDecoder implements ImportDecoder {
         }
 
         // create the product feature applications
-        GenericValue colorAppl = delegator.makeValue("ProductFeatureAppl", null);
+        GenericValue colorAppl = delegator.makeValue("ProductFeatureAppl");
         colorAppl.put("productId", entry.getString("itemId"));
         colorAppl.put("productFeatureId", colorFeatureId);
         colorAppl.put("productFeatureApplTypeId", "STANDARD_FEATURE");
@@ -223,7 +223,7 @@ public class NetSuiteItemDecoder implements ImportDecoder {
         colorAppl.put("sequenceNum", 1);
         toBeStored.add(colorAppl);
 
-        GenericValue sizeAppl = delegator.makeValue("ProductFeatureAppl", null);
+        GenericValue sizeAppl = delegator.makeValue("ProductFeatureAppl");
         sizeAppl.put("productId", entry.getString("itemId"));
         sizeAppl.put("productFeatureId", sizeFeatureId);
         sizeAppl.put("productFeatureApplTypeId", "STANDARD_FEATURE");

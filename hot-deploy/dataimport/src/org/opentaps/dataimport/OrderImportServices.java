@@ -284,7 +284,7 @@ public class OrderImportServices {
         // purchase orders must be assigned to a ship group
         GenericValue oisg = null;
         if (isPurchaseOrder) {
-            oisg = delegator.makeValue("OrderItemShipGroup", null);
+            oisg = delegator.makeValue("OrderItemShipGroup");
             oisg.put("orderId", orderId);
             oisg.put("shipGroupSeqId", defaultShipGroupSeqId);
             oisg.put("carrierPartyId", "_NA_");
@@ -319,7 +319,7 @@ public class OrderImportServices {
                 Debug.logInfo("No shipping address found for customer [" + customerPartyId + "].  Not creating ship group for the order.", module);
             } else {
                 String contactMechId = EntityUtil.getFirst(shippingAddresses).getString("contactMechId");
-                oisg = delegator.makeValue("OrderItemShipGroup", null);
+                oisg = delegator.makeValue("OrderItemShipGroup");
                 oisg.put("orderId", orderId);
                 oisg.put("shipGroupSeqId", defaultShipGroupSeqId);
                 oisg.put("carrierPartyId", carrierPartyId);
@@ -335,7 +335,7 @@ public class OrderImportServices {
         // handle the shipping total as a whole order one
         Double shippingTotal = externalOrderHeader.getDouble("shippingTotal");
         if (shippingTotal != null && shippingTotal > 0.0) {
-            GenericValue adj = delegator.makeValue("OrderAdjustment", null);
+            GenericValue adj = delegator.makeValue("OrderAdjustment");
             adj.put("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
             adj.put("orderAdjustmentTypeId", "SHIPPING_CHARGES");
             adj.put("orderId", orderId);
@@ -353,7 +353,7 @@ public class OrderImportServices {
             if (taxAuth == null) {
                 Debug.logWarning("Order [" + orderId + "] has a tax to an unknown tax authority.  No entry for taxAuthPartyId [" + taxAuthPartyId + "] found in TaxAuthority.", module);
             } else {
-                GenericValue adj = delegator.makeValue("OrderAdjustment", null);
+                GenericValue adj = delegator.makeValue("OrderAdjustment");
                 adj.put("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
                 adj.put("orderAdjustmentTypeId", "SALES_TAX");
                 adj.put("orderId", orderId);
@@ -439,7 +439,7 @@ public class OrderImportServices {
                 if (taxAuth == null) {
                     Debug.logWarning("Order Item [" + orderId + "," + orderItemSeqId + "] has a tax to an unknown tax authority.  No entry for taxAuthPartyId [" + taxAuthPartyId + "] found in TaxAuthority.", module);
                 } else {
-                    GenericValue adj = delegator.makeValue("OrderAdjustment", null);
+                    GenericValue adj = delegator.makeValue("OrderAdjustment");
                     adj.put("orderAdjustmentId", delegator.getNextSeqId("OrderAdjustment"));
                     adj.put("orderAdjustmentTypeId", "SALES_TAX");
                     adj.put("orderId", orderId);

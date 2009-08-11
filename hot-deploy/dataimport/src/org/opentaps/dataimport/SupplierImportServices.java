@@ -181,7 +181,7 @@ class SupplierDecoder implements ImportDecoder {
         if (netPaymentDays != null && netPaymentDays.longValue() > 0) {
             String agreementId = delegator.getNextSeqId("Agreement");
 
-            Map<String, Object> agreement = UtilMisc.toMap("agreementId", agreementId);
+            Map<String, Object> agreement = UtilMisc.<String, Object>toMap("agreementId", agreementId);
             agreement.put("partyIdFrom", organizationPartyId);
             agreement.put("partyIdTo", partyId);
             agreement.put("roleTypeIdTo", "SUPPLIER");
@@ -196,7 +196,7 @@ class SupplierDecoder implements ImportDecoder {
 
             if (netPaymentDays != null && netPaymentDays.longValue() > 0) {
                 itemSeqId++;
-                Map<String, Object> netPaymentDaysItem = UtilMisc.toMap("agreementId", agreementId, "agreementItemSeqId", Integer.valueOf(itemSeqId).toString(), "agreementItemTypeId", "AGREEMENT_PAYMENT");
+                Map<String, Object> netPaymentDaysItem = UtilMisc.<String, Object>toMap("agreementId", agreementId, "agreementItemSeqId", Integer.valueOf(itemSeqId).toString(), "agreementItemTypeId", "AGREEMENT_PAYMENT");
                 toBeStored.add(delegator.makeValue("AgreementItem", netPaymentDaysItem));
                 Map<String, Object> netPaymentDaysTerm = UtilMisc.toMap("agreementId", agreementId, "agreementTermId", delegator.getNextSeqId("AgreementTerm"), "termTypeId", "FIN_PAYMENT_TERM", "agreementItemSeqId", Integer.valueOf(itemSeqId).toString(), "termDays", netPaymentDays, "currencyUomId", baseCurrencyUomId);
                 toBeStored.add(delegator.makeValue("AgreementTerm", netPaymentDaysTerm));
