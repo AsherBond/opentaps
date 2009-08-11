@@ -219,7 +219,7 @@ public class TaskSyncHandler extends AbstractSyncHandler<CalendarContent> implem
     public String addItem(CalendarContent source) throws GeneralException 
     {               
         //1a. convert basic params
-        Map<String, Object> params = UtilMisc.toMap("workEffortTypeId", getWorkEffortType());       
+        Map params = UtilMisc.toMap("workEffortTypeId", getWorkEffortType());       
         _converters.getConverter("CREATE", source).toMap(source, params);
         
                 //1b. if it is an all day event, we need to set start and end time from defaults
@@ -241,7 +241,7 @@ public class TaskSyncHandler extends AbstractSyncHandler<CalendarContent> implem
         
         //4. now create a WEPA to link sync user to the WorkEffort
         String effortId = effortInfo.get("workEffortId").toString();        
-        Map<String, Object> assingPartyParams = UtilMisc.toMap("workEffortId", effortId, "partyId", _syncPartyId);
+        Map assingPartyParams = UtilMisc.toMap("workEffortId", effortId, "partyId", _syncPartyId);
         assingPartyParams.put("statusId", "PRTYASGN_ASSIGNED");
         assingPartyParams.put("roleTypeId", _type.getRoleType());
         _syncSource.runSync("assignPartyToWorkEffort", assingPartyParams);
@@ -433,7 +433,7 @@ public class TaskSyncHandler extends AbstractSyncHandler<CalendarContent> implem
     public void updateItem(String key, CalendarContent source) throws GeneralException 
     {
         //1. convert basic data
-        Map<String, Object> params = UtilMisc.toMap("workEffortId", key);
+        Map params = UtilMisc.toMap("workEffortId", key);
         GenericValue workEffort = _syncSource.findByPrimaryKey("WorkEffort", params);
         _converters.getConverter("CREATE", source).toMap(source, params);
         
