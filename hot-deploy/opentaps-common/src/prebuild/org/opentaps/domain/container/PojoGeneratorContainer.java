@@ -410,6 +410,8 @@ public class PojoGeneratorContainer implements Container {
                     relationInfo.put("relationName", modelRelation.getTitle() + modelRelation.getRelEntityName());
                     // the names are pluralized for relation of type many
                     String accessorName = modelRelation.getTitle() + modelRelation.getRelEntityName();
+                    // title may have white spaces, remove them to use as an attribute in the java class
+                    accessorName = accessorName.replaceAll(" ", "");
                     // justify if need create hibernate mapping annotation
                     String isNeedMapping = "Y";
                     if ("many".equals(modelRelation.getType())) {
