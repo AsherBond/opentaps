@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.5.0_05" class="java.beans.XMLDecoder"> 
+ <object class="com.funambol.framework.engine.transformer.DataTransformerManager"> 
+  <void property="dataTransformersIn"> 
+   <void method="put"> 
+    <string>b64</string> 
+    <string>com.funambol.server.engine.transformer.B64Decoder</string> 
+   </void> 
+   <void method="put"> 
+    <string>des</string> 
+    <string>com.funambol.server.engine.transformer.DESDecoder</string> 
+   </void> 
+  </void> 
+  <void property="dataTransformersOut"> 
+   <void method="put"> 
+    <string>b64</string> 
+    <string>com.funambol.server.engine.transformer.B64Encoder</string> 
+   </void> 
+   <void method="put"> 
+    <string>des</string> 
+    <string>com.funambol.server.engine.transformer.DESEncoder</string> 
+   </void> 
+  </void> 
+  <void property="sourceUriTrasformationsRequired"> 
+   <void method="put"> 
+    <string>scard</string> 
+    <string>b64</string> 
+   </void> 
+   <void method="put"> 
+    <string>briefcase</string> 
+    <string>b64</string> 
+   </void> 
+   <void method="put"> 
+    <string>scal</string> 
+    <string>b64</string> 
+   </void> 
+   <void method="put"> 
+    <string>stask</string> 
+    <string>b64</string> 
+   </void> 
+   <void method="put"> 
+    <string>snote</string> 
+    <string>b64</string> 
+   </void> 
+  </void> 
+ </object> 
+</java> 

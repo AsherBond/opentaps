@@ -1,0 +1,69 @@
+[Postgres setup on Fedora]
+DO NOT USE service postgresql initdb!!
+Instead:
+0. su - postgres
+1. rm -rf data/*
+2. initdb -A md5 --pwprompt -D data
+
+[Postgres setup on Ubuntu 7.04]
+1. sudo apt-get install postgresql-8.2
+2. sudo su - postgresql
+
+[Postgres setup on linux - general]
+3. Edit PGDATA/postgresql.conf
+ listen_addresses = '*' 
+4. Edit PGDATA/pg_hba.conf
+ host    all         all         192.168.0.1/32        md5
+ 
+[Schema Setup]
+0. Make sure postgres service is running
+1. psql -U <superuser>
+ #<password>
+2. create user funambol password 'funambol';
+3. create database funambol owner funambol;
+4. \q
+5. psql funambol funambol
+ #<password>
+6. List all tables - you should see "No relations found":
+ \dt
+
+[Funambol Config]
+See: funambol_ds_server_administration_guide.pdf, v3.0, p.14
+
+1. Copy <POSTGRESQL_HOME>/jdbc/postgresql-8.2-505.jdbc3.jar to <OFBIZ_HOME>/framework/base/lib/common - because it must be loaded from same ClassLoader as commons-dbcp.jar
+2. Edit <DSS_HOME>/install.properties:
+ dbms=postgresql
+ ...
+ jdbc.classpath=postgresql-8.2-505.jdbc3.jar   #DO NOT use jdbc4.jar, is only for JDK1.6
+ jdbc.driver=org.postgresql.Driver
+ jdbc.url=jdbc:postgresql://localhost/funambol
+ jdbc.user=funambol
+ jdbc.password=funambol
+
+3. Open command prompt in <DSS_HOME>:
+ bin/install
+ # answer y to all questions
+ # At the end you should see the message ""
+
+4. Verify that schema was created and modules installed
+ psql funambol funambol
+ \dt
+ #You should see a list starting with "fnbl_client_mapping", ending with "fnbl_user_role", and "(40 rows)"
+
+5. Verify that the config now points to this schema:
+
+TODO: JNDI config 
+ SETUP DS: Tomcat standalone, is standard context.xml, but in OFbiz will be via our OFBizFakeJndiListener
+ POINT AT DS:   See FakeJndiPreparer
+
+TODO: driver config
+ See: XXX bean in opentaps-sync-config.xml
+ 
+ [Maintenance]
+ Make a backup:
+  pg_dump -f C:\var\fbol.sql -U funambol funambol
+ 
+ Restore from backup:
+  ...
+  psql funambol funambol #logon
+  \i C:\var\fbol.sql

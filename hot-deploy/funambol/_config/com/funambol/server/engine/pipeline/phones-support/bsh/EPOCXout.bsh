@@ -1,0 +1,307 @@
+/*
+ * Copyright (C) 2006-2007 Funambol
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.funambol.framework.core.*;
+import com.funambol.framework.core.Sync4jException;
+import com.funambol.framework.engine.pipeline.OutputMessageProcessor;
+import com.funambol.framework.engine.pipeline.MessageProcessingContext;
+import com.funambol.framework.logging.FunambolLogger;
+import com.funambol.framework.logging.FunambolLoggerFactory;
+
+import com.funambol.foundation.synclet.PIMItemsHandler;
+
+/**
+ * Contacts:
+ * =========
+ * Exchanges the position of TEL;VOICE;WORK: with the position of TEL;WORK;PREF:
+ * in order to have first TEL;WORK;PREF: and then TEL;VOICE;WORK:
+ * Replaces field EMAIL;INTERNET with EMAIL;INTERNET;HOME token.
+ * Adds X-SYNCMLREFx at email, url and phone tokens.
+ *
+ * Calendars:
+ * ==========
+ * . Event
+ *   Replaces T235900 with T240000 in the end date of an all day event.
+ *
+ * @version $Id: EPOCXout.bsh,v 1.4 2007/04/13 09:11:24 luigiafassina Exp $
+ */
+ 
+// ------------------------------------------------------------------- Constants
+private final String DTSTART = "DTSTART:";
+private final String DTEND   = "DTEND:"  ;
+
+// ---------------------------------------------------------------- Private data
+private final FunambolLogger log =
+    FunambolLoggerFactory.getLogger("engine.pipeline");
+
+private List xTokens = null;
+
+// ------------------------------------------------------ Synclet implementation
+importCommands("/com/funambol/server/engine/pipeline/phones-support/bsh/commands");
+/**
+ * Process and manipulate the output message.
+ *
+ * @param processingContext the message processing context
+ * @param message the message to be processed
+ * @throws Sync4jException
+ */
+void postProcessMessage(MessageProcessingContext processingContext,
+                        SyncML message                            )
+throws Sync4jException {
+
+    if (log.isTraceEnabled()) {
+        log.trace("EPOCXout.postProcessMessage(...)");
+    }
+
+    // This map contains the three lists of items separated based on their type
+    PIMItemsHandler pimItemsHandler = new PIMItemsHandler();
+    Map mapItems = pimItemsHandler.extractOutgoingPIMItems(message);
+    processPIMItems(mapItems);
+}
+
+/**
+ * Processes outgoing items.
+ *
+ * @param mapItems the map that contains the three lists of items separated
+ *                 based on their type
+ *
+ */
+void processPIMItems(Map mapItems) {
+    
+    //
+    // Cycle on vcard list
+    //
+    for (i: (List)mapItems.get(PIMItemsHandler.KEY_VCARD)) {
+        changeEmailField(i);
+        postProcessContacts(i);
+    }
+
+    //
+    // Cycle on vevent list
+    //
+    for (i: (List)mapItems.get(PIMItemsHandler.KEY_VEVENT)) {
+        postProcessEvents(i);
+    }
+}
+
+/**
+ * Processes outgoing contacts.
+ *
+ * Exchanges the position of TEL;VOICE;WORK: with the position of TEL;WORK;PREF:
+ * in order to have first TEL;WORK;PREF: and then TEL;VOICE;WORK:
+ *
+ * Adds X-SYNCMLREFx at email, url and phone tokens.
+ *
+ * @param i the item content
+ *
+ */
+void postProcessContacts(Item i) {
+    if (log.isTraceEnabled()) {
+        log.trace("EPOCXout.postProcessContacts(...)");
+    }
+
+    vCard = i.data.data;
+
+    int telVoiceWorkPosition = vCard.indexOf("TEL;VOICE;WORK:");
+    int telWorkPrefPosition  = vCard.indexOf("TEL;WORK;PREF:" );
+
+    if (telVoiceWorkPosition != -1 && telWorkPrefPosition != -1) {
+
+        telVoiceWork = vCard.substring(telVoiceWorkPosition,
+                                       vCard.indexOf(13, telVoiceWorkPosition));
+        telWorkPref  = vCard.substring(telWorkPrefPosition ,
+                                       vCard.indexOf(13, telWorkPrefPosition ));
+
+        vCard = vCard.substring(0, telVoiceWorkPosition - 1)
+              + vCard.substring(vCard.indexOf(13, telVoiceWorkPosition) + 1);
+
+        telWorkPrefPosition = vCard.indexOf("TEL;WORK;PREF:");
+
+        vCard = vCard.substring(0, telWorkPrefPosition - 1)
+              + vCard.substring(vCard.indexOf(13, telWorkPrefPosition) + 1);
+
+        vCard = vCard.replaceAll("TEL;FAX;WORK:",
+                                 telVoiceWork + "\r\nTEL;FAX;WORK:");
+        vCard = vCard.replaceAll("END:VCARD", telWorkPref + "\r\nEND:VCARD");
+    }
+
+    vCard = handleXParams(vCard);
+
+    i.data.setData(vCard);
+}
+
+/**
+ * Adds X-SYNCMLREFx at email, url and phone tokens.
+ *
+ * @param data the vCard content
+ *
+ * @return the vCard with replaced tokens
+ */
+String handleXParams(String data) {
+
+    for (int i=0; i<xTokens.size(); i++) {
+
+        token = (String)xTokens.get(i);
+
+        indtoken = 0;
+        indcolon = 0;
+        count    = 0;
+        inds     = 1;
+        while (inds != 0) {
+            if ((indtoken = data.indexOf(token, inds - 1)) != -1) {
+
+              ++count;
+
+              endline = data.indexOf("\r\n", indtoken + token.length());
+              value = data.substring(indtoken, endline);
+
+              inds = endline;
+
+              indcolon = data.indexOf(":", indtoken);
+
+              params = data.substring(indtoken + token.length(), indcolon);
+
+              start = data.substring(0, indtoken + token.length());
+
+              end = data.substring(indcolon);
+
+              StringBuffer sb = new StringBuffer(start);
+              sb.append(";X-SYNCMLREF" + count);
+
+              java.util.StringTokenizer st =
+                  new java.util.StringTokenizer(params, ";");
+
+              while (st.hasMoreTokens()) {
+                param = (String)st.nextToken();
+
+                if (!param.startsWith("X-SYNCMLREF")) {
+                    sb.append(";" + param);
+                }
+              }
+
+              sb.append(end);
+
+              data = sb.toString();
+
+            } else {
+              inds = 0;
+            }
+        }
+    }
+    return data;
+}
+
+/**
+ * Initializes array list of contact properties.
+ */
+void init() {
+    xTokens = new ArrayList();
+
+    xTokens.add("\r\nTEL;WORK;PREF");
+    xTokens.add("\r\nTEL;CELL");
+    xTokens.add("\r\nTEL;FAX");
+    xTokens.add("\r\nTEL;VOICE");
+    xTokens.add("\r\nTEL;PREF;VOICE");
+    xTokens.add("\r\nEMAIL;INTERNET");
+    xTokens.add("\r\nURL");
+}
+
+/**
+ * Replaces field EMAIL;INTERNET with EMAIL;INTERNET;HOME token.
+ *
+ * @param i the item content
+ */
+void changeEmailField(Item i) {
+    data = i.data.data;
+
+    if(data.indexOf("EMAIL;INTERNET") != -1) {
+        data = replace (data, "EMAIL;INTERNET", "EMAIL;INTERNET;HOME");
+    }
+
+    i.data.setData(data);
+
+}
+
+/**
+ * Replaces a pattern string
+ *
+ * @param str the string to be modified
+ * @param pattern the pattern to be searche
+ * @param replace the replace substring
+ */
+String replace(String str, String pattern, String replace) {
+    int s = 0;
+    int e = 0;
+    StringBuffer result = new StringBuffer();
+
+    while ((e = str.indexOf(pattern, s)) >= 0) {
+        result.append(str.substring(s, e));
+        result.append(replace);
+        s = e+pattern.length();
+    }
+    result.append(str.substring(s));
+    return result.toString();
+}
+
+
+/**
+ * Processes outgoing events.
+ * Replaces T235900 with T240000 in the end date of an all day event.
+ *
+ * @param i the item content
+ *
+ */
+void postProcessEvents(Item i) {
+     if (log.isTraceEnabled()) {
+         log.trace("EPOCXout.postProcessEvents(...)");
+     }
+
+    i.data.data = fixAllDay(i.data.data);
+}
+
+/**
+ * Replaces T235900 with T240000 in the end date of an all day event.
+ *
+ * @param event the event content
+ *
+ * @return event with fixed all day
+ */
+String fixAllDay(String event) {
+
+  s = e = 0;
+  if ((s = event.indexOf(DTSTART)) != -1 &&
+      (e = event.indexOf(DTEND)  ) != -1   ) {
+
+      dtStart = event.substring(s, event.indexOf("\r\n", s));
+      dtEnd   = event.substring(e, event.indexOf("\r\n", e));
+
+      if (dtStart.indexOf("T000000") != -1 &&
+          dtEnd.indexOf("T235900")   != -1   ) {
+
+          dtEnd = dtEnd.replaceAll("T235900", "T240000");
+
+          StringBuffer sb = new StringBuffer(event.substring(0, e));
+          sb.append(dtEnd).append(event.substring(e + dtEnd.length()));
+
+          event = sb.toString();
+      }
+  }
+  return event;
+}

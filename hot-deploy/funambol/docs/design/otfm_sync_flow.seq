@@ -1,0 +1,28 @@
+# Parser Class: com.zanthan.sequence.parser.alternate.AlternateParserImpl
+DSS
+{
+  EntitySyncSource.beginSync
+  {
+    _spring: WebApplicationContext.getBean("otcontacthandler") -> _handler
+   {
+      _handler: ContactSyncHandler.<<create>> -> this;
+      _handler: ContactSyncHandler.setVariousProperties;
+   }
+  }
+  EntitySyncSource.getXXXItemKeys; 
+  EntitySyncSource.addSyncItem
+  {
+    _handler: ContactSyncHandler.addItem
+    {
+      LocalDispatcher.runSync("crmsfa.createContact");
+    }
+  }
+  EntitySyncSource.updateSyncItem -> SyncItemKey
+  {
+    ContactSyncHandler.addItem -> partyId
+    {
+      GenericDelegator.findXXX;
+    }
+  }
+  EntitySyncSource.removeSyncItem;
+} 

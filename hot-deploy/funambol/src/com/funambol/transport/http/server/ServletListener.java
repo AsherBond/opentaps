@@ -1,0 +1,48 @@
+/**
+ * Copyright (C) 2003-2007 Funambol
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+package com.funambol.transport.http.server;
+
+import com.funambol.server.config.Configuration;
+import javax.servlet.ServletContextListener;
+import javax.servlet.ServletContextEvent;
+
+/**
+ * Servlet context listener used to release the resources
+ * @version $Id: ServletListener.java,v 1.2 2007/01/11 11:49:26 nichele Exp $
+ */
+public class ServletListener implements ServletContextListener {
+
+    /**
+     * Called when a Web application is first ready to process requests
+     * (i.e. on Web server startup and when a context is added or reloaded).
+     *
+     * For example, here might be database connections established
+     * and added to the servlet context attributes.
+     */
+    public void contextInitialized(ServletContextEvent evt) {
+    }
+
+    /**
+     * Called when a Web application is about to be shut down
+     * (i.e. on Web server shutdown or when a context is removed or reloaded).
+     * Request handling will be stopped before this method is called.
+     *
+     * For example, the database connections can be closed here.
+     */
+    public void contextDestroyed(ServletContextEvent evt) {
+        Configuration.getConfiguration().release();
+    }
+}

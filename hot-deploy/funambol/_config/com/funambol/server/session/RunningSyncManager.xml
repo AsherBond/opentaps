@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.5.0" class="java.beans.XMLDecoder">
+  <object class="com.funambol.server.session.RunningSyncManager">
+    <void property="maxSyncAgeInMinutes">
+      <int>480</int> <!-- 8 hours -->
+    </void>
+    <void property="persistentStore">
+      <object class="com.funambol.server.store.RunningSyncPersistentStore">
+        <void property="sql">
+          <array class="java.lang.String" length="9">
+            <!--  SQL_INSERT   -->
+            <void index="0">
+              <string>insert into fnbl_running_sync (username, session, node, principal, device, start_sync) values (?,?,?,?,?,?)</string>
+            </void>
+            <!--  SQL_UPDATE -->
+            <void index="1">
+              <string>update fnbl_running_sync set session=?, node=?, principal=?, device=?, start_sync=? where username=?</string>
+            </void>
+            <!--  SQL_SELECT_ALL -->
+            <void index="2">
+              <string>select username, session, node, principal, device, start_sync from fnbl_running_sync</string>
+            </void>
+            <!--  SQL_SELECT -->
+            <void index="3">
+              <string>select username, session, node, principal, device, start_sync from fnbl_running_sync where username=?</string>
+            </void>
+            <!--  SQL_COUNT -->
+            <void index="4">
+              <string>select count(*) from fnbl_running_sync</string>
+            </void>
+            <!--  SQL_DELETE_USERNAME -->
+            <void index="5">
+              <string>delete from fnbl_running_sync where username=?</string>
+            </void>
+            <!--  SQL_DELETE_USERNAME_DEVICE -->
+            <void index="6">
+              <string>delete from fnbl_running_sync where username=? and device=?</string>
+            </void>
+            <!--  SQL_DELETE_NODE -->
+            <void index="7">
+              <string>delete from fnbl_running_sync where node=?</string>
+            </void>
+            <!--  SQL_DELETE_SESSION_ID -->
+            <void index="8">
+              <string>delete from fnbl_running_sync where session=?</string>
+            </void>
+          </array>
+        </void>
+      </object>
+    </void>
+  </object>
+</java>

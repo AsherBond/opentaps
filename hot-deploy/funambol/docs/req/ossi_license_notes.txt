@@ -1,0 +1,39 @@
+=== 
+= This file summarizes all the guidance received from OSSI about how any code committed by DBL, should be licensed.
+=  Most recent at top
+===
+
+[Cameron Smith 27/06/07]
+When you test it internally, before showing to client, please check the headers because you may disagree with my judgement about what header goes where. 
+
+[Si Chen 27/06/07]
+Ok, please give me a list of what you may have copied from ofbiz, what 
+you may have copied from funambol. 
+
+Also there is a file ADDITIONAL-LICENSE in opentaps-1.0.0/ so if you 
+could modify that to point to all your new jars I'd appreciate it. 
+===
+
+[Si Chen 09/06/07]
+Sorry but this is pretty important thing. If you copy any portion of 
+any file from OFBIZ, you have to include the license header from the 
+APACHE2_HEADER file in opentaps-1.0/ and then make a note 
+
+"This file has been modified by XXXXXX" 
+
+You could see this a lot in our components. Please look through the 
+apache 2.0 license if you have any questions, Section 4 
+"Redistribution," at http://www.apache.org/licenses/LICENSE-2.0.html 
+
+And then please put the generic open source strategies HPL header on all 
+files. 
+===
+
+[Si Chen 16/05/07]
+We can't have anything which uses a framework that we cannot include as 
+part of our open source product, so if you want to use your framework 
+you'd have to release it under a license compatible with ours at 
+opentaps. If you'd like, you can release it under a commercial/open 
+source license model--we would not require that you use the Apache/BSD 
+license. 
+===

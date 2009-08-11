@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<!--
+ * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  @author Cameron Smith (cameron.ord@database.co.mz)
+-->
+
+<ofbiz-component name="funambol"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+ <resource-loader name="main" type="component"/>
+ 	
+  <!-- Setup classpath (on standalone funambol would all be in WEB-INF/lib -->	
+  <classpath type="jar" location="lib/ext/*"/>
+  <classpath type="jar" location="lib/core/*"/>
+  <classpath type="jar" location="lib/modules/*"/>	
+  <classpath type="jar" location="../crmsfa/build/lib/*"/>
+  <classpath type="dir" location="build/classes"/> <!-- put here explicitly (outside WEB-INF/classes) so that we only use one classloader FBol + Spring -->
+	  
+  <!-- TODO: lib conflicts -->		
+	
+ <webapp name="funambol" location="webapp" mount-point="/funambol" server="default-server" title="Funambol Data Synchronization" app-bar-display="false"/>
+ 
+</ofbiz-component>

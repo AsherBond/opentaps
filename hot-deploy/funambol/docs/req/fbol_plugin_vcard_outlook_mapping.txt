@@ -1,0 +1,24 @@
+> ITEM: text/x-vcard, null
+> CONTENT: BEGIN:VCARD
+VERSION:2.1
+N:Yasar;Mohammad.;;;
+FN:Yasar, Mohammad.
+BDAY:
+TEL;WORK;FAX:
+ORG:
+EMAIL;INTERNET:mohammad.yasar@database.co.mz
+TEL;CELL:
+TEL;PAGER:
+TEL;WORK:
+TITLE:
+TEL;HOME:
+TEL;CAR:
+TEL;HOME;FAX:
+TEL;VOICE:
+CATEGORIES:
+URL:
+ADR;HOME:;;;;;;
+ADR:;;;;;;
+ADR;WORK:;;;;;;
+NOTE:
+END:VCARD

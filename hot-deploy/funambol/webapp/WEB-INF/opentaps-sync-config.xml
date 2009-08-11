@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--
+ *  @author Cameron Smith (cameron.ord@database.co.mz)
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+
+ <!-- 1. Configuration related to Funambol hosting inside OT (D1) -->	
+ <!--- 1.1. Set certain system properties which Funambol relies upon -->
+ <bean class="mz.co.dbl.siga.framework.util.SystemPropertiesSetter">	 
+  <property name="mappings">
+   <map>
+    <entry key="funambol.ds.home" value="hot-deploy/funambol"/>  <!-- path to funambol DS server component, relative to opentaps or absolute path -->
+   </map>	  
+  </property>	 		 
+ </bean>
+
+ <!-- 1.2. Substitute default JNDI with one we control, that gets datasource from OFBiz -->	
+ <bean class="org.opentaps.funambol.util.jndi.DataSourceFakeJndiPreparer"
+	   init-method="init" destroy-method="destroy">
+  <property name="dataSource" ref="funambolDS"/>
+  <property name="userDataSource" ref="funambolUserDS"/>
+  <!-- Since v7, the jndiDataSourceNames used are jdbc/fnblcore and jdbc/fnbluser and they are hardcoded -->
+  <property name="dsJndiName" value="jdbc/fnblcore"/>
+  <property name="dsUserJndiName" value="jdbc/fnbluser"/>
+  <property name="springJndiName" value="spring"/>	 
+ </bean>
+	
+ <!-- 1.3. Setup a javax.sql.DataSource for access to funambol schema -->	
+ <bean id="funambolDS" class="org.apache.commons.dbcp.BasicDataSource">
+  <property name="url" value="jdbc:postgresql://127.0.0.1/funambol"/>
+  <property name="driverClassName" value="org.postgresql.Driver"/>
+  <property name="username" value="funambol"/>
+  <property name="password" value="funambol"/>
+  <property name="defaultAutoCommit" value="true"/>	<!-- this setting is essential as Funambol is not TX-aware -->
+  <property name="maxActive" value="20"/>
+  <property name="maxIdle" value="2"/>
+  <property name="maxWait" value="5000"/>
+ </bean>	
+
+<!-- routing data source, for jdbc/fnbluser -->
+ <bean id="funambolUserDS" class="com.funambol.server.db.RoutingDataSource">
+  <constructor-arg><ref bean="routingDataSourceConfiguration"/></constructor-arg>
+ </bean>
+ 
+<!-- routing data source configuration, for initial routing data source -->
+ <bean id="routingDataSourceConfiguration" class="com.funambol.server.db.RoutingDataSourceConfiguration">
+  <constructor-arg>
+      <props>
+         <prop key="url">jdbc:postgresql://127.0.0.1/funambol</prop>
+         <prop key="driverClassName">org.postgresql.Driver</prop>
+         <prop key="username">funambol</prop>
+         <prop key="password">funambol</prop>
+         <prop key="url">jdbc:postgresql://127.0.0.1/funambol</prop>
+      </props>
+  </constructor-arg>
+  <constructor-arg><ref bean="partitioningCriteria"/></constructor-arg>
+  <constructor-arg><null/></constructor-arg>
+  
+ </bean>	
+
+ <bean id="partitioningCriteria" class="com.funambol.server.db.DummyPartitioningCriteria" />
+
+ <!-- 2.0 Configuration related to Sync Module in general -->
+	
+ <!-- 2.0.1 Bean<->Entity converters to deal with Funambol data beans -->
+ <bean id="converters" class="mz.co.dbl.siga.framework.entity.EntityBeanConverterRegistry"
+	   init-method="init">
+  <property name="propertyEditors">
+   <map>
+	<entry key="com.funambol.common.pim.common.Property" value="org.opentaps.funambol.common.PimPropertyEditor"/>  
+   </map>	  
+  </property>
+  <property name="beanConverters"> <!-- Customized Converters -->	
+   <map>
+    <entry key="TelecomNumber:com.funambol.common.pim.contact.Contact:PRIMARY_PHONE">
+	 <bean class="org.opentaps.funambol.sync.converter.TelecomNumberPhoneConverter">
+	  <constructor-arg>
+   	   <value>
+	    contactNumber=businessDetail.phones[propertyType=BusinessTelephoneNumber]
+	    askForName=name.firstName
+	   </value>
+	  </constructor-arg> 
+	 </bean>
+	</entry>
+	<entry key="PRIMARY_PHONE:com.funambol.common.pim.contact.Contact">
+	 <bean class="org.opentaps.funambol.sync.converter.TelecomNumberPhoneConverter">
+	  <constructor-arg>
+   	   <value>
+	    contactNumber=businessDetail.phones[propertyType=BusinessTelephoneNumber]
+	    askForName=name.firstName
+	   </value>
+	  </constructor-arg> 
+	 </bean>
+	</entry> 
+	<entry key="TelecomNumber:com.funambol.common.pim.contact.Contact:PHONE_HOME">
+	 <bean class="org.opentaps.funambol.sync.converter.TelecomNumberPhoneConverter">
+	  <constructor-arg>
+	   <value>
+	    contactNumber=personalDetail.phones[propertyType=HomeTelephoneNumber]
+	    askForName=name.firstName
+	   </value>
+	  </constructor-arg> 
+	 </bean>
+	</entry> 
+	<entry key="PHONE_HOME:com.funambol.common.pim.contact.Contact">
+	 <bean class="org.opentaps.funambol.sync.converter.TelecomNumberPhoneConverter">
+	  <constructor-arg>
+	   <value>
+	    contactNumber=personalDetail.phones[propertyType=HomeTelephoneNumber]
+	    askForName=name.firstName
+	   </value>
+	  </constructor-arg> 
+	 </bean>
+	</entry>        
+	<entry key="TelecomNumber:com.funambol.common.pim.contact.Contact:PHONE_MOBILE">
+	 <bean class="org.opentaps.funambol.sync.converter.TelecomNumberPhoneConverter">
+	  <constructor-arg> 
+	   <value>
+	    contactNumber=personalDetail.phones[propertyType=MobileTelephoneNumber]
+	    askForName=name.firstName
+	   </value>
+	  </constructor-arg> 
+	 </bean>
+	</entry>
+	<entry key="PHONE_MOBILE:com.funambol.common.pim.contact.Contact">
+	 <bean class="org.opentaps.funambol.sync.converter.TelecomNumberPhoneConverter">
+	  <constructor-arg> 
+	   <value>
+	    contactNumber=personalDetail.phones[propertyType=MobileTelephoneNumber]
+	    askForName=name.firstName
+	   </value>
+	  </constructor-arg> 
+	 </bean>
+	</entry>
+	<entry key="TelecomNumber:com.funambol.common.pim.contact.Contact:FAX_NUMBER">
+	 <bean class="org.opentaps.funambol.sync.converter.TelecomNumberPhoneConverter">
+	  <constructor-arg> 
+	   <value>
+	    contactNumber=businessDetail.phones[propertyType=BusinessFaxNumber]
+	    askForName=name.firstName
+	   </value>
+	  </constructor-arg> 
+	 </bean>
+	</entry>  
+	<entry key="FAX_NUMBER:TelecomNumber:com.funambol.common.pim.contact.Contact">
+	 <bean class="org.opentaps.funambol.sync.converter.TelecomNumberPhoneConverter">
+	  <constructor-arg> 
+	   <value>
+	    contactNumber=businessDetail.phones[propertyType=BusinessFaxNumber]
+	    askForName=name.firstName
+	   </value>
+	  </constructor-arg> 
+	 </bean>
+	</entry> 
+   </map>
+  </property>
+  <property name="converters"> <!-- Generic Converters, built up from properties -->
+   <map> 
+   	<entry key="PartySupplementalData:com.funambol.common.pim.contact.Contact">
+	 <value>
+ 	  companyName			=	businessDetail.company
+	 </value>
+	</entry>
+	<entry key="PRIMARY_WEB_URL:com.funambol.common.pim.contact.Contact">
+	 <value>
+ 	  infoString			=	personalDetail.webPages[propertyType=WebPage]
+	 </value>
+	</entry>
+   	<entry key="PRIMARY_EMAIL:com.funambol.common.pim.contact.Contact">
+	 <value>
+ 	  infoString			=	personalDetail.emails[propertyType=Email1Address]
+	 </value>
+	</entry>
+	<entry key="OTHER_EMAIL_SEC:com.funambol.common.pim.contact.Contact">
+	 <value>
+ 	  infoString			=	personalDetail.emails[propertyType=OtherEmail3Address]
+	 </value>
+	</entry>
+	<entry key="OTHER_EMAIL:com.funambol.common.pim.contact.Contact">
+	 <value>
+ 	  infoString			=	personalDetail.emails[propertyType=OtherEmail2Address]
+	 </value>
+	</entry>
+    <entry key="OTHER_LOCATION:com.funambol.common.pim.contact.Contact">
+	 <value>
+ 	  address1				=	personalDetail.otherAddress.street
+  	  address2				=	personalDetail.otherAddress.extendedAddress
+	  city					=	personalDetail.otherAddress.city
+	  countryGeoId			=	personalDetail.otherAddress.country
+	  postalCode			=	personalDetail.otherAddress.postalCode
+	  stateProvinceGeoId	=	personalDetail.otherAddress.state
+	 </value>
+	</entry>       
+   	<entry key="HOME_LOCATION:com.funambol.common.pim.contact.Contact">
+	 <value>
+ 	  address1				=	personalDetail.address.street
+  	  address2				=	personalDetail.address.extendedAddress
+	  city					=	personalDetail.address.city
+	  countryGeoId			=	personalDetail.address.country
+	  postalCode			=	personalDetail.address.postalCode
+	  stateProvinceGeoId	=	personalDetail.address.state
+	 </value>
+	</entry> 
+   	<entry key="GENERAL_LOCATION:com.funambol.common.pim.contact.Contact">
+	 <value>
+ 	  address1				=	businessDetail.address.street
+  	  address2				=	businessDetail.address.extendedAddress
+	  city					=	businessDetail.address.city
+	  countryGeoId			=	businessDetail.address.country
+	  postalCode			=	businessDetail.address.postalCode
+	  stateProvinceGeoId	=	businessDetail.address.state
+	 </value>
+	</entry> 
+	<entry key="Party:com.funambol.common.pim.contact.Contact:ACCOUNT"> <!-- service: crmsfa.updateAccount -->
+	 <value>
+	  groupName=businessDetail.company 
+	  groupNameLocal=businessDetail.company 
+	 </value>	 
+	</entry>   	
+	<entry key="Party:com.funambol.common.pim.contact.Contact:CONTACT"> <!-- service: crmsfa.updateContact -->
+	 <value>
+	  firstName=name.firstName
+      lastName=name.lastName
+      firstNameLocal=name.firstName
+      lastNameLocal=name.lastName
+	 </value>	 
+	</entry>    
+	<entry key="Party:com.funambol.common.pim.contact.Contact:PROSPECT"> <!-- service: crmsfa.updateLead -->
+	 <value>
+	  firstName=name.firstName
+      lastName=name.lastName
+      firstNameLocal=name.firstName
+      lastNameLocal=name.lastName
+      companyName=businessDetail.company
+	 </value>	 
+	</entry>    	   
+	
+	<entry key="PostalAddress:com.funambol.common.pim.contact.Contact:OTHER_LOCATION">
+	 <value>
+ 	  address1				=	personalDetail.otherAddress.street
+  	  address2				=	personalDetail.otherAddress.extendedAddress
+	  city					=	personalDetail.otherAddress.city
+	  countryGeoId			=	personalDetail.otherAddress.country
+	  postalCode			=	personalDetail.otherAddress.postalCode
+	  stateProvinceGeoId	=	personalDetail.otherAddress.state
+	 </value>
+	</entry>       
+   	<entry key="PostalAddress:com.funambol.common.pim.contact.Contact:HOME_LOCATION">
+	 <value>
+ 	  address1				=	personalDetail.address.street
+  	  address2				=	personalDetail.address.extendedAddress
+	  city					=	personalDetail.address.city
+	  countryGeoId			=	personalDetail.address.country
+	  postalCode			=	personalDetail.address.postalCode
+	  stateProvinceGeoId	=	personalDetail.address.state
+	 </value>
+	</entry> 
+   	<entry key="PostalAddress:com.funambol.common.pim.contact.Contact:GENERAL_LOCATION">
+	 <value>
+ 	  address1				=	businessDetail.address.street
+  	  address2				=	businessDetail.address.extendedAddress
+	  city					=	businessDetail.address.city
+	  countryGeoId			=	businessDetail.address.country
+	  postalCode			=	businessDetail.address.postalCode
+	  stateProvinceGeoId	=	businessDetail.address.state
+	 </value>
+	</entry>    
+	   	   
+	<!-- Task Converters -->
+	<entry key="CREATE:com.funambol.common.pim.calendar.Task">
+	 <value> 
+		workEffortName = summary
+		currentStatusId = status
+		estimatedCompletionDate = dueDate
+		estimatedStartDate = dtStart
+		actualCompletionDate = dateCompleted
+		percentComplete = percentComplete
+		description = description
+		priority = priority		
+	 </value>
+	</entry>
+	
+	<entry key="CREATE:com.funambol.common.pim.calendar.Event">
+	 <value> 
+		workEffortName = summary
+		estimatedCompletionDate = dtEnd
+		estimatedStartDate = dtStart
+		actualCompletionDate = dtEnd
+		actualStartDate = dtStart
+		description = description
+		priority = priority		
+		locationDesc = location
+	 </value>
+	</entry>
+   </map>	  
+  </property>	  
+ </bean>	
+	
+ <!-- 2.0.2 Master config for sync source -->	
+ <bean id="syncSourceConfig" class="org.opentaps.funambol.sync.EntitySyncSourceConfig">
+  <property name="handlerSuffix" value="Handler"/>	 
+  <property name="handlers">
+    <!-- 2.0.3 try to load each handler - forces spring to validate config so any probs are detected at startup and not at first sync -->
+   <list><ref bean="otcontactHandler"/><ref bean="ottaskHandler"/></list>
+  </property>
+ </bean>	
+	
+ <!-- 2.2 Configuration for Contacts --> 	
+ <bean id="otcontactHandler" class="org.opentaps.funambol.sync.ContactSyncHandler" scope="prototype">
+  <property name="mergeStrategy" value="merge"/> <!-- LEGITIMATE VALUES: client_wins, server_wins, merge -->
+  <property name="normalizeRemoveRegex" value="[^0-9A-Z]"/> <!-- remove anything which is not "pure" alphanumeric -->
+ </bean>
+
+ <!-- 2.3 Configuration for Tasks --> 	
+ <bean id="ottaskHandler" class="org.opentaps.funambol.sync.TaskSyncHandler" scope="prototype"> 
+  <property name="mergeStrategy" value="client_wins"/> <!-- LEGITIMATE VALUES: client_wins, server_wins -->
+  <property name="normalizeRemoveRegex" value="[^0-9A-Z]"/> <!-- remove anything which is not "pure" alphanumeric -->
+ </bean>
+ 
+ <!-- 2.4 Configuration for Calendar --> 	
+ <bean id="otcalendarHandler" class="org.opentaps.funambol.sync.TaskSyncHandler" scope="prototype"> 
+  <property name="type" value="text/x-s4j-sife"/>
+  <property name="mergeStrategy" value="client_wins"/> <!-- LEGITIMATE VALUES: client_wins, server_wins -->
+  <property name="normalizeRemoveRegex" value="[^0-9A-Z]"/> <!-- remove anything which is not "pure" alphanumeric -->
+ </bean>
+
+</beans>

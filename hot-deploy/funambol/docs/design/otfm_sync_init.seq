@@ -1,0 +1,30 @@
+# Parser Class: com.zanthan.sequence.parser.alternate.AlternateParserImpl
+OT_JVM
+{
+    ComponentContainer.init
+    {
+      OTFM.load
+      {
+        this.set_classpath;
+        this.load_webapps
+        {
+           _spring: WebApplicationContext.init
+           {
+              funambolDS: BasicDataSource.<<create>>;
+              EntityBeanConverterRegistry.prepare;
+              DataSourceFakeJndiPreparer.init; 
+           }
+           DSS_Servlet.init
+           {
+             DataSourceFakeJndiPreparer.lookup("funambolDS") -> BasicDataSource;
+
+             EntitySyncSource.init
+             {
+               DataSourceFakeJndiPreparer.lookup("spring") -> WebApplicationContext;
+               _spring: WebApplicationContext.getBeans -> allOtherConfig;
+             }
+           }
+        }
+      }
+    }
+} 

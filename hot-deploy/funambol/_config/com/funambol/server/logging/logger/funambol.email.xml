@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.5.0_04" class="java.beans.XMLDecoder"> 
+ <object class="com.funambol.framework.config.LoggerConfiguration"> 
+  <void property="append"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="appenders"> 
+   <object class="java.util.ArrayList"> 
+    <void method="add"> 
+     <string>FunambolConsole</string> 
+    </void> 
+    <void method="add"> 
+     <string>FunambolLogFile</string> 
+    </void> 
+   </object> 
+  </void> 
+  <void property="count"> 
+   <int>1</int> 
+  </void> 
+  <void property="inherit"> 
+   <boolean>true</boolean> 
+  </void> 
+  <void property="level"> 
+   <string>INFO</string> 
+  </void> 
+  <void property="limit"> 
+   <int>100</int> 
+  </void> 
+  <void property="name"> 
+   <string>funambol.email</string> 
+  </void> 
+  <void property="pattern"> 
+   <string>logs/funambol_ds.email.log</string> 
+  </void> 
+ </object> 
+</java> 

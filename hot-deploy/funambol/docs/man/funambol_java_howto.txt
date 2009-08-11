@@ -1,0 +1,6 @@
+[Jar/Library conflicts with core OFBiz]
+ log4j-1.2.14 -> framework/base/lib
+ bsh-2.04b -> framework/base/lib/scripting (JIRA-528 mod)
+
+[Other issues]
+ funambol-admin-dev.jar - we need it on build path, but also at runtime?

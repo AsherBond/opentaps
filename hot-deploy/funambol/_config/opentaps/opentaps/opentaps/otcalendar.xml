@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.5.0_05" class="java.beans.XMLDecoder"> 
+ <object class="org.opentaps.funambol.sync.EntitySyncSource"> 
+  <void property="info"> 
+   <object class="com.funambol.framework.engine.source.SyncSourceInfo"> 
+    <void property="supportedTypes"> 
+     <array class="com.funambol.framework.engine.source.ContentType" length="1"> 
+      <void index="0"> 
+       <object class="com.funambol.framework.engine.source.ContentType"> 
+        <void property="type"> 
+         <string>text/x-s4j-sife</string> 
+        </void> 
+        <void property="version"> 
+         <string>1.0</string> 
+        </void> 
+       </object> 
+      </void> 
+     </array> 
+    </void> 
+   </object> 
+  </void> 
+  <void property="name"> 
+   <string>otcalendar</string> 
+  </void> 
+  <void property="sourceURI"> 
+   <string>otcalendar</string> 
+  </void> 
+  <void property="type"> 
+   <string>text/x-s4j-sife</string> 
+  </void> 
+ </object> 
+</java> 
