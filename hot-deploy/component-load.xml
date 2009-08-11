@@ -28,9 +28,9 @@ under the License.
     <load-component component-location="financials"/>
     <load-component component-location="purchasing"/>
     <load-component component-location="warehouse"/>
+    <load-component component-location="dataimport"/>
     <load-component component-location="opentaps-tests"/>
     <!--
-    <load-component component-location="dataimport"/>
     <load-component component-location="livecatalog"/>
     <load-component component-location="analytics"/>
     <load-component component-location="homeapps"/>
