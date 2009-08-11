@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--/* @author: Michele Orru' (michele.orru@integratingweb.com) */-->
+
+
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entitymodel.xsd">
+    <title>Entity definitions for the HomeWebApps application</title>
+    <copyright></copyright>
+    <author>Michele Orru - IntegratingWeb</author>
+
+    <entity entity-name="HomeWebApps"
+            package-name="org.ofbiz.homewebapps"
+            title="Opentaps Home Web Applications Entity">
+      <field name="applicationId" type="id-long-ne"></field>
+      <field name="name" type="long-varchar"></field>
+      <field name="description" type="description"></field>
+      <field name="imageUrl" type="long-varchar"></field>
+      <field name="imageHoverUrl" type="long-varchar"></field>
+      <field name="linkUrl" type="long-varchar"></field>
+      <prim-key field="applicationId"/>
+    </entity>
+
+</entitymodel>

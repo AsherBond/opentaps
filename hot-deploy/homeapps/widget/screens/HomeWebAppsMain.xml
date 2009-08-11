@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--/* @author: Michele Orru' (michele.orru@integratingweb.com) */-->
+
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+
+    <screen name="main-decorator">
+        <section>
+            <actions>
+                <property-map resource="opentaps" map-name="configProperties" global="true"/>
+                <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/main-decorator.bsh"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://opentaps-common/webapp/common/includes/main-decorator.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="main-section-decorator">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <include-screen name="main-section-template" location="component://opentaps-common/widget/screens/common/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="main">
+        <section>
+            <actions>
+                <set field="pageTitleLabel" value="Opentaps Home"/>
+                <property-map resource="opentaps" map-name="configProperties" global="true"/>
+                <script location="component://homeapps/webapp/homeapps/WEB-INF/actions/main-decorator.bsh"/>
+                <script location="component://homeapps/webapp/homeapps/WEB-INF/actions/getHomeApplications.bsh"/>
+                <script location="component://homeapps/webapp/homeapps/WEB-INF/actions/retrievePartyInfos.bsh"/>
+            </actions>
+            <widgets>
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://homeapps/webapp/homeapps/includes/header.ftl"/>
+                            </html>
+                        </platform-specific>
+
+                        <platform-specific>
+                            <html>
+                               <html-template location="component://homeapps/webapp/homeapps/main.ftl"/>
+                            </html>
+                        </platform-specific>
+                
+                        <platform-specific>
+                            <html>
+                               <html-template location="component://homeapps/webapp/homeapps/includes/footer.ftl"/>
+                            </html>
+                        </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+
+
+</screens>

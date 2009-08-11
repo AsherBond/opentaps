@@ -1,0 +1,124 @@
+/*
+ * Copyright (C) 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/* @author: Michele Orru' (michele.orru@integratingweb.com) */
+
+/* Here we suppose that the applicationId defined for an application in the entity HomeWebApps
+   is equal to the webapp name of the same application, defined in his own ofbiz-component.xml.
+
+   An example.
+   
+   We define the following in hot-deploy/homeapps/HomeAppsSeedData.xml:
+   <HomeWebApps applicationId="party" name="Parties and Users" description="Party Description."
+     imageUrl="/opentaps_images/integratingweb/party.png" imageHoverUrl="/opentaps_images/integratingweb/partyHover.png" linkUrl="/partymgr/control/main" lastUpdatedStamp="2009-07-18 16:41:58.415"
+     lastUpdatedTxStamp="2009-07-18 16:41:58.415" createdStamp="2009-07-18 16:12:28.395" createdTxStamp="2009-07-18 16:12:28.395"/>
+
+    Then, in applications/party/ofbiz-component.xml:
+
+    <webapp name="party"
+        title="Party"
+        server="default-server"
+        location="webapp/partymgr"
+        base-permission="OFBTOOLS,PARTYMGR"
+        mount-point="/partymgr"/>
+
+   As you can clearly see, the webapp name and the applicationId are the same.
+
+   The security checks are made on the base-permission String array, appending to the values
+   the default _VIEW crud operation. Instead, when base-permission is NONE (not defined), the application
+   can be accessed without any privileges (ecommerce, for example).
+
+   In this way, as discussed with Si, we don't have to maintain permission relations
+   in the HomeWebApps entity.
+
+*/
+
+import org.ofbiz.base.component.ComponentConfig;
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+// retrieve all the defined applications
+homeWebApps = delegator.findAll("HomeWebApps");
+webapps = FastList.newInstance();
+
+//get all webapps defined in all the ofbiz-components
+webapps = ComponentConfig.getAllWebappResourceInfos();
+wit = webapps.iterator();
+webappsMap = FastMap.newInstance();
+
+//create a map entry (name , permissions[]) for every webapp
+while(wit.hasNext()){
+     webapp = wit.next();
+     webappsMap.put(webapp.getName() , webapp.getBasePermission());
+}
+
+// security
+security = request.getAttribute("security");
+context.put("security", security);
+
+// external login key
+extLogin = request.getAttribute("externalLoginKey");
+if (extLogin != null) {
+    context.put("externalKeyParam", "externalLoginKey=" + requestAttributes.get("externalLoginKey"));
+}
+
+if(userLogin != null){ // if user is authneticated
+   if(homeWebApps != null){
+      it = homeWebApps.iterator();
+      apps = FastList.newInstance();
+      while (it.hasNext()) {
+        homeApp = it.next();
+        permitted = true;
+        //get the base permissions associated with the particular application mapped in HomeWebApps entity
+        permissions = webappsMap.get(homeApp.get("applicationId"));
+        // need to check this, in case the web that is not an ofbiz  web app -- i.e., the documentation wiki:
+        if (permissions != null) {
+            //  if there are permissions for this application, then check if the user can view it
+        	for (int i = 0; i < permissions.length; i++) {
+                 // if the application has basePermissions and user doesn't jave VIEW permissions on them, don't get the app
+                 if (!"NONE".equals(permissions[i]) && !security.hasEntityPermission(permissions[i], "_VIEW", userLogin)) {
+                       permitted = false;
+                       break;
+                 }
+            }
+        }
+        if(permitted){
+            apps.add(homeApp);
+        }
+      }
+      context.put("apps", apps);
+   }
+}else{ // if user is not authenticated
+    if(homeWebApps != null){
+      it = homeWebApps.iterator();
+      apps = FastList.newInstance();
+      while (it.hasNext()){
+        homeWebApp = it.next();
+        //get the base permissions associated with the particular application mapped in HomeWebApps entity
+        permissions = webappsMap.get(homeWebApp.get("applicationId"));
+        if (permissions == null) {
+           // if there are no permissions required for the application, or if it is an external link,
+             apps.add(homeWebApp);
+        } else if (permissions.length > 0){
+           //  or, if the application is defined with permission of "NONE",  such as the ofbiz e-commerce store
+            if("NONE".equals(permissions[0])){ //permissions[0] will always exists
+             apps.add(homeWebApp);
+           }
+        }
+
+      }
+      context.put("apps", apps);
+    }
+}

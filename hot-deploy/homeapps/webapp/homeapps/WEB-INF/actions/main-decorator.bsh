@@ -1,0 +1,98 @@
+/*
+ * Copyright (C) 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+/*******************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *******************************************************************************/
+
+/* This file may contain code which has been modified from that included with the Apache-licensed OFBiz application */
+/* This file has been modified by Open Source Strategies, Inc. */
+
+/* main-decorator.bsh populates the global context with objects used by all opentaps-common applications */
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilHttp;
+import org.opentaps.common.util.UtilMessage;
+
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.security.SecurityUser;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.repository.ofbiz.Repository;
+
+if (userLogin != null) {
+    globalContext.put("user", new User(userLogin, delegator));
+}
+
+// Instead of using screens to define the uiLabelMap, grab it from UtilMessage
+uiLabelMap = UtilMessage.getUiLabels(locale);
+
+// Add any uiLabels defined upstream to the top of the map
+existingUiLabelMap = globalContext.get("uiLabelMap");
+if (existingUiLabelMap != null) uiLabelMap.pushResourceBundle(existingUiLabelMap.getInitialResourceBundle());
+
+globalContext.put("uiLabelMap", uiLabelMap);
+
+// Place the opentapsErrors map in the global context
+opentapsErrors = UtilMessage.getOpentapsErrors(request);
+globalContext.put("opentapsErrors", opentapsErrors);
+
+// Add the import and include transforms
+// These will enable Freemarker include loading and global macros from a remote file.
+// Note that globalContext will allow access from all sections of the screen widget
+loader = Thread.currentThread().getContextClassLoader();
+globalContext.put("import", loader.loadClass("org.opentaps.common.template.freemarker.transform.ImportTransform").newInstance());
+globalContext.put("include", loader.loadClass("org.opentaps.common.template.freemarker.transform.IncludeTransform").newInstance());
+globalContext.put("paginateTransform", loader.loadClass("org.opentaps.common.webapp.transform.PaginateTransform").newInstance());
+
+//TODO: oandreyev. This should not be here
+globalContext.put("timeZone", UtilHttp.getTimeZone(request));
+
+// Add the current state of all foldable screen areas for the user and the current screen/application combination
+foldedStates = new HashMap();
+if (userLogin != null) {
+    screenName = parameters.get("thisRequestUri");
+                                           //hack here
+    prefMap = UtilMisc.toMap("application", "homeWebApps", "screenName", screenName, "userLoginId", userLogin.getString("userLoginId"));
+    viewPrefs = delegator.findByAnd("ViewPrefAndLocation", prefMap);
+    vpit = viewPrefs.iterator();
+    while (vpit.hasNext()) {
+        viewPref = vpit.next();
+        foldedStates.put(viewPref.get("domId"), viewPref.getString("viewPrefString"));
+    }
+}
+globalContext.put("foldedStates", foldedStates);
+
+// Miscellaneous properties
+globalContext.put("validatePostalAddresses", "true".equals(configProperties.get("opentaps.validatePostalAddresses")));
+globalContext.put("enableInternalMessaging", "true".equals(configProperties.get("opentaps.enableInternalMessaging")));
+globalContext.put("internalMessageCheckFrequencySeconds", configProperties.get("opentaps.internalMessageCheckFrequencySeconds"));

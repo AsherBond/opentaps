@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<!--/* @author: Michele Orru' (michele.orru@integratingweb.com) */-->
+
+
+<ofbiz-component name="homeapps"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/ofbiz-component.xsd">
+
+
+
+	<!-- always required -->
+	<resource-loader name="main" type="component" />
+
+    <!--<classpath type="jar" location="build/lib/*"/>-->
+    <classpath type="dir" location="script"/>
+    <!--<classpath type="dir" location="config"/>-->
+
+	<entity-resource type="data" reader-name="seed" loader="main"
+		location="data/HomeAppsSeedData.xml" />
+
+	 <!-- this defines the data model specific to this application -->
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+
+    <!-- service definitions
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
+    -->
+      <webapp name="opentapsHome"
+    	    title="opentaps"
+    	    server="default-server" 
+    	    location="webapp/homeapps"
+    	    mount-point="/opentaps"
+    	    app-bar-display="true"/>
+
+</ofbiz-component>

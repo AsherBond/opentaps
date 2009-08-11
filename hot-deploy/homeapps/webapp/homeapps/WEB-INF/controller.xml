@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) 2009 Open Source Strategies, Inc.
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ * 
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+-->
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/site-conf.xsd">
+    <!-- Include requests for common opentaps features. -->
+    <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
+
+    <description>Opentaps Home Page</description>
+    <owner>IntegratingWeb </owner>
+    <errorpage>/error/error.jsp</errorpage>
+
+    <!-- event handlers -->
+    <handler name="java" type="request" class="org.ofbiz.webapp.event.JavaEventHandler"/>
+    <handler name="simple" type="request" class="org.ofbiz.webapp.event.SimpleEventHandler"/>
+    <handler name="service" type="request" class="org.ofbiz.webapp.event.ServiceEventHandler"/>
+    <handler name="service-multi" type="request" class="org.ofbiz.webapp.event.ServiceMultiEventHandler"/>
+    <handler name="bsf" type="request" class="org.ofbiz.webapp.event.BsfEventHandler"/>
+
+    <!-- view handlers -->
+    <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
+    <handler name="ftl" type="view" class="org.ofbiz.webapp.ftl.FreeMarkerViewHandler"/>
+    
+
+    <preprocessor>
+        <!-- Events to run on every request before security (chains exempt) -->
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkExternalLoginKey"/>
+    </preprocessor>
+    <postprocessor>
+        <!-- Events to run on every request after all other processing (chains exempt) -->
+    </postprocessor>
+
+    <!-- Request Mappings -->
+    <request-map uri="main">
+    	<security https="false" auth="false"/>
+        <response name="success" type="view" value="main"/>
+    </request-map>
+    
+   <request-map uri="checkLogin" edit="false">
+        <description>Verify a user is logged in.</description>
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkLogin" />
+        <response name="success" type="view" value="main" />
+        <response name="error" type="view" value="main" />
+    </request-map>
+
+    <request-map uri="login">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="login"/>
+        <response name="success" type="view" value="main"/>
+        <response name="error" type="view" value="main"/>
+    </request-map>
+    <request-map uri="logout">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="logout"/>
+        <response name="success" type="request" value="checkLogin"/>
+        <response name="error" type="view" value="main"/>
+    </request-map>
+    
+   <request-map uri="forgotpassword">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="forgotPassword"/>
+        <response name="success" type="view" value="main"/>
+        <response name="error" type="view" value="main"/>
+    </request-map>
+    
+
+    <!-- end of request mappings -->
+
+    <!-- View Mappings -->
+    <view-map name="error" page="/error/error.jsp"/>
+    <view-map name="main" type="screen" page="component://homeapps/widget/screens/HomeWebAppsMain.xml#main"/>
+   
+   
+    <!-- end of view mappings -->
+</site-conf>
