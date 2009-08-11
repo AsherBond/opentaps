@@ -15,6 +15,9 @@ completely for now.
 framework/service/config/serviceengine.xml
 r12978 Added the POJOJavaEngine as a service engine. This is a needed part of opentaps.
 
+framework/base/config/pojoentities-containers.xml
+framework/start/src/org/ofbiz/base/start/pojoentities.properties
+- Added the POJO generator configuration
 
 Applications changes
 --------------------
