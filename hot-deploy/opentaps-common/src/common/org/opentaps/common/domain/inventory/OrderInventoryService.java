@@ -16,7 +16,6 @@
 package org.opentaps.common.domain.inventory;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Collections;
@@ -40,9 +39,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.domain.base.entities.Facility;
 import org.opentaps.domain.base.entities.InventoryTransfer;
 import org.opentaps.domain.base.entities.OrderItemShipGrpInvRes;
-import org.opentaps.domain.base.entities.ProductAssoc;
 import org.opentaps.domain.base.entities.ProductFacility;
-import org.opentaps.domain.base.entities.WorkEffort;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
@@ -58,7 +55,6 @@ import org.opentaps.domain.product.Product;
 import org.opentaps.domain.product.ProductDomainInterface;
 import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
-import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
@@ -433,7 +429,6 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public void reserveProductInventory() throws ServiceException {
 
         try {
@@ -621,7 +616,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                         createInventoryItemInMap.put("facilityId", facilityId);
                     }
                     createInventoryItemInMap.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-                    Map<String, Object> result = getInfrastructure().getDispatcher().runSync("createInventoryItem", createInventoryItemInMap);
+                    Map<String, Object> result = runSync("createInventoryItem", createInventoryItemInMap);
                     String inventoryItemOutId = (String) result.get("inventoryItemId");
                     InventoryItem newNonSerInventoryItem = inventoryRepository.getInventoryItemById(inventoryItemOutId);
 
@@ -787,9 +782,9 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
             InventoryItem item = inventoryRepository.getInventoryItemById(this.inventoryItemId);
             // if received PURCH_PKG_AUTO product into invertorym, then split it to components
             if ("PURCH_PKG_AUTO".equals(item.getProduct().getProductTypeId())) {
-              Map input = createInputMap();
+              Map<String, Object> input = createInputMap();
               input.put("inventoryItemId", this.inventoryItemId);
-              Map results = runSync("decomposeInventoryItem", input);
+              runSync("decomposeInventoryItem", input);
             }
         } catch (GeneralException ex) {
             throw new ServiceException(ex);

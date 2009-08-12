@@ -161,7 +161,6 @@ public class Service implements ServiceInterface {
      * @return the service results <code>Map</code>
      * @throws ServiceException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public Map<String, Object> runSync(String serviceName, Map<String, Object> input) throws ServiceException {
         try {
             // run the service without creating a new transaction
