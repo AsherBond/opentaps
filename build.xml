@@ -448,7 +448,7 @@ under the License.
             <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8091"/>
         </java>
     </target>
-    <target name="run-tests" depends="build" description="Run OFBiz default tests">
+    <target name="run-tests" depends="server" description="Run OFBiz default tests">
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
