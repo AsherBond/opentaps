@@ -1974,7 +1974,7 @@ public final class ProductionRunServices {
                         serviceContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
                         serviceContext.put("comments", "Created by production run " + productionRunId);
                         if (unitCost.compareTo(ZERO) != 0) {
-                            serviceContext.put("unitCost", new Double(unitCost.doubleValue()));
+                            serviceContext.put("unitCost", unitCost);
                         }
                         //serviceContext.put("serialNumber", productionRunId);
                         serviceContext.put("lotId", lotId);
@@ -2009,7 +2009,7 @@ public final class ProductionRunServices {
                     serviceContext.put("comments", "Created by production run " + productionRunId);
                     serviceContext.put("lotId", lotId);
                     if (unitCost.compareTo(ZERO) != 0) {
-                        serviceContext.put("unitCost", new Double(unitCost.doubleValue()));
+                        serviceContext.put("unitCost", unitCost);
                     }
                     serviceContext.put("userLogin", userLogin);
                     Map resultService = dispatcher.runSync("createInventoryItem", serviceContext);
