@@ -610,7 +610,7 @@ under the License.
 
     <target name="make-base-entities" depends="prebuild">
         <delete verbose="on">
-            <fileset dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/entities/" includes="*.java"/>
+            <fileset dir="./hot-deploy/opentaps-common/src/common/org/opentaps/domain/base/entities/" includes="**/*.java"/>
         </delete>
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.max.param}"/>
