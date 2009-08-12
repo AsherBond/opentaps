@@ -64,6 +64,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("unitPrice", "UNIT_PRICE");
         fields.put("reserv2ndPPPerc", "RESERV2ND_P_P_PERC");
         fields.put("reservNthPPPerc", "RESERV_NTH_P_P_PERC");
+        fields.put("configId", "CONFIG_ID");
         fields.put("totalWithAdjustments", "TOTAL_WITH_ADJUSTMENTS");
         fields.put("wasReserved", "WAS_RESERVED");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -84,6 +85,7 @@ fieldMapColumns.put("CartAbandonedLine", fields);
     unitPrice("unitPrice"),
     reserv2ndPPPerc("reserv2ndPPPerc"),
     reservNthPPPerc("reservNthPPPerc"),
+    configId("configId"),
     totalWithAdjustments("totalWithAdjustments"),
     wasReserved("wasReserved"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -137,6 +139,8 @@ fieldMapColumns.put("CartAbandonedLine", fields);
    private BigDecimal reserv2ndPPPerc;
    @Column(name="RESERV_NTH_P_P_PERC")
    private BigDecimal reservNthPPPerc;
+   @Column(name="CONFIG_ID")
+   private String configId;
    @Column(name="TOTAL_WITH_ADJUSTMENTS")
    private BigDecimal totalWithAdjustments;
    @Column(name="WAS_RESERVED")
@@ -182,7 +186,7 @@ fieldMapColumns.put("CartAbandonedLine", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("visitId");this.primaryKeyNames.add("cartAbandonedLineSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("visitId");this.allFieldsNames.add("cartAbandonedLineSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("prodCatalogId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("reservStart");this.allFieldsNames.add("reservLength");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("totalWithAdjustments");this.allFieldsNames.add("wasReserved");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("visitId");this.allFieldsNames.add("cartAbandonedLineSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("prodCatalogId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("reservStart");this.allFieldsNames.add("reservLength");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("configId");this.allFieldsNames.add("totalWithAdjustments");this.allFieldsNames.add("wasReserved");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -273,6 +277,13 @@ fieldMapColumns.put("CartAbandonedLine", fields);
      */
     public void setReservNthPPPerc(BigDecimal reservNthPPPerc) {
         this.reservNthPPPerc = reservNthPPPerc;
+    }
+    /**
+     * Auto generated value setter.
+     * @param configId the configId to set
+     */
+    public void setConfigId(String configId) {
+        this.configId = configId;
     }
     /**
      * Auto generated value setter.
@@ -396,6 +407,13 @@ fieldMapColumns.put("CartAbandonedLine", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getConfigId() {
+        return this.configId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getTotalWithAdjustments() {
@@ -509,6 +527,7 @@ fieldMapColumns.put("CartAbandonedLine", fields);
         setUnitPrice(convertToBigDecimal(mapValue.get("unitPrice")));
         setReserv2ndPPPerc(convertToBigDecimal(mapValue.get("reserv2ndPPPerc")));
         setReservNthPPPerc(convertToBigDecimal(mapValue.get("reservNthPPPerc")));
+        setConfigId((String) mapValue.get("configId"));
         setTotalWithAdjustments(convertToBigDecimal(mapValue.get("totalWithAdjustments")));
         setWasReserved((String) mapValue.get("wasReserved"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -533,6 +552,7 @@ fieldMapColumns.put("CartAbandonedLine", fields);
         mapValue.put("unitPrice", getUnitPrice());
         mapValue.put("reserv2ndPPPerc", getReserv2ndPPPerc());
         mapValue.put("reservNthPPPerc", getReservNthPPPerc());
+        mapValue.put("configId", getConfigId());
         mapValue.put("totalWithAdjustments", getTotalWithAdjustments());
         mapValue.put("wasReserved", getWasReserved());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

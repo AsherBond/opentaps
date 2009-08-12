@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PicklistItemAndOdrItmShipGrp.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPicklistItemAndOdrItmShipGrps", query="SELECT PL.PICKLIST_ID AS \"picklistId\",PL.DESCRIPTION AS \"description\",PL.FACILITY_ID AS \"facilityId\",PL.SHIPMENT_METHOD_TYPE_ID AS \"shipmentMethodTypeId\",PL.STATUS_ID AS \"statusId\",PL.PICKLIST_DATE AS \"picklistDate\",PL.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PL.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PLB.PICKLIST_BIN_ID AS \"picklistBinId\",PLB.PICKLIST_ID AS \"picklistId\",PLB.BIN_LOCATION_NUMBER AS \"binLocationNumber\",PLB.PRIMARY_ORDER_ID AS \"primaryOrderId\",PLB.PRIMARY_SHIP_GROUP_SEQ_ID AS \"primaryShipGroupSeqId\",PI.PICKLIST_BIN_ID AS \"picklistBinId\",PI.ORDER_ID AS \"orderId\",PI.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",PI.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",PI.INVENTORY_ITEM_ID AS \"inventoryItemId\",PI.ITEM_STATUS_ID AS \"itemStatusId\",PI.QUANTITY AS \"quantity\",OISG.ORDER_ID AS \"orderId\",OISG.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",OISG.SHIPMENT_METHOD_TYPE_ID AS \"shipmentMethodTypeId\",OISG.SUPPLIER_PARTY_ID AS \"supplierPartyId\",OISG.CARRIER_PARTY_ID AS \"carrierPartyId\",OISG.CARRIER_ROLE_TYPE_ID AS \"carrierRoleTypeId\",OISG.CONTACT_MECH_ID AS \"contactMechId\",OISG.TELECOM_CONTACT_MECH_ID AS \"telecomContactMechId\",OISG.TRACKING_NUMBER AS \"trackingNumber\",OISG.SHIPPING_INSTRUCTIONS AS \"shippingInstructions\",OISG.MAY_SPLIT AS \"maySplit\",OISG.GIFT_MESSAGE AS \"giftMessage\",OISG.IS_GIFT AS \"isGift\",OISG.SHIP_AFTER_DATE AS \"shipAfterDate\",OISG.SHIP_BY_DATE AS \"shipByDate\",OISG.THIRD_PARTY_ACCOUNT_NUMBER AS \"thirdPartyAccountNumber\",OISG.THIRD_PARTY_POSTAL_CODE AS \"thirdPartyPostalCode\",OISG.THIRD_PARTY_COUNTRY_GEO_CODE AS \"thirdPartyCountryGeoCode\",OISG.STATUS_ID AS \"statusId\",OI.ORDER_ID AS \"orderId\",OI.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",OI.EXTERNAL_ID AS \"externalId\",OI.ORDER_ITEM_TYPE_ID AS \"orderItemTypeId\",OI.ORDER_ITEM_GROUP_SEQ_ID AS \"orderItemGroupSeqId\",OI.IS_ITEM_GROUP_PRIMARY AS \"isItemGroupPrimary\",OI.BUDGET_ID AS \"budgetId\",OI.BUDGET_ITEM_SEQ_ID AS \"budgetItemSeqId\",OI.PRODUCT_ID AS \"productId\",OI.PRODUCT_FEATURE_ID AS \"productFeatureId\",OI.PROD_CATALOG_ID AS \"prodCatalogId\",OI.PRODUCT_CATEGORY_ID AS \"productCategoryId\",OI.IS_PROMO AS \"isPromo\",OI.QUOTE_ID AS \"quoteId\",OI.QUOTE_ITEM_SEQ_ID AS \"quoteItemSeqId\",OI.SHOPPING_LIST_ID AS \"shoppingListId\",OI.SHOPPING_LIST_ITEM_SEQ_ID AS \"shoppingListItemSeqId\",OI.SUBSCRIPTION_ID AS \"subscriptionId\",OI.DEPLOYMENT_ID AS \"deploymentId\",OI.QUANTITY AS \"quantity\",OI.CANCEL_QUANTITY AS \"cancelQuantity\",OI.SELECTED_AMOUNT AS \"selectedAmount\",OI.UNIT_PRICE AS \"unitPrice\",OI.UNIT_LIST_PRICE AS \"unitListPrice\",OI.UNIT_AVERAGE_COST AS \"unitAverageCost\",OI.UNIT_RECURRING_PRICE AS \"unitRecurringPrice\",OI.IS_MODIFIED_PRICE AS \"isModifiedPrice\",OI.RECURRING_FREQ_UOM_ID AS \"recurringFreqUomId\",OI.ITEM_DESCRIPTION AS \"itemDescription\",OI.COMMENTS AS \"comments\",OI.CORRESPONDING_PO_ID AS \"correspondingPoId\",OI.STATUS_ID AS \"statusId\",OI.SYNC_STATUS_ID AS \"syncStatusId\",OI.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",OI.ESTIMATED_DELIVERY_DATE AS \"estimatedDeliveryDate\",OI.AUTO_CANCEL_DATE AS \"autoCancelDate\",OI.DONT_CANCEL_SET_DATE AS \"dontCancelSetDate\",OI.DONT_CANCEL_SET_USER_LOGIN AS \"dontCancelSetUserLogin\",OI.SHIP_BEFORE_DATE AS \"shipBeforeDate\",OI.SHIP_AFTER_DATE AS \"shipAfterDate\",OI.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",OI.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",OI.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",OI.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",OI.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",OI.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",OI.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",OI.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",OI.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",OI.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",OI.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",II.PRODUCT_ID AS \"productId\",II.PARTY_ID AS \"partyId\",II.OWNER_PARTY_ID AS \"ownerPartyId\",II.STATUS_ID AS \"statusId\",II.DATETIME_RECEIVED AS \"datetimeReceived\",II.DATETIME_MANUFACTURED AS \"datetimeManufactured\",II.EXPIRE_DATE AS \"expireDate\",II.FACILITY_ID AS \"facilityId\",II.CONTAINER_ID AS \"containerId\",II.LOT_ID AS \"lotId\",II.UOM_ID AS \"uomId\",II.BIN_NUMBER AS \"binNumber\",II.LOCATION_SEQ_ID AS \"locationSeqId\",II.COMMENTS AS \"comments\",II.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",II.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",II.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",II.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",II.SERIAL_NUMBER AS \"serialNumber\",II.SOFT_IDENTIFIER AS \"softIdentifier\",II.ACTIVATION_NUMBER AS \"activationNumber\",II.ACTIVATION_VALID_THRU AS \"activationValidThru\",II.UNIT_COST AS \"unitCost\",II.CURRENCY_UOM_ID AS \"currencyUomId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",II.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\" FROM PICKLIST PL INNER JOIN PICKLIST_BIN PLB ON PL.PICKLIST_ID = PLB.PICKLIST_ID INNER JOIN PICKLIST_ITEM PI ON PLB.PICKLIST_BIN_ID = PI.PICKLIST_BIN_ID INNER JOIN ORDER_ITEM_SHIP_GROUP OISG ON PI.ORDER_ID = OISG.ORDER_ID AND PI.SHIP_GROUP_SEQ_ID = OISG.SHIP_GROUP_SEQ_ID INNER JOIN ORDER_ITEM OI ON PI.ORDER_ID = OI.ORDER_ID AND PI.ORDER_ITEM_SEQ_ID = OI.ORDER_ITEM_SEQ_ID INNER JOIN INVENTORY_ITEM II ON PI.INVENTORY_ITEM_ID = II.INVENTORY_ITEM_ID", resultSetMapping="PicklistItemAndOdrItmShipGrpMapping")
+@NamedNativeQuery(name="selectPicklistItemAndOdrItmShipGrps", query="SELECT PL.PICKLIST_ID AS \"picklistId\",PL.DESCRIPTION AS \"description\",PL.FACILITY_ID AS \"facilityId\",PL.SHIPMENT_METHOD_TYPE_ID AS \"shipmentMethodTypeId\",PL.STATUS_ID AS \"statusId\",PL.PICKLIST_DATE AS \"picklistDate\",PL.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PL.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PLB.PICKLIST_BIN_ID AS \"picklistBinId\",PLB.PICKLIST_ID AS \"picklistId\",PLB.BIN_LOCATION_NUMBER AS \"binLocationNumber\",PLB.PRIMARY_ORDER_ID AS \"primaryOrderId\",PLB.PRIMARY_SHIP_GROUP_SEQ_ID AS \"primaryShipGroupSeqId\",PI.PICKLIST_BIN_ID AS \"picklistBinId\",PI.ORDER_ID AS \"orderId\",PI.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",PI.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",PI.INVENTORY_ITEM_ID AS \"inventoryItemId\",PI.ITEM_STATUS_ID AS \"itemStatusId\",PI.QUANTITY AS \"quantity\",OISG.ORDER_ID AS \"orderId\",OISG.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",OISG.SHIPMENT_METHOD_TYPE_ID AS \"shipmentMethodTypeId\",OISG.SUPPLIER_PARTY_ID AS \"supplierPartyId\",OISG.VENDOR_PARTY_ID AS \"vendorPartyId\",OISG.CARRIER_PARTY_ID AS \"carrierPartyId\",OISG.CARRIER_ROLE_TYPE_ID AS \"carrierRoleTypeId\",OISG.FACILITY_ID AS \"facilityId\",OISG.CONTACT_MECH_ID AS \"contactMechId\",OISG.TELECOM_CONTACT_MECH_ID AS \"telecomContactMechId\",OISG.TRACKING_NUMBER AS \"trackingNumber\",OISG.SHIPPING_INSTRUCTIONS AS \"shippingInstructions\",OISG.MAY_SPLIT AS \"maySplit\",OISG.GIFT_MESSAGE AS \"giftMessage\",OISG.IS_GIFT AS \"isGift\",OISG.SHIP_AFTER_DATE AS \"shipAfterDate\",OISG.SHIP_BY_DATE AS \"shipByDate\",OISG.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",OISG.ESTIMATED_DELIVERY_DATE AS \"estimatedDeliveryDate\",OISG.THIRD_PARTY_ACCOUNT_NUMBER AS \"thirdPartyAccountNumber\",OISG.THIRD_PARTY_POSTAL_CODE AS \"thirdPartyPostalCode\",OISG.THIRD_PARTY_COUNTRY_GEO_CODE AS \"thirdPartyCountryGeoCode\",OISG.STATUS_ID AS \"statusId\",OI.ORDER_ID AS \"orderId\",OI.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",OI.EXTERNAL_ID AS \"externalId\",OI.ORDER_ITEM_TYPE_ID AS \"orderItemTypeId\",OI.ORDER_ITEM_GROUP_SEQ_ID AS \"orderItemGroupSeqId\",OI.IS_ITEM_GROUP_PRIMARY AS \"isItemGroupPrimary\",OI.FROM_INVENTORY_ITEM_ID AS \"fromInventoryItemId\",OI.BUDGET_ID AS \"budgetId\",OI.BUDGET_ITEM_SEQ_ID AS \"budgetItemSeqId\",OI.PRODUCT_ID AS \"productId\",OI.PRODUCT_FEATURE_ID AS \"productFeatureId\",OI.PROD_CATALOG_ID AS \"prodCatalogId\",OI.PRODUCT_CATEGORY_ID AS \"productCategoryId\",OI.IS_PROMO AS \"isPromo\",OI.QUOTE_ID AS \"quoteId\",OI.QUOTE_ITEM_SEQ_ID AS \"quoteItemSeqId\",OI.SHOPPING_LIST_ID AS \"shoppingListId\",OI.SHOPPING_LIST_ITEM_SEQ_ID AS \"shoppingListItemSeqId\",OI.SUBSCRIPTION_ID AS \"subscriptionId\",OI.DEPLOYMENT_ID AS \"deploymentId\",OI.QUANTITY AS \"quantity\",OI.CANCEL_QUANTITY AS \"cancelQuantity\",OI.SELECTED_AMOUNT AS \"selectedAmount\",OI.UNIT_PRICE AS \"unitPrice\",OI.UNIT_LIST_PRICE AS \"unitListPrice\",OI.UNIT_AVERAGE_COST AS \"unitAverageCost\",OI.UNIT_RECURRING_PRICE AS \"unitRecurringPrice\",OI.IS_MODIFIED_PRICE AS \"isModifiedPrice\",OI.RECURRING_FREQ_UOM_ID AS \"recurringFreqUomId\",OI.ITEM_DESCRIPTION AS \"itemDescription\",OI.COMMENTS AS \"comments\",OI.CORRESPONDING_PO_ID AS \"correspondingPoId\",OI.STATUS_ID AS \"statusId\",OI.SYNC_STATUS_ID AS \"syncStatusId\",OI.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",OI.ESTIMATED_DELIVERY_DATE AS \"estimatedDeliveryDate\",OI.AUTO_CANCEL_DATE AS \"autoCancelDate\",OI.DONT_CANCEL_SET_DATE AS \"dontCancelSetDate\",OI.DONT_CANCEL_SET_USER_LOGIN AS \"dontCancelSetUserLogin\",OI.SHIP_BEFORE_DATE AS \"shipBeforeDate\",OI.SHIP_AFTER_DATE AS \"shipAfterDate\",OI.CANCEL_BACK_ORDER_DATE AS \"cancelBackOrderDate\",OI.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",OI.SALES_OPPORTUNITY_ID AS \"salesOpportunityId\",OI.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",OI.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",OI.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",OI.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",OI.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",OI.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",OI.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",OI.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",OI.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",OI.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",II.PRODUCT_ID AS \"productId\",II.PARTY_ID AS \"partyId\",II.OWNER_PARTY_ID AS \"ownerPartyId\",II.STATUS_ID AS \"statusId\",II.DATETIME_RECEIVED AS \"datetimeReceived\",II.DATETIME_MANUFACTURED AS \"datetimeManufactured\",II.EXPIRE_DATE AS \"expireDate\",II.FACILITY_ID AS \"facilityId\",II.CONTAINER_ID AS \"containerId\",II.LOT_ID AS \"lotId\",II.UOM_ID AS \"uomId\",II.BIN_NUMBER AS \"binNumber\",II.LOCATION_SEQ_ID AS \"locationSeqId\",II.COMMENTS AS \"comments\",II.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",II.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",II.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",II.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",II.SERIAL_NUMBER AS \"serialNumber\",II.SOFT_IDENTIFIER AS \"softIdentifier\",II.ACTIVATION_NUMBER AS \"activationNumber\",II.ACTIVATION_VALID_THRU AS \"activationValidThru\",II.UNIT_COST AS \"unitCost\",II.CURRENCY_UOM_ID AS \"currencyUomId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",II.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\" FROM PICKLIST PL INNER JOIN PICKLIST_BIN PLB ON PL.PICKLIST_ID = PLB.PICKLIST_ID INNER JOIN PICKLIST_ITEM PI ON PLB.PICKLIST_BIN_ID = PI.PICKLIST_BIN_ID INNER JOIN ORDER_ITEM_SHIP_GROUP OISG ON PI.ORDER_ID = OISG.ORDER_ID AND PI.SHIP_GROUP_SEQ_ID = OISG.SHIP_GROUP_SEQ_ID INNER JOIN ORDER_ITEM OI ON PI.ORDER_ID = OI.ORDER_ID AND PI.ORDER_ITEM_SEQ_ID = OI.ORDER_ITEM_SEQ_ID INNER JOIN INVENTORY_ITEM II ON PI.INVENTORY_ITEM_ID = II.INVENTORY_ITEM_ID", resultSetMapping="PicklistItemAndOdrItmShipGrpMapping")
 @SqlResultSetMapping(name="PicklistItemAndOdrItmShipGrpMapping", entities={
 @EntityResult(entityClass=PicklistItemAndOdrItmShipGrp.class, fields = {
 @FieldResult(name="pPicklistId", column="pPicklistId")
@@ -77,8 +77,10 @@ import java.sql.Timestamp;
 ,@FieldResult(name="oisgShipGroupSeqId", column="oisgShipGroupSeqId")
 ,@FieldResult(name="oisgShipmentMethodTypeId", column="oisgShipmentMethodTypeId")
 ,@FieldResult(name="oisgSupplierPartyId", column="oisgSupplierPartyId")
+,@FieldResult(name="oisgVendorPartyId", column="oisgVendorPartyId")
 ,@FieldResult(name="oisgCarrierPartyId", column="oisgCarrierPartyId")
 ,@FieldResult(name="oisgCarrierRoleTypeId", column="oisgCarrierRoleTypeId")
+,@FieldResult(name="oisgFacilityId", column="oisgFacilityId")
 ,@FieldResult(name="oisgContactMechId", column="oisgContactMechId")
 ,@FieldResult(name="oisgTelecomContactMechId", column="oisgTelecomContactMechId")
 ,@FieldResult(name="oisgTrackingNumber", column="oisgTrackingNumber")
@@ -88,6 +90,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="oisgIsGift", column="oisgIsGift")
 ,@FieldResult(name="oisgShipAfterDate", column="oisgShipAfterDate")
 ,@FieldResult(name="oisgShipByDate", column="oisgShipByDate")
+,@FieldResult(name="oisgEstimatedShipDate", column="oisgEstimatedShipDate")
+,@FieldResult(name="oisgEstimatedDeliveryDate", column="oisgEstimatedDeliveryDate")
 ,@FieldResult(name="oisgThirdPartyAccountNumber", column="oisgThirdPartyAccountNumber")
 ,@FieldResult(name="oisgThirdPartyPostalCode", column="oisgThirdPartyPostalCode")
 ,@FieldResult(name="oisgThirdPartyCountryGeoCode", column="oisgThirdPartyCountryGeoCode")
@@ -98,6 +102,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="oiOrderItemTypeId", column="oiOrderItemTypeId")
 ,@FieldResult(name="oiOrderItemGroupSeqId", column="oiOrderItemGroupSeqId")
 ,@FieldResult(name="oiIsItemGroupPrimary", column="oiIsItemGroupPrimary")
+,@FieldResult(name="oiFromInventoryItemId", column="oiFromInventoryItemId")
 ,@FieldResult(name="oiBudgetId", column="oiBudgetId")
 ,@FieldResult(name="oiBudgetItemSeqId", column="oiBudgetItemSeqId")
 ,@FieldResult(name="oiProductId", column="oiProductId")
@@ -132,7 +137,9 @@ import java.sql.Timestamp;
 ,@FieldResult(name="oiDontCancelSetUserLogin", column="oiDontCancelSetUserLogin")
 ,@FieldResult(name="oiShipBeforeDate", column="oiShipBeforeDate")
 ,@FieldResult(name="oiShipAfterDate", column="oiShipAfterDate")
+,@FieldResult(name="oiCancelBackOrderDate", column="oiCancelBackOrderDate")
 ,@FieldResult(name="oiOverrideGlAccountId", column="oiOverrideGlAccountId")
+,@FieldResult(name="oiSalesOpportunityId", column="oiSalesOpportunityId")
 ,@FieldResult(name="oiAcctgTagEnumId1", column="oiAcctgTagEnumId1")
 ,@FieldResult(name="oiAcctgTagEnumId2", column="oiAcctgTagEnumId2")
 ,@FieldResult(name="oiAcctgTagEnumId3", column="oiAcctgTagEnumId3")
@@ -210,8 +217,10 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("oisgShipGroupSeqId", "OISG.SHIP_GROUP_SEQ_ID");
         fields.put("oisgShipmentMethodTypeId", "OISG.SHIPMENT_METHOD_TYPE_ID");
         fields.put("oisgSupplierPartyId", "OISG.SUPPLIER_PARTY_ID");
+        fields.put("oisgVendorPartyId", "OISG.VENDOR_PARTY_ID");
         fields.put("oisgCarrierPartyId", "OISG.CARRIER_PARTY_ID");
         fields.put("oisgCarrierRoleTypeId", "OISG.CARRIER_ROLE_TYPE_ID");
+        fields.put("oisgFacilityId", "OISG.FACILITY_ID");
         fields.put("oisgContactMechId", "OISG.CONTACT_MECH_ID");
         fields.put("oisgTelecomContactMechId", "OISG.TELECOM_CONTACT_MECH_ID");
         fields.put("oisgTrackingNumber", "OISG.TRACKING_NUMBER");
@@ -221,6 +230,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("oisgIsGift", "OISG.IS_GIFT");
         fields.put("oisgShipAfterDate", "OISG.SHIP_AFTER_DATE");
         fields.put("oisgShipByDate", "OISG.SHIP_BY_DATE");
+        fields.put("oisgEstimatedShipDate", "OISG.ESTIMATED_SHIP_DATE");
+        fields.put("oisgEstimatedDeliveryDate", "OISG.ESTIMATED_DELIVERY_DATE");
         fields.put("oisgThirdPartyAccountNumber", "OISG.THIRD_PARTY_ACCOUNT_NUMBER");
         fields.put("oisgThirdPartyPostalCode", "OISG.THIRD_PARTY_POSTAL_CODE");
         fields.put("oisgThirdPartyCountryGeoCode", "OISG.THIRD_PARTY_COUNTRY_GEO_CODE");
@@ -231,6 +242,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("oiOrderItemTypeId", "OI.ORDER_ITEM_TYPE_ID");
         fields.put("oiOrderItemGroupSeqId", "OI.ORDER_ITEM_GROUP_SEQ_ID");
         fields.put("oiIsItemGroupPrimary", "OI.IS_ITEM_GROUP_PRIMARY");
+        fields.put("oiFromInventoryItemId", "OI.FROM_INVENTORY_ITEM_ID");
         fields.put("oiBudgetId", "OI.BUDGET_ID");
         fields.put("oiBudgetItemSeqId", "OI.BUDGET_ITEM_SEQ_ID");
         fields.put("oiProductId", "OI.PRODUCT_ID");
@@ -265,7 +277,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("oiDontCancelSetUserLogin", "OI.DONT_CANCEL_SET_USER_LOGIN");
         fields.put("oiShipBeforeDate", "OI.SHIP_BEFORE_DATE");
         fields.put("oiShipAfterDate", "OI.SHIP_AFTER_DATE");
+        fields.put("oiCancelBackOrderDate", "OI.CANCEL_BACK_ORDER_DATE");
         fields.put("oiOverrideGlAccountId", "OI.OVERRIDE_GL_ACCOUNT_ID");
+        fields.put("oiSalesOpportunityId", "OI.SALES_OPPORTUNITY_ID");
         fields.put("oiAcctgTagEnumId1", "OI.ACCTG_TAG_ENUM_ID1");
         fields.put("oiAcctgTagEnumId2", "OI.ACCTG_TAG_ENUM_ID2");
         fields.put("oiAcctgTagEnumId3", "OI.ACCTG_TAG_ENUM_ID3");
@@ -340,8 +354,10 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     oisgShipGroupSeqId("oisgShipGroupSeqId"),
     oisgShipmentMethodTypeId("oisgShipmentMethodTypeId"),
     oisgSupplierPartyId("oisgSupplierPartyId"),
+    oisgVendorPartyId("oisgVendorPartyId"),
     oisgCarrierPartyId("oisgCarrierPartyId"),
     oisgCarrierRoleTypeId("oisgCarrierRoleTypeId"),
+    oisgFacilityId("oisgFacilityId"),
     oisgContactMechId("oisgContactMechId"),
     oisgTelecomContactMechId("oisgTelecomContactMechId"),
     oisgTrackingNumber("oisgTrackingNumber"),
@@ -351,6 +367,8 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     oisgIsGift("oisgIsGift"),
     oisgShipAfterDate("oisgShipAfterDate"),
     oisgShipByDate("oisgShipByDate"),
+    oisgEstimatedShipDate("oisgEstimatedShipDate"),
+    oisgEstimatedDeliveryDate("oisgEstimatedDeliveryDate"),
     oisgThirdPartyAccountNumber("oisgThirdPartyAccountNumber"),
     oisgThirdPartyPostalCode("oisgThirdPartyPostalCode"),
     oisgThirdPartyCountryGeoCode("oisgThirdPartyCountryGeoCode"),
@@ -361,6 +379,7 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     oiOrderItemTypeId("oiOrderItemTypeId"),
     oiOrderItemGroupSeqId("oiOrderItemGroupSeqId"),
     oiIsItemGroupPrimary("oiIsItemGroupPrimary"),
+    oiFromInventoryItemId("oiFromInventoryItemId"),
     oiBudgetId("oiBudgetId"),
     oiBudgetItemSeqId("oiBudgetItemSeqId"),
     oiProductId("oiProductId"),
@@ -395,7 +414,9 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     oiDontCancelSetUserLogin("oiDontCancelSetUserLogin"),
     oiShipBeforeDate("oiShipBeforeDate"),
     oiShipAfterDate("oiShipAfterDate"),
+    oiCancelBackOrderDate("oiCancelBackOrderDate"),
     oiOverrideGlAccountId("oiOverrideGlAccountId"),
+    oiSalesOpportunityId("oiSalesOpportunityId"),
     oiAcctgTagEnumId1("oiAcctgTagEnumId1"),
     oiAcctgTagEnumId2("oiAcctgTagEnumId2"),
     oiAcctgTagEnumId3("oiAcctgTagEnumId3"),
@@ -502,9 +523,13 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     
    private String oisgSupplierPartyId;
     
+   private String oisgVendorPartyId;
+    
    private String oisgCarrierPartyId;
     
    private String oisgCarrierRoleTypeId;
+    
+   private String oisgFacilityId;
     
    private String oisgContactMechId;
     
@@ -523,6 +548,10 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
    private Timestamp oisgShipAfterDate;
     
    private Timestamp oisgShipByDate;
+    
+   private Timestamp oisgEstimatedShipDate;
+    
+   private Timestamp oisgEstimatedDeliveryDate;
     
    private String oisgThirdPartyAccountNumber;
     
@@ -543,6 +572,8 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
    private String oiOrderItemGroupSeqId;
     
    private String oiIsItemGroupPrimary;
+    
+   private String oiFromInventoryItemId;
     
    private String oiBudgetId;
     
@@ -612,7 +643,11 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     
    private Timestamp oiShipAfterDate;
     
+   private Timestamp oiCancelBackOrderDate;
+    
    private String oiOverrideGlAccountId;
+    
+   private String oiSalesOpportunityId;
     
    private String oiAcctgTagEnumId1;
     
@@ -726,7 +761,7 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("pPicklistId");this.primaryKeyNames.add("pbPicklistBinId");this.primaryKeyNames.add("piPicklistBinId");this.primaryKeyNames.add("piOrderId");this.primaryKeyNames.add("piOrderItemSeqId");this.primaryKeyNames.add("piShipGroupSeqId");this.primaryKeyNames.add("piInventoryItemId");this.primaryKeyNames.add("oisgOrderId");this.primaryKeyNames.add("oisgShipGroupSeqId");this.primaryKeyNames.add("oiOrderId");this.primaryKeyNames.add("oiOrderItemSeqId");this.primaryKeyNames.add("iiInventoryItemId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("pPicklistId");this.allFieldsNames.add("pDescription");this.allFieldsNames.add("pFacilityId");this.allFieldsNames.add("pShipmentMethodTypeId");this.allFieldsNames.add("pStatusId");this.allFieldsNames.add("pPicklistDate");this.allFieldsNames.add("pCreatedByUserLogin");this.allFieldsNames.add("pLastModifiedByUserLogin");this.allFieldsNames.add("pbPicklistBinId");this.allFieldsNames.add("pbPicklistId");this.allFieldsNames.add("pbBinLocationNumber");this.allFieldsNames.add("pbPrimaryOrderId");this.allFieldsNames.add("pbPrimaryShipGroupSeqId");this.allFieldsNames.add("piPicklistBinId");this.allFieldsNames.add("piOrderId");this.allFieldsNames.add("piOrderItemSeqId");this.allFieldsNames.add("piShipGroupSeqId");this.allFieldsNames.add("piInventoryItemId");this.allFieldsNames.add("piItemStatusId");this.allFieldsNames.add("piQuantity");this.allFieldsNames.add("oisgOrderId");this.allFieldsNames.add("oisgShipGroupSeqId");this.allFieldsNames.add("oisgShipmentMethodTypeId");this.allFieldsNames.add("oisgSupplierPartyId");this.allFieldsNames.add("oisgCarrierPartyId");this.allFieldsNames.add("oisgCarrierRoleTypeId");this.allFieldsNames.add("oisgContactMechId");this.allFieldsNames.add("oisgTelecomContactMechId");this.allFieldsNames.add("oisgTrackingNumber");this.allFieldsNames.add("oisgShippingInstructions");this.allFieldsNames.add("oisgMaySplit");this.allFieldsNames.add("oisgGiftMessage");this.allFieldsNames.add("oisgIsGift");this.allFieldsNames.add("oisgShipAfterDate");this.allFieldsNames.add("oisgShipByDate");this.allFieldsNames.add("oisgThirdPartyAccountNumber");this.allFieldsNames.add("oisgThirdPartyPostalCode");this.allFieldsNames.add("oisgThirdPartyCountryGeoCode");this.allFieldsNames.add("oisgStatusId");this.allFieldsNames.add("oiOrderId");this.allFieldsNames.add("oiOrderItemSeqId");this.allFieldsNames.add("oiExternalId");this.allFieldsNames.add("oiOrderItemTypeId");this.allFieldsNames.add("oiOrderItemGroupSeqId");this.allFieldsNames.add("oiIsItemGroupPrimary");this.allFieldsNames.add("oiBudgetId");this.allFieldsNames.add("oiBudgetItemSeqId");this.allFieldsNames.add("oiProductId");this.allFieldsNames.add("oiProductFeatureId");this.allFieldsNames.add("oiProdCatalogId");this.allFieldsNames.add("oiProductCategoryId");this.allFieldsNames.add("oiIsPromo");this.allFieldsNames.add("oiQuoteId");this.allFieldsNames.add("oiQuoteItemSeqId");this.allFieldsNames.add("oiShoppingListId");this.allFieldsNames.add("oiShoppingListItemSeqId");this.allFieldsNames.add("oiSubscriptionId");this.allFieldsNames.add("oiDeploymentId");this.allFieldsNames.add("oiQuantity");this.allFieldsNames.add("oiCancelQuantity");this.allFieldsNames.add("oiSelectedAmount");this.allFieldsNames.add("oiUnitPrice");this.allFieldsNames.add("oiUnitListPrice");this.allFieldsNames.add("oiUnitAverageCost");this.allFieldsNames.add("oiUnitRecurringPrice");this.allFieldsNames.add("oiIsModifiedPrice");this.allFieldsNames.add("oiRecurringFreqUomId");this.allFieldsNames.add("oiItemDescription");this.allFieldsNames.add("oiComments");this.allFieldsNames.add("oiCorrespondingPoId");this.allFieldsNames.add("oiStatusId");this.allFieldsNames.add("oiSyncStatusId");this.allFieldsNames.add("oiEstimatedShipDate");this.allFieldsNames.add("oiEstimatedDeliveryDate");this.allFieldsNames.add("oiAutoCancelDate");this.allFieldsNames.add("oiDontCancelSetDate");this.allFieldsNames.add("oiDontCancelSetUserLogin");this.allFieldsNames.add("oiShipBeforeDate");this.allFieldsNames.add("oiShipAfterDate");this.allFieldsNames.add("oiOverrideGlAccountId");this.allFieldsNames.add("oiAcctgTagEnumId1");this.allFieldsNames.add("oiAcctgTagEnumId2");this.allFieldsNames.add("oiAcctgTagEnumId3");this.allFieldsNames.add("oiAcctgTagEnumId4");this.allFieldsNames.add("oiAcctgTagEnumId5");this.allFieldsNames.add("oiAcctgTagEnumId6");this.allFieldsNames.add("oiAcctgTagEnumId7");this.allFieldsNames.add("oiAcctgTagEnumId8");this.allFieldsNames.add("oiAcctgTagEnumId9");this.allFieldsNames.add("oiAcctgTagEnumId10");this.allFieldsNames.add("iiInventoryItemId");this.allFieldsNames.add("iiInventoryItemTypeId");this.allFieldsNames.add("iiProductId");this.allFieldsNames.add("iiPartyId");this.allFieldsNames.add("iiOwnerPartyId");this.allFieldsNames.add("iiStatusId");this.allFieldsNames.add("iiDatetimeReceived");this.allFieldsNames.add("iiDatetimeManufactured");this.allFieldsNames.add("iiExpireDate");this.allFieldsNames.add("iiFacilityId");this.allFieldsNames.add("iiContainerId");this.allFieldsNames.add("iiLotId");this.allFieldsNames.add("iiUomId");this.allFieldsNames.add("iiBinNumber");this.allFieldsNames.add("iiLocationSeqId");this.allFieldsNames.add("iiComments");this.allFieldsNames.add("iiQuantityOnHandTotal");this.allFieldsNames.add("iiAvailableToPromiseTotal");this.allFieldsNames.add("iiOldQuantityOnHand");this.allFieldsNames.add("iiOldAvailableToPromise");this.allFieldsNames.add("iiSerialNumber");this.allFieldsNames.add("iiSoftIdentifier");this.allFieldsNames.add("iiActivationNumber");this.allFieldsNames.add("iiActivationValidThru");this.allFieldsNames.add("iiUnitCost");this.allFieldsNames.add("iiCurrencyUomId");this.allFieldsNames.add("iiAcctgTagEnumId1");this.allFieldsNames.add("iiAcctgTagEnumId2");this.allFieldsNames.add("iiAcctgTagEnumId3");this.allFieldsNames.add("iiAcctgTagEnumId4");this.allFieldsNames.add("iiAcctgTagEnumId5");this.allFieldsNames.add("iiAcctgTagEnumId6");this.allFieldsNames.add("iiAcctgTagEnumId7");this.allFieldsNames.add("iiAcctgTagEnumId8");this.allFieldsNames.add("iiAcctgTagEnumId9");this.allFieldsNames.add("iiAcctgTagEnumId10");this.allFieldsNames.add("iiParentInventoryItemId");
+      this.allFieldsNames.add("pPicklistId");this.allFieldsNames.add("pDescription");this.allFieldsNames.add("pFacilityId");this.allFieldsNames.add("pShipmentMethodTypeId");this.allFieldsNames.add("pStatusId");this.allFieldsNames.add("pPicklistDate");this.allFieldsNames.add("pCreatedByUserLogin");this.allFieldsNames.add("pLastModifiedByUserLogin");this.allFieldsNames.add("pbPicklistBinId");this.allFieldsNames.add("pbPicklistId");this.allFieldsNames.add("pbBinLocationNumber");this.allFieldsNames.add("pbPrimaryOrderId");this.allFieldsNames.add("pbPrimaryShipGroupSeqId");this.allFieldsNames.add("piPicklistBinId");this.allFieldsNames.add("piOrderId");this.allFieldsNames.add("piOrderItemSeqId");this.allFieldsNames.add("piShipGroupSeqId");this.allFieldsNames.add("piInventoryItemId");this.allFieldsNames.add("piItemStatusId");this.allFieldsNames.add("piQuantity");this.allFieldsNames.add("oisgOrderId");this.allFieldsNames.add("oisgShipGroupSeqId");this.allFieldsNames.add("oisgShipmentMethodTypeId");this.allFieldsNames.add("oisgSupplierPartyId");this.allFieldsNames.add("oisgVendorPartyId");this.allFieldsNames.add("oisgCarrierPartyId");this.allFieldsNames.add("oisgCarrierRoleTypeId");this.allFieldsNames.add("oisgFacilityId");this.allFieldsNames.add("oisgContactMechId");this.allFieldsNames.add("oisgTelecomContactMechId");this.allFieldsNames.add("oisgTrackingNumber");this.allFieldsNames.add("oisgShippingInstructions");this.allFieldsNames.add("oisgMaySplit");this.allFieldsNames.add("oisgGiftMessage");this.allFieldsNames.add("oisgIsGift");this.allFieldsNames.add("oisgShipAfterDate");this.allFieldsNames.add("oisgShipByDate");this.allFieldsNames.add("oisgEstimatedShipDate");this.allFieldsNames.add("oisgEstimatedDeliveryDate");this.allFieldsNames.add("oisgThirdPartyAccountNumber");this.allFieldsNames.add("oisgThirdPartyPostalCode");this.allFieldsNames.add("oisgThirdPartyCountryGeoCode");this.allFieldsNames.add("oisgStatusId");this.allFieldsNames.add("oiOrderId");this.allFieldsNames.add("oiOrderItemSeqId");this.allFieldsNames.add("oiExternalId");this.allFieldsNames.add("oiOrderItemTypeId");this.allFieldsNames.add("oiOrderItemGroupSeqId");this.allFieldsNames.add("oiIsItemGroupPrimary");this.allFieldsNames.add("oiFromInventoryItemId");this.allFieldsNames.add("oiBudgetId");this.allFieldsNames.add("oiBudgetItemSeqId");this.allFieldsNames.add("oiProductId");this.allFieldsNames.add("oiProductFeatureId");this.allFieldsNames.add("oiProdCatalogId");this.allFieldsNames.add("oiProductCategoryId");this.allFieldsNames.add("oiIsPromo");this.allFieldsNames.add("oiQuoteId");this.allFieldsNames.add("oiQuoteItemSeqId");this.allFieldsNames.add("oiShoppingListId");this.allFieldsNames.add("oiShoppingListItemSeqId");this.allFieldsNames.add("oiSubscriptionId");this.allFieldsNames.add("oiDeploymentId");this.allFieldsNames.add("oiQuantity");this.allFieldsNames.add("oiCancelQuantity");this.allFieldsNames.add("oiSelectedAmount");this.allFieldsNames.add("oiUnitPrice");this.allFieldsNames.add("oiUnitListPrice");this.allFieldsNames.add("oiUnitAverageCost");this.allFieldsNames.add("oiUnitRecurringPrice");this.allFieldsNames.add("oiIsModifiedPrice");this.allFieldsNames.add("oiRecurringFreqUomId");this.allFieldsNames.add("oiItemDescription");this.allFieldsNames.add("oiComments");this.allFieldsNames.add("oiCorrespondingPoId");this.allFieldsNames.add("oiStatusId");this.allFieldsNames.add("oiSyncStatusId");this.allFieldsNames.add("oiEstimatedShipDate");this.allFieldsNames.add("oiEstimatedDeliveryDate");this.allFieldsNames.add("oiAutoCancelDate");this.allFieldsNames.add("oiDontCancelSetDate");this.allFieldsNames.add("oiDontCancelSetUserLogin");this.allFieldsNames.add("oiShipBeforeDate");this.allFieldsNames.add("oiShipAfterDate");this.allFieldsNames.add("oiCancelBackOrderDate");this.allFieldsNames.add("oiOverrideGlAccountId");this.allFieldsNames.add("oiSalesOpportunityId");this.allFieldsNames.add("oiAcctgTagEnumId1");this.allFieldsNames.add("oiAcctgTagEnumId2");this.allFieldsNames.add("oiAcctgTagEnumId3");this.allFieldsNames.add("oiAcctgTagEnumId4");this.allFieldsNames.add("oiAcctgTagEnumId5");this.allFieldsNames.add("oiAcctgTagEnumId6");this.allFieldsNames.add("oiAcctgTagEnumId7");this.allFieldsNames.add("oiAcctgTagEnumId8");this.allFieldsNames.add("oiAcctgTagEnumId9");this.allFieldsNames.add("oiAcctgTagEnumId10");this.allFieldsNames.add("iiInventoryItemId");this.allFieldsNames.add("iiInventoryItemTypeId");this.allFieldsNames.add("iiProductId");this.allFieldsNames.add("iiPartyId");this.allFieldsNames.add("iiOwnerPartyId");this.allFieldsNames.add("iiStatusId");this.allFieldsNames.add("iiDatetimeReceived");this.allFieldsNames.add("iiDatetimeManufactured");this.allFieldsNames.add("iiExpireDate");this.allFieldsNames.add("iiFacilityId");this.allFieldsNames.add("iiContainerId");this.allFieldsNames.add("iiLotId");this.allFieldsNames.add("iiUomId");this.allFieldsNames.add("iiBinNumber");this.allFieldsNames.add("iiLocationSeqId");this.allFieldsNames.add("iiComments");this.allFieldsNames.add("iiQuantityOnHandTotal");this.allFieldsNames.add("iiAvailableToPromiseTotal");this.allFieldsNames.add("iiOldQuantityOnHand");this.allFieldsNames.add("iiOldAvailableToPromise");this.allFieldsNames.add("iiSerialNumber");this.allFieldsNames.add("iiSoftIdentifier");this.allFieldsNames.add("iiActivationNumber");this.allFieldsNames.add("iiActivationValidThru");this.allFieldsNames.add("iiUnitCost");this.allFieldsNames.add("iiCurrencyUomId");this.allFieldsNames.add("iiAcctgTagEnumId1");this.allFieldsNames.add("iiAcctgTagEnumId2");this.allFieldsNames.add("iiAcctgTagEnumId3");this.allFieldsNames.add("iiAcctgTagEnumId4");this.allFieldsNames.add("iiAcctgTagEnumId5");this.allFieldsNames.add("iiAcctgTagEnumId6");this.allFieldsNames.add("iiAcctgTagEnumId7");this.allFieldsNames.add("iiAcctgTagEnumId8");this.allFieldsNames.add("iiAcctgTagEnumId9");this.allFieldsNames.add("iiAcctgTagEnumId10");this.allFieldsNames.add("iiParentInventoryItemId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -914,6 +949,13 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     }
     /**
      * Auto generated value setter.
+     * @param oisgVendorPartyId the oisgVendorPartyId to set
+     */
+    private void setOisgVendorPartyId(String oisgVendorPartyId) {
+        this.oisgVendorPartyId = oisgVendorPartyId;
+    }
+    /**
+     * Auto generated value setter.
      * @param oisgCarrierPartyId the oisgCarrierPartyId to set
      */
     private void setOisgCarrierPartyId(String oisgCarrierPartyId) {
@@ -925,6 +967,13 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
      */
     private void setOisgCarrierRoleTypeId(String oisgCarrierRoleTypeId) {
         this.oisgCarrierRoleTypeId = oisgCarrierRoleTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oisgFacilityId the oisgFacilityId to set
+     */
+    private void setOisgFacilityId(String oisgFacilityId) {
+        this.oisgFacilityId = oisgFacilityId;
     }
     /**
      * Auto generated value setter.
@@ -988,6 +1037,20 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
      */
     private void setOisgShipByDate(Timestamp oisgShipByDate) {
         this.oisgShipByDate = oisgShipByDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oisgEstimatedShipDate the oisgEstimatedShipDate to set
+     */
+    private void setOisgEstimatedShipDate(Timestamp oisgEstimatedShipDate) {
+        this.oisgEstimatedShipDate = oisgEstimatedShipDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oisgEstimatedDeliveryDate the oisgEstimatedDeliveryDate to set
+     */
+    private void setOisgEstimatedDeliveryDate(Timestamp oisgEstimatedDeliveryDate) {
+        this.oisgEstimatedDeliveryDate = oisgEstimatedDeliveryDate;
     }
     /**
      * Auto generated value setter.
@@ -1058,6 +1121,13 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
      */
     private void setOiIsItemGroupPrimary(String oiIsItemGroupPrimary) {
         this.oiIsItemGroupPrimary = oiIsItemGroupPrimary;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oiFromInventoryItemId the oiFromInventoryItemId to set
+     */
+    private void setOiFromInventoryItemId(String oiFromInventoryItemId) {
+        this.oiFromInventoryItemId = oiFromInventoryItemId;
     }
     /**
      * Auto generated value setter.
@@ -1299,10 +1369,24 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     }
     /**
      * Auto generated value setter.
+     * @param oiCancelBackOrderDate the oiCancelBackOrderDate to set
+     */
+    private void setOiCancelBackOrderDate(Timestamp oiCancelBackOrderDate) {
+        this.oiCancelBackOrderDate = oiCancelBackOrderDate;
+    }
+    /**
+     * Auto generated value setter.
      * @param oiOverrideGlAccountId the oiOverrideGlAccountId to set
      */
     private void setOiOverrideGlAccountId(String oiOverrideGlAccountId) {
         this.oiOverrideGlAccountId = oiOverrideGlAccountId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oiSalesOpportunityId the oiSalesOpportunityId to set
+     */
+    private void setOiSalesOpportunityId(String oiSalesOpportunityId) {
+        this.oiSalesOpportunityId = oiSalesOpportunityId;
     }
     /**
      * Auto generated value setter.
@@ -1806,6 +1890,13 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getOisgVendorPartyId() {
+        return this.oisgVendorPartyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getOisgCarrierPartyId() {
         return this.oisgCarrierPartyId;
     }
@@ -1815,6 +1906,13 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
      */
     public String getOisgCarrierRoleTypeId() {
         return this.oisgCarrierRoleTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOisgFacilityId() {
+        return this.oisgFacilityId;
     }
     /**
      * Auto generated value accessor.
@@ -1878,6 +1976,20 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
      */
     public Timestamp getOisgShipByDate() {
         return this.oisgShipByDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getOisgEstimatedShipDate() {
+        return this.oisgEstimatedShipDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getOisgEstimatedDeliveryDate() {
+        return this.oisgEstimatedDeliveryDate;
     }
     /**
      * Auto generated value accessor.
@@ -1948,6 +2060,13 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
      */
     public String getOiIsItemGroupPrimary() {
         return this.oiIsItemGroupPrimary;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOiFromInventoryItemId() {
+        return this.oiFromInventoryItemId;
     }
     /**
      * Auto generated value accessor.
@@ -2189,10 +2308,24 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getOiCancelBackOrderDate() {
+        return this.oiCancelBackOrderDate;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getOiOverrideGlAccountId() {
         return this.oiOverrideGlAccountId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOiSalesOpportunityId() {
+        return this.oiSalesOpportunityId;
     }
     /**
      * Auto generated value accessor.
@@ -2573,8 +2706,10 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
         setOisgShipGroupSeqId((String) mapValue.get("oisgShipGroupSeqId"));
         setOisgShipmentMethodTypeId((String) mapValue.get("oisgShipmentMethodTypeId"));
         setOisgSupplierPartyId((String) mapValue.get("oisgSupplierPartyId"));
+        setOisgVendorPartyId((String) mapValue.get("oisgVendorPartyId"));
         setOisgCarrierPartyId((String) mapValue.get("oisgCarrierPartyId"));
         setOisgCarrierRoleTypeId((String) mapValue.get("oisgCarrierRoleTypeId"));
+        setOisgFacilityId((String) mapValue.get("oisgFacilityId"));
         setOisgContactMechId((String) mapValue.get("oisgContactMechId"));
         setOisgTelecomContactMechId((String) mapValue.get("oisgTelecomContactMechId"));
         setOisgTrackingNumber((String) mapValue.get("oisgTrackingNumber"));
@@ -2584,6 +2719,8 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
         setOisgIsGift((String) mapValue.get("oisgIsGift"));
         setOisgShipAfterDate((Timestamp) mapValue.get("oisgShipAfterDate"));
         setOisgShipByDate((Timestamp) mapValue.get("oisgShipByDate"));
+        setOisgEstimatedShipDate((Timestamp) mapValue.get("oisgEstimatedShipDate"));
+        setOisgEstimatedDeliveryDate((Timestamp) mapValue.get("oisgEstimatedDeliveryDate"));
         setOisgThirdPartyAccountNumber((String) mapValue.get("oisgThirdPartyAccountNumber"));
         setOisgThirdPartyPostalCode((String) mapValue.get("oisgThirdPartyPostalCode"));
         setOisgThirdPartyCountryGeoCode((String) mapValue.get("oisgThirdPartyCountryGeoCode"));
@@ -2594,6 +2731,7 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
         setOiOrderItemTypeId((String) mapValue.get("oiOrderItemTypeId"));
         setOiOrderItemGroupSeqId((String) mapValue.get("oiOrderItemGroupSeqId"));
         setOiIsItemGroupPrimary((String) mapValue.get("oiIsItemGroupPrimary"));
+        setOiFromInventoryItemId((String) mapValue.get("oiFromInventoryItemId"));
         setOiBudgetId((String) mapValue.get("oiBudgetId"));
         setOiBudgetItemSeqId((String) mapValue.get("oiBudgetItemSeqId"));
         setOiProductId((String) mapValue.get("oiProductId"));
@@ -2628,7 +2766,9 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
         setOiDontCancelSetUserLogin((String) mapValue.get("oiDontCancelSetUserLogin"));
         setOiShipBeforeDate((Timestamp) mapValue.get("oiShipBeforeDate"));
         setOiShipAfterDate((Timestamp) mapValue.get("oiShipAfterDate"));
+        setOiCancelBackOrderDate((Timestamp) mapValue.get("oiCancelBackOrderDate"));
         setOiOverrideGlAccountId((String) mapValue.get("oiOverrideGlAccountId"));
+        setOiSalesOpportunityId((String) mapValue.get("oiSalesOpportunityId"));
         setOiAcctgTagEnumId1((String) mapValue.get("oiAcctgTagEnumId1"));
         setOiAcctgTagEnumId2((String) mapValue.get("oiAcctgTagEnumId2"));
         setOiAcctgTagEnumId3((String) mapValue.get("oiAcctgTagEnumId3"));
@@ -2707,8 +2847,10 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
         mapValue.put("oisgShipGroupSeqId", getOisgShipGroupSeqId());
         mapValue.put("oisgShipmentMethodTypeId", getOisgShipmentMethodTypeId());
         mapValue.put("oisgSupplierPartyId", getOisgSupplierPartyId());
+        mapValue.put("oisgVendorPartyId", getOisgVendorPartyId());
         mapValue.put("oisgCarrierPartyId", getOisgCarrierPartyId());
         mapValue.put("oisgCarrierRoleTypeId", getOisgCarrierRoleTypeId());
+        mapValue.put("oisgFacilityId", getOisgFacilityId());
         mapValue.put("oisgContactMechId", getOisgContactMechId());
         mapValue.put("oisgTelecomContactMechId", getOisgTelecomContactMechId());
         mapValue.put("oisgTrackingNumber", getOisgTrackingNumber());
@@ -2718,6 +2860,8 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
         mapValue.put("oisgIsGift", getOisgIsGift());
         mapValue.put("oisgShipAfterDate", getOisgShipAfterDate());
         mapValue.put("oisgShipByDate", getOisgShipByDate());
+        mapValue.put("oisgEstimatedShipDate", getOisgEstimatedShipDate());
+        mapValue.put("oisgEstimatedDeliveryDate", getOisgEstimatedDeliveryDate());
         mapValue.put("oisgThirdPartyAccountNumber", getOisgThirdPartyAccountNumber());
         mapValue.put("oisgThirdPartyPostalCode", getOisgThirdPartyPostalCode());
         mapValue.put("oisgThirdPartyCountryGeoCode", getOisgThirdPartyCountryGeoCode());
@@ -2728,6 +2872,7 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
         mapValue.put("oiOrderItemTypeId", getOiOrderItemTypeId());
         mapValue.put("oiOrderItemGroupSeqId", getOiOrderItemGroupSeqId());
         mapValue.put("oiIsItemGroupPrimary", getOiIsItemGroupPrimary());
+        mapValue.put("oiFromInventoryItemId", getOiFromInventoryItemId());
         mapValue.put("oiBudgetId", getOiBudgetId());
         mapValue.put("oiBudgetItemSeqId", getOiBudgetItemSeqId());
         mapValue.put("oiProductId", getOiProductId());
@@ -2762,7 +2907,9 @@ fieldMapColumns.put("PicklistItemAndOdrItmShipGrp", fields);
         mapValue.put("oiDontCancelSetUserLogin", getOiDontCancelSetUserLogin());
         mapValue.put("oiShipBeforeDate", getOiShipBeforeDate());
         mapValue.put("oiShipAfterDate", getOiShipAfterDate());
+        mapValue.put("oiCancelBackOrderDate", getOiCancelBackOrderDate());
         mapValue.put("oiOverrideGlAccountId", getOiOverrideGlAccountId());
+        mapValue.put("oiSalesOpportunityId", getOiSalesOpportunityId());
         mapValue.put("oiAcctgTagEnumId1", getOiAcctgTagEnumId1());
         mapValue.put("oiAcctgTagEnumId2", getOiAcctgTagEnumId2());
         mapValue.put("oiAcctgTagEnumId3", getOiAcctgTagEnumId3());

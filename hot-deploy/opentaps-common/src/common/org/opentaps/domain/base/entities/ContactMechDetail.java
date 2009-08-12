@@ -47,7 +47,7 @@ import java.lang.String;
  * Auto generated base entity ContactMechDetail.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectContactMechDetails", query="SELECT CM.CONTACT_MECH_ID AS \"contactMechId\",CM.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CM.INFO_STRING AS \"infoString\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",TN.COUNTRY_CODE AS \"countryCode\",TN.AREA_CODE AS \"areaCode\",TN.CONTACT_NUMBER AS \"contactNumber\",TN.ASK_FOR_NAME AS \"askForName\" FROM CONTACT_MECH CM LEFT JOIN POSTAL_ADDRESS PA ON CM.CONTACT_MECH_ID = PA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER TN ON CM.CONTACT_MECH_ID = TN.CONTACT_MECH_ID", resultSetMapping="ContactMechDetailMapping")
+@NamedNativeQuery(name="selectContactMechDetails", query="SELECT CM.CONTACT_MECH_ID AS \"contactMechId\",CM.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CM.INFO_STRING AS \"infoString\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PA.GEO_POINT_ID AS \"geoPointId\",TN.COUNTRY_CODE AS \"countryCode\",TN.AREA_CODE AS \"areaCode\",TN.CONTACT_NUMBER AS \"contactNumber\",TN.ASK_FOR_NAME AS \"askForName\" FROM CONTACT_MECH CM LEFT JOIN POSTAL_ADDRESS PA ON CM.CONTACT_MECH_ID = PA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER TN ON CM.CONTACT_MECH_ID = TN.CONTACT_MECH_ID", resultSetMapping="ContactMechDetailMapping")
 @SqlResultSetMapping(name="ContactMechDetailMapping", entities={
 @EntityResult(entityClass=ContactMechDetail.class, fields = {
 @FieldResult(name="contactMechId", column="contactMechId")
@@ -65,6 +65,7 @@ import java.lang.String;
 ,@FieldResult(name="paStateProvinceGeoId", column="paStateProvinceGeoId")
 ,@FieldResult(name="paCountyGeoId", column="paCountyGeoId")
 ,@FieldResult(name="paPostalCodeGeoId", column="paPostalCodeGeoId")
+,@FieldResult(name="paGeoPointId", column="paGeoPointId")
 ,@FieldResult(name="tnCountryCode", column="tnCountryCode")
 ,@FieldResult(name="tnAreaCode", column="tnAreaCode")
 ,@FieldResult(name="tnContactNumber", column="tnContactNumber")
@@ -90,6 +91,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("paStateProvinceGeoId", "PA.STATE_PROVINCE_GEO_ID");
         fields.put("paCountyGeoId", "PA.COUNTY_GEO_ID");
         fields.put("paPostalCodeGeoId", "PA.POSTAL_CODE_GEO_ID");
+        fields.put("paGeoPointId", "PA.GEO_POINT_ID");
         fields.put("tnCountryCode", "TN.COUNTRY_CODE");
         fields.put("tnAreaCode", "TN.AREA_CODE");
         fields.put("tnContactNumber", "TN.CONTACT_NUMBER");
@@ -112,6 +114,7 @@ fieldMapColumns.put("ContactMechDetail", fields);
     paStateProvinceGeoId("paStateProvinceGeoId"),
     paCountyGeoId("paCountyGeoId"),
     paPostalCodeGeoId("paPostalCodeGeoId"),
+    paGeoPointId("paGeoPointId"),
     tnCountryCode("tnCountryCode"),
     tnAreaCode("tnAreaCode"),
     tnContactNumber("tnContactNumber"),
@@ -157,6 +160,8 @@ fieldMapColumns.put("ContactMechDetail", fields);
     
    private String paPostalCodeGeoId;
     
+   private String paGeoPointId;
+    
    private String tnCountryCode;
     
    private String tnAreaCode;
@@ -176,7 +181,7 @@ fieldMapColumns.put("ContactMechDetail", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("contactMechId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("infoString");this.allFieldsNames.add("paToName");this.allFieldsNames.add("paAttnName");this.allFieldsNames.add("paAddress1");this.allFieldsNames.add("paAddress2");this.allFieldsNames.add("paDirections");this.allFieldsNames.add("paCity");this.allFieldsNames.add("paPostalCode");this.allFieldsNames.add("paPostalCodeExt");this.allFieldsNames.add("paCountryGeoId");this.allFieldsNames.add("paStateProvinceGeoId");this.allFieldsNames.add("paCountyGeoId");this.allFieldsNames.add("paPostalCodeGeoId");this.allFieldsNames.add("tnCountryCode");this.allFieldsNames.add("tnAreaCode");this.allFieldsNames.add("tnContactNumber");this.allFieldsNames.add("tnAskForName");
+      this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("infoString");this.allFieldsNames.add("paToName");this.allFieldsNames.add("paAttnName");this.allFieldsNames.add("paAddress1");this.allFieldsNames.add("paAddress2");this.allFieldsNames.add("paDirections");this.allFieldsNames.add("paCity");this.allFieldsNames.add("paPostalCode");this.allFieldsNames.add("paPostalCodeExt");this.allFieldsNames.add("paCountryGeoId");this.allFieldsNames.add("paStateProvinceGeoId");this.allFieldsNames.add("paCountyGeoId");this.allFieldsNames.add("paPostalCodeGeoId");this.allFieldsNames.add("paGeoPointId");this.allFieldsNames.add("tnCountryCode");this.allFieldsNames.add("tnAreaCode");this.allFieldsNames.add("tnContactNumber");this.allFieldsNames.add("tnAskForName");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -298,6 +303,13 @@ fieldMapColumns.put("ContactMechDetail", fields);
      */
     private void setPaPostalCodeGeoId(String paPostalCodeGeoId) {
         this.paPostalCodeGeoId = paPostalCodeGeoId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param paGeoPointId the paGeoPointId to set
+     */
+    private void setPaGeoPointId(String paGeoPointId) {
+        this.paGeoPointId = paGeoPointId;
     }
     /**
      * Auto generated value setter.
@@ -437,6 +449,13 @@ fieldMapColumns.put("ContactMechDetail", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getPaGeoPointId() {
+        return this.paGeoPointId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getTnCountryCode() {
         return this.tnCountryCode;
     }
@@ -484,6 +503,7 @@ fieldMapColumns.put("ContactMechDetail", fields);
         setPaStateProvinceGeoId((String) mapValue.get("paStateProvinceGeoId"));
         setPaCountyGeoId((String) mapValue.get("paCountyGeoId"));
         setPaPostalCodeGeoId((String) mapValue.get("paPostalCodeGeoId"));
+        setPaGeoPointId((String) mapValue.get("paGeoPointId"));
         setTnCountryCode((String) mapValue.get("tnCountryCode"));
         setTnAreaCode((String) mapValue.get("tnAreaCode"));
         setTnContactNumber((String) mapValue.get("tnContactNumber"));
@@ -510,6 +530,7 @@ fieldMapColumns.put("ContactMechDetail", fields);
         mapValue.put("paStateProvinceGeoId", getPaStateProvinceGeoId());
         mapValue.put("paCountyGeoId", getPaCountyGeoId());
         mapValue.put("paPostalCodeGeoId", getPaPostalCodeGeoId());
+        mapValue.put("paGeoPointId", getPaGeoPointId());
         mapValue.put("tnCountryCode", getTnCountryCode());
         mapValue.put("tnAreaCode", getTnAreaCode());
         mapValue.put("tnContactNumber", getTnContactNumber());

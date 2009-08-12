@@ -41,6 +41,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
+import java.lang.Long;
 import java.lang.String;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -64,6 +65,14 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("currencyUomId", "CURRENCY_UOM_ID");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
+        fields.put("isActive", "IS_ACTIVE");
+        fields.put("convertedLeads", "CONVERTED_LEADS");
+        fields.put("expectedResponsePercent", "EXPECTED_RESPONSE_PERCENT");
+        fields.put("expectedRevenue", "EXPECTED_REVENUE");
+        fields.put("numSent", "NUM_SENT");
+        fields.put("startDate", "START_DATE");
+        fields.put("createdByUserLogin", "CREATED_BY_USER_LOGIN");
+        fields.put("lastModifiedByUserLogin", "LAST_MODIFIED_BY_USER_LOGIN");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -82,6 +91,14 @@ fieldMapColumns.put("MarketingCampaign", fields);
     currencyUomId("currencyUomId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
+    isActive("isActive"),
+    convertedLeads("convertedLeads"),
+    expectedResponsePercent("expectedResponsePercent"),
+    expectedRevenue("expectedRevenue"),
+    numSent("numSent"),
+    startDate("startDate"),
+    createdByUserLogin("createdByUserLogin"),
+    lastModifiedByUserLogin("lastModifiedByUserLogin"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -121,6 +138,22 @@ fieldMapColumns.put("MarketingCampaign", fields);
    private Timestamp fromDate;
    @Column(name="THRU_DATE")
    private Timestamp thruDate;
+   @Column(name="IS_ACTIVE")
+   private String isActive;
+   @Column(name="CONVERTED_LEADS")
+   private String convertedLeads;
+   @Column(name="EXPECTED_RESPONSE_PERCENT")
+   private BigDecimal expectedResponsePercent;
+   @Column(name="EXPECTED_REVENUE")
+   private BigDecimal expectedRevenue;
+   @Column(name="NUM_SENT")
+   private Long numSent;
+   @Column(name="START_DATE")
+   private Timestamp startDate;
+   @Column(name="CREATED_BY_USER_LOGIN")
+   private String createdByUserLogin;
+   @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
+   private String lastModifiedByUserLogin;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -198,7 +231,7 @@ fieldMapColumns.put("MarketingCampaign", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("marketingCampaignId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("marketingCampaignId");this.allFieldsNames.add("parentCampaignId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("campaignName");this.allFieldsNames.add("campaignSummary");this.allFieldsNames.add("budgetedCost");this.allFieldsNames.add("actualCost");this.allFieldsNames.add("estimatedCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("marketingCampaignId");this.allFieldsNames.add("parentCampaignId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("campaignName");this.allFieldsNames.add("campaignSummary");this.allFieldsNames.add("budgetedCost");this.allFieldsNames.add("actualCost");this.allFieldsNames.add("estimatedCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("isActive");this.allFieldsNames.add("convertedLeads");this.allFieldsNames.add("expectedResponsePercent");this.allFieldsNames.add("expectedRevenue");this.allFieldsNames.add("numSent");this.allFieldsNames.add("startDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -289,6 +322,62 @@ fieldMapColumns.put("MarketingCampaign", fields);
      */
     public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param isActive the isActive to set
+     */
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
+    }
+    /**
+     * Auto generated value setter.
+     * @param convertedLeads the convertedLeads to set
+     */
+    public void setConvertedLeads(String convertedLeads) {
+        this.convertedLeads = convertedLeads;
+    }
+    /**
+     * Auto generated value setter.
+     * @param expectedResponsePercent the expectedResponsePercent to set
+     */
+    public void setExpectedResponsePercent(BigDecimal expectedResponsePercent) {
+        this.expectedResponsePercent = expectedResponsePercent;
+    }
+    /**
+     * Auto generated value setter.
+     * @param expectedRevenue the expectedRevenue to set
+     */
+    public void setExpectedRevenue(BigDecimal expectedRevenue) {
+        this.expectedRevenue = expectedRevenue;
+    }
+    /**
+     * Auto generated value setter.
+     * @param numSent the numSent to set
+     */
+    public void setNumSent(Long numSent) {
+        this.numSent = numSent;
+    }
+    /**
+     * Auto generated value setter.
+     * @param startDate the startDate to set
+     */
+    public void setStartDate(Timestamp startDate) {
+        this.startDate = startDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param createdByUserLogin the createdByUserLogin to set
+     */
+    public void setCreatedByUserLogin(String createdByUserLogin) {
+        this.createdByUserLogin = createdByUserLogin;
+    }
+    /**
+     * Auto generated value setter.
+     * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
+     */
+    public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+        this.lastModifiedByUserLogin = lastModifiedByUserLogin;
     }
     /**
      * Auto generated value setter.
@@ -395,6 +484,62 @@ fieldMapColumns.put("MarketingCampaign", fields);
      */
     public Timestamp getThruDate() {
         return this.thruDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIsActive() {
+        return this.isActive;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getConvertedLeads() {
+        return this.convertedLeads;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getExpectedResponsePercent() {
+        return this.expectedResponsePercent;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getExpectedRevenue() {
+        return this.expectedRevenue;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getNumSent() {
+        return this.numSent;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getStartDate() {
+        return this.startDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCreatedByUserLogin() {
+        return this.createdByUserLogin;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLastModifiedByUserLogin() {
+        return this.lastModifiedByUserLogin;
     }
     /**
      * Auto generated value accessor.
@@ -767,6 +912,14 @@ fieldMapColumns.put("MarketingCampaign", fields);
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
+        setIsActive((String) mapValue.get("isActive"));
+        setConvertedLeads((String) mapValue.get("convertedLeads"));
+        setExpectedResponsePercent(convertToBigDecimal(mapValue.get("expectedResponsePercent")));
+        setExpectedRevenue(convertToBigDecimal(mapValue.get("expectedRevenue")));
+        setNumSent((Long) mapValue.get("numSent"));
+        setStartDate((Timestamp) mapValue.get("startDate"));
+        setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
+        setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -789,6 +942,14 @@ fieldMapColumns.put("MarketingCampaign", fields);
         mapValue.put("currencyUomId", getCurrencyUomId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
+        mapValue.put("isActive", getIsActive());
+        mapValue.put("convertedLeads", getConvertedLeads());
+        mapValue.put("expectedResponsePercent", getExpectedResponsePercent());
+        mapValue.put("expectedRevenue", getExpectedRevenue());
+        mapValue.put("numSent", getNumSent());
+        mapValue.put("startDate", getStartDate());
+        mapValue.put("createdByUserLogin", getCreatedByUserLogin());
+        mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

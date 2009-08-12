@@ -47,7 +47,7 @@ import java.lang.String;
  * Auto generated base entity GeoAssocAndGeoTo.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectGeoAssocAndGeoTos", query="SELECT GA.GEO_ID AS \"geoId\",GA.GEO_ASSOC_TYPE_ID AS \"geoAssocTypeId\",GTO.GEO_ID AS \"geoId\",GTO.GEO_TYPE_ID AS \"geoTypeId\",GTO.GEO_NAME AS \"geoName\",GTO.GEO_CODE AS \"geoCode\",GTO.GEO_SEC_CODE AS \"geoSecCode\",GTO.ABBREVIATION AS \"abbreviation\" FROM GEO_ASSOC GA INNER JOIN GEO GTO ON GA.GEO_ID_TO = GTO.GEO_ID", resultSetMapping="GeoAssocAndGeoToMapping")
+@NamedNativeQuery(name="selectGeoAssocAndGeoTos", query="SELECT GA.GEO_ID AS \"geoId\",GA.GEO_ASSOC_TYPE_ID AS \"geoAssocTypeId\",GTO.GEO_ID AS \"geoId\",GTO.GEO_TYPE_ID AS \"geoTypeId\",GTO.GEO_NAME AS \"geoName\",GTO.GEO_CODE AS \"geoCode\",GTO.GEO_SEC_CODE AS \"geoSecCode\",GTO.ABBREVIATION AS \"abbreviation\",GTO.WELL_KNOWN_TEXT AS \"wellKnownText\" FROM GEO_ASSOC GA INNER JOIN GEO GTO ON GA.GEO_ID_TO = GTO.GEO_ID", resultSetMapping="GeoAssocAndGeoToMapping")
 @SqlResultSetMapping(name="GeoAssocAndGeoToMapping", entities={
 @EntityResult(entityClass=GeoAssocAndGeoTo.class, fields = {
 @FieldResult(name="geoIdFrom", column="geoIdFrom")
@@ -58,6 +58,7 @@ import java.lang.String;
 ,@FieldResult(name="geoCode", column="geoCode")
 ,@FieldResult(name="geoSecCode", column="geoSecCode")
 ,@FieldResult(name="abbreviation", column="abbreviation")
+,@FieldResult(name="wellKnownText", column="wellKnownText")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -72,6 +73,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("geoCode", "GTO.GEO_CODE");
         fields.put("geoSecCode", "GTO.GEO_SEC_CODE");
         fields.put("abbreviation", "GTO.ABBREVIATION");
+        fields.put("wellKnownText", "GTO.WELL_KNOWN_TEXT");
 fieldMapColumns.put("GeoAssocAndGeoTo", fields);
 }
   public static enum Fields implements EntityFieldInterface<GeoAssocAndGeoTo> {
@@ -82,7 +84,8 @@ fieldMapColumns.put("GeoAssocAndGeoTo", fields);
     geoName("geoName"),
     geoCode("geoCode"),
     geoSecCode("geoSecCode"),
-    abbreviation("abbreviation");
+    abbreviation("abbreviation"),
+    wellKnownText("wellKnownText");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -109,6 +112,8 @@ fieldMapColumns.put("GeoAssocAndGeoTo", fields);
    private String geoSecCode;
     
    private String abbreviation;
+    
+   private String wellKnownText;
 
   /**
    * Default constructor.
@@ -121,7 +126,7 @@ fieldMapColumns.put("GeoAssocAndGeoTo", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("geoIdFrom");this.primaryKeyNames.add("geoId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("geoIdFrom");this.allFieldsNames.add("geoAssocTypeId");this.allFieldsNames.add("geoId");this.allFieldsNames.add("geoTypeId");this.allFieldsNames.add("geoName");this.allFieldsNames.add("geoCode");this.allFieldsNames.add("geoSecCode");this.allFieldsNames.add("abbreviation");
+      this.allFieldsNames.add("geoIdFrom");this.allFieldsNames.add("geoAssocTypeId");this.allFieldsNames.add("geoId");this.allFieldsNames.add("geoTypeId");this.allFieldsNames.add("geoName");this.allFieldsNames.add("geoCode");this.allFieldsNames.add("geoSecCode");this.allFieldsNames.add("abbreviation");this.allFieldsNames.add("wellKnownText");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -195,6 +200,13 @@ fieldMapColumns.put("GeoAssocAndGeoTo", fields);
     private void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
     }
+    /**
+     * Auto generated value setter.
+     * @param wellKnownText the wellKnownText to set
+     */
+    private void setWellKnownText(String wellKnownText) {
+        this.wellKnownText = wellKnownText;
+    }
 
     /**
      * Auto generated value accessor.
@@ -252,6 +264,13 @@ fieldMapColumns.put("GeoAssocAndGeoTo", fields);
     public String getAbbreviation() {
         return this.abbreviation;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWellKnownText() {
+        return this.wellKnownText;
+    }
 
 
 
@@ -268,6 +287,7 @@ fieldMapColumns.put("GeoAssocAndGeoTo", fields);
         setGeoCode((String) mapValue.get("geoCode"));
         setGeoSecCode((String) mapValue.get("geoSecCode"));
         setAbbreviation((String) mapValue.get("abbreviation"));
+        setWellKnownText((String) mapValue.get("wellKnownText"));
         postInit();
     }
 
@@ -283,6 +303,7 @@ fieldMapColumns.put("GeoAssocAndGeoTo", fields);
         mapValue.put("geoCode", getGeoCode());
         mapValue.put("geoSecCode", getGeoSecCode());
         mapValue.put("abbreviation", getAbbreviation());
+        mapValue.put("wellKnownText", getWellKnownText());
         return mapValue;
     }
 

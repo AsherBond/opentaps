@@ -71,6 +71,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("orderIdPrefix", "ORDER_ID_PREFIX");
         fields.put("lastOrderNumber", "LAST_ORDER_NUMBER");
         fields.put("refundPaymentMethodId", "REFUND_PAYMENT_METHOD_ID");
+        fields.put("errorGlJournalId", "ERROR_GL_JOURNAL_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -98,6 +99,7 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
     orderIdPrefix("orderIdPrefix"),
     lastOrderNumber("lastOrderNumber"),
     refundPaymentMethodId("refundPaymentMethodId"),
+    errorGlJournalId("errorGlJournalId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -153,6 +155,8 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
    private Long lastOrderNumber;
    @Column(name="REFUND_PAYMENT_METHOD_ID")
    private String refundPaymentMethodId;
+   @Column(name="ERROR_GL_JOURNAL_ID")
+   private String errorGlJournalId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -222,6 +226,13 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
    
    private PaymentMethod paymentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ERROR_GL_JOURNAL_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private GlJournal glJournal = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COSTING_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -240,7 +251,7 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("fiscalYearStartMonth");this.allFieldsNames.add("fiscalYearStartDay");this.allFieldsNames.add("taxFormId");this.allFieldsNames.add("cogsMethodId");this.allFieldsNames.add("baseCurrencyUomId");this.allFieldsNames.add("invoiceSequenceEnumId");this.allFieldsNames.add("invoiceIdPrefix");this.allFieldsNames.add("lastInvoiceNumber");this.allFieldsNames.add("lastInvoiceRestartDate");this.allFieldsNames.add("useInvoiceIdForReturns");this.allFieldsNames.add("quoteSequenceEnumId");this.allFieldsNames.add("quoteIdPrefix");this.allFieldsNames.add("lastQuoteNumber");this.allFieldsNames.add("orderSequenceEnumId");this.allFieldsNames.add("orderIdPrefix");this.allFieldsNames.add("lastOrderNumber");this.allFieldsNames.add("refundPaymentMethodId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("costingMethodId");this.allFieldsNames.add("salesInvoiceFooterText");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("fiscalYearStartMonth");this.allFieldsNames.add("fiscalYearStartDay");this.allFieldsNames.add("taxFormId");this.allFieldsNames.add("cogsMethodId");this.allFieldsNames.add("baseCurrencyUomId");this.allFieldsNames.add("invoiceSequenceEnumId");this.allFieldsNames.add("invoiceIdPrefix");this.allFieldsNames.add("lastInvoiceNumber");this.allFieldsNames.add("lastInvoiceRestartDate");this.allFieldsNames.add("useInvoiceIdForReturns");this.allFieldsNames.add("quoteSequenceEnumId");this.allFieldsNames.add("quoteIdPrefix");this.allFieldsNames.add("lastQuoteNumber");this.allFieldsNames.add("orderSequenceEnumId");this.allFieldsNames.add("orderIdPrefix");this.allFieldsNames.add("lastOrderNumber");this.allFieldsNames.add("refundPaymentMethodId");this.allFieldsNames.add("errorGlJournalId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("costingMethodId");this.allFieldsNames.add("salesInvoiceFooterText");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -380,6 +391,13 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
      */
     public void setRefundPaymentMethodId(String refundPaymentMethodId) {
         this.refundPaymentMethodId = refundPaymentMethodId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param errorGlJournalId the errorGlJournalId to set
+     */
+    public void setErrorGlJournalId(String errorGlJournalId) {
+        this.errorGlJournalId = errorGlJournalId;
     }
     /**
      * Auto generated value setter.
@@ -552,6 +570,13 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getErrorGlJournalId() {
+        return this.errorGlJournalId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -682,6 +707,17 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
         return this.paymentMethod;
     }
     /**
+     * Auto generated method that gets the related <code>GlJournal</code> by the relation named <code>GlJournal</code>.
+     * @return the <code>GlJournal</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public GlJournal getGlJournal() throws RepositoryException {
+        if (this.glJournal == null) {
+            this.glJournal = getRelatedOne(GlJournal.class, "GlJournal");
+        }
+        return this.glJournal;
+    }
+    /**
      * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>CostingMethodEnumeration</code>.
      * @return the <code>Enumeration</code>
      * @throws RepositoryException if an error occurs
@@ -751,6 +787,13 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
     }
     /**
      * Auto generated value setter.
+     * @param glJournal the glJournal to set
+    */
+    public void setGlJournal(GlJournal glJournal) {
+        this.glJournal = glJournal;
+    }
+    /**
+     * Auto generated value setter.
      * @param costingMethodEnumeration the costingMethodEnumeration to set
     */
     public void setCostingMethodEnumeration(Enumeration costingMethodEnumeration) {
@@ -780,6 +823,7 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
         setOrderIdPrefix((String) mapValue.get("orderIdPrefix"));
         setLastOrderNumber((Long) mapValue.get("lastOrderNumber"));
         setRefundPaymentMethodId((String) mapValue.get("refundPaymentMethodId"));
+        setErrorGlJournalId((String) mapValue.get("errorGlJournalId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -811,6 +855,7 @@ fieldMapColumns.put("PartyAcctgPreference", fields);
         mapValue.put("orderIdPrefix", getOrderIdPrefix());
         mapValue.put("lastOrderNumber", getLastOrderNumber());
         mapValue.put("refundPaymentMethodId", getRefundPaymentMethodId());
+        mapValue.put("errorGlJournalId", getErrorGlJournalId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

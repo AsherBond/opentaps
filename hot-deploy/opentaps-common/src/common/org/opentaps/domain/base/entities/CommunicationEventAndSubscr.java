@@ -41,6 +41,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
+import java.lang.Long;
 import java.lang.String;
 import java.sql.Timestamp;
 
@@ -48,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity CommunicationEventAndSubscr.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectCommunicationEventAndSubscrs", query="SELECT SC.SUBSCRIPTION_ID AS \"subscriptionId\",SU.DESCRIPTION AS \"description\",SU.SUBSCRIPTION_RESOURCE_ID AS \"subscriptionResourceId\",SU.COMMUNICATION_EVENT_ID AS \"communicationEventId\",SU.CONTACT_MECH_ID AS \"contactMechId\",SU.ORIGINATED_FROM_PARTY_ID AS \"originatedFromPartyId\",SU.ORIGINATED_FROM_ROLE_TYPE_ID AS \"originatedFromRoleTypeId\",SU.PARTY_ID AS \"partyId\",SU.ROLE_TYPE_ID AS \"roleTypeId\",SU.PARTY_NEED_ID AS \"partyNeedId\",SU.NEED_TYPE_ID AS \"needTypeId\",SU.ORDER_ID AS \"orderId\",SU.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",SU.PRODUCT_ID AS \"productId\",SU.PRODUCT_CATEGORY_ID AS \"productCategoryId\",SU.INVENTORY_ITEM_ID AS \"inventoryItemId\",SU.SUBSCRIPTION_TYPE_ID AS \"subscriptionTypeId\",SU.EXTERNAL_SUBSCRIPTION_ID AS \"externalSubscriptionId\",SU.FROM_DATE AS \"fromDate\",SU.THRU_DATE AS \"thruDate\" FROM SUBSCRIPTION_COMM_EVENT SC INNER JOIN SUBSCRIPTION SU ON SC.SUBSCRIPTION_ID = SU.SUBSCRIPTION_ID", resultSetMapping="CommunicationEventAndSubscrMapping")
+@NamedNativeQuery(name="selectCommunicationEventAndSubscrs", query="SELECT SC.SUBSCRIPTION_ID AS \"subscriptionId\",SU.DESCRIPTION AS \"description\",SU.SUBSCRIPTION_RESOURCE_ID AS \"subscriptionResourceId\",SU.COMMUNICATION_EVENT_ID AS \"communicationEventId\",SU.CONTACT_MECH_ID AS \"contactMechId\",SU.ORIGINATED_FROM_PARTY_ID AS \"originatedFromPartyId\",SU.ORIGINATED_FROM_ROLE_TYPE_ID AS \"originatedFromRoleTypeId\",SU.PARTY_ID AS \"partyId\",SU.ROLE_TYPE_ID AS \"roleTypeId\",SU.PARTY_NEED_ID AS \"partyNeedId\",SU.NEED_TYPE_ID AS \"needTypeId\",SU.ORDER_ID AS \"orderId\",SU.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",SU.PRODUCT_ID AS \"productId\",SU.PRODUCT_CATEGORY_ID AS \"productCategoryId\",SU.INVENTORY_ITEM_ID AS \"inventoryItemId\",SU.SUBSCRIPTION_TYPE_ID AS \"subscriptionTypeId\",SU.EXTERNAL_SUBSCRIPTION_ID AS \"externalSubscriptionId\",SU.FROM_DATE AS \"fromDate\",SU.THRU_DATE AS \"thruDate\",SU.PURCHASE_FROM_DATE AS \"purchaseFromDate\",SU.PURCHASE_THRU_DATE AS \"purchaseThruDate\",SU.MAX_LIFE_TIME AS \"maxLifeTime\",SU.MAX_LIFE_TIME_UOM_ID AS \"maxLifeTimeUomId\",SU.AVAILABLE_TIME AS \"availableTime\",SU.AVAILABLE_TIME_UOM_ID AS \"availableTimeUomId\",SU.USE_COUNT_LIMIT AS \"useCountLimit\",SU.USE_TIME AS \"useTime\",SU.USE_TIME_UOM_ID AS \"useTimeUomId\",SU.AUTOMATIC_EXTEND AS \"automaticExtend\",SU.CANCL_AUTM_EXT_TIME AS \"canclAutmExtTime\",SU.CANCL_AUTM_EXT_TIME_UOM_ID AS \"canclAutmExtTimeUomId\" FROM SUBSCRIPTION_COMM_EVENT SC INNER JOIN SUBSCRIPTION SU ON SC.SUBSCRIPTION_ID = SU.SUBSCRIPTION_ID", resultSetMapping="CommunicationEventAndSubscrMapping")
 @SqlResultSetMapping(name="CommunicationEventAndSubscrMapping", entities={
 @EntityResult(entityClass=CommunicationEventAndSubscr.class, fields = {
 @FieldResult(name="subscriptionId", column="subscriptionId")
@@ -71,6 +72,18 @@ import java.sql.Timestamp;
 ,@FieldResult(name="externalSubscriptionId", column="externalSubscriptionId")
 ,@FieldResult(name="fromDate", column="fromDate")
 ,@FieldResult(name="thruDate", column="thruDate")
+,@FieldResult(name="purchaseFromDate", column="purchaseFromDate")
+,@FieldResult(name="purchaseThruDate", column="purchaseThruDate")
+,@FieldResult(name="maxLifeTime", column="maxLifeTime")
+,@FieldResult(name="maxLifeTimeUomId", column="maxLifeTimeUomId")
+,@FieldResult(name="availableTime", column="availableTime")
+,@FieldResult(name="availableTimeUomId", column="availableTimeUomId")
+,@FieldResult(name="useCountLimit", column="useCountLimit")
+,@FieldResult(name="useTime", column="useTime")
+,@FieldResult(name="useTimeUomId", column="useTimeUomId")
+,@FieldResult(name="automaticExtend", column="automaticExtend")
+,@FieldResult(name="canclAutmExtTime", column="canclAutmExtTime")
+,@FieldResult(name="canclAutmExtTimeUomId", column="canclAutmExtTimeUomId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -97,6 +110,18 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("externalSubscriptionId", "SU.EXTERNAL_SUBSCRIPTION_ID");
         fields.put("fromDate", "SU.FROM_DATE");
         fields.put("thruDate", "SU.THRU_DATE");
+        fields.put("purchaseFromDate", "SU.PURCHASE_FROM_DATE");
+        fields.put("purchaseThruDate", "SU.PURCHASE_THRU_DATE");
+        fields.put("maxLifeTime", "SU.MAX_LIFE_TIME");
+        fields.put("maxLifeTimeUomId", "SU.MAX_LIFE_TIME_UOM_ID");
+        fields.put("availableTime", "SU.AVAILABLE_TIME");
+        fields.put("availableTimeUomId", "SU.AVAILABLE_TIME_UOM_ID");
+        fields.put("useCountLimit", "SU.USE_COUNT_LIMIT");
+        fields.put("useTime", "SU.USE_TIME");
+        fields.put("useTimeUomId", "SU.USE_TIME_UOM_ID");
+        fields.put("automaticExtend", "SU.AUTOMATIC_EXTEND");
+        fields.put("canclAutmExtTime", "SU.CANCL_AUTM_EXT_TIME");
+        fields.put("canclAutmExtTimeUomId", "SU.CANCL_AUTM_EXT_TIME_UOM_ID");
 fieldMapColumns.put("CommunicationEventAndSubscr", fields);
 }
   public static enum Fields implements EntityFieldInterface<CommunicationEventAndSubscr> {
@@ -119,7 +144,19 @@ fieldMapColumns.put("CommunicationEventAndSubscr", fields);
     subscriptionTypeId("subscriptionTypeId"),
     externalSubscriptionId("externalSubscriptionId"),
     fromDate("fromDate"),
-    thruDate("thruDate");
+    thruDate("thruDate"),
+    purchaseFromDate("purchaseFromDate"),
+    purchaseThruDate("purchaseThruDate"),
+    maxLifeTime("maxLifeTime"),
+    maxLifeTimeUomId("maxLifeTimeUomId"),
+    availableTime("availableTime"),
+    availableTimeUomId("availableTimeUomId"),
+    useCountLimit("useCountLimit"),
+    useTime("useTime"),
+    useTimeUomId("useTimeUomId"),
+    automaticExtend("automaticExtend"),
+    canclAutmExtTime("canclAutmExtTime"),
+    canclAutmExtTimeUomId("canclAutmExtTimeUomId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -170,6 +207,30 @@ fieldMapColumns.put("CommunicationEventAndSubscr", fields);
    private Timestamp fromDate;
     
    private Timestamp thruDate;
+    
+   private Timestamp purchaseFromDate;
+    
+   private Timestamp purchaseThruDate;
+    
+   private Long maxLifeTime;
+    
+   private String maxLifeTimeUomId;
+    
+   private Long availableTime;
+    
+   private String availableTimeUomId;
+    
+   private Long useCountLimit;
+    
+   private Long useTime;
+    
+   private String useTimeUomId;
+    
+   private String automaticExtend;
+    
+   private Long canclAutmExtTime;
+    
+   private String canclAutmExtTimeUomId;
 
   /**
    * Default constructor.
@@ -182,7 +243,7 @@ fieldMapColumns.put("CommunicationEventAndSubscr", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("subscriptionId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("subscriptionId");this.allFieldsNames.add("description");this.allFieldsNames.add("subscriptionResourceId");this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("originatedFromPartyId");this.allFieldsNames.add("originatedFromRoleTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("partyNeedId");this.allFieldsNames.add("needTypeId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("subscriptionTypeId");this.allFieldsNames.add("externalSubscriptionId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");
+      this.allFieldsNames.add("subscriptionId");this.allFieldsNames.add("description");this.allFieldsNames.add("subscriptionResourceId");this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("originatedFromPartyId");this.allFieldsNames.add("originatedFromRoleTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("partyNeedId");this.allFieldsNames.add("needTypeId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("subscriptionTypeId");this.allFieldsNames.add("externalSubscriptionId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("purchaseFromDate");this.allFieldsNames.add("purchaseThruDate");this.allFieldsNames.add("maxLifeTime");this.allFieldsNames.add("maxLifeTimeUomId");this.allFieldsNames.add("availableTime");this.allFieldsNames.add("availableTimeUomId");this.allFieldsNames.add("useCountLimit");this.allFieldsNames.add("useTime");this.allFieldsNames.add("useTimeUomId");this.allFieldsNames.add("automaticExtend");this.allFieldsNames.add("canclAutmExtTime");this.allFieldsNames.add("canclAutmExtTimeUomId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -340,6 +401,90 @@ fieldMapColumns.put("CommunicationEventAndSubscr", fields);
     private void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
     }
+    /**
+     * Auto generated value setter.
+     * @param purchaseFromDate the purchaseFromDate to set
+     */
+    private void setPurchaseFromDate(Timestamp purchaseFromDate) {
+        this.purchaseFromDate = purchaseFromDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param purchaseThruDate the purchaseThruDate to set
+     */
+    private void setPurchaseThruDate(Timestamp purchaseThruDate) {
+        this.purchaseThruDate = purchaseThruDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param maxLifeTime the maxLifeTime to set
+     */
+    private void setMaxLifeTime(Long maxLifeTime) {
+        this.maxLifeTime = maxLifeTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param maxLifeTimeUomId the maxLifeTimeUomId to set
+     */
+    private void setMaxLifeTimeUomId(String maxLifeTimeUomId) {
+        this.maxLifeTimeUomId = maxLifeTimeUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param availableTime the availableTime to set
+     */
+    private void setAvailableTime(Long availableTime) {
+        this.availableTime = availableTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param availableTimeUomId the availableTimeUomId to set
+     */
+    private void setAvailableTimeUomId(String availableTimeUomId) {
+        this.availableTimeUomId = availableTimeUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param useCountLimit the useCountLimit to set
+     */
+    private void setUseCountLimit(Long useCountLimit) {
+        this.useCountLimit = useCountLimit;
+    }
+    /**
+     * Auto generated value setter.
+     * @param useTime the useTime to set
+     */
+    private void setUseTime(Long useTime) {
+        this.useTime = useTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param useTimeUomId the useTimeUomId to set
+     */
+    private void setUseTimeUomId(String useTimeUomId) {
+        this.useTimeUomId = useTimeUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param automaticExtend the automaticExtend to set
+     */
+    private void setAutomaticExtend(String automaticExtend) {
+        this.automaticExtend = automaticExtend;
+    }
+    /**
+     * Auto generated value setter.
+     * @param canclAutmExtTime the canclAutmExtTime to set
+     */
+    private void setCanclAutmExtTime(Long canclAutmExtTime) {
+        this.canclAutmExtTime = canclAutmExtTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param canclAutmExtTimeUomId the canclAutmExtTimeUomId to set
+     */
+    private void setCanclAutmExtTimeUomId(String canclAutmExtTimeUomId) {
+        this.canclAutmExtTimeUomId = canclAutmExtTimeUomId;
+    }
 
     /**
      * Auto generated value accessor.
@@ -481,6 +626,90 @@ fieldMapColumns.put("CommunicationEventAndSubscr", fields);
     public Timestamp getThruDate() {
         return this.thruDate;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getPurchaseFromDate() {
+        return this.purchaseFromDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getPurchaseThruDate() {
+        return this.purchaseThruDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getMaxLifeTime() {
+        return this.maxLifeTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getMaxLifeTimeUomId() {
+        return this.maxLifeTimeUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getAvailableTime() {
+        return this.availableTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAvailableTimeUomId() {
+        return this.availableTimeUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getUseCountLimit() {
+        return this.useCountLimit;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getUseTime() {
+        return this.useTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getUseTimeUomId() {
+        return this.useTimeUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAutomaticExtend() {
+        return this.automaticExtend;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getCanclAutmExtTime() {
+        return this.canclAutmExtTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCanclAutmExtTimeUomId() {
+        return this.canclAutmExtTimeUomId;
+    }
 
 
 
@@ -509,6 +738,18 @@ fieldMapColumns.put("CommunicationEventAndSubscr", fields);
         setExternalSubscriptionId((String) mapValue.get("externalSubscriptionId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
+        setPurchaseFromDate((Timestamp) mapValue.get("purchaseFromDate"));
+        setPurchaseThruDate((Timestamp) mapValue.get("purchaseThruDate"));
+        setMaxLifeTime((Long) mapValue.get("maxLifeTime"));
+        setMaxLifeTimeUomId((String) mapValue.get("maxLifeTimeUomId"));
+        setAvailableTime((Long) mapValue.get("availableTime"));
+        setAvailableTimeUomId((String) mapValue.get("availableTimeUomId"));
+        setUseCountLimit((Long) mapValue.get("useCountLimit"));
+        setUseTime((Long) mapValue.get("useTime"));
+        setUseTimeUomId((String) mapValue.get("useTimeUomId"));
+        setAutomaticExtend((String) mapValue.get("automaticExtend"));
+        setCanclAutmExtTime((Long) mapValue.get("canclAutmExtTime"));
+        setCanclAutmExtTimeUomId((String) mapValue.get("canclAutmExtTimeUomId"));
         postInit();
     }
 
@@ -536,6 +777,18 @@ fieldMapColumns.put("CommunicationEventAndSubscr", fields);
         mapValue.put("externalSubscriptionId", getExternalSubscriptionId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
+        mapValue.put("purchaseFromDate", getPurchaseFromDate());
+        mapValue.put("purchaseThruDate", getPurchaseThruDate());
+        mapValue.put("maxLifeTime", getMaxLifeTime());
+        mapValue.put("maxLifeTimeUomId", getMaxLifeTimeUomId());
+        mapValue.put("availableTime", getAvailableTime());
+        mapValue.put("availableTimeUomId", getAvailableTimeUomId());
+        mapValue.put("useCountLimit", getUseCountLimit());
+        mapValue.put("useTime", getUseTime());
+        mapValue.put("useTimeUomId", getUseTimeUomId());
+        mapValue.put("automaticExtend", getAutomaticExtend());
+        mapValue.put("canclAutmExtTime", getCanclAutmExtTime());
+        mapValue.put("canclAutmExtTimeUomId", getCanclAutmExtTimeUomId());
         return mapValue;
     }
 

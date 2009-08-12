@@ -189,6 +189,10 @@ fieldMapColumns.put("ProductCategory", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
+   private List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_CATEGORY_ID")
+   
    private List<ProductCategoryLink> productCategoryLinks = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productCategory", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
@@ -222,6 +226,10 @@ fieldMapColumns.put("ProductCategory", fields);
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
    private List<ProductStoreSurveyAppl> productStoreSurveyAppls = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRODUCT_CATEGORY_ID")
+   
+   private List<SalesForecastDetail> salesForecastDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_CATEGORY_ID")
    
@@ -617,6 +625,17 @@ fieldMapColumns.put("ProductCategory", fields);
         return this.productCategoryContents;
     }
     /**
+     * Auto generated method that gets the related <code>ProductCategoryGlAccount</code> by the relation named <code>ProductCategoryGlAccount</code>.
+     * @return the list of <code>ProductCategoryGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductCategoryGlAccount> getProductCategoryGlAccounts() throws RepositoryException {
+        if (this.productCategoryGlAccounts == null) {
+            this.productCategoryGlAccounts = getRelated(ProductCategoryGlAccount.class, "ProductCategoryGlAccount");
+        }
+        return this.productCategoryGlAccounts;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductCategoryLink</code> by the relation named <code>ProductCategoryLink</code>.
      * @return the list of <code>ProductCategoryLink</code>
      * @throws RepositoryException if an error occurs
@@ -714,6 +733,17 @@ fieldMapColumns.put("ProductCategory", fields);
             this.productStoreSurveyAppls = getRelated(ProductStoreSurveyAppl.class, "ProductStoreSurveyAppl");
         }
         return this.productStoreSurveyAppls;
+    }
+    /**
+     * Auto generated method that gets the related <code>SalesForecastDetail</code> by the relation named <code>SalesForecastDetail</code>.
+     * @return the list of <code>SalesForecastDetail</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends SalesForecastDetail> getSalesForecastDetails() throws RepositoryException {
+        if (this.salesForecastDetails == null) {
+            this.salesForecastDetails = getRelated(SalesForecastDetail.class, "SalesForecastDetail");
+        }
+        return this.salesForecastDetails;
     }
     /**
      * Auto generated method that gets the related <code>Subscription</code> by the relation named <code>Subscription</code>.
@@ -842,6 +872,13 @@ fieldMapColumns.put("ProductCategory", fields);
     }
     /**
      * Auto generated value setter.
+     * @param productCategoryGlAccounts the productCategoryGlAccounts to set
+    */
+    public void setProductCategoryGlAccounts(List<ProductCategoryGlAccount> productCategoryGlAccounts) {
+        this.productCategoryGlAccounts = productCategoryGlAccounts;
+    }
+    /**
+     * Auto generated value setter.
      * @param productCategoryLinks the productCategoryLinks to set
     */
     public void setProductCategoryLinks(List<ProductCategoryLink> productCategoryLinks) {
@@ -902,6 +939,13 @@ fieldMapColumns.put("ProductCategory", fields);
     */
     public void setProductStoreSurveyAppls(List<ProductStoreSurveyAppl> productStoreSurveyAppls) {
         this.productStoreSurveyAppls = productStoreSurveyAppls;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesForecastDetails the salesForecastDetails to set
+    */
+    public void setSalesForecastDetails(List<SalesForecastDetail> salesForecastDetails) {
+        this.salesForecastDetails = salesForecastDetails;
     }
     /**
      * Auto generated value setter.
@@ -1059,6 +1103,33 @@ fieldMapColumns.put("ProductCategory", fields);
             return;
         }
         this.productCategoryContents.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addProductCategoryGlAccount(ProductCategoryGlAccount productCategoryGlAccount) {
+        if (this.productCategoryGlAccounts == null) {
+            this.productCategoryGlAccounts = new ArrayList<ProductCategoryGlAccount>();
+        }
+        this.productCategoryGlAccounts.add(productCategoryGlAccount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeProductCategoryGlAccount(ProductCategoryGlAccount productCategoryGlAccount) {
+        if (this.productCategoryGlAccounts == null) {
+            return;
+        }
+        this.productCategoryGlAccounts.remove(productCategoryGlAccount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearProductCategoryGlAccount() {
+        if (this.productCategoryGlAccounts == null) {
+            return;
+        }
+        this.productCategoryGlAccounts.clear();
     }
     /**
      * Auto generated method that add item to collection.

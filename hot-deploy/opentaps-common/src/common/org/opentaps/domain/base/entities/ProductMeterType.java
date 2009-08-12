@@ -111,6 +111,10 @@ fieldMapColumns.put("ProductMeterType", fields);
    @JoinColumn(name="PRODUCT_METER_TYPE_ID")
    
    private List<FixedAssetMaintMeter> fixedAssetMaintMeters = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="productMeterType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_METER_TYPE_ID")
+   
+   private List<FixedAssetMeter> fixedAssetMeters = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_METER_TYPE_ID")
    
@@ -280,6 +284,17 @@ fieldMapColumns.put("ProductMeterType", fields);
         return this.fixedAssetMaintMeters;
     }
     /**
+     * Auto generated method that gets the related <code>FixedAssetMeter</code> by the relation named <code>FixedAssetMeter</code>.
+     * @return the list of <code>FixedAssetMeter</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FixedAssetMeter> getFixedAssetMeters() throws RepositoryException {
+        if (this.fixedAssetMeters == null) {
+            this.fixedAssetMeters = getRelated(FixedAssetMeter.class, "FixedAssetMeter");
+        }
+        return this.fixedAssetMeters;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductMaint</code> by the relation named <code>IntervalProductMaint</code>.
      * @return the list of <code>ProductMaint</code>
      * @throws RepositoryException if an error occurs
@@ -325,6 +340,13 @@ fieldMapColumns.put("ProductMeterType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param fixedAssetMeters the fixedAssetMeters to set
+    */
+    public void setFixedAssetMeters(List<FixedAssetMeter> fixedAssetMeters) {
+        this.fixedAssetMeters = fixedAssetMeters;
+    }
+    /**
+     * Auto generated value setter.
      * @param intervalProductMaints the intervalProductMaints to set
     */
     public void setIntervalProductMaints(List<ProductMaint> intervalProductMaints) {
@@ -364,6 +386,33 @@ fieldMapColumns.put("ProductMeterType", fields);
             return;
         }
         this.fixedAssetMaintMeters.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addFixedAssetMeter(FixedAssetMeter fixedAssetMeter) {
+        if (this.fixedAssetMeters == null) {
+            this.fixedAssetMeters = new ArrayList<FixedAssetMeter>();
+        }
+        this.fixedAssetMeters.add(fixedAssetMeter);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeFixedAssetMeter(FixedAssetMeter fixedAssetMeter) {
+        if (this.fixedAssetMeters == null) {
+            return;
+        }
+        this.fixedAssetMeters.remove(fixedAssetMeter);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearFixedAssetMeter() {
+        if (this.fixedAssetMeters == null) {
+            return;
+        }
+        this.fixedAssetMeters.clear();
     }
     /**
      * Auto generated method that add item to collection.

@@ -66,8 +66,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("quantity", "QUANTITY");
         fields.put("selectedAmount", "SELECTED_AMOUNT");
         fields.put("quoteUnitPrice", "QUOTE_UNIT_PRICE");
+        fields.put("reservStart", "RESERV_START");
+        fields.put("reservLength", "RESERV_LENGTH");
+        fields.put("reservPersons", "RESERV_PERSONS");
+        fields.put("configId", "CONFIG_ID");
         fields.put("estimatedDeliveryDate", "ESTIMATED_DELIVERY_DATE");
-        fields.put("description", "DESCRIPTION");
         fields.put("comments", "COMMENTS");
         fields.put("isPromo", "IS_PROMO");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -90,8 +93,11 @@ fieldMapColumns.put("QuoteItem", fields);
     quantity("quantity"),
     selectedAmount("selectedAmount"),
     quoteUnitPrice("quoteUnitPrice"),
+    reservStart("reservStart"),
+    reservLength("reservLength"),
+    reservPersons("reservPersons"),
+    configId("configId"),
     estimatedDeliveryDate("estimatedDeliveryDate"),
-    description("description"),
     comments("comments"),
     isPromo("isPromo"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -149,10 +155,16 @@ fieldMapColumns.put("QuoteItem", fields);
    private BigDecimal selectedAmount;
    @Column(name="QUOTE_UNIT_PRICE")
    private BigDecimal quoteUnitPrice;
+   @Column(name="RESERV_START")
+   private Timestamp reservStart;
+   @Column(name="RESERV_LENGTH")
+   private BigDecimal reservLength;
+   @Column(name="RESERV_PERSONS")
+   private BigDecimal reservPersons;
+   @Column(name="CONFIG_ID")
+   private String configId;
    @Column(name="ESTIMATED_DELIVERY_DATE")
    private Timestamp estimatedDeliveryDate;
-   @Column(name="DESCRIPTION")
-   private String description;
    @Column(name="COMMENTS")
    private String comments;
    @Column(name="IS_PROMO")
@@ -238,7 +250,7 @@ fieldMapColumns.put("QuoteItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("quoteId");this.primaryKeyNames.add("quoteItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("quoteId");this.allFieldsNames.add("quoteItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("deliverableTypeId");this.allFieldsNames.add("skillTypeId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestItemSeqId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("quoteUnitPrice");this.allFieldsNames.add("estimatedDeliveryDate");this.allFieldsNames.add("description");this.allFieldsNames.add("comments");this.allFieldsNames.add("isPromo");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("quoteId");this.allFieldsNames.add("quoteItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("deliverableTypeId");this.allFieldsNames.add("skillTypeId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestItemSeqId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("quoteUnitPrice");this.allFieldsNames.add("reservStart");this.allFieldsNames.add("reservLength");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("configId");this.allFieldsNames.add("estimatedDeliveryDate");this.allFieldsNames.add("comments");this.allFieldsNames.add("isPromo");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -346,17 +358,38 @@ fieldMapColumns.put("QuoteItem", fields);
     }
     /**
      * Auto generated value setter.
+     * @param reservStart the reservStart to set
+     */
+    public void setReservStart(Timestamp reservStart) {
+        this.reservStart = reservStart;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reservLength the reservLength to set
+     */
+    public void setReservLength(BigDecimal reservLength) {
+        this.reservLength = reservLength;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reservPersons the reservPersons to set
+     */
+    public void setReservPersons(BigDecimal reservPersons) {
+        this.reservPersons = reservPersons;
+    }
+    /**
+     * Auto generated value setter.
+     * @param configId the configId to set
+     */
+    public void setConfigId(String configId) {
+        this.configId = configId;
+    }
+    /**
+     * Auto generated value setter.
      * @param estimatedDeliveryDate the estimatedDeliveryDate to set
      */
     public void setEstimatedDeliveryDate(Timestamp estimatedDeliveryDate) {
         this.estimatedDeliveryDate = estimatedDeliveryDate;
-    }
-    /**
-     * Auto generated value setter.
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
     }
     /**
      * Auto generated value setter.
@@ -496,15 +529,36 @@ fieldMapColumns.put("QuoteItem", fields);
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
-    public Timestamp getEstimatedDeliveryDate() {
-        return this.estimatedDeliveryDate;
+    public Timestamp getReservStart() {
+        return this.reservStart;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getReservLength() {
+        return this.reservLength;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getReservPersons() {
+        return this.reservPersons;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getDescription() {
-        return this.description;
+    public String getConfigId() {
+        return this.configId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getEstimatedDeliveryDate() {
+        return this.estimatedDeliveryDate;
     }
     /**
      * Auto generated value accessor.
@@ -803,8 +857,11 @@ fieldMapColumns.put("QuoteItem", fields);
         setQuantity(convertToBigDecimal(mapValue.get("quantity")));
         setSelectedAmount(convertToBigDecimal(mapValue.get("selectedAmount")));
         setQuoteUnitPrice(convertToBigDecimal(mapValue.get("quoteUnitPrice")));
+        setReservStart((Timestamp) mapValue.get("reservStart"));
+        setReservLength(convertToBigDecimal(mapValue.get("reservLength")));
+        setReservPersons(convertToBigDecimal(mapValue.get("reservPersons")));
+        setConfigId((String) mapValue.get("configId"));
         setEstimatedDeliveryDate((Timestamp) mapValue.get("estimatedDeliveryDate"));
-        setDescription((String) mapValue.get("description"));
         setComments((String) mapValue.get("comments"));
         setIsPromo((String) mapValue.get("isPromo"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -831,8 +888,11 @@ fieldMapColumns.put("QuoteItem", fields);
         mapValue.put("quantity", getQuantity());
         mapValue.put("selectedAmount", getSelectedAmount());
         mapValue.put("quoteUnitPrice", getQuoteUnitPrice());
+        mapValue.put("reservStart", getReservStart());
+        mapValue.put("reservLength", getReservLength());
+        mapValue.put("reservPersons", getReservPersons());
+        mapValue.put("configId", getConfigId());
         mapValue.put("estimatedDeliveryDate", getEstimatedDeliveryDate());
-        mapValue.put("description", getDescription());
         mapValue.put("comments", getComments());
         mapValue.put("isPromo", getIsPromo());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

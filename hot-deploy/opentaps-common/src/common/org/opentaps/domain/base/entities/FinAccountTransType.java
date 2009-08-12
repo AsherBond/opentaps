@@ -127,7 +127,7 @@ fieldMapColumns.put("FinAccountTransType", fields);
       super();
       this.baseEntityName = "FinAccountTransType";
       this.isView = false;
-      
+      this.resourceName = "AccountingEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("finAccountTransTypeId");
       this.allFieldsNames = new ArrayList<String>();

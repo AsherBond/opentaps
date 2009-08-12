@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity GlReconciliationAndAcctgTransEntry.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectGlReconciliationAndAcctgTransEntrys", query="SELECT GRE.GL_RECONCILIATION_ID AS \"glReconciliationId\",GRE.ACCTG_TRANS_ID AS \"acctgTransId\",GRE.ACCTG_TRANS_ENTRY_SEQ_ID AS \"acctgTransEntrySeqId\",GRE.RECONCILED_AMOUNT AS \"reconciledAmount\",A.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",A.DESCRIPTION AS \"description\",A.TRANSACTION_DATE AS \"transactionDate\",A.IS_POSTED AS \"isPosted\",A.POSTED_DATE AS \"postedDate\",A.SCHEDULED_POSTING_DATE AS \"scheduledPostingDate\",A.GL_JOURNAL_ID AS \"glJournalId\",A.GL_FISCAL_TYPE_ID AS \"glFiscalTypeId\",A.VOUCHER_REF AS \"voucherRef\",A.VOUCHER_DATE AS \"voucherDate\",A.GROUP_STATUS_ID AS \"groupStatusId\",A.FIXED_ASSET_ID AS \"fixedAssetId\",A.INVENTORY_ITEM_ID AS \"inventoryItemId\",A.PHYSICAL_INVENTORY_ID AS \"physicalInventoryId\",A.PARTY_ID AS \"partyId\",A.ROLE_TYPE_ID AS \"roleTypeId\",A.INVOICE_ID AS \"invoiceId\",A.PAYMENT_ID AS \"paymentId\",A.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",A.SHIPMENT_ID AS \"shipmentId\",A.RECEIPT_ID AS \"receiptId\",A.WORK_EFFORT_ID AS \"workEffortId\",A.THEIR_ACCTG_TRANS_ID AS \"theirAcctgTransId\",A.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",A.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",A.INVOICE_ADJUSTMENT_ID AS \"invoiceAdjustmentId\",ATE.ACCTG_TRANS_ENTRY_TYPE_ID AS \"acctgTransEntryTypeId\",ATE.THEIR_PARTY_ID AS \"theirPartyId\",ATE.PRODUCT_ID AS \"productId\",ATE.THEIR_PRODUCT_ID AS \"theirProductId\",ATE.GL_ACCOUNT_ID AS \"glAccountId\",ATE.ORGANIZATION_PARTY_ID AS \"organizationPartyId\",ATE.AMOUNT AS \"amount\",ATE.CURRENCY_UOM_ID AS \"currencyUomId\",ATE.ORIG_AMOUNT AS \"origAmount\",ATE.DEBIT_CREDIT_FLAG AS \"debitCreditFlag\",ATE.DUE_DATE AS \"dueDate\",ATE.GROUP_ID AS \"groupId\",ATE.TAX_ID AS \"taxId\",ATE.RECONCILE_STATUS_ID AS \"reconcileStatusId\",ATE.SETTLEMENT_TERM_ID AS \"settlementTermId\",ATE.IS_SUMMARY AS \"isSummary\",ATE.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",ATE.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",ATE.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",ATE.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",ATE.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",ATE.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",ATE.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",ATE.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",ATE.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",ATE.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM GL_RECONCILIATION_ENTRY GRE INNER JOIN ACCTG_TRANS A ON GRE.ACCTG_TRANS_ID = A.ACCTG_TRANS_ID INNER JOIN ACCTG_TRANS_ENTRY ATE ON GRE.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID AND GRE.ACCTG_TRANS_ENTRY_SEQ_ID = ATE.ACCTG_TRANS_ENTRY_SEQ_ID", resultSetMapping="GlReconciliationAndAcctgTransEntryMapping")
+@NamedNativeQuery(name="selectGlReconciliationAndAcctgTransEntrys", query="SELECT GRE.GL_RECONCILIATION_ID AS \"glReconciliationId\",GRE.ACCTG_TRANS_ID AS \"acctgTransId\",GRE.ACCTG_TRANS_ENTRY_SEQ_ID AS \"acctgTransEntrySeqId\",GRE.RECONCILED_AMOUNT AS \"reconciledAmount\",A.ACCTG_TRANS_TYPE_ID AS \"acctgTransTypeId\",A.DESCRIPTION AS \"description\",A.TRANSACTION_DATE AS \"transactionDate\",A.IS_POSTED AS \"isPosted\",A.POSTED_DATE AS \"postedDate\",A.SCHEDULED_POSTING_DATE AS \"scheduledPostingDate\",A.GL_JOURNAL_ID AS \"glJournalId\",A.GL_FISCAL_TYPE_ID AS \"glFiscalTypeId\",A.VOUCHER_REF AS \"voucherRef\",A.VOUCHER_DATE AS \"voucherDate\",A.GROUP_STATUS_ID AS \"groupStatusId\",A.FIXED_ASSET_ID AS \"fixedAssetId\",A.INVENTORY_ITEM_ID AS \"inventoryItemId\",A.PHYSICAL_INVENTORY_ID AS \"physicalInventoryId\",A.PARTY_ID AS \"partyId\",A.ROLE_TYPE_ID AS \"roleTypeId\",A.INVOICE_ID AS \"invoiceId\",A.PAYMENT_ID AS \"paymentId\",A.FIN_ACCOUNT_TRANS_ID AS \"finAccountTransId\",A.SHIPMENT_ID AS \"shipmentId\",A.RECEIPT_ID AS \"receiptId\",A.WORK_EFFORT_ID AS \"workEffortId\",A.THEIR_ACCTG_TRANS_ID AS \"theirAcctgTransId\",A.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",A.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",A.INVOICE_ADJUSTMENT_ID AS \"invoiceAdjustmentId\",ATE.ACCTG_TRANS_ENTRY_TYPE_ID AS \"acctgTransEntryTypeId\",ATE.THEIR_PARTY_ID AS \"theirPartyId\",ATE.PRODUCT_ID AS \"productId\",ATE.THEIR_PRODUCT_ID AS \"theirProductId\",ATE.GL_ACCOUNT_TYPE_ID AS \"glAccountTypeId\",ATE.GL_ACCOUNT_ID AS \"glAccountId\",ATE.ORGANIZATION_PARTY_ID AS \"organizationPartyId\",ATE.AMOUNT AS \"amount\",ATE.CURRENCY_UOM_ID AS \"currencyUomId\",ATE.ORIG_AMOUNT AS \"origAmount\",ATE.ORIG_CURRENCY_UOM_ID AS \"origCurrencyUomId\",ATE.DEBIT_CREDIT_FLAG AS \"debitCreditFlag\",ATE.DUE_DATE AS \"dueDate\",ATE.GROUP_ID AS \"groupId\",ATE.TAX_ID AS \"taxId\",ATE.RECONCILE_STATUS_ID AS \"reconcileStatusId\",ATE.SETTLEMENT_TERM_ID AS \"settlementTermId\",ATE.IS_SUMMARY AS \"isSummary\",ATE.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",ATE.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",ATE.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",ATE.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",ATE.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",ATE.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",ATE.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",ATE.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",ATE.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",ATE.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM GL_RECONCILIATION_ENTRY GRE INNER JOIN ACCTG_TRANS A ON GRE.ACCTG_TRANS_ID = A.ACCTG_TRANS_ID INNER JOIN ACCTG_TRANS_ENTRY ATE ON GRE.ACCTG_TRANS_ID = ATE.ACCTG_TRANS_ID AND GRE.ACCTG_TRANS_ENTRY_SEQ_ID = ATE.ACCTG_TRANS_ENTRY_SEQ_ID", resultSetMapping="GlReconciliationAndAcctgTransEntryMapping")
 @SqlResultSetMapping(name="GlReconciliationAndAcctgTransEntryMapping", entities={
 @EntityResult(entityClass=GlReconciliationAndAcctgTransEntry.class, fields = {
 @FieldResult(name="glReconciliationId", column="glReconciliationId")
@@ -87,11 +87,13 @@ import java.sql.Timestamp;
 ,@FieldResult(name="theirPartyId", column="theirPartyId")
 ,@FieldResult(name="productId", column="productId")
 ,@FieldResult(name="theirProductId", column="theirProductId")
+,@FieldResult(name="glAccountTypeId", column="glAccountTypeId")
 ,@FieldResult(name="glAccountId", column="glAccountId")
 ,@FieldResult(name="organizationPartyId", column="organizationPartyId")
 ,@FieldResult(name="amount", column="amount")
 ,@FieldResult(name="currencyUomId", column="currencyUomId")
 ,@FieldResult(name="origAmount", column="origAmount")
+,@FieldResult(name="origCurrencyUomId", column="origCurrencyUomId")
 ,@FieldResult(name="debitCreditFlag", column="debitCreditFlag")
 ,@FieldResult(name="dueDate", column="dueDate")
 ,@FieldResult(name="groupId", column="groupId")
@@ -149,11 +151,13 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("theirPartyId", "ATE.THEIR_PARTY_ID");
         fields.put("productId", "ATE.PRODUCT_ID");
         fields.put("theirProductId", "ATE.THEIR_PRODUCT_ID");
+        fields.put("glAccountTypeId", "ATE.GL_ACCOUNT_TYPE_ID");
         fields.put("glAccountId", "ATE.GL_ACCOUNT_ID");
         fields.put("organizationPartyId", "ATE.ORGANIZATION_PARTY_ID");
         fields.put("amount", "ATE.AMOUNT");
         fields.put("currencyUomId", "ATE.CURRENCY_UOM_ID");
         fields.put("origAmount", "ATE.ORIG_AMOUNT");
+        fields.put("origCurrencyUomId", "ATE.ORIG_CURRENCY_UOM_ID");
         fields.put("debitCreditFlag", "ATE.DEBIT_CREDIT_FLAG");
         fields.put("dueDate", "ATE.DUE_DATE");
         fields.put("groupId", "ATE.GROUP_ID");
@@ -208,11 +212,13 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
     theirPartyId("theirPartyId"),
     productId("productId"),
     theirProductId("theirProductId"),
+    glAccountTypeId("glAccountTypeId"),
     glAccountId("glAccountId"),
     organizationPartyId("organizationPartyId"),
     amount("amount"),
     currencyUomId("currencyUomId"),
     origAmount("origAmount"),
+    origCurrencyUomId("origCurrencyUomId"),
     debitCreditFlag("debitCreditFlag"),
     dueDate("dueDate"),
     groupId("groupId"),
@@ -309,6 +315,8 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
     
    private String theirProductId;
     
+   private String glAccountTypeId;
+    
    private String glAccountId;
     
    private String organizationPartyId;
@@ -318,6 +326,8 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
    private String currencyUomId;
     
    private BigDecimal origAmount;
+    
+   private String origCurrencyUomId;
     
    private String debitCreditFlag;
     
@@ -364,7 +374,7 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("glReconciliationId");this.primaryKeyNames.add("acctgTransId");this.primaryKeyNames.add("acctgTransEntrySeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("glReconciliationId");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("reconciledAmount");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("glJournalId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("voucherDate");this.allFieldsNames.add("groupStatusId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("theirAcctgTransId");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("invoiceAdjustmentId");this.allFieldsNames.add("acctgTransEntryTypeId");this.allFieldsNames.add("theirPartyId");this.allFieldsNames.add("productId");this.allFieldsNames.add("theirProductId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("origAmount");this.allFieldsNames.add("debitCreditFlag");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("groupId");this.allFieldsNames.add("taxId");this.allFieldsNames.add("reconcileStatusId");this.allFieldsNames.add("settlementTermId");this.allFieldsNames.add("isSummary");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
+      this.allFieldsNames.add("glReconciliationId");this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("reconciledAmount");this.allFieldsNames.add("acctgTransTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("isPosted");this.allFieldsNames.add("postedDate");this.allFieldsNames.add("scheduledPostingDate");this.allFieldsNames.add("glJournalId");this.allFieldsNames.add("glFiscalTypeId");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("voucherDate");this.allFieldsNames.add("groupStatusId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("theirAcctgTransId");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("invoiceAdjustmentId");this.allFieldsNames.add("acctgTransEntryTypeId");this.allFieldsNames.add("theirPartyId");this.allFieldsNames.add("productId");this.allFieldsNames.add("theirProductId");this.allFieldsNames.add("glAccountTypeId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("origAmount");this.allFieldsNames.add("origCurrencyUomId");this.allFieldsNames.add("debitCreditFlag");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("groupId");this.allFieldsNames.add("taxId");this.allFieldsNames.add("reconcileStatusId");this.allFieldsNames.add("settlementTermId");this.allFieldsNames.add("isSummary");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -622,6 +632,13 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
     }
     /**
      * Auto generated value setter.
+     * @param glAccountTypeId the glAccountTypeId to set
+     */
+    private void setGlAccountTypeId(String glAccountTypeId) {
+        this.glAccountTypeId = glAccountTypeId;
+    }
+    /**
+     * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
     private void setGlAccountId(String glAccountId) {
@@ -654,6 +671,13 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
      */
     private void setOrigAmount(BigDecimal origAmount) {
         this.origAmount = origAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param origCurrencyUomId the origCurrencyUomId to set
+     */
+    private void setOrigCurrencyUomId(String origCurrencyUomId) {
+        this.origCurrencyUomId = origCurrencyUomId;
     }
     /**
      * Auto generated value setter.
@@ -1017,6 +1041,13 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getGlAccountTypeId() {
+        return this.glAccountTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getGlAccountId() {
         return this.glAccountId;
     }
@@ -1047,6 +1078,13 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
      */
     public BigDecimal getOrigAmount() {
         return this.origAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOrigCurrencyUomId() {
+        return this.origCurrencyUomId;
     }
     /**
      * Auto generated value accessor.
@@ -1209,11 +1247,13 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
         setTheirPartyId((String) mapValue.get("theirPartyId"));
         setProductId((String) mapValue.get("productId"));
         setTheirProductId((String) mapValue.get("theirProductId"));
+        setGlAccountTypeId((String) mapValue.get("glAccountTypeId"));
         setGlAccountId((String) mapValue.get("glAccountId"));
         setOrganizationPartyId((String) mapValue.get("organizationPartyId"));
         setAmount(convertToBigDecimal(mapValue.get("amount")));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setOrigAmount(convertToBigDecimal(mapValue.get("origAmount")));
+        setOrigCurrencyUomId((String) mapValue.get("origCurrencyUomId"));
         setDebitCreditFlag((String) mapValue.get("debitCreditFlag"));
         setDueDate((Date) mapValue.get("dueDate"));
         setGroupId((String) mapValue.get("groupId"));
@@ -1272,11 +1312,13 @@ fieldMapColumns.put("GlReconciliationAndAcctgTransEntry", fields);
         mapValue.put("theirPartyId", getTheirPartyId());
         mapValue.put("productId", getProductId());
         mapValue.put("theirProductId", getTheirProductId());
+        mapValue.put("glAccountTypeId", getGlAccountTypeId());
         mapValue.put("glAccountId", getGlAccountId());
         mapValue.put("organizationPartyId", getOrganizationPartyId());
         mapValue.put("amount", getAmount());
         mapValue.put("currencyUomId", getCurrencyUomId());
         mapValue.put("origAmount", getOrigAmount());
+        mapValue.put("origCurrencyUomId", getOrigCurrencyUomId());
         mapValue.put("debitCreditFlag", getDebitCreditFlag());
         mapValue.put("dueDate", getDueDate());
         mapValue.put("groupId", getGroupId());

@@ -111,10 +111,22 @@ fieldMapColumns.put("CustomMethod", fields);
    @JoinColumn(name="COST_CUSTOM_METHOD_ID")
    
    private List<CostComponentCalc> costComponentCalcs = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="customMethod", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="DEPRECIATION_CUSTOM_METHOD_ID")
+   
+   private List<FixedAssetDepMethod> fixedAssetDepMethods = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ESTIMATE_CALC_METHOD")
    
    private List<ProductAssoc> productAssocs = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="CUSTOM_PRICE_CALC_SERVICE")
+   
+   private List<ProductPrice> productPrices = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PAYMENT_CUSTOM_METHOD_ID")
+   
+   private List<ProductStorePaymentSetting> productStorePaymentSettings = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUSTOM_METHOD_ID")
    
@@ -291,6 +303,17 @@ fieldMapColumns.put("CustomMethod", fields);
         return this.costComponentCalcs;
     }
     /**
+     * Auto generated method that gets the related <code>FixedAssetDepMethod</code> by the relation named <code>FixedAssetDepMethod</code>.
+     * @return the list of <code>FixedAssetDepMethod</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FixedAssetDepMethod> getFixedAssetDepMethods() throws RepositoryException {
+        if (this.fixedAssetDepMethods == null) {
+            this.fixedAssetDepMethods = getRelated(FixedAssetDepMethod.class, "FixedAssetDepMethod");
+        }
+        return this.fixedAssetDepMethods;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductAssoc</code> by the relation named <code>ProductAssoc</code>.
      * @return the list of <code>ProductAssoc</code>
      * @throws RepositoryException if an error occurs
@@ -300,6 +323,28 @@ fieldMapColumns.put("CustomMethod", fields);
             this.productAssocs = getRelated(ProductAssoc.class, "ProductAssoc");
         }
         return this.productAssocs;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductPrice</code> by the relation named <code>ProductPrice</code>.
+     * @return the list of <code>ProductPrice</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductPrice> getProductPrices() throws RepositoryException {
+        if (this.productPrices == null) {
+            this.productPrices = getRelated(ProductPrice.class, "ProductPrice");
+        }
+        return this.productPrices;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductStorePaymentSetting</code> by the relation named <code>ProductStorePaymentSetting</code>.
+     * @return the list of <code>ProductStorePaymentSetting</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductStorePaymentSetting> getProductStorePaymentSettings() throws RepositoryException {
+        if (this.productStorePaymentSettings == null) {
+            this.productStorePaymentSettings = getRelated(ProductStorePaymentSetting.class, "ProductStorePaymentSetting");
+        }
+        return this.productStorePaymentSettings;
     }
     /**
      * Auto generated method that gets the related <code>UomConversion</code> by the relation named <code>uomCustomMethodUomConversion</code>.
@@ -351,10 +396,31 @@ fieldMapColumns.put("CustomMethod", fields);
     }
     /**
      * Auto generated value setter.
+     * @param fixedAssetDepMethods the fixedAssetDepMethods to set
+    */
+    public void setFixedAssetDepMethods(List<FixedAssetDepMethod> fixedAssetDepMethods) {
+        this.fixedAssetDepMethods = fixedAssetDepMethods;
+    }
+    /**
+     * Auto generated value setter.
      * @param productAssocs the productAssocs to set
     */
     public void setProductAssocs(List<ProductAssoc> productAssocs) {
         this.productAssocs = productAssocs;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productPrices the productPrices to set
+    */
+    public void setProductPrices(List<ProductPrice> productPrices) {
+        this.productPrices = productPrices;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productStorePaymentSettings the productStorePaymentSettings to set
+    */
+    public void setProductStorePaymentSettings(List<ProductStorePaymentSetting> productStorePaymentSettings) {
+        this.productStorePaymentSettings = productStorePaymentSettings;
     }
     /**
      * Auto generated value setter.
@@ -378,6 +444,33 @@ fieldMapColumns.put("CustomMethod", fields);
         this.workEfforts = workEfforts;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addFixedAssetDepMethod(FixedAssetDepMethod fixedAssetDepMethod) {
+        if (this.fixedAssetDepMethods == null) {
+            this.fixedAssetDepMethods = new ArrayList<FixedAssetDepMethod>();
+        }
+        this.fixedAssetDepMethods.add(fixedAssetDepMethod);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeFixedAssetDepMethod(FixedAssetDepMethod fixedAssetDepMethod) {
+        if (this.fixedAssetDepMethods == null) {
+            return;
+        }
+        this.fixedAssetDepMethods.remove(fixedAssetDepMethod);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearFixedAssetDepMethod() {
+        if (this.fixedAssetDepMethods == null) {
+            return;
+        }
+        this.fixedAssetDepMethods.clear();
+    }
 
     /** {@inheritDoc} */
     @Override

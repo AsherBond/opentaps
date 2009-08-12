@@ -67,6 +67,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("referenceNumber", "REFERENCE_NUMBER");
         fields.put("description", "DESCRIPTION");
         fields.put("currencyUomId", "CURRENCY_UOM_ID");
+        fields.put("recurrenceInfoId", "RECURRENCE_INFO_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -90,6 +91,7 @@ fieldMapColumns.put("Invoice", fields);
     referenceNumber("referenceNumber"),
     description("description"),
     currencyUomId("currencyUomId"),
+    recurrenceInfoId("recurrenceInfoId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -138,6 +140,8 @@ fieldMapColumns.put("Invoice", fields);
    private String description;
    @Column(name="CURRENCY_UOM_ID")
    private String currencyUomId;
+   @Column(name="RECURRENCE_INFO_ID")
+   private String recurrenceInfoId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -209,6 +213,13 @@ fieldMapColumns.put("Invoice", fields);
    )
    
    private Uom currencyUom = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="RECURRENCE_INFO_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private RecurrenceInfo recurrenceInfo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PROCESSING_STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -300,7 +311,7 @@ fieldMapColumns.put("Invoice", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("invoiceId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("processingStatusId");
+      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("processingStatusId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -419,6 +430,13 @@ fieldMapColumns.put("Invoice", fields);
      */
     public void setCurrencyUomId(String currencyUomId) {
         this.currencyUomId = currencyUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param recurrenceInfoId the recurrenceInfoId to set
+     */
+    public void setRecurrenceInfoId(String recurrenceInfoId) {
+        this.recurrenceInfoId = recurrenceInfoId;
     }
     /**
      * Auto generated value setter.
@@ -560,6 +578,13 @@ fieldMapColumns.put("Invoice", fields);
      */
     public String getCurrencyUomId() {
         return this.currencyUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getRecurrenceInfoId() {
+        return this.recurrenceInfoId;
     }
     /**
      * Auto generated value accessor.
@@ -706,6 +731,17 @@ fieldMapColumns.put("Invoice", fields);
             this.currencyUom = getRelatedOne(Uom.class, "CurrencyUom");
         }
         return this.currencyUom;
+    }
+    /**
+     * Auto generated method that gets the related <code>RecurrenceInfo</code> by the relation named <code>RecurrenceInfo</code>.
+     * @return the <code>RecurrenceInfo</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public RecurrenceInfo getRecurrenceInfo() throws RepositoryException {
+        if (this.recurrenceInfo == null) {
+            this.recurrenceInfo = getRelatedOne(RecurrenceInfo.class, "RecurrenceInfo");
+        }
+        return this.recurrenceInfo;
     }
     /**
      * Auto generated method that gets the related <code>StatusItem</code> by the relation named <code>ProcessingStatusItem</code>.
@@ -986,6 +1022,13 @@ fieldMapColumns.put("Invoice", fields);
     */
     public void setCurrencyUom(Uom currencyUom) {
         this.currencyUom = currencyUom;
+    }
+    /**
+     * Auto generated value setter.
+     * @param recurrenceInfo the recurrenceInfo to set
+    */
+    public void setRecurrenceInfo(RecurrenceInfo recurrenceInfo) {
+        this.recurrenceInfo = recurrenceInfo;
     }
     /**
      * Auto generated value setter.
@@ -1438,6 +1481,7 @@ fieldMapColumns.put("Invoice", fields);
         setReferenceNumber((String) mapValue.get("referenceNumber"));
         setDescription((String) mapValue.get("description"));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
+        setRecurrenceInfoId((String) mapValue.get("recurrenceInfoId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -1465,6 +1509,7 @@ fieldMapColumns.put("Invoice", fields);
         mapValue.put("referenceNumber", getReferenceNumber());
         mapValue.put("description", getDescription());
         mapValue.put("currencyUomId", getCurrencyUomId());
+        mapValue.put("recurrenceInfoId", getRecurrenceInfoId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

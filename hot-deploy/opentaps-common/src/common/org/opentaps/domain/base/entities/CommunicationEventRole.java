@@ -56,6 +56,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("partyId", "PARTY_ID");
         fields.put("roleTypeId", "ROLE_TYPE_ID");
         fields.put("contactMechId", "CONTACT_MECH_ID");
+        fields.put("statusId", "STATUS_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -67,6 +68,7 @@ fieldMapColumns.put("CommunicationEventRole", fields);
     partyId("partyId"),
     roleTypeId("roleTypeId"),
     contactMechId("contactMechId"),
+    statusId("statusId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -102,6 +104,8 @@ fieldMapColumns.put("CommunicationEventRole", fields);
       }
    @Column(name="CONTACT_MECH_ID")
    private String contactMechId;
+   @Column(name="STATUS_ID")
+   private String statusId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -139,6 +143,13 @@ fieldMapColumns.put("CommunicationEventRole", fields);
    )
    
    private ContactMech contactMech = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private StatusItem statusItem = null;
 
   /**
    * Default constructor.
@@ -151,7 +162,7 @@ fieldMapColumns.put("CommunicationEventRole", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("communicationEventId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -193,6 +204,13 @@ fieldMapColumns.put("CommunicationEventRole", fields);
      */
     public void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusId the statusId to set
+     */
+    public void setStatusId(String statusId) {
+        this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
@@ -250,6 +268,13 @@ fieldMapColumns.put("CommunicationEventRole", fields);
      */
     public String getContactMechId() {
         return this.contactMechId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getStatusId() {
+        return this.statusId;
     }
     /**
      * Auto generated value accessor.
@@ -335,6 +360,17 @@ fieldMapColumns.put("CommunicationEventRole", fields);
         }
         return this.contactMech;
     }
+    /**
+     * Auto generated method that gets the related <code>StatusItem</code> by the relation named <code>StatusItem</code>.
+     * @return the <code>StatusItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public StatusItem getStatusItem() throws RepositoryException {
+        if (this.statusItem == null) {
+            this.statusItem = getRelatedOne(StatusItem.class, "StatusItem");
+        }
+        return this.statusItem;
+    }
 
     /**
      * Auto generated value setter.
@@ -371,6 +407,13 @@ fieldMapColumns.put("CommunicationEventRole", fields);
     public void setContactMech(ContactMech contactMech) {
         this.contactMech = contactMech;
     }
+    /**
+     * Auto generated value setter.
+     * @param statusItem the statusItem to set
+    */
+    public void setStatusItem(StatusItem statusItem) {
+        this.statusItem = statusItem;
+    }
 
 
     /** {@inheritDoc} */
@@ -381,6 +424,7 @@ fieldMapColumns.put("CommunicationEventRole", fields);
         setPartyId((String) mapValue.get("partyId"));
         setRoleTypeId((String) mapValue.get("roleTypeId"));
         setContactMechId((String) mapValue.get("contactMechId"));
+        setStatusId((String) mapValue.get("statusId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -396,6 +440,7 @@ fieldMapColumns.put("CommunicationEventRole", fields);
         mapValue.put("partyId", getPartyId());
         mapValue.put("roleTypeId", getRoleTypeId());
         mapValue.put("contactMechId", getContactMechId());
+        mapValue.put("statusId", getStatusId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

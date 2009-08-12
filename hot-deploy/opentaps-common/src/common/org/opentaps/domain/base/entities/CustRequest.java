@@ -67,6 +67,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("productStoreId", "PRODUCT_STORE_ID");
         fields.put("salesChannelEnumId", "SALES_CHANNEL_ENUM_ID");
         fields.put("fulfillContactMechId", "FULFILL_CONTACT_MECH_ID");
+        fields.put("currencyUomId", "CURRENCY_UOM_ID");
+        fields.put("openDateTime", "OPEN_DATE_TIME");
+        fields.put("closedDateTime", "CLOSED_DATE_TIME");
+        fields.put("internalComment", "INTERNAL_COMMENT");
+        fields.put("reason", "REASON");
         fields.put("createdDate", "CREATED_DATE");
         fields.put("createdByUserLogin", "CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "LAST_MODIFIED_DATE");
@@ -93,6 +98,11 @@ fieldMapColumns.put("CustRequest", fields);
     productStoreId("productStoreId"),
     salesChannelEnumId("salesChannelEnumId"),
     fulfillContactMechId("fulfillContactMechId"),
+    currencyUomId("currencyUomId"),
+    openDateTime("openDateTime"),
+    closedDateTime("closedDateTime"),
+    internalComment("internalComment"),
+    reason("reason"),
     createdDate("createdDate"),
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
@@ -143,6 +153,16 @@ fieldMapColumns.put("CustRequest", fields);
    private String salesChannelEnumId;
    @Column(name="FULFILL_CONTACT_MECH_ID")
    private String fulfillContactMechId;
+   @Column(name="CURRENCY_UOM_ID")
+   private String currencyUomId;
+   @Column(name="OPEN_DATE_TIME")
+   private Timestamp openDateTime;
+   @Column(name="CLOSED_DATE_TIME")
+   private Timestamp closedDateTime;
+   @Column(name="INTERNAL_COMMENT")
+   private String internalComment;
+   @Column(name="REASON")
+   private String reason;
    @Column(name="CREATED_DATE")
    private Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
@@ -195,7 +215,7 @@ fieldMapColumns.put("CustRequest", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Uom uom = null;
+   private Uom maximumAmountUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -221,6 +241,13 @@ fieldMapColumns.put("CustRequest", fields);
    )
    
    private ContactMech fulfillContactMech = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="CURRENCY_UOM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Uom currencyUom = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
@@ -241,6 +268,10 @@ fieldMapColumns.put("CustRequest", fields);
    @JoinColumn(name="CUST_REQUEST_ID")
    
    private List<CustRequestItemWorkEffort> custRequestItemWorkEfforts = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="CUST_REQUEST_ID")
+   
+   private List<CustRequestParty> custRequestPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="custRequest", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CUST_REQUEST_ID")
    
@@ -277,7 +308,7 @@ fieldMapColumns.put("CustRequest", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("custRequestId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("custRequestCategoryId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromPartyId");this.allFieldsNames.add("priority");this.allFieldsNames.add("custRequestDate");this.allFieldsNames.add("responseRequiredDate");this.allFieldsNames.add("custRequestName");this.allFieldsNames.add("description");this.allFieldsNames.add("maximumAmountUomId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("fulfillContactMechId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("fulfilledDateTime");
+      this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("custRequestCategoryId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromPartyId");this.allFieldsNames.add("priority");this.allFieldsNames.add("custRequestDate");this.allFieldsNames.add("responseRequiredDate");this.allFieldsNames.add("custRequestName");this.allFieldsNames.add("description");this.allFieldsNames.add("maximumAmountUomId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("fulfillContactMechId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("openDateTime");this.allFieldsNames.add("closedDateTime");this.allFieldsNames.add("internalComment");this.allFieldsNames.add("reason");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("fulfilledDateTime");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -389,6 +420,41 @@ fieldMapColumns.put("CustRequest", fields);
      */
     public void setFulfillContactMechId(String fulfillContactMechId) {
         this.fulfillContactMechId = fulfillContactMechId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param currencyUomId the currencyUomId to set
+     */
+    public void setCurrencyUomId(String currencyUomId) {
+        this.currencyUomId = currencyUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param openDateTime the openDateTime to set
+     */
+    public void setOpenDateTime(Timestamp openDateTime) {
+        this.openDateTime = openDateTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param closedDateTime the closedDateTime to set
+     */
+    public void setClosedDateTime(Timestamp closedDateTime) {
+        this.closedDateTime = closedDateTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param internalComment the internalComment to set
+     */
+    public void setInternalComment(String internalComment) {
+        this.internalComment = internalComment;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reason the reason to set
+     */
+    public void setReason(String reason) {
+        this.reason = reason;
     }
     /**
      * Auto generated value setter.
@@ -554,6 +620,41 @@ fieldMapColumns.put("CustRequest", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCurrencyUomId() {
+        return this.currencyUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getOpenDateTime() {
+        return this.openDateTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getClosedDateTime() {
+        return this.closedDateTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInternalComment() {
+        return this.internalComment;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReason() {
+        return this.reason;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getCreatedDate() {
@@ -661,15 +762,15 @@ fieldMapColumns.put("CustRequest", fields);
         return this.fromParty;
     }
     /**
-     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>Uom</code>.
+     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>MaximumAmountUom</code>.
      * @return the <code>Uom</code>
      * @throws RepositoryException if an error occurs
      */
-    public Uom getUom() throws RepositoryException {
-        if (this.uom == null) {
-            this.uom = getRelatedOne(Uom.class, "Uom");
+    public Uom getMaximumAmountUom() throws RepositoryException {
+        if (this.maximumAmountUom == null) {
+            this.maximumAmountUom = getRelatedOne(Uom.class, "MaximumAmountUom");
         }
-        return this.uom;
+        return this.maximumAmountUom;
     }
     /**
      * Auto generated method that gets the related <code>ProductStore</code> by the relation named <code>ProductStore</code>.
@@ -714,6 +815,17 @@ fieldMapColumns.put("CustRequest", fields);
             this.fulfillContactMech = getRelatedOne(ContactMech.class, "FulfillContactMech");
         }
         return this.fulfillContactMech;
+    }
+    /**
+     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>CurrencyUom</code>.
+     * @return the <code>Uom</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Uom getCurrencyUom() throws RepositoryException {
+        if (this.currencyUom == null) {
+            this.currencyUom = getRelatedOne(Uom.class, "CurrencyUom");
+        }
+        return this.currencyUom;
     }
     /**
      * Auto generated method that gets the related <code>CustRequestAttribute</code> by the relation named <code>CustRequestAttribute</code>.
@@ -769,6 +881,17 @@ fieldMapColumns.put("CustRequest", fields);
             this.custRequestItemWorkEfforts = getRelated(CustRequestItemWorkEffort.class, "CustRequestItemWorkEffort");
         }
         return this.custRequestItemWorkEfforts;
+    }
+    /**
+     * Auto generated method that gets the related <code>CustRequestParty</code> by the relation named <code>CustRequestParty</code>.
+     * @return the list of <code>CustRequestParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends CustRequestParty> getCustRequestPartys() throws RepositoryException {
+        if (this.custRequestPartys == null) {
+            this.custRequestPartys = getRelated(CustRequestParty.class, "CustRequestParty");
+        }
+        return this.custRequestPartys;
     }
     /**
      * Auto generated method that gets the related <code>CustRequestRole</code> by the relation named <code>CustRequestRole</code>.
@@ -867,10 +990,10 @@ fieldMapColumns.put("CustRequest", fields);
     }
     /**
      * Auto generated value setter.
-     * @param uom the uom to set
+     * @param maximumAmountUom the maximumAmountUom to set
     */
-    public void setUom(Uom uom) {
-        this.uom = uom;
+    public void setMaximumAmountUom(Uom maximumAmountUom) {
+        this.maximumAmountUom = maximumAmountUom;
     }
     /**
      * Auto generated value setter.
@@ -899,6 +1022,13 @@ fieldMapColumns.put("CustRequest", fields);
     */
     public void setFulfillContactMech(ContactMech fulfillContactMech) {
         this.fulfillContactMech = fulfillContactMech;
+    }
+    /**
+     * Auto generated value setter.
+     * @param currencyUom the currencyUom to set
+    */
+    public void setCurrencyUom(Uom currencyUom) {
+        this.currencyUom = currencyUom;
     }
     /**
      * Auto generated value setter.
@@ -934,6 +1064,13 @@ fieldMapColumns.put("CustRequest", fields);
     */
     public void setCustRequestItemWorkEfforts(List<CustRequestItemWorkEffort> custRequestItemWorkEfforts) {
         this.custRequestItemWorkEfforts = custRequestItemWorkEfforts;
+    }
+    /**
+     * Auto generated value setter.
+     * @param custRequestPartys the custRequestPartys to set
+    */
+    public void setCustRequestPartys(List<CustRequestParty> custRequestPartys) {
+        this.custRequestPartys = custRequestPartys;
     }
     /**
      * Auto generated value setter.
@@ -1116,6 +1253,33 @@ fieldMapColumns.put("CustRequest", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addCustRequestParty(CustRequestParty custRequestParty) {
+        if (this.custRequestPartys == null) {
+            this.custRequestPartys = new ArrayList<CustRequestParty>();
+        }
+        this.custRequestPartys.add(custRequestParty);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeCustRequestParty(CustRequestParty custRequestParty) {
+        if (this.custRequestPartys == null) {
+            return;
+        }
+        this.custRequestPartys.remove(custRequestParty);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearCustRequestParty() {
+        if (this.custRequestPartys == null) {
+            return;
+        }
+        this.custRequestPartys.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addCustRequestRole(CustRequestRole custRequestRole) {
         if (this.custRequestRoles == null) {
             this.custRequestRoles = new ArrayList<CustRequestRole>();
@@ -1240,6 +1404,11 @@ fieldMapColumns.put("CustRequest", fields);
         setProductStoreId((String) mapValue.get("productStoreId"));
         setSalesChannelEnumId((String) mapValue.get("salesChannelEnumId"));
         setFulfillContactMechId((String) mapValue.get("fulfillContactMechId"));
+        setCurrencyUomId((String) mapValue.get("currencyUomId"));
+        setOpenDateTime((Timestamp) mapValue.get("openDateTime"));
+        setClosedDateTime((Timestamp) mapValue.get("closedDateTime"));
+        setInternalComment((String) mapValue.get("internalComment"));
+        setReason((String) mapValue.get("reason"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
@@ -1270,6 +1439,11 @@ fieldMapColumns.put("CustRequest", fields);
         mapValue.put("productStoreId", getProductStoreId());
         mapValue.put("salesChannelEnumId", getSalesChannelEnumId());
         mapValue.put("fulfillContactMechId", getFulfillContactMechId());
+        mapValue.put("currencyUomId", getCurrencyUomId());
+        mapValue.put("openDateTime", getOpenDateTime());
+        mapValue.put("closedDateTime", getClosedDateTime());
+        mapValue.put("internalComment", getInternalComment());
+        mapValue.put("reason", getReason());
         mapValue.put("createdDate", getCreatedDate());
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());

@@ -127,6 +127,10 @@ fieldMapColumns.put("RecurrenceInfo", fields);
    )
    
    private RecurrenceRule exceptionRecurrenceRule = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="RECURRENCE_INFO_ID")
+   
+   private List<Invoice> invoices = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="recurrenceInfo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RECURRENCE_INFO_ID")
    
@@ -135,6 +139,10 @@ fieldMapColumns.put("RecurrenceInfo", fields);
    @JoinColumn(name="RECURRENCE_INFO_ID")
    
    private List<JobSandbox> jobSandboxes = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="RECURRENCE_INFO_ID")
+   
+   private List<ProductAssoc> productAssocs = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRENCE_INFO_ID")
    
@@ -349,6 +357,17 @@ fieldMapColumns.put("RecurrenceInfo", fields);
         return this.exceptionRecurrenceRule;
     }
     /**
+     * Auto generated method that gets the related <code>Invoice</code> by the relation named <code>Invoice</code>.
+     * @return the list of <code>Invoice</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Invoice> getInvoices() throws RepositoryException {
+        if (this.invoices == null) {
+            this.invoices = getRelated(Invoice.class, "Invoice");
+        }
+        return this.invoices;
+    }
+    /**
      * Auto generated method that gets the related <code>InvoiceRecurrence</code> by the relation named <code>InvoiceRecurrence</code>.
      * @return the list of <code>InvoiceRecurrence</code>
      * @throws RepositoryException if an error occurs
@@ -369,6 +388,17 @@ fieldMapColumns.put("RecurrenceInfo", fields);
             this.jobSandboxes = getRelated(JobSandbox.class, "JobSandbox");
         }
         return this.jobSandboxes;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductAssoc</code> by the relation named <code>ProductAssoc</code>.
+     * @return the list of <code>ProductAssoc</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductAssoc> getProductAssocs() throws RepositoryException {
+        if (this.productAssocs == null) {
+            this.productAssocs = getRelated(ProductAssoc.class, "ProductAssoc");
+        }
+        return this.productAssocs;
     }
     /**
      * Auto generated method that gets the related <code>ShoppingList</code> by the relation named <code>ShoppingList</code>.
@@ -409,6 +439,13 @@ fieldMapColumns.put("RecurrenceInfo", fields);
     }
     /**
      * Auto generated value setter.
+     * @param invoices the invoices to set
+    */
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
+    }
+    /**
+     * Auto generated value setter.
      * @param invoiceRecurrences the invoiceRecurrences to set
     */
     public void setInvoiceRecurrences(List<InvoiceRecurrence> invoiceRecurrences) {
@@ -420,6 +457,13 @@ fieldMapColumns.put("RecurrenceInfo", fields);
     */
     public void setJobSandboxes(List<JobSandbox> jobSandboxes) {
         this.jobSandboxes = jobSandboxes;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productAssocs the productAssocs to set
+    */
+    public void setProductAssocs(List<ProductAssoc> productAssocs) {
+        this.productAssocs = productAssocs;
     }
     /**
      * Auto generated value setter.

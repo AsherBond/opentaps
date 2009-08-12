@@ -57,6 +57,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("clientPartyId", "CLIENT_PARTY_ID");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
+        fields.put("statusId", "STATUS_ID");
+        fields.put("approvedByUserLoginId", "APPROVED_BY_USER_LOGIN_ID");
         fields.put("comments", "COMMENTS");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -70,6 +72,8 @@ fieldMapColumns.put("Timesheet", fields);
     clientPartyId("clientPartyId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
+    statusId("statusId"),
+    approvedByUserLoginId("approvedByUserLoginId"),
     comments("comments"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -98,6 +102,10 @@ fieldMapColumns.put("Timesheet", fields);
    private Timestamp fromDate;
    @Column(name="THRU_DATE")
    private Timestamp thruDate;
+   @Column(name="STATUS_ID")
+   private String statusId;
+   @Column(name="APPROVED_BY_USER_LOGIN_ID")
+   private String approvedByUserLoginId;
    @Column(name="COMMENTS")
    private String comments;
    @Column(name="LAST_UPDATED_STAMP")
@@ -116,12 +124,26 @@ fieldMapColumns.put("Timesheet", fields);
    
    private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
+   @JoinColumn(name="CLIENT_PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
    private Party clientParty = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private StatusItem statusItem = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="APPROVED_BY_USER_LOGIN_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private UserLogin approvedByUserLogin = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TIMESHEET_ID")
    
@@ -142,7 +164,7 @@ fieldMapColumns.put("Timesheet", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("timesheetId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("timesheetId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("clientPartyId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("timesheetId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("clientPartyId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("approvedByUserLoginId");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -191,6 +213,20 @@ fieldMapColumns.put("Timesheet", fields);
      */
     public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusId the statusId to set
+     */
+    public void setStatusId(String statusId) {
+        this.statusId = statusId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param approvedByUserLoginId the approvedByUserLoginId to set
+     */
+    public void setApprovedByUserLoginId(String approvedByUserLoginId) {
+        this.approvedByUserLoginId = approvedByUserLoginId;
     }
     /**
      * Auto generated value setter.
@@ -267,6 +303,20 @@ fieldMapColumns.put("Timesheet", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getStatusId() {
+        return this.statusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getApprovedByUserLoginId() {
+        return this.approvedByUserLoginId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getComments() {
         return this.comments;
     }
@@ -322,6 +372,28 @@ fieldMapColumns.put("Timesheet", fields);
         return this.clientParty;
     }
     /**
+     * Auto generated method that gets the related <code>StatusItem</code> by the relation named <code>StatusItem</code>.
+     * @return the <code>StatusItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public StatusItem getStatusItem() throws RepositoryException {
+        if (this.statusItem == null) {
+            this.statusItem = getRelatedOne(StatusItem.class, "StatusItem");
+        }
+        return this.statusItem;
+    }
+    /**
+     * Auto generated method that gets the related <code>UserLogin</code> by the relation named <code>ApprovedByUserLogin</code>.
+     * @return the <code>UserLogin</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public UserLogin getApprovedByUserLogin() throws RepositoryException {
+        if (this.approvedByUserLogin == null) {
+            this.approvedByUserLogin = getRelatedOne(UserLogin.class, "ApprovedByUserLogin");
+        }
+        return this.approvedByUserLogin;
+    }
+    /**
      * Auto generated method that gets the related <code>TimeEntry</code> by the relation named <code>TimeEntry</code>.
      * @return the list of <code>TimeEntry</code>
      * @throws RepositoryException if an error occurs
@@ -357,6 +429,20 @@ fieldMapColumns.put("Timesheet", fields);
     */
     public void setClientParty(Party clientParty) {
         this.clientParty = clientParty;
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusItem the statusItem to set
+    */
+    public void setStatusItem(StatusItem statusItem) {
+        this.statusItem = statusItem;
+    }
+    /**
+     * Auto generated value setter.
+     * @param approvedByUserLogin the approvedByUserLogin to set
+    */
+    public void setApprovedByUserLogin(UserLogin approvedByUserLogin) {
+        this.approvedByUserLogin = approvedByUserLogin;
     }
     /**
      * Auto generated value setter.
@@ -410,6 +496,8 @@ fieldMapColumns.put("Timesheet", fields);
         setClientPartyId((String) mapValue.get("clientPartyId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
+        setStatusId((String) mapValue.get("statusId"));
+        setApprovedByUserLoginId((String) mapValue.get("approvedByUserLoginId"));
         setComments((String) mapValue.get("comments"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -427,6 +515,8 @@ fieldMapColumns.put("Timesheet", fields);
         mapValue.put("clientPartyId", getClientPartyId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
+        mapValue.put("statusId", getStatusId());
+        mapValue.put("approvedByUserLoginId", getApprovedByUserLoginId());
         mapValue.put("comments", getComments());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

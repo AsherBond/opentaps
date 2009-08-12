@@ -134,6 +134,10 @@ fieldMapColumns.put("StatusItem", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
+   private List<CommunicationEventRole> communicationEventRoles = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID")
+   
    private List<ContactListCommStatus> contactListCommStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
@@ -178,6 +182,18 @@ fieldMapColumns.put("StatusItem", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
+   private List<Example> examples = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID")
+   
+   private List<ExampleStatus> exampleStatuses = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="statusItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="STATUS_ID")
+   
+   private List<FinAccountStatus> finAccountStatuses = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID")
+   
    private List<FixedAssetMaint> fixedAssetMaints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
@@ -219,6 +235,10 @@ fieldMapColumns.put("StatusItem", fields);
    @JoinColumn(name="STATUS_ID")
    
    private List<MarketingCampaign> marketingCampaigns = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PROCESSING_STATUS_ID")
+   
+   private List<OagisMessageInfo> processingOagisMessageInfoes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
@@ -394,6 +414,10 @@ fieldMapColumns.put("StatusItem", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
+   private List<Timesheet> timesheets = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="STATUS_ID")
+   
    private List<UnemploymentClaim> unemploymentClaims = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENT_STATUS_ID")
@@ -403,6 +427,10 @@ fieldMapColumns.put("StatusItem", fields);
    @JoinColumn(name="STATUS_ID")
    
    private List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="AVAILABILITY_STATUS_ID")
+   
+   private List<WorkEffortFixedAssetAssign> availabilityWorkEffortFixedAssetAssigns = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID")
    
@@ -427,14 +455,6 @@ fieldMapColumns.put("StatusItem", fields);
    @JoinColumn(name="STATUS_ID")
    
    private List<WorkEffortStatus> workEffortStatuses = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PUBLICATION_STATUS_ID")
-   
-   private List<WorkflowPackage> publicationWorkflowPackages = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PUBLICATION_STATUS_ID")
-   
-   private List<WorkflowProcess> publicationWorkflowProcesses = null;
 
   /**
    * Default constructor.
@@ -657,6 +677,17 @@ fieldMapColumns.put("StatusItem", fields);
         return this.communicationEvents;
     }
     /**
+     * Auto generated method that gets the related <code>CommunicationEventRole</code> by the relation named <code>CommunicationEventRole</code>.
+     * @return the list of <code>CommunicationEventRole</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends CommunicationEventRole> getCommunicationEventRoles() throws RepositoryException {
+        if (this.communicationEventRoles == null) {
+            this.communicationEventRoles = getRelated(CommunicationEventRole.class, "CommunicationEventRole");
+        }
+        return this.communicationEventRoles;
+    }
+    /**
      * Auto generated method that gets the related <code>ContactListCommStatus</code> by the relation named <code>ContactListCommStatus</code>.
      * @return the list of <code>ContactListCommStatus</code>
      * @throws RepositoryException if an error occurs
@@ -778,6 +809,39 @@ fieldMapColumns.put("StatusItem", fields);
         return this.employmentApps;
     }
     /**
+     * Auto generated method that gets the related <code>Example</code> by the relation named <code>Example</code>.
+     * @return the list of <code>Example</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Example> getExamples() throws RepositoryException {
+        if (this.examples == null) {
+            this.examples = getRelated(Example.class, "Example");
+        }
+        return this.examples;
+    }
+    /**
+     * Auto generated method that gets the related <code>ExampleStatus</code> by the relation named <code>ExampleStatus</code>.
+     * @return the list of <code>ExampleStatus</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ExampleStatus> getExampleStatuses() throws RepositoryException {
+        if (this.exampleStatuses == null) {
+            this.exampleStatuses = getRelated(ExampleStatus.class, "ExampleStatus");
+        }
+        return this.exampleStatuses;
+    }
+    /**
+     * Auto generated method that gets the related <code>FinAccountStatus</code> by the relation named <code>FinAccountStatus</code>.
+     * @return the list of <code>FinAccountStatus</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FinAccountStatus> getFinAccountStatuses() throws RepositoryException {
+        if (this.finAccountStatuses == null) {
+            this.finAccountStatuses = getRelated(FinAccountStatus.class, "FinAccountStatus");
+        }
+        return this.finAccountStatuses;
+    }
+    /**
      * Auto generated method that gets the related <code>FixedAssetMaint</code> by the relation named <code>FixedAssetMaint</code>.
      * @return the list of <code>FixedAssetMaint</code>
      * @throws RepositoryException if an error occurs
@@ -897,6 +961,17 @@ fieldMapColumns.put("StatusItem", fields);
             this.marketingCampaigns = getRelated(MarketingCampaign.class, "MarketingCampaign");
         }
         return this.marketingCampaigns;
+    }
+    /**
+     * Auto generated method that gets the related <code>OagisMessageInfo</code> by the relation named <code>ProcessingOagisMessageInfo</code>.
+     * @return the list of <code>OagisMessageInfo</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OagisMessageInfo> getProcessingOagisMessageInfoes() throws RepositoryException {
+        if (this.processingOagisMessageInfoes == null) {
+            this.processingOagisMessageInfoes = getRelated(OagisMessageInfo.class, "ProcessingOagisMessageInfo");
+        }
+        return this.processingOagisMessageInfoes;
     }
     /**
      * Auto generated method that gets the related <code>OrderDeliverySchedule</code> by the relation named <code>OrderDeliverySchedule</code>.
@@ -1372,6 +1447,17 @@ fieldMapColumns.put("StatusItem", fields);
         return this.surveyResponses;
     }
     /**
+     * Auto generated method that gets the related <code>Timesheet</code> by the relation named <code>Timesheet</code>.
+     * @return the list of <code>Timesheet</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Timesheet> getTimesheets() throws RepositoryException {
+        if (this.timesheets == null) {
+            this.timesheets = getRelated(Timesheet.class, "Timesheet");
+        }
+        return this.timesheets;
+    }
+    /**
      * Auto generated method that gets the related <code>UnemploymentClaim</code> by the relation named <code>UnemploymentClaim</code>.
      * @return the list of <code>UnemploymentClaim</code>
      * @throws RepositoryException if an error occurs
@@ -1403,6 +1489,17 @@ fieldMapColumns.put("StatusItem", fields);
             this.workEffortFixedAssetAssigns = getRelated(WorkEffortFixedAssetAssign.class, "WorkEffortFixedAssetAssign");
         }
         return this.workEffortFixedAssetAssigns;
+    }
+    /**
+     * Auto generated method that gets the related <code>WorkEffortFixedAssetAssign</code> by the relation named <code>AvailabilityWorkEffortFixedAssetAssign</code>.
+     * @return the list of <code>WorkEffortFixedAssetAssign</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends WorkEffortFixedAssetAssign> getAvailabilityWorkEffortFixedAssetAssigns() throws RepositoryException {
+        if (this.availabilityWorkEffortFixedAssetAssigns == null) {
+            this.availabilityWorkEffortFixedAssetAssigns = getRelated(WorkEffortFixedAssetAssign.class, "AvailabilityWorkEffortFixedAssetAssign");
+        }
+        return this.availabilityWorkEffortFixedAssetAssigns;
     }
     /**
      * Auto generated method that gets the related <code>WorkEffortGoodStandard</code> by the relation named <code>WorkEffortGoodStandard</code>.
@@ -1470,28 +1567,6 @@ fieldMapColumns.put("StatusItem", fields);
         }
         return this.workEffortStatuses;
     }
-    /**
-     * Auto generated method that gets the related <code>WorkflowPackage</code> by the relation named <code>PublicationWorkflowPackage</code>.
-     * @return the list of <code>WorkflowPackage</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowPackage> getPublicationWorkflowPackages() throws RepositoryException {
-        if (this.publicationWorkflowPackages == null) {
-            this.publicationWorkflowPackages = getRelated(WorkflowPackage.class, "PublicationWorkflowPackage");
-        }
-        return this.publicationWorkflowPackages;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowProcess</code> by the relation named <code>PublicationWorkflowProcess</code>.
-     * @return the list of <code>WorkflowProcess</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowProcess> getPublicationWorkflowProcesses() throws RepositoryException {
-        if (this.publicationWorkflowProcesses == null) {
-            this.publicationWorkflowProcesses = getRelated(WorkflowProcess.class, "PublicationWorkflowProcess");
-        }
-        return this.publicationWorkflowProcesses;
-    }
 
     /**
      * Auto generated value setter.
@@ -1534,6 +1609,13 @@ fieldMapColumns.put("StatusItem", fields);
     */
     public void setCommunicationEvents(List<CommunicationEvent> communicationEvents) {
         this.communicationEvents = communicationEvents;
+    }
+    /**
+     * Auto generated value setter.
+     * @param communicationEventRoles the communicationEventRoles to set
+    */
+    public void setCommunicationEventRoles(List<CommunicationEventRole> communicationEventRoles) {
+        this.communicationEventRoles = communicationEventRoles;
     }
     /**
      * Auto generated value setter.
@@ -1614,6 +1696,27 @@ fieldMapColumns.put("StatusItem", fields);
     }
     /**
      * Auto generated value setter.
+     * @param examples the examples to set
+    */
+    public void setExamples(List<Example> examples) {
+        this.examples = examples;
+    }
+    /**
+     * Auto generated value setter.
+     * @param exampleStatuses the exampleStatuses to set
+    */
+    public void setExampleStatuses(List<ExampleStatus> exampleStatuses) {
+        this.exampleStatuses = exampleStatuses;
+    }
+    /**
+     * Auto generated value setter.
+     * @param finAccountStatuses the finAccountStatuses to set
+    */
+    public void setFinAccountStatuses(List<FinAccountStatus> finAccountStatuses) {
+        this.finAccountStatuses = finAccountStatuses;
+    }
+    /**
+     * Auto generated value setter.
      * @param fixedAssetMaints the fixedAssetMaints to set
     */
     public void setFixedAssetMaints(List<FixedAssetMaint> fixedAssetMaints) {
@@ -1688,6 +1791,13 @@ fieldMapColumns.put("StatusItem", fields);
     */
     public void setMarketingCampaigns(List<MarketingCampaign> marketingCampaigns) {
         this.marketingCampaigns = marketingCampaigns;
+    }
+    /**
+     * Auto generated value setter.
+     * @param processingOagisMessageInfoes the processingOagisMessageInfoes to set
+    */
+    public void setProcessingOagisMessageInfoes(List<OagisMessageInfo> processingOagisMessageInfoes) {
+        this.processingOagisMessageInfoes = processingOagisMessageInfoes;
     }
     /**
      * Auto generated value setter.
@@ -1992,6 +2102,13 @@ fieldMapColumns.put("StatusItem", fields);
     }
     /**
      * Auto generated value setter.
+     * @param timesheets the timesheets to set
+    */
+    public void setTimesheets(List<Timesheet> timesheets) {
+        this.timesheets = timesheets;
+    }
+    /**
+     * Auto generated value setter.
      * @param unemploymentClaims the unemploymentClaims to set
     */
     public void setUnemploymentClaims(List<UnemploymentClaim> unemploymentClaims) {
@@ -2010,6 +2127,13 @@ fieldMapColumns.put("StatusItem", fields);
     */
     public void setWorkEffortFixedAssetAssigns(List<WorkEffortFixedAssetAssign> workEffortFixedAssetAssigns) {
         this.workEffortFixedAssetAssigns = workEffortFixedAssetAssigns;
+    }
+    /**
+     * Auto generated value setter.
+     * @param availabilityWorkEffortFixedAssetAssigns the availabilityWorkEffortFixedAssetAssigns to set
+    */
+    public void setAvailabilityWorkEffortFixedAssetAssigns(List<WorkEffortFixedAssetAssign> availabilityWorkEffortFixedAssetAssigns) {
+        this.availabilityWorkEffortFixedAssetAssigns = availabilityWorkEffortFixedAssetAssigns;
     }
     /**
      * Auto generated value setter.
@@ -2052,20 +2176,6 @@ fieldMapColumns.put("StatusItem", fields);
     */
     public void setWorkEffortStatuses(List<WorkEffortStatus> workEffortStatuses) {
         this.workEffortStatuses = workEffortStatuses;
-    }
-    /**
-     * Auto generated value setter.
-     * @param publicationWorkflowPackages the publicationWorkflowPackages to set
-    */
-    public void setPublicationWorkflowPackages(List<WorkflowPackage> publicationWorkflowPackages) {
-        this.publicationWorkflowPackages = publicationWorkflowPackages;
-    }
-    /**
-     * Auto generated value setter.
-     * @param publicationWorkflowProcesses the publicationWorkflowProcesses to set
-    */
-    public void setPublicationWorkflowProcesses(List<WorkflowProcess> publicationWorkflowProcesses) {
-        this.publicationWorkflowProcesses = publicationWorkflowProcesses;
     }
 
     /**
@@ -2121,6 +2231,33 @@ fieldMapColumns.put("StatusItem", fields);
             return;
         }
         this.contentPurposeOperations.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addFinAccountStatuse(FinAccountStatus finAccountStatuse) {
+        if (this.finAccountStatuses == null) {
+            this.finAccountStatuses = new ArrayList<FinAccountStatus>();
+        }
+        this.finAccountStatuses.add(finAccountStatuse);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeFinAccountStatuse(FinAccountStatus finAccountStatuse) {
+        if (this.finAccountStatuses == null) {
+            return;
+        }
+        this.finAccountStatuses.remove(finAccountStatuse);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearFinAccountStatuse() {
+        if (this.finAccountStatuses == null) {
+            return;
+        }
+        this.finAccountStatuses.clear();
     }
     /**
      * Auto generated method that add item to collection.

@@ -58,6 +58,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
         fields.put("sequenceNum", "SEQUENCE_NUM");
+        fields.put("manualOnly", "MANUAL_ONLY");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -70,6 +71,7 @@ fieldMapColumns.put("ProductStorePromoAppl", fields);
     fromDate("fromDate"),
     thruDate("thruDate"),
     sequenceNum("sequenceNum"),
+    manualOnly("manualOnly"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -107,6 +109,8 @@ fieldMapColumns.put("ProductStorePromoAppl", fields);
    private Timestamp thruDate;
    @Column(name="SEQUENCE_NUM")
    private Long sequenceNum;
+   @Column(name="MANUAL_ONLY")
+   private String manualOnly;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -141,7 +145,7 @@ fieldMapColumns.put("ProductStorePromoAppl", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productStoreId");this.primaryKeyNames.add("productPromoId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("productPromoId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("productPromoId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("manualOnly");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -190,6 +194,13 @@ fieldMapColumns.put("ProductStorePromoAppl", fields);
      */
     public void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
+    }
+    /**
+     * Auto generated value setter.
+     * @param manualOnly the manualOnly to set
+     */
+    public void setManualOnly(String manualOnly) {
+        this.manualOnly = manualOnly;
     }
     /**
      * Auto generated value setter.
@@ -254,6 +265,13 @@ fieldMapColumns.put("ProductStorePromoAppl", fields);
      */
     public Long getSequenceNum() {
         return this.sequenceNum;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getManualOnly() {
+        return this.manualOnly;
     }
     /**
      * Auto generated value accessor.
@@ -332,6 +350,7 @@ fieldMapColumns.put("ProductStorePromoAppl", fields);
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
         setSequenceNum((Long) mapValue.get("sequenceNum"));
+        setManualOnly((String) mapValue.get("manualOnly"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -348,6 +367,7 @@ fieldMapColumns.put("ProductStorePromoAppl", fields);
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
         mapValue.put("sequenceNum", getSequenceNum());
+        mapValue.put("manualOnly", getManualOnly());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

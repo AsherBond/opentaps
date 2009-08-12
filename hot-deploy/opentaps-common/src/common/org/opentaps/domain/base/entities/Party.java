@@ -63,6 +63,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdByUserLogin", "CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "LAST_MODIFIED_BY_USER_LOGIN");
+        fields.put("dataSourceId", "DATA_SOURCE_ID");
+        fields.put("isUnread", "IS_UNREAD");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -80,6 +82,8 @@ fieldMapColumns.put("Party", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
+    dataSourceId("dataSourceId"),
+    isUnread("isUnread"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -124,6 +128,10 @@ fieldMapColumns.put("Party", fields);
    private Timestamp lastModifiedDate;
    @Column(name="LAST_MODIFIED_BY_USER_LOGIN")
    private String lastModifiedByUserLogin;
+   @Column(name="DATA_SOURCE_ID")
+   private String dataSourceId;
+   @Column(name="IS_UNREAD")
+   private String isUnread;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -171,6 +179,13 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="PARTY_TYPE_ID")
    
    private List<PartyTypeAttr> partyTypeAttrs = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="DATA_SOURCE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private DataSource dataSource = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
@@ -300,7 +315,15 @@ fieldMapColumns.put("Party", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
+   private List<CustRequestParty> custRequestPartys = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_ID")
+   
    private List<CustRequestRole> custRequestRoles = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARTY_ID")
+   
+   private List<CustRequestType> custRequestTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
@@ -328,6 +351,10 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="PARTY_ID")
    
    private List<DataResourceRole> dataResourceRoles = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_ID")
+   
+   private List<EmplLeave> emplLeaves = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
@@ -336,10 +363,6 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="PARTY_ID")
    
    private List<EmplPositionFulfillment> emplPositionFulfillments = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PARTY_ID")
-   
-   private List<EmplPositionType> emplPositionTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
@@ -379,11 +402,11 @@ fieldMapColumns.put("Party", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<FacilityPartyPermission> facilityPartyPermissions = null;
+   private List<FacilityParty> facilityPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<FacilityRole> facilityRoles = null;
+   private List<FacilityPartyPermission> facilityPartyPermissions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
@@ -472,6 +495,10 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="TAX_AUTH_PARTY_ID")
    
    private List<InvoiceItem> taxAuthorityInvoiceItems = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="OVERRIDE_ORG_PARTY_ID")
+   
+   private List<InvoiceItem> overrideOrgInvoiceItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
@@ -493,9 +520,21 @@ fieldMapColumns.put("Party", fields);
    
    private List<MarketingCampaignRole> marketingCampaignRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="NOTE_PARTY")
+   
+   private List<NoteData> noteNoteDatas = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_ID")
+   
+   private List<OldFacilityRole> oldFacilityRoles = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID")
    
    private List<OldOrderShipmentPreference> carrierOldOrderShipmentPreferences = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_ID")
+   
+   private List<OldPartyRate> oldPartyRates = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
@@ -504,6 +543,10 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="PARTY_ID")
    
    private List<OldValueLinkFulfillment> oldValueLinkFulfillments = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_ID")
+   
+   private List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="BILL_FROM_PARTY_ID")
    
@@ -520,6 +563,10 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="SUPPLIER_PARTY_ID")
    
    private List<OrderItemShipGroup> supplierOrderItemShipGroups = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="VENDOR_PARTY_ID")
+   
+   private List<OrderItemShipGroup> vendorOrderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID")
    
@@ -579,6 +626,18 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="PARTY_ID")
    
    private List<PartyFixedAssetAssignment> partyFixedAssetAssignments = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_ID")
+   
+   private List<PartyGeoPoint> partyGeoPoints = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="organizationParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="ORGANIZATION_PARTY_ID")
+   
+   private List<PartyGlAccount> organizationPartyGlAccounts = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_ID")
+   
+   private List<PartyGlAccount> partyGlAccounts = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -617,14 +676,10 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="PARTY_ID")
    
    private List<PartyProfileDefault> partyProfileDefaults = null;
-   @OneToMany(fetch=FetchType.LAZY)
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
    private List<PartyQual> partyQuals = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="INSTITUTION_PARTY_ID")
-   
-   private List<PartyQual> institutionPartyQuals = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
@@ -712,14 +767,6 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="MANAGER_PARTY_ID")
    
    private List<PerfReview> managerPerfReviews = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PAY_HISTORY_PARTY_ID_FROM")
-   
-   private List<PerfReview> payHistoryFromPerfReviews = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PAY_HISTORY_PARTY_ID_TO")
-   
-   private List<PerfReview> payHistoryToPerfReviews = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="employeeParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPLOYEE_PARTY_ID")
    
@@ -752,6 +799,10 @@ fieldMapColumns.put("Party", fields);
    
    private List<ProductAverageCost> productAverageCosts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="ORGANIZATION_PARTY_ID")
+   
+   private List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
    private List<ProductCategoryRole> productCategoryRoles = null;
@@ -759,6 +810,10 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="ORGANIZATION_PARTY_ID")
    
    private List<ProductGlAccount> productGlAccounts = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="OVERRIDE_ORG_PARTY_ID")
+   
+   private List<ProductPromo> productPromoes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
@@ -767,6 +822,10 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="PARTY_ID")
    
    private List<ProductPromoUse> productPromoUses = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_ID")
+   
+   private List<ProductRole> productRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAY_TO_PARTY_ID")
    
@@ -791,6 +850,18 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="COMPANY_PARTY_ID")
    
    private List<ProductStoreShipmentMeth> productStoreShipmentMeths = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="vendorParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="VENDOR_PARTY_ID")
+   
+   private List<ProductStoreVendorPayment> vendorProductStoreVendorPayments = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="vendorParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="VENDOR_PARTY_ID")
+   
+   private List<ProductStoreVendorShipment> vendorProductStoreVendorShipments = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="carrierParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="CARRIER_PARTY_ID")
+   
+   private List<ProductStoreVendorShipment> carrierProductStoreVendorShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
@@ -807,6 +878,10 @@ fieldMapColumns.put("Party", fields);
    @JoinColumn(name="PARTY_ID")
    
    private List<QuoteRole> quoteRoles = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_ID")
+   
+   private List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
@@ -920,7 +995,7 @@ fieldMapColumns.put("Party", fields);
    
    private List<Timesheet> timesheets = null;
    @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PARTY_ID")
+   @JoinColumn(name="CLIENT_PARTY_ID")
    
    private List<Timesheet> clientTimesheets = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
@@ -946,6 +1021,10 @@ fieldMapColumns.put("Party", fields);
    )
    
    private Vendor vendor = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="vendorParty", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="VENDOR_PARTY_ID")
+   
+   private List<VendorProduct> vendorVendorProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID")
    
@@ -965,10 +1044,6 @@ fieldMapColumns.put("Party", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_ID")
    
-   private List<WorkEffortAssignmentRate> workEffortAssignmentRates = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="party", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="PARTY_ID")
-   
    private List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
 
   /**
@@ -982,7 +1057,7 @@ fieldMapColumns.put("Party", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -1066,6 +1141,20 @@ fieldMapColumns.put("Party", fields);
      */
     public void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dataSourceId the dataSourceId to set
+     */
+    public void setDataSourceId(String dataSourceId) {
+        this.dataSourceId = dataSourceId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param isUnread the isUnread to set
+     */
+    public void setIsUnread(String isUnread) {
+        this.isUnread = isUnread;
     }
     /**
      * Auto generated value setter.
@@ -1168,6 +1257,20 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDataSourceId() {
+        return this.dataSourceId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIsUnread() {
+        return this.isUnread;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -1260,6 +1363,17 @@ fieldMapColumns.put("Party", fields);
             this.partyTypeAttrs = getRelated(PartyTypeAttr.class, "PartyTypeAttr");
         }
         return this.partyTypeAttrs;
+    }
+    /**
+     * Auto generated method that gets the related <code>DataSource</code> by the relation named <code>DataSource</code>.
+     * @return the <code>DataSource</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public DataSource getDataSource() throws RepositoryException {
+        if (this.dataSource == null) {
+            this.dataSource = getRelatedOne(DataSource.class, "DataSource");
+        }
+        return this.dataSource;
     }
     /**
      * Auto generated method that gets the related <code>AccountBalanceHistory</code> by the relation named <code>OrganizationAccountBalanceHistory</code>.
@@ -1592,6 +1706,17 @@ fieldMapColumns.put("Party", fields);
         return this.fromCustRequests;
     }
     /**
+     * Auto generated method that gets the related <code>CustRequestParty</code> by the relation named <code>CustRequestParty</code>.
+     * @return the list of <code>CustRequestParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends CustRequestParty> getCustRequestPartys() throws RepositoryException {
+        if (this.custRequestPartys == null) {
+            this.custRequestPartys = getRelated(CustRequestParty.class, "CustRequestParty");
+        }
+        return this.custRequestPartys;
+    }
+    /**
      * Auto generated method that gets the related <code>CustRequestRole</code> by the relation named <code>CustRequestRole</code>.
      * @return the list of <code>CustRequestRole</code>
      * @throws RepositoryException if an error occurs
@@ -1601,6 +1726,17 @@ fieldMapColumns.put("Party", fields);
             this.custRequestRoles = getRelated(CustRequestRole.class, "CustRequestRole");
         }
         return this.custRequestRoles;
+    }
+    /**
+     * Auto generated method that gets the related <code>CustRequestType</code> by the relation named <code>CustRequestType</code>.
+     * @return the list of <code>CustRequestType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends CustRequestType> getCustRequestTypes() throws RepositoryException {
+        if (this.custRequestTypes == null) {
+            this.custRequestTypes = getRelated(CustRequestType.class, "CustRequestType");
+        }
+        return this.custRequestTypes;
     }
     /**
      * Auto generated method that gets the related <code>CustomTimePeriod</code> by the relation named <code>OrganizationCustomTimePeriod</code>.
@@ -1669,6 +1805,17 @@ fieldMapColumns.put("Party", fields);
         return this.dataResourceRoles;
     }
     /**
+     * Auto generated method that gets the related <code>EmplLeave</code> by the relation named <code>EmplLeave</code>.
+     * @return the list of <code>EmplLeave</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends EmplLeave> getEmplLeaves() throws RepositoryException {
+        if (this.emplLeaves == null) {
+            this.emplLeaves = getRelated(EmplLeave.class, "EmplLeave");
+        }
+        return this.emplLeaves;
+    }
+    /**
      * Auto generated method that gets the related <code>EmplPosition</code> by the relation named <code>EmplPosition</code>.
      * @return the list of <code>EmplPosition</code>
      * @throws RepositoryException if an error occurs
@@ -1689,17 +1836,6 @@ fieldMapColumns.put("Party", fields);
             this.emplPositionFulfillments = getRelated(EmplPositionFulfillment.class, "EmplPositionFulfillment");
         }
         return this.emplPositionFulfillments;
-    }
-    /**
-     * Auto generated method that gets the related <code>EmplPositionType</code> by the relation named <code>EmplPositionType</code>.
-     * @return the list of <code>EmplPositionType</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends EmplPositionType> getEmplPositionTypes() throws RepositoryException {
-        if (this.emplPositionTypes == null) {
-            this.emplPositionTypes = getRelated(EmplPositionType.class, "EmplPositionType");
-        }
-        return this.emplPositionTypes;
     }
     /**
      * Auto generated method that gets the related <code>EmployeePaycheckType</code> by the relation named <code>OrganizationEmployeePaycheckType</code>.
@@ -1801,6 +1937,17 @@ fieldMapColumns.put("Party", fields);
         return this.facilityGroupRoles;
     }
     /**
+     * Auto generated method that gets the related <code>FacilityParty</code> by the relation named <code>FacilityParty</code>.
+     * @return the list of <code>FacilityParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FacilityParty> getFacilityPartys() throws RepositoryException {
+        if (this.facilityPartys == null) {
+            this.facilityPartys = getRelated(FacilityParty.class, "FacilityParty");
+        }
+        return this.facilityPartys;
+    }
+    /**
      * Auto generated method that gets the related <code>FacilityPartyPermission</code> by the relation named <code>FacilityPartyPermission</code>.
      * @return the list of <code>FacilityPartyPermission</code>
      * @throws RepositoryException if an error occurs
@@ -1810,17 +1957,6 @@ fieldMapColumns.put("Party", fields);
             this.facilityPartyPermissions = getRelated(FacilityPartyPermission.class, "FacilityPartyPermission");
         }
         return this.facilityPartyPermissions;
-    }
-    /**
-     * Auto generated method that gets the related <code>FacilityRole</code> by the relation named <code>FacilityRole</code>.
-     * @return the list of <code>FacilityRole</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends FacilityRole> getFacilityRoles() throws RepositoryException {
-        if (this.facilityRoles == null) {
-            this.facilityRoles = getRelated(FacilityRole.class, "FacilityRole");
-        }
-        return this.facilityRoles;
     }
     /**
      * Auto generated method that gets the related <code>FinAccount</code> by the relation named <code>OrganizationFinAccount</code>.
@@ -2065,6 +2201,17 @@ fieldMapColumns.put("Party", fields);
         return this.taxAuthorityInvoiceItems;
     }
     /**
+     * Auto generated method that gets the related <code>InvoiceItem</code> by the relation named <code>OverrideOrgInvoiceItem</code>.
+     * @return the list of <code>InvoiceItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends InvoiceItem> getOverrideOrgInvoiceItems() throws RepositoryException {
+        if (this.overrideOrgInvoiceItems == null) {
+            this.overrideOrgInvoiceItems = getRelated(InvoiceItem.class, "OverrideOrgInvoiceItem");
+        }
+        return this.overrideOrgInvoiceItems;
+    }
+    /**
      * Auto generated method that gets the related <code>InvoiceItemTypeGlAccount</code> by the relation named <code>OrganizationInvoiceItemTypeGlAccount</code>.
      * @return the list of <code>InvoiceItemTypeGlAccount</code>
      * @throws RepositoryException if an error occurs
@@ -2120,6 +2267,28 @@ fieldMapColumns.put("Party", fields);
         return this.marketingCampaignRoles;
     }
     /**
+     * Auto generated method that gets the related <code>NoteData</code> by the relation named <code>NoteNoteData</code>.
+     * @return the list of <code>NoteData</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends NoteData> getNoteNoteDatas() throws RepositoryException {
+        if (this.noteNoteDatas == null) {
+            this.noteNoteDatas = getRelated(NoteData.class, "NoteNoteData");
+        }
+        return this.noteNoteDatas;
+    }
+    /**
+     * Auto generated method that gets the related <code>OldFacilityRole</code> by the relation named <code>OldFacilityRole</code>.
+     * @return the list of <code>OldFacilityRole</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldFacilityRole> getOldFacilityRoles() throws RepositoryException {
+        if (this.oldFacilityRoles == null) {
+            this.oldFacilityRoles = getRelated(OldFacilityRole.class, "OldFacilityRole");
+        }
+        return this.oldFacilityRoles;
+    }
+    /**
      * Auto generated method that gets the related <code>OldOrderShipmentPreference</code> by the relation named <code>CarrierOldOrderShipmentPreference</code>.
      * @return the list of <code>OldOrderShipmentPreference</code>
      * @throws RepositoryException if an error occurs
@@ -2129,6 +2298,17 @@ fieldMapColumns.put("Party", fields);
             this.carrierOldOrderShipmentPreferences = getRelated(OldOrderShipmentPreference.class, "CarrierOldOrderShipmentPreference");
         }
         return this.carrierOldOrderShipmentPreferences;
+    }
+    /**
+     * Auto generated method that gets the related <code>OldPartyRate</code> by the relation named <code>OldPartyRate</code>.
+     * @return the list of <code>OldPartyRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldPartyRate> getOldPartyRates() throws RepositoryException {
+        if (this.oldPartyRates == null) {
+            this.oldPartyRates = getRelated(OldPartyRate.class, "OldPartyRate");
+        }
+        return this.oldPartyRates;
     }
     /**
      * Auto generated method that gets the related <code>OldPartyTaxInfo</code> by the relation named <code>OldPartyTaxInfo</code>.
@@ -2151,6 +2331,17 @@ fieldMapColumns.put("Party", fields);
             this.oldValueLinkFulfillments = getRelated(OldValueLinkFulfillment.class, "OldValueLinkFulfillment");
         }
         return this.oldValueLinkFulfillments;
+    }
+    /**
+     * Auto generated method that gets the related <code>OldWorkEffortAssignmentRate</code> by the relation named <code>OldWorkEffortAssignmentRate</code>.
+     * @return the list of <code>OldWorkEffortAssignmentRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldWorkEffortAssignmentRate> getOldWorkEffortAssignmentRates() throws RepositoryException {
+        if (this.oldWorkEffortAssignmentRates == null) {
+            this.oldWorkEffortAssignmentRates = getRelated(OldWorkEffortAssignmentRate.class, "OldWorkEffortAssignmentRate");
+        }
+        return this.oldWorkEffortAssignmentRates;
     }
     /**
      * Auto generated method that gets the related <code>OrderHeader</code> by the relation named <code>BillFromVendorOrderHeader</code>.
@@ -2195,6 +2386,17 @@ fieldMapColumns.put("Party", fields);
             this.supplierOrderItemShipGroups = getRelated(OrderItemShipGroup.class, "SupplierOrderItemShipGroup");
         }
         return this.supplierOrderItemShipGroups;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderItemShipGroup</code> by the relation named <code>VendorOrderItemShipGroup</code>.
+     * @return the list of <code>OrderItemShipGroup</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItemShipGroup> getVendorOrderItemShipGroups() throws RepositoryException {
+        if (this.vendorOrderItemShipGroups == null) {
+            this.vendorOrderItemShipGroups = getRelated(OrderItemShipGroup.class, "VendorOrderItemShipGroup");
+        }
+        return this.vendorOrderItemShipGroups;
     }
     /**
      * Auto generated method that gets the related <code>OrderItemShipGroup</code> by the relation named <code>CarrierOrderItemShipGroup</code>.
@@ -2351,6 +2553,39 @@ fieldMapColumns.put("Party", fields);
         return this.partyFixedAssetAssignments;
     }
     /**
+     * Auto generated method that gets the related <code>PartyGeoPoint</code> by the relation named <code>PartyGeoPoint</code>.
+     * @return the list of <code>PartyGeoPoint</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyGeoPoint> getPartyGeoPoints() throws RepositoryException {
+        if (this.partyGeoPoints == null) {
+            this.partyGeoPoints = getRelated(PartyGeoPoint.class, "PartyGeoPoint");
+        }
+        return this.partyGeoPoints;
+    }
+    /**
+     * Auto generated method that gets the related <code>PartyGlAccount</code> by the relation named <code>OrganizationPartyGlAccount</code>.
+     * @return the list of <code>PartyGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyGlAccount> getOrganizationPartyGlAccounts() throws RepositoryException {
+        if (this.organizationPartyGlAccounts == null) {
+            this.organizationPartyGlAccounts = getRelated(PartyGlAccount.class, "OrganizationPartyGlAccount");
+        }
+        return this.organizationPartyGlAccounts;
+    }
+    /**
+     * Auto generated method that gets the related <code>PartyGlAccount</code> by the relation named <code>PartyGlAccount</code>.
+     * @return the list of <code>PartyGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyGlAccount> getPartyGlAccounts() throws RepositoryException {
+        if (this.partyGlAccounts == null) {
+            this.partyGlAccounts = getRelated(PartyGlAccount.class, "PartyGlAccount");
+        }
+        return this.partyGlAccounts;
+    }
+    /**
      * Auto generated method that gets the related <code>PartyGroup</code> by the relation named <code>PartyGroup</code>.
      * @return the <code>PartyGroup</code>
      * @throws RepositoryException if an error occurs
@@ -2448,17 +2683,6 @@ fieldMapColumns.put("Party", fields);
             this.partyQuals = getRelated(PartyQual.class, "PartyQual");
         }
         return this.partyQuals;
-    }
-    /**
-     * Auto generated method that gets the related <code>PartyQual</code> by the relation named <code>InstitutionPartyQual</code>.
-     * @return the list of <code>PartyQual</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends PartyQual> getInstitutionPartyQuals() throws RepositoryException {
-        if (this.institutionPartyQuals == null) {
-            this.institutionPartyQuals = getRelated(PartyQual.class, "InstitutionPartyQual");
-        }
-        return this.institutionPartyQuals;
     }
     /**
      * Auto generated method that gets the related <code>PartyRate</code> by the relation named <code>PartyRate</code>.
@@ -2692,28 +2916,6 @@ fieldMapColumns.put("Party", fields);
         return this.managerPerfReviews;
     }
     /**
-     * Auto generated method that gets the related <code>PerfReview</code> by the relation named <code>PayHistoryFromPerfReview</code>.
-     * @return the list of <code>PerfReview</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends PerfReview> getPayHistoryFromPerfReviews() throws RepositoryException {
-        if (this.payHistoryFromPerfReviews == null) {
-            this.payHistoryFromPerfReviews = getRelated(PerfReview.class, "PayHistoryFromPerfReview");
-        }
-        return this.payHistoryFromPerfReviews;
-    }
-    /**
-     * Auto generated method that gets the related <code>PerfReview</code> by the relation named <code>PayHistoryToPerfReview</code>.
-     * @return the list of <code>PerfReview</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends PerfReview> getPayHistoryToPerfReviews() throws RepositoryException {
-        if (this.payHistoryToPerfReviews == null) {
-            this.payHistoryToPerfReviews = getRelated(PerfReview.class, "PayHistoryToPerfReview");
-        }
-        return this.payHistoryToPerfReviews;
-    }
-    /**
      * Auto generated method that gets the related <code>PerfReviewItem</code> by the relation named <code>EmployeePerfReviewItem</code>.
      * @return the list of <code>PerfReviewItem</code>
      * @throws RepositoryException if an error occurs
@@ -2791,6 +2993,17 @@ fieldMapColumns.put("Party", fields);
         return this.productAverageCosts;
     }
     /**
+     * Auto generated method that gets the related <code>ProductCategoryGlAccount</code> by the relation named <code>ProductCategoryGlAccount</code>.
+     * @return the list of <code>ProductCategoryGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductCategoryGlAccount> getProductCategoryGlAccounts() throws RepositoryException {
+        if (this.productCategoryGlAccounts == null) {
+            this.productCategoryGlAccounts = getRelated(ProductCategoryGlAccount.class, "ProductCategoryGlAccount");
+        }
+        return this.productCategoryGlAccounts;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductCategoryRole</code> by the relation named <code>ProductCategoryRole</code>.
      * @return the list of <code>ProductCategoryRole</code>
      * @throws RepositoryException if an error occurs
@@ -2813,6 +3026,17 @@ fieldMapColumns.put("Party", fields);
         return this.productGlAccounts;
     }
     /**
+     * Auto generated method that gets the related <code>ProductPromo</code> by the relation named <code>ProductPromo</code>.
+     * @return the list of <code>ProductPromo</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductPromo> getProductPromoes() throws RepositoryException {
+        if (this.productPromoes == null) {
+            this.productPromoes = getRelated(ProductPromo.class, "ProductPromo");
+        }
+        return this.productPromoes;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductPromoCodeParty</code> by the relation named <code>ProductPromoCodeParty</code>.
      * @return the list of <code>ProductPromoCodeParty</code>
      * @throws RepositoryException if an error occurs
@@ -2833,6 +3057,17 @@ fieldMapColumns.put("Party", fields);
             this.productPromoUses = getRelated(ProductPromoUse.class, "ProductPromoUse");
         }
         return this.productPromoUses;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductRole</code> by the relation named <code>ProductRole</code>.
+     * @return the list of <code>ProductRole</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductRole> getProductRoles() throws RepositoryException {
+        if (this.productRoles == null) {
+            this.productRoles = getRelated(ProductRole.class, "ProductRole");
+        }
+        return this.productRoles;
     }
     /**
      * Auto generated method that gets the related <code>ProductStore</code> by the relation named <code>ProductStore</code>.
@@ -2901,6 +3136,39 @@ fieldMapColumns.put("Party", fields);
         return this.productStoreShipmentMeths;
     }
     /**
+     * Auto generated method that gets the related <code>ProductStoreVendorPayment</code> by the relation named <code>VendorProductStoreVendorPayment</code>.
+     * @return the list of <code>ProductStoreVendorPayment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductStoreVendorPayment> getVendorProductStoreVendorPayments() throws RepositoryException {
+        if (this.vendorProductStoreVendorPayments == null) {
+            this.vendorProductStoreVendorPayments = getRelated(ProductStoreVendorPayment.class, "VendorProductStoreVendorPayment");
+        }
+        return this.vendorProductStoreVendorPayments;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductStoreVendorShipment</code> by the relation named <code>VendorProductStoreVendorShipment</code>.
+     * @return the list of <code>ProductStoreVendorShipment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductStoreVendorShipment> getVendorProductStoreVendorShipments() throws RepositoryException {
+        if (this.vendorProductStoreVendorShipments == null) {
+            this.vendorProductStoreVendorShipments = getRelated(ProductStoreVendorShipment.class, "VendorProductStoreVendorShipment");
+        }
+        return this.vendorProductStoreVendorShipments;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductStoreVendorShipment</code> by the relation named <code>CarrierProductStoreVendorShipment</code>.
+     * @return the list of <code>ProductStoreVendorShipment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductStoreVendorShipment> getCarrierProductStoreVendorShipments() throws RepositoryException {
+        if (this.carrierProductStoreVendorShipments == null) {
+            this.carrierProductStoreVendorShipments = getRelated(ProductStoreVendorShipment.class, "CarrierProductStoreVendorShipment");
+        }
+        return this.carrierProductStoreVendorShipments;
+    }
+    /**
      * Auto generated method that gets the related <code>Quote</code> by the relation named <code>Quote</code>.
      * @return the list of <code>Quote</code>
      * @throws RepositoryException if an error occurs
@@ -2943,6 +3211,17 @@ fieldMapColumns.put("Party", fields);
             this.quoteRoles = getRelated(QuoteRole.class, "QuoteRole");
         }
         return this.quoteRoles;
+    }
+    /**
+     * Auto generated method that gets the related <code>RateAmount</code> by the relation named <code>RateAmount</code>.
+     * @return the list of <code>RateAmount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends RateAmount> getRateAmounts() throws RepositoryException {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = getRelated(RateAmount.class, "RateAmount");
+        }
+        return this.rateAmounts;
     }
     /**
      * Auto generated method that gets the related <code>ReorderGuideline</code> by the relation named <code>ReorderGuideline</code>.
@@ -3319,6 +3598,17 @@ fieldMapColumns.put("Party", fields);
         return this.vendor;
     }
     /**
+     * Auto generated method that gets the related <code>VendorProduct</code> by the relation named <code>VendorVendorProduct</code>.
+     * @return the list of <code>VendorProduct</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends VendorProduct> getVendorVendorProducts() throws RepositoryException {
+        if (this.vendorVendorProducts == null) {
+            this.vendorVendorProducts = getRelated(VendorProduct.class, "VendorVendorProduct");
+        }
+        return this.vendorVendorProducts;
+    }
+    /**
      * Auto generated method that gets the related <code>Visit</code> by the relation named <code>Visit</code>.
      * @return the list of <code>Visit</code>
      * @throws RepositoryException if an error occurs
@@ -3361,17 +3651,6 @@ fieldMapColumns.put("Party", fields);
             this.webUserPreferences = getRelated(WebUserPreference.class, "WebUserPreference");
         }
         return this.webUserPreferences;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkEffortAssignmentRate</code> by the relation named <code>WorkEffortAssignmentRate</code>.
-     * @return the list of <code>WorkEffortAssignmentRate</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkEffortAssignmentRate> getWorkEffortAssignmentRates() throws RepositoryException {
-        if (this.workEffortAssignmentRates == null) {
-            this.workEffortAssignmentRates = getRelated(WorkEffortAssignmentRate.class, "WorkEffortAssignmentRate");
-        }
-        return this.workEffortAssignmentRates;
     }
     /**
      * Auto generated method that gets the related <code>WorkEffortPartyAssignment</code> by the relation named <code>WorkEffortPartyAssignment</code>.
@@ -3426,6 +3705,13 @@ fieldMapColumns.put("Party", fields);
     */
     public void setPartyTypeAttrs(List<PartyTypeAttr> partyTypeAttrs) {
         this.partyTypeAttrs = partyTypeAttrs;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dataSource the dataSource to set
+    */
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
     /**
      * Auto generated value setter.
@@ -3639,10 +3925,24 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param custRequestPartys the custRequestPartys to set
+    */
+    public void setCustRequestPartys(List<CustRequestParty> custRequestPartys) {
+        this.custRequestPartys = custRequestPartys;
+    }
+    /**
+     * Auto generated value setter.
      * @param custRequestRoles the custRequestRoles to set
     */
     public void setCustRequestRoles(List<CustRequestRole> custRequestRoles) {
         this.custRequestRoles = custRequestRoles;
+    }
+    /**
+     * Auto generated value setter.
+     * @param custRequestTypes the custRequestTypes to set
+    */
+    public void setCustRequestTypes(List<CustRequestType> custRequestTypes) {
+        this.custRequestTypes = custRequestTypes;
     }
     /**
      * Auto generated value setter.
@@ -3688,6 +3988,13 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param emplLeaves the emplLeaves to set
+    */
+    public void setEmplLeaves(List<EmplLeave> emplLeaves) {
+        this.emplLeaves = emplLeaves;
+    }
+    /**
+     * Auto generated value setter.
      * @param emplPositions the emplPositions to set
     */
     public void setEmplPositions(List<EmplPosition> emplPositions) {
@@ -3699,13 +4006,6 @@ fieldMapColumns.put("Party", fields);
     */
     public void setEmplPositionFulfillments(List<EmplPositionFulfillment> emplPositionFulfillments) {
         this.emplPositionFulfillments = emplPositionFulfillments;
-    }
-    /**
-     * Auto generated value setter.
-     * @param emplPositionTypes the emplPositionTypes to set
-    */
-    public void setEmplPositionTypes(List<EmplPositionType> emplPositionTypes) {
-        this.emplPositionTypes = emplPositionTypes;
     }
     /**
      * Auto generated value setter.
@@ -3772,17 +4072,17 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param facilityPartys the facilityPartys to set
+    */
+    public void setFacilityPartys(List<FacilityParty> facilityPartys) {
+        this.facilityPartys = facilityPartys;
+    }
+    /**
+     * Auto generated value setter.
      * @param facilityPartyPermissions the facilityPartyPermissions to set
     */
     public void setFacilityPartyPermissions(List<FacilityPartyPermission> facilityPartyPermissions) {
         this.facilityPartyPermissions = facilityPartyPermissions;
-    }
-    /**
-     * Auto generated value setter.
-     * @param facilityRoles the facilityRoles to set
-    */
-    public void setFacilityRoles(List<FacilityRole> facilityRoles) {
-        this.facilityRoles = facilityRoles;
     }
     /**
      * Auto generated value setter.
@@ -3940,6 +4240,13 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param overrideOrgInvoiceItems the overrideOrgInvoiceItems to set
+    */
+    public void setOverrideOrgInvoiceItems(List<InvoiceItem> overrideOrgInvoiceItems) {
+        this.overrideOrgInvoiceItems = overrideOrgInvoiceItems;
+    }
+    /**
+     * Auto generated value setter.
      * @param organizationInvoiceItemTypeGlAccounts the organizationInvoiceItemTypeGlAccounts to set
     */
     public void setOrganizationInvoiceItemTypeGlAccounts(List<InvoiceItemTypeGlAccount> organizationInvoiceItemTypeGlAccounts) {
@@ -3975,10 +4282,31 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param noteNoteDatas the noteNoteDatas to set
+    */
+    public void setNoteNoteDatas(List<NoteData> noteNoteDatas) {
+        this.noteNoteDatas = noteNoteDatas;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oldFacilityRoles the oldFacilityRoles to set
+    */
+    public void setOldFacilityRoles(List<OldFacilityRole> oldFacilityRoles) {
+        this.oldFacilityRoles = oldFacilityRoles;
+    }
+    /**
+     * Auto generated value setter.
      * @param carrierOldOrderShipmentPreferences the carrierOldOrderShipmentPreferences to set
     */
     public void setCarrierOldOrderShipmentPreferences(List<OldOrderShipmentPreference> carrierOldOrderShipmentPreferences) {
         this.carrierOldOrderShipmentPreferences = carrierOldOrderShipmentPreferences;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oldPartyRates the oldPartyRates to set
+    */
+    public void setOldPartyRates(List<OldPartyRate> oldPartyRates) {
+        this.oldPartyRates = oldPartyRates;
     }
     /**
      * Auto generated value setter.
@@ -3993,6 +4321,13 @@ fieldMapColumns.put("Party", fields);
     */
     public void setOldValueLinkFulfillments(List<OldValueLinkFulfillment> oldValueLinkFulfillments) {
         this.oldValueLinkFulfillments = oldValueLinkFulfillments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oldWorkEffortAssignmentRates the oldWorkEffortAssignmentRates to set
+    */
+    public void setOldWorkEffortAssignmentRates(List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates) {
+        this.oldWorkEffortAssignmentRates = oldWorkEffortAssignmentRates;
     }
     /**
      * Auto generated value setter.
@@ -4021,6 +4356,13 @@ fieldMapColumns.put("Party", fields);
     */
     public void setSupplierOrderItemShipGroups(List<OrderItemShipGroup> supplierOrderItemShipGroups) {
         this.supplierOrderItemShipGroups = supplierOrderItemShipGroups;
+    }
+    /**
+     * Auto generated value setter.
+     * @param vendorOrderItemShipGroups the vendorOrderItemShipGroups to set
+    */
+    public void setVendorOrderItemShipGroups(List<OrderItemShipGroup> vendorOrderItemShipGroups) {
+        this.vendorOrderItemShipGroups = vendorOrderItemShipGroups;
     }
     /**
      * Auto generated value setter.
@@ -4122,6 +4464,27 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param partyGeoPoints the partyGeoPoints to set
+    */
+    public void setPartyGeoPoints(List<PartyGeoPoint> partyGeoPoints) {
+        this.partyGeoPoints = partyGeoPoints;
+    }
+    /**
+     * Auto generated value setter.
+     * @param organizationPartyGlAccounts the organizationPartyGlAccounts to set
+    */
+    public void setOrganizationPartyGlAccounts(List<PartyGlAccount> organizationPartyGlAccounts) {
+        this.organizationPartyGlAccounts = organizationPartyGlAccounts;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyGlAccounts the partyGlAccounts to set
+    */
+    public void setPartyGlAccounts(List<PartyGlAccount> partyGlAccounts) {
+        this.partyGlAccounts = partyGlAccounts;
+    }
+    /**
+     * Auto generated value setter.
      * @param partyGroup the partyGroup to set
     */
     public void setPartyGroup(PartyGroup partyGroup) {
@@ -4182,13 +4545,6 @@ fieldMapColumns.put("Party", fields);
     */
     public void setPartyQuals(List<PartyQual> partyQuals) {
         this.partyQuals = partyQuals;
-    }
-    /**
-     * Auto generated value setter.
-     * @param institutionPartyQuals the institutionPartyQuals to set
-    */
-    public void setInstitutionPartyQuals(List<PartyQual> institutionPartyQuals) {
-        this.institutionPartyQuals = institutionPartyQuals;
     }
     /**
      * Auto generated value setter.
@@ -4339,20 +4695,6 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
-     * @param payHistoryFromPerfReviews the payHistoryFromPerfReviews to set
-    */
-    public void setPayHistoryFromPerfReviews(List<PerfReview> payHistoryFromPerfReviews) {
-        this.payHistoryFromPerfReviews = payHistoryFromPerfReviews;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryToPerfReviews the payHistoryToPerfReviews to set
-    */
-    public void setPayHistoryToPerfReviews(List<PerfReview> payHistoryToPerfReviews) {
-        this.payHistoryToPerfReviews = payHistoryToPerfReviews;
-    }
-    /**
-     * Auto generated value setter.
      * @param employeePerfReviewItems the employeePerfReviewItems to set
     */
     public void setEmployeePerfReviewItems(List<PerfReviewItem> employeePerfReviewItems) {
@@ -4402,6 +4744,13 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param productCategoryGlAccounts the productCategoryGlAccounts to set
+    */
+    public void setProductCategoryGlAccounts(List<ProductCategoryGlAccount> productCategoryGlAccounts) {
+        this.productCategoryGlAccounts = productCategoryGlAccounts;
+    }
+    /**
+     * Auto generated value setter.
      * @param productCategoryRoles the productCategoryRoles to set
     */
     public void setProductCategoryRoles(List<ProductCategoryRole> productCategoryRoles) {
@@ -4416,6 +4765,13 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param productPromoes the productPromoes to set
+    */
+    public void setProductPromoes(List<ProductPromo> productPromoes) {
+        this.productPromoes = productPromoes;
+    }
+    /**
+     * Auto generated value setter.
      * @param productPromoCodePartys the productPromoCodePartys to set
     */
     public void setProductPromoCodePartys(List<ProductPromoCodeParty> productPromoCodePartys) {
@@ -4427,6 +4783,13 @@ fieldMapColumns.put("Party", fields);
     */
     public void setProductPromoUses(List<ProductPromoUse> productPromoUses) {
         this.productPromoUses = productPromoUses;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productRoles the productRoles to set
+    */
+    public void setProductRoles(List<ProductRole> productRoles) {
+        this.productRoles = productRoles;
     }
     /**
      * Auto generated value setter.
@@ -4472,6 +4835,27 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param vendorProductStoreVendorPayments the vendorProductStoreVendorPayments to set
+    */
+    public void setVendorProductStoreVendorPayments(List<ProductStoreVendorPayment> vendorProductStoreVendorPayments) {
+        this.vendorProductStoreVendorPayments = vendorProductStoreVendorPayments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param vendorProductStoreVendorShipments the vendorProductStoreVendorShipments to set
+    */
+    public void setVendorProductStoreVendorShipments(List<ProductStoreVendorShipment> vendorProductStoreVendorShipments) {
+        this.vendorProductStoreVendorShipments = vendorProductStoreVendorShipments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param carrierProductStoreVendorShipments the carrierProductStoreVendorShipments to set
+    */
+    public void setCarrierProductStoreVendorShipments(List<ProductStoreVendorShipment> carrierProductStoreVendorShipments) {
+        this.carrierProductStoreVendorShipments = carrierProductStoreVendorShipments;
+    }
+    /**
+     * Auto generated value setter.
      * @param quotes the quotes to set
     */
     public void setQuotes(List<Quote> quotes) {
@@ -4497,6 +4881,13 @@ fieldMapColumns.put("Party", fields);
     */
     public void setQuoteRoles(List<QuoteRole> quoteRoles) {
         this.quoteRoles = quoteRoles;
+    }
+    /**
+     * Auto generated value setter.
+     * @param rateAmounts the rateAmounts to set
+    */
+    public void setRateAmounts(List<RateAmount> rateAmounts) {
+        this.rateAmounts = rateAmounts;
     }
     /**
      * Auto generated value setter.
@@ -4738,6 +5129,13 @@ fieldMapColumns.put("Party", fields);
     }
     /**
      * Auto generated value setter.
+     * @param vendorVendorProducts the vendorVendorProducts to set
+    */
+    public void setVendorVendorProducts(List<VendorProduct> vendorVendorProducts) {
+        this.vendorVendorProducts = vendorVendorProducts;
+    }
+    /**
+     * Auto generated value setter.
      * @param visits the visits to set
     */
     public void setVisits(List<Visit> visits) {
@@ -4763,13 +5161,6 @@ fieldMapColumns.put("Party", fields);
     */
     public void setWebUserPreferences(List<WebUserPreference> webUserPreferences) {
         this.webUserPreferences = webUserPreferences;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workEffortAssignmentRates the workEffortAssignmentRates to set
-    */
-    public void setWorkEffortAssignmentRates(List<WorkEffortAssignmentRate> workEffortAssignmentRates) {
-        this.workEffortAssignmentRates = workEffortAssignmentRates;
     }
     /**
      * Auto generated value setter.
@@ -5106,6 +5497,33 @@ fieldMapColumns.put("Party", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addCustRequestParty(CustRequestParty custRequestParty) {
+        if (this.custRequestPartys == null) {
+            this.custRequestPartys = new ArrayList<CustRequestParty>();
+        }
+        this.custRequestPartys.add(custRequestParty);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeCustRequestParty(CustRequestParty custRequestParty) {
+        if (this.custRequestPartys == null) {
+            return;
+        }
+        this.custRequestPartys.remove(custRequestParty);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearCustRequestParty() {
+        if (this.custRequestPartys == null) {
+            return;
+        }
+        this.custRequestPartys.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addCustRequestRole(CustRequestRole custRequestRole) {
         if (this.custRequestRoles == null) {
             this.custRequestRoles = new ArrayList<CustRequestRole>();
@@ -5183,6 +5601,33 @@ fieldMapColumns.put("Party", fields);
             return;
         }
         this.dataResourceRoles.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addEmplLeave(EmplLeave emplLeave) {
+        if (this.emplLeaves == null) {
+            this.emplLeaves = new ArrayList<EmplLeave>();
+        }
+        this.emplLeaves.add(emplLeave);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeEmplLeave(EmplLeave emplLeave) {
+        if (this.emplLeaves == null) {
+            return;
+        }
+        this.emplLeaves.remove(emplLeave);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearEmplLeave() {
+        if (this.emplLeaves == null) {
+            return;
+        }
+        this.emplLeaves.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -5376,6 +5821,33 @@ fieldMapColumns.put("Party", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addFacilityParty(FacilityParty facilityParty) {
+        if (this.facilityPartys == null) {
+            this.facilityPartys = new ArrayList<FacilityParty>();
+        }
+        this.facilityPartys.add(facilityParty);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeFacilityParty(FacilityParty facilityParty) {
+        if (this.facilityPartys == null) {
+            return;
+        }
+        this.facilityPartys.remove(facilityParty);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearFacilityParty() {
+        if (this.facilityPartys == null) {
+            return;
+        }
+        this.facilityPartys.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addFacilityPartyPermission(FacilityPartyPermission facilityPartyPermission) {
         if (this.facilityPartyPermissions == null) {
             this.facilityPartyPermissions = new ArrayList<FacilityPartyPermission>();
@@ -5399,33 +5871,6 @@ fieldMapColumns.put("Party", fields);
             return;
         }
         this.facilityPartyPermissions.clear();
-    }
-    /**
-     * Auto generated method that add item to collection.
-     */
-    public void addFacilityRole(FacilityRole facilityRole) {
-        if (this.facilityRoles == null) {
-            this.facilityRoles = new ArrayList<FacilityRole>();
-        }
-        this.facilityRoles.add(facilityRole);
-    }
-    /**
-     * Auto generated method that remove item from collection.
-     */
-    public void removeFacilityRole(FacilityRole facilityRole) {
-        if (this.facilityRoles == null) {
-            return;
-        }
-        this.facilityRoles.remove(facilityRole);
-    }
-    /**
-     * Auto generated method that clear items from collection.
-     */
-    public void clearFacilityRole() {
-        if (this.facilityRoles == null) {
-            return;
-        }
-        this.facilityRoles.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -5754,6 +6199,60 @@ fieldMapColumns.put("Party", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addOldFacilityRole(OldFacilityRole oldFacilityRole) {
+        if (this.oldFacilityRoles == null) {
+            this.oldFacilityRoles = new ArrayList<OldFacilityRole>();
+        }
+        this.oldFacilityRoles.add(oldFacilityRole);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOldFacilityRole(OldFacilityRole oldFacilityRole) {
+        if (this.oldFacilityRoles == null) {
+            return;
+        }
+        this.oldFacilityRoles.remove(oldFacilityRole);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOldFacilityRole() {
+        if (this.oldFacilityRoles == null) {
+            return;
+        }
+        this.oldFacilityRoles.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOldPartyRate(OldPartyRate oldPartyRate) {
+        if (this.oldPartyRates == null) {
+            this.oldPartyRates = new ArrayList<OldPartyRate>();
+        }
+        this.oldPartyRates.add(oldPartyRate);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOldPartyRate(OldPartyRate oldPartyRate) {
+        if (this.oldPartyRates == null) {
+            return;
+        }
+        this.oldPartyRates.remove(oldPartyRate);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOldPartyRate() {
+        if (this.oldPartyRates == null) {
+            return;
+        }
+        this.oldPartyRates.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addOldPartyTaxInfoe(OldPartyTaxInfo oldPartyTaxInfoe) {
         if (this.oldPartyTaxInfoes == null) {
             this.oldPartyTaxInfoes = new ArrayList<OldPartyTaxInfo>();
@@ -5777,6 +6276,33 @@ fieldMapColumns.put("Party", fields);
             return;
         }
         this.oldPartyTaxInfoes.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOldWorkEffortAssignmentRate(OldWorkEffortAssignmentRate oldWorkEffortAssignmentRate) {
+        if (this.oldWorkEffortAssignmentRates == null) {
+            this.oldWorkEffortAssignmentRates = new ArrayList<OldWorkEffortAssignmentRate>();
+        }
+        this.oldWorkEffortAssignmentRates.add(oldWorkEffortAssignmentRate);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOldWorkEffortAssignmentRate(OldWorkEffortAssignmentRate oldWorkEffortAssignmentRate) {
+        if (this.oldWorkEffortAssignmentRates == null) {
+            return;
+        }
+        this.oldWorkEffortAssignmentRates.remove(oldWorkEffortAssignmentRate);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOldWorkEffortAssignmentRate() {
+        if (this.oldWorkEffortAssignmentRates == null) {
+            return;
+        }
+        this.oldWorkEffortAssignmentRates.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -6132,6 +6658,87 @@ fieldMapColumns.put("Party", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addPartyGeoPoint(PartyGeoPoint partyGeoPoint) {
+        if (this.partyGeoPoints == null) {
+            this.partyGeoPoints = new ArrayList<PartyGeoPoint>();
+        }
+        this.partyGeoPoints.add(partyGeoPoint);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removePartyGeoPoint(PartyGeoPoint partyGeoPoint) {
+        if (this.partyGeoPoints == null) {
+            return;
+        }
+        this.partyGeoPoints.remove(partyGeoPoint);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearPartyGeoPoint() {
+        if (this.partyGeoPoints == null) {
+            return;
+        }
+        this.partyGeoPoints.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOrganizationPartyGlAccount(PartyGlAccount organizationPartyGlAccount) {
+        if (this.organizationPartyGlAccounts == null) {
+            this.organizationPartyGlAccounts = new ArrayList<PartyGlAccount>();
+        }
+        this.organizationPartyGlAccounts.add(organizationPartyGlAccount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOrganizationPartyGlAccount(PartyGlAccount organizationPartyGlAccount) {
+        if (this.organizationPartyGlAccounts == null) {
+            return;
+        }
+        this.organizationPartyGlAccounts.remove(organizationPartyGlAccount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOrganizationPartyGlAccount() {
+        if (this.organizationPartyGlAccounts == null) {
+            return;
+        }
+        this.organizationPartyGlAccounts.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addPartyGlAccount(PartyGlAccount partyGlAccount) {
+        if (this.partyGlAccounts == null) {
+            this.partyGlAccounts = new ArrayList<PartyGlAccount>();
+        }
+        this.partyGlAccounts.add(partyGlAccount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removePartyGlAccount(PartyGlAccount partyGlAccount) {
+        if (this.partyGlAccounts == null) {
+            return;
+        }
+        this.partyGlAccounts.remove(partyGlAccount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearPartyGlAccount() {
+        if (this.partyGlAccounts == null) {
+            return;
+        }
+        this.partyGlAccounts.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addToPartyInvitationGroupAssoc(PartyInvitationGroupAssoc toPartyInvitationGroupAssoc) {
         if (this.toPartyInvitationGroupAssocs == null) {
             this.toPartyInvitationGroupAssocs = new ArrayList<PartyInvitationGroupAssoc>();
@@ -6263,6 +6870,33 @@ fieldMapColumns.put("Party", fields);
             return;
         }
         this.partyProfileDefaults.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addPartyQual(PartyQual partyQual) {
+        if (this.partyQuals == null) {
+            this.partyQuals = new ArrayList<PartyQual>();
+        }
+        this.partyQuals.add(partyQual);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removePartyQual(PartyQual partyQual) {
+        if (this.partyQuals == null) {
+            return;
+        }
+        this.partyQuals.remove(partyQual);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearPartyQual() {
+        if (this.partyQuals == null) {
+            return;
+        }
+        this.partyQuals.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -6699,6 +7333,33 @@ fieldMapColumns.put("Party", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addProductCategoryGlAccount(ProductCategoryGlAccount productCategoryGlAccount) {
+        if (this.productCategoryGlAccounts == null) {
+            this.productCategoryGlAccounts = new ArrayList<ProductCategoryGlAccount>();
+        }
+        this.productCategoryGlAccounts.add(productCategoryGlAccount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeProductCategoryGlAccount(ProductCategoryGlAccount productCategoryGlAccount) {
+        if (this.productCategoryGlAccounts == null) {
+            return;
+        }
+        this.productCategoryGlAccounts.remove(productCategoryGlAccount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearProductCategoryGlAccount() {
+        if (this.productCategoryGlAccounts == null) {
+            return;
+        }
+        this.productCategoryGlAccounts.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addProductCategoryRole(ProductCategoryRole productCategoryRole) {
         if (this.productCategoryRoles == null) {
             this.productCategoryRoles = new ArrayList<ProductCategoryRole>();
@@ -6780,6 +7441,33 @@ fieldMapColumns.put("Party", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addProductRole(ProductRole productRole) {
+        if (this.productRoles == null) {
+            this.productRoles = new ArrayList<ProductRole>();
+        }
+        this.productRoles.add(productRole);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeProductRole(ProductRole productRole) {
+        if (this.productRoles == null) {
+            return;
+        }
+        this.productRoles.remove(productRole);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearProductRole() {
+        if (this.productRoles == null) {
+            return;
+        }
+        this.productRoles.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addProductStoreGroupRole(ProductStoreGroupRole productStoreGroupRole) {
         if (this.productStoreGroupRoles == null) {
             this.productStoreGroupRoles = new ArrayList<ProductStoreGroupRole>();
@@ -6834,6 +7522,87 @@ fieldMapColumns.put("Party", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addVendorProductStoreVendorPayment(ProductStoreVendorPayment vendorProductStoreVendorPayment) {
+        if (this.vendorProductStoreVendorPayments == null) {
+            this.vendorProductStoreVendorPayments = new ArrayList<ProductStoreVendorPayment>();
+        }
+        this.vendorProductStoreVendorPayments.add(vendorProductStoreVendorPayment);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeVendorProductStoreVendorPayment(ProductStoreVendorPayment vendorProductStoreVendorPayment) {
+        if (this.vendorProductStoreVendorPayments == null) {
+            return;
+        }
+        this.vendorProductStoreVendorPayments.remove(vendorProductStoreVendorPayment);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearVendorProductStoreVendorPayment() {
+        if (this.vendorProductStoreVendorPayments == null) {
+            return;
+        }
+        this.vendorProductStoreVendorPayments.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addVendorProductStoreVendorShipment(ProductStoreVendorShipment vendorProductStoreVendorShipment) {
+        if (this.vendorProductStoreVendorShipments == null) {
+            this.vendorProductStoreVendorShipments = new ArrayList<ProductStoreVendorShipment>();
+        }
+        this.vendorProductStoreVendorShipments.add(vendorProductStoreVendorShipment);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeVendorProductStoreVendorShipment(ProductStoreVendorShipment vendorProductStoreVendorShipment) {
+        if (this.vendorProductStoreVendorShipments == null) {
+            return;
+        }
+        this.vendorProductStoreVendorShipments.remove(vendorProductStoreVendorShipment);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearVendorProductStoreVendorShipment() {
+        if (this.vendorProductStoreVendorShipments == null) {
+            return;
+        }
+        this.vendorProductStoreVendorShipments.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addCarrierProductStoreVendorShipment(ProductStoreVendorShipment carrierProductStoreVendorShipment) {
+        if (this.carrierProductStoreVendorShipments == null) {
+            this.carrierProductStoreVendorShipments = new ArrayList<ProductStoreVendorShipment>();
+        }
+        this.carrierProductStoreVendorShipments.add(carrierProductStoreVendorShipment);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeCarrierProductStoreVendorShipment(ProductStoreVendorShipment carrierProductStoreVendorShipment) {
+        if (this.carrierProductStoreVendorShipments == null) {
+            return;
+        }
+        this.carrierProductStoreVendorShipments.remove(carrierProductStoreVendorShipment);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearCarrierProductStoreVendorShipment() {
+        if (this.carrierProductStoreVendorShipments == null) {
+            return;
+        }
+        this.carrierProductStoreVendorShipments.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addQuoteRole(QuoteRole quoteRole) {
         if (this.quoteRoles == null) {
             this.quoteRoles = new ArrayList<QuoteRole>();
@@ -6857,6 +7626,33 @@ fieldMapColumns.put("Party", fields);
             return;
         }
         this.quoteRoles.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = new ArrayList<RateAmount>();
+        }
+        this.rateAmounts.add(rateAmount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
+            return;
+        }
+        this.rateAmounts.remove(rateAmount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearRateAmount() {
+        if (this.rateAmounts == null) {
+            return;
+        }
+        this.rateAmounts.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -7158,6 +7954,33 @@ fieldMapColumns.put("Party", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addVendorVendorProduct(VendorProduct vendorVendorProduct) {
+        if (this.vendorVendorProducts == null) {
+            this.vendorVendorProducts = new ArrayList<VendorProduct>();
+        }
+        this.vendorVendorProducts.add(vendorVendorProduct);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeVendorVendorProduct(VendorProduct vendorVendorProduct) {
+        if (this.vendorVendorProducts == null) {
+            return;
+        }
+        this.vendorVendorProducts.remove(vendorVendorProduct);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearVendorVendorProduct() {
+        if (this.vendorVendorProducts == null) {
+            return;
+        }
+        this.vendorVendorProducts.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addWebSiteRole(WebSiteRole webSiteRole) {
         if (this.webSiteRoles == null) {
             this.webSiteRoles = new ArrayList<WebSiteRole>();
@@ -7212,33 +8035,6 @@ fieldMapColumns.put("Party", fields);
     /**
      * Auto generated method that add item to collection.
      */
-    public void addWorkEffortAssignmentRate(WorkEffortAssignmentRate workEffortAssignmentRate) {
-        if (this.workEffortAssignmentRates == null) {
-            this.workEffortAssignmentRates = new ArrayList<WorkEffortAssignmentRate>();
-        }
-        this.workEffortAssignmentRates.add(workEffortAssignmentRate);
-    }
-    /**
-     * Auto generated method that remove item from collection.
-     */
-    public void removeWorkEffortAssignmentRate(WorkEffortAssignmentRate workEffortAssignmentRate) {
-        if (this.workEffortAssignmentRates == null) {
-            return;
-        }
-        this.workEffortAssignmentRates.remove(workEffortAssignmentRate);
-    }
-    /**
-     * Auto generated method that clear items from collection.
-     */
-    public void clearWorkEffortAssignmentRate() {
-        if (this.workEffortAssignmentRates == null) {
-            return;
-        }
-        this.workEffortAssignmentRates.clear();
-    }
-    /**
-     * Auto generated method that add item to collection.
-     */
     public void addWorkEffortPartyAssignment(WorkEffortPartyAssignment workEffortPartyAssignment) {
         if (this.workEffortPartyAssignments == null) {
             this.workEffortPartyAssignments = new ArrayList<WorkEffortPartyAssignment>();
@@ -7278,6 +8074,8 @@ fieldMapColumns.put("Party", fields);
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
+        setDataSourceId((String) mapValue.get("dataSourceId"));
+        setIsUnread((String) mapValue.get("isUnread"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -7299,6 +8097,8 @@ fieldMapColumns.put("Party", fields);
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
+        mapValue.put("dataSourceId", getDataSourceId());
+        mapValue.put("isUnread", getIsUnread());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

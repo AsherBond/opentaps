@@ -104,7 +104,7 @@ fieldMapColumns.put("OrderBlacklistType", fields);
       super();
       this.baseEntityName = "OrderBlacklistType";
       this.isView = false;
-      
+      this.resourceName = "OrderEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderBlacklistTypeId");
       this.allFieldsNames = new ArrayList<String>();

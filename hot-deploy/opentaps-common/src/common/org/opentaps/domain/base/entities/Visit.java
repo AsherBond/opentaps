@@ -68,6 +68,10 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("clientIpAddress", "CLIENT_IP_ADDRESS");
         fields.put("clientHostName", "CLIENT_HOST_NAME");
         fields.put("clientUser", "CLIENT_USER");
+        fields.put("clientIpIspName", "CLIENT_IP_ISP_NAME");
+        fields.put("clientIpPostalCode", "CLIENT_IP_POSTAL_CODE");
+        fields.put("clientIpStateProvGeoId", "CLIENT_IP_STATE_PROV_GEO_ID");
+        fields.put("clientIpCountryGeoId", "CLIENT_IP_COUNTRY_GEO_ID");
         fields.put("cookie", "COOKIE");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
@@ -97,6 +101,10 @@ fieldMapColumns.put("Visit", fields);
     clientIpAddress("clientIpAddress"),
     clientHostName("clientHostName"),
     clientUser("clientUser"),
+    clientIpIspName("clientIpIspName"),
+    clientIpPostalCode("clientIpPostalCode"),
+    clientIpStateProvGeoId("clientIpStateProvGeoId"),
+    clientIpCountryGeoId("clientIpCountryGeoId"),
     cookie("cookie"),
     fromDate("fromDate"),
     thruDate("thruDate"),
@@ -152,6 +160,14 @@ fieldMapColumns.put("Visit", fields);
    private String clientHostName;
    @Column(name="CLIENT_USER")
    private String clientUser;
+   @Column(name="CLIENT_IP_ISP_NAME")
+   private String clientIpIspName;
+   @Column(name="CLIENT_IP_POSTAL_CODE")
+   private String clientIpPostalCode;
+   @Column(name="CLIENT_IP_STATE_PROV_GEO_ID")
+   private String clientIpStateProvGeoId;
+   @Column(name="CLIENT_IP_COUNTRY_GEO_ID")
+   private String clientIpCountryGeoId;
    @Column(name="COOKIE")
    private String cookie;
    @Column(name="FROM_DATE")
@@ -186,6 +202,20 @@ fieldMapColumns.put("Visit", fields);
    )
    
    private UserAgent userAgent = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="CLIENT_IP_STATE_PROV_GEO_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Geo clientIpStateProvGeo = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="CLIENT_IP_COUNTRY_GEO_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Geo clientIpCountryGeo = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -256,7 +286,7 @@ fieldMapColumns.put("Visit", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("visitId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("visitId");this.allFieldsNames.add("visitorId");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("userCreated");this.allFieldsNames.add("sessionId");this.allFieldsNames.add("serverIpAddress");this.allFieldsNames.add("serverHostName");this.allFieldsNames.add("webappName");this.allFieldsNames.add("initialLocale");this.allFieldsNames.add("initialRequest");this.allFieldsNames.add("initialReferrer");this.allFieldsNames.add("initialUserAgent");this.allFieldsNames.add("userAgentId");this.allFieldsNames.add("clientIpAddress");this.allFieldsNames.add("clientHostName");this.allFieldsNames.add("clientUser");this.allFieldsNames.add("cookie");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");
+      this.allFieldsNames.add("visitId");this.allFieldsNames.add("visitorId");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("userCreated");this.allFieldsNames.add("sessionId");this.allFieldsNames.add("serverIpAddress");this.allFieldsNames.add("serverHostName");this.allFieldsNames.add("webappName");this.allFieldsNames.add("initialLocale");this.allFieldsNames.add("initialRequest");this.allFieldsNames.add("initialReferrer");this.allFieldsNames.add("initialUserAgent");this.allFieldsNames.add("userAgentId");this.allFieldsNames.add("clientIpAddress");this.allFieldsNames.add("clientHostName");this.allFieldsNames.add("clientUser");this.allFieldsNames.add("clientIpIspName");this.allFieldsNames.add("clientIpPostalCode");this.allFieldsNames.add("clientIpStateProvGeoId");this.allFieldsNames.add("clientIpCountryGeoId");this.allFieldsNames.add("cookie");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -382,6 +412,34 @@ fieldMapColumns.put("Visit", fields);
      */
     public void setClientUser(String clientUser) {
         this.clientUser = clientUser;
+    }
+    /**
+     * Auto generated value setter.
+     * @param clientIpIspName the clientIpIspName to set
+     */
+    public void setClientIpIspName(String clientIpIspName) {
+        this.clientIpIspName = clientIpIspName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param clientIpPostalCode the clientIpPostalCode to set
+     */
+    public void setClientIpPostalCode(String clientIpPostalCode) {
+        this.clientIpPostalCode = clientIpPostalCode;
+    }
+    /**
+     * Auto generated value setter.
+     * @param clientIpStateProvGeoId the clientIpStateProvGeoId to set
+     */
+    public void setClientIpStateProvGeoId(String clientIpStateProvGeoId) {
+        this.clientIpStateProvGeoId = clientIpStateProvGeoId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param clientIpCountryGeoId the clientIpCountryGeoId to set
+     */
+    public void setClientIpCountryGeoId(String clientIpCountryGeoId) {
+        this.clientIpCountryGeoId = clientIpCountryGeoId;
     }
     /**
      * Auto generated value setter.
@@ -570,6 +628,34 @@ fieldMapColumns.put("Visit", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getClientIpIspName() {
+        return this.clientIpIspName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getClientIpPostalCode() {
+        return this.clientIpPostalCode;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getClientIpStateProvGeoId() {
+        return this.clientIpStateProvGeoId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getClientIpCountryGeoId() {
+        return this.clientIpCountryGeoId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getCookie() {
         return this.cookie;
     }
@@ -658,6 +744,28 @@ fieldMapColumns.put("Visit", fields);
             this.userAgent = getRelatedOne(UserAgent.class, "UserAgent");
         }
         return this.userAgent;
+    }
+    /**
+     * Auto generated method that gets the related <code>Geo</code> by the relation named <code>ClientIpStateProvGeo</code>.
+     * @return the <code>Geo</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Geo getClientIpStateProvGeo() throws RepositoryException {
+        if (this.clientIpStateProvGeo == null) {
+            this.clientIpStateProvGeo = getRelatedOne(Geo.class, "ClientIpStateProvGeo");
+        }
+        return this.clientIpStateProvGeo;
+    }
+    /**
+     * Auto generated method that gets the related <code>Geo</code> by the relation named <code>ClientIpCountryGeo</code>.
+     * @return the <code>Geo</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Geo getClientIpCountryGeo() throws RepositoryException {
+        if (this.clientIpCountryGeo == null) {
+            this.clientIpCountryGeo = getRelatedOne(Geo.class, "ClientIpCountryGeo");
+        }
+        return this.clientIpCountryGeo;
     }
     /**
      * Auto generated method that gets the related <code>ContactMech</code> by the relation named <code>ContactMech</code>.
@@ -816,6 +924,20 @@ fieldMapColumns.put("Visit", fields);
     */
     public void setUserAgent(UserAgent userAgent) {
         this.userAgent = userAgent;
+    }
+    /**
+     * Auto generated value setter.
+     * @param clientIpStateProvGeo the clientIpStateProvGeo to set
+    */
+    public void setClientIpStateProvGeo(Geo clientIpStateProvGeo) {
+        this.clientIpStateProvGeo = clientIpStateProvGeo;
+    }
+    /**
+     * Auto generated value setter.
+     * @param clientIpCountryGeo the clientIpCountryGeo to set
+    */
+    public void setClientIpCountryGeo(Geo clientIpCountryGeo) {
+        this.clientIpCountryGeo = clientIpCountryGeo;
     }
     /**
      * Auto generated value setter.
@@ -1038,6 +1160,10 @@ fieldMapColumns.put("Visit", fields);
         setClientIpAddress((String) mapValue.get("clientIpAddress"));
         setClientHostName((String) mapValue.get("clientHostName"));
         setClientUser((String) mapValue.get("clientUser"));
+        setClientIpIspName((String) mapValue.get("clientIpIspName"));
+        setClientIpPostalCode((String) mapValue.get("clientIpPostalCode"));
+        setClientIpStateProvGeoId((String) mapValue.get("clientIpStateProvGeoId"));
+        setClientIpCountryGeoId((String) mapValue.get("clientIpCountryGeoId"));
         setCookie((String) mapValue.get("cookie"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
@@ -1071,6 +1197,10 @@ fieldMapColumns.put("Visit", fields);
         mapValue.put("clientIpAddress", getClientIpAddress());
         mapValue.put("clientHostName", getClientHostName());
         mapValue.put("clientUser", getClientUser());
+        mapValue.put("clientIpIspName", getClientIpIspName());
+        mapValue.put("clientIpPostalCode", getClientIpPostalCode());
+        mapValue.put("clientIpStateProvGeoId", getClientIpStateProvGeoId());
+        mapValue.put("clientIpCountryGeoId", getClientIpCountryGeoId());
         mapValue.put("cookie", getCookie());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());

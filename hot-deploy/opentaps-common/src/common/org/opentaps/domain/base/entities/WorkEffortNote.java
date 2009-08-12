@@ -54,6 +54,7 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("workEffortId", "WORK_EFFORT_ID");
         fields.put("noteId", "NOTE_ID");
+        fields.put("internalNote", "INTERNAL_NOTE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -63,6 +64,7 @@ fieldMapColumns.put("WorkEffortNote", fields);
   public static enum Fields implements EntityFieldInterface<WorkEffortNote> {
     workEffortId("workEffortId"),
     noteId("noteId"),
+    internalNote("internalNote"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -96,6 +98,8 @@ fieldMapColumns.put("WorkEffortNote", fields);
       public void setId(WorkEffortNotePk id) {
          this.id = id;
       }
+   @Column(name="INTERNAL_NOTE")
+   private String internalNote;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -130,7 +134,7 @@ fieldMapColumns.put("WorkEffortNote", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("noteId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("internalNote");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -158,6 +162,13 @@ fieldMapColumns.put("WorkEffortNote", fields);
      */
     public void setNoteId(String noteId) {
         id.setNoteId(noteId);
+    }
+    /**
+     * Auto generated value setter.
+     * @param internalNote the internalNote to set
+     */
+    public void setInternalNote(String internalNote) {
+        this.internalNote = internalNote;
     }
     /**
      * Auto generated value setter.
@@ -201,6 +212,13 @@ fieldMapColumns.put("WorkEffortNote", fields);
      */
     public String getNoteId() {
         return this.id.getNoteId();
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInternalNote() {
+        return this.internalNote;
     }
     /**
      * Auto generated value accessor.
@@ -276,6 +294,7 @@ fieldMapColumns.put("WorkEffortNote", fields);
         preInit();
         setWorkEffortId((String) mapValue.get("workEffortId"));
         setNoteId((String) mapValue.get("noteId"));
+        setInternalNote((String) mapValue.get("internalNote"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -289,6 +308,7 @@ fieldMapColumns.put("WorkEffortNote", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("workEffortId", getWorkEffortId());
         mapValue.put("noteId", getNoteId());
+        mapValue.put("internalNote", getInternalNote());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

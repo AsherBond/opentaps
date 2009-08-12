@@ -112,6 +112,13 @@ fieldMapColumns.put("PartyInvitationGroupAssoc", fields);
    )
    
    private Party toParty = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARTY_INVITATION_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private PartyInvitation partyInvitation = null;
 
   /**
    * Default constructor.
@@ -247,6 +254,17 @@ fieldMapColumns.put("PartyInvitationGroupAssoc", fields);
         }
         return this.toParty;
     }
+    /**
+     * Auto generated method that gets the related <code>PartyInvitation</code> by the relation named <code>PartyInvitation</code>.
+     * @return the <code>PartyInvitation</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public PartyInvitation getPartyInvitation() throws RepositoryException {
+        if (this.partyInvitation == null) {
+            this.partyInvitation = getRelatedOne(PartyInvitation.class, "PartyInvitation");
+        }
+        return this.partyInvitation;
+    }
 
     /**
      * Auto generated value setter.
@@ -261,6 +279,13 @@ fieldMapColumns.put("PartyInvitationGroupAssoc", fields);
     */
     public void setToParty(Party toParty) {
         this.toParty = toParty;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyInvitation the partyInvitation to set
+    */
+    public void setPartyInvitation(PartyInvitation partyInvitation) {
+        this.partyInvitation = partyInvitation;
     }
 
 

@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity OrderHeaderItemAndRoles.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectOrderHeaderItemAndRoless", query="SELECT OH.ORDER_NAME AS \"orderName\",OH.ORDER_ID AS \"orderId\",OT.PARTY_ID AS \"partyId\",OT.ROLE_TYPE_ID AS \"roleTypeId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_DATE AS \"orderDate\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.GRAND_TOTAL AS \"grandTotal\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OI.PRODUCT_ID AS \"productId\",OI.QUANTITY AS \"quantity\",OI.UNIT_PRICE AS \"unitPrice\",OI.UNIT_LIST_PRICE AS \"unitListPrice\",OI.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",OI.AUTO_CANCEL_DATE AS \"autoCancelDate\",OI.CORRESPONDING_PO_ID AS \"correspondingPoId\" FROM ORDER_ROLE OT INNER JOIN ORDER_HEADER OH ON OT.ORDER_ID = OH.ORDER_ID INNER JOIN ORDER_ITEM OI ON OH.ORDER_ID = OI.ORDER_ID", resultSetMapping="OrderHeaderItemAndRolesMapping")
+@NamedNativeQuery(name="selectOrderHeaderItemAndRoless", query="SELECT OH.ORDER_NAME AS \"orderName\",OH.ORDER_ID AS \"orderId\",OT.PARTY_ID AS \"partyId\",OT.ROLE_TYPE_ID AS \"roleTypeId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_DATE AS \"orderDate\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.GRAND_TOTAL AS \"grandTotal\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OI.PRODUCT_ID AS \"productId\",OI.QUANTITY AS \"quantity\",OI.UNIT_PRICE AS \"unitPrice\",OI.UNIT_LIST_PRICE AS \"unitListPrice\",OI.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",OI.AUTO_CANCEL_DATE AS \"autoCancelDate\",OI.CORRESPONDING_PO_ID AS \"correspondingPoId\",OI.ORDER_ITEM_TYPE_ID AS \"orderItemTypeId\",OI.ITEM_DESCRIPTION AS \"itemDescription\",OI.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\" FROM ORDER_ROLE OT INNER JOIN ORDER_HEADER OH ON OT.ORDER_ID = OH.ORDER_ID INNER JOIN ORDER_ITEM OI ON OH.ORDER_ID = OI.ORDER_ID", resultSetMapping="OrderHeaderItemAndRolesMapping")
 @SqlResultSetMapping(name="OrderHeaderItemAndRolesMapping", entities={
 @EntityResult(entityClass=OrderHeaderItemAndRoles.class, fields = {
 @FieldResult(name="orderName", column="orderName")
@@ -78,6 +78,9 @@ import java.sql.Timestamp;
 ,@FieldResult(name="estimatedShipDate", column="estimatedShipDate")
 ,@FieldResult(name="autoCancelDate", column="autoCancelDate")
 ,@FieldResult(name="correspondingPoId", column="correspondingPoId")
+,@FieldResult(name="orderItemTypeId", column="orderItemTypeId")
+,@FieldResult(name="itemDescription", column="itemDescription")
+,@FieldResult(name="orderItemSeqId", column="orderItemSeqId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -110,6 +113,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("estimatedShipDate", "OI.ESTIMATED_SHIP_DATE");
         fields.put("autoCancelDate", "OI.AUTO_CANCEL_DATE");
         fields.put("correspondingPoId", "OI.CORRESPONDING_PO_ID");
+        fields.put("orderItemTypeId", "OI.ORDER_ITEM_TYPE_ID");
+        fields.put("itemDescription", "OI.ITEM_DESCRIPTION");
+        fields.put("orderItemSeqId", "OI.ORDER_ITEM_SEQ_ID");
 fieldMapColumns.put("OrderHeaderItemAndRoles", fields);
 }
   public static enum Fields implements EntityFieldInterface<OrderHeaderItemAndRoles> {
@@ -138,7 +144,10 @@ fieldMapColumns.put("OrderHeaderItemAndRoles", fields);
     unitListPrice("unitListPrice"),
     estimatedShipDate("estimatedShipDate"),
     autoCancelDate("autoCancelDate"),
-    correspondingPoId("correspondingPoId");
+    correspondingPoId("correspondingPoId"),
+    orderItemTypeId("orderItemTypeId"),
+    itemDescription("itemDescription"),
+    orderItemSeqId("orderItemSeqId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -201,6 +210,12 @@ fieldMapColumns.put("OrderHeaderItemAndRoles", fields);
    private Timestamp autoCancelDate;
     
    private String correspondingPoId;
+    
+   private String orderItemTypeId;
+    
+   private String itemDescription;
+    
+   private String orderItemSeqId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ORDER_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -271,9 +286,9 @@ fieldMapColumns.put("OrderHeaderItemAndRoles", fields);
       this.isView = true;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");
+      this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");this.primaryKeyNames.add("orderItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderName");this.allFieldsNames.add("orderId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("unitListPrice");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("autoCancelDate");this.allFieldsNames.add("correspondingPoId");
+      this.allFieldsNames.add("orderName");this.allFieldsNames.add("orderId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("unitListPrice");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("autoCancelDate");this.allFieldsNames.add("correspondingPoId");this.allFieldsNames.add("orderItemTypeId");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("orderItemSeqId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -473,6 +488,27 @@ fieldMapColumns.put("OrderHeaderItemAndRoles", fields);
     private void setCorrespondingPoId(String correspondingPoId) {
         this.correspondingPoId = correspondingPoId;
     }
+    /**
+     * Auto generated value setter.
+     * @param orderItemTypeId the orderItemTypeId to set
+     */
+    private void setOrderItemTypeId(String orderItemTypeId) {
+        this.orderItemTypeId = orderItemTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param itemDescription the itemDescription to set
+     */
+    private void setItemDescription(String itemDescription) {
+        this.itemDescription = itemDescription;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderItemSeqId the orderItemSeqId to set
+     */
+    private void setOrderItemSeqId(String orderItemSeqId) {
+        this.orderItemSeqId = orderItemSeqId;
+    }
 
     /**
      * Auto generated value accessor.
@@ -655,6 +691,27 @@ fieldMapColumns.put("OrderHeaderItemAndRoles", fields);
      */
     public String getCorrespondingPoId() {
         return this.correspondingPoId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOrderItemTypeId() {
+        return this.orderItemTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getItemDescription() {
+        return this.itemDescription;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOrderItemSeqId() {
+        return this.orderItemSeqId;
     }
 
     /**
@@ -1122,6 +1179,9 @@ fieldMapColumns.put("OrderHeaderItemAndRoles", fields);
         setEstimatedShipDate((Timestamp) mapValue.get("estimatedShipDate"));
         setAutoCancelDate((Timestamp) mapValue.get("autoCancelDate"));
         setCorrespondingPoId((String) mapValue.get("correspondingPoId"));
+        setOrderItemTypeId((String) mapValue.get("orderItemTypeId"));
+        setItemDescription((String) mapValue.get("itemDescription"));
+        setOrderItemSeqId((String) mapValue.get("orderItemSeqId"));
         postInit();
     }
 
@@ -1155,6 +1215,9 @@ fieldMapColumns.put("OrderHeaderItemAndRoles", fields);
         mapValue.put("estimatedShipDate", getEstimatedShipDate());
         mapValue.put("autoCancelDate", getAutoCancelDate());
         mapValue.put("correspondingPoId", getCorrespondingPoId());
+        mapValue.put("orderItemTypeId", getOrderItemTypeId());
+        mapValue.put("itemDescription", getItemDescription());
+        mapValue.put("orderItemSeqId", getOrderItemSeqId());
         return mapValue;
     }
 

@@ -41,6 +41,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
+import java.lang.Long;
 import java.lang.String;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -49,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity InventoryItemAndLocation.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectInventoryItemAndLocations", query="SELECT II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",II.PRODUCT_ID AS \"productId\",II.PARTY_ID AS \"partyId\",II.OWNER_PARTY_ID AS \"ownerPartyId\",II.STATUS_ID AS \"statusId\",II.DATETIME_RECEIVED AS \"datetimeReceived\",II.DATETIME_MANUFACTURED AS \"datetimeManufactured\",II.EXPIRE_DATE AS \"expireDate\",II.FACILITY_ID AS \"facilityId\",II.CONTAINER_ID AS \"containerId\",II.LOT_ID AS \"lotId\",II.UOM_ID AS \"uomId\",II.BIN_NUMBER AS \"binNumber\",II.LOCATION_SEQ_ID AS \"locationSeqId\",II.COMMENTS AS \"comments\",II.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",II.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",II.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",II.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",II.SERIAL_NUMBER AS \"serialNumber\",II.SOFT_IDENTIFIER AS \"softIdentifier\",II.ACTIVATION_NUMBER AS \"activationNumber\",II.ACTIVATION_VALID_THRU AS \"activationValidThru\",II.UNIT_COST AS \"unitCost\",II.CURRENCY_UOM_ID AS \"currencyUomId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",II.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\",FL.LOCATION_TYPE_ENUM_ID AS \"locationTypeEnumId\",FL.AREA_ID AS \"areaId\",FL.AISLE_ID AS \"aisleId\",FL.SECTION_ID AS \"sectionId\",FL.LEVEL_ID AS \"levelId\",FL.POSITION_ID AS \"positionId\" FROM INVENTORY_ITEM II LEFT JOIN FACILITY_LOCATION FL ON II.FACILITY_ID = FL.FACILITY_ID AND II.LOCATION_SEQ_ID = FL.LOCATION_SEQ_ID", resultSetMapping="InventoryItemAndLocationMapping")
+@NamedNativeQuery(name="selectInventoryItemAndLocations", query="SELECT II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",II.PRODUCT_ID AS \"productId\",II.PARTY_ID AS \"partyId\",II.OWNER_PARTY_ID AS \"ownerPartyId\",II.STATUS_ID AS \"statusId\",II.DATETIME_RECEIVED AS \"datetimeReceived\",II.DATETIME_MANUFACTURED AS \"datetimeManufactured\",II.EXPIRE_DATE AS \"expireDate\",II.FACILITY_ID AS \"facilityId\",II.CONTAINER_ID AS \"containerId\",II.LOT_ID AS \"lotId\",II.UOM_ID AS \"uomId\",II.BIN_NUMBER AS \"binNumber\",II.LOCATION_SEQ_ID AS \"locationSeqId\",II.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",II.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",II.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",II.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",II.SERIAL_NUMBER AS \"serialNumber\",II.SOFT_IDENTIFIER AS \"softIdentifier\",II.ACTIVATION_NUMBER AS \"activationNumber\",II.ACTIVATION_VALID_THRU AS \"activationValidThru\",II.UNIT_COST AS \"unitCost\",II.CURRENCY_UOM_ID AS \"currencyUomId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",II.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\",PR.PRODUCT_TYPE_ID AS \"productTypeId\",PR.PRIMARY_PRODUCT_CATEGORY_ID AS \"primaryProductCategoryId\",PR.MANUFACTURER_PARTY_ID AS \"manufacturerPartyId\",PR.INTRODUCTION_DATE AS \"introductionDate\",PR.SUPPORT_DISCONTINUATION_DATE AS \"supportDiscontinuationDate\",PR.SALES_DISCONTINUATION_DATE AS \"salesDiscontinuationDate\",PR.SALES_DISC_WHEN_NOT_AVAIL AS \"salesDiscWhenNotAvail\",PR.INTERNAL_NAME AS \"internalName\",PR.BRAND_NAME AS \"brandName\",PR.COMMENTS AS \"comments\",PR.PRODUCT_NAME AS \"productName\",PR.DESCRIPTION AS \"description\",PR.LONG_DESCRIPTION AS \"longDescription\",PR.PRICE_DETAIL_TEXT AS \"priceDetailText\",PR.SMALL_IMAGE_URL AS \"smallImageUrl\",PR.MEDIUM_IMAGE_URL AS \"mediumImageUrl\",PR.LARGE_IMAGE_URL AS \"largeImageUrl\",PR.DETAIL_IMAGE_URL AS \"detailImageUrl\",PR.ORIGINAL_IMAGE_URL AS \"originalImageUrl\",PR.DETAIL_SCREEN AS \"detailScreen\",PR.INVENTORY_MESSAGE AS \"inventoryMessage\",PR.REQUIRE_INVENTORY AS \"requireInventory\",PR.QUANTITY_UOM_ID AS \"quantityUomId\",PR.QUANTITY_INCLUDED AS \"quantityIncluded\",PR.PIECES_INCLUDED AS \"piecesIncluded\",PR.REQUIRE_AMOUNT AS \"requireAmount\",PR.FIXED_AMOUNT AS \"fixedAmount\",PR.AMOUNT_UOM_TYPE_ID AS \"amountUomTypeId\",PR.WEIGHT_UOM_ID AS \"weightUomId\",PR.WEIGHT AS \"weight\",PR.HEIGHT_UOM_ID AS \"heightUomId\",PR.PRODUCT_HEIGHT AS \"productHeight\",PR.SHIPPING_HEIGHT AS \"shippingHeight\",PR.WIDTH_UOM_ID AS \"widthUomId\",PR.PRODUCT_WIDTH AS \"productWidth\",PR.SHIPPING_WIDTH AS \"shippingWidth\",PR.DEPTH_UOM_ID AS \"depthUomId\",PR.PRODUCT_DEPTH AS \"productDepth\",PR.SHIPPING_DEPTH AS \"shippingDepth\",PR.PRODUCT_RATING AS \"productRating\",PR.RATING_TYPE_ENUM AS \"ratingTypeEnum\",PR.RETURNABLE AS \"returnable\",PR.TAXABLE AS \"taxable\",PR.CHARGE_SHIPPING AS \"chargeShipping\",PR.AUTO_CREATE_KEYWORDS AS \"autoCreateKeywords\",PR.INCLUDE_IN_PROMOTIONS AS \"includeInPromotions\",PR.IS_VIRTUAL AS \"isVirtual\",PR.IS_VARIANT AS \"isVariant\",PR.VIRTUAL_VARIANT_METHOD_ENUM AS \"virtualVariantMethodEnum\",PR.ORIGIN_GEO_ID AS \"originGeoId\",PR.REQUIREMENT_METHOD_ENUM_ID AS \"requirementMethodEnumId\",PR.BILL_OF_MATERIAL_LEVEL AS \"billOfMaterialLevel\",PR.RESERV_MAX_PERSONS AS \"reservMaxPersons\",PR.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",PR.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",PR.CONFIG_ID AS \"configId\",PR.CREATED_DATE AS \"createdDate\",PR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PR.IN_SHIPPING_BOX AS \"inShippingBox\",PR.DEFAULT_SHIPMENT_BOX_TYPE_ID AS \"defaultShipmentBoxTypeId\",FL.LOCATION_TYPE_ENUM_ID AS \"locationTypeEnumId\",FL.AREA_ID AS \"areaId\",FL.AISLE_ID AS \"aisleId\",FL.SECTION_ID AS \"sectionId\",FL.LEVEL_ID AS \"levelId\",FL.POSITION_ID AS \"positionId\" FROM INVENTORY_ITEM II LEFT JOIN PRODUCT PR ON II.PRODUCT_ID = PR.PRODUCT_ID LEFT JOIN FACILITY_LOCATION FL ON II.FACILITY_ID = FL.FACILITY_ID AND II.LOCATION_SEQ_ID = FL.LOCATION_SEQ_ID", resultSetMapping="InventoryItemAndLocationMapping")
 @SqlResultSetMapping(name="InventoryItemAndLocationMapping", entities={
 @EntityResult(entityClass=InventoryItemAndLocation.class, fields = {
 @FieldResult(name="inventoryItemId", column="inventoryItemId")
@@ -67,7 +68,6 @@ import java.sql.Timestamp;
 ,@FieldResult(name="uomId", column="uomId")
 ,@FieldResult(name="binNumber", column="binNumber")
 ,@FieldResult(name="locationSeqId", column="locationSeqId")
-,@FieldResult(name="comments", column="comments")
 ,@FieldResult(name="quantityOnHandTotal", column="quantityOnHandTotal")
 ,@FieldResult(name="availableToPromiseTotal", column="availableToPromiseTotal")
 ,@FieldResult(name="oldQuantityOnHand", column="oldQuantityOnHand")
@@ -89,6 +89,68 @@ import java.sql.Timestamp;
 ,@FieldResult(name="acctgTagEnumId9", column="acctgTagEnumId9")
 ,@FieldResult(name="acctgTagEnumId10", column="acctgTagEnumId10")
 ,@FieldResult(name="parentInventoryItemId", column="parentInventoryItemId")
+,@FieldResult(name="productTypeId", column="productTypeId")
+,@FieldResult(name="primaryProductCategoryId", column="primaryProductCategoryId")
+,@FieldResult(name="manufacturerPartyId", column="manufacturerPartyId")
+,@FieldResult(name="introductionDate", column="introductionDate")
+,@FieldResult(name="supportDiscontinuationDate", column="supportDiscontinuationDate")
+,@FieldResult(name="salesDiscontinuationDate", column="salesDiscontinuationDate")
+,@FieldResult(name="salesDiscWhenNotAvail", column="salesDiscWhenNotAvail")
+,@FieldResult(name="internalName", column="internalName")
+,@FieldResult(name="brandName", column="brandName")
+,@FieldResult(name="comments", column="comments")
+,@FieldResult(name="productName", column="productName")
+,@FieldResult(name="description", column="description")
+,@FieldResult(name="longDescription", column="longDescription")
+,@FieldResult(name="priceDetailText", column="priceDetailText")
+,@FieldResult(name="smallImageUrl", column="smallImageUrl")
+,@FieldResult(name="mediumImageUrl", column="mediumImageUrl")
+,@FieldResult(name="largeImageUrl", column="largeImageUrl")
+,@FieldResult(name="detailImageUrl", column="detailImageUrl")
+,@FieldResult(name="originalImageUrl", column="originalImageUrl")
+,@FieldResult(name="detailScreen", column="detailScreen")
+,@FieldResult(name="inventoryMessage", column="inventoryMessage")
+,@FieldResult(name="requireInventory", column="requireInventory")
+,@FieldResult(name="quantityUomId", column="quantityUomId")
+,@FieldResult(name="quantityIncluded", column="quantityIncluded")
+,@FieldResult(name="piecesIncluded", column="piecesIncluded")
+,@FieldResult(name="requireAmount", column="requireAmount")
+,@FieldResult(name="fixedAmount", column="fixedAmount")
+,@FieldResult(name="amountUomTypeId", column="amountUomTypeId")
+,@FieldResult(name="weightUomId", column="weightUomId")
+,@FieldResult(name="weight", column="weight")
+,@FieldResult(name="heightUomId", column="heightUomId")
+,@FieldResult(name="productHeight", column="productHeight")
+,@FieldResult(name="shippingHeight", column="shippingHeight")
+,@FieldResult(name="widthUomId", column="widthUomId")
+,@FieldResult(name="productWidth", column="productWidth")
+,@FieldResult(name="shippingWidth", column="shippingWidth")
+,@FieldResult(name="depthUomId", column="depthUomId")
+,@FieldResult(name="productDepth", column="productDepth")
+,@FieldResult(name="shippingDepth", column="shippingDepth")
+,@FieldResult(name="productRating", column="productRating")
+,@FieldResult(name="ratingTypeEnum", column="ratingTypeEnum")
+,@FieldResult(name="returnable", column="returnable")
+,@FieldResult(name="taxable", column="taxable")
+,@FieldResult(name="chargeShipping", column="chargeShipping")
+,@FieldResult(name="autoCreateKeywords", column="autoCreateKeywords")
+,@FieldResult(name="includeInPromotions", column="includeInPromotions")
+,@FieldResult(name="isVirtual", column="isVirtual")
+,@FieldResult(name="isVariant", column="isVariant")
+,@FieldResult(name="virtualVariantMethodEnum", column="virtualVariantMethodEnum")
+,@FieldResult(name="originGeoId", column="originGeoId")
+,@FieldResult(name="requirementMethodEnumId", column="requirementMethodEnumId")
+,@FieldResult(name="billOfMaterialLevel", column="billOfMaterialLevel")
+,@FieldResult(name="reservMaxPersons", column="reservMaxPersons")
+,@FieldResult(name="reserv2ndPPPerc", column="reserv2ndPPPerc")
+,@FieldResult(name="reservNthPPPerc", column="reservNthPPPerc")
+,@FieldResult(name="configId", column="configId")
+,@FieldResult(name="createdDate", column="createdDate")
+,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
+,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
+,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
+,@FieldResult(name="inShippingBox", column="inShippingBox")
+,@FieldResult(name="defaultShipmentBoxTypeId", column="defaultShipmentBoxTypeId")
 ,@FieldResult(name="locationTypeEnumId", column="locationTypeEnumId")
 ,@FieldResult(name="areaId", column="areaId")
 ,@FieldResult(name="aisleId", column="aisleId")
@@ -116,7 +178,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("uomId", "II.UOM_ID");
         fields.put("binNumber", "II.BIN_NUMBER");
         fields.put("locationSeqId", "II.LOCATION_SEQ_ID");
-        fields.put("comments", "II.COMMENTS");
         fields.put("quantityOnHandTotal", "II.QUANTITY_ON_HAND_TOTAL");
         fields.put("availableToPromiseTotal", "II.AVAILABLE_TO_PROMISE_TOTAL");
         fields.put("oldQuantityOnHand", "II.OLD_QUANTITY_ON_HAND");
@@ -138,6 +199,68 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("acctgTagEnumId9", "II.ACCTG_TAG_ENUM_ID9");
         fields.put("acctgTagEnumId10", "II.ACCTG_TAG_ENUM_ID10");
         fields.put("parentInventoryItemId", "II.PARENT_INVENTORY_ITEM_ID");
+        fields.put("productTypeId", "PR.PRODUCT_TYPE_ID");
+        fields.put("primaryProductCategoryId", "PR.PRIMARY_PRODUCT_CATEGORY_ID");
+        fields.put("manufacturerPartyId", "PR.MANUFACTURER_PARTY_ID");
+        fields.put("introductionDate", "PR.INTRODUCTION_DATE");
+        fields.put("supportDiscontinuationDate", "PR.SUPPORT_DISCONTINUATION_DATE");
+        fields.put("salesDiscontinuationDate", "PR.SALES_DISCONTINUATION_DATE");
+        fields.put("salesDiscWhenNotAvail", "PR.SALES_DISC_WHEN_NOT_AVAIL");
+        fields.put("internalName", "PR.INTERNAL_NAME");
+        fields.put("brandName", "PR.BRAND_NAME");
+        fields.put("comments", "PR.COMMENTS");
+        fields.put("productName", "PR.PRODUCT_NAME");
+        fields.put("description", "PR.DESCRIPTION");
+        fields.put("longDescription", "PR.LONG_DESCRIPTION");
+        fields.put("priceDetailText", "PR.PRICE_DETAIL_TEXT");
+        fields.put("smallImageUrl", "PR.SMALL_IMAGE_URL");
+        fields.put("mediumImageUrl", "PR.MEDIUM_IMAGE_URL");
+        fields.put("largeImageUrl", "PR.LARGE_IMAGE_URL");
+        fields.put("detailImageUrl", "PR.DETAIL_IMAGE_URL");
+        fields.put("originalImageUrl", "PR.ORIGINAL_IMAGE_URL");
+        fields.put("detailScreen", "PR.DETAIL_SCREEN");
+        fields.put("inventoryMessage", "PR.INVENTORY_MESSAGE");
+        fields.put("requireInventory", "PR.REQUIRE_INVENTORY");
+        fields.put("quantityUomId", "PR.QUANTITY_UOM_ID");
+        fields.put("quantityIncluded", "PR.QUANTITY_INCLUDED");
+        fields.put("piecesIncluded", "PR.PIECES_INCLUDED");
+        fields.put("requireAmount", "PR.REQUIRE_AMOUNT");
+        fields.put("fixedAmount", "PR.FIXED_AMOUNT");
+        fields.put("amountUomTypeId", "PR.AMOUNT_UOM_TYPE_ID");
+        fields.put("weightUomId", "PR.WEIGHT_UOM_ID");
+        fields.put("weight", "PR.WEIGHT");
+        fields.put("heightUomId", "PR.HEIGHT_UOM_ID");
+        fields.put("productHeight", "PR.PRODUCT_HEIGHT");
+        fields.put("shippingHeight", "PR.SHIPPING_HEIGHT");
+        fields.put("widthUomId", "PR.WIDTH_UOM_ID");
+        fields.put("productWidth", "PR.PRODUCT_WIDTH");
+        fields.put("shippingWidth", "PR.SHIPPING_WIDTH");
+        fields.put("depthUomId", "PR.DEPTH_UOM_ID");
+        fields.put("productDepth", "PR.PRODUCT_DEPTH");
+        fields.put("shippingDepth", "PR.SHIPPING_DEPTH");
+        fields.put("productRating", "PR.PRODUCT_RATING");
+        fields.put("ratingTypeEnum", "PR.RATING_TYPE_ENUM");
+        fields.put("returnable", "PR.RETURNABLE");
+        fields.put("taxable", "PR.TAXABLE");
+        fields.put("chargeShipping", "PR.CHARGE_SHIPPING");
+        fields.put("autoCreateKeywords", "PR.AUTO_CREATE_KEYWORDS");
+        fields.put("includeInPromotions", "PR.INCLUDE_IN_PROMOTIONS");
+        fields.put("isVirtual", "PR.IS_VIRTUAL");
+        fields.put("isVariant", "PR.IS_VARIANT");
+        fields.put("virtualVariantMethodEnum", "PR.VIRTUAL_VARIANT_METHOD_ENUM");
+        fields.put("originGeoId", "PR.ORIGIN_GEO_ID");
+        fields.put("requirementMethodEnumId", "PR.REQUIREMENT_METHOD_ENUM_ID");
+        fields.put("billOfMaterialLevel", "PR.BILL_OF_MATERIAL_LEVEL");
+        fields.put("reservMaxPersons", "PR.RESERV_MAX_PERSONS");
+        fields.put("reserv2ndPPPerc", "PR.RESERV2ND_P_P_PERC");
+        fields.put("reservNthPPPerc", "PR.RESERV_NTH_P_P_PERC");
+        fields.put("configId", "PR.CONFIG_ID");
+        fields.put("createdDate", "PR.CREATED_DATE");
+        fields.put("createdByUserLogin", "PR.CREATED_BY_USER_LOGIN");
+        fields.put("lastModifiedDate", "PR.LAST_MODIFIED_DATE");
+        fields.put("lastModifiedByUserLogin", "PR.LAST_MODIFIED_BY_USER_LOGIN");
+        fields.put("inShippingBox", "PR.IN_SHIPPING_BOX");
+        fields.put("defaultShipmentBoxTypeId", "PR.DEFAULT_SHIPMENT_BOX_TYPE_ID");
         fields.put("locationTypeEnumId", "FL.LOCATION_TYPE_ENUM_ID");
         fields.put("areaId", "FL.AREA_ID");
         fields.put("aisleId", "FL.AISLE_ID");
@@ -162,7 +285,6 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
     uomId("uomId"),
     binNumber("binNumber"),
     locationSeqId("locationSeqId"),
-    comments("comments"),
     quantityOnHandTotal("quantityOnHandTotal"),
     availableToPromiseTotal("availableToPromiseTotal"),
     oldQuantityOnHand("oldQuantityOnHand"),
@@ -184,6 +306,68 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
     acctgTagEnumId9("acctgTagEnumId9"),
     acctgTagEnumId10("acctgTagEnumId10"),
     parentInventoryItemId("parentInventoryItemId"),
+    productTypeId("productTypeId"),
+    primaryProductCategoryId("primaryProductCategoryId"),
+    manufacturerPartyId("manufacturerPartyId"),
+    introductionDate("introductionDate"),
+    supportDiscontinuationDate("supportDiscontinuationDate"),
+    salesDiscontinuationDate("salesDiscontinuationDate"),
+    salesDiscWhenNotAvail("salesDiscWhenNotAvail"),
+    internalName("internalName"),
+    brandName("brandName"),
+    comments("comments"),
+    productName("productName"),
+    description("description"),
+    longDescription("longDescription"),
+    priceDetailText("priceDetailText"),
+    smallImageUrl("smallImageUrl"),
+    mediumImageUrl("mediumImageUrl"),
+    largeImageUrl("largeImageUrl"),
+    detailImageUrl("detailImageUrl"),
+    originalImageUrl("originalImageUrl"),
+    detailScreen("detailScreen"),
+    inventoryMessage("inventoryMessage"),
+    requireInventory("requireInventory"),
+    quantityUomId("quantityUomId"),
+    quantityIncluded("quantityIncluded"),
+    piecesIncluded("piecesIncluded"),
+    requireAmount("requireAmount"),
+    fixedAmount("fixedAmount"),
+    amountUomTypeId("amountUomTypeId"),
+    weightUomId("weightUomId"),
+    weight("weight"),
+    heightUomId("heightUomId"),
+    productHeight("productHeight"),
+    shippingHeight("shippingHeight"),
+    widthUomId("widthUomId"),
+    productWidth("productWidth"),
+    shippingWidth("shippingWidth"),
+    depthUomId("depthUomId"),
+    productDepth("productDepth"),
+    shippingDepth("shippingDepth"),
+    productRating("productRating"),
+    ratingTypeEnum("ratingTypeEnum"),
+    returnable("returnable"),
+    taxable("taxable"),
+    chargeShipping("chargeShipping"),
+    autoCreateKeywords("autoCreateKeywords"),
+    includeInPromotions("includeInPromotions"),
+    isVirtual("isVirtual"),
+    isVariant("isVariant"),
+    virtualVariantMethodEnum("virtualVariantMethodEnum"),
+    originGeoId("originGeoId"),
+    requirementMethodEnumId("requirementMethodEnumId"),
+    billOfMaterialLevel("billOfMaterialLevel"),
+    reservMaxPersons("reservMaxPersons"),
+    reserv2ndPPPerc("reserv2ndPPPerc"),
+    reservNthPPPerc("reservNthPPPerc"),
+    configId("configId"),
+    createdDate("createdDate"),
+    createdByUserLogin("createdByUserLogin"),
+    lastModifiedDate("lastModifiedDate"),
+    lastModifiedByUserLogin("lastModifiedByUserLogin"),
+    inShippingBox("inShippingBox"),
+    defaultShipmentBoxTypeId("defaultShipmentBoxTypeId"),
     locationTypeEnumId("locationTypeEnumId"),
     areaId("areaId"),
     aisleId("aisleId"),
@@ -231,8 +415,6 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
     
    private String locationSeqId;
     
-   private String comments;
-    
    private BigDecimal quantityOnHandTotal;
     
    private BigDecimal availableToPromiseTotal;
@@ -275,6 +457,130 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
     
    private String parentInventoryItemId;
     
+   private String productTypeId;
+    
+   private String primaryProductCategoryId;
+    
+   private String manufacturerPartyId;
+    
+   private Timestamp introductionDate;
+    
+   private Timestamp supportDiscontinuationDate;
+    
+   private Timestamp salesDiscontinuationDate;
+    
+   private String salesDiscWhenNotAvail;
+    
+   private String internalName;
+    
+   private String brandName;
+    
+   private String comments;
+    
+   private String productName;
+    
+   private String description;
+    
+   private String longDescription;
+    
+   private String priceDetailText;
+    
+   private String smallImageUrl;
+    
+   private String mediumImageUrl;
+    
+   private String largeImageUrl;
+    
+   private String detailImageUrl;
+    
+   private String originalImageUrl;
+    
+   private String detailScreen;
+    
+   private String inventoryMessage;
+    
+   private String requireInventory;
+    
+   private String quantityUomId;
+    
+   private BigDecimal quantityIncluded;
+    
+   private Long piecesIncluded;
+    
+   private String requireAmount;
+    
+   private BigDecimal fixedAmount;
+    
+   private String amountUomTypeId;
+    
+   private String weightUomId;
+    
+   private BigDecimal weight;
+    
+   private String heightUomId;
+    
+   private BigDecimal productHeight;
+    
+   private BigDecimal shippingHeight;
+    
+   private String widthUomId;
+    
+   private BigDecimal productWidth;
+    
+   private BigDecimal shippingWidth;
+    
+   private String depthUomId;
+    
+   private BigDecimal productDepth;
+    
+   private BigDecimal shippingDepth;
+    
+   private BigDecimal productRating;
+    
+   private String ratingTypeEnum;
+    
+   private String returnable;
+    
+   private String taxable;
+    
+   private String chargeShipping;
+    
+   private String autoCreateKeywords;
+    
+   private String includeInPromotions;
+    
+   private String isVirtual;
+    
+   private String isVariant;
+    
+   private String virtualVariantMethodEnum;
+    
+   private String originGeoId;
+    
+   private String requirementMethodEnumId;
+    
+   private Long billOfMaterialLevel;
+    
+   private BigDecimal reservMaxPersons;
+    
+   private BigDecimal reserv2ndPPPerc;
+    
+   private BigDecimal reservNthPPPerc;
+    
+   private String configId;
+    
+   private Timestamp createdDate;
+    
+   private String createdByUserLogin;
+    
+   private Timestamp lastModifiedDate;
+    
+   private String lastModifiedByUserLogin;
+    
+   private String inShippingBox;
+    
+   private String defaultShipmentBoxTypeId;
+    
    private String locationTypeEnumId;
     
    private String areaId;
@@ -311,7 +617,7 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("inventoryItemId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("inventoryItemTypeId");this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("datetimeManufactured");this.allFieldsNames.add("expireDate");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("containerId");this.allFieldsNames.add("lotId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("binNumber");this.allFieldsNames.add("locationSeqId");this.allFieldsNames.add("comments");this.allFieldsNames.add("quantityOnHandTotal");this.allFieldsNames.add("availableToPromiseTotal");this.allFieldsNames.add("oldQuantityOnHand");this.allFieldsNames.add("oldAvailableToPromise");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("softIdentifier");this.allFieldsNames.add("activationNumber");this.allFieldsNames.add("activationValidThru");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("parentInventoryItemId");this.allFieldsNames.add("locationTypeEnumId");this.allFieldsNames.add("areaId");this.allFieldsNames.add("aisleId");this.allFieldsNames.add("sectionId");this.allFieldsNames.add("levelId");this.allFieldsNames.add("positionId");
+      this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("inventoryItemTypeId");this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("datetimeManufactured");this.allFieldsNames.add("expireDate");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("containerId");this.allFieldsNames.add("lotId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("binNumber");this.allFieldsNames.add("locationSeqId");this.allFieldsNames.add("quantityOnHandTotal");this.allFieldsNames.add("availableToPromiseTotal");this.allFieldsNames.add("oldQuantityOnHand");this.allFieldsNames.add("oldAvailableToPromise");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("softIdentifier");this.allFieldsNames.add("activationNumber");this.allFieldsNames.add("activationValidThru");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("parentInventoryItemId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("primaryProductCategoryId");this.allFieldsNames.add("manufacturerPartyId");this.allFieldsNames.add("introductionDate");this.allFieldsNames.add("supportDiscontinuationDate");this.allFieldsNames.add("salesDiscontinuationDate");this.allFieldsNames.add("salesDiscWhenNotAvail");this.allFieldsNames.add("internalName");this.allFieldsNames.add("brandName");this.allFieldsNames.add("comments");this.allFieldsNames.add("productName");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("priceDetailText");this.allFieldsNames.add("smallImageUrl");this.allFieldsNames.add("mediumImageUrl");this.allFieldsNames.add("largeImageUrl");this.allFieldsNames.add("detailImageUrl");this.allFieldsNames.add("originalImageUrl");this.allFieldsNames.add("detailScreen");this.allFieldsNames.add("inventoryMessage");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("quantityIncluded");this.allFieldsNames.add("piecesIncluded");this.allFieldsNames.add("requireAmount");this.allFieldsNames.add("fixedAmount");this.allFieldsNames.add("amountUomTypeId");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("weight");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("productHeight");this.allFieldsNames.add("shippingHeight");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("productWidth");this.allFieldsNames.add("shippingWidth");this.allFieldsNames.add("depthUomId");this.allFieldsNames.add("productDepth");this.allFieldsNames.add("shippingDepth");this.allFieldsNames.add("productRating");this.allFieldsNames.add("ratingTypeEnum");this.allFieldsNames.add("returnable");this.allFieldsNames.add("taxable");this.allFieldsNames.add("chargeShipping");this.allFieldsNames.add("autoCreateKeywords");this.allFieldsNames.add("includeInPromotions");this.allFieldsNames.add("isVirtual");this.allFieldsNames.add("isVariant");this.allFieldsNames.add("virtualVariantMethodEnum");this.allFieldsNames.add("originGeoId");this.allFieldsNames.add("requirementMethodEnumId");this.allFieldsNames.add("billOfMaterialLevel");this.allFieldsNames.add("reservMaxPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("configId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("inShippingBox");this.allFieldsNames.add("defaultShipmentBoxTypeId");this.allFieldsNames.add("locationTypeEnumId");this.allFieldsNames.add("areaId");this.allFieldsNames.add("aisleId");this.allFieldsNames.add("sectionId");this.allFieldsNames.add("levelId");this.allFieldsNames.add("positionId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -433,13 +739,6 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
      */
     private void setLocationSeqId(String locationSeqId) {
         this.locationSeqId = locationSeqId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param comments the comments to set
-     */
-    private void setComments(String comments) {
-        this.comments = comments;
     }
     /**
      * Auto generated value setter.
@@ -587,6 +886,440 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
      */
     private void setParentInventoryItemId(String parentInventoryItemId) {
         this.parentInventoryItemId = parentInventoryItemId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productTypeId the productTypeId to set
+     */
+    private void setProductTypeId(String productTypeId) {
+        this.productTypeId = productTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param primaryProductCategoryId the primaryProductCategoryId to set
+     */
+    private void setPrimaryProductCategoryId(String primaryProductCategoryId) {
+        this.primaryProductCategoryId = primaryProductCategoryId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param manufacturerPartyId the manufacturerPartyId to set
+     */
+    private void setManufacturerPartyId(String manufacturerPartyId) {
+        this.manufacturerPartyId = manufacturerPartyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param introductionDate the introductionDate to set
+     */
+    private void setIntroductionDate(Timestamp introductionDate) {
+        this.introductionDate = introductionDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param supportDiscontinuationDate the supportDiscontinuationDate to set
+     */
+    private void setSupportDiscontinuationDate(Timestamp supportDiscontinuationDate) {
+        this.supportDiscontinuationDate = supportDiscontinuationDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesDiscontinuationDate the salesDiscontinuationDate to set
+     */
+    private void setSalesDiscontinuationDate(Timestamp salesDiscontinuationDate) {
+        this.salesDiscontinuationDate = salesDiscontinuationDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesDiscWhenNotAvail the salesDiscWhenNotAvail to set
+     */
+    private void setSalesDiscWhenNotAvail(String salesDiscWhenNotAvail) {
+        this.salesDiscWhenNotAvail = salesDiscWhenNotAvail;
+    }
+    /**
+     * Auto generated value setter.
+     * @param internalName the internalName to set
+     */
+    private void setInternalName(String internalName) {
+        this.internalName = internalName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param brandName the brandName to set
+     */
+    private void setBrandName(String brandName) {
+        this.brandName = brandName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param comments the comments to set
+     */
+    private void setComments(String comments) {
+        this.comments = comments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productName the productName to set
+     */
+    private void setProductName(String productName) {
+        this.productName = productName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param description the description to set
+     */
+    private void setDescription(String description) {
+        this.description = description;
+    }
+    /**
+     * Auto generated value setter.
+     * @param longDescription the longDescription to set
+     */
+    private void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
+    /**
+     * Auto generated value setter.
+     * @param priceDetailText the priceDetailText to set
+     */
+    private void setPriceDetailText(String priceDetailText) {
+        this.priceDetailText = priceDetailText;
+    }
+    /**
+     * Auto generated value setter.
+     * @param smallImageUrl the smallImageUrl to set
+     */
+    private void setSmallImageUrl(String smallImageUrl) {
+        this.smallImageUrl = smallImageUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param mediumImageUrl the mediumImageUrl to set
+     */
+    private void setMediumImageUrl(String mediumImageUrl) {
+        this.mediumImageUrl = mediumImageUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param largeImageUrl the largeImageUrl to set
+     */
+    private void setLargeImageUrl(String largeImageUrl) {
+        this.largeImageUrl = largeImageUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param detailImageUrl the detailImageUrl to set
+     */
+    private void setDetailImageUrl(String detailImageUrl) {
+        this.detailImageUrl = detailImageUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param originalImageUrl the originalImageUrl to set
+     */
+    private void setOriginalImageUrl(String originalImageUrl) {
+        this.originalImageUrl = originalImageUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param detailScreen the detailScreen to set
+     */
+    private void setDetailScreen(String detailScreen) {
+        this.detailScreen = detailScreen;
+    }
+    /**
+     * Auto generated value setter.
+     * @param inventoryMessage the inventoryMessage to set
+     */
+    private void setInventoryMessage(String inventoryMessage) {
+        this.inventoryMessage = inventoryMessage;
+    }
+    /**
+     * Auto generated value setter.
+     * @param requireInventory the requireInventory to set
+     */
+    private void setRequireInventory(String requireInventory) {
+        this.requireInventory = requireInventory;
+    }
+    /**
+     * Auto generated value setter.
+     * @param quantityUomId the quantityUomId to set
+     */
+    private void setQuantityUomId(String quantityUomId) {
+        this.quantityUomId = quantityUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param quantityIncluded the quantityIncluded to set
+     */
+    private void setQuantityIncluded(BigDecimal quantityIncluded) {
+        this.quantityIncluded = quantityIncluded;
+    }
+    /**
+     * Auto generated value setter.
+     * @param piecesIncluded the piecesIncluded to set
+     */
+    private void setPiecesIncluded(Long piecesIncluded) {
+        this.piecesIncluded = piecesIncluded;
+    }
+    /**
+     * Auto generated value setter.
+     * @param requireAmount the requireAmount to set
+     */
+    private void setRequireAmount(String requireAmount) {
+        this.requireAmount = requireAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fixedAmount the fixedAmount to set
+     */
+    private void setFixedAmount(BigDecimal fixedAmount) {
+        this.fixedAmount = fixedAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amountUomTypeId the amountUomTypeId to set
+     */
+    private void setAmountUomTypeId(String amountUomTypeId) {
+        this.amountUomTypeId = amountUomTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param weightUomId the weightUomId to set
+     */
+    private void setWeightUomId(String weightUomId) {
+        this.weightUomId = weightUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param weight the weight to set
+     */
+    private void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
+    /**
+     * Auto generated value setter.
+     * @param heightUomId the heightUomId to set
+     */
+    private void setHeightUomId(String heightUomId) {
+        this.heightUomId = heightUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productHeight the productHeight to set
+     */
+    private void setProductHeight(BigDecimal productHeight) {
+        this.productHeight = productHeight;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingHeight the shippingHeight to set
+     */
+    private void setShippingHeight(BigDecimal shippingHeight) {
+        this.shippingHeight = shippingHeight;
+    }
+    /**
+     * Auto generated value setter.
+     * @param widthUomId the widthUomId to set
+     */
+    private void setWidthUomId(String widthUomId) {
+        this.widthUomId = widthUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productWidth the productWidth to set
+     */
+    private void setProductWidth(BigDecimal productWidth) {
+        this.productWidth = productWidth;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingWidth the shippingWidth to set
+     */
+    private void setShippingWidth(BigDecimal shippingWidth) {
+        this.shippingWidth = shippingWidth;
+    }
+    /**
+     * Auto generated value setter.
+     * @param depthUomId the depthUomId to set
+     */
+    private void setDepthUomId(String depthUomId) {
+        this.depthUomId = depthUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productDepth the productDepth to set
+     */
+    private void setProductDepth(BigDecimal productDepth) {
+        this.productDepth = productDepth;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shippingDepth the shippingDepth to set
+     */
+    private void setShippingDepth(BigDecimal shippingDepth) {
+        this.shippingDepth = shippingDepth;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productRating the productRating to set
+     */
+    private void setProductRating(BigDecimal productRating) {
+        this.productRating = productRating;
+    }
+    /**
+     * Auto generated value setter.
+     * @param ratingTypeEnum the ratingTypeEnum to set
+     */
+    private void setRatingTypeEnum(String ratingTypeEnum) {
+        this.ratingTypeEnum = ratingTypeEnum;
+    }
+    /**
+     * Auto generated value setter.
+     * @param returnable the returnable to set
+     */
+    private void setReturnable(String returnable) {
+        this.returnable = returnable;
+    }
+    /**
+     * Auto generated value setter.
+     * @param taxable the taxable to set
+     */
+    private void setTaxable(String taxable) {
+        this.taxable = taxable;
+    }
+    /**
+     * Auto generated value setter.
+     * @param chargeShipping the chargeShipping to set
+     */
+    private void setChargeShipping(String chargeShipping) {
+        this.chargeShipping = chargeShipping;
+    }
+    /**
+     * Auto generated value setter.
+     * @param autoCreateKeywords the autoCreateKeywords to set
+     */
+    private void setAutoCreateKeywords(String autoCreateKeywords) {
+        this.autoCreateKeywords = autoCreateKeywords;
+    }
+    /**
+     * Auto generated value setter.
+     * @param includeInPromotions the includeInPromotions to set
+     */
+    private void setIncludeInPromotions(String includeInPromotions) {
+        this.includeInPromotions = includeInPromotions;
+    }
+    /**
+     * Auto generated value setter.
+     * @param isVirtual the isVirtual to set
+     */
+    private void setIsVirtual(String isVirtual) {
+        this.isVirtual = isVirtual;
+    }
+    /**
+     * Auto generated value setter.
+     * @param isVariant the isVariant to set
+     */
+    private void setIsVariant(String isVariant) {
+        this.isVariant = isVariant;
+    }
+    /**
+     * Auto generated value setter.
+     * @param virtualVariantMethodEnum the virtualVariantMethodEnum to set
+     */
+    private void setVirtualVariantMethodEnum(String virtualVariantMethodEnum) {
+        this.virtualVariantMethodEnum = virtualVariantMethodEnum;
+    }
+    /**
+     * Auto generated value setter.
+     * @param originGeoId the originGeoId to set
+     */
+    private void setOriginGeoId(String originGeoId) {
+        this.originGeoId = originGeoId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param requirementMethodEnumId the requirementMethodEnumId to set
+     */
+    private void setRequirementMethodEnumId(String requirementMethodEnumId) {
+        this.requirementMethodEnumId = requirementMethodEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param billOfMaterialLevel the billOfMaterialLevel to set
+     */
+    private void setBillOfMaterialLevel(Long billOfMaterialLevel) {
+        this.billOfMaterialLevel = billOfMaterialLevel;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reservMaxPersons the reservMaxPersons to set
+     */
+    private void setReservMaxPersons(BigDecimal reservMaxPersons) {
+        this.reservMaxPersons = reservMaxPersons;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reserv2ndPPPerc the reserv2ndPPPerc to set
+     */
+    private void setReserv2ndPPPerc(BigDecimal reserv2ndPPPerc) {
+        this.reserv2ndPPPerc = reserv2ndPPPerc;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reservNthPPPerc the reservNthPPPerc to set
+     */
+    private void setReservNthPPPerc(BigDecimal reservNthPPPerc) {
+        this.reservNthPPPerc = reservNthPPPerc;
+    }
+    /**
+     * Auto generated value setter.
+     * @param configId the configId to set
+     */
+    private void setConfigId(String configId) {
+        this.configId = configId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param createdDate the createdDate to set
+     */
+    private void setCreatedDate(Timestamp createdDate) {
+        this.createdDate = createdDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param createdByUserLogin the createdByUserLogin to set
+     */
+    private void setCreatedByUserLogin(String createdByUserLogin) {
+        this.createdByUserLogin = createdByUserLogin;
+    }
+    /**
+     * Auto generated value setter.
+     * @param lastModifiedDate the lastModifiedDate to set
+     */
+    private void setLastModifiedDate(Timestamp lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param lastModifiedByUserLogin the lastModifiedByUserLogin to set
+     */
+    private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
+        this.lastModifiedByUserLogin = lastModifiedByUserLogin;
+    }
+    /**
+     * Auto generated value setter.
+     * @param inShippingBox the inShippingBox to set
+     */
+    private void setInShippingBox(String inShippingBox) {
+        this.inShippingBox = inShippingBox;
+    }
+    /**
+     * Auto generated value setter.
+     * @param defaultShipmentBoxTypeId the defaultShipmentBoxTypeId to set
+     */
+    private void setDefaultShipmentBoxTypeId(String defaultShipmentBoxTypeId) {
+        this.defaultShipmentBoxTypeId = defaultShipmentBoxTypeId;
     }
     /**
      * Auto generated value setter.
@@ -738,13 +1471,6 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getComments() {
-        return this.comments;
-    }
-    /**
-     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getQuantityOnHandTotal() {
@@ -889,6 +1615,440 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
      */
     public String getParentInventoryItemId() {
         return this.parentInventoryItemId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getProductTypeId() {
+        return this.productTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPrimaryProductCategoryId() {
+        return this.primaryProductCategoryId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getManufacturerPartyId() {
+        return this.manufacturerPartyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getIntroductionDate() {
+        return this.introductionDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getSupportDiscontinuationDate() {
+        return this.supportDiscontinuationDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getSalesDiscontinuationDate() {
+        return this.salesDiscontinuationDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSalesDiscWhenNotAvail() {
+        return this.salesDiscWhenNotAvail;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInternalName() {
+        return this.internalName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getBrandName() {
+        return this.brandName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getComments() {
+        return this.comments;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getProductName() {
+        return this.productName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDescription() {
+        return this.description;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLongDescription() {
+        return this.longDescription;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPriceDetailText() {
+        return this.priceDetailText;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSmallImageUrl() {
+        return this.smallImageUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getMediumImageUrl() {
+        return this.mediumImageUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLargeImageUrl() {
+        return this.largeImageUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDetailImageUrl() {
+        return this.detailImageUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOriginalImageUrl() {
+        return this.originalImageUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDetailScreen() {
+        return this.detailScreen;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInventoryMessage() {
+        return this.inventoryMessage;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getRequireInventory() {
+        return this.requireInventory;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getQuantityUomId() {
+        return this.quantityUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getQuantityIncluded() {
+        return this.quantityIncluded;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getPiecesIncluded() {
+        return this.piecesIncluded;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getRequireAmount() {
+        return this.requireAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getFixedAmount() {
+        return this.fixedAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAmountUomTypeId() {
+        return this.amountUomTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWeightUomId() {
+        return this.weightUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getWeight() {
+        return this.weight;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getHeightUomId() {
+        return this.heightUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getProductHeight() {
+        return this.productHeight;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getShippingHeight() {
+        return this.shippingHeight;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWidthUomId() {
+        return this.widthUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getProductWidth() {
+        return this.productWidth;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getShippingWidth() {
+        return this.shippingWidth;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDepthUomId() {
+        return this.depthUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getProductDepth() {
+        return this.productDepth;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getShippingDepth() {
+        return this.shippingDepth;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getProductRating() {
+        return this.productRating;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getRatingTypeEnum() {
+        return this.ratingTypeEnum;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReturnable() {
+        return this.returnable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getTaxable() {
+        return this.taxable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getChargeShipping() {
+        return this.chargeShipping;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAutoCreateKeywords() {
+        return this.autoCreateKeywords;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIncludeInPromotions() {
+        return this.includeInPromotions;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIsVirtual() {
+        return this.isVirtual;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIsVariant() {
+        return this.isVariant;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getVirtualVariantMethodEnum() {
+        return this.virtualVariantMethodEnum;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOriginGeoId() {
+        return this.originGeoId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getRequirementMethodEnumId() {
+        return this.requirementMethodEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getBillOfMaterialLevel() {
+        return this.billOfMaterialLevel;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getReservMaxPersons() {
+        return this.reservMaxPersons;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getReserv2ndPPPerc() {
+        return this.reserv2ndPPPerc;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getReservNthPPPerc() {
+        return this.reservNthPPPerc;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getConfigId() {
+        return this.configId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getCreatedDate() {
+        return this.createdDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCreatedByUserLogin() {
+        return this.createdByUserLogin;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getLastModifiedDate() {
+        return this.lastModifiedDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLastModifiedByUserLogin() {
+        return this.lastModifiedByUserLogin;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInShippingBox() {
+        return this.inShippingBox;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDefaultShipmentBoxTypeId() {
+        return this.defaultShipmentBoxTypeId;
     }
     /**
      * Auto generated value accessor.
@@ -1054,7 +2214,6 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
         setUomId((String) mapValue.get("uomId"));
         setBinNumber((String) mapValue.get("binNumber"));
         setLocationSeqId((String) mapValue.get("locationSeqId"));
-        setComments((String) mapValue.get("comments"));
         setQuantityOnHandTotal(convertToBigDecimal(mapValue.get("quantityOnHandTotal")));
         setAvailableToPromiseTotal(convertToBigDecimal(mapValue.get("availableToPromiseTotal")));
         setOldQuantityOnHand(convertToBigDecimal(mapValue.get("oldQuantityOnHand")));
@@ -1076,6 +2235,68 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
         setAcctgTagEnumId9((String) mapValue.get("acctgTagEnumId9"));
         setAcctgTagEnumId10((String) mapValue.get("acctgTagEnumId10"));
         setParentInventoryItemId((String) mapValue.get("parentInventoryItemId"));
+        setProductTypeId((String) mapValue.get("productTypeId"));
+        setPrimaryProductCategoryId((String) mapValue.get("primaryProductCategoryId"));
+        setManufacturerPartyId((String) mapValue.get("manufacturerPartyId"));
+        setIntroductionDate((Timestamp) mapValue.get("introductionDate"));
+        setSupportDiscontinuationDate((Timestamp) mapValue.get("supportDiscontinuationDate"));
+        setSalesDiscontinuationDate((Timestamp) mapValue.get("salesDiscontinuationDate"));
+        setSalesDiscWhenNotAvail((String) mapValue.get("salesDiscWhenNotAvail"));
+        setInternalName((String) mapValue.get("internalName"));
+        setBrandName((String) mapValue.get("brandName"));
+        setComments((String) mapValue.get("comments"));
+        setProductName((String) mapValue.get("productName"));
+        setDescription((String) mapValue.get("description"));
+        setLongDescription((String) mapValue.get("longDescription"));
+        setPriceDetailText((String) mapValue.get("priceDetailText"));
+        setSmallImageUrl((String) mapValue.get("smallImageUrl"));
+        setMediumImageUrl((String) mapValue.get("mediumImageUrl"));
+        setLargeImageUrl((String) mapValue.get("largeImageUrl"));
+        setDetailImageUrl((String) mapValue.get("detailImageUrl"));
+        setOriginalImageUrl((String) mapValue.get("originalImageUrl"));
+        setDetailScreen((String) mapValue.get("detailScreen"));
+        setInventoryMessage((String) mapValue.get("inventoryMessage"));
+        setRequireInventory((String) mapValue.get("requireInventory"));
+        setQuantityUomId((String) mapValue.get("quantityUomId"));
+        setQuantityIncluded(convertToBigDecimal(mapValue.get("quantityIncluded")));
+        setPiecesIncluded((Long) mapValue.get("piecesIncluded"));
+        setRequireAmount((String) mapValue.get("requireAmount"));
+        setFixedAmount(convertToBigDecimal(mapValue.get("fixedAmount")));
+        setAmountUomTypeId((String) mapValue.get("amountUomTypeId"));
+        setWeightUomId((String) mapValue.get("weightUomId"));
+        setWeight(convertToBigDecimal(mapValue.get("weight")));
+        setHeightUomId((String) mapValue.get("heightUomId"));
+        setProductHeight(convertToBigDecimal(mapValue.get("productHeight")));
+        setShippingHeight(convertToBigDecimal(mapValue.get("shippingHeight")));
+        setWidthUomId((String) mapValue.get("widthUomId"));
+        setProductWidth(convertToBigDecimal(mapValue.get("productWidth")));
+        setShippingWidth(convertToBigDecimal(mapValue.get("shippingWidth")));
+        setDepthUomId((String) mapValue.get("depthUomId"));
+        setProductDepth(convertToBigDecimal(mapValue.get("productDepth")));
+        setShippingDepth(convertToBigDecimal(mapValue.get("shippingDepth")));
+        setProductRating(convertToBigDecimal(mapValue.get("productRating")));
+        setRatingTypeEnum((String) mapValue.get("ratingTypeEnum"));
+        setReturnable((String) mapValue.get("returnable"));
+        setTaxable((String) mapValue.get("taxable"));
+        setChargeShipping((String) mapValue.get("chargeShipping"));
+        setAutoCreateKeywords((String) mapValue.get("autoCreateKeywords"));
+        setIncludeInPromotions((String) mapValue.get("includeInPromotions"));
+        setIsVirtual((String) mapValue.get("isVirtual"));
+        setIsVariant((String) mapValue.get("isVariant"));
+        setVirtualVariantMethodEnum((String) mapValue.get("virtualVariantMethodEnum"));
+        setOriginGeoId((String) mapValue.get("originGeoId"));
+        setRequirementMethodEnumId((String) mapValue.get("requirementMethodEnumId"));
+        setBillOfMaterialLevel((Long) mapValue.get("billOfMaterialLevel"));
+        setReservMaxPersons(convertToBigDecimal(mapValue.get("reservMaxPersons")));
+        setReserv2ndPPPerc(convertToBigDecimal(mapValue.get("reserv2ndPPPerc")));
+        setReservNthPPPerc(convertToBigDecimal(mapValue.get("reservNthPPPerc")));
+        setConfigId((String) mapValue.get("configId"));
+        setCreatedDate((Timestamp) mapValue.get("createdDate"));
+        setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
+        setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
+        setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
+        setInShippingBox((String) mapValue.get("inShippingBox"));
+        setDefaultShipmentBoxTypeId((String) mapValue.get("defaultShipmentBoxTypeId"));
         setLocationTypeEnumId((String) mapValue.get("locationTypeEnumId"));
         setAreaId((String) mapValue.get("areaId"));
         setAisleId((String) mapValue.get("aisleId"));
@@ -1104,7 +2325,6 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
         mapValue.put("uomId", getUomId());
         mapValue.put("binNumber", getBinNumber());
         mapValue.put("locationSeqId", getLocationSeqId());
-        mapValue.put("comments", getComments());
         mapValue.put("quantityOnHandTotal", getQuantityOnHandTotal());
         mapValue.put("availableToPromiseTotal", getAvailableToPromiseTotal());
         mapValue.put("oldQuantityOnHand", getOldQuantityOnHand());
@@ -1126,6 +2346,68 @@ fieldMapColumns.put("InventoryItemAndLocation", fields);
         mapValue.put("acctgTagEnumId9", getAcctgTagEnumId9());
         mapValue.put("acctgTagEnumId10", getAcctgTagEnumId10());
         mapValue.put("parentInventoryItemId", getParentInventoryItemId());
+        mapValue.put("productTypeId", getProductTypeId());
+        mapValue.put("primaryProductCategoryId", getPrimaryProductCategoryId());
+        mapValue.put("manufacturerPartyId", getManufacturerPartyId());
+        mapValue.put("introductionDate", getIntroductionDate());
+        mapValue.put("supportDiscontinuationDate", getSupportDiscontinuationDate());
+        mapValue.put("salesDiscontinuationDate", getSalesDiscontinuationDate());
+        mapValue.put("salesDiscWhenNotAvail", getSalesDiscWhenNotAvail());
+        mapValue.put("internalName", getInternalName());
+        mapValue.put("brandName", getBrandName());
+        mapValue.put("comments", getComments());
+        mapValue.put("productName", getProductName());
+        mapValue.put("description", getDescription());
+        mapValue.put("longDescription", getLongDescription());
+        mapValue.put("priceDetailText", getPriceDetailText());
+        mapValue.put("smallImageUrl", getSmallImageUrl());
+        mapValue.put("mediumImageUrl", getMediumImageUrl());
+        mapValue.put("largeImageUrl", getLargeImageUrl());
+        mapValue.put("detailImageUrl", getDetailImageUrl());
+        mapValue.put("originalImageUrl", getOriginalImageUrl());
+        mapValue.put("detailScreen", getDetailScreen());
+        mapValue.put("inventoryMessage", getInventoryMessage());
+        mapValue.put("requireInventory", getRequireInventory());
+        mapValue.put("quantityUomId", getQuantityUomId());
+        mapValue.put("quantityIncluded", getQuantityIncluded());
+        mapValue.put("piecesIncluded", getPiecesIncluded());
+        mapValue.put("requireAmount", getRequireAmount());
+        mapValue.put("fixedAmount", getFixedAmount());
+        mapValue.put("amountUomTypeId", getAmountUomTypeId());
+        mapValue.put("weightUomId", getWeightUomId());
+        mapValue.put("weight", getWeight());
+        mapValue.put("heightUomId", getHeightUomId());
+        mapValue.put("productHeight", getProductHeight());
+        mapValue.put("shippingHeight", getShippingHeight());
+        mapValue.put("widthUomId", getWidthUomId());
+        mapValue.put("productWidth", getProductWidth());
+        mapValue.put("shippingWidth", getShippingWidth());
+        mapValue.put("depthUomId", getDepthUomId());
+        mapValue.put("productDepth", getProductDepth());
+        mapValue.put("shippingDepth", getShippingDepth());
+        mapValue.put("productRating", getProductRating());
+        mapValue.put("ratingTypeEnum", getRatingTypeEnum());
+        mapValue.put("returnable", getReturnable());
+        mapValue.put("taxable", getTaxable());
+        mapValue.put("chargeShipping", getChargeShipping());
+        mapValue.put("autoCreateKeywords", getAutoCreateKeywords());
+        mapValue.put("includeInPromotions", getIncludeInPromotions());
+        mapValue.put("isVirtual", getIsVirtual());
+        mapValue.put("isVariant", getIsVariant());
+        mapValue.put("virtualVariantMethodEnum", getVirtualVariantMethodEnum());
+        mapValue.put("originGeoId", getOriginGeoId());
+        mapValue.put("requirementMethodEnumId", getRequirementMethodEnumId());
+        mapValue.put("billOfMaterialLevel", getBillOfMaterialLevel());
+        mapValue.put("reservMaxPersons", getReservMaxPersons());
+        mapValue.put("reserv2ndPPPerc", getReserv2ndPPPerc());
+        mapValue.put("reservNthPPPerc", getReservNthPPPerc());
+        mapValue.put("configId", getConfigId());
+        mapValue.put("createdDate", getCreatedDate());
+        mapValue.put("createdByUserLogin", getCreatedByUserLogin());
+        mapValue.put("lastModifiedDate", getLastModifiedDate());
+        mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
+        mapValue.put("inShippingBox", getInShippingBox());
+        mapValue.put("defaultShipmentBoxTypeId", getDefaultShipmentBoxTypeId());
         mapValue.put("locationTypeEnumId", getLocationTypeEnumId());
         mapValue.put("areaId", getAreaId());
         mapValue.put("aisleId", getAisleId());

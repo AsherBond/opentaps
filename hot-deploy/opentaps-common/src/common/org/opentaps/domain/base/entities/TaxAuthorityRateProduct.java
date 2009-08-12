@@ -64,6 +64,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("minPurchase", "MIN_PURCHASE");
         fields.put("taxShipping", "TAX_SHIPPING");
         fields.put("taxPercentage", "TAX_PERCENTAGE");
+        fields.put("taxPromotions", "TAX_PROMOTIONS");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
         fields.put("description", "DESCRIPTION");
@@ -85,6 +86,7 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
     minPurchase("minPurchase"),
     taxShipping("taxShipping"),
     taxPercentage("taxPercentage"),
+    taxPromotions("taxPromotions"),
     fromDate("fromDate"),
     thruDate("thruDate"),
     description("description"),
@@ -127,6 +129,8 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
    private String taxShipping;
    @Column(name="TAX_PERCENTAGE")
    private BigDecimal taxPercentage;
+   @Column(name="TAX_PROMOTIONS")
+   private String taxPromotions;
    @Column(name="FROM_DATE")
    private Timestamp fromDate;
    @Column(name="THRU_DATE")
@@ -187,7 +191,7 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("taxAuthorityRateSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("taxAuthorityRateSeqId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("taxAuthorityRateTypeId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("titleTransferEnumId");this.allFieldsNames.add("minItemPrice");this.allFieldsNames.add("minPurchase");this.allFieldsNames.add("taxShipping");this.allFieldsNames.add("taxPercentage");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("taxAuthorityRateSeqId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("taxAuthorityRateTypeId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("titleTransferEnumId");this.allFieldsNames.add("minItemPrice");this.allFieldsNames.add("minPurchase");this.allFieldsNames.add("taxShipping");this.allFieldsNames.add("taxPercentage");this.allFieldsNames.add("taxPromotions");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -278,6 +282,13 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
      */
     public void setTaxPercentage(BigDecimal taxPercentage) {
         this.taxPercentage = taxPercentage;
+    }
+    /**
+     * Auto generated value setter.
+     * @param taxPromotions the taxPromotions to set
+     */
+    public void setTaxPromotions(String taxPromotions) {
+        this.taxPromotions = taxPromotions;
     }
     /**
      * Auto generated value setter.
@@ -405,6 +416,13 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
      */
     public BigDecimal getTaxPercentage() {
         return this.taxPercentage;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getTaxPromotions() {
+        return this.taxPromotions;
     }
     /**
      * Auto generated value accessor.
@@ -600,6 +618,7 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
         setMinPurchase(convertToBigDecimal(mapValue.get("minPurchase")));
         setTaxShipping((String) mapValue.get("taxShipping"));
         setTaxPercentage(convertToBigDecimal(mapValue.get("taxPercentage")));
+        setTaxPromotions((String) mapValue.get("taxPromotions"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
         setDescription((String) mapValue.get("description"));
@@ -625,6 +644,7 @@ fieldMapColumns.put("TaxAuthorityRateProduct", fields);
         mapValue.put("minPurchase", getMinPurchase());
         mapValue.put("taxShipping", getTaxShipping());
         mapValue.put("taxPercentage", getTaxPercentage());
+        mapValue.put("taxPromotions", getTaxPromotions());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
         mapValue.put("description", getDescription());

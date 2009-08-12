@@ -55,6 +55,7 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("finAccountId", "FIN_ACCOUNT_ID");
         fields.put("finAccountTypeId", "FIN_ACCOUNT_TYPE_ID");
+        fields.put("statusId", "STATUS_ID");
         fields.put("finAccountName", "FIN_ACCOUNT_NAME");
         fields.put("finAccountCode", "FIN_ACCOUNT_CODE");
         fields.put("finAccountPin", "FIN_ACCOUNT_PIN");
@@ -64,7 +65,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("postToGlAccountId", "POST_TO_GL_ACCOUNT_ID");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
-        fields.put("isFrozen", "IS_FROZEN");
         fields.put("isRefundable", "IS_REFUNDABLE");
         fields.put("replenishPaymentId", "REPLENISH_PAYMENT_ID");
         fields.put("replenishLevel", "REPLENISH_LEVEL");
@@ -79,6 +79,7 @@ fieldMapColumns.put("FinAccount", fields);
   public static enum Fields implements EntityFieldInterface<FinAccount> {
     finAccountId("finAccountId"),
     finAccountTypeId("finAccountTypeId"),
+    statusId("statusId"),
     finAccountName("finAccountName"),
     finAccountCode("finAccountCode"),
     finAccountPin("finAccountPin"),
@@ -88,7 +89,6 @@ fieldMapColumns.put("FinAccount", fields);
     postToGlAccountId("postToGlAccountId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
-    isFrozen("isFrozen"),
     isRefundable("isRefundable"),
     replenishPaymentId("replenishPaymentId"),
     replenishLevel("replenishLevel"),
@@ -115,6 +115,8 @@ fieldMapColumns.put("FinAccount", fields);
    private String finAccountId;
    @Column(name="FIN_ACCOUNT_TYPE_ID")
    private String finAccountTypeId;
+   @Column(name="STATUS_ID")
+   private String statusId;
    @Column(name="FIN_ACCOUNT_NAME")
    private String finAccountName;
    @Column(name="FIN_ACCOUNT_CODE")
@@ -133,8 +135,6 @@ fieldMapColumns.put("FinAccount", fields);
    private Timestamp fromDate;
    @Column(name="THRU_DATE")
    private Timestamp thruDate;
-   @Column(name="IS_FROZEN")
-   private String isFrozen;
    @Column(name="IS_REFUNDABLE")
    private String isRefundable;
    @Column(name="REPLENISH_PAYMENT_ID")
@@ -211,10 +211,18 @@ fieldMapColumns.put("FinAccount", fields);
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
    private List<FinAccountRole> finAccountRoles = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="finAccount", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FIN_ACCOUNT_ID")
+   
+   private List<FinAccountStatus> finAccountStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
    private List<FinAccountTrans> finAccountTranses = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FIN_ACCOUNT_ID")
+   
+   private List<OrderPaymentPreference> orderPaymentPreferences = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_ID")
    
@@ -231,7 +239,7 @@ fieldMapColumns.put("FinAccount", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("finAccountId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("finAccountId");this.allFieldsNames.add("finAccountTypeId");this.allFieldsNames.add("finAccountName");this.allFieldsNames.add("finAccountCode");this.allFieldsNames.add("finAccountPin");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("postToGlAccountId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("isFrozen");this.allFieldsNames.add("isRefundable");this.allFieldsNames.add("replenishPaymentId");this.allFieldsNames.add("replenishLevel");this.allFieldsNames.add("actualBalance");this.allFieldsNames.add("availableBalance");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("finAccountId");this.allFieldsNames.add("finAccountTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("finAccountName");this.allFieldsNames.add("finAccountCode");this.allFieldsNames.add("finAccountPin");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("postToGlAccountId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("isRefundable");this.allFieldsNames.add("replenishPaymentId");this.allFieldsNames.add("replenishLevel");this.allFieldsNames.add("actualBalance");this.allFieldsNames.add("availableBalance");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -259,6 +267,13 @@ fieldMapColumns.put("FinAccount", fields);
      */
     public void setFinAccountTypeId(String finAccountTypeId) {
         this.finAccountTypeId = finAccountTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusId the statusId to set
+     */
+    public void setStatusId(String statusId) {
+        this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
@@ -322,13 +337,6 @@ fieldMapColumns.put("FinAccount", fields);
      */
     public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
-    }
-    /**
-     * Auto generated value setter.
-     * @param isFrozen the isFrozen to set
-     */
-    public void setIsFrozen(String isFrozen) {
-        this.isFrozen = isFrozen;
     }
     /**
      * Auto generated value setter.
@@ -412,6 +420,13 @@ fieldMapColumns.put("FinAccount", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getStatusId() {
+        return this.statusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getFinAccountName() {
         return this.finAccountName;
     }
@@ -470,13 +485,6 @@ fieldMapColumns.put("FinAccount", fields);
      */
     public Timestamp getThruDate() {
         return this.thruDate;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getIsFrozen() {
-        return this.isFrozen;
     }
     /**
      * Auto generated value accessor.
@@ -653,6 +661,17 @@ fieldMapColumns.put("FinAccount", fields);
         return this.finAccountRoles;
     }
     /**
+     * Auto generated method that gets the related <code>FinAccountStatus</code> by the relation named <code>FinAccountStatus</code>.
+     * @return the list of <code>FinAccountStatus</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FinAccountStatus> getFinAccountStatuses() throws RepositoryException {
+        if (this.finAccountStatuses == null) {
+            this.finAccountStatuses = getRelated(FinAccountStatus.class, "FinAccountStatus");
+        }
+        return this.finAccountStatuses;
+    }
+    /**
      * Auto generated method that gets the related <code>FinAccountTrans</code> by the relation named <code>FinAccountTrans</code>.
      * @return the list of <code>FinAccountTrans</code>
      * @throws RepositoryException if an error occurs
@@ -662,6 +681,17 @@ fieldMapColumns.put("FinAccount", fields);
             this.finAccountTranses = getRelated(FinAccountTrans.class, "FinAccountTrans");
         }
         return this.finAccountTranses;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderPaymentPreference</code> by the relation named <code>OrderPaymentPreference</code>.
+     * @return the list of <code>OrderPaymentPreference</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderPaymentPreference> getOrderPaymentPreferences() throws RepositoryException {
+        if (this.orderPaymentPreferences == null) {
+            this.orderPaymentPreferences = getRelated(OrderPaymentPreference.class, "OrderPaymentPreference");
+        }
+        return this.orderPaymentPreferences;
     }
     /**
      * Auto generated method that gets the related <code>ReturnHeader</code> by the relation named <code>ReturnHeader</code>.
@@ -747,10 +777,24 @@ fieldMapColumns.put("FinAccount", fields);
     }
     /**
      * Auto generated value setter.
+     * @param finAccountStatuses the finAccountStatuses to set
+    */
+    public void setFinAccountStatuses(List<FinAccountStatus> finAccountStatuses) {
+        this.finAccountStatuses = finAccountStatuses;
+    }
+    /**
+     * Auto generated value setter.
      * @param finAccountTranses the finAccountTranses to set
     */
     public void setFinAccountTranses(List<FinAccountTrans> finAccountTranses) {
         this.finAccountTranses = finAccountTranses;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderPaymentPreferences the orderPaymentPreferences to set
+    */
+    public void setOrderPaymentPreferences(List<OrderPaymentPreference> orderPaymentPreferences) {
+        this.orderPaymentPreferences = orderPaymentPreferences;
     }
     /**
      * Auto generated value setter.
@@ -814,6 +858,33 @@ fieldMapColumns.put("FinAccount", fields);
         }
         this.finAccountRoles.clear();
     }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addFinAccountStatuse(FinAccountStatus finAccountStatuse) {
+        if (this.finAccountStatuses == null) {
+            this.finAccountStatuses = new ArrayList<FinAccountStatus>();
+        }
+        this.finAccountStatuses.add(finAccountStatuse);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeFinAccountStatuse(FinAccountStatus finAccountStatuse) {
+        if (this.finAccountStatuses == null) {
+            return;
+        }
+        this.finAccountStatuses.remove(finAccountStatuse);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearFinAccountStatuse() {
+        if (this.finAccountStatuses == null) {
+            return;
+        }
+        this.finAccountStatuses.clear();
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -821,6 +892,7 @@ fieldMapColumns.put("FinAccount", fields);
         preInit();
         setFinAccountId((String) mapValue.get("finAccountId"));
         setFinAccountTypeId((String) mapValue.get("finAccountTypeId"));
+        setStatusId((String) mapValue.get("statusId"));
         setFinAccountName((String) mapValue.get("finAccountName"));
         setFinAccountCode((String) mapValue.get("finAccountCode"));
         setFinAccountPin((String) mapValue.get("finAccountPin"));
@@ -830,7 +902,6 @@ fieldMapColumns.put("FinAccount", fields);
         setPostToGlAccountId((String) mapValue.get("postToGlAccountId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
-        setIsFrozen((String) mapValue.get("isFrozen"));
         setIsRefundable((String) mapValue.get("isRefundable"));
         setReplenishPaymentId((String) mapValue.get("replenishPaymentId"));
         setReplenishLevel(convertToBigDecimal(mapValue.get("replenishLevel")));
@@ -849,6 +920,7 @@ fieldMapColumns.put("FinAccount", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("finAccountId", getFinAccountId());
         mapValue.put("finAccountTypeId", getFinAccountTypeId());
+        mapValue.put("statusId", getStatusId());
         mapValue.put("finAccountName", getFinAccountName());
         mapValue.put("finAccountCode", getFinAccountCode());
         mapValue.put("finAccountPin", getFinAccountPin());
@@ -858,7 +930,6 @@ fieldMapColumns.put("FinAccount", fields);
         mapValue.put("postToGlAccountId", getPostToGlAccountId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
-        mapValue.put("isFrozen", getIsFrozen());
         mapValue.put("isRefundable", getIsRefundable());
         mapValue.put("replenishPaymentId", getReplenishPaymentId());
         mapValue.put("replenishLevel", getReplenishLevel());

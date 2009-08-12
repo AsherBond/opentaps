@@ -49,11 +49,12 @@ import java.sql.Timestamp;
  * Auto generated base entity FacilityAndContactMech.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectFacilityAndContactMechs", query="SELECT FA.FACILITY_ID AS \"facilityId\",FA.FACILITY_TYPE_ID AS \"facilityTypeId\",FA.OWNER_PARTY_ID AS \"ownerPartyId\",FA.DEFAULT_INVENTORY_ITEM_TYPE_ID AS \"defaultInventoryItemTypeId\",FA.FACILITY_NAME AS \"facilityName\",FA.PRIMARY_FACILITY_GROUP_ID AS \"primaryFacilityGroupId\",FA.SQUARE_FOOTAGE AS \"squareFootage\",FA.PRODUCT_STORE_ID AS \"productStoreId\",FA.DEFAULT_DAYS_TO_SHIP AS \"defaultDaysToShip\",FA.OPENED_DATE AS \"openedDate\",FA.CLOSED_DATE AS \"closedDate\",FA.DESCRIPTION AS \"description\",FA.DEFAULT_WEIGHT_UOM_ID AS \"defaultWeightUomId\",FA.INVENTORY_RESERVE_ORDER_ENUM_ID AS \"inventoryReserveOrderEnumId\",CM.CONTACT_MECH_ID AS \"contactMechId\",CM.FROM_DATE AS \"fromDate\",CM.THRU_DATE AS \"thruDate\",CM.EXTENSION AS \"extension\",CM.COMMENTS AS \"comments\" FROM FACILITY FA INNER JOIN FACILITY_CONTACT_MECH CM ON FA.FACILITY_ID = CM.FACILITY_ID", resultSetMapping="FacilityAndContactMechMapping")
+@NamedNativeQuery(name="selectFacilityAndContactMechs", query="SELECT FA.FACILITY_ID AS \"facilityId\",FA.FACILITY_TYPE_ID AS \"facilityTypeId\",FA.PARENT_FACILITY_ID AS \"parentFacilityId\",FA.OWNER_PARTY_ID AS \"ownerPartyId\",FA.DEFAULT_INVENTORY_ITEM_TYPE_ID AS \"defaultInventoryItemTypeId\",FA.FACILITY_NAME AS \"facilityName\",FA.PRIMARY_FACILITY_GROUP_ID AS \"primaryFacilityGroupId\",FA.SQUARE_FOOTAGE AS \"squareFootage\",FA.PRODUCT_STORE_ID AS \"productStoreId\",FA.DEFAULT_DAYS_TO_SHIP AS \"defaultDaysToShip\",FA.OPENED_DATE AS \"openedDate\",FA.CLOSED_DATE AS \"closedDate\",FA.DESCRIPTION AS \"description\",FA.DEFAULT_WEIGHT_UOM_ID AS \"defaultWeightUomId\",FA.GEO_POINT_ID AS \"geoPointId\",FA.INVENTORY_RESERVE_ORDER_ENUM_ID AS \"inventoryReserveOrderEnumId\",CM.CONTACT_MECH_ID AS \"contactMechId\",CM.FROM_DATE AS \"fromDate\",CM.THRU_DATE AS \"thruDate\",CM.EXTENSION AS \"extension\",CM.COMMENTS AS \"comments\" FROM FACILITY FA INNER JOIN FACILITY_CONTACT_MECH CM ON FA.FACILITY_ID = CM.FACILITY_ID", resultSetMapping="FacilityAndContactMechMapping")
 @SqlResultSetMapping(name="FacilityAndContactMechMapping", entities={
 @EntityResult(entityClass=FacilityAndContactMech.class, fields = {
 @FieldResult(name="facilityId", column="facilityId")
 ,@FieldResult(name="facilityTypeId", column="facilityTypeId")
+,@FieldResult(name="parentFacilityId", column="parentFacilityId")
 ,@FieldResult(name="ownerPartyId", column="ownerPartyId")
 ,@FieldResult(name="defaultInventoryItemTypeId", column="defaultInventoryItemTypeId")
 ,@FieldResult(name="facilityName", column="facilityName")
@@ -65,6 +66,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="closedDate", column="closedDate")
 ,@FieldResult(name="description", column="description")
 ,@FieldResult(name="defaultWeightUomId", column="defaultWeightUomId")
+,@FieldResult(name="geoPointId", column="geoPointId")
 ,@FieldResult(name="inventoryReserveOrderEnumId", column="inventoryReserveOrderEnumId")
 ,@FieldResult(name="contactMechId", column="contactMechId")
 ,@FieldResult(name="fromDate", column="fromDate")
@@ -79,6 +81,7 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("facilityId", "FA.FACILITY_ID");
         fields.put("facilityTypeId", "FA.FACILITY_TYPE_ID");
+        fields.put("parentFacilityId", "FA.PARENT_FACILITY_ID");
         fields.put("ownerPartyId", "FA.OWNER_PARTY_ID");
         fields.put("defaultInventoryItemTypeId", "FA.DEFAULT_INVENTORY_ITEM_TYPE_ID");
         fields.put("facilityName", "FA.FACILITY_NAME");
@@ -90,6 +93,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("closedDate", "FA.CLOSED_DATE");
         fields.put("description", "FA.DESCRIPTION");
         fields.put("defaultWeightUomId", "FA.DEFAULT_WEIGHT_UOM_ID");
+        fields.put("geoPointId", "FA.GEO_POINT_ID");
         fields.put("inventoryReserveOrderEnumId", "FA.INVENTORY_RESERVE_ORDER_ENUM_ID");
         fields.put("contactMechId", "CM.CONTACT_MECH_ID");
         fields.put("fromDate", "CM.FROM_DATE");
@@ -101,6 +105,7 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
   public static enum Fields implements EntityFieldInterface<FacilityAndContactMech> {
     facilityId("facilityId"),
     facilityTypeId("facilityTypeId"),
+    parentFacilityId("parentFacilityId"),
     ownerPartyId("ownerPartyId"),
     defaultInventoryItemTypeId("defaultInventoryItemTypeId"),
     facilityName("facilityName"),
@@ -112,6 +117,7 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
     closedDate("closedDate"),
     description("description"),
     defaultWeightUomId("defaultWeightUomId"),
+    geoPointId("geoPointId"),
     inventoryReserveOrderEnumId("inventoryReserveOrderEnumId"),
     contactMechId("contactMechId"),
     fromDate("fromDate"),
@@ -132,6 +138,8 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
    private String facilityId;
     
    private String facilityTypeId;
+    
+   private String parentFacilityId;
     
    private String ownerPartyId;
     
@@ -154,6 +162,8 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
    private String description;
     
    private String defaultWeightUomId;
+    
+   private String geoPointId;
     
    private String inventoryReserveOrderEnumId;
     
@@ -178,7 +188,7 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("facilityId");this.primaryKeyNames.add("contactMechId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("facilityId");this.allFieldsNames.add("facilityTypeId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("defaultInventoryItemTypeId");this.allFieldsNames.add("facilityName");this.allFieldsNames.add("primaryFacilityGroupId");this.allFieldsNames.add("squareFootage");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("defaultDaysToShip");this.allFieldsNames.add("openedDate");this.allFieldsNames.add("closedDate");this.allFieldsNames.add("description");this.allFieldsNames.add("defaultWeightUomId");this.allFieldsNames.add("inventoryReserveOrderEnumId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("extension");this.allFieldsNames.add("comments");
+      this.allFieldsNames.add("facilityId");this.allFieldsNames.add("facilityTypeId");this.allFieldsNames.add("parentFacilityId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("defaultInventoryItemTypeId");this.allFieldsNames.add("facilityName");this.allFieldsNames.add("primaryFacilityGroupId");this.allFieldsNames.add("squareFootage");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("defaultDaysToShip");this.allFieldsNames.add("openedDate");this.allFieldsNames.add("closedDate");this.allFieldsNames.add("description");this.allFieldsNames.add("defaultWeightUomId");this.allFieldsNames.add("geoPointId");this.allFieldsNames.add("inventoryReserveOrderEnumId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("extension");this.allFieldsNames.add("comments");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -209,6 +219,13 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
      */
     private void setFacilityTypeId(String facilityTypeId) {
         this.facilityTypeId = facilityTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentFacilityId the parentFacilityId to set
+     */
+    private void setParentFacilityId(String parentFacilityId) {
+        this.parentFacilityId = parentFacilityId;
     }
     /**
      * Auto generated value setter.
@@ -289,6 +306,13 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
     }
     /**
      * Auto generated value setter.
+     * @param geoPointId the geoPointId to set
+     */
+    private void setGeoPointId(String geoPointId) {
+        this.geoPointId = geoPointId;
+    }
+    /**
+     * Auto generated value setter.
      * @param inventoryReserveOrderEnumId the inventoryReserveOrderEnumId to set
      */
     private void setInventoryReserveOrderEnumId(String inventoryReserveOrderEnumId) {
@@ -343,6 +367,13 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
      */
     public String getFacilityTypeId() {
         return this.facilityTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getParentFacilityId() {
+        return this.parentFacilityId;
     }
     /**
      * Auto generated value accessor.
@@ -425,6 +456,13 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getGeoPointId() {
+        return this.geoPointId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getInventoryReserveOrderEnumId() {
         return this.inventoryReserveOrderEnumId;
     }
@@ -473,6 +511,7 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
         preInit();
         setFacilityId((String) mapValue.get("facilityId"));
         setFacilityTypeId((String) mapValue.get("facilityTypeId"));
+        setParentFacilityId((String) mapValue.get("parentFacilityId"));
         setOwnerPartyId((String) mapValue.get("ownerPartyId"));
         setDefaultInventoryItemTypeId((String) mapValue.get("defaultInventoryItemTypeId"));
         setFacilityName((String) mapValue.get("facilityName"));
@@ -484,6 +523,7 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
         setClosedDate((Timestamp) mapValue.get("closedDate"));
         setDescription((String) mapValue.get("description"));
         setDefaultWeightUomId((String) mapValue.get("defaultWeightUomId"));
+        setGeoPointId((String) mapValue.get("geoPointId"));
         setInventoryReserveOrderEnumId((String) mapValue.get("inventoryReserveOrderEnumId"));
         setContactMechId((String) mapValue.get("contactMechId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
@@ -499,6 +539,7 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("facilityId", getFacilityId());
         mapValue.put("facilityTypeId", getFacilityTypeId());
+        mapValue.put("parentFacilityId", getParentFacilityId());
         mapValue.put("ownerPartyId", getOwnerPartyId());
         mapValue.put("defaultInventoryItemTypeId", getDefaultInventoryItemTypeId());
         mapValue.put("facilityName", getFacilityName());
@@ -510,6 +551,7 @@ fieldMapColumns.put("FacilityAndContactMech", fields);
         mapValue.put("closedDate", getClosedDate());
         mapValue.put("description", getDescription());
         mapValue.put("defaultWeightUomId", getDefaultWeightUomId());
+        mapValue.put("geoPointId", getGeoPointId());
         mapValue.put("inventoryReserveOrderEnumId", getInventoryReserveOrderEnumId());
         mapValue.put("contactMechId", getContactMechId());
         mapValue.put("fromDate", getFromDate());

@@ -337,6 +337,10 @@ fieldMapColumns.put("Content", fields);
    @JoinColumn(name="CONTENT_ID")
    
    private List<PartyContent> partyContents = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="CONTENT_ID")
+   
+   private List<PartyResume> partyResumes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="content", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CONTENT_ID")
    
@@ -1145,6 +1149,17 @@ fieldMapColumns.put("Content", fields);
         return this.partyContents;
     }
     /**
+     * Auto generated method that gets the related <code>PartyResume</code> by the relation named <code>PartyResume</code>.
+     * @return the list of <code>PartyResume</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyResume> getPartyResumes() throws RepositoryException {
+        if (this.partyResumes == null) {
+            this.partyResumes = getRelated(PartyResume.class, "PartyResume");
+        }
+        return this.partyResumes;
+    }
+    /**
      * Auto generated method that gets the related <code>ProdConfItemContent</code> by the relation named <code>ProdConfItemContent</code>.
      * @return the list of <code>ProdConfItemContent</code>
      * @throws RepositoryException if an error occurs
@@ -1515,6 +1530,13 @@ fieldMapColumns.put("Content", fields);
     */
     public void setPartyContents(List<PartyContent> partyContents) {
         this.partyContents = partyContents;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyResumes the partyResumes to set
+    */
+    public void setPartyResumes(List<PartyResume> partyResumes) {
+        this.partyResumes = partyResumes;
     }
     /**
      * Auto generated value setter.

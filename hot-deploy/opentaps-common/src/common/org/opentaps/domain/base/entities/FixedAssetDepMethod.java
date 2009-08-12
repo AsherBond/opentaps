@@ -52,7 +52,7 @@ import java.sql.Timestamp;
 public class FixedAssetDepMethod extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
-        fields.put("depreciationMethodId", "DEPRECIATION_METHOD_ID");
+        fields.put("depreciationCustomMethodId", "DEPRECIATION_CUSTOM_METHOD_ID");
         fields.put("fixedAssetId", "FIXED_ASSET_ID");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
@@ -63,7 +63,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("FixedAssetDepMethod", fields);
 }
   public static enum Fields implements EntityFieldInterface<FixedAssetDepMethod> {
-    depreciationMethodId("depreciationMethodId"),
+    depreciationCustomMethodId("depreciationCustomMethodId"),
     fixedAssetId("fixedAssetId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
@@ -113,12 +113,12 @@ fieldMapColumns.put("FixedAssetDepMethod", fields);
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="DEPRECIATION_METHOD_ID", insertable=false, updatable=false)
+   @JoinColumn(name="DEPRECIATION_CUSTOM_METHOD_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private DepreciationMethod depreciationMethod = null;
+   private CustomMethod customMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -136,9 +136,9 @@ fieldMapColumns.put("FixedAssetDepMethod", fields);
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("depreciationMethodId");this.primaryKeyNames.add("fixedAssetId");
+      this.primaryKeyNames.add("depreciationCustomMethodId");this.primaryKeyNames.add("fixedAssetId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("depreciationMethodId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("depreciationCustomMethodId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -155,10 +155,10 @@ fieldMapColumns.put("FixedAssetDepMethod", fields);
 
     /**
      * Auto generated value setter.
-     * @param depreciationMethodId the depreciationMethodId to set
+     * @param depreciationCustomMethodId the depreciationCustomMethodId to set
      */
-    public void setDepreciationMethodId(String depreciationMethodId) {
-        id.setDepreciationMethodId(depreciationMethodId);
+    public void setDepreciationCustomMethodId(String depreciationCustomMethodId) {
+        id.setDepreciationCustomMethodId(depreciationCustomMethodId);
     }
     /**
      * Auto generated value setter.
@@ -214,8 +214,8 @@ fieldMapColumns.put("FixedAssetDepMethod", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getDepreciationMethodId() {
-        return this.id.getDepreciationMethodId();
+    public String getDepreciationCustomMethodId() {
+        return this.id.getDepreciationCustomMethodId();
     }
     /**
      * Auto generated value accessor.
@@ -268,15 +268,15 @@ fieldMapColumns.put("FixedAssetDepMethod", fields);
     }
 
     /**
-     * Auto generated method that gets the related <code>DepreciationMethod</code> by the relation named <code>DepreciationMethod</code>.
-     * @return the <code>DepreciationMethod</code>
+     * Auto generated method that gets the related <code>CustomMethod</code> by the relation named <code>CustomMethod</code>.
+     * @return the <code>CustomMethod</code>
      * @throws RepositoryException if an error occurs
      */
-    public DepreciationMethod getDepreciationMethod() throws RepositoryException {
-        if (this.depreciationMethod == null) {
-            this.depreciationMethod = getRelatedOne(DepreciationMethod.class, "DepreciationMethod");
+    public CustomMethod getCustomMethod() throws RepositoryException {
+        if (this.customMethod == null) {
+            this.customMethod = getRelatedOne(CustomMethod.class, "CustomMethod");
         }
-        return this.depreciationMethod;
+        return this.customMethod;
     }
     /**
      * Auto generated method that gets the related <code>FixedAsset</code> by the relation named <code>FixedAsset</code>.
@@ -292,10 +292,10 @@ fieldMapColumns.put("FixedAssetDepMethod", fields);
 
     /**
      * Auto generated value setter.
-     * @param depreciationMethod the depreciationMethod to set
+     * @param customMethod the customMethod to set
     */
-    public void setDepreciationMethod(DepreciationMethod depreciationMethod) {
-        this.depreciationMethod = depreciationMethod;
+    public void setCustomMethod(CustomMethod customMethod) {
+        this.customMethod = customMethod;
     }
     /**
      * Auto generated value setter.
@@ -310,7 +310,7 @@ fieldMapColumns.put("FixedAssetDepMethod", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
-        setDepreciationMethodId((String) mapValue.get("depreciationMethodId"));
+        setDepreciationCustomMethodId((String) mapValue.get("depreciationCustomMethodId"));
         setFixedAssetId((String) mapValue.get("fixedAssetId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
@@ -325,7 +325,7 @@ fieldMapColumns.put("FixedAssetDepMethod", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        mapValue.put("depreciationMethodId", getDepreciationMethodId());
+        mapValue.put("depreciationCustomMethodId", getDepreciationCustomMethodId());
         mapValue.put("fixedAssetId", getFixedAssetId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());

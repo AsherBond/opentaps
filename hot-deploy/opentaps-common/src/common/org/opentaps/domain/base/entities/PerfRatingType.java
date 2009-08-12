@@ -53,6 +53,8 @@ public class PerfRatingType extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("perfRatingTypeId", "PERF_RATING_TYPE_ID");
+        fields.put("parentTypeId", "PARENT_TYPE_ID");
+        fields.put("hasTable", "HAS_TABLE");
         fields.put("description", "DESCRIPTION");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -62,6 +64,8 @@ fieldMapColumns.put("PerfRatingType", fields);
 }
   public static enum Fields implements EntityFieldInterface<PerfRatingType> {
     perfRatingTypeId("perfRatingTypeId"),
+    parentTypeId("parentTypeId"),
+    hasTable("hasTable"),
     description("description"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -82,6 +86,10 @@ fieldMapColumns.put("PerfRatingType", fields);
    @Id
    @Column(name="PERF_RATING_TYPE_ID")
    private String perfRatingTypeId;
+   @Column(name="PARENT_TYPE_ID")
+   private String parentTypeId;
+   @Column(name="HAS_TABLE")
+   private String hasTable;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="LAST_UPDATED_STAMP")
@@ -92,6 +100,17 @@ fieldMapColumns.put("PerfRatingType", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private PerfRatingType parentPerfRatingType = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID")
+   
+   private List<PerfRatingType> childPerfRatingTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERF_RATING_TYPE_ID")
    
@@ -108,7 +127,7 @@ fieldMapColumns.put("PerfRatingType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("perfRatingTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("perfRatingTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("perfRatingTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -129,6 +148,20 @@ fieldMapColumns.put("PerfRatingType", fields);
      */
     public void setPerfRatingTypeId(String perfRatingTypeId) {
         this.perfRatingTypeId = perfRatingTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentTypeId the parentTypeId to set
+     */
+    public void setParentTypeId(String parentTypeId) {
+        this.parentTypeId = parentTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param hasTable the hasTable to set
+     */
+    public void setHasTable(String hasTable) {
+        this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
@@ -177,6 +210,20 @@ fieldMapColumns.put("PerfRatingType", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getParentTypeId() {
+        return this.parentTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getHasTable() {
+        return this.hasTable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDescription() {
         return this.description;
     }
@@ -210,6 +257,28 @@ fieldMapColumns.put("PerfRatingType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>PerfRatingType</code> by the relation named <code>ParentPerfRatingType</code>.
+     * @return the <code>PerfRatingType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public PerfRatingType getParentPerfRatingType() throws RepositoryException {
+        if (this.parentPerfRatingType == null) {
+            this.parentPerfRatingType = getRelatedOne(PerfRatingType.class, "ParentPerfRatingType");
+        }
+        return this.parentPerfRatingType;
+    }
+    /**
+     * Auto generated method that gets the related <code>PerfRatingType</code> by the relation named <code>ChildPerfRatingType</code>.
+     * @return the list of <code>PerfRatingType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PerfRatingType> getChildPerfRatingTypes() throws RepositoryException {
+        if (this.childPerfRatingTypes == null) {
+            this.childPerfRatingTypes = getRelated(PerfRatingType.class, "ChildPerfRatingType");
+        }
+        return this.childPerfRatingTypes;
+    }
+    /**
      * Auto generated method that gets the related <code>PerfReviewItem</code> by the relation named <code>PerfReviewItem</code>.
      * @return the list of <code>PerfReviewItem</code>
      * @throws RepositoryException if an error occurs
@@ -221,6 +290,20 @@ fieldMapColumns.put("PerfRatingType", fields);
         return this.perfReviewItems;
     }
 
+    /**
+     * Auto generated value setter.
+     * @param parentPerfRatingType the parentPerfRatingType to set
+    */
+    public void setParentPerfRatingType(PerfRatingType parentPerfRatingType) {
+        this.parentPerfRatingType = parentPerfRatingType;
+    }
+    /**
+     * Auto generated value setter.
+     * @param childPerfRatingTypes the childPerfRatingTypes to set
+    */
+    public void setChildPerfRatingTypes(List<PerfRatingType> childPerfRatingTypes) {
+        this.childPerfRatingTypes = childPerfRatingTypes;
+    }
     /**
      * Auto generated value setter.
      * @param perfReviewItems the perfReviewItems to set
@@ -235,6 +318,8 @@ fieldMapColumns.put("PerfRatingType", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setPerfRatingTypeId((String) mapValue.get("perfRatingTypeId"));
+        setParentTypeId((String) mapValue.get("parentTypeId"));
+        setHasTable((String) mapValue.get("hasTable"));
         setDescription((String) mapValue.get("description"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -248,6 +333,8 @@ fieldMapColumns.put("PerfRatingType", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("perfRatingTypeId", getPerfRatingTypeId());
+        mapValue.put("parentTypeId", getParentTypeId());
+        mapValue.put("hasTable", getHasTable());
         mapValue.put("description", getDescription());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

@@ -59,11 +59,13 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("isSystem", "IS_SYSTEM");
         fields.put("enabled", "ENABLED");
         fields.put("hasLoggedOut", "HAS_LOGGED_OUT");
+        fields.put("requirePasswordChange", "REQUIRE_PASSWORD_CHANGE");
         fields.put("lastCurrencyUom", "LAST_CURRENCY_UOM");
         fields.put("lastLocale", "LAST_LOCALE");
         fields.put("lastTimeZone", "LAST_TIME_ZONE");
         fields.put("disabledDateTime", "DISABLED_DATE_TIME");
         fields.put("successiveFailedLogins", "SUCCESSIVE_FAILED_LOGINS");
+        fields.put("userLdapDn", "USER_LDAP_DN");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -78,11 +80,13 @@ fieldMapColumns.put("UserLogin", fields);
     isSystem("isSystem"),
     enabled("enabled"),
     hasLoggedOut("hasLoggedOut"),
+    requirePasswordChange("requirePasswordChange"),
     lastCurrencyUom("lastCurrencyUom"),
     lastLocale("lastLocale"),
     lastTimeZone("lastTimeZone"),
     disabledDateTime("disabledDateTime"),
     successiveFailedLogins("successiveFailedLogins"),
+    userLdapDn("userLdapDn"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -113,6 +117,8 @@ fieldMapColumns.put("UserLogin", fields);
    private String enabled;
    @Column(name="HAS_LOGGED_OUT")
    private String hasLoggedOut;
+   @Column(name="REQUIRE_PASSWORD_CHANGE")
+   private String requirePasswordChange;
    @Column(name="LAST_CURRENCY_UOM")
    private String lastCurrencyUom;
    @Column(name="LAST_LOCALE")
@@ -123,6 +129,8 @@ fieldMapColumns.put("UserLogin", fields);
    private Timestamp disabledDateTime;
    @Column(name="SUCCESSIVE_FAILED_LOGINS")
    private Long successiveFailedLogins;
+   @Column(name="USER_LDAP_DN")
+   private String userLdapDn;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -239,6 +247,10 @@ fieldMapColumns.put("UserLogin", fields);
    
    private List<OrderItem> dontCancelSetOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="CHANGE_USER_LOGIN")
+   
+   private List<OrderItemChange> orderItemChanges = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
    private List<OrderPaymentPreference> orderPaymentPreferences = null;
@@ -274,6 +286,14 @@ fieldMapColumns.put("UserLogin", fields);
    @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
    
    private List<Product> lastModifiedByProducts = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="CREATED_BY_USER_LOGIN")
+   
+   private List<ProductFeaturePrice> createdByProductFeaturePrices = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="LAST_MODIFIED_BY_USER_LOGIN")
+   
+   private List<ProductFeaturePrice> lastModifiedByProductFeaturePrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN")
    
@@ -354,10 +374,18 @@ fieldMapColumns.put("UserLogin", fields);
    @JoinColumn(name="RECEIVED_BY_USER_LOGIN_ID")
    
    private List<ShipmentReceipt> shipmentReceipts = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="APPROVED_BY_USER_LOGIN_ID")
+   
+   private List<Timesheet> approvedByTimesheets = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
    private List<UserLoginHistory> userLoginHistorys = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="USER_LOGIN_ID")
+   
+   private List<UserLoginPasswordHistory> userLoginPasswordHistorys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
@@ -381,6 +409,10 @@ fieldMapColumns.put("UserLogin", fields);
    @JoinColumn(name="USER_LOGIN_ID")
    
    private List<WebUserPreference> webUserPreferences = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ASSIGNED_BY_USER_LOGIN_ID")
+   
+   private List<WorkEffortPartyAssignment> assignedByWorkEffortPartyAssignments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="userLogin", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="USER_LOGIN_ID")
    
@@ -401,7 +433,7 @@ fieldMapColumns.put("UserLogin", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("userLoginId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("currentPassword");this.allFieldsNames.add("passwordHint");this.allFieldsNames.add("isSystem");this.allFieldsNames.add("enabled");this.allFieldsNames.add("hasLoggedOut");this.allFieldsNames.add("lastCurrencyUom");this.allFieldsNames.add("lastLocale");this.allFieldsNames.add("lastTimeZone");this.allFieldsNames.add("disabledDateTime");this.allFieldsNames.add("successiveFailedLogins");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("partyId");
+      this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("currentPassword");this.allFieldsNames.add("passwordHint");this.allFieldsNames.add("isSystem");this.allFieldsNames.add("enabled");this.allFieldsNames.add("hasLoggedOut");this.allFieldsNames.add("requirePasswordChange");this.allFieldsNames.add("lastCurrencyUom");this.allFieldsNames.add("lastLocale");this.allFieldsNames.add("lastTimeZone");this.allFieldsNames.add("disabledDateTime");this.allFieldsNames.add("successiveFailedLogins");this.allFieldsNames.add("userLdapDn");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("partyId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -460,6 +492,13 @@ fieldMapColumns.put("UserLogin", fields);
     }
     /**
      * Auto generated value setter.
+     * @param requirePasswordChange the requirePasswordChange to set
+     */
+    public void setRequirePasswordChange(String requirePasswordChange) {
+        this.requirePasswordChange = requirePasswordChange;
+    }
+    /**
+     * Auto generated value setter.
      * @param lastCurrencyUom the lastCurrencyUom to set
      */
     public void setLastCurrencyUom(String lastCurrencyUom) {
@@ -492,6 +531,13 @@ fieldMapColumns.put("UserLogin", fields);
      */
     public void setSuccessiveFailedLogins(Long successiveFailedLogins) {
         this.successiveFailedLogins = successiveFailedLogins;
+    }
+    /**
+     * Auto generated value setter.
+     * @param userLdapDn the userLdapDn to set
+     */
+    public void setUserLdapDn(String userLdapDn) {
+        this.userLdapDn = userLdapDn;
     }
     /**
      * Auto generated value setter.
@@ -575,6 +621,13 @@ fieldMapColumns.put("UserLogin", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getRequirePasswordChange() {
+        return this.requirePasswordChange;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getLastCurrencyUom() {
         return this.lastCurrencyUom;
     }
@@ -605,6 +658,13 @@ fieldMapColumns.put("UserLogin", fields);
      */
     public Long getSuccessiveFailedLogins() {
         return this.successiveFailedLogins;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getUserLdapDn() {
+        return this.userLdapDn;
     }
     /**
      * Auto generated value accessor.
@@ -940,6 +1000,17 @@ fieldMapColumns.put("UserLogin", fields);
         return this.dontCancelSetOrderItems;
     }
     /**
+     * Auto generated method that gets the related <code>OrderItemChange</code> by the relation named <code>OrderItemChange</code>.
+     * @return the list of <code>OrderItemChange</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItemChange> getOrderItemChanges() throws RepositoryException {
+        if (this.orderItemChanges == null) {
+            this.orderItemChanges = getRelated(OrderItemChange.class, "OrderItemChange");
+        }
+        return this.orderItemChanges;
+    }
+    /**
      * Auto generated method that gets the related <code>OrderPaymentPreference</code> by the relation named <code>OrderPaymentPreference</code>.
      * @return the list of <code>OrderPaymentPreference</code>
      * @throws RepositoryException if an error occurs
@@ -1037,6 +1108,28 @@ fieldMapColumns.put("UserLogin", fields);
             this.lastModifiedByProducts = getRelated(Product.class, "LastModifiedByProduct");
         }
         return this.lastModifiedByProducts;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductFeaturePrice</code> by the relation named <code>CreatedByProductFeaturePrice</code>.
+     * @return the list of <code>ProductFeaturePrice</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductFeaturePrice> getCreatedByProductFeaturePrices() throws RepositoryException {
+        if (this.createdByProductFeaturePrices == null) {
+            this.createdByProductFeaturePrices = getRelated(ProductFeaturePrice.class, "CreatedByProductFeaturePrice");
+        }
+        return this.createdByProductFeaturePrices;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductFeaturePrice</code> by the relation named <code>LastModifiedByProductFeaturePrice</code>.
+     * @return the list of <code>ProductFeaturePrice</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductFeaturePrice> getLastModifiedByProductFeaturePrices() throws RepositoryException {
+        if (this.lastModifiedByProductFeaturePrices == null) {
+            this.lastModifiedByProductFeaturePrices = getRelated(ProductFeaturePrice.class, "LastModifiedByProductFeaturePrice");
+        }
+        return this.lastModifiedByProductFeaturePrices;
     }
     /**
      * Auto generated method that gets the related <code>ProductPrice</code> by the relation named <code>CreatedByProductPrice</code>.
@@ -1259,6 +1352,17 @@ fieldMapColumns.put("UserLogin", fields);
         return this.shipmentReceipts;
     }
     /**
+     * Auto generated method that gets the related <code>Timesheet</code> by the relation named <code>ApprovedByTimesheet</code>.
+     * @return the list of <code>Timesheet</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Timesheet> getApprovedByTimesheets() throws RepositoryException {
+        if (this.approvedByTimesheets == null) {
+            this.approvedByTimesheets = getRelated(Timesheet.class, "ApprovedByTimesheet");
+        }
+        return this.approvedByTimesheets;
+    }
+    /**
      * Auto generated method that gets the related <code>UserLoginHistory</code> by the relation named <code>UserLoginHistory</code>.
      * @return the list of <code>UserLoginHistory</code>
      * @throws RepositoryException if an error occurs
@@ -1268,6 +1372,17 @@ fieldMapColumns.put("UserLogin", fields);
             this.userLoginHistorys = getRelated(UserLoginHistory.class, "UserLoginHistory");
         }
         return this.userLoginHistorys;
+    }
+    /**
+     * Auto generated method that gets the related <code>UserLoginPasswordHistory</code> by the relation named <code>UserLoginPasswordHistory</code>.
+     * @return the list of <code>UserLoginPasswordHistory</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends UserLoginPasswordHistory> getUserLoginPasswordHistorys() throws RepositoryException {
+        if (this.userLoginPasswordHistorys == null) {
+            this.userLoginPasswordHistorys = getRelated(UserLoginPasswordHistory.class, "UserLoginPasswordHistory");
+        }
+        return this.userLoginPasswordHistorys;
     }
     /**
      * Auto generated method that gets the related <code>UserLoginSecurityGroup</code> by the relation named <code>UserLoginSecurityGroup</code>.
@@ -1323,6 +1438,17 @@ fieldMapColumns.put("UserLogin", fields);
             this.webUserPreferences = getRelated(WebUserPreference.class, "WebUserPreference");
         }
         return this.webUserPreferences;
+    }
+    /**
+     * Auto generated method that gets the related <code>WorkEffortPartyAssignment</code> by the relation named <code>AssignedByWorkEffortPartyAssignment</code>.
+     * @return the list of <code>WorkEffortPartyAssignment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends WorkEffortPartyAssignment> getAssignedByWorkEffortPartyAssignments() throws RepositoryException {
+        if (this.assignedByWorkEffortPartyAssignments == null) {
+            this.assignedByWorkEffortPartyAssignments = getRelated(WorkEffortPartyAssignment.class, "AssignedByWorkEffortPartyAssignment");
+        }
+        return this.assignedByWorkEffortPartyAssignments;
     }
     /**
      * Auto generated method that gets the related <code>WorkEffortReview</code> by the relation named <code>WorkEffortReview</code>.
@@ -1538,6 +1664,13 @@ fieldMapColumns.put("UserLogin", fields);
     }
     /**
      * Auto generated value setter.
+     * @param orderItemChanges the orderItemChanges to set
+    */
+    public void setOrderItemChanges(List<OrderItemChange> orderItemChanges) {
+        this.orderItemChanges = orderItemChanges;
+    }
+    /**
+     * Auto generated value setter.
      * @param orderPaymentPreferences the orderPaymentPreferences to set
     */
     public void setOrderPaymentPreferences(List<OrderPaymentPreference> orderPaymentPreferences) {
@@ -1598,6 +1731,20 @@ fieldMapColumns.put("UserLogin", fields);
     */
     public void setLastModifiedByProducts(List<Product> lastModifiedByProducts) {
         this.lastModifiedByProducts = lastModifiedByProducts;
+    }
+    /**
+     * Auto generated value setter.
+     * @param createdByProductFeaturePrices the createdByProductFeaturePrices to set
+    */
+    public void setCreatedByProductFeaturePrices(List<ProductFeaturePrice> createdByProductFeaturePrices) {
+        this.createdByProductFeaturePrices = createdByProductFeaturePrices;
+    }
+    /**
+     * Auto generated value setter.
+     * @param lastModifiedByProductFeaturePrices the lastModifiedByProductFeaturePrices to set
+    */
+    public void setLastModifiedByProductFeaturePrices(List<ProductFeaturePrice> lastModifiedByProductFeaturePrices) {
+        this.lastModifiedByProductFeaturePrices = lastModifiedByProductFeaturePrices;
     }
     /**
      * Auto generated value setter.
@@ -1741,10 +1888,24 @@ fieldMapColumns.put("UserLogin", fields);
     }
     /**
      * Auto generated value setter.
+     * @param approvedByTimesheets the approvedByTimesheets to set
+    */
+    public void setApprovedByTimesheets(List<Timesheet> approvedByTimesheets) {
+        this.approvedByTimesheets = approvedByTimesheets;
+    }
+    /**
+     * Auto generated value setter.
      * @param userLoginHistorys the userLoginHistorys to set
     */
     public void setUserLoginHistorys(List<UserLoginHistory> userLoginHistorys) {
         this.userLoginHistorys = userLoginHistorys;
+    }
+    /**
+     * Auto generated value setter.
+     * @param userLoginPasswordHistorys the userLoginPasswordHistorys to set
+    */
+    public void setUserLoginPasswordHistorys(List<UserLoginPasswordHistory> userLoginPasswordHistorys) {
+        this.userLoginPasswordHistorys = userLoginPasswordHistorys;
     }
     /**
      * Auto generated value setter.
@@ -1780,6 +1941,13 @@ fieldMapColumns.put("UserLogin", fields);
     */
     public void setWebUserPreferences(List<WebUserPreference> webUserPreferences) {
         this.webUserPreferences = webUserPreferences;
+    }
+    /**
+     * Auto generated value setter.
+     * @param assignedByWorkEffortPartyAssignments the assignedByWorkEffortPartyAssignments to set
+    */
+    public void setAssignedByWorkEffortPartyAssignments(List<WorkEffortPartyAssignment> assignedByWorkEffortPartyAssignments) {
+        this.assignedByWorkEffortPartyAssignments = assignedByWorkEffortPartyAssignments;
     }
     /**
      * Auto generated value setter.
@@ -1849,6 +2017,33 @@ fieldMapColumns.put("UserLogin", fields);
             return;
         }
         this.userLoginHistorys.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addUserLoginPasswordHistory(UserLoginPasswordHistory userLoginPasswordHistory) {
+        if (this.userLoginPasswordHistorys == null) {
+            this.userLoginPasswordHistorys = new ArrayList<UserLoginPasswordHistory>();
+        }
+        this.userLoginPasswordHistorys.add(userLoginPasswordHistory);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeUserLoginPasswordHistory(UserLoginPasswordHistory userLoginPasswordHistory) {
+        if (this.userLoginPasswordHistorys == null) {
+            return;
+        }
+        this.userLoginPasswordHistorys.remove(userLoginPasswordHistory);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearUserLoginPasswordHistory() {
+        if (this.userLoginPasswordHistorys == null) {
+            return;
+        }
+        this.userLoginPasswordHistorys.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -1969,11 +2164,13 @@ fieldMapColumns.put("UserLogin", fields);
         setIsSystem((String) mapValue.get("isSystem"));
         setEnabled((String) mapValue.get("enabled"));
         setHasLoggedOut((String) mapValue.get("hasLoggedOut"));
+        setRequirePasswordChange((String) mapValue.get("requirePasswordChange"));
         setLastCurrencyUom((String) mapValue.get("lastCurrencyUom"));
         setLastLocale((String) mapValue.get("lastLocale"));
         setLastTimeZone((String) mapValue.get("lastTimeZone"));
         setDisabledDateTime((Timestamp) mapValue.get("disabledDateTime"));
         setSuccessiveFailedLogins((Long) mapValue.get("successiveFailedLogins"));
+        setUserLdapDn((String) mapValue.get("userLdapDn"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -1992,11 +2189,13 @@ fieldMapColumns.put("UserLogin", fields);
         mapValue.put("isSystem", getIsSystem());
         mapValue.put("enabled", getEnabled());
         mapValue.put("hasLoggedOut", getHasLoggedOut());
+        mapValue.put("requirePasswordChange", getRequirePasswordChange());
         mapValue.put("lastCurrencyUom", getLastCurrencyUom());
         mapValue.put("lastLocale", getLastLocale());
         mapValue.put("lastTimeZone", getLastTimeZone());
         mapValue.put("disabledDateTime", getDisabledDateTime());
         mapValue.put("successiveFailedLogins", getSuccessiveFailedLogins());
+        mapValue.put("userLdapDn", getUserLdapDn());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

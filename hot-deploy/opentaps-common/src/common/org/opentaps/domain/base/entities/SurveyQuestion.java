@@ -58,6 +58,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("description", "DESCRIPTION");
         fields.put("question", "QUESTION");
         fields.put("hint", "HINT");
+        fields.put("enumTypeId", "ENUM_TYPE_ID");
+        fields.put("geoId", "GEO_ID");
+        fields.put("formatString", "FORMAT_STRING");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -71,6 +74,9 @@ fieldMapColumns.put("SurveyQuestion", fields);
     description("description"),
     question("question"),
     hint("hint"),
+    enumTypeId("enumTypeId"),
+    geoId("geoId"),
+    formatString("formatString"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -100,6 +106,12 @@ fieldMapColumns.put("SurveyQuestion", fields);
    private String question;
    @Column(name="HINT")
    private String hint;
+   @Column(name="ENUM_TYPE_ID")
+   private String enumTypeId;
+   @Column(name="GEO_ID")
+   private String geoId;
+   @Column(name="FORMAT_STRING")
+   private String formatString;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -122,6 +134,17 @@ fieldMapColumns.put("SurveyQuestion", fields);
    )
    
    private SurveyQuestionCategory surveyQuestionCategory = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="GEO_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Geo geo = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ENUM_TYPE_ID")
+   
+   private List<Enumeration> enumerations = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="surveyQuestion", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SURVEY_QUESTION_ID")
    
@@ -146,7 +169,7 @@ fieldMapColumns.put("SurveyQuestion", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("surveyQuestionId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("surveyQuestionId");this.allFieldsNames.add("surveyQuestionCategoryId");this.allFieldsNames.add("surveyQuestionTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("question");this.allFieldsNames.add("hint");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("surveyQuestionId");this.allFieldsNames.add("surveyQuestionCategoryId");this.allFieldsNames.add("surveyQuestionTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("question");this.allFieldsNames.add("hint");this.allFieldsNames.add("enumTypeId");this.allFieldsNames.add("geoId");this.allFieldsNames.add("formatString");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -202,6 +225,27 @@ fieldMapColumns.put("SurveyQuestion", fields);
      */
     public void setHint(String hint) {
         this.hint = hint;
+    }
+    /**
+     * Auto generated value setter.
+     * @param enumTypeId the enumTypeId to set
+     */
+    public void setEnumTypeId(String enumTypeId) {
+        this.enumTypeId = enumTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param geoId the geoId to set
+     */
+    public void setGeoId(String geoId) {
+        this.geoId = geoId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param formatString the formatString to set
+     */
+    public void setFormatString(String formatString) {
+        this.formatString = formatString;
     }
     /**
      * Auto generated value setter.
@@ -276,6 +320,27 @@ fieldMapColumns.put("SurveyQuestion", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getEnumTypeId() {
+        return this.enumTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getGeoId() {
+        return this.geoId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getFormatString() {
+        return this.formatString;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -326,6 +391,28 @@ fieldMapColumns.put("SurveyQuestion", fields);
         return this.surveyQuestionCategory;
     }
     /**
+     * Auto generated method that gets the related <code>Geo</code> by the relation named <code>Geo</code>.
+     * @return the <code>Geo</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Geo getGeo() throws RepositoryException {
+        if (this.geo == null) {
+            this.geo = getRelatedOne(Geo.class, "Geo");
+        }
+        return this.geo;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>Enumeration</code>.
+     * @return the list of <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Enumeration> getEnumerations() throws RepositoryException {
+        if (this.enumerations == null) {
+            this.enumerations = getRelated(Enumeration.class, "Enumeration");
+        }
+        return this.enumerations;
+    }
+    /**
      * Auto generated method that gets the related <code>SurveyQuestionAppl</code> by the relation named <code>SurveyQuestionAppl</code>.
      * @return the list of <code>SurveyQuestionAppl</code>
      * @throws RepositoryException if an error occurs
@@ -372,6 +459,20 @@ fieldMapColumns.put("SurveyQuestion", fields);
     */
     public void setSurveyQuestionCategory(SurveyQuestionCategory surveyQuestionCategory) {
         this.surveyQuestionCategory = surveyQuestionCategory;
+    }
+    /**
+     * Auto generated value setter.
+     * @param geo the geo to set
+    */
+    public void setGeo(Geo geo) {
+        this.geo = geo;
+    }
+    /**
+     * Auto generated value setter.
+     * @param enumerations the enumerations to set
+    */
+    public void setEnumerations(List<Enumeration> enumerations) {
+        this.enumerations = enumerations;
     }
     /**
      * Auto generated value setter.
@@ -487,6 +588,9 @@ fieldMapColumns.put("SurveyQuestion", fields);
         setDescription((String) mapValue.get("description"));
         setQuestion((String) mapValue.get("question"));
         setHint((String) mapValue.get("hint"));
+        setEnumTypeId((String) mapValue.get("enumTypeId"));
+        setGeoId((String) mapValue.get("geoId"));
+        setFormatString((String) mapValue.get("formatString"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -504,6 +608,9 @@ fieldMapColumns.put("SurveyQuestion", fields);
         mapValue.put("description", getDescription());
         mapValue.put("question", getQuestion());
         mapValue.put("hint", getHint());
+        mapValue.put("enumTypeId", getEnumTypeId());
+        mapValue.put("geoId", getGeoId());
+        mapValue.put("formatString", getFormatString());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

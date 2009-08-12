@@ -51,6 +51,12 @@ public class PartyContentPkBridge implements TwoWayFieldBridge {
         id.setPartyId(field.stringValue());
         field = document.getField(name + ".contentId");
         id.setContentId(field.stringValue());
+        field = document.getField(name + ".partyContentTypeId");
+        id.setPartyContentTypeId(field.stringValue());
+        field = document.getField(name + ".fromDate");
+        if (field.stringValue() != null && !field.stringValue().equals("")) {
+            id.setFromDate(new Timestamp(((Date) (new DateBridge(Resolution.DAY)).stringToObject(field.stringValue())).getTime()));
+        }
         return id;
     }
 
@@ -66,6 +72,10 @@ public class PartyContentPkBridge implements TwoWayFieldBridge {
         sb.append(id.getPartyId());
         sb.append(" ");
         sb.append(id.getContentId());
+        sb.append(" ");
+        sb.append(id.getPartyContentTypeId());
+        sb.append(" ");
+        sb.append(id.getFromDate());
         return sb.toString();
     }
 
@@ -88,6 +98,12 @@ public class PartyContentPkBridge implements TwoWayFieldBridge {
         field.setBoost(boost);
         document.add(field);
         field = new Field(name + ".contentId", id.getContentId(), store, index, termVector);
+        field.setBoost(boost);
+        document.add(field);
+        field = new Field(name + ".partyContentTypeId", id.getPartyContentTypeId(), store, index, termVector);
+        field.setBoost(boost);
+        document.add(field);
+        field = new Field(name + ".fromDate", (new DateBridge(Resolution.DAY)).objectToString(id.getFromDate()), store, index, termVector);
         field.setBoost(boost);
         document.add(field);
 

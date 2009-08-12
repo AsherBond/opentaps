@@ -48,7 +48,7 @@ import java.sql.Timestamp;
  * Auto generated base entity SegmentGroupViewRelatedParties.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectSegmentGroupViewRelatedPartiess", query="SELECT SGR.SEGMENT_GROUP_ID AS \"segmentGroupId\",SGR.PARTY_ID AS \"partyId\",SGR.ROLE_TYPE_ID AS \"roleTypeId\",SGRTO.SEGMENT_GROUP_ID AS \"segmentGroupId\",SGRTO.PARTY_ID AS \"partyId\",SGRTO.ROLE_TYPE_ID AS \"roleTypeId\",PRSGR.PARTY_ID_FROM AS \"partyIdFrom\",PRSGR.PARTY_ID_TO AS \"partyIdTo\",PRSGR.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PRSGR.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PRSGR.FROM_DATE AS \"fromDate\",PRSGR.THRU_DATE AS \"thruDate\",PRSGR.STATUS_ID AS \"statusId\",PRSGR.RELATIONSHIP_NAME AS \"relationshipName\",PRSGR.SECURITY_GROUP_ID AS \"securityGroupId\",PRSGR.PRIORITY_TYPE_ID AS \"priorityTypeId\",PRSGR.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PRSGR.COMMENTS AS \"comments\",SGC.SEGMENT_GROUP_ID AS \"segmentGroupId\",SGC.PARTY_CLASSIFICATION_GROUP_ID AS \"partyClassificationGroupId\",PC.PARTY_ID AS \"partyId\",PC.PARTY_CLASSIFICATION_GROUP_ID AS \"partyClassificationGroupId\",PC.FROM_DATE AS \"fromDate\",PC.THRU_DATE AS \"thruDate\",PRPC.PARTY_ID_FROM AS \"partyIdFrom\",PRPC.PARTY_ID_TO AS \"partyIdTo\",PRPC.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PRPC.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PRPC.FROM_DATE AS \"fromDate\",PRPC.THRU_DATE AS \"thruDate\",PRPC.STATUS_ID AS \"statusId\",PRPC.RELATIONSHIP_NAME AS \"relationshipName\",PRPC.SECURITY_GROUP_ID AS \"securityGroupId\",PRPC.PRIORITY_TYPE_ID AS \"priorityTypeId\",PRPC.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PRPC.COMMENTS AS \"comments\" FROM SEGMENT_GROUP_ROLE SGR LEFT JOIN SEGMENT_GROUP_ROLE SGRTO ON SGR.SEGMENT_GROUP_ID = SGRTO.SEGMENT_GROUP_ID LEFT JOIN PARTY_RELATIONSHIP PRSGR ON SGRTO.PARTY_ID = PRSGR.PARTY_ID_FROM LEFT JOIN SEGMENT_GROUP_CLASSIFICATION SGC ON SGR.SEGMENT_GROUP_ID = SGC.SEGMENT_GROUP_ID INNER JOIN PARTY_CLASSIFICATION PC ON SGC.PARTY_CLASSIFICATION_GROUP_ID = PC.PARTY_CLASSIFICATION_GROUP_ID LEFT JOIN PARTY_RELATIONSHIP PRPC ON PC.PARTY_ID = PRPC.PARTY_ID_FROM", resultSetMapping="SegmentGroupViewRelatedPartiesMapping")
+@NamedNativeQuery(name="selectSegmentGroupViewRelatedPartiess", query="SELECT SGR.SEGMENT_GROUP_ID AS \"segmentGroupId\",SGR.PARTY_ID AS \"partyId\",SGR.ROLE_TYPE_ID AS \"roleTypeId\",SGRTO.SEGMENT_GROUP_ID AS \"segmentGroupId\",SGRTO.PARTY_ID AS \"partyId\",SGRTO.ROLE_TYPE_ID AS \"roleTypeId\",PRSGR.PARTY_ID_FROM AS \"partyIdFrom\",PRSGR.PARTY_ID_TO AS \"partyIdTo\",PRSGR.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PRSGR.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PRSGR.FROM_DATE AS \"fromDate\",PRSGR.THRU_DATE AS \"thruDate\",PRSGR.STATUS_ID AS \"statusId\",PRSGR.RELATIONSHIP_NAME AS \"relationshipName\",PRSGR.SECURITY_GROUP_ID AS \"securityGroupId\",PRSGR.PRIORITY_TYPE_ID AS \"priorityTypeId\",PRSGR.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PRSGR.PERMISSIONS_ENUM_ID AS \"permissionsEnumId\",PRSGR.POSITION_TITLE AS \"positionTitle\",PRSGR.COMMENTS AS \"comments\",SGC.SEGMENT_GROUP_ID AS \"segmentGroupId\",SGC.PARTY_CLASSIFICATION_GROUP_ID AS \"partyClassificationGroupId\",PC.PARTY_ID AS \"partyId\",PC.PARTY_CLASSIFICATION_GROUP_ID AS \"partyClassificationGroupId\",PC.FROM_DATE AS \"fromDate\",PC.THRU_DATE AS \"thruDate\",PRPC.PARTY_ID_FROM AS \"partyIdFrom\",PRPC.PARTY_ID_TO AS \"partyIdTo\",PRPC.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PRPC.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PRPC.FROM_DATE AS \"fromDate\",PRPC.THRU_DATE AS \"thruDate\",PRPC.STATUS_ID AS \"statusId\",PRPC.RELATIONSHIP_NAME AS \"relationshipName\",PRPC.SECURITY_GROUP_ID AS \"securityGroupId\",PRPC.PRIORITY_TYPE_ID AS \"priorityTypeId\",PRPC.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PRPC.PERMISSIONS_ENUM_ID AS \"permissionsEnumId\",PRPC.POSITION_TITLE AS \"positionTitle\",PRPC.COMMENTS AS \"comments\" FROM SEGMENT_GROUP_ROLE SGR LEFT JOIN SEGMENT_GROUP_ROLE SGRTO ON SGR.SEGMENT_GROUP_ID = SGRTO.SEGMENT_GROUP_ID LEFT JOIN PARTY_RELATIONSHIP PRSGR ON SGRTO.PARTY_ID = PRSGR.PARTY_ID_FROM LEFT JOIN SEGMENT_GROUP_CLASSIFICATION SGC ON SGR.SEGMENT_GROUP_ID = SGC.SEGMENT_GROUP_ID INNER JOIN PARTY_CLASSIFICATION PC ON SGC.PARTY_CLASSIFICATION_GROUP_ID = PC.PARTY_CLASSIFICATION_GROUP_ID LEFT JOIN PARTY_RELATIONSHIP PRPC ON PC.PARTY_ID = PRPC.PARTY_ID_FROM", resultSetMapping="SegmentGroupViewRelatedPartiesMapping")
 @SqlResultSetMapping(name="SegmentGroupViewRelatedPartiesMapping", entities={
 @EntityResult(entityClass=SegmentGroupViewRelatedParties.class, fields = {
 @FieldResult(name="sgrSegmentGroupId", column="sgrSegmentGroupId")
@@ -68,6 +68,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="prSgrSecurityGroupId", column="prSgrSecurityGroupId")
 ,@FieldResult(name="prSgrPriorityTypeId", column="prSgrPriorityTypeId")
 ,@FieldResult(name="prSgrPartyRelationshipTypeId", column="prSgrPartyRelationshipTypeId")
+,@FieldResult(name="prSgrPermissionsEnumId", column="prSgrPermissionsEnumId")
+,@FieldResult(name="prSgrPositionTitle", column="prSgrPositionTitle")
 ,@FieldResult(name="prSgrComments", column="prSgrComments")
 ,@FieldResult(name="sgcSegmentGroupId", column="sgcSegmentGroupId")
 ,@FieldResult(name="sgcPartyClassificationGroupId", column="sgcPartyClassificationGroupId")
@@ -86,6 +88,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="prPcSecurityGroupId", column="prPcSecurityGroupId")
 ,@FieldResult(name="prPcPriorityTypeId", column="prPcPriorityTypeId")
 ,@FieldResult(name="prPcPartyRelationshipTypeId", column="prPcPartyRelationshipTypeId")
+,@FieldResult(name="prPcPermissionsEnumId", column="prPcPermissionsEnumId")
+,@FieldResult(name="prPcPositionTitle", column="prPcPositionTitle")
 ,@FieldResult(name="prPcComments", column="prPcComments")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
@@ -110,6 +114,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("prSgrSecurityGroupId", "PRSGR.SECURITY_GROUP_ID");
         fields.put("prSgrPriorityTypeId", "PRSGR.PRIORITY_TYPE_ID");
         fields.put("prSgrPartyRelationshipTypeId", "PRSGR.PARTY_RELATIONSHIP_TYPE_ID");
+        fields.put("prSgrPermissionsEnumId", "PRSGR.PERMISSIONS_ENUM_ID");
+        fields.put("prSgrPositionTitle", "PRSGR.POSITION_TITLE");
         fields.put("prSgrComments", "PRSGR.COMMENTS");
         fields.put("sgcSegmentGroupId", "SGC.SEGMENT_GROUP_ID");
         fields.put("sgcPartyClassificationGroupId", "SGC.PARTY_CLASSIFICATION_GROUP_ID");
@@ -128,6 +134,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("prPcSecurityGroupId", "PRPC.SECURITY_GROUP_ID");
         fields.put("prPcPriorityTypeId", "PRPC.PRIORITY_TYPE_ID");
         fields.put("prPcPartyRelationshipTypeId", "PRPC.PARTY_RELATIONSHIP_TYPE_ID");
+        fields.put("prPcPermissionsEnumId", "PRPC.PERMISSIONS_ENUM_ID");
+        fields.put("prPcPositionTitle", "PRPC.POSITION_TITLE");
         fields.put("prPcComments", "PRPC.COMMENTS");
 fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
 }
@@ -149,6 +157,8 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
     prSgrSecurityGroupId("prSgrSecurityGroupId"),
     prSgrPriorityTypeId("prSgrPriorityTypeId"),
     prSgrPartyRelationshipTypeId("prSgrPartyRelationshipTypeId"),
+    prSgrPermissionsEnumId("prSgrPermissionsEnumId"),
+    prSgrPositionTitle("prSgrPositionTitle"),
     prSgrComments("prSgrComments"),
     sgcSegmentGroupId("sgcSegmentGroupId"),
     sgcPartyClassificationGroupId("sgcPartyClassificationGroupId"),
@@ -167,6 +177,8 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
     prPcSecurityGroupId("prPcSecurityGroupId"),
     prPcPriorityTypeId("prPcPriorityTypeId"),
     prPcPartyRelationshipTypeId("prPcPartyRelationshipTypeId"),
+    prPcPermissionsEnumId("prPcPermissionsEnumId"),
+    prPcPositionTitle("prPcPositionTitle"),
     prPcComments("prPcComments");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
@@ -213,6 +225,10 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
     
    private String prSgrPartyRelationshipTypeId;
     
+   private String prSgrPermissionsEnumId;
+    
+   private String prSgrPositionTitle;
+    
    private String prSgrComments;
     
    private String sgcSegmentGroupId;
@@ -249,6 +265,10 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
     
    private String prPcPartyRelationshipTypeId;
     
+   private String prPcPermissionsEnumId;
+    
+   private String prPcPositionTitle;
+    
    private String prPcComments;
 
   /**
@@ -262,7 +282,7 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("sgrSegmentGroupId");this.primaryKeyNames.add("sgrPartyId");this.primaryKeyNames.add("sgrRoleTypeId");this.primaryKeyNames.add("sgrToSegmentGroupId");this.primaryKeyNames.add("sgrToPartyId");this.primaryKeyNames.add("sgrToRoleTypeId");this.primaryKeyNames.add("prSgrPartyIdFrom");this.primaryKeyNames.add("prSgrPartyIdTo");this.primaryKeyNames.add("prSgrRoleTypeIdFrom");this.primaryKeyNames.add("prSgrRoleTypeIdTo");this.primaryKeyNames.add("prSgrFromDate");this.primaryKeyNames.add("sgcSegmentGroupId");this.primaryKeyNames.add("sgcPartyClassificationGroupId");this.primaryKeyNames.add("pcPartyId");this.primaryKeyNames.add("pcPartyClassificationGroupId");this.primaryKeyNames.add("pcFromDate");this.primaryKeyNames.add("prPcPartyIdFrom");this.primaryKeyNames.add("prPcPartyIdTo");this.primaryKeyNames.add("prPcRoleTypeIdFrom");this.primaryKeyNames.add("prPcRoleTypeIdTo");this.primaryKeyNames.add("prPcFromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("sgrSegmentGroupId");this.allFieldsNames.add("sgrPartyId");this.allFieldsNames.add("sgrRoleTypeId");this.allFieldsNames.add("sgrToSegmentGroupId");this.allFieldsNames.add("sgrToPartyId");this.allFieldsNames.add("sgrToRoleTypeId");this.allFieldsNames.add("prSgrPartyIdFrom");this.allFieldsNames.add("prSgrPartyIdTo");this.allFieldsNames.add("prSgrRoleTypeIdFrom");this.allFieldsNames.add("prSgrRoleTypeIdTo");this.allFieldsNames.add("prSgrFromDate");this.allFieldsNames.add("prSgrThruDate");this.allFieldsNames.add("prSgrStatusId");this.allFieldsNames.add("prSgrRelationshipName");this.allFieldsNames.add("prSgrSecurityGroupId");this.allFieldsNames.add("prSgrPriorityTypeId");this.allFieldsNames.add("prSgrPartyRelationshipTypeId");this.allFieldsNames.add("prSgrComments");this.allFieldsNames.add("sgcSegmentGroupId");this.allFieldsNames.add("sgcPartyClassificationGroupId");this.allFieldsNames.add("pcPartyId");this.allFieldsNames.add("pcPartyClassificationGroupId");this.allFieldsNames.add("pcFromDate");this.allFieldsNames.add("pcThruDate");this.allFieldsNames.add("prPcPartyIdFrom");this.allFieldsNames.add("prPcPartyIdTo");this.allFieldsNames.add("prPcRoleTypeIdFrom");this.allFieldsNames.add("prPcRoleTypeIdTo");this.allFieldsNames.add("prPcFromDate");this.allFieldsNames.add("prPcThruDate");this.allFieldsNames.add("prPcStatusId");this.allFieldsNames.add("prPcRelationshipName");this.allFieldsNames.add("prPcSecurityGroupId");this.allFieldsNames.add("prPcPriorityTypeId");this.allFieldsNames.add("prPcPartyRelationshipTypeId");this.allFieldsNames.add("prPcComments");
+      this.allFieldsNames.add("sgrSegmentGroupId");this.allFieldsNames.add("sgrPartyId");this.allFieldsNames.add("sgrRoleTypeId");this.allFieldsNames.add("sgrToSegmentGroupId");this.allFieldsNames.add("sgrToPartyId");this.allFieldsNames.add("sgrToRoleTypeId");this.allFieldsNames.add("prSgrPartyIdFrom");this.allFieldsNames.add("prSgrPartyIdTo");this.allFieldsNames.add("prSgrRoleTypeIdFrom");this.allFieldsNames.add("prSgrRoleTypeIdTo");this.allFieldsNames.add("prSgrFromDate");this.allFieldsNames.add("prSgrThruDate");this.allFieldsNames.add("prSgrStatusId");this.allFieldsNames.add("prSgrRelationshipName");this.allFieldsNames.add("prSgrSecurityGroupId");this.allFieldsNames.add("prSgrPriorityTypeId");this.allFieldsNames.add("prSgrPartyRelationshipTypeId");this.allFieldsNames.add("prSgrPermissionsEnumId");this.allFieldsNames.add("prSgrPositionTitle");this.allFieldsNames.add("prSgrComments");this.allFieldsNames.add("sgcSegmentGroupId");this.allFieldsNames.add("sgcPartyClassificationGroupId");this.allFieldsNames.add("pcPartyId");this.allFieldsNames.add("pcPartyClassificationGroupId");this.allFieldsNames.add("pcFromDate");this.allFieldsNames.add("pcThruDate");this.allFieldsNames.add("prPcPartyIdFrom");this.allFieldsNames.add("prPcPartyIdTo");this.allFieldsNames.add("prPcRoleTypeIdFrom");this.allFieldsNames.add("prPcRoleTypeIdTo");this.allFieldsNames.add("prPcFromDate");this.allFieldsNames.add("prPcThruDate");this.allFieldsNames.add("prPcStatusId");this.allFieldsNames.add("prPcRelationshipName");this.allFieldsNames.add("prPcSecurityGroupId");this.allFieldsNames.add("prPcPriorityTypeId");this.allFieldsNames.add("prPcPartyRelationshipTypeId");this.allFieldsNames.add("prPcPermissionsEnumId");this.allFieldsNames.add("prPcPositionTitle");this.allFieldsNames.add("prPcComments");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -401,6 +421,20 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
     }
     /**
      * Auto generated value setter.
+     * @param prSgrPermissionsEnumId the prSgrPermissionsEnumId to set
+     */
+    private void setPrSgrPermissionsEnumId(String prSgrPermissionsEnumId) {
+        this.prSgrPermissionsEnumId = prSgrPermissionsEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param prSgrPositionTitle the prSgrPositionTitle to set
+     */
+    private void setPrSgrPositionTitle(String prSgrPositionTitle) {
+        this.prSgrPositionTitle = prSgrPositionTitle;
+    }
+    /**
+     * Auto generated value setter.
      * @param prSgrComments the prSgrComments to set
      */
     private void setPrSgrComments(String prSgrComments) {
@@ -524,6 +558,20 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
      */
     private void setPrPcPartyRelationshipTypeId(String prPcPartyRelationshipTypeId) {
         this.prPcPartyRelationshipTypeId = prPcPartyRelationshipTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param prPcPermissionsEnumId the prPcPermissionsEnumId to set
+     */
+    private void setPrPcPermissionsEnumId(String prPcPermissionsEnumId) {
+        this.prPcPermissionsEnumId = prPcPermissionsEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param prPcPositionTitle the prPcPositionTitle to set
+     */
+    private void setPrPcPositionTitle(String prPcPositionTitle) {
+        this.prPcPositionTitle = prPcPositionTitle;
     }
     /**
      * Auto generated value setter.
@@ -656,6 +704,20 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getPrSgrPermissionsEnumId() {
+        return this.prSgrPermissionsEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPrSgrPositionTitle() {
+        return this.prSgrPositionTitle;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getPrSgrComments() {
         return this.prSgrComments;
     }
@@ -782,6 +844,20 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getPrPcPermissionsEnumId() {
+        return this.prPcPermissionsEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPrPcPositionTitle() {
+        return this.prPcPositionTitle;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getPrPcComments() {
         return this.prPcComments;
     }
@@ -810,6 +886,8 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
         setPrSgrSecurityGroupId((String) mapValue.get("prSgrSecurityGroupId"));
         setPrSgrPriorityTypeId((String) mapValue.get("prSgrPriorityTypeId"));
         setPrSgrPartyRelationshipTypeId((String) mapValue.get("prSgrPartyRelationshipTypeId"));
+        setPrSgrPermissionsEnumId((String) mapValue.get("prSgrPermissionsEnumId"));
+        setPrSgrPositionTitle((String) mapValue.get("prSgrPositionTitle"));
         setPrSgrComments((String) mapValue.get("prSgrComments"));
         setSgcSegmentGroupId((String) mapValue.get("sgcSegmentGroupId"));
         setSgcPartyClassificationGroupId((String) mapValue.get("sgcPartyClassificationGroupId"));
@@ -828,6 +906,8 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
         setPrPcSecurityGroupId((String) mapValue.get("prPcSecurityGroupId"));
         setPrPcPriorityTypeId((String) mapValue.get("prPcPriorityTypeId"));
         setPrPcPartyRelationshipTypeId((String) mapValue.get("prPcPartyRelationshipTypeId"));
+        setPrPcPermissionsEnumId((String) mapValue.get("prPcPermissionsEnumId"));
+        setPrPcPositionTitle((String) mapValue.get("prPcPositionTitle"));
         setPrPcComments((String) mapValue.get("prPcComments"));
         postInit();
     }
@@ -853,6 +933,8 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
         mapValue.put("prSgrSecurityGroupId", getPrSgrSecurityGroupId());
         mapValue.put("prSgrPriorityTypeId", getPrSgrPriorityTypeId());
         mapValue.put("prSgrPartyRelationshipTypeId", getPrSgrPartyRelationshipTypeId());
+        mapValue.put("prSgrPermissionsEnumId", getPrSgrPermissionsEnumId());
+        mapValue.put("prSgrPositionTitle", getPrSgrPositionTitle());
         mapValue.put("prSgrComments", getPrSgrComments());
         mapValue.put("sgcSegmentGroupId", getSgcSegmentGroupId());
         mapValue.put("sgcPartyClassificationGroupId", getSgcPartyClassificationGroupId());
@@ -871,6 +953,8 @@ fieldMapColumns.put("SegmentGroupViewRelatedParties", fields);
         mapValue.put("prPcSecurityGroupId", getPrPcSecurityGroupId());
         mapValue.put("prPcPriorityTypeId", getPrPcPriorityTypeId());
         mapValue.put("prPcPartyRelationshipTypeId", getPrPcPartyRelationshipTypeId());
+        mapValue.put("prPcPermissionsEnumId", getPrPcPermissionsEnumId());
+        mapValue.put("prPcPositionTitle", getPrPcPositionTitle());
         mapValue.put("prPcComments", getPrPcComments());
         return mapValue;
     }

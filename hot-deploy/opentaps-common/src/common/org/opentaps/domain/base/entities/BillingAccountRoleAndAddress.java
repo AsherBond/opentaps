@@ -48,7 +48,7 @@ import java.sql.Timestamp;
  * Auto generated base entity BillingAccountRoleAndAddress.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectBillingAccountRoleAndAddresss", query="SELECT PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",BAR.BILLING_ACCOUNT_ID AS \"billingAccountId\",BAR.PARTY_ID AS \"partyId\",BAR.ROLE_TYPE_ID AS \"roleTypeId\",BAR.FROM_DATE AS \"fromDate\",BAR.THRU_DATE AS \"thruDate\",PADDR.CONTACT_MECH_ID AS \"contactMechId\",PADDR.TO_NAME AS \"toName\",PADDR.ATTN_NAME AS \"attnName\",PADDR.ADDRESS1 AS \"address1\",PADDR.ADDRESS2 AS \"address2\",PADDR.DIRECTIONS AS \"directions\",PADDR.CITY AS \"city\",PADDR.POSTAL_CODE AS \"postalCode\",PADDR.POSTAL_CODE_EXT AS \"postalCodeExt\",PADDR.COUNTRY_GEO_ID AS \"countryGeoId\",PADDR.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PADDR.COUNTY_GEO_ID AS \"countyGeoId\",PADDR.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\" FROM BILLING_ACCOUNT_ROLE BAR INNER JOIN PARTY_CONTACT_MECH PCM ON BAR.PARTY_ID = PCM.PARTY_ID INNER JOIN POSTAL_ADDRESS PADDR ON PCM.CONTACT_MECH_ID = PADDR.CONTACT_MECH_ID", resultSetMapping="BillingAccountRoleAndAddressMapping")
+@NamedNativeQuery(name="selectBillingAccountRoleAndAddresss", query="SELECT PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",BAR.BILLING_ACCOUNT_ID AS \"billingAccountId\",BAR.PARTY_ID AS \"partyId\",BAR.ROLE_TYPE_ID AS \"roleTypeId\",BAR.FROM_DATE AS \"fromDate\",BAR.THRU_DATE AS \"thruDate\",PADDR.CONTACT_MECH_ID AS \"contactMechId\",PADDR.TO_NAME AS \"toName\",PADDR.ATTN_NAME AS \"attnName\",PADDR.ADDRESS1 AS \"address1\",PADDR.ADDRESS2 AS \"address2\",PADDR.DIRECTIONS AS \"directions\",PADDR.CITY AS \"city\",PADDR.POSTAL_CODE AS \"postalCode\",PADDR.POSTAL_CODE_EXT AS \"postalCodeExt\",PADDR.COUNTRY_GEO_ID AS \"countryGeoId\",PADDR.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PADDR.COUNTY_GEO_ID AS \"countyGeoId\",PADDR.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PADDR.GEO_POINT_ID AS \"geoPointId\" FROM BILLING_ACCOUNT_ROLE BAR INNER JOIN PARTY_CONTACT_MECH PCM ON BAR.PARTY_ID = PCM.PARTY_ID INNER JOIN POSTAL_ADDRESS PADDR ON PCM.CONTACT_MECH_ID = PADDR.CONTACT_MECH_ID", resultSetMapping="BillingAccountRoleAndAddressMapping")
 @SqlResultSetMapping(name="BillingAccountRoleAndAddressMapping", entities={
 @EntityResult(entityClass=BillingAccountRoleAndAddress.class, fields = {
 @FieldResult(name="pcmFromDate", column="pcmFromDate")
@@ -71,6 +71,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="stateProvinceGeoId", column="stateProvinceGeoId")
 ,@FieldResult(name="countyGeoId", column="countyGeoId")
 ,@FieldResult(name="postalCodeGeoId", column="postalCodeGeoId")
+,@FieldResult(name="geoPointId", column="geoPointId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -97,6 +98,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("stateProvinceGeoId", "PADDR.STATE_PROVINCE_GEO_ID");
         fields.put("countyGeoId", "PADDR.COUNTY_GEO_ID");
         fields.put("postalCodeGeoId", "PADDR.POSTAL_CODE_GEO_ID");
+        fields.put("geoPointId", "PADDR.GEO_POINT_ID");
 fieldMapColumns.put("BillingAccountRoleAndAddress", fields);
 }
   public static enum Fields implements EntityFieldInterface<BillingAccountRoleAndAddress> {
@@ -119,7 +121,8 @@ fieldMapColumns.put("BillingAccountRoleAndAddress", fields);
     countryGeoId("countryGeoId"),
     stateProvinceGeoId("stateProvinceGeoId"),
     countyGeoId("countyGeoId"),
-    postalCodeGeoId("postalCodeGeoId");
+    postalCodeGeoId("postalCodeGeoId"),
+    geoPointId("geoPointId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -170,6 +173,8 @@ fieldMapColumns.put("BillingAccountRoleAndAddress", fields);
    private String countyGeoId;
     
    private String postalCodeGeoId;
+    
+   private String geoPointId;
 
   /**
    * Default constructor.
@@ -182,7 +187,7 @@ fieldMapColumns.put("BillingAccountRoleAndAddress", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("pcmFromDate");this.primaryKeyNames.add("billingAccountId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("contactMechId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("pcmFromDate");this.allFieldsNames.add("pcmThruDate");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");
+      this.allFieldsNames.add("pcmFromDate");this.allFieldsNames.add("pcmThruDate");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");this.allFieldsNames.add("geoPointId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -340,6 +345,13 @@ fieldMapColumns.put("BillingAccountRoleAndAddress", fields);
     private void setPostalCodeGeoId(String postalCodeGeoId) {
         this.postalCodeGeoId = postalCodeGeoId;
     }
+    /**
+     * Auto generated value setter.
+     * @param geoPointId the geoPointId to set
+     */
+    private void setGeoPointId(String geoPointId) {
+        this.geoPointId = geoPointId;
+    }
 
     /**
      * Auto generated value accessor.
@@ -481,6 +493,13 @@ fieldMapColumns.put("BillingAccountRoleAndAddress", fields);
     public String getPostalCodeGeoId() {
         return this.postalCodeGeoId;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getGeoPointId() {
+        return this.geoPointId;
+    }
 
 
 
@@ -509,6 +528,7 @@ fieldMapColumns.put("BillingAccountRoleAndAddress", fields);
         setStateProvinceGeoId((String) mapValue.get("stateProvinceGeoId"));
         setCountyGeoId((String) mapValue.get("countyGeoId"));
         setPostalCodeGeoId((String) mapValue.get("postalCodeGeoId"));
+        setGeoPointId((String) mapValue.get("geoPointId"));
         postInit();
     }
 
@@ -536,6 +556,7 @@ fieldMapColumns.put("BillingAccountRoleAndAddress", fields);
         mapValue.put("stateProvinceGeoId", getStateProvinceGeoId());
         mapValue.put("countyGeoId", getCountyGeoId());
         mapValue.put("postalCodeGeoId", getPostalCodeGeoId());
+        mapValue.put("geoPointId", getGeoPointId());
         return mapValue;
     }
 

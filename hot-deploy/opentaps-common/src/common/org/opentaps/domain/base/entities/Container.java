@@ -114,6 +114,10 @@ fieldMapColumns.put("Container", fields);
    )
    
    private Facility facility = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="container", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="CONTAINER_ID")
+   
+   private List<ContainerGeoPoint> containerGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTAINER_ID")
    
@@ -290,6 +294,17 @@ fieldMapColumns.put("Container", fields);
         return this.facility;
     }
     /**
+     * Auto generated method that gets the related <code>ContainerGeoPoint</code> by the relation named <code>ContainerGeoPoint</code>.
+     * @return the list of <code>ContainerGeoPoint</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ContainerGeoPoint> getContainerGeoPoints() throws RepositoryException {
+        if (this.containerGeoPoints == null) {
+            this.containerGeoPoints = getRelated(ContainerGeoPoint.class, "ContainerGeoPoint");
+        }
+        return this.containerGeoPoints;
+    }
+    /**
      * Auto generated method that gets the related <code>InventoryItem</code> by the relation named <code>InventoryItem</code>.
      * @return the list of <code>InventoryItem</code>
      * @throws RepositoryException if an error occurs
@@ -339,6 +354,13 @@ fieldMapColumns.put("Container", fields);
     }
     /**
      * Auto generated value setter.
+     * @param containerGeoPoints the containerGeoPoints to set
+    */
+    public void setContainerGeoPoints(List<ContainerGeoPoint> containerGeoPoints) {
+        this.containerGeoPoints = containerGeoPoints;
+    }
+    /**
+     * Auto generated value setter.
      * @param inventoryItems the inventoryItems to set
     */
     public void setInventoryItems(List<InventoryItem> inventoryItems) {
@@ -359,6 +381,33 @@ fieldMapColumns.put("Container", fields);
         this.toInventoryTransfers = toInventoryTransfers;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addContainerGeoPoint(ContainerGeoPoint containerGeoPoint) {
+        if (this.containerGeoPoints == null) {
+            this.containerGeoPoints = new ArrayList<ContainerGeoPoint>();
+        }
+        this.containerGeoPoints.add(containerGeoPoint);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeContainerGeoPoint(ContainerGeoPoint containerGeoPoint) {
+        if (this.containerGeoPoints == null) {
+            return;
+        }
+        this.containerGeoPoints.remove(containerGeoPoint);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearContainerGeoPoint() {
+        if (this.containerGeoPoints == null) {
+            return;
+        }
+        this.containerGeoPoints.clear();
+    }
 
     /** {@inheritDoc} */
     @Override

@@ -71,12 +71,14 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("contentMimeTypeId", "CONTENT_MIME_TYPE_ID");
         fields.put("content", "CONTENT");
         fields.put("note", "NOTE");
+        fields.put("reasonEnumId", "REASON_ENUM_ID");
         fields.put("contactListId", "CONTACT_LIST_ID");
         fields.put("headerString", "HEADER_STRING");
         fields.put("fromString", "FROM_STRING");
         fields.put("toString", "TO_STRING");
         fields.put("ccString", "CC_STRING");
         fields.put("bccString", "BCC_STRING");
+        fields.put("messageId", "MESSAGE_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -103,12 +105,14 @@ fieldMapColumns.put("CommunicationEvent", fields);
     contentMimeTypeId("contentMimeTypeId"),
     content("content"),
     note("note"),
+    reasonEnumId("reasonEnumId"),
     contactListId("contactListId"),
     headerString("headerString"),
     fromString("fromString"),
     toString("toString"),
     ccString("ccString"),
     bccString("bccString"),
+    messageId("messageId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -164,6 +168,8 @@ fieldMapColumns.put("CommunicationEvent", fields);
    private String content;
    @Column(name="NOTE")
    private String note;
+   @Column(name="REASON_ENUM_ID")
+   private String reasonEnumId;
    @Column(name="CONTACT_LIST_ID")
    private String contactListId;
    @Column(name="HEADER_STRING")
@@ -176,6 +182,8 @@ fieldMapColumns.put("CommunicationEvent", fields);
    private String ccString;
    @Column(name="BCC_STRING")
    private String bccString;
+   @Column(name="MESSAGE_ID")
+   private String messageId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -263,6 +271,13 @@ fieldMapColumns.put("CommunicationEvent", fields);
    )
    
    private MimeType mimeType = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="REASON_ENUM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration enumeration = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="communicationEvent", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="COMMUNICATION_EVENT_ID")
    
@@ -315,7 +330,7 @@ fieldMapColumns.put("CommunicationEvent", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("communicationEventId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("communicationEventTypeId");this.allFieldsNames.add("origCommEventId");this.allFieldsNames.add("parentCommEventId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("contactMechIdFrom");this.allFieldsNames.add("contactMechIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("datetimeStarted");this.allFieldsNames.add("datetimeEnded");this.allFieldsNames.add("subject");this.allFieldsNames.add("contentMimeTypeId");this.allFieldsNames.add("content");this.allFieldsNames.add("note");this.allFieldsNames.add("contactListId");this.allFieldsNames.add("headerString");this.allFieldsNames.add("fromString");this.allFieldsNames.add("toString");this.allFieldsNames.add("ccString");this.allFieldsNames.add("bccString");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("communicationEventTypeId");this.allFieldsNames.add("origCommEventId");this.allFieldsNames.add("parentCommEventId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("contactMechIdFrom");this.allFieldsNames.add("contactMechIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("datetimeStarted");this.allFieldsNames.add("datetimeEnded");this.allFieldsNames.add("subject");this.allFieldsNames.add("contentMimeTypeId");this.allFieldsNames.add("content");this.allFieldsNames.add("note");this.allFieldsNames.add("reasonEnumId");this.allFieldsNames.add("contactListId");this.allFieldsNames.add("headerString");this.allFieldsNames.add("fromString");this.allFieldsNames.add("toString");this.allFieldsNames.add("ccString");this.allFieldsNames.add("bccString");this.allFieldsNames.add("messageId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -465,6 +480,13 @@ fieldMapColumns.put("CommunicationEvent", fields);
     }
     /**
      * Auto generated value setter.
+     * @param reasonEnumId the reasonEnumId to set
+     */
+    public void setReasonEnumId(String reasonEnumId) {
+        this.reasonEnumId = reasonEnumId;
+    }
+    /**
+     * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
     public void setContactListId(String contactListId) {
@@ -504,6 +526,13 @@ fieldMapColumns.put("CommunicationEvent", fields);
      */
     public void setBccString(String bccString) {
         this.bccString = bccString;
+    }
+    /**
+     * Auto generated value setter.
+     * @param messageId the messageId to set
+     */
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
     /**
      * Auto generated value setter.
@@ -671,6 +700,13 @@ fieldMapColumns.put("CommunicationEvent", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getReasonEnumId() {
+        return this.reasonEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getContactListId() {
         return this.contactListId;
     }
@@ -708,6 +744,13 @@ fieldMapColumns.put("CommunicationEvent", fields);
      */
     public String getBccString() {
         return this.bccString;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getMessageId() {
+        return this.messageId;
     }
     /**
      * Auto generated value accessor.
@@ -880,6 +923,17 @@ fieldMapColumns.put("CommunicationEvent", fields);
             this.mimeType = getRelatedOne(MimeType.class, "MimeType");
         }
         return this.mimeType;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration getEnumeration() throws RepositoryException {
+        if (this.enumeration == null) {
+            this.enumeration = getRelatedOne(Enumeration.class, "Enumeration");
+        }
+        return this.enumeration;
     }
     /**
      * Auto generated method that gets the related <code>CommEventContentAssoc</code> by the relation named <code>CommEventContentAssoc</code>.
@@ -1082,6 +1136,13 @@ fieldMapColumns.put("CommunicationEvent", fields);
     */
     public void setMimeType(MimeType mimeType) {
         this.mimeType = mimeType;
+    }
+    /**
+     * Auto generated value setter.
+     * @param enumeration the enumeration to set
+    */
+    public void setEnumeration(Enumeration enumeration) {
+        this.enumeration = enumeration;
     }
     /**
      * Auto generated value setter.
@@ -1421,12 +1482,14 @@ fieldMapColumns.put("CommunicationEvent", fields);
         setContentMimeTypeId((String) mapValue.get("contentMimeTypeId"));
         setContent((String) mapValue.get("content"));
         setNote((String) mapValue.get("note"));
+        setReasonEnumId((String) mapValue.get("reasonEnumId"));
         setContactListId((String) mapValue.get("contactListId"));
         setHeaderString((String) mapValue.get("headerString"));
         setFromString((String) mapValue.get("fromString"));
         setToString((String) mapValue.get("toString"));
         setCcString((String) mapValue.get("ccString"));
         setBccString((String) mapValue.get("bccString"));
+        setMessageId((String) mapValue.get("messageId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -1457,12 +1520,14 @@ fieldMapColumns.put("CommunicationEvent", fields);
         mapValue.put("contentMimeTypeId", getContentMimeTypeId());
         mapValue.put("content", getContent());
         mapValue.put("note", getNote());
+        mapValue.put("reasonEnumId", getReasonEnumId());
         mapValue.put("contactListId", getContactListId());
         mapValue.put("headerString", getHeaderString());
         mapValue.put("fromString", getFromString());
         mapValue.put("toString", getToString());
         mapValue.put("ccString", getCcString());
         mapValue.put("bccString", getBccString());
+        mapValue.put("messageId", getMessageId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

@@ -58,6 +58,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("statusId", "STATUS_ID");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
+        fields.put("availabilityStatusId", "AVAILABILITY_STATUS_ID");
         fields.put("allocatedCost", "ALLOCATED_COST");
         fields.put("comments", "COMMENTS");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -72,6 +73,7 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
     statusId("statusId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
+    availabilityStatusId("availabilityStatusId"),
     allocatedCost("allocatedCost"),
     comments("comments"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -111,6 +113,8 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
    private String statusId;
    @Column(name="THRU_DATE")
    private Timestamp thruDate;
+   @Column(name="AVAILABILITY_STATUS_ID")
+   private String availabilityStatusId;
    @Column(name="ALLOCATED_COST")
    private BigDecimal allocatedCost;
    @Column(name="COMMENTS")
@@ -144,6 +148,13 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
    )
    
    private StatusItem statusItem = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="AVAILABILITY_STATUS_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private StatusItem availabilityStatusItem = null;
 
   /**
    * Default constructor.
@@ -156,7 +167,7 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("fixedAssetId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("allocatedCost");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("availabilityStatusId");this.allFieldsNames.add("allocatedCost");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -205,6 +216,13 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
      */
     public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param availabilityStatusId the availabilityStatusId to set
+     */
+    public void setAvailabilityStatusId(String availabilityStatusId) {
+        this.availabilityStatusId = availabilityStatusId;
     }
     /**
      * Auto generated value setter.
@@ -286,6 +304,13 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAvailabilityStatusId() {
+        return this.availabilityStatusId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getAllocatedCost() {
@@ -360,6 +385,17 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
         }
         return this.statusItem;
     }
+    /**
+     * Auto generated method that gets the related <code>StatusItem</code> by the relation named <code>AvailabilityStatusItem</code>.
+     * @return the <code>StatusItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public StatusItem getAvailabilityStatusItem() throws RepositoryException {
+        if (this.availabilityStatusItem == null) {
+            this.availabilityStatusItem = getRelatedOne(StatusItem.class, "AvailabilityStatusItem");
+        }
+        return this.availabilityStatusItem;
+    }
 
     /**
      * Auto generated value setter.
@@ -382,6 +418,13 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
     public void setStatusItem(StatusItem statusItem) {
         this.statusItem = statusItem;
     }
+    /**
+     * Auto generated value setter.
+     * @param availabilityStatusItem the availabilityStatusItem to set
+    */
+    public void setAvailabilityStatusItem(StatusItem availabilityStatusItem) {
+        this.availabilityStatusItem = availabilityStatusItem;
+    }
 
 
     /** {@inheritDoc} */
@@ -393,6 +436,7 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
         setStatusId((String) mapValue.get("statusId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
+        setAvailabilityStatusId((String) mapValue.get("availabilityStatusId"));
         setAllocatedCost(convertToBigDecimal(mapValue.get("allocatedCost")));
         setComments((String) mapValue.get("comments"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -411,6 +455,7 @@ fieldMapColumns.put("WorkEffortFixedAssetAssign", fields);
         mapValue.put("statusId", getStatusId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
+        mapValue.put("availabilityStatusId", getAvailabilityStatusId());
         mapValue.put("allocatedCost", getAllocatedCost());
         mapValue.put("comments", getComments());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

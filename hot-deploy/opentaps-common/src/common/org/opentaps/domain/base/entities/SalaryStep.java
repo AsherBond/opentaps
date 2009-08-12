@@ -120,6 +120,8 @@ fieldMapColumns.put("SalaryStep", fields);
    )
    
    private PayGrade payGrade = null;
+   private transient List<EmplPositionTypeRate> emplPositionTypeRates = null;
+   private transient List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
    private transient List<PayHistory> payHistorys = null;
 
   /**
@@ -274,6 +276,28 @@ fieldMapColumns.put("SalaryStep", fields);
         return this.payGrade;
     }
     /**
+     * Auto generated method that gets the related <code>EmplPositionTypeRate</code> by the relation named <code>EmplPositionTypeRate</code>.
+     * @return the list of <code>EmplPositionTypeRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends EmplPositionTypeRate> getEmplPositionTypeRates() throws RepositoryException {
+        if (this.emplPositionTypeRates == null) {
+            this.emplPositionTypeRates = getRelated(EmplPositionTypeRate.class, "EmplPositionTypeRate");
+        }
+        return this.emplPositionTypeRates;
+    }
+    /**
+     * Auto generated method that gets the related <code>OldEmplPositionTypeRate</code> by the relation named <code>OldEmplPositionTypeRate</code>.
+     * @return the list of <code>OldEmplPositionTypeRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldEmplPositionTypeRate> getOldEmplPositionTypeRates() throws RepositoryException {
+        if (this.oldEmplPositionTypeRates == null) {
+            this.oldEmplPositionTypeRates = getRelated(OldEmplPositionTypeRate.class, "OldEmplPositionTypeRate");
+        }
+        return this.oldEmplPositionTypeRates;
+    }
+    /**
      * Auto generated method that gets the related <code>PayHistory</code> by the relation named <code>PayHistory</code>.
      * @return the list of <code>PayHistory</code>
      * @throws RepositoryException if an error occurs
@@ -291,6 +315,20 @@ fieldMapColumns.put("SalaryStep", fields);
     */
     public void setPayGrade(PayGrade payGrade) {
         this.payGrade = payGrade;
+    }
+    /**
+     * Auto generated value setter.
+     * @param emplPositionTypeRates the emplPositionTypeRates to set
+    */
+    public void setEmplPositionTypeRates(List<EmplPositionTypeRate> emplPositionTypeRates) {
+        this.emplPositionTypeRates = emplPositionTypeRates;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oldEmplPositionTypeRates the oldEmplPositionTypeRates to set
+    */
+    public void setOldEmplPositionTypeRates(List<OldEmplPositionTypeRate> oldEmplPositionTypeRates) {
+        this.oldEmplPositionTypeRates = oldEmplPositionTypeRates;
     }
     /**
      * Auto generated value setter.

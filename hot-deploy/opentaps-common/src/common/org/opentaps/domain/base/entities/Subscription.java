@@ -41,6 +41,7 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
+import java.lang.Long;
 import java.lang.String;
 import java.sql.Timestamp;
 
@@ -72,6 +73,18 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("externalSubscriptionId", "EXTERNAL_SUBSCRIPTION_ID");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
+        fields.put("purchaseFromDate", "PURCHASE_FROM_DATE");
+        fields.put("purchaseThruDate", "PURCHASE_THRU_DATE");
+        fields.put("maxLifeTime", "MAX_LIFE_TIME");
+        fields.put("maxLifeTimeUomId", "MAX_LIFE_TIME_UOM_ID");
+        fields.put("availableTime", "AVAILABLE_TIME");
+        fields.put("availableTimeUomId", "AVAILABLE_TIME_UOM_ID");
+        fields.put("useCountLimit", "USE_COUNT_LIMIT");
+        fields.put("useTime", "USE_TIME");
+        fields.put("useTimeUomId", "USE_TIME_UOM_ID");
+        fields.put("automaticExtend", "AUTOMATIC_EXTEND");
+        fields.put("canclAutmExtTime", "CANCL_AUTM_EXT_TIME");
+        fields.put("canclAutmExtTimeUomId", "CANCL_AUTM_EXT_TIME_UOM_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -99,6 +112,18 @@ fieldMapColumns.put("Subscription", fields);
     externalSubscriptionId("externalSubscriptionId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
+    purchaseFromDate("purchaseFromDate"),
+    purchaseThruDate("purchaseThruDate"),
+    maxLifeTime("maxLifeTime"),
+    maxLifeTimeUomId("maxLifeTimeUomId"),
+    availableTime("availableTime"),
+    availableTimeUomId("availableTimeUomId"),
+    useCountLimit("useCountLimit"),
+    useTime("useTime"),
+    useTimeUomId("useTimeUomId"),
+    automaticExtend("automaticExtend"),
+    canclAutmExtTime("canclAutmExtTime"),
+    canclAutmExtTimeUomId("canclAutmExtTimeUomId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -156,6 +181,30 @@ fieldMapColumns.put("Subscription", fields);
    private Timestamp fromDate;
    @Column(name="THRU_DATE")
    private Timestamp thruDate;
+   @Column(name="PURCHASE_FROM_DATE")
+   private Timestamp purchaseFromDate;
+   @Column(name="PURCHASE_THRU_DATE")
+   private Timestamp purchaseThruDate;
+   @Column(name="MAX_LIFE_TIME")
+   private Long maxLifeTime;
+   @Column(name="MAX_LIFE_TIME_UOM_ID")
+   private String maxLifeTimeUomId;
+   @Column(name="AVAILABLE_TIME")
+   private Long availableTime;
+   @Column(name="AVAILABLE_TIME_UOM_ID")
+   private String availableTimeUomId;
+   @Column(name="USE_COUNT_LIMIT")
+   private Long useCountLimit;
+   @Column(name="USE_TIME")
+   private Long useTime;
+   @Column(name="USE_TIME_UOM_ID")
+   private String useTimeUomId;
+   @Column(name="AUTOMATIC_EXTEND")
+   private String automaticExtend;
+   @Column(name="CANCL_AUTM_EXT_TIME")
+   private Long canclAutmExtTime;
+   @Column(name="CANCL_AUTM_EXT_TIME_UOM_ID")
+   private String canclAutmExtTimeUomId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -185,6 +234,34 @@ fieldMapColumns.put("Subscription", fields);
    )
    
    private Party party = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="USE_TIME_UOM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Uom useTimeUom = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="CANCL_AUTM_EXT_TIME_UOM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Uom cancelTimeUom = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="AVAILABLE_TIME_UOM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Uom availableTimeUom = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="MAX_LIFE_TIME_UOM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Uom maxLifeTimeUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -280,7 +357,7 @@ fieldMapColumns.put("Subscription", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("subscriptionId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("subscriptionId");this.allFieldsNames.add("description");this.allFieldsNames.add("subscriptionResourceId");this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("originatedFromPartyId");this.allFieldsNames.add("originatedFromRoleTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("partyNeedId");this.allFieldsNames.add("needTypeId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("subscriptionTypeId");this.allFieldsNames.add("externalSubscriptionId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("subscriptionId");this.allFieldsNames.add("description");this.allFieldsNames.add("subscriptionResourceId");this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("originatedFromPartyId");this.allFieldsNames.add("originatedFromRoleTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("partyNeedId");this.allFieldsNames.add("needTypeId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("subscriptionTypeId");this.allFieldsNames.add("externalSubscriptionId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("purchaseFromDate");this.allFieldsNames.add("purchaseThruDate");this.allFieldsNames.add("maxLifeTime");this.allFieldsNames.add("maxLifeTimeUomId");this.allFieldsNames.add("availableTime");this.allFieldsNames.add("availableTimeUomId");this.allFieldsNames.add("useCountLimit");this.allFieldsNames.add("useTime");this.allFieldsNames.add("useTimeUomId");this.allFieldsNames.add("automaticExtend");this.allFieldsNames.add("canclAutmExtTime");this.allFieldsNames.add("canclAutmExtTimeUomId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -434,6 +511,90 @@ fieldMapColumns.put("Subscription", fields);
      */
     public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param purchaseFromDate the purchaseFromDate to set
+     */
+    public void setPurchaseFromDate(Timestamp purchaseFromDate) {
+        this.purchaseFromDate = purchaseFromDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param purchaseThruDate the purchaseThruDate to set
+     */
+    public void setPurchaseThruDate(Timestamp purchaseThruDate) {
+        this.purchaseThruDate = purchaseThruDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param maxLifeTime the maxLifeTime to set
+     */
+    public void setMaxLifeTime(Long maxLifeTime) {
+        this.maxLifeTime = maxLifeTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param maxLifeTimeUomId the maxLifeTimeUomId to set
+     */
+    public void setMaxLifeTimeUomId(String maxLifeTimeUomId) {
+        this.maxLifeTimeUomId = maxLifeTimeUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param availableTime the availableTime to set
+     */
+    public void setAvailableTime(Long availableTime) {
+        this.availableTime = availableTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param availableTimeUomId the availableTimeUomId to set
+     */
+    public void setAvailableTimeUomId(String availableTimeUomId) {
+        this.availableTimeUomId = availableTimeUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param useCountLimit the useCountLimit to set
+     */
+    public void setUseCountLimit(Long useCountLimit) {
+        this.useCountLimit = useCountLimit;
+    }
+    /**
+     * Auto generated value setter.
+     * @param useTime the useTime to set
+     */
+    public void setUseTime(Long useTime) {
+        this.useTime = useTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param useTimeUomId the useTimeUomId to set
+     */
+    public void setUseTimeUomId(String useTimeUomId) {
+        this.useTimeUomId = useTimeUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param automaticExtend the automaticExtend to set
+     */
+    public void setAutomaticExtend(String automaticExtend) {
+        this.automaticExtend = automaticExtend;
+    }
+    /**
+     * Auto generated value setter.
+     * @param canclAutmExtTime the canclAutmExtTime to set
+     */
+    public void setCanclAutmExtTime(Long canclAutmExtTime) {
+        this.canclAutmExtTime = canclAutmExtTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param canclAutmExtTimeUomId the canclAutmExtTimeUomId to set
+     */
+    public void setCanclAutmExtTimeUomId(String canclAutmExtTimeUomId) {
+        this.canclAutmExtTimeUomId = canclAutmExtTimeUomId;
     }
     /**
      * Auto generated value setter.
@@ -608,6 +769,90 @@ fieldMapColumns.put("Subscription", fields);
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
+    public Timestamp getPurchaseFromDate() {
+        return this.purchaseFromDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getPurchaseThruDate() {
+        return this.purchaseThruDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getMaxLifeTime() {
+        return this.maxLifeTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getMaxLifeTimeUomId() {
+        return this.maxLifeTimeUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getAvailableTime() {
+        return this.availableTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAvailableTimeUomId() {
+        return this.availableTimeUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getUseCountLimit() {
+        return this.useCountLimit;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getUseTime() {
+        return this.useTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getUseTimeUomId() {
+        return this.useTimeUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAutomaticExtend() {
+        return this.automaticExtend;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getCanclAutmExtTime() {
+        return this.canclAutmExtTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCanclAutmExtTimeUomId() {
+        return this.canclAutmExtTimeUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
     public Timestamp getLastUpdatedStamp() {
         return this.lastUpdatedStamp;
     }
@@ -665,6 +910,50 @@ fieldMapColumns.put("Subscription", fields);
             this.party = getRelatedOne(Party.class, "Party");
         }
         return this.party;
+    }
+    /**
+     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>UseTimeUom</code>.
+     * @return the <code>Uom</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Uom getUseTimeUom() throws RepositoryException {
+        if (this.useTimeUom == null) {
+            this.useTimeUom = getRelatedOne(Uom.class, "UseTimeUom");
+        }
+        return this.useTimeUom;
+    }
+    /**
+     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>CancelTimeUom</code>.
+     * @return the <code>Uom</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Uom getCancelTimeUom() throws RepositoryException {
+        if (this.cancelTimeUom == null) {
+            this.cancelTimeUom = getRelatedOne(Uom.class, "CancelTimeUom");
+        }
+        return this.cancelTimeUom;
+    }
+    /**
+     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>AvailableTimeUom</code>.
+     * @return the <code>Uom</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Uom getAvailableTimeUom() throws RepositoryException {
+        if (this.availableTimeUom == null) {
+            this.availableTimeUom = getRelatedOne(Uom.class, "AvailableTimeUom");
+        }
+        return this.availableTimeUom;
+    }
+    /**
+     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>MaxLifeTimeUom</code>.
+     * @return the <code>Uom</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Uom getMaxLifeTimeUom() throws RepositoryException {
+        if (this.maxLifeTimeUom == null) {
+            this.maxLifeTimeUom = getRelatedOne(Uom.class, "MaxLifeTimeUom");
+        }
+        return this.maxLifeTimeUom;
     }
     /**
      * Auto generated method that gets the related <code>RoleType</code> by the relation named <code>RoleType</code>.
@@ -874,6 +1163,34 @@ fieldMapColumns.put("Subscription", fields);
     */
     public void setParty(Party party) {
         this.party = party;
+    }
+    /**
+     * Auto generated value setter.
+     * @param useTimeUom the useTimeUom to set
+    */
+    public void setUseTimeUom(Uom useTimeUom) {
+        this.useTimeUom = useTimeUom;
+    }
+    /**
+     * Auto generated value setter.
+     * @param cancelTimeUom the cancelTimeUom to set
+    */
+    public void setCancelTimeUom(Uom cancelTimeUom) {
+        this.cancelTimeUom = cancelTimeUom;
+    }
+    /**
+     * Auto generated value setter.
+     * @param availableTimeUom the availableTimeUom to set
+    */
+    public void setAvailableTimeUom(Uom availableTimeUom) {
+        this.availableTimeUom = availableTimeUom;
+    }
+    /**
+     * Auto generated value setter.
+     * @param maxLifeTimeUom the maxLifeTimeUom to set
+    */
+    public void setMaxLifeTimeUom(Uom maxLifeTimeUom) {
+        this.maxLifeTimeUom = maxLifeTimeUom;
     }
     /**
      * Auto generated value setter.
@@ -1101,6 +1418,18 @@ fieldMapColumns.put("Subscription", fields);
         setExternalSubscriptionId((String) mapValue.get("externalSubscriptionId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
+        setPurchaseFromDate((Timestamp) mapValue.get("purchaseFromDate"));
+        setPurchaseThruDate((Timestamp) mapValue.get("purchaseThruDate"));
+        setMaxLifeTime((Long) mapValue.get("maxLifeTime"));
+        setMaxLifeTimeUomId((String) mapValue.get("maxLifeTimeUomId"));
+        setAvailableTime((Long) mapValue.get("availableTime"));
+        setAvailableTimeUomId((String) mapValue.get("availableTimeUomId"));
+        setUseCountLimit((Long) mapValue.get("useCountLimit"));
+        setUseTime((Long) mapValue.get("useTime"));
+        setUseTimeUomId((String) mapValue.get("useTimeUomId"));
+        setAutomaticExtend((String) mapValue.get("automaticExtend"));
+        setCanclAutmExtTime((Long) mapValue.get("canclAutmExtTime"));
+        setCanclAutmExtTimeUomId((String) mapValue.get("canclAutmExtTimeUomId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -1132,6 +1461,18 @@ fieldMapColumns.put("Subscription", fields);
         mapValue.put("externalSubscriptionId", getExternalSubscriptionId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
+        mapValue.put("purchaseFromDate", getPurchaseFromDate());
+        mapValue.put("purchaseThruDate", getPurchaseThruDate());
+        mapValue.put("maxLifeTime", getMaxLifeTime());
+        mapValue.put("maxLifeTimeUomId", getMaxLifeTimeUomId());
+        mapValue.put("availableTime", getAvailableTime());
+        mapValue.put("availableTimeUomId", getAvailableTimeUomId());
+        mapValue.put("useCountLimit", getUseCountLimit());
+        mapValue.put("useTime", getUseTime());
+        mapValue.put("useTimeUomId", getUseTimeUomId());
+        mapValue.put("automaticExtend", getAutomaticExtend());
+        mapValue.put("canclAutmExtTime", getCanclAutmExtTime());
+        mapValue.put("canclAutmExtTimeUomId", getCanclAutmExtTimeUomId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

@@ -51,7 +51,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyAndPerson.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyAndPersons", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.EXTERNAL_ID AS \"externalId\",PTY.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PTY.DESCRIPTION AS \"description\",PTY.STATUS_ID AS \"statusId\",PTY.CREATED_DATE AS \"createdDate\",PTY.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PTY.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PTY.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PERS.SALUTATION AS \"salutation\",PERS.FIRST_NAME AS \"firstName\",PERS.MIDDLE_NAME AS \"middleName\",PERS.LAST_NAME AS \"lastName\",PERS.PERSONAL_TITLE AS \"personalTitle\",PERS.SUFFIX AS \"suffix\",PERS.NICKNAME AS \"nickname\",PERS.FIRST_NAME_LOCAL AS \"firstNameLocal\",PERS.LAST_NAME_LOCAL AS \"lastNameLocal\",PERS.MEMBER_ID AS \"memberId\",PERS.GENDER AS \"gender\",PERS.BIRTH_DATE AS \"birthDate\",PERS.HEIGHT AS \"height\",PERS.WEIGHT AS \"weight\",PERS.MOTHERS_MAIDEN_NAME AS \"mothersMaidenName\",PERS.MARITAL_STATUS AS \"maritalStatus\",PERS.SOCIAL_SECURITY_NUMBER AS \"socialSecurityNumber\",PERS.PASSPORT_NUMBER AS \"passportNumber\",PERS.PASSPORT_EXPIRE_DATE AS \"passportExpireDate\",PERS.TOTAL_YEARS_WORK_EXPERIENCE AS \"totalYearsWorkExperience\",PERS.COMMENTS AS \"comments\",PERS.EMPLOYMENT_STATUS_ENUM_ID AS \"employmentStatusEnumId\",PERS.RESIDENCE_STATUS_ENUM_ID AS \"residenceStatusEnumId\",PERS.OCCUPATION AS \"occupation\",PERS.YEARS_WITH_EMPLOYER AS \"yearsWithEmployer\",PERS.MONTHS_WITH_EMPLOYER AS \"monthsWithEmployer\",PERS.EXISTING_CUSTOMER AS \"existingCustomer\" FROM PARTY PTY INNER JOIN PERSON PERS ON PTY.PARTY_ID = PERS.PARTY_ID", resultSetMapping="PartyAndPersonMapping")
+@NamedNativeQuery(name="selectPartyAndPersons", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.EXTERNAL_ID AS \"externalId\",PTY.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PTY.DESCRIPTION AS \"description\",PTY.STATUS_ID AS \"statusId\",PTY.CREATED_DATE AS \"createdDate\",PTY.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PTY.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PTY.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PTY.DATA_SOURCE_ID AS \"dataSourceId\",PTY.IS_UNREAD AS \"isUnread\",PERS.SALUTATION AS \"salutation\",PERS.FIRST_NAME AS \"firstName\",PERS.MIDDLE_NAME AS \"middleName\",PERS.LAST_NAME AS \"lastName\",PERS.PERSONAL_TITLE AS \"personalTitle\",PERS.SUFFIX AS \"suffix\",PERS.NICKNAME AS \"nickname\",PERS.FIRST_NAME_LOCAL AS \"firstNameLocal\",PERS.MIDDLE_NAME_LOCAL AS \"middleNameLocal\",PERS.LAST_NAME_LOCAL AS \"lastNameLocal\",PERS.OTHER_LOCAL AS \"otherLocal\",PERS.MEMBER_ID AS \"memberId\",PERS.GENDER AS \"gender\",PERS.BIRTH_DATE AS \"birthDate\",PERS.HEIGHT AS \"height\",PERS.WEIGHT AS \"weight\",PERS.MOTHERS_MAIDEN_NAME AS \"mothersMaidenName\",PERS.MARITAL_STATUS AS \"maritalStatus\",PERS.SOCIAL_SECURITY_NUMBER AS \"socialSecurityNumber\",PERS.PASSPORT_NUMBER AS \"passportNumber\",PERS.PASSPORT_EXPIRE_DATE AS \"passportExpireDate\",PERS.TOTAL_YEARS_WORK_EXPERIENCE AS \"totalYearsWorkExperience\",PERS.COMMENTS AS \"comments\",PERS.EMPLOYMENT_STATUS_ENUM_ID AS \"employmentStatusEnumId\",PERS.RESIDENCE_STATUS_ENUM_ID AS \"residenceStatusEnumId\",PERS.OCCUPATION AS \"occupation\",PERS.YEARS_WITH_EMPLOYER AS \"yearsWithEmployer\",PERS.MONTHS_WITH_EMPLOYER AS \"monthsWithEmployer\",PERS.EXISTING_CUSTOMER AS \"existingCustomer\" FROM PARTY PTY INNER JOIN PERSON PERS ON PTY.PARTY_ID = PERS.PARTY_ID", resultSetMapping="PartyAndPersonMapping")
 @SqlResultSetMapping(name="PartyAndPersonMapping", entities={
 @EntityResult(entityClass=PartyAndPerson.class, fields = {
 @FieldResult(name="partyId", column="partyId")
@@ -64,6 +64,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
+,@FieldResult(name="dataSourceId", column="dataSourceId")
+,@FieldResult(name="isUnread", column="isUnread")
 ,@FieldResult(name="salutation", column="salutation")
 ,@FieldResult(name="firstName", column="firstName")
 ,@FieldResult(name="middleName", column="middleName")
@@ -72,7 +74,9 @@ import java.sql.Timestamp;
 ,@FieldResult(name="suffix", column="suffix")
 ,@FieldResult(name="nickname", column="nickname")
 ,@FieldResult(name="firstNameLocal", column="firstNameLocal")
+,@FieldResult(name="middleNameLocal", column="middleNameLocal")
 ,@FieldResult(name="lastNameLocal", column="lastNameLocal")
+,@FieldResult(name="otherLocal", column="otherLocal")
 ,@FieldResult(name="memberId", column="memberId")
 ,@FieldResult(name="gender", column="gender")
 ,@FieldResult(name="birthDate", column="birthDate")
@@ -107,6 +111,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdByUserLogin", "PTY.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "PTY.LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "PTY.LAST_MODIFIED_BY_USER_LOGIN");
+        fields.put("dataSourceId", "PTY.DATA_SOURCE_ID");
+        fields.put("isUnread", "PTY.IS_UNREAD");
         fields.put("salutation", "PERS.SALUTATION");
         fields.put("firstName", "PERS.FIRST_NAME");
         fields.put("middleName", "PERS.MIDDLE_NAME");
@@ -115,7 +121,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("suffix", "PERS.SUFFIX");
         fields.put("nickname", "PERS.NICKNAME");
         fields.put("firstNameLocal", "PERS.FIRST_NAME_LOCAL");
+        fields.put("middleNameLocal", "PERS.MIDDLE_NAME_LOCAL");
         fields.put("lastNameLocal", "PERS.LAST_NAME_LOCAL");
+        fields.put("otherLocal", "PERS.OTHER_LOCAL");
         fields.put("memberId", "PERS.MEMBER_ID");
         fields.put("gender", "PERS.GENDER");
         fields.put("birthDate", "PERS.BIRTH_DATE");
@@ -147,6 +155,8 @@ fieldMapColumns.put("PartyAndPerson", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
+    dataSourceId("dataSourceId"),
+    isUnread("isUnread"),
     salutation("salutation"),
     firstName("firstName"),
     middleName("middleName"),
@@ -155,7 +165,9 @@ fieldMapColumns.put("PartyAndPerson", fields);
     suffix("suffix"),
     nickname("nickname"),
     firstNameLocal("firstNameLocal"),
+    middleNameLocal("middleNameLocal"),
     lastNameLocal("lastNameLocal"),
+    otherLocal("otherLocal"),
     memberId("memberId"),
     gender("gender"),
     birthDate("birthDate"),
@@ -205,6 +217,10 @@ fieldMapColumns.put("PartyAndPerson", fields);
     
    private String lastModifiedByUserLogin;
     
+   private String dataSourceId;
+    
+   private String isUnread;
+    
    private String salutation;
     
    private String firstName;
@@ -221,7 +237,11 @@ fieldMapColumns.put("PartyAndPerson", fields);
     
    private String firstNameLocal;
     
+   private String middleNameLocal;
+    
    private String lastNameLocal;
+    
+   private String otherLocal;
     
    private String memberId;
     
@@ -270,7 +290,7 @@ fieldMapColumns.put("PartyAndPerson", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("salutation");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("nickname");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("memberId");this.allFieldsNames.add("gender");this.allFieldsNames.add("birthDate");this.allFieldsNames.add("height");this.allFieldsNames.add("weight");this.allFieldsNames.add("mothersMaidenName");this.allFieldsNames.add("maritalStatus");this.allFieldsNames.add("socialSecurityNumber");this.allFieldsNames.add("passportNumber");this.allFieldsNames.add("passportExpireDate");this.allFieldsNames.add("totalYearsWorkExperience");this.allFieldsNames.add("comments");this.allFieldsNames.add("employmentStatusEnumId");this.allFieldsNames.add("residenceStatusEnumId");this.allFieldsNames.add("occupation");this.allFieldsNames.add("yearsWithEmployer");this.allFieldsNames.add("monthsWithEmployer");this.allFieldsNames.add("existingCustomer");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("salutation");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("nickname");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("middleNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("otherLocal");this.allFieldsNames.add("memberId");this.allFieldsNames.add("gender");this.allFieldsNames.add("birthDate");this.allFieldsNames.add("height");this.allFieldsNames.add("weight");this.allFieldsNames.add("mothersMaidenName");this.allFieldsNames.add("maritalStatus");this.allFieldsNames.add("socialSecurityNumber");this.allFieldsNames.add("passportNumber");this.allFieldsNames.add("passportExpireDate");this.allFieldsNames.add("totalYearsWorkExperience");this.allFieldsNames.add("comments");this.allFieldsNames.add("employmentStatusEnumId");this.allFieldsNames.add("residenceStatusEnumId");this.allFieldsNames.add("occupation");this.allFieldsNames.add("yearsWithEmployer");this.allFieldsNames.add("monthsWithEmployer");this.allFieldsNames.add("existingCustomer");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -360,6 +380,20 @@ fieldMapColumns.put("PartyAndPerson", fields);
     }
     /**
      * Auto generated value setter.
+     * @param dataSourceId the dataSourceId to set
+     */
+    private void setDataSourceId(String dataSourceId) {
+        this.dataSourceId = dataSourceId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param isUnread the isUnread to set
+     */
+    private void setIsUnread(String isUnread) {
+        this.isUnread = isUnread;
+    }
+    /**
+     * Auto generated value setter.
      * @param salutation the salutation to set
      */
     private void setSalutation(String salutation) {
@@ -416,10 +450,24 @@ fieldMapColumns.put("PartyAndPerson", fields);
     }
     /**
      * Auto generated value setter.
+     * @param middleNameLocal the middleNameLocal to set
+     */
+    private void setMiddleNameLocal(String middleNameLocal) {
+        this.middleNameLocal = middleNameLocal;
+    }
+    /**
+     * Auto generated value setter.
      * @param lastNameLocal the lastNameLocal to set
      */
     private void setLastNameLocal(String lastNameLocal) {
         this.lastNameLocal = lastNameLocal;
+    }
+    /**
+     * Auto generated value setter.
+     * @param otherLocal the otherLocal to set
+     */
+    private void setOtherLocal(String otherLocal) {
+        this.otherLocal = otherLocal;
     }
     /**
      * Auto generated value setter.
@@ -622,6 +670,20 @@ fieldMapColumns.put("PartyAndPerson", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getDataSourceId() {
+        return this.dataSourceId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIsUnread() {
+        return this.isUnread;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getSalutation() {
         return this.salutation;
     }
@@ -678,8 +740,22 @@ fieldMapColumns.put("PartyAndPerson", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getMiddleNameLocal() {
+        return this.middleNameLocal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getLastNameLocal() {
         return this.lastNameLocal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOtherLocal() {
+        return this.otherLocal;
     }
     /**
      * Auto generated value accessor.
@@ -825,6 +901,8 @@ fieldMapColumns.put("PartyAndPerson", fields);
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
+        setDataSourceId((String) mapValue.get("dataSourceId"));
+        setIsUnread((String) mapValue.get("isUnread"));
         setSalutation((String) mapValue.get("salutation"));
         setFirstName((String) mapValue.get("firstName"));
         setMiddleName((String) mapValue.get("middleName"));
@@ -833,7 +911,9 @@ fieldMapColumns.put("PartyAndPerson", fields);
         setSuffix((String) mapValue.get("suffix"));
         setNickname((String) mapValue.get("nickname"));
         setFirstNameLocal((String) mapValue.get("firstNameLocal"));
+        setMiddleNameLocal((String) mapValue.get("middleNameLocal"));
         setLastNameLocal((String) mapValue.get("lastNameLocal"));
+        setOtherLocal((String) mapValue.get("otherLocal"));
         setMemberId((String) mapValue.get("memberId"));
         setGender((String) mapValue.get("gender"));
         setBirthDate((Date) mapValue.get("birthDate"));
@@ -869,6 +949,8 @@ fieldMapColumns.put("PartyAndPerson", fields);
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
+        mapValue.put("dataSourceId", getDataSourceId());
+        mapValue.put("isUnread", getIsUnread());
         mapValue.put("salutation", getSalutation());
         mapValue.put("firstName", getFirstName());
         mapValue.put("middleName", getMiddleName());
@@ -877,7 +959,9 @@ fieldMapColumns.put("PartyAndPerson", fields);
         mapValue.put("suffix", getSuffix());
         mapValue.put("nickname", getNickname());
         mapValue.put("firstNameLocal", getFirstNameLocal());
+        mapValue.put("middleNameLocal", getMiddleNameLocal());
         mapValue.put("lastNameLocal", getLastNameLocal());
+        mapValue.put("otherLocal", getOtherLocal());
         mapValue.put("memberId", getMemberId());
         mapValue.put("gender", getGender());
         mapValue.put("birthDate", getBirthDate());

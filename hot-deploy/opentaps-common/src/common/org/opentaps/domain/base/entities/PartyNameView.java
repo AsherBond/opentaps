@@ -47,12 +47,13 @@ import java.lang.String;
  * Auto generated base entity PartyNameView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyNameViews", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.DESCRIPTION AS \"description\",PER.FIRST_NAME AS \"firstName\",PER.MIDDLE_NAME AS \"middleName\",PER.LAST_NAME AS \"lastName\",PER.FIRST_NAME_LOCAL AS \"firstNameLocal\",PER.LAST_NAME_LOCAL AS \"lastNameLocal\",PER.PERSONAL_TITLE AS \"personalTitle\",PER.SUFFIX AS \"suffix\",PTYGRP.GROUP_NAME AS \"groupName\",PTYGRP.GROUP_NAME_LOCAL AS \"groupNameLocal\" FROM PARTY PTY LEFT JOIN PERSON PER ON PTY.PARTY_ID = PER.PARTY_ID LEFT JOIN PARTY_GROUP PTYGRP ON PTY.PARTY_ID = PTYGRP.PARTY_ID", resultSetMapping="PartyNameViewMapping")
+@NamedNativeQuery(name="selectPartyNameViews", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.DESCRIPTION AS \"description\",PTY.STATUS_ID AS \"statusId\",PER.FIRST_NAME AS \"firstName\",PER.MIDDLE_NAME AS \"middleName\",PER.LAST_NAME AS \"lastName\",PER.FIRST_NAME_LOCAL AS \"firstNameLocal\",PER.LAST_NAME_LOCAL AS \"lastNameLocal\",PER.PERSONAL_TITLE AS \"personalTitle\",PER.SUFFIX AS \"suffix\",PTYGRP.GROUP_NAME AS \"groupName\",PTYGRP.GROUP_NAME_LOCAL AS \"groupNameLocal\" FROM PARTY PTY LEFT JOIN PERSON PER ON PTY.PARTY_ID = PER.PARTY_ID LEFT JOIN PARTY_GROUP PTYGRP ON PTY.PARTY_ID = PTYGRP.PARTY_ID", resultSetMapping="PartyNameViewMapping")
 @SqlResultSetMapping(name="PartyNameViewMapping", entities={
 @EntityResult(entityClass=PartyNameView.class, fields = {
 @FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="partyTypeId", column="partyTypeId")
 ,@FieldResult(name="description", column="description")
+,@FieldResult(name="statusId", column="statusId")
 ,@FieldResult(name="firstName", column="firstName")
 ,@FieldResult(name="middleName", column="middleName")
 ,@FieldResult(name="lastName", column="lastName")
@@ -71,6 +72,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("partyId", "PTY.PARTY_ID");
         fields.put("partyTypeId", "PTY.PARTY_TYPE_ID");
         fields.put("description", "PTY.DESCRIPTION");
+        fields.put("statusId", "PTY.STATUS_ID");
         fields.put("firstName", "PER.FIRST_NAME");
         fields.put("middleName", "PER.MIDDLE_NAME");
         fields.put("lastName", "PER.LAST_NAME");
@@ -86,6 +88,7 @@ fieldMapColumns.put("PartyNameView", fields);
     partyId("partyId"),
     partyTypeId("partyTypeId"),
     description("description"),
+    statusId("statusId"),
     firstName("firstName"),
     middleName("middleName"),
     lastName("lastName"),
@@ -111,6 +114,8 @@ fieldMapColumns.put("PartyNameView", fields);
    private String partyTypeId;
     
    private String description;
+    
+   private String statusId;
     
    private String firstName;
     
@@ -152,7 +157,7 @@ fieldMapColumns.put("PartyNameView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -190,6 +195,13 @@ fieldMapColumns.put("PartyNameView", fields);
      */
     private void setDescription(String description) {
         this.description = description;
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusId the statusId to set
+     */
+    private void setStatusId(String statusId) {
+        this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
@@ -275,6 +287,13 @@ fieldMapColumns.put("PartyNameView", fields);
      */
     public String getDescription() {
         return this.description;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getStatusId() {
+        return this.statusId;
     }
     /**
      * Auto generated value accessor.
@@ -413,6 +432,7 @@ fieldMapColumns.put("PartyNameView", fields);
         setPartyId((String) mapValue.get("partyId"));
         setPartyTypeId((String) mapValue.get("partyTypeId"));
         setDescription((String) mapValue.get("description"));
+        setStatusId((String) mapValue.get("statusId"));
         setFirstName((String) mapValue.get("firstName"));
         setMiddleName((String) mapValue.get("middleName"));
         setLastName((String) mapValue.get("lastName"));
@@ -432,6 +452,7 @@ fieldMapColumns.put("PartyNameView", fields);
         mapValue.put("partyId", getPartyId());
         mapValue.put("partyTypeId", getPartyTypeId());
         mapValue.put("description", getDescription());
+        mapValue.put("statusId", getStatusId());
         mapValue.put("firstName", getFirstName());
         mapValue.put("middleName", getMiddleName());
         mapValue.put("lastName", getLastName());

@@ -62,6 +62,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("thruDate", "THRU_DATE");
         fields.put("price", "PRICE");
         fields.put("termUomId", "TERM_UOM_ID");
+        fields.put("customPriceCalcService", "CUSTOM_PRICE_CALC_SERVICE");
         fields.put("createdDate", "CREATED_DATE");
         fields.put("createdByUserLogin", "CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "LAST_MODIFIED_DATE");
@@ -82,6 +83,7 @@ fieldMapColumns.put("ProductPrice", fields);
     thruDate("thruDate"),
     price("price"),
     termUomId("termUomId"),
+    customPriceCalcService("customPriceCalcService"),
     createdDate("createdDate"),
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
@@ -125,6 +127,8 @@ fieldMapColumns.put("ProductPrice", fields);
    private BigDecimal price;
    @Column(name="TERM_UOM_ID")
    private String termUomId;
+   @Column(name="CUSTOM_PRICE_CALC_SERVICE")
+   private String customPriceCalcService;
    @Column(name="CREATED_DATE")
    private Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
@@ -184,6 +188,13 @@ fieldMapColumns.put("ProductPrice", fields);
    
    private ProductStoreGroup productStoreGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="CUSTOM_PRICE_CALC_SERVICE", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private CustomMethod customMethod = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -210,7 +221,7 @@ fieldMapColumns.put("ProductPrice", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");this.primaryKeyNames.add("productPriceTypeId");this.primaryKeyNames.add("productPricePurposeId");this.primaryKeyNames.add("currencyUomId");this.primaryKeyNames.add("productStoreGroupId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("productPriceTypeId");this.allFieldsNames.add("productPricePurposeId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("productStoreGroupId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("price");this.allFieldsNames.add("termUomId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("productPriceTypeId");this.allFieldsNames.add("productPricePurposeId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("productStoreGroupId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("price");this.allFieldsNames.add("termUomId");this.allFieldsNames.add("customPriceCalcService");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -287,6 +298,13 @@ fieldMapColumns.put("ProductPrice", fields);
      */
     public void setTermUomId(String termUomId) {
         this.termUomId = termUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param customPriceCalcService the customPriceCalcService to set
+     */
+    public void setCustomPriceCalcService(String customPriceCalcService) {
+        this.customPriceCalcService = customPriceCalcService;
     }
     /**
      * Auto generated value setter.
@@ -407,6 +425,13 @@ fieldMapColumns.put("ProductPrice", fields);
      */
     public String getTermUomId() {
         return this.termUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCustomPriceCalcService() {
+        return this.customPriceCalcService;
     }
     /**
      * Auto generated value accessor.
@@ -532,6 +557,17 @@ fieldMapColumns.put("ProductPrice", fields);
         return this.productStoreGroup;
     }
     /**
+     * Auto generated method that gets the related <code>CustomMethod</code> by the relation named <code>CustomMethod</code>.
+     * @return the <code>CustomMethod</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public CustomMethod getCustomMethod() throws RepositoryException {
+        if (this.customMethod == null) {
+            this.customMethod = getRelatedOne(CustomMethod.class, "CustomMethod");
+        }
+        return this.customMethod;
+    }
+    /**
      * Auto generated method that gets the related <code>UserLogin</code> by the relation named <code>CreatedByUserLogin</code>.
      * @return the <code>UserLogin</code>
      * @throws RepositoryException if an error occurs
@@ -609,6 +645,13 @@ fieldMapColumns.put("ProductPrice", fields);
     }
     /**
      * Auto generated value setter.
+     * @param customMethod the customMethod to set
+    */
+    public void setCustomMethod(CustomMethod customMethod) {
+        this.customMethod = customMethod;
+    }
+    /**
+     * Auto generated value setter.
      * @param relatedCreatedByUserLogin the relatedCreatedByUserLogin to set
     */
     public void setRelatedCreatedByUserLogin(UserLogin relatedCreatedByUserLogin) {
@@ -643,6 +686,7 @@ fieldMapColumns.put("ProductPrice", fields);
         setThruDate((Timestamp) mapValue.get("thruDate"));
         setPrice(convertToBigDecimal(mapValue.get("price")));
         setTermUomId((String) mapValue.get("termUomId"));
+        setCustomPriceCalcService((String) mapValue.get("customPriceCalcService"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
@@ -667,6 +711,7 @@ fieldMapColumns.put("ProductPrice", fields);
         mapValue.put("thruDate", getThruDate());
         mapValue.put("price", getPrice());
         mapValue.put("termUomId", getTermUomId());
+        mapValue.put("customPriceCalcService", getCustomPriceCalcService());
         mapValue.put("createdDate", getCreatedDate());
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());

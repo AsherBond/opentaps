@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyRelationshipAndCaseRole.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyRelationshipAndCaseRoles", query="SELECT CRR.PARTY_ID AS \"partyId\",CRR.ROLE_TYPE_ID AS \"roleTypeId\",PR.PARTY_ID_TO AS \"partyIdTo\",PR.PARTY_ID_FROM AS \"partyIdFrom\",PR.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR.FROM_DATE AS \"fromDate\",PR.THRU_DATE AS \"thruDate\",CR.CUST_REQUEST_ID AS \"custRequestId\",CR.CUST_REQUEST_TYPE_ID AS \"custRequestTypeId\",CR.CUST_REQUEST_CATEGORY_ID AS \"custRequestCategoryId\",CR.STATUS_ID AS \"statusId\",CR.FROM_PARTY_ID AS \"fromPartyId\",CR.PRIORITY AS \"priority\",CR.CUST_REQUEST_DATE AS \"custRequestDate\",CR.RESPONSE_REQUIRED_DATE AS \"responseRequiredDate\",CR.CUST_REQUEST_NAME AS \"custRequestName\",CR.DESCRIPTION AS \"description\",CR.MAXIMUM_AMOUNT_UOM_ID AS \"maximumAmountUomId\",CR.PRODUCT_STORE_ID AS \"productStoreId\",CR.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",CR.FULFILL_CONTACT_MECH_ID AS \"fulfillContactMechId\",CR.CREATED_DATE AS \"createdDate\",CR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CR.FULFILLED_DATE_TIME AS \"fulfilledDateTime\" FROM CUST_REQUEST CR INNER JOIN CUST_REQUEST_ROLE CRR ON CRR.CUST_REQUEST_ID = CR.CUST_REQUEST_ID LEFT JOIN PARTY_RELATIONSHIP PR ON CRR.PARTY_ID = PR.PARTY_ID_FROM", resultSetMapping="PartyRelationshipAndCaseRoleMapping")
+@NamedNativeQuery(name="selectPartyRelationshipAndCaseRoles", query="SELECT CRR.PARTY_ID AS \"partyId\",CRR.ROLE_TYPE_ID AS \"roleTypeId\",PR.PARTY_ID_TO AS \"partyIdTo\",PR.PARTY_ID_FROM AS \"partyIdFrom\",PR.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR.FROM_DATE AS \"fromDate\",PR.THRU_DATE AS \"thruDate\",CR.CUST_REQUEST_ID AS \"custRequestId\",CR.CUST_REQUEST_TYPE_ID AS \"custRequestTypeId\",CR.CUST_REQUEST_CATEGORY_ID AS \"custRequestCategoryId\",CR.STATUS_ID AS \"statusId\",CR.FROM_PARTY_ID AS \"fromPartyId\",CR.PRIORITY AS \"priority\",CR.CUST_REQUEST_DATE AS \"custRequestDate\",CR.RESPONSE_REQUIRED_DATE AS \"responseRequiredDate\",CR.CUST_REQUEST_NAME AS \"custRequestName\",CR.DESCRIPTION AS \"description\",CR.MAXIMUM_AMOUNT_UOM_ID AS \"maximumAmountUomId\",CR.PRODUCT_STORE_ID AS \"productStoreId\",CR.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",CR.FULFILL_CONTACT_MECH_ID AS \"fulfillContactMechId\",CR.CURRENCY_UOM_ID AS \"currencyUomId\",CR.OPEN_DATE_TIME AS \"openDateTime\",CR.CLOSED_DATE_TIME AS \"closedDateTime\",CR.INTERNAL_COMMENT AS \"internalComment\",CR.REASON AS \"reason\",CR.CREATED_DATE AS \"createdDate\",CR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CR.FULFILLED_DATE_TIME AS \"fulfilledDateTime\" FROM CUST_REQUEST CR INNER JOIN CUST_REQUEST_PARTY CRR ON CRR.CUST_REQUEST_ID = CR.CUST_REQUEST_ID LEFT JOIN PARTY_RELATIONSHIP PR ON CRR.PARTY_ID = PR.PARTY_ID_FROM", resultSetMapping="PartyRelationshipAndCaseRoleMapping")
 @SqlResultSetMapping(name="PartyRelationshipAndCaseRoleMapping", entities={
 @EntityResult(entityClass=PartyRelationshipAndCaseRole.class, fields = {
 @FieldResult(name="partyId", column="partyId")
@@ -73,6 +73,11 @@ import java.sql.Timestamp;
 ,@FieldResult(name="productStoreId", column="productStoreId")
 ,@FieldResult(name="salesChannelEnumId", column="salesChannelEnumId")
 ,@FieldResult(name="fulfillContactMechId", column="fulfillContactMechId")
+,@FieldResult(name="currencyUomId", column="currencyUomId")
+,@FieldResult(name="openDateTime", column="openDateTime")
+,@FieldResult(name="closedDateTime", column="closedDateTime")
+,@FieldResult(name="internalComment", column="internalComment")
+,@FieldResult(name="reason", column="reason")
 ,@FieldResult(name="createdDate", column="createdDate")
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
@@ -105,6 +110,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("productStoreId", "CR.PRODUCT_STORE_ID");
         fields.put("salesChannelEnumId", "CR.SALES_CHANNEL_ENUM_ID");
         fields.put("fulfillContactMechId", "CR.FULFILL_CONTACT_MECH_ID");
+        fields.put("currencyUomId", "CR.CURRENCY_UOM_ID");
+        fields.put("openDateTime", "CR.OPEN_DATE_TIME");
+        fields.put("closedDateTime", "CR.CLOSED_DATE_TIME");
+        fields.put("internalComment", "CR.INTERNAL_COMMENT");
+        fields.put("reason", "CR.REASON");
         fields.put("createdDate", "CR.CREATED_DATE");
         fields.put("createdByUserLogin", "CR.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "CR.LAST_MODIFIED_DATE");
@@ -134,6 +144,11 @@ fieldMapColumns.put("PartyRelationshipAndCaseRole", fields);
     productStoreId("productStoreId"),
     salesChannelEnumId("salesChannelEnumId"),
     fulfillContactMechId("fulfillContactMechId"),
+    currencyUomId("currencyUomId"),
+    openDateTime("openDateTime"),
+    closedDateTime("closedDateTime"),
+    internalComment("internalComment"),
+    reason("reason"),
     createdDate("createdDate"),
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
@@ -192,6 +207,16 @@ fieldMapColumns.put("PartyRelationshipAndCaseRole", fields);
     
    private String fulfillContactMechId;
     
+   private String currencyUomId;
+    
+   private Timestamp openDateTime;
+    
+   private Timestamp closedDateTime;
+    
+   private String internalComment;
+    
+   private String reason;
+    
    private Timestamp createdDate;
     
    private String createdByUserLogin;
@@ -241,7 +266,7 @@ fieldMapColumns.put("PartyRelationshipAndCaseRole", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");this.primaryKeyNames.add("partyIdTo");this.primaryKeyNames.add("partyIdFrom");this.primaryKeyNames.add("roleTypeIdFrom");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("custRequestId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("custRequestCategoryId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromPartyId");this.allFieldsNames.add("priority");this.allFieldsNames.add("custRequestDate");this.allFieldsNames.add("responseRequiredDate");this.allFieldsNames.add("custRequestName");this.allFieldsNames.add("description");this.allFieldsNames.add("maximumAmountUomId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("fulfillContactMechId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("fulfilledDateTime");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("custRequestCategoryId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromPartyId");this.allFieldsNames.add("priority");this.allFieldsNames.add("custRequestDate");this.allFieldsNames.add("responseRequiredDate");this.allFieldsNames.add("custRequestName");this.allFieldsNames.add("description");this.allFieldsNames.add("maximumAmountUomId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("fulfillContactMechId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("openDateTime");this.allFieldsNames.add("closedDateTime");this.allFieldsNames.add("internalComment");this.allFieldsNames.add("reason");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("fulfilledDateTime");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -405,6 +430,41 @@ fieldMapColumns.put("PartyRelationshipAndCaseRole", fields);
      */
     private void setFulfillContactMechId(String fulfillContactMechId) {
         this.fulfillContactMechId = fulfillContactMechId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param currencyUomId the currencyUomId to set
+     */
+    private void setCurrencyUomId(String currencyUomId) {
+        this.currencyUomId = currencyUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param openDateTime the openDateTime to set
+     */
+    private void setOpenDateTime(Timestamp openDateTime) {
+        this.openDateTime = openDateTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param closedDateTime the closedDateTime to set
+     */
+    private void setClosedDateTime(Timestamp closedDateTime) {
+        this.closedDateTime = closedDateTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param internalComment the internalComment to set
+     */
+    private void setInternalComment(String internalComment) {
+        this.internalComment = internalComment;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reason the reason to set
+     */
+    private void setReason(String reason) {
+        this.reason = reason;
     }
     /**
      * Auto generated value setter.
@@ -591,6 +651,41 @@ fieldMapColumns.put("PartyRelationshipAndCaseRole", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCurrencyUomId() {
+        return this.currencyUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getOpenDateTime() {
+        return this.openDateTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getClosedDateTime() {
+        return this.closedDateTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInternalComment() {
+        return this.internalComment;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReason() {
+        return this.reason;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getCreatedDate() {
@@ -725,6 +820,11 @@ fieldMapColumns.put("PartyRelationshipAndCaseRole", fields);
         setProductStoreId((String) mapValue.get("productStoreId"));
         setSalesChannelEnumId((String) mapValue.get("salesChannelEnumId"));
         setFulfillContactMechId((String) mapValue.get("fulfillContactMechId"));
+        setCurrencyUomId((String) mapValue.get("currencyUomId"));
+        setOpenDateTime((Timestamp) mapValue.get("openDateTime"));
+        setClosedDateTime((Timestamp) mapValue.get("closedDateTime"));
+        setInternalComment((String) mapValue.get("internalComment"));
+        setReason((String) mapValue.get("reason"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
@@ -758,6 +858,11 @@ fieldMapColumns.put("PartyRelationshipAndCaseRole", fields);
         mapValue.put("productStoreId", getProductStoreId());
         mapValue.put("salesChannelEnumId", getSalesChannelEnumId());
         mapValue.put("fulfillContactMechId", getFulfillContactMechId());
+        mapValue.put("currencyUomId", getCurrencyUomId());
+        mapValue.put("openDateTime", getOpenDateTime());
+        mapValue.put("closedDateTime", getClosedDateTime());
+        mapValue.put("internalComment", getInternalComment());
+        mapValue.put("reason", getReason());
         mapValue.put("createdDate", getCreatedDate());
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());

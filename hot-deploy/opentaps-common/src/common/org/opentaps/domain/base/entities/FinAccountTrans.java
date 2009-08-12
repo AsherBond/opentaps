@@ -64,6 +64,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("orderId", "ORDER_ID");
         fields.put("orderItemSeqId", "ORDER_ITEM_SEQ_ID");
         fields.put("performedByPartyId", "PERFORMED_BY_PARTY_ID");
+        fields.put("reasonEnumId", "REASON_ENUM_ID");
+        fields.put("comments", "COMMENTS");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -82,6 +84,8 @@ fieldMapColumns.put("FinAccountTrans", fields);
     orderId("orderId"),
     orderItemSeqId("orderItemSeqId"),
     performedByPartyId("performedByPartyId"),
+    reasonEnumId("reasonEnumId"),
+    comments("comments"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -121,6 +125,10 @@ fieldMapColumns.put("FinAccountTrans", fields);
    private String orderItemSeqId;
    @Column(name="PERFORMED_BY_PARTY_ID")
    private String performedByPartyId;
+   @Column(name="REASON_ENUM_ID")
+   private String reasonEnumId;
+   @Column(name="COMMENTS")
+   private String comments;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -169,6 +177,13 @@ fieldMapColumns.put("FinAccountTrans", fields);
    )
    
    private Party performedByParty = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="REASON_ENUM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration reasonEnumeration = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIN_ACCOUNT_TRANS_ID")
    
@@ -189,7 +204,7 @@ fieldMapColumns.put("FinAccountTrans", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("finAccountTransId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("finAccountTransTypeId");this.allFieldsNames.add("finAccountId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("amount");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("performedByPartyId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("finAccountTransId");this.allFieldsNames.add("finAccountTransTypeId");this.allFieldsNames.add("finAccountId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("amount");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("performedByPartyId");this.allFieldsNames.add("reasonEnumId");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -280,6 +295,20 @@ fieldMapColumns.put("FinAccountTrans", fields);
      */
     public void setPerformedByPartyId(String performedByPartyId) {
         this.performedByPartyId = performedByPartyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reasonEnumId the reasonEnumId to set
+     */
+    public void setReasonEnumId(String reasonEnumId) {
+        this.reasonEnumId = reasonEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param comments the comments to set
+     */
+    public void setComments(String comments) {
+        this.comments = comments;
     }
     /**
      * Auto generated value setter.
@@ -389,6 +418,20 @@ fieldMapColumns.put("FinAccountTrans", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReasonEnumId() {
+        return this.reasonEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getComments() {
+        return this.comments;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -494,6 +537,17 @@ fieldMapColumns.put("FinAccountTrans", fields);
         return this.performedByParty;
     }
     /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>ReasonEnumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration getReasonEnumeration() throws RepositoryException {
+        if (this.reasonEnumeration == null) {
+            this.reasonEnumeration = getRelatedOne(Enumeration.class, "ReasonEnumeration");
+        }
+        return this.reasonEnumeration;
+    }
+    /**
      * Auto generated method that gets the related <code>AcctgTrans</code> by the relation named <code>AcctgTrans</code>.
      * @return the list of <code>AcctgTrans</code>
      * @throws RepositoryException if an error occurs
@@ -567,6 +621,13 @@ fieldMapColumns.put("FinAccountTrans", fields);
     }
     /**
      * Auto generated value setter.
+     * @param reasonEnumeration the reasonEnumeration to set
+    */
+    public void setReasonEnumeration(Enumeration reasonEnumeration) {
+        this.reasonEnumeration = reasonEnumeration;
+    }
+    /**
+     * Auto generated value setter.
      * @param acctgTranses the acctgTranses to set
     */
     public void setAcctgTranses(List<AcctgTrans> acctgTranses) {
@@ -623,6 +684,8 @@ fieldMapColumns.put("FinAccountTrans", fields);
         setOrderId((String) mapValue.get("orderId"));
         setOrderItemSeqId((String) mapValue.get("orderItemSeqId"));
         setPerformedByPartyId((String) mapValue.get("performedByPartyId"));
+        setReasonEnumId((String) mapValue.get("reasonEnumId"));
+        setComments((String) mapValue.get("comments"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -645,6 +708,8 @@ fieldMapColumns.put("FinAccountTrans", fields);
         mapValue.put("orderId", getOrderId());
         mapValue.put("orderItemSeqId", getOrderItemSeqId());
         mapValue.put("performedByPartyId", getPerformedByPartyId());
+        mapValue.put("reasonEnumId", getReasonEnumId());
+        mapValue.put("comments", getComments());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

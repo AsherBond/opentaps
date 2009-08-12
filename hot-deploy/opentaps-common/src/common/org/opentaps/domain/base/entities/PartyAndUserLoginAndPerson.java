@@ -49,12 +49,13 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyAndUserLoginAndPerson.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyAndUserLoginAndPersons", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.CREATED_DATE AS \"createdDate\",ULN.USER_LOGIN_ID AS \"userLoginId\",ULN.CURRENT_PASSWORD AS \"currentPassword\",ULN.PASSWORD_HINT AS \"passwordHint\",ULN.ENABLED AS \"enabled\",ULN.DISABLED_DATE_TIME AS \"disabledDateTime\",ULN.SUCCESSIVE_FAILED_LOGINS AS \"successiveFailedLogins\",PER.LAST_NAME AS \"lastName\",PER.FIRST_NAME AS \"firstName\" FROM PARTY PTY INNER JOIN USER_LOGIN ULN ON PTY.PARTY_ID = ULN.PARTY_ID INNER JOIN PERSON PER ON PTY.PARTY_ID = PER.PARTY_ID", resultSetMapping="PartyAndUserLoginAndPersonMapping")
+@NamedNativeQuery(name="selectPartyAndUserLoginAndPersons", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.CREATED_DATE AS \"createdDate\",PTY.STATUS_ID AS \"statusId\",ULN.USER_LOGIN_ID AS \"userLoginId\",ULN.CURRENT_PASSWORD AS \"currentPassword\",ULN.PASSWORD_HINT AS \"passwordHint\",ULN.ENABLED AS \"enabled\",ULN.DISABLED_DATE_TIME AS \"disabledDateTime\",ULN.SUCCESSIVE_FAILED_LOGINS AS \"successiveFailedLogins\",PER.LAST_NAME AS \"lastName\",PER.FIRST_NAME AS \"firstName\" FROM PARTY PTY INNER JOIN USER_LOGIN ULN ON PTY.PARTY_ID = ULN.PARTY_ID INNER JOIN PERSON PER ON PTY.PARTY_ID = PER.PARTY_ID", resultSetMapping="PartyAndUserLoginAndPersonMapping")
 @SqlResultSetMapping(name="PartyAndUserLoginAndPersonMapping", entities={
 @EntityResult(entityClass=PartyAndUserLoginAndPerson.class, fields = {
 @FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="partyTypeId", column="partyTypeId")
 ,@FieldResult(name="createdDate", column="createdDate")
+,@FieldResult(name="statusId", column="statusId")
 ,@FieldResult(name="userLoginId", column="userLoginId")
 ,@FieldResult(name="currentPassword", column="currentPassword")
 ,@FieldResult(name="passwordHint", column="passwordHint")
@@ -72,6 +73,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("partyId", "PTY.PARTY_ID");
         fields.put("partyTypeId", "PTY.PARTY_TYPE_ID");
         fields.put("createdDate", "PTY.CREATED_DATE");
+        fields.put("statusId", "PTY.STATUS_ID");
         fields.put("userLoginId", "ULN.USER_LOGIN_ID");
         fields.put("currentPassword", "ULN.CURRENT_PASSWORD");
         fields.put("passwordHint", "ULN.PASSWORD_HINT");
@@ -86,6 +88,7 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
     partyId("partyId"),
     partyTypeId("partyTypeId"),
     createdDate("createdDate"),
+    statusId("statusId"),
     userLoginId("userLoginId"),
     currentPassword("currentPassword"),
     passwordHint("passwordHint"),
@@ -110,6 +113,8 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
    private String partyTypeId;
     
    private Timestamp createdDate;
+    
+   private String statusId;
     
    private String userLoginId;
     
@@ -152,7 +157,7 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("userLoginId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("currentPassword");this.allFieldsNames.add("passwordHint");this.allFieldsNames.add("enabled");this.allFieldsNames.add("disabledDateTime");this.allFieldsNames.add("successiveFailedLogins");this.allFieldsNames.add("lastName");this.allFieldsNames.add("firstName");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("currentPassword");this.allFieldsNames.add("passwordHint");this.allFieldsNames.add("enabled");this.allFieldsNames.add("disabledDateTime");this.allFieldsNames.add("successiveFailedLogins");this.allFieldsNames.add("lastName");this.allFieldsNames.add("firstName");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -190,6 +195,13 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
      */
     private void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusId the statusId to set
+     */
+    private void setStatusId(String statusId) {
+        this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
@@ -268,6 +280,13 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
      */
     public Timestamp getCreatedDate() {
         return this.createdDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getStatusId() {
+        return this.statusId;
     }
     /**
      * Auto generated value accessor.
@@ -372,6 +391,7 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
         setPartyId((String) mapValue.get("partyId"));
         setPartyTypeId((String) mapValue.get("partyTypeId"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
+        setStatusId((String) mapValue.get("statusId"));
         setUserLoginId((String) mapValue.get("userLoginId"));
         setCurrentPassword((String) mapValue.get("currentPassword"));
         setPasswordHint((String) mapValue.get("passwordHint"));
@@ -390,6 +410,7 @@ fieldMapColumns.put("PartyAndUserLoginAndPerson", fields);
         mapValue.put("partyId", getPartyId());
         mapValue.put("partyTypeId", getPartyTypeId());
         mapValue.put("createdDate", getCreatedDate());
+        mapValue.put("statusId", getStatusId());
         mapValue.put("userLoginId", getUserLoginId());
         mapValue.put("currentPassword", getCurrentPassword());
         mapValue.put("passwordHint", getPasswordHint());

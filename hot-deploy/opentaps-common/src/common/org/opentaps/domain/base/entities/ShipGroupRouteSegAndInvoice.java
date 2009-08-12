@@ -48,7 +48,7 @@ import java.sql.Timestamp;
  * Auto generated base entity ShipGroupRouteSegAndInvoice.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectShipGroupRouteSegAndInvoices", query="SELECT OISG.CARRIER_PARTY_ID AS \"carrierPartyId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OPP.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",OPP.STATUS_ID AS \"statusId\",S.SHIPMENT_ID AS \"shipmentId\",S.SHIPMENT_TYPE_ID AS \"shipmentTypeId\",S.STATUS_ID AS \"statusId\",SRS.TRACKING_ID_NUMBER AS \"trackingIdNumber\",I.INVOICE_ID AS \"invoiceId\",I.INVOICE_TYPE_ID AS \"invoiceTypeId\",I.PARTY_ID_FROM AS \"partyIdFrom\",I.PARTY_ID AS \"partyId\",I.ROLE_TYPE_ID AS \"roleTypeId\",I.STATUS_ID AS \"statusId\",I.BILLING_ACCOUNT_ID AS \"billingAccountId\",I.CONTACT_MECH_ID AS \"contactMechId\",I.INVOICE_DATE AS \"invoiceDate\",I.DUE_DATE AS \"dueDate\",I.PAID_DATE AS \"paidDate\",I.INVOICE_MESSAGE AS \"invoiceMessage\",I.REFERENCE_NUMBER AS \"referenceNumber\",I.DESCRIPTION AS \"description\",I.CURRENCY_UOM_ID AS \"currencyUomId\",I.PROCESSING_STATUS_ID AS \"processingStatusId\" FROM ORDER_ITEM_SHIP_GROUP OISG INNER JOIN ORDER_HEADER OH ON OISG.ORDER_ID = OH.ORDER_ID INNER JOIN ORDER_PAYMENT_PREFERENCE OPP ON OISG.ORDER_ID = OPP.ORDER_ID INNER JOIN SHIPMENT S ON OISG.ORDER_ID = S.PRIMARY_ORDER_ID AND OISG.SHIP_GROUP_SEQ_ID = S.PRIMARY_SHIP_GROUP_SEQ_ID INNER JOIN SHIPMENT_ROUTE_SEGMENT SRS ON S.SHIPMENT_ID = SRS.SHIPMENT_ID INNER JOIN SHIPMENT_ITEM_BILLING SIB ON S.SHIPMENT_ID = SIB.SHIPMENT_ID INNER JOIN INVOICE I ON SIB.INVOICE_ID = I.INVOICE_ID", resultSetMapping="ShipGroupRouteSegAndInvoiceMapping")
+@NamedNativeQuery(name="selectShipGroupRouteSegAndInvoices", query="SELECT OISG.CARRIER_PARTY_ID AS \"carrierPartyId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OPP.PAYMENT_METHOD_TYPE_ID AS \"paymentMethodTypeId\",OPP.STATUS_ID AS \"statusId\",S.SHIPMENT_ID AS \"shipmentId\",S.SHIPMENT_TYPE_ID AS \"shipmentTypeId\",S.STATUS_ID AS \"statusId\",SRS.TRACKING_ID_NUMBER AS \"trackingIdNumber\",I.INVOICE_ID AS \"invoiceId\",I.INVOICE_TYPE_ID AS \"invoiceTypeId\",I.PARTY_ID_FROM AS \"partyIdFrom\",I.PARTY_ID AS \"partyId\",I.ROLE_TYPE_ID AS \"roleTypeId\",I.STATUS_ID AS \"statusId\",I.BILLING_ACCOUNT_ID AS \"billingAccountId\",I.CONTACT_MECH_ID AS \"contactMechId\",I.INVOICE_DATE AS \"invoiceDate\",I.DUE_DATE AS \"dueDate\",I.PAID_DATE AS \"paidDate\",I.INVOICE_MESSAGE AS \"invoiceMessage\",I.REFERENCE_NUMBER AS \"referenceNumber\",I.DESCRIPTION AS \"description\",I.CURRENCY_UOM_ID AS \"currencyUomId\",I.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",I.PROCESSING_STATUS_ID AS \"processingStatusId\" FROM ORDER_ITEM_SHIP_GROUP OISG INNER JOIN ORDER_HEADER OH ON OISG.ORDER_ID = OH.ORDER_ID INNER JOIN ORDER_PAYMENT_PREFERENCE OPP ON OISG.ORDER_ID = OPP.ORDER_ID INNER JOIN SHIPMENT S ON OISG.ORDER_ID = S.PRIMARY_ORDER_ID AND OISG.SHIP_GROUP_SEQ_ID = S.PRIMARY_SHIP_GROUP_SEQ_ID INNER JOIN SHIPMENT_ROUTE_SEGMENT SRS ON S.SHIPMENT_ID = SRS.SHIPMENT_ID INNER JOIN SHIPMENT_ITEM_BILLING SIB ON S.SHIPMENT_ID = SIB.SHIPMENT_ID INNER JOIN INVOICE I ON SIB.INVOICE_ID = I.INVOICE_ID", resultSetMapping="ShipGroupRouteSegAndInvoiceMapping")
 @SqlResultSetMapping(name="ShipGroupRouteSegAndInvoiceMapping", entities={
 @EntityResult(entityClass=ShipGroupRouteSegAndInvoice.class, fields = {
 @FieldResult(name="carrierPartyId", column="carrierPartyId")
@@ -74,6 +74,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="referenceNumber", column="referenceNumber")
 ,@FieldResult(name="description", column="description")
 ,@FieldResult(name="currencyUomId", column="currencyUomId")
+,@FieldResult(name="recurrenceInfoId", column="recurrenceInfoId")
 ,@FieldResult(name="processingStatusId", column="processingStatusId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
@@ -104,6 +105,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("referenceNumber", "I.REFERENCE_NUMBER");
         fields.put("description", "I.DESCRIPTION");
         fields.put("currencyUomId", "I.CURRENCY_UOM_ID");
+        fields.put("recurrenceInfoId", "I.RECURRENCE_INFO_ID");
         fields.put("processingStatusId", "I.PROCESSING_STATUS_ID");
 fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
 }
@@ -131,6 +133,7 @@ fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
     referenceNumber("referenceNumber"),
     description("description"),
     currencyUomId("currencyUomId"),
+    recurrenceInfoId("recurrenceInfoId"),
     processingStatusId("processingStatusId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
@@ -189,6 +192,8 @@ fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
     
    private String currencyUomId;
     
+   private String recurrenceInfoId;
+    
    private String processingStatusId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVOICE_ID", insertable=false, updatable=false)
@@ -209,7 +214,7 @@ fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("shipmentId");this.primaryKeyNames.add("invoiceId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("carrierPartyId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("oppStatusId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentTypeId");this.allFieldsNames.add("shipmentStatusId");this.allFieldsNames.add("trackingIdNumber");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("processingStatusId");
+      this.allFieldsNames.add("carrierPartyId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("oppStatusId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentTypeId");this.allFieldsNames.add("shipmentStatusId");this.allFieldsNames.add("trackingIdNumber");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceTypeId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("invoiceDate");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("paidDate");this.allFieldsNames.add("invoiceMessage");this.allFieldsNames.add("referenceNumber");this.allFieldsNames.add("description");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("processingStatusId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -390,6 +395,13 @@ fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
     }
     /**
      * Auto generated value setter.
+     * @param recurrenceInfoId the recurrenceInfoId to set
+     */
+    private void setRecurrenceInfoId(String recurrenceInfoId) {
+        this.recurrenceInfoId = recurrenceInfoId;
+    }
+    /**
+     * Auto generated value setter.
      * @param processingStatusId the processingStatusId to set
      */
     private void setProcessingStatusId(String processingStatusId) {
@@ -561,6 +573,13 @@ fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getRecurrenceInfoId() {
+        return this.recurrenceInfoId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getProcessingStatusId() {
         return this.processingStatusId;
     }
@@ -613,6 +632,7 @@ fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
         setReferenceNumber((String) mapValue.get("referenceNumber"));
         setDescription((String) mapValue.get("description"));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
+        setRecurrenceInfoId((String) mapValue.get("recurrenceInfoId"));
         setProcessingStatusId((String) mapValue.get("processingStatusId"));
         postInit();
     }
@@ -644,6 +664,7 @@ fieldMapColumns.put("ShipGroupRouteSegAndInvoice", fields);
         mapValue.put("referenceNumber", getReferenceNumber());
         mapValue.put("description", getDescription());
         mapValue.put("currencyUomId", getCurrencyUomId());
+        mapValue.put("recurrenceInfoId", getRecurrenceInfoId());
         mapValue.put("processingStatusId", getProcessingStatusId());
         return mapValue;
     }

@@ -125,6 +125,10 @@ fieldMapColumns.put("Budget", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
    
+   private List<BudgetItem> budgetItems = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="BUDGET_ID")
+   
    private List<BudgetReview> budgetReviews = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="budget", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BUDGET_ID")
@@ -340,6 +344,17 @@ fieldMapColumns.put("Budget", fields);
         return this.budgetAttributes;
     }
     /**
+     * Auto generated method that gets the related <code>BudgetItem</code> by the relation named <code>BudgetItem</code>.
+     * @return the list of <code>BudgetItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends BudgetItem> getBudgetItems() throws RepositoryException {
+        if (this.budgetItems == null) {
+            this.budgetItems = getRelated(BudgetItem.class, "BudgetItem");
+        }
+        return this.budgetItems;
+    }
+    /**
      * Auto generated method that gets the related <code>BudgetReview</code> by the relation named <code>BudgetReview</code>.
      * @return the list of <code>BudgetReview</code>
      * @throws RepositoryException if an error occurs
@@ -458,6 +473,13 @@ fieldMapColumns.put("Budget", fields);
     }
     /**
      * Auto generated value setter.
+     * @param budgetItems the budgetItems to set
+    */
+    public void setBudgetItems(List<BudgetItem> budgetItems) {
+        this.budgetItems = budgetItems;
+    }
+    /**
+     * Auto generated value setter.
      * @param budgetReviews the budgetReviews to set
     */
     public void setBudgetReviews(List<BudgetReview> budgetReviews) {
@@ -539,6 +561,33 @@ fieldMapColumns.put("Budget", fields);
             return;
         }
         this.budgetAttributes.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addBudgetItem(BudgetItem budgetItem) {
+        if (this.budgetItems == null) {
+            this.budgetItems = new ArrayList<BudgetItem>();
+        }
+        this.budgetItems.add(budgetItem);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeBudgetItem(BudgetItem budgetItem) {
+        if (this.budgetItems == null) {
+            return;
+        }
+        this.budgetItems.remove(budgetItem);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearBudgetItem() {
+        if (this.budgetItems == null) {
+            return;
+        }
+        this.budgetItems.clear();
     }
     /**
      * Auto generated method that add item to collection.

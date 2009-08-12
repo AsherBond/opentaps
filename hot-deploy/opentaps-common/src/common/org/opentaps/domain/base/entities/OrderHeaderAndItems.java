@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity OrderHeaderAndItems.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectOrderHeaderAndItemss", query="SELECT OH.ORDER_ID AS \"orderId\",OH.ORDER_DATE AS \"orderDate\",OH.STATUS_ID AS \"statusId\",OH.GRAND_TOTAL AS \"grandTotal\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OI.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",OI.PRODUCT_ID AS \"productId\",OI.QUANTITY AS \"quantity\",OI.CANCEL_QUANTITY AS \"cancelQuantity\",OI.UNIT_PRICE AS \"unitPrice\",OI.UNIT_LIST_PRICE AS \"unitListPrice\",OI.ITEM_DESCRIPTION AS \"itemDescription\",OI.STATUS_ID AS \"statusId\",OI.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",OI.ESTIMATED_DELIVERY_DATE AS \"estimatedDeliveryDate\",OI.ORDER_ITEM_TYPE_ID AS \"orderItemTypeId\" FROM ORDER_HEADER OH INNER JOIN ORDER_ITEM OI ON OH.ORDER_ID = OI.ORDER_ID", resultSetMapping="OrderHeaderAndItemsMapping")
+@NamedNativeQuery(name="selectOrderHeaderAndItemss", query="SELECT OH.ORDER_ID AS \"orderId\",OH.ORDER_DATE AS \"orderDate\",OH.STATUS_ID AS \"statusId\",OH.GRAND_TOTAL AS \"grandTotal\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OI.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",OI.PRODUCT_ID AS \"productId\",OI.QUANTITY AS \"quantity\",OI.CANCEL_QUANTITY AS \"cancelQuantity\",OI.UNIT_PRICE AS \"unitPrice\",OI.UNIT_LIST_PRICE AS \"unitListPrice\",OI.ITEM_DESCRIPTION AS \"itemDescription\",OI.STATUS_ID AS \"statusId\",OI.ESTIMATED_SHIP_DATE AS \"estimatedShipDate\",OI.ESTIMATED_DELIVERY_DATE AS \"estimatedDeliveryDate\",OI.SHIP_BEFORE_DATE AS \"shipBeforeDate\",OI.SHIP_AFTER_DATE AS \"shipAfterDate\",OI.ORDER_ITEM_TYPE_ID AS \"orderItemTypeId\" FROM ORDER_HEADER OH INNER JOIN ORDER_ITEM OI ON OH.ORDER_ID = OI.ORDER_ID", resultSetMapping="OrderHeaderAndItemsMapping")
 @SqlResultSetMapping(name="OrderHeaderAndItemsMapping", entities={
 @EntityResult(entityClass=OrderHeaderAndItems.class, fields = {
 @FieldResult(name="orderId", column="orderId")
@@ -68,6 +68,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="itemStatusId", column="itemStatusId")
 ,@FieldResult(name="estimatedShipDate", column="estimatedShipDate")
 ,@FieldResult(name="estimatedDeliveryDate", column="estimatedDeliveryDate")
+,@FieldResult(name="shipBeforeDate", column="shipBeforeDate")
+,@FieldResult(name="shipAfterDate", column="shipAfterDate")
 ,@FieldResult(name="orderItemTypeId", column="orderItemTypeId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
@@ -91,6 +93,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("itemStatusId", "OI.STATUS_ID");
         fields.put("estimatedShipDate", "OI.ESTIMATED_SHIP_DATE");
         fields.put("estimatedDeliveryDate", "OI.ESTIMATED_DELIVERY_DATE");
+        fields.put("shipBeforeDate", "OI.SHIP_BEFORE_DATE");
+        fields.put("shipAfterDate", "OI.SHIP_AFTER_DATE");
         fields.put("orderItemTypeId", "OI.ORDER_ITEM_TYPE_ID");
 fieldMapColumns.put("OrderHeaderAndItems", fields);
 }
@@ -111,6 +115,8 @@ fieldMapColumns.put("OrderHeaderAndItems", fields);
     itemStatusId("itemStatusId"),
     estimatedShipDate("estimatedShipDate"),
     estimatedDeliveryDate("estimatedDeliveryDate"),
+    shipBeforeDate("shipBeforeDate"),
+    shipAfterDate("shipAfterDate"),
     orderItemTypeId("orderItemTypeId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
@@ -155,6 +161,10 @@ fieldMapColumns.put("OrderHeaderAndItems", fields);
     
    private Timestamp estimatedDeliveryDate;
     
+   private Timestamp shipBeforeDate;
+    
+   private Timestamp shipAfterDate;
+    
    private String orderItemTypeId;
 
   /**
@@ -168,7 +178,7 @@ fieldMapColumns.put("OrderHeaderAndItems", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("orderItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("orderStatusId");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("cancelQuantity");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("unitListPrice");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("itemStatusId");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("estimatedDeliveryDate");this.allFieldsNames.add("orderItemTypeId");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("orderStatusId");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("cancelQuantity");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("unitListPrice");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("itemStatusId");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("estimatedDeliveryDate");this.allFieldsNames.add("shipBeforeDate");this.allFieldsNames.add("shipAfterDate");this.allFieldsNames.add("orderItemTypeId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -300,6 +310,20 @@ fieldMapColumns.put("OrderHeaderAndItems", fields);
     }
     /**
      * Auto generated value setter.
+     * @param shipBeforeDate the shipBeforeDate to set
+     */
+    private void setShipBeforeDate(Timestamp shipBeforeDate) {
+        this.shipBeforeDate = shipBeforeDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shipAfterDate the shipAfterDate to set
+     */
+    private void setShipAfterDate(Timestamp shipAfterDate) {
+        this.shipAfterDate = shipAfterDate;
+    }
+    /**
+     * Auto generated value setter.
      * @param orderItemTypeId the orderItemTypeId to set
      */
     private void setOrderItemTypeId(String orderItemTypeId) {
@@ -420,6 +444,20 @@ fieldMapColumns.put("OrderHeaderAndItems", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getShipBeforeDate() {
+        return this.shipBeforeDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getShipAfterDate() {
+        return this.shipAfterDate;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getOrderItemTypeId() {
@@ -449,6 +487,8 @@ fieldMapColumns.put("OrderHeaderAndItems", fields);
         setItemStatusId((String) mapValue.get("itemStatusId"));
         setEstimatedShipDate((Timestamp) mapValue.get("estimatedShipDate"));
         setEstimatedDeliveryDate((Timestamp) mapValue.get("estimatedDeliveryDate"));
+        setShipBeforeDate((Timestamp) mapValue.get("shipBeforeDate"));
+        setShipAfterDate((Timestamp) mapValue.get("shipAfterDate"));
         setOrderItemTypeId((String) mapValue.get("orderItemTypeId"));
         postInit();
     }
@@ -473,6 +513,8 @@ fieldMapColumns.put("OrderHeaderAndItems", fields);
         mapValue.put("itemStatusId", getItemStatusId());
         mapValue.put("estimatedShipDate", getEstimatedShipDate());
         mapValue.put("estimatedDeliveryDate", getEstimatedDeliveryDate());
+        mapValue.put("shipBeforeDate", getShipBeforeDate());
+        mapValue.put("shipAfterDate", getShipAfterDate());
         mapValue.put("orderItemTypeId", getOrderItemTypeId());
         return mapValue;
     }

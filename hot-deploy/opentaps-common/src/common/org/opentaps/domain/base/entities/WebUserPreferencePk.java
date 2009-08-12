@@ -30,6 +30,8 @@ public class WebUserPreferencePk implements Serializable {
     private String userLoginId;
     @Column(name="PARTY_ID")
     private String partyId;
+    @Column(name="VISIT_ID")
+    private String visitId;
     @Column(name="WEB_PREFERENCE_TYPE_ID")
     private String webPreferenceTypeId;
     
@@ -46,6 +48,13 @@ public class WebUserPreferencePk implements Serializable {
      */
     public void setPartyId(String partyId) {
         this.partyId = partyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param visitId the visitId to set
+     */
+    public void setVisitId(String visitId) {
+        this.visitId = visitId;
     }
     /**
      * Auto generated value setter.
@@ -68,6 +77,13 @@ public class WebUserPreferencePk implements Serializable {
      */  
     public String getPartyId() {
         return this.partyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */  
+    public String getVisitId() {
+        return this.visitId;
     }
     /**
      * Auto generated value accessor.

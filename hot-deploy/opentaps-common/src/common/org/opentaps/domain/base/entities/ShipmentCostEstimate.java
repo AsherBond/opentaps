@@ -57,6 +57,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("shipmentMethodTypeId", "SHIPMENT_METHOD_TYPE_ID");
         fields.put("carrierPartyId", "CARRIER_PARTY_ID");
         fields.put("carrierRoleTypeId", "CARRIER_ROLE_TYPE_ID");
+        fields.put("productStoreShipMethId", "PRODUCT_STORE_SHIP_METH_ID");
         fields.put("productStoreId", "PRODUCT_STORE_ID");
         fields.put("partyId", "PARTY_ID");
         fields.put("roleTypeId", "ROLE_TYPE_ID");
@@ -91,6 +92,7 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
     shipmentMethodTypeId("shipmentMethodTypeId"),
     carrierPartyId("carrierPartyId"),
     carrierRoleTypeId("carrierRoleTypeId"),
+    productStoreShipMethId("productStoreShipMethId"),
     productStoreId("productStoreId"),
     partyId("partyId"),
     roleTypeId("roleTypeId"),
@@ -139,6 +141,8 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
    private String carrierPartyId;
    @Column(name="CARRIER_ROLE_TYPE_ID")
    private String carrierRoleTypeId;
+   @Column(name="PRODUCT_STORE_SHIP_METH_ID")
+   private String productStoreShipMethId;
    @Column(name="PRODUCT_STORE_ID")
    private String productStoreId;
    @Column(name="PARTY_ID")
@@ -277,7 +281,7 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("shipmentCostEstimateId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("shipmentCostEstimateId");this.allFieldsNames.add("shipmentMethodTypeId");this.allFieldsNames.add("carrierPartyId");this.allFieldsNames.add("carrierRoleTypeId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("geoIdTo");this.allFieldsNames.add("geoIdFrom");this.allFieldsNames.add("weightBreakId");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("weightUnitPrice");this.allFieldsNames.add("quantityBreakId");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("quantityUnitPrice");this.allFieldsNames.add("priceBreakId");this.allFieldsNames.add("priceUomId");this.allFieldsNames.add("priceUnitPrice");this.allFieldsNames.add("orderFlatPrice");this.allFieldsNames.add("orderPricePercent");this.allFieldsNames.add("orderItemFlatPrice");this.allFieldsNames.add("shippingPricePercent");this.allFieldsNames.add("productFeatureGroupId");this.allFieldsNames.add("oversizeUnit");this.allFieldsNames.add("oversizePrice");this.allFieldsNames.add("featurePercent");this.allFieldsNames.add("featurePrice");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("shipmentCostEstimateId");this.allFieldsNames.add("shipmentMethodTypeId");this.allFieldsNames.add("carrierPartyId");this.allFieldsNames.add("carrierRoleTypeId");this.allFieldsNames.add("productStoreShipMethId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("geoIdTo");this.allFieldsNames.add("geoIdFrom");this.allFieldsNames.add("weightBreakId");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("weightUnitPrice");this.allFieldsNames.add("quantityBreakId");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("quantityUnitPrice");this.allFieldsNames.add("priceBreakId");this.allFieldsNames.add("priceUomId");this.allFieldsNames.add("priceUnitPrice");this.allFieldsNames.add("orderFlatPrice");this.allFieldsNames.add("orderPricePercent");this.allFieldsNames.add("orderItemFlatPrice");this.allFieldsNames.add("shippingPricePercent");this.allFieldsNames.add("productFeatureGroupId");this.allFieldsNames.add("oversizeUnit");this.allFieldsNames.add("oversizePrice");this.allFieldsNames.add("featurePercent");this.allFieldsNames.add("featurePrice");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -319,6 +323,13 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
      */
     public void setCarrierRoleTypeId(String carrierRoleTypeId) {
         this.carrierRoleTypeId = carrierRoleTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productStoreShipMethId the productStoreShipMethId to set
+     */
+    public void setProductStoreShipMethId(String productStoreShipMethId) {
+        this.productStoreShipMethId = productStoreShipMethId;
     }
     /**
      * Auto generated value setter.
@@ -537,6 +548,13 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
      */
     public String getCarrierRoleTypeId() {
         return this.carrierRoleTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getProductStoreShipMethId() {
+        return this.productStoreShipMethId;
     }
     /**
      * Auto generated value accessor.
@@ -955,6 +973,7 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
         setShipmentMethodTypeId((String) mapValue.get("shipmentMethodTypeId"));
         setCarrierPartyId((String) mapValue.get("carrierPartyId"));
         setCarrierRoleTypeId((String) mapValue.get("carrierRoleTypeId"));
+        setProductStoreShipMethId((String) mapValue.get("productStoreShipMethId"));
         setProductStoreId((String) mapValue.get("productStoreId"));
         setPartyId((String) mapValue.get("partyId"));
         setRoleTypeId((String) mapValue.get("roleTypeId"));
@@ -993,6 +1012,7 @@ fieldMapColumns.put("ShipmentCostEstimate", fields);
         mapValue.put("shipmentMethodTypeId", getShipmentMethodTypeId());
         mapValue.put("carrierPartyId", getCarrierPartyId());
         mapValue.put("carrierRoleTypeId", getCarrierRoleTypeId());
+        mapValue.put("productStoreShipMethId", getProductStoreShipMethId());
         mapValue.put("productStoreId", getProductStoreId());
         mapValue.put("partyId", getPartyId());
         mapValue.put("roleTypeId", getRoleTypeId());

@@ -152,6 +152,8 @@ fieldMapColumns.put("Employment", fields);
    )
    
    private TerminationType terminationType = null;
+   private transient List<Agreement> agreements = null;
+   private transient List<AgreementEmploymentAppl> agreementEmploymentAppls = null;
    private transient PayHistory payHistory = null;
    private transient List<UnemploymentClaim> unemploymentClaims = null;
 
@@ -418,6 +420,28 @@ fieldMapColumns.put("Employment", fields);
         return this.terminationType;
     }
     /**
+     * Auto generated method that gets the related <code>Agreement</code> by the relation named <code>Agreement</code>.
+     * @return the list of <code>Agreement</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Agreement> getAgreements() throws RepositoryException {
+        if (this.agreements == null) {
+            this.agreements = getRelated(Agreement.class, "Agreement");
+        }
+        return this.agreements;
+    }
+    /**
+     * Auto generated method that gets the related <code>AgreementEmploymentAppl</code> by the relation named <code>AgreementEmploymentAppl</code>.
+     * @return the list of <code>AgreementEmploymentAppl</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AgreementEmploymentAppl> getAgreementEmploymentAppls() throws RepositoryException {
+        if (this.agreementEmploymentAppls == null) {
+            this.agreementEmploymentAppls = getRelated(AgreementEmploymentAppl.class, "AgreementEmploymentAppl");
+        }
+        return this.agreementEmploymentAppls;
+    }
+    /**
      * Auto generated method that gets the related <code>PayHistory</code> by the relation named <code>PayHistory</code>.
      * @return the <code>PayHistory</code>
      * @throws RepositoryException if an error occurs
@@ -481,6 +505,20 @@ fieldMapColumns.put("Employment", fields);
     */
     public void setTerminationType(TerminationType terminationType) {
         this.terminationType = terminationType;
+    }
+    /**
+     * Auto generated value setter.
+     * @param agreements the agreements to set
+    */
+    public void setAgreements(List<Agreement> agreements) {
+        this.agreements = agreements;
+    }
+    /**
+     * Auto generated value setter.
+     * @param agreementEmploymentAppls the agreementEmploymentAppls to set
+    */
+    public void setAgreementEmploymentAppls(List<AgreementEmploymentAppl> agreementEmploymentAppls) {
+        this.agreementEmploymentAppls = agreementEmploymentAppls;
     }
     /**
      * Auto generated value setter.

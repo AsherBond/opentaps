@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity WorkEffortAndFulfillment.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectWorkEffortAndFulfillments", query="SELECT WEF.DESCRIPTION AS \"description\",WEF.FIXED_ASSET_ID AS \"fixedAssetId\",WEF.FACILITY_ID AS \"facilityId\",REQ.FACILITY_ID AS \"facilityId\",REQ.FIXED_ASSET_ID AS \"fixedAssetId\",REQ.DESCRIPTION AS \"description\",REQ.CREATED_DATE AS \"createdDate\",WEF.WORK_EFFORT_ID AS \"workEffortId\",WEF.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WEF.CURRENT_STATUS_ID AS \"currentStatusId\",WEF.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WEF.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WEF.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WEF.WORKFLOW_PACKAGE_ID AS \"workflowPackageId\",WEF.WORKFLOW_PACKAGE_VERSION AS \"workflowPackageVersion\",WEF.WORKFLOW_PROCESS_ID AS \"workflowProcessId\",WEF.WORKFLOW_PROCESS_VERSION AS \"workflowProcessVersion\",WEF.WORKFLOW_ACTIVITY_ID AS \"workflowActivityId\",WEF.SCOPE_ENUM_ID AS \"scopeEnumId\",WEF.PRIORITY AS \"priority\",WEF.PERCENT_COMPLETE AS \"percentComplete\",WEF.WORK_EFFORT_NAME AS \"workEffortName\",WEF.LOCATION_DESC AS \"locationDesc\",WEF.ESTIMATED_START_DATE AS \"estimatedStartDate\",WEF.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WEF.ACTUAL_START_DATE AS \"actualStartDate\",WEF.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WEF.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WEF.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WEF.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WEF.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WEF.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WEF.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WEF.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WEF.MONEY_UOM_ID AS \"moneyUomId\",WEF.SPECIAL_TERMS AS \"specialTerms\",WEF.TIME_TRANSPARENCY AS \"timeTransparency\",WEF.UNIVERSAL_ID AS \"universalId\",WEF.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WEF.INFO_URL AS \"infoUrl\",WEF.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WEF.RUNTIME_DATA_ID AS \"runtimeDataId\",WEF.NOTE_ID AS \"noteId\",WEF.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WEF.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WEF.QUANTITY_PRODUCED AS \"quantityProduced\",WEF.QUANTITY_REJECTED AS \"quantityRejected\",WEF.RESERV_PERSONS AS \"reservPersons\",WEF.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WEF.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WEF.REVISION_NUMBER AS \"revisionNumber\",WEF.CREATED_DATE AS \"createdDate\",WEF.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WEF.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WEF.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",WRF.REQUIREMENT_ID AS \"requirementId\",WRF.WORK_REQ_FULF_TYPE_ID AS \"workReqFulfTypeId\",REQ.REQUIREMENT_TYPE_ID AS \"requirementTypeId\",REQ.DELIVERABLE_ID AS \"deliverableId\",REQ.PRODUCT_ID AS \"productId\",REQ.STATUS_ID AS \"statusId\",REQ.REQUIREMENT_START_DATE AS \"requirementStartDate\",REQ.REQUIRED_BY_DATE AS \"requiredByDate\",REQ.ESTIMATED_BUDGET AS \"estimatedBudget\",REQ.QUANTITY AS \"quantity\",REQ.USE_CASE AS \"useCase\",REQ.REASON AS \"reason\",REQ.ORDER_ITEM_TYPE_ID AS \"orderItemTypeId\",REQ.FACILITY_ID_TO AS \"facilityIdTo\" FROM WORK_EFFORT WEF INNER JOIN WORK_REQUIREMENT_FULFILLMENT WRF ON WEF.WORK_EFFORT_ID = WRF.WORK_EFFORT_ID INNER JOIN REQUIREMENT REQ ON WRF.REQUIREMENT_ID = REQ.REQUIREMENT_ID", resultSetMapping="WorkEffortAndFulfillmentMapping")
+@NamedNativeQuery(name="selectWorkEffortAndFulfillments", query="SELECT WEF.DESCRIPTION AS \"description\",WEF.FIXED_ASSET_ID AS \"fixedAssetId\",WEF.FACILITY_ID AS \"facilityId\",REQ.FACILITY_ID AS \"facilityId\",REQ.FIXED_ASSET_ID AS \"fixedAssetId\",REQ.DESCRIPTION AS \"description\",REQ.CREATED_DATE AS \"createdDate\",WEF.WORK_EFFORT_ID AS \"workEffortId\",WEF.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WEF.CURRENT_STATUS_ID AS \"currentStatusId\",WEF.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WEF.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WEF.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WEF.SCOPE_ENUM_ID AS \"scopeEnumId\",WEF.PRIORITY AS \"priority\",WEF.PERCENT_COMPLETE AS \"percentComplete\",WEF.WORK_EFFORT_NAME AS \"workEffortName\",WEF.SHOW_AS_ENUM_ID AS \"showAsEnumId\",WEF.SEND_NOTIFICATION_EMAIL AS \"sendNotificationEmail\",WEF.LOCATION_DESC AS \"locationDesc\",WEF.ESTIMATED_START_DATE AS \"estimatedStartDate\",WEF.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WEF.ACTUAL_START_DATE AS \"actualStartDate\",WEF.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WEF.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WEF.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WEF.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WEF.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WEF.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WEF.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WEF.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WEF.MONEY_UOM_ID AS \"moneyUomId\",WEF.SPECIAL_TERMS AS \"specialTerms\",WEF.TIME_TRANSPARENCY AS \"timeTransparency\",WEF.UNIVERSAL_ID AS \"universalId\",WEF.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WEF.INFO_URL AS \"infoUrl\",WEF.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WEF.TEMP_EXPR_ID AS \"tempExprId\",WEF.RUNTIME_DATA_ID AS \"runtimeDataId\",WEF.NOTE_ID AS \"noteId\",WEF.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WEF.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WEF.QUANTITY_PRODUCED AS \"quantityProduced\",WEF.QUANTITY_REJECTED AS \"quantityRejected\",WEF.RESERV_PERSONS AS \"reservPersons\",WEF.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WEF.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WEF.ACCOMMODATION_MAP_ID AS \"accommodationMapId\",WEF.ACCOMMODATION_SPOT_ID AS \"accommodationSpotId\",WEF.REVISION_NUMBER AS \"revisionNumber\",WEF.CREATED_DATE AS \"createdDate\",WEF.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WEF.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WEF.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",WRF.REQUIREMENT_ID AS \"requirementId\",WRF.WORK_REQ_FULF_TYPE_ID AS \"workReqFulfTypeId\",REQ.REQUIREMENT_TYPE_ID AS \"requirementTypeId\",REQ.DELIVERABLE_ID AS \"deliverableId\",REQ.PRODUCT_ID AS \"productId\",REQ.STATUS_ID AS \"statusId\",REQ.REQUIREMENT_START_DATE AS \"requirementStartDate\",REQ.REQUIRED_BY_DATE AS \"requiredByDate\",REQ.ESTIMATED_BUDGET AS \"estimatedBudget\",REQ.QUANTITY AS \"quantity\",REQ.USE_CASE AS \"useCase\",REQ.REASON AS \"reason\",REQ.ORDER_ITEM_TYPE_ID AS \"orderItemTypeId\",REQ.FACILITY_ID_TO AS \"facilityIdTo\" FROM WORK_EFFORT WEF INNER JOIN WORK_REQUIREMENT_FULFILLMENT WRF ON WEF.WORK_EFFORT_ID = WRF.WORK_EFFORT_ID INNER JOIN REQUIREMENT REQ ON WRF.REQUIREMENT_ID = REQ.REQUIREMENT_ID", resultSetMapping="WorkEffortAndFulfillmentMapping")
 @SqlResultSetMapping(name="WorkEffortAndFulfillmentMapping", entities={
 @EntityResult(entityClass=WorkEffortAndFulfillment.class, fields = {
 @FieldResult(name="workEffortDescription", column="workEffortDescription")
@@ -66,15 +66,12 @@ import java.sql.Timestamp;
 ,@FieldResult(name="lastStatusUpdate", column="lastStatusUpdate")
 ,@FieldResult(name="workEffortPurposeTypeId", column="workEffortPurposeTypeId")
 ,@FieldResult(name="workEffortParentId", column="workEffortParentId")
-,@FieldResult(name="workflowPackageId", column="workflowPackageId")
-,@FieldResult(name="workflowPackageVersion", column="workflowPackageVersion")
-,@FieldResult(name="workflowProcessId", column="workflowProcessId")
-,@FieldResult(name="workflowProcessVersion", column="workflowProcessVersion")
-,@FieldResult(name="workflowActivityId", column="workflowActivityId")
 ,@FieldResult(name="scopeEnumId", column="scopeEnumId")
 ,@FieldResult(name="priority", column="priority")
 ,@FieldResult(name="percentComplete", column="percentComplete")
 ,@FieldResult(name="workEffortName", column="workEffortName")
+,@FieldResult(name="showAsEnumId", column="showAsEnumId")
+,@FieldResult(name="sendNotificationEmail", column="sendNotificationEmail")
 ,@FieldResult(name="locationDesc", column="locationDesc")
 ,@FieldResult(name="estimatedStartDate", column="estimatedStartDate")
 ,@FieldResult(name="estimatedCompletionDate", column="estimatedCompletionDate")
@@ -94,6 +91,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="sourceReferenceId", column="sourceReferenceId")
 ,@FieldResult(name="infoUrl", column="infoUrl")
 ,@FieldResult(name="recurrenceInfoId", column="recurrenceInfoId")
+,@FieldResult(name="tempExprId", column="tempExprId")
 ,@FieldResult(name="runtimeDataId", column="runtimeDataId")
 ,@FieldResult(name="noteId", column="noteId")
 ,@FieldResult(name="serviceLoaderName", column="serviceLoaderName")
@@ -103,6 +101,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="reservPersons", column="reservPersons")
 ,@FieldResult(name="reserv2ndPPPerc", column="reserv2ndPPPerc")
 ,@FieldResult(name="reservNthPPPerc", column="reservNthPPPerc")
+,@FieldResult(name="accommodationMapId", column="accommodationMapId")
+,@FieldResult(name="accommodationSpotId", column="accommodationSpotId")
 ,@FieldResult(name="revisionNumber", column="revisionNumber")
 ,@FieldResult(name="createdDate", column="createdDate")
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
@@ -141,15 +141,12 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastStatusUpdate", "WEF.LAST_STATUS_UPDATE");
         fields.put("workEffortPurposeTypeId", "WEF.WORK_EFFORT_PURPOSE_TYPE_ID");
         fields.put("workEffortParentId", "WEF.WORK_EFFORT_PARENT_ID");
-        fields.put("workflowPackageId", "WEF.WORKFLOW_PACKAGE_ID");
-        fields.put("workflowPackageVersion", "WEF.WORKFLOW_PACKAGE_VERSION");
-        fields.put("workflowProcessId", "WEF.WORKFLOW_PROCESS_ID");
-        fields.put("workflowProcessVersion", "WEF.WORKFLOW_PROCESS_VERSION");
-        fields.put("workflowActivityId", "WEF.WORKFLOW_ACTIVITY_ID");
         fields.put("scopeEnumId", "WEF.SCOPE_ENUM_ID");
         fields.put("priority", "WEF.PRIORITY");
         fields.put("percentComplete", "WEF.PERCENT_COMPLETE");
         fields.put("workEffortName", "WEF.WORK_EFFORT_NAME");
+        fields.put("showAsEnumId", "WEF.SHOW_AS_ENUM_ID");
+        fields.put("sendNotificationEmail", "WEF.SEND_NOTIFICATION_EMAIL");
         fields.put("locationDesc", "WEF.LOCATION_DESC");
         fields.put("estimatedStartDate", "WEF.ESTIMATED_START_DATE");
         fields.put("estimatedCompletionDate", "WEF.ESTIMATED_COMPLETION_DATE");
@@ -169,6 +166,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("sourceReferenceId", "WEF.SOURCE_REFERENCE_ID");
         fields.put("infoUrl", "WEF.INFO_URL");
         fields.put("recurrenceInfoId", "WEF.RECURRENCE_INFO_ID");
+        fields.put("tempExprId", "WEF.TEMP_EXPR_ID");
         fields.put("runtimeDataId", "WEF.RUNTIME_DATA_ID");
         fields.put("noteId", "WEF.NOTE_ID");
         fields.put("serviceLoaderName", "WEF.SERVICE_LOADER_NAME");
@@ -178,6 +176,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("reservPersons", "WEF.RESERV_PERSONS");
         fields.put("reserv2ndPPPerc", "WEF.RESERV2ND_P_P_PERC");
         fields.put("reservNthPPPerc", "WEF.RESERV_NTH_P_P_PERC");
+        fields.put("accommodationMapId", "WEF.ACCOMMODATION_MAP_ID");
+        fields.put("accommodationSpotId", "WEF.ACCOMMODATION_SPOT_ID");
         fields.put("revisionNumber", "WEF.REVISION_NUMBER");
         fields.put("createdDate", "WEF.CREATED_DATE");
         fields.put("createdByUserLogin", "WEF.CREATED_BY_USER_LOGIN");
@@ -213,15 +213,12 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     lastStatusUpdate("lastStatusUpdate"),
     workEffortPurposeTypeId("workEffortPurposeTypeId"),
     workEffortParentId("workEffortParentId"),
-    workflowPackageId("workflowPackageId"),
-    workflowPackageVersion("workflowPackageVersion"),
-    workflowProcessId("workflowProcessId"),
-    workflowProcessVersion("workflowProcessVersion"),
-    workflowActivityId("workflowActivityId"),
     scopeEnumId("scopeEnumId"),
     priority("priority"),
     percentComplete("percentComplete"),
     workEffortName("workEffortName"),
+    showAsEnumId("showAsEnumId"),
+    sendNotificationEmail("sendNotificationEmail"),
     locationDesc("locationDesc"),
     estimatedStartDate("estimatedStartDate"),
     estimatedCompletionDate("estimatedCompletionDate"),
@@ -241,6 +238,7 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     sourceReferenceId("sourceReferenceId"),
     infoUrl("infoUrl"),
     recurrenceInfoId("recurrenceInfoId"),
+    tempExprId("tempExprId"),
     runtimeDataId("runtimeDataId"),
     noteId("noteId"),
     serviceLoaderName("serviceLoaderName"),
@@ -250,6 +248,8 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     reservPersons("reservPersons"),
     reserv2ndPPPerc("reserv2ndPPPerc"),
     reservNthPPPerc("reservNthPPPerc"),
+    accommodationMapId("accommodationMapId"),
+    accommodationSpotId("accommodationSpotId"),
     revisionNumber("revisionNumber"),
     createdDate("createdDate"),
     createdByUserLogin("createdByUserLogin"),
@@ -306,16 +306,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     
    private String workEffortParentId;
     
-   private String workflowPackageId;
-    
-   private String workflowPackageVersion;
-    
-   private String workflowProcessId;
-    
-   private String workflowProcessVersion;
-    
-   private String workflowActivityId;
-    
    private String scopeEnumId;
     
    private Long priority;
@@ -323,6 +313,10 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
    private Long percentComplete;
     
    private String workEffortName;
+    
+   private String showAsEnumId;
+    
+   private String sendNotificationEmail;
     
    private String locationDesc;
     
@@ -362,6 +356,8 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     
    private String recurrenceInfoId;
     
+   private String tempExprId;
+    
    private String runtimeDataId;
     
    private String noteId;
@@ -379,6 +375,10 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
    private BigDecimal reserv2ndPPPerc;
     
    private BigDecimal reservNthPPPerc;
+    
+   private String accommodationMapId;
+    
+   private String accommodationSpotId;
     
    private Long revisionNumber;
     
@@ -487,15 +487,12 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
    private transient List<WorkEffortAssoc> toWorkEffortAssocs = null;
    private transient List<WorkEffortPartyAssignment> workEffortPartyAssignments = null;
    private transient List<WorkEffortStatus> workEffortStatuses = null;
-   private transient WorkflowPackage workflowPackage = null;
-   private transient WorkflowProcess workflowProcess = null;
-   private transient WorkflowActivity workflowActivity = null;
    private transient List<QuoteItem> quoteItems = null;
    private transient List<WorkRequirementFulfillment> workRequirementFulfillments = null;
    private transient List<TimeEntry> timeEntrys = null;
    private transient List<WorkEffortDeliverableProd> workEffortDeliverableProds = null;
    private transient List<WorkEffortBilling> workEffortBillings = null;
-   private transient List<WorkEffortAssignmentRate> workEffortAssignmentRates = null;
+   private transient List<RateAmount> rateAmounts = null;
    private transient List<CommunicationEventWorkEff> communicationEventWorkEffs = null;
    private transient List<WorkEffortGoodStandard> workEffortGoodStandards = null;
    private transient List<WorkEffortFixedAssetStd> workEffortFixedAssetStds = null;
@@ -515,7 +512,7 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("requirementId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortDescription");this.allFieldsNames.add("workEffortFixedAssetId");this.allFieldsNames.add("workEffortFacilityId");this.allFieldsNames.add("requirementFacilityId");this.allFieldsNames.add("requirementFixedAssetId");this.allFieldsNames.add("requirementDescription");this.allFieldsNames.add("requirementCreationDate");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("workflowPackageId");this.allFieldsNames.add("workflowPackageVersion");this.allFieldsNames.add("workflowProcessId");this.allFieldsNames.add("workflowProcessVersion");this.allFieldsNames.add("workflowActivityId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("requirementId");this.allFieldsNames.add("workReqFulfTypeId");this.allFieldsNames.add("requirementTypeId");this.allFieldsNames.add("deliverableId");this.allFieldsNames.add("productId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("requirementStartDate");this.allFieldsNames.add("requiredByDate");this.allFieldsNames.add("estimatedBudget");this.allFieldsNames.add("quantity");this.allFieldsNames.add("useCase");this.allFieldsNames.add("reason");this.allFieldsNames.add("orderItemTypeId");this.allFieldsNames.add("facilityIdTo");
+      this.allFieldsNames.add("workEffortDescription");this.allFieldsNames.add("workEffortFixedAssetId");this.allFieldsNames.add("workEffortFacilityId");this.allFieldsNames.add("requirementFacilityId");this.allFieldsNames.add("requirementFixedAssetId");this.allFieldsNames.add("requirementDescription");this.allFieldsNames.add("requirementCreationDate");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("requirementId");this.allFieldsNames.add("workReqFulfTypeId");this.allFieldsNames.add("requirementTypeId");this.allFieldsNames.add("deliverableId");this.allFieldsNames.add("productId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("requirementStartDate");this.allFieldsNames.add("requiredByDate");this.allFieldsNames.add("estimatedBudget");this.allFieldsNames.add("quantity");this.allFieldsNames.add("useCase");this.allFieldsNames.add("reason");this.allFieldsNames.add("orderItemTypeId");this.allFieldsNames.add("facilityIdTo");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -626,41 +623,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     }
     /**
      * Auto generated value setter.
-     * @param workflowPackageId the workflowPackageId to set
-     */
-    private void setWorkflowPackageId(String workflowPackageId) {
-        this.workflowPackageId = workflowPackageId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowPackageVersion the workflowPackageVersion to set
-     */
-    private void setWorkflowPackageVersion(String workflowPackageVersion) {
-        this.workflowPackageVersion = workflowPackageVersion;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowProcessId the workflowProcessId to set
-     */
-    private void setWorkflowProcessId(String workflowProcessId) {
-        this.workflowProcessId = workflowProcessId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowProcessVersion the workflowProcessVersion to set
-     */
-    private void setWorkflowProcessVersion(String workflowProcessVersion) {
-        this.workflowProcessVersion = workflowProcessVersion;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowActivityId the workflowActivityId to set
-     */
-    private void setWorkflowActivityId(String workflowActivityId) {
-        this.workflowActivityId = workflowActivityId;
-    }
-    /**
-     * Auto generated value setter.
      * @param scopeEnumId the scopeEnumId to set
      */
     private void setScopeEnumId(String scopeEnumId) {
@@ -686,6 +648,20 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
      */
     private void setWorkEffortName(String workEffortName) {
         this.workEffortName = workEffortName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param showAsEnumId the showAsEnumId to set
+     */
+    private void setShowAsEnumId(String showAsEnumId) {
+        this.showAsEnumId = showAsEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param sendNotificationEmail the sendNotificationEmail to set
+     */
+    private void setSendNotificationEmail(String sendNotificationEmail) {
+        this.sendNotificationEmail = sendNotificationEmail;
     }
     /**
      * Auto generated value setter.
@@ -822,6 +798,13 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     }
     /**
      * Auto generated value setter.
+     * @param tempExprId the tempExprId to set
+     */
+    private void setTempExprId(String tempExprId) {
+        this.tempExprId = tempExprId;
+    }
+    /**
+     * Auto generated value setter.
      * @param runtimeDataId the runtimeDataId to set
      */
     private void setRuntimeDataId(String runtimeDataId) {
@@ -882,6 +865,20 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
      */
     private void setReservNthPPPerc(BigDecimal reservNthPPPerc) {
         this.reservNthPPPerc = reservNthPPPerc;
+    }
+    /**
+     * Auto generated value setter.
+     * @param accommodationMapId the accommodationMapId to set
+     */
+    private void setAccommodationMapId(String accommodationMapId) {
+        this.accommodationMapId = accommodationMapId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param accommodationSpotId the accommodationSpotId to set
+     */
+    private void setAccommodationSpotId(String accommodationSpotId) {
+        this.accommodationSpotId = accommodationSpotId;
     }
     /**
      * Auto generated value setter.
@@ -1112,41 +1109,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getWorkflowPackageId() {
-        return this.workflowPackageId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowPackageVersion() {
-        return this.workflowPackageVersion;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowProcessId() {
-        return this.workflowProcessId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowProcessVersion() {
-        return this.workflowProcessVersion;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowActivityId() {
-        return this.workflowActivityId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getScopeEnumId() {
         return this.scopeEnumId;
     }
@@ -1170,6 +1132,20 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
      */
     public String getWorkEffortName() {
         return this.workEffortName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShowAsEnumId() {
+        return this.showAsEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSendNotificationEmail() {
+        return this.sendNotificationEmail;
     }
     /**
      * Auto generated value accessor.
@@ -1308,6 +1284,13 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getTempExprId() {
+        return this.tempExprId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getRuntimeDataId() {
         return this.runtimeDataId;
     }
@@ -1366,6 +1349,20 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
      */
     public BigDecimal getReservNthPPPerc() {
         return this.reservNthPPPerc;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAccommodationMapId() {
+        return this.accommodationMapId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAccommodationSpotId() {
+        return this.accommodationSpotId;
     }
     /**
      * Auto generated value accessor.
@@ -1678,39 +1675,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         return this.workEffortStatuses;
     }
     /**
-     * Auto generated method that gets the related <code>WorkflowPackage</code> by the relation named <code>WorkflowPackage</code>.
-     * @return the <code>WorkflowPackage</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public WorkflowPackage getWorkflowPackage() throws RepositoryException {
-        if (this.workflowPackage == null) {
-            this.workflowPackage = getRelatedOne(WorkflowPackage.class, "WorkflowPackage");
-        }
-        return this.workflowPackage;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowProcess</code> by the relation named <code>WorkflowProcess</code>.
-     * @return the <code>WorkflowProcess</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public WorkflowProcess getWorkflowProcess() throws RepositoryException {
-        if (this.workflowProcess == null) {
-            this.workflowProcess = getRelatedOne(WorkflowProcess.class, "WorkflowProcess");
-        }
-        return this.workflowProcess;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowActivity</code> by the relation named <code>WorkflowActivity</code>.
-     * @return the <code>WorkflowActivity</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public WorkflowActivity getWorkflowActivity() throws RepositoryException {
-        if (this.workflowActivity == null) {
-            this.workflowActivity = getRelatedOne(WorkflowActivity.class, "WorkflowActivity");
-        }
-        return this.workflowActivity;
-    }
-    /**
      * Auto generated method that gets the related <code>QuoteItem</code> by the relation named <code>QuoteItem</code>.
      * @return the list of <code>QuoteItem</code>
      * @throws RepositoryException if an error occurs
@@ -1766,15 +1730,15 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         return this.workEffortBillings;
     }
     /**
-     * Auto generated method that gets the related <code>WorkEffortAssignmentRate</code> by the relation named <code>WorkEffortAssignmentRate</code>.
-     * @return the list of <code>WorkEffortAssignmentRate</code>
+     * Auto generated method that gets the related <code>RateAmount</code> by the relation named <code>RateAmount</code>.
+     * @return the list of <code>RateAmount</code>
      * @throws RepositoryException if an error occurs
      */
-    public List<? extends WorkEffortAssignmentRate> getWorkEffortAssignmentRates() throws RepositoryException {
-        if (this.workEffortAssignmentRates == null) {
-            this.workEffortAssignmentRates = getRelated(WorkEffortAssignmentRate.class, "WorkEffortAssignmentRate");
+    public List<? extends RateAmount> getRateAmounts() throws RepositoryException {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = getRelated(RateAmount.class, "RateAmount");
         }
-        return this.workEffortAssignmentRates;
+        return this.rateAmounts;
     }
     /**
      * Auto generated method that gets the related <code>CommunicationEventWorkEff</code> by the relation named <code>CommunicationEventWorkEff</code>.
@@ -1968,27 +1932,6 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     }
     /**
      * Auto generated value setter.
-     * @param workflowPackage the workflowPackage to set
-    */
-    public void setWorkflowPackage(WorkflowPackage workflowPackage) {
-        this.workflowPackage = workflowPackage;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowProcess the workflowProcess to set
-    */
-    public void setWorkflowProcess(WorkflowProcess workflowProcess) {
-        this.workflowProcess = workflowProcess;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowActivity the workflowActivity to set
-    */
-    public void setWorkflowActivity(WorkflowActivity workflowActivity) {
-        this.workflowActivity = workflowActivity;
-    }
-    /**
-     * Auto generated value setter.
      * @param quoteItems the quoteItems to set
     */
     public void setQuoteItems(List<QuoteItem> quoteItems) {
@@ -2024,10 +1967,10 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
     }
     /**
      * Auto generated value setter.
-     * @param workEffortAssignmentRates the workEffortAssignmentRates to set
+     * @param rateAmounts the rateAmounts to set
     */
-    public void setWorkEffortAssignmentRates(List<WorkEffortAssignmentRate> workEffortAssignmentRates) {
-        this.workEffortAssignmentRates = workEffortAssignmentRates;
+    public void setRateAmounts(List<RateAmount> rateAmounts) {
+        this.rateAmounts = rateAmounts;
     }
     /**
      * Auto generated value setter.
@@ -2097,15 +2040,12 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         setLastStatusUpdate((Timestamp) mapValue.get("lastStatusUpdate"));
         setWorkEffortPurposeTypeId((String) mapValue.get("workEffortPurposeTypeId"));
         setWorkEffortParentId((String) mapValue.get("workEffortParentId"));
-        setWorkflowPackageId((String) mapValue.get("workflowPackageId"));
-        setWorkflowPackageVersion((String) mapValue.get("workflowPackageVersion"));
-        setWorkflowProcessId((String) mapValue.get("workflowProcessId"));
-        setWorkflowProcessVersion((String) mapValue.get("workflowProcessVersion"));
-        setWorkflowActivityId((String) mapValue.get("workflowActivityId"));
         setScopeEnumId((String) mapValue.get("scopeEnumId"));
         setPriority((Long) mapValue.get("priority"));
         setPercentComplete((Long) mapValue.get("percentComplete"));
         setWorkEffortName((String) mapValue.get("workEffortName"));
+        setShowAsEnumId((String) mapValue.get("showAsEnumId"));
+        setSendNotificationEmail((String) mapValue.get("sendNotificationEmail"));
         setLocationDesc((String) mapValue.get("locationDesc"));
         setEstimatedStartDate((Timestamp) mapValue.get("estimatedStartDate"));
         setEstimatedCompletionDate((Timestamp) mapValue.get("estimatedCompletionDate"));
@@ -2125,6 +2065,7 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         setSourceReferenceId((String) mapValue.get("sourceReferenceId"));
         setInfoUrl((String) mapValue.get("infoUrl"));
         setRecurrenceInfoId((String) mapValue.get("recurrenceInfoId"));
+        setTempExprId((String) mapValue.get("tempExprId"));
         setRuntimeDataId((String) mapValue.get("runtimeDataId"));
         setNoteId((String) mapValue.get("noteId"));
         setServiceLoaderName((String) mapValue.get("serviceLoaderName"));
@@ -2134,6 +2075,8 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         setReservPersons(convertToBigDecimal(mapValue.get("reservPersons")));
         setReserv2ndPPPerc(convertToBigDecimal(mapValue.get("reserv2ndPPPerc")));
         setReservNthPPPerc(convertToBigDecimal(mapValue.get("reservNthPPPerc")));
+        setAccommodationMapId((String) mapValue.get("accommodationMapId"));
+        setAccommodationSpotId((String) mapValue.get("accommodationSpotId"));
         setRevisionNumber((Long) mapValue.get("revisionNumber"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
@@ -2173,15 +2116,12 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         mapValue.put("lastStatusUpdate", getLastStatusUpdate());
         mapValue.put("workEffortPurposeTypeId", getWorkEffortPurposeTypeId());
         mapValue.put("workEffortParentId", getWorkEffortParentId());
-        mapValue.put("workflowPackageId", getWorkflowPackageId());
-        mapValue.put("workflowPackageVersion", getWorkflowPackageVersion());
-        mapValue.put("workflowProcessId", getWorkflowProcessId());
-        mapValue.put("workflowProcessVersion", getWorkflowProcessVersion());
-        mapValue.put("workflowActivityId", getWorkflowActivityId());
         mapValue.put("scopeEnumId", getScopeEnumId());
         mapValue.put("priority", getPriority());
         mapValue.put("percentComplete", getPercentComplete());
         mapValue.put("workEffortName", getWorkEffortName());
+        mapValue.put("showAsEnumId", getShowAsEnumId());
+        mapValue.put("sendNotificationEmail", getSendNotificationEmail());
         mapValue.put("locationDesc", getLocationDesc());
         mapValue.put("estimatedStartDate", getEstimatedStartDate());
         mapValue.put("estimatedCompletionDate", getEstimatedCompletionDate());
@@ -2201,6 +2141,7 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         mapValue.put("sourceReferenceId", getSourceReferenceId());
         mapValue.put("infoUrl", getInfoUrl());
         mapValue.put("recurrenceInfoId", getRecurrenceInfoId());
+        mapValue.put("tempExprId", getTempExprId());
         mapValue.put("runtimeDataId", getRuntimeDataId());
         mapValue.put("noteId", getNoteId());
         mapValue.put("serviceLoaderName", getServiceLoaderName());
@@ -2210,6 +2151,8 @@ fieldMapColumns.put("WorkEffortAndFulfillment", fields);
         mapValue.put("reservPersons", getReservPersons());
         mapValue.put("reserv2ndPPPerc", getReserv2ndPPPerc());
         mapValue.put("reservNthPPPerc", getReservNthPPPerc());
+        mapValue.put("accommodationMapId", getAccommodationMapId());
+        mapValue.put("accommodationSpotId", getAccommodationSpotId());
         mapValue.put("revisionNumber", getRevisionNumber());
         mapValue.put("createdDate", getCreatedDate());
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());

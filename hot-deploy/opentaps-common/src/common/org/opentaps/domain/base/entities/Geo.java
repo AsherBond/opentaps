@@ -58,6 +58,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("geoCode", "GEO_CODE");
         fields.put("geoSecCode", "GEO_SEC_CODE");
         fields.put("abbreviation", "ABBREVIATION");
+        fields.put("wellKnownText", "WELL_KNOWN_TEXT");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -71,6 +72,7 @@ fieldMapColumns.put("Geo", fields);
     geoCode("geoCode"),
     geoSecCode("geoSecCode"),
     abbreviation("abbreviation"),
+    wellKnownText("wellKnownText"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -100,6 +102,8 @@ fieldMapColumns.put("Geo", fields);
    private String geoSecCode;
    @Column(name="ABBREVIATION")
    private String abbreviation;
+   @Column(name="WELL_KNOWN_TEXT")
+   private String wellKnownText;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -219,6 +223,10 @@ fieldMapColumns.put("Geo", fields);
    @JoinColumn(name="GEO_ID_FROM")
    
    private List<ShipmentCostEstimate> fromShipmentCostEstimates = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="GEO_ID")
+   
+   private List<SurveyQuestion> surveyQuestions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="taxAuthGeo", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TAX_AUTH_GEO_ID")
    
@@ -232,13 +240,13 @@ fieldMapColumns.put("Geo", fields);
    
    private List<TestGeoData> countryTestGeoDatas = null;
    @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="COUNTRY_GEO_ID")
+   @JoinColumn(name="CLIENT_IP_STATE_PROV_GEO_ID")
    
-   private List<WorkflowPackage> countryWorkflowPackages = null;
+   private List<Visit> clientIpStateProvVisits = null;
    @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="COUNTRY_GEO_ID")
+   @JoinColumn(name="CLIENT_IP_COUNTRY_GEO_ID")
    
-   private List<WorkflowProcess> countryWorkflowProcesses = null;
+   private List<Visit> clientIpCountryVisits = null;
 
   /**
    * Default constructor.
@@ -251,7 +259,7 @@ fieldMapColumns.put("Geo", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("geoId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("geoId");this.allFieldsNames.add("geoTypeId");this.allFieldsNames.add("geoName");this.allFieldsNames.add("geoCode");this.allFieldsNames.add("geoSecCode");this.allFieldsNames.add("abbreviation");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("geoId");this.allFieldsNames.add("geoTypeId");this.allFieldsNames.add("geoName");this.allFieldsNames.add("geoCode");this.allFieldsNames.add("geoSecCode");this.allFieldsNames.add("abbreviation");this.allFieldsNames.add("wellKnownText");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -307,6 +315,13 @@ fieldMapColumns.put("Geo", fields);
      */
     public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
+    }
+    /**
+     * Auto generated value setter.
+     * @param wellKnownText the wellKnownText to set
+     */
+    public void setWellKnownText(String wellKnownText) {
+        this.wellKnownText = wellKnownText;
     }
     /**
      * Auto generated value setter.
@@ -378,6 +393,13 @@ fieldMapColumns.put("Geo", fields);
      */
     public String getAbbreviation() {
         return this.abbreviation;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWellKnownText() {
+        return this.wellKnownText;
     }
     /**
      * Auto generated value accessor.
@@ -706,6 +728,17 @@ fieldMapColumns.put("Geo", fields);
         return this.fromShipmentCostEstimates;
     }
     /**
+     * Auto generated method that gets the related <code>SurveyQuestion</code> by the relation named <code>SurveyQuestion</code>.
+     * @return the list of <code>SurveyQuestion</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends SurveyQuestion> getSurveyQuestions() throws RepositoryException {
+        if (this.surveyQuestions == null) {
+            this.surveyQuestions = getRelated(SurveyQuestion.class, "SurveyQuestion");
+        }
+        return this.surveyQuestions;
+    }
+    /**
      * Auto generated method that gets the related <code>TaxAuthority</code> by the relation named <code>TaxAuthTaxAuthority</code>.
      * @return the list of <code>TaxAuthority</code>
      * @throws RepositoryException if an error occurs
@@ -739,26 +772,26 @@ fieldMapColumns.put("Geo", fields);
         return this.countryTestGeoDatas;
     }
     /**
-     * Auto generated method that gets the related <code>WorkflowPackage</code> by the relation named <code>CountryWorkflowPackage</code>.
-     * @return the list of <code>WorkflowPackage</code>
+     * Auto generated method that gets the related <code>Visit</code> by the relation named <code>ClientIpStateProvVisit</code>.
+     * @return the list of <code>Visit</code>
      * @throws RepositoryException if an error occurs
      */
-    public List<? extends WorkflowPackage> getCountryWorkflowPackages() throws RepositoryException {
-        if (this.countryWorkflowPackages == null) {
-            this.countryWorkflowPackages = getRelated(WorkflowPackage.class, "CountryWorkflowPackage");
+    public List<? extends Visit> getClientIpStateProvVisits() throws RepositoryException {
+        if (this.clientIpStateProvVisits == null) {
+            this.clientIpStateProvVisits = getRelated(Visit.class, "ClientIpStateProvVisit");
         }
-        return this.countryWorkflowPackages;
+        return this.clientIpStateProvVisits;
     }
     /**
-     * Auto generated method that gets the related <code>WorkflowProcess</code> by the relation named <code>CountryWorkflowProcess</code>.
-     * @return the list of <code>WorkflowProcess</code>
+     * Auto generated method that gets the related <code>Visit</code> by the relation named <code>ClientIpCountryVisit</code>.
+     * @return the list of <code>Visit</code>
      * @throws RepositoryException if an error occurs
      */
-    public List<? extends WorkflowProcess> getCountryWorkflowProcesses() throws RepositoryException {
-        if (this.countryWorkflowProcesses == null) {
-            this.countryWorkflowProcesses = getRelated(WorkflowProcess.class, "CountryWorkflowProcess");
+    public List<? extends Visit> getClientIpCountryVisits() throws RepositoryException {
+        if (this.clientIpCountryVisits == null) {
+            this.clientIpCountryVisits = getRelated(Visit.class, "ClientIpCountryVisit");
         }
-        return this.countryWorkflowProcesses;
+        return this.clientIpCountryVisits;
     }
 
     /**
@@ -952,6 +985,13 @@ fieldMapColumns.put("Geo", fields);
     }
     /**
      * Auto generated value setter.
+     * @param surveyQuestions the surveyQuestions to set
+    */
+    public void setSurveyQuestions(List<SurveyQuestion> surveyQuestions) {
+        this.surveyQuestions = surveyQuestions;
+    }
+    /**
+     * Auto generated value setter.
      * @param taxAuthTaxAuthoritys the taxAuthTaxAuthoritys to set
     */
     public void setTaxAuthTaxAuthoritys(List<TaxAuthority> taxAuthTaxAuthoritys) {
@@ -973,17 +1013,17 @@ fieldMapColumns.put("Geo", fields);
     }
     /**
      * Auto generated value setter.
-     * @param countryWorkflowPackages the countryWorkflowPackages to set
+     * @param clientIpStateProvVisits the clientIpStateProvVisits to set
     */
-    public void setCountryWorkflowPackages(List<WorkflowPackage> countryWorkflowPackages) {
-        this.countryWorkflowPackages = countryWorkflowPackages;
+    public void setClientIpStateProvVisits(List<Visit> clientIpStateProvVisits) {
+        this.clientIpStateProvVisits = clientIpStateProvVisits;
     }
     /**
      * Auto generated value setter.
-     * @param countryWorkflowProcesses the countryWorkflowProcesses to set
+     * @param clientIpCountryVisits the clientIpCountryVisits to set
     */
-    public void setCountryWorkflowProcesses(List<WorkflowProcess> countryWorkflowProcesses) {
-        this.countryWorkflowProcesses = countryWorkflowProcesses;
+    public void setClientIpCountryVisits(List<Visit> clientIpCountryVisits) {
+        this.clientIpCountryVisits = clientIpCountryVisits;
     }
 
     /**
@@ -1213,6 +1253,7 @@ fieldMapColumns.put("Geo", fields);
         setGeoCode((String) mapValue.get("geoCode"));
         setGeoSecCode((String) mapValue.get("geoSecCode"));
         setAbbreviation((String) mapValue.get("abbreviation"));
+        setWellKnownText((String) mapValue.get("wellKnownText"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -1230,6 +1271,7 @@ fieldMapColumns.put("Geo", fields);
         mapValue.put("geoCode", getGeoCode());
         mapValue.put("geoSecCode", getGeoSecCode());
         mapValue.put("abbreviation", getAbbreviation());
+        mapValue.put("wellKnownText", getWellKnownText());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

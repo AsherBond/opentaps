@@ -123,7 +123,7 @@ fieldMapColumns.put("ProductFeatureIactnType", fields);
       super();
       this.baseEntityName = "ProductFeatureIactnType";
       this.isView = false;
-      this.resourceName = "ProductEntityLabels";
+      
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productFeatureIactnTypeId");
       this.allFieldsNames = new ArrayList<String>();

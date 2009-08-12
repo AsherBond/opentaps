@@ -44,6 +44,7 @@ import org.hibernate.search.annotations.*;
 import java.lang.Long;
 import java.lang.String;
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -234,7 +235,7 @@ fieldMapColumns.put("AgreementAndItemAndTerm", fields);
     
    private String agreementText;
     
-   private byte[] agreementImage;
+   private Blob agreementImage;
     
    private String agreementTermId;
     
@@ -469,7 +470,7 @@ fieldMapColumns.put("AgreementAndItemAndTerm", fields);
      * Auto generated value setter.
      * @param agreementImage the agreementImage to set
      */
-    private void setAgreementImage(byte[] agreementImage) {
+    private void setAgreementImage(Blob agreementImage) {
         this.agreementImage = agreementImage;
     }
     /**
@@ -741,9 +742,9 @@ fieldMapColumns.put("AgreementAndItemAndTerm", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>byte[]</code>
+     * @return <code>Blob</code>
      */
-    public byte[] getAgreementImage() {
+    public Blob getAgreementImage() {
         return this.agreementImage;
     }
     /**
@@ -924,7 +925,7 @@ fieldMapColumns.put("AgreementAndItemAndTerm", fields);
         setAgreementItemSeqId((String) mapValue.get("agreementItemSeqId"));
         setAgreementItemTypeId((String) mapValue.get("agreementItemTypeId"));
         setAgreementText((String) mapValue.get("agreementText"));
-        setAgreementImage((byte[]) mapValue.get("agreementImage"));
+        setAgreementImage((Blob) mapValue.get("agreementImage"));
         setAgreementTermId((String) mapValue.get("agreementTermId"));
         setTermTypeId((String) mapValue.get("termTypeId"));
         setInvoiceItemTypeId((String) mapValue.get("invoiceItemTypeId"));

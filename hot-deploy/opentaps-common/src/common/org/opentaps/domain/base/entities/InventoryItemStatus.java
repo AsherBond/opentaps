@@ -55,6 +55,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("inventoryItemId", "INVENTORY_ITEM_ID");
         fields.put("statusId", "STATUS_ID");
         fields.put("statusDatetime", "STATUS_DATETIME");
+        fields.put("statusEndDatetime", "STATUS_END_DATETIME");
+        fields.put("ownerPartyId", "OWNER_PARTY_ID");
+        fields.put("productId", "PRODUCT_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -65,6 +68,9 @@ fieldMapColumns.put("InventoryItemStatus", fields);
     inventoryItemId("inventoryItemId"),
     statusId("statusId"),
     statusDatetime("statusDatetime"),
+    statusEndDatetime("statusEndDatetime"),
+    ownerPartyId("ownerPartyId"),
+    productId("productId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -98,6 +104,12 @@ fieldMapColumns.put("InventoryItemStatus", fields);
       public void setId(InventoryItemStatusPk id) {
          this.id = id;
       }
+   @Column(name="STATUS_END_DATETIME")
+   private Timestamp statusEndDatetime;
+   @Column(name="OWNER_PARTY_ID")
+   private String ownerPartyId;
+   @Column(name="PRODUCT_ID")
+   private String productId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -132,7 +144,7 @@ fieldMapColumns.put("InventoryItemStatus", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("inventoryItemId");this.primaryKeyNames.add("statusId");this.primaryKeyNames.add("statusDatetime");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("statusDatetime");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("statusDatetime");this.allFieldsNames.add("statusEndDatetime");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("productId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -167,6 +179,27 @@ fieldMapColumns.put("InventoryItemStatus", fields);
      */
     public void setStatusDatetime(Timestamp statusDatetime) {
         id.setStatusDatetime(statusDatetime);
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusEndDatetime the statusEndDatetime to set
+     */
+    public void setStatusEndDatetime(Timestamp statusEndDatetime) {
+        this.statusEndDatetime = statusEndDatetime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param ownerPartyId the ownerPartyId to set
+     */
+    public void setOwnerPartyId(String ownerPartyId) {
+        this.ownerPartyId = ownerPartyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productId the productId to set
+     */
+    public void setProductId(String productId) {
+        this.productId = productId;
     }
     /**
      * Auto generated value setter.
@@ -217,6 +250,27 @@ fieldMapColumns.put("InventoryItemStatus", fields);
      */
     public Timestamp getStatusDatetime() {
         return this.id.getStatusDatetime();
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getStatusEndDatetime() {
+        return this.statusEndDatetime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOwnerPartyId() {
+        return this.ownerPartyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getProductId() {
+        return this.productId;
     }
     /**
      * Auto generated value accessor.
@@ -293,6 +347,9 @@ fieldMapColumns.put("InventoryItemStatus", fields);
         setInventoryItemId((String) mapValue.get("inventoryItemId"));
         setStatusId((String) mapValue.get("statusId"));
         setStatusDatetime((Timestamp) mapValue.get("statusDatetime"));
+        setStatusEndDatetime((Timestamp) mapValue.get("statusEndDatetime"));
+        setOwnerPartyId((String) mapValue.get("ownerPartyId"));
+        setProductId((String) mapValue.get("productId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -307,6 +364,9 @@ fieldMapColumns.put("InventoryItemStatus", fields);
         mapValue.put("inventoryItemId", getInventoryItemId());
         mapValue.put("statusId", getStatusId());
         mapValue.put("statusDatetime", getStatusDatetime());
+        mapValue.put("statusEndDatetime", getStatusEndDatetime());
+        mapValue.put("ownerPartyId", getOwnerPartyId());
+        mapValue.put("productId", getProductId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

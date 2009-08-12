@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity UserLoginAndSecurityGroup.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectUserLoginAndSecurityGroups", query="SELECT ULSG.USER_LOGIN_ID AS \"userLoginId\",ULSG.GROUP_ID AS \"groupId\",ULSG.FROM_DATE AS \"fromDate\",ULSG.THRU_DATE AS \"thruDate\",UL.CURRENT_PASSWORD AS \"currentPassword\",UL.PASSWORD_HINT AS \"passwordHint\",UL.IS_SYSTEM AS \"isSystem\",UL.ENABLED AS \"enabled\",UL.HAS_LOGGED_OUT AS \"hasLoggedOut\",UL.LAST_CURRENCY_UOM AS \"lastCurrencyUom\",UL.LAST_LOCALE AS \"lastLocale\",UL.LAST_TIME_ZONE AS \"lastTimeZone\",UL.DISABLED_DATE_TIME AS \"disabledDateTime\",UL.SUCCESSIVE_FAILED_LOGINS AS \"successiveFailedLogins\",UL.PARTY_ID AS \"partyId\" FROM USER_LOGIN_SECURITY_GROUP ULSG INNER JOIN USER_LOGIN UL ON ULSG.USER_LOGIN_ID = UL.USER_LOGIN_ID", resultSetMapping="UserLoginAndSecurityGroupMapping")
+@NamedNativeQuery(name="selectUserLoginAndSecurityGroups", query="SELECT ULSG.USER_LOGIN_ID AS \"userLoginId\",ULSG.GROUP_ID AS \"groupId\",ULSG.FROM_DATE AS \"fromDate\",ULSG.THRU_DATE AS \"thruDate\",UL.CURRENT_PASSWORD AS \"currentPassword\",UL.PASSWORD_HINT AS \"passwordHint\",UL.IS_SYSTEM AS \"isSystem\",UL.ENABLED AS \"enabled\",UL.HAS_LOGGED_OUT AS \"hasLoggedOut\",UL.REQUIRE_PASSWORD_CHANGE AS \"requirePasswordChange\",UL.LAST_CURRENCY_UOM AS \"lastCurrencyUom\",UL.LAST_LOCALE AS \"lastLocale\",UL.LAST_TIME_ZONE AS \"lastTimeZone\",UL.DISABLED_DATE_TIME AS \"disabledDateTime\",UL.SUCCESSIVE_FAILED_LOGINS AS \"successiveFailedLogins\",UL.USER_LDAP_DN AS \"userLdapDn\",UL.PARTY_ID AS \"partyId\" FROM USER_LOGIN_SECURITY_GROUP ULSG INNER JOIN USER_LOGIN UL ON ULSG.USER_LOGIN_ID = UL.USER_LOGIN_ID", resultSetMapping="UserLoginAndSecurityGroupMapping")
 @SqlResultSetMapping(name="UserLoginAndSecurityGroupMapping", entities={
 @EntityResult(entityClass=UserLoginAndSecurityGroup.class, fields = {
 @FieldResult(name="userLoginId", column="userLoginId")
@@ -61,11 +61,13 @@ import java.sql.Timestamp;
 ,@FieldResult(name="isSystem", column="isSystem")
 ,@FieldResult(name="enabled", column="enabled")
 ,@FieldResult(name="hasLoggedOut", column="hasLoggedOut")
+,@FieldResult(name="requirePasswordChange", column="requirePasswordChange")
 ,@FieldResult(name="lastCurrencyUom", column="lastCurrencyUom")
 ,@FieldResult(name="lastLocale", column="lastLocale")
 ,@FieldResult(name="lastTimeZone", column="lastTimeZone")
 ,@FieldResult(name="disabledDateTime", column="disabledDateTime")
 ,@FieldResult(name="successiveFailedLogins", column="successiveFailedLogins")
+,@FieldResult(name="userLdapDn", column="userLdapDn")
 ,@FieldResult(name="partyId", column="partyId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
@@ -82,11 +84,13 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("isSystem", "UL.IS_SYSTEM");
         fields.put("enabled", "UL.ENABLED");
         fields.put("hasLoggedOut", "UL.HAS_LOGGED_OUT");
+        fields.put("requirePasswordChange", "UL.REQUIRE_PASSWORD_CHANGE");
         fields.put("lastCurrencyUom", "UL.LAST_CURRENCY_UOM");
         fields.put("lastLocale", "UL.LAST_LOCALE");
         fields.put("lastTimeZone", "UL.LAST_TIME_ZONE");
         fields.put("disabledDateTime", "UL.DISABLED_DATE_TIME");
         fields.put("successiveFailedLogins", "UL.SUCCESSIVE_FAILED_LOGINS");
+        fields.put("userLdapDn", "UL.USER_LDAP_DN");
         fields.put("partyId", "UL.PARTY_ID");
 fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
 }
@@ -100,11 +104,13 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
     isSystem("isSystem"),
     enabled("enabled"),
     hasLoggedOut("hasLoggedOut"),
+    requirePasswordChange("requirePasswordChange"),
     lastCurrencyUom("lastCurrencyUom"),
     lastLocale("lastLocale"),
     lastTimeZone("lastTimeZone"),
     disabledDateTime("disabledDateTime"),
     successiveFailedLogins("successiveFailedLogins"),
+    userLdapDn("userLdapDn"),
     partyId("partyId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
@@ -135,6 +141,8 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
     
    private String hasLoggedOut;
     
+   private String requirePasswordChange;
+    
    private String lastCurrencyUom;
     
    private String lastLocale;
@@ -144,6 +152,8 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
    private Timestamp disabledDateTime;
     
    private Long successiveFailedLogins;
+    
+   private String userLdapDn;
     
    private String partyId;
 
@@ -158,7 +168,7 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("userLoginId");this.primaryKeyNames.add("groupId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("groupId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("currentPassword");this.allFieldsNames.add("passwordHint");this.allFieldsNames.add("isSystem");this.allFieldsNames.add("enabled");this.allFieldsNames.add("hasLoggedOut");this.allFieldsNames.add("lastCurrencyUom");this.allFieldsNames.add("lastLocale");this.allFieldsNames.add("lastTimeZone");this.allFieldsNames.add("disabledDateTime");this.allFieldsNames.add("successiveFailedLogins");this.allFieldsNames.add("partyId");
+      this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("groupId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("currentPassword");this.allFieldsNames.add("passwordHint");this.allFieldsNames.add("isSystem");this.allFieldsNames.add("enabled");this.allFieldsNames.add("hasLoggedOut");this.allFieldsNames.add("requirePasswordChange");this.allFieldsNames.add("lastCurrencyUom");this.allFieldsNames.add("lastLocale");this.allFieldsNames.add("lastTimeZone");this.allFieldsNames.add("disabledDateTime");this.allFieldsNames.add("successiveFailedLogins");this.allFieldsNames.add("userLdapDn");this.allFieldsNames.add("partyId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -241,6 +251,13 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
     }
     /**
      * Auto generated value setter.
+     * @param requirePasswordChange the requirePasswordChange to set
+     */
+    private void setRequirePasswordChange(String requirePasswordChange) {
+        this.requirePasswordChange = requirePasswordChange;
+    }
+    /**
+     * Auto generated value setter.
      * @param lastCurrencyUom the lastCurrencyUom to set
      */
     private void setLastCurrencyUom(String lastCurrencyUom) {
@@ -273,6 +290,13 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
      */
     private void setSuccessiveFailedLogins(Long successiveFailedLogins) {
         this.successiveFailedLogins = successiveFailedLogins;
+    }
+    /**
+     * Auto generated value setter.
+     * @param userLdapDn the userLdapDn to set
+     */
+    private void setUserLdapDn(String userLdapDn) {
+        this.userLdapDn = userLdapDn;
     }
     /**
      * Auto generated value setter.
@@ -349,6 +373,13 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getRequirePasswordChange() {
+        return this.requirePasswordChange;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getLastCurrencyUom() {
         return this.lastCurrencyUom;
     }
@@ -384,6 +415,13 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getUserLdapDn() {
+        return this.userLdapDn;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getPartyId() {
         return this.partyId;
     }
@@ -404,11 +442,13 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
         setIsSystem((String) mapValue.get("isSystem"));
         setEnabled((String) mapValue.get("enabled"));
         setHasLoggedOut((String) mapValue.get("hasLoggedOut"));
+        setRequirePasswordChange((String) mapValue.get("requirePasswordChange"));
         setLastCurrencyUom((String) mapValue.get("lastCurrencyUom"));
         setLastLocale((String) mapValue.get("lastLocale"));
         setLastTimeZone((String) mapValue.get("lastTimeZone"));
         setDisabledDateTime((Timestamp) mapValue.get("disabledDateTime"));
         setSuccessiveFailedLogins((Long) mapValue.get("successiveFailedLogins"));
+        setUserLdapDn((String) mapValue.get("userLdapDn"));
         setPartyId((String) mapValue.get("partyId"));
         postInit();
     }
@@ -426,11 +466,13 @@ fieldMapColumns.put("UserLoginAndSecurityGroup", fields);
         mapValue.put("isSystem", getIsSystem());
         mapValue.put("enabled", getEnabled());
         mapValue.put("hasLoggedOut", getHasLoggedOut());
+        mapValue.put("requirePasswordChange", getRequirePasswordChange());
         mapValue.put("lastCurrencyUom", getLastCurrencyUom());
         mapValue.put("lastLocale", getLastLocale());
         mapValue.put("lastTimeZone", getLastTimeZone());
         mapValue.put("disabledDateTime", getDisabledDateTime());
         mapValue.put("successiveFailedLogins", getSuccessiveFailedLogins());
+        mapValue.put("userLdapDn", getUserLdapDn());
         mapValue.put("partyId", getPartyId());
         return mapValue;
     }

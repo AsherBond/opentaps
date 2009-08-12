@@ -224,6 +224,7 @@ fieldMapColumns.put("ReturnItem", fields);
    private transient List<OrderItemShipGrpInvRes> orderItemShipGrpInvReses = null;
    private transient List<ReturnAdjustment> returnAdjustments = null;
    private transient List<ReturnItemBilling> returnItemBillings = null;
+   private transient List<ReturnItemShipment> returnItemShipments = null;
    private transient List<ReturnStatus> returnStatuses = null;
    private transient List<ShipmentReceipt> shipmentReceipts = null;
 
@@ -665,6 +666,17 @@ fieldMapColumns.put("ReturnItem", fields);
         return this.returnItemBillings;
     }
     /**
+     * Auto generated method that gets the related <code>ReturnItemShipment</code> by the relation named <code>ReturnItemShipment</code>.
+     * @return the list of <code>ReturnItemShipment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ReturnItemShipment> getReturnItemShipments() throws RepositoryException {
+        if (this.returnItemShipments == null) {
+            this.returnItemShipments = getRelated(ReturnItemShipment.class, "ReturnItemShipment");
+        }
+        return this.returnItemShipments;
+    }
+    /**
      * Auto generated method that gets the related <code>ReturnStatus</code> by the relation named <code>ReturnStatus</code>.
      * @return the list of <code>ReturnStatus</code>
      * @throws RepositoryException if an error occurs
@@ -777,6 +789,13 @@ fieldMapColumns.put("ReturnItem", fields);
     */
     public void setReturnItemBillings(List<ReturnItemBilling> returnItemBillings) {
         this.returnItemBillings = returnItemBillings;
+    }
+    /**
+     * Auto generated value setter.
+     * @param returnItemShipments the returnItemShipments to set
+    */
+    public void setReturnItemShipments(List<ReturnItemShipment> returnItemShipments) {
+        this.returnItemShipments = returnItemShipments;
     }
     /**
      * Auto generated value setter.

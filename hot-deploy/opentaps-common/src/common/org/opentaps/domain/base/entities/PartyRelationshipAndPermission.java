@@ -48,7 +48,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyRelationshipAndPermission.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyRelationshipAndPermissions", query="SELECT PR.PARTY_ID_FROM AS \"partyIdFrom\",PR.PARTY_ID_TO AS \"partyIdTo\",PR.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PR.FROM_DATE AS \"fromDate\",PR.THRU_DATE AS \"thruDate\",PR.STATUS_ID AS \"statusId\",PR.RELATIONSHIP_NAME AS \"relationshipName\",PR.SECURITY_GROUP_ID AS \"securityGroupId\",PR.PRIORITY_TYPE_ID AS \"priorityTypeId\",PR.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PR.COMMENTS AS \"comments\",SGP.GROUP_ID AS \"groupId\",SGP.PERMISSION_ID AS \"permissionId\" FROM PARTY_RELATIONSHIP PR INNER JOIN SECURITY_GROUP_PERMISSION SGP ON PR.SECURITY_GROUP_ID = SGP.GROUP_ID", resultSetMapping="PartyRelationshipAndPermissionMapping")
+@NamedNativeQuery(name="selectPartyRelationshipAndPermissions", query="SELECT PR.PARTY_ID_FROM AS \"partyIdFrom\",PR.PARTY_ID_TO AS \"partyIdTo\",PR.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PR.FROM_DATE AS \"fromDate\",PR.THRU_DATE AS \"thruDate\",PR.STATUS_ID AS \"statusId\",PR.RELATIONSHIP_NAME AS \"relationshipName\",PR.SECURITY_GROUP_ID AS \"securityGroupId\",PR.PRIORITY_TYPE_ID AS \"priorityTypeId\",PR.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PR.PERMISSIONS_ENUM_ID AS \"permissionsEnumId\",PR.POSITION_TITLE AS \"positionTitle\",PR.COMMENTS AS \"comments\",SGP.GROUP_ID AS \"groupId\",SGP.PERMISSION_ID AS \"permissionId\" FROM PARTY_RELATIONSHIP PR INNER JOIN SECURITY_GROUP_PERMISSION SGP ON PR.SECURITY_GROUP_ID = SGP.GROUP_ID", resultSetMapping="PartyRelationshipAndPermissionMapping")
 @SqlResultSetMapping(name="PartyRelationshipAndPermissionMapping", entities={
 @EntityResult(entityClass=PartyRelationshipAndPermission.class, fields = {
 @FieldResult(name="partyIdFrom", column="partyIdFrom")
@@ -62,6 +62,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="securityGroupId", column="securityGroupId")
 ,@FieldResult(name="priorityTypeId", column="priorityTypeId")
 ,@FieldResult(name="partyRelationshipTypeId", column="partyRelationshipTypeId")
+,@FieldResult(name="permissionsEnumId", column="permissionsEnumId")
+,@FieldResult(name="positionTitle", column="positionTitle")
 ,@FieldResult(name="comments", column="comments")
 ,@FieldResult(name="groupId", column="groupId")
 ,@FieldResult(name="permissionId", column="permissionId")
@@ -82,6 +84,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("securityGroupId", "PR.SECURITY_GROUP_ID");
         fields.put("priorityTypeId", "PR.PRIORITY_TYPE_ID");
         fields.put("partyRelationshipTypeId", "PR.PARTY_RELATIONSHIP_TYPE_ID");
+        fields.put("permissionsEnumId", "PR.PERMISSIONS_ENUM_ID");
+        fields.put("positionTitle", "PR.POSITION_TITLE");
         fields.put("comments", "PR.COMMENTS");
         fields.put("groupId", "SGP.GROUP_ID");
         fields.put("permissionId", "SGP.PERMISSION_ID");
@@ -99,6 +103,8 @@ fieldMapColumns.put("PartyRelationshipAndPermission", fields);
     securityGroupId("securityGroupId"),
     priorityTypeId("priorityTypeId"),
     partyRelationshipTypeId("partyRelationshipTypeId"),
+    permissionsEnumId("permissionsEnumId"),
+    positionTitle("positionTitle"),
     comments("comments"),
     groupId("groupId"),
     permissionId("permissionId");
@@ -135,6 +141,10 @@ fieldMapColumns.put("PartyRelationshipAndPermission", fields);
     
    private String partyRelationshipTypeId;
     
+   private String permissionsEnumId;
+    
+   private String positionTitle;
+    
    private String comments;
     
    private String groupId;
@@ -152,7 +162,7 @@ fieldMapColumns.put("PartyRelationshipAndPermission", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyIdFrom");this.primaryKeyNames.add("partyIdTo");this.primaryKeyNames.add("roleTypeIdFrom");this.primaryKeyNames.add("roleTypeIdTo");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("groupId");this.primaryKeyNames.add("permissionId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("relationshipName");this.allFieldsNames.add("securityGroupId");this.allFieldsNames.add("priorityTypeId");this.allFieldsNames.add("partyRelationshipTypeId");this.allFieldsNames.add("comments");this.allFieldsNames.add("groupId");this.allFieldsNames.add("permissionId");
+      this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("relationshipName");this.allFieldsNames.add("securityGroupId");this.allFieldsNames.add("priorityTypeId");this.allFieldsNames.add("partyRelationshipTypeId");this.allFieldsNames.add("permissionsEnumId");this.allFieldsNames.add("positionTitle");this.allFieldsNames.add("comments");this.allFieldsNames.add("groupId");this.allFieldsNames.add("permissionId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -246,6 +256,20 @@ fieldMapColumns.put("PartyRelationshipAndPermission", fields);
      */
     private void setPartyRelationshipTypeId(String partyRelationshipTypeId) {
         this.partyRelationshipTypeId = partyRelationshipTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param permissionsEnumId the permissionsEnumId to set
+     */
+    private void setPermissionsEnumId(String permissionsEnumId) {
+        this.permissionsEnumId = permissionsEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param positionTitle the positionTitle to set
+     */
+    private void setPositionTitle(String positionTitle) {
+        this.positionTitle = positionTitle;
     }
     /**
      * Auto generated value setter.
@@ -350,6 +374,20 @@ fieldMapColumns.put("PartyRelationshipAndPermission", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getPermissionsEnumId() {
+        return this.permissionsEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPositionTitle() {
+        return this.positionTitle;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getComments() {
         return this.comments;
     }
@@ -386,6 +424,8 @@ fieldMapColumns.put("PartyRelationshipAndPermission", fields);
         setSecurityGroupId((String) mapValue.get("securityGroupId"));
         setPriorityTypeId((String) mapValue.get("priorityTypeId"));
         setPartyRelationshipTypeId((String) mapValue.get("partyRelationshipTypeId"));
+        setPermissionsEnumId((String) mapValue.get("permissionsEnumId"));
+        setPositionTitle((String) mapValue.get("positionTitle"));
         setComments((String) mapValue.get("comments"));
         setGroupId((String) mapValue.get("groupId"));
         setPermissionId((String) mapValue.get("permissionId"));
@@ -407,6 +447,8 @@ fieldMapColumns.put("PartyRelationshipAndPermission", fields);
         mapValue.put("securityGroupId", getSecurityGroupId());
         mapValue.put("priorityTypeId", getPriorityTypeId());
         mapValue.put("partyRelationshipTypeId", getPartyRelationshipTypeId());
+        mapValue.put("permissionsEnumId", getPermissionsEnumId());
+        mapValue.put("positionTitle", getPositionTitle());
         mapValue.put("comments", getComments());
         mapValue.put("groupId", getGroupId());
         mapValue.put("permissionId", getPermissionId());

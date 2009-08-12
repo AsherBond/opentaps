@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity WorkEffortCustRequestItemView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectWorkEffortCustRequestItemViews", query="SELECT SI.DESCRIPTION AS \"description\",CRIWE.CUST_REQUEST_ID AS \"custRequestId\",CRIWE.CUST_REQUEST_ITEM_SEQ_ID AS \"custRequestItemSeqId\",CRIWE.WORK_EFFORT_ID AS \"workEffortId\",CRI.CUST_REQUEST_RESOLUTION_ID AS \"custRequestResolutionId\",CRI.STATUS_ID AS \"statusId\",CRI.PRIORITY AS \"priority\",CRI.SEQUENCE_NUM AS \"sequenceNum\",CRI.REQUIRED_BY_DATE AS \"requiredByDate\",CRI.PRODUCT_ID AS \"productId\",CRI.QUANTITY AS \"quantity\",CRI.SELECTED_AMOUNT AS \"selectedAmount\",CRI.MAXIMUM_AMOUNT AS \"maximumAmount\",CRI.DESCRIPTION AS \"description\",CRI.STORY AS \"story\" FROM CUST_REQUEST_ITEM_WORK_EFFORT CRIWE INNER JOIN CUST_REQUEST_ITEM CRI ON CRIWE.CUST_REQUEST_ID = CRI.CUST_REQUEST_ID AND CRIWE.CUST_REQUEST_ITEM_SEQ_ID = CRI.CUST_REQUEST_ITEM_SEQ_ID LEFT JOIN STATUS_ITEM SI ON CRI.STATUS_ID = SI.STATUS_ID", resultSetMapping="WorkEffortCustRequestItemViewMapping")
+@NamedNativeQuery(name="selectWorkEffortCustRequestItemViews", query="SELECT SI.DESCRIPTION AS \"description\",CRIWE.CUST_REQUEST_ID AS \"custRequestId\",CRIWE.CUST_REQUEST_ITEM_SEQ_ID AS \"custRequestItemSeqId\",CRIWE.WORK_EFFORT_ID AS \"workEffortId\",CRI.CUST_REQUEST_RESOLUTION_ID AS \"custRequestResolutionId\",CRI.STATUS_ID AS \"statusId\",CRI.PRIORITY AS \"priority\",CRI.SEQUENCE_NUM AS \"sequenceNum\",CRI.REQUIRED_BY_DATE AS \"requiredByDate\",CRI.PRODUCT_ID AS \"productId\",CRI.QUANTITY AS \"quantity\",CRI.SELECTED_AMOUNT AS \"selectedAmount\",CRI.MAXIMUM_AMOUNT AS \"maximumAmount\",CRI.RESERV_START AS \"reservStart\",CRI.RESERV_LENGTH AS \"reservLength\",CRI.RESERV_PERSONS AS \"reservPersons\",CRI.CONFIG_ID AS \"configId\",CRI.DESCRIPTION AS \"description\",CRI.STORY AS \"story\" FROM CUST_REQUEST_ITEM_WORK_EFFORT CRIWE INNER JOIN CUST_REQUEST_ITEM CRI ON CRIWE.CUST_REQUEST_ID = CRI.CUST_REQUEST_ID AND CRIWE.CUST_REQUEST_ITEM_SEQ_ID = CRI.CUST_REQUEST_ITEM_SEQ_ID LEFT JOIN STATUS_ITEM SI ON CRI.STATUS_ID = SI.STATUS_ID", resultSetMapping="WorkEffortCustRequestItemViewMapping")
 @SqlResultSetMapping(name="WorkEffortCustRequestItemViewMapping", entities={
 @EntityResult(entityClass=WorkEffortCustRequestItemView.class, fields = {
 @FieldResult(name="statusItemDescription", column="statusItemDescription")
@@ -66,6 +66,10 @@ import java.sql.Timestamp;
 ,@FieldResult(name="quantity", column="quantity")
 ,@FieldResult(name="selectedAmount", column="selectedAmount")
 ,@FieldResult(name="maximumAmount", column="maximumAmount")
+,@FieldResult(name="reservStart", column="reservStart")
+,@FieldResult(name="reservLength", column="reservLength")
+,@FieldResult(name="reservPersons", column="reservPersons")
+,@FieldResult(name="configId", column="configId")
 ,@FieldResult(name="description", column="description")
 ,@FieldResult(name="story", column="story")
 })})
@@ -87,6 +91,10 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("quantity", "CRI.QUANTITY");
         fields.put("selectedAmount", "CRI.SELECTED_AMOUNT");
         fields.put("maximumAmount", "CRI.MAXIMUM_AMOUNT");
+        fields.put("reservStart", "CRI.RESERV_START");
+        fields.put("reservLength", "CRI.RESERV_LENGTH");
+        fields.put("reservPersons", "CRI.RESERV_PERSONS");
+        fields.put("configId", "CRI.CONFIG_ID");
         fields.put("description", "CRI.DESCRIPTION");
         fields.put("story", "CRI.STORY");
 fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
@@ -105,6 +113,10 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
     quantity("quantity"),
     selectedAmount("selectedAmount"),
     maximumAmount("maximumAmount"),
+    reservStart("reservStart"),
+    reservLength("reservLength"),
+    reservPersons("reservPersons"),
+    configId("configId"),
     description("description"),
     story("story");
     private final String fieldName;
@@ -144,6 +156,14 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
     
    private BigDecimal maximumAmount;
     
+   private Timestamp reservStart;
+    
+   private BigDecimal reservLength;
+    
+   private BigDecimal reservPersons;
+    
+   private String configId;
+    
    private String description;
     
    private String story;
@@ -174,7 +194,7 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("custRequestId");this.primaryKeyNames.add("custRequestItemSeqId");this.primaryKeyNames.add("workEffortId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("statusItemDescription");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestItemSeqId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("custRequestResolutionId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("priority");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("requiredByDate");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("maximumAmount");this.allFieldsNames.add("description");this.allFieldsNames.add("story");
+      this.allFieldsNames.add("statusItemDescription");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestItemSeqId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("custRequestResolutionId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("priority");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("requiredByDate");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("maximumAmount");this.allFieldsNames.add("reservStart");this.allFieldsNames.add("reservLength");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("configId");this.allFieldsNames.add("description");this.allFieldsNames.add("story");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -285,6 +305,34 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
     }
     /**
      * Auto generated value setter.
+     * @param reservStart the reservStart to set
+     */
+    private void setReservStart(Timestamp reservStart) {
+        this.reservStart = reservStart;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reservLength the reservLength to set
+     */
+    private void setReservLength(BigDecimal reservLength) {
+        this.reservLength = reservLength;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reservPersons the reservPersons to set
+     */
+    private void setReservPersons(BigDecimal reservPersons) {
+        this.reservPersons = reservPersons;
+    }
+    /**
+     * Auto generated value setter.
+     * @param configId the configId to set
+     */
+    private void setConfigId(String configId) {
+        this.configId = configId;
+    }
+    /**
+     * Auto generated value setter.
      * @param description the description to set
      */
     private void setDescription(String description) {
@@ -391,6 +439,34 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getReservStart() {
+        return this.reservStart;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getReservLength() {
+        return this.reservLength;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getReservPersons() {
+        return this.reservPersons;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getConfigId() {
+        return this.configId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getDescription() {
@@ -478,6 +554,10 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
         setQuantity(convertToBigDecimal(mapValue.get("quantity")));
         setSelectedAmount(convertToBigDecimal(mapValue.get("selectedAmount")));
         setMaximumAmount(convertToBigDecimal(mapValue.get("maximumAmount")));
+        setReservStart((Timestamp) mapValue.get("reservStart"));
+        setReservLength(convertToBigDecimal(mapValue.get("reservLength")));
+        setReservPersons(convertToBigDecimal(mapValue.get("reservPersons")));
+        setConfigId((String) mapValue.get("configId"));
         setDescription((String) mapValue.get("description"));
         setStory((String) mapValue.get("story"));
         postInit();
@@ -500,6 +580,10 @@ fieldMapColumns.put("WorkEffortCustRequestItemView", fields);
         mapValue.put("quantity", getQuantity());
         mapValue.put("selectedAmount", getSelectedAmount());
         mapValue.put("maximumAmount", getMaximumAmount());
+        mapValue.put("reservStart", getReservStart());
+        mapValue.put("reservLength", getReservLength());
+        mapValue.put("reservPersons", getReservPersons());
+        mapValue.put("configId", getConfigId());
         mapValue.put("description", getDescription());
         mapValue.put("story", getStory());
         return mapValue;

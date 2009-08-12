@@ -54,6 +54,8 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("partyInvitationId", "PARTY_INVITATION_ID");
         fields.put("partyIdFrom", "PARTY_ID_FROM");
+        fields.put("partyId", "PARTY_ID");
+        fields.put("toName", "TO_NAME");
         fields.put("emailAddress", "EMAIL_ADDRESS");
         fields.put("statusId", "STATUS_ID");
         fields.put("lastInviteDate", "LAST_INVITE_DATE");
@@ -66,6 +68,8 @@ fieldMapColumns.put("PartyInvitation", fields);
   public static enum Fields implements EntityFieldInterface<PartyInvitation> {
     partyInvitationId("partyInvitationId"),
     partyIdFrom("partyIdFrom"),
+    partyId("partyId"),
+    toName("toName"),
     emailAddress("emailAddress"),
     statusId("statusId"),
     lastInviteDate("lastInviteDate"),
@@ -90,6 +94,10 @@ fieldMapColumns.put("PartyInvitation", fields);
    private String partyInvitationId;
    @Column(name="PARTY_ID_FROM")
    private String partyIdFrom;
+   @Column(name="PARTY_ID")
+   private String partyId;
+   @Column(name="TO_NAME")
+   private String toName;
    @Column(name="EMAIL_ADDRESS")
    private String emailAddress;
    @Column(name="STATUS_ID")
@@ -118,6 +126,14 @@ fieldMapColumns.put("PartyInvitation", fields);
    )
    
    private StatusItem statusItem = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="partyInvitation", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_INVITATION_ID")
+   
+   private List<PartyInvitationGroupAssoc> partyInvitationGroupAssocs = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="partyInvitation", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PARTY_INVITATION_ID")
+   
+   private List<PartyInvitationRoleAssoc> partyInvitationRoleAssocs = null;
 
   /**
    * Default constructor.
@@ -130,7 +146,7 @@ fieldMapColumns.put("PartyInvitation", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyInvitationId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyInvitationId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("emailAddress");this.allFieldsNames.add("statusId");this.allFieldsNames.add("lastInviteDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("partyInvitationId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyId");this.allFieldsNames.add("toName");this.allFieldsNames.add("emailAddress");this.allFieldsNames.add("statusId");this.allFieldsNames.add("lastInviteDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -158,6 +174,20 @@ fieldMapColumns.put("PartyInvitation", fields);
      */
     public void setPartyIdFrom(String partyIdFrom) {
         this.partyIdFrom = partyIdFrom;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyId the partyId to set
+     */
+    public void setPartyId(String partyId) {
+        this.partyId = partyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param toName the toName to set
+     */
+    public void setToName(String toName) {
+        this.toName = toName;
     }
     /**
      * Auto generated value setter.
@@ -222,6 +252,20 @@ fieldMapColumns.put("PartyInvitation", fields);
      */
     public String getPartyIdFrom() {
         return this.partyIdFrom;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPartyId() {
+        return this.partyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getToName() {
+        return this.toName;
     }
     /**
      * Auto generated value accessor.
@@ -295,6 +339,28 @@ fieldMapColumns.put("PartyInvitation", fields);
         }
         return this.statusItem;
     }
+    /**
+     * Auto generated method that gets the related <code>PartyInvitationGroupAssoc</code> by the relation named <code>PartyInvitationGroupAssoc</code>.
+     * @return the list of <code>PartyInvitationGroupAssoc</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyInvitationGroupAssoc> getPartyInvitationGroupAssocs() throws RepositoryException {
+        if (this.partyInvitationGroupAssocs == null) {
+            this.partyInvitationGroupAssocs = getRelated(PartyInvitationGroupAssoc.class, "PartyInvitationGroupAssoc");
+        }
+        return this.partyInvitationGroupAssocs;
+    }
+    /**
+     * Auto generated method that gets the related <code>PartyInvitationRoleAssoc</code> by the relation named <code>PartyInvitationRoleAssoc</code>.
+     * @return the list of <code>PartyInvitationRoleAssoc</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyInvitationRoleAssoc> getPartyInvitationRoleAssocs() throws RepositoryException {
+        if (this.partyInvitationRoleAssocs == null) {
+            this.partyInvitationRoleAssocs = getRelated(PartyInvitationRoleAssoc.class, "PartyInvitationRoleAssoc");
+        }
+        return this.partyInvitationRoleAssocs;
+    }
 
     /**
      * Auto generated value setter.
@@ -310,7 +376,75 @@ fieldMapColumns.put("PartyInvitation", fields);
     public void setStatusItem(StatusItem statusItem) {
         this.statusItem = statusItem;
     }
+    /**
+     * Auto generated value setter.
+     * @param partyInvitationGroupAssocs the partyInvitationGroupAssocs to set
+    */
+    public void setPartyInvitationGroupAssocs(List<PartyInvitationGroupAssoc> partyInvitationGroupAssocs) {
+        this.partyInvitationGroupAssocs = partyInvitationGroupAssocs;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyInvitationRoleAssocs the partyInvitationRoleAssocs to set
+    */
+    public void setPartyInvitationRoleAssocs(List<PartyInvitationRoleAssoc> partyInvitationRoleAssocs) {
+        this.partyInvitationRoleAssocs = partyInvitationRoleAssocs;
+    }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addPartyInvitationGroupAssoc(PartyInvitationGroupAssoc partyInvitationGroupAssoc) {
+        if (this.partyInvitationGroupAssocs == null) {
+            this.partyInvitationGroupAssocs = new ArrayList<PartyInvitationGroupAssoc>();
+        }
+        this.partyInvitationGroupAssocs.add(partyInvitationGroupAssoc);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removePartyInvitationGroupAssoc(PartyInvitationGroupAssoc partyInvitationGroupAssoc) {
+        if (this.partyInvitationGroupAssocs == null) {
+            return;
+        }
+        this.partyInvitationGroupAssocs.remove(partyInvitationGroupAssoc);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearPartyInvitationGroupAssoc() {
+        if (this.partyInvitationGroupAssocs == null) {
+            return;
+        }
+        this.partyInvitationGroupAssocs.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addPartyInvitationRoleAssoc(PartyInvitationRoleAssoc partyInvitationRoleAssoc) {
+        if (this.partyInvitationRoleAssocs == null) {
+            this.partyInvitationRoleAssocs = new ArrayList<PartyInvitationRoleAssoc>();
+        }
+        this.partyInvitationRoleAssocs.add(partyInvitationRoleAssoc);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removePartyInvitationRoleAssoc(PartyInvitationRoleAssoc partyInvitationRoleAssoc) {
+        if (this.partyInvitationRoleAssocs == null) {
+            return;
+        }
+        this.partyInvitationRoleAssocs.remove(partyInvitationRoleAssoc);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearPartyInvitationRoleAssoc() {
+        if (this.partyInvitationRoleAssocs == null) {
+            return;
+        }
+        this.partyInvitationRoleAssocs.clear();
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -318,6 +452,8 @@ fieldMapColumns.put("PartyInvitation", fields);
         preInit();
         setPartyInvitationId((String) mapValue.get("partyInvitationId"));
         setPartyIdFrom((String) mapValue.get("partyIdFrom"));
+        setPartyId((String) mapValue.get("partyId"));
+        setToName((String) mapValue.get("toName"));
         setEmailAddress((String) mapValue.get("emailAddress"));
         setStatusId((String) mapValue.get("statusId"));
         setLastInviteDate((Timestamp) mapValue.get("lastInviteDate"));
@@ -334,6 +470,8 @@ fieldMapColumns.put("PartyInvitation", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("partyInvitationId", getPartyInvitationId());
         mapValue.put("partyIdFrom", getPartyIdFrom());
+        mapValue.put("partyId", getPartyId());
+        mapValue.put("toName", getToName());
         mapValue.put("emailAddress", getEmailAddress());
         mapValue.put("statusId", getStatusId());
         mapValue.put("lastInviteDate", getLastInviteDate());

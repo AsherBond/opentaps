@@ -55,24 +55,24 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("noteId", "NOTE_ID");
         fields.put("noteName", "NOTE_NAME");
         fields.put("noteInfo", "NOTE_INFO");
-        fields.put("noteParty", "NOTE_PARTY");
         fields.put("noteDateTime", "NOTE_DATE_TIME");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
+        fields.put("noteParty", "NOTE_PARTY");
 fieldMapColumns.put("NoteData", fields);
 }
   public static enum Fields implements EntityFieldInterface<NoteData> {
     noteId("noteId"),
     noteName("noteName"),
     noteInfo("noteInfo"),
-    noteParty("noteParty"),
     noteDateTime("noteDateTime"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
-    createdTxStamp("createdTxStamp");
+    createdTxStamp("createdTxStamp"),
+    noteParty("noteParty");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -92,8 +92,6 @@ fieldMapColumns.put("NoteData", fields);
    private String noteName;
    @Column(name="NOTE_INFO")
    private String noteInfo;
-   @Column(name="NOTE_PARTY")
-   private String noteParty;
    @Column(name="NOTE_DATE_TIME")
    private Timestamp noteDateTime;
    @Column(name="LAST_UPDATED_STAMP")
@@ -104,6 +102,15 @@ fieldMapColumns.put("NoteData", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @Column(name="NOTE_PARTY")
+   private String noteParty;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="NOTE_PARTY", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Party relatedNoteParty = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="noteData", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="NOTE_ID")
    
@@ -148,7 +155,7 @@ fieldMapColumns.put("NoteData", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("noteId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("noteId");this.allFieldsNames.add("noteName");this.allFieldsNames.add("noteInfo");this.allFieldsNames.add("noteParty");this.allFieldsNames.add("noteDateTime");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("noteId");this.allFieldsNames.add("noteName");this.allFieldsNames.add("noteInfo");this.allFieldsNames.add("noteDateTime");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("noteParty");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -186,13 +193,6 @@ fieldMapColumns.put("NoteData", fields);
     }
     /**
      * Auto generated value setter.
-     * @param noteParty the noteParty to set
-     */
-    public void setNoteParty(String noteParty) {
-        this.noteParty = noteParty;
-    }
-    /**
-     * Auto generated value setter.
      * @param noteDateTime the noteDateTime to set
      */
     public void setNoteDateTime(Timestamp noteDateTime) {
@@ -226,6 +226,13 @@ fieldMapColumns.put("NoteData", fields);
     public void setCreatedTxStamp(Timestamp createdTxStamp) {
         this.createdTxStamp = createdTxStamp;
     }
+    /**
+     * Auto generated value setter.
+     * @param noteParty the noteParty to set
+     */
+    public void setNoteParty(String noteParty) {
+        this.noteParty = noteParty;
+    }
 
     /**
      * Auto generated value accessor.
@@ -247,13 +254,6 @@ fieldMapColumns.put("NoteData", fields);
      */
     public String getNoteInfo() {
         return this.noteInfo;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getNoteParty() {
-        return this.noteParty;
     }
     /**
      * Auto generated value accessor.
@@ -290,7 +290,25 @@ fieldMapColumns.put("NoteData", fields);
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getNoteParty() {
+        return this.noteParty;
+    }
 
+    /**
+     * Auto generated method that gets the related <code>Party</code> by the relation named <code>NoteParty</code>.
+     * @return the <code>Party</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Party getRelatedNoteParty() throws RepositoryException {
+        if (this.relatedNoteParty == null) {
+            this.relatedNoteParty = getRelatedOne(Party.class, "NoteParty");
+        }
+        return this.relatedNoteParty;
+    }
     /**
      * Auto generated method that gets the related <code>CustRequestItemNote</code> by the relation named <code>CustRequestItemNote</code>.
      * @return the list of <code>CustRequestItemNote</code>
@@ -380,6 +398,13 @@ fieldMapColumns.put("NoteData", fields);
         return this.workEffortNotes;
     }
 
+    /**
+     * Auto generated value setter.
+     * @param relatedNoteParty the relatedNoteParty to set
+    */
+    public void setRelatedNoteParty(Party relatedNoteParty) {
+        this.relatedNoteParty = relatedNoteParty;
+    }
     /**
      * Auto generated value setter.
      * @param custRequestItemNotes the custRequestItemNotes to set
@@ -634,12 +659,12 @@ fieldMapColumns.put("NoteData", fields);
         setNoteId((String) mapValue.get("noteId"));
         setNoteName((String) mapValue.get("noteName"));
         setNoteInfo((String) mapValue.get("noteInfo"));
-        setNoteParty((String) mapValue.get("noteParty"));
         setNoteDateTime((Timestamp) mapValue.get("noteDateTime"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
+        setNoteParty((String) mapValue.get("noteParty"));
         postInit();
     }
 
@@ -650,12 +675,12 @@ fieldMapColumns.put("NoteData", fields);
         mapValue.put("noteId", getNoteId());
         mapValue.put("noteName", getNoteName());
         mapValue.put("noteInfo", getNoteInfo());
-        mapValue.put("noteParty", getNoteParty());
         mapValue.put("noteDateTime", getNoteDateTime());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
+        mapValue.put("noteParty", getNoteParty());
         return mapValue;
     }
 

@@ -126,7 +126,7 @@ fieldMapColumns.put("ReturnItemResponse", fields);
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private OrderHeader orderHeader = null;
+   private OrderHeader replacementOrderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -340,15 +340,15 @@ fieldMapColumns.put("ReturnItemResponse", fields);
         return this.orderPaymentPreference;
     }
     /**
-     * Auto generated method that gets the related <code>OrderHeader</code> by the relation named <code>OrderHeader</code>.
+     * Auto generated method that gets the related <code>OrderHeader</code> by the relation named <code>ReplacementOrderHeader</code>.
      * @return the <code>OrderHeader</code>
      * @throws RepositoryException if an error occurs
      */
-    public OrderHeader getOrderHeader() throws RepositoryException {
-        if (this.orderHeader == null) {
-            this.orderHeader = getRelatedOne(OrderHeader.class, "OrderHeader");
+    public OrderHeader getReplacementOrderHeader() throws RepositoryException {
+        if (this.replacementOrderHeader == null) {
+            this.replacementOrderHeader = getRelatedOne(OrderHeader.class, "ReplacementOrderHeader");
         }
-        return this.orderHeader;
+        return this.replacementOrderHeader;
     }
     /**
      * Auto generated method that gets the related <code>Payment</code> by the relation named <code>Payment</code>.
@@ -393,10 +393,10 @@ fieldMapColumns.put("ReturnItemResponse", fields);
     }
     /**
      * Auto generated value setter.
-     * @param orderHeader the orderHeader to set
+     * @param replacementOrderHeader the replacementOrderHeader to set
     */
-    public void setOrderHeader(OrderHeader orderHeader) {
-        this.orderHeader = orderHeader;
+    public void setReplacementOrderHeader(OrderHeader replacementOrderHeader) {
+        this.replacementOrderHeader = replacementOrderHeader;
     }
     /**
      * Auto generated value setter.

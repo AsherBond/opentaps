@@ -64,11 +64,13 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("theirPartyId", "THEIR_PARTY_ID");
         fields.put("productId", "PRODUCT_ID");
         fields.put("theirProductId", "THEIR_PRODUCT_ID");
+        fields.put("glAccountTypeId", "GL_ACCOUNT_TYPE_ID");
         fields.put("glAccountId", "GL_ACCOUNT_ID");
         fields.put("organizationPartyId", "ORGANIZATION_PARTY_ID");
         fields.put("amount", "AMOUNT");
         fields.put("currencyUomId", "CURRENCY_UOM_ID");
         fields.put("origAmount", "ORIG_AMOUNT");
+        fields.put("origCurrencyUomId", "ORIG_CURRENCY_UOM_ID");
         fields.put("debitCreditFlag", "DEBIT_CREDIT_FLAG");
         fields.put("dueDate", "DUE_DATE");
         fields.put("groupId", "GROUP_ID");
@@ -103,11 +105,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
     theirPartyId("theirPartyId"),
     productId("productId"),
     theirProductId("theirProductId"),
+    glAccountTypeId("glAccountTypeId"),
     glAccountId("glAccountId"),
     organizationPartyId("organizationPartyId"),
     amount("amount"),
     currencyUomId("currencyUomId"),
     origAmount("origAmount"),
+    origCurrencyUomId("origCurrencyUomId"),
     debitCreditFlag("debitCreditFlag"),
     dueDate("dueDate"),
     groupId("groupId"),
@@ -174,6 +178,8 @@ fieldMapColumns.put("AcctgTransEntry", fields);
    private String productId;
    @Column(name="THEIR_PRODUCT_ID")
    private String theirProductId;
+   @Column(name="GL_ACCOUNT_TYPE_ID")
+   private String glAccountTypeId;
    @Column(name="GL_ACCOUNT_ID")
    private String glAccountId;
    @Column(name="ORGANIZATION_PARTY_ID")
@@ -184,6 +190,8 @@ fieldMapColumns.put("AcctgTransEntry", fields);
    private String currencyUomId;
    @Column(name="ORIG_AMOUNT")
    private BigDecimal origAmount;
+   @Column(name="ORIG_CURRENCY_UOM_ID")
+   private String origCurrencyUomId;
    @Column(name="DEBIT_CREDIT_FLAG")
    private String debitCreditFlag;
    @Column(name="DUE_DATE")
@@ -241,6 +249,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
    
    private Uom currencyUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ORIG_CURRENCY_UOM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Uom origCurrencyUom = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TRANS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -262,6 +277,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
    
    private RoleType roleType = null;
    private transient PartyRole partyRole = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="GL_ACCOUNT_TYPE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private GlAccountType glAccountType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -369,7 +391,7 @@ fieldMapColumns.put("AcctgTransEntry", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("acctgTransId");this.primaryKeyNames.add("acctgTransEntrySeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("acctgTransEntryTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("theirPartyId");this.allFieldsNames.add("productId");this.allFieldsNames.add("theirProductId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("origAmount");this.allFieldsNames.add("debitCreditFlag");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("groupId");this.allFieldsNames.add("taxId");this.allFieldsNames.add("reconcileStatusId");this.allFieldsNames.add("settlementTermId");this.allFieldsNames.add("isSummary");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
+      this.allFieldsNames.add("acctgTransId");this.allFieldsNames.add("acctgTransEntrySeqId");this.allFieldsNames.add("acctgTransEntryTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("voucherRef");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("theirPartyId");this.allFieldsNames.add("productId");this.allFieldsNames.add("theirProductId");this.allFieldsNames.add("glAccountTypeId");this.allFieldsNames.add("glAccountId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("origAmount");this.allFieldsNames.add("origCurrencyUomId");this.allFieldsNames.add("debitCreditFlag");this.allFieldsNames.add("dueDate");this.allFieldsNames.add("groupId");this.allFieldsNames.add("taxId");this.allFieldsNames.add("reconcileStatusId");this.allFieldsNames.add("settlementTermId");this.allFieldsNames.add("isSummary");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -456,6 +478,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
     }
     /**
      * Auto generated value setter.
+     * @param glAccountTypeId the glAccountTypeId to set
+     */
+    public void setGlAccountTypeId(String glAccountTypeId) {
+        this.glAccountTypeId = glAccountTypeId;
+    }
+    /**
+     * Auto generated value setter.
      * @param glAccountId the glAccountId to set
      */
     public void setGlAccountId(String glAccountId) {
@@ -488,6 +517,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
      */
     public void setOrigAmount(BigDecimal origAmount) {
         this.origAmount = origAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param origCurrencyUomId the origCurrencyUomId to set
+     */
+    public void setOrigCurrencyUomId(String origCurrencyUomId) {
+        this.origCurrencyUomId = origCurrencyUomId;
     }
     /**
      * Auto generated value setter.
@@ -711,6 +747,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getGlAccountTypeId() {
+        return this.glAccountTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getGlAccountId() {
         return this.glAccountId;
     }
@@ -741,6 +784,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
      */
     public BigDecimal getOrigAmount() {
         return this.origAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOrigCurrencyUomId() {
+        return this.origCurrencyUomId;
     }
     /**
      * Auto generated value accessor.
@@ -913,6 +963,17 @@ fieldMapColumns.put("AcctgTransEntry", fields);
         return this.currencyUom;
     }
     /**
+     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>OrigCurrencyUom</code>.
+     * @return the <code>Uom</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Uom getOrigCurrencyUom() throws RepositoryException {
+        if (this.origCurrencyUom == null) {
+            this.origCurrencyUom = getRelatedOne(Uom.class, "OrigCurrencyUom");
+        }
+        return this.origCurrencyUom;
+    }
+    /**
      * Auto generated method that gets the related <code>AcctgTrans</code> by the relation named <code>AcctgTrans</code>.
      * @return the <code>AcctgTrans</code>
      * @throws RepositoryException if an error occurs
@@ -955,6 +1016,17 @@ fieldMapColumns.put("AcctgTransEntry", fields);
             this.partyRole = getRelatedOne(PartyRole.class, "PartyRole");
         }
         return this.partyRole;
+    }
+    /**
+     * Auto generated method that gets the related <code>GlAccountType</code> by the relation named <code>GlAccountType</code>.
+     * @return the <code>GlAccountType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public GlAccountType getGlAccountType() throws RepositoryException {
+        if (this.glAccountType == null) {
+            this.glAccountType = getRelatedOne(GlAccountType.class, "GlAccountType");
+        }
+        return this.glAccountType;
     }
     /**
      * Auto generated method that gets the related <code>GlAccount</code> by the relation named <code>GlAccount</code>.
@@ -1160,6 +1232,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
     }
     /**
      * Auto generated value setter.
+     * @param origCurrencyUom the origCurrencyUom to set
+    */
+    public void setOrigCurrencyUom(Uom origCurrencyUom) {
+        this.origCurrencyUom = origCurrencyUom;
+    }
+    /**
+     * Auto generated value setter.
      * @param acctgTrans the acctgTrans to set
     */
     public void setAcctgTrans(AcctgTrans acctgTrans) {
@@ -1185,6 +1264,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
     */
     public void setPartyRole(PartyRole partyRole) {
         this.partyRole = partyRole;
+    }
+    /**
+     * Auto generated value setter.
+     * @param glAccountType the glAccountType to set
+    */
+    public void setGlAccountType(GlAccountType glAccountType) {
+        this.glAccountType = glAccountType;
     }
     /**
      * Auto generated value setter.
@@ -1321,11 +1407,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
         setTheirPartyId((String) mapValue.get("theirPartyId"));
         setProductId((String) mapValue.get("productId"));
         setTheirProductId((String) mapValue.get("theirProductId"));
+        setGlAccountTypeId((String) mapValue.get("glAccountTypeId"));
         setGlAccountId((String) mapValue.get("glAccountId"));
         setOrganizationPartyId((String) mapValue.get("organizationPartyId"));
         setAmount(convertToBigDecimal(mapValue.get("amount")));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setOrigAmount(convertToBigDecimal(mapValue.get("origAmount")));
+        setOrigCurrencyUomId((String) mapValue.get("origCurrencyUomId"));
         setDebitCreditFlag((String) mapValue.get("debitCreditFlag"));
         setDueDate((Date) mapValue.get("dueDate"));
         setGroupId((String) mapValue.get("groupId"));
@@ -1364,11 +1452,13 @@ fieldMapColumns.put("AcctgTransEntry", fields);
         mapValue.put("theirPartyId", getTheirPartyId());
         mapValue.put("productId", getProductId());
         mapValue.put("theirProductId", getTheirProductId());
+        mapValue.put("glAccountTypeId", getGlAccountTypeId());
         mapValue.put("glAccountId", getGlAccountId());
         mapValue.put("organizationPartyId", getOrganizationPartyId());
         mapValue.put("amount", getAmount());
         mapValue.put("currencyUomId", getCurrencyUomId());
         mapValue.put("origAmount", getOrigAmount());
+        mapValue.put("origCurrencyUomId", getOrigCurrencyUomId());
         mapValue.put("debitCreditFlag", getDebitCreditFlag());
         mapValue.put("dueDate", getDueDate());
         mapValue.put("groupId", getGroupId());

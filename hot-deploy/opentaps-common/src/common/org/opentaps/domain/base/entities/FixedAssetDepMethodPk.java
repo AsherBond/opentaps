@@ -26,17 +26,17 @@ import java.lang.String;
 
 @Embeddable
 public class FixedAssetDepMethodPk implements Serializable {
-    @Column(name="DEPRECIATION_METHOD_ID")
-    private String depreciationMethodId;
+    @Column(name="DEPRECIATION_CUSTOM_METHOD_ID")
+    private String depreciationCustomMethodId;
     @Column(name="FIXED_ASSET_ID")
     private String fixedAssetId;
     
     /**
      * Auto generated value setter.
-     * @param depreciationMethodId the depreciationMethodId to set
+     * @param depreciationCustomMethodId the depreciationCustomMethodId to set
      */
-    public void setDepreciationMethodId(String depreciationMethodId) {
-        this.depreciationMethodId = depreciationMethodId;
+    public void setDepreciationCustomMethodId(String depreciationCustomMethodId) {
+        this.depreciationCustomMethodId = depreciationCustomMethodId;
     }
     /**
      * Auto generated value setter.
@@ -50,8 +50,8 @@ public class FixedAssetDepMethodPk implements Serializable {
      * Auto generated value accessor.
      * @return <code>String</code>
      */  
-    public String getDepreciationMethodId() {
-        return this.depreciationMethodId;
+    public String getDepreciationCustomMethodId() {
+        return this.depreciationCustomMethodId;
     }
     /**
      * Auto generated value accessor.

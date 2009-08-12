@@ -65,7 +65,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("suffix", "SUFFIX");
         fields.put("nickname", "NICKNAME");
         fields.put("firstNameLocal", "FIRST_NAME_LOCAL");
+        fields.put("middleNameLocal", "MIDDLE_NAME_LOCAL");
         fields.put("lastNameLocal", "LAST_NAME_LOCAL");
+        fields.put("otherLocal", "OTHER_LOCAL");
         fields.put("memberId", "MEMBER_ID");
         fields.put("gender", "GENDER");
         fields.put("birthDate", "BIRTH_DATE");
@@ -100,7 +102,9 @@ fieldMapColumns.put("Person", fields);
     suffix("suffix"),
     nickname("nickname"),
     firstNameLocal("firstNameLocal"),
+    middleNameLocal("middleNameLocal"),
     lastNameLocal("lastNameLocal"),
+    otherLocal("otherLocal"),
     memberId("memberId"),
     gender("gender"),
     birthDate("birthDate"),
@@ -167,10 +171,14 @@ fieldMapColumns.put("Person", fields);
    @Boost(5f)
    @Column(name="FIRST_NAME_LOCAL")
    private String firstNameLocal;
+   @Column(name="MIDDLE_NAME_LOCAL")
+   private String middleNameLocal;
    @Field(index=Index.TOKENIZED, store=Store.YES)
    @Boost(5f)
    @Column(name="LAST_NAME_LOCAL")
    private String lastNameLocal;
+   @Column(name="OTHER_LOCAL")
+   private String otherLocal;
    @Column(name="MEMBER_ID")
    private String memberId;
    @Column(name="GENDER")
@@ -258,7 +266,7 @@ fieldMapColumns.put("Person", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("salutation");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("nickname");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("memberId");this.allFieldsNames.add("gender");this.allFieldsNames.add("birthDate");this.allFieldsNames.add("height");this.allFieldsNames.add("weight");this.allFieldsNames.add("mothersMaidenName");this.allFieldsNames.add("maritalStatus");this.allFieldsNames.add("socialSecurityNumber");this.allFieldsNames.add("passportNumber");this.allFieldsNames.add("passportExpireDate");this.allFieldsNames.add("totalYearsWorkExperience");this.allFieldsNames.add("comments");this.allFieldsNames.add("employmentStatusEnumId");this.allFieldsNames.add("residenceStatusEnumId");this.allFieldsNames.add("occupation");this.allFieldsNames.add("yearsWithEmployer");this.allFieldsNames.add("monthsWithEmployer");this.allFieldsNames.add("existingCustomer");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("salutation");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("nickname");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("middleNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("otherLocal");this.allFieldsNames.add("memberId");this.allFieldsNames.add("gender");this.allFieldsNames.add("birthDate");this.allFieldsNames.add("height");this.allFieldsNames.add("weight");this.allFieldsNames.add("mothersMaidenName");this.allFieldsNames.add("maritalStatus");this.allFieldsNames.add("socialSecurityNumber");this.allFieldsNames.add("passportNumber");this.allFieldsNames.add("passportExpireDate");this.allFieldsNames.add("totalYearsWorkExperience");this.allFieldsNames.add("comments");this.allFieldsNames.add("employmentStatusEnumId");this.allFieldsNames.add("residenceStatusEnumId");this.allFieldsNames.add("occupation");this.allFieldsNames.add("yearsWithEmployer");this.allFieldsNames.add("monthsWithEmployer");this.allFieldsNames.add("existingCustomer");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -338,10 +346,24 @@ fieldMapColumns.put("Person", fields);
     }
     /**
      * Auto generated value setter.
+     * @param middleNameLocal the middleNameLocal to set
+     */
+    public void setMiddleNameLocal(String middleNameLocal) {
+        this.middleNameLocal = middleNameLocal;
+    }
+    /**
+     * Auto generated value setter.
      * @param lastNameLocal the lastNameLocal to set
      */
     public void setLastNameLocal(String lastNameLocal) {
         this.lastNameLocal = lastNameLocal;
+    }
+    /**
+     * Auto generated value setter.
+     * @param otherLocal the otherLocal to set
+     */
+    public void setOtherLocal(String otherLocal) {
+        this.otherLocal = otherLocal;
     }
     /**
      * Auto generated value setter.
@@ -565,8 +587,22 @@ fieldMapColumns.put("Person", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getMiddleNameLocal() {
+        return this.middleNameLocal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getLastNameLocal() {
         return this.lastNameLocal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOtherLocal() {
+        return this.otherLocal;
     }
     /**
      * Auto generated value accessor.
@@ -1135,7 +1171,9 @@ fieldMapColumns.put("Person", fields);
         setSuffix((String) mapValue.get("suffix"));
         setNickname((String) mapValue.get("nickname"));
         setFirstNameLocal((String) mapValue.get("firstNameLocal"));
+        setMiddleNameLocal((String) mapValue.get("middleNameLocal"));
         setLastNameLocal((String) mapValue.get("lastNameLocal"));
+        setOtherLocal((String) mapValue.get("otherLocal"));
         setMemberId((String) mapValue.get("memberId"));
         setGender((String) mapValue.get("gender"));
         setBirthDate((Date) mapValue.get("birthDate"));
@@ -1174,7 +1212,9 @@ fieldMapColumns.put("Person", fields);
         mapValue.put("suffix", getSuffix());
         mapValue.put("nickname", getNickname());
         mapValue.put("firstNameLocal", getFirstNameLocal());
+        mapValue.put("middleNameLocal", getMiddleNameLocal());
         mapValue.put("lastNameLocal", getLastNameLocal());
+        mapValue.put("otherLocal", getOtherLocal());
         mapValue.put("memberId", getMemberId());
         mapValue.put("gender", getGender());
         mapValue.put("birthDate", getBirthDate());

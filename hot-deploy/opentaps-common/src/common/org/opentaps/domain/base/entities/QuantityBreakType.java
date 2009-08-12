@@ -104,7 +104,7 @@ fieldMapColumns.put("QuantityBreakType", fields);
       super();
       this.baseEntityName = "QuantityBreakType";
       this.isView = false;
-      
+      this.resourceName = "ProductEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("quantityBreakTypeId");
       this.allFieldsNames = new ArrayList<String>();

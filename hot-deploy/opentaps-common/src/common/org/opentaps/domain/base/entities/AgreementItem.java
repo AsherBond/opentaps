@@ -42,6 +42,7 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -111,7 +112,7 @@ fieldMapColumns.put("AgreementItem", fields);
    @Column(name="AGREEMENT_TEXT")
    private String agreementText;
    @Column(name="AGREEMENT_IMAGE")
-   private byte[] agreementImage;
+   private Blob agreementImage;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -137,6 +138,7 @@ fieldMapColumns.put("AgreementItem", fields);
    private transient List<AgreementItemTypeAttr> agreementItemTypeAttrs = null;
    private transient List<Addendum> addendums = null;
    private transient List<AgreementCategoryAppl> agreementCategoryAppls = null;
+   private transient List<AgreementEmploymentAppl> agreementEmploymentAppls = null;
    private transient List<AgreementGeographicalApplic> agreementGeographicalApplics = null;
    private transient List<AgreementItemAttribute> agreementItemAttributes = null;
    private transient List<AgreementPartyApplic> agreementPartyApplics = null;
@@ -144,6 +146,7 @@ fieldMapColumns.put("AgreementItem", fields);
    private transient List<AgreementPromoAppl> agreementPromoAppls = null;
    private transient List<AgreementTerm> agreementTerms = null;
    private transient List<AgreementWorkEffortAppl> agreementWorkEffortAppls = null;
+   private transient List<SupplierProduct> supplierProducts = null;
 
   /**
    * Default constructor.
@@ -210,7 +213,7 @@ fieldMapColumns.put("AgreementItem", fields);
      * Auto generated value setter.
      * @param agreementImage the agreementImage to set
      */
-    public void setAgreementImage(byte[] agreementImage) {
+    public void setAgreementImage(Blob agreementImage) {
         this.agreementImage = agreementImage;
     }
     /**
@@ -279,9 +282,9 @@ fieldMapColumns.put("AgreementItem", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>byte[]</code>
+     * @return <code>Blob</code>
      */
-    public byte[] getAgreementImage() {
+    public Blob getAgreementImage() {
         return this.agreementImage;
     }
     /**
@@ -369,6 +372,17 @@ fieldMapColumns.put("AgreementItem", fields);
         return this.agreementCategoryAppls;
     }
     /**
+     * Auto generated method that gets the related <code>AgreementEmploymentAppl</code> by the relation named <code>AgreementEmploymentAppl</code>.
+     * @return the list of <code>AgreementEmploymentAppl</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AgreementEmploymentAppl> getAgreementEmploymentAppls() throws RepositoryException {
+        if (this.agreementEmploymentAppls == null) {
+            this.agreementEmploymentAppls = getRelated(AgreementEmploymentAppl.class, "AgreementEmploymentAppl");
+        }
+        return this.agreementEmploymentAppls;
+    }
+    /**
      * Auto generated method that gets the related <code>AgreementGeographicalApplic</code> by the relation named <code>AgreementGeographicalApplic</code>.
      * @return the list of <code>AgreementGeographicalApplic</code>
      * @throws RepositoryException if an error occurs
@@ -445,6 +459,17 @@ fieldMapColumns.put("AgreementItem", fields);
         }
         return this.agreementWorkEffortAppls;
     }
+    /**
+     * Auto generated method that gets the related <code>SupplierProduct</code> by the relation named <code>SupplierProduct</code>.
+     * @return the list of <code>SupplierProduct</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends SupplierProduct> getSupplierProducts() throws RepositoryException {
+        if (this.supplierProducts == null) {
+            this.supplierProducts = getRelated(SupplierProduct.class, "SupplierProduct");
+        }
+        return this.supplierProducts;
+    }
 
     /**
      * Auto generated value setter.
@@ -480,6 +505,13 @@ fieldMapColumns.put("AgreementItem", fields);
     */
     public void setAgreementCategoryAppls(List<AgreementCategoryAppl> agreementCategoryAppls) {
         this.agreementCategoryAppls = agreementCategoryAppls;
+    }
+    /**
+     * Auto generated value setter.
+     * @param agreementEmploymentAppls the agreementEmploymentAppls to set
+    */
+    public void setAgreementEmploymentAppls(List<AgreementEmploymentAppl> agreementEmploymentAppls) {
+        this.agreementEmploymentAppls = agreementEmploymentAppls;
     }
     /**
      * Auto generated value setter.
@@ -530,6 +562,13 @@ fieldMapColumns.put("AgreementItem", fields);
     public void setAgreementWorkEffortAppls(List<AgreementWorkEffortAppl> agreementWorkEffortAppls) {
         this.agreementWorkEffortAppls = agreementWorkEffortAppls;
     }
+    /**
+     * Auto generated value setter.
+     * @param supplierProducts the supplierProducts to set
+    */
+    public void setSupplierProducts(List<SupplierProduct> supplierProducts) {
+        this.supplierProducts = supplierProducts;
+    }
 
 
     /** {@inheritDoc} */
@@ -541,7 +580,7 @@ fieldMapColumns.put("AgreementItem", fields);
         setAgreementItemTypeId((String) mapValue.get("agreementItemTypeId"));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setAgreementText((String) mapValue.get("agreementText"));
-        setAgreementImage((byte[]) mapValue.get("agreementImage"));
+        setAgreementImage((Blob) mapValue.get("agreementImage"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));

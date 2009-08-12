@@ -52,8 +52,8 @@ import java.sql.Timestamp;
 public class CustRequestContent extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
-        fields.put("contentId", "CONTENT_ID");
         fields.put("custRequestId", "CUST_REQUEST_ID");
+        fields.put("contentId", "CONTENT_ID");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -63,8 +63,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("CustRequestContent", fields);
 }
   public static enum Fields implements EntityFieldInterface<CustRequestContent> {
-    contentId("contentId"),
     custRequestId("custRequestId"),
+    contentId("contentId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -134,9 +134,9 @@ fieldMapColumns.put("CustRequestContent", fields);
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("contentId");this.primaryKeyNames.add("custRequestId");this.primaryKeyNames.add("fromDate");
+      this.primaryKeyNames.add("custRequestId");this.primaryKeyNames.add("contentId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("contentId");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("contentId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -153,17 +153,17 @@ fieldMapColumns.put("CustRequestContent", fields);
 
     /**
      * Auto generated value setter.
-     * @param contentId the contentId to set
-     */
-    public void setContentId(String contentId) {
-        id.setContentId(contentId);
-    }
-    /**
-     * Auto generated value setter.
      * @param custRequestId the custRequestId to set
      */
     public void setCustRequestId(String custRequestId) {
         id.setCustRequestId(custRequestId);
+    }
+    /**
+     * Auto generated value setter.
+     * @param contentId the contentId to set
+     */
+    public void setContentId(String contentId) {
+        id.setContentId(contentId);
     }
     /**
      * Auto generated value setter.
@@ -212,15 +212,15 @@ fieldMapColumns.put("CustRequestContent", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getContentId() {
-        return this.id.getContentId();
+    public String getCustRequestId() {
+        return this.id.getCustRequestId();
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getCustRequestId() {
-        return this.id.getCustRequestId();
+    public String getContentId() {
+        return this.id.getContentId();
     }
     /**
      * Auto generated value accessor.
@@ -308,8 +308,8 @@ fieldMapColumns.put("CustRequestContent", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
-        setContentId((String) mapValue.get("contentId"));
         setCustRequestId((String) mapValue.get("custRequestId"));
+        setContentId((String) mapValue.get("contentId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -323,8 +323,8 @@ fieldMapColumns.put("CustRequestContent", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        mapValue.put("contentId", getContentId());
         mapValue.put("custRequestId", getCustRequestId());
+        mapValue.put("contentId", getContentId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

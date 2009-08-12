@@ -61,6 +61,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("roleTypeIdFrom", "ROLE_TYPE_ID_FROM");
         fields.put("roleTypeIdTo", "ROLE_TYPE_ID_TO");
         fields.put("fromDate", "FROM_DATE");
+        fields.put("thruDate", "THRU_DATE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -77,6 +78,7 @@ fieldMapColumns.put("UnemploymentClaim", fields);
     roleTypeIdFrom("roleTypeIdFrom"),
     roleTypeIdTo("roleTypeIdTo"),
     fromDate("fromDate"),
+    thruDate("thruDate"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -112,6 +114,8 @@ fieldMapColumns.put("UnemploymentClaim", fields);
    private String roleTypeIdTo;
    @Column(name="FROM_DATE")
    private Timestamp fromDate;
+   @Column(name="THRU_DATE")
+   private Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -140,7 +144,7 @@ fieldMapColumns.put("UnemploymentClaim", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("unemploymentClaimId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("unemploymentClaimId");this.allFieldsNames.add("unemploymentClaimDate");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("unemploymentClaimId");this.allFieldsNames.add("unemploymentClaimDate");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -217,6 +221,13 @@ fieldMapColumns.put("UnemploymentClaim", fields);
      */
     public void setFromDate(Timestamp fromDate) {
         this.fromDate = fromDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param thruDate the thruDate to set
+     */
+    public void setThruDate(Timestamp thruDate) {
+        this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
@@ -314,6 +325,13 @@ fieldMapColumns.put("UnemploymentClaim", fields);
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
+    public Timestamp getThruDate() {
+        return this.thruDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
     public Timestamp getLastUpdatedStamp() {
         return this.lastUpdatedStamp;
     }
@@ -391,6 +409,7 @@ fieldMapColumns.put("UnemploymentClaim", fields);
         setRoleTypeIdFrom((String) mapValue.get("roleTypeIdFrom"));
         setRoleTypeIdTo((String) mapValue.get("roleTypeIdTo"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
+        setThruDate((Timestamp) mapValue.get("thruDate"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -411,6 +430,7 @@ fieldMapColumns.put("UnemploymentClaim", fields);
         mapValue.put("roleTypeIdFrom", getRoleTypeIdFrom());
         mapValue.put("roleTypeIdTo", getRoleTypeIdTo());
         mapValue.put("fromDate", getFromDate());
+        mapValue.put("thruDate", getThruDate());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

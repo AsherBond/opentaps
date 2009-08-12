@@ -43,6 +43,7 @@ import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -232,7 +233,7 @@ fieldMapColumns.put("ShipmentRouteSegment", fields);
    @Column(name="THIRD_PARTY_COUNTRY_GEO_CODE")
    private String thirdPartyCountryGeoCode;
    @Column(name="UPS_HIGH_VALUE_REPORT")
-   private byte[] upsHighValueReport;
+   private Blob upsHighValueReport;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -625,7 +626,7 @@ fieldMapColumns.put("ShipmentRouteSegment", fields);
      * Auto generated value setter.
      * @param upsHighValueReport the upsHighValueReport to set
      */
-    public void setUpsHighValueReport(byte[] upsHighValueReport) {
+    public void setUpsHighValueReport(Blob upsHighValueReport) {
         this.upsHighValueReport = upsHighValueReport;
     }
     /**
@@ -904,9 +905,9 @@ fieldMapColumns.put("ShipmentRouteSegment", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>byte[]</code>
+     * @return <code>Blob</code>
      */
-    public byte[] getUpsHighValueReport() {
+    public Blob getUpsHighValueReport() {
         return this.upsHighValueReport;
     }
     /**
@@ -1304,7 +1305,7 @@ fieldMapColumns.put("ShipmentRouteSegment", fields);
         setThirdPartyAccountNumber((String) mapValue.get("thirdPartyAccountNumber"));
         setThirdPartyPostalCode((String) mapValue.get("thirdPartyPostalCode"));
         setThirdPartyCountryGeoCode((String) mapValue.get("thirdPartyCountryGeoCode"));
-        setUpsHighValueReport((byte[]) mapValue.get("upsHighValueReport"));
+        setUpsHighValueReport((Blob) mapValue.get("upsHighValueReport"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));

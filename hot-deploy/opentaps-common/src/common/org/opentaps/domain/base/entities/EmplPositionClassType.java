@@ -53,6 +53,8 @@ public class EmplPositionClassType extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("emplPositionClassTypeId", "EMPL_POSITION_CLASS_TYPE_ID");
+        fields.put("parentTypeId", "PARENT_TYPE_ID");
+        fields.put("hasTable", "HAS_TABLE");
         fields.put("description", "DESCRIPTION");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -62,6 +64,8 @@ fieldMapColumns.put("EmplPositionClassType", fields);
 }
   public static enum Fields implements EntityFieldInterface<EmplPositionClassType> {
     emplPositionClassTypeId("emplPositionClassTypeId"),
+    parentTypeId("parentTypeId"),
+    hasTable("hasTable"),
     description("description"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -82,6 +86,10 @@ fieldMapColumns.put("EmplPositionClassType", fields);
    @Id
    @Column(name="EMPL_POSITION_CLASS_TYPE_ID")
    private String emplPositionClassTypeId;
+   @Column(name="PARENT_TYPE_ID")
+   private String parentTypeId;
+   @Column(name="HAS_TABLE")
+   private String hasTable;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="LAST_UPDATED_STAMP")
@@ -92,6 +100,17 @@ fieldMapColumns.put("EmplPositionClassType", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private EmplPositionClassType parentEmplPositionClassType = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID")
+   
+   private List<EmplPositionClassType> childEmplPositionClassTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionClassType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_CLASS_TYPE_ID")
    
@@ -108,7 +127,7 @@ fieldMapColumns.put("EmplPositionClassType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("emplPositionClassTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("emplPositionClassTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("emplPositionClassTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -129,6 +148,20 @@ fieldMapColumns.put("EmplPositionClassType", fields);
      */
     public void setEmplPositionClassTypeId(String emplPositionClassTypeId) {
         this.emplPositionClassTypeId = emplPositionClassTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentTypeId the parentTypeId to set
+     */
+    public void setParentTypeId(String parentTypeId) {
+        this.parentTypeId = parentTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param hasTable the hasTable to set
+     */
+    public void setHasTable(String hasTable) {
+        this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
@@ -177,6 +210,20 @@ fieldMapColumns.put("EmplPositionClassType", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getParentTypeId() {
+        return this.parentTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getHasTable() {
+        return this.hasTable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDescription() {
         return this.description;
     }
@@ -210,6 +257,28 @@ fieldMapColumns.put("EmplPositionClassType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>EmplPositionClassType</code> by the relation named <code>ParentEmplPositionClassType</code>.
+     * @return the <code>EmplPositionClassType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public EmplPositionClassType getParentEmplPositionClassType() throws RepositoryException {
+        if (this.parentEmplPositionClassType == null) {
+            this.parentEmplPositionClassType = getRelatedOne(EmplPositionClassType.class, "ParentEmplPositionClassType");
+        }
+        return this.parentEmplPositionClassType;
+    }
+    /**
+     * Auto generated method that gets the related <code>EmplPositionClassType</code> by the relation named <code>ChildEmplPositionClassType</code>.
+     * @return the list of <code>EmplPositionClassType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends EmplPositionClassType> getChildEmplPositionClassTypes() throws RepositoryException {
+        if (this.childEmplPositionClassTypes == null) {
+            this.childEmplPositionClassTypes = getRelated(EmplPositionClassType.class, "ChildEmplPositionClassType");
+        }
+        return this.childEmplPositionClassTypes;
+    }
+    /**
      * Auto generated method that gets the related <code>EmplPositionTypeClass</code> by the relation named <code>EmplPositionTypeClass</code>.
      * @return the list of <code>EmplPositionTypeClass</code>
      * @throws RepositoryException if an error occurs
@@ -221,6 +290,20 @@ fieldMapColumns.put("EmplPositionClassType", fields);
         return this.emplPositionTypeClasses;
     }
 
+    /**
+     * Auto generated value setter.
+     * @param parentEmplPositionClassType the parentEmplPositionClassType to set
+    */
+    public void setParentEmplPositionClassType(EmplPositionClassType parentEmplPositionClassType) {
+        this.parentEmplPositionClassType = parentEmplPositionClassType;
+    }
+    /**
+     * Auto generated value setter.
+     * @param childEmplPositionClassTypes the childEmplPositionClassTypes to set
+    */
+    public void setChildEmplPositionClassTypes(List<EmplPositionClassType> childEmplPositionClassTypes) {
+        this.childEmplPositionClassTypes = childEmplPositionClassTypes;
+    }
     /**
      * Auto generated value setter.
      * @param emplPositionTypeClasses the emplPositionTypeClasses to set
@@ -262,6 +345,8 @@ fieldMapColumns.put("EmplPositionClassType", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setEmplPositionClassTypeId((String) mapValue.get("emplPositionClassTypeId"));
+        setParentTypeId((String) mapValue.get("parentTypeId"));
+        setHasTable((String) mapValue.get("hasTable"));
         setDescription((String) mapValue.get("description"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -275,6 +360,8 @@ fieldMapColumns.put("EmplPositionClassType", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("emplPositionClassTypeId", getEmplPositionClassTypeId());
+        mapValue.put("parentTypeId", getParentTypeId());
+        mapValue.put("hasTable", getHasTable());
         mapValue.put("description", getDescription());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

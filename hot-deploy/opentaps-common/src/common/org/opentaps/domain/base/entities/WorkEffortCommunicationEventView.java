@@ -48,7 +48,7 @@ import java.sql.Timestamp;
  * Auto generated base entity WorkEffortCommunicationEventView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectWorkEffortCommunicationEventViews", query="SELECT CEWE.WORK_EFFORT_ID AS \"workEffortId\",CEWE.COMMUNICATION_EVENT_ID AS \"communicationEventId\",CEWE.DESCRIPTION AS \"description\",CE.COMMUNICATION_EVENT_TYPE_ID AS \"communicationEventTypeId\",CE.ORIG_COMM_EVENT_ID AS \"origCommEventId\",CE.PARENT_COMM_EVENT_ID AS \"parentCommEventId\",CE.STATUS_ID AS \"statusId\",CE.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CE.CONTACT_MECH_ID_FROM AS \"contactMechIdFrom\",CE.CONTACT_MECH_ID_TO AS \"contactMechIdTo\",CE.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",CE.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",CE.PARTY_ID_FROM AS \"partyIdFrom\",CE.PARTY_ID_TO AS \"partyIdTo\",CE.ENTRY_DATE AS \"entryDate\",CE.DATETIME_STARTED AS \"datetimeStarted\",CE.DATETIME_ENDED AS \"datetimeEnded\",CE.SUBJECT AS \"subject\",CE.CONTENT_MIME_TYPE_ID AS \"contentMimeTypeId\",CE.CONTENT AS \"content\",CE.NOTE AS \"note\",CE.CONTACT_LIST_ID AS \"contactListId\",CE.HEADER_STRING AS \"headerString\",CE.FROM_STRING AS \"fromString\",CE.TO_STRING AS \"toString\",CE.CC_STRING AS \"ccString\",CE.BCC_STRING AS \"bccString\" FROM COMMUNICATION_EVENT_WORK_EFF CEWE INNER JOIN COMMUNICATION_EVENT CE ON CEWE.COMMUNICATION_EVENT_ID = CE.COMMUNICATION_EVENT_ID", resultSetMapping="WorkEffortCommunicationEventViewMapping")
+@NamedNativeQuery(name="selectWorkEffortCommunicationEventViews", query="SELECT CEWE.WORK_EFFORT_ID AS \"workEffortId\",CEWE.COMMUNICATION_EVENT_ID AS \"communicationEventId\",CEWE.DESCRIPTION AS \"description\",CE.COMMUNICATION_EVENT_TYPE_ID AS \"communicationEventTypeId\",CE.ORIG_COMM_EVENT_ID AS \"origCommEventId\",CE.PARENT_COMM_EVENT_ID AS \"parentCommEventId\",CE.STATUS_ID AS \"statusId\",CE.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CE.CONTACT_MECH_ID_FROM AS \"contactMechIdFrom\",CE.CONTACT_MECH_ID_TO AS \"contactMechIdTo\",CE.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",CE.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",CE.PARTY_ID_FROM AS \"partyIdFrom\",CE.PARTY_ID_TO AS \"partyIdTo\",CE.ENTRY_DATE AS \"entryDate\",CE.DATETIME_STARTED AS \"datetimeStarted\",CE.DATETIME_ENDED AS \"datetimeEnded\",CE.SUBJECT AS \"subject\",CE.CONTENT_MIME_TYPE_ID AS \"contentMimeTypeId\",CE.CONTENT AS \"content\",CE.NOTE AS \"note\",CE.REASON_ENUM_ID AS \"reasonEnumId\",CE.CONTACT_LIST_ID AS \"contactListId\",CE.HEADER_STRING AS \"headerString\",CE.FROM_STRING AS \"fromString\",CE.TO_STRING AS \"toString\",CE.CC_STRING AS \"ccString\",CE.BCC_STRING AS \"bccString\",CE.MESSAGE_ID AS \"messageId\" FROM COMMUNICATION_EVENT_WORK_EFF CEWE INNER JOIN COMMUNICATION_EVENT CE ON CEWE.COMMUNICATION_EVENT_ID = CE.COMMUNICATION_EVENT_ID", resultSetMapping="WorkEffortCommunicationEventViewMapping")
 @SqlResultSetMapping(name="WorkEffortCommunicationEventViewMapping", entities={
 @EntityResult(entityClass=WorkEffortCommunicationEventView.class, fields = {
 @FieldResult(name="workEffortId", column="workEffortId")
@@ -72,12 +72,14 @@ import java.sql.Timestamp;
 ,@FieldResult(name="contentMimeTypeId", column="contentMimeTypeId")
 ,@FieldResult(name="content", column="content")
 ,@FieldResult(name="note", column="note")
+,@FieldResult(name="reasonEnumId", column="reasonEnumId")
 ,@FieldResult(name="contactListId", column="contactListId")
 ,@FieldResult(name="headerString", column="headerString")
 ,@FieldResult(name="fromString", column="fromString")
 ,@FieldResult(name="toString", column="toString")
 ,@FieldResult(name="ccString", column="ccString")
 ,@FieldResult(name="bccString", column="bccString")
+,@FieldResult(name="messageId", column="messageId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -105,12 +107,14 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("contentMimeTypeId", "CE.CONTENT_MIME_TYPE_ID");
         fields.put("content", "CE.CONTENT");
         fields.put("note", "CE.NOTE");
+        fields.put("reasonEnumId", "CE.REASON_ENUM_ID");
         fields.put("contactListId", "CE.CONTACT_LIST_ID");
         fields.put("headerString", "CE.HEADER_STRING");
         fields.put("fromString", "CE.FROM_STRING");
         fields.put("toString", "CE.TO_STRING");
         fields.put("ccString", "CE.CC_STRING");
         fields.put("bccString", "CE.BCC_STRING");
+        fields.put("messageId", "CE.MESSAGE_ID");
 fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
 }
   public static enum Fields implements EntityFieldInterface<WorkEffortCommunicationEventView> {
@@ -135,12 +139,14 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
     contentMimeTypeId("contentMimeTypeId"),
     content("content"),
     note("note"),
+    reasonEnumId("reasonEnumId"),
     contactListId("contactListId"),
     headerString("headerString"),
     fromString("fromString"),
     toString("toString"),
     ccString("ccString"),
-    bccString("bccString");
+    bccString("bccString"),
+    messageId("messageId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -194,6 +200,8 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
     
    private String note;
     
+   private String reasonEnumId;
+    
    private String contactListId;
     
    private String headerString;
@@ -205,6 +213,8 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
    private String ccString;
     
    private String bccString;
+    
+   private String messageId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="WORK_EFFORT_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -231,7 +241,7 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("communicationEventId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("description");this.allFieldsNames.add("communicationEventTypeId");this.allFieldsNames.add("origCommEventId");this.allFieldsNames.add("parentCommEventId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("contactMechIdFrom");this.allFieldsNames.add("contactMechIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("datetimeStarted");this.allFieldsNames.add("datetimeEnded");this.allFieldsNames.add("subject");this.allFieldsNames.add("contentMimeTypeId");this.allFieldsNames.add("content");this.allFieldsNames.add("note");this.allFieldsNames.add("contactListId");this.allFieldsNames.add("headerString");this.allFieldsNames.add("fromString");this.allFieldsNames.add("toString");this.allFieldsNames.add("ccString");this.allFieldsNames.add("bccString");
+      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("description");this.allFieldsNames.add("communicationEventTypeId");this.allFieldsNames.add("origCommEventId");this.allFieldsNames.add("parentCommEventId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("contactMechIdFrom");this.allFieldsNames.add("contactMechIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("datetimeStarted");this.allFieldsNames.add("datetimeEnded");this.allFieldsNames.add("subject");this.allFieldsNames.add("contentMimeTypeId");this.allFieldsNames.add("content");this.allFieldsNames.add("note");this.allFieldsNames.add("reasonEnumId");this.allFieldsNames.add("contactListId");this.allFieldsNames.add("headerString");this.allFieldsNames.add("fromString");this.allFieldsNames.add("toString");this.allFieldsNames.add("ccString");this.allFieldsNames.add("bccString");this.allFieldsNames.add("messageId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -398,6 +408,13 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
     }
     /**
      * Auto generated value setter.
+     * @param reasonEnumId the reasonEnumId to set
+     */
+    private void setReasonEnumId(String reasonEnumId) {
+        this.reasonEnumId = reasonEnumId;
+    }
+    /**
+     * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
     private void setContactListId(String contactListId) {
@@ -437,6 +454,13 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
      */
     private void setBccString(String bccString) {
         this.bccString = bccString;
+    }
+    /**
+     * Auto generated value setter.
+     * @param messageId the messageId to set
+     */
+    private void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     /**
@@ -590,6 +614,13 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getReasonEnumId() {
+        return this.reasonEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getContactListId() {
         return this.contactListId;
     }
@@ -627,6 +658,13 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
      */
     public String getBccString() {
         return this.bccString;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getMessageId() {
+        return this.messageId;
     }
 
     /**
@@ -693,12 +731,14 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
         setContentMimeTypeId((String) mapValue.get("contentMimeTypeId"));
         setContent((String) mapValue.get("content"));
         setNote((String) mapValue.get("note"));
+        setReasonEnumId((String) mapValue.get("reasonEnumId"));
         setContactListId((String) mapValue.get("contactListId"));
         setHeaderString((String) mapValue.get("headerString"));
         setFromString((String) mapValue.get("fromString"));
         setToString((String) mapValue.get("toString"));
         setCcString((String) mapValue.get("ccString"));
         setBccString((String) mapValue.get("bccString"));
+        setMessageId((String) mapValue.get("messageId"));
         postInit();
     }
 
@@ -727,12 +767,14 @@ fieldMapColumns.put("WorkEffortCommunicationEventView", fields);
         mapValue.put("contentMimeTypeId", getContentMimeTypeId());
         mapValue.put("content", getContent());
         mapValue.put("note", getNote());
+        mapValue.put("reasonEnumId", getReasonEnumId());
         mapValue.put("contactListId", getContactListId());
         mapValue.put("headerString", getHeaderString());
         mapValue.put("fromString", getFromString());
         mapValue.put("toString", getToString());
         mapValue.put("ccString", getCcString());
         mapValue.put("bccString", getBccString());
+        mapValue.put("messageId", getMessageId());
         return mapValue;
     }
 

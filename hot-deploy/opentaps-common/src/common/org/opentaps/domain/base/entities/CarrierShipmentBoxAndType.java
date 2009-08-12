@@ -48,7 +48,7 @@ import java.math.BigDecimal;
  * Auto generated base entity CarrierShipmentBoxAndType.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectCarrierShipmentBoxAndTypes", query="SELECT CSBT.SHIPMENT_BOX_TYPE_ID AS \"shipmentBoxTypeId\",CSBT.PARTY_ID AS \"partyId\",CSBT.PACKAGING_TYPE_CODE AS \"packagingTypeCode\",CSBT.OVERSIZE_CODE AS \"oversizeCode\",SBT.DESCRIPTION AS \"description\",SBT.DIMENSION_UOM_ID AS \"dimensionUomId\",SBT.BOX_LENGTH AS \"boxLength\",SBT.BOX_WIDTH AS \"boxWidth\",SBT.BOX_HEIGHT AS \"boxHeight\" FROM CARRIER_SHIPMENT_BOX_TYPE CSBT INNER JOIN SHIPMENT_BOX_TYPE SBT ON CSBT.SHIPMENT_BOX_TYPE_ID = SBT.SHIPMENT_BOX_TYPE_ID", resultSetMapping="CarrierShipmentBoxAndTypeMapping")
+@NamedNativeQuery(name="selectCarrierShipmentBoxAndTypes", query="SELECT CSBT.SHIPMENT_BOX_TYPE_ID AS \"shipmentBoxTypeId\",CSBT.PARTY_ID AS \"partyId\",CSBT.PACKAGING_TYPE_CODE AS \"packagingTypeCode\",CSBT.OVERSIZE_CODE AS \"oversizeCode\",SBT.DESCRIPTION AS \"description\",SBT.DIMENSION_UOM_ID AS \"dimensionUomId\",SBT.BOX_LENGTH AS \"boxLength\",SBT.BOX_WIDTH AS \"boxWidth\",SBT.BOX_HEIGHT AS \"boxHeight\",SBT.WEIGHT_UOM_ID AS \"weightUomId\",SBT.BOX_WEIGHT AS \"boxWeight\" FROM CARRIER_SHIPMENT_BOX_TYPE CSBT INNER JOIN SHIPMENT_BOX_TYPE SBT ON CSBT.SHIPMENT_BOX_TYPE_ID = SBT.SHIPMENT_BOX_TYPE_ID", resultSetMapping="CarrierShipmentBoxAndTypeMapping")
 @SqlResultSetMapping(name="CarrierShipmentBoxAndTypeMapping", entities={
 @EntityResult(entityClass=CarrierShipmentBoxAndType.class, fields = {
 @FieldResult(name="shipmentBoxTypeId", column="shipmentBoxTypeId")
@@ -60,6 +60,8 @@ import java.math.BigDecimal;
 ,@FieldResult(name="boxLength", column="boxLength")
 ,@FieldResult(name="boxWidth", column="boxWidth")
 ,@FieldResult(name="boxHeight", column="boxHeight")
+,@FieldResult(name="weightUomId", column="weightUomId")
+,@FieldResult(name="boxWeight", column="boxWeight")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -75,6 +77,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("boxLength", "SBT.BOX_LENGTH");
         fields.put("boxWidth", "SBT.BOX_WIDTH");
         fields.put("boxHeight", "SBT.BOX_HEIGHT");
+        fields.put("weightUomId", "SBT.WEIGHT_UOM_ID");
+        fields.put("boxWeight", "SBT.BOX_WEIGHT");
 fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
 }
   public static enum Fields implements EntityFieldInterface<CarrierShipmentBoxAndType> {
@@ -86,7 +90,9 @@ fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
     dimensionUomId("dimensionUomId"),
     boxLength("boxLength"),
     boxWidth("boxWidth"),
-    boxHeight("boxHeight");
+    boxHeight("boxHeight"),
+    weightUomId("weightUomId"),
+    boxWeight("boxWeight");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -115,6 +121,10 @@ fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
    private BigDecimal boxWidth;
     
    private BigDecimal boxHeight;
+    
+   private String weightUomId;
+    
+   private BigDecimal boxWeight;
 
   /**
    * Default constructor.
@@ -127,7 +137,7 @@ fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("shipmentBoxTypeId");this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("shipmentBoxTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("packagingTypeCode");this.allFieldsNames.add("oversizeCode");this.allFieldsNames.add("description");this.allFieldsNames.add("dimensionUomId");this.allFieldsNames.add("boxLength");this.allFieldsNames.add("boxWidth");this.allFieldsNames.add("boxHeight");
+      this.allFieldsNames.add("shipmentBoxTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("packagingTypeCode");this.allFieldsNames.add("oversizeCode");this.allFieldsNames.add("description");this.allFieldsNames.add("dimensionUomId");this.allFieldsNames.add("boxLength");this.allFieldsNames.add("boxWidth");this.allFieldsNames.add("boxHeight");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("boxWeight");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -208,6 +218,20 @@ fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
     private void setBoxHeight(BigDecimal boxHeight) {
         this.boxHeight = boxHeight;
     }
+    /**
+     * Auto generated value setter.
+     * @param weightUomId the weightUomId to set
+     */
+    private void setWeightUomId(String weightUomId) {
+        this.weightUomId = weightUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param boxWeight the boxWeight to set
+     */
+    private void setBoxWeight(BigDecimal boxWeight) {
+        this.boxWeight = boxWeight;
+    }
 
     /**
      * Auto generated value accessor.
@@ -272,6 +296,20 @@ fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
     public BigDecimal getBoxHeight() {
         return this.boxHeight;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWeightUomId() {
+        return this.weightUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getBoxWeight() {
+        return this.boxWeight;
+    }
 
 
 
@@ -289,6 +327,8 @@ fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
         setBoxLength(convertToBigDecimal(mapValue.get("boxLength")));
         setBoxWidth(convertToBigDecimal(mapValue.get("boxWidth")));
         setBoxHeight(convertToBigDecimal(mapValue.get("boxHeight")));
+        setWeightUomId((String) mapValue.get("weightUomId"));
+        setBoxWeight(convertToBigDecimal(mapValue.get("boxWeight")));
         postInit();
     }
 
@@ -305,6 +345,8 @@ fieldMapColumns.put("CarrierShipmentBoxAndType", fields);
         mapValue.put("boxLength", getBoxLength());
         mapValue.put("boxWidth", getBoxWidth());
         mapValue.put("boxHeight", getBoxHeight());
+        mapValue.put("weightUomId", getWeightUomId());
+        mapValue.put("boxWeight", getBoxWeight());
         return mapValue;
     }
 

@@ -65,6 +65,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("issuedDateTime", "ISSUED_DATE_TIME");
         fields.put("issuedByUserLoginId", "ISSUED_BY_USER_LOGIN_ID");
         fields.put("quantity", "QUANTITY");
+        fields.put("cancelQuantity", "CANCEL_QUANTITY");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -84,6 +85,7 @@ fieldMapColumns.put("ItemIssuance", fields);
     issuedDateTime("issuedDateTime"),
     issuedByUserLoginId("issuedByUserLoginId"),
     quantity("quantity"),
+    cancelQuantity("cancelQuantity"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -125,6 +127,8 @@ fieldMapColumns.put("ItemIssuance", fields);
    private String issuedByUserLoginId;
    @Column(name="QUANTITY")
    private BigDecimal quantity;
+   @Column(name="CANCEL_QUANTITY")
+   private BigDecimal cancelQuantity;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -197,7 +201,7 @@ fieldMapColumns.put("ItemIssuance", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("itemIssuanceId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("itemIssuanceId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentItemSeqId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("issuedDateTime");this.allFieldsNames.add("issuedByUserLoginId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("itemIssuanceId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentItemSeqId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("issuedDateTime");this.allFieldsNames.add("issuedByUserLoginId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("cancelQuantity");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -295,6 +299,13 @@ fieldMapColumns.put("ItemIssuance", fields);
      */
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+    /**
+     * Auto generated value setter.
+     * @param cancelQuantity the cancelQuantity to set
+     */
+    public void setCancelQuantity(BigDecimal cancelQuantity) {
+        this.cancelQuantity = cancelQuantity;
     }
     /**
      * Auto generated value setter.
@@ -408,6 +419,13 @@ fieldMapColumns.put("ItemIssuance", fields);
      */
     public BigDecimal getQuantity() {
         return this.quantity;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getCancelQuantity() {
+        return this.cancelQuantity;
     }
     /**
      * Auto generated value accessor.
@@ -718,6 +736,7 @@ fieldMapColumns.put("ItemIssuance", fields);
         setIssuedDateTime((Timestamp) mapValue.get("issuedDateTime"));
         setIssuedByUserLoginId((String) mapValue.get("issuedByUserLoginId"));
         setQuantity(convertToBigDecimal(mapValue.get("quantity")));
+        setCancelQuantity(convertToBigDecimal(mapValue.get("cancelQuantity")));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -741,6 +760,7 @@ fieldMapColumns.put("ItemIssuance", fields);
         mapValue.put("issuedDateTime", getIssuedDateTime());
         mapValue.put("issuedByUserLoginId", getIssuedByUserLoginId());
         mapValue.put("quantity", getQuantity());
+        mapValue.put("cancelQuantity", getCancelQuantity());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

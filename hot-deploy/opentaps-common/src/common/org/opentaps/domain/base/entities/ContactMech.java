@@ -281,6 +281,10 @@ fieldMapColumns.put("ContactMech", fields);
    @JoinColumn(name="CONTACT_MECH_ID")
    
    private List<WorkEffortContactMech> workEffortContactMeches = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="CONTACT_MECH_ID")
+   
+   private List<WorkEffortEventReminder> workEffortEventReminders = null;
 
   /**
    * Default constructor.
@@ -892,6 +896,17 @@ fieldMapColumns.put("ContactMech", fields);
         }
         return this.workEffortContactMeches;
     }
+    /**
+     * Auto generated method that gets the related <code>WorkEffortEventReminder</code> by the relation named <code>WorkEffortEventReminder</code>.
+     * @return the list of <code>WorkEffortEventReminder</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends WorkEffortEventReminder> getWorkEffortEventReminders() throws RepositoryException {
+        if (this.workEffortEventReminders == null) {
+            this.workEffortEventReminders = getRelated(WorkEffortEventReminder.class, "WorkEffortEventReminder");
+        }
+        return this.workEffortEventReminders;
+    }
 
     /**
      * Auto generated value setter.
@@ -1200,6 +1215,13 @@ fieldMapColumns.put("ContactMech", fields);
     */
     public void setWorkEffortContactMeches(List<WorkEffortContactMech> workEffortContactMeches) {
         this.workEffortContactMeches = workEffortContactMeches;
+    }
+    /**
+     * Auto generated value setter.
+     * @param workEffortEventReminders the workEffortEventReminders to set
+    */
+    public void setWorkEffortEventReminders(List<WorkEffortEventReminder> workEffortEventReminders) {
+        this.workEffortEventReminders = workEffortEventReminders;
     }
 
     /**

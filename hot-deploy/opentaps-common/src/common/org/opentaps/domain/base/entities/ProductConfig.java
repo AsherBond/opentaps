@@ -60,6 +60,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("description", "DESCRIPTION");
         fields.put("longDescription", "LONG_DESCRIPTION");
         fields.put("configTypeId", "CONFIG_TYPE_ID");
+        fields.put("defaultConfigOptionId", "DEFAULT_CONFIG_OPTION_ID");
         fields.put("thruDate", "THRU_DATE");
         fields.put("isMandatory", "IS_MANDATORY");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -76,6 +77,7 @@ fieldMapColumns.put("ProductConfig", fields);
     description("description"),
     longDescription("longDescription"),
     configTypeId("configTypeId"),
+    defaultConfigOptionId("defaultConfigOptionId"),
     thruDate("thruDate"),
     isMandatory("isMandatory"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -117,6 +119,8 @@ fieldMapColumns.put("ProductConfig", fields);
    private String longDescription;
    @Column(name="CONFIG_TYPE_ID")
    private String configTypeId;
+   @Column(name="DEFAULT_CONFIG_OPTION_ID")
+   private String defaultConfigOptionId;
    @Column(name="THRU_DATE")
    private Timestamp thruDate;
    @Column(name="IS_MANDATORY")
@@ -155,7 +159,7 @@ fieldMapColumns.put("ProductConfig", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");this.primaryKeyNames.add("configItemId");this.primaryKeyNames.add("sequenceNum");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("configItemId");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("configTypeId");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("isMandatory");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("configItemId");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("configTypeId");this.allFieldsNames.add("defaultConfigOptionId");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("isMandatory");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -218,6 +222,13 @@ fieldMapColumns.put("ProductConfig", fields);
      */
     public void setConfigTypeId(String configTypeId) {
         this.configTypeId = configTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param defaultConfigOptionId the defaultConfigOptionId to set
+     */
+    public void setDefaultConfigOptionId(String defaultConfigOptionId) {
+        this.defaultConfigOptionId = defaultConfigOptionId;
     }
     /**
      * Auto generated value setter.
@@ -313,6 +324,13 @@ fieldMapColumns.put("ProductConfig", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDefaultConfigOptionId() {
+        return this.defaultConfigOptionId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getThruDate() {
@@ -404,6 +422,7 @@ fieldMapColumns.put("ProductConfig", fields);
         setDescription((String) mapValue.get("description"));
         setLongDescription((String) mapValue.get("longDescription"));
         setConfigTypeId((String) mapValue.get("configTypeId"));
+        setDefaultConfigOptionId((String) mapValue.get("defaultConfigOptionId"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
         setIsMandatory((String) mapValue.get("isMandatory"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -424,6 +443,7 @@ fieldMapColumns.put("ProductConfig", fields);
         mapValue.put("description", getDescription());
         mapValue.put("longDescription", getLongDescription());
         mapValue.put("configTypeId", getConfigTypeId());
+        mapValue.put("defaultConfigOptionId", getDefaultConfigOptionId());
         mapValue.put("thruDate", getThruDate());
         mapValue.put("isMandatory", getIsMandatory());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

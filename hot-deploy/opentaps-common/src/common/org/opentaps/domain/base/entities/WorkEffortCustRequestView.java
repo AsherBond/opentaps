@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity WorkEffortCustRequestView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectWorkEffortCustRequestViews", query="SELECT CRT.DESCRIPTION AS \"description\",SI.DESCRIPTION AS \"description\",WE.PRIORITY AS \"priority\",WE.DESCRIPTION AS \"description\",WE.CREATED_DATE AS \"createdDate\",WE.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WE.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WE.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CRWE.CUST_REQUEST_ID AS \"custRequestId\",CRWE.WORK_EFFORT_ID AS \"workEffortId\",CR.CUST_REQUEST_TYPE_ID AS \"custRequestTypeId\",CR.CUST_REQUEST_CATEGORY_ID AS \"custRequestCategoryId\",CR.STATUS_ID AS \"statusId\",CR.FROM_PARTY_ID AS \"fromPartyId\",CR.PRIORITY AS \"priority\",CR.CUST_REQUEST_DATE AS \"custRequestDate\",CR.RESPONSE_REQUIRED_DATE AS \"responseRequiredDate\",CR.CUST_REQUEST_NAME AS \"custRequestName\",CR.DESCRIPTION AS \"description\",CR.MAXIMUM_AMOUNT_UOM_ID AS \"maximumAmountUomId\",CR.PRODUCT_STORE_ID AS \"productStoreId\",CR.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",CR.FULFILL_CONTACT_MECH_ID AS \"fulfillContactMechId\",CR.CREATED_DATE AS \"createdDate\",CR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CR.FULFILLED_DATE_TIME AS \"fulfilledDateTime\",WE.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WE.CURRENT_STATUS_ID AS \"currentStatusId\",WE.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WE.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WE.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WE.WORKFLOW_PACKAGE_ID AS \"workflowPackageId\",WE.WORKFLOW_PACKAGE_VERSION AS \"workflowPackageVersion\",WE.WORKFLOW_PROCESS_ID AS \"workflowProcessId\",WE.WORKFLOW_PROCESS_VERSION AS \"workflowProcessVersion\",WE.WORKFLOW_ACTIVITY_ID AS \"workflowActivityId\",WE.SCOPE_ENUM_ID AS \"scopeEnumId\",WE.PERCENT_COMPLETE AS \"percentComplete\",WE.WORK_EFFORT_NAME AS \"workEffortName\",WE.LOCATION_DESC AS \"locationDesc\",WE.ESTIMATED_START_DATE AS \"estimatedStartDate\",WE.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WE.ACTUAL_START_DATE AS \"actualStartDate\",WE.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WE.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WE.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WE.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WE.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WE.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WE.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WE.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WE.MONEY_UOM_ID AS \"moneyUomId\",WE.SPECIAL_TERMS AS \"specialTerms\",WE.TIME_TRANSPARENCY AS \"timeTransparency\",WE.UNIVERSAL_ID AS \"universalId\",WE.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WE.FIXED_ASSET_ID AS \"fixedAssetId\",WE.FACILITY_ID AS \"facilityId\",WE.INFO_URL AS \"infoUrl\",WE.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WE.RUNTIME_DATA_ID AS \"runtimeDataId\",WE.NOTE_ID AS \"noteId\",WE.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WE.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WE.QUANTITY_PRODUCED AS \"quantityProduced\",WE.QUANTITY_REJECTED AS \"quantityRejected\",WE.RESERV_PERSONS AS \"reservPersons\",WE.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WE.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WE.REVISION_NUMBER AS \"revisionNumber\" FROM CUST_REQUEST_WORK_EFFORT CRWE INNER JOIN CUST_REQUEST CR ON CRWE.CUST_REQUEST_ID = CR.CUST_REQUEST_ID LEFT JOIN CUST_REQUEST_TYPE CRT ON CR.CUST_REQUEST_TYPE_ID = CRT.CUST_REQUEST_TYPE_ID LEFT JOIN STATUS_ITEM SI ON CR.STATUS_ID = SI.STATUS_ID INNER JOIN WORK_EFFORT WE ON CRWE.WORK_EFFORT_ID = WE.WORK_EFFORT_ID", resultSetMapping="WorkEffortCustRequestViewMapping")
+@NamedNativeQuery(name="selectWorkEffortCustRequestViews", query="SELECT CRT.DESCRIPTION AS \"description\",SI.DESCRIPTION AS \"description\",WE.PRIORITY AS \"priority\",WE.DESCRIPTION AS \"description\",WE.CREATED_DATE AS \"createdDate\",WE.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WE.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WE.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CRWE.CUST_REQUEST_ID AS \"custRequestId\",CRWE.WORK_EFFORT_ID AS \"workEffortId\",CR.CUST_REQUEST_TYPE_ID AS \"custRequestTypeId\",CR.CUST_REQUEST_CATEGORY_ID AS \"custRequestCategoryId\",CR.STATUS_ID AS \"statusId\",CR.FROM_PARTY_ID AS \"fromPartyId\",CR.PRIORITY AS \"priority\",CR.CUST_REQUEST_DATE AS \"custRequestDate\",CR.RESPONSE_REQUIRED_DATE AS \"responseRequiredDate\",CR.CUST_REQUEST_NAME AS \"custRequestName\",CR.DESCRIPTION AS \"description\",CR.MAXIMUM_AMOUNT_UOM_ID AS \"maximumAmountUomId\",CR.PRODUCT_STORE_ID AS \"productStoreId\",CR.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",CR.FULFILL_CONTACT_MECH_ID AS \"fulfillContactMechId\",CR.CURRENCY_UOM_ID AS \"currencyUomId\",CR.OPEN_DATE_TIME AS \"openDateTime\",CR.CLOSED_DATE_TIME AS \"closedDateTime\",CR.INTERNAL_COMMENT AS \"internalComment\",CR.REASON AS \"reason\",CR.CREATED_DATE AS \"createdDate\",CR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CR.FULFILLED_DATE_TIME AS \"fulfilledDateTime\",WE.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WE.CURRENT_STATUS_ID AS \"currentStatusId\",WE.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WE.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WE.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WE.SCOPE_ENUM_ID AS \"scopeEnumId\",WE.PERCENT_COMPLETE AS \"percentComplete\",WE.WORK_EFFORT_NAME AS \"workEffortName\",WE.SHOW_AS_ENUM_ID AS \"showAsEnumId\",WE.SEND_NOTIFICATION_EMAIL AS \"sendNotificationEmail\",WE.LOCATION_DESC AS \"locationDesc\",WE.ESTIMATED_START_DATE AS \"estimatedStartDate\",WE.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WE.ACTUAL_START_DATE AS \"actualStartDate\",WE.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WE.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WE.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WE.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WE.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WE.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WE.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WE.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WE.MONEY_UOM_ID AS \"moneyUomId\",WE.SPECIAL_TERMS AS \"specialTerms\",WE.TIME_TRANSPARENCY AS \"timeTransparency\",WE.UNIVERSAL_ID AS \"universalId\",WE.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WE.FIXED_ASSET_ID AS \"fixedAssetId\",WE.FACILITY_ID AS \"facilityId\",WE.INFO_URL AS \"infoUrl\",WE.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WE.TEMP_EXPR_ID AS \"tempExprId\",WE.RUNTIME_DATA_ID AS \"runtimeDataId\",WE.NOTE_ID AS \"noteId\",WE.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WE.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WE.QUANTITY_PRODUCED AS \"quantityProduced\",WE.QUANTITY_REJECTED AS \"quantityRejected\",WE.RESERV_PERSONS AS \"reservPersons\",WE.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WE.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WE.ACCOMMODATION_MAP_ID AS \"accommodationMapId\",WE.ACCOMMODATION_SPOT_ID AS \"accommodationSpotId\",WE.REVISION_NUMBER AS \"revisionNumber\" FROM CUST_REQUEST_WORK_EFFORT CRWE INNER JOIN CUST_REQUEST CR ON CRWE.CUST_REQUEST_ID = CR.CUST_REQUEST_ID LEFT JOIN CUST_REQUEST_TYPE CRT ON CR.CUST_REQUEST_TYPE_ID = CRT.CUST_REQUEST_TYPE_ID LEFT JOIN STATUS_ITEM SI ON CR.STATUS_ID = SI.STATUS_ID INNER JOIN WORK_EFFORT WE ON CRWE.WORK_EFFORT_ID = WE.WORK_EFFORT_ID", resultSetMapping="WorkEffortCustRequestViewMapping")
 @SqlResultSetMapping(name="WorkEffortCustRequestViewMapping", entities={
 @EntityResult(entityClass=WorkEffortCustRequestView.class, fields = {
 @FieldResult(name="custRequestTypeDescription", column="custRequestTypeDescription")
@@ -76,6 +76,11 @@ import java.sql.Timestamp;
 ,@FieldResult(name="productStoreId", column="productStoreId")
 ,@FieldResult(name="salesChannelEnumId", column="salesChannelEnumId")
 ,@FieldResult(name="fulfillContactMechId", column="fulfillContactMechId")
+,@FieldResult(name="currencyUomId", column="currencyUomId")
+,@FieldResult(name="openDateTime", column="openDateTime")
+,@FieldResult(name="closedDateTime", column="closedDateTime")
+,@FieldResult(name="internalComment", column="internalComment")
+,@FieldResult(name="reason", column="reason")
 ,@FieldResult(name="createdDate", column="createdDate")
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
@@ -86,14 +91,11 @@ import java.sql.Timestamp;
 ,@FieldResult(name="lastStatusUpdate", column="lastStatusUpdate")
 ,@FieldResult(name="workEffortPurposeTypeId", column="workEffortPurposeTypeId")
 ,@FieldResult(name="workEffortParentId", column="workEffortParentId")
-,@FieldResult(name="workflowPackageId", column="workflowPackageId")
-,@FieldResult(name="workflowPackageVersion", column="workflowPackageVersion")
-,@FieldResult(name="workflowProcessId", column="workflowProcessId")
-,@FieldResult(name="workflowProcessVersion", column="workflowProcessVersion")
-,@FieldResult(name="workflowActivityId", column="workflowActivityId")
 ,@FieldResult(name="scopeEnumId", column="scopeEnumId")
 ,@FieldResult(name="percentComplete", column="percentComplete")
 ,@FieldResult(name="workEffortName", column="workEffortName")
+,@FieldResult(name="showAsEnumId", column="showAsEnumId")
+,@FieldResult(name="sendNotificationEmail", column="sendNotificationEmail")
 ,@FieldResult(name="locationDesc", column="locationDesc")
 ,@FieldResult(name="estimatedStartDate", column="estimatedStartDate")
 ,@FieldResult(name="estimatedCompletionDate", column="estimatedCompletionDate")
@@ -115,6 +117,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="facilityId", column="facilityId")
 ,@FieldResult(name="infoUrl", column="infoUrl")
 ,@FieldResult(name="recurrenceInfoId", column="recurrenceInfoId")
+,@FieldResult(name="tempExprId", column="tempExprId")
 ,@FieldResult(name="runtimeDataId", column="runtimeDataId")
 ,@FieldResult(name="noteId", column="noteId")
 ,@FieldResult(name="serviceLoaderName", column="serviceLoaderName")
@@ -124,6 +127,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="reservPersons", column="reservPersons")
 ,@FieldResult(name="reserv2ndPPPerc", column="reserv2ndPPPerc")
 ,@FieldResult(name="reservNthPPPerc", column="reservNthPPPerc")
+,@FieldResult(name="accommodationMapId", column="accommodationMapId")
+,@FieldResult(name="accommodationSpotId", column="accommodationSpotId")
 ,@FieldResult(name="revisionNumber", column="revisionNumber")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
@@ -154,6 +159,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("productStoreId", "CR.PRODUCT_STORE_ID");
         fields.put("salesChannelEnumId", "CR.SALES_CHANNEL_ENUM_ID");
         fields.put("fulfillContactMechId", "CR.FULFILL_CONTACT_MECH_ID");
+        fields.put("currencyUomId", "CR.CURRENCY_UOM_ID");
+        fields.put("openDateTime", "CR.OPEN_DATE_TIME");
+        fields.put("closedDateTime", "CR.CLOSED_DATE_TIME");
+        fields.put("internalComment", "CR.INTERNAL_COMMENT");
+        fields.put("reason", "CR.REASON");
         fields.put("createdDate", "CR.CREATED_DATE");
         fields.put("createdByUserLogin", "CR.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "CR.LAST_MODIFIED_DATE");
@@ -164,14 +174,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastStatusUpdate", "WE.LAST_STATUS_UPDATE");
         fields.put("workEffortPurposeTypeId", "WE.WORK_EFFORT_PURPOSE_TYPE_ID");
         fields.put("workEffortParentId", "WE.WORK_EFFORT_PARENT_ID");
-        fields.put("workflowPackageId", "WE.WORKFLOW_PACKAGE_ID");
-        fields.put("workflowPackageVersion", "WE.WORKFLOW_PACKAGE_VERSION");
-        fields.put("workflowProcessId", "WE.WORKFLOW_PROCESS_ID");
-        fields.put("workflowProcessVersion", "WE.WORKFLOW_PROCESS_VERSION");
-        fields.put("workflowActivityId", "WE.WORKFLOW_ACTIVITY_ID");
         fields.put("scopeEnumId", "WE.SCOPE_ENUM_ID");
         fields.put("percentComplete", "WE.PERCENT_COMPLETE");
         fields.put("workEffortName", "WE.WORK_EFFORT_NAME");
+        fields.put("showAsEnumId", "WE.SHOW_AS_ENUM_ID");
+        fields.put("sendNotificationEmail", "WE.SEND_NOTIFICATION_EMAIL");
         fields.put("locationDesc", "WE.LOCATION_DESC");
         fields.put("estimatedStartDate", "WE.ESTIMATED_START_DATE");
         fields.put("estimatedCompletionDate", "WE.ESTIMATED_COMPLETION_DATE");
@@ -193,6 +200,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("facilityId", "WE.FACILITY_ID");
         fields.put("infoUrl", "WE.INFO_URL");
         fields.put("recurrenceInfoId", "WE.RECURRENCE_INFO_ID");
+        fields.put("tempExprId", "WE.TEMP_EXPR_ID");
         fields.put("runtimeDataId", "WE.RUNTIME_DATA_ID");
         fields.put("noteId", "WE.NOTE_ID");
         fields.put("serviceLoaderName", "WE.SERVICE_LOADER_NAME");
@@ -202,6 +210,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("reservPersons", "WE.RESERV_PERSONS");
         fields.put("reserv2ndPPPerc", "WE.RESERV2ND_P_P_PERC");
         fields.put("reservNthPPPerc", "WE.RESERV_NTH_P_P_PERC");
+        fields.put("accommodationMapId", "WE.ACCOMMODATION_MAP_ID");
+        fields.put("accommodationSpotId", "WE.ACCOMMODATION_SPOT_ID");
         fields.put("revisionNumber", "WE.REVISION_NUMBER");
 fieldMapColumns.put("WorkEffortCustRequestView", fields);
 }
@@ -229,6 +239,11 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     productStoreId("productStoreId"),
     salesChannelEnumId("salesChannelEnumId"),
     fulfillContactMechId("fulfillContactMechId"),
+    currencyUomId("currencyUomId"),
+    openDateTime("openDateTime"),
+    closedDateTime("closedDateTime"),
+    internalComment("internalComment"),
+    reason("reason"),
     createdDate("createdDate"),
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
@@ -239,14 +254,11 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     lastStatusUpdate("lastStatusUpdate"),
     workEffortPurposeTypeId("workEffortPurposeTypeId"),
     workEffortParentId("workEffortParentId"),
-    workflowPackageId("workflowPackageId"),
-    workflowPackageVersion("workflowPackageVersion"),
-    workflowProcessId("workflowProcessId"),
-    workflowProcessVersion("workflowProcessVersion"),
-    workflowActivityId("workflowActivityId"),
     scopeEnumId("scopeEnumId"),
     percentComplete("percentComplete"),
     workEffortName("workEffortName"),
+    showAsEnumId("showAsEnumId"),
+    sendNotificationEmail("sendNotificationEmail"),
     locationDesc("locationDesc"),
     estimatedStartDate("estimatedStartDate"),
     estimatedCompletionDate("estimatedCompletionDate"),
@@ -268,6 +280,7 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     facilityId("facilityId"),
     infoUrl("infoUrl"),
     recurrenceInfoId("recurrenceInfoId"),
+    tempExprId("tempExprId"),
     runtimeDataId("runtimeDataId"),
     noteId("noteId"),
     serviceLoaderName("serviceLoaderName"),
@@ -277,6 +290,8 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     reservPersons("reservPersons"),
     reserv2ndPPPerc("reserv2ndPPPerc"),
     reservNthPPPerc("reservNthPPPerc"),
+    accommodationMapId("accommodationMapId"),
+    accommodationSpotId("accommodationSpotId"),
     revisionNumber("revisionNumber");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
@@ -335,6 +350,16 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     
    private String fulfillContactMechId;
     
+   private String currencyUomId;
+    
+   private Timestamp openDateTime;
+    
+   private Timestamp closedDateTime;
+    
+   private String internalComment;
+    
+   private String reason;
+    
    private Timestamp createdDate;
     
    private String createdByUserLogin;
@@ -355,21 +380,15 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     
    private String workEffortParentId;
     
-   private String workflowPackageId;
-    
-   private String workflowPackageVersion;
-    
-   private String workflowProcessId;
-    
-   private String workflowProcessVersion;
-    
-   private String workflowActivityId;
-    
    private String scopeEnumId;
     
    private Long percentComplete;
     
    private String workEffortName;
+    
+   private String showAsEnumId;
+    
+   private String sendNotificationEmail;
     
    private String locationDesc;
     
@@ -413,6 +432,8 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     
    private String recurrenceInfoId;
     
+   private String tempExprId;
+    
    private String runtimeDataId;
     
    private String noteId;
@@ -430,6 +451,10 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
    private BigDecimal reserv2ndPPPerc;
     
    private BigDecimal reservNthPPPerc;
+    
+   private String accommodationMapId;
+    
+   private String accommodationSpotId;
     
    private Long revisionNumber;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
@@ -493,7 +518,7 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("custRequestId");this.primaryKeyNames.add("workEffortId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("custRequestTypeDescription");this.allFieldsNames.add("statusItemDescription");this.allFieldsNames.add("workEffortPriority");this.allFieldsNames.add("workEffortDescription");this.allFieldsNames.add("workEffortCreatedDate");this.allFieldsNames.add("workEffortCreatedByUserLogin");this.allFieldsNames.add("workEffortLastModifiedDate");this.allFieldsNames.add("workEffortLastModByUserLogin");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("custRequestCategoryId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromPartyId");this.allFieldsNames.add("priority");this.allFieldsNames.add("custRequestDate");this.allFieldsNames.add("responseRequiredDate");this.allFieldsNames.add("custRequestName");this.allFieldsNames.add("description");this.allFieldsNames.add("maximumAmountUomId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("fulfillContactMechId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("fulfilledDateTime");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("workflowPackageId");this.allFieldsNames.add("workflowPackageVersion");this.allFieldsNames.add("workflowProcessId");this.allFieldsNames.add("workflowProcessVersion");this.allFieldsNames.add("workflowActivityId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("revisionNumber");
+      this.allFieldsNames.add("custRequestTypeDescription");this.allFieldsNames.add("statusItemDescription");this.allFieldsNames.add("workEffortPriority");this.allFieldsNames.add("workEffortDescription");this.allFieldsNames.add("workEffortCreatedDate");this.allFieldsNames.add("workEffortCreatedByUserLogin");this.allFieldsNames.add("workEffortLastModifiedDate");this.allFieldsNames.add("workEffortLastModByUserLogin");this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("custRequestCategoryId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromPartyId");this.allFieldsNames.add("priority");this.allFieldsNames.add("custRequestDate");this.allFieldsNames.add("responseRequiredDate");this.allFieldsNames.add("custRequestName");this.allFieldsNames.add("description");this.allFieldsNames.add("maximumAmountUomId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("fulfillContactMechId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("openDateTime");this.allFieldsNames.add("closedDateTime");this.allFieldsNames.add("internalComment");this.allFieldsNames.add("reason");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("fulfilledDateTime");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -674,6 +699,41 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     }
     /**
      * Auto generated value setter.
+     * @param currencyUomId the currencyUomId to set
+     */
+    private void setCurrencyUomId(String currencyUomId) {
+        this.currencyUomId = currencyUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param openDateTime the openDateTime to set
+     */
+    private void setOpenDateTime(Timestamp openDateTime) {
+        this.openDateTime = openDateTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param closedDateTime the closedDateTime to set
+     */
+    private void setClosedDateTime(Timestamp closedDateTime) {
+        this.closedDateTime = closedDateTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param internalComment the internalComment to set
+     */
+    private void setInternalComment(String internalComment) {
+        this.internalComment = internalComment;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reason the reason to set
+     */
+    private void setReason(String reason) {
+        this.reason = reason;
+    }
+    /**
+     * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
     private void setCreatedDate(Timestamp createdDate) {
@@ -744,41 +804,6 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     }
     /**
      * Auto generated value setter.
-     * @param workflowPackageId the workflowPackageId to set
-     */
-    private void setWorkflowPackageId(String workflowPackageId) {
-        this.workflowPackageId = workflowPackageId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowPackageVersion the workflowPackageVersion to set
-     */
-    private void setWorkflowPackageVersion(String workflowPackageVersion) {
-        this.workflowPackageVersion = workflowPackageVersion;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowProcessId the workflowProcessId to set
-     */
-    private void setWorkflowProcessId(String workflowProcessId) {
-        this.workflowProcessId = workflowProcessId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowProcessVersion the workflowProcessVersion to set
-     */
-    private void setWorkflowProcessVersion(String workflowProcessVersion) {
-        this.workflowProcessVersion = workflowProcessVersion;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowActivityId the workflowActivityId to set
-     */
-    private void setWorkflowActivityId(String workflowActivityId) {
-        this.workflowActivityId = workflowActivityId;
-    }
-    /**
-     * Auto generated value setter.
      * @param scopeEnumId the scopeEnumId to set
      */
     private void setScopeEnumId(String scopeEnumId) {
@@ -797,6 +822,20 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
      */
     private void setWorkEffortName(String workEffortName) {
         this.workEffortName = workEffortName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param showAsEnumId the showAsEnumId to set
+     */
+    private void setShowAsEnumId(String showAsEnumId) {
+        this.showAsEnumId = showAsEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param sendNotificationEmail the sendNotificationEmail to set
+     */
+    private void setSendNotificationEmail(String sendNotificationEmail) {
+        this.sendNotificationEmail = sendNotificationEmail;
     }
     /**
      * Auto generated value setter.
@@ -947,6 +986,13 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     }
     /**
      * Auto generated value setter.
+     * @param tempExprId the tempExprId to set
+     */
+    private void setTempExprId(String tempExprId) {
+        this.tempExprId = tempExprId;
+    }
+    /**
+     * Auto generated value setter.
      * @param runtimeDataId the runtimeDataId to set
      */
     private void setRuntimeDataId(String runtimeDataId) {
@@ -1007,6 +1053,20 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
      */
     private void setReservNthPPPerc(BigDecimal reservNthPPPerc) {
         this.reservNthPPPerc = reservNthPPPerc;
+    }
+    /**
+     * Auto generated value setter.
+     * @param accommodationMapId the accommodationMapId to set
+     */
+    private void setAccommodationMapId(String accommodationMapId) {
+        this.accommodationMapId = accommodationMapId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param accommodationSpotId the accommodationSpotId to set
+     */
+    private void setAccommodationSpotId(String accommodationSpotId) {
+        this.accommodationSpotId = accommodationSpotId;
     }
     /**
      * Auto generated value setter.
@@ -1179,6 +1239,41 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCurrencyUomId() {
+        return this.currencyUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getOpenDateTime() {
+        return this.openDateTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getClosedDateTime() {
+        return this.closedDateTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInternalComment() {
+        return this.internalComment;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReason() {
+        return this.reason;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getCreatedDate() {
@@ -1251,41 +1346,6 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getWorkflowPackageId() {
-        return this.workflowPackageId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowPackageVersion() {
-        return this.workflowPackageVersion;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowProcessId() {
-        return this.workflowProcessId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowProcessVersion() {
-        return this.workflowProcessVersion;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowActivityId() {
-        return this.workflowActivityId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getScopeEnumId() {
         return this.scopeEnumId;
     }
@@ -1302,6 +1362,20 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
      */
     public String getWorkEffortName() {
         return this.workEffortName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShowAsEnumId() {
+        return this.showAsEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSendNotificationEmail() {
+        return this.sendNotificationEmail;
     }
     /**
      * Auto generated value accessor.
@@ -1454,6 +1528,13 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getTempExprId() {
+        return this.tempExprId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getRuntimeDataId() {
         return this.runtimeDataId;
     }
@@ -1512,6 +1593,20 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
      */
     public BigDecimal getReservNthPPPerc() {
         return this.reservNthPPPerc;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAccommodationMapId() {
+        return this.accommodationMapId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAccommodationSpotId() {
+        return this.accommodationSpotId;
     }
     /**
      * Auto generated value accessor.
@@ -1677,6 +1772,11 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
         setProductStoreId((String) mapValue.get("productStoreId"));
         setSalesChannelEnumId((String) mapValue.get("salesChannelEnumId"));
         setFulfillContactMechId((String) mapValue.get("fulfillContactMechId"));
+        setCurrencyUomId((String) mapValue.get("currencyUomId"));
+        setOpenDateTime((Timestamp) mapValue.get("openDateTime"));
+        setClosedDateTime((Timestamp) mapValue.get("closedDateTime"));
+        setInternalComment((String) mapValue.get("internalComment"));
+        setReason((String) mapValue.get("reason"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
@@ -1687,14 +1787,11 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
         setLastStatusUpdate((Timestamp) mapValue.get("lastStatusUpdate"));
         setWorkEffortPurposeTypeId((String) mapValue.get("workEffortPurposeTypeId"));
         setWorkEffortParentId((String) mapValue.get("workEffortParentId"));
-        setWorkflowPackageId((String) mapValue.get("workflowPackageId"));
-        setWorkflowPackageVersion((String) mapValue.get("workflowPackageVersion"));
-        setWorkflowProcessId((String) mapValue.get("workflowProcessId"));
-        setWorkflowProcessVersion((String) mapValue.get("workflowProcessVersion"));
-        setWorkflowActivityId((String) mapValue.get("workflowActivityId"));
         setScopeEnumId((String) mapValue.get("scopeEnumId"));
         setPercentComplete((Long) mapValue.get("percentComplete"));
         setWorkEffortName((String) mapValue.get("workEffortName"));
+        setShowAsEnumId((String) mapValue.get("showAsEnumId"));
+        setSendNotificationEmail((String) mapValue.get("sendNotificationEmail"));
         setLocationDesc((String) mapValue.get("locationDesc"));
         setEstimatedStartDate((Timestamp) mapValue.get("estimatedStartDate"));
         setEstimatedCompletionDate((Timestamp) mapValue.get("estimatedCompletionDate"));
@@ -1716,6 +1813,7 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
         setFacilityId((String) mapValue.get("facilityId"));
         setInfoUrl((String) mapValue.get("infoUrl"));
         setRecurrenceInfoId((String) mapValue.get("recurrenceInfoId"));
+        setTempExprId((String) mapValue.get("tempExprId"));
         setRuntimeDataId((String) mapValue.get("runtimeDataId"));
         setNoteId((String) mapValue.get("noteId"));
         setServiceLoaderName((String) mapValue.get("serviceLoaderName"));
@@ -1725,6 +1823,8 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
         setReservPersons(convertToBigDecimal(mapValue.get("reservPersons")));
         setReserv2ndPPPerc(convertToBigDecimal(mapValue.get("reserv2ndPPPerc")));
         setReservNthPPPerc(convertToBigDecimal(mapValue.get("reservNthPPPerc")));
+        setAccommodationMapId((String) mapValue.get("accommodationMapId"));
+        setAccommodationSpotId((String) mapValue.get("accommodationSpotId"));
         setRevisionNumber((Long) mapValue.get("revisionNumber"));
         postInit();
     }
@@ -1756,6 +1856,11 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
         mapValue.put("productStoreId", getProductStoreId());
         mapValue.put("salesChannelEnumId", getSalesChannelEnumId());
         mapValue.put("fulfillContactMechId", getFulfillContactMechId());
+        mapValue.put("currencyUomId", getCurrencyUomId());
+        mapValue.put("openDateTime", getOpenDateTime());
+        mapValue.put("closedDateTime", getClosedDateTime());
+        mapValue.put("internalComment", getInternalComment());
+        mapValue.put("reason", getReason());
         mapValue.put("createdDate", getCreatedDate());
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
@@ -1766,14 +1871,11 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
         mapValue.put("lastStatusUpdate", getLastStatusUpdate());
         mapValue.put("workEffortPurposeTypeId", getWorkEffortPurposeTypeId());
         mapValue.put("workEffortParentId", getWorkEffortParentId());
-        mapValue.put("workflowPackageId", getWorkflowPackageId());
-        mapValue.put("workflowPackageVersion", getWorkflowPackageVersion());
-        mapValue.put("workflowProcessId", getWorkflowProcessId());
-        mapValue.put("workflowProcessVersion", getWorkflowProcessVersion());
-        mapValue.put("workflowActivityId", getWorkflowActivityId());
         mapValue.put("scopeEnumId", getScopeEnumId());
         mapValue.put("percentComplete", getPercentComplete());
         mapValue.put("workEffortName", getWorkEffortName());
+        mapValue.put("showAsEnumId", getShowAsEnumId());
+        mapValue.put("sendNotificationEmail", getSendNotificationEmail());
         mapValue.put("locationDesc", getLocationDesc());
         mapValue.put("estimatedStartDate", getEstimatedStartDate());
         mapValue.put("estimatedCompletionDate", getEstimatedCompletionDate());
@@ -1795,6 +1897,7 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
         mapValue.put("facilityId", getFacilityId());
         mapValue.put("infoUrl", getInfoUrl());
         mapValue.put("recurrenceInfoId", getRecurrenceInfoId());
+        mapValue.put("tempExprId", getTempExprId());
         mapValue.put("runtimeDataId", getRuntimeDataId());
         mapValue.put("noteId", getNoteId());
         mapValue.put("serviceLoaderName", getServiceLoaderName());
@@ -1804,6 +1907,8 @@ fieldMapColumns.put("WorkEffortCustRequestView", fields);
         mapValue.put("reservPersons", getReservPersons());
         mapValue.put("reserv2ndPPPerc", getReserv2ndPPPerc());
         mapValue.put("reservNthPPPerc", getReservNthPPPerc());
+        mapValue.put("accommodationMapId", getAccommodationMapId());
+        mapValue.put("accommodationSpotId", getAccommodationSpotId());
         mapValue.put("revisionNumber", getRevisionNumber());
         return mapValue;
     }

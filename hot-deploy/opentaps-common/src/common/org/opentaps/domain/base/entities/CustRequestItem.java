@@ -65,6 +65,10 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("quantity", "QUANTITY");
         fields.put("selectedAmount", "SELECTED_AMOUNT");
         fields.put("maximumAmount", "MAXIMUM_AMOUNT");
+        fields.put("reservStart", "RESERV_START");
+        fields.put("reservLength", "RESERV_LENGTH");
+        fields.put("reservPersons", "RESERV_PERSONS");
+        fields.put("configId", "CONFIG_ID");
         fields.put("description", "DESCRIPTION");
         fields.put("story", "STORY");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -85,6 +89,10 @@ fieldMapColumns.put("CustRequestItem", fields);
     quantity("quantity"),
     selectedAmount("selectedAmount"),
     maximumAmount("maximumAmount"),
+    reservStart("reservStart"),
+    reservLength("reservLength"),
+    reservPersons("reservPersons"),
+    configId("configId"),
     description("description"),
     story("story"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -138,6 +146,14 @@ fieldMapColumns.put("CustRequestItem", fields);
    private BigDecimal selectedAmount;
    @Column(name="MAXIMUM_AMOUNT")
    private BigDecimal maximumAmount;
+   @Column(name="RESERV_START")
+   private Timestamp reservStart;
+   @Column(name="RESERV_LENGTH")
+   private BigDecimal reservLength;
+   @Column(name="RESERV_PERSONS")
+   private BigDecimal reservPersons;
+   @Column(name="CONFIG_ID")
+   private String configId;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="STORY")
@@ -195,7 +211,7 @@ fieldMapColumns.put("CustRequestItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("custRequestId");this.primaryKeyNames.add("custRequestItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestItemSeqId");this.allFieldsNames.add("custRequestResolutionId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("priority");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("requiredByDate");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("maximumAmount");this.allFieldsNames.add("description");this.allFieldsNames.add("story");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestItemSeqId");this.allFieldsNames.add("custRequestResolutionId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("priority");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("requiredByDate");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("maximumAmount");this.allFieldsNames.add("reservStart");this.allFieldsNames.add("reservLength");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("configId");this.allFieldsNames.add("description");this.allFieldsNames.add("story");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -286,6 +302,34 @@ fieldMapColumns.put("CustRequestItem", fields);
      */
     public void setMaximumAmount(BigDecimal maximumAmount) {
         this.maximumAmount = maximumAmount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reservStart the reservStart to set
+     */
+    public void setReservStart(Timestamp reservStart) {
+        this.reservStart = reservStart;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reservLength the reservLength to set
+     */
+    public void setReservLength(BigDecimal reservLength) {
+        this.reservLength = reservLength;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reservPersons the reservPersons to set
+     */
+    public void setReservPersons(BigDecimal reservPersons) {
+        this.reservPersons = reservPersons;
+    }
+    /**
+     * Auto generated value setter.
+     * @param configId the configId to set
+     */
+    public void setConfigId(String configId) {
+        this.configId = configId;
     }
     /**
      * Auto generated value setter.
@@ -406,6 +450,34 @@ fieldMapColumns.put("CustRequestItem", fields);
      */
     public BigDecimal getMaximumAmount() {
         return this.maximumAmount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getReservStart() {
+        return this.reservStart;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getReservLength() {
+        return this.reservLength;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getReservPersons() {
+        return this.reservPersons;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getConfigId() {
+        return this.configId;
     }
     /**
      * Auto generated value accessor.
@@ -630,6 +702,10 @@ fieldMapColumns.put("CustRequestItem", fields);
         setQuantity(convertToBigDecimal(mapValue.get("quantity")));
         setSelectedAmount(convertToBigDecimal(mapValue.get("selectedAmount")));
         setMaximumAmount(convertToBigDecimal(mapValue.get("maximumAmount")));
+        setReservStart((Timestamp) mapValue.get("reservStart"));
+        setReservLength(convertToBigDecimal(mapValue.get("reservLength")));
+        setReservPersons(convertToBigDecimal(mapValue.get("reservPersons")));
+        setConfigId((String) mapValue.get("configId"));
         setDescription((String) mapValue.get("description"));
         setStory((String) mapValue.get("story"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -654,6 +730,10 @@ fieldMapColumns.put("CustRequestItem", fields);
         mapValue.put("quantity", getQuantity());
         mapValue.put("selectedAmount", getSelectedAmount());
         mapValue.put("maximumAmount", getMaximumAmount());
+        mapValue.put("reservStart", getReservStart());
+        mapValue.put("reservLength", getReservLength());
+        mapValue.put("reservPersons", getReservPersons());
+        mapValue.put("configId", getConfigId());
         mapValue.put("description", getDescription());
         mapValue.put("story", getStory());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

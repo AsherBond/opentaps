@@ -95,15 +95,31 @@ fieldMapColumns.put("RateType", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RATE_TYPE_ID")
    
+   private List<EmplPositionTypeRate> emplPositionTypeRates = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="RATE_TYPE_ID")
+   
+   private List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="RATE_TYPE_ID")
+   
+   private List<OldPartyRate> oldPartyRates = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="RATE_TYPE_ID")
+   
+   private List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="RATE_TYPE_ID")
+   
    private List<PartyRate> partyRates = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="RATE_TYPE_ID")
+   
+   private List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RATE_TYPE_ID")
    
    private List<TimeEntry> timeEntrys = null;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="rateType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="RATE_TYPE_ID")
-   
-   private List<WorkEffortAssignmentRate> workEffortAssignmentRates = null;
 
   /**
    * Default constructor.
@@ -112,7 +128,7 @@ fieldMapColumns.put("RateType", fields);
       super();
       this.baseEntityName = "RateType";
       this.isView = false;
-      this.resourceName = "WorkEffortEntityLabels";
+      
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("rateTypeId");
       this.allFieldsNames = new ArrayList<String>();
@@ -218,6 +234,50 @@ fieldMapColumns.put("RateType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>EmplPositionTypeRate</code> by the relation named <code>EmplPositionTypeRate</code>.
+     * @return the list of <code>EmplPositionTypeRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends EmplPositionTypeRate> getEmplPositionTypeRates() throws RepositoryException {
+        if (this.emplPositionTypeRates == null) {
+            this.emplPositionTypeRates = getRelated(EmplPositionTypeRate.class, "EmplPositionTypeRate");
+        }
+        return this.emplPositionTypeRates;
+    }
+    /**
+     * Auto generated method that gets the related <code>OldEmplPositionTypeRate</code> by the relation named <code>OldEmplPositionTypeRate</code>.
+     * @return the list of <code>OldEmplPositionTypeRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldEmplPositionTypeRate> getOldEmplPositionTypeRates() throws RepositoryException {
+        if (this.oldEmplPositionTypeRates == null) {
+            this.oldEmplPositionTypeRates = getRelated(OldEmplPositionTypeRate.class, "OldEmplPositionTypeRate");
+        }
+        return this.oldEmplPositionTypeRates;
+    }
+    /**
+     * Auto generated method that gets the related <code>OldPartyRate</code> by the relation named <code>OldPartyRate</code>.
+     * @return the list of <code>OldPartyRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldPartyRate> getOldPartyRates() throws RepositoryException {
+        if (this.oldPartyRates == null) {
+            this.oldPartyRates = getRelated(OldPartyRate.class, "OldPartyRate");
+        }
+        return this.oldPartyRates;
+    }
+    /**
+     * Auto generated method that gets the related <code>OldWorkEffortAssignmentRate</code> by the relation named <code>OldWorkEffortAssignmentRate</code>.
+     * @return the list of <code>OldWorkEffortAssignmentRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldWorkEffortAssignmentRate> getOldWorkEffortAssignmentRates() throws RepositoryException {
+        if (this.oldWorkEffortAssignmentRates == null) {
+            this.oldWorkEffortAssignmentRates = getRelated(OldWorkEffortAssignmentRate.class, "OldWorkEffortAssignmentRate");
+        }
+        return this.oldWorkEffortAssignmentRates;
+    }
+    /**
      * Auto generated method that gets the related <code>PartyRate</code> by the relation named <code>PartyRate</code>.
      * @return the list of <code>PartyRate</code>
      * @throws RepositoryException if an error occurs
@@ -227,6 +287,17 @@ fieldMapColumns.put("RateType", fields);
             this.partyRates = getRelated(PartyRate.class, "PartyRate");
         }
         return this.partyRates;
+    }
+    /**
+     * Auto generated method that gets the related <code>RateAmount</code> by the relation named <code>RateAmount</code>.
+     * @return the list of <code>RateAmount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends RateAmount> getRateAmounts() throws RepositoryException {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = getRelated(RateAmount.class, "RateAmount");
+        }
+        return this.rateAmounts;
     }
     /**
      * Auto generated method that gets the related <code>TimeEntry</code> by the relation named <code>TimeEntry</code>.
@@ -239,18 +310,35 @@ fieldMapColumns.put("RateType", fields);
         }
         return this.timeEntrys;
     }
-    /**
-     * Auto generated method that gets the related <code>WorkEffortAssignmentRate</code> by the relation named <code>WorkEffortAssignmentRate</code>.
-     * @return the list of <code>WorkEffortAssignmentRate</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkEffortAssignmentRate> getWorkEffortAssignmentRates() throws RepositoryException {
-        if (this.workEffortAssignmentRates == null) {
-            this.workEffortAssignmentRates = getRelated(WorkEffortAssignmentRate.class, "WorkEffortAssignmentRate");
-        }
-        return this.workEffortAssignmentRates;
-    }
 
+    /**
+     * Auto generated value setter.
+     * @param emplPositionTypeRates the emplPositionTypeRates to set
+    */
+    public void setEmplPositionTypeRates(List<EmplPositionTypeRate> emplPositionTypeRates) {
+        this.emplPositionTypeRates = emplPositionTypeRates;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oldEmplPositionTypeRates the oldEmplPositionTypeRates to set
+    */
+    public void setOldEmplPositionTypeRates(List<OldEmplPositionTypeRate> oldEmplPositionTypeRates) {
+        this.oldEmplPositionTypeRates = oldEmplPositionTypeRates;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oldPartyRates the oldPartyRates to set
+    */
+    public void setOldPartyRates(List<OldPartyRate> oldPartyRates) {
+        this.oldPartyRates = oldPartyRates;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oldWorkEffortAssignmentRates the oldWorkEffortAssignmentRates to set
+    */
+    public void setOldWorkEffortAssignmentRates(List<OldWorkEffortAssignmentRate> oldWorkEffortAssignmentRates) {
+        this.oldWorkEffortAssignmentRates = oldWorkEffortAssignmentRates;
+    }
     /**
      * Auto generated value setter.
      * @param partyRates the partyRates to set
@@ -260,19 +348,100 @@ fieldMapColumns.put("RateType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param rateAmounts the rateAmounts to set
+    */
+    public void setRateAmounts(List<RateAmount> rateAmounts) {
+        this.rateAmounts = rateAmounts;
+    }
+    /**
+     * Auto generated value setter.
      * @param timeEntrys the timeEntrys to set
     */
     public void setTimeEntrys(List<TimeEntry> timeEntrys) {
         this.timeEntrys = timeEntrys;
     }
-    /**
-     * Auto generated value setter.
-     * @param workEffortAssignmentRates the workEffortAssignmentRates to set
-    */
-    public void setWorkEffortAssignmentRates(List<WorkEffortAssignmentRate> workEffortAssignmentRates) {
-        this.workEffortAssignmentRates = workEffortAssignmentRates;
-    }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addEmplPositionTypeRate(EmplPositionTypeRate emplPositionTypeRate) {
+        if (this.emplPositionTypeRates == null) {
+            this.emplPositionTypeRates = new ArrayList<EmplPositionTypeRate>();
+        }
+        this.emplPositionTypeRates.add(emplPositionTypeRate);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeEmplPositionTypeRate(EmplPositionTypeRate emplPositionTypeRate) {
+        if (this.emplPositionTypeRates == null) {
+            return;
+        }
+        this.emplPositionTypeRates.remove(emplPositionTypeRate);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearEmplPositionTypeRate() {
+        if (this.emplPositionTypeRates == null) {
+            return;
+        }
+        this.emplPositionTypeRates.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOldPartyRate(OldPartyRate oldPartyRate) {
+        if (this.oldPartyRates == null) {
+            this.oldPartyRates = new ArrayList<OldPartyRate>();
+        }
+        this.oldPartyRates.add(oldPartyRate);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOldPartyRate(OldPartyRate oldPartyRate) {
+        if (this.oldPartyRates == null) {
+            return;
+        }
+        this.oldPartyRates.remove(oldPartyRate);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOldPartyRate() {
+        if (this.oldPartyRates == null) {
+            return;
+        }
+        this.oldPartyRates.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOldWorkEffortAssignmentRate(OldWorkEffortAssignmentRate oldWorkEffortAssignmentRate) {
+        if (this.oldWorkEffortAssignmentRates == null) {
+            this.oldWorkEffortAssignmentRates = new ArrayList<OldWorkEffortAssignmentRate>();
+        }
+        this.oldWorkEffortAssignmentRates.add(oldWorkEffortAssignmentRate);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOldWorkEffortAssignmentRate(OldWorkEffortAssignmentRate oldWorkEffortAssignmentRate) {
+        if (this.oldWorkEffortAssignmentRates == null) {
+            return;
+        }
+        this.oldWorkEffortAssignmentRates.remove(oldWorkEffortAssignmentRate);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOldWorkEffortAssignmentRate() {
+        if (this.oldWorkEffortAssignmentRates == null) {
+            return;
+        }
+        this.oldWorkEffortAssignmentRates.clear();
+    }
     /**
      * Auto generated method that add item to collection.
      */
@@ -303,29 +472,29 @@ fieldMapColumns.put("RateType", fields);
     /**
      * Auto generated method that add item to collection.
      */
-    public void addWorkEffortAssignmentRate(WorkEffortAssignmentRate workEffortAssignmentRate) {
-        if (this.workEffortAssignmentRates == null) {
-            this.workEffortAssignmentRates = new ArrayList<WorkEffortAssignmentRate>();
+    public void addRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = new ArrayList<RateAmount>();
         }
-        this.workEffortAssignmentRates.add(workEffortAssignmentRate);
+        this.rateAmounts.add(rateAmount);
     }
     /**
      * Auto generated method that remove item from collection.
      */
-    public void removeWorkEffortAssignmentRate(WorkEffortAssignmentRate workEffortAssignmentRate) {
-        if (this.workEffortAssignmentRates == null) {
+    public void removeRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
             return;
         }
-        this.workEffortAssignmentRates.remove(workEffortAssignmentRate);
+        this.rateAmounts.remove(rateAmount);
     }
     /**
      * Auto generated method that clear items from collection.
      */
-    public void clearWorkEffortAssignmentRate() {
-        if (this.workEffortAssignmentRates == null) {
+    public void clearRateAmount() {
+        if (this.rateAmounts == null) {
             return;
         }
-        this.workEffortAssignmentRates.clear();
+        this.rateAmounts.clear();
     }
 
     /** {@inheritDoc} */

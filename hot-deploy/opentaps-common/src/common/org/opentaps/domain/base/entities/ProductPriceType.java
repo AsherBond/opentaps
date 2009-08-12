@@ -95,6 +95,10 @@ fieldMapColumns.put("ProductPriceType", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="productPriceType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PRODUCT_PRICE_TYPE_ID")
    
+   private List<ProductFeaturePrice> productFeaturePrices = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="productPriceType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_PRICE_TYPE_ID")
+   
    private List<ProductPrice> productPrices = null;
 
   /**
@@ -210,6 +214,17 @@ fieldMapColumns.put("ProductPriceType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>ProductFeaturePrice</code> by the relation named <code>ProductFeaturePrice</code>.
+     * @return the list of <code>ProductFeaturePrice</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductFeaturePrice> getProductFeaturePrices() throws RepositoryException {
+        if (this.productFeaturePrices == null) {
+            this.productFeaturePrices = getRelated(ProductFeaturePrice.class, "ProductFeaturePrice");
+        }
+        return this.productFeaturePrices;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductPrice</code> by the relation named <code>ProductPrice</code>.
      * @return the list of <code>ProductPrice</code>
      * @throws RepositoryException if an error occurs
@@ -223,12 +238,46 @@ fieldMapColumns.put("ProductPriceType", fields);
 
     /**
      * Auto generated value setter.
+     * @param productFeaturePrices the productFeaturePrices to set
+    */
+    public void setProductFeaturePrices(List<ProductFeaturePrice> productFeaturePrices) {
+        this.productFeaturePrices = productFeaturePrices;
+    }
+    /**
+     * Auto generated value setter.
      * @param productPrices the productPrices to set
     */
     public void setProductPrices(List<ProductPrice> productPrices) {
         this.productPrices = productPrices;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addProductFeaturePrice(ProductFeaturePrice productFeaturePrice) {
+        if (this.productFeaturePrices == null) {
+            this.productFeaturePrices = new ArrayList<ProductFeaturePrice>();
+        }
+        this.productFeaturePrices.add(productFeaturePrice);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeProductFeaturePrice(ProductFeaturePrice productFeaturePrice) {
+        if (this.productFeaturePrices == null) {
+            return;
+        }
+        this.productFeaturePrices.remove(productFeaturePrice);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearProductFeaturePrice() {
+        if (this.productFeaturePrices == null) {
+            return;
+        }
+        this.productFeaturePrices.clear();
+    }
     /**
      * Auto generated method that add item to collection.
      */

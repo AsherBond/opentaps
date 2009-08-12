@@ -54,21 +54,27 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("partyId", "PARTY_ID");
         fields.put("contentId", "CONTENT_ID");
-        fields.put("contentPurposeEnumId", "CONTENT_PURPOSE_ENUM_ID");
+        fields.put("partyContentTypeId", "PARTY_CONTENT_TYPE_ID");
+        fields.put("fromDate", "FROM_DATE");
+        fields.put("thruDate", "THRU_DATE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
+        fields.put("contentPurposeEnumId", "CONTENT_PURPOSE_ENUM_ID");
 fieldMapColumns.put("PartyContent", fields);
 }
   public static enum Fields implements EntityFieldInterface<PartyContent> {
     partyId("partyId"),
     contentId("contentId"),
-    contentPurposeEnumId("contentPurposeEnumId"),
+    partyContentTypeId("partyContentTypeId"),
+    fromDate("fromDate"),
+    thruDate("thruDate"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
-    createdTxStamp("createdTxStamp");
+    createdTxStamp("createdTxStamp"),
+    contentPurposeEnumId("contentPurposeEnumId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -98,8 +104,8 @@ fieldMapColumns.put("PartyContent", fields);
       public void setId(PartyContentPk id) {
          this.id = id;
       }
-   @Column(name="CONTENT_PURPOSE_ENUM_ID")
-   private String contentPurposeEnumId;
+   @Column(name="THRU_DATE")
+   private Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -108,6 +114,8 @@ fieldMapColumns.put("PartyContent", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @Column(name="CONTENT_PURPOSE_ENUM_ID")
+   private String contentPurposeEnumId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -122,6 +130,13 @@ fieldMapColumns.put("PartyContent", fields);
    )
    
    private Content content = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARTY_CONTENT_TYPE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private PartyContentType partyContentType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CONTENT_PURPOSE_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -139,9 +154,9 @@ fieldMapColumns.put("PartyContent", fields);
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("contentId");
+      this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("contentId");this.primaryKeyNames.add("partyContentTypeId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("contentId");this.allFieldsNames.add("contentPurposeEnumId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("contentId");this.allFieldsNames.add("partyContentTypeId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("contentPurposeEnumId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -172,10 +187,24 @@ fieldMapColumns.put("PartyContent", fields);
     }
     /**
      * Auto generated value setter.
-     * @param contentPurposeEnumId the contentPurposeEnumId to set
+     * @param partyContentTypeId the partyContentTypeId to set
      */
-    public void setContentPurposeEnumId(String contentPurposeEnumId) {
-        this.contentPurposeEnumId = contentPurposeEnumId;
+    public void setPartyContentTypeId(String partyContentTypeId) {
+        id.setPartyContentTypeId(partyContentTypeId);
+    }
+    /**
+     * Auto generated value setter.
+     * @param fromDate the fromDate to set
+     */
+    public void setFromDate(Timestamp fromDate) {
+        id.setFromDate(fromDate);
+    }
+    /**
+     * Auto generated value setter.
+     * @param thruDate the thruDate to set
+     */
+    public void setThruDate(Timestamp thruDate) {
+        this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
@@ -205,6 +234,13 @@ fieldMapColumns.put("PartyContent", fields);
     public void setCreatedTxStamp(Timestamp createdTxStamp) {
         this.createdTxStamp = createdTxStamp;
     }
+    /**
+     * Auto generated value setter.
+     * @param contentPurposeEnumId the contentPurposeEnumId to set
+     */
+    public void setContentPurposeEnumId(String contentPurposeEnumId) {
+        this.contentPurposeEnumId = contentPurposeEnumId;
+    }
 
     /**
      * Auto generated value accessor.
@@ -224,8 +260,22 @@ fieldMapColumns.put("PartyContent", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getContentPurposeEnumId() {
-        return this.contentPurposeEnumId;
+    public String getPartyContentTypeId() {
+        return this.id.getPartyContentTypeId();
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getFromDate() {
+        return this.id.getFromDate();
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getThruDate() {
+        return this.thruDate;
     }
     /**
      * Auto generated value accessor.
@@ -255,6 +305,13 @@ fieldMapColumns.put("PartyContent", fields);
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getContentPurposeEnumId() {
+        return this.contentPurposeEnumId;
+    }
 
     /**
      * Auto generated method that gets the related <code>Party</code> by the relation named <code>Party</code>.
@@ -277,6 +334,17 @@ fieldMapColumns.put("PartyContent", fields);
             this.content = getRelatedOne(Content.class, "Content");
         }
         return this.content;
+    }
+    /**
+     * Auto generated method that gets the related <code>PartyContentType</code> by the relation named <code>PartyContentType</code>.
+     * @return the <code>PartyContentType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public PartyContentType getPartyContentType() throws RepositoryException {
+        if (this.partyContentType == null) {
+            this.partyContentType = getRelatedOne(PartyContentType.class, "PartyContentType");
+        }
+        return this.partyContentType;
     }
     /**
      * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>Enumeration</code>.
@@ -306,6 +374,13 @@ fieldMapColumns.put("PartyContent", fields);
     }
     /**
      * Auto generated value setter.
+     * @param partyContentType the partyContentType to set
+    */
+    public void setPartyContentType(PartyContentType partyContentType) {
+        this.partyContentType = partyContentType;
+    }
+    /**
+     * Auto generated value setter.
      * @param enumeration the enumeration to set
     */
     public void setEnumeration(Enumeration enumeration) {
@@ -319,11 +394,14 @@ fieldMapColumns.put("PartyContent", fields);
         preInit();
         setPartyId((String) mapValue.get("partyId"));
         setContentId((String) mapValue.get("contentId"));
-        setContentPurposeEnumId((String) mapValue.get("contentPurposeEnumId"));
+        setPartyContentTypeId((String) mapValue.get("partyContentTypeId"));
+        setFromDate((Timestamp) mapValue.get("fromDate"));
+        setThruDate((Timestamp) mapValue.get("thruDate"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
+        setContentPurposeEnumId((String) mapValue.get("contentPurposeEnumId"));
         postInit();
     }
 
@@ -333,11 +411,14 @@ fieldMapColumns.put("PartyContent", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("partyId", getPartyId());
         mapValue.put("contentId", getContentId());
-        mapValue.put("contentPurposeEnumId", getContentPurposeEnumId());
+        mapValue.put("partyContentTypeId", getPartyContentTypeId());
+        mapValue.put("fromDate", getFromDate());
+        mapValue.put("thruDate", getThruDate());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
+        mapValue.put("contentPurposeEnumId", getContentPurposeEnumId());
         return mapValue;
     }
 

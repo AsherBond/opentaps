@@ -42,6 +42,7 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -103,7 +104,7 @@ fieldMapColumns.put("Document", fields);
    @Column(name="DOCUMENT_TEXT")
    private String documentText;
    @Column(name="IMAGE_DATA")
-   private byte[] imageData;
+   private Blob imageData;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -204,7 +205,7 @@ fieldMapColumns.put("Document", fields);
      * Auto generated value setter.
      * @param imageData the imageData to set
      */
-    public void setImageData(byte[] imageData) {
+    public void setImageData(Blob imageData) {
         this.imageData = imageData;
     }
     /**
@@ -280,9 +281,9 @@ fieldMapColumns.put("Document", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>byte[]</code>
+     * @return <code>Blob</code>
      */
-    public byte[] getImageData() {
+    public Blob getImageData() {
         return this.imageData;
     }
     /**
@@ -453,7 +454,7 @@ fieldMapColumns.put("Document", fields);
         setComments((String) mapValue.get("comments"));
         setDocumentLocation((String) mapValue.get("documentLocation"));
         setDocumentText((String) mapValue.get("documentText"));
-        setImageData((byte[]) mapValue.get("imageData"));
+        setImageData((Blob) mapValue.get("imageData"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));

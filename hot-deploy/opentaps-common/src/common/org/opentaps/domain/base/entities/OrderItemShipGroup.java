@@ -56,8 +56,10 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("shipGroupSeqId", "SHIP_GROUP_SEQ_ID");
         fields.put("shipmentMethodTypeId", "SHIPMENT_METHOD_TYPE_ID");
         fields.put("supplierPartyId", "SUPPLIER_PARTY_ID");
+        fields.put("vendorPartyId", "VENDOR_PARTY_ID");
         fields.put("carrierPartyId", "CARRIER_PARTY_ID");
         fields.put("carrierRoleTypeId", "CARRIER_ROLE_TYPE_ID");
+        fields.put("facilityId", "FACILITY_ID");
         fields.put("contactMechId", "CONTACT_MECH_ID");
         fields.put("telecomContactMechId", "TELECOM_CONTACT_MECH_ID");
         fields.put("trackingNumber", "TRACKING_NUMBER");
@@ -67,6 +69,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("isGift", "IS_GIFT");
         fields.put("shipAfterDate", "SHIP_AFTER_DATE");
         fields.put("shipByDate", "SHIP_BY_DATE");
+        fields.put("estimatedShipDate", "ESTIMATED_SHIP_DATE");
+        fields.put("estimatedDeliveryDate", "ESTIMATED_DELIVERY_DATE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -82,8 +86,10 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
     shipGroupSeqId("shipGroupSeqId"),
     shipmentMethodTypeId("shipmentMethodTypeId"),
     supplierPartyId("supplierPartyId"),
+    vendorPartyId("vendorPartyId"),
     carrierPartyId("carrierPartyId"),
     carrierRoleTypeId("carrierRoleTypeId"),
+    facilityId("facilityId"),
     contactMechId("contactMechId"),
     telecomContactMechId("telecomContactMechId"),
     trackingNumber("trackingNumber"),
@@ -93,6 +99,8 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
     isGift("isGift"),
     shipAfterDate("shipAfterDate"),
     shipByDate("shipByDate"),
+    estimatedShipDate("estimatedShipDate"),
+    estimatedDeliveryDate("estimatedDeliveryDate"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -134,10 +142,14 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
    private String shipmentMethodTypeId;
    @Column(name="SUPPLIER_PARTY_ID")
    private String supplierPartyId;
+   @Column(name="VENDOR_PARTY_ID")
+   private String vendorPartyId;
    @Column(name="CARRIER_PARTY_ID")
    private String carrierPartyId;
    @Column(name="CARRIER_ROLE_TYPE_ID")
    private String carrierRoleTypeId;
+   @Column(name="FACILITY_ID")
+   private String facilityId;
    @Column(name="CONTACT_MECH_ID")
    private String contactMechId;
    @Column(name="TELECOM_CONTACT_MECH_ID")
@@ -156,6 +168,10 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
    private Timestamp shipAfterDate;
    @Column(name="SHIP_BY_DATE")
    private Timestamp shipByDate;
+   @Column(name="ESTIMATED_SHIP_DATE")
+   private Timestamp estimatedShipDate;
+   @Column(name="ESTIMATED_DELIVERY_DATE")
+   private Timestamp estimatedDeliveryDate;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -186,6 +202,13 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
    )
    
    private Party supplierParty = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="VENDOR_PARTY_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Party vendorParty = null;
    private transient CarrierShipmentMethod carrierShipmentMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CARRIER_PARTY_ID", insertable=false, updatable=false)
@@ -195,6 +218,13 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
    
    private Party carrierParty = null;
    private transient PartyRole carrierPartyRole = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Facility facility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -242,6 +272,7 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
    private transient List<OrderItemAssoc> toOrderItemAssocs = null;
    private transient List<OrderItemShipGroupAssoc> orderItemShipGroupAssocs = null;
    private transient List<OrderItemShipGrpInvRes> orderItemShipGrpInvReses = null;
+   private transient List<OrderPaymentPreference> orderPaymentPreferences = null;
    private transient OrderShipGroupPriority orderShipGroupPriority = null;
    private transient List<PicklistBin> primaryPicklistBins = null;
    private transient List<PicklistItem> picklistItems = null;
@@ -258,7 +289,7 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("shipGroupSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("shipmentMethodTypeId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("carrierPartyId");this.allFieldsNames.add("carrierRoleTypeId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("telecomContactMechId");this.allFieldsNames.add("trackingNumber");this.allFieldsNames.add("shippingInstructions");this.allFieldsNames.add("maySplit");this.allFieldsNames.add("giftMessage");this.allFieldsNames.add("isGift");this.allFieldsNames.add("shipAfterDate");this.allFieldsNames.add("shipByDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("thirdPartyAccountNumber");this.allFieldsNames.add("thirdPartyPostalCode");this.allFieldsNames.add("thirdPartyCountryGeoCode");this.allFieldsNames.add("statusId");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("shipmentMethodTypeId");this.allFieldsNames.add("supplierPartyId");this.allFieldsNames.add("vendorPartyId");this.allFieldsNames.add("carrierPartyId");this.allFieldsNames.add("carrierRoleTypeId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("telecomContactMechId");this.allFieldsNames.add("trackingNumber");this.allFieldsNames.add("shippingInstructions");this.allFieldsNames.add("maySplit");this.allFieldsNames.add("giftMessage");this.allFieldsNames.add("isGift");this.allFieldsNames.add("shipAfterDate");this.allFieldsNames.add("shipByDate");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("estimatedDeliveryDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("thirdPartyAccountNumber");this.allFieldsNames.add("thirdPartyPostalCode");this.allFieldsNames.add("thirdPartyCountryGeoCode");this.allFieldsNames.add("statusId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -303,6 +334,13 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
     }
     /**
      * Auto generated value setter.
+     * @param vendorPartyId the vendorPartyId to set
+     */
+    public void setVendorPartyId(String vendorPartyId) {
+        this.vendorPartyId = vendorPartyId;
+    }
+    /**
+     * Auto generated value setter.
      * @param carrierPartyId the carrierPartyId to set
      */
     public void setCarrierPartyId(String carrierPartyId) {
@@ -314,6 +352,13 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
      */
     public void setCarrierRoleTypeId(String carrierRoleTypeId) {
         this.carrierRoleTypeId = carrierRoleTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param facilityId the facilityId to set
+     */
+    public void setFacilityId(String facilityId) {
+        this.facilityId = facilityId;
     }
     /**
      * Auto generated value setter.
@@ -377,6 +422,20 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
      */
     public void setShipByDate(Timestamp shipByDate) {
         this.shipByDate = shipByDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param estimatedShipDate the estimatedShipDate to set
+     */
+    public void setEstimatedShipDate(Timestamp estimatedShipDate) {
+        this.estimatedShipDate = estimatedShipDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param estimatedDeliveryDate the estimatedDeliveryDate to set
+     */
+    public void setEstimatedDeliveryDate(Timestamp estimatedDeliveryDate) {
+        this.estimatedDeliveryDate = estimatedDeliveryDate;
     }
     /**
      * Auto generated value setter.
@@ -467,6 +526,13 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getVendorPartyId() {
+        return this.vendorPartyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getCarrierPartyId() {
         return this.carrierPartyId;
     }
@@ -476,6 +542,13 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
      */
     public String getCarrierRoleTypeId() {
         return this.carrierRoleTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getFacilityId() {
+        return this.facilityId;
     }
     /**
      * Auto generated value accessor.
@@ -539,6 +612,20 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
      */
     public Timestamp getShipByDate() {
         return this.shipByDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getEstimatedShipDate() {
+        return this.estimatedShipDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getEstimatedDeliveryDate() {
+        return this.estimatedDeliveryDate;
     }
     /**
      * Auto generated value accessor.
@@ -620,6 +707,17 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
         return this.supplierParty;
     }
     /**
+     * Auto generated method that gets the related <code>Party</code> by the relation named <code>VendorParty</code>.
+     * @return the <code>Party</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Party getVendorParty() throws RepositoryException {
+        if (this.vendorParty == null) {
+            this.vendorParty = getRelatedOne(Party.class, "VendorParty");
+        }
+        return this.vendorParty;
+    }
+    /**
      * Auto generated method that gets the related <code>CarrierShipmentMethod</code> by the relation named <code>CarrierShipmentMethod</code>.
      * @return the <code>CarrierShipmentMethod</code>
      * @throws RepositoryException if an error occurs
@@ -651,6 +749,17 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
             this.carrierPartyRole = getRelatedOne(PartyRole.class, "CarrierPartyRole");
         }
         return this.carrierPartyRole;
+    }
+    /**
+     * Auto generated method that gets the related <code>Facility</code> by the relation named <code>Facility</code>.
+     * @return the <code>Facility</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Facility getFacility() throws RepositoryException {
+        if (this.facility == null) {
+            this.facility = getRelatedOne(Facility.class, "Facility");
+        }
+        return this.facility;
     }
     /**
      * Auto generated method that gets the related <code>ShipmentMethodType</code> by the relation named <code>ShipmentMethodType</code>.
@@ -774,6 +883,17 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
         return this.orderItemShipGrpInvReses;
     }
     /**
+     * Auto generated method that gets the related <code>OrderPaymentPreference</code> by the relation named <code>OrderPaymentPreference</code>.
+     * @return the list of <code>OrderPaymentPreference</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderPaymentPreference> getOrderPaymentPreferences() throws RepositoryException {
+        if (this.orderPaymentPreferences == null) {
+            this.orderPaymentPreferences = getRelated(OrderPaymentPreference.class, "OrderPaymentPreference");
+        }
+        return this.orderPaymentPreferences;
+    }
+    /**
      * Auto generated method that gets the related <code>OrderShipGroupPriority</code> by the relation named <code>OrderShipGroupPriority</code>.
      * @return the <code>OrderShipGroupPriority</code>
      * @throws RepositoryException if an error occurs
@@ -834,6 +954,13 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
     }
     /**
      * Auto generated value setter.
+     * @param vendorParty the vendorParty to set
+    */
+    public void setVendorParty(Party vendorParty) {
+        this.vendorParty = vendorParty;
+    }
+    /**
+     * Auto generated value setter.
      * @param carrierShipmentMethod the carrierShipmentMethod to set
     */
     public void setCarrierShipmentMethod(CarrierShipmentMethod carrierShipmentMethod) {
@@ -852,6 +979,13 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
     */
     public void setCarrierPartyRole(PartyRole carrierPartyRole) {
         this.carrierPartyRole = carrierPartyRole;
+    }
+    /**
+     * Auto generated value setter.
+     * @param facility the facility to set
+    */
+    public void setFacility(Facility facility) {
+        this.facility = facility;
     }
     /**
      * Auto generated value setter.
@@ -932,6 +1066,13 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
     }
     /**
      * Auto generated value setter.
+     * @param orderPaymentPreferences the orderPaymentPreferences to set
+    */
+    public void setOrderPaymentPreferences(List<OrderPaymentPreference> orderPaymentPreferences) {
+        this.orderPaymentPreferences = orderPaymentPreferences;
+    }
+    /**
+     * Auto generated value setter.
      * @param orderShipGroupPriority the orderShipGroupPriority to set
     */
     public void setOrderShipGroupPriority(OrderShipGroupPriority orderShipGroupPriority) {
@@ -968,8 +1109,10 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
         setShipGroupSeqId((String) mapValue.get("shipGroupSeqId"));
         setShipmentMethodTypeId((String) mapValue.get("shipmentMethodTypeId"));
         setSupplierPartyId((String) mapValue.get("supplierPartyId"));
+        setVendorPartyId((String) mapValue.get("vendorPartyId"));
         setCarrierPartyId((String) mapValue.get("carrierPartyId"));
         setCarrierRoleTypeId((String) mapValue.get("carrierRoleTypeId"));
+        setFacilityId((String) mapValue.get("facilityId"));
         setContactMechId((String) mapValue.get("contactMechId"));
         setTelecomContactMechId((String) mapValue.get("telecomContactMechId"));
         setTrackingNumber((String) mapValue.get("trackingNumber"));
@@ -979,6 +1122,8 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
         setIsGift((String) mapValue.get("isGift"));
         setShipAfterDate((Timestamp) mapValue.get("shipAfterDate"));
         setShipByDate((Timestamp) mapValue.get("shipByDate"));
+        setEstimatedShipDate((Timestamp) mapValue.get("estimatedShipDate"));
+        setEstimatedDeliveryDate((Timestamp) mapValue.get("estimatedDeliveryDate"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -998,8 +1143,10 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
         mapValue.put("shipGroupSeqId", getShipGroupSeqId());
         mapValue.put("shipmentMethodTypeId", getShipmentMethodTypeId());
         mapValue.put("supplierPartyId", getSupplierPartyId());
+        mapValue.put("vendorPartyId", getVendorPartyId());
         mapValue.put("carrierPartyId", getCarrierPartyId());
         mapValue.put("carrierRoleTypeId", getCarrierRoleTypeId());
+        mapValue.put("facilityId", getFacilityId());
         mapValue.put("contactMechId", getContactMechId());
         mapValue.put("telecomContactMechId", getTelecomContactMechId());
         mapValue.put("trackingNumber", getTrackingNumber());
@@ -1009,6 +1156,8 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
         mapValue.put("isGift", getIsGift());
         mapValue.put("shipAfterDate", getShipAfterDate());
         mapValue.put("shipByDate", getShipByDate());
+        mapValue.put("estimatedShipDate", getEstimatedShipDate());
+        mapValue.put("estimatedDeliveryDate", getEstimatedDeliveryDate());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

@@ -41,7 +41,9 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
+import java.lang.Long;
 import java.lang.String;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -57,6 +59,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("groupName", "GROUP_NAME");
         fields.put("groupNameLocal", "GROUP_NAME_LOCAL");
         fields.put("officeSiteName", "OFFICE_SITE_NAME");
+        fields.put("annualRevenue", "ANNUAL_REVENUE");
+        fields.put("numEmployees", "NUM_EMPLOYEES");
+        fields.put("tickerSymbol", "TICKER_SYMBOL");
         fields.put("comments", "COMMENTS");
         fields.put("logoImageUrl", "LOGO_IMAGE_URL");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -73,6 +78,9 @@ fieldMapColumns.put("PartyGroup", fields);
     groupName("groupName"),
     groupNameLocal("groupNameLocal"),
     officeSiteName("officeSiteName"),
+    annualRevenue("annualRevenue"),
+    numEmployees("numEmployees"),
+    tickerSymbol("tickerSymbol"),
     comments("comments"),
     logoImageUrl("logoImageUrl"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -108,6 +116,12 @@ fieldMapColumns.put("PartyGroup", fields);
    private String groupNameLocal;
    @Column(name="OFFICE_SITE_NAME")
    private String officeSiteName;
+   @Column(name="ANNUAL_REVENUE")
+   private BigDecimal annualRevenue;
+   @Column(name="NUM_EMPLOYEES")
+   private Long numEmployees;
+   @Column(name="TICKER_SYMBOL")
+   private String tickerSymbol;
    @Field(index=Index.TOKENIZED, store=Store.YES)
    @Boost(1f)
    @Column(name="COMMENTS")
@@ -164,7 +178,7 @@ fieldMapColumns.put("PartyGroup", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("comments");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("annualRevenue");this.allFieldsNames.add("numEmployees");this.allFieldsNames.add("tickerSymbol");this.allFieldsNames.add("comments");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -206,6 +220,27 @@ fieldMapColumns.put("PartyGroup", fields);
      */
     public void setOfficeSiteName(String officeSiteName) {
         this.officeSiteName = officeSiteName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param annualRevenue the annualRevenue to set
+     */
+    public void setAnnualRevenue(BigDecimal annualRevenue) {
+        this.annualRevenue = annualRevenue;
+    }
+    /**
+     * Auto generated value setter.
+     * @param numEmployees the numEmployees to set
+     */
+    public void setNumEmployees(Long numEmployees) {
+        this.numEmployees = numEmployees;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tickerSymbol the tickerSymbol to set
+     */
+    public void setTickerSymbol(String tickerSymbol) {
+        this.tickerSymbol = tickerSymbol;
     }
     /**
      * Auto generated value setter.
@@ -298,6 +333,27 @@ fieldMapColumns.put("PartyGroup", fields);
      */
     public String getOfficeSiteName() {
         return this.officeSiteName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAnnualRevenue() {
+        return this.annualRevenue;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getNumEmployees() {
+        return this.numEmployees;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getTickerSymbol() {
+        return this.tickerSymbol;
     }
     /**
      * Auto generated value accessor.
@@ -752,6 +808,9 @@ fieldMapColumns.put("PartyGroup", fields);
         setGroupName((String) mapValue.get("groupName"));
         setGroupNameLocal((String) mapValue.get("groupNameLocal"));
         setOfficeSiteName((String) mapValue.get("officeSiteName"));
+        setAnnualRevenue(convertToBigDecimal(mapValue.get("annualRevenue")));
+        setNumEmployees((Long) mapValue.get("numEmployees"));
+        setTickerSymbol((String) mapValue.get("tickerSymbol"));
         setComments((String) mapValue.get("comments"));
         setLogoImageUrl((String) mapValue.get("logoImageUrl"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -772,6 +831,9 @@ fieldMapColumns.put("PartyGroup", fields);
         mapValue.put("groupName", getGroupName());
         mapValue.put("groupNameLocal", getGroupNameLocal());
         mapValue.put("officeSiteName", getOfficeSiteName());
+        mapValue.put("annualRevenue", getAnnualRevenue());
+        mapValue.put("numEmployees", getNumEmployees());
+        mapValue.put("tickerSymbol", getTickerSymbol());
         mapValue.put("comments", getComments());
         mapValue.put("logoImageUrl", getLogoImageUrl());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

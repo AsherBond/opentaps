@@ -123,6 +123,14 @@ fieldMapColumns.put("DataSource", fields);
    @JoinColumn(name="DATA_SOURCE_ID")
    
    private List<DataResourceMetaData> dataResourceMetaDatas = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="DATA_SOURCE_ID")
+   
+   private List<GeoPoint> geoPoints = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="DATA_SOURCE_ID")
+   
+   private List<Party> partys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="dataSource", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="DATA_SOURCE_ID")
    
@@ -321,6 +329,28 @@ fieldMapColumns.put("DataSource", fields);
         return this.dataResourceMetaDatas;
     }
     /**
+     * Auto generated method that gets the related <code>GeoPoint</code> by the relation named <code>GeoPoint</code>.
+     * @return the list of <code>GeoPoint</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends GeoPoint> getGeoPoints() throws RepositoryException {
+        if (this.geoPoints == null) {
+            this.geoPoints = getRelated(GeoPoint.class, "GeoPoint");
+        }
+        return this.geoPoints;
+    }
+    /**
+     * Auto generated method that gets the related <code>Party</code> by the relation named <code>Party</code>.
+     * @return the list of <code>Party</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Party> getPartys() throws RepositoryException {
+        if (this.partys == null) {
+            this.partys = getRelated(Party.class, "Party");
+        }
+        return this.partys;
+    }
+    /**
      * Auto generated method that gets the related <code>PartyDataSource</code> by the relation named <code>PartyDataSource</code>.
      * @return the list of <code>PartyDataSource</code>
      * @throws RepositoryException if an error occurs
@@ -373,6 +403,20 @@ fieldMapColumns.put("DataSource", fields);
     */
     public void setDataResourceMetaDatas(List<DataResourceMetaData> dataResourceMetaDatas) {
         this.dataResourceMetaDatas = dataResourceMetaDatas;
+    }
+    /**
+     * Auto generated value setter.
+     * @param geoPoints the geoPoints to set
+    */
+    public void setGeoPoints(List<GeoPoint> geoPoints) {
+        this.geoPoints = geoPoints;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partys the partys to set
+    */
+    public void setPartys(List<Party> partys) {
+        this.partys = partys;
     }
     /**
      * Auto generated value setter.

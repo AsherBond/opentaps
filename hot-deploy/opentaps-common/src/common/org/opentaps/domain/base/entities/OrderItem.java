@@ -59,6 +59,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("orderItemTypeId", "ORDER_ITEM_TYPE_ID");
         fields.put("orderItemGroupSeqId", "ORDER_ITEM_GROUP_SEQ_ID");
         fields.put("isItemGroupPrimary", "IS_ITEM_GROUP_PRIMARY");
+        fields.put("fromInventoryItemId", "FROM_INVENTORY_ITEM_ID");
         fields.put("budgetId", "BUDGET_ID");
         fields.put("budgetItemSeqId", "BUDGET_ITEM_SEQ_ID");
         fields.put("productId", "PRODUCT_ID");
@@ -93,7 +94,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("dontCancelSetUserLogin", "DONT_CANCEL_SET_USER_LOGIN");
         fields.put("shipBeforeDate", "SHIP_BEFORE_DATE");
         fields.put("shipAfterDate", "SHIP_AFTER_DATE");
+        fields.put("cancelBackOrderDate", "CANCEL_BACK_ORDER_DATE");
         fields.put("overrideGlAccountId", "OVERRIDE_GL_ACCOUNT_ID");
+        fields.put("salesOpportunityId", "SALES_OPPORTUNITY_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -117,6 +120,7 @@ fieldMapColumns.put("OrderItem", fields);
     orderItemTypeId("orderItemTypeId"),
     orderItemGroupSeqId("orderItemGroupSeqId"),
     isItemGroupPrimary("isItemGroupPrimary"),
+    fromInventoryItemId("fromInventoryItemId"),
     budgetId("budgetId"),
     budgetItemSeqId("budgetItemSeqId"),
     productId("productId"),
@@ -151,7 +155,9 @@ fieldMapColumns.put("OrderItem", fields);
     dontCancelSetUserLogin("dontCancelSetUserLogin"),
     shipBeforeDate("shipBeforeDate"),
     shipAfterDate("shipAfterDate"),
+    cancelBackOrderDate("cancelBackOrderDate"),
     overrideGlAccountId("overrideGlAccountId"),
+    salesOpportunityId("salesOpportunityId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -203,6 +209,8 @@ fieldMapColumns.put("OrderItem", fields);
    private String orderItemGroupSeqId;
    @Column(name="IS_ITEM_GROUP_PRIMARY")
    private String isItemGroupPrimary;
+   @Column(name="FROM_INVENTORY_ITEM_ID")
+   private String fromInventoryItemId;
    @Column(name="BUDGET_ID")
    private String budgetId;
    @Column(name="BUDGET_ITEM_SEQ_ID")
@@ -271,8 +279,12 @@ fieldMapColumns.put("OrderItem", fields);
    private Timestamp shipBeforeDate;
    @Column(name="SHIP_AFTER_DATE")
    private Timestamp shipAfterDate;
+   @Column(name="CANCEL_BACK_ORDER_DATE")
+   private Timestamp cancelBackOrderDate;
    @Column(name="OVERRIDE_GL_ACCOUNT_ID")
    private String overrideGlAccountId;
+   @Column(name="SALES_OPPORTUNITY_ID")
+   private String salesOpportunityId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -325,6 +337,13 @@ fieldMapColumns.put("OrderItem", fields);
    
    private Product product = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="FROM_INVENTORY_ITEM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private InventoryItem fromInventoryItem = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RECURRING_FREQ_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -362,6 +381,13 @@ fieldMapColumns.put("OrderItem", fields);
    )
    
    private GlAccount overrideGlAccount = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="SALES_OPPORTUNITY_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private SalesOpportunity salesOpportunity = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -433,6 +459,7 @@ fieldMapColumns.put("OrderItem", fields);
    
    private Enumeration tag10Enumeration = null;
    private transient List<FinAccountTrans> finAccountTranses = null;
+   private transient List<FixedAsset> acquireFixedAssets = null;
    private transient List<FixedAssetMaintOrder> fixedAssetMaintOrders = null;
    private transient List<GiftCardFulfillment> giftCardFulfillments = null;
    private transient List<ItemIssuance> itemIssuances = null;
@@ -448,6 +475,7 @@ fieldMapColumns.put("OrderItem", fields);
    private transient List<OrderItemAssoc> toOrderItemAssocs = null;
    private transient List<OrderItemAttribute> orderItemAttributes = null;
    private transient List<OrderItemBilling> orderItemBillings = null;
+   private transient List<OrderItemChange> orderItemChanges = null;
    private transient List<OrderItemContactMech> orderItemContactMeches = null;
    private transient List<OrderItemPriceInfo> orderItemPriceInfoes = null;
    private transient List<OrderItemRole> orderItemRoles = null;
@@ -478,7 +506,7 @@ fieldMapColumns.put("OrderItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("orderItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("orderItemTypeId");this.allFieldsNames.add("orderItemGroupSeqId");this.allFieldsNames.add("isItemGroupPrimary");this.allFieldsNames.add("budgetId");this.allFieldsNames.add("budgetItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("prodCatalogId");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("isPromo");this.allFieldsNames.add("quoteId");this.allFieldsNames.add("quoteItemSeqId");this.allFieldsNames.add("shoppingListId");this.allFieldsNames.add("shoppingListItemSeqId");this.allFieldsNames.add("subscriptionId");this.allFieldsNames.add("deploymentId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("cancelQuantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("unitListPrice");this.allFieldsNames.add("unitAverageCost");this.allFieldsNames.add("unitRecurringPrice");this.allFieldsNames.add("isModifiedPrice");this.allFieldsNames.add("recurringFreqUomId");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("comments");this.allFieldsNames.add("correspondingPoId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("estimatedDeliveryDate");this.allFieldsNames.add("autoCancelDate");this.allFieldsNames.add("dontCancelSetDate");this.allFieldsNames.add("dontCancelSetUserLogin");this.allFieldsNames.add("shipBeforeDate");this.allFieldsNames.add("shipAfterDate");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("orderItemTypeId");this.allFieldsNames.add("orderItemGroupSeqId");this.allFieldsNames.add("isItemGroupPrimary");this.allFieldsNames.add("fromInventoryItemId");this.allFieldsNames.add("budgetId");this.allFieldsNames.add("budgetItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("prodCatalogId");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("isPromo");this.allFieldsNames.add("quoteId");this.allFieldsNames.add("quoteItemSeqId");this.allFieldsNames.add("shoppingListId");this.allFieldsNames.add("shoppingListItemSeqId");this.allFieldsNames.add("subscriptionId");this.allFieldsNames.add("deploymentId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("cancelQuantity");this.allFieldsNames.add("selectedAmount");this.allFieldsNames.add("unitPrice");this.allFieldsNames.add("unitListPrice");this.allFieldsNames.add("unitAverageCost");this.allFieldsNames.add("unitRecurringPrice");this.allFieldsNames.add("isModifiedPrice");this.allFieldsNames.add("recurringFreqUomId");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("comments");this.allFieldsNames.add("correspondingPoId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("estimatedDeliveryDate");this.allFieldsNames.add("autoCancelDate");this.allFieldsNames.add("dontCancelSetDate");this.allFieldsNames.add("dontCancelSetUserLogin");this.allFieldsNames.add("shipBeforeDate");this.allFieldsNames.add("shipAfterDate");this.allFieldsNames.add("cancelBackOrderDate");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("salesOpportunityId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -534,6 +562,13 @@ fieldMapColumns.put("OrderItem", fields);
      */
     public void setIsItemGroupPrimary(String isItemGroupPrimary) {
         this.isItemGroupPrimary = isItemGroupPrimary;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fromInventoryItemId the fromInventoryItemId to set
+     */
+    public void setFromInventoryItemId(String fromInventoryItemId) {
+        this.fromInventoryItemId = fromInventoryItemId;
     }
     /**
      * Auto generated value setter.
@@ -775,10 +810,24 @@ fieldMapColumns.put("OrderItem", fields);
     }
     /**
      * Auto generated value setter.
+     * @param cancelBackOrderDate the cancelBackOrderDate to set
+     */
+    public void setCancelBackOrderDate(Timestamp cancelBackOrderDate) {
+        this.cancelBackOrderDate = cancelBackOrderDate;
+    }
+    /**
+     * Auto generated value setter.
      * @param overrideGlAccountId the overrideGlAccountId to set
      */
     public void setOverrideGlAccountId(String overrideGlAccountId) {
         this.overrideGlAccountId = overrideGlAccountId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesOpportunityId the salesOpportunityId to set
+     */
+    public void setSalesOpportunityId(String salesOpportunityId) {
+        this.salesOpportunityId = salesOpportunityId;
     }
     /**
      * Auto generated value setter.
@@ -920,6 +969,13 @@ fieldMapColumns.put("OrderItem", fields);
      */
     public String getIsItemGroupPrimary() {
         return this.isItemGroupPrimary;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getFromInventoryItemId() {
+        return this.fromInventoryItemId;
     }
     /**
      * Auto generated value accessor.
@@ -1161,10 +1217,24 @@ fieldMapColumns.put("OrderItem", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getCancelBackOrderDate() {
+        return this.cancelBackOrderDate;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getOverrideGlAccountId() {
         return this.overrideGlAccountId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSalesOpportunityId() {
+        return this.salesOpportunityId;
     }
     /**
      * Auto generated value accessor.
@@ -1321,6 +1391,17 @@ fieldMapColumns.put("OrderItem", fields);
         return this.product;
     }
     /**
+     * Auto generated method that gets the related <code>InventoryItem</code> by the relation named <code>FromInventoryItem</code>.
+     * @return the <code>InventoryItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public InventoryItem getFromInventoryItem() throws RepositoryException {
+        if (this.fromInventoryItem == null) {
+            this.fromInventoryItem = getRelatedOne(InventoryItem.class, "FromInventoryItem");
+        }
+        return this.fromInventoryItem;
+    }
+    /**
      * Auto generated method that gets the related <code>Uom</code> by the relation named <code>RecurringFreqUom</code>.
      * @return the <code>Uom</code>
      * @throws RepositoryException if an error occurs
@@ -1407,6 +1488,17 @@ fieldMapColumns.put("OrderItem", fields);
             this.overrideGlAccount = getRelatedOne(GlAccount.class, "OverrideGlAccount");
         }
         return this.overrideGlAccount;
+    }
+    /**
+     * Auto generated method that gets the related <code>SalesOpportunity</code> by the relation named <code>SalesOpportunity</code>.
+     * @return the <code>SalesOpportunity</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public SalesOpportunity getSalesOpportunity() throws RepositoryException {
+        if (this.salesOpportunity == null) {
+            this.salesOpportunity = getRelatedOne(SalesOpportunity.class, "SalesOpportunity");
+        }
+        return this.salesOpportunity;
     }
     /**
      * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag1Enumeration</code>.
@@ -1528,6 +1620,17 @@ fieldMapColumns.put("OrderItem", fields);
             this.finAccountTranses = getRelated(FinAccountTrans.class, "FinAccountTrans");
         }
         return this.finAccountTranses;
+    }
+    /**
+     * Auto generated method that gets the related <code>FixedAsset</code> by the relation named <code>AcquireFixedAsset</code>.
+     * @return the list of <code>FixedAsset</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FixedAsset> getAcquireFixedAssets() throws RepositoryException {
+        if (this.acquireFixedAssets == null) {
+            this.acquireFixedAssets = getRelated(FixedAsset.class, "AcquireFixedAsset");
+        }
+        return this.acquireFixedAssets;
     }
     /**
      * Auto generated method that gets the related <code>FixedAssetMaintOrder</code> by the relation named <code>FixedAssetMaintOrder</code>.
@@ -1693,6 +1796,17 @@ fieldMapColumns.put("OrderItem", fields);
             this.orderItemBillings = getRelated(OrderItemBilling.class, "OrderItemBilling");
         }
         return this.orderItemBillings;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderItemChange</code> by the relation named <code>OrderItemChange</code>.
+     * @return the list of <code>OrderItemChange</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItemChange> getOrderItemChanges() throws RepositoryException {
+        if (this.orderItemChanges == null) {
+            this.orderItemChanges = getRelated(OrderItemChange.class, "OrderItemChange");
+        }
+        return this.orderItemChanges;
     }
     /**
      * Auto generated method that gets the related <code>OrderItemContactMech</code> by the relation named <code>OrderItemContactMech</code>.
@@ -1930,6 +2044,13 @@ fieldMapColumns.put("OrderItem", fields);
     }
     /**
      * Auto generated value setter.
+     * @param fromInventoryItem the fromInventoryItem to set
+    */
+    public void setFromInventoryItem(InventoryItem fromInventoryItem) {
+        this.fromInventoryItem = fromInventoryItem;
+    }
+    /**
+     * Auto generated value setter.
      * @param recurringFreqUom the recurringFreqUom to set
     */
     public void setRecurringFreqUom(Uom recurringFreqUom) {
@@ -1983,6 +2104,13 @@ fieldMapColumns.put("OrderItem", fields);
     */
     public void setOverrideGlAccount(GlAccount overrideGlAccount) {
         this.overrideGlAccount = overrideGlAccount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesOpportunity the salesOpportunity to set
+    */
+    public void setSalesOpportunity(SalesOpportunity salesOpportunity) {
+        this.salesOpportunity = salesOpportunity;
     }
     /**
      * Auto generated value setter.
@@ -2060,6 +2188,13 @@ fieldMapColumns.put("OrderItem", fields);
     */
     public void setFinAccountTranses(List<FinAccountTrans> finAccountTranses) {
         this.finAccountTranses = finAccountTranses;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acquireFixedAssets the acquireFixedAssets to set
+    */
+    public void setAcquireFixedAssets(List<FixedAsset> acquireFixedAssets) {
+        this.acquireFixedAssets = acquireFixedAssets;
     }
     /**
      * Auto generated value setter.
@@ -2165,6 +2300,13 @@ fieldMapColumns.put("OrderItem", fields);
     */
     public void setOrderItemBillings(List<OrderItemBilling> orderItemBillings) {
         this.orderItemBillings = orderItemBillings;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderItemChanges the orderItemChanges to set
+    */
+    public void setOrderItemChanges(List<OrderItemChange> orderItemChanges) {
+        this.orderItemChanges = orderItemChanges;
     }
     /**
      * Auto generated value setter.
@@ -2304,6 +2446,7 @@ fieldMapColumns.put("OrderItem", fields);
         setOrderItemTypeId((String) mapValue.get("orderItemTypeId"));
         setOrderItemGroupSeqId((String) mapValue.get("orderItemGroupSeqId"));
         setIsItemGroupPrimary((String) mapValue.get("isItemGroupPrimary"));
+        setFromInventoryItemId((String) mapValue.get("fromInventoryItemId"));
         setBudgetId((String) mapValue.get("budgetId"));
         setBudgetItemSeqId((String) mapValue.get("budgetItemSeqId"));
         setProductId((String) mapValue.get("productId"));
@@ -2338,7 +2481,9 @@ fieldMapColumns.put("OrderItem", fields);
         setDontCancelSetUserLogin((String) mapValue.get("dontCancelSetUserLogin"));
         setShipBeforeDate((Timestamp) mapValue.get("shipBeforeDate"));
         setShipAfterDate((Timestamp) mapValue.get("shipAfterDate"));
+        setCancelBackOrderDate((Timestamp) mapValue.get("cancelBackOrderDate"));
         setOverrideGlAccountId((String) mapValue.get("overrideGlAccountId"));
+        setSalesOpportunityId((String) mapValue.get("salesOpportunityId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -2366,6 +2511,7 @@ fieldMapColumns.put("OrderItem", fields);
         mapValue.put("orderItemTypeId", getOrderItemTypeId());
         mapValue.put("orderItemGroupSeqId", getOrderItemGroupSeqId());
         mapValue.put("isItemGroupPrimary", getIsItemGroupPrimary());
+        mapValue.put("fromInventoryItemId", getFromInventoryItemId());
         mapValue.put("budgetId", getBudgetId());
         mapValue.put("budgetItemSeqId", getBudgetItemSeqId());
         mapValue.put("productId", getProductId());
@@ -2400,7 +2546,9 @@ fieldMapColumns.put("OrderItem", fields);
         mapValue.put("dontCancelSetUserLogin", getDontCancelSetUserLogin());
         mapValue.put("shipBeforeDate", getShipBeforeDate());
         mapValue.put("shipAfterDate", getShipAfterDate());
+        mapValue.put("cancelBackOrderDate", getCancelBackOrderDate());
         mapValue.put("overrideGlAccountId", getOverrideGlAccountId());
+        mapValue.put("salesOpportunityId", getSalesOpportunityId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

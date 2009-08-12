@@ -54,7 +54,9 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("userLoginId", "USER_LOGIN_ID");
         fields.put("partyId", "PARTY_ID");
+        fields.put("visitId", "VISIT_ID");
         fields.put("webPreferenceTypeId", "WEB_PREFERENCE_TYPE_ID");
+        fields.put("webPreferenceValue", "WEB_PREFERENCE_VALUE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -64,7 +66,9 @@ fieldMapColumns.put("WebUserPreference", fields);
   public static enum Fields implements EntityFieldInterface<WebUserPreference> {
     userLoginId("userLoginId"),
     partyId("partyId"),
+    visitId("visitId"),
     webPreferenceTypeId("webPreferenceTypeId"),
+    webPreferenceValue("webPreferenceValue"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -98,6 +102,8 @@ fieldMapColumns.put("WebUserPreference", fields);
       public void setId(WebUserPreferencePk id) {
          this.id = id;
       }
+   @Column(name="WEB_PREFERENCE_VALUE")
+   private String webPreferenceValue;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -137,9 +143,9 @@ fieldMapColumns.put("WebUserPreference", fields);
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("userLoginId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("webPreferenceTypeId");
+      this.primaryKeyNames.add("userLoginId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("visitId");this.primaryKeyNames.add("webPreferenceTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("webPreferenceTypeId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("visitId");this.allFieldsNames.add("webPreferenceTypeId");this.allFieldsNames.add("webPreferenceValue");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -170,10 +176,24 @@ fieldMapColumns.put("WebUserPreference", fields);
     }
     /**
      * Auto generated value setter.
+     * @param visitId the visitId to set
+     */
+    public void setVisitId(String visitId) {
+        id.setVisitId(visitId);
+    }
+    /**
+     * Auto generated value setter.
      * @param webPreferenceTypeId the webPreferenceTypeId to set
      */
     public void setWebPreferenceTypeId(String webPreferenceTypeId) {
         id.setWebPreferenceTypeId(webPreferenceTypeId);
+    }
+    /**
+     * Auto generated value setter.
+     * @param webPreferenceValue the webPreferenceValue to set
+     */
+    public void setWebPreferenceValue(String webPreferenceValue) {
+        this.webPreferenceValue = webPreferenceValue;
     }
     /**
      * Auto generated value setter.
@@ -222,8 +242,22 @@ fieldMapColumns.put("WebUserPreference", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getVisitId() {
+        return this.id.getVisitId();
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getWebPreferenceTypeId() {
         return this.id.getWebPreferenceTypeId();
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWebPreferenceValue() {
+        return this.webPreferenceValue;
     }
     /**
      * Auto generated value accessor.
@@ -317,7 +351,9 @@ fieldMapColumns.put("WebUserPreference", fields);
         preInit();
         setUserLoginId((String) mapValue.get("userLoginId"));
         setPartyId((String) mapValue.get("partyId"));
+        setVisitId((String) mapValue.get("visitId"));
         setWebPreferenceTypeId((String) mapValue.get("webPreferenceTypeId"));
+        setWebPreferenceValue((String) mapValue.get("webPreferenceValue"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -331,7 +367,9 @@ fieldMapColumns.put("WebUserPreference", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("userLoginId", getUserLoginId());
         mapValue.put("partyId", getPartyId());
+        mapValue.put("visitId", getVisitId());
         mapValue.put("webPreferenceTypeId", getWebPreferenceTypeId());
+        mapValue.put("webPreferenceValue", getWebPreferenceValue());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

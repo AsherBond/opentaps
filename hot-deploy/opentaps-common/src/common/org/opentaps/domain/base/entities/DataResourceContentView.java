@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity DataResourceContentView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectDataResourceContentViews", query="SELECT DR.DATA_RESOURCE_ID AS \"dataResourceId\",DR.DATA_RESOURCE_TYPE_ID AS \"dataResourceTypeId\",DR.DATA_TEMPLATE_TYPE_ID AS \"dataTemplateTypeId\",DR.DATA_CATEGORY_ID AS \"dataCategoryId\",DR.DATA_SOURCE_ID AS \"dataSourceId\",DR.STATUS_ID AS \"statusId\",DR.DATA_RESOURCE_NAME AS \"dataResourceName\",DR.LOCALE_STRING AS \"localeString\",DR.MIME_TYPE_ID AS \"mimeTypeId\",DR.CHARACTER_SET_ID AS \"characterSetId\",DR.OBJECT_INFO AS \"objectInfo\",DR.RELATED_DETAIL_ID AS \"relatedDetailId\",DR.IS_PUBLIC AS \"isPublic\",DR.CREATED_DATE AS \"createdDate\",DR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",DR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",DR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CO.CONTENT_ID AS \"contentId\",CO.CONTENT_TYPE_ID AS \"contentTypeId\",CO.OWNER_CONTENT_ID AS \"ownerContentId\",CO.DECORATOR_CONTENT_ID AS \"decoratorContentId\",CO.INSTANCE_OF_CONTENT_ID AS \"instanceOfContentId\",CO.DATA_RESOURCE_ID AS \"dataResourceId\",CO.TEMPLATE_DATA_RESOURCE_ID AS \"templateDataResourceId\",CO.DATA_SOURCE_ID AS \"dataSourceId\",CO.STATUS_ID AS \"statusId\",CO.PRIVILEGE_ENUM_ID AS \"privilegeEnumId\",CO.SERVICE_NAME AS \"serviceName\",CO.CONTENT_NAME AS \"contentName\",CO.DESCRIPTION AS \"description\",CO.LOCALE_STRING AS \"localeString\",CO.MIME_TYPE_ID AS \"mimeTypeId\",CO.CHARACTER_SET_ID AS \"characterSetId\",CO.CHILD_LEAF_COUNT AS \"childLeafCount\",CO.CHILD_BRANCH_COUNT AS \"childBranchCount\",CO.CREATED_DATE AS \"createdDate\",CO.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CO.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CO.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CO.CLASSIFICATION_ENUM_ID AS \"classificationEnumId\" FROM DATA_RESOURCE DR LEFT JOIN CONTENT CO ON DR.DATA_RESOURCE_ID = CO.DATA_RESOURCE_ID", resultSetMapping="DataResourceContentViewMapping")
+@NamedNativeQuery(name="selectDataResourceContentViews", query="SELECT DR.DATA_RESOURCE_ID AS \"dataResourceId\",DR.DATA_RESOURCE_TYPE_ID AS \"dataResourceTypeId\",DR.DATA_TEMPLATE_TYPE_ID AS \"dataTemplateTypeId\",DR.DATA_CATEGORY_ID AS \"dataCategoryId\",DR.DATA_SOURCE_ID AS \"dataSourceId\",DR.STATUS_ID AS \"statusId\",DR.DATA_RESOURCE_NAME AS \"dataResourceName\",DR.LOCALE_STRING AS \"localeString\",DR.MIME_TYPE_ID AS \"mimeTypeId\",DR.CHARACTER_SET_ID AS \"characterSetId\",DR.OBJECT_INFO AS \"objectInfo\",DR.SURVEY_ID AS \"surveyId\",DR.SURVEY_RESPONSE_ID AS \"surveyResponseId\",DR.RELATED_DETAIL_ID AS \"relatedDetailId\",DR.IS_PUBLIC AS \"isPublic\",DR.CREATED_DATE AS \"createdDate\",DR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",DR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",DR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CO.CONTENT_ID AS \"contentId\",CO.CONTENT_TYPE_ID AS \"contentTypeId\",CO.OWNER_CONTENT_ID AS \"ownerContentId\",CO.DECORATOR_CONTENT_ID AS \"decoratorContentId\",CO.INSTANCE_OF_CONTENT_ID AS \"instanceOfContentId\",CO.DATA_RESOURCE_ID AS \"dataResourceId\",CO.TEMPLATE_DATA_RESOURCE_ID AS \"templateDataResourceId\",CO.DATA_SOURCE_ID AS \"dataSourceId\",CO.STATUS_ID AS \"statusId\",CO.PRIVILEGE_ENUM_ID AS \"privilegeEnumId\",CO.SERVICE_NAME AS \"serviceName\",CO.CONTENT_NAME AS \"contentName\",CO.DESCRIPTION AS \"description\",CO.LOCALE_STRING AS \"localeString\",CO.MIME_TYPE_ID AS \"mimeTypeId\",CO.CHARACTER_SET_ID AS \"characterSetId\",CO.CHILD_LEAF_COUNT AS \"childLeafCount\",CO.CHILD_BRANCH_COUNT AS \"childBranchCount\",CO.CREATED_DATE AS \"createdDate\",CO.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CO.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CO.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CO.CLASSIFICATION_ENUM_ID AS \"classificationEnumId\" FROM DATA_RESOURCE DR LEFT JOIN CONTENT CO ON DR.DATA_RESOURCE_ID = CO.DATA_RESOURCE_ID", resultSetMapping="DataResourceContentViewMapping")
 @SqlResultSetMapping(name="DataResourceContentViewMapping", entities={
 @EntityResult(entityClass=DataResourceContentView.class, fields = {
 @FieldResult(name="dataResourceId", column="dataResourceId")
@@ -63,6 +63,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="mimeTypeId", column="mimeTypeId")
 ,@FieldResult(name="characterSetId", column="characterSetId")
 ,@FieldResult(name="objectInfo", column="objectInfo")
+,@FieldResult(name="surveyId", column="surveyId")
+,@FieldResult(name="surveyResponseId", column="surveyResponseId")
 ,@FieldResult(name="relatedDetailId", column="relatedDetailId")
 ,@FieldResult(name="isPublic", column="isPublic")
 ,@FieldResult(name="createdDate", column="createdDate")
@@ -109,6 +111,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("mimeTypeId", "DR.MIME_TYPE_ID");
         fields.put("characterSetId", "DR.CHARACTER_SET_ID");
         fields.put("objectInfo", "DR.OBJECT_INFO");
+        fields.put("surveyId", "DR.SURVEY_ID");
+        fields.put("surveyResponseId", "DR.SURVEY_RESPONSE_ID");
         fields.put("relatedDetailId", "DR.RELATED_DETAIL_ID");
         fields.put("isPublic", "DR.IS_PUBLIC");
         fields.put("createdDate", "DR.CREATED_DATE");
@@ -152,6 +156,8 @@ fieldMapColumns.put("DataResourceContentView", fields);
     mimeTypeId("mimeTypeId"),
     characterSetId("characterSetId"),
     objectInfo("objectInfo"),
+    surveyId("surveyId"),
+    surveyResponseId("surveyResponseId"),
     relatedDetailId("relatedDetailId"),
     isPublic("isPublic"),
     createdDate("createdDate"),
@@ -213,6 +219,10 @@ fieldMapColumns.put("DataResourceContentView", fields);
    private String characterSetId;
     
    private String objectInfo;
+    
+   private String surveyId;
+    
+   private String surveyResponseId;
     
    private String relatedDetailId;
     
@@ -356,7 +366,7 @@ fieldMapColumns.put("DataResourceContentView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("dataResourceId");this.primaryKeyNames.add("coContentId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("dataResourceId");this.allFieldsNames.add("dataResourceTypeId");this.allFieldsNames.add("dataTemplateTypeId");this.allFieldsNames.add("dataCategoryId");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("dataResourceName");this.allFieldsNames.add("localeString");this.allFieldsNames.add("mimeTypeId");this.allFieldsNames.add("characterSetId");this.allFieldsNames.add("objectInfo");this.allFieldsNames.add("relatedDetailId");this.allFieldsNames.add("isPublic");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("coContentId");this.allFieldsNames.add("coContentTypeId");this.allFieldsNames.add("coOwnerContentId");this.allFieldsNames.add("coDecoratorContentId");this.allFieldsNames.add("coInstanceOfContentId");this.allFieldsNames.add("coDataResourceId");this.allFieldsNames.add("coTemplateDataResourceId");this.allFieldsNames.add("coDataSourceId");this.allFieldsNames.add("coStatusId");this.allFieldsNames.add("coPrivilegeEnumId");this.allFieldsNames.add("coServiceName");this.allFieldsNames.add("coContentName");this.allFieldsNames.add("coDescription");this.allFieldsNames.add("coLocaleString");this.allFieldsNames.add("coMimeTypeId");this.allFieldsNames.add("coCharacterSetId");this.allFieldsNames.add("coChildLeafCount");this.allFieldsNames.add("coChildBranchCount");this.allFieldsNames.add("coCreatedDate");this.allFieldsNames.add("coCreatedByUserLogin");this.allFieldsNames.add("coLastModifiedDate");this.allFieldsNames.add("coLastModifiedByUserLogin");this.allFieldsNames.add("coClassificationEnumId");
+      this.allFieldsNames.add("dataResourceId");this.allFieldsNames.add("dataResourceTypeId");this.allFieldsNames.add("dataTemplateTypeId");this.allFieldsNames.add("dataCategoryId");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("dataResourceName");this.allFieldsNames.add("localeString");this.allFieldsNames.add("mimeTypeId");this.allFieldsNames.add("characterSetId");this.allFieldsNames.add("objectInfo");this.allFieldsNames.add("surveyId");this.allFieldsNames.add("surveyResponseId");this.allFieldsNames.add("relatedDetailId");this.allFieldsNames.add("isPublic");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("coContentId");this.allFieldsNames.add("coContentTypeId");this.allFieldsNames.add("coOwnerContentId");this.allFieldsNames.add("coDecoratorContentId");this.allFieldsNames.add("coInstanceOfContentId");this.allFieldsNames.add("coDataResourceId");this.allFieldsNames.add("coTemplateDataResourceId");this.allFieldsNames.add("coDataSourceId");this.allFieldsNames.add("coStatusId");this.allFieldsNames.add("coPrivilegeEnumId");this.allFieldsNames.add("coServiceName");this.allFieldsNames.add("coContentName");this.allFieldsNames.add("coDescription");this.allFieldsNames.add("coLocaleString");this.allFieldsNames.add("coMimeTypeId");this.allFieldsNames.add("coCharacterSetId");this.allFieldsNames.add("coChildLeafCount");this.allFieldsNames.add("coChildBranchCount");this.allFieldsNames.add("coCreatedDate");this.allFieldsNames.add("coCreatedByUserLogin");this.allFieldsNames.add("coLastModifiedDate");this.allFieldsNames.add("coLastModifiedByUserLogin");this.allFieldsNames.add("coClassificationEnumId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -450,6 +460,20 @@ fieldMapColumns.put("DataResourceContentView", fields);
      */
     private void setObjectInfo(String objectInfo) {
         this.objectInfo = objectInfo;
+    }
+    /**
+     * Auto generated value setter.
+     * @param surveyId the surveyId to set
+     */
+    private void setSurveyId(String surveyId) {
+        this.surveyId = surveyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param surveyResponseId the surveyResponseId to set
+     */
+    private void setSurveyResponseId(String surveyResponseId) {
+        this.surveyResponseId = surveyResponseId;
     }
     /**
      * Auto generated value setter.
@@ -731,6 +755,20 @@ fieldMapColumns.put("DataResourceContentView", fields);
      */
     public String getObjectInfo() {
         return this.objectInfo;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSurveyId() {
+        return this.surveyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSurveyResponseId() {
+        return this.surveyResponseId;
     }
     /**
      * Auto generated value accessor.
@@ -1188,6 +1226,8 @@ fieldMapColumns.put("DataResourceContentView", fields);
         setMimeTypeId((String) mapValue.get("mimeTypeId"));
         setCharacterSetId((String) mapValue.get("characterSetId"));
         setObjectInfo((String) mapValue.get("objectInfo"));
+        setSurveyId((String) mapValue.get("surveyId"));
+        setSurveyResponseId((String) mapValue.get("surveyResponseId"));
         setRelatedDetailId((String) mapValue.get("relatedDetailId"));
         setIsPublic((String) mapValue.get("isPublic"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
@@ -1235,6 +1275,8 @@ fieldMapColumns.put("DataResourceContentView", fields);
         mapValue.put("mimeTypeId", getMimeTypeId());
         mapValue.put("characterSetId", getCharacterSetId());
         mapValue.put("objectInfo", getObjectInfo());
+        mapValue.put("surveyId", getSurveyId());
+        mapValue.put("surveyResponseId", getSurveyResponseId());
         mapValue.put("relatedDetailId", getRelatedDetailId());
         mapValue.put("isPublic", getIsPublic());
         mapValue.put("createdDate", getCreatedDate());

@@ -108,6 +108,10 @@ fieldMapColumns.put("GlAccountType", fields);
    
    private GlAccountType parentGlAccountType = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="GL_ACCOUNT_TYPE_ID")
+   
+   private List<AcctgTransEntry> acctgTransEntrys = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="COST_GL_ACCOUNT_TYPE_ID")
    
    private List<CostComponentCalc> costCostComponentCalcs = null;
@@ -143,10 +147,18 @@ fieldMapColumns.put("GlAccountType", fields);
    @JoinColumn(name="INVOICE_GL_ACCOUNT_TYPE_ID")
    
    private List<InvoiceGlAccountType> invoiceInvoiceGlAccountTypes = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="glAccountType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="GL_ACCOUNT_TYPE_ID")
+   
+   private List<PartyGlAccount> partyGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_TYPE_ID")
    
    private List<PaymentGlAccountTypeMap> paymentGlAccountTypeMaps = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="glAccountType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="GL_ACCOUNT_TYPE_ID")
+   
+   private List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="glAccountType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="GL_ACCOUNT_TYPE_ID")
    
@@ -304,6 +316,17 @@ fieldMapColumns.put("GlAccountType", fields);
         return this.parentGlAccountType;
     }
     /**
+     * Auto generated method that gets the related <code>AcctgTransEntry</code> by the relation named <code>AcctgTransEntry</code>.
+     * @return the list of <code>AcctgTransEntry</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AcctgTransEntry> getAcctgTransEntrys() throws RepositoryException {
+        if (this.acctgTransEntrys == null) {
+            this.acctgTransEntrys = getRelated(AcctgTransEntry.class, "AcctgTransEntry");
+        }
+        return this.acctgTransEntrys;
+    }
+    /**
      * Auto generated method that gets the related <code>CostComponentCalc</code> by the relation named <code>CostCostComponentCalc</code>.
      * @return the list of <code>CostComponentCalc</code>
      * @throws RepositoryException if an error occurs
@@ -403,6 +426,17 @@ fieldMapColumns.put("GlAccountType", fields);
         return this.invoiceInvoiceGlAccountTypes;
     }
     /**
+     * Auto generated method that gets the related <code>PartyGlAccount</code> by the relation named <code>PartyGlAccount</code>.
+     * @return the list of <code>PartyGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyGlAccount> getPartyGlAccounts() throws RepositoryException {
+        if (this.partyGlAccounts == null) {
+            this.partyGlAccounts = getRelated(PartyGlAccount.class, "PartyGlAccount");
+        }
+        return this.partyGlAccounts;
+    }
+    /**
      * Auto generated method that gets the related <code>PaymentGlAccountTypeMap</code> by the relation named <code>PaymentGlAccountTypeMap</code>.
      * @return the list of <code>PaymentGlAccountTypeMap</code>
      * @throws RepositoryException if an error occurs
@@ -412,6 +446,17 @@ fieldMapColumns.put("GlAccountType", fields);
             this.paymentGlAccountTypeMaps = getRelated(PaymentGlAccountTypeMap.class, "PaymentGlAccountTypeMap");
         }
         return this.paymentGlAccountTypeMaps;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductCategoryGlAccount</code> by the relation named <code>ProductCategoryGlAccount</code>.
+     * @return the list of <code>ProductCategoryGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductCategoryGlAccount> getProductCategoryGlAccounts() throws RepositoryException {
+        if (this.productCategoryGlAccounts == null) {
+            this.productCategoryGlAccounts = getRelated(ProductCategoryGlAccount.class, "ProductCategoryGlAccount");
+        }
+        return this.productCategoryGlAccounts;
     }
     /**
      * Auto generated method that gets the related <code>ProductGlAccount</code> by the relation named <code>ProductGlAccount</code>.
@@ -431,6 +476,13 @@ fieldMapColumns.put("GlAccountType", fields);
     */
     public void setParentGlAccountType(GlAccountType parentGlAccountType) {
         this.parentGlAccountType = parentGlAccountType;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acctgTransEntrys the acctgTransEntrys to set
+    */
+    public void setAcctgTransEntrys(List<AcctgTransEntry> acctgTransEntrys) {
+        this.acctgTransEntrys = acctgTransEntrys;
     }
     /**
      * Auto generated value setter.
@@ -497,10 +549,24 @@ fieldMapColumns.put("GlAccountType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param partyGlAccounts the partyGlAccounts to set
+    */
+    public void setPartyGlAccounts(List<PartyGlAccount> partyGlAccounts) {
+        this.partyGlAccounts = partyGlAccounts;
+    }
+    /**
+     * Auto generated value setter.
      * @param paymentGlAccountTypeMaps the paymentGlAccountTypeMaps to set
     */
     public void setPaymentGlAccountTypeMaps(List<PaymentGlAccountTypeMap> paymentGlAccountTypeMaps) {
         this.paymentGlAccountTypeMaps = paymentGlAccountTypeMaps;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productCategoryGlAccounts the productCategoryGlAccounts to set
+    */
+    public void setProductCategoryGlAccounts(List<ProductCategoryGlAccount> productCategoryGlAccounts) {
+        this.productCategoryGlAccounts = productCategoryGlAccounts;
     }
     /**
      * Auto generated value setter.
@@ -536,6 +602,60 @@ fieldMapColumns.put("GlAccountType", fields);
             return;
         }
         this.glAccountTypeDefaults.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addPartyGlAccount(PartyGlAccount partyGlAccount) {
+        if (this.partyGlAccounts == null) {
+            this.partyGlAccounts = new ArrayList<PartyGlAccount>();
+        }
+        this.partyGlAccounts.add(partyGlAccount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removePartyGlAccount(PartyGlAccount partyGlAccount) {
+        if (this.partyGlAccounts == null) {
+            return;
+        }
+        this.partyGlAccounts.remove(partyGlAccount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearPartyGlAccount() {
+        if (this.partyGlAccounts == null) {
+            return;
+        }
+        this.partyGlAccounts.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addProductCategoryGlAccount(ProductCategoryGlAccount productCategoryGlAccount) {
+        if (this.productCategoryGlAccounts == null) {
+            this.productCategoryGlAccounts = new ArrayList<ProductCategoryGlAccount>();
+        }
+        this.productCategoryGlAccounts.add(productCategoryGlAccount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeProductCategoryGlAccount(ProductCategoryGlAccount productCategoryGlAccount) {
+        if (this.productCategoryGlAccounts == null) {
+            return;
+        }
+        this.productCategoryGlAccounts.remove(productCategoryGlAccount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearProductCategoryGlAccount() {
+        if (this.productCategoryGlAccounts == null) {
+            return;
+        }
+        this.productCategoryGlAccounts.clear();
     }
     /**
      * Auto generated method that add item to collection.

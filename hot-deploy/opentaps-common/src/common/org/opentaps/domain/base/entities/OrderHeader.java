@@ -59,6 +59,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("externalId", "EXTERNAL_ID");
         fields.put("salesChannelEnumId", "SALES_CHANNEL_ENUM_ID");
         fields.put("orderDate", "ORDER_DATE");
+        fields.put("priority", "PRIORITY");
         fields.put("entryDate", "ENTRY_DATE");
         fields.put("visitId", "VISIT_ID");
         fields.put("statusId", "STATUS_ID");
@@ -93,6 +94,7 @@ fieldMapColumns.put("OrderHeader", fields);
     externalId("externalId"),
     salesChannelEnumId("salesChannelEnumId"),
     orderDate("orderDate"),
+    priority("priority"),
     entryDate("entryDate"),
     visitId("visitId"),
     statusId("statusId"),
@@ -143,6 +145,8 @@ fieldMapColumns.put("OrderHeader", fields);
    private String salesChannelEnumId;
    @Column(name="ORDER_DATE")
    private Timestamp orderDate;
+   @Column(name="PRIORITY")
+   private String priority;
    @Column(name="ENTRY_DATE")
    private Timestamp entryDate;
    @Column(name="VISIT_ID")
@@ -288,6 +292,10 @@ fieldMapColumns.put("OrderHeader", fields);
    
    private List<CommunicationEventOrder> communicationEventOrders = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ACQUIRE_ORDER_ID")
+   
+   private List<FixedAsset> acquireFixedAssets = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PURCHASE_ORDER_ID")
    
    private List<FixedAssetMaint> purchaseFixedAssetMaints = null;
@@ -371,6 +379,10 @@ fieldMapColumns.put("OrderHeader", fields);
    @JoinColumn(name="ORDER_ID")
    
    private List<OrderItemBilling> orderItemBillings = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ORDER_ID")
+   
+   private List<OrderItemChange> orderItemChanges = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="orderHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ORDER_ID")
    
@@ -462,7 +474,7 @@ fieldMapColumns.put("OrderHeader", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REPLACEMENT_ORDER_ID")
    
-   private List<ReturnItemResponse> returnItemResponses = null;
+   private List<ReturnItemResponse> replacementReturnItemResponses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_ORDER_ID")
    
@@ -503,7 +515,7 @@ fieldMapColumns.put("OrderHeader", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderName");this.allFieldsNames.add("externalId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("terminalId");this.allFieldsNames.add("transactionId");this.allFieldsNames.add("autoOrderShoppingListId");this.allFieldsNames.add("needsInventoryIssuance");this.allFieldsNames.add("isRushOrder");this.allFieldsNames.add("internalCode");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderName");this.allFieldsNames.add("externalId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("priority");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("terminalId");this.allFieldsNames.add("transactionId");this.allFieldsNames.add("autoOrderShoppingListId");this.allFieldsNames.add("needsInventoryIssuance");this.allFieldsNames.add("isRushOrder");this.allFieldsNames.add("internalCode");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -559,6 +571,13 @@ fieldMapColumns.put("OrderHeader", fields);
      */
     public void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param priority the priority to set
+     */
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
     /**
      * Auto generated value setter.
@@ -777,6 +796,13 @@ fieldMapColumns.put("OrderHeader", fields);
      */
     public Timestamp getOrderDate() {
         return this.orderDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPriority() {
+        return this.priority;
     }
     /**
      * Auto generated value accessor.
@@ -1131,6 +1157,17 @@ fieldMapColumns.put("OrderHeader", fields);
         return this.communicationEventOrders;
     }
     /**
+     * Auto generated method that gets the related <code>FixedAsset</code> by the relation named <code>AcquireFixedAsset</code>.
+     * @return the list of <code>FixedAsset</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FixedAsset> getAcquireFixedAssets() throws RepositoryException {
+        if (this.acquireFixedAssets == null) {
+            this.acquireFixedAssets = getRelated(FixedAsset.class, "AcquireFixedAsset");
+        }
+        return this.acquireFixedAssets;
+    }
+    /**
      * Auto generated method that gets the related <code>FixedAssetMaint</code> by the relation named <code>PurchaseFixedAssetMaint</code>.
      * @return the list of <code>FixedAssetMaint</code>
      * @throws RepositoryException if an error occurs
@@ -1360,6 +1397,17 @@ fieldMapColumns.put("OrderHeader", fields);
             this.orderItemBillings = getRelated(OrderItemBilling.class, "OrderItemBilling");
         }
         return this.orderItemBillings;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderItemChange</code> by the relation named <code>OrderItemChange</code>.
+     * @return the list of <code>OrderItemChange</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItemChange> getOrderItemChanges() throws RepositoryException {
+        if (this.orderItemChanges == null) {
+            this.orderItemChanges = getRelated(OrderItemChange.class, "OrderItemChange");
+        }
+        return this.orderItemChanges;
     }
     /**
      * Auto generated method that gets the related <code>OrderItemContactMech</code> by the relation named <code>OrderItemContactMech</code>.
@@ -1604,15 +1652,15 @@ fieldMapColumns.put("OrderHeader", fields);
         return this.returnItems;
     }
     /**
-     * Auto generated method that gets the related <code>ReturnItemResponse</code> by the relation named <code>ReturnItemResponse</code>.
+     * Auto generated method that gets the related <code>ReturnItemResponse</code> by the relation named <code>ReplacementReturnItemResponse</code>.
      * @return the list of <code>ReturnItemResponse</code>
      * @throws RepositoryException if an error occurs
      */
-    public List<? extends ReturnItemResponse> getReturnItemResponses() throws RepositoryException {
-        if (this.returnItemResponses == null) {
-            this.returnItemResponses = getRelated(ReturnItemResponse.class, "ReturnItemResponse");
+    public List<? extends ReturnItemResponse> getReplacementReturnItemResponses() throws RepositoryException {
+        if (this.replacementReturnItemResponses == null) {
+            this.replacementReturnItemResponses = getRelated(ReturnItemResponse.class, "ReplacementReturnItemResponse");
         }
-        return this.returnItemResponses;
+        return this.replacementReturnItemResponses;
     }
     /**
      * Auto generated method that gets the related <code>Shipment</code> by the relation named <code>PrimaryShipment</code>.
@@ -1806,6 +1854,13 @@ fieldMapColumns.put("OrderHeader", fields);
     }
     /**
      * Auto generated value setter.
+     * @param acquireFixedAssets the acquireFixedAssets to set
+    */
+    public void setAcquireFixedAssets(List<FixedAsset> acquireFixedAssets) {
+        this.acquireFixedAssets = acquireFixedAssets;
+    }
+    /**
+     * Auto generated value setter.
      * @param purchaseFixedAssetMaints the purchaseFixedAssetMaints to set
     */
     public void setPurchaseFixedAssetMaints(List<FixedAssetMaint> purchaseFixedAssetMaints) {
@@ -1950,6 +2005,13 @@ fieldMapColumns.put("OrderHeader", fields);
     */
     public void setOrderItemBillings(List<OrderItemBilling> orderItemBillings) {
         this.orderItemBillings = orderItemBillings;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderItemChanges the orderItemChanges to set
+    */
+    public void setOrderItemChanges(List<OrderItemChange> orderItemChanges) {
+        this.orderItemChanges = orderItemChanges;
     }
     /**
      * Auto generated value setter.
@@ -2107,10 +2169,10 @@ fieldMapColumns.put("OrderHeader", fields);
     }
     /**
      * Auto generated value setter.
-     * @param returnItemResponses the returnItemResponses to set
+     * @param replacementReturnItemResponses the replacementReturnItemResponses to set
     */
-    public void setReturnItemResponses(List<ReturnItemResponse> returnItemResponses) {
-        this.returnItemResponses = returnItemResponses;
+    public void setReplacementReturnItemResponses(List<ReturnItemResponse> replacementReturnItemResponses) {
+        this.replacementReturnItemResponses = replacementReturnItemResponses;
     }
     /**
      * Auto generated value setter.
@@ -3118,6 +3180,7 @@ fieldMapColumns.put("OrderHeader", fields);
         setExternalId((String) mapValue.get("externalId"));
         setSalesChannelEnumId((String) mapValue.get("salesChannelEnumId"));
         setOrderDate((Timestamp) mapValue.get("orderDate"));
+        setPriority((String) mapValue.get("priority"));
         setEntryDate((Timestamp) mapValue.get("entryDate"));
         setVisitId((String) mapValue.get("visitId"));
         setStatusId((String) mapValue.get("statusId"));
@@ -3156,6 +3219,7 @@ fieldMapColumns.put("OrderHeader", fields);
         mapValue.put("externalId", getExternalId());
         mapValue.put("salesChannelEnumId", getSalesChannelEnumId());
         mapValue.put("orderDate", getOrderDate());
+        mapValue.put("priority", getPriority());
         mapValue.put("entryDate", getEntryDate());
         mapValue.put("visitId", getVisitId());
         mapValue.put("statusId", getStatusId());

@@ -61,18 +61,24 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("classEnumId", "CLASS_ENUM_ID");
         fields.put("partyId", "PARTY_ID");
         fields.put("roleTypeId", "ROLE_TYPE_ID");
-        fields.put("uomId", "UOM_ID");
         fields.put("fixedAssetName", "FIXED_ASSET_NAME");
+        fields.put("acquireOrderId", "ACQUIRE_ORDER_ID");
+        fields.put("acquireOrderItemSeqId", "ACQUIRE_ORDER_ITEM_SEQ_ID");
         fields.put("dateAcquired", "DATE_ACQUIRED");
         fields.put("dateLastServiced", "DATE_LAST_SERVICED");
         fields.put("dateNextService", "DATE_NEXT_SERVICE");
         fields.put("expectedEndOfLife", "EXPECTED_END_OF_LIFE");
         fields.put("actualEndOfLife", "ACTUAL_END_OF_LIFE");
         fields.put("productionCapacity", "PRODUCTION_CAPACITY");
+        fields.put("uomId", "UOM_ID");
         fields.put("calendarId", "CALENDAR_ID");
         fields.put("serialNumber", "SERIAL_NUMBER");
         fields.put("locatedAtFacilityId", "LOCATED_AT_FACILITY_ID");
         fields.put("locatedAtLocationSeqId", "LOCATED_AT_LOCATION_SEQ_ID");
+        fields.put("salvageValue", "SALVAGE_VALUE");
+        fields.put("depreciation", "DEPRECIATION");
+        fields.put("purchaseCost", "PURCHASE_COST");
+        fields.put("purchaseCostUomId", "PURCHASE_COST_UOM_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -87,18 +93,24 @@ fieldMapColumns.put("FixedAsset", fields);
     classEnumId("classEnumId"),
     partyId("partyId"),
     roleTypeId("roleTypeId"),
-    uomId("uomId"),
     fixedAssetName("fixedAssetName"),
+    acquireOrderId("acquireOrderId"),
+    acquireOrderItemSeqId("acquireOrderItemSeqId"),
     dateAcquired("dateAcquired"),
     dateLastServiced("dateLastServiced"),
     dateNextService("dateNextService"),
     expectedEndOfLife("expectedEndOfLife"),
     actualEndOfLife("actualEndOfLife"),
     productionCapacity("productionCapacity"),
+    uomId("uomId"),
     calendarId("calendarId"),
     serialNumber("serialNumber"),
     locatedAtFacilityId("locatedAtFacilityId"),
     locatedAtLocationSeqId("locatedAtLocationSeqId"),
+    salvageValue("salvageValue"),
+    depreciation("depreciation"),
+    purchaseCost("purchaseCost"),
+    purchaseCostUomId("purchaseCostUomId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -130,10 +142,12 @@ fieldMapColumns.put("FixedAsset", fields);
    private String partyId;
    @Column(name="ROLE_TYPE_ID")
    private String roleTypeId;
-   @Column(name="UOM_ID")
-   private String uomId;
    @Column(name="FIXED_ASSET_NAME")
    private String fixedAssetName;
+   @Column(name="ACQUIRE_ORDER_ID")
+   private String acquireOrderId;
+   @Column(name="ACQUIRE_ORDER_ITEM_SEQ_ID")
+   private String acquireOrderItemSeqId;
    @Column(name="DATE_ACQUIRED")
    private Timestamp dateAcquired;
    @Column(name="DATE_LAST_SERVICED")
@@ -146,6 +160,8 @@ fieldMapColumns.put("FixedAsset", fields);
    private Date actualEndOfLife;
    @Column(name="PRODUCTION_CAPACITY")
    private BigDecimal productionCapacity;
+   @Column(name="UOM_ID")
+   private String uomId;
    @Column(name="CALENDAR_ID")
    private String calendarId;
    @Column(name="SERIAL_NUMBER")
@@ -154,6 +170,14 @@ fieldMapColumns.put("FixedAsset", fields);
    private String locatedAtFacilityId;
    @Column(name="LOCATED_AT_LOCATION_SEQ_ID")
    private String locatedAtLocationSeqId;
+   @Column(name="SALVAGE_VALUE")
+   private BigDecimal salvageValue;
+   @Column(name="DEPRECIATION")
+   private BigDecimal depreciation;
+   @Column(name="PURCHASE_COST")
+   private BigDecimal purchaseCost;
+   @Column(name="PURCHASE_COST_UOM_ID")
+   private String purchaseCostUomId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -210,6 +234,14 @@ fieldMapColumns.put("FixedAsset", fields);
    private RoleType roleType = null;
    private transient PartyRole partyRole = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ACQUIRE_ORDER_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private OrderHeader acquireOrderHeader = null;
+   private transient OrderItem acquireOrderItem = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -234,6 +266,14 @@ fieldMapColumns.put("FixedAsset", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID")
    
+   private List<AccommodationMap> accommodationMaps = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FIXED_ASSET_ID")
+   
+   private List<AccommodationSpot> accommodationSpots = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FIXED_ASSET_ID")
+   
    private List<AcctgTrans> acctgTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FIXED_ASSET_ID")
@@ -251,6 +291,10 @@ fieldMapColumns.put("FixedAsset", fields);
    @JoinColumn(name="FIXED_ASSET_ID")
    
    private List<FixedAssetDepMethod> fixedAssetDepMethods = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FIXED_ASSET_ID")
+   
+   private List<FixedAssetGeoPoint> fixedAssetGeoPoints = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fixedAsset", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FIXED_ASSET_ID")
    
@@ -303,7 +347,7 @@ fieldMapColumns.put("FixedAsset", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("fixedAssetId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("fixedAssetTypeId");this.allFieldsNames.add("parentFixedAssetId");this.allFieldsNames.add("instanceOfProductId");this.allFieldsNames.add("classEnumId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("fixedAssetName");this.allFieldsNames.add("dateAcquired");this.allFieldsNames.add("dateLastServiced");this.allFieldsNames.add("dateNextService");this.allFieldsNames.add("expectedEndOfLife");this.allFieldsNames.add("actualEndOfLife");this.allFieldsNames.add("productionCapacity");this.allFieldsNames.add("calendarId");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("locatedAtFacilityId");this.allFieldsNames.add("locatedAtLocationSeqId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("fixedAssetTypeId");this.allFieldsNames.add("parentFixedAssetId");this.allFieldsNames.add("instanceOfProductId");this.allFieldsNames.add("classEnumId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("fixedAssetName");this.allFieldsNames.add("acquireOrderId");this.allFieldsNames.add("acquireOrderItemSeqId");this.allFieldsNames.add("dateAcquired");this.allFieldsNames.add("dateLastServiced");this.allFieldsNames.add("dateNextService");this.allFieldsNames.add("expectedEndOfLife");this.allFieldsNames.add("actualEndOfLife");this.allFieldsNames.add("productionCapacity");this.allFieldsNames.add("uomId");this.allFieldsNames.add("calendarId");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("locatedAtFacilityId");this.allFieldsNames.add("locatedAtLocationSeqId");this.allFieldsNames.add("salvageValue");this.allFieldsNames.add("depreciation");this.allFieldsNames.add("purchaseCost");this.allFieldsNames.add("purchaseCostUomId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -369,17 +413,24 @@ fieldMapColumns.put("FixedAsset", fields);
     }
     /**
      * Auto generated value setter.
-     * @param uomId the uomId to set
-     */
-    public void setUomId(String uomId) {
-        this.uomId = uomId;
-    }
-    /**
-     * Auto generated value setter.
      * @param fixedAssetName the fixedAssetName to set
      */
     public void setFixedAssetName(String fixedAssetName) {
         this.fixedAssetName = fixedAssetName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acquireOrderId the acquireOrderId to set
+     */
+    public void setAcquireOrderId(String acquireOrderId) {
+        this.acquireOrderId = acquireOrderId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acquireOrderItemSeqId the acquireOrderItemSeqId to set
+     */
+    public void setAcquireOrderItemSeqId(String acquireOrderItemSeqId) {
+        this.acquireOrderItemSeqId = acquireOrderItemSeqId;
     }
     /**
      * Auto generated value setter.
@@ -425,6 +476,13 @@ fieldMapColumns.put("FixedAsset", fields);
     }
     /**
      * Auto generated value setter.
+     * @param uomId the uomId to set
+     */
+    public void setUomId(String uomId) {
+        this.uomId = uomId;
+    }
+    /**
+     * Auto generated value setter.
      * @param calendarId the calendarId to set
      */
     public void setCalendarId(String calendarId) {
@@ -450,6 +508,34 @@ fieldMapColumns.put("FixedAsset", fields);
      */
     public void setLocatedAtLocationSeqId(String locatedAtLocationSeqId) {
         this.locatedAtLocationSeqId = locatedAtLocationSeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salvageValue the salvageValue to set
+     */
+    public void setSalvageValue(BigDecimal salvageValue) {
+        this.salvageValue = salvageValue;
+    }
+    /**
+     * Auto generated value setter.
+     * @param depreciation the depreciation to set
+     */
+    public void setDepreciation(BigDecimal depreciation) {
+        this.depreciation = depreciation;
+    }
+    /**
+     * Auto generated value setter.
+     * @param purchaseCost the purchaseCost to set
+     */
+    public void setPurchaseCost(BigDecimal purchaseCost) {
+        this.purchaseCost = purchaseCost;
+    }
+    /**
+     * Auto generated value setter.
+     * @param purchaseCostUomId the purchaseCostUomId to set
+     */
+    public void setPurchaseCostUomId(String purchaseCostUomId) {
+        this.purchaseCostUomId = purchaseCostUomId;
     }
     /**
      * Auto generated value setter.
@@ -533,15 +619,22 @@ fieldMapColumns.put("FixedAsset", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getUomId() {
-        return this.uomId;
+    public String getFixedAssetName() {
+        return this.fixedAssetName;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getFixedAssetName() {
-        return this.fixedAssetName;
+    public String getAcquireOrderId() {
+        return this.acquireOrderId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcquireOrderItemSeqId() {
+        return this.acquireOrderItemSeqId;
     }
     /**
      * Auto generated value accessor.
@@ -589,6 +682,13 @@ fieldMapColumns.put("FixedAsset", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getUomId() {
+        return this.uomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getCalendarId() {
         return this.calendarId;
     }
@@ -612,6 +712,34 @@ fieldMapColumns.put("FixedAsset", fields);
      */
     public String getLocatedAtLocationSeqId() {
         return this.locatedAtLocationSeqId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getSalvageValue() {
+        return this.salvageValue;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getDepreciation() {
+        return this.depreciation;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPurchaseCost() {
+        return this.purchaseCost;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPurchaseCostUomId() {
+        return this.purchaseCostUomId;
     }
     /**
      * Auto generated value accessor.
@@ -731,6 +859,28 @@ fieldMapColumns.put("FixedAsset", fields);
         return this.partyRole;
     }
     /**
+     * Auto generated method that gets the related <code>OrderHeader</code> by the relation named <code>AcquireOrderHeader</code>.
+     * @return the <code>OrderHeader</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public OrderHeader getAcquireOrderHeader() throws RepositoryException {
+        if (this.acquireOrderHeader == null) {
+            this.acquireOrderHeader = getRelatedOne(OrderHeader.class, "AcquireOrderHeader");
+        }
+        return this.acquireOrderHeader;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderItem</code> by the relation named <code>AcquireOrderItem</code>.
+     * @return the <code>OrderItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public OrderItem getAcquireOrderItem() throws RepositoryException {
+        if (this.acquireOrderItem == null) {
+            this.acquireOrderItem = getRelatedOne(OrderItem.class, "AcquireOrderItem");
+        }
+        return this.acquireOrderItem;
+    }
+    /**
      * Auto generated method that gets the related <code>Uom</code> by the relation named <code>Uom</code>.
      * @return the <code>Uom</code>
      * @throws RepositoryException if an error occurs
@@ -773,6 +923,28 @@ fieldMapColumns.put("FixedAsset", fields);
             this.locatedAtFacilityLocation = getRelatedOne(FacilityLocation.class, "LocatedAtFacilityLocation");
         }
         return this.locatedAtFacilityLocation;
+    }
+    /**
+     * Auto generated method that gets the related <code>AccommodationMap</code> by the relation named <code>AccommodationMap</code>.
+     * @return the list of <code>AccommodationMap</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AccommodationMap> getAccommodationMaps() throws RepositoryException {
+        if (this.accommodationMaps == null) {
+            this.accommodationMaps = getRelated(AccommodationMap.class, "AccommodationMap");
+        }
+        return this.accommodationMaps;
+    }
+    /**
+     * Auto generated method that gets the related <code>AccommodationSpot</code> by the relation named <code>AccommodationSpot</code>.
+     * @return the list of <code>AccommodationSpot</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AccommodationSpot> getAccommodationSpots() throws RepositoryException {
+        if (this.accommodationSpots == null) {
+            this.accommodationSpots = getRelated(AccommodationSpot.class, "AccommodationSpot");
+        }
+        return this.accommodationSpots;
     }
     /**
      * Auto generated method that gets the related <code>AcctgTrans</code> by the relation named <code>AcctgTrans</code>.
@@ -828,6 +1000,17 @@ fieldMapColumns.put("FixedAsset", fields);
             this.fixedAssetDepMethods = getRelated(FixedAssetDepMethod.class, "FixedAssetDepMethod");
         }
         return this.fixedAssetDepMethods;
+    }
+    /**
+     * Auto generated method that gets the related <code>FixedAssetGeoPoint</code> by the relation named <code>FixedAssetGeoPoint</code>.
+     * @return the list of <code>FixedAssetGeoPoint</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FixedAssetGeoPoint> getFixedAssetGeoPoints() throws RepositoryException {
+        if (this.fixedAssetGeoPoints == null) {
+            this.fixedAssetGeoPoints = getRelated(FixedAssetGeoPoint.class, "FixedAssetGeoPoint");
+        }
+        return this.fixedAssetGeoPoints;
     }
     /**
      * Auto generated method that gets the related <code>FixedAssetIdent</code> by the relation named <code>FixedAssetIdent</code>.
@@ -998,6 +1181,20 @@ fieldMapColumns.put("FixedAsset", fields);
     }
     /**
      * Auto generated value setter.
+     * @param acquireOrderHeader the acquireOrderHeader to set
+    */
+    public void setAcquireOrderHeader(OrderHeader acquireOrderHeader) {
+        this.acquireOrderHeader = acquireOrderHeader;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acquireOrderItem the acquireOrderItem to set
+    */
+    public void setAcquireOrderItem(OrderItem acquireOrderItem) {
+        this.acquireOrderItem = acquireOrderItem;
+    }
+    /**
+     * Auto generated value setter.
      * @param uom the uom to set
     */
     public void setUom(Uom uom) {
@@ -1023,6 +1220,20 @@ fieldMapColumns.put("FixedAsset", fields);
     */
     public void setLocatedAtFacilityLocation(FacilityLocation locatedAtFacilityLocation) {
         this.locatedAtFacilityLocation = locatedAtFacilityLocation;
+    }
+    /**
+     * Auto generated value setter.
+     * @param accommodationMaps the accommodationMaps to set
+    */
+    public void setAccommodationMaps(List<AccommodationMap> accommodationMaps) {
+        this.accommodationMaps = accommodationMaps;
+    }
+    /**
+     * Auto generated value setter.
+     * @param accommodationSpots the accommodationSpots to set
+    */
+    public void setAccommodationSpots(List<AccommodationSpot> accommodationSpots) {
+        this.accommodationSpots = accommodationSpots;
     }
     /**
      * Auto generated value setter.
@@ -1058,6 +1269,13 @@ fieldMapColumns.put("FixedAsset", fields);
     */
     public void setFixedAssetDepMethods(List<FixedAssetDepMethod> fixedAssetDepMethods) {
         this.fixedAssetDepMethods = fixedAssetDepMethods;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fixedAssetGeoPoints the fixedAssetGeoPoints to set
+    */
+    public void setFixedAssetGeoPoints(List<FixedAssetGeoPoint> fixedAssetGeoPoints) {
+        this.fixedAssetGeoPoints = fixedAssetGeoPoints;
     }
     /**
      * Auto generated value setter.
@@ -1183,6 +1401,33 @@ fieldMapColumns.put("FixedAsset", fields);
             return;
         }
         this.fixedAssetDepMethods.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addFixedAssetGeoPoint(FixedAssetGeoPoint fixedAssetGeoPoint) {
+        if (this.fixedAssetGeoPoints == null) {
+            this.fixedAssetGeoPoints = new ArrayList<FixedAssetGeoPoint>();
+        }
+        this.fixedAssetGeoPoints.add(fixedAssetGeoPoint);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeFixedAssetGeoPoint(FixedAssetGeoPoint fixedAssetGeoPoint) {
+        if (this.fixedAssetGeoPoints == null) {
+            return;
+        }
+        this.fixedAssetGeoPoints.remove(fixedAssetGeoPoint);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearFixedAssetGeoPoint() {
+        if (this.fixedAssetGeoPoints == null) {
+            return;
+        }
+        this.fixedAssetGeoPoints.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -1412,18 +1657,24 @@ fieldMapColumns.put("FixedAsset", fields);
         setClassEnumId((String) mapValue.get("classEnumId"));
         setPartyId((String) mapValue.get("partyId"));
         setRoleTypeId((String) mapValue.get("roleTypeId"));
-        setUomId((String) mapValue.get("uomId"));
         setFixedAssetName((String) mapValue.get("fixedAssetName"));
+        setAcquireOrderId((String) mapValue.get("acquireOrderId"));
+        setAcquireOrderItemSeqId((String) mapValue.get("acquireOrderItemSeqId"));
         setDateAcquired((Timestamp) mapValue.get("dateAcquired"));
         setDateLastServiced((Timestamp) mapValue.get("dateLastServiced"));
         setDateNextService((Timestamp) mapValue.get("dateNextService"));
         setExpectedEndOfLife((Date) mapValue.get("expectedEndOfLife"));
         setActualEndOfLife((Date) mapValue.get("actualEndOfLife"));
         setProductionCapacity(convertToBigDecimal(mapValue.get("productionCapacity")));
+        setUomId((String) mapValue.get("uomId"));
         setCalendarId((String) mapValue.get("calendarId"));
         setSerialNumber((String) mapValue.get("serialNumber"));
         setLocatedAtFacilityId((String) mapValue.get("locatedAtFacilityId"));
         setLocatedAtLocationSeqId((String) mapValue.get("locatedAtLocationSeqId"));
+        setSalvageValue(convertToBigDecimal(mapValue.get("salvageValue")));
+        setDepreciation(convertToBigDecimal(mapValue.get("depreciation")));
+        setPurchaseCost(convertToBigDecimal(mapValue.get("purchaseCost")));
+        setPurchaseCostUomId((String) mapValue.get("purchaseCostUomId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -1442,18 +1693,24 @@ fieldMapColumns.put("FixedAsset", fields);
         mapValue.put("classEnumId", getClassEnumId());
         mapValue.put("partyId", getPartyId());
         mapValue.put("roleTypeId", getRoleTypeId());
-        mapValue.put("uomId", getUomId());
         mapValue.put("fixedAssetName", getFixedAssetName());
+        mapValue.put("acquireOrderId", getAcquireOrderId());
+        mapValue.put("acquireOrderItemSeqId", getAcquireOrderItemSeqId());
         mapValue.put("dateAcquired", getDateAcquired());
         mapValue.put("dateLastServiced", getDateLastServiced());
         mapValue.put("dateNextService", getDateNextService());
         mapValue.put("expectedEndOfLife", getExpectedEndOfLife());
         mapValue.put("actualEndOfLife", getActualEndOfLife());
         mapValue.put("productionCapacity", getProductionCapacity());
+        mapValue.put("uomId", getUomId());
         mapValue.put("calendarId", getCalendarId());
         mapValue.put("serialNumber", getSerialNumber());
         mapValue.put("locatedAtFacilityId", getLocatedAtFacilityId());
         mapValue.put("locatedAtLocationSeqId", getLocatedAtLocationSeqId());
+        mapValue.put("salvageValue", getSalvageValue());
+        mapValue.put("depreciation", getDepreciation());
+        mapValue.put("purchaseCost", getPurchaseCost());
+        mapValue.put("purchaseCostUomId", getPurchaseCostUomId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

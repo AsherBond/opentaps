@@ -48,7 +48,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyRelationshipToFrom.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyRelationshipToFroms", query="SELECT PR1.PARTY_ID_FROM AS \"partyIdFrom\",PR1.PARTY_ID_TO AS \"partyIdTo\",PR1.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR1.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PR1.FROM_DATE AS \"fromDate\",PR1.THRU_DATE AS \"thruDate\",PR1.STATUS_ID AS \"statusId\",PR1.RELATIONSHIP_NAME AS \"relationshipName\",PR1.SECURITY_GROUP_ID AS \"securityGroupId\",PR1.PRIORITY_TYPE_ID AS \"priorityTypeId\",PR1.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PR1.COMMENTS AS \"comments\",PR2.PARTY_ID_FROM AS \"partyIdFrom\",PR2.PARTY_ID_TO AS \"partyIdTo\",PR2.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR2.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PR2.FROM_DATE AS \"fromDate\",PR2.THRU_DATE AS \"thruDate\",PR2.STATUS_ID AS \"statusId\",PR2.RELATIONSHIP_NAME AS \"relationshipName\",PR2.SECURITY_GROUP_ID AS \"securityGroupId\",PR2.PRIORITY_TYPE_ID AS \"priorityTypeId\",PR2.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PR2.COMMENTS AS \"comments\" FROM PARTY_RELATIONSHIP PR1 INNER JOIN PARTY_RELATIONSHIP PR2 ON PR1.PARTY_ID_TO = PR2.PARTY_ID_FROM", resultSetMapping="PartyRelationshipToFromMapping")
+@NamedNativeQuery(name="selectPartyRelationshipToFroms", query="SELECT PR1.PARTY_ID_FROM AS \"partyIdFrom\",PR1.PARTY_ID_TO AS \"partyIdTo\",PR1.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR1.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PR1.FROM_DATE AS \"fromDate\",PR1.THRU_DATE AS \"thruDate\",PR1.STATUS_ID AS \"statusId\",PR1.RELATIONSHIP_NAME AS \"relationshipName\",PR1.SECURITY_GROUP_ID AS \"securityGroupId\",PR1.PRIORITY_TYPE_ID AS \"priorityTypeId\",PR1.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PR1.PERMISSIONS_ENUM_ID AS \"permissionsEnumId\",PR1.POSITION_TITLE AS \"positionTitle\",PR1.COMMENTS AS \"comments\",PR2.PARTY_ID_FROM AS \"partyIdFrom\",PR2.PARTY_ID_TO AS \"partyIdTo\",PR2.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",PR2.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",PR2.FROM_DATE AS \"fromDate\",PR2.THRU_DATE AS \"thruDate\",PR2.STATUS_ID AS \"statusId\",PR2.RELATIONSHIP_NAME AS \"relationshipName\",PR2.SECURITY_GROUP_ID AS \"securityGroupId\",PR2.PRIORITY_TYPE_ID AS \"priorityTypeId\",PR2.PARTY_RELATIONSHIP_TYPE_ID AS \"partyRelationshipTypeId\",PR2.PERMISSIONS_ENUM_ID AS \"permissionsEnumId\",PR2.POSITION_TITLE AS \"positionTitle\",PR2.COMMENTS AS \"comments\" FROM PARTY_RELATIONSHIP PR1 INNER JOIN PARTY_RELATIONSHIP PR2 ON PR1.PARTY_ID_TO = PR2.PARTY_ID_FROM", resultSetMapping="PartyRelationshipToFromMapping")
 @SqlResultSetMapping(name="PartyRelationshipToFromMapping", entities={
 @EntityResult(entityClass=PartyRelationshipToFrom.class, fields = {
 @FieldResult(name="onePartyIdFrom", column="onePartyIdFrom")
@@ -62,6 +62,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="oneSecurityGroupId", column="oneSecurityGroupId")
 ,@FieldResult(name="onePriorityTypeId", column="onePriorityTypeId")
 ,@FieldResult(name="onePartyRelationshipTypeId", column="onePartyRelationshipTypeId")
+,@FieldResult(name="onePermissionsEnumId", column="onePermissionsEnumId")
+,@FieldResult(name="onePositionTitle", column="onePositionTitle")
 ,@FieldResult(name="oneComments", column="oneComments")
 ,@FieldResult(name="twoPartyIdFrom", column="twoPartyIdFrom")
 ,@FieldResult(name="twoPartyIdTo", column="twoPartyIdTo")
@@ -74,6 +76,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="twoSecurityGroupId", column="twoSecurityGroupId")
 ,@FieldResult(name="twoPriorityTypeId", column="twoPriorityTypeId")
 ,@FieldResult(name="twoPartyRelationshipTypeId", column="twoPartyRelationshipTypeId")
+,@FieldResult(name="twoPermissionsEnumId", column="twoPermissionsEnumId")
+,@FieldResult(name="twoPositionTitle", column="twoPositionTitle")
 ,@FieldResult(name="twoComments", column="twoComments")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
@@ -92,6 +96,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("oneSecurityGroupId", "PR1.SECURITY_GROUP_ID");
         fields.put("onePriorityTypeId", "PR1.PRIORITY_TYPE_ID");
         fields.put("onePartyRelationshipTypeId", "PR1.PARTY_RELATIONSHIP_TYPE_ID");
+        fields.put("onePermissionsEnumId", "PR1.PERMISSIONS_ENUM_ID");
+        fields.put("onePositionTitle", "PR1.POSITION_TITLE");
         fields.put("oneComments", "PR1.COMMENTS");
         fields.put("twoPartyIdFrom", "PR2.PARTY_ID_FROM");
         fields.put("twoPartyIdTo", "PR2.PARTY_ID_TO");
@@ -104,6 +110,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("twoSecurityGroupId", "PR2.SECURITY_GROUP_ID");
         fields.put("twoPriorityTypeId", "PR2.PRIORITY_TYPE_ID");
         fields.put("twoPartyRelationshipTypeId", "PR2.PARTY_RELATIONSHIP_TYPE_ID");
+        fields.put("twoPermissionsEnumId", "PR2.PERMISSIONS_ENUM_ID");
+        fields.put("twoPositionTitle", "PR2.POSITION_TITLE");
         fields.put("twoComments", "PR2.COMMENTS");
 fieldMapColumns.put("PartyRelationshipToFrom", fields);
 }
@@ -119,6 +127,8 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
     oneSecurityGroupId("oneSecurityGroupId"),
     onePriorityTypeId("onePriorityTypeId"),
     onePartyRelationshipTypeId("onePartyRelationshipTypeId"),
+    onePermissionsEnumId("onePermissionsEnumId"),
+    onePositionTitle("onePositionTitle"),
     oneComments("oneComments"),
     twoPartyIdFrom("twoPartyIdFrom"),
     twoPartyIdTo("twoPartyIdTo"),
@@ -131,6 +141,8 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
     twoSecurityGroupId("twoSecurityGroupId"),
     twoPriorityTypeId("twoPriorityTypeId"),
     twoPartyRelationshipTypeId("twoPartyRelationshipTypeId"),
+    twoPermissionsEnumId("twoPermissionsEnumId"),
+    twoPositionTitle("twoPositionTitle"),
     twoComments("twoComments");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
@@ -165,6 +177,10 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
     
    private String onePartyRelationshipTypeId;
     
+   private String onePermissionsEnumId;
+    
+   private String onePositionTitle;
+    
    private String oneComments;
     
    private String twoPartyIdFrom;
@@ -189,6 +205,10 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
     
    private String twoPartyRelationshipTypeId;
     
+   private String twoPermissionsEnumId;
+    
+   private String twoPositionTitle;
+    
    private String twoComments;
 
   /**
@@ -202,7 +222,7 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("onePartyIdFrom");this.primaryKeyNames.add("onePartyIdTo");this.primaryKeyNames.add("oneRoleTypeIdFrom");this.primaryKeyNames.add("oneRoleTypeIdTo");this.primaryKeyNames.add("oneFromDate");this.primaryKeyNames.add("twoPartyIdFrom");this.primaryKeyNames.add("twoPartyIdTo");this.primaryKeyNames.add("twoRoleTypeIdFrom");this.primaryKeyNames.add("twoRoleTypeIdTo");this.primaryKeyNames.add("twoFromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("onePartyIdFrom");this.allFieldsNames.add("onePartyIdTo");this.allFieldsNames.add("oneRoleTypeIdFrom");this.allFieldsNames.add("oneRoleTypeIdTo");this.allFieldsNames.add("oneFromDate");this.allFieldsNames.add("oneThruDate");this.allFieldsNames.add("oneStatusId");this.allFieldsNames.add("oneRelationshipName");this.allFieldsNames.add("oneSecurityGroupId");this.allFieldsNames.add("onePriorityTypeId");this.allFieldsNames.add("onePartyRelationshipTypeId");this.allFieldsNames.add("oneComments");this.allFieldsNames.add("twoPartyIdFrom");this.allFieldsNames.add("twoPartyIdTo");this.allFieldsNames.add("twoRoleTypeIdFrom");this.allFieldsNames.add("twoRoleTypeIdTo");this.allFieldsNames.add("twoFromDate");this.allFieldsNames.add("twoThruDate");this.allFieldsNames.add("twoStatusId");this.allFieldsNames.add("twoRelationshipName");this.allFieldsNames.add("twoSecurityGroupId");this.allFieldsNames.add("twoPriorityTypeId");this.allFieldsNames.add("twoPartyRelationshipTypeId");this.allFieldsNames.add("twoComments");
+      this.allFieldsNames.add("onePartyIdFrom");this.allFieldsNames.add("onePartyIdTo");this.allFieldsNames.add("oneRoleTypeIdFrom");this.allFieldsNames.add("oneRoleTypeIdTo");this.allFieldsNames.add("oneFromDate");this.allFieldsNames.add("oneThruDate");this.allFieldsNames.add("oneStatusId");this.allFieldsNames.add("oneRelationshipName");this.allFieldsNames.add("oneSecurityGroupId");this.allFieldsNames.add("onePriorityTypeId");this.allFieldsNames.add("onePartyRelationshipTypeId");this.allFieldsNames.add("onePermissionsEnumId");this.allFieldsNames.add("onePositionTitle");this.allFieldsNames.add("oneComments");this.allFieldsNames.add("twoPartyIdFrom");this.allFieldsNames.add("twoPartyIdTo");this.allFieldsNames.add("twoRoleTypeIdFrom");this.allFieldsNames.add("twoRoleTypeIdTo");this.allFieldsNames.add("twoFromDate");this.allFieldsNames.add("twoThruDate");this.allFieldsNames.add("twoStatusId");this.allFieldsNames.add("twoRelationshipName");this.allFieldsNames.add("twoSecurityGroupId");this.allFieldsNames.add("twoPriorityTypeId");this.allFieldsNames.add("twoPartyRelationshipTypeId");this.allFieldsNames.add("twoPermissionsEnumId");this.allFieldsNames.add("twoPositionTitle");this.allFieldsNames.add("twoComments");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -299,6 +319,20 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
     }
     /**
      * Auto generated value setter.
+     * @param onePermissionsEnumId the onePermissionsEnumId to set
+     */
+    private void setOnePermissionsEnumId(String onePermissionsEnumId) {
+        this.onePermissionsEnumId = onePermissionsEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param onePositionTitle the onePositionTitle to set
+     */
+    private void setOnePositionTitle(String onePositionTitle) {
+        this.onePositionTitle = onePositionTitle;
+    }
+    /**
+     * Auto generated value setter.
      * @param oneComments the oneComments to set
      */
     private void setOneComments(String oneComments) {
@@ -380,6 +414,20 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
      */
     private void setTwoPartyRelationshipTypeId(String twoPartyRelationshipTypeId) {
         this.twoPartyRelationshipTypeId = twoPartyRelationshipTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param twoPermissionsEnumId the twoPermissionsEnumId to set
+     */
+    private void setTwoPermissionsEnumId(String twoPermissionsEnumId) {
+        this.twoPermissionsEnumId = twoPermissionsEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param twoPositionTitle the twoPositionTitle to set
+     */
+    private void setTwoPositionTitle(String twoPositionTitle) {
+        this.twoPositionTitle = twoPositionTitle;
     }
     /**
      * Auto generated value setter.
@@ -470,6 +518,20 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getOnePermissionsEnumId() {
+        return this.onePermissionsEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOnePositionTitle() {
+        return this.onePositionTitle;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getOneComments() {
         return this.oneComments;
     }
@@ -554,6 +616,20 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getTwoPermissionsEnumId() {
+        return this.twoPermissionsEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getTwoPositionTitle() {
+        return this.twoPositionTitle;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getTwoComments() {
         return this.twoComments;
     }
@@ -576,6 +652,8 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
         setOneSecurityGroupId((String) mapValue.get("oneSecurityGroupId"));
         setOnePriorityTypeId((String) mapValue.get("onePriorityTypeId"));
         setOnePartyRelationshipTypeId((String) mapValue.get("onePartyRelationshipTypeId"));
+        setOnePermissionsEnumId((String) mapValue.get("onePermissionsEnumId"));
+        setOnePositionTitle((String) mapValue.get("onePositionTitle"));
         setOneComments((String) mapValue.get("oneComments"));
         setTwoPartyIdFrom((String) mapValue.get("twoPartyIdFrom"));
         setTwoPartyIdTo((String) mapValue.get("twoPartyIdTo"));
@@ -588,6 +666,8 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
         setTwoSecurityGroupId((String) mapValue.get("twoSecurityGroupId"));
         setTwoPriorityTypeId((String) mapValue.get("twoPriorityTypeId"));
         setTwoPartyRelationshipTypeId((String) mapValue.get("twoPartyRelationshipTypeId"));
+        setTwoPermissionsEnumId((String) mapValue.get("twoPermissionsEnumId"));
+        setTwoPositionTitle((String) mapValue.get("twoPositionTitle"));
         setTwoComments((String) mapValue.get("twoComments"));
         postInit();
     }
@@ -607,6 +687,8 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
         mapValue.put("oneSecurityGroupId", getOneSecurityGroupId());
         mapValue.put("onePriorityTypeId", getOnePriorityTypeId());
         mapValue.put("onePartyRelationshipTypeId", getOnePartyRelationshipTypeId());
+        mapValue.put("onePermissionsEnumId", getOnePermissionsEnumId());
+        mapValue.put("onePositionTitle", getOnePositionTitle());
         mapValue.put("oneComments", getOneComments());
         mapValue.put("twoPartyIdFrom", getTwoPartyIdFrom());
         mapValue.put("twoPartyIdTo", getTwoPartyIdTo());
@@ -619,6 +701,8 @@ fieldMapColumns.put("PartyRelationshipToFrom", fields);
         mapValue.put("twoSecurityGroupId", getTwoSecurityGroupId());
         mapValue.put("twoPriorityTypeId", getTwoPriorityTypeId());
         mapValue.put("twoPartyRelationshipTypeId", getTwoPartyRelationshipTypeId());
+        mapValue.put("twoPermissionsEnumId", getTwoPermissionsEnumId());
+        mapValue.put("twoPositionTitle", getTwoPositionTitle());
         mapValue.put("twoComments", getTwoComments());
         return mapValue;
     }

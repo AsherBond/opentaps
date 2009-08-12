@@ -67,6 +67,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("gatewayCode", "GATEWAY_CODE");
         fields.put("gatewayFlag", "GATEWAY_FLAG");
         fields.put("gatewayAvsResult", "GATEWAY_AVS_RESULT");
+        fields.put("gatewayCvResult", "GATEWAY_CV_RESULT");
         fields.put("gatewayScoreResult", "GATEWAY_SCORE_RESULT");
         fields.put("gatewayMessage", "GATEWAY_MESSAGE");
         fields.put("transactionDate", "TRANSACTION_DATE");
@@ -95,6 +96,7 @@ fieldMapColumns.put("PaymentGatewayResponse", fields);
     gatewayCode("gatewayCode"),
     gatewayFlag("gatewayFlag"),
     gatewayAvsResult("gatewayAvsResult"),
+    gatewayCvResult("gatewayCvResult"),
     gatewayScoreResult("gatewayScoreResult"),
     gatewayMessage("gatewayMessage"),
     transactionDate("transactionDate"),
@@ -147,6 +149,8 @@ fieldMapColumns.put("PaymentGatewayResponse", fields);
    private String gatewayFlag;
    @Column(name="GATEWAY_AVS_RESULT")
    private String gatewayAvsResult;
+   @Column(name="GATEWAY_CV_RESULT")
+   private String gatewayCvResult;
    @Column(name="GATEWAY_SCORE_RESULT")
    private String gatewayScoreResult;
    @Column(name="GATEWAY_MESSAGE")
@@ -231,7 +235,7 @@ fieldMapColumns.put("PaymentGatewayResponse", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("paymentGatewayResponseId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("paymentGatewayResponseId");this.allFieldsNames.add("paymentServiceTypeEnumId");this.allFieldsNames.add("orderPaymentPreferenceId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("transCodeEnumId");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("referenceNum");this.allFieldsNames.add("altReference");this.allFieldsNames.add("subReference");this.allFieldsNames.add("gatewayCode");this.allFieldsNames.add("gatewayFlag");this.allFieldsNames.add("gatewayAvsResult");this.allFieldsNames.add("gatewayScoreResult");this.allFieldsNames.add("gatewayMessage");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("resultDeclined");this.allFieldsNames.add("resultNsf");this.allFieldsNames.add("resultBadExpire");this.allFieldsNames.add("resultBadCardNumber");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("paymentGatewayResponseId");this.allFieldsNames.add("paymentServiceTypeEnumId");this.allFieldsNames.add("orderPaymentPreferenceId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("transCodeEnumId");this.allFieldsNames.add("amount");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("referenceNum");this.allFieldsNames.add("altReference");this.allFieldsNames.add("subReference");this.allFieldsNames.add("gatewayCode");this.allFieldsNames.add("gatewayFlag");this.allFieldsNames.add("gatewayAvsResult");this.allFieldsNames.add("gatewayCvResult");this.allFieldsNames.add("gatewayScoreResult");this.allFieldsNames.add("gatewayMessage");this.allFieldsNames.add("transactionDate");this.allFieldsNames.add("resultDeclined");this.allFieldsNames.add("resultNsf");this.allFieldsNames.add("resultBadExpire");this.allFieldsNames.add("resultBadCardNumber");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -343,6 +347,13 @@ fieldMapColumns.put("PaymentGatewayResponse", fields);
      */
     public void setGatewayAvsResult(String gatewayAvsResult) {
         this.gatewayAvsResult = gatewayAvsResult;
+    }
+    /**
+     * Auto generated value setter.
+     * @param gatewayCvResult the gatewayCvResult to set
+     */
+    public void setGatewayCvResult(String gatewayCvResult) {
+        this.gatewayCvResult = gatewayCvResult;
     }
     /**
      * Auto generated value setter.
@@ -519,6 +530,13 @@ fieldMapColumns.put("PaymentGatewayResponse", fields);
      */
     public String getGatewayAvsResult() {
         return this.gatewayAvsResult;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getGatewayCvResult() {
+        return this.gatewayCvResult;
     }
     /**
      * Auto generated value accessor.
@@ -763,6 +781,7 @@ fieldMapColumns.put("PaymentGatewayResponse", fields);
         setGatewayCode((String) mapValue.get("gatewayCode"));
         setGatewayFlag((String) mapValue.get("gatewayFlag"));
         setGatewayAvsResult((String) mapValue.get("gatewayAvsResult"));
+        setGatewayCvResult((String) mapValue.get("gatewayCvResult"));
         setGatewayScoreResult((String) mapValue.get("gatewayScoreResult"));
         setGatewayMessage((String) mapValue.get("gatewayMessage"));
         setTransactionDate((Timestamp) mapValue.get("transactionDate"));
@@ -795,6 +814,7 @@ fieldMapColumns.put("PaymentGatewayResponse", fields);
         mapValue.put("gatewayCode", getGatewayCode());
         mapValue.put("gatewayFlag", getGatewayFlag());
         mapValue.put("gatewayAvsResult", getGatewayAvsResult());
+        mapValue.put("gatewayCvResult", getGatewayCvResult());
         mapValue.put("gatewayScoreResult", getGatewayScoreResult());
         mapValue.put("gatewayMessage", getGatewayMessage());
         mapValue.put("transactionDate", getTransactionDate());

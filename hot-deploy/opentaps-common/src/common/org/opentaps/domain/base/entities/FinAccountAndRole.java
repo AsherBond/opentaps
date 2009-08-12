@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity FinAccountAndRole.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectFinAccountAndRoles", query="SELECT FR.PARTY_ID AS \"partyId\",FR.ROLE_TYPE_ID AS \"roleTypeId\",FR.FROM_DATE AS \"fromDate\",FR.THRU_DATE AS \"thruDate\",FA.FIN_ACCOUNT_ID AS \"finAccountId\",FA.FIN_ACCOUNT_TYPE_ID AS \"finAccountTypeId\",FA.FIN_ACCOUNT_NAME AS \"finAccountName\",FA.FIN_ACCOUNT_CODE AS \"finAccountCode\",FA.FIN_ACCOUNT_PIN AS \"finAccountPin\",FA.CURRENCY_UOM_ID AS \"currencyUomId\",FA.ORGANIZATION_PARTY_ID AS \"organizationPartyId\",FA.OWNER_PARTY_ID AS \"ownerPartyId\",FA.POST_TO_GL_ACCOUNT_ID AS \"postToGlAccountId\",FA.FROM_DATE AS \"fromDate\",FA.THRU_DATE AS \"thruDate\",FA.IS_FROZEN AS \"isFrozen\",FA.IS_REFUNDABLE AS \"isRefundable\",FA.REPLENISH_PAYMENT_ID AS \"replenishPaymentId\",FA.REPLENISH_LEVEL AS \"replenishLevel\",FA.ACTUAL_BALANCE AS \"actualBalance\",FA.AVAILABLE_BALANCE AS \"availableBalance\" FROM FIN_ACCOUNT FA INNER JOIN FIN_ACCOUNT_ROLE FR ON FA.FIN_ACCOUNT_ID = FR.FIN_ACCOUNT_ID", resultSetMapping="FinAccountAndRoleMapping")
+@NamedNativeQuery(name="selectFinAccountAndRoles", query="SELECT FR.PARTY_ID AS \"partyId\",FR.ROLE_TYPE_ID AS \"roleTypeId\",FR.FROM_DATE AS \"fromDate\",FR.THRU_DATE AS \"thruDate\",FA.FIN_ACCOUNT_ID AS \"finAccountId\",FA.FIN_ACCOUNT_TYPE_ID AS \"finAccountTypeId\",FA.STATUS_ID AS \"statusId\",FA.FIN_ACCOUNT_NAME AS \"finAccountName\",FA.FIN_ACCOUNT_CODE AS \"finAccountCode\",FA.FIN_ACCOUNT_PIN AS \"finAccountPin\",FA.CURRENCY_UOM_ID AS \"currencyUomId\",FA.ORGANIZATION_PARTY_ID AS \"organizationPartyId\",FA.OWNER_PARTY_ID AS \"ownerPartyId\",FA.POST_TO_GL_ACCOUNT_ID AS \"postToGlAccountId\",FA.FROM_DATE AS \"fromDate\",FA.THRU_DATE AS \"thruDate\",FA.IS_REFUNDABLE AS \"isRefundable\",FA.REPLENISH_PAYMENT_ID AS \"replenishPaymentId\",FA.REPLENISH_LEVEL AS \"replenishLevel\",FA.ACTUAL_BALANCE AS \"actualBalance\",FA.AVAILABLE_BALANCE AS \"availableBalance\" FROM FIN_ACCOUNT FA INNER JOIN FIN_ACCOUNT_ROLE FR ON FA.FIN_ACCOUNT_ID = FR.FIN_ACCOUNT_ID", resultSetMapping="FinAccountAndRoleMapping")
 @SqlResultSetMapping(name="FinAccountAndRoleMapping", entities={
 @EntityResult(entityClass=FinAccountAndRole.class, fields = {
 @FieldResult(name="partyId", column="partyId")
@@ -58,6 +58,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="roleThruDate", column="roleThruDate")
 ,@FieldResult(name="finAccountId", column="finAccountId")
 ,@FieldResult(name="finAccountTypeId", column="finAccountTypeId")
+,@FieldResult(name="statusId", column="statusId")
 ,@FieldResult(name="finAccountName", column="finAccountName")
 ,@FieldResult(name="finAccountCode", column="finAccountCode")
 ,@FieldResult(name="finAccountPin", column="finAccountPin")
@@ -67,7 +68,6 @@ import java.sql.Timestamp;
 ,@FieldResult(name="postToGlAccountId", column="postToGlAccountId")
 ,@FieldResult(name="fromDate", column="fromDate")
 ,@FieldResult(name="thruDate", column="thruDate")
-,@FieldResult(name="isFrozen", column="isFrozen")
 ,@FieldResult(name="isRefundable", column="isRefundable")
 ,@FieldResult(name="replenishPaymentId", column="replenishPaymentId")
 ,@FieldResult(name="replenishLevel", column="replenishLevel")
@@ -85,6 +85,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("roleThruDate", "FR.THRU_DATE");
         fields.put("finAccountId", "FA.FIN_ACCOUNT_ID");
         fields.put("finAccountTypeId", "FA.FIN_ACCOUNT_TYPE_ID");
+        fields.put("statusId", "FA.STATUS_ID");
         fields.put("finAccountName", "FA.FIN_ACCOUNT_NAME");
         fields.put("finAccountCode", "FA.FIN_ACCOUNT_CODE");
         fields.put("finAccountPin", "FA.FIN_ACCOUNT_PIN");
@@ -94,7 +95,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("postToGlAccountId", "FA.POST_TO_GL_ACCOUNT_ID");
         fields.put("fromDate", "FA.FROM_DATE");
         fields.put("thruDate", "FA.THRU_DATE");
-        fields.put("isFrozen", "FA.IS_FROZEN");
         fields.put("isRefundable", "FA.IS_REFUNDABLE");
         fields.put("replenishPaymentId", "FA.REPLENISH_PAYMENT_ID");
         fields.put("replenishLevel", "FA.REPLENISH_LEVEL");
@@ -109,6 +109,7 @@ fieldMapColumns.put("FinAccountAndRole", fields);
     roleThruDate("roleThruDate"),
     finAccountId("finAccountId"),
     finAccountTypeId("finAccountTypeId"),
+    statusId("statusId"),
     finAccountName("finAccountName"),
     finAccountCode("finAccountCode"),
     finAccountPin("finAccountPin"),
@@ -118,7 +119,6 @@ fieldMapColumns.put("FinAccountAndRole", fields);
     postToGlAccountId("postToGlAccountId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
-    isFrozen("isFrozen"),
     isRefundable("isRefundable"),
     replenishPaymentId("replenishPaymentId"),
     replenishLevel("replenishLevel"),
@@ -147,6 +147,8 @@ fieldMapColumns.put("FinAccountAndRole", fields);
     
    private String finAccountTypeId;
     
+   private String statusId;
+    
    private String finAccountName;
     
    private String finAccountCode;
@@ -164,8 +166,6 @@ fieldMapColumns.put("FinAccountAndRole", fields);
    private Timestamp fromDate;
     
    private Timestamp thruDate;
-    
-   private String isFrozen;
     
    private String isRefundable;
     
@@ -188,7 +188,7 @@ fieldMapColumns.put("FinAccountAndRole", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");this.primaryKeyNames.add("roleFromDate");this.primaryKeyNames.add("finAccountId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("roleFromDate");this.allFieldsNames.add("roleThruDate");this.allFieldsNames.add("finAccountId");this.allFieldsNames.add("finAccountTypeId");this.allFieldsNames.add("finAccountName");this.allFieldsNames.add("finAccountCode");this.allFieldsNames.add("finAccountPin");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("postToGlAccountId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("isFrozen");this.allFieldsNames.add("isRefundable");this.allFieldsNames.add("replenishPaymentId");this.allFieldsNames.add("replenishLevel");this.allFieldsNames.add("actualBalance");this.allFieldsNames.add("availableBalance");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("roleFromDate");this.allFieldsNames.add("roleThruDate");this.allFieldsNames.add("finAccountId");this.allFieldsNames.add("finAccountTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("finAccountName");this.allFieldsNames.add("finAccountCode");this.allFieldsNames.add("finAccountPin");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("postToGlAccountId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("isRefundable");this.allFieldsNames.add("replenishPaymentId");this.allFieldsNames.add("replenishLevel");this.allFieldsNames.add("actualBalance");this.allFieldsNames.add("availableBalance");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -247,6 +247,13 @@ fieldMapColumns.put("FinAccountAndRole", fields);
      */
     private void setFinAccountTypeId(String finAccountTypeId) {
         this.finAccountTypeId = finAccountTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusId the statusId to set
+     */
+    private void setStatusId(String statusId) {
+        this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
@@ -310,13 +317,6 @@ fieldMapColumns.put("FinAccountAndRole", fields);
      */
     private void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
-    }
-    /**
-     * Auto generated value setter.
-     * @param isFrozen the isFrozen to set
-     */
-    private void setIsFrozen(String isFrozen) {
-        this.isFrozen = isFrozen;
     }
     /**
      * Auto generated value setter.
@@ -400,6 +400,13 @@ fieldMapColumns.put("FinAccountAndRole", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getStatusId() {
+        return this.statusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getFinAccountName() {
         return this.finAccountName;
     }
@@ -463,13 +470,6 @@ fieldMapColumns.put("FinAccountAndRole", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getIsFrozen() {
-        return this.isFrozen;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getIsRefundable() {
         return this.isRefundable;
     }
@@ -515,6 +515,7 @@ fieldMapColumns.put("FinAccountAndRole", fields);
         setRoleThruDate((Timestamp) mapValue.get("roleThruDate"));
         setFinAccountId((String) mapValue.get("finAccountId"));
         setFinAccountTypeId((String) mapValue.get("finAccountTypeId"));
+        setStatusId((String) mapValue.get("statusId"));
         setFinAccountName((String) mapValue.get("finAccountName"));
         setFinAccountCode((String) mapValue.get("finAccountCode"));
         setFinAccountPin((String) mapValue.get("finAccountPin"));
@@ -524,7 +525,6 @@ fieldMapColumns.put("FinAccountAndRole", fields);
         setPostToGlAccountId((String) mapValue.get("postToGlAccountId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
-        setIsFrozen((String) mapValue.get("isFrozen"));
         setIsRefundable((String) mapValue.get("isRefundable"));
         setReplenishPaymentId((String) mapValue.get("replenishPaymentId"));
         setReplenishLevel(convertToBigDecimal(mapValue.get("replenishLevel")));
@@ -543,6 +543,7 @@ fieldMapColumns.put("FinAccountAndRole", fields);
         mapValue.put("roleThruDate", getRoleThruDate());
         mapValue.put("finAccountId", getFinAccountId());
         mapValue.put("finAccountTypeId", getFinAccountTypeId());
+        mapValue.put("statusId", getStatusId());
         mapValue.put("finAccountName", getFinAccountName());
         mapValue.put("finAccountCode", getFinAccountCode());
         mapValue.put("finAccountPin", getFinAccountPin());
@@ -552,7 +553,6 @@ fieldMapColumns.put("FinAccountAndRole", fields);
         mapValue.put("postToGlAccountId", getPostToGlAccountId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
-        mapValue.put("isFrozen", getIsFrozen());
         mapValue.put("isRefundable", getIsRefundable());
         mapValue.put("replenishPaymentId", getReplenishPaymentId());
         mapValue.put("replenishLevel", getReplenishLevel());

@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity CustRequestAndRole.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectCustRequestAndRoles", query="SELECT CR.CUST_REQUEST_ID AS \"custRequestId\",CR.CUST_REQUEST_TYPE_ID AS \"custRequestTypeId\",CR.STATUS_ID AS \"statusId\",CR.FROM_PARTY_ID AS \"fromPartyId\",CR.PRIORITY AS \"priority\",CR.CUST_REQUEST_DATE AS \"custRequestDate\",CR.RESPONSE_REQUIRED_DATE AS \"responseRequiredDate\",CR.CUST_REQUEST_NAME AS \"custRequestName\",CR.DESCRIPTION AS \"description\",CR.CREATED_DATE AS \"createdDate\",CR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CRR.PARTY_ID AS \"partyId\",CRR.ROLE_TYPE_ID AS \"roleTypeId\" FROM CUST_REQUEST CR INNER JOIN CUST_REQUEST_ROLE CRR ON CR.CUST_REQUEST_ID = CRR.CUST_REQUEST_ID", resultSetMapping="CustRequestAndRoleMapping")
+@NamedNativeQuery(name="selectCustRequestAndRoles", query="SELECT CR.CUST_REQUEST_ID AS \"custRequestId\",CR.CUST_REQUEST_TYPE_ID AS \"custRequestTypeId\",CR.STATUS_ID AS \"statusId\",CR.FROM_PARTY_ID AS \"fromPartyId\",CR.PRIORITY AS \"priority\",CR.CUST_REQUEST_DATE AS \"custRequestDate\",CR.RESPONSE_REQUIRED_DATE AS \"responseRequiredDate\",CR.CUST_REQUEST_NAME AS \"custRequestName\",CR.DESCRIPTION AS \"description\",CR.CREATED_DATE AS \"createdDate\",CR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CRP.PARTY_ID AS \"partyId\",CRP.ROLE_TYPE_ID AS \"roleTypeId\",CRP.FROM_DATE AS \"fromDate\",CRP.THRU_DATE AS \"thruDate\" FROM CUST_REQUEST CR INNER JOIN CUST_REQUEST_PARTY CRP ON CR.CUST_REQUEST_ID = CRP.CUST_REQUEST_ID", resultSetMapping="CustRequestAndRoleMapping")
 @SqlResultSetMapping(name="CustRequestAndRoleMapping", entities={
 @EntityResult(entityClass=CustRequestAndRole.class, fields = {
 @FieldResult(name="custRequestId", column="custRequestId")
@@ -66,6 +66,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
 ,@FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="roleTypeId", column="roleTypeId")
+,@FieldResult(name="fromDate", column="fromDate")
+,@FieldResult(name="thruDate", column="thruDate")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -84,8 +86,10 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdDate", "CR.CREATED_DATE");
         fields.put("lastModifiedDate", "CR.LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "CR.LAST_MODIFIED_BY_USER_LOGIN");
-        fields.put("partyId", "CRR.PARTY_ID");
-        fields.put("roleTypeId", "CRR.ROLE_TYPE_ID");
+        fields.put("partyId", "CRP.PARTY_ID");
+        fields.put("roleTypeId", "CRP.ROLE_TYPE_ID");
+        fields.put("fromDate", "CRP.FROM_DATE");
+        fields.put("thruDate", "CRP.THRU_DATE");
 fieldMapColumns.put("CustRequestAndRole", fields);
 }
   public static enum Fields implements EntityFieldInterface<CustRequestAndRole> {
@@ -102,7 +106,9 @@ fieldMapColumns.put("CustRequestAndRole", fields);
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
     partyId("partyId"),
-    roleTypeId("roleTypeId");
+    roleTypeId("roleTypeId"),
+    fromDate("fromDate"),
+    thruDate("thruDate");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -141,6 +147,10 @@ fieldMapColumns.put("CustRequestAndRole", fields);
    private String partyId;
     
    private String roleTypeId;
+    
+   private Timestamp fromDate;
+    
+   private Timestamp thruDate;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -148,7 +158,7 @@ fieldMapColumns.put("CustRequestAndRole", fields);
    )
    
    private CustRequest custRequest = null;
-   private transient CustRequestRole custRequestRole = null;
+   private transient CustRequestParty custRequestParty = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -175,9 +185,9 @@ fieldMapColumns.put("CustRequestAndRole", fields);
       this.isView = true;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("custRequestId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");
+      this.primaryKeyNames.add("custRequestId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromPartyId");this.allFieldsNames.add("priority");this.allFieldsNames.add("custRequestDate");this.allFieldsNames.add("responseRequiredDate");this.allFieldsNames.add("custRequestName");this.allFieldsNames.add("description");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");
+      this.allFieldsNames.add("custRequestId");this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("fromPartyId");this.allFieldsNames.add("priority");this.allFieldsNames.add("custRequestDate");this.allFieldsNames.add("responseRequiredDate");this.allFieldsNames.add("custRequestName");this.allFieldsNames.add("description");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -293,6 +303,20 @@ fieldMapColumns.put("CustRequestAndRole", fields);
     private void setRoleTypeId(String roleTypeId) {
         this.roleTypeId = roleTypeId;
     }
+    /**
+     * Auto generated value setter.
+     * @param fromDate the fromDate to set
+     */
+    private void setFromDate(Timestamp fromDate) {
+        this.fromDate = fromDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param thruDate the thruDate to set
+     */
+    private void setThruDate(Timestamp thruDate) {
+        this.thruDate = thruDate;
+    }
 
     /**
      * Auto generated value accessor.
@@ -392,6 +416,20 @@ fieldMapColumns.put("CustRequestAndRole", fields);
     public String getRoleTypeId() {
         return this.roleTypeId;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getFromDate() {
+        return this.fromDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getThruDate() {
+        return this.thruDate;
+    }
 
     /**
      * Auto generated method that gets the related <code>CustRequest</code> by the relation named <code>CustRequest</code>.
@@ -405,15 +443,15 @@ fieldMapColumns.put("CustRequestAndRole", fields);
         return this.custRequest;
     }
     /**
-     * Auto generated method that gets the related <code>CustRequestRole</code> by the relation named <code>CustRequestRole</code>.
-     * @return the <code>CustRequestRole</code>
+     * Auto generated method that gets the related <code>CustRequestParty</code> by the relation named <code>CustRequestParty</code>.
+     * @return the <code>CustRequestParty</code>
      * @throws RepositoryException if an error occurs
      */
-    public CustRequestRole getCustRequestRole() throws RepositoryException {
-        if (this.custRequestRole == null) {
-            this.custRequestRole = getRelatedOne(CustRequestRole.class, "CustRequestRole");
+    public CustRequestParty getCustRequestParty() throws RepositoryException {
+        if (this.custRequestParty == null) {
+            this.custRequestParty = getRelatedOne(CustRequestParty.class, "CustRequestParty");
         }
-        return this.custRequestRole;
+        return this.custRequestParty;
     }
     /**
      * Auto generated method that gets the related <code>Party</code> by the relation named <code>Party</code>.
@@ -469,10 +507,10 @@ fieldMapColumns.put("CustRequestAndRole", fields);
     }
     /**
      * Auto generated value setter.
-     * @param custRequestRole the custRequestRole to set
+     * @param custRequestParty the custRequestParty to set
     */
-    public void setCustRequestRole(CustRequestRole custRequestRole) {
-        this.custRequestRole = custRequestRole;
+    public void setCustRequestParty(CustRequestParty custRequestParty) {
+        this.custRequestParty = custRequestParty;
     }
     /**
      * Auto generated value setter.
@@ -522,6 +560,8 @@ fieldMapColumns.put("CustRequestAndRole", fields);
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
         setPartyId((String) mapValue.get("partyId"));
         setRoleTypeId((String) mapValue.get("roleTypeId"));
+        setFromDate((Timestamp) mapValue.get("fromDate"));
+        setThruDate((Timestamp) mapValue.get("thruDate"));
         postInit();
     }
 
@@ -543,6 +583,8 @@ fieldMapColumns.put("CustRequestAndRole", fields);
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
         mapValue.put("partyId", getPartyId());
         mapValue.put("roleTypeId", getRoleTypeId());
+        mapValue.put("fromDate", getFromDate());
+        mapValue.put("thruDate", getThruDate());
         return mapValue;
     }
 

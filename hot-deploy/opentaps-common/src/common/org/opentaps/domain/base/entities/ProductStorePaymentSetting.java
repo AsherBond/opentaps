@@ -56,6 +56,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("paymentMethodTypeId", "PAYMENT_METHOD_TYPE_ID");
         fields.put("paymentServiceTypeEnumId", "PAYMENT_SERVICE_TYPE_ENUM_ID");
         fields.put("paymentService", "PAYMENT_SERVICE");
+        fields.put("paymentCustomMethodId", "PAYMENT_CUSTOM_METHOD_ID");
+        fields.put("paymentGatewayConfigId", "PAYMENT_GATEWAY_CONFIG_ID");
         fields.put("paymentPropertiesPath", "PAYMENT_PROPERTIES_PATH");
         fields.put("applyToAllProducts", "APPLY_TO_ALL_PRODUCTS");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -69,6 +71,8 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
     paymentMethodTypeId("paymentMethodTypeId"),
     paymentServiceTypeEnumId("paymentServiceTypeEnumId"),
     paymentService("paymentService"),
+    paymentCustomMethodId("paymentCustomMethodId"),
+    paymentGatewayConfigId("paymentGatewayConfigId"),
     paymentPropertiesPath("paymentPropertiesPath"),
     applyToAllProducts("applyToAllProducts"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -106,6 +110,10 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
       }
    @Column(name="PAYMENT_SERVICE")
    private String paymentService;
+   @Column(name="PAYMENT_CUSTOM_METHOD_ID")
+   private String paymentCustomMethodId;
+   @Column(name="PAYMENT_GATEWAY_CONFIG_ID")
+   private String paymentGatewayConfigId;
    @Column(name="PAYMENT_PROPERTIES_PATH")
    private String paymentPropertiesPath;
    @Column(name="APPLY_TO_ALL_PRODUCTS")
@@ -139,6 +147,20 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
    )
    
    private Enumeration enumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PAYMENT_GATEWAY_CONFIG_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private PaymentGatewayConfig paymentGatewayConfig = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PAYMENT_CUSTOM_METHOD_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private CustomMethod customMethod = null;
 
   /**
    * Default constructor.
@@ -151,7 +173,7 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productStoreId");this.primaryKeyNames.add("paymentMethodTypeId");this.primaryKeyNames.add("paymentServiceTypeEnumId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentServiceTypeEnumId");this.allFieldsNames.add("paymentService");this.allFieldsNames.add("paymentPropertiesPath");this.allFieldsNames.add("applyToAllProducts");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentServiceTypeEnumId");this.allFieldsNames.add("paymentService");this.allFieldsNames.add("paymentCustomMethodId");this.allFieldsNames.add("paymentGatewayConfigId");this.allFieldsNames.add("paymentPropertiesPath");this.allFieldsNames.add("applyToAllProducts");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -193,6 +215,20 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
      */
     public void setPaymentService(String paymentService) {
         this.paymentService = paymentService;
+    }
+    /**
+     * Auto generated value setter.
+     * @param paymentCustomMethodId the paymentCustomMethodId to set
+     */
+    public void setPaymentCustomMethodId(String paymentCustomMethodId) {
+        this.paymentCustomMethodId = paymentCustomMethodId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param paymentGatewayConfigId the paymentGatewayConfigId to set
+     */
+    public void setPaymentGatewayConfigId(String paymentGatewayConfigId) {
+        this.paymentGatewayConfigId = paymentGatewayConfigId;
     }
     /**
      * Auto generated value setter.
@@ -264,6 +300,20 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
      */
     public String getPaymentService() {
         return this.paymentService;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPaymentCustomMethodId() {
+        return this.paymentCustomMethodId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPaymentGatewayConfigId() {
+        return this.paymentGatewayConfigId;
     }
     /**
      * Auto generated value accessor.
@@ -341,6 +391,28 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
         }
         return this.enumeration;
     }
+    /**
+     * Auto generated method that gets the related <code>PaymentGatewayConfig</code> by the relation named <code>PaymentGatewayConfig</code>.
+     * @return the <code>PaymentGatewayConfig</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public PaymentGatewayConfig getPaymentGatewayConfig() throws RepositoryException {
+        if (this.paymentGatewayConfig == null) {
+            this.paymentGatewayConfig = getRelatedOne(PaymentGatewayConfig.class, "PaymentGatewayConfig");
+        }
+        return this.paymentGatewayConfig;
+    }
+    /**
+     * Auto generated method that gets the related <code>CustomMethod</code> by the relation named <code>CustomMethod</code>.
+     * @return the <code>CustomMethod</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public CustomMethod getCustomMethod() throws RepositoryException {
+        if (this.customMethod == null) {
+            this.customMethod = getRelatedOne(CustomMethod.class, "CustomMethod");
+        }
+        return this.customMethod;
+    }
 
     /**
      * Auto generated value setter.
@@ -363,6 +435,20 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
     public void setEnumeration(Enumeration enumeration) {
         this.enumeration = enumeration;
     }
+    /**
+     * Auto generated value setter.
+     * @param paymentGatewayConfig the paymentGatewayConfig to set
+    */
+    public void setPaymentGatewayConfig(PaymentGatewayConfig paymentGatewayConfig) {
+        this.paymentGatewayConfig = paymentGatewayConfig;
+    }
+    /**
+     * Auto generated value setter.
+     * @param customMethod the customMethod to set
+    */
+    public void setCustomMethod(CustomMethod customMethod) {
+        this.customMethod = customMethod;
+    }
 
 
     /** {@inheritDoc} */
@@ -373,6 +459,8 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
         setPaymentMethodTypeId((String) mapValue.get("paymentMethodTypeId"));
         setPaymentServiceTypeEnumId((String) mapValue.get("paymentServiceTypeEnumId"));
         setPaymentService((String) mapValue.get("paymentService"));
+        setPaymentCustomMethodId((String) mapValue.get("paymentCustomMethodId"));
+        setPaymentGatewayConfigId((String) mapValue.get("paymentGatewayConfigId"));
         setPaymentPropertiesPath((String) mapValue.get("paymentPropertiesPath"));
         setApplyToAllProducts((String) mapValue.get("applyToAllProducts"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -390,6 +478,8 @@ fieldMapColumns.put("ProductStorePaymentSetting", fields);
         mapValue.put("paymentMethodTypeId", getPaymentMethodTypeId());
         mapValue.put("paymentServiceTypeEnumId", getPaymentServiceTypeEnumId());
         mapValue.put("paymentService", getPaymentService());
+        mapValue.put("paymentCustomMethodId", getPaymentCustomMethodId());
+        mapValue.put("paymentGatewayConfigId", getPaymentGatewayConfigId());
         mapValue.put("paymentPropertiesPath", getPaymentPropertiesPath());
         mapValue.put("applyToAllProducts", getApplyToAllProducts());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

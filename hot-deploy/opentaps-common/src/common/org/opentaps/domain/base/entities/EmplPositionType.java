@@ -53,8 +53,8 @@ public class EmplPositionType extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("emplPositionTypeId", "EMPL_POSITION_TYPE_ID");
-        fields.put("partyId", "PARTY_ID");
-        fields.put("roleTypeId", "ROLE_TYPE_ID");
+        fields.put("parentTypeId", "PARENT_TYPE_ID");
+        fields.put("hasTable", "HAS_TABLE");
         fields.put("description", "DESCRIPTION");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -64,8 +64,8 @@ fieldMapColumns.put("EmplPositionType", fields);
 }
   public static enum Fields implements EntityFieldInterface<EmplPositionType> {
     emplPositionTypeId("emplPositionTypeId"),
-    partyId("partyId"),
-    roleTypeId("roleTypeId"),
+    parentTypeId("parentTypeId"),
+    hasTable("hasTable"),
     description("description"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -86,10 +86,10 @@ fieldMapColumns.put("EmplPositionType", fields);
    @Id
    @Column(name="EMPL_POSITION_TYPE_ID")
    private String emplPositionTypeId;
-   @Column(name="PARTY_ID")
-   private String partyId;
-   @Column(name="ROLE_TYPE_ID")
-   private String roleTypeId;
+   @Column(name="PARENT_TYPE_ID")
+   private String parentTypeId;
+   @Column(name="HAS_TABLE")
+   private String hasTable;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="LAST_UPDATED_STAMP")
@@ -101,28 +101,36 @@ fieldMapColumns.put("EmplPositionType", fields);
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
+   @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
-   private Party party = null;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="ROLE_TYPE_ID", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
-   
-   private RoleType roleType = null;
-   private transient PartyRole partyRole = null;
+   private EmplPositionType parentEmplPositionType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EMPL_POSITION_TYPE_ID")
    
    private List<EmplPosition> emplPositions = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID")
+   
+   private List<EmplPositionType> childEmplPositionTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_TYPE_ID")
    
    private List<EmplPositionTypeClass> emplPositionTypeClasses = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="EMPL_POSITION_TYPE_ID")
+   
+   private List<EmplPositionTypeRate> emplPositionTypeRates = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="EMPL_POSITION_TYPE_ID")
+   
+   private List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="EMPL_POSITION_TYPE_ID")
+   
+   private List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="emplPositionType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="EMPL_POSITION_TYPE_ID")
    
@@ -139,7 +147,7 @@ fieldMapColumns.put("EmplPositionType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("emplPositionTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("emplPositionTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("emplPositionTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -163,17 +171,17 @@ fieldMapColumns.put("EmplPositionType", fields);
     }
     /**
      * Auto generated value setter.
-     * @param partyId the partyId to set
+     * @param parentTypeId the parentTypeId to set
      */
-    public void setPartyId(String partyId) {
-        this.partyId = partyId;
+    public void setParentTypeId(String parentTypeId) {
+        this.parentTypeId = parentTypeId;
     }
     /**
      * Auto generated value setter.
-     * @param roleTypeId the roleTypeId to set
+     * @param hasTable the hasTable to set
      */
-    public void setRoleTypeId(String roleTypeId) {
-        this.roleTypeId = roleTypeId;
+    public void setHasTable(String hasTable) {
+        this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
@@ -222,15 +230,15 @@ fieldMapColumns.put("EmplPositionType", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getPartyId() {
-        return this.partyId;
+    public String getParentTypeId() {
+        return this.parentTypeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getRoleTypeId() {
-        return this.roleTypeId;
+    public String getHasTable() {
+        return this.hasTable;
     }
     /**
      * Auto generated value accessor.
@@ -269,37 +277,15 @@ fieldMapColumns.put("EmplPositionType", fields);
     }
 
     /**
-     * Auto generated method that gets the related <code>Party</code> by the relation named <code>Party</code>.
-     * @return the <code>Party</code>
+     * Auto generated method that gets the related <code>EmplPositionType</code> by the relation named <code>ParentEmplPositionType</code>.
+     * @return the <code>EmplPositionType</code>
      * @throws RepositoryException if an error occurs
      */
-    public Party getParty() throws RepositoryException {
-        if (this.party == null) {
-            this.party = getRelatedOne(Party.class, "Party");
+    public EmplPositionType getParentEmplPositionType() throws RepositoryException {
+        if (this.parentEmplPositionType == null) {
+            this.parentEmplPositionType = getRelatedOne(EmplPositionType.class, "ParentEmplPositionType");
         }
-        return this.party;
-    }
-    /**
-     * Auto generated method that gets the related <code>RoleType</code> by the relation named <code>RoleType</code>.
-     * @return the <code>RoleType</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public RoleType getRoleType() throws RepositoryException {
-        if (this.roleType == null) {
-            this.roleType = getRelatedOne(RoleType.class, "RoleType");
-        }
-        return this.roleType;
-    }
-    /**
-     * Auto generated method that gets the related <code>PartyRole</code> by the relation named <code>PartyRole</code>.
-     * @return the <code>PartyRole</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public PartyRole getPartyRole() throws RepositoryException {
-        if (this.partyRole == null) {
-            this.partyRole = getRelatedOne(PartyRole.class, "PartyRole");
-        }
-        return this.partyRole;
+        return this.parentEmplPositionType;
     }
     /**
      * Auto generated method that gets the related <code>EmplPosition</code> by the relation named <code>EmplPosition</code>.
@@ -313,6 +299,17 @@ fieldMapColumns.put("EmplPositionType", fields);
         return this.emplPositions;
     }
     /**
+     * Auto generated method that gets the related <code>EmplPositionType</code> by the relation named <code>ChildEmplPositionType</code>.
+     * @return the list of <code>EmplPositionType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends EmplPositionType> getChildEmplPositionTypes() throws RepositoryException {
+        if (this.childEmplPositionTypes == null) {
+            this.childEmplPositionTypes = getRelated(EmplPositionType.class, "ChildEmplPositionType");
+        }
+        return this.childEmplPositionTypes;
+    }
+    /**
      * Auto generated method that gets the related <code>EmplPositionTypeClass</code> by the relation named <code>EmplPositionTypeClass</code>.
      * @return the list of <code>EmplPositionTypeClass</code>
      * @throws RepositoryException if an error occurs
@@ -322,6 +319,39 @@ fieldMapColumns.put("EmplPositionType", fields);
             this.emplPositionTypeClasses = getRelated(EmplPositionTypeClass.class, "EmplPositionTypeClass");
         }
         return this.emplPositionTypeClasses;
+    }
+    /**
+     * Auto generated method that gets the related <code>EmplPositionTypeRate</code> by the relation named <code>EmplPositionTypeRate</code>.
+     * @return the list of <code>EmplPositionTypeRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends EmplPositionTypeRate> getEmplPositionTypeRates() throws RepositoryException {
+        if (this.emplPositionTypeRates == null) {
+            this.emplPositionTypeRates = getRelated(EmplPositionTypeRate.class, "EmplPositionTypeRate");
+        }
+        return this.emplPositionTypeRates;
+    }
+    /**
+     * Auto generated method that gets the related <code>OldEmplPositionTypeRate</code> by the relation named <code>OldEmplPositionTypeRate</code>.
+     * @return the list of <code>OldEmplPositionTypeRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldEmplPositionTypeRate> getOldEmplPositionTypeRates() throws RepositoryException {
+        if (this.oldEmplPositionTypeRates == null) {
+            this.oldEmplPositionTypeRates = getRelated(OldEmplPositionTypeRate.class, "OldEmplPositionTypeRate");
+        }
+        return this.oldEmplPositionTypeRates;
+    }
+    /**
+     * Auto generated method that gets the related <code>RateAmount</code> by the relation named <code>RateAmount</code>.
+     * @return the list of <code>RateAmount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends RateAmount> getRateAmounts() throws RepositoryException {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = getRelated(RateAmount.class, "RateAmount");
+        }
+        return this.rateAmounts;
     }
     /**
      * Auto generated method that gets the related <code>ValidResponsibility</code> by the relation named <code>ValidResponsibility</code>.
@@ -337,24 +367,10 @@ fieldMapColumns.put("EmplPositionType", fields);
 
     /**
      * Auto generated value setter.
-     * @param party the party to set
+     * @param parentEmplPositionType the parentEmplPositionType to set
     */
-    public void setParty(Party party) {
-        this.party = party;
-    }
-    /**
-     * Auto generated value setter.
-     * @param roleType the roleType to set
-    */
-    public void setRoleType(RoleType roleType) {
-        this.roleType = roleType;
-    }
-    /**
-     * Auto generated value setter.
-     * @param partyRole the partyRole to set
-    */
-    public void setPartyRole(PartyRole partyRole) {
-        this.partyRole = partyRole;
+    public void setParentEmplPositionType(EmplPositionType parentEmplPositionType) {
+        this.parentEmplPositionType = parentEmplPositionType;
     }
     /**
      * Auto generated value setter.
@@ -365,10 +381,38 @@ fieldMapColumns.put("EmplPositionType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param childEmplPositionTypes the childEmplPositionTypes to set
+    */
+    public void setChildEmplPositionTypes(List<EmplPositionType> childEmplPositionTypes) {
+        this.childEmplPositionTypes = childEmplPositionTypes;
+    }
+    /**
+     * Auto generated value setter.
      * @param emplPositionTypeClasses the emplPositionTypeClasses to set
     */
     public void setEmplPositionTypeClasses(List<EmplPositionTypeClass> emplPositionTypeClasses) {
         this.emplPositionTypeClasses = emplPositionTypeClasses;
+    }
+    /**
+     * Auto generated value setter.
+     * @param emplPositionTypeRates the emplPositionTypeRates to set
+    */
+    public void setEmplPositionTypeRates(List<EmplPositionTypeRate> emplPositionTypeRates) {
+        this.emplPositionTypeRates = emplPositionTypeRates;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oldEmplPositionTypeRates the oldEmplPositionTypeRates to set
+    */
+    public void setOldEmplPositionTypeRates(List<OldEmplPositionTypeRate> oldEmplPositionTypeRates) {
+        this.oldEmplPositionTypeRates = oldEmplPositionTypeRates;
+    }
+    /**
+     * Auto generated value setter.
+     * @param rateAmounts the rateAmounts to set
+    */
+    public void setRateAmounts(List<RateAmount> rateAmounts) {
+        this.rateAmounts = rateAmounts;
     }
     /**
      * Auto generated value setter.
@@ -408,6 +452,87 @@ fieldMapColumns.put("EmplPositionType", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addEmplPositionTypeRate(EmplPositionTypeRate emplPositionTypeRate) {
+        if (this.emplPositionTypeRates == null) {
+            this.emplPositionTypeRates = new ArrayList<EmplPositionTypeRate>();
+        }
+        this.emplPositionTypeRates.add(emplPositionTypeRate);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeEmplPositionTypeRate(EmplPositionTypeRate emplPositionTypeRate) {
+        if (this.emplPositionTypeRates == null) {
+            return;
+        }
+        this.emplPositionTypeRates.remove(emplPositionTypeRate);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearEmplPositionTypeRate() {
+        if (this.emplPositionTypeRates == null) {
+            return;
+        }
+        this.emplPositionTypeRates.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOldEmplPositionTypeRate(OldEmplPositionTypeRate oldEmplPositionTypeRate) {
+        if (this.oldEmplPositionTypeRates == null) {
+            this.oldEmplPositionTypeRates = new ArrayList<OldEmplPositionTypeRate>();
+        }
+        this.oldEmplPositionTypeRates.add(oldEmplPositionTypeRate);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOldEmplPositionTypeRate(OldEmplPositionTypeRate oldEmplPositionTypeRate) {
+        if (this.oldEmplPositionTypeRates == null) {
+            return;
+        }
+        this.oldEmplPositionTypeRates.remove(oldEmplPositionTypeRate);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOldEmplPositionTypeRate() {
+        if (this.oldEmplPositionTypeRates == null) {
+            return;
+        }
+        this.oldEmplPositionTypeRates.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = new ArrayList<RateAmount>();
+        }
+        this.rateAmounts.add(rateAmount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
+            return;
+        }
+        this.rateAmounts.remove(rateAmount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearRateAmount() {
+        if (this.rateAmounts == null) {
+            return;
+        }
+        this.rateAmounts.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addValidResponsibility(ValidResponsibility validResponsibility) {
         if (this.validResponsibilitys == null) {
             this.validResponsibilitys = new ArrayList<ValidResponsibility>();
@@ -438,8 +563,8 @@ fieldMapColumns.put("EmplPositionType", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setEmplPositionTypeId((String) mapValue.get("emplPositionTypeId"));
-        setPartyId((String) mapValue.get("partyId"));
-        setRoleTypeId((String) mapValue.get("roleTypeId"));
+        setParentTypeId((String) mapValue.get("parentTypeId"));
+        setHasTable((String) mapValue.get("hasTable"));
         setDescription((String) mapValue.get("description"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -453,8 +578,8 @@ fieldMapColumns.put("EmplPositionType", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("emplPositionTypeId", getEmplPositionTypeId());
-        mapValue.put("partyId", getPartyId());
-        mapValue.put("roleTypeId", getRoleTypeId());
+        mapValue.put("parentTypeId", getParentTypeId());
+        mapValue.put("hasTable", getHasTable());
         mapValue.put("description", getDescription());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

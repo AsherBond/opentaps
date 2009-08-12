@@ -64,6 +64,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("orderQtyIncrements", "ORDER_QTY_INCREMENTS");
         fields.put("unitsIncluded", "UNITS_INCLUDED");
         fields.put("quantityUomId", "QUANTITY_UOM_ID");
+        fields.put("agreementId", "AGREEMENT_ID");
+        fields.put("agreementItemSeqId", "AGREEMENT_ITEM_SEQ_ID");
         fields.put("lastPrice", "LAST_PRICE");
         fields.put("currencyUomId", "CURRENCY_UOM_ID");
         fields.put("supplierProductName", "SUPPLIER_PRODUCT_NAME");
@@ -89,6 +91,8 @@ fieldMapColumns.put("SupplierProduct", fields);
     orderQtyIncrements("orderQtyIncrements"),
     unitsIncluded("unitsIncluded"),
     quantityUomId("quantityUomId"),
+    agreementId("agreementId"),
+    agreementItemSeqId("agreementItemSeqId"),
     lastPrice("lastPrice"),
     currencyUomId("currencyUomId"),
     supplierProductName("supplierProductName"),
@@ -143,6 +147,10 @@ fieldMapColumns.put("SupplierProduct", fields);
    private BigDecimal unitsIncluded;
    @Column(name="QUANTITY_UOM_ID")
    private String quantityUomId;
+   @Column(name="AGREEMENT_ID")
+   private String agreementId;
+   @Column(name="AGREEMENT_ITEM_SEQ_ID")
+   private String agreementItemSeqId;
    @Column(name="LAST_PRICE")
    private BigDecimal lastPrice;
    @Column(name="SUPPLIER_PRODUCT_NAME")
@@ -205,6 +213,7 @@ fieldMapColumns.put("SupplierProduct", fields);
    )
    
    private Uom quantityUom = null;
+   private transient AgreementItem agreementItem = null;
 
   /**
    * Default constructor.
@@ -217,7 +226,7 @@ fieldMapColumns.put("SupplierProduct", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("currencyUomId");this.primaryKeyNames.add("minimumOrderQuantity");this.primaryKeyNames.add("availableFromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("availableFromDate");this.allFieldsNames.add("availableThruDate");this.allFieldsNames.add("supplierPrefOrderId");this.allFieldsNames.add("supplierRatingTypeId");this.allFieldsNames.add("standardLeadTimeDays");this.allFieldsNames.add("minimumOrderQuantity");this.allFieldsNames.add("orderQtyIncrements");this.allFieldsNames.add("unitsIncluded");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("lastPrice");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("supplierProductName");this.allFieldsNames.add("supplierProductId");this.allFieldsNames.add("canDropShip");this.allFieldsNames.add("supplierCommissionPerc");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("availableFromDate");this.allFieldsNames.add("availableThruDate");this.allFieldsNames.add("supplierPrefOrderId");this.allFieldsNames.add("supplierRatingTypeId");this.allFieldsNames.add("standardLeadTimeDays");this.allFieldsNames.add("minimumOrderQuantity");this.allFieldsNames.add("orderQtyIncrements");this.allFieldsNames.add("unitsIncluded");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("agreementId");this.allFieldsNames.add("agreementItemSeqId");this.allFieldsNames.add("lastPrice");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("supplierProductName");this.allFieldsNames.add("supplierProductId");this.allFieldsNames.add("canDropShip");this.allFieldsNames.add("supplierCommissionPerc");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -308,6 +317,20 @@ fieldMapColumns.put("SupplierProduct", fields);
      */
     public void setQuantityUomId(String quantityUomId) {
         this.quantityUomId = quantityUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param agreementId the agreementId to set
+     */
+    public void setAgreementId(String agreementId) {
+        this.agreementId = agreementId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param agreementItemSeqId the agreementItemSeqId to set
+     */
+    public void setAgreementItemSeqId(String agreementItemSeqId) {
+        this.agreementItemSeqId = agreementItemSeqId;
     }
     /**
      * Auto generated value setter.
@@ -466,6 +489,20 @@ fieldMapColumns.put("SupplierProduct", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAgreementId() {
+        return this.agreementId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAgreementItemSeqId() {
+        return this.agreementItemSeqId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getLastPrice() {
@@ -608,6 +645,17 @@ fieldMapColumns.put("SupplierProduct", fields);
         }
         return this.quantityUom;
     }
+    /**
+     * Auto generated method that gets the related <code>AgreementItem</code> by the relation named <code>AgreementItem</code>.
+     * @return the <code>AgreementItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public AgreementItem getAgreementItem() throws RepositoryException {
+        if (this.agreementItem == null) {
+            this.agreementItem = getRelatedOne(AgreementItem.class, "AgreementItem");
+        }
+        return this.agreementItem;
+    }
 
     /**
      * Auto generated value setter.
@@ -651,6 +699,13 @@ fieldMapColumns.put("SupplierProduct", fields);
     public void setQuantityUom(Uom quantityUom) {
         this.quantityUom = quantityUom;
     }
+    /**
+     * Auto generated value setter.
+     * @param agreementItem the agreementItem to set
+    */
+    public void setAgreementItem(AgreementItem agreementItem) {
+        this.agreementItem = agreementItem;
+    }
 
 
     /** {@inheritDoc} */
@@ -668,6 +723,8 @@ fieldMapColumns.put("SupplierProduct", fields);
         setOrderQtyIncrements(convertToBigDecimal(mapValue.get("orderQtyIncrements")));
         setUnitsIncluded(convertToBigDecimal(mapValue.get("unitsIncluded")));
         setQuantityUomId((String) mapValue.get("quantityUomId"));
+        setAgreementId((String) mapValue.get("agreementId"));
+        setAgreementItemSeqId((String) mapValue.get("agreementItemSeqId"));
         setLastPrice(convertToBigDecimal(mapValue.get("lastPrice")));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setSupplierProductName((String) mapValue.get("supplierProductName"));
@@ -697,6 +754,8 @@ fieldMapColumns.put("SupplierProduct", fields);
         mapValue.put("orderQtyIncrements", getOrderQtyIncrements());
         mapValue.put("unitsIncluded", getUnitsIncluded());
         mapValue.put("quantityUomId", getQuantityUomId());
+        mapValue.put("agreementId", getAgreementId());
+        mapValue.put("agreementItemSeqId", getAgreementItemSeqId());
         mapValue.put("lastPrice", getLastPrice());
         mapValue.put("currencyUomId", getCurrencyUomId());
         mapValue.put("supplierProductName", getSupplierProductName());

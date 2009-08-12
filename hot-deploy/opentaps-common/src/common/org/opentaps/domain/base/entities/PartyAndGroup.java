@@ -41,14 +41,16 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
+import java.lang.Long;
 import java.lang.String;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
  * Auto generated base entity PartyAndGroup.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyAndGroups", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.EXTERNAL_ID AS \"externalId\",PTY.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PTY.DESCRIPTION AS \"description\",PTY.STATUS_ID AS \"statusId\",PTY.CREATED_DATE AS \"createdDate\",PTY.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PTY.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PTY.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PGRP.GROUP_NAME AS \"groupName\",PGRP.GROUP_NAME_LOCAL AS \"groupNameLocal\",PGRP.OFFICE_SITE_NAME AS \"officeSiteName\",PGRP.COMMENTS AS \"comments\",PGRP.LOGO_IMAGE_URL AS \"logoImageUrl\",PGRP.IS_INCORPORATED AS \"isIncorporated\",PGRP.FEDERAL_TAX_ID AS \"federalTaxId\",PGRP.REQUIRES1099 AS \"requires1099\" FROM PARTY PTY INNER JOIN PARTY_GROUP PGRP ON PTY.PARTY_ID = PGRP.PARTY_ID", resultSetMapping="PartyAndGroupMapping")
+@NamedNativeQuery(name="selectPartyAndGroups", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.EXTERNAL_ID AS \"externalId\",PTY.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PTY.DESCRIPTION AS \"description\",PTY.STATUS_ID AS \"statusId\",PTY.CREATED_DATE AS \"createdDate\",PTY.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PTY.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PTY.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PTY.DATA_SOURCE_ID AS \"dataSourceId\",PTY.IS_UNREAD AS \"isUnread\",PGRP.GROUP_NAME AS \"groupName\",PGRP.GROUP_NAME_LOCAL AS \"groupNameLocal\",PGRP.OFFICE_SITE_NAME AS \"officeSiteName\",PGRP.ANNUAL_REVENUE AS \"annualRevenue\",PGRP.NUM_EMPLOYEES AS \"numEmployees\",PGRP.TICKER_SYMBOL AS \"tickerSymbol\",PGRP.COMMENTS AS \"comments\",PGRP.LOGO_IMAGE_URL AS \"logoImageUrl\",PGRP.IS_INCORPORATED AS \"isIncorporated\",PGRP.FEDERAL_TAX_ID AS \"federalTaxId\",PGRP.REQUIRES1099 AS \"requires1099\" FROM PARTY PTY INNER JOIN PARTY_GROUP PGRP ON PTY.PARTY_ID = PGRP.PARTY_ID", resultSetMapping="PartyAndGroupMapping")
 @SqlResultSetMapping(name="PartyAndGroupMapping", entities={
 @EntityResult(entityClass=PartyAndGroup.class, fields = {
 @FieldResult(name="partyId", column="partyId")
@@ -61,9 +63,14 @@ import java.sql.Timestamp;
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
+,@FieldResult(name="dataSourceId", column="dataSourceId")
+,@FieldResult(name="isUnread", column="isUnread")
 ,@FieldResult(name="groupName", column="groupName")
 ,@FieldResult(name="groupNameLocal", column="groupNameLocal")
 ,@FieldResult(name="officeSiteName", column="officeSiteName")
+,@FieldResult(name="annualRevenue", column="annualRevenue")
+,@FieldResult(name="numEmployees", column="numEmployees")
+,@FieldResult(name="tickerSymbol", column="tickerSymbol")
 ,@FieldResult(name="comments", column="comments")
 ,@FieldResult(name="logoImageUrl", column="logoImageUrl")
 ,@FieldResult(name="isIncorporated", column="isIncorporated")
@@ -85,9 +92,14 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdByUserLogin", "PTY.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "PTY.LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "PTY.LAST_MODIFIED_BY_USER_LOGIN");
+        fields.put("dataSourceId", "PTY.DATA_SOURCE_ID");
+        fields.put("isUnread", "PTY.IS_UNREAD");
         fields.put("groupName", "PGRP.GROUP_NAME");
         fields.put("groupNameLocal", "PGRP.GROUP_NAME_LOCAL");
         fields.put("officeSiteName", "PGRP.OFFICE_SITE_NAME");
+        fields.put("annualRevenue", "PGRP.ANNUAL_REVENUE");
+        fields.put("numEmployees", "PGRP.NUM_EMPLOYEES");
+        fields.put("tickerSymbol", "PGRP.TICKER_SYMBOL");
         fields.put("comments", "PGRP.COMMENTS");
         fields.put("logoImageUrl", "PGRP.LOGO_IMAGE_URL");
         fields.put("isIncorporated", "PGRP.IS_INCORPORATED");
@@ -106,9 +118,14 @@ fieldMapColumns.put("PartyAndGroup", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
+    dataSourceId("dataSourceId"),
+    isUnread("isUnread"),
     groupName("groupName"),
     groupNameLocal("groupNameLocal"),
     officeSiteName("officeSiteName"),
+    annualRevenue("annualRevenue"),
+    numEmployees("numEmployees"),
+    tickerSymbol("tickerSymbol"),
     comments("comments"),
     logoImageUrl("logoImageUrl"),
     isIncorporated("isIncorporated"),
@@ -145,11 +162,21 @@ fieldMapColumns.put("PartyAndGroup", fields);
     
    private String lastModifiedByUserLogin;
     
+   private String dataSourceId;
+    
+   private String isUnread;
+    
    private String groupName;
     
    private String groupNameLocal;
     
    private String officeSiteName;
+    
+   private BigDecimal annualRevenue;
+    
+   private Long numEmployees;
+    
+   private String tickerSymbol;
     
    private String comments;
     
@@ -172,7 +199,7 @@ fieldMapColumns.put("PartyAndGroup", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("comments");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("annualRevenue");this.allFieldsNames.add("numEmployees");this.allFieldsNames.add("tickerSymbol");this.allFieldsNames.add("comments");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -262,6 +289,20 @@ fieldMapColumns.put("PartyAndGroup", fields);
     }
     /**
      * Auto generated value setter.
+     * @param dataSourceId the dataSourceId to set
+     */
+    private void setDataSourceId(String dataSourceId) {
+        this.dataSourceId = dataSourceId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param isUnread the isUnread to set
+     */
+    private void setIsUnread(String isUnread) {
+        this.isUnread = isUnread;
+    }
+    /**
+     * Auto generated value setter.
      * @param groupName the groupName to set
      */
     private void setGroupName(String groupName) {
@@ -280,6 +321,27 @@ fieldMapColumns.put("PartyAndGroup", fields);
      */
     private void setOfficeSiteName(String officeSiteName) {
         this.officeSiteName = officeSiteName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param annualRevenue the annualRevenue to set
+     */
+    private void setAnnualRevenue(BigDecimal annualRevenue) {
+        this.annualRevenue = annualRevenue;
+    }
+    /**
+     * Auto generated value setter.
+     * @param numEmployees the numEmployees to set
+     */
+    private void setNumEmployees(Long numEmployees) {
+        this.numEmployees = numEmployees;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tickerSymbol the tickerSymbol to set
+     */
+    private void setTickerSymbol(String tickerSymbol) {
+        this.tickerSymbol = tickerSymbol;
     }
     /**
      * Auto generated value setter.
@@ -391,6 +453,20 @@ fieldMapColumns.put("PartyAndGroup", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getDataSourceId() {
+        return this.dataSourceId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIsUnread() {
+        return this.isUnread;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getGroupName() {
         return this.groupName;
     }
@@ -407,6 +483,27 @@ fieldMapColumns.put("PartyAndGroup", fields);
      */
     public String getOfficeSiteName() {
         return this.officeSiteName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAnnualRevenue() {
+        return this.annualRevenue;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getNumEmployees() {
+        return this.numEmployees;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getTickerSymbol() {
+        return this.tickerSymbol;
     }
     /**
      * Auto generated value accessor.
@@ -461,9 +558,14 @@ fieldMapColumns.put("PartyAndGroup", fields);
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
+        setDataSourceId((String) mapValue.get("dataSourceId"));
+        setIsUnread((String) mapValue.get("isUnread"));
         setGroupName((String) mapValue.get("groupName"));
         setGroupNameLocal((String) mapValue.get("groupNameLocal"));
         setOfficeSiteName((String) mapValue.get("officeSiteName"));
+        setAnnualRevenue(convertToBigDecimal(mapValue.get("annualRevenue")));
+        setNumEmployees((Long) mapValue.get("numEmployees"));
+        setTickerSymbol((String) mapValue.get("tickerSymbol"));
         setComments((String) mapValue.get("comments"));
         setLogoImageUrl((String) mapValue.get("logoImageUrl"));
         setIsIncorporated((String) mapValue.get("isIncorporated"));
@@ -486,9 +588,14 @@ fieldMapColumns.put("PartyAndGroup", fields);
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
+        mapValue.put("dataSourceId", getDataSourceId());
+        mapValue.put("isUnread", getIsUnread());
         mapValue.put("groupName", getGroupName());
         mapValue.put("groupNameLocal", getGroupNameLocal());
         mapValue.put("officeSiteName", getOfficeSiteName());
+        mapValue.put("annualRevenue", getAnnualRevenue());
+        mapValue.put("numEmployees", getNumEmployees());
+        mapValue.put("tickerSymbol", getTickerSymbol());
         mapValue.put("comments", getComments());
         mapValue.put("logoImageUrl", getLogoImageUrl());
         mapValue.put("isIncorporated", getIsIncorporated());

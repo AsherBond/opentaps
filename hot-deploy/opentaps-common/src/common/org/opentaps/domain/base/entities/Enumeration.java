@@ -215,6 +215,10 @@ fieldMapColumns.put("Enumeration", fields);
    
    private List<AgreementTerm> agreementTerms = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="REASON_ENUM_ID")
+   
+   private List<CommunicationEvent> communicationEvents = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PRIVILEGE_ENUM_ID")
    
    private List<Content> privilegeContents = null;
@@ -271,6 +275,10 @@ fieldMapColumns.put("Enumeration", fields);
    
    private List<EncumbranceDetail> tag10EncumbranceDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FEATURE_SOURCE_ENUM_ID")
+   
+   private List<ExampleFeature> exampleFeatures = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RESERVE_ORDER_ENUM_ID")
    
    private List<Facility> facilitys = null;
@@ -278,6 +286,10 @@ fieldMapColumns.put("Enumeration", fields);
    @JoinColumn(name="LOCATION_TYPE_ENUM_ID")
    
    private List<FacilityLocation> typeFacilityLocations = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="REASON_ENUM_ID")
+   
+   private List<FinAccountTrans> reasonFinAccountTranses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="REPLENISH_ENUM_ID")
    
@@ -427,6 +439,14 @@ fieldMapColumns.put("Enumeration", fields);
    
    private List<OrderItem> tag10OrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="CHANGE_TYPE_ENUM_ID")
+   
+   private List<OrderItemChange> orderItemChanges = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="REASON_ENUM_ID")
+   
+   private List<OrderItemChange> reasonOrderItemChanges = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="EMAIL_TYPE")
    
    private List<OrderNotification> orderNotifications = null;
@@ -523,6 +543,14 @@ fieldMapColumns.put("Enumeration", fields);
    
    private List<Person> residenceStatuspeople = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="REASON_ENUM_ID")
+   
+   private List<PosTerminalInternTx> posTerminalInternTxes = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="VIRTUAL_VARIANT_METHOD_ENUM")
+   
+   private List<Product> vitualVariantMethodProducts = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RATING_TYPE_ENUM")
    
    private List<Product> ratingProducts = null;
@@ -587,6 +615,10 @@ fieldMapColumns.put("Enumeration", fields);
    
    private List<ProductStoreEmailSetting> productStoreEmailSettings = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="REPLENISH_METHOD_ENUM_ID")
+   
+   private List<ProductStoreFinActSetting> replenishMethodProductStoreFinActSettings = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TARGET_TYPE_ENUM_ID")
    
    private List<ProductStoreKeywordOvrd> productStoreKeywordOvrds = null;
@@ -594,6 +626,10 @@ fieldMapColumns.put("Enumeration", fields);
    @JoinColumn(name="PAYMENT_SERVICE_TYPE_ENUM_ID")
    
    private List<ProductStorePaymentSetting> productStorePaymentSettings = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="creditCardEnumeration", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="CREDIT_CARD_ENUM_ID")
+   
+   private List<ProductStoreVendorPayment> creditCardProductStoreVendorPayments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_CHANNEL_ENUM_ID")
    
@@ -611,9 +647,17 @@ fieldMapColumns.put("Enumeration", fields);
    
    private List<TrackingCodeVisit> trackingCodeVisits = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PURPOSE_ENUM_ID")
+   
+   private List<UomConversionDated> purposeUomConversionDateds = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="VIEW_PREF_ENUM_ID")
    
    private List<ViewPreference> viewPreferences = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="enumeration", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="RESOURCE_TYPE_ENUM_ID")
+   
+   private List<VisualThemeResource> visualThemeResources = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SCOPE_ENUM_ID")
    
@@ -623,53 +667,9 @@ fieldMapColumns.put("Enumeration", fields);
    
    private List<WorkEffortPartyAssignment> expectationWorkEffortPartyAssignments = null;
    @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="START_MODE_ENUM_ID")
+   @JoinColumn(name="DELEGATE_REASON_ENUM_ID")
    
-   private List<WorkflowActivity> startModeWorkflowActivitys = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="FINISH_MODE_ENUM_ID")
-   
-   private List<WorkflowActivity> finishModeWorkflowActivitys = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="JOIN_TYPE_ENUM_ID")
-   
-   private List<WorkflowActivity> joinWorkflowActivitys = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="SPLIT_TYPE_ENUM_ID")
-   
-   private List<WorkflowActivity> splitWorkflowActivitys = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="DATA_TYPE_ENUM_ID")
-   
-   private List<WorkflowComplexTypeInfo> dataTypeWorkflowComplexTypeInfoes = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="DATA_TYPE_ENUM_ID")
-   
-   private List<WorkflowDataField> dataTypeWorkflowDataFields = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="MODE_ENUM_ID")
-   
-   private List<WorkflowFormalParam> modeWorkflowFormalParams = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="DATA_TYPE_ENUM_ID")
-   
-   private List<WorkflowFormalParam> dataTypeWorkflowFormalParams = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="GRAPH_CONFORMANCE_ENUM_ID")
-   
-   private List<WorkflowPackage> graphConformanceWorkflowPackages = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="CONDITION_TYPE_ENUM_ID")
-   
-   private List<WorkflowTransition> conditionTypeWorkflowTransitions = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="LOOP_TYPE_ENUM_ID")
-   
-   private List<WorkflowTransition> loopTypeWorkflowTransitions = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="DATA_TYPE_ENUM_ID")
-   
-   private List<WorkflowTypeDeclaration> dataTypeWorkflowTypeDeclarations = null;
+   private List<WorkEffortPartyAssignment> delegateReasonWorkEffortPartyAssignments = null;
 
   /**
    * Default constructor.
@@ -1118,6 +1118,17 @@ fieldMapColumns.put("Enumeration", fields);
         return this.agreementTerms;
     }
     /**
+     * Auto generated method that gets the related <code>CommunicationEvent</code> by the relation named <code>CommunicationEvent</code>.
+     * @return the list of <code>CommunicationEvent</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends CommunicationEvent> getCommunicationEvents() throws RepositoryException {
+        if (this.communicationEvents == null) {
+            this.communicationEvents = getRelated(CommunicationEvent.class, "CommunicationEvent");
+        }
+        return this.communicationEvents;
+    }
+    /**
      * Auto generated method that gets the related <code>Content</code> by the relation named <code>PrivilegeContent</code>.
      * @return the list of <code>Content</code>
      * @throws RepositoryException if an error occurs
@@ -1272,6 +1283,17 @@ fieldMapColumns.put("Enumeration", fields);
         return this.tag10EncumbranceDetails;
     }
     /**
+     * Auto generated method that gets the related <code>ExampleFeature</code> by the relation named <code>ExampleFeature</code>.
+     * @return the list of <code>ExampleFeature</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ExampleFeature> getExampleFeatures() throws RepositoryException {
+        if (this.exampleFeatures == null) {
+            this.exampleFeatures = getRelated(ExampleFeature.class, "ExampleFeature");
+        }
+        return this.exampleFeatures;
+    }
+    /**
      * Auto generated method that gets the related <code>Facility</code> by the relation named <code>Facility</code>.
      * @return the list of <code>Facility</code>
      * @throws RepositoryException if an error occurs
@@ -1292,6 +1314,17 @@ fieldMapColumns.put("Enumeration", fields);
             this.typeFacilityLocations = getRelated(FacilityLocation.class, "TypeFacilityLocation");
         }
         return this.typeFacilityLocations;
+    }
+    /**
+     * Auto generated method that gets the related <code>FinAccountTrans</code> by the relation named <code>ReasonFinAccountTrans</code>.
+     * @return the list of <code>FinAccountTrans</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FinAccountTrans> getReasonFinAccountTranses() throws RepositoryException {
+        if (this.reasonFinAccountTranses == null) {
+            this.reasonFinAccountTranses = getRelated(FinAccountTrans.class, "ReasonFinAccountTrans");
+        }
+        return this.reasonFinAccountTranses;
     }
     /**
      * Auto generated method that gets the related <code>FinAccountType</code> by the relation named <code>ReplenishFinAccountType</code>.
@@ -1701,6 +1734,28 @@ fieldMapColumns.put("Enumeration", fields);
         return this.tag10OrderItems;
     }
     /**
+     * Auto generated method that gets the related <code>OrderItemChange</code> by the relation named <code>OrderItemChange</code>.
+     * @return the list of <code>OrderItemChange</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItemChange> getOrderItemChanges() throws RepositoryException {
+        if (this.orderItemChanges == null) {
+            this.orderItemChanges = getRelated(OrderItemChange.class, "OrderItemChange");
+        }
+        return this.orderItemChanges;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderItemChange</code> by the relation named <code>ReasonOrderItemChange</code>.
+     * @return the list of <code>OrderItemChange</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItemChange> getReasonOrderItemChanges() throws RepositoryException {
+        if (this.reasonOrderItemChanges == null) {
+            this.reasonOrderItemChanges = getRelated(OrderItemChange.class, "ReasonOrderItemChange");
+        }
+        return this.reasonOrderItemChanges;
+    }
+    /**
      * Auto generated method that gets the related <code>OrderNotification</code> by the relation named <code>OrderNotification</code>.
      * @return the list of <code>OrderNotification</code>
      * @throws RepositoryException if an error occurs
@@ -1965,6 +2020,28 @@ fieldMapColumns.put("Enumeration", fields);
         return this.residenceStatuspeople;
     }
     /**
+     * Auto generated method that gets the related <code>PosTerminalInternTx</code> by the relation named <code>PosTerminalInternTx</code>.
+     * @return the list of <code>PosTerminalInternTx</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PosTerminalInternTx> getPosTerminalInternTxes() throws RepositoryException {
+        if (this.posTerminalInternTxes == null) {
+            this.posTerminalInternTxes = getRelated(PosTerminalInternTx.class, "PosTerminalInternTx");
+        }
+        return this.posTerminalInternTxes;
+    }
+    /**
+     * Auto generated method that gets the related <code>Product</code> by the relation named <code>VitualVariant MethodProduct</code>.
+     * @return the list of <code>Product</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Product> getVitualVariantMethodProducts() throws RepositoryException {
+        if (this.vitualVariantMethodProducts == null) {
+            this.vitualVariantMethodProducts = getRelated(Product.class, "VitualVariant MethodProduct");
+        }
+        return this.vitualVariantMethodProducts;
+    }
+    /**
      * Auto generated method that gets the related <code>Product</code> by the relation named <code>RatingProduct</code>.
      * @return the list of <code>Product</code>
      * @throws RepositoryException if an error occurs
@@ -2141,6 +2218,17 @@ fieldMapColumns.put("Enumeration", fields);
         return this.productStoreEmailSettings;
     }
     /**
+     * Auto generated method that gets the related <code>ProductStoreFinActSetting</code> by the relation named <code>ReplenishMethodProductStoreFinActSetting</code>.
+     * @return the list of <code>ProductStoreFinActSetting</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductStoreFinActSetting> getReplenishMethodProductStoreFinActSettings() throws RepositoryException {
+        if (this.replenishMethodProductStoreFinActSettings == null) {
+            this.replenishMethodProductStoreFinActSettings = getRelated(ProductStoreFinActSetting.class, "ReplenishMethodProductStoreFinActSetting");
+        }
+        return this.replenishMethodProductStoreFinActSettings;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductStoreKeywordOvrd</code> by the relation named <code>ProductStoreKeywordOvrd</code>.
      * @return the list of <code>ProductStoreKeywordOvrd</code>
      * @throws RepositoryException if an error occurs
@@ -2161,6 +2249,17 @@ fieldMapColumns.put("Enumeration", fields);
             this.productStorePaymentSettings = getRelated(ProductStorePaymentSetting.class, "ProductStorePaymentSetting");
         }
         return this.productStorePaymentSettings;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductStoreVendorPayment</code> by the relation named <code>CreditCardProductStoreVendorPayment</code>.
+     * @return the list of <code>ProductStoreVendorPayment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductStoreVendorPayment> getCreditCardProductStoreVendorPayments() throws RepositoryException {
+        if (this.creditCardProductStoreVendorPayments == null) {
+            this.creditCardProductStoreVendorPayments = getRelated(ProductStoreVendorPayment.class, "CreditCardProductStoreVendorPayment");
+        }
+        return this.creditCardProductStoreVendorPayments;
     }
     /**
      * Auto generated method that gets the related <code>Quote</code> by the relation named <code>SalesChannelQuote</code>.
@@ -2207,6 +2306,17 @@ fieldMapColumns.put("Enumeration", fields);
         return this.trackingCodeVisits;
     }
     /**
+     * Auto generated method that gets the related <code>UomConversionDated</code> by the relation named <code>PurposeUomConversionDated</code>.
+     * @return the list of <code>UomConversionDated</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends UomConversionDated> getPurposeUomConversionDateds() throws RepositoryException {
+        if (this.purposeUomConversionDateds == null) {
+            this.purposeUomConversionDateds = getRelated(UomConversionDated.class, "PurposeUomConversionDated");
+        }
+        return this.purposeUomConversionDateds;
+    }
+    /**
      * Auto generated method that gets the related <code>ViewPreference</code> by the relation named <code>ViewPreference</code>.
      * @return the list of <code>ViewPreference</code>
      * @throws RepositoryException if an error occurs
@@ -2216,6 +2326,17 @@ fieldMapColumns.put("Enumeration", fields);
             this.viewPreferences = getRelated(ViewPreference.class, "ViewPreference");
         }
         return this.viewPreferences;
+    }
+    /**
+     * Auto generated method that gets the related <code>VisualThemeResource</code> by the relation named <code>VisualThemeResource</code>.
+     * @return the list of <code>VisualThemeResource</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends VisualThemeResource> getVisualThemeResources() throws RepositoryException {
+        if (this.visualThemeResources == null) {
+            this.visualThemeResources = getRelated(VisualThemeResource.class, "VisualThemeResource");
+        }
+        return this.visualThemeResources;
     }
     /**
      * Auto generated method that gets the related <code>WorkEffort</code> by the relation named <code>ScopeWorkEffort</code>.
@@ -2240,136 +2361,15 @@ fieldMapColumns.put("Enumeration", fields);
         return this.expectationWorkEffortPartyAssignments;
     }
     /**
-     * Auto generated method that gets the related <code>WorkflowActivity</code> by the relation named <code>StartModeWorkflowActivity</code>.
-     * @return the list of <code>WorkflowActivity</code>
+     * Auto generated method that gets the related <code>WorkEffortPartyAssignment</code> by the relation named <code>DelegateReasonWorkEffortPartyAssignment</code>.
+     * @return the list of <code>WorkEffortPartyAssignment</code>
      * @throws RepositoryException if an error occurs
      */
-    public List<? extends WorkflowActivity> getStartModeWorkflowActivitys() throws RepositoryException {
-        if (this.startModeWorkflowActivitys == null) {
-            this.startModeWorkflowActivitys = getRelated(WorkflowActivity.class, "StartModeWorkflowActivity");
+    public List<? extends WorkEffortPartyAssignment> getDelegateReasonWorkEffortPartyAssignments() throws RepositoryException {
+        if (this.delegateReasonWorkEffortPartyAssignments == null) {
+            this.delegateReasonWorkEffortPartyAssignments = getRelated(WorkEffortPartyAssignment.class, "DelegateReasonWorkEffortPartyAssignment");
         }
-        return this.startModeWorkflowActivitys;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowActivity</code> by the relation named <code>FinishModeWorkflowActivity</code>.
-     * @return the list of <code>WorkflowActivity</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowActivity> getFinishModeWorkflowActivitys() throws RepositoryException {
-        if (this.finishModeWorkflowActivitys == null) {
-            this.finishModeWorkflowActivitys = getRelated(WorkflowActivity.class, "FinishModeWorkflowActivity");
-        }
-        return this.finishModeWorkflowActivitys;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowActivity</code> by the relation named <code>JoinWorkflowActivity</code>.
-     * @return the list of <code>WorkflowActivity</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowActivity> getJoinWorkflowActivitys() throws RepositoryException {
-        if (this.joinWorkflowActivitys == null) {
-            this.joinWorkflowActivitys = getRelated(WorkflowActivity.class, "JoinWorkflowActivity");
-        }
-        return this.joinWorkflowActivitys;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowActivity</code> by the relation named <code>SplitWorkflowActivity</code>.
-     * @return the list of <code>WorkflowActivity</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowActivity> getSplitWorkflowActivitys() throws RepositoryException {
-        if (this.splitWorkflowActivitys == null) {
-            this.splitWorkflowActivitys = getRelated(WorkflowActivity.class, "SplitWorkflowActivity");
-        }
-        return this.splitWorkflowActivitys;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowComplexTypeInfo</code> by the relation named <code>DataTypeWorkflowComplexTypeInfo</code>.
-     * @return the list of <code>WorkflowComplexTypeInfo</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowComplexTypeInfo> getDataTypeWorkflowComplexTypeInfoes() throws RepositoryException {
-        if (this.dataTypeWorkflowComplexTypeInfoes == null) {
-            this.dataTypeWorkflowComplexTypeInfoes = getRelated(WorkflowComplexTypeInfo.class, "DataTypeWorkflowComplexTypeInfo");
-        }
-        return this.dataTypeWorkflowComplexTypeInfoes;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowDataField</code> by the relation named <code>DataTypeWorkflowDataField</code>.
-     * @return the list of <code>WorkflowDataField</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowDataField> getDataTypeWorkflowDataFields() throws RepositoryException {
-        if (this.dataTypeWorkflowDataFields == null) {
-            this.dataTypeWorkflowDataFields = getRelated(WorkflowDataField.class, "DataTypeWorkflowDataField");
-        }
-        return this.dataTypeWorkflowDataFields;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowFormalParam</code> by the relation named <code>ModeWorkflowFormalParam</code>.
-     * @return the list of <code>WorkflowFormalParam</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowFormalParam> getModeWorkflowFormalParams() throws RepositoryException {
-        if (this.modeWorkflowFormalParams == null) {
-            this.modeWorkflowFormalParams = getRelated(WorkflowFormalParam.class, "ModeWorkflowFormalParam");
-        }
-        return this.modeWorkflowFormalParams;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowFormalParam</code> by the relation named <code>DataTypeWorkflowFormalParam</code>.
-     * @return the list of <code>WorkflowFormalParam</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowFormalParam> getDataTypeWorkflowFormalParams() throws RepositoryException {
-        if (this.dataTypeWorkflowFormalParams == null) {
-            this.dataTypeWorkflowFormalParams = getRelated(WorkflowFormalParam.class, "DataTypeWorkflowFormalParam");
-        }
-        return this.dataTypeWorkflowFormalParams;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowPackage</code> by the relation named <code>GraphConformanceWorkflowPackage</code>.
-     * @return the list of <code>WorkflowPackage</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowPackage> getGraphConformanceWorkflowPackages() throws RepositoryException {
-        if (this.graphConformanceWorkflowPackages == null) {
-            this.graphConformanceWorkflowPackages = getRelated(WorkflowPackage.class, "GraphConformanceWorkflowPackage");
-        }
-        return this.graphConformanceWorkflowPackages;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowTransition</code> by the relation named <code>ConditionTypeWorkflowTransition</code>.
-     * @return the list of <code>WorkflowTransition</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowTransition> getConditionTypeWorkflowTransitions() throws RepositoryException {
-        if (this.conditionTypeWorkflowTransitions == null) {
-            this.conditionTypeWorkflowTransitions = getRelated(WorkflowTransition.class, "ConditionTypeWorkflowTransition");
-        }
-        return this.conditionTypeWorkflowTransitions;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowTransition</code> by the relation named <code>LoopTypeWorkflowTransition</code>.
-     * @return the list of <code>WorkflowTransition</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowTransition> getLoopTypeWorkflowTransitions() throws RepositoryException {
-        if (this.loopTypeWorkflowTransitions == null) {
-            this.loopTypeWorkflowTransitions = getRelated(WorkflowTransition.class, "LoopTypeWorkflowTransition");
-        }
-        return this.loopTypeWorkflowTransitions;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowTypeDeclaration</code> by the relation named <code>DataTypeWorkflowTypeDeclaration</code>.
-     * @return the list of <code>WorkflowTypeDeclaration</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowTypeDeclaration> getDataTypeWorkflowTypeDeclarations() throws RepositoryException {
-        if (this.dataTypeWorkflowTypeDeclarations == null) {
-            this.dataTypeWorkflowTypeDeclarations = getRelated(WorkflowTypeDeclaration.class, "DataTypeWorkflowTypeDeclaration");
-        }
-        return this.dataTypeWorkflowTypeDeclarations;
+        return this.delegateReasonWorkEffortPartyAssignments;
     }
 
     /**
@@ -2542,6 +2542,13 @@ fieldMapColumns.put("Enumeration", fields);
     }
     /**
      * Auto generated value setter.
+     * @param communicationEvents the communicationEvents to set
+    */
+    public void setCommunicationEvents(List<CommunicationEvent> communicationEvents) {
+        this.communicationEvents = communicationEvents;
+    }
+    /**
+     * Auto generated value setter.
      * @param privilegeContents the privilegeContents to set
     */
     public void setPrivilegeContents(List<Content> privilegeContents) {
@@ -2640,6 +2647,13 @@ fieldMapColumns.put("Enumeration", fields);
     }
     /**
      * Auto generated value setter.
+     * @param exampleFeatures the exampleFeatures to set
+    */
+    public void setExampleFeatures(List<ExampleFeature> exampleFeatures) {
+        this.exampleFeatures = exampleFeatures;
+    }
+    /**
+     * Auto generated value setter.
      * @param facilitys the facilitys to set
     */
     public void setFacilitys(List<Facility> facilitys) {
@@ -2651,6 +2665,13 @@ fieldMapColumns.put("Enumeration", fields);
     */
     public void setTypeFacilityLocations(List<FacilityLocation> typeFacilityLocations) {
         this.typeFacilityLocations = typeFacilityLocations;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reasonFinAccountTranses the reasonFinAccountTranses to set
+    */
+    public void setReasonFinAccountTranses(List<FinAccountTrans> reasonFinAccountTranses) {
+        this.reasonFinAccountTranses = reasonFinAccountTranses;
     }
     /**
      * Auto generated value setter.
@@ -2913,6 +2934,20 @@ fieldMapColumns.put("Enumeration", fields);
     }
     /**
      * Auto generated value setter.
+     * @param orderItemChanges the orderItemChanges to set
+    */
+    public void setOrderItemChanges(List<OrderItemChange> orderItemChanges) {
+        this.orderItemChanges = orderItemChanges;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reasonOrderItemChanges the reasonOrderItemChanges to set
+    */
+    public void setReasonOrderItemChanges(List<OrderItemChange> reasonOrderItemChanges) {
+        this.reasonOrderItemChanges = reasonOrderItemChanges;
+    }
+    /**
+     * Auto generated value setter.
      * @param orderNotifications the orderNotifications to set
     */
     public void setOrderNotifications(List<OrderNotification> orderNotifications) {
@@ -3081,6 +3116,20 @@ fieldMapColumns.put("Enumeration", fields);
     }
     /**
      * Auto generated value setter.
+     * @param posTerminalInternTxes the posTerminalInternTxes to set
+    */
+    public void setPosTerminalInternTxes(List<PosTerminalInternTx> posTerminalInternTxes) {
+        this.posTerminalInternTxes = posTerminalInternTxes;
+    }
+    /**
+     * Auto generated value setter.
+     * @param vitualVariantMethodProducts the vitualVariantMethodProducts to set
+    */
+    public void setVitualVariantMethodProducts(List<Product> vitualVariantMethodProducts) {
+        this.vitualVariantMethodProducts = vitualVariantMethodProducts;
+    }
+    /**
+     * Auto generated value setter.
      * @param ratingProducts the ratingProducts to set
     */
     public void setRatingProducts(List<Product> ratingProducts) {
@@ -3193,6 +3242,13 @@ fieldMapColumns.put("Enumeration", fields);
     }
     /**
      * Auto generated value setter.
+     * @param replenishMethodProductStoreFinActSettings the replenishMethodProductStoreFinActSettings to set
+    */
+    public void setReplenishMethodProductStoreFinActSettings(List<ProductStoreFinActSetting> replenishMethodProductStoreFinActSettings) {
+        this.replenishMethodProductStoreFinActSettings = replenishMethodProductStoreFinActSettings;
+    }
+    /**
+     * Auto generated value setter.
      * @param productStoreKeywordOvrds the productStoreKeywordOvrds to set
     */
     public void setProductStoreKeywordOvrds(List<ProductStoreKeywordOvrd> productStoreKeywordOvrds) {
@@ -3204,6 +3260,13 @@ fieldMapColumns.put("Enumeration", fields);
     */
     public void setProductStorePaymentSettings(List<ProductStorePaymentSetting> productStorePaymentSettings) {
         this.productStorePaymentSettings = productStorePaymentSettings;
+    }
+    /**
+     * Auto generated value setter.
+     * @param creditCardProductStoreVendorPayments the creditCardProductStoreVendorPayments to set
+    */
+    public void setCreditCardProductStoreVendorPayments(List<ProductStoreVendorPayment> creditCardProductStoreVendorPayments) {
+        this.creditCardProductStoreVendorPayments = creditCardProductStoreVendorPayments;
     }
     /**
      * Auto generated value setter.
@@ -3235,10 +3298,24 @@ fieldMapColumns.put("Enumeration", fields);
     }
     /**
      * Auto generated value setter.
+     * @param purposeUomConversionDateds the purposeUomConversionDateds to set
+    */
+    public void setPurposeUomConversionDateds(List<UomConversionDated> purposeUomConversionDateds) {
+        this.purposeUomConversionDateds = purposeUomConversionDateds;
+    }
+    /**
+     * Auto generated value setter.
      * @param viewPreferences the viewPreferences to set
     */
     public void setViewPreferences(List<ViewPreference> viewPreferences) {
         this.viewPreferences = viewPreferences;
+    }
+    /**
+     * Auto generated value setter.
+     * @param visualThemeResources the visualThemeResources to set
+    */
+    public void setVisualThemeResources(List<VisualThemeResource> visualThemeResources) {
+        this.visualThemeResources = visualThemeResources;
     }
     /**
      * Auto generated value setter.
@@ -3256,87 +3333,10 @@ fieldMapColumns.put("Enumeration", fields);
     }
     /**
      * Auto generated value setter.
-     * @param startModeWorkflowActivitys the startModeWorkflowActivitys to set
+     * @param delegateReasonWorkEffortPartyAssignments the delegateReasonWorkEffortPartyAssignments to set
     */
-    public void setStartModeWorkflowActivitys(List<WorkflowActivity> startModeWorkflowActivitys) {
-        this.startModeWorkflowActivitys = startModeWorkflowActivitys;
-    }
-    /**
-     * Auto generated value setter.
-     * @param finishModeWorkflowActivitys the finishModeWorkflowActivitys to set
-    */
-    public void setFinishModeWorkflowActivitys(List<WorkflowActivity> finishModeWorkflowActivitys) {
-        this.finishModeWorkflowActivitys = finishModeWorkflowActivitys;
-    }
-    /**
-     * Auto generated value setter.
-     * @param joinWorkflowActivitys the joinWorkflowActivitys to set
-    */
-    public void setJoinWorkflowActivitys(List<WorkflowActivity> joinWorkflowActivitys) {
-        this.joinWorkflowActivitys = joinWorkflowActivitys;
-    }
-    /**
-     * Auto generated value setter.
-     * @param splitWorkflowActivitys the splitWorkflowActivitys to set
-    */
-    public void setSplitWorkflowActivitys(List<WorkflowActivity> splitWorkflowActivitys) {
-        this.splitWorkflowActivitys = splitWorkflowActivitys;
-    }
-    /**
-     * Auto generated value setter.
-     * @param dataTypeWorkflowComplexTypeInfoes the dataTypeWorkflowComplexTypeInfoes to set
-    */
-    public void setDataTypeWorkflowComplexTypeInfoes(List<WorkflowComplexTypeInfo> dataTypeWorkflowComplexTypeInfoes) {
-        this.dataTypeWorkflowComplexTypeInfoes = dataTypeWorkflowComplexTypeInfoes;
-    }
-    /**
-     * Auto generated value setter.
-     * @param dataTypeWorkflowDataFields the dataTypeWorkflowDataFields to set
-    */
-    public void setDataTypeWorkflowDataFields(List<WorkflowDataField> dataTypeWorkflowDataFields) {
-        this.dataTypeWorkflowDataFields = dataTypeWorkflowDataFields;
-    }
-    /**
-     * Auto generated value setter.
-     * @param modeWorkflowFormalParams the modeWorkflowFormalParams to set
-    */
-    public void setModeWorkflowFormalParams(List<WorkflowFormalParam> modeWorkflowFormalParams) {
-        this.modeWorkflowFormalParams = modeWorkflowFormalParams;
-    }
-    /**
-     * Auto generated value setter.
-     * @param dataTypeWorkflowFormalParams the dataTypeWorkflowFormalParams to set
-    */
-    public void setDataTypeWorkflowFormalParams(List<WorkflowFormalParam> dataTypeWorkflowFormalParams) {
-        this.dataTypeWorkflowFormalParams = dataTypeWorkflowFormalParams;
-    }
-    /**
-     * Auto generated value setter.
-     * @param graphConformanceWorkflowPackages the graphConformanceWorkflowPackages to set
-    */
-    public void setGraphConformanceWorkflowPackages(List<WorkflowPackage> graphConformanceWorkflowPackages) {
-        this.graphConformanceWorkflowPackages = graphConformanceWorkflowPackages;
-    }
-    /**
-     * Auto generated value setter.
-     * @param conditionTypeWorkflowTransitions the conditionTypeWorkflowTransitions to set
-    */
-    public void setConditionTypeWorkflowTransitions(List<WorkflowTransition> conditionTypeWorkflowTransitions) {
-        this.conditionTypeWorkflowTransitions = conditionTypeWorkflowTransitions;
-    }
-    /**
-     * Auto generated value setter.
-     * @param loopTypeWorkflowTransitions the loopTypeWorkflowTransitions to set
-    */
-    public void setLoopTypeWorkflowTransitions(List<WorkflowTransition> loopTypeWorkflowTransitions) {
-        this.loopTypeWorkflowTransitions = loopTypeWorkflowTransitions;
-    }
-    /**
-     * Auto generated value setter.
-     * @param dataTypeWorkflowTypeDeclarations the dataTypeWorkflowTypeDeclarations to set
-    */
-    public void setDataTypeWorkflowTypeDeclarations(List<WorkflowTypeDeclaration> dataTypeWorkflowTypeDeclarations) {
-        this.dataTypeWorkflowTypeDeclarations = dataTypeWorkflowTypeDeclarations;
+    public void setDelegateReasonWorkEffortPartyAssignments(List<WorkEffortPartyAssignment> delegateReasonWorkEffortPartyAssignments) {
+        this.delegateReasonWorkEffortPartyAssignments = delegateReasonWorkEffortPartyAssignments;
     }
 
     /**
@@ -3419,6 +3419,60 @@ fieldMapColumns.put("Enumeration", fields);
             return;
         }
         this.productStorePaymentSettings.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addCreditCardProductStoreVendorPayment(ProductStoreVendorPayment creditCardProductStoreVendorPayment) {
+        if (this.creditCardProductStoreVendorPayments == null) {
+            this.creditCardProductStoreVendorPayments = new ArrayList<ProductStoreVendorPayment>();
+        }
+        this.creditCardProductStoreVendorPayments.add(creditCardProductStoreVendorPayment);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeCreditCardProductStoreVendorPayment(ProductStoreVendorPayment creditCardProductStoreVendorPayment) {
+        if (this.creditCardProductStoreVendorPayments == null) {
+            return;
+        }
+        this.creditCardProductStoreVendorPayments.remove(creditCardProductStoreVendorPayment);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearCreditCardProductStoreVendorPayment() {
+        if (this.creditCardProductStoreVendorPayments == null) {
+            return;
+        }
+        this.creditCardProductStoreVendorPayments.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addVisualThemeResource(VisualThemeResource visualThemeResource) {
+        if (this.visualThemeResources == null) {
+            this.visualThemeResources = new ArrayList<VisualThemeResource>();
+        }
+        this.visualThemeResources.add(visualThemeResource);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeVisualThemeResource(VisualThemeResource visualThemeResource) {
+        if (this.visualThemeResources == null) {
+            return;
+        }
+        this.visualThemeResources.remove(visualThemeResource);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearVisualThemeResource() {
+        if (this.visualThemeResources == null) {
+            return;
+        }
+        this.visualThemeResources.clear();
     }
 
     /** {@inheritDoc} */

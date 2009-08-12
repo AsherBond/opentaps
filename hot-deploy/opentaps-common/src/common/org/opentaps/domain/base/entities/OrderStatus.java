@@ -56,8 +56,10 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("statusId", "STATUS_ID");
         fields.put("orderId", "ORDER_ID");
         fields.put("orderItemSeqId", "ORDER_ITEM_SEQ_ID");
+        fields.put("orderPaymentPreferenceId", "ORDER_PAYMENT_PREFERENCE_ID");
         fields.put("statusDatetime", "STATUS_DATETIME");
         fields.put("statusUserLogin", "STATUS_USER_LOGIN");
+        fields.put("changeReason", "CHANGE_REASON");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -69,8 +71,10 @@ fieldMapColumns.put("OrderStatus", fields);
     statusId("statusId"),
     orderId("orderId"),
     orderItemSeqId("orderItemSeqId"),
+    orderPaymentPreferenceId("orderPaymentPreferenceId"),
     statusDatetime("statusDatetime"),
     statusUserLogin("statusUserLogin"),
+    changeReason("changeReason"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -96,10 +100,14 @@ fieldMapColumns.put("OrderStatus", fields);
    private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
    private String orderItemSeqId;
+   @Column(name="ORDER_PAYMENT_PREFERENCE_ID")
+   private String orderPaymentPreferenceId;
    @Column(name="STATUS_DATETIME")
    private Timestamp statusDatetime;
    @Column(name="STATUS_USER_LOGIN")
    private String statusUserLogin;
+   @Column(name="CHANGE_REASON")
+   private String changeReason;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -124,6 +132,13 @@ fieldMapColumns.put("OrderStatus", fields);
    private OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ORDER_PAYMENT_PREFERENCE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private OrderPaymentPreference orderPaymentPreference = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -142,7 +157,7 @@ fieldMapColumns.put("OrderStatus", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderStatusId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderStatusId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("statusDatetime");this.allFieldsNames.add("statusUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("orderStatusId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("orderPaymentPreferenceId");this.allFieldsNames.add("statusDatetime");this.allFieldsNames.add("statusUserLogin");this.allFieldsNames.add("changeReason");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -187,6 +202,13 @@ fieldMapColumns.put("OrderStatus", fields);
     }
     /**
      * Auto generated value setter.
+     * @param orderPaymentPreferenceId the orderPaymentPreferenceId to set
+     */
+    public void setOrderPaymentPreferenceId(String orderPaymentPreferenceId) {
+        this.orderPaymentPreferenceId = orderPaymentPreferenceId;
+    }
+    /**
+     * Auto generated value setter.
      * @param statusDatetime the statusDatetime to set
      */
     public void setStatusDatetime(Timestamp statusDatetime) {
@@ -198,6 +220,13 @@ fieldMapColumns.put("OrderStatus", fields);
      */
     public void setStatusUserLogin(String statusUserLogin) {
         this.statusUserLogin = statusUserLogin;
+    }
+    /**
+     * Auto generated value setter.
+     * @param changeReason the changeReason to set
+     */
+    public void setChangeReason(String changeReason) {
+        this.changeReason = changeReason;
     }
     /**
      * Auto generated value setter.
@@ -258,6 +287,13 @@ fieldMapColumns.put("OrderStatus", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOrderPaymentPreferenceId() {
+        return this.orderPaymentPreferenceId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getStatusDatetime() {
@@ -269,6 +305,13 @@ fieldMapColumns.put("OrderStatus", fields);
      */
     public String getStatusUserLogin() {
         return this.statusUserLogin;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getChangeReason() {
+        return this.changeReason;
     }
     /**
      * Auto generated value accessor.
@@ -333,6 +376,17 @@ fieldMapColumns.put("OrderStatus", fields);
         return this.orderItem;
     }
     /**
+     * Auto generated method that gets the related <code>OrderPaymentPreference</code> by the relation named <code>OrderPaymentPreference</code>.
+     * @return the <code>OrderPaymentPreference</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public OrderPaymentPreference getOrderPaymentPreference() throws RepositoryException {
+        if (this.orderPaymentPreference == null) {
+            this.orderPaymentPreference = getRelatedOne(OrderPaymentPreference.class, "OrderPaymentPreference");
+        }
+        return this.orderPaymentPreference;
+    }
+    /**
      * Auto generated method that gets the related <code>UserLogin</code> by the relation named <code>UserLogin</code>.
      * @return the <code>UserLogin</code>
      * @throws RepositoryException if an error occurs
@@ -367,6 +421,13 @@ fieldMapColumns.put("OrderStatus", fields);
     }
     /**
      * Auto generated value setter.
+     * @param orderPaymentPreference the orderPaymentPreference to set
+    */
+    public void setOrderPaymentPreference(OrderPaymentPreference orderPaymentPreference) {
+        this.orderPaymentPreference = orderPaymentPreference;
+    }
+    /**
+     * Auto generated value setter.
      * @param userLogin the userLogin to set
     */
     public void setUserLogin(UserLogin userLogin) {
@@ -382,8 +443,10 @@ fieldMapColumns.put("OrderStatus", fields);
         setStatusId((String) mapValue.get("statusId"));
         setOrderId((String) mapValue.get("orderId"));
         setOrderItemSeqId((String) mapValue.get("orderItemSeqId"));
+        setOrderPaymentPreferenceId((String) mapValue.get("orderPaymentPreferenceId"));
         setStatusDatetime((Timestamp) mapValue.get("statusDatetime"));
         setStatusUserLogin((String) mapValue.get("statusUserLogin"));
+        setChangeReason((String) mapValue.get("changeReason"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -399,8 +462,10 @@ fieldMapColumns.put("OrderStatus", fields);
         mapValue.put("statusId", getStatusId());
         mapValue.put("orderId", getOrderId());
         mapValue.put("orderItemSeqId", getOrderItemSeqId());
+        mapValue.put("orderPaymentPreferenceId", getOrderPaymentPreferenceId());
         mapValue.put("statusDatetime", getStatusDatetime());
         mapValue.put("statusUserLogin", getStatusUserLogin());
+        mapValue.put("changeReason", getChangeReason());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

@@ -55,6 +55,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("partyId", "PARTY_ID");
         fields.put("productStoreId", "PRODUCT_STORE_ID");
         fields.put("defaultShipAddr", "DEFAULT_SHIP_ADDR");
+        fields.put("defaultBillAddr", "DEFAULT_BILL_ADDR");
         fields.put("defaultPayMeth", "DEFAULT_PAY_METH");
         fields.put("defaultShipMeth", "DEFAULT_SHIP_METH");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -67,6 +68,7 @@ fieldMapColumns.put("PartyProfileDefault", fields);
     partyId("partyId"),
     productStoreId("productStoreId"),
     defaultShipAddr("defaultShipAddr"),
+    defaultBillAddr("defaultBillAddr"),
     defaultPayMeth("defaultPayMeth"),
     defaultShipMeth("defaultShipMeth"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -104,6 +106,8 @@ fieldMapColumns.put("PartyProfileDefault", fields);
       }
    @Column(name="DEFAULT_SHIP_ADDR")
    private String defaultShipAddr;
+   @Column(name="DEFAULT_BILL_ADDR")
+   private String defaultBillAddr;
    @Column(name="DEFAULT_PAY_METH")
    private String defaultPayMeth;
    @Column(name="DEFAULT_SHIP_METH")
@@ -142,7 +146,7 @@ fieldMapColumns.put("PartyProfileDefault", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("productStoreId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("defaultShipAddr");this.allFieldsNames.add("defaultPayMeth");this.allFieldsNames.add("defaultShipMeth");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("defaultShipAddr");this.allFieldsNames.add("defaultBillAddr");this.allFieldsNames.add("defaultPayMeth");this.allFieldsNames.add("defaultShipMeth");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -177,6 +181,13 @@ fieldMapColumns.put("PartyProfileDefault", fields);
      */
     public void setDefaultShipAddr(String defaultShipAddr) {
         this.defaultShipAddr = defaultShipAddr;
+    }
+    /**
+     * Auto generated value setter.
+     * @param defaultBillAddr the defaultBillAddr to set
+     */
+    public void setDefaultBillAddr(String defaultBillAddr) {
+        this.defaultBillAddr = defaultBillAddr;
     }
     /**
      * Auto generated value setter.
@@ -241,6 +252,13 @@ fieldMapColumns.put("PartyProfileDefault", fields);
      */
     public String getDefaultShipAddr() {
         return this.defaultShipAddr;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDefaultBillAddr() {
+        return this.defaultBillAddr;
     }
     /**
      * Auto generated value accessor.
@@ -331,6 +349,7 @@ fieldMapColumns.put("PartyProfileDefault", fields);
         setPartyId((String) mapValue.get("partyId"));
         setProductStoreId((String) mapValue.get("productStoreId"));
         setDefaultShipAddr((String) mapValue.get("defaultShipAddr"));
+        setDefaultBillAddr((String) mapValue.get("defaultBillAddr"));
         setDefaultPayMeth((String) mapValue.get("defaultPayMeth"));
         setDefaultShipMeth((String) mapValue.get("defaultShipMeth"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -347,6 +366,7 @@ fieldMapColumns.put("PartyProfileDefault", fields);
         mapValue.put("partyId", getPartyId());
         mapValue.put("productStoreId", getProductStoreId());
         mapValue.put("defaultShipAddr", getDefaultShipAddr());
+        mapValue.put("defaultBillAddr", getDefaultBillAddr());
         mapValue.put("defaultPayMeth", getDefaultPayMeth());
         mapValue.put("defaultShipMeth", getDefaultShipMeth());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

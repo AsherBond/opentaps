@@ -125,6 +125,10 @@ fieldMapColumns.put("ShipmentMethodType", fields);
    @JoinColumn(name="DEFAULT_SHIP_METHOD_ID")
    
    private List<ProductStore> productStores = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
+   
+   private List<ProductStoreVendorShipment> productStoreVendorShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_METHOD_TYPE_ID")
    
@@ -334,6 +338,17 @@ fieldMapColumns.put("ShipmentMethodType", fields);
         return this.productStores;
     }
     /**
+     * Auto generated method that gets the related <code>ProductStoreVendorShipment</code> by the relation named <code>ProductStoreVendorShipment</code>.
+     * @return the list of <code>ProductStoreVendorShipment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductStoreVendorShipment> getProductStoreVendorShipments() throws RepositoryException {
+        if (this.productStoreVendorShipments == null) {
+            this.productStoreVendorShipments = getRelated(ProductStoreVendorShipment.class, "ProductStoreVendorShipment");
+        }
+        return this.productStoreVendorShipments;
+    }
+    /**
      * Auto generated method that gets the related <code>ShipmentRouteSegment</code> by the relation named <code>ShipmentRouteSegment</code>.
      * @return the list of <code>ShipmentRouteSegment</code>
      * @throws RepositoryException if an error occurs
@@ -396,6 +411,13 @@ fieldMapColumns.put("ShipmentMethodType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param productStoreVendorShipments the productStoreVendorShipments to set
+    */
+    public void setProductStoreVendorShipments(List<ProductStoreVendorShipment> productStoreVendorShipments) {
+        this.productStoreVendorShipments = productStoreVendorShipments;
+    }
+    /**
+     * Auto generated value setter.
      * @param shipmentRouteSegments the shipmentRouteSegments to set
     */
     public void setShipmentRouteSegments(List<ShipmentRouteSegment> shipmentRouteSegments) {
@@ -455,6 +477,33 @@ fieldMapColumns.put("ShipmentMethodType", fields);
             return;
         }
         this.facilityCarrierShipments.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addProductStoreVendorShipment(ProductStoreVendorShipment productStoreVendorShipment) {
+        if (this.productStoreVendorShipments == null) {
+            this.productStoreVendorShipments = new ArrayList<ProductStoreVendorShipment>();
+        }
+        this.productStoreVendorShipments.add(productStoreVendorShipment);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeProductStoreVendorShipment(ProductStoreVendorShipment productStoreVendorShipment) {
+        if (this.productStoreVendorShipments == null) {
+            return;
+        }
+        this.productStoreVendorShipments.remove(productStoreVendorShipment);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearProductStoreVendorShipment() {
+        if (this.productStoreVendorShipments == null) {
+            return;
+        }
+        this.productStoreVendorShipments.clear();
     }
 
     /** {@inheritDoc} */

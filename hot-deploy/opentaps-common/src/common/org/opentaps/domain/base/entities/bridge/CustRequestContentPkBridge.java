@@ -47,10 +47,10 @@ public class CustRequestContentPkBridge implements TwoWayFieldBridge {
     public Object get(String name, Document document) {
         CustRequestContentPk id = new CustRequestContentPk();
         Field field = null;
-        field = document.getField(name + ".contentId");
-        id.setContentId(field.stringValue());
         field = document.getField(name + ".custRequestId");
         id.setCustRequestId(field.stringValue());
+        field = document.getField(name + ".contentId");
+        id.setContentId(field.stringValue());
         field = document.getField(name + ".fromDate");
         if (field.stringValue() != null && !field.stringValue().equals("")) {
             id.setFromDate(new Timestamp(((Date) (new DateBridge(Resolution.DAY)).stringToObject(field.stringValue())).getTime()));
@@ -67,9 +67,9 @@ public class CustRequestContentPkBridge implements TwoWayFieldBridge {
         CustRequestContentPk id = (CustRequestContentPk) object;
         StringBuilder sb = new StringBuilder("");
         
-        sb.append(id.getContentId());
-        sb.append(" ");
         sb.append(id.getCustRequestId());
+        sb.append(" ");
+        sb.append(id.getContentId());
         sb.append(" ");
         sb.append(id.getFromDate());
         return sb.toString();
@@ -90,10 +90,10 @@ public class CustRequestContentPkBridge implements TwoWayFieldBridge {
         Float boost = luceneOptions.getBoost();
 
         Field field = null;
-        field = new Field(name + ".contentId", id.getContentId(), store, index, termVector);
+        field = new Field(name + ".custRequestId", id.getCustRequestId(), store, index, termVector);
         field.setBoost(boost);
         document.add(field);
-        field = new Field(name + ".custRequestId", id.getCustRequestId(), store, index, termVector);
+        field = new Field(name + ".contentId", id.getContentId(), store, index, termVector);
         field.setBoost(boost);
         document.add(field);
         field = new Field(name + ".fromDate", (new DateBridge(Resolution.DAY)).objectToString(id.getFromDate()), store, index, termVector);

@@ -55,13 +55,17 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("inventoryItemId", "INVENTORY_ITEM_ID");
         fields.put("inventoryItemDetailSeqId", "INVENTORY_ITEM_DETAIL_SEQ_ID");
+        fields.put("effectiveDate", "EFFECTIVE_DATE");
         fields.put("quantityOnHandDiff", "QUANTITY_ON_HAND_DIFF");
         fields.put("availableToPromiseDiff", "AVAILABLE_TO_PROMISE_DIFF");
+        fields.put("unitCost", "UNIT_COST");
         fields.put("orderId", "ORDER_ID");
         fields.put("orderItemSeqId", "ORDER_ITEM_SEQ_ID");
         fields.put("shipGroupSeqId", "SHIP_GROUP_SEQ_ID");
         fields.put("shipmentId", "SHIPMENT_ID");
         fields.put("shipmentItemSeqId", "SHIPMENT_ITEM_SEQ_ID");
+        fields.put("returnId", "RETURN_ID");
+        fields.put("returnItemSeqId", "RETURN_ITEM_SEQ_ID");
         fields.put("workEffortId", "WORK_EFFORT_ID");
         fields.put("fixedAssetId", "FIXED_ASSET_ID");
         fields.put("maintHistSeqId", "MAINT_HIST_SEQ_ID");
@@ -74,20 +78,22 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
-        fields.put("returnId", "RETURN_ID");
-        fields.put("returnItemSeqId", "RETURN_ITEM_SEQ_ID");
 fieldMapColumns.put("InventoryItemDetail", fields);
 }
   public static enum Fields implements EntityFieldInterface<InventoryItemDetail> {
     inventoryItemId("inventoryItemId"),
     inventoryItemDetailSeqId("inventoryItemDetailSeqId"),
+    effectiveDate("effectiveDate"),
     quantityOnHandDiff("quantityOnHandDiff"),
     availableToPromiseDiff("availableToPromiseDiff"),
+    unitCost("unitCost"),
     orderId("orderId"),
     orderItemSeqId("orderItemSeqId"),
     shipGroupSeqId("shipGroupSeqId"),
     shipmentId("shipmentId"),
     shipmentItemSeqId("shipmentItemSeqId"),
+    returnId("returnId"),
+    returnItemSeqId("returnItemSeqId"),
     workEffortId("workEffortId"),
     fixedAssetId("fixedAssetId"),
     maintHistSeqId("maintHistSeqId"),
@@ -99,9 +105,7 @@ fieldMapColumns.put("InventoryItemDetail", fields);
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
-    createdTxStamp("createdTxStamp"),
-    returnId("returnId"),
-    returnItemSeqId("returnItemSeqId");
+    createdTxStamp("createdTxStamp");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -131,10 +135,14 @@ fieldMapColumns.put("InventoryItemDetail", fields);
       public void setId(InventoryItemDetailPk id) {
          this.id = id;
       }
+   @Column(name="EFFECTIVE_DATE")
+   private Timestamp effectiveDate;
    @Column(name="QUANTITY_ON_HAND_DIFF")
    private BigDecimal quantityOnHandDiff;
    @Column(name="AVAILABLE_TO_PROMISE_DIFF")
    private BigDecimal availableToPromiseDiff;
+   @Column(name="UNIT_COST")
+   private BigDecimal unitCost;
    @Column(name="ORDER_ID")
    private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
@@ -145,6 +153,10 @@ fieldMapColumns.put("InventoryItemDetail", fields);
    private String shipmentId;
    @Column(name="SHIPMENT_ITEM_SEQ_ID")
    private String shipmentItemSeqId;
+   @Column(name="RETURN_ID")
+   private String returnId;
+   @Column(name="RETURN_ITEM_SEQ_ID")
+   private String returnItemSeqId;
    @Column(name="WORK_EFFORT_ID")
    private String workEffortId;
    @Column(name="FIXED_ASSET_ID")
@@ -169,10 +181,6 @@ fieldMapColumns.put("InventoryItemDetail", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
-   @Column(name="RETURN_ID")
-   private String returnId;
-   @Column(name="RETURN_ITEM_SEQ_ID")
-   private String returnItemSeqId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -232,7 +240,7 @@ fieldMapColumns.put("InventoryItemDetail", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("inventoryItemId");this.primaryKeyNames.add("inventoryItemDetailSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("inventoryItemDetailSeqId");this.allFieldsNames.add("quantityOnHandDiff");this.allFieldsNames.add("availableToPromiseDiff");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentItemSeqId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("itemIssuanceId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("reasonEnumId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("returnId");this.allFieldsNames.add("returnItemSeqId");
+      this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("inventoryItemDetailSeqId");this.allFieldsNames.add("effectiveDate");this.allFieldsNames.add("quantityOnHandDiff");this.allFieldsNames.add("availableToPromiseDiff");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentItemSeqId");this.allFieldsNames.add("returnId");this.allFieldsNames.add("returnItemSeqId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("itemIssuanceId");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("physicalInventoryId");this.allFieldsNames.add("reasonEnumId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -263,6 +271,13 @@ fieldMapColumns.put("InventoryItemDetail", fields);
     }
     /**
      * Auto generated value setter.
+     * @param effectiveDate the effectiveDate to set
+     */
+    public void setEffectiveDate(Timestamp effectiveDate) {
+        this.effectiveDate = effectiveDate;
+    }
+    /**
+     * Auto generated value setter.
      * @param quantityOnHandDiff the quantityOnHandDiff to set
      */
     public void setQuantityOnHandDiff(BigDecimal quantityOnHandDiff) {
@@ -274,6 +289,13 @@ fieldMapColumns.put("InventoryItemDetail", fields);
      */
     public void setAvailableToPromiseDiff(BigDecimal availableToPromiseDiff) {
         this.availableToPromiseDiff = availableToPromiseDiff;
+    }
+    /**
+     * Auto generated value setter.
+     * @param unitCost the unitCost to set
+     */
+    public void setUnitCost(BigDecimal unitCost) {
+        this.unitCost = unitCost;
     }
     /**
      * Auto generated value setter.
@@ -309,6 +331,20 @@ fieldMapColumns.put("InventoryItemDetail", fields);
      */
     public void setShipmentItemSeqId(String shipmentItemSeqId) {
         this.shipmentItemSeqId = shipmentItemSeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param returnId the returnId to set
+     */
+    public void setReturnId(String returnId) {
+        this.returnId = returnId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param returnItemSeqId the returnItemSeqId to set
+     */
+    public void setReturnItemSeqId(String returnItemSeqId) {
+        this.returnItemSeqId = returnItemSeqId;
     }
     /**
      * Auto generated value setter.
@@ -394,20 +430,6 @@ fieldMapColumns.put("InventoryItemDetail", fields);
     public void setCreatedTxStamp(Timestamp createdTxStamp) {
         this.createdTxStamp = createdTxStamp;
     }
-    /**
-     * Auto generated value setter.
-     * @param returnId the returnId to set
-     */
-    public void setReturnId(String returnId) {
-        this.returnId = returnId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param returnItemSeqId the returnItemSeqId to set
-     */
-    public void setReturnItemSeqId(String returnItemSeqId) {
-        this.returnItemSeqId = returnItemSeqId;
-    }
 
     /**
      * Auto generated value accessor.
@@ -425,6 +447,13 @@ fieldMapColumns.put("InventoryItemDetail", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getEffectiveDate() {
+        return this.effectiveDate;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getQuantityOnHandDiff() {
@@ -436,6 +465,13 @@ fieldMapColumns.put("InventoryItemDetail", fields);
      */
     public BigDecimal getAvailableToPromiseDiff() {
         return this.availableToPromiseDiff;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getUnitCost() {
+        return this.unitCost;
     }
     /**
      * Auto generated value accessor.
@@ -471,6 +507,20 @@ fieldMapColumns.put("InventoryItemDetail", fields);
      */
     public String getShipmentItemSeqId() {
         return this.shipmentItemSeqId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReturnId() {
+        return this.returnId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReturnItemSeqId() {
+        return this.returnItemSeqId;
     }
     /**
      * Auto generated value accessor.
@@ -555,20 +605,6 @@ fieldMapColumns.put("InventoryItemDetail", fields);
      */
     public Timestamp getCreatedTxStamp() {
         return this.createdTxStamp;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getReturnId() {
-        return this.returnId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getReturnItemSeqId() {
-        return this.returnItemSeqId;
     }
 
     /**
@@ -778,13 +814,17 @@ fieldMapColumns.put("InventoryItemDetail", fields);
         preInit();
         setInventoryItemId((String) mapValue.get("inventoryItemId"));
         setInventoryItemDetailSeqId((String) mapValue.get("inventoryItemDetailSeqId"));
+        setEffectiveDate((Timestamp) mapValue.get("effectiveDate"));
         setQuantityOnHandDiff(convertToBigDecimal(mapValue.get("quantityOnHandDiff")));
         setAvailableToPromiseDiff(convertToBigDecimal(mapValue.get("availableToPromiseDiff")));
+        setUnitCost(convertToBigDecimal(mapValue.get("unitCost")));
         setOrderId((String) mapValue.get("orderId"));
         setOrderItemSeqId((String) mapValue.get("orderItemSeqId"));
         setShipGroupSeqId((String) mapValue.get("shipGroupSeqId"));
         setShipmentId((String) mapValue.get("shipmentId"));
         setShipmentItemSeqId((String) mapValue.get("shipmentItemSeqId"));
+        setReturnId((String) mapValue.get("returnId"));
+        setReturnItemSeqId((String) mapValue.get("returnItemSeqId"));
         setWorkEffortId((String) mapValue.get("workEffortId"));
         setFixedAssetId((String) mapValue.get("fixedAssetId"));
         setMaintHistSeqId((String) mapValue.get("maintHistSeqId"));
@@ -797,8 +837,6 @@ fieldMapColumns.put("InventoryItemDetail", fields);
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
-        setReturnId((String) mapValue.get("returnId"));
-        setReturnItemSeqId((String) mapValue.get("returnItemSeqId"));
         postInit();
     }
 
@@ -808,13 +846,17 @@ fieldMapColumns.put("InventoryItemDetail", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("inventoryItemId", getInventoryItemId());
         mapValue.put("inventoryItemDetailSeqId", getInventoryItemDetailSeqId());
+        mapValue.put("effectiveDate", getEffectiveDate());
         mapValue.put("quantityOnHandDiff", getQuantityOnHandDiff());
         mapValue.put("availableToPromiseDiff", getAvailableToPromiseDiff());
+        mapValue.put("unitCost", getUnitCost());
         mapValue.put("orderId", getOrderId());
         mapValue.put("orderItemSeqId", getOrderItemSeqId());
         mapValue.put("shipGroupSeqId", getShipGroupSeqId());
         mapValue.put("shipmentId", getShipmentId());
         mapValue.put("shipmentItemSeqId", getShipmentItemSeqId());
+        mapValue.put("returnId", getReturnId());
+        mapValue.put("returnItemSeqId", getReturnItemSeqId());
         mapValue.put("workEffortId", getWorkEffortId());
         mapValue.put("fixedAssetId", getFixedAssetId());
         mapValue.put("maintHistSeqId", getMaintHistSeqId());
@@ -827,8 +869,6 @@ fieldMapColumns.put("InventoryItemDetail", fields);
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
-        mapValue.put("returnId", getReturnId());
-        mapValue.put("returnItemSeqId", getReturnItemSeqId());
         return mapValue;
     }
 

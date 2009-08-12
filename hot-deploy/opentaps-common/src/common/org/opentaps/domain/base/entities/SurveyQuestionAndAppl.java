@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity SurveyQuestionAndAppl.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectSurveyQuestionAndAppls", query="SELECT SQ.SURVEY_QUESTION_ID AS \"surveyQuestionId\",SQ.SURVEY_QUESTION_CATEGORY_ID AS \"surveyQuestionCategoryId\",SQ.SURVEY_QUESTION_TYPE_ID AS \"surveyQuestionTypeId\",SQ.DESCRIPTION AS \"description\",SQ.QUESTION AS \"question\",SQ.HINT AS \"hint\",SA.SURVEY_ID AS \"surveyId\",SA.FROM_DATE AS \"fromDate\",SA.THRU_DATE AS \"thruDate\",SA.SURVEY_PAGE_SEQ_ID AS \"surveyPageSeqId\",SA.SURVEY_MULTI_RESP_ID AS \"surveyMultiRespId\",SA.SURVEY_MULTI_RESP_COL_ID AS \"surveyMultiRespColId\",SA.REQUIRED_FIELD AS \"requiredField\",SA.SEQUENCE_NUM AS \"sequenceNum\",SA.EXTERNAL_FIELD_REF AS \"externalFieldRef\",SA.WITH_SURVEY_QUESTION_ID AS \"withSurveyQuestionId\",SA.WITH_SURVEY_OPTION_SEQ_ID AS \"withSurveyOptionSeqId\" FROM SURVEY_QUESTION SQ INNER JOIN SURVEY_QUESTION_APPL SA ON SQ.SURVEY_QUESTION_ID = SA.SURVEY_QUESTION_ID", resultSetMapping="SurveyQuestionAndApplMapping")
+@NamedNativeQuery(name="selectSurveyQuestionAndAppls", query="SELECT SQ.SURVEY_QUESTION_ID AS \"surveyQuestionId\",SQ.SURVEY_QUESTION_CATEGORY_ID AS \"surveyQuestionCategoryId\",SQ.SURVEY_QUESTION_TYPE_ID AS \"surveyQuestionTypeId\",SQ.DESCRIPTION AS \"description\",SQ.QUESTION AS \"question\",SQ.HINT AS \"hint\",SQ.ENUM_TYPE_ID AS \"enumTypeId\",SQ.GEO_ID AS \"geoId\",SQ.FORMAT_STRING AS \"formatString\",SA.SURVEY_ID AS \"surveyId\",SA.FROM_DATE AS \"fromDate\",SA.THRU_DATE AS \"thruDate\",SA.SURVEY_PAGE_SEQ_ID AS \"surveyPageSeqId\",SA.SURVEY_MULTI_RESP_ID AS \"surveyMultiRespId\",SA.SURVEY_MULTI_RESP_COL_ID AS \"surveyMultiRespColId\",SA.REQUIRED_FIELD AS \"requiredField\",SA.SEQUENCE_NUM AS \"sequenceNum\",SA.EXTERNAL_FIELD_REF AS \"externalFieldRef\",SA.WITH_SURVEY_QUESTION_ID AS \"withSurveyQuestionId\",SA.WITH_SURVEY_OPTION_SEQ_ID AS \"withSurveyOptionSeqId\" FROM SURVEY_QUESTION SQ INNER JOIN SURVEY_QUESTION_APPL SA ON SQ.SURVEY_QUESTION_ID = SA.SURVEY_QUESTION_ID", resultSetMapping="SurveyQuestionAndApplMapping")
 @SqlResultSetMapping(name="SurveyQuestionAndApplMapping", entities={
 @EntityResult(entityClass=SurveyQuestionAndAppl.class, fields = {
 @FieldResult(name="surveyQuestionId", column="surveyQuestionId")
@@ -58,6 +58,9 @@ import java.sql.Timestamp;
 ,@FieldResult(name="description", column="description")
 ,@FieldResult(name="question", column="question")
 ,@FieldResult(name="hint", column="hint")
+,@FieldResult(name="enumTypeId", column="enumTypeId")
+,@FieldResult(name="geoId", column="geoId")
+,@FieldResult(name="formatString", column="formatString")
 ,@FieldResult(name="surveyId", column="surveyId")
 ,@FieldResult(name="fromDate", column="fromDate")
 ,@FieldResult(name="thruDate", column="thruDate")
@@ -81,6 +84,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("description", "SQ.DESCRIPTION");
         fields.put("question", "SQ.QUESTION");
         fields.put("hint", "SQ.HINT");
+        fields.put("enumTypeId", "SQ.ENUM_TYPE_ID");
+        fields.put("geoId", "SQ.GEO_ID");
+        fields.put("formatString", "SQ.FORMAT_STRING");
         fields.put("surveyId", "SA.SURVEY_ID");
         fields.put("fromDate", "SA.FROM_DATE");
         fields.put("thruDate", "SA.THRU_DATE");
@@ -101,6 +107,9 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
     description("description"),
     question("question"),
     hint("hint"),
+    enumTypeId("enumTypeId"),
+    geoId("geoId"),
+    formatString("formatString"),
     surveyId("surveyId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
@@ -134,6 +143,12 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
    private String question;
     
    private String hint;
+    
+   private String enumTypeId;
+    
+   private String geoId;
+    
+   private String formatString;
     
    private String surveyId;
     
@@ -178,6 +193,14 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
    
    private Survey survey = null;
    private transient List<SurveyQuestionOption> surveyQuestionOptions = null;
+   private transient List<Enumeration> enumerations = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="GEO_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Geo geo = null;
    private transient SurveyPage surveyPage = null;
    private transient SurveyMultiResp surveyMultiResp = null;
    private transient SurveyMultiRespColumn surveyMultiRespColumn = null;
@@ -193,7 +216,7 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("surveyQuestionId");this.primaryKeyNames.add("surveyId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("surveyQuestionId");this.allFieldsNames.add("surveyQuestionCategoryId");this.allFieldsNames.add("surveyQuestionTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("question");this.allFieldsNames.add("hint");this.allFieldsNames.add("surveyId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("surveyPageSeqId");this.allFieldsNames.add("surveyMultiRespId");this.allFieldsNames.add("surveyMultiRespColId");this.allFieldsNames.add("requiredField");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("externalFieldRef");this.allFieldsNames.add("withSurveyQuestionId");this.allFieldsNames.add("withSurveyOptionSeqId");
+      this.allFieldsNames.add("surveyQuestionId");this.allFieldsNames.add("surveyQuestionCategoryId");this.allFieldsNames.add("surveyQuestionTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("question");this.allFieldsNames.add("hint");this.allFieldsNames.add("enumTypeId");this.allFieldsNames.add("geoId");this.allFieldsNames.add("formatString");this.allFieldsNames.add("surveyId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("surveyPageSeqId");this.allFieldsNames.add("surveyMultiRespId");this.allFieldsNames.add("surveyMultiRespColId");this.allFieldsNames.add("requiredField");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("externalFieldRef");this.allFieldsNames.add("withSurveyQuestionId");this.allFieldsNames.add("withSurveyOptionSeqId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -252,6 +275,27 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
      */
     private void setHint(String hint) {
         this.hint = hint;
+    }
+    /**
+     * Auto generated value setter.
+     * @param enumTypeId the enumTypeId to set
+     */
+    private void setEnumTypeId(String enumTypeId) {
+        this.enumTypeId = enumTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param geoId the geoId to set
+     */
+    private void setGeoId(String geoId) {
+        this.geoId = geoId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param formatString the formatString to set
+     */
+    private void setFormatString(String formatString) {
+        this.formatString = formatString;
     }
     /**
      * Auto generated value setter.
@@ -377,6 +421,27 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getEnumTypeId() {
+        return this.enumTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getGeoId() {
+        return this.geoId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getFormatString() {
+        return this.formatString;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getSurveyId() {
         return this.surveyId;
     }
@@ -496,6 +561,28 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
         return this.surveyQuestionOptions;
     }
     /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>Enumeration</code>.
+     * @return the list of <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Enumeration> getEnumerations() throws RepositoryException {
+        if (this.enumerations == null) {
+            this.enumerations = getRelated(Enumeration.class, "Enumeration");
+        }
+        return this.enumerations;
+    }
+    /**
+     * Auto generated method that gets the related <code>Geo</code> by the relation named <code>Geo</code>.
+     * @return the <code>Geo</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Geo getGeo() throws RepositoryException {
+        if (this.geo == null) {
+            this.geo = getRelatedOne(Geo.class, "Geo");
+        }
+        return this.geo;
+    }
+    /**
      * Auto generated method that gets the related <code>SurveyPage</code> by the relation named <code>SurveyPage</code>.
      * @return the <code>SurveyPage</code>
      * @throws RepositoryException if an error occurs
@@ -559,6 +646,20 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
     }
     /**
      * Auto generated value setter.
+     * @param enumerations the enumerations to set
+    */
+    public void setEnumerations(List<Enumeration> enumerations) {
+        this.enumerations = enumerations;
+    }
+    /**
+     * Auto generated value setter.
+     * @param geo the geo to set
+    */
+    public void setGeo(Geo geo) {
+        this.geo = geo;
+    }
+    /**
+     * Auto generated value setter.
      * @param surveyPage the surveyPage to set
     */
     public void setSurveyPage(SurveyPage surveyPage) {
@@ -590,6 +691,9 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
         setDescription((String) mapValue.get("description"));
         setQuestion((String) mapValue.get("question"));
         setHint((String) mapValue.get("hint"));
+        setEnumTypeId((String) mapValue.get("enumTypeId"));
+        setGeoId((String) mapValue.get("geoId"));
+        setFormatString((String) mapValue.get("formatString"));
         setSurveyId((String) mapValue.get("surveyId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
@@ -614,6 +718,9 @@ fieldMapColumns.put("SurveyQuestionAndAppl", fields);
         mapValue.put("description", getDescription());
         mapValue.put("question", getQuestion());
         mapValue.put("hint", getHint());
+        mapValue.put("enumTypeId", getEnumTypeId());
+        mapValue.put("geoId", getGeoId());
+        mapValue.put("formatString", getFormatString());
         mapValue.put("surveyId", getSurveyId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());

@@ -51,6 +51,8 @@ public class WebUserPreferencePkBridge implements TwoWayFieldBridge {
         id.setUserLoginId(field.stringValue());
         field = document.getField(name + ".partyId");
         id.setPartyId(field.stringValue());
+        field = document.getField(name + ".visitId");
+        id.setVisitId(field.stringValue());
         field = document.getField(name + ".webPreferenceTypeId");
         id.setWebPreferenceTypeId(field.stringValue());
         return id;
@@ -68,6 +70,8 @@ public class WebUserPreferencePkBridge implements TwoWayFieldBridge {
         sb.append(id.getUserLoginId());
         sb.append(" ");
         sb.append(id.getPartyId());
+        sb.append(" ");
+        sb.append(id.getVisitId());
         sb.append(" ");
         sb.append(id.getWebPreferenceTypeId());
         return sb.toString();
@@ -92,6 +96,9 @@ public class WebUserPreferencePkBridge implements TwoWayFieldBridge {
         field.setBoost(boost);
         document.add(field);
         field = new Field(name + ".partyId", id.getPartyId(), store, index, termVector);
+        field.setBoost(boost);
+        document.add(field);
+        field = new Field(name + ".visitId", id.getVisitId(), store, index, termVector);
         field.setBoost(boost);
         document.add(field);
         field = new Field(name + ".webPreferenceTypeId", id.getWebPreferenceTypeId(), store, index, termVector);

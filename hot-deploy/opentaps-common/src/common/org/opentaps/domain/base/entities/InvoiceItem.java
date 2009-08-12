@@ -57,6 +57,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("invoiceItemSeqId", "INVOICE_ITEM_SEQ_ID");
         fields.put("invoiceItemTypeId", "INVOICE_ITEM_TYPE_ID");
         fields.put("overrideGlAccountId", "OVERRIDE_GL_ACCOUNT_ID");
+        fields.put("overrideOrgPartyId", "OVERRIDE_ORG_PARTY_ID");
         fields.put("inventoryItemId", "INVENTORY_ITEM_ID");
         fields.put("productId", "PRODUCT_ID");
         fields.put("productFeatureId", "PRODUCT_FEATURE_ID");
@@ -70,6 +71,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("taxAuthPartyId", "TAX_AUTH_PARTY_ID");
         fields.put("taxAuthGeoId", "TAX_AUTH_GEO_ID");
         fields.put("taxAuthorityRateSeqId", "TAX_AUTHORITY_RATE_SEQ_ID");
+        fields.put("salesOpportunityId", "SALES_OPPORTUNITY_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -91,6 +93,7 @@ fieldMapColumns.put("InvoiceItem", fields);
     invoiceItemSeqId("invoiceItemSeqId"),
     invoiceItemTypeId("invoiceItemTypeId"),
     overrideGlAccountId("overrideGlAccountId"),
+    overrideOrgPartyId("overrideOrgPartyId"),
     inventoryItemId("inventoryItemId"),
     productId("productId"),
     productFeatureId("productFeatureId"),
@@ -104,6 +107,7 @@ fieldMapColumns.put("InvoiceItem", fields);
     taxAuthPartyId("taxAuthPartyId"),
     taxAuthGeoId("taxAuthGeoId"),
     taxAuthorityRateSeqId("taxAuthorityRateSeqId"),
+    salesOpportunityId("salesOpportunityId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -151,6 +155,8 @@ fieldMapColumns.put("InvoiceItem", fields);
    private String invoiceItemTypeId;
    @Column(name="OVERRIDE_GL_ACCOUNT_ID")
    private String overrideGlAccountId;
+   @Column(name="OVERRIDE_ORG_PARTY_ID")
+   private String overrideOrgPartyId;
    @Column(name="INVENTORY_ITEM_ID")
    private String inventoryItemId;
    @Column(name="PRODUCT_ID")
@@ -177,6 +183,8 @@ fieldMapColumns.put("InvoiceItem", fields);
    private String taxAuthGeoId;
    @Column(name="TAX_AUTHORITY_RATE_SEQ_ID")
    private String taxAuthorityRateSeqId;
+   @Column(name="SALES_OPPORTUNITY_ID")
+   private String salesOpportunityId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -279,6 +287,20 @@ fieldMapColumns.put("InvoiceItem", fields);
    
    private TaxAuthorityRateProduct taxAuthorityRateProduct = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="OVERRIDE_ORG_PARTY_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Party overrideOrgParty = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="SALES_OPPORTUNITY_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private SalesOpportunity salesOpportunity = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="ACCTG_TAG_ENUM_ID1", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -373,7 +395,7 @@ fieldMapColumns.put("InvoiceItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("invoiceId");this.primaryKeyNames.add("invoiceItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("invoiceItemTypeId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("parentInvoiceId");this.allFieldsNames.add("parentInvoiceItemSeqId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("taxableFlag");this.allFieldsNames.add("quantity");this.allFieldsNames.add("amount");this.allFieldsNames.add("description");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("taxAuthorityRateSeqId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
+      this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("invoiceItemTypeId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("overrideOrgPartyId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("parentInvoiceId");this.allFieldsNames.add("parentInvoiceItemSeqId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("taxableFlag");this.allFieldsNames.add("quantity");this.allFieldsNames.add("amount");this.allFieldsNames.add("description");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("taxAuthorityRateSeqId");this.allFieldsNames.add("salesOpportunityId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -415,6 +437,13 @@ fieldMapColumns.put("InvoiceItem", fields);
      */
     public void setOverrideGlAccountId(String overrideGlAccountId) {
         this.overrideGlAccountId = overrideGlAccountId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param overrideOrgPartyId the overrideOrgPartyId to set
+     */
+    public void setOverrideOrgPartyId(String overrideOrgPartyId) {
+        this.overrideOrgPartyId = overrideOrgPartyId;
     }
     /**
      * Auto generated value setter.
@@ -506,6 +535,13 @@ fieldMapColumns.put("InvoiceItem", fields);
      */
     public void setTaxAuthorityRateSeqId(String taxAuthorityRateSeqId) {
         this.taxAuthorityRateSeqId = taxAuthorityRateSeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesOpportunityId the salesOpportunityId to set
+     */
+    public void setSalesOpportunityId(String salesOpportunityId) {
+        this.salesOpportunityId = salesOpportunityId;
     }
     /**
      * Auto generated value setter.
@@ -638,6 +674,13 @@ fieldMapColumns.put("InvoiceItem", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getOverrideOrgPartyId() {
+        return this.overrideOrgPartyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getInventoryItemId() {
         return this.inventoryItemId;
     }
@@ -724,6 +767,13 @@ fieldMapColumns.put("InvoiceItem", fields);
      */
     public String getTaxAuthorityRateSeqId() {
         return this.taxAuthorityRateSeqId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSalesOpportunityId() {
+        return this.salesOpportunityId;
     }
     /**
      * Auto generated value accessor.
@@ -966,6 +1016,28 @@ fieldMapColumns.put("InvoiceItem", fields);
             this.taxAuthorityRateProduct = getRelatedOne(TaxAuthorityRateProduct.class, "TaxAuthorityRateProduct");
         }
         return this.taxAuthorityRateProduct;
+    }
+    /**
+     * Auto generated method that gets the related <code>Party</code> by the relation named <code>OverrideOrgParty</code>.
+     * @return the <code>Party</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Party getOverrideOrgParty() throws RepositoryException {
+        if (this.overrideOrgParty == null) {
+            this.overrideOrgParty = getRelatedOne(Party.class, "OverrideOrgParty");
+        }
+        return this.overrideOrgParty;
+    }
+    /**
+     * Auto generated method that gets the related <code>SalesOpportunity</code> by the relation named <code>SalesOpportunity</code>.
+     * @return the <code>SalesOpportunity</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public SalesOpportunity getSalesOpportunity() throws RepositoryException {
+        if (this.salesOpportunity == null) {
+            this.salesOpportunity = getRelatedOne(SalesOpportunity.class, "SalesOpportunity");
+        }
+        return this.salesOpportunity;
     }
     /**
      * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>tag1Enumeration</code>.
@@ -1314,6 +1386,20 @@ fieldMapColumns.put("InvoiceItem", fields);
     }
     /**
      * Auto generated value setter.
+     * @param overrideOrgParty the overrideOrgParty to set
+    */
+    public void setOverrideOrgParty(Party overrideOrgParty) {
+        this.overrideOrgParty = overrideOrgParty;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesOpportunity the salesOpportunity to set
+    */
+    public void setSalesOpportunity(SalesOpportunity salesOpportunity) {
+        this.salesOpportunity = salesOpportunity;
+    }
+    /**
+     * Auto generated value setter.
      * @param tag1Enumeration the tag1Enumeration to set
     */
     public void settag1Enumeration(Enumeration tag1Enumeration) {
@@ -1483,6 +1569,7 @@ fieldMapColumns.put("InvoiceItem", fields);
         setInvoiceItemSeqId((String) mapValue.get("invoiceItemSeqId"));
         setInvoiceItemTypeId((String) mapValue.get("invoiceItemTypeId"));
         setOverrideGlAccountId((String) mapValue.get("overrideGlAccountId"));
+        setOverrideOrgPartyId((String) mapValue.get("overrideOrgPartyId"));
         setInventoryItemId((String) mapValue.get("inventoryItemId"));
         setProductId((String) mapValue.get("productId"));
         setProductFeatureId((String) mapValue.get("productFeatureId"));
@@ -1496,6 +1583,7 @@ fieldMapColumns.put("InvoiceItem", fields);
         setTaxAuthPartyId((String) mapValue.get("taxAuthPartyId"));
         setTaxAuthGeoId((String) mapValue.get("taxAuthGeoId"));
         setTaxAuthorityRateSeqId((String) mapValue.get("taxAuthorityRateSeqId"));
+        setSalesOpportunityId((String) mapValue.get("salesOpportunityId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -1521,6 +1609,7 @@ fieldMapColumns.put("InvoiceItem", fields);
         mapValue.put("invoiceItemSeqId", getInvoiceItemSeqId());
         mapValue.put("invoiceItemTypeId", getInvoiceItemTypeId());
         mapValue.put("overrideGlAccountId", getOverrideGlAccountId());
+        mapValue.put("overrideOrgPartyId", getOverrideOrgPartyId());
         mapValue.put("inventoryItemId", getInventoryItemId());
         mapValue.put("productId", getProductId());
         mapValue.put("productFeatureId", getProductFeatureId());
@@ -1534,6 +1623,7 @@ fieldMapColumns.put("InvoiceItem", fields);
         mapValue.put("taxAuthPartyId", getTaxAuthPartyId());
         mapValue.put("taxAuthGeoId", getTaxAuthGeoId());
         mapValue.put("taxAuthorityRateSeqId", getTaxAuthorityRateSeqId());
+        mapValue.put("salesOpportunityId", getSalesOpportunityId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

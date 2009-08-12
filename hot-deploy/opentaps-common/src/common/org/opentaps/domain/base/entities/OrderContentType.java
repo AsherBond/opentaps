@@ -123,7 +123,7 @@ fieldMapColumns.put("OrderContentType", fields);
       super();
       this.baseEntityName = "OrderContentType";
       this.isView = false;
-      
+      this.resourceName = "OrderEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderContentTypeId");
       this.allFieldsNames = new ArrayList<String>();

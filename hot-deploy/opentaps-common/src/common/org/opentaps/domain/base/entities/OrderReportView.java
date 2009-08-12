@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity OrderReportView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectOrderReportViews", query="SELECT OS.DESCRIPTION AS \"description\",OH.ORDER_ID AS \"orderId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_DATE AS \"orderDate\",OS.DESCRIPTION AS \"description\",PMT.DESCRIPTION AS \"description\",SMT.DESCRIPTION AS \"description\",OH.VISIT_ID AS \"visitId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.GRAND_TOTAL AS \"grandTotal\",OI.PRODUCT_ID AS \"productId\",OI.ITEM_DESCRIPTION AS \"itemDescription\",OIS.DESCRIPTION AS \"description\",OI.QUANTITY AS \"quantity\",OI.UNIT_PRICE AS \"unitPrice\" FROM ORDER_HEADER OH LEFT JOIN ORDER_PAYMENT_PREFERENCE OPP ON OH.ORDER_ID = OPP.ORDER_ID LEFT JOIN PAYMENT_METHOD_TYPE PMT ON OPP.PAYMENT_METHOD_TYPE_ID = PMT.PAYMENT_METHOD_TYPE_ID INNER JOIN STATUS_ITEM OS ON OH.STATUS_ID = OS.STATUS_ID INNER JOIN ORDER_ITEM OI ON OH.ORDER_ID = OI.ORDER_ID INNER JOIN STATUS_ITEM OIS ON OI.STATUS_ID = OIS.STATUS_ID", resultSetMapping="OrderReportViewMapping")
+@NamedNativeQuery(name="selectOrderReportViews", query="SELECT OS.DESCRIPTION AS \"description\",OH.ORDER_ID AS \"orderId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_DATE AS \"orderDate\",OS.DESCRIPTION AS \"description\",PMT.DESCRIPTION AS \"description\",OH.VISIT_ID AS \"visitId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.GRAND_TOTAL AS \"grandTotal\",OI.PRODUCT_ID AS \"productId\",OI.ITEM_DESCRIPTION AS \"itemDescription\",OIS.DESCRIPTION AS \"description\",OI.QUANTITY AS \"quantity\",OI.UNIT_PRICE AS \"unitPrice\" FROM ORDER_HEADER OH LEFT JOIN ORDER_PAYMENT_PREFERENCE OPP ON OH.ORDER_ID = OPP.ORDER_ID LEFT JOIN PAYMENT_METHOD_TYPE PMT ON OPP.PAYMENT_METHOD_TYPE_ID = PMT.PAYMENT_METHOD_TYPE_ID INNER JOIN STATUS_ITEM OS ON OH.STATUS_ID = OS.STATUS_ID INNER JOIN ORDER_ITEM OI ON OH.ORDER_ID = OI.ORDER_ID INNER JOIN STATUS_ITEM OIS ON OI.STATUS_ID = OIS.STATUS_ID", resultSetMapping="OrderReportViewMapping")
 @SqlResultSetMapping(name="OrderReportViewMapping", entities={
 @EntityResult(entityClass=OrderReportView.class, fields = {
 @FieldResult(name="groupName", column="groupName")
@@ -58,7 +58,6 @@ import java.sql.Timestamp;
 ,@FieldResult(name="orderDate", column="orderDate")
 ,@FieldResult(name="orderStatus", column="orderStatus")
 ,@FieldResult(name="paymentMethod", column="paymentMethod")
-,@FieldResult(name="shipMethod", column="shipMethod")
 ,@FieldResult(name="visitId", column="visitId")
 ,@FieldResult(name="currencyUom", column="currencyUom")
 ,@FieldResult(name="originFacilityId", column="originFacilityId")
@@ -81,7 +80,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("orderDate", "OH.ORDER_DATE");
         fields.put("orderStatus", "OS.DESCRIPTION");
         fields.put("paymentMethod", "PMT.DESCRIPTION");
-        fields.put("shipMethod", "SMT.DESCRIPTION");
         fields.put("visitId", "OH.VISIT_ID");
         fields.put("currencyUom", "OH.CURRENCY_UOM");
         fields.put("originFacilityId", "OH.ORIGIN_FACILITY_ID");
@@ -101,7 +99,6 @@ fieldMapColumns.put("OrderReportView", fields);
     orderDate("orderDate"),
     orderStatus("orderStatus"),
     paymentMethod("paymentMethod"),
-    shipMethod("shipMethod"),
     visitId("visitId"),
     currencyUom("currencyUom"),
     originFacilityId("originFacilityId"),
@@ -135,8 +132,6 @@ fieldMapColumns.put("OrderReportView", fields);
     
    private String paymentMethod;
     
-   private String shipMethod;
-    
    private String visitId;
     
    private String currencyUom;
@@ -168,7 +163,7 @@ fieldMapColumns.put("OrderReportView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("groupName");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("orderStatus");this.allFieldsNames.add("paymentMethod");this.allFieldsNames.add("shipMethod");this.allFieldsNames.add("visitId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("productId");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("itemStatus");this.allFieldsNames.add("quantity");this.allFieldsNames.add("unitPrice");
+      this.allFieldsNames.add("groupName");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("orderStatus");this.allFieldsNames.add("paymentMethod");this.allFieldsNames.add("visitId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("productId");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("itemStatus");this.allFieldsNames.add("quantity");this.allFieldsNames.add("unitPrice");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -227,13 +222,6 @@ fieldMapColumns.put("OrderReportView", fields);
      */
     private void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
-    }
-    /**
-     * Auto generated value setter.
-     * @param shipMethod the shipMethod to set
-     */
-    private void setShipMethod(String shipMethod) {
-        this.shipMethod = shipMethod;
     }
     /**
      * Auto generated value setter.
@@ -352,13 +340,6 @@ fieldMapColumns.put("OrderReportView", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getShipMethod() {
-        return this.shipMethod;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getVisitId() {
         return this.visitId;
     }
@@ -439,7 +420,6 @@ fieldMapColumns.put("OrderReportView", fields);
         setOrderDate((Timestamp) mapValue.get("orderDate"));
         setOrderStatus((String) mapValue.get("orderStatus"));
         setPaymentMethod((String) mapValue.get("paymentMethod"));
-        setShipMethod((String) mapValue.get("shipMethod"));
         setVisitId((String) mapValue.get("visitId"));
         setCurrencyUom((String) mapValue.get("currencyUom"));
         setOriginFacilityId((String) mapValue.get("originFacilityId"));
@@ -463,7 +443,6 @@ fieldMapColumns.put("OrderReportView", fields);
         mapValue.put("orderDate", getOrderDate());
         mapValue.put("orderStatus", getOrderStatus());
         mapValue.put("paymentMethod", getPaymentMethod());
-        mapValue.put("shipMethod", getShipMethod());
         mapValue.put("visitId", getVisitId());
         mapValue.put("currencyUom", getCurrencyUom());
         mapValue.put("originFacilityId", getOriginFacilityId());

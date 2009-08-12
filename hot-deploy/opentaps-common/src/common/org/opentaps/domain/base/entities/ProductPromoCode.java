@@ -59,6 +59,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("requireEmailOrParty", "REQUIRE_EMAIL_OR_PARTY");
         fields.put("useLimitPerCode", "USE_LIMIT_PER_CODE");
         fields.put("useLimitPerCustomer", "USE_LIMIT_PER_CUSTOMER");
+        fields.put("fromDate", "FROM_DATE");
+        fields.put("thruDate", "THRU_DATE");
         fields.put("createdDate", "CREATED_DATE");
         fields.put("createdByUserLogin", "CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "LAST_MODIFIED_DATE");
@@ -76,6 +78,8 @@ fieldMapColumns.put("ProductPromoCode", fields);
     requireEmailOrParty("requireEmailOrParty"),
     useLimitPerCode("useLimitPerCode"),
     useLimitPerCustomer("useLimitPerCustomer"),
+    fromDate("fromDate"),
+    thruDate("thruDate"),
     createdDate("createdDate"),
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
@@ -109,6 +113,10 @@ fieldMapColumns.put("ProductPromoCode", fields);
    private Long useLimitPerCode;
    @Column(name="USE_LIMIT_PER_CUSTOMER")
    private Long useLimitPerCustomer;
+   @Column(name="FROM_DATE")
+   private Timestamp fromDate;
+   @Column(name="THRU_DATE")
+   private Timestamp thruDate;
    @Column(name="CREATED_DATE")
    private Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
@@ -174,7 +182,7 @@ fieldMapColumns.put("ProductPromoCode", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productPromoCodeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productPromoCodeId");this.allFieldsNames.add("productPromoId");this.allFieldsNames.add("userEntered");this.allFieldsNames.add("requireEmailOrParty");this.allFieldsNames.add("useLimitPerCode");this.allFieldsNames.add("useLimitPerCustomer");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productPromoCodeId");this.allFieldsNames.add("productPromoId");this.allFieldsNames.add("userEntered");this.allFieldsNames.add("requireEmailOrParty");this.allFieldsNames.add("useLimitPerCode");this.allFieldsNames.add("useLimitPerCustomer");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -230,6 +238,20 @@ fieldMapColumns.put("ProductPromoCode", fields);
      */
     public void setUseLimitPerCustomer(Long useLimitPerCustomer) {
         this.useLimitPerCustomer = useLimitPerCustomer;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fromDate the fromDate to set
+     */
+    public void setFromDate(Timestamp fromDate) {
+        this.fromDate = fromDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param thruDate the thruDate to set
+     */
+    public void setThruDate(Timestamp thruDate) {
+        this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
@@ -329,6 +351,20 @@ fieldMapColumns.put("ProductPromoCode", fields);
      */
     public Long getUseLimitPerCustomer() {
         return this.useLimitPerCustomer;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getFromDate() {
+        return this.fromDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getThruDate() {
+        return this.thruDate;
     }
     /**
      * Auto generated value accessor.
@@ -580,6 +616,8 @@ fieldMapColumns.put("ProductPromoCode", fields);
         setRequireEmailOrParty((String) mapValue.get("requireEmailOrParty"));
         setUseLimitPerCode((Long) mapValue.get("useLimitPerCode"));
         setUseLimitPerCustomer((Long) mapValue.get("useLimitPerCustomer"));
+        setFromDate((Timestamp) mapValue.get("fromDate"));
+        setThruDate((Timestamp) mapValue.get("thruDate"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
@@ -601,6 +639,8 @@ fieldMapColumns.put("ProductPromoCode", fields);
         mapValue.put("requireEmailOrParty", getRequireEmailOrParty());
         mapValue.put("useLimitPerCode", getUseLimitPerCode());
         mapValue.put("useLimitPerCustomer", getUseLimitPerCustomer());
+        mapValue.put("fromDate", getFromDate());
+        mapValue.put("thruDate", getThruDate());
         mapValue.put("createdDate", getCreatedDate());
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());

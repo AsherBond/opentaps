@@ -49,12 +49,13 @@ import java.sql.Timestamp;
  * Auto generated base entity UserLoginAndPartyDetails.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectUserLoginAndPartyDetailss", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.CREATED_DATE AS \"createdDate\",PTYGRP.GROUP_NAME AS \"groupName\",ULN.USER_LOGIN_ID AS \"userLoginId\",ULN.CURRENT_PASSWORD AS \"currentPassword\",ULN.PASSWORD_HINT AS \"passwordHint\",ULN.ENABLED AS \"enabled\",ULN.DISABLED_DATE_TIME AS \"disabledDateTime\",ULN.SUCCESSIVE_FAILED_LOGINS AS \"successiveFailedLogins\",PER.LAST_NAME AS \"lastName\",PER.MIDDLE_NAME AS \"middleName\",PER.FIRST_NAME AS \"firstName\" FROM USER_LOGIN ULN LEFT JOIN PARTY PTY ON ULN.PARTY_ID = PTY.PARTY_ID LEFT JOIN PERSON PER ON ULN.PARTY_ID = PER.PARTY_ID LEFT JOIN PARTY_GROUP PTYGRP ON ULN.PARTY_ID = PTYGRP.PARTY_ID", resultSetMapping="UserLoginAndPartyDetailsMapping")
+@NamedNativeQuery(name="selectUserLoginAndPartyDetailss", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.CREATED_DATE AS \"createdDate\",PTY.STATUS_ID AS \"statusId\",PTYGRP.GROUP_NAME AS \"groupName\",ULN.USER_LOGIN_ID AS \"userLoginId\",ULN.CURRENT_PASSWORD AS \"currentPassword\",ULN.PASSWORD_HINT AS \"passwordHint\",ULN.ENABLED AS \"enabled\",ULN.DISABLED_DATE_TIME AS \"disabledDateTime\",ULN.SUCCESSIVE_FAILED_LOGINS AS \"successiveFailedLogins\",PER.LAST_NAME AS \"lastName\",PER.MIDDLE_NAME AS \"middleName\",PER.FIRST_NAME AS \"firstName\" FROM USER_LOGIN ULN LEFT JOIN PARTY PTY ON ULN.PARTY_ID = PTY.PARTY_ID LEFT JOIN PERSON PER ON ULN.PARTY_ID = PER.PARTY_ID LEFT JOIN PARTY_GROUP PTYGRP ON ULN.PARTY_ID = PTYGRP.PARTY_ID", resultSetMapping="UserLoginAndPartyDetailsMapping")
 @SqlResultSetMapping(name="UserLoginAndPartyDetailsMapping", entities={
 @EntityResult(entityClass=UserLoginAndPartyDetails.class, fields = {
 @FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="partyTypeId", column="partyTypeId")
 ,@FieldResult(name="createdDate", column="createdDate")
+,@FieldResult(name="statusId", column="statusId")
 ,@FieldResult(name="groupName", column="groupName")
 ,@FieldResult(name="userLoginId", column="userLoginId")
 ,@FieldResult(name="currentPassword", column="currentPassword")
@@ -74,6 +75,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("partyId", "PTY.PARTY_ID");
         fields.put("partyTypeId", "PTY.PARTY_TYPE_ID");
         fields.put("createdDate", "PTY.CREATED_DATE");
+        fields.put("statusId", "PTY.STATUS_ID");
         fields.put("groupName", "PTYGRP.GROUP_NAME");
         fields.put("userLoginId", "ULN.USER_LOGIN_ID");
         fields.put("currentPassword", "ULN.CURRENT_PASSWORD");
@@ -90,6 +92,7 @@ fieldMapColumns.put("UserLoginAndPartyDetails", fields);
     partyId("partyId"),
     partyTypeId("partyTypeId"),
     createdDate("createdDate"),
+    statusId("statusId"),
     groupName("groupName"),
     userLoginId("userLoginId"),
     currentPassword("currentPassword"),
@@ -116,6 +119,8 @@ fieldMapColumns.put("UserLoginAndPartyDetails", fields);
    private String partyTypeId;
     
    private Timestamp createdDate;
+    
+   private String statusId;
     
    private String groupName;
     @Id
@@ -162,7 +167,7 @@ fieldMapColumns.put("UserLoginAndPartyDetails", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("userLoginId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("groupName");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("currentPassword");this.allFieldsNames.add("passwordHint");this.allFieldsNames.add("enabled");this.allFieldsNames.add("disabledDateTime");this.allFieldsNames.add("successiveFailedLogins");this.allFieldsNames.add("lastName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("firstName");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("groupName");this.allFieldsNames.add("userLoginId");this.allFieldsNames.add("currentPassword");this.allFieldsNames.add("passwordHint");this.allFieldsNames.add("enabled");this.allFieldsNames.add("disabledDateTime");this.allFieldsNames.add("successiveFailedLogins");this.allFieldsNames.add("lastName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("firstName");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -200,6 +205,13 @@ fieldMapColumns.put("UserLoginAndPartyDetails", fields);
      */
     private void setCreatedDate(Timestamp createdDate) {
         this.createdDate = createdDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusId the statusId to set
+     */
+    private void setStatusId(String statusId) {
+        this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
@@ -292,6 +304,13 @@ fieldMapColumns.put("UserLoginAndPartyDetails", fields);
      */
     public Timestamp getCreatedDate() {
         return this.createdDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getStatusId() {
+        return this.statusId;
     }
     /**
      * Auto generated value accessor.
@@ -410,6 +429,7 @@ fieldMapColumns.put("UserLoginAndPartyDetails", fields);
         setPartyId((String) mapValue.get("partyId"));
         setPartyTypeId((String) mapValue.get("partyTypeId"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
+        setStatusId((String) mapValue.get("statusId"));
         setGroupName((String) mapValue.get("groupName"));
         setUserLoginId((String) mapValue.get("userLoginId"));
         setCurrentPassword((String) mapValue.get("currentPassword"));
@@ -430,6 +450,7 @@ fieldMapColumns.put("UserLoginAndPartyDetails", fields);
         mapValue.put("partyId", getPartyId());
         mapValue.put("partyTypeId", getPartyTypeId());
         mapValue.put("createdDate", getCreatedDate());
+        mapValue.put("statusId", getStatusId());
         mapValue.put("groupName", getGroupName());
         mapValue.put("userLoginId", getUserLoginId());
         mapValue.put("currentPassword", getCurrentPassword());

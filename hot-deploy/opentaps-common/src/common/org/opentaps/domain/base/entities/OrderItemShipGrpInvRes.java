@@ -65,6 +65,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdDatetime", "CREATED_DATETIME");
         fields.put("promisedDatetime", "PROMISED_DATETIME");
         fields.put("currentPromisedDate", "CURRENT_PROMISED_DATE");
+        fields.put("priority", "PRIORITY");
         fields.put("sequenceId", "SEQUENCE_ID");
         fields.put("oldPickStartDate", "PICK_START_DATE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -85,6 +86,7 @@ fieldMapColumns.put("OrderItemShipGrpInvRes", fields);
     createdDatetime("createdDatetime"),
     promisedDatetime("promisedDatetime"),
     currentPromisedDate("currentPromisedDate"),
+    priority("priority"),
     sequenceId("sequenceId"),
     oldPickStartDate("oldPickStartDate"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -134,6 +136,8 @@ fieldMapColumns.put("OrderItemShipGrpInvRes", fields);
    private Timestamp promisedDatetime;
    @Column(name="CURRENT_PROMISED_DATE")
    private Timestamp currentPromisedDate;
+   @Column(name="PRIORITY")
+   private String priority;
    @Column(name="SEQUENCE_ID")
    private Long sequenceId;
    @Column(name="PICK_START_DATE")
@@ -178,7 +182,7 @@ fieldMapColumns.put("OrderItemShipGrpInvRes", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("shipGroupSeqId");this.primaryKeyNames.add("orderItemSeqId");this.primaryKeyNames.add("inventoryItemId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("reserveOrderEnumId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("quantityNotAvailable");this.allFieldsNames.add("reservedDatetime");this.allFieldsNames.add("createdDatetime");this.allFieldsNames.add("promisedDatetime");this.allFieldsNames.add("currentPromisedDate");this.allFieldsNames.add("sequenceId");this.allFieldsNames.add("oldPickStartDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("reserveOrderEnumId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("quantityNotAvailable");this.allFieldsNames.add("reservedDatetime");this.allFieldsNames.add("createdDatetime");this.allFieldsNames.add("promisedDatetime");this.allFieldsNames.add("currentPromisedDate");this.allFieldsNames.add("priority");this.allFieldsNames.add("sequenceId");this.allFieldsNames.add("oldPickStartDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -269,6 +273,13 @@ fieldMapColumns.put("OrderItemShipGrpInvRes", fields);
      */
     public void setCurrentPromisedDate(Timestamp currentPromisedDate) {
         this.currentPromisedDate = currentPromisedDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param priority the priority to set
+     */
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
     /**
      * Auto generated value setter.
@@ -389,6 +400,13 @@ fieldMapColumns.put("OrderItemShipGrpInvRes", fields);
      */
     public Timestamp getCurrentPromisedDate() {
         return this.currentPromisedDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPriority() {
+        return this.priority;
     }
     /**
      * Auto generated value accessor.
@@ -595,6 +613,7 @@ fieldMapColumns.put("OrderItemShipGrpInvRes", fields);
         setCreatedDatetime((Timestamp) mapValue.get("createdDatetime"));
         setPromisedDatetime((Timestamp) mapValue.get("promisedDatetime"));
         setCurrentPromisedDate((Timestamp) mapValue.get("currentPromisedDate"));
+        setPriority((String) mapValue.get("priority"));
         setSequenceId((Long) mapValue.get("sequenceId"));
         setOldPickStartDate((Timestamp) mapValue.get("oldPickStartDate"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -619,6 +638,7 @@ fieldMapColumns.put("OrderItemShipGrpInvRes", fields);
         mapValue.put("createdDatetime", getCreatedDatetime());
         mapValue.put("promisedDatetime", getPromisedDatetime());
         mapValue.put("currentPromisedDate", getCurrentPromisedDate());
+        mapValue.put("priority", getPriority());
         mapValue.put("sequenceId", getSequenceId());
         mapValue.put("oldPickStartDate", getOldPickStartDate());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

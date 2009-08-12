@@ -112,6 +112,10 @@ fieldMapColumns.put("PeriodType", fields);
    @JoinColumn(name="PERIOD_TYPE_ID")
    
    private List<CustomTimePeriod> customTimePeriods = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="periodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PERIOD_TYPE_ID")
+   
+   private List<OldEmplPositionTypeRate> oldEmplPositionTypeRates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID")
    
@@ -124,6 +128,10 @@ fieldMapColumns.put("PeriodType", fields);
    @JoinColumn(name="PERIOD_TYPE_ID")
    
    private List<PayrollPreference> payrollPreferences = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="periodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PERIOD_TYPE_ID")
+   
+   private List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERIOD_TYPE_ID")
    
@@ -292,6 +300,17 @@ fieldMapColumns.put("PeriodType", fields);
         return this.customTimePeriods;
     }
     /**
+     * Auto generated method that gets the related <code>OldEmplPositionTypeRate</code> by the relation named <code>OldEmplPositionTypeRate</code>.
+     * @return the list of <code>OldEmplPositionTypeRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldEmplPositionTypeRate> getOldEmplPositionTypeRates() throws RepositoryException {
+        if (this.oldEmplPositionTypeRates == null) {
+            this.oldEmplPositionTypeRates = getRelated(OldEmplPositionTypeRate.class, "OldEmplPositionTypeRate");
+        }
+        return this.oldEmplPositionTypeRates;
+    }
+    /**
      * Auto generated method that gets the related <code>PartyBenefit</code> by the relation named <code>PartyBenefit</code>.
      * @return the list of <code>PartyBenefit</code>
      * @throws RepositoryException if an error occurs
@@ -325,6 +344,17 @@ fieldMapColumns.put("PeriodType", fields);
         return this.payrollPreferences;
     }
     /**
+     * Auto generated method that gets the related <code>RateAmount</code> by the relation named <code>RateAmount</code>.
+     * @return the list of <code>RateAmount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends RateAmount> getRateAmounts() throws RepositoryException {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = getRelated(RateAmount.class, "RateAmount");
+        }
+        return this.rateAmounts;
+    }
+    /**
      * Auto generated method that gets the related <code>StandardTimePeriod</code> by the relation named <code>StandardTimePeriod</code>.
      * @return the list of <code>StandardTimePeriod</code>
      * @throws RepositoryException if an error occurs
@@ -352,6 +382,13 @@ fieldMapColumns.put("PeriodType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param oldEmplPositionTypeRates the oldEmplPositionTypeRates to set
+    */
+    public void setOldEmplPositionTypeRates(List<OldEmplPositionTypeRate> oldEmplPositionTypeRates) {
+        this.oldEmplPositionTypeRates = oldEmplPositionTypeRates;
+    }
+    /**
+     * Auto generated value setter.
      * @param partyBenefits the partyBenefits to set
     */
     public void setPartyBenefits(List<PartyBenefit> partyBenefits) {
@@ -373,12 +410,73 @@ fieldMapColumns.put("PeriodType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param rateAmounts the rateAmounts to set
+    */
+    public void setRateAmounts(List<RateAmount> rateAmounts) {
+        this.rateAmounts = rateAmounts;
+    }
+    /**
+     * Auto generated value setter.
      * @param standardTimePeriods the standardTimePeriods to set
     */
     public void setStandardTimePeriods(List<StandardTimePeriod> standardTimePeriods) {
         this.standardTimePeriods = standardTimePeriods;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOldEmplPositionTypeRate(OldEmplPositionTypeRate oldEmplPositionTypeRate) {
+        if (this.oldEmplPositionTypeRates == null) {
+            this.oldEmplPositionTypeRates = new ArrayList<OldEmplPositionTypeRate>();
+        }
+        this.oldEmplPositionTypeRates.add(oldEmplPositionTypeRate);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOldEmplPositionTypeRate(OldEmplPositionTypeRate oldEmplPositionTypeRate) {
+        if (this.oldEmplPositionTypeRates == null) {
+            return;
+        }
+        this.oldEmplPositionTypeRates.remove(oldEmplPositionTypeRate);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOldEmplPositionTypeRate() {
+        if (this.oldEmplPositionTypeRates == null) {
+            return;
+        }
+        this.oldEmplPositionTypeRates.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = new ArrayList<RateAmount>();
+        }
+        this.rateAmounts.add(rateAmount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
+            return;
+        }
+        this.rateAmounts.remove(rateAmount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearRateAmount() {
+        if (this.rateAmounts == null) {
+            return;
+        }
+        this.rateAmounts.clear();
+    }
 
     /** {@inheritDoc} */
     @Override

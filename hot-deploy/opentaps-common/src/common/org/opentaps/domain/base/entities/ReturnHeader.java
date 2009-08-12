@@ -286,10 +286,18 @@ fieldMapColumns.put("ReturnHeader", fields);
    @JoinColumn(name="RETURN_ID")
    
    private List<ReturnItemBilling> returnItemBillings = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="returnHeader", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="RETURN_ID")
+   
+   private List<ReturnItemShipment> returnItemShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ID")
    
    private List<ReturnStatus> returnStatuses = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PRIMARY_RETURN_ID")
+   
+   private List<Shipment> primaryShipments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="RETURN_ID")
    
@@ -873,6 +881,17 @@ fieldMapColumns.put("ReturnHeader", fields);
         return this.returnItemBillings;
     }
     /**
+     * Auto generated method that gets the related <code>ReturnItemShipment</code> by the relation named <code>ReturnItemShipment</code>.
+     * @return the list of <code>ReturnItemShipment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ReturnItemShipment> getReturnItemShipments() throws RepositoryException {
+        if (this.returnItemShipments == null) {
+            this.returnItemShipments = getRelated(ReturnItemShipment.class, "ReturnItemShipment");
+        }
+        return this.returnItemShipments;
+    }
+    /**
      * Auto generated method that gets the related <code>ReturnStatus</code> by the relation named <code>ReturnStatus</code>.
      * @return the list of <code>ReturnStatus</code>
      * @throws RepositoryException if an error occurs
@@ -882,6 +901,17 @@ fieldMapColumns.put("ReturnHeader", fields);
             this.returnStatuses = getRelated(ReturnStatus.class, "ReturnStatus");
         }
         return this.returnStatuses;
+    }
+    /**
+     * Auto generated method that gets the related <code>Shipment</code> by the relation named <code>PrimaryShipment</code>.
+     * @return the list of <code>Shipment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Shipment> getPrimaryShipments() throws RepositoryException {
+        if (this.primaryShipments == null) {
+            this.primaryShipments = getRelated(Shipment.class, "PrimaryShipment");
+        }
+        return this.primaryShipments;
     }
     /**
      * Auto generated method that gets the related <code>Shipment</code> by the relation named <code>Shipment</code>.
@@ -1041,10 +1071,24 @@ fieldMapColumns.put("ReturnHeader", fields);
     }
     /**
      * Auto generated value setter.
+     * @param returnItemShipments the returnItemShipments to set
+    */
+    public void setReturnItemShipments(List<ReturnItemShipment> returnItemShipments) {
+        this.returnItemShipments = returnItemShipments;
+    }
+    /**
+     * Auto generated value setter.
      * @param returnStatuses the returnStatuses to set
     */
     public void setReturnStatuses(List<ReturnStatus> returnStatuses) {
         this.returnStatuses = returnStatuses;
+    }
+    /**
+     * Auto generated value setter.
+     * @param primaryShipments the primaryShipments to set
+    */
+    public void setPrimaryShipments(List<Shipment> primaryShipments) {
+        this.primaryShipments = primaryShipments;
     }
     /**
      * Auto generated value setter.
@@ -1114,6 +1158,33 @@ fieldMapColumns.put("ReturnHeader", fields);
             return;
         }
         this.returnItemBillings.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addReturnItemShipment(ReturnItemShipment returnItemShipment) {
+        if (this.returnItemShipments == null) {
+            this.returnItemShipments = new ArrayList<ReturnItemShipment>();
+        }
+        this.returnItemShipments.add(returnItemShipment);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeReturnItemShipment(ReturnItemShipment returnItemShipment) {
+        if (this.returnItemShipments == null) {
+            return;
+        }
+        this.returnItemShipments.remove(returnItemShipment);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearReturnItemShipment() {
+        if (this.returnItemShipments == null) {
+            return;
+        }
+        this.returnItemShipments.clear();
     }
     /**
      * Auto generated method that add item to collection.

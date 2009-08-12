@@ -55,6 +55,7 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("facilityId", "FACILITY_ID");
         fields.put("facilityTypeId", "FACILITY_TYPE_ID");
+        fields.put("parentFacilityId", "PARENT_FACILITY_ID");
         fields.put("ownerPartyId", "OWNER_PARTY_ID");
         fields.put("defaultInventoryItemTypeId", "DEFAULT_INVENTORY_ITEM_TYPE_ID");
         fields.put("facilityName", "FACILITY_NAME");
@@ -66,6 +67,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("closedDate", "CLOSED_DATE");
         fields.put("description", "DESCRIPTION");
         fields.put("defaultWeightUomId", "DEFAULT_WEIGHT_UOM_ID");
+        fields.put("geoPointId", "GEO_POINT_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -76,6 +78,7 @@ fieldMapColumns.put("Facility", fields);
   public static enum Fields implements EntityFieldInterface<Facility> {
     facilityId("facilityId"),
     facilityTypeId("facilityTypeId"),
+    parentFacilityId("parentFacilityId"),
     ownerPartyId("ownerPartyId"),
     defaultInventoryItemTypeId("defaultInventoryItemTypeId"),
     facilityName("facilityName"),
@@ -87,6 +90,7 @@ fieldMapColumns.put("Facility", fields);
     closedDate("closedDate"),
     description("description"),
     defaultWeightUomId("defaultWeightUomId"),
+    geoPointId("geoPointId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -109,6 +113,8 @@ fieldMapColumns.put("Facility", fields);
    private String facilityId;
    @Column(name="FACILITY_TYPE_ID")
    private String facilityTypeId;
+   @Column(name="PARENT_FACILITY_ID")
+   private String parentFacilityId;
    @Column(name="OWNER_PARTY_ID")
    private String ownerPartyId;
    @Column(name="DEFAULT_INVENTORY_ITEM_TYPE_ID")
@@ -131,6 +137,8 @@ fieldMapColumns.put("Facility", fields);
    private String description;
    @Column(name="DEFAULT_WEIGHT_UOM_ID")
    private String defaultWeightUomId;
+   @Column(name="GEO_POINT_ID")
+   private String geoPointId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -148,6 +156,13 @@ fieldMapColumns.put("Facility", fields);
    )
    
    private FacilityType facilityType = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_FACILITY_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Facility parentFacility = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRIMARY_FACILITY_GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -188,6 +203,13 @@ fieldMapColumns.put("Facility", fields);
    
    private List<FacilityTypeAttr> facilityTypeAttrs = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="GEO_POINT_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private GeoPoint geoPointGeoPoint = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RESERVE_ORDER_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -210,6 +232,10 @@ fieldMapColumns.put("Facility", fields);
    @JoinColumn(name="DEST_FACILITY_ID")
    
    private List<Delivery> destDeliverys = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_FACILITY_ID")
+   
+   private List<Facility> childFacilitys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="fromFacility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
@@ -245,11 +271,11 @@ fieldMapColumns.put("Facility", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   private List<FacilityPartyPermission> facilityPartyPermissions = null;
+   private List<FacilityParty> facilityPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
-   private List<FacilityRole> facilityRoles = null;
+   private List<FacilityPartyPermission> facilityPartyPermissions = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="FACILITY_ID_FROM")
    
@@ -278,14 +304,26 @@ fieldMapColumns.put("Facility", fields);
    @JoinColumn(name="FACILITY_ID_TO")
    
    private List<InventoryTransfer> toInventoryTransfers = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<MrpEvent> mrpEvents = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
    private List<MrpInventoryEvent> mrpInventoryEvents = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<OldFacilityRole> oldFacilityRoles = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="ORIGIN_FACILITY_ID")
    
    private List<OrderHeader> originOrderHeaders = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FACILITY_ID")
+   
+   private List<OrderItemShipGroup> orderItemShipGroups = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="facility", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="FACILITY_ID")
    
@@ -378,7 +416,7 @@ fieldMapColumns.put("Facility", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("facilityId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("facilityId");this.allFieldsNames.add("facilityTypeId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("defaultInventoryItemTypeId");this.allFieldsNames.add("facilityName");this.allFieldsNames.add("primaryFacilityGroupId");this.allFieldsNames.add("squareFootage");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("defaultDaysToShip");this.allFieldsNames.add("openedDate");this.allFieldsNames.add("closedDate");this.allFieldsNames.add("description");this.allFieldsNames.add("defaultWeightUomId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("inventoryReserveOrderEnumId");
+      this.allFieldsNames.add("facilityId");this.allFieldsNames.add("facilityTypeId");this.allFieldsNames.add("parentFacilityId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("defaultInventoryItemTypeId");this.allFieldsNames.add("facilityName");this.allFieldsNames.add("primaryFacilityGroupId");this.allFieldsNames.add("squareFootage");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("defaultDaysToShip");this.allFieldsNames.add("openedDate");this.allFieldsNames.add("closedDate");this.allFieldsNames.add("description");this.allFieldsNames.add("defaultWeightUomId");this.allFieldsNames.add("geoPointId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("inventoryReserveOrderEnumId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -406,6 +444,13 @@ fieldMapColumns.put("Facility", fields);
      */
     public void setFacilityTypeId(String facilityTypeId) {
         this.facilityTypeId = facilityTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentFacilityId the parentFacilityId to set
+     */
+    public void setParentFacilityId(String parentFacilityId) {
+        this.parentFacilityId = parentFacilityId;
     }
     /**
      * Auto generated value setter.
@@ -486,6 +531,13 @@ fieldMapColumns.put("Facility", fields);
     }
     /**
      * Auto generated value setter.
+     * @param geoPointId the geoPointId to set
+     */
+    public void setGeoPointId(String geoPointId) {
+        this.geoPointId = geoPointId;
+    }
+    /**
+     * Auto generated value setter.
      * @param lastUpdatedStamp the lastUpdatedStamp to set
      */
     public void setLastUpdatedStamp(Timestamp lastUpdatedStamp) {
@@ -533,6 +585,13 @@ fieldMapColumns.put("Facility", fields);
      */
     public String getFacilityTypeId() {
         return this.facilityTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getParentFacilityId() {
+        return this.parentFacilityId;
     }
     /**
      * Auto generated value accessor.
@@ -613,6 +672,13 @@ fieldMapColumns.put("Facility", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getGeoPointId() {
+        return this.geoPointId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -657,6 +723,17 @@ fieldMapColumns.put("Facility", fields);
             this.facilityType = getRelatedOne(FacilityType.class, "FacilityType");
         }
         return this.facilityType;
+    }
+    /**
+     * Auto generated method that gets the related <code>Facility</code> by the relation named <code>ParentFacility</code>.
+     * @return the <code>Facility</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Facility getParentFacility() throws RepositoryException {
+        if (this.parentFacility == null) {
+            this.parentFacility = getRelatedOne(Facility.class, "ParentFacility");
+        }
+        return this.parentFacility;
     }
     /**
      * Auto generated method that gets the related <code>FacilityGroup</code> by the relation named <code>FacilityGroup</code>.
@@ -725,6 +802,17 @@ fieldMapColumns.put("Facility", fields);
         return this.facilityTypeAttrs;
     }
     /**
+     * Auto generated method that gets the related <code>GeoPoint</code> by the relation named <code>Geo PointGeoPoint</code>.
+     * @return the <code>GeoPoint</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public GeoPoint getGeoPointGeoPoint() throws RepositoryException {
+        if (this.geoPointGeoPoint == null) {
+            this.geoPointGeoPoint = getRelatedOne(GeoPoint.class, "Geo PointGeoPoint");
+        }
+        return this.geoPointGeoPoint;
+    }
+    /**
      * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>Enumeration</code>.
      * @return the <code>Enumeration</code>
      * @throws RepositoryException if an error occurs
@@ -778,6 +866,17 @@ fieldMapColumns.put("Facility", fields);
             this.destDeliverys = getRelated(Delivery.class, "DestDelivery");
         }
         return this.destDeliverys;
+    }
+    /**
+     * Auto generated method that gets the related <code>Facility</code> by the relation named <code>ChildFacility</code>.
+     * @return the list of <code>Facility</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Facility> getChildFacilitys() throws RepositoryException {
+        if (this.childFacilitys == null) {
+            this.childFacilitys = getRelated(Facility.class, "ChildFacility");
+        }
+        return this.childFacilitys;
     }
     /**
      * Auto generated method that gets the related <code>FacilityAssoc</code> by the relation named <code>FromFacilityAssoc</code>.
@@ -868,6 +967,17 @@ fieldMapColumns.put("Facility", fields);
         return this.facilityLocations;
     }
     /**
+     * Auto generated method that gets the related <code>FacilityParty</code> by the relation named <code>FacilityParty</code>.
+     * @return the list of <code>FacilityParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FacilityParty> getFacilityPartys() throws RepositoryException {
+        if (this.facilityPartys == null) {
+            this.facilityPartys = getRelated(FacilityParty.class, "FacilityParty");
+        }
+        return this.facilityPartys;
+    }
+    /**
      * Auto generated method that gets the related <code>FacilityPartyPermission</code> by the relation named <code>FacilityPartyPermission</code>.
      * @return the list of <code>FacilityPartyPermission</code>
      * @throws RepositoryException if an error occurs
@@ -877,17 +987,6 @@ fieldMapColumns.put("Facility", fields);
             this.facilityPartyPermissions = getRelated(FacilityPartyPermission.class, "FacilityPartyPermission");
         }
         return this.facilityPartyPermissions;
-    }
-    /**
-     * Auto generated method that gets the related <code>FacilityRole</code> by the relation named <code>FacilityRole</code>.
-     * @return the list of <code>FacilityRole</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends FacilityRole> getFacilityRoles() throws RepositoryException {
-        if (this.facilityRoles == null) {
-            this.facilityRoles = getRelated(FacilityRole.class, "FacilityRole");
-        }
-        return this.facilityRoles;
     }
     /**
      * Auto generated method that gets the related <code>FacilityTransferPlan</code> by the relation named <code>FromFacilityTransferPlan</code>.
@@ -967,6 +1066,17 @@ fieldMapColumns.put("Facility", fields);
         return this.toInventoryTransfers;
     }
     /**
+     * Auto generated method that gets the related <code>MrpEvent</code> by the relation named <code>MrpEvent</code>.
+     * @return the list of <code>MrpEvent</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends MrpEvent> getMrpEvents() throws RepositoryException {
+        if (this.mrpEvents == null) {
+            this.mrpEvents = getRelated(MrpEvent.class, "MrpEvent");
+        }
+        return this.mrpEvents;
+    }
+    /**
      * Auto generated method that gets the related <code>MrpInventoryEvent</code> by the relation named <code>MrpInventoryEvent</code>.
      * @return the list of <code>MrpInventoryEvent</code>
      * @throws RepositoryException if an error occurs
@@ -978,6 +1088,17 @@ fieldMapColumns.put("Facility", fields);
         return this.mrpInventoryEvents;
     }
     /**
+     * Auto generated method that gets the related <code>OldFacilityRole</code> by the relation named <code>OldFacilityRole</code>.
+     * @return the list of <code>OldFacilityRole</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldFacilityRole> getOldFacilityRoles() throws RepositoryException {
+        if (this.oldFacilityRoles == null) {
+            this.oldFacilityRoles = getRelated(OldFacilityRole.class, "OldFacilityRole");
+        }
+        return this.oldFacilityRoles;
+    }
+    /**
      * Auto generated method that gets the related <code>OrderHeader</code> by the relation named <code>OriginOrderHeader</code>.
      * @return the list of <code>OrderHeader</code>
      * @throws RepositoryException if an error occurs
@@ -987,6 +1108,17 @@ fieldMapColumns.put("Facility", fields);
             this.originOrderHeaders = getRelated(OrderHeader.class, "OriginOrderHeader");
         }
         return this.originOrderHeaders;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderItemShipGroup</code> by the relation named <code>OrderItemShipGroup</code>.
+     * @return the list of <code>OrderItemShipGroup</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItemShipGroup> getOrderItemShipGroups() throws RepositoryException {
+        if (this.orderItemShipGroups == null) {
+            this.orderItemShipGroups = getRelated(OrderItemShipGroup.class, "OrderItemShipGroup");
+        }
+        return this.orderItemShipGroups;
     }
     /**
      * Auto generated method that gets the related <code>OrderSummaryEntry</code> by the relation named <code>OrderSummaryEntry</code>.
@@ -1218,6 +1350,13 @@ fieldMapColumns.put("Facility", fields);
     }
     /**
      * Auto generated value setter.
+     * @param parentFacility the parentFacility to set
+    */
+    public void setParentFacility(Facility parentFacility) {
+        this.parentFacility = parentFacility;
+    }
+    /**
+     * Auto generated value setter.
      * @param facilityGroup the facilityGroup to set
     */
     public void setFacilityGroup(FacilityGroup facilityGroup) {
@@ -1260,6 +1399,13 @@ fieldMapColumns.put("Facility", fields);
     }
     /**
      * Auto generated value setter.
+     * @param geoPointGeoPoint the geoPointGeoPoint to set
+    */
+    public void setGeoPointGeoPoint(GeoPoint geoPointGeoPoint) {
+        this.geoPointGeoPoint = geoPointGeoPoint;
+    }
+    /**
+     * Auto generated value setter.
      * @param enumeration the enumeration to set
     */
     public void setEnumeration(Enumeration enumeration) {
@@ -1292,6 +1438,13 @@ fieldMapColumns.put("Facility", fields);
     */
     public void setDestDeliverys(List<Delivery> destDeliverys) {
         this.destDeliverys = destDeliverys;
+    }
+    /**
+     * Auto generated value setter.
+     * @param childFacilitys the childFacilitys to set
+    */
+    public void setChildFacilitys(List<Facility> childFacilitys) {
+        this.childFacilitys = childFacilitys;
     }
     /**
      * Auto generated value setter.
@@ -1351,17 +1504,17 @@ fieldMapColumns.put("Facility", fields);
     }
     /**
      * Auto generated value setter.
+     * @param facilityPartys the facilityPartys to set
+    */
+    public void setFacilityPartys(List<FacilityParty> facilityPartys) {
+        this.facilityPartys = facilityPartys;
+    }
+    /**
+     * Auto generated value setter.
      * @param facilityPartyPermissions the facilityPartyPermissions to set
     */
     public void setFacilityPartyPermissions(List<FacilityPartyPermission> facilityPartyPermissions) {
         this.facilityPartyPermissions = facilityPartyPermissions;
-    }
-    /**
-     * Auto generated value setter.
-     * @param facilityRoles the facilityRoles to set
-    */
-    public void setFacilityRoles(List<FacilityRole> facilityRoles) {
-        this.facilityRoles = facilityRoles;
     }
     /**
      * Auto generated value setter.
@@ -1414,6 +1567,13 @@ fieldMapColumns.put("Facility", fields);
     }
     /**
      * Auto generated value setter.
+     * @param mrpEvents the mrpEvents to set
+    */
+    public void setMrpEvents(List<MrpEvent> mrpEvents) {
+        this.mrpEvents = mrpEvents;
+    }
+    /**
+     * Auto generated value setter.
      * @param mrpInventoryEvents the mrpInventoryEvents to set
     */
     public void setMrpInventoryEvents(List<MrpInventoryEvent> mrpInventoryEvents) {
@@ -1421,10 +1581,24 @@ fieldMapColumns.put("Facility", fields);
     }
     /**
      * Auto generated value setter.
+     * @param oldFacilityRoles the oldFacilityRoles to set
+    */
+    public void setOldFacilityRoles(List<OldFacilityRole> oldFacilityRoles) {
+        this.oldFacilityRoles = oldFacilityRoles;
+    }
+    /**
+     * Auto generated value setter.
      * @param originOrderHeaders the originOrderHeaders to set
     */
     public void setOriginOrderHeaders(List<OrderHeader> originOrderHeaders) {
         this.originOrderHeaders = originOrderHeaders;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderItemShipGroups the orderItemShipGroups to set
+    */
+    public void setOrderItemShipGroups(List<OrderItemShipGroup> orderItemShipGroups) {
+        this.orderItemShipGroups = orderItemShipGroups;
     }
     /**
      * Auto generated value setter.
@@ -1786,6 +1960,33 @@ fieldMapColumns.put("Facility", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addFacilityParty(FacilityParty facilityParty) {
+        if (this.facilityPartys == null) {
+            this.facilityPartys = new ArrayList<FacilityParty>();
+        }
+        this.facilityPartys.add(facilityParty);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeFacilityParty(FacilityParty facilityParty) {
+        if (this.facilityPartys == null) {
+            return;
+        }
+        this.facilityPartys.remove(facilityParty);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearFacilityParty() {
+        if (this.facilityPartys == null) {
+            return;
+        }
+        this.facilityPartys.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addFacilityPartyPermission(FacilityPartyPermission facilityPartyPermission) {
         if (this.facilityPartyPermissions == null) {
             this.facilityPartyPermissions = new ArrayList<FacilityPartyPermission>();
@@ -1813,33 +2014,6 @@ fieldMapColumns.put("Facility", fields);
     /**
      * Auto generated method that add item to collection.
      */
-    public void addFacilityRole(FacilityRole facilityRole) {
-        if (this.facilityRoles == null) {
-            this.facilityRoles = new ArrayList<FacilityRole>();
-        }
-        this.facilityRoles.add(facilityRole);
-    }
-    /**
-     * Auto generated method that remove item from collection.
-     */
-    public void removeFacilityRole(FacilityRole facilityRole) {
-        if (this.facilityRoles == null) {
-            return;
-        }
-        this.facilityRoles.remove(facilityRole);
-    }
-    /**
-     * Auto generated method that clear items from collection.
-     */
-    public void clearFacilityRole() {
-        if (this.facilityRoles == null) {
-            return;
-        }
-        this.facilityRoles.clear();
-    }
-    /**
-     * Auto generated method that add item to collection.
-     */
     public void addMrpInventoryEvent(MrpInventoryEvent mrpInventoryEvent) {
         if (this.mrpInventoryEvents == null) {
             this.mrpInventoryEvents = new ArrayList<MrpInventoryEvent>();
@@ -1863,6 +2037,33 @@ fieldMapColumns.put("Facility", fields);
             return;
         }
         this.mrpInventoryEvents.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addOldFacilityRole(OldFacilityRole oldFacilityRole) {
+        if (this.oldFacilityRoles == null) {
+            this.oldFacilityRoles = new ArrayList<OldFacilityRole>();
+        }
+        this.oldFacilityRoles.add(oldFacilityRole);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOldFacilityRole(OldFacilityRole oldFacilityRole) {
+        if (this.oldFacilityRoles == null) {
+            return;
+        }
+        this.oldFacilityRoles.remove(oldFacilityRole);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOldFacilityRole() {
+        if (this.oldFacilityRoles == null) {
+            return;
+        }
+        this.oldFacilityRoles.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -2033,6 +2234,7 @@ fieldMapColumns.put("Facility", fields);
         preInit();
         setFacilityId((String) mapValue.get("facilityId"));
         setFacilityTypeId((String) mapValue.get("facilityTypeId"));
+        setParentFacilityId((String) mapValue.get("parentFacilityId"));
         setOwnerPartyId((String) mapValue.get("ownerPartyId"));
         setDefaultInventoryItemTypeId((String) mapValue.get("defaultInventoryItemTypeId"));
         setFacilityName((String) mapValue.get("facilityName"));
@@ -2044,6 +2246,7 @@ fieldMapColumns.put("Facility", fields);
         setClosedDate((Timestamp) mapValue.get("closedDate"));
         setDescription((String) mapValue.get("description"));
         setDefaultWeightUomId((String) mapValue.get("defaultWeightUomId"));
+        setGeoPointId((String) mapValue.get("geoPointId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -2058,6 +2261,7 @@ fieldMapColumns.put("Facility", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("facilityId", getFacilityId());
         mapValue.put("facilityTypeId", getFacilityTypeId());
+        mapValue.put("parentFacilityId", getParentFacilityId());
         mapValue.put("ownerPartyId", getOwnerPartyId());
         mapValue.put("defaultInventoryItemTypeId", getDefaultInventoryItemTypeId());
         mapValue.put("facilityName", getFacilityName());
@@ -2069,6 +2273,7 @@ fieldMapColumns.put("Facility", fields);
         mapValue.put("closedDate", getClosedDate());
         mapValue.put("description", getDescription());
         mapValue.put("defaultWeightUomId", getDefaultWeightUomId());
+        mapValue.put("geoPointId", getGeoPointId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

@@ -44,16 +44,41 @@ import org.hibernate.search.annotations.*;
 import java.lang.Long;
 import java.lang.String;
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 /**
  * Auto generated base entity FixedAssetMaintWorkEffort.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectFixedAssetMaintWorkEfforts", query="SELECT FAM.FIXED_ASSET_ID AS \"fixedAssetId\",FAM.MAINT_HIST_SEQ_ID AS \"maintHistSeqId\",FAM.STATUS_ID AS \"statusId\",FAM.PRODUCT_MAINT_TYPE_ID AS \"productMaintTypeId\",FAM.PRODUCT_MAINT_SEQ_ID AS \"productMaintSeqId\",FAM.SCHEDULE_WORK_EFFORT_ID AS \"scheduleWorkEffortId\",FAM.INTERVAL_QUANTITY AS \"intervalQuantity\",FAM.INTERVAL_UOM_ID AS \"intervalUomId\",FAM.INTERVAL_METER_TYPE_ID AS \"intervalMeterTypeId\",FAM.PURCHASE_ORDER_ID AS \"purchaseOrderId\",WE.WORK_EFFORT_ID AS \"workEffortId\",WE.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WE.CURRENT_STATUS_ID AS \"currentStatusId\",WE.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WE.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WE.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WE.WORKFLOW_PACKAGE_ID AS \"workflowPackageId\",WE.WORKFLOW_PACKAGE_VERSION AS \"workflowPackageVersion\",WE.WORKFLOW_PROCESS_ID AS \"workflowProcessId\",WE.WORKFLOW_PROCESS_VERSION AS \"workflowProcessVersion\",WE.WORKFLOW_ACTIVITY_ID AS \"workflowActivityId\",WE.SCOPE_ENUM_ID AS \"scopeEnumId\",WE.PRIORITY AS \"priority\",WE.PERCENT_COMPLETE AS \"percentComplete\",WE.WORK_EFFORT_NAME AS \"workEffortName\",WE.DESCRIPTION AS \"description\",WE.LOCATION_DESC AS \"locationDesc\",WE.ESTIMATED_START_DATE AS \"estimatedStartDate\",WE.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WE.ACTUAL_START_DATE AS \"actualStartDate\",WE.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WE.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WE.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WE.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WE.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WE.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WE.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WE.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WE.MONEY_UOM_ID AS \"moneyUomId\",WE.SPECIAL_TERMS AS \"specialTerms\",WE.TIME_TRANSPARENCY AS \"timeTransparency\",WE.UNIVERSAL_ID AS \"universalId\",WE.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WE.FACILITY_ID AS \"facilityId\",WE.INFO_URL AS \"infoUrl\",WE.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WE.RUNTIME_DATA_ID AS \"runtimeDataId\",WE.NOTE_ID AS \"noteId\",WE.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WE.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WE.QUANTITY_PRODUCED AS \"quantityProduced\",WE.QUANTITY_REJECTED AS \"quantityRejected\",WE.RESERV_PERSONS AS \"reservPersons\",WE.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WE.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WE.REVISION_NUMBER AS \"revisionNumber\",WE.CREATED_DATE AS \"createdDate\",WE.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WE.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WE.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\" FROM FIXED_ASSET_MAINT FAM INNER JOIN WORK_EFFORT WE ON FAM.SCHEDULE_WORK_EFFORT_ID = WE.WORK_EFFORT_ID", resultSetMapping="FixedAssetMaintWorkEffortMapping")
+@NamedNativeQuery(name="selectFixedAssetMaintWorkEfforts", query="SELECT FA.FIXED_ASSET_ID AS \"fixedAssetId\",FA.FIXED_ASSET_TYPE_ID AS \"fixedAssetTypeId\",FA.PARENT_FIXED_ASSET_ID AS \"parentFixedAssetId\",FA.INSTANCE_OF_PRODUCT_ID AS \"instanceOfProductId\",FA.CLASS_ENUM_ID AS \"classEnumId\",FA.PARTY_ID AS \"partyId\",FA.ROLE_TYPE_ID AS \"roleTypeId\",FA.FIXED_ASSET_NAME AS \"fixedAssetName\",FA.ACQUIRE_ORDER_ID AS \"acquireOrderId\",FA.ACQUIRE_ORDER_ITEM_SEQ_ID AS \"acquireOrderItemSeqId\",FA.DATE_ACQUIRED AS \"dateAcquired\",FA.DATE_LAST_SERVICED AS \"dateLastServiced\",FA.DATE_NEXT_SERVICE AS \"dateNextService\",FA.EXPECTED_END_OF_LIFE AS \"expectedEndOfLife\",FA.ACTUAL_END_OF_LIFE AS \"actualEndOfLife\",FA.PRODUCTION_CAPACITY AS \"productionCapacity\",FA.UOM_ID AS \"uomId\",FA.CALENDAR_ID AS \"calendarId\",FA.SERIAL_NUMBER AS \"serialNumber\",FA.LOCATED_AT_FACILITY_ID AS \"locatedAtFacilityId\",FA.LOCATED_AT_LOCATION_SEQ_ID AS \"locatedAtLocationSeqId\",FA.SALVAGE_VALUE AS \"salvageValue\",FA.DEPRECIATION AS \"depreciation\",FA.PURCHASE_COST AS \"purchaseCost\",FA.PURCHASE_COST_UOM_ID AS \"purchaseCostUomId\",FAM.MAINT_HIST_SEQ_ID AS \"maintHistSeqId\",FAM.STATUS_ID AS \"statusId\",FAM.PRODUCT_MAINT_TYPE_ID AS \"productMaintTypeId\",FAM.PRODUCT_MAINT_SEQ_ID AS \"productMaintSeqId\",FAM.SCHEDULE_WORK_EFFORT_ID AS \"scheduleWorkEffortId\",FAM.INTERVAL_QUANTITY AS \"intervalQuantity\",FAM.INTERVAL_UOM_ID AS \"intervalUomId\",FAM.INTERVAL_METER_TYPE_ID AS \"intervalMeterTypeId\",FAM.PURCHASE_ORDER_ID AS \"purchaseOrderId\",WE.WORK_EFFORT_ID AS \"workEffortId\",WE.WORK_EFFORT_TYPE_ID AS \"workEffortTypeId\",WE.CURRENT_STATUS_ID AS \"currentStatusId\",WE.LAST_STATUS_UPDATE AS \"lastStatusUpdate\",WE.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WE.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WE.SCOPE_ENUM_ID AS \"scopeEnumId\",WE.PRIORITY AS \"priority\",WE.PERCENT_COMPLETE AS \"percentComplete\",WE.WORK_EFFORT_NAME AS \"workEffortName\",WE.SHOW_AS_ENUM_ID AS \"showAsEnumId\",WE.SEND_NOTIFICATION_EMAIL AS \"sendNotificationEmail\",WE.DESCRIPTION AS \"description\",WE.LOCATION_DESC AS \"locationDesc\",WE.ESTIMATED_START_DATE AS \"estimatedStartDate\",WE.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WE.ACTUAL_START_DATE AS \"actualStartDate\",WE.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WE.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WE.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WE.ESTIMATE_CALC_METHOD AS \"estimateCalcMethod\",WE.ACTUAL_MILLI_SECONDS AS \"actualMilliSeconds\",WE.ACTUAL_SETUP_MILLIS AS \"actualSetupMillis\",WE.TOTAL_MILLI_SECONDS_ALLOWED AS \"totalMilliSecondsAllowed\",WE.TOTAL_MONEY_ALLOWED AS \"totalMoneyAllowed\",WE.MONEY_UOM_ID AS \"moneyUomId\",WE.SPECIAL_TERMS AS \"specialTerms\",WE.TIME_TRANSPARENCY AS \"timeTransparency\",WE.UNIVERSAL_ID AS \"universalId\",WE.SOURCE_REFERENCE_ID AS \"sourceReferenceId\",WE.FACILITY_ID AS \"facilityId\",WE.INFO_URL AS \"infoUrl\",WE.RECURRENCE_INFO_ID AS \"recurrenceInfoId\",WE.TEMP_EXPR_ID AS \"tempExprId\",WE.RUNTIME_DATA_ID AS \"runtimeDataId\",WE.NOTE_ID AS \"noteId\",WE.SERVICE_LOADER_NAME AS \"serviceLoaderName\",WE.QUANTITY_TO_PRODUCE AS \"quantityToProduce\",WE.QUANTITY_PRODUCED AS \"quantityProduced\",WE.QUANTITY_REJECTED AS \"quantityRejected\",WE.RESERV_PERSONS AS \"reservPersons\",WE.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",WE.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",WE.ACCOMMODATION_MAP_ID AS \"accommodationMapId\",WE.ACCOMMODATION_SPOT_ID AS \"accommodationSpotId\",WE.REVISION_NUMBER AS \"revisionNumber\",WE.CREATED_DATE AS \"createdDate\",WE.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",WE.LAST_MODIFIED_DATE AS \"lastModifiedDate\",WE.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\" FROM FIXED_ASSET FA INNER JOIN FIXED_ASSET_MAINT FAM ON FAM.FIXED_ASSET_ID = FA.FIXED_ASSET_ID INNER JOIN WORK_EFFORT WE ON FAM.SCHEDULE_WORK_EFFORT_ID = WE.WORK_EFFORT_ID", resultSetMapping="FixedAssetMaintWorkEffortMapping")
 @SqlResultSetMapping(name="FixedAssetMaintWorkEffortMapping", entities={
 @EntityResult(entityClass=FixedAssetMaintWorkEffort.class, fields = {
 @FieldResult(name="fixedAssetId", column="fixedAssetId")
+,@FieldResult(name="fixedAssetTypeId", column="fixedAssetTypeId")
+,@FieldResult(name="parentFixedAssetId", column="parentFixedAssetId")
+,@FieldResult(name="instanceOfProductId", column="instanceOfProductId")
+,@FieldResult(name="classEnumId", column="classEnumId")
+,@FieldResult(name="partyId", column="partyId")
+,@FieldResult(name="roleTypeId", column="roleTypeId")
+,@FieldResult(name="fixedAssetName", column="fixedAssetName")
+,@FieldResult(name="acquireOrderId", column="acquireOrderId")
+,@FieldResult(name="acquireOrderItemSeqId", column="acquireOrderItemSeqId")
+,@FieldResult(name="dateAcquired", column="dateAcquired")
+,@FieldResult(name="dateLastServiced", column="dateLastServiced")
+,@FieldResult(name="dateNextService", column="dateNextService")
+,@FieldResult(name="expectedEndOfLife", column="expectedEndOfLife")
+,@FieldResult(name="actualEndOfLife", column="actualEndOfLife")
+,@FieldResult(name="productionCapacity", column="productionCapacity")
+,@FieldResult(name="uomId", column="uomId")
+,@FieldResult(name="calendarId", column="calendarId")
+,@FieldResult(name="serialNumber", column="serialNumber")
+,@FieldResult(name="locatedAtFacilityId", column="locatedAtFacilityId")
+,@FieldResult(name="locatedAtLocationSeqId", column="locatedAtLocationSeqId")
+,@FieldResult(name="salvageValue", column="salvageValue")
+,@FieldResult(name="depreciation", column="depreciation")
+,@FieldResult(name="purchaseCost", column="purchaseCost")
+,@FieldResult(name="purchaseCostUomId", column="purchaseCostUomId")
 ,@FieldResult(name="maintHistSeqId", column="maintHistSeqId")
 ,@FieldResult(name="statusId", column="statusId")
 ,@FieldResult(name="productMaintTypeId", column="productMaintTypeId")
@@ -69,15 +94,12 @@ import java.sql.Timestamp;
 ,@FieldResult(name="lastStatusUpdate", column="lastStatusUpdate")
 ,@FieldResult(name="workEffortPurposeTypeId", column="workEffortPurposeTypeId")
 ,@FieldResult(name="workEffortParentId", column="workEffortParentId")
-,@FieldResult(name="workflowPackageId", column="workflowPackageId")
-,@FieldResult(name="workflowPackageVersion", column="workflowPackageVersion")
-,@FieldResult(name="workflowProcessId", column="workflowProcessId")
-,@FieldResult(name="workflowProcessVersion", column="workflowProcessVersion")
-,@FieldResult(name="workflowActivityId", column="workflowActivityId")
 ,@FieldResult(name="scopeEnumId", column="scopeEnumId")
 ,@FieldResult(name="priority", column="priority")
 ,@FieldResult(name="percentComplete", column="percentComplete")
 ,@FieldResult(name="workEffortName", column="workEffortName")
+,@FieldResult(name="showAsEnumId", column="showAsEnumId")
+,@FieldResult(name="sendNotificationEmail", column="sendNotificationEmail")
 ,@FieldResult(name="description", column="description")
 ,@FieldResult(name="locationDesc", column="locationDesc")
 ,@FieldResult(name="estimatedStartDate", column="estimatedStartDate")
@@ -99,6 +121,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="facilityId", column="facilityId")
 ,@FieldResult(name="infoUrl", column="infoUrl")
 ,@FieldResult(name="recurrenceInfoId", column="recurrenceInfoId")
+,@FieldResult(name="tempExprId", column="tempExprId")
 ,@FieldResult(name="runtimeDataId", column="runtimeDataId")
 ,@FieldResult(name="noteId", column="noteId")
 ,@FieldResult(name="serviceLoaderName", column="serviceLoaderName")
@@ -108,6 +131,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="reservPersons", column="reservPersons")
 ,@FieldResult(name="reserv2ndPPPerc", column="reserv2ndPPPerc")
 ,@FieldResult(name="reservNthPPPerc", column="reservNthPPPerc")
+,@FieldResult(name="accommodationMapId", column="accommodationMapId")
+,@FieldResult(name="accommodationSpotId", column="accommodationSpotId")
 ,@FieldResult(name="revisionNumber", column="revisionNumber")
 ,@FieldResult(name="createdDate", column="createdDate")
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
@@ -119,7 +144,31 @@ import java.sql.Timestamp;
 public class FixedAssetMaintWorkEffort extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
-        fields.put("fixedAssetId", "FAM.FIXED_ASSET_ID");
+        fields.put("fixedAssetId", "FA.FIXED_ASSET_ID");
+        fields.put("fixedAssetTypeId", "FA.FIXED_ASSET_TYPE_ID");
+        fields.put("parentFixedAssetId", "FA.PARENT_FIXED_ASSET_ID");
+        fields.put("instanceOfProductId", "FA.INSTANCE_OF_PRODUCT_ID");
+        fields.put("classEnumId", "FA.CLASS_ENUM_ID");
+        fields.put("partyId", "FA.PARTY_ID");
+        fields.put("roleTypeId", "FA.ROLE_TYPE_ID");
+        fields.put("fixedAssetName", "FA.FIXED_ASSET_NAME");
+        fields.put("acquireOrderId", "FA.ACQUIRE_ORDER_ID");
+        fields.put("acquireOrderItemSeqId", "FA.ACQUIRE_ORDER_ITEM_SEQ_ID");
+        fields.put("dateAcquired", "FA.DATE_ACQUIRED");
+        fields.put("dateLastServiced", "FA.DATE_LAST_SERVICED");
+        fields.put("dateNextService", "FA.DATE_NEXT_SERVICE");
+        fields.put("expectedEndOfLife", "FA.EXPECTED_END_OF_LIFE");
+        fields.put("actualEndOfLife", "FA.ACTUAL_END_OF_LIFE");
+        fields.put("productionCapacity", "FA.PRODUCTION_CAPACITY");
+        fields.put("uomId", "FA.UOM_ID");
+        fields.put("calendarId", "FA.CALENDAR_ID");
+        fields.put("serialNumber", "FA.SERIAL_NUMBER");
+        fields.put("locatedAtFacilityId", "FA.LOCATED_AT_FACILITY_ID");
+        fields.put("locatedAtLocationSeqId", "FA.LOCATED_AT_LOCATION_SEQ_ID");
+        fields.put("salvageValue", "FA.SALVAGE_VALUE");
+        fields.put("depreciation", "FA.DEPRECIATION");
+        fields.put("purchaseCost", "FA.PURCHASE_COST");
+        fields.put("purchaseCostUomId", "FA.PURCHASE_COST_UOM_ID");
         fields.put("maintHistSeqId", "FAM.MAINT_HIST_SEQ_ID");
         fields.put("statusId", "FAM.STATUS_ID");
         fields.put("productMaintTypeId", "FAM.PRODUCT_MAINT_TYPE_ID");
@@ -135,15 +184,12 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("lastStatusUpdate", "WE.LAST_STATUS_UPDATE");
         fields.put("workEffortPurposeTypeId", "WE.WORK_EFFORT_PURPOSE_TYPE_ID");
         fields.put("workEffortParentId", "WE.WORK_EFFORT_PARENT_ID");
-        fields.put("workflowPackageId", "WE.WORKFLOW_PACKAGE_ID");
-        fields.put("workflowPackageVersion", "WE.WORKFLOW_PACKAGE_VERSION");
-        fields.put("workflowProcessId", "WE.WORKFLOW_PROCESS_ID");
-        fields.put("workflowProcessVersion", "WE.WORKFLOW_PROCESS_VERSION");
-        fields.put("workflowActivityId", "WE.WORKFLOW_ACTIVITY_ID");
         fields.put("scopeEnumId", "WE.SCOPE_ENUM_ID");
         fields.put("priority", "WE.PRIORITY");
         fields.put("percentComplete", "WE.PERCENT_COMPLETE");
         fields.put("workEffortName", "WE.WORK_EFFORT_NAME");
+        fields.put("showAsEnumId", "WE.SHOW_AS_ENUM_ID");
+        fields.put("sendNotificationEmail", "WE.SEND_NOTIFICATION_EMAIL");
         fields.put("description", "WE.DESCRIPTION");
         fields.put("locationDesc", "WE.LOCATION_DESC");
         fields.put("estimatedStartDate", "WE.ESTIMATED_START_DATE");
@@ -165,6 +211,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("facilityId", "WE.FACILITY_ID");
         fields.put("infoUrl", "WE.INFO_URL");
         fields.put("recurrenceInfoId", "WE.RECURRENCE_INFO_ID");
+        fields.put("tempExprId", "WE.TEMP_EXPR_ID");
         fields.put("runtimeDataId", "WE.RUNTIME_DATA_ID");
         fields.put("noteId", "WE.NOTE_ID");
         fields.put("serviceLoaderName", "WE.SERVICE_LOADER_NAME");
@@ -174,6 +221,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("reservPersons", "WE.RESERV_PERSONS");
         fields.put("reserv2ndPPPerc", "WE.RESERV2ND_P_P_PERC");
         fields.put("reservNthPPPerc", "WE.RESERV_NTH_P_P_PERC");
+        fields.put("accommodationMapId", "WE.ACCOMMODATION_MAP_ID");
+        fields.put("accommodationSpotId", "WE.ACCOMMODATION_SPOT_ID");
         fields.put("revisionNumber", "WE.REVISION_NUMBER");
         fields.put("createdDate", "WE.CREATED_DATE");
         fields.put("createdByUserLogin", "WE.CREATED_BY_USER_LOGIN");
@@ -183,6 +232,30 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
 }
   public static enum Fields implements EntityFieldInterface<FixedAssetMaintWorkEffort> {
     fixedAssetId("fixedAssetId"),
+    fixedAssetTypeId("fixedAssetTypeId"),
+    parentFixedAssetId("parentFixedAssetId"),
+    instanceOfProductId("instanceOfProductId"),
+    classEnumId("classEnumId"),
+    partyId("partyId"),
+    roleTypeId("roleTypeId"),
+    fixedAssetName("fixedAssetName"),
+    acquireOrderId("acquireOrderId"),
+    acquireOrderItemSeqId("acquireOrderItemSeqId"),
+    dateAcquired("dateAcquired"),
+    dateLastServiced("dateLastServiced"),
+    dateNextService("dateNextService"),
+    expectedEndOfLife("expectedEndOfLife"),
+    actualEndOfLife("actualEndOfLife"),
+    productionCapacity("productionCapacity"),
+    uomId("uomId"),
+    calendarId("calendarId"),
+    serialNumber("serialNumber"),
+    locatedAtFacilityId("locatedAtFacilityId"),
+    locatedAtLocationSeqId("locatedAtLocationSeqId"),
+    salvageValue("salvageValue"),
+    depreciation("depreciation"),
+    purchaseCost("purchaseCost"),
+    purchaseCostUomId("purchaseCostUomId"),
     maintHistSeqId("maintHistSeqId"),
     statusId("statusId"),
     productMaintTypeId("productMaintTypeId"),
@@ -198,15 +271,12 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     lastStatusUpdate("lastStatusUpdate"),
     workEffortPurposeTypeId("workEffortPurposeTypeId"),
     workEffortParentId("workEffortParentId"),
-    workflowPackageId("workflowPackageId"),
-    workflowPackageVersion("workflowPackageVersion"),
-    workflowProcessId("workflowProcessId"),
-    workflowProcessVersion("workflowProcessVersion"),
-    workflowActivityId("workflowActivityId"),
     scopeEnumId("scopeEnumId"),
     priority("priority"),
     percentComplete("percentComplete"),
     workEffortName("workEffortName"),
+    showAsEnumId("showAsEnumId"),
+    sendNotificationEmail("sendNotificationEmail"),
     description("description"),
     locationDesc("locationDesc"),
     estimatedStartDate("estimatedStartDate"),
@@ -228,6 +298,7 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     facilityId("facilityId"),
     infoUrl("infoUrl"),
     recurrenceInfoId("recurrenceInfoId"),
+    tempExprId("tempExprId"),
     runtimeDataId("runtimeDataId"),
     noteId("noteId"),
     serviceLoaderName("serviceLoaderName"),
@@ -237,6 +308,8 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     reservPersons("reservPersons"),
     reserv2ndPPPerc("reserv2ndPPPerc"),
     reservNthPPPerc("reservNthPPPerc"),
+    accommodationMapId("accommodationMapId"),
+    accommodationSpotId("accommodationSpotId"),
     revisionNumber("revisionNumber"),
     createdDate("createdDate"),
     createdByUserLogin("createdByUserLogin"),
@@ -254,6 +327,54 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
 
     @Id
    private String fixedAssetId;
+    
+   private String fixedAssetTypeId;
+    
+   private String parentFixedAssetId;
+    
+   private String instanceOfProductId;
+    
+   private String classEnumId;
+    
+   private String partyId;
+    
+   private String roleTypeId;
+    
+   private String fixedAssetName;
+    
+   private String acquireOrderId;
+    
+   private String acquireOrderItemSeqId;
+    
+   private Timestamp dateAcquired;
+    
+   private Timestamp dateLastServiced;
+    
+   private Timestamp dateNextService;
+    
+   private Date expectedEndOfLife;
+    
+   private Date actualEndOfLife;
+    
+   private BigDecimal productionCapacity;
+    
+   private String uomId;
+    
+   private String calendarId;
+    
+   private String serialNumber;
+    
+   private String locatedAtFacilityId;
+    
+   private String locatedAtLocationSeqId;
+    
+   private BigDecimal salvageValue;
+    
+   private BigDecimal depreciation;
+    
+   private BigDecimal purchaseCost;
+    
+   private String purchaseCostUomId;
     
    private String maintHistSeqId;
     
@@ -285,16 +406,6 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     
    private String workEffortParentId;
     
-   private String workflowPackageId;
-    
-   private String workflowPackageVersion;
-    
-   private String workflowProcessId;
-    
-   private String workflowProcessVersion;
-    
-   private String workflowActivityId;
-    
    private String scopeEnumId;
     
    private Long priority;
@@ -302,6 +413,10 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
    private Long percentComplete;
     
    private String workEffortName;
+    
+   private String showAsEnumId;
+    
+   private String sendNotificationEmail;
     
    private String description;
     
@@ -345,6 +460,8 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     
    private String recurrenceInfoId;
     
+   private String tempExprId;
+    
    private String runtimeDataId;
     
    private String noteId;
@@ -362,6 +479,10 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
    private BigDecimal reserv2ndPPPerc;
     
    private BigDecimal reservNthPPPerc;
+    
+   private String accommodationMapId;
+    
+   private String accommodationSpotId;
     
    private Long revisionNumber;
     
@@ -384,7 +505,7 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("fixedAssetId");this.primaryKeyNames.add("maintHistSeqId");this.primaryKeyNames.add("workEffortId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("productMaintTypeId");this.allFieldsNames.add("productMaintSeqId");this.allFieldsNames.add("scheduleWorkEffortId");this.allFieldsNames.add("intervalQuantity");this.allFieldsNames.add("intervalUomId");this.allFieldsNames.add("intervalMeterTypeId");this.allFieldsNames.add("purchaseOrderId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("workflowPackageId");this.allFieldsNames.add("workflowPackageVersion");this.allFieldsNames.add("workflowProcessId");this.allFieldsNames.add("workflowProcessVersion");this.allFieldsNames.add("workflowActivityId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("description");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");
+      this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("fixedAssetTypeId");this.allFieldsNames.add("parentFixedAssetId");this.allFieldsNames.add("instanceOfProductId");this.allFieldsNames.add("classEnumId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("fixedAssetName");this.allFieldsNames.add("acquireOrderId");this.allFieldsNames.add("acquireOrderItemSeqId");this.allFieldsNames.add("dateAcquired");this.allFieldsNames.add("dateLastServiced");this.allFieldsNames.add("dateNextService");this.allFieldsNames.add("expectedEndOfLife");this.allFieldsNames.add("actualEndOfLife");this.allFieldsNames.add("productionCapacity");this.allFieldsNames.add("uomId");this.allFieldsNames.add("calendarId");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("locatedAtFacilityId");this.allFieldsNames.add("locatedAtLocationSeqId");this.allFieldsNames.add("salvageValue");this.allFieldsNames.add("depreciation");this.allFieldsNames.add("purchaseCost");this.allFieldsNames.add("purchaseCostUomId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("productMaintTypeId");this.allFieldsNames.add("productMaintSeqId");this.allFieldsNames.add("scheduleWorkEffortId");this.allFieldsNames.add("intervalQuantity");this.allFieldsNames.add("intervalUomId");this.allFieldsNames.add("intervalMeterTypeId");this.allFieldsNames.add("purchaseOrderId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("workEffortTypeId");this.allFieldsNames.add("currentStatusId");this.allFieldsNames.add("lastStatusUpdate");this.allFieldsNames.add("workEffortPurposeTypeId");this.allFieldsNames.add("workEffortParentId");this.allFieldsNames.add("scopeEnumId");this.allFieldsNames.add("priority");this.allFieldsNames.add("percentComplete");this.allFieldsNames.add("workEffortName");this.allFieldsNames.add("showAsEnumId");this.allFieldsNames.add("sendNotificationEmail");this.allFieldsNames.add("description");this.allFieldsNames.add("locationDesc");this.allFieldsNames.add("estimatedStartDate");this.allFieldsNames.add("estimatedCompletionDate");this.allFieldsNames.add("actualStartDate");this.allFieldsNames.add("actualCompletionDate");this.allFieldsNames.add("estimatedMilliSeconds");this.allFieldsNames.add("estimatedSetupMillis");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("actualMilliSeconds");this.allFieldsNames.add("actualSetupMillis");this.allFieldsNames.add("totalMilliSecondsAllowed");this.allFieldsNames.add("totalMoneyAllowed");this.allFieldsNames.add("moneyUomId");this.allFieldsNames.add("specialTerms");this.allFieldsNames.add("timeTransparency");this.allFieldsNames.add("universalId");this.allFieldsNames.add("sourceReferenceId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("infoUrl");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("serviceLoaderName");this.allFieldsNames.add("quantityToProduce");this.allFieldsNames.add("quantityProduced");this.allFieldsNames.add("quantityRejected");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("accommodationMapId");this.allFieldsNames.add("accommodationSpotId");this.allFieldsNames.add("revisionNumber");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -408,6 +529,174 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
      */
     private void setFixedAssetId(String fixedAssetId) {
         this.fixedAssetId = fixedAssetId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fixedAssetTypeId the fixedAssetTypeId to set
+     */
+    private void setFixedAssetTypeId(String fixedAssetTypeId) {
+        this.fixedAssetTypeId = fixedAssetTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentFixedAssetId the parentFixedAssetId to set
+     */
+    private void setParentFixedAssetId(String parentFixedAssetId) {
+        this.parentFixedAssetId = parentFixedAssetId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param instanceOfProductId the instanceOfProductId to set
+     */
+    private void setInstanceOfProductId(String instanceOfProductId) {
+        this.instanceOfProductId = instanceOfProductId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param classEnumId the classEnumId to set
+     */
+    private void setClassEnumId(String classEnumId) {
+        this.classEnumId = classEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyId the partyId to set
+     */
+    private void setPartyId(String partyId) {
+        this.partyId = partyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param roleTypeId the roleTypeId to set
+     */
+    private void setRoleTypeId(String roleTypeId) {
+        this.roleTypeId = roleTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fixedAssetName the fixedAssetName to set
+     */
+    private void setFixedAssetName(String fixedAssetName) {
+        this.fixedAssetName = fixedAssetName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acquireOrderId the acquireOrderId to set
+     */
+    private void setAcquireOrderId(String acquireOrderId) {
+        this.acquireOrderId = acquireOrderId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param acquireOrderItemSeqId the acquireOrderItemSeqId to set
+     */
+    private void setAcquireOrderItemSeqId(String acquireOrderItemSeqId) {
+        this.acquireOrderItemSeqId = acquireOrderItemSeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dateAcquired the dateAcquired to set
+     */
+    private void setDateAcquired(Timestamp dateAcquired) {
+        this.dateAcquired = dateAcquired;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dateLastServiced the dateLastServiced to set
+     */
+    private void setDateLastServiced(Timestamp dateLastServiced) {
+        this.dateLastServiced = dateLastServiced;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dateNextService the dateNextService to set
+     */
+    private void setDateNextService(Timestamp dateNextService) {
+        this.dateNextService = dateNextService;
+    }
+    /**
+     * Auto generated value setter.
+     * @param expectedEndOfLife the expectedEndOfLife to set
+     */
+    private void setExpectedEndOfLife(Date expectedEndOfLife) {
+        this.expectedEndOfLife = expectedEndOfLife;
+    }
+    /**
+     * Auto generated value setter.
+     * @param actualEndOfLife the actualEndOfLife to set
+     */
+    private void setActualEndOfLife(Date actualEndOfLife) {
+        this.actualEndOfLife = actualEndOfLife;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productionCapacity the productionCapacity to set
+     */
+    private void setProductionCapacity(BigDecimal productionCapacity) {
+        this.productionCapacity = productionCapacity;
+    }
+    /**
+     * Auto generated value setter.
+     * @param uomId the uomId to set
+     */
+    private void setUomId(String uomId) {
+        this.uomId = uomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param calendarId the calendarId to set
+     */
+    private void setCalendarId(String calendarId) {
+        this.calendarId = calendarId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param serialNumber the serialNumber to set
+     */
+    private void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+    /**
+     * Auto generated value setter.
+     * @param locatedAtFacilityId the locatedAtFacilityId to set
+     */
+    private void setLocatedAtFacilityId(String locatedAtFacilityId) {
+        this.locatedAtFacilityId = locatedAtFacilityId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param locatedAtLocationSeqId the locatedAtLocationSeqId to set
+     */
+    private void setLocatedAtLocationSeqId(String locatedAtLocationSeqId) {
+        this.locatedAtLocationSeqId = locatedAtLocationSeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salvageValue the salvageValue to set
+     */
+    private void setSalvageValue(BigDecimal salvageValue) {
+        this.salvageValue = salvageValue;
+    }
+    /**
+     * Auto generated value setter.
+     * @param depreciation the depreciation to set
+     */
+    private void setDepreciation(BigDecimal depreciation) {
+        this.depreciation = depreciation;
+    }
+    /**
+     * Auto generated value setter.
+     * @param purchaseCost the purchaseCost to set
+     */
+    private void setPurchaseCost(BigDecimal purchaseCost) {
+        this.purchaseCost = purchaseCost;
+    }
+    /**
+     * Auto generated value setter.
+     * @param purchaseCostUomId the purchaseCostUomId to set
+     */
+    private void setPurchaseCostUomId(String purchaseCostUomId) {
+        this.purchaseCostUomId = purchaseCostUomId;
     }
     /**
      * Auto generated value setter.
@@ -516,41 +805,6 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     }
     /**
      * Auto generated value setter.
-     * @param workflowPackageId the workflowPackageId to set
-     */
-    private void setWorkflowPackageId(String workflowPackageId) {
-        this.workflowPackageId = workflowPackageId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowPackageVersion the workflowPackageVersion to set
-     */
-    private void setWorkflowPackageVersion(String workflowPackageVersion) {
-        this.workflowPackageVersion = workflowPackageVersion;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowProcessId the workflowProcessId to set
-     */
-    private void setWorkflowProcessId(String workflowProcessId) {
-        this.workflowProcessId = workflowProcessId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowProcessVersion the workflowProcessVersion to set
-     */
-    private void setWorkflowProcessVersion(String workflowProcessVersion) {
-        this.workflowProcessVersion = workflowProcessVersion;
-    }
-    /**
-     * Auto generated value setter.
-     * @param workflowActivityId the workflowActivityId to set
-     */
-    private void setWorkflowActivityId(String workflowActivityId) {
-        this.workflowActivityId = workflowActivityId;
-    }
-    /**
-     * Auto generated value setter.
      * @param scopeEnumId the scopeEnumId to set
      */
     private void setScopeEnumId(String scopeEnumId) {
@@ -576,6 +830,20 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
      */
     private void setWorkEffortName(String workEffortName) {
         this.workEffortName = workEffortName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param showAsEnumId the showAsEnumId to set
+     */
+    private void setShowAsEnumId(String showAsEnumId) {
+        this.showAsEnumId = showAsEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param sendNotificationEmail the sendNotificationEmail to set
+     */
+    private void setSendNotificationEmail(String sendNotificationEmail) {
+        this.sendNotificationEmail = sendNotificationEmail;
     }
     /**
      * Auto generated value setter.
@@ -726,6 +994,13 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     }
     /**
      * Auto generated value setter.
+     * @param tempExprId the tempExprId to set
+     */
+    private void setTempExprId(String tempExprId) {
+        this.tempExprId = tempExprId;
+    }
+    /**
+     * Auto generated value setter.
      * @param runtimeDataId the runtimeDataId to set
      */
     private void setRuntimeDataId(String runtimeDataId) {
@@ -789,6 +1064,20 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     }
     /**
      * Auto generated value setter.
+     * @param accommodationMapId the accommodationMapId to set
+     */
+    private void setAccommodationMapId(String accommodationMapId) {
+        this.accommodationMapId = accommodationMapId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param accommodationSpotId the accommodationSpotId to set
+     */
+    private void setAccommodationSpotId(String accommodationSpotId) {
+        this.accommodationSpotId = accommodationSpotId;
+    }
+    /**
+     * Auto generated value setter.
      * @param revisionNumber the revisionNumber to set
      */
     private void setRevisionNumber(Long revisionNumber) {
@@ -829,6 +1118,174 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
      */
     public String getFixedAssetId() {
         return this.fixedAssetId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getFixedAssetTypeId() {
+        return this.fixedAssetTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getParentFixedAssetId() {
+        return this.parentFixedAssetId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInstanceOfProductId() {
+        return this.instanceOfProductId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getClassEnumId() {
+        return this.classEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPartyId() {
+        return this.partyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getRoleTypeId() {
+        return this.roleTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getFixedAssetName() {
+        return this.fixedAssetName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcquireOrderId() {
+        return this.acquireOrderId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAcquireOrderItemSeqId() {
+        return this.acquireOrderItemSeqId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getDateAcquired() {
+        return this.dateAcquired;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getDateLastServiced() {
+        return this.dateLastServiced;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getDateNextService() {
+        return this.dateNextService;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Date</code>
+     */
+    public Date getExpectedEndOfLife() {
+        return this.expectedEndOfLife;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Date</code>
+     */
+    public Date getActualEndOfLife() {
+        return this.actualEndOfLife;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getProductionCapacity() {
+        return this.productionCapacity;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getUomId() {
+        return this.uomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCalendarId() {
+        return this.calendarId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSerialNumber() {
+        return this.serialNumber;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLocatedAtFacilityId() {
+        return this.locatedAtFacilityId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLocatedAtLocationSeqId() {
+        return this.locatedAtLocationSeqId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getSalvageValue() {
+        return this.salvageValue;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getDepreciation() {
+        return this.depreciation;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPurchaseCost() {
+        return this.purchaseCost;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPurchaseCostUomId() {
+        return this.purchaseCostUomId;
     }
     /**
      * Auto generated value accessor.
@@ -939,41 +1396,6 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getWorkflowPackageId() {
-        return this.workflowPackageId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowPackageVersion() {
-        return this.workflowPackageVersion;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowProcessId() {
-        return this.workflowProcessId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowProcessVersion() {
-        return this.workflowProcessVersion;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getWorkflowActivityId() {
-        return this.workflowActivityId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getScopeEnumId() {
         return this.scopeEnumId;
     }
@@ -997,6 +1419,20 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
      */
     public String getWorkEffortName() {
         return this.workEffortName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getShowAsEnumId() {
+        return this.showAsEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSendNotificationEmail() {
+        return this.sendNotificationEmail;
     }
     /**
      * Auto generated value accessor.
@@ -1149,6 +1585,13 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getTempExprId() {
+        return this.tempExprId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getRuntimeDataId() {
         return this.runtimeDataId;
     }
@@ -1210,6 +1653,20 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAccommodationMapId() {
+        return this.accommodationMapId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAccommodationSpotId() {
+        return this.accommodationSpotId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Long</code>
      */
     public Long getRevisionNumber() {
@@ -1252,6 +1709,30 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setFixedAssetId((String) mapValue.get("fixedAssetId"));
+        setFixedAssetTypeId((String) mapValue.get("fixedAssetTypeId"));
+        setParentFixedAssetId((String) mapValue.get("parentFixedAssetId"));
+        setInstanceOfProductId((String) mapValue.get("instanceOfProductId"));
+        setClassEnumId((String) mapValue.get("classEnumId"));
+        setPartyId((String) mapValue.get("partyId"));
+        setRoleTypeId((String) mapValue.get("roleTypeId"));
+        setFixedAssetName((String) mapValue.get("fixedAssetName"));
+        setAcquireOrderId((String) mapValue.get("acquireOrderId"));
+        setAcquireOrderItemSeqId((String) mapValue.get("acquireOrderItemSeqId"));
+        setDateAcquired((Timestamp) mapValue.get("dateAcquired"));
+        setDateLastServiced((Timestamp) mapValue.get("dateLastServiced"));
+        setDateNextService((Timestamp) mapValue.get("dateNextService"));
+        setExpectedEndOfLife((Date) mapValue.get("expectedEndOfLife"));
+        setActualEndOfLife((Date) mapValue.get("actualEndOfLife"));
+        setProductionCapacity(convertToBigDecimal(mapValue.get("productionCapacity")));
+        setUomId((String) mapValue.get("uomId"));
+        setCalendarId((String) mapValue.get("calendarId"));
+        setSerialNumber((String) mapValue.get("serialNumber"));
+        setLocatedAtFacilityId((String) mapValue.get("locatedAtFacilityId"));
+        setLocatedAtLocationSeqId((String) mapValue.get("locatedAtLocationSeqId"));
+        setSalvageValue(convertToBigDecimal(mapValue.get("salvageValue")));
+        setDepreciation(convertToBigDecimal(mapValue.get("depreciation")));
+        setPurchaseCost(convertToBigDecimal(mapValue.get("purchaseCost")));
+        setPurchaseCostUomId((String) mapValue.get("purchaseCostUomId"));
         setMaintHistSeqId((String) mapValue.get("maintHistSeqId"));
         setStatusId((String) mapValue.get("statusId"));
         setProductMaintTypeId((String) mapValue.get("productMaintTypeId"));
@@ -1267,15 +1748,12 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
         setLastStatusUpdate((Timestamp) mapValue.get("lastStatusUpdate"));
         setWorkEffortPurposeTypeId((String) mapValue.get("workEffortPurposeTypeId"));
         setWorkEffortParentId((String) mapValue.get("workEffortParentId"));
-        setWorkflowPackageId((String) mapValue.get("workflowPackageId"));
-        setWorkflowPackageVersion((String) mapValue.get("workflowPackageVersion"));
-        setWorkflowProcessId((String) mapValue.get("workflowProcessId"));
-        setWorkflowProcessVersion((String) mapValue.get("workflowProcessVersion"));
-        setWorkflowActivityId((String) mapValue.get("workflowActivityId"));
         setScopeEnumId((String) mapValue.get("scopeEnumId"));
         setPriority((Long) mapValue.get("priority"));
         setPercentComplete((Long) mapValue.get("percentComplete"));
         setWorkEffortName((String) mapValue.get("workEffortName"));
+        setShowAsEnumId((String) mapValue.get("showAsEnumId"));
+        setSendNotificationEmail((String) mapValue.get("sendNotificationEmail"));
         setDescription((String) mapValue.get("description"));
         setLocationDesc((String) mapValue.get("locationDesc"));
         setEstimatedStartDate((Timestamp) mapValue.get("estimatedStartDate"));
@@ -1297,6 +1775,7 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
         setFacilityId((String) mapValue.get("facilityId"));
         setInfoUrl((String) mapValue.get("infoUrl"));
         setRecurrenceInfoId((String) mapValue.get("recurrenceInfoId"));
+        setTempExprId((String) mapValue.get("tempExprId"));
         setRuntimeDataId((String) mapValue.get("runtimeDataId"));
         setNoteId((String) mapValue.get("noteId"));
         setServiceLoaderName((String) mapValue.get("serviceLoaderName"));
@@ -1306,6 +1785,8 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
         setReservPersons(convertToBigDecimal(mapValue.get("reservPersons")));
         setReserv2ndPPPerc(convertToBigDecimal(mapValue.get("reserv2ndPPPerc")));
         setReservNthPPPerc(convertToBigDecimal(mapValue.get("reservNthPPPerc")));
+        setAccommodationMapId((String) mapValue.get("accommodationMapId"));
+        setAccommodationSpotId((String) mapValue.get("accommodationSpotId"));
         setRevisionNumber((Long) mapValue.get("revisionNumber"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
@@ -1319,6 +1800,30 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("fixedAssetId", getFixedAssetId());
+        mapValue.put("fixedAssetTypeId", getFixedAssetTypeId());
+        mapValue.put("parentFixedAssetId", getParentFixedAssetId());
+        mapValue.put("instanceOfProductId", getInstanceOfProductId());
+        mapValue.put("classEnumId", getClassEnumId());
+        mapValue.put("partyId", getPartyId());
+        mapValue.put("roleTypeId", getRoleTypeId());
+        mapValue.put("fixedAssetName", getFixedAssetName());
+        mapValue.put("acquireOrderId", getAcquireOrderId());
+        mapValue.put("acquireOrderItemSeqId", getAcquireOrderItemSeqId());
+        mapValue.put("dateAcquired", getDateAcquired());
+        mapValue.put("dateLastServiced", getDateLastServiced());
+        mapValue.put("dateNextService", getDateNextService());
+        mapValue.put("expectedEndOfLife", getExpectedEndOfLife());
+        mapValue.put("actualEndOfLife", getActualEndOfLife());
+        mapValue.put("productionCapacity", getProductionCapacity());
+        mapValue.put("uomId", getUomId());
+        mapValue.put("calendarId", getCalendarId());
+        mapValue.put("serialNumber", getSerialNumber());
+        mapValue.put("locatedAtFacilityId", getLocatedAtFacilityId());
+        mapValue.put("locatedAtLocationSeqId", getLocatedAtLocationSeqId());
+        mapValue.put("salvageValue", getSalvageValue());
+        mapValue.put("depreciation", getDepreciation());
+        mapValue.put("purchaseCost", getPurchaseCost());
+        mapValue.put("purchaseCostUomId", getPurchaseCostUomId());
         mapValue.put("maintHistSeqId", getMaintHistSeqId());
         mapValue.put("statusId", getStatusId());
         mapValue.put("productMaintTypeId", getProductMaintTypeId());
@@ -1334,15 +1839,12 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
         mapValue.put("lastStatusUpdate", getLastStatusUpdate());
         mapValue.put("workEffortPurposeTypeId", getWorkEffortPurposeTypeId());
         mapValue.put("workEffortParentId", getWorkEffortParentId());
-        mapValue.put("workflowPackageId", getWorkflowPackageId());
-        mapValue.put("workflowPackageVersion", getWorkflowPackageVersion());
-        mapValue.put("workflowProcessId", getWorkflowProcessId());
-        mapValue.put("workflowProcessVersion", getWorkflowProcessVersion());
-        mapValue.put("workflowActivityId", getWorkflowActivityId());
         mapValue.put("scopeEnumId", getScopeEnumId());
         mapValue.put("priority", getPriority());
         mapValue.put("percentComplete", getPercentComplete());
         mapValue.put("workEffortName", getWorkEffortName());
+        mapValue.put("showAsEnumId", getShowAsEnumId());
+        mapValue.put("sendNotificationEmail", getSendNotificationEmail());
         mapValue.put("description", getDescription());
         mapValue.put("locationDesc", getLocationDesc());
         mapValue.put("estimatedStartDate", getEstimatedStartDate());
@@ -1364,6 +1866,7 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
         mapValue.put("facilityId", getFacilityId());
         mapValue.put("infoUrl", getInfoUrl());
         mapValue.put("recurrenceInfoId", getRecurrenceInfoId());
+        mapValue.put("tempExprId", getTempExprId());
         mapValue.put("runtimeDataId", getRuntimeDataId());
         mapValue.put("noteId", getNoteId());
         mapValue.put("serviceLoaderName", getServiceLoaderName());
@@ -1373,6 +1876,8 @@ fieldMapColumns.put("FixedAssetMaintWorkEffort", fields);
         mapValue.put("reservPersons", getReservPersons());
         mapValue.put("reserv2ndPPPerc", getReserv2ndPPPerc());
         mapValue.put("reservNthPPPerc", getReservNthPPPerc());
+        mapValue.put("accommodationMapId", getAccommodationMapId());
+        mapValue.put("accommodationSpotId", getAccommodationSpotId());
         mapValue.put("revisionNumber", getRevisionNumber());
         mapValue.put("createdDate", getCreatedDate());
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());

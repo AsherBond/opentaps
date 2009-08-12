@@ -48,13 +48,14 @@ import java.sql.Timestamp;
  * Auto generated base entity CommunicationEventAndRole.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectCommunicationEventAndRoles", query="SELECT CR.COMMUNICATION_EVENT_ID AS \"communicationEventId\",CR.PARTY_ID AS \"partyId\",CR.ROLE_TYPE_ID AS \"roleTypeId\",CR.CONTACT_MECH_ID AS \"contactMechId\",CE.COMMUNICATION_EVENT_TYPE_ID AS \"communicationEventTypeId\",CE.ORIG_COMM_EVENT_ID AS \"origCommEventId\",CE.PARENT_COMM_EVENT_ID AS \"parentCommEventId\",CE.STATUS_ID AS \"statusId\",CE.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CE.CONTACT_MECH_ID_FROM AS \"contactMechIdFrom\",CE.CONTACT_MECH_ID_TO AS \"contactMechIdTo\",CE.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",CE.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",CE.PARTY_ID_FROM AS \"partyIdFrom\",CE.PARTY_ID_TO AS \"partyIdTo\",CE.ENTRY_DATE AS \"entryDate\",CE.DATETIME_STARTED AS \"datetimeStarted\",CE.DATETIME_ENDED AS \"datetimeEnded\",CE.SUBJECT AS \"subject\",CE.CONTENT_MIME_TYPE_ID AS \"contentMimeTypeId\",CE.CONTENT AS \"content\",CE.NOTE AS \"note\",CE.CONTACT_LIST_ID AS \"contactListId\",CE.HEADER_STRING AS \"headerString\",CE.FROM_STRING AS \"fromString\",CE.TO_STRING AS \"toString\",CE.CC_STRING AS \"ccString\",CE.BCC_STRING AS \"bccString\" FROM COMMUNICATION_EVENT_ROLE CR INNER JOIN COMMUNICATION_EVENT CE ON CR.COMMUNICATION_EVENT_ID = CE.COMMUNICATION_EVENT_ID", resultSetMapping="CommunicationEventAndRoleMapping")
+@NamedNativeQuery(name="selectCommunicationEventAndRoles", query="SELECT CR.PARTY_ID AS \"partyId\",CR.ROLE_TYPE_ID AS \"roleTypeId\",CR.STATUS_ID AS \"statusId\",CR.CONTACT_MECH_ID AS \"contactMechId\",CE.COMMUNICATION_EVENT_ID AS \"communicationEventId\",CE.COMMUNICATION_EVENT_TYPE_ID AS \"communicationEventTypeId\",CE.ORIG_COMM_EVENT_ID AS \"origCommEventId\",CE.PARENT_COMM_EVENT_ID AS \"parentCommEventId\",CE.STATUS_ID AS \"statusId\",CE.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CE.CONTACT_MECH_ID_FROM AS \"contactMechIdFrom\",CE.CONTACT_MECH_ID_TO AS \"contactMechIdTo\",CE.ROLE_TYPE_ID_FROM AS \"roleTypeIdFrom\",CE.ROLE_TYPE_ID_TO AS \"roleTypeIdTo\",CE.PARTY_ID_FROM AS \"partyIdFrom\",CE.PARTY_ID_TO AS \"partyIdTo\",CE.ENTRY_DATE AS \"entryDate\",CE.DATETIME_STARTED AS \"datetimeStarted\",CE.DATETIME_ENDED AS \"datetimeEnded\",CE.SUBJECT AS \"subject\",CE.CONTENT_MIME_TYPE_ID AS \"contentMimeTypeId\",CE.CONTENT AS \"content\",CE.NOTE AS \"note\",CE.REASON_ENUM_ID AS \"reasonEnumId\",CE.CONTACT_LIST_ID AS \"contactListId\",CE.HEADER_STRING AS \"headerString\",CE.FROM_STRING AS \"fromString\",CE.TO_STRING AS \"toString\",CE.CC_STRING AS \"ccString\",CE.BCC_STRING AS \"bccString\",CE.MESSAGE_ID AS \"messageId\" FROM COMMUNICATION_EVENT_ROLE CR INNER JOIN COMMUNICATION_EVENT CE ON CR.COMMUNICATION_EVENT_ID = CE.COMMUNICATION_EVENT_ID", resultSetMapping="CommunicationEventAndRoleMapping")
 @SqlResultSetMapping(name="CommunicationEventAndRoleMapping", entities={
 @EntityResult(entityClass=CommunicationEventAndRole.class, fields = {
-@FieldResult(name="communicationEventId", column="communicationEventId")
-,@FieldResult(name="partyId", column="partyId")
+@FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="roleTypeId", column="roleTypeId")
+,@FieldResult(name="roleStatusId", column="roleStatusId")
 ,@FieldResult(name="contactMechId", column="contactMechId")
+,@FieldResult(name="communicationEventId", column="communicationEventId")
 ,@FieldResult(name="communicationEventTypeId", column="communicationEventTypeId")
 ,@FieldResult(name="origCommEventId", column="origCommEventId")
 ,@FieldResult(name="parentCommEventId", column="parentCommEventId")
@@ -73,22 +74,25 @@ import java.sql.Timestamp;
 ,@FieldResult(name="contentMimeTypeId", column="contentMimeTypeId")
 ,@FieldResult(name="content", column="content")
 ,@FieldResult(name="note", column="note")
+,@FieldResult(name="reasonEnumId", column="reasonEnumId")
 ,@FieldResult(name="contactListId", column="contactListId")
 ,@FieldResult(name="headerString", column="headerString")
 ,@FieldResult(name="fromString", column="fromString")
 ,@FieldResult(name="toString", column="toString")
 ,@FieldResult(name="ccString", column="ccString")
 ,@FieldResult(name="bccString", column="bccString")
+,@FieldResult(name="messageId", column="messageId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
 public class CommunicationEventAndRole extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
-        fields.put("communicationEventId", "CR.COMMUNICATION_EVENT_ID");
         fields.put("partyId", "CR.PARTY_ID");
         fields.put("roleTypeId", "CR.ROLE_TYPE_ID");
+        fields.put("roleStatusId", "CR.STATUS_ID");
         fields.put("contactMechId", "CR.CONTACT_MECH_ID");
+        fields.put("communicationEventId", "CE.COMMUNICATION_EVENT_ID");
         fields.put("communicationEventTypeId", "CE.COMMUNICATION_EVENT_TYPE_ID");
         fields.put("origCommEventId", "CE.ORIG_COMM_EVENT_ID");
         fields.put("parentCommEventId", "CE.PARENT_COMM_EVENT_ID");
@@ -107,19 +111,22 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("contentMimeTypeId", "CE.CONTENT_MIME_TYPE_ID");
         fields.put("content", "CE.CONTENT");
         fields.put("note", "CE.NOTE");
+        fields.put("reasonEnumId", "CE.REASON_ENUM_ID");
         fields.put("contactListId", "CE.CONTACT_LIST_ID");
         fields.put("headerString", "CE.HEADER_STRING");
         fields.put("fromString", "CE.FROM_STRING");
         fields.put("toString", "CE.TO_STRING");
         fields.put("ccString", "CE.CC_STRING");
         fields.put("bccString", "CE.BCC_STRING");
+        fields.put("messageId", "CE.MESSAGE_ID");
 fieldMapColumns.put("CommunicationEventAndRole", fields);
 }
   public static enum Fields implements EntityFieldInterface<CommunicationEventAndRole> {
-    communicationEventId("communicationEventId"),
     partyId("partyId"),
     roleTypeId("roleTypeId"),
+    roleStatusId("roleStatusId"),
     contactMechId("contactMechId"),
+    communicationEventId("communicationEventId"),
     communicationEventTypeId("communicationEventTypeId"),
     origCommEventId("origCommEventId"),
     parentCommEventId("parentCommEventId"),
@@ -138,12 +145,14 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
     contentMimeTypeId("contentMimeTypeId"),
     content("content"),
     note("note"),
+    reasonEnumId("reasonEnumId"),
     contactListId("contactListId"),
     headerString("headerString"),
     fromString("fromString"),
     toString("toString"),
     ccString("ccString"),
-    bccString("bccString");
+    bccString("bccString"),
+    messageId("messageId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -154,14 +163,16 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-    @Id
-   private String communicationEventId;
     
    private String partyId;
     
    private String roleTypeId;
     
+   private String roleStatusId;
+    
    private String contactMechId;
+    @Id
+   private String communicationEventId;
     
    private String communicationEventTypeId;
     
@@ -199,6 +210,8 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
     
    private String note;
     
+   private String reasonEnumId;
+    
    private String contactListId;
     
    private String headerString;
@@ -210,6 +223,8 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
    private String ccString;
     
    private String bccString;
+    
+   private String messageId;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -290,9 +305,9 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
       this.isView = true;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("communicationEventId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");
+      this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");this.primaryKeyNames.add("communicationEventId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("communicationEventTypeId");this.allFieldsNames.add("origCommEventId");this.allFieldsNames.add("parentCommEventId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("contactMechIdFrom");this.allFieldsNames.add("contactMechIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("datetimeStarted");this.allFieldsNames.add("datetimeEnded");this.allFieldsNames.add("subject");this.allFieldsNames.add("contentMimeTypeId");this.allFieldsNames.add("content");this.allFieldsNames.add("note");this.allFieldsNames.add("contactListId");this.allFieldsNames.add("headerString");this.allFieldsNames.add("fromString");this.allFieldsNames.add("toString");this.allFieldsNames.add("ccString");this.allFieldsNames.add("bccString");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("roleStatusId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("communicationEventId");this.allFieldsNames.add("communicationEventTypeId");this.allFieldsNames.add("origCommEventId");this.allFieldsNames.add("parentCommEventId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("contactMechIdFrom");this.allFieldsNames.add("contactMechIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("datetimeStarted");this.allFieldsNames.add("datetimeEnded");this.allFieldsNames.add("subject");this.allFieldsNames.add("contentMimeTypeId");this.allFieldsNames.add("content");this.allFieldsNames.add("note");this.allFieldsNames.add("reasonEnumId");this.allFieldsNames.add("contactListId");this.allFieldsNames.add("headerString");this.allFieldsNames.add("fromString");this.allFieldsNames.add("toString");this.allFieldsNames.add("ccString");this.allFieldsNames.add("bccString");this.allFieldsNames.add("messageId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -312,13 +327,6 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
      */
     /**
      * Auto generated value setter.
-     * @param communicationEventId the communicationEventId to set
-     */
-    private void setCommunicationEventId(String communicationEventId) {
-        this.communicationEventId = communicationEventId;
-    }
-    /**
-     * Auto generated value setter.
      * @param partyId the partyId to set
      */
     private void setPartyId(String partyId) {
@@ -333,10 +341,24 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
     }
     /**
      * Auto generated value setter.
+     * @param roleStatusId the roleStatusId to set
+     */
+    private void setRoleStatusId(String roleStatusId) {
+        this.roleStatusId = roleStatusId;
+    }
+    /**
+     * Auto generated value setter.
      * @param contactMechId the contactMechId to set
      */
     private void setContactMechId(String contactMechId) {
         this.contactMechId = contactMechId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param communicationEventId the communicationEventId to set
+     */
+    private void setCommunicationEventId(String communicationEventId) {
+        this.communicationEventId = communicationEventId;
     }
     /**
      * Auto generated value setter.
@@ -466,6 +488,13 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
     }
     /**
      * Auto generated value setter.
+     * @param reasonEnumId the reasonEnumId to set
+     */
+    private void setReasonEnumId(String reasonEnumId) {
+        this.reasonEnumId = reasonEnumId;
+    }
+    /**
+     * Auto generated value setter.
      * @param contactListId the contactListId to set
      */
     private void setContactListId(String contactListId) {
@@ -506,14 +535,14 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
     private void setBccString(String bccString) {
         this.bccString = bccString;
     }
-
     /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
+     * Auto generated value setter.
+     * @param messageId the messageId to set
      */
-    public String getCommunicationEventId() {
-        return this.communicationEventId;
+    private void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
+
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
@@ -532,8 +561,22 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getRoleStatusId() {
+        return this.roleStatusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getContactMechId() {
         return this.contactMechId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCommunicationEventId() {
+        return this.communicationEventId;
     }
     /**
      * Auto generated value accessor.
@@ -665,6 +708,13 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getReasonEnumId() {
+        return this.reasonEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getContactListId() {
         return this.contactListId;
     }
@@ -702,6 +752,13 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
      */
     public String getBccString() {
         return this.bccString;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getMessageId() {
+        return this.messageId;
     }
 
     /**
@@ -999,10 +1056,11 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
-        setCommunicationEventId((String) mapValue.get("communicationEventId"));
         setPartyId((String) mapValue.get("partyId"));
         setRoleTypeId((String) mapValue.get("roleTypeId"));
+        setRoleStatusId((String) mapValue.get("roleStatusId"));
         setContactMechId((String) mapValue.get("contactMechId"));
+        setCommunicationEventId((String) mapValue.get("communicationEventId"));
         setCommunicationEventTypeId((String) mapValue.get("communicationEventTypeId"));
         setOrigCommEventId((String) mapValue.get("origCommEventId"));
         setParentCommEventId((String) mapValue.get("parentCommEventId"));
@@ -1021,12 +1079,14 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
         setContentMimeTypeId((String) mapValue.get("contentMimeTypeId"));
         setContent((String) mapValue.get("content"));
         setNote((String) mapValue.get("note"));
+        setReasonEnumId((String) mapValue.get("reasonEnumId"));
         setContactListId((String) mapValue.get("contactListId"));
         setHeaderString((String) mapValue.get("headerString"));
         setFromString((String) mapValue.get("fromString"));
         setToString((String) mapValue.get("toString"));
         setCcString((String) mapValue.get("ccString"));
         setBccString((String) mapValue.get("bccString"));
+        setMessageId((String) mapValue.get("messageId"));
         postInit();
     }
 
@@ -1034,10 +1094,11 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        mapValue.put("communicationEventId", getCommunicationEventId());
         mapValue.put("partyId", getPartyId());
         mapValue.put("roleTypeId", getRoleTypeId());
+        mapValue.put("roleStatusId", getRoleStatusId());
         mapValue.put("contactMechId", getContactMechId());
+        mapValue.put("communicationEventId", getCommunicationEventId());
         mapValue.put("communicationEventTypeId", getCommunicationEventTypeId());
         mapValue.put("origCommEventId", getOrigCommEventId());
         mapValue.put("parentCommEventId", getParentCommEventId());
@@ -1056,12 +1117,14 @@ fieldMapColumns.put("CommunicationEventAndRole", fields);
         mapValue.put("contentMimeTypeId", getContentMimeTypeId());
         mapValue.put("content", getContent());
         mapValue.put("note", getNote());
+        mapValue.put("reasonEnumId", getReasonEnumId());
         mapValue.put("contactListId", getContactListId());
         mapValue.put("headerString", getHeaderString());
         mapValue.put("fromString", getFromString());
         mapValue.put("toString", getToString());
         mapValue.put("ccString", getCcString());
         mapValue.put("bccString", getBccString());
+        mapValue.put("messageId", getMessageId());
         return mapValue;
     }
 

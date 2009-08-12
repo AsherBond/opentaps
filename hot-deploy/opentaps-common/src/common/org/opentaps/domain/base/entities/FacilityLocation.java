@@ -142,6 +142,7 @@ fieldMapColumns.put("FacilityLocation", fields);
    )
    
    private Enumeration typeEnumeration = null;
+   private transient List<FacilityLocationGeoPoint> facilityLocationGeoPoints = null;
    private transient List<FixedAsset> locatedAtFixedAssets = null;
    private transient List<InventoryItem> inventoryItems = null;
    private transient List<InventoryTransfer> inventoryTransfers = null;
@@ -367,6 +368,17 @@ fieldMapColumns.put("FacilityLocation", fields);
         return this.typeEnumeration;
     }
     /**
+     * Auto generated method that gets the related <code>FacilityLocationGeoPoint</code> by the relation named <code>FacilityLocationGeoPoint</code>.
+     * @return the list of <code>FacilityLocationGeoPoint</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FacilityLocationGeoPoint> getFacilityLocationGeoPoints() throws RepositoryException {
+        if (this.facilityLocationGeoPoints == null) {
+            this.facilityLocationGeoPoints = getRelated(FacilityLocationGeoPoint.class, "FacilityLocationGeoPoint");
+        }
+        return this.facilityLocationGeoPoints;
+    }
+    /**
      * Auto generated method that gets the related <code>FixedAsset</code> by the relation named <code>LocatedAtFixedAsset</code>.
      * @return the list of <code>FixedAsset</code>
      * @throws RepositoryException if an error occurs
@@ -435,6 +447,13 @@ fieldMapColumns.put("FacilityLocation", fields);
     */
     public void setTypeEnumeration(Enumeration typeEnumeration) {
         this.typeEnumeration = typeEnumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param facilityLocationGeoPoints the facilityLocationGeoPoints to set
+    */
+    public void setFacilityLocationGeoPoints(List<FacilityLocationGeoPoint> facilityLocationGeoPoints) {
+        this.facilityLocationGeoPoints = facilityLocationGeoPoints;
     }
     /**
      * Auto generated value setter.

@@ -187,6 +187,7 @@ fieldMapColumns.put("FixedAssetMaint", fields);
    
    private StatusItem statusItem = null;
    private transient List<FixedAssetMaintMeter> fixedAssetMaintMeters = null;
+   private transient List<FixedAssetMeter> fixedAssetMeters = null;
    private transient List<InventoryItemDetail> inventoryItemDetails = null;
    private transient List<ItemIssuance> itemIssuances = null;
 
@@ -503,6 +504,17 @@ fieldMapColumns.put("FixedAssetMaint", fields);
         return this.fixedAssetMaintMeters;
     }
     /**
+     * Auto generated method that gets the related <code>FixedAssetMeter</code> by the relation named <code>FixedAssetMeter</code>.
+     * @return the list of <code>FixedAssetMeter</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FixedAssetMeter> getFixedAssetMeters() throws RepositoryException {
+        if (this.fixedAssetMeters == null) {
+            this.fixedAssetMeters = getRelated(FixedAssetMeter.class, "FixedAssetMeter");
+        }
+        return this.fixedAssetMeters;
+    }
+    /**
      * Auto generated method that gets the related <code>InventoryItemDetail</code> by the relation named <code>InventoryItemDetail</code>.
      * @return the list of <code>InventoryItemDetail</code>
      * @throws RepositoryException if an error occurs
@@ -580,6 +592,13 @@ fieldMapColumns.put("FixedAssetMaint", fields);
     */
     public void setFixedAssetMaintMeters(List<FixedAssetMaintMeter> fixedAssetMaintMeters) {
         this.fixedAssetMaintMeters = fixedAssetMaintMeters;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fixedAssetMeters the fixedAssetMeters to set
+    */
+    public void setFixedAssetMeters(List<FixedAssetMeter> fixedAssetMeters) {
+        this.fixedAssetMeters = fixedAssetMeters;
     }
     /**
      * Auto generated value setter.

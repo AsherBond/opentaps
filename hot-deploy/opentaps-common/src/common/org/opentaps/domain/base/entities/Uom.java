@@ -112,6 +112,10 @@ fieldMapColumns.put("Uom", fields);
    
    private List<AcctgTransEntry> currencyAcctgTransEntrys = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ORIG_CURRENCY_UOM_ID")
+   
+   private List<AcctgTransEntry> origCurrencyAcctgTransEntrys = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
    private List<AgreementTerm> currencyAgreementTerms = null;
@@ -142,11 +146,19 @@ fieldMapColumns.put("Uom", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="MAXIMUM_AMOUNT_UOM_ID")
    
-   private List<CustRequest> custRequests = null;
+   private List<CustRequest> maximumAmountCustRequests = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="CURRENCY_UOM_ID")
+   
+   private List<CustRequest> currencyCustRequests = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
    private List<DataImportOrderHeader> dataImportOrderHeaders = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="AMOUNT_UOM_ID")
+   
+   private List<ExampleItem> amountExampleItems = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEFAULT_WEIGHT_UOM_ID")
    
@@ -172,6 +184,10 @@ fieldMapColumns.put("Uom", fields);
    
    private List<FixedAssetStdCost> fixedAssetStdCosts = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ELEVATION_UOM_ID")
+   
+   private List<GeoPoint> elevationGeoPoints = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="UOM_ID")
    
    private List<InventoryItem> inventoryItems = null;
@@ -195,6 +211,10 @@ fieldMapColumns.put("Uom", fields);
    @JoinColumn(name="CURRENCY_UOM_ID")
    
    private List<MarketingCampaign> marketingCampaigns = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="currencyUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="CURRENCY_UOM_ID")
+   
+   private List<OldPartyRate> currencyOldPartyRates = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TOTAL_CUBIC_UOM_ID")
    
@@ -267,6 +287,10 @@ fieldMapColumns.put("Uom", fields);
    @JoinColumn(name="USE_TIME_UOM_ID")
    
    private List<ProductContent> useTimeProductContents = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="currencyUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="CURRENCY_UOM_ID")
+   
+   private List<ProductFeaturePrice> currencyProductFeaturePrices = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INTERVAL_UOM_ID")
    
@@ -296,6 +320,10 @@ fieldMapColumns.put("Uom", fields);
    
    private List<ProductSubscriptionResource> useTimeProductSubscriptionResources = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="CANCL_AUTM_EXT_TIME_UOM_ID")
+   
+   private List<ProductSubscriptionResource> cancelTimeProductSubscriptionResources = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="AVAILABLE_TIME_UOM_ID")
    
    private List<ProductSubscriptionResource> availableTimeProductSubscriptionResources = null;
@@ -311,6 +339,10 @@ fieldMapColumns.put("Uom", fields);
    @JoinColumn(name="UOM_ID")
    
    private List<QuoteItem> quoteItems = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="uom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="RATE_CURRENCY_UOM_ID")
+   
+   private List<RateAmount> rateAmounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
@@ -319,6 +351,10 @@ fieldMapColumns.put("Uom", fields);
    @JoinColumn(name="CURRENCY_UOM_ID")
    
    private List<SalesForecast> salesForecasts = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="QUANTITY_UOM_ID")
+   
+   private List<SalesForecastDetail> quantitySalesForecastDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CURRENCY_UOM_ID")
    
@@ -339,6 +375,10 @@ fieldMapColumns.put("Uom", fields);
    @JoinColumn(name="DIMENSION_UOM_ID")
    
    private List<ShipmentBoxType> dimensionShipmentBoxTypes = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="WEIGHT_UOM_ID")
+   
+   private List<ShipmentBoxType> weightShipmentBoxTypes = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="WEIGHT_UOM_ID")
    
@@ -367,6 +407,22 @@ fieldMapColumns.put("Uom", fields);
    @JoinColumn(name="BILLING_WEIGHT_UOM_ID")
    
    private List<ShipmentRouteSegment> billingWeightShipmentRouteSegments = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="USE_TIME_UOM_ID")
+   
+   private List<Subscription> useTimeSubscriptions = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="CANCL_AUTM_EXT_TIME_UOM_ID")
+   
+   private List<Subscription> cancelTimeSubscriptions = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="AVAILABLE_TIME_UOM_ID")
+   
+   private List<Subscription> availableTimeSubscriptions = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="MAX_LIFE_TIME_UOM_ID")
+   
+   private List<Subscription> maxLifeTimeSubscriptions = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="currencyUom", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="CURRENCY_UOM_ID")
    
@@ -399,18 +455,6 @@ fieldMapColumns.put("Uom", fields);
    @JoinColumn(name="MONEY_UOM_ID")
    
    private List<WorkEffort> moneyWorkEfforts = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="PRIORITY_UOM_ID")
-   
-   private List<WorkflowPackage> priorityWorkflowPackages = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="COST_UOM_ID")
-   
-   private List<WorkflowPackage> costWorkflowPackages = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="DURATION_UOM_ID")
-   
-   private List<WorkflowProcess> durationWorkflowProcesses = null;
 
   /**
    * Default constructor.
@@ -575,6 +619,17 @@ fieldMapColumns.put("Uom", fields);
         return this.currencyAcctgTransEntrys;
     }
     /**
+     * Auto generated method that gets the related <code>AcctgTransEntry</code> by the relation named <code>OrigCurrencyAcctgTransEntry</code>.
+     * @return the list of <code>AcctgTransEntry</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends AcctgTransEntry> getOrigCurrencyAcctgTransEntrys() throws RepositoryException {
+        if (this.origCurrencyAcctgTransEntrys == null) {
+            this.origCurrencyAcctgTransEntrys = getRelated(AcctgTransEntry.class, "OrigCurrencyAcctgTransEntry");
+        }
+        return this.origCurrencyAcctgTransEntrys;
+    }
+    /**
      * Auto generated method that gets the related <code>AgreementTerm</code> by the relation named <code>CurrencyAgreementTerm</code>.
      * @return the list of <code>AgreementTerm</code>
      * @throws RepositoryException if an error occurs
@@ -652,15 +707,26 @@ fieldMapColumns.put("Uom", fields);
         return this.costComponentCalcs;
     }
     /**
-     * Auto generated method that gets the related <code>CustRequest</code> by the relation named <code>CustRequest</code>.
+     * Auto generated method that gets the related <code>CustRequest</code> by the relation named <code>MaximumAmountCustRequest</code>.
      * @return the list of <code>CustRequest</code>
      * @throws RepositoryException if an error occurs
      */
-    public List<? extends CustRequest> getCustRequests() throws RepositoryException {
-        if (this.custRequests == null) {
-            this.custRequests = getRelated(CustRequest.class, "CustRequest");
+    public List<? extends CustRequest> getMaximumAmountCustRequests() throws RepositoryException {
+        if (this.maximumAmountCustRequests == null) {
+            this.maximumAmountCustRequests = getRelated(CustRequest.class, "MaximumAmountCustRequest");
         }
-        return this.custRequests;
+        return this.maximumAmountCustRequests;
+    }
+    /**
+     * Auto generated method that gets the related <code>CustRequest</code> by the relation named <code>CurrencyCustRequest</code>.
+     * @return the list of <code>CustRequest</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends CustRequest> getCurrencyCustRequests() throws RepositoryException {
+        if (this.currencyCustRequests == null) {
+            this.currencyCustRequests = getRelated(CustRequest.class, "CurrencyCustRequest");
+        }
+        return this.currencyCustRequests;
     }
     /**
      * Auto generated method that gets the related <code>DataImportOrderHeader</code> by the relation named <code>DataImportOrderHeader</code>.
@@ -672,6 +738,17 @@ fieldMapColumns.put("Uom", fields);
             this.dataImportOrderHeaders = getRelated(DataImportOrderHeader.class, "DataImportOrderHeader");
         }
         return this.dataImportOrderHeaders;
+    }
+    /**
+     * Auto generated method that gets the related <code>ExampleItem</code> by the relation named <code>AmountExampleItem</code>.
+     * @return the list of <code>ExampleItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ExampleItem> getAmountExampleItems() throws RepositoryException {
+        if (this.amountExampleItems == null) {
+            this.amountExampleItems = getRelated(ExampleItem.class, "AmountExampleItem");
+        }
+        return this.amountExampleItems;
     }
     /**
      * Auto generated method that gets the related <code>Facility</code> by the relation named <code>Facility</code>.
@@ -740,6 +817,17 @@ fieldMapColumns.put("Uom", fields);
         return this.fixedAssetStdCosts;
     }
     /**
+     * Auto generated method that gets the related <code>GeoPoint</code> by the relation named <code>ElevationGeoPoint</code>.
+     * @return the list of <code>GeoPoint</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends GeoPoint> getElevationGeoPoints() throws RepositoryException {
+        if (this.elevationGeoPoints == null) {
+            this.elevationGeoPoints = getRelated(GeoPoint.class, "ElevationGeoPoint");
+        }
+        return this.elevationGeoPoints;
+    }
+    /**
      * Auto generated method that gets the related <code>InventoryItem</code> by the relation named <code>InventoryItem</code>.
      * @return the list of <code>InventoryItem</code>
      * @throws RepositoryException if an error occurs
@@ -804,6 +892,17 @@ fieldMapColumns.put("Uom", fields);
             this.marketingCampaigns = getRelated(MarketingCampaign.class, "MarketingCampaign");
         }
         return this.marketingCampaigns;
+    }
+    /**
+     * Auto generated method that gets the related <code>OldPartyRate</code> by the relation named <code>CurrencyOldPartyRate</code>.
+     * @return the list of <code>OldPartyRate</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldPartyRate> getCurrencyOldPartyRates() throws RepositoryException {
+        if (this.currencyOldPartyRates == null) {
+            this.currencyOldPartyRates = getRelated(OldPartyRate.class, "CurrencyOldPartyRate");
+        }
+        return this.currencyOldPartyRates;
     }
     /**
      * Auto generated method that gets the related <code>OrderDeliverySchedule</code> by the relation named <code>TotalCubicOrderDeliverySchedule</code>.
@@ -1004,6 +1103,17 @@ fieldMapColumns.put("Uom", fields);
         return this.useTimeProductContents;
     }
     /**
+     * Auto generated method that gets the related <code>ProductFeaturePrice</code> by the relation named <code>CurrencyProductFeaturePrice</code>.
+     * @return the list of <code>ProductFeaturePrice</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductFeaturePrice> getCurrencyProductFeaturePrices() throws RepositoryException {
+        if (this.currencyProductFeaturePrices == null) {
+            this.currencyProductFeaturePrices = getRelated(ProductFeaturePrice.class, "CurrencyProductFeaturePrice");
+        }
+        return this.currencyProductFeaturePrices;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductMaint</code> by the relation named <code>IntervalProductMaint</code>.
      * @return the list of <code>ProductMaint</code>
      * @throws RepositoryException if an error occurs
@@ -1081,6 +1191,17 @@ fieldMapColumns.put("Uom", fields);
         return this.useTimeProductSubscriptionResources;
     }
     /**
+     * Auto generated method that gets the related <code>ProductSubscriptionResource</code> by the relation named <code>CancelTimeProductSubscriptionResource</code>.
+     * @return the list of <code>ProductSubscriptionResource</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductSubscriptionResource> getCancelTimeProductSubscriptionResources() throws RepositoryException {
+        if (this.cancelTimeProductSubscriptionResources == null) {
+            this.cancelTimeProductSubscriptionResources = getRelated(ProductSubscriptionResource.class, "CancelTimeProductSubscriptionResource");
+        }
+        return this.cancelTimeProductSubscriptionResources;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductSubscriptionResource</code> by the relation named <code>AvailableTimeProductSubscriptionResource</code>.
      * @return the list of <code>ProductSubscriptionResource</code>
      * @throws RepositoryException if an error occurs
@@ -1125,6 +1246,17 @@ fieldMapColumns.put("Uom", fields);
         return this.quoteItems;
     }
     /**
+     * Auto generated method that gets the related <code>RateAmount</code> by the relation named <code>RateAmount</code>.
+     * @return the list of <code>RateAmount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends RateAmount> getRateAmounts() throws RepositoryException {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = getRelated(RateAmount.class, "RateAmount");
+        }
+        return this.rateAmounts;
+    }
+    /**
      * Auto generated method that gets the related <code>ReturnHeader</code> by the relation named <code>ReturnHeader</code>.
      * @return the list of <code>ReturnHeader</code>
      * @throws RepositoryException if an error occurs
@@ -1145,6 +1277,17 @@ fieldMapColumns.put("Uom", fields);
             this.salesForecasts = getRelated(SalesForecast.class, "SalesForecast");
         }
         return this.salesForecasts;
+    }
+    /**
+     * Auto generated method that gets the related <code>SalesForecastDetail</code> by the relation named <code>QuantitySalesForecastDetail</code>.
+     * @return the list of <code>SalesForecastDetail</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends SalesForecastDetail> getQuantitySalesForecastDetails() throws RepositoryException {
+        if (this.quantitySalesForecastDetails == null) {
+            this.quantitySalesForecastDetails = getRelated(SalesForecastDetail.class, "QuantitySalesForecastDetail");
+        }
+        return this.quantitySalesForecastDetails;
     }
     /**
      * Auto generated method that gets the related <code>SalesForecastHistory</code> by the relation named <code>SalesForecastHistory</code>.
@@ -1200,6 +1343,17 @@ fieldMapColumns.put("Uom", fields);
             this.dimensionShipmentBoxTypes = getRelated(ShipmentBoxType.class, "DimensionShipmentBoxType");
         }
         return this.dimensionShipmentBoxTypes;
+    }
+    /**
+     * Auto generated method that gets the related <code>ShipmentBoxType</code> by the relation named <code>WeightShipmentBoxType</code>.
+     * @return the list of <code>ShipmentBoxType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ShipmentBoxType> getWeightShipmentBoxTypes() throws RepositoryException {
+        if (this.weightShipmentBoxTypes == null) {
+            this.weightShipmentBoxTypes = getRelated(ShipmentBoxType.class, "WeightShipmentBoxType");
+        }
+        return this.weightShipmentBoxTypes;
     }
     /**
      * Auto generated method that gets the related <code>ShipmentCostEstimate</code> by the relation named <code>WeightShipmentCostEstimate</code>.
@@ -1277,6 +1431,50 @@ fieldMapColumns.put("Uom", fields);
             this.billingWeightShipmentRouteSegments = getRelated(ShipmentRouteSegment.class, "BillingWeightShipmentRouteSegment");
         }
         return this.billingWeightShipmentRouteSegments;
+    }
+    /**
+     * Auto generated method that gets the related <code>Subscription</code> by the relation named <code>UseTimeSubscription</code>.
+     * @return the list of <code>Subscription</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Subscription> getUseTimeSubscriptions() throws RepositoryException {
+        if (this.useTimeSubscriptions == null) {
+            this.useTimeSubscriptions = getRelated(Subscription.class, "UseTimeSubscription");
+        }
+        return this.useTimeSubscriptions;
+    }
+    /**
+     * Auto generated method that gets the related <code>Subscription</code> by the relation named <code>CancelTimeSubscription</code>.
+     * @return the list of <code>Subscription</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Subscription> getCancelTimeSubscriptions() throws RepositoryException {
+        if (this.cancelTimeSubscriptions == null) {
+            this.cancelTimeSubscriptions = getRelated(Subscription.class, "CancelTimeSubscription");
+        }
+        return this.cancelTimeSubscriptions;
+    }
+    /**
+     * Auto generated method that gets the related <code>Subscription</code> by the relation named <code>AvailableTimeSubscription</code>.
+     * @return the list of <code>Subscription</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Subscription> getAvailableTimeSubscriptions() throws RepositoryException {
+        if (this.availableTimeSubscriptions == null) {
+            this.availableTimeSubscriptions = getRelated(Subscription.class, "AvailableTimeSubscription");
+        }
+        return this.availableTimeSubscriptions;
+    }
+    /**
+     * Auto generated method that gets the related <code>Subscription</code> by the relation named <code>MaxLifeTimeSubscription</code>.
+     * @return the list of <code>Subscription</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Subscription> getMaxLifeTimeSubscriptions() throws RepositoryException {
+        if (this.maxLifeTimeSubscriptions == null) {
+            this.maxLifeTimeSubscriptions = getRelated(Subscription.class, "MaxLifeTimeSubscription");
+        }
+        return this.maxLifeTimeSubscriptions;
     }
     /**
      * Auto generated method that gets the related <code>SupplierProduct</code> by the relation named <code>CurrencySupplierProduct</code>.
@@ -1366,39 +1564,6 @@ fieldMapColumns.put("Uom", fields);
         }
         return this.moneyWorkEfforts;
     }
-    /**
-     * Auto generated method that gets the related <code>WorkflowPackage</code> by the relation named <code>PriorityWorkflowPackage</code>.
-     * @return the list of <code>WorkflowPackage</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowPackage> getPriorityWorkflowPackages() throws RepositoryException {
-        if (this.priorityWorkflowPackages == null) {
-            this.priorityWorkflowPackages = getRelated(WorkflowPackage.class, "PriorityWorkflowPackage");
-        }
-        return this.priorityWorkflowPackages;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowPackage</code> by the relation named <code>CostWorkflowPackage</code>.
-     * @return the list of <code>WorkflowPackage</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowPackage> getCostWorkflowPackages() throws RepositoryException {
-        if (this.costWorkflowPackages == null) {
-            this.costWorkflowPackages = getRelated(WorkflowPackage.class, "CostWorkflowPackage");
-        }
-        return this.costWorkflowPackages;
-    }
-    /**
-     * Auto generated method that gets the related <code>WorkflowProcess</code> by the relation named <code>DurationWorkflowProcess</code>.
-     * @return the list of <code>WorkflowProcess</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends WorkflowProcess> getDurationWorkflowProcesses() throws RepositoryException {
-        if (this.durationWorkflowProcesses == null) {
-            this.durationWorkflowProcesses = getRelated(WorkflowProcess.class, "DurationWorkflowProcess");
-        }
-        return this.durationWorkflowProcesses;
-    }
 
     /**
      * Auto generated value setter.
@@ -1413,6 +1578,13 @@ fieldMapColumns.put("Uom", fields);
     */
     public void setCurrencyAcctgTransEntrys(List<AcctgTransEntry> currencyAcctgTransEntrys) {
         this.currencyAcctgTransEntrys = currencyAcctgTransEntrys;
+    }
+    /**
+     * Auto generated value setter.
+     * @param origCurrencyAcctgTransEntrys the origCurrencyAcctgTransEntrys to set
+    */
+    public void setOrigCurrencyAcctgTransEntrys(List<AcctgTransEntry> origCurrencyAcctgTransEntrys) {
+        this.origCurrencyAcctgTransEntrys = origCurrencyAcctgTransEntrys;
     }
     /**
      * Auto generated value setter.
@@ -1465,10 +1637,17 @@ fieldMapColumns.put("Uom", fields);
     }
     /**
      * Auto generated value setter.
-     * @param custRequests the custRequests to set
+     * @param maximumAmountCustRequests the maximumAmountCustRequests to set
     */
-    public void setCustRequests(List<CustRequest> custRequests) {
-        this.custRequests = custRequests;
+    public void setMaximumAmountCustRequests(List<CustRequest> maximumAmountCustRequests) {
+        this.maximumAmountCustRequests = maximumAmountCustRequests;
+    }
+    /**
+     * Auto generated value setter.
+     * @param currencyCustRequests the currencyCustRequests to set
+    */
+    public void setCurrencyCustRequests(List<CustRequest> currencyCustRequests) {
+        this.currencyCustRequests = currencyCustRequests;
     }
     /**
      * Auto generated value setter.
@@ -1476,6 +1655,13 @@ fieldMapColumns.put("Uom", fields);
     */
     public void setDataImportOrderHeaders(List<DataImportOrderHeader> dataImportOrderHeaders) {
         this.dataImportOrderHeaders = dataImportOrderHeaders;
+    }
+    /**
+     * Auto generated value setter.
+     * @param amountExampleItems the amountExampleItems to set
+    */
+    public void setAmountExampleItems(List<ExampleItem> amountExampleItems) {
+        this.amountExampleItems = amountExampleItems;
     }
     /**
      * Auto generated value setter.
@@ -1521,6 +1707,13 @@ fieldMapColumns.put("Uom", fields);
     }
     /**
      * Auto generated value setter.
+     * @param elevationGeoPoints the elevationGeoPoints to set
+    */
+    public void setElevationGeoPoints(List<GeoPoint> elevationGeoPoints) {
+        this.elevationGeoPoints = elevationGeoPoints;
+    }
+    /**
+     * Auto generated value setter.
      * @param inventoryItems the inventoryItems to set
     */
     public void setInventoryItems(List<InventoryItem> inventoryItems) {
@@ -1560,6 +1753,13 @@ fieldMapColumns.put("Uom", fields);
     */
     public void setMarketingCampaigns(List<MarketingCampaign> marketingCampaigns) {
         this.marketingCampaigns = marketingCampaigns;
+    }
+    /**
+     * Auto generated value setter.
+     * @param currencyOldPartyRates the currencyOldPartyRates to set
+    */
+    public void setCurrencyOldPartyRates(List<OldPartyRate> currencyOldPartyRates) {
+        this.currencyOldPartyRates = currencyOldPartyRates;
     }
     /**
      * Auto generated value setter.
@@ -1689,6 +1889,13 @@ fieldMapColumns.put("Uom", fields);
     }
     /**
      * Auto generated value setter.
+     * @param currencyProductFeaturePrices the currencyProductFeaturePrices to set
+    */
+    public void setCurrencyProductFeaturePrices(List<ProductFeaturePrice> currencyProductFeaturePrices) {
+        this.currencyProductFeaturePrices = currencyProductFeaturePrices;
+    }
+    /**
+     * Auto generated value setter.
      * @param intervalProductMaints the intervalProductMaints to set
     */
     public void setIntervalProductMaints(List<ProductMaint> intervalProductMaints) {
@@ -1738,6 +1945,13 @@ fieldMapColumns.put("Uom", fields);
     }
     /**
      * Auto generated value setter.
+     * @param cancelTimeProductSubscriptionResources the cancelTimeProductSubscriptionResources to set
+    */
+    public void setCancelTimeProductSubscriptionResources(List<ProductSubscriptionResource> cancelTimeProductSubscriptionResources) {
+        this.cancelTimeProductSubscriptionResources = cancelTimeProductSubscriptionResources;
+    }
+    /**
+     * Auto generated value setter.
      * @param availableTimeProductSubscriptionResources the availableTimeProductSubscriptionResources to set
     */
     public void setAvailableTimeProductSubscriptionResources(List<ProductSubscriptionResource> availableTimeProductSubscriptionResources) {
@@ -1766,6 +1980,13 @@ fieldMapColumns.put("Uom", fields);
     }
     /**
      * Auto generated value setter.
+     * @param rateAmounts the rateAmounts to set
+    */
+    public void setRateAmounts(List<RateAmount> rateAmounts) {
+        this.rateAmounts = rateAmounts;
+    }
+    /**
+     * Auto generated value setter.
      * @param returnHeaders the returnHeaders to set
     */
     public void setReturnHeaders(List<ReturnHeader> returnHeaders) {
@@ -1777,6 +1998,13 @@ fieldMapColumns.put("Uom", fields);
     */
     public void setSalesForecasts(List<SalesForecast> salesForecasts) {
         this.salesForecasts = salesForecasts;
+    }
+    /**
+     * Auto generated value setter.
+     * @param quantitySalesForecastDetails the quantitySalesForecastDetails to set
+    */
+    public void setQuantitySalesForecastDetails(List<SalesForecastDetail> quantitySalesForecastDetails) {
+        this.quantitySalesForecastDetails = quantitySalesForecastDetails;
     }
     /**
      * Auto generated value setter.
@@ -1812,6 +2040,13 @@ fieldMapColumns.put("Uom", fields);
     */
     public void setDimensionShipmentBoxTypes(List<ShipmentBoxType> dimensionShipmentBoxTypes) {
         this.dimensionShipmentBoxTypes = dimensionShipmentBoxTypes;
+    }
+    /**
+     * Auto generated value setter.
+     * @param weightShipmentBoxTypes the weightShipmentBoxTypes to set
+    */
+    public void setWeightShipmentBoxTypes(List<ShipmentBoxType> weightShipmentBoxTypes) {
+        this.weightShipmentBoxTypes = weightShipmentBoxTypes;
     }
     /**
      * Auto generated value setter.
@@ -1861,6 +2096,34 @@ fieldMapColumns.put("Uom", fields);
     */
     public void setBillingWeightShipmentRouteSegments(List<ShipmentRouteSegment> billingWeightShipmentRouteSegments) {
         this.billingWeightShipmentRouteSegments = billingWeightShipmentRouteSegments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param useTimeSubscriptions the useTimeSubscriptions to set
+    */
+    public void setUseTimeSubscriptions(List<Subscription> useTimeSubscriptions) {
+        this.useTimeSubscriptions = useTimeSubscriptions;
+    }
+    /**
+     * Auto generated value setter.
+     * @param cancelTimeSubscriptions the cancelTimeSubscriptions to set
+    */
+    public void setCancelTimeSubscriptions(List<Subscription> cancelTimeSubscriptions) {
+        this.cancelTimeSubscriptions = cancelTimeSubscriptions;
+    }
+    /**
+     * Auto generated value setter.
+     * @param availableTimeSubscriptions the availableTimeSubscriptions to set
+    */
+    public void setAvailableTimeSubscriptions(List<Subscription> availableTimeSubscriptions) {
+        this.availableTimeSubscriptions = availableTimeSubscriptions;
+    }
+    /**
+     * Auto generated value setter.
+     * @param maxLifeTimeSubscriptions the maxLifeTimeSubscriptions to set
+    */
+    public void setMaxLifeTimeSubscriptions(List<Subscription> maxLifeTimeSubscriptions) {
+        this.maxLifeTimeSubscriptions = maxLifeTimeSubscriptions;
     }
     /**
      * Auto generated value setter.
@@ -1918,28 +2181,61 @@ fieldMapColumns.put("Uom", fields);
     public void setMoneyWorkEfforts(List<WorkEffort> moneyWorkEfforts) {
         this.moneyWorkEfforts = moneyWorkEfforts;
     }
-    /**
-     * Auto generated value setter.
-     * @param priorityWorkflowPackages the priorityWorkflowPackages to set
-    */
-    public void setPriorityWorkflowPackages(List<WorkflowPackage> priorityWorkflowPackages) {
-        this.priorityWorkflowPackages = priorityWorkflowPackages;
-    }
-    /**
-     * Auto generated value setter.
-     * @param costWorkflowPackages the costWorkflowPackages to set
-    */
-    public void setCostWorkflowPackages(List<WorkflowPackage> costWorkflowPackages) {
-        this.costWorkflowPackages = costWorkflowPackages;
-    }
-    /**
-     * Auto generated value setter.
-     * @param durationWorkflowProcesses the durationWorkflowProcesses to set
-    */
-    public void setDurationWorkflowProcesses(List<WorkflowProcess> durationWorkflowProcesses) {
-        this.durationWorkflowProcesses = durationWorkflowProcesses;
-    }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addCurrencyOldPartyRate(OldPartyRate currencyOldPartyRate) {
+        if (this.currencyOldPartyRates == null) {
+            this.currencyOldPartyRates = new ArrayList<OldPartyRate>();
+        }
+        this.currencyOldPartyRates.add(currencyOldPartyRate);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeCurrencyOldPartyRate(OldPartyRate currencyOldPartyRate) {
+        if (this.currencyOldPartyRates == null) {
+            return;
+        }
+        this.currencyOldPartyRates.remove(currencyOldPartyRate);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearCurrencyOldPartyRate() {
+        if (this.currencyOldPartyRates == null) {
+            return;
+        }
+        this.currencyOldPartyRates.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addCurrencyProductFeaturePrice(ProductFeaturePrice currencyProductFeaturePrice) {
+        if (this.currencyProductFeaturePrices == null) {
+            this.currencyProductFeaturePrices = new ArrayList<ProductFeaturePrice>();
+        }
+        this.currencyProductFeaturePrices.add(currencyProductFeaturePrice);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeCurrencyProductFeaturePrice(ProductFeaturePrice currencyProductFeaturePrice) {
+        if (this.currencyProductFeaturePrices == null) {
+            return;
+        }
+        this.currencyProductFeaturePrices.remove(currencyProductFeaturePrice);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearCurrencyProductFeaturePrice() {
+        if (this.currencyProductFeaturePrices == null) {
+            return;
+        }
+        this.currencyProductFeaturePrices.clear();
+    }
     /**
      * Auto generated method that add item to collection.
      */
@@ -1966,6 +2262,33 @@ fieldMapColumns.put("Uom", fields);
             return;
         }
         this.currencyProductPrices.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
+            this.rateAmounts = new ArrayList<RateAmount>();
+        }
+        this.rateAmounts.add(rateAmount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeRateAmount(RateAmount rateAmount) {
+        if (this.rateAmounts == null) {
+            return;
+        }
+        this.rateAmounts.remove(rateAmount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearRateAmount() {
+        if (this.rateAmounts == null) {
+            return;
+        }
+        this.rateAmounts.clear();
     }
     /**
      * Auto generated method that add item to collection.

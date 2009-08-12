@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyAndContactMech.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyAndContactMechs", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.EXTERNAL_ID AS \"externalId\",PTY.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PTY.DESCRIPTION AS \"description\",PTY.STATUS_ID AS \"statusId\",PTY.CREATED_DATE AS \"createdDate\",PTY.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PTY.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PTY.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PCM.CONTACT_MECH_ID AS \"contactMechId\",PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",PCM.ROLE_TYPE_ID AS \"roleTypeId\",PCM.ALLOW_SOLICITATION AS \"allowSolicitation\",PCM.EXTENSION AS \"extension\",PCM.VERIFIED AS \"verified\",PCM.COMMENTS AS \"comments\",PCM.YEARS_WITH_CONTACT_MECH AS \"yearsWithContactMech\",PCM.MONTHS_WITH_CONTACT_MECH AS \"monthsWithContactMech\",CM.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CM.INFO_STRING AS \"infoString\",PA.CONTACT_MECH_ID AS \"contactMechId\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",TN.CONTACT_MECH_ID AS \"contactMechId\",TN.COUNTRY_CODE AS \"countryCode\",TN.AREA_CODE AS \"areaCode\",TN.CONTACT_NUMBER AS \"contactNumber\",TN.ASK_FOR_NAME AS \"askForName\" FROM PARTY PTY INNER JOIN PARTY_CONTACT_MECH PCM ON PTY.PARTY_ID = PCM.PARTY_ID INNER JOIN CONTACT_MECH CM ON PCM.CONTACT_MECH_ID = CM.CONTACT_MECH_ID LEFT JOIN POSTAL_ADDRESS PA ON PCM.CONTACT_MECH_ID = PA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER TN ON PCM.CONTACT_MECH_ID = TN.CONTACT_MECH_ID", resultSetMapping="PartyAndContactMechMapping")
+@NamedNativeQuery(name="selectPartyAndContactMechs", query="SELECT PTY.PARTY_ID AS \"partyId\",PTY.PARTY_TYPE_ID AS \"partyTypeId\",PTY.EXTERNAL_ID AS \"externalId\",PTY.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PTY.DESCRIPTION AS \"description\",PTY.STATUS_ID AS \"statusId\",PTY.CREATED_DATE AS \"createdDate\",PTY.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PTY.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PTY.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PTY.DATA_SOURCE_ID AS \"dataSourceId\",PTY.IS_UNREAD AS \"isUnread\",PCM.CONTACT_MECH_ID AS \"contactMechId\",PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",PCM.ROLE_TYPE_ID AS \"roleTypeId\",PCM.ALLOW_SOLICITATION AS \"allowSolicitation\",PCM.EXTENSION AS \"extension\",PCM.VERIFIED AS \"verified\",PCM.COMMENTS AS \"comments\",PCM.YEARS_WITH_CONTACT_MECH AS \"yearsWithContactMech\",PCM.MONTHS_WITH_CONTACT_MECH AS \"monthsWithContactMech\",CM.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CM.INFO_STRING AS \"infoString\",PA.CONTACT_MECH_ID AS \"contactMechId\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PA.GEO_POINT_ID AS \"geoPointId\",TN.CONTACT_MECH_ID AS \"contactMechId\",TN.COUNTRY_CODE AS \"countryCode\",TN.AREA_CODE AS \"areaCode\",TN.CONTACT_NUMBER AS \"contactNumber\",TN.ASK_FOR_NAME AS \"askForName\" FROM PARTY PTY INNER JOIN PARTY_CONTACT_MECH PCM ON PTY.PARTY_ID = PCM.PARTY_ID INNER JOIN CONTACT_MECH CM ON PCM.CONTACT_MECH_ID = CM.CONTACT_MECH_ID LEFT JOIN POSTAL_ADDRESS PA ON PCM.CONTACT_MECH_ID = PA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER TN ON PCM.CONTACT_MECH_ID = TN.CONTACT_MECH_ID", resultSetMapping="PartyAndContactMechMapping")
 @SqlResultSetMapping(name="PartyAndContactMechMapping", entities={
 @EntityResult(entityClass=PartyAndContactMech.class, fields = {
 @FieldResult(name="partyId", column="partyId")
@@ -62,6 +62,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
+,@FieldResult(name="dataSourceId", column="dataSourceId")
+,@FieldResult(name="isUnread", column="isUnread")
 ,@FieldResult(name="contactMechId", column="contactMechId")
 ,@FieldResult(name="fromDate", column="fromDate")
 ,@FieldResult(name="thruDate", column="thruDate")
@@ -87,6 +89,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="paStateProvinceGeoId", column="paStateProvinceGeoId")
 ,@FieldResult(name="paCountyGeoId", column="paCountyGeoId")
 ,@FieldResult(name="paPostalCodeGeoId", column="paPostalCodeGeoId")
+,@FieldResult(name="paGeoPointId", column="paGeoPointId")
 ,@FieldResult(name="tnContactMechId", column="tnContactMechId")
 ,@FieldResult(name="tnCountryCode", column="tnCountryCode")
 ,@FieldResult(name="tnAreaCode", column="tnAreaCode")
@@ -108,6 +111,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdByUserLogin", "PTY.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "PTY.LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "PTY.LAST_MODIFIED_BY_USER_LOGIN");
+        fields.put("dataSourceId", "PTY.DATA_SOURCE_ID");
+        fields.put("isUnread", "PTY.IS_UNREAD");
         fields.put("contactMechId", "PCM.CONTACT_MECH_ID");
         fields.put("fromDate", "PCM.FROM_DATE");
         fields.put("thruDate", "PCM.THRU_DATE");
@@ -133,6 +138,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("paStateProvinceGeoId", "PA.STATE_PROVINCE_GEO_ID");
         fields.put("paCountyGeoId", "PA.COUNTY_GEO_ID");
         fields.put("paPostalCodeGeoId", "PA.POSTAL_CODE_GEO_ID");
+        fields.put("paGeoPointId", "PA.GEO_POINT_ID");
         fields.put("tnContactMechId", "TN.CONTACT_MECH_ID");
         fields.put("tnCountryCode", "TN.COUNTRY_CODE");
         fields.put("tnAreaCode", "TN.AREA_CODE");
@@ -151,6 +157,8 @@ fieldMapColumns.put("PartyAndContactMech", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
+    dataSourceId("dataSourceId"),
+    isUnread("isUnread"),
     contactMechId("contactMechId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
@@ -176,6 +184,7 @@ fieldMapColumns.put("PartyAndContactMech", fields);
     paStateProvinceGeoId("paStateProvinceGeoId"),
     paCountyGeoId("paCountyGeoId"),
     paPostalCodeGeoId("paPostalCodeGeoId"),
+    paGeoPointId("paGeoPointId"),
     tnContactMechId("tnContactMechId"),
     tnCountryCode("tnCountryCode"),
     tnAreaCode("tnAreaCode"),
@@ -211,6 +220,10 @@ fieldMapColumns.put("PartyAndContactMech", fields);
    private Timestamp lastModifiedDate;
     
    private String lastModifiedByUserLogin;
+    
+   private String dataSourceId;
+    
+   private String isUnread;
     
    private String contactMechId;
     
@@ -262,6 +275,8 @@ fieldMapColumns.put("PartyAndContactMech", fields);
     
    private String paPostalCodeGeoId;
     
+   private String paGeoPointId;
+    
    private String tnContactMechId;
     
    private String tnCountryCode;
@@ -312,7 +327,7 @@ fieldMapColumns.put("PartyAndContactMech", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("contactMechId");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("paContactMechId");this.primaryKeyNames.add("tnContactMechId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("allowSolicitation");this.allFieldsNames.add("extension");this.allFieldsNames.add("verified");this.allFieldsNames.add("comments");this.allFieldsNames.add("yearsWithContactMech");this.allFieldsNames.add("monthsWithContactMech");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("infoString");this.allFieldsNames.add("paContactMechId");this.allFieldsNames.add("paToName");this.allFieldsNames.add("paAttnName");this.allFieldsNames.add("paAddress1");this.allFieldsNames.add("paAddress2");this.allFieldsNames.add("paDirections");this.allFieldsNames.add("paCity");this.allFieldsNames.add("paPostalCode");this.allFieldsNames.add("paPostalCodeExt");this.allFieldsNames.add("paCountryGeoId");this.allFieldsNames.add("paStateProvinceGeoId");this.allFieldsNames.add("paCountyGeoId");this.allFieldsNames.add("paPostalCodeGeoId");this.allFieldsNames.add("tnContactMechId");this.allFieldsNames.add("tnCountryCode");this.allFieldsNames.add("tnAreaCode");this.allFieldsNames.add("tnContactNumber");this.allFieldsNames.add("tnAskForName");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("allowSolicitation");this.allFieldsNames.add("extension");this.allFieldsNames.add("verified");this.allFieldsNames.add("comments");this.allFieldsNames.add("yearsWithContactMech");this.allFieldsNames.add("monthsWithContactMech");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("infoString");this.allFieldsNames.add("paContactMechId");this.allFieldsNames.add("paToName");this.allFieldsNames.add("paAttnName");this.allFieldsNames.add("paAddress1");this.allFieldsNames.add("paAddress2");this.allFieldsNames.add("paDirections");this.allFieldsNames.add("paCity");this.allFieldsNames.add("paPostalCode");this.allFieldsNames.add("paPostalCodeExt");this.allFieldsNames.add("paCountryGeoId");this.allFieldsNames.add("paStateProvinceGeoId");this.allFieldsNames.add("paCountyGeoId");this.allFieldsNames.add("paPostalCodeGeoId");this.allFieldsNames.add("paGeoPointId");this.allFieldsNames.add("tnContactMechId");this.allFieldsNames.add("tnCountryCode");this.allFieldsNames.add("tnAreaCode");this.allFieldsNames.add("tnContactNumber");this.allFieldsNames.add("tnAskForName");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -399,6 +414,20 @@ fieldMapColumns.put("PartyAndContactMech", fields);
      */
     private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dataSourceId the dataSourceId to set
+     */
+    private void setDataSourceId(String dataSourceId) {
+        this.dataSourceId = dataSourceId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param isUnread the isUnread to set
+     */
+    private void setIsUnread(String isUnread) {
+        this.isUnread = isUnread;
     }
     /**
      * Auto generated value setter.
@@ -577,6 +606,13 @@ fieldMapColumns.put("PartyAndContactMech", fields);
     }
     /**
      * Auto generated value setter.
+     * @param paGeoPointId the paGeoPointId to set
+     */
+    private void setPaGeoPointId(String paGeoPointId) {
+        this.paGeoPointId = paGeoPointId;
+    }
+    /**
+     * Auto generated value setter.
      * @param tnContactMechId the tnContactMechId to set
      */
     private void setTnContactMechId(String tnContactMechId) {
@@ -680,6 +716,20 @@ fieldMapColumns.put("PartyAndContactMech", fields);
      */
     public String getLastModifiedByUserLogin() {
         return this.lastModifiedByUserLogin;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDataSourceId() {
+        return this.dataSourceId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIsUnread() {
+        return this.isUnread;
     }
     /**
      * Auto generated value accessor.
@@ -860,6 +910,13 @@ fieldMapColumns.put("PartyAndContactMech", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getPaGeoPointId() {
+        return this.paGeoPointId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getTnContactMechId() {
         return this.tnContactMechId;
     }
@@ -999,6 +1056,8 @@ fieldMapColumns.put("PartyAndContactMech", fields);
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
+        setDataSourceId((String) mapValue.get("dataSourceId"));
+        setIsUnread((String) mapValue.get("isUnread"));
         setContactMechId((String) mapValue.get("contactMechId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
@@ -1024,6 +1083,7 @@ fieldMapColumns.put("PartyAndContactMech", fields);
         setPaStateProvinceGeoId((String) mapValue.get("paStateProvinceGeoId"));
         setPaCountyGeoId((String) mapValue.get("paCountyGeoId"));
         setPaPostalCodeGeoId((String) mapValue.get("paPostalCodeGeoId"));
+        setPaGeoPointId((String) mapValue.get("paGeoPointId"));
         setTnContactMechId((String) mapValue.get("tnContactMechId"));
         setTnCountryCode((String) mapValue.get("tnCountryCode"));
         setTnAreaCode((String) mapValue.get("tnAreaCode"));
@@ -1046,6 +1106,8 @@ fieldMapColumns.put("PartyAndContactMech", fields);
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
+        mapValue.put("dataSourceId", getDataSourceId());
+        mapValue.put("isUnread", getIsUnread());
         mapValue.put("contactMechId", getContactMechId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
@@ -1071,6 +1133,7 @@ fieldMapColumns.put("PartyAndContactMech", fields);
         mapValue.put("paStateProvinceGeoId", getPaStateProvinceGeoId());
         mapValue.put("paCountyGeoId", getPaCountyGeoId());
         mapValue.put("paPostalCodeGeoId", getPaPostalCodeGeoId());
+        mapValue.put("paGeoPointId", getPaGeoPointId());
         mapValue.put("tnContactMechId", getTnContactMechId());
         mapValue.put("tnCountryCode", getTnCountryCode());
         mapValue.put("tnAreaCode", getTnAreaCode());

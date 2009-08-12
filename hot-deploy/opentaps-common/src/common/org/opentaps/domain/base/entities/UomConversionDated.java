@@ -62,6 +62,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("customMethodId", "CUSTOM_METHOD_ID");
         fields.put("decimalScale", "DECIMAL_SCALE");
         fields.put("roundingMode", "ROUNDING_MODE");
+        fields.put("purposeEnumId", "PURPOSE_ENUM_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -77,6 +78,7 @@ fieldMapColumns.put("UomConversionDated", fields);
     customMethodId("customMethodId"),
     decimalScale("decimalScale"),
     roundingMode("roundingMode"),
+    purposeEnumId("purposeEnumId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -120,6 +122,8 @@ fieldMapColumns.put("UomConversionDated", fields);
    private Long decimalScale;
    @Column(name="ROUNDING_MODE")
    private String roundingMode;
+   @Column(name="PURPOSE_ENUM_ID")
+   private String purposeEnumId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -149,6 +153,13 @@ fieldMapColumns.put("UomConversionDated", fields);
    )
    
    private CustomMethod uomCustomMethodCustomMethod = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PURPOSE_ENUM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration purposeEnumeration = null;
 
   /**
    * Default constructor.
@@ -161,7 +172,7 @@ fieldMapColumns.put("UomConversionDated", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("uomId");this.primaryKeyNames.add("uomIdTo");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("uomId");this.allFieldsNames.add("uomIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("conversionFactor");this.allFieldsNames.add("customMethodId");this.allFieldsNames.add("decimalScale");this.allFieldsNames.add("roundingMode");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("uomId");this.allFieldsNames.add("uomIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("conversionFactor");this.allFieldsNames.add("customMethodId");this.allFieldsNames.add("decimalScale");this.allFieldsNames.add("roundingMode");this.allFieldsNames.add("purposeEnumId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -231,6 +242,13 @@ fieldMapColumns.put("UomConversionDated", fields);
      */
     public void setRoundingMode(String roundingMode) {
         this.roundingMode = roundingMode;
+    }
+    /**
+     * Auto generated value setter.
+     * @param purposeEnumId the purposeEnumId to set
+     */
+    public void setPurposeEnumId(String purposeEnumId) {
+        this.purposeEnumId = purposeEnumId;
     }
     /**
      * Auto generated value setter.
@@ -319,6 +337,13 @@ fieldMapColumns.put("UomConversionDated", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPurposeEnumId() {
+        return this.purposeEnumId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -379,6 +404,17 @@ fieldMapColumns.put("UomConversionDated", fields);
         }
         return this.uomCustomMethodCustomMethod;
     }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>PurposeEnumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration getPurposeEnumeration() throws RepositoryException {
+        if (this.purposeEnumeration == null) {
+            this.purposeEnumeration = getRelatedOne(Enumeration.class, "PurposeEnumeration");
+        }
+        return this.purposeEnumeration;
+    }
 
     /**
      * Auto generated value setter.
@@ -401,6 +437,13 @@ fieldMapColumns.put("UomConversionDated", fields);
     public void setuomCustomMethodCustomMethod(CustomMethod uomCustomMethodCustomMethod) {
         this.uomCustomMethodCustomMethod = uomCustomMethodCustomMethod;
     }
+    /**
+     * Auto generated value setter.
+     * @param purposeEnumeration the purposeEnumeration to set
+    */
+    public void setPurposeEnumeration(Enumeration purposeEnumeration) {
+        this.purposeEnumeration = purposeEnumeration;
+    }
 
 
     /** {@inheritDoc} */
@@ -415,6 +458,7 @@ fieldMapColumns.put("UomConversionDated", fields);
         setCustomMethodId((String) mapValue.get("customMethodId"));
         setDecimalScale((Long) mapValue.get("decimalScale"));
         setRoundingMode((String) mapValue.get("roundingMode"));
+        setPurposeEnumId((String) mapValue.get("purposeEnumId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -434,6 +478,7 @@ fieldMapColumns.put("UomConversionDated", fields);
         mapValue.put("customMethodId", getCustomMethodId());
         mapValue.put("decimalScale", getDecimalScale());
         mapValue.put("roundingMode", getRoundingMode());
+        mapValue.put("purposeEnumId", getPurposeEnumId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

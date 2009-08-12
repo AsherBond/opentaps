@@ -104,7 +104,7 @@ fieldMapColumns.put("ContentAssocPredicate", fields);
       super();
       this.baseEntityName = "ContentAssocPredicate";
       this.isView = false;
-      
+      this.resourceName = "ContentEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("contentAssocPredicateId");
       this.allFieldsNames = new ArrayList<String>();

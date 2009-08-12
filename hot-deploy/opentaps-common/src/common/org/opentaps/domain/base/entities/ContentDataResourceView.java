@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity ContentDataResourceView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectContentDataResourceViews", query="SELECT CO.CONTENT_ID AS \"contentId\",CO.CONTENT_TYPE_ID AS \"contentTypeId\",CO.OWNER_CONTENT_ID AS \"ownerContentId\",CO.DECORATOR_CONTENT_ID AS \"decoratorContentId\",CO.INSTANCE_OF_CONTENT_ID AS \"instanceOfContentId\",CO.DATA_RESOURCE_ID AS \"dataResourceId\",CO.TEMPLATE_DATA_RESOURCE_ID AS \"templateDataResourceId\",CO.DATA_SOURCE_ID AS \"dataSourceId\",CO.STATUS_ID AS \"statusId\",CO.PRIVILEGE_ENUM_ID AS \"privilegeEnumId\",CO.SERVICE_NAME AS \"serviceName\",CO.CONTENT_NAME AS \"contentName\",CO.DESCRIPTION AS \"description\",CO.LOCALE_STRING AS \"localeString\",CO.MIME_TYPE_ID AS \"mimeTypeId\",CO.CHARACTER_SET_ID AS \"characterSetId\",CO.CHILD_LEAF_COUNT AS \"childLeafCount\",CO.CHILD_BRANCH_COUNT AS \"childBranchCount\",CO.CREATED_DATE AS \"createdDate\",CO.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CO.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CO.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CO.CLASSIFICATION_ENUM_ID AS \"classificationEnumId\",DR.DATA_RESOURCE_ID AS \"dataResourceId\",DR.DATA_RESOURCE_TYPE_ID AS \"dataResourceTypeId\",DR.DATA_TEMPLATE_TYPE_ID AS \"dataTemplateTypeId\",DR.DATA_CATEGORY_ID AS \"dataCategoryId\",DR.DATA_SOURCE_ID AS \"dataSourceId\",DR.STATUS_ID AS \"statusId\",DR.DATA_RESOURCE_NAME AS \"dataResourceName\",DR.LOCALE_STRING AS \"localeString\",DR.MIME_TYPE_ID AS \"mimeTypeId\",DR.CHARACTER_SET_ID AS \"characterSetId\",DR.OBJECT_INFO AS \"objectInfo\",DR.RELATED_DETAIL_ID AS \"relatedDetailId\",DR.IS_PUBLIC AS \"isPublic\",DR.CREATED_DATE AS \"createdDate\",DR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",DR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",DR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\" FROM CONTENT CO LEFT JOIN DATA_RESOURCE DR ON CO.DATA_RESOURCE_ID = DR.DATA_RESOURCE_ID", resultSetMapping="ContentDataResourceViewMapping")
+@NamedNativeQuery(name="selectContentDataResourceViews", query="SELECT CO.CONTENT_ID AS \"contentId\",CO.CONTENT_TYPE_ID AS \"contentTypeId\",CO.OWNER_CONTENT_ID AS \"ownerContentId\",CO.DECORATOR_CONTENT_ID AS \"decoratorContentId\",CO.INSTANCE_OF_CONTENT_ID AS \"instanceOfContentId\",CO.DATA_RESOURCE_ID AS \"dataResourceId\",CO.TEMPLATE_DATA_RESOURCE_ID AS \"templateDataResourceId\",CO.DATA_SOURCE_ID AS \"dataSourceId\",CO.STATUS_ID AS \"statusId\",CO.PRIVILEGE_ENUM_ID AS \"privilegeEnumId\",CO.SERVICE_NAME AS \"serviceName\",CO.CONTENT_NAME AS \"contentName\",CO.DESCRIPTION AS \"description\",CO.LOCALE_STRING AS \"localeString\",CO.MIME_TYPE_ID AS \"mimeTypeId\",CO.CHARACTER_SET_ID AS \"characterSetId\",CO.CHILD_LEAF_COUNT AS \"childLeafCount\",CO.CHILD_BRANCH_COUNT AS \"childBranchCount\",CO.CREATED_DATE AS \"createdDate\",CO.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CO.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CO.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CO.CLASSIFICATION_ENUM_ID AS \"classificationEnumId\",DR.DATA_RESOURCE_ID AS \"dataResourceId\",DR.DATA_RESOURCE_TYPE_ID AS \"dataResourceTypeId\",DR.DATA_TEMPLATE_TYPE_ID AS \"dataTemplateTypeId\",DR.DATA_CATEGORY_ID AS \"dataCategoryId\",DR.DATA_SOURCE_ID AS \"dataSourceId\",DR.STATUS_ID AS \"statusId\",DR.DATA_RESOURCE_NAME AS \"dataResourceName\",DR.LOCALE_STRING AS \"localeString\",DR.MIME_TYPE_ID AS \"mimeTypeId\",DR.CHARACTER_SET_ID AS \"characterSetId\",DR.OBJECT_INFO AS \"objectInfo\",DR.SURVEY_ID AS \"surveyId\",DR.SURVEY_RESPONSE_ID AS \"surveyResponseId\",DR.RELATED_DETAIL_ID AS \"relatedDetailId\",DR.IS_PUBLIC AS \"isPublic\",DR.CREATED_DATE AS \"createdDate\",DR.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",DR.LAST_MODIFIED_DATE AS \"lastModifiedDate\",DR.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\" FROM CONTENT CO LEFT JOIN DATA_RESOURCE DR ON CO.DATA_RESOURCE_ID = DR.DATA_RESOURCE_ID", resultSetMapping="ContentDataResourceViewMapping")
 @SqlResultSetMapping(name="ContentDataResourceViewMapping", entities={
 @EntityResult(entityClass=ContentDataResourceView.class, fields = {
 @FieldResult(name="contentId", column="contentId")
@@ -86,6 +86,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="drMimeTypeId", column="drMimeTypeId")
 ,@FieldResult(name="drCharacterSetId", column="drCharacterSetId")
 ,@FieldResult(name="drObjectInfo", column="drObjectInfo")
+,@FieldResult(name="drSurveyId", column="drSurveyId")
+,@FieldResult(name="drSurveyResponseId", column="drSurveyResponseId")
 ,@FieldResult(name="drRelatedDetailId", column="drRelatedDetailId")
 ,@FieldResult(name="drIsPublic", column="drIsPublic")
 ,@FieldResult(name="drCreatedDate", column="drCreatedDate")
@@ -132,6 +134,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("drMimeTypeId", "DR.MIME_TYPE_ID");
         fields.put("drCharacterSetId", "DR.CHARACTER_SET_ID");
         fields.put("drObjectInfo", "DR.OBJECT_INFO");
+        fields.put("drSurveyId", "DR.SURVEY_ID");
+        fields.put("drSurveyResponseId", "DR.SURVEY_RESPONSE_ID");
         fields.put("drRelatedDetailId", "DR.RELATED_DETAIL_ID");
         fields.put("drIsPublic", "DR.IS_PUBLIC");
         fields.put("drCreatedDate", "DR.CREATED_DATE");
@@ -175,6 +179,8 @@ fieldMapColumns.put("ContentDataResourceView", fields);
     drMimeTypeId("drMimeTypeId"),
     drCharacterSetId("drCharacterSetId"),
     drObjectInfo("drObjectInfo"),
+    drSurveyId("drSurveyId"),
+    drSurveyResponseId("drSurveyResponseId"),
     drRelatedDetailId("drRelatedDetailId"),
     drIsPublic("drIsPublic"),
     drCreatedDate("drCreatedDate"),
@@ -260,6 +266,10 @@ fieldMapColumns.put("ContentDataResourceView", fields);
     
    private String drObjectInfo;
     
+   private String drSurveyId;
+    
+   private String drSurveyResponseId;
+    
    private String drRelatedDetailId;
     
    private String drIsPublic;
@@ -310,7 +320,7 @@ fieldMapColumns.put("ContentDataResourceView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("contentId");this.primaryKeyNames.add("drDataResourceId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("contentId");this.allFieldsNames.add("contentTypeId");this.allFieldsNames.add("ownerContentId");this.allFieldsNames.add("decoratorContentId");this.allFieldsNames.add("instanceOfContentId");this.allFieldsNames.add("dataResourceId");this.allFieldsNames.add("templateDataResourceId");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("privilegeEnumId");this.allFieldsNames.add("serviceName");this.allFieldsNames.add("contentName");this.allFieldsNames.add("description");this.allFieldsNames.add("localeString");this.allFieldsNames.add("mimeTypeId");this.allFieldsNames.add("characterSetId");this.allFieldsNames.add("childLeafCount");this.allFieldsNames.add("childBranchCount");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("classificationEnumId");this.allFieldsNames.add("drDataResourceId");this.allFieldsNames.add("drDataResourceTypeId");this.allFieldsNames.add("drDataTemplateTypeId");this.allFieldsNames.add("drDataCategoryId");this.allFieldsNames.add("drDataSourceId");this.allFieldsNames.add("drStatusId");this.allFieldsNames.add("drDataResourceName");this.allFieldsNames.add("drLocaleString");this.allFieldsNames.add("drMimeTypeId");this.allFieldsNames.add("drCharacterSetId");this.allFieldsNames.add("drObjectInfo");this.allFieldsNames.add("drRelatedDetailId");this.allFieldsNames.add("drIsPublic");this.allFieldsNames.add("drCreatedDate");this.allFieldsNames.add("drCreatedByUserLogin");this.allFieldsNames.add("drLastModifiedDate");this.allFieldsNames.add("drLastModifiedByUserLogin");
+      this.allFieldsNames.add("contentId");this.allFieldsNames.add("contentTypeId");this.allFieldsNames.add("ownerContentId");this.allFieldsNames.add("decoratorContentId");this.allFieldsNames.add("instanceOfContentId");this.allFieldsNames.add("dataResourceId");this.allFieldsNames.add("templateDataResourceId");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("privilegeEnumId");this.allFieldsNames.add("serviceName");this.allFieldsNames.add("contentName");this.allFieldsNames.add("description");this.allFieldsNames.add("localeString");this.allFieldsNames.add("mimeTypeId");this.allFieldsNames.add("characterSetId");this.allFieldsNames.add("childLeafCount");this.allFieldsNames.add("childBranchCount");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("classificationEnumId");this.allFieldsNames.add("drDataResourceId");this.allFieldsNames.add("drDataResourceTypeId");this.allFieldsNames.add("drDataTemplateTypeId");this.allFieldsNames.add("drDataCategoryId");this.allFieldsNames.add("drDataSourceId");this.allFieldsNames.add("drStatusId");this.allFieldsNames.add("drDataResourceName");this.allFieldsNames.add("drLocaleString");this.allFieldsNames.add("drMimeTypeId");this.allFieldsNames.add("drCharacterSetId");this.allFieldsNames.add("drObjectInfo");this.allFieldsNames.add("drSurveyId");this.allFieldsNames.add("drSurveyResponseId");this.allFieldsNames.add("drRelatedDetailId");this.allFieldsNames.add("drIsPublic");this.allFieldsNames.add("drCreatedDate");this.allFieldsNames.add("drCreatedByUserLogin");this.allFieldsNames.add("drLastModifiedDate");this.allFieldsNames.add("drLastModifiedByUserLogin");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -565,6 +575,20 @@ fieldMapColumns.put("ContentDataResourceView", fields);
      */
     private void setDrObjectInfo(String drObjectInfo) {
         this.drObjectInfo = drObjectInfo;
+    }
+    /**
+     * Auto generated value setter.
+     * @param drSurveyId the drSurveyId to set
+     */
+    private void setDrSurveyId(String drSurveyId) {
+        this.drSurveyId = drSurveyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param drSurveyResponseId the drSurveyResponseId to set
+     */
+    private void setDrSurveyResponseId(String drSurveyResponseId) {
+        this.drSurveyResponseId = drSurveyResponseId;
     }
     /**
      * Auto generated value setter.
@@ -851,6 +875,20 @@ fieldMapColumns.put("ContentDataResourceView", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getDrSurveyId() {
+        return this.drSurveyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDrSurveyResponseId() {
+        return this.drSurveyResponseId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDrRelatedDetailId() {
         return this.drRelatedDetailId;
     }
@@ -1093,6 +1131,8 @@ fieldMapColumns.put("ContentDataResourceView", fields);
         setDrMimeTypeId((String) mapValue.get("drMimeTypeId"));
         setDrCharacterSetId((String) mapValue.get("drCharacterSetId"));
         setDrObjectInfo((String) mapValue.get("drObjectInfo"));
+        setDrSurveyId((String) mapValue.get("drSurveyId"));
+        setDrSurveyResponseId((String) mapValue.get("drSurveyResponseId"));
         setDrRelatedDetailId((String) mapValue.get("drRelatedDetailId"));
         setDrIsPublic((String) mapValue.get("drIsPublic"));
         setDrCreatedDate((Timestamp) mapValue.get("drCreatedDate"));
@@ -1140,6 +1180,8 @@ fieldMapColumns.put("ContentDataResourceView", fields);
         mapValue.put("drMimeTypeId", getDrMimeTypeId());
         mapValue.put("drCharacterSetId", getDrCharacterSetId());
         mapValue.put("drObjectInfo", getDrObjectInfo());
+        mapValue.put("drSurveyId", getDrSurveyId());
+        mapValue.put("drSurveyResponseId", getDrSurveyResponseId());
         mapValue.put("drRelatedDetailId", getDrRelatedDetailId());
         mapValue.put("drIsPublic", getDrIsPublic());
         mapValue.put("drCreatedDate", getDrCreatedDate());

@@ -156,6 +156,10 @@ fieldMapColumns.put("SurveyResponse", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_RESPONSE_ID")
    
+   private List<DataResource> dataResources = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="SURVEY_RESPONSE_ID")
+   
    private List<GiftCardFulfillment> giftCardFulfillments = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SURVEY_RESPONSE_ID")
@@ -450,6 +454,17 @@ fieldMapColumns.put("SurveyResponse", fields);
         return this.statusItem;
     }
     /**
+     * Auto generated method that gets the related <code>DataResource</code> by the relation named <code>DataResource</code>.
+     * @return the list of <code>DataResource</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends DataResource> getDataResources() throws RepositoryException {
+        if (this.dataResources == null) {
+            this.dataResources = getRelated(DataResource.class, "DataResource");
+        }
+        return this.dataResources;
+    }
+    /**
      * Auto generated method that gets the related <code>GiftCardFulfillment</code> by the relation named <code>GiftCardFulfillment</code>.
      * @return the list of <code>GiftCardFulfillment</code>
      * @throws RepositoryException if an error occurs
@@ -528,6 +543,13 @@ fieldMapColumns.put("SurveyResponse", fields);
     */
     public void setStatusItem(StatusItem statusItem) {
         this.statusItem = statusItem;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dataResources the dataResources to set
+    */
+    public void setDataResources(List<DataResource> dataResources) {
+        this.dataResources = dataResources;
     }
     /**
      * Auto generated value setter.

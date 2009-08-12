@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity ProductAndCategoryMember.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectProductAndCategoryMembers", query="SELECT PROD.PRODUCT_ID AS \"productId\",PROD.PRODUCT_TYPE_ID AS \"productTypeId\",PROD.PRIMARY_PRODUCT_CATEGORY_ID AS \"primaryProductCategoryId\",PROD.MANUFACTURER_PARTY_ID AS \"manufacturerPartyId\",PROD.FACILITY_ID AS \"facilityId\",PROD.INTRODUCTION_DATE AS \"introductionDate\",PROD.SUPPORT_DISCONTINUATION_DATE AS \"supportDiscontinuationDate\",PROD.SALES_DISCONTINUATION_DATE AS \"salesDiscontinuationDate\",PROD.SALES_DISC_WHEN_NOT_AVAIL AS \"salesDiscWhenNotAvail\",PROD.INTERNAL_NAME AS \"internalName\",PROD.BRAND_NAME AS \"brandName\",PROD.COMMENTS AS \"comments\",PROD.PRODUCT_NAME AS \"productName\",PROD.DESCRIPTION AS \"description\",PROD.LONG_DESCRIPTION AS \"longDescription\",PROD.PRICE_DETAIL_TEXT AS \"priceDetailText\",PROD.SMALL_IMAGE_URL AS \"smallImageUrl\",PROD.MEDIUM_IMAGE_URL AS \"mediumImageUrl\",PROD.LARGE_IMAGE_URL AS \"largeImageUrl\",PROD.DETAIL_IMAGE_URL AS \"detailImageUrl\",PROD.DETAIL_SCREEN AS \"detailScreen\",PROD.INVENTORY_MESSAGE AS \"inventoryMessage\",PROD.REQUIRE_INVENTORY AS \"requireInventory\",PROD.QUANTITY_UOM_ID AS \"quantityUomId\",PROD.QUANTITY_INCLUDED AS \"quantityIncluded\",PROD.PIECES_INCLUDED AS \"piecesIncluded\",PROD.REQUIRE_AMOUNT AS \"requireAmount\",PROD.FIXED_AMOUNT AS \"fixedAmount\",PROD.AMOUNT_UOM_TYPE_ID AS \"amountUomTypeId\",PROD.WEIGHT_UOM_ID AS \"weightUomId\",PROD.WEIGHT AS \"weight\",PROD.HEIGHT_UOM_ID AS \"heightUomId\",PROD.PRODUCT_HEIGHT AS \"productHeight\",PROD.SHIPPING_HEIGHT AS \"shippingHeight\",PROD.WIDTH_UOM_ID AS \"widthUomId\",PROD.PRODUCT_WIDTH AS \"productWidth\",PROD.SHIPPING_WIDTH AS \"shippingWidth\",PROD.DEPTH_UOM_ID AS \"depthUomId\",PROD.PRODUCT_DEPTH AS \"productDepth\",PROD.SHIPPING_DEPTH AS \"shippingDepth\",PROD.PRODUCT_RATING AS \"productRating\",PROD.RATING_TYPE_ENUM AS \"ratingTypeEnum\",PROD.RETURNABLE AS \"returnable\",PROD.TAXABLE AS \"taxable\",PROD.TAX_CATEGORY AS \"taxCategory\",PROD.TAX_VAT_CODE AS \"taxVatCode\",PROD.TAX_DUTY_CODE AS \"taxDutyCode\",PROD.CHARGE_SHIPPING AS \"chargeShipping\",PROD.AUTO_CREATE_KEYWORDS AS \"autoCreateKeywords\",PROD.INCLUDE_IN_PROMOTIONS AS \"includeInPromotions\",PROD.IS_VIRTUAL AS \"isVirtual\",PROD.IS_VARIANT AS \"isVariant\",PROD.ORIGIN_GEO_ID AS \"originGeoId\",PROD.REQUIREMENT_METHOD_ENUM_ID AS \"requirementMethodEnumId\",PROD.BILL_OF_MATERIAL_LEVEL AS \"billOfMaterialLevel\",PROD.RESERV_MAX_PERSONS AS \"reservMaxPersons\",PROD.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",PROD.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",PROD.CREATED_DATE AS \"createdDate\",PROD.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PROD.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PROD.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PROD.IN_SHIPPING_BOX AS \"inShippingBox\",PCM.PRODUCT_CATEGORY_ID AS \"productCategoryId\",PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",PCM.SEQUENCE_NUM AS \"sequenceNum\",PCM.QUANTITY AS \"quantity\" FROM PRODUCT PROD INNER JOIN PRODUCT_CATEGORY_MEMBER PCM ON PROD.PRODUCT_ID = PCM.PRODUCT_ID", resultSetMapping="ProductAndCategoryMemberMapping")
+@NamedNativeQuery(name="selectProductAndCategoryMembers", query="SELECT PROD.PRODUCT_ID AS \"productId\",PROD.PRODUCT_TYPE_ID AS \"productTypeId\",PROD.PRIMARY_PRODUCT_CATEGORY_ID AS \"primaryProductCategoryId\",PROD.MANUFACTURER_PARTY_ID AS \"manufacturerPartyId\",PROD.FACILITY_ID AS \"facilityId\",PROD.INTRODUCTION_DATE AS \"introductionDate\",PROD.SUPPORT_DISCONTINUATION_DATE AS \"supportDiscontinuationDate\",PROD.SALES_DISCONTINUATION_DATE AS \"salesDiscontinuationDate\",PROD.SALES_DISC_WHEN_NOT_AVAIL AS \"salesDiscWhenNotAvail\",PROD.INTERNAL_NAME AS \"internalName\",PROD.BRAND_NAME AS \"brandName\",PROD.COMMENTS AS \"comments\",PROD.PRODUCT_NAME AS \"productName\",PROD.DESCRIPTION AS \"description\",PROD.LONG_DESCRIPTION AS \"longDescription\",PROD.PRICE_DETAIL_TEXT AS \"priceDetailText\",PROD.SMALL_IMAGE_URL AS \"smallImageUrl\",PROD.MEDIUM_IMAGE_URL AS \"mediumImageUrl\",PROD.LARGE_IMAGE_URL AS \"largeImageUrl\",PROD.DETAIL_IMAGE_URL AS \"detailImageUrl\",PROD.ORIGINAL_IMAGE_URL AS \"originalImageUrl\",PROD.DETAIL_SCREEN AS \"detailScreen\",PROD.INVENTORY_MESSAGE AS \"inventoryMessage\",PROD.REQUIRE_INVENTORY AS \"requireInventory\",PROD.QUANTITY_UOM_ID AS \"quantityUomId\",PROD.QUANTITY_INCLUDED AS \"quantityIncluded\",PROD.PIECES_INCLUDED AS \"piecesIncluded\",PROD.REQUIRE_AMOUNT AS \"requireAmount\",PROD.FIXED_AMOUNT AS \"fixedAmount\",PROD.AMOUNT_UOM_TYPE_ID AS \"amountUomTypeId\",PROD.WEIGHT_UOM_ID AS \"weightUomId\",PROD.WEIGHT AS \"weight\",PROD.HEIGHT_UOM_ID AS \"heightUomId\",PROD.PRODUCT_HEIGHT AS \"productHeight\",PROD.SHIPPING_HEIGHT AS \"shippingHeight\",PROD.WIDTH_UOM_ID AS \"widthUomId\",PROD.PRODUCT_WIDTH AS \"productWidth\",PROD.SHIPPING_WIDTH AS \"shippingWidth\",PROD.DEPTH_UOM_ID AS \"depthUomId\",PROD.PRODUCT_DEPTH AS \"productDepth\",PROD.SHIPPING_DEPTH AS \"shippingDepth\",PROD.PRODUCT_RATING AS \"productRating\",PROD.RATING_TYPE_ENUM AS \"ratingTypeEnum\",PROD.RETURNABLE AS \"returnable\",PROD.TAXABLE AS \"taxable\",PROD.CHARGE_SHIPPING AS \"chargeShipping\",PROD.AUTO_CREATE_KEYWORDS AS \"autoCreateKeywords\",PROD.INCLUDE_IN_PROMOTIONS AS \"includeInPromotions\",PROD.IS_VIRTUAL AS \"isVirtual\",PROD.IS_VARIANT AS \"isVariant\",PROD.VIRTUAL_VARIANT_METHOD_ENUM AS \"virtualVariantMethodEnum\",PROD.ORIGIN_GEO_ID AS \"originGeoId\",PROD.REQUIREMENT_METHOD_ENUM_ID AS \"requirementMethodEnumId\",PROD.BILL_OF_MATERIAL_LEVEL AS \"billOfMaterialLevel\",PROD.RESERV_MAX_PERSONS AS \"reservMaxPersons\",PROD.RESERV2ND_P_P_PERC AS \"reserv2ndPPPerc\",PROD.RESERV_NTH_P_P_PERC AS \"reservNthPPPerc\",PROD.CONFIG_ID AS \"configId\",PROD.CREATED_DATE AS \"createdDate\",PROD.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PROD.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PROD.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PROD.IN_SHIPPING_BOX AS \"inShippingBox\",PROD.DEFAULT_SHIPMENT_BOX_TYPE_ID AS \"defaultShipmentBoxTypeId\",PCM.PRODUCT_CATEGORY_ID AS \"productCategoryId\",PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",PCM.SEQUENCE_NUM AS \"sequenceNum\",PCM.QUANTITY AS \"quantity\" FROM PRODUCT PROD INNER JOIN PRODUCT_CATEGORY_MEMBER PCM ON PROD.PRODUCT_ID = PCM.PRODUCT_ID", resultSetMapping="ProductAndCategoryMemberMapping")
 @SqlResultSetMapping(name="ProductAndCategoryMemberMapping", entities={
 @EntityResult(entityClass=ProductAndCategoryMember.class, fields = {
 @FieldResult(name="productId", column="productId")
@@ -73,6 +73,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="mediumImageUrl", column="mediumImageUrl")
 ,@FieldResult(name="largeImageUrl", column="largeImageUrl")
 ,@FieldResult(name="detailImageUrl", column="detailImageUrl")
+,@FieldResult(name="originalImageUrl", column="originalImageUrl")
 ,@FieldResult(name="detailScreen", column="detailScreen")
 ,@FieldResult(name="inventoryMessage", column="inventoryMessage")
 ,@FieldResult(name="requireInventory", column="requireInventory")
@@ -97,25 +98,25 @@ import java.sql.Timestamp;
 ,@FieldResult(name="ratingTypeEnum", column="ratingTypeEnum")
 ,@FieldResult(name="returnable", column="returnable")
 ,@FieldResult(name="taxable", column="taxable")
-,@FieldResult(name="taxCategory", column="taxCategory")
-,@FieldResult(name="taxVatCode", column="taxVatCode")
-,@FieldResult(name="taxDutyCode", column="taxDutyCode")
 ,@FieldResult(name="chargeShipping", column="chargeShipping")
 ,@FieldResult(name="autoCreateKeywords", column="autoCreateKeywords")
 ,@FieldResult(name="includeInPromotions", column="includeInPromotions")
 ,@FieldResult(name="isVirtual", column="isVirtual")
 ,@FieldResult(name="isVariant", column="isVariant")
+,@FieldResult(name="virtualVariantMethodEnum", column="virtualVariantMethodEnum")
 ,@FieldResult(name="originGeoId", column="originGeoId")
 ,@FieldResult(name="requirementMethodEnumId", column="requirementMethodEnumId")
 ,@FieldResult(name="billOfMaterialLevel", column="billOfMaterialLevel")
 ,@FieldResult(name="reservMaxPersons", column="reservMaxPersons")
 ,@FieldResult(name="reserv2ndPPPerc", column="reserv2ndPPPerc")
 ,@FieldResult(name="reservNthPPPerc", column="reservNthPPPerc")
+,@FieldResult(name="configId", column="configId")
 ,@FieldResult(name="createdDate", column="createdDate")
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
 ,@FieldResult(name="inShippingBox", column="inShippingBox")
+,@FieldResult(name="defaultShipmentBoxTypeId", column="defaultShipmentBoxTypeId")
 ,@FieldResult(name="productCategoryId", column="productCategoryId")
 ,@FieldResult(name="fromDate", column="fromDate")
 ,@FieldResult(name="thruDate", column="thruDate")
@@ -147,6 +148,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("mediumImageUrl", "PROD.MEDIUM_IMAGE_URL");
         fields.put("largeImageUrl", "PROD.LARGE_IMAGE_URL");
         fields.put("detailImageUrl", "PROD.DETAIL_IMAGE_URL");
+        fields.put("originalImageUrl", "PROD.ORIGINAL_IMAGE_URL");
         fields.put("detailScreen", "PROD.DETAIL_SCREEN");
         fields.put("inventoryMessage", "PROD.INVENTORY_MESSAGE");
         fields.put("requireInventory", "PROD.REQUIRE_INVENTORY");
@@ -171,25 +173,25 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("ratingTypeEnum", "PROD.RATING_TYPE_ENUM");
         fields.put("returnable", "PROD.RETURNABLE");
         fields.put("taxable", "PROD.TAXABLE");
-        fields.put("taxCategory", "PROD.TAX_CATEGORY");
-        fields.put("taxVatCode", "PROD.TAX_VAT_CODE");
-        fields.put("taxDutyCode", "PROD.TAX_DUTY_CODE");
         fields.put("chargeShipping", "PROD.CHARGE_SHIPPING");
         fields.put("autoCreateKeywords", "PROD.AUTO_CREATE_KEYWORDS");
         fields.put("includeInPromotions", "PROD.INCLUDE_IN_PROMOTIONS");
         fields.put("isVirtual", "PROD.IS_VIRTUAL");
         fields.put("isVariant", "PROD.IS_VARIANT");
+        fields.put("virtualVariantMethodEnum", "PROD.VIRTUAL_VARIANT_METHOD_ENUM");
         fields.put("originGeoId", "PROD.ORIGIN_GEO_ID");
         fields.put("requirementMethodEnumId", "PROD.REQUIREMENT_METHOD_ENUM_ID");
         fields.put("billOfMaterialLevel", "PROD.BILL_OF_MATERIAL_LEVEL");
         fields.put("reservMaxPersons", "PROD.RESERV_MAX_PERSONS");
         fields.put("reserv2ndPPPerc", "PROD.RESERV2ND_P_P_PERC");
         fields.put("reservNthPPPerc", "PROD.RESERV_NTH_P_P_PERC");
+        fields.put("configId", "PROD.CONFIG_ID");
         fields.put("createdDate", "PROD.CREATED_DATE");
         fields.put("createdByUserLogin", "PROD.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "PROD.LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "PROD.LAST_MODIFIED_BY_USER_LOGIN");
         fields.put("inShippingBox", "PROD.IN_SHIPPING_BOX");
+        fields.put("defaultShipmentBoxTypeId", "PROD.DEFAULT_SHIPMENT_BOX_TYPE_ID");
         fields.put("productCategoryId", "PCM.PRODUCT_CATEGORY_ID");
         fields.put("fromDate", "PCM.FROM_DATE");
         fields.put("thruDate", "PCM.THRU_DATE");
@@ -218,6 +220,7 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
     mediumImageUrl("mediumImageUrl"),
     largeImageUrl("largeImageUrl"),
     detailImageUrl("detailImageUrl"),
+    originalImageUrl("originalImageUrl"),
     detailScreen("detailScreen"),
     inventoryMessage("inventoryMessage"),
     requireInventory("requireInventory"),
@@ -242,25 +245,25 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
     ratingTypeEnum("ratingTypeEnum"),
     returnable("returnable"),
     taxable("taxable"),
-    taxCategory("taxCategory"),
-    taxVatCode("taxVatCode"),
-    taxDutyCode("taxDutyCode"),
     chargeShipping("chargeShipping"),
     autoCreateKeywords("autoCreateKeywords"),
     includeInPromotions("includeInPromotions"),
     isVirtual("isVirtual"),
     isVariant("isVariant"),
+    virtualVariantMethodEnum("virtualVariantMethodEnum"),
     originGeoId("originGeoId"),
     requirementMethodEnumId("requirementMethodEnumId"),
     billOfMaterialLevel("billOfMaterialLevel"),
     reservMaxPersons("reservMaxPersons"),
     reserv2ndPPPerc("reserv2ndPPPerc"),
     reservNthPPPerc("reservNthPPPerc"),
+    configId("configId"),
     createdDate("createdDate"),
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
     inShippingBox("inShippingBox"),
+    defaultShipmentBoxTypeId("defaultShipmentBoxTypeId"),
     productCategoryId("productCategoryId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
@@ -317,6 +320,8 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
     
    private String detailImageUrl;
     
+   private String originalImageUrl;
+    
    private String detailScreen;
     
    private String inventoryMessage;
@@ -365,12 +370,6 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
     
    private String taxable;
     
-   private String taxCategory;
-    
-   private String taxVatCode;
-    
-   private String taxDutyCode;
-    
    private String chargeShipping;
     
    private String autoCreateKeywords;
@@ -380,6 +379,8 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
    private String isVirtual;
     
    private String isVariant;
+    
+   private String virtualVariantMethodEnum;
     
    private String originGeoId;
     
@@ -393,6 +394,8 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
     
    private BigDecimal reservNthPPPerc;
     
+   private String configId;
+    
    private Timestamp createdDate;
     
    private String createdByUserLogin;
@@ -402,6 +405,8 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
    private String lastModifiedByUserLogin;
     
    private String inShippingBox;
+    
+   private String defaultShipmentBoxTypeId;
     
    private String productCategoryId;
     
@@ -432,7 +437,7 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");this.primaryKeyNames.add("productCategoryId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("primaryProductCategoryId");this.allFieldsNames.add("manufacturerPartyId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("introductionDate");this.allFieldsNames.add("supportDiscontinuationDate");this.allFieldsNames.add("salesDiscontinuationDate");this.allFieldsNames.add("salesDiscWhenNotAvail");this.allFieldsNames.add("internalName");this.allFieldsNames.add("brandName");this.allFieldsNames.add("comments");this.allFieldsNames.add("productName");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("priceDetailText");this.allFieldsNames.add("smallImageUrl");this.allFieldsNames.add("mediumImageUrl");this.allFieldsNames.add("largeImageUrl");this.allFieldsNames.add("detailImageUrl");this.allFieldsNames.add("detailScreen");this.allFieldsNames.add("inventoryMessage");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("quantityIncluded");this.allFieldsNames.add("piecesIncluded");this.allFieldsNames.add("requireAmount");this.allFieldsNames.add("fixedAmount");this.allFieldsNames.add("amountUomTypeId");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("weight");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("productHeight");this.allFieldsNames.add("shippingHeight");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("productWidth");this.allFieldsNames.add("shippingWidth");this.allFieldsNames.add("depthUomId");this.allFieldsNames.add("productDepth");this.allFieldsNames.add("shippingDepth");this.allFieldsNames.add("productRating");this.allFieldsNames.add("ratingTypeEnum");this.allFieldsNames.add("returnable");this.allFieldsNames.add("taxable");this.allFieldsNames.add("taxCategory");this.allFieldsNames.add("taxVatCode");this.allFieldsNames.add("taxDutyCode");this.allFieldsNames.add("chargeShipping");this.allFieldsNames.add("autoCreateKeywords");this.allFieldsNames.add("includeInPromotions");this.allFieldsNames.add("isVirtual");this.allFieldsNames.add("isVariant");this.allFieldsNames.add("originGeoId");this.allFieldsNames.add("requirementMethodEnumId");this.allFieldsNames.add("billOfMaterialLevel");this.allFieldsNames.add("reservMaxPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("inShippingBox");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("quantity");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("primaryProductCategoryId");this.allFieldsNames.add("manufacturerPartyId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("introductionDate");this.allFieldsNames.add("supportDiscontinuationDate");this.allFieldsNames.add("salesDiscontinuationDate");this.allFieldsNames.add("salesDiscWhenNotAvail");this.allFieldsNames.add("internalName");this.allFieldsNames.add("brandName");this.allFieldsNames.add("comments");this.allFieldsNames.add("productName");this.allFieldsNames.add("description");this.allFieldsNames.add("longDescription");this.allFieldsNames.add("priceDetailText");this.allFieldsNames.add("smallImageUrl");this.allFieldsNames.add("mediumImageUrl");this.allFieldsNames.add("largeImageUrl");this.allFieldsNames.add("detailImageUrl");this.allFieldsNames.add("originalImageUrl");this.allFieldsNames.add("detailScreen");this.allFieldsNames.add("inventoryMessage");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("quantityIncluded");this.allFieldsNames.add("piecesIncluded");this.allFieldsNames.add("requireAmount");this.allFieldsNames.add("fixedAmount");this.allFieldsNames.add("amountUomTypeId");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("weight");this.allFieldsNames.add("heightUomId");this.allFieldsNames.add("productHeight");this.allFieldsNames.add("shippingHeight");this.allFieldsNames.add("widthUomId");this.allFieldsNames.add("productWidth");this.allFieldsNames.add("shippingWidth");this.allFieldsNames.add("depthUomId");this.allFieldsNames.add("productDepth");this.allFieldsNames.add("shippingDepth");this.allFieldsNames.add("productRating");this.allFieldsNames.add("ratingTypeEnum");this.allFieldsNames.add("returnable");this.allFieldsNames.add("taxable");this.allFieldsNames.add("chargeShipping");this.allFieldsNames.add("autoCreateKeywords");this.allFieldsNames.add("includeInPromotions");this.allFieldsNames.add("isVirtual");this.allFieldsNames.add("isVariant");this.allFieldsNames.add("virtualVariantMethodEnum");this.allFieldsNames.add("originGeoId");this.allFieldsNames.add("requirementMethodEnumId");this.allFieldsNames.add("billOfMaterialLevel");this.allFieldsNames.add("reservMaxPersons");this.allFieldsNames.add("reserv2ndPPPerc");this.allFieldsNames.add("reservNthPPPerc");this.allFieldsNames.add("configId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("inShippingBox");this.allFieldsNames.add("defaultShipmentBoxTypeId");this.allFieldsNames.add("productCategoryId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("quantity");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -589,6 +594,13 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
      */
     private void setDetailImageUrl(String detailImageUrl) {
         this.detailImageUrl = detailImageUrl;
+    }
+    /**
+     * Auto generated value setter.
+     * @param originalImageUrl the originalImageUrl to set
+     */
+    private void setOriginalImageUrl(String originalImageUrl) {
+        this.originalImageUrl = originalImageUrl;
     }
     /**
      * Auto generated value setter.
@@ -760,27 +772,6 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
     }
     /**
      * Auto generated value setter.
-     * @param taxCategory the taxCategory to set
-     */
-    private void setTaxCategory(String taxCategory) {
-        this.taxCategory = taxCategory;
-    }
-    /**
-     * Auto generated value setter.
-     * @param taxVatCode the taxVatCode to set
-     */
-    private void setTaxVatCode(String taxVatCode) {
-        this.taxVatCode = taxVatCode;
-    }
-    /**
-     * Auto generated value setter.
-     * @param taxDutyCode the taxDutyCode to set
-     */
-    private void setTaxDutyCode(String taxDutyCode) {
-        this.taxDutyCode = taxDutyCode;
-    }
-    /**
-     * Auto generated value setter.
      * @param chargeShipping the chargeShipping to set
      */
     private void setChargeShipping(String chargeShipping) {
@@ -813,6 +804,13 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
      */
     private void setIsVariant(String isVariant) {
         this.isVariant = isVariant;
+    }
+    /**
+     * Auto generated value setter.
+     * @param virtualVariantMethodEnum the virtualVariantMethodEnum to set
+     */
+    private void setVirtualVariantMethodEnum(String virtualVariantMethodEnum) {
+        this.virtualVariantMethodEnum = virtualVariantMethodEnum;
     }
     /**
      * Auto generated value setter.
@@ -858,6 +856,13 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
     }
     /**
      * Auto generated value setter.
+     * @param configId the configId to set
+     */
+    private void setConfigId(String configId) {
+        this.configId = configId;
+    }
+    /**
+     * Auto generated value setter.
      * @param createdDate the createdDate to set
      */
     private void setCreatedDate(Timestamp createdDate) {
@@ -890,6 +895,13 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
      */
     private void setInShippingBox(String inShippingBox) {
         this.inShippingBox = inShippingBox;
+    }
+    /**
+     * Auto generated value setter.
+     * @param defaultShipmentBoxTypeId the defaultShipmentBoxTypeId to set
+     */
+    private void setDefaultShipmentBoxTypeId(String defaultShipmentBoxTypeId) {
+        this.defaultShipmentBoxTypeId = defaultShipmentBoxTypeId;
     }
     /**
      * Auto generated value setter.
@@ -1071,6 +1083,13 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getOriginalImageUrl() {
+        return this.originalImageUrl;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDetailScreen() {
         return this.detailScreen;
     }
@@ -1239,27 +1258,6 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getTaxCategory() {
-        return this.taxCategory;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getTaxVatCode() {
-        return this.taxVatCode;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getTaxDutyCode() {
-        return this.taxDutyCode;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getChargeShipping() {
         return this.chargeShipping;
     }
@@ -1290,6 +1288,13 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
      */
     public String getIsVariant() {
         return this.isVariant;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getVirtualVariantMethodEnum() {
+        return this.virtualVariantMethodEnum;
     }
     /**
      * Auto generated value accessor.
@@ -1335,6 +1340,13 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getConfigId() {
+        return this.configId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getCreatedDate() {
@@ -1367,6 +1379,13 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
      */
     public String getInShippingBox() {
         return this.inShippingBox;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDefaultShipmentBoxTypeId() {
+        return this.defaultShipmentBoxTypeId;
     }
     /**
      * Auto generated value accessor.
@@ -1467,6 +1486,7 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
         setMediumImageUrl((String) mapValue.get("mediumImageUrl"));
         setLargeImageUrl((String) mapValue.get("largeImageUrl"));
         setDetailImageUrl((String) mapValue.get("detailImageUrl"));
+        setOriginalImageUrl((String) mapValue.get("originalImageUrl"));
         setDetailScreen((String) mapValue.get("detailScreen"));
         setInventoryMessage((String) mapValue.get("inventoryMessage"));
         setRequireInventory((String) mapValue.get("requireInventory"));
@@ -1491,25 +1511,25 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
         setRatingTypeEnum((String) mapValue.get("ratingTypeEnum"));
         setReturnable((String) mapValue.get("returnable"));
         setTaxable((String) mapValue.get("taxable"));
-        setTaxCategory((String) mapValue.get("taxCategory"));
-        setTaxVatCode((String) mapValue.get("taxVatCode"));
-        setTaxDutyCode((String) mapValue.get("taxDutyCode"));
         setChargeShipping((String) mapValue.get("chargeShipping"));
         setAutoCreateKeywords((String) mapValue.get("autoCreateKeywords"));
         setIncludeInPromotions((String) mapValue.get("includeInPromotions"));
         setIsVirtual((String) mapValue.get("isVirtual"));
         setIsVariant((String) mapValue.get("isVariant"));
+        setVirtualVariantMethodEnum((String) mapValue.get("virtualVariantMethodEnum"));
         setOriginGeoId((String) mapValue.get("originGeoId"));
         setRequirementMethodEnumId((String) mapValue.get("requirementMethodEnumId"));
         setBillOfMaterialLevel((Long) mapValue.get("billOfMaterialLevel"));
         setReservMaxPersons(convertToBigDecimal(mapValue.get("reservMaxPersons")));
         setReserv2ndPPPerc(convertToBigDecimal(mapValue.get("reserv2ndPPPerc")));
         setReservNthPPPerc(convertToBigDecimal(mapValue.get("reservNthPPPerc")));
+        setConfigId((String) mapValue.get("configId"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
         setInShippingBox((String) mapValue.get("inShippingBox"));
+        setDefaultShipmentBoxTypeId((String) mapValue.get("defaultShipmentBoxTypeId"));
         setProductCategoryId((String) mapValue.get("productCategoryId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
@@ -1542,6 +1562,7 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
         mapValue.put("mediumImageUrl", getMediumImageUrl());
         mapValue.put("largeImageUrl", getLargeImageUrl());
         mapValue.put("detailImageUrl", getDetailImageUrl());
+        mapValue.put("originalImageUrl", getOriginalImageUrl());
         mapValue.put("detailScreen", getDetailScreen());
         mapValue.put("inventoryMessage", getInventoryMessage());
         mapValue.put("requireInventory", getRequireInventory());
@@ -1566,25 +1587,25 @@ fieldMapColumns.put("ProductAndCategoryMember", fields);
         mapValue.put("ratingTypeEnum", getRatingTypeEnum());
         mapValue.put("returnable", getReturnable());
         mapValue.put("taxable", getTaxable());
-        mapValue.put("taxCategory", getTaxCategory());
-        mapValue.put("taxVatCode", getTaxVatCode());
-        mapValue.put("taxDutyCode", getTaxDutyCode());
         mapValue.put("chargeShipping", getChargeShipping());
         mapValue.put("autoCreateKeywords", getAutoCreateKeywords());
         mapValue.put("includeInPromotions", getIncludeInPromotions());
         mapValue.put("isVirtual", getIsVirtual());
         mapValue.put("isVariant", getIsVariant());
+        mapValue.put("virtualVariantMethodEnum", getVirtualVariantMethodEnum());
         mapValue.put("originGeoId", getOriginGeoId());
         mapValue.put("requirementMethodEnumId", getRequirementMethodEnumId());
         mapValue.put("billOfMaterialLevel", getBillOfMaterialLevel());
         mapValue.put("reservMaxPersons", getReservMaxPersons());
         mapValue.put("reserv2ndPPPerc", getReserv2ndPPPerc());
         mapValue.put("reservNthPPPerc", getReservNthPPPerc());
+        mapValue.put("configId", getConfigId());
         mapValue.put("createdDate", getCreatedDate());
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
         mapValue.put("inShippingBox", getInShippingBox());
+        mapValue.put("defaultShipmentBoxTypeId", getDefaultShipmentBoxTypeId());
         mapValue.put("productCategoryId", getProductCategoryId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());

@@ -53,6 +53,8 @@ public class TrainingClassType extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("trainingClassTypeId", "TRAINING_CLASS_TYPE_ID");
+        fields.put("parentTypeId", "PARENT_TYPE_ID");
+        fields.put("hasTable", "HAS_TABLE");
         fields.put("description", "DESCRIPTION");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -62,6 +64,8 @@ fieldMapColumns.put("TrainingClassType", fields);
 }
   public static enum Fields implements EntityFieldInterface<TrainingClassType> {
     trainingClassTypeId("trainingClassTypeId"),
+    parentTypeId("parentTypeId"),
+    hasTable("hasTable"),
     description("description"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -82,6 +86,10 @@ fieldMapColumns.put("TrainingClassType", fields);
    @Id
    @Column(name="TRAINING_CLASS_TYPE_ID")
    private String trainingClassTypeId;
+   @Column(name="PARENT_TYPE_ID")
+   private String parentTypeId;
+   @Column(name="HAS_TABLE")
+   private String hasTable;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="LAST_UPDATED_STAMP")
@@ -92,10 +100,21 @@ fieldMapColumns.put("TrainingClassType", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private TrainingClassType parentTrainingClassType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="trainingClassType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="TRAINING_CLASS_TYPE_ID")
    
    private List<PersonTraining> personTrainings = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID")
+   
+   private List<TrainingClassType> childTrainingClassTypes = null;
 
   /**
    * Default constructor.
@@ -108,7 +127,7 @@ fieldMapColumns.put("TrainingClassType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("trainingClassTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("trainingClassTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("trainingClassTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -129,6 +148,20 @@ fieldMapColumns.put("TrainingClassType", fields);
      */
     public void setTrainingClassTypeId(String trainingClassTypeId) {
         this.trainingClassTypeId = trainingClassTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentTypeId the parentTypeId to set
+     */
+    public void setParentTypeId(String parentTypeId) {
+        this.parentTypeId = parentTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param hasTable the hasTable to set
+     */
+    public void setHasTable(String hasTable) {
+        this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
@@ -177,6 +210,20 @@ fieldMapColumns.put("TrainingClassType", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getParentTypeId() {
+        return this.parentTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getHasTable() {
+        return this.hasTable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDescription() {
         return this.description;
     }
@@ -210,6 +257,17 @@ fieldMapColumns.put("TrainingClassType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>TrainingClassType</code> by the relation named <code>ParentTrainingClassType</code>.
+     * @return the <code>TrainingClassType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public TrainingClassType getParentTrainingClassType() throws RepositoryException {
+        if (this.parentTrainingClassType == null) {
+            this.parentTrainingClassType = getRelatedOne(TrainingClassType.class, "ParentTrainingClassType");
+        }
+        return this.parentTrainingClassType;
+    }
+    /**
      * Auto generated method that gets the related <code>PersonTraining</code> by the relation named <code>PersonTraining</code>.
      * @return the list of <code>PersonTraining</code>
      * @throws RepositoryException if an error occurs
@@ -220,13 +278,38 @@ fieldMapColumns.put("TrainingClassType", fields);
         }
         return this.personTrainings;
     }
+    /**
+     * Auto generated method that gets the related <code>TrainingClassType</code> by the relation named <code>ChildTrainingClassType</code>.
+     * @return the list of <code>TrainingClassType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends TrainingClassType> getChildTrainingClassTypes() throws RepositoryException {
+        if (this.childTrainingClassTypes == null) {
+            this.childTrainingClassTypes = getRelated(TrainingClassType.class, "ChildTrainingClassType");
+        }
+        return this.childTrainingClassTypes;
+    }
 
+    /**
+     * Auto generated value setter.
+     * @param parentTrainingClassType the parentTrainingClassType to set
+    */
+    public void setParentTrainingClassType(TrainingClassType parentTrainingClassType) {
+        this.parentTrainingClassType = parentTrainingClassType;
+    }
     /**
      * Auto generated value setter.
      * @param personTrainings the personTrainings to set
     */
     public void setPersonTrainings(List<PersonTraining> personTrainings) {
         this.personTrainings = personTrainings;
+    }
+    /**
+     * Auto generated value setter.
+     * @param childTrainingClassTypes the childTrainingClassTypes to set
+    */
+    public void setChildTrainingClassTypes(List<TrainingClassType> childTrainingClassTypes) {
+        this.childTrainingClassTypes = childTrainingClassTypes;
     }
 
     /**
@@ -262,6 +345,8 @@ fieldMapColumns.put("TrainingClassType", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setTrainingClassTypeId((String) mapValue.get("trainingClassTypeId"));
+        setParentTypeId((String) mapValue.get("parentTypeId"));
+        setHasTable((String) mapValue.get("hasTable"));
         setDescription((String) mapValue.get("description"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -275,6 +360,8 @@ fieldMapColumns.put("TrainingClassType", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("trainingClassTypeId", getTrainingClassTypeId());
+        mapValue.put("parentTypeId", getParentTypeId());
+        mapValue.put("hasTable", getHasTable());
         mapValue.put("description", getDescription());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

@@ -135,6 +135,10 @@ fieldMapColumns.put("PaymentMethodType", fields);
    @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
    
    private List<ProductStorePaymentSetting> productStorePaymentSettings = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="paymentMethodType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PAYMENT_METHOD_TYPE_ID")
+   
+   private List<ProductStoreVendorPayment> productStoreVendorPayments = null;
 
   /**
    * Default constructor.
@@ -361,6 +365,17 @@ fieldMapColumns.put("PaymentMethodType", fields);
         }
         return this.productStorePaymentSettings;
     }
+    /**
+     * Auto generated method that gets the related <code>ProductStoreVendorPayment</code> by the relation named <code>ProductStoreVendorPayment</code>.
+     * @return the list of <code>ProductStoreVendorPayment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductStoreVendorPayment> getProductStoreVendorPayments() throws RepositoryException {
+        if (this.productStoreVendorPayments == null) {
+            this.productStoreVendorPayments = getRelated(ProductStoreVendorPayment.class, "ProductStoreVendorPayment");
+        }
+        return this.productStoreVendorPayments;
+    }
 
     /**
      * Auto generated value setter.
@@ -424,6 +439,13 @@ fieldMapColumns.put("PaymentMethodType", fields);
     */
     public void setProductStorePaymentSettings(List<ProductStorePaymentSetting> productStorePaymentSettings) {
         this.productStorePaymentSettings = productStorePaymentSettings;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productStoreVendorPayments the productStoreVendorPayments to set
+    */
+    public void setProductStoreVendorPayments(List<ProductStoreVendorPayment> productStoreVendorPayments) {
+        this.productStoreVendorPayments = productStoreVendorPayments;
     }
 
     /**
@@ -506,6 +528,33 @@ fieldMapColumns.put("PaymentMethodType", fields);
             return;
         }
         this.productStorePaymentSettings.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addProductStoreVendorPayment(ProductStoreVendorPayment productStoreVendorPayment) {
+        if (this.productStoreVendorPayments == null) {
+            this.productStoreVendorPayments = new ArrayList<ProductStoreVendorPayment>();
+        }
+        this.productStoreVendorPayments.add(productStoreVendorPayment);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeProductStoreVendorPayment(ProductStoreVendorPayment productStoreVendorPayment) {
+        if (this.productStoreVendorPayments == null) {
+            return;
+        }
+        this.productStoreVendorPayments.remove(productStoreVendorPayment);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearProductStoreVendorPayment() {
+        if (this.productStoreVendorPayments == null) {
+            return;
+        }
+        this.productStoreVendorPayments.clear();
     }
 
     /** {@inheritDoc} */

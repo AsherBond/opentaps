@@ -47,11 +47,12 @@ import java.lang.String;
  * Auto generated base entity RoleTypeAndParty.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectRoleTypeAndPartys", query="SELECT PR.PARTY_ID AS \"partyId\",RT.ROLE_TYPE_ID AS \"roleTypeId\",RT.DESCRIPTION AS \"description\" FROM PARTY_ROLE PR INNER JOIN ROLE_TYPE RT ON RT.ROLE_TYPE_ID = PR.ROLE_TYPE_ID", resultSetMapping="RoleTypeAndPartyMapping")
+@NamedNativeQuery(name="selectRoleTypeAndPartys", query="SELECT PR.PARTY_ID AS \"partyId\",RT.ROLE_TYPE_ID AS \"roleTypeId\",RT.PARENT_TYPE_ID AS \"parentTypeId\",RT.DESCRIPTION AS \"description\" FROM PARTY_ROLE PR INNER JOIN ROLE_TYPE RT ON RT.ROLE_TYPE_ID = PR.ROLE_TYPE_ID", resultSetMapping="RoleTypeAndPartyMapping")
 @SqlResultSetMapping(name="RoleTypeAndPartyMapping", entities={
 @EntityResult(entityClass=RoleTypeAndParty.class, fields = {
 @FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="roleTypeId", column="roleTypeId")
+,@FieldResult(name="parentTypeId", column="parentTypeId")
 ,@FieldResult(name="description", column="description")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
@@ -61,12 +62,14 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("partyId", "PR.PARTY_ID");
         fields.put("roleTypeId", "RT.ROLE_TYPE_ID");
+        fields.put("parentTypeId", "RT.PARENT_TYPE_ID");
         fields.put("description", "RT.DESCRIPTION");
 fieldMapColumns.put("RoleTypeAndParty", fields);
 }
   public static enum Fields implements EntityFieldInterface<RoleTypeAndParty> {
     partyId("partyId"),
     roleTypeId("roleTypeId"),
+    parentTypeId("parentTypeId"),
     description("description");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
@@ -83,6 +86,8 @@ fieldMapColumns.put("RoleTypeAndParty", fields);
     
    private String roleTypeId;
     
+   private String parentTypeId;
+    
    private String description;
 
   /**
@@ -96,7 +101,7 @@ fieldMapColumns.put("RoleTypeAndParty", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("roleTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("description");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("description");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -130,6 +135,13 @@ fieldMapColumns.put("RoleTypeAndParty", fields);
     }
     /**
      * Auto generated value setter.
+     * @param parentTypeId the parentTypeId to set
+     */
+    private void setParentTypeId(String parentTypeId) {
+        this.parentTypeId = parentTypeId;
+    }
+    /**
+     * Auto generated value setter.
      * @param description the description to set
      */
     private void setDescription(String description) {
@@ -154,6 +166,13 @@ fieldMapColumns.put("RoleTypeAndParty", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getParentTypeId() {
+        return this.parentTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDescription() {
         return this.description;
     }
@@ -167,6 +186,7 @@ fieldMapColumns.put("RoleTypeAndParty", fields);
         preInit();
         setPartyId((String) mapValue.get("partyId"));
         setRoleTypeId((String) mapValue.get("roleTypeId"));
+        setParentTypeId((String) mapValue.get("parentTypeId"));
         setDescription((String) mapValue.get("description"));
         postInit();
     }
@@ -177,6 +197,7 @@ fieldMapColumns.put("RoleTypeAndParty", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("partyId", getPartyId());
         mapValue.put("roleTypeId", getRoleTypeId());
+        mapValue.put("parentTypeId", getParentTypeId());
         mapValue.put("description", getDescription());
         return mapValue;
     }

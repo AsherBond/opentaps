@@ -59,6 +59,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("boxLength", "BOX_LENGTH");
         fields.put("boxWidth", "BOX_WIDTH");
         fields.put("boxHeight", "BOX_HEIGHT");
+        fields.put("weightUomId", "WEIGHT_UOM_ID");
+        fields.put("boxWeight", "BOX_WEIGHT");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -72,6 +74,8 @@ fieldMapColumns.put("ShipmentBoxType", fields);
     boxLength("boxLength"),
     boxWidth("boxWidth"),
     boxHeight("boxHeight"),
+    weightUomId("weightUomId"),
+    boxWeight("boxWeight"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -101,6 +105,10 @@ fieldMapColumns.put("ShipmentBoxType", fields);
    private BigDecimal boxWidth;
    @Column(name="BOX_HEIGHT")
    private BigDecimal boxHeight;
+   @Column(name="WEIGHT_UOM_ID")
+   private String weightUomId;
+   @Column(name="BOX_WEIGHT")
+   private BigDecimal boxWeight;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -116,10 +124,21 @@ fieldMapColumns.put("ShipmentBoxType", fields);
    )
    
    private Uom dimensionUom = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="WEIGHT_UOM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Uom weightUom = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipmentBoxType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_BOX_TYPE_ID")
    
    private List<CarrierShipmentBoxType> carrierShipmentBoxTypes = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="DEFAULT_SHIPMENT_BOX_TYPE_ID")
+   
+   private List<Product> defaultProducts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SHIPMENT_BOX_TYPE_ID")
    
@@ -136,7 +155,7 @@ fieldMapColumns.put("ShipmentBoxType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("shipmentBoxTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("shipmentBoxTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("dimensionUomId");this.allFieldsNames.add("boxLength");this.allFieldsNames.add("boxWidth");this.allFieldsNames.add("boxHeight");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("shipmentBoxTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("dimensionUomId");this.allFieldsNames.add("boxLength");this.allFieldsNames.add("boxWidth");this.allFieldsNames.add("boxHeight");this.allFieldsNames.add("weightUomId");this.allFieldsNames.add("boxWeight");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -192,6 +211,20 @@ fieldMapColumns.put("ShipmentBoxType", fields);
      */
     public void setBoxHeight(BigDecimal boxHeight) {
         this.boxHeight = boxHeight;
+    }
+    /**
+     * Auto generated value setter.
+     * @param weightUomId the weightUomId to set
+     */
+    public void setWeightUomId(String weightUomId) {
+        this.weightUomId = weightUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param boxWeight the boxWeight to set
+     */
+    public void setBoxWeight(BigDecimal boxWeight) {
+        this.boxWeight = boxWeight;
     }
     /**
      * Auto generated value setter.
@@ -266,6 +299,20 @@ fieldMapColumns.put("ShipmentBoxType", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWeightUomId() {
+        return this.weightUomId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getBoxWeight() {
+        return this.boxWeight;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -305,6 +352,17 @@ fieldMapColumns.put("ShipmentBoxType", fields);
         return this.dimensionUom;
     }
     /**
+     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>WeightUom</code>.
+     * @return the <code>Uom</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Uom getWeightUom() throws RepositoryException {
+        if (this.weightUom == null) {
+            this.weightUom = getRelatedOne(Uom.class, "WeightUom");
+        }
+        return this.weightUom;
+    }
+    /**
      * Auto generated method that gets the related <code>CarrierShipmentBoxType</code> by the relation named <code>CarrierShipmentBoxType</code>.
      * @return the list of <code>CarrierShipmentBoxType</code>
      * @throws RepositoryException if an error occurs
@@ -314,6 +372,17 @@ fieldMapColumns.put("ShipmentBoxType", fields);
             this.carrierShipmentBoxTypes = getRelated(CarrierShipmentBoxType.class, "CarrierShipmentBoxType");
         }
         return this.carrierShipmentBoxTypes;
+    }
+    /**
+     * Auto generated method that gets the related <code>Product</code> by the relation named <code>DefaultProduct</code>.
+     * @return the list of <code>Product</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends Product> getDefaultProducts() throws RepositoryException {
+        if (this.defaultProducts == null) {
+            this.defaultProducts = getRelated(Product.class, "DefaultProduct");
+        }
+        return this.defaultProducts;
     }
     /**
      * Auto generated method that gets the related <code>ShipmentPackage</code> by the relation named <code>ShipmentPackage</code>.
@@ -336,10 +405,24 @@ fieldMapColumns.put("ShipmentBoxType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param weightUom the weightUom to set
+    */
+    public void setWeightUom(Uom weightUom) {
+        this.weightUom = weightUom;
+    }
+    /**
+     * Auto generated value setter.
      * @param carrierShipmentBoxTypes the carrierShipmentBoxTypes to set
     */
     public void setCarrierShipmentBoxTypes(List<CarrierShipmentBoxType> carrierShipmentBoxTypes) {
         this.carrierShipmentBoxTypes = carrierShipmentBoxTypes;
+    }
+    /**
+     * Auto generated value setter.
+     * @param defaultProducts the defaultProducts to set
+    */
+    public void setDefaultProducts(List<Product> defaultProducts) {
+        this.defaultProducts = defaultProducts;
     }
     /**
      * Auto generated value setter.
@@ -387,6 +470,8 @@ fieldMapColumns.put("ShipmentBoxType", fields);
         setBoxLength(convertToBigDecimal(mapValue.get("boxLength")));
         setBoxWidth(convertToBigDecimal(mapValue.get("boxWidth")));
         setBoxHeight(convertToBigDecimal(mapValue.get("boxHeight")));
+        setWeightUomId((String) mapValue.get("weightUomId"));
+        setBoxWeight(convertToBigDecimal(mapValue.get("boxWeight")));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -404,6 +489,8 @@ fieldMapColumns.put("ShipmentBoxType", fields);
         mapValue.put("boxLength", getBoxLength());
         mapValue.put("boxWidth", getBoxWidth());
         mapValue.put("boxHeight", getBoxHeight());
+        mapValue.put("weightUomId", getWeightUomId());
+        mapValue.put("boxWeight", getBoxWeight());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

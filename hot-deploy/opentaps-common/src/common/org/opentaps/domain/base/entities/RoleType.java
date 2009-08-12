@@ -162,11 +162,11 @@ fieldMapColumns.put("RoleType", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
-   private List<CustRequestRole> custRequestRoles = null;
-   @OneToMany(fetch=FetchType.LAZY)
+   private List<CustRequestParty> custRequestPartys = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
-   private List<EmplPositionType> emplPositionTypes = null;
+   private List<CustRequestRole> custRequestRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
@@ -174,7 +174,7 @@ fieldMapColumns.put("RoleType", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
-   private List<FacilityRole> facilityRoles = null;
+   private List<FacilityParty> facilityPartys = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
@@ -206,6 +206,10 @@ fieldMapColumns.put("RoleType", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
+   private List<OldFacilityRole> oldFacilityRoles = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="ROLE_TYPE_ID")
+   
    private List<OrderItemRole> orderItemRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
@@ -219,6 +223,14 @@ fieldMapColumns.put("RoleType", fields);
    @JoinColumn(name="ROLE_TYPE_ID")
    
    private List<PartyFixedAssetAssignment> partyFixedAssetAssignments = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="ROLE_TYPE_ID")
+   
+   private List<PartyGlAccount> partyGlAccounts = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="ROLE_TYPE_ID")
+   
+   private List<PartyInvitationRoleAssoc> partyInvitationRoleAssocs = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
@@ -263,6 +275,10 @@ fieldMapColumns.put("RoleType", fields);
    @JoinColumn(name="USE_ROLE_TYPE_ID")
    
    private List<ProductContent> useProductContents = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="ROLE_TYPE_ID")
+   
+   private List<ProductRole> productRoles = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="roleType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="ROLE_TYPE_ID")
    
@@ -623,6 +639,17 @@ fieldMapColumns.put("RoleType", fields);
         return this.contentPurposeOperations;
     }
     /**
+     * Auto generated method that gets the related <code>CustRequestParty</code> by the relation named <code>CustRequestParty</code>.
+     * @return the list of <code>CustRequestParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends CustRequestParty> getCustRequestPartys() throws RepositoryException {
+        if (this.custRequestPartys == null) {
+            this.custRequestPartys = getRelated(CustRequestParty.class, "CustRequestParty");
+        }
+        return this.custRequestPartys;
+    }
+    /**
      * Auto generated method that gets the related <code>CustRequestRole</code> by the relation named <code>CustRequestRole</code>.
      * @return the list of <code>CustRequestRole</code>
      * @throws RepositoryException if an error occurs
@@ -632,17 +659,6 @@ fieldMapColumns.put("RoleType", fields);
             this.custRequestRoles = getRelated(CustRequestRole.class, "CustRequestRole");
         }
         return this.custRequestRoles;
-    }
-    /**
-     * Auto generated method that gets the related <code>EmplPositionType</code> by the relation named <code>EmplPositionType</code>.
-     * @return the list of <code>EmplPositionType</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends EmplPositionType> getEmplPositionTypes() throws RepositoryException {
-        if (this.emplPositionTypes == null) {
-            this.emplPositionTypes = getRelated(EmplPositionType.class, "EmplPositionType");
-        }
-        return this.emplPositionTypes;
     }
     /**
      * Auto generated method that gets the related <code>FacilityGroupRole</code> by the relation named <code>FacilityGroupRole</code>.
@@ -656,15 +672,15 @@ fieldMapColumns.put("RoleType", fields);
         return this.facilityGroupRoles;
     }
     /**
-     * Auto generated method that gets the related <code>FacilityRole</code> by the relation named <code>FacilityRole</code>.
-     * @return the list of <code>FacilityRole</code>
+     * Auto generated method that gets the related <code>FacilityParty</code> by the relation named <code>FacilityParty</code>.
+     * @return the list of <code>FacilityParty</code>
      * @throws RepositoryException if an error occurs
      */
-    public List<? extends FacilityRole> getFacilityRoles() throws RepositoryException {
-        if (this.facilityRoles == null) {
-            this.facilityRoles = getRelated(FacilityRole.class, "FacilityRole");
+    public List<? extends FacilityParty> getFacilityPartys() throws RepositoryException {
+        if (this.facilityPartys == null) {
+            this.facilityPartys = getRelated(FacilityParty.class, "FacilityParty");
         }
-        return this.facilityRoles;
+        return this.facilityPartys;
     }
     /**
      * Auto generated method that gets the related <code>FinAccountRole</code> by the relation named <code>FinAccountRole</code>.
@@ -744,6 +760,17 @@ fieldMapColumns.put("RoleType", fields);
         return this.marketingCampaignRoles;
     }
     /**
+     * Auto generated method that gets the related <code>OldFacilityRole</code> by the relation named <code>OldFacilityRole</code>.
+     * @return the list of <code>OldFacilityRole</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OldFacilityRole> getOldFacilityRoles() throws RepositoryException {
+        if (this.oldFacilityRoles == null) {
+            this.oldFacilityRoles = getRelated(OldFacilityRole.class, "OldFacilityRole");
+        }
+        return this.oldFacilityRoles;
+    }
+    /**
      * Auto generated method that gets the related <code>OrderItemRole</code> by the relation named <code>OrderItemRole</code>.
      * @return the list of <code>OrderItemRole</code>
      * @throws RepositoryException if an error occurs
@@ -786,6 +813,28 @@ fieldMapColumns.put("RoleType", fields);
             this.partyFixedAssetAssignments = getRelated(PartyFixedAssetAssignment.class, "PartyFixedAssetAssignment");
         }
         return this.partyFixedAssetAssignments;
+    }
+    /**
+     * Auto generated method that gets the related <code>PartyGlAccount</code> by the relation named <code>PartyGlAccount</code>.
+     * @return the list of <code>PartyGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyGlAccount> getPartyGlAccounts() throws RepositoryException {
+        if (this.partyGlAccounts == null) {
+            this.partyGlAccounts = getRelated(PartyGlAccount.class, "PartyGlAccount");
+        }
+        return this.partyGlAccounts;
+    }
+    /**
+     * Auto generated method that gets the related <code>PartyInvitationRoleAssoc</code> by the relation named <code>PartyInvitationRoleAssoc</code>.
+     * @return the list of <code>PartyInvitationRoleAssoc</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyInvitationRoleAssoc> getPartyInvitationRoleAssocs() throws RepositoryException {
+        if (this.partyInvitationRoleAssocs == null) {
+            this.partyInvitationRoleAssocs = getRelated(PartyInvitationRoleAssoc.class, "PartyInvitationRoleAssoc");
+        }
+        return this.partyInvitationRoleAssocs;
     }
     /**
      * Auto generated method that gets the related <code>PartyNeed</code> by the relation named <code>PartyNeed</code>.
@@ -907,6 +956,17 @@ fieldMapColumns.put("RoleType", fields);
             this.useProductContents = getRelated(ProductContent.class, "UseProductContent");
         }
         return this.useProductContents;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductRole</code> by the relation named <code>ProductRole</code>.
+     * @return the list of <code>ProductRole</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductRole> getProductRoles() throws RepositoryException {
+        if (this.productRoles == null) {
+            this.productRoles = getRelated(ProductRole.class, "ProductRole");
+        }
+        return this.productRoles;
     }
     /**
      * Auto generated method that gets the related <code>ProductStoreGroupRole</code> by the relation named <code>ProductStoreGroupRole</code>.
@@ -1185,17 +1245,17 @@ fieldMapColumns.put("RoleType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param custRequestPartys the custRequestPartys to set
+    */
+    public void setCustRequestPartys(List<CustRequestParty> custRequestPartys) {
+        this.custRequestPartys = custRequestPartys;
+    }
+    /**
+     * Auto generated value setter.
      * @param custRequestRoles the custRequestRoles to set
     */
     public void setCustRequestRoles(List<CustRequestRole> custRequestRoles) {
         this.custRequestRoles = custRequestRoles;
-    }
-    /**
-     * Auto generated value setter.
-     * @param emplPositionTypes the emplPositionTypes to set
-    */
-    public void setEmplPositionTypes(List<EmplPositionType> emplPositionTypes) {
-        this.emplPositionTypes = emplPositionTypes;
     }
     /**
      * Auto generated value setter.
@@ -1206,10 +1266,10 @@ fieldMapColumns.put("RoleType", fields);
     }
     /**
      * Auto generated value setter.
-     * @param facilityRoles the facilityRoles to set
+     * @param facilityPartys the facilityPartys to set
     */
-    public void setFacilityRoles(List<FacilityRole> facilityRoles) {
-        this.facilityRoles = facilityRoles;
+    public void setFacilityPartys(List<FacilityParty> facilityPartys) {
+        this.facilityPartys = facilityPartys;
     }
     /**
      * Auto generated value setter.
@@ -1262,6 +1322,13 @@ fieldMapColumns.put("RoleType", fields);
     }
     /**
      * Auto generated value setter.
+     * @param oldFacilityRoles the oldFacilityRoles to set
+    */
+    public void setOldFacilityRoles(List<OldFacilityRole> oldFacilityRoles) {
+        this.oldFacilityRoles = oldFacilityRoles;
+    }
+    /**
+     * Auto generated value setter.
      * @param orderItemRoles the orderItemRoles to set
     */
     public void setOrderItemRoles(List<OrderItemRole> orderItemRoles) {
@@ -1287,6 +1354,20 @@ fieldMapColumns.put("RoleType", fields);
     */
     public void setPartyFixedAssetAssignments(List<PartyFixedAssetAssignment> partyFixedAssetAssignments) {
         this.partyFixedAssetAssignments = partyFixedAssetAssignments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyGlAccounts the partyGlAccounts to set
+    */
+    public void setPartyGlAccounts(List<PartyGlAccount> partyGlAccounts) {
+        this.partyGlAccounts = partyGlAccounts;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyInvitationRoleAssocs the partyInvitationRoleAssocs to set
+    */
+    public void setPartyInvitationRoleAssocs(List<PartyInvitationRoleAssoc> partyInvitationRoleAssocs) {
+        this.partyInvitationRoleAssocs = partyInvitationRoleAssocs;
     }
     /**
      * Auto generated value setter.
@@ -1364,6 +1445,13 @@ fieldMapColumns.put("RoleType", fields);
     */
     public void setUseProductContents(List<ProductContent> useProductContents) {
         this.useProductContents = useProductContents;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productRoles the productRoles to set
+    */
+    public void setProductRoles(List<ProductRole> productRoles) {
+        this.productRoles = productRoles;
     }
     /**
      * Auto generated value setter.
@@ -1616,6 +1704,33 @@ fieldMapColumns.put("RoleType", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addCustRequestParty(CustRequestParty custRequestParty) {
+        if (this.custRequestPartys == null) {
+            this.custRequestPartys = new ArrayList<CustRequestParty>();
+        }
+        this.custRequestPartys.add(custRequestParty);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeCustRequestParty(CustRequestParty custRequestParty) {
+        if (this.custRequestPartys == null) {
+            return;
+        }
+        this.custRequestPartys.remove(custRequestParty);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearCustRequestParty() {
+        if (this.custRequestPartys == null) {
+            return;
+        }
+        this.custRequestPartys.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addCustRequestRole(CustRequestRole custRequestRole) {
         if (this.custRequestRoles == null) {
             this.custRequestRoles = new ArrayList<CustRequestRole>();
@@ -1670,29 +1785,29 @@ fieldMapColumns.put("RoleType", fields);
     /**
      * Auto generated method that add item to collection.
      */
-    public void addFacilityRole(FacilityRole facilityRole) {
-        if (this.facilityRoles == null) {
-            this.facilityRoles = new ArrayList<FacilityRole>();
+    public void addFacilityParty(FacilityParty facilityParty) {
+        if (this.facilityPartys == null) {
+            this.facilityPartys = new ArrayList<FacilityParty>();
         }
-        this.facilityRoles.add(facilityRole);
+        this.facilityPartys.add(facilityParty);
     }
     /**
      * Auto generated method that remove item from collection.
      */
-    public void removeFacilityRole(FacilityRole facilityRole) {
-        if (this.facilityRoles == null) {
+    public void removeFacilityParty(FacilityParty facilityParty) {
+        if (this.facilityPartys == null) {
             return;
         }
-        this.facilityRoles.remove(facilityRole);
+        this.facilityPartys.remove(facilityParty);
     }
     /**
      * Auto generated method that clear items from collection.
      */
-    public void clearFacilityRole() {
-        if (this.facilityRoles == null) {
+    public void clearFacilityParty() {
+        if (this.facilityPartys == null) {
             return;
         }
-        this.facilityRoles.clear();
+        this.facilityPartys.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -1805,6 +1920,33 @@ fieldMapColumns.put("RoleType", fields);
     /**
      * Auto generated method that add item to collection.
      */
+    public void addOldFacilityRole(OldFacilityRole oldFacilityRole) {
+        if (this.oldFacilityRoles == null) {
+            this.oldFacilityRoles = new ArrayList<OldFacilityRole>();
+        }
+        this.oldFacilityRoles.add(oldFacilityRole);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeOldFacilityRole(OldFacilityRole oldFacilityRole) {
+        if (this.oldFacilityRoles == null) {
+            return;
+        }
+        this.oldFacilityRoles.remove(oldFacilityRole);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearOldFacilityRole() {
+        if (this.oldFacilityRoles == null) {
+            return;
+        }
+        this.oldFacilityRoles.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
     public void addOrderItemRole(OrderItemRole orderItemRole) {
         if (this.orderItemRoles == null) {
             this.orderItemRoles = new ArrayList<OrderItemRole>();
@@ -1882,6 +2024,60 @@ fieldMapColumns.put("RoleType", fields);
             return;
         }
         this.partyFixedAssetAssignments.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addPartyGlAccount(PartyGlAccount partyGlAccount) {
+        if (this.partyGlAccounts == null) {
+            this.partyGlAccounts = new ArrayList<PartyGlAccount>();
+        }
+        this.partyGlAccounts.add(partyGlAccount);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removePartyGlAccount(PartyGlAccount partyGlAccount) {
+        if (this.partyGlAccounts == null) {
+            return;
+        }
+        this.partyGlAccounts.remove(partyGlAccount);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearPartyGlAccount() {
+        if (this.partyGlAccounts == null) {
+            return;
+        }
+        this.partyGlAccounts.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addPartyInvitationRoleAssoc(PartyInvitationRoleAssoc partyInvitationRoleAssoc) {
+        if (this.partyInvitationRoleAssocs == null) {
+            this.partyInvitationRoleAssocs = new ArrayList<PartyInvitationRoleAssoc>();
+        }
+        this.partyInvitationRoleAssocs.add(partyInvitationRoleAssoc);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removePartyInvitationRoleAssoc(PartyInvitationRoleAssoc partyInvitationRoleAssoc) {
+        if (this.partyInvitationRoleAssocs == null) {
+            return;
+        }
+        this.partyInvitationRoleAssocs.remove(partyInvitationRoleAssoc);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearPartyInvitationRoleAssoc() {
+        if (this.partyInvitationRoleAssocs == null) {
+            return;
+        }
+        this.partyInvitationRoleAssocs.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -2071,6 +2267,33 @@ fieldMapColumns.put("RoleType", fields);
             return;
         }
         this.productCategoryRoles.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addProductRole(ProductRole productRole) {
+        if (this.productRoles == null) {
+            this.productRoles = new ArrayList<ProductRole>();
+        }
+        this.productRoles.add(productRole);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeProductRole(ProductRole productRole) {
+        if (this.productRoles == null) {
+            return;
+        }
+        this.productRoles.remove(productRole);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearProductRole() {
+        if (this.productRoles == null) {
+            return;
+        }
+        this.productRoles.clear();
     }
     /**
      * Auto generated method that add item to collection.

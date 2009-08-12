@@ -56,6 +56,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("posTerminalLogId", "POS_TERMINAL_LOG_ID");
         fields.put("paidAmount", "PAID_AMOUNT");
         fields.put("reasonComment", "REASON_COMMENT");
+        fields.put("reasonEnumId", "REASON_ENUM_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -66,6 +67,7 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
     posTerminalLogId("posTerminalLogId"),
     paidAmount("paidAmount"),
     reasonComment("reasonComment"),
+    reasonEnumId("reasonEnumId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -89,6 +91,8 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
    private BigDecimal paidAmount;
    @Column(name="REASON_COMMENT")
    private String reasonComment;
+   @Column(name="REASON_ENUM_ID")
+   private String reasonEnumId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -104,6 +108,13 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
    )
    
    private PosTerminalLog posTerminalLog = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="REASON_ENUM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration enumeration = null;
 
   /**
    * Default constructor.
@@ -116,7 +127,7 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("posTerminalLogId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("posTerminalLogId");this.allFieldsNames.add("paidAmount");this.allFieldsNames.add("reasonComment");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("posTerminalLogId");this.allFieldsNames.add("paidAmount");this.allFieldsNames.add("reasonComment");this.allFieldsNames.add("reasonEnumId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -151,6 +162,13 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
      */
     public void setReasonComment(String reasonComment) {
         this.reasonComment = reasonComment;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reasonEnumId the reasonEnumId to set
+     */
+    public void setReasonEnumId(String reasonEnumId) {
+        this.reasonEnumId = reasonEnumId;
     }
     /**
      * Auto generated value setter.
@@ -204,6 +222,13 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReasonEnumId() {
+        return this.reasonEnumId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -242,6 +267,17 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
         }
         return this.posTerminalLog;
     }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>Enumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration getEnumeration() throws RepositoryException {
+        if (this.enumeration == null) {
+            this.enumeration = getRelatedOne(Enumeration.class, "Enumeration");
+        }
+        return this.enumeration;
+    }
 
     /**
      * Auto generated value setter.
@@ -249,6 +285,13 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
     */
     public void setPosTerminalLog(PosTerminalLog posTerminalLog) {
         this.posTerminalLog = posTerminalLog;
+    }
+    /**
+     * Auto generated value setter.
+     * @param enumeration the enumeration to set
+    */
+    public void setEnumeration(Enumeration enumeration) {
+        this.enumeration = enumeration;
     }
 
 
@@ -259,6 +302,7 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
         setPosTerminalLogId((String) mapValue.get("posTerminalLogId"));
         setPaidAmount(convertToBigDecimal(mapValue.get("paidAmount")));
         setReasonComment((String) mapValue.get("reasonComment"));
+        setReasonEnumId((String) mapValue.get("reasonEnumId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -273,6 +317,7 @@ fieldMapColumns.put("PosTerminalInternTx", fields);
         mapValue.put("posTerminalLogId", getPosTerminalLogId());
         mapValue.put("paidAmount", getPaidAmount());
         mapValue.put("reasonComment", getReasonComment());
+        mapValue.put("reasonEnumId", getReasonEnumId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

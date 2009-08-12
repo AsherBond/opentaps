@@ -131,7 +131,7 @@ fieldMapColumns.put("OrderItemType", fields);
       super();
       this.baseEntityName = "OrderItemType";
       this.isView = false;
-      
+      this.resourceName = "OrderEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderItemTypeId");
       this.allFieldsNames = new ArrayList<String>();

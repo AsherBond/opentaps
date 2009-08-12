@@ -103,6 +103,14 @@ fieldMapColumns.put("SecurityGroup", fields);
    @JoinColumn(name="SECURITY_GROUP_ID")
    
    private List<PartyRelationship> partyRelationships = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="SECURITY_GROUP_ID")
+   
+   private List<PortalPage> portalPages = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="securityGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="GROUP_ID")
+   
+   private List<ProtectedView> protectedViews = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="GROUP_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -254,6 +262,28 @@ fieldMapColumns.put("SecurityGroup", fields);
         return this.partyRelationships;
     }
     /**
+     * Auto generated method that gets the related <code>PortalPage</code> by the relation named <code>PortalPage</code>.
+     * @return the list of <code>PortalPage</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PortalPage> getPortalPages() throws RepositoryException {
+        if (this.portalPages == null) {
+            this.portalPages = getRelated(PortalPage.class, "PortalPage");
+        }
+        return this.portalPages;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProtectedView</code> by the relation named <code>ProtectedView</code>.
+     * @return the list of <code>ProtectedView</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProtectedView> getProtectedViews() throws RepositoryException {
+        if (this.protectedViews == null) {
+            this.protectedViews = getRelated(ProtectedView.class, "ProtectedView");
+        }
+        return this.protectedViews;
+    }
+    /**
      * Auto generated method that gets the related <code>SalesTeamRoleSecurity</code> by the relation named <code>SalesTeamRoleSecurity</code>.
      * @return the <code>SalesTeamRoleSecurity</code>
      * @throws RepositoryException if an error occurs
@@ -303,6 +333,20 @@ fieldMapColumns.put("SecurityGroup", fields);
     }
     /**
      * Auto generated value setter.
+     * @param portalPages the portalPages to set
+    */
+    public void setPortalPages(List<PortalPage> portalPages) {
+        this.portalPages = portalPages;
+    }
+    /**
+     * Auto generated value setter.
+     * @param protectedViews the protectedViews to set
+    */
+    public void setProtectedViews(List<ProtectedView> protectedViews) {
+        this.protectedViews = protectedViews;
+    }
+    /**
+     * Auto generated value setter.
      * @param salesTeamRoleSecurity the salesTeamRoleSecurity to set
     */
     public void setSalesTeamRoleSecurity(SalesTeamRoleSecurity salesTeamRoleSecurity) {
@@ -323,6 +367,33 @@ fieldMapColumns.put("SecurityGroup", fields);
         this.userLoginSecurityGroups = userLoginSecurityGroups;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addProtectedView(ProtectedView protectedView) {
+        if (this.protectedViews == null) {
+            this.protectedViews = new ArrayList<ProtectedView>();
+        }
+        this.protectedViews.add(protectedView);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeProtectedView(ProtectedView protectedView) {
+        if (this.protectedViews == null) {
+            return;
+        }
+        this.protectedViews.remove(protectedView);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearProtectedView() {
+        if (this.protectedViews == null) {
+            return;
+        }
+        this.protectedViews.clear();
+    }
     /**
      * Auto generated method that add item to collection.
      */

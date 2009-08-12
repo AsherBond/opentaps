@@ -402,6 +402,10 @@ fieldMapColumns.put("InventoryItem", fields);
    @OneToMany(fetch=FetchType.LAZY, mappedBy="inventoryItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVENTORY_ITEM_ID")
    
+   private List<InventoryItemLabelAppl> inventoryItemLabelAppls = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="inventoryItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="INVENTORY_ITEM_ID")
+   
    private List<InventoryItemStatus> inventoryItemStatuses = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="INVENTORY_ITEM_ID")
@@ -439,6 +443,10 @@ fieldMapColumns.put("InventoryItem", fields);
    @JoinColumn(name="INVENTORY_ITEM_ID")
    
    private List<OldOrderItemInventoryRes> oldOrderItemInventoryReses = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="FROM_INVENTORY_ITEM_ID")
+   
+   private List<OrderItem> fromOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="inventoryItem", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="INVENTORY_ITEM_ID")
    
@@ -1375,6 +1383,17 @@ fieldMapColumns.put("InventoryItem", fields);
         return this.inventoryItemDetails;
     }
     /**
+     * Auto generated method that gets the related <code>InventoryItemLabelAppl</code> by the relation named <code>InventoryItemLabelAppl</code>.
+     * @return the list of <code>InventoryItemLabelAppl</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends InventoryItemLabelAppl> getInventoryItemLabelAppls() throws RepositoryException {
+        if (this.inventoryItemLabelAppls == null) {
+            this.inventoryItemLabelAppls = getRelated(InventoryItemLabelAppl.class, "InventoryItemLabelAppl");
+        }
+        return this.inventoryItemLabelAppls;
+    }
+    /**
      * Auto generated method that gets the related <code>InventoryItemStatus</code> by the relation named <code>InventoryItemStatus</code>.
      * @return the list of <code>InventoryItemStatus</code>
      * @throws RepositoryException if an error occurs
@@ -1483,6 +1502,17 @@ fieldMapColumns.put("InventoryItem", fields);
             this.oldOrderItemInventoryReses = getRelated(OldOrderItemInventoryRes.class, "OldOrderItemInventoryRes");
         }
         return this.oldOrderItemInventoryReses;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderItem</code> by the relation named <code>FromOrderItem</code>.
+     * @return the list of <code>OrderItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItem> getFromOrderItems() throws RepositoryException {
+        if (this.fromOrderItems == null) {
+            this.fromOrderItems = getRelated(OrderItem.class, "FromOrderItem");
+        }
+        return this.fromOrderItems;
     }
     /**
      * Auto generated method that gets the related <code>OrderItemShipGrpInvRes</code> by the relation named <code>OrderItemShipGrpInvRes</code>.
@@ -1749,6 +1779,13 @@ fieldMapColumns.put("InventoryItem", fields);
     }
     /**
      * Auto generated value setter.
+     * @param inventoryItemLabelAppls the inventoryItemLabelAppls to set
+    */
+    public void setInventoryItemLabelAppls(List<InventoryItemLabelAppl> inventoryItemLabelAppls) {
+        this.inventoryItemLabelAppls = inventoryItemLabelAppls;
+    }
+    /**
+     * Auto generated value setter.
      * @param inventoryItemStatuses the inventoryItemStatuses to set
     */
     public void setInventoryItemStatuses(List<InventoryItemStatus> inventoryItemStatuses) {
@@ -1816,6 +1853,13 @@ fieldMapColumns.put("InventoryItem", fields);
     */
     public void setOldOrderItemInventoryReses(List<OldOrderItemInventoryRes> oldOrderItemInventoryReses) {
         this.oldOrderItemInventoryReses = oldOrderItemInventoryReses;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fromOrderItems the fromOrderItems to set
+    */
+    public void setFromOrderItems(List<OrderItem> fromOrderItems) {
+        this.fromOrderItems = fromOrderItems;
     }
     /**
      * Auto generated value setter.
@@ -1913,6 +1957,33 @@ fieldMapColumns.put("InventoryItem", fields);
             return;
         }
         this.inventoryItemDetails.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addInventoryItemLabelAppl(InventoryItemLabelAppl inventoryItemLabelAppl) {
+        if (this.inventoryItemLabelAppls == null) {
+            this.inventoryItemLabelAppls = new ArrayList<InventoryItemLabelAppl>();
+        }
+        this.inventoryItemLabelAppls.add(inventoryItemLabelAppl);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeInventoryItemLabelAppl(InventoryItemLabelAppl inventoryItemLabelAppl) {
+        if (this.inventoryItemLabelAppls == null) {
+            return;
+        }
+        this.inventoryItemLabelAppls.remove(inventoryItemLabelAppl);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearInventoryItemLabelAppl() {
+        if (this.inventoryItemLabelAppls == null) {
+            return;
+        }
+        this.inventoryItemLabelAppls.clear();
     }
     /**
      * Auto generated method that add item to collection.

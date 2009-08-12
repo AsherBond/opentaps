@@ -237,6 +237,10 @@ fieldMapColumns.put("GlAccount", fields);
    
    private List<OrderItem> overrideOrderItems = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="GL_ACCOUNT_ID")
+   
+   private List<PartyGlAccount> partyGlAccounts = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="DEBIT_GL_ACCOUNT_ID")
    
    private List<PaycheckItemTypeGlAccount> debitPaycheckItemTypeGlAccounts = null;
@@ -267,6 +271,10 @@ fieldMapColumns.put("GlAccount", fields);
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="GL_ACCOUNT_ID")
    
+   private List<ProductCategoryGlAccount> productCategoryGlAccounts = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="GL_ACCOUNT_ID")
+   
    private List<ProductGlAccount> productGlAccounts = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="OVERRIDE_GL_ACCOUNT_ID")
@@ -292,7 +300,7 @@ fieldMapColumns.put("GlAccount", fields);
       super();
       this.baseEntityName = "GlAccount";
       this.isView = false;
-      
+      this.resourceName = "ChartOfAccountsEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("glAccountId");
       this.allFieldsNames = new ArrayList<String>();
@@ -777,6 +785,17 @@ fieldMapColumns.put("GlAccount", fields);
         return this.overrideOrderItems;
     }
     /**
+     * Auto generated method that gets the related <code>PartyGlAccount</code> by the relation named <code>PartyGlAccount</code>.
+     * @return the list of <code>PartyGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyGlAccount> getPartyGlAccounts() throws RepositoryException {
+        if (this.partyGlAccounts == null) {
+            this.partyGlAccounts = getRelated(PartyGlAccount.class, "PartyGlAccount");
+        }
+        return this.partyGlAccounts;
+    }
+    /**
      * Auto generated method that gets the related <code>PaycheckItemTypeGlAccount</code> by the relation named <code>DebitPaycheckItemTypeGlAccount</code>.
      * @return the list of <code>PaycheckItemTypeGlAccount</code>
      * @throws RepositoryException if an error occurs
@@ -852,6 +871,17 @@ fieldMapColumns.put("GlAccount", fields);
             this.paymentMethodTypeGlAccounts = getRelated(PaymentMethodTypeGlAccount.class, "PaymentMethodTypeGlAccount");
         }
         return this.paymentMethodTypeGlAccounts;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductCategoryGlAccount</code> by the relation named <code>ProductCategoryGlAccount</code>.
+     * @return the list of <code>ProductCategoryGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductCategoryGlAccount> getProductCategoryGlAccounts() throws RepositoryException {
+        if (this.productCategoryGlAccounts == null) {
+            this.productCategoryGlAccounts = getRelated(ProductCategoryGlAccount.class, "ProductCategoryGlAccount");
+        }
+        return this.productCategoryGlAccounts;
     }
     /**
      * Auto generated method that gets the related <code>ProductGlAccount</code> by the relation named <code>ProductGlAccount</code>.
@@ -1072,6 +1102,13 @@ fieldMapColumns.put("GlAccount", fields);
     }
     /**
      * Auto generated value setter.
+     * @param partyGlAccounts the partyGlAccounts to set
+    */
+    public void setPartyGlAccounts(List<PartyGlAccount> partyGlAccounts) {
+        this.partyGlAccounts = partyGlAccounts;
+    }
+    /**
+     * Auto generated value setter.
      * @param debitPaycheckItemTypeGlAccounts the debitPaycheckItemTypeGlAccounts to set
     */
     public void setDebitPaycheckItemTypeGlAccounts(List<PaycheckItemTypeGlAccount> debitPaycheckItemTypeGlAccounts) {
@@ -1118,6 +1155,13 @@ fieldMapColumns.put("GlAccount", fields);
     */
     public void setPaymentMethodTypeGlAccounts(List<PaymentMethodTypeGlAccount> paymentMethodTypeGlAccounts) {
         this.paymentMethodTypeGlAccounts = paymentMethodTypeGlAccounts;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productCategoryGlAccounts the productCategoryGlAccounts to set
+    */
+    public void setProductCategoryGlAccounts(List<ProductCategoryGlAccount> productCategoryGlAccounts) {
+        this.productCategoryGlAccounts = productCategoryGlAccounts;
     }
     /**
      * Auto generated value setter.

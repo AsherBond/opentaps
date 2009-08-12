@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity SupplierProductGoodIdentification.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectSupplierProductGoodIdentifications", query="SELECT SP.PRODUCT_ID AS \"productId\",SP.PARTY_ID AS \"partyId\",SP.AVAILABLE_FROM_DATE AS \"availableFromDate\",SP.AVAILABLE_THRU_DATE AS \"availableThruDate\",SP.SUPPLIER_PREF_ORDER_ID AS \"supplierPrefOrderId\",SP.SUPPLIER_RATING_TYPE_ID AS \"supplierRatingTypeId\",SP.STANDARD_LEAD_TIME_DAYS AS \"standardLeadTimeDays\",SP.MINIMUM_ORDER_QUANTITY AS \"minimumOrderQuantity\",SP.ORDER_QTY_INCREMENTS AS \"orderQtyIncrements\",SP.UNITS_INCLUDED AS \"unitsIncluded\",SP.QUANTITY_UOM_ID AS \"quantityUomId\",SP.LAST_PRICE AS \"lastPrice\",SP.CURRENCY_UOM_ID AS \"currencyUomId\",SP.SUPPLIER_PRODUCT_NAME AS \"supplierProductName\",SP.SUPPLIER_PRODUCT_ID AS \"supplierProductId\",SP.CAN_DROP_SHIP AS \"canDropShip\",SP.SUPPLIER_COMMISSION_PERC AS \"supplierCommissionPerc\",SP.COMMENTS AS \"comments\",GI.GOOD_IDENTIFICATION_TYPE_ID AS \"goodIdentificationTypeId\",GI.ID_VALUE AS \"idValue\" FROM SUPPLIER_PRODUCT SP LEFT JOIN GOOD_IDENTIFICATION GI ON SP.PRODUCT_ID = GI.PRODUCT_ID", resultSetMapping="SupplierProductGoodIdentificationMapping")
+@NamedNativeQuery(name="selectSupplierProductGoodIdentifications", query="SELECT SP.PRODUCT_ID AS \"productId\",SP.PARTY_ID AS \"partyId\",SP.AVAILABLE_FROM_DATE AS \"availableFromDate\",SP.AVAILABLE_THRU_DATE AS \"availableThruDate\",SP.SUPPLIER_PREF_ORDER_ID AS \"supplierPrefOrderId\",SP.SUPPLIER_RATING_TYPE_ID AS \"supplierRatingTypeId\",SP.STANDARD_LEAD_TIME_DAYS AS \"standardLeadTimeDays\",SP.MINIMUM_ORDER_QUANTITY AS \"minimumOrderQuantity\",SP.ORDER_QTY_INCREMENTS AS \"orderQtyIncrements\",SP.UNITS_INCLUDED AS \"unitsIncluded\",SP.QUANTITY_UOM_ID AS \"quantityUomId\",SP.AGREEMENT_ID AS \"agreementId\",SP.AGREEMENT_ITEM_SEQ_ID AS \"agreementItemSeqId\",SP.LAST_PRICE AS \"lastPrice\",SP.CURRENCY_UOM_ID AS \"currencyUomId\",SP.SUPPLIER_PRODUCT_NAME AS \"supplierProductName\",SP.SUPPLIER_PRODUCT_ID AS \"supplierProductId\",SP.CAN_DROP_SHIP AS \"canDropShip\",SP.SUPPLIER_COMMISSION_PERC AS \"supplierCommissionPerc\",SP.COMMENTS AS \"comments\",GI.GOOD_IDENTIFICATION_TYPE_ID AS \"goodIdentificationTypeId\",GI.ID_VALUE AS \"idValue\" FROM SUPPLIER_PRODUCT SP LEFT JOIN GOOD_IDENTIFICATION GI ON SP.PRODUCT_ID = GI.PRODUCT_ID", resultSetMapping="SupplierProductGoodIdentificationMapping")
 @SqlResultSetMapping(name="SupplierProductGoodIdentificationMapping", entities={
 @EntityResult(entityClass=SupplierProductGoodIdentification.class, fields = {
 @FieldResult(name="productId", column="productId")
@@ -63,6 +63,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="orderQtyIncrements", column="orderQtyIncrements")
 ,@FieldResult(name="unitsIncluded", column="unitsIncluded")
 ,@FieldResult(name="quantityUomId", column="quantityUomId")
+,@FieldResult(name="agreementId", column="agreementId")
+,@FieldResult(name="agreementItemSeqId", column="agreementItemSeqId")
 ,@FieldResult(name="lastPrice", column="lastPrice")
 ,@FieldResult(name="currencyUomId", column="currencyUomId")
 ,@FieldResult(name="supplierProductName", column="supplierProductName")
@@ -89,6 +91,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("orderQtyIncrements", "SP.ORDER_QTY_INCREMENTS");
         fields.put("unitsIncluded", "SP.UNITS_INCLUDED");
         fields.put("quantityUomId", "SP.QUANTITY_UOM_ID");
+        fields.put("agreementId", "SP.AGREEMENT_ID");
+        fields.put("agreementItemSeqId", "SP.AGREEMENT_ITEM_SEQ_ID");
         fields.put("lastPrice", "SP.LAST_PRICE");
         fields.put("currencyUomId", "SP.CURRENCY_UOM_ID");
         fields.put("supplierProductName", "SP.SUPPLIER_PRODUCT_NAME");
@@ -112,6 +116,8 @@ fieldMapColumns.put("SupplierProductGoodIdentification", fields);
     orderQtyIncrements("orderQtyIncrements"),
     unitsIncluded("unitsIncluded"),
     quantityUomId("quantityUomId"),
+    agreementId("agreementId"),
+    agreementItemSeqId("agreementItemSeqId"),
     lastPrice("lastPrice"),
     currencyUomId("currencyUomId"),
     supplierProductName("supplierProductName"),
@@ -154,6 +160,10 @@ fieldMapColumns.put("SupplierProductGoodIdentification", fields);
     
    private String quantityUomId;
     
+   private String agreementId;
+    
+   private String agreementItemSeqId;
+    
    private BigDecimal lastPrice;
     
    private String currencyUomId;
@@ -190,7 +200,7 @@ fieldMapColumns.put("SupplierProductGoodIdentification", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("availableFromDate");this.primaryKeyNames.add("minimumOrderQuantity");this.primaryKeyNames.add("currencyUomId");this.primaryKeyNames.add("goodIdentificationTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("availableFromDate");this.allFieldsNames.add("availableThruDate");this.allFieldsNames.add("supplierPrefOrderId");this.allFieldsNames.add("supplierRatingTypeId");this.allFieldsNames.add("standardLeadTimeDays");this.allFieldsNames.add("minimumOrderQuantity");this.allFieldsNames.add("orderQtyIncrements");this.allFieldsNames.add("unitsIncluded");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("lastPrice");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("supplierProductName");this.allFieldsNames.add("supplierProductId");this.allFieldsNames.add("canDropShip");this.allFieldsNames.add("supplierCommissionPerc");this.allFieldsNames.add("comments");this.allFieldsNames.add("goodIdentificationTypeId");this.allFieldsNames.add("idValue");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("availableFromDate");this.allFieldsNames.add("availableThruDate");this.allFieldsNames.add("supplierPrefOrderId");this.allFieldsNames.add("supplierRatingTypeId");this.allFieldsNames.add("standardLeadTimeDays");this.allFieldsNames.add("minimumOrderQuantity");this.allFieldsNames.add("orderQtyIncrements");this.allFieldsNames.add("unitsIncluded");this.allFieldsNames.add("quantityUomId");this.allFieldsNames.add("agreementId");this.allFieldsNames.add("agreementItemSeqId");this.allFieldsNames.add("lastPrice");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("supplierProductName");this.allFieldsNames.add("supplierProductId");this.allFieldsNames.add("canDropShip");this.allFieldsNames.add("supplierCommissionPerc");this.allFieldsNames.add("comments");this.allFieldsNames.add("goodIdentificationTypeId");this.allFieldsNames.add("idValue");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -284,6 +294,20 @@ fieldMapColumns.put("SupplierProductGoodIdentification", fields);
      */
     private void setQuantityUomId(String quantityUomId) {
         this.quantityUomId = quantityUomId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param agreementId the agreementId to set
+     */
+    private void setAgreementId(String agreementId) {
+        this.agreementId = agreementId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param agreementItemSeqId the agreementItemSeqId to set
+     */
+    private void setAgreementItemSeqId(String agreementItemSeqId) {
+        this.agreementItemSeqId = agreementItemSeqId;
     }
     /**
      * Auto generated value setter.
@@ -428,6 +452,20 @@ fieldMapColumns.put("SupplierProductGoodIdentification", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAgreementId() {
+        return this.agreementId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAgreementItemSeqId() {
+        return this.agreementItemSeqId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getLastPrice() {
@@ -526,6 +564,8 @@ fieldMapColumns.put("SupplierProductGoodIdentification", fields);
         setOrderQtyIncrements(convertToBigDecimal(mapValue.get("orderQtyIncrements")));
         setUnitsIncluded(convertToBigDecimal(mapValue.get("unitsIncluded")));
         setQuantityUomId((String) mapValue.get("quantityUomId"));
+        setAgreementId((String) mapValue.get("agreementId"));
+        setAgreementItemSeqId((String) mapValue.get("agreementItemSeqId"));
         setLastPrice(convertToBigDecimal(mapValue.get("lastPrice")));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setSupplierProductName((String) mapValue.get("supplierProductName"));
@@ -553,6 +593,8 @@ fieldMapColumns.put("SupplierProductGoodIdentification", fields);
         mapValue.put("orderQtyIncrements", getOrderQtyIncrements());
         mapValue.put("unitsIncluded", getUnitsIncluded());
         mapValue.put("quantityUomId", getQuantityUomId());
+        mapValue.put("agreementId", getAgreementId());
+        mapValue.put("agreementItemSeqId", getAgreementItemSeqId());
         mapValue.put("lastPrice", getLastPrice());
         mapValue.put("currencyUomId", getCurrencyUomId());
         mapValue.put("supplierProductName", getSupplierProductName());

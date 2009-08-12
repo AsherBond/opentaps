@@ -96,10 +96,6 @@ fieldMapColumns.put("DepreciationMethod", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
-   @OneToMany(fetch=FetchType.LAZY, mappedBy="depreciationMethod", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-   @JoinColumn(name="DEPRECIATION_METHOD_ID")
-   
-   private List<FixedAssetDepMethod> fixedAssetDepMethods = null;
 
   /**
    * Default constructor.
@@ -227,53 +223,8 @@ fieldMapColumns.put("DepreciationMethod", fields);
         return this.createdTxStamp;
     }
 
-    /**
-     * Auto generated method that gets the related <code>FixedAssetDepMethod</code> by the relation named <code>FixedAssetDepMethod</code>.
-     * @return the list of <code>FixedAssetDepMethod</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends FixedAssetDepMethod> getFixedAssetDepMethods() throws RepositoryException {
-        if (this.fixedAssetDepMethods == null) {
-            this.fixedAssetDepMethods = getRelated(FixedAssetDepMethod.class, "FixedAssetDepMethod");
-        }
-        return this.fixedAssetDepMethods;
-    }
 
-    /**
-     * Auto generated value setter.
-     * @param fixedAssetDepMethods the fixedAssetDepMethods to set
-    */
-    public void setFixedAssetDepMethods(List<FixedAssetDepMethod> fixedAssetDepMethods) {
-        this.fixedAssetDepMethods = fixedAssetDepMethods;
-    }
 
-    /**
-     * Auto generated method that add item to collection.
-     */
-    public void addFixedAssetDepMethod(FixedAssetDepMethod fixedAssetDepMethod) {
-        if (this.fixedAssetDepMethods == null) {
-            this.fixedAssetDepMethods = new ArrayList<FixedAssetDepMethod>();
-        }
-        this.fixedAssetDepMethods.add(fixedAssetDepMethod);
-    }
-    /**
-     * Auto generated method that remove item from collection.
-     */
-    public void removeFixedAssetDepMethod(FixedAssetDepMethod fixedAssetDepMethod) {
-        if (this.fixedAssetDepMethods == null) {
-            return;
-        }
-        this.fixedAssetDepMethods.remove(fixedAssetDepMethod);
-    }
-    /**
-     * Auto generated method that clear items from collection.
-     */
-    public void clearFixedAssetDepMethod() {
-        if (this.fixedAssetDepMethods == null) {
-            return;
-        }
-        this.fixedAssetDepMethods.clear();
-    }
 
     /** {@inheritDoc} */
     @Override

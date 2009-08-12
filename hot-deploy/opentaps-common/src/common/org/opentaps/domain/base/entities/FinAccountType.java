@@ -150,7 +150,7 @@ fieldMapColumns.put("FinAccountType", fields);
       super();
       this.baseEntityName = "FinAccountType";
       this.isView = false;
-      
+      this.resourceName = "AccountingEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("finAccountTypeId");
       this.allFieldsNames = new ArrayList<String>();

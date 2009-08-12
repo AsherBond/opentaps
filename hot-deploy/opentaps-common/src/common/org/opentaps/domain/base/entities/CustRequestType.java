@@ -56,6 +56,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("parentTypeId", "PARENT_TYPE_ID");
         fields.put("hasTable", "HAS_TABLE");
         fields.put("description", "DESCRIPTION");
+        fields.put("partyId", "PARTY_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -67,6 +68,7 @@ fieldMapColumns.put("CustRequestType", fields);
     parentTypeId("parentTypeId"),
     hasTable("hasTable"),
     description("description"),
+    partyId("partyId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -92,6 +94,8 @@ fieldMapColumns.put("CustRequestType", fields);
    private String hasTable;
    @Column(name="DESCRIPTION")
    private String description;
+   @Column(name="PARTY_ID")
+   private String partyId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -107,6 +111,17 @@ fieldMapColumns.put("CustRequestType", fields);
    )
    
    private CustRequestType parentCustRequestType = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARTY_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Party party = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARTY_ID_FROM")
+   
+   private List<PartyRelationship> partyRelationships = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CUST_REQUEST_TYPE_ID")
    
@@ -139,7 +154,7 @@ fieldMapColumns.put("CustRequestType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("custRequestTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("custRequestTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("partyId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -181,6 +196,13 @@ fieldMapColumns.put("CustRequestType", fields);
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyId the partyId to set
+     */
+    public void setPartyId(String partyId) {
+        this.partyId = partyId;
     }
     /**
      * Auto generated value setter.
@@ -241,6 +263,13 @@ fieldMapColumns.put("CustRequestType", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPartyId() {
+        return this.partyId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -278,6 +307,28 @@ fieldMapColumns.put("CustRequestType", fields);
             this.parentCustRequestType = getRelatedOne(CustRequestType.class, "ParentCustRequestType");
         }
         return this.parentCustRequestType;
+    }
+    /**
+     * Auto generated method that gets the related <code>Party</code> by the relation named <code>Party</code>.
+     * @return the <code>Party</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Party getParty() throws RepositoryException {
+        if (this.party == null) {
+            this.party = getRelatedOne(Party.class, "Party");
+        }
+        return this.party;
+    }
+    /**
+     * Auto generated method that gets the related <code>PartyRelationship</code> by the relation named <code>PartyRelationship</code>.
+     * @return the list of <code>PartyRelationship</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyRelationship> getPartyRelationships() throws RepositoryException {
+        if (this.partyRelationships == null) {
+            this.partyRelationships = getRelated(PartyRelationship.class, "PartyRelationship");
+        }
+        return this.partyRelationships;
     }
     /**
      * Auto generated method that gets the related <code>CustRequest</code> by the relation named <code>CustRequest</code>.
@@ -341,6 +392,20 @@ fieldMapColumns.put("CustRequestType", fields);
     */
     public void setParentCustRequestType(CustRequestType parentCustRequestType) {
         this.parentCustRequestType = parentCustRequestType;
+    }
+    /**
+     * Auto generated value setter.
+     * @param party the party to set
+    */
+    public void setParty(Party party) {
+        this.party = party;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyRelationships the partyRelationships to set
+    */
+    public void setPartyRelationships(List<PartyRelationship> partyRelationships) {
+        this.partyRelationships = partyRelationships;
     }
     /**
      * Auto generated value setter.
@@ -414,6 +479,7 @@ fieldMapColumns.put("CustRequestType", fields);
         setParentTypeId((String) mapValue.get("parentTypeId"));
         setHasTable((String) mapValue.get("hasTable"));
         setDescription((String) mapValue.get("description"));
+        setPartyId((String) mapValue.get("partyId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -429,6 +495,7 @@ fieldMapColumns.put("CustRequestType", fields);
         mapValue.put("parentTypeId", getParentTypeId());
         mapValue.put("hasTable", getHasTable());
         mapValue.put("description", getDescription());
+        mapValue.put("partyId", getPartyId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

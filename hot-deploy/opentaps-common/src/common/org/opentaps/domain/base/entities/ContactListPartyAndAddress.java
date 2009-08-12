@@ -48,7 +48,7 @@ import java.sql.Timestamp;
  * Auto generated base entity ContactListPartyAndAddress.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectContactListPartyAndAddresss", query="SELECT CLP.CONTACT_LIST_ID AS \"contactListId\",CLP.PARTY_ID AS \"partyId\",CLP.FROM_DATE AS \"fromDate\",CLP.THRU_DATE AS \"thruDate\",CLP.STATUS_ID AS \"statusId\",CLP.PREFERRED_CONTACT_MECH_ID AS \"preferredContactMechId\",PA.CONTACT_MECH_ID AS \"contactMechId\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\" FROM CONTACT_LIST_PARTY CLP INNER JOIN POSTAL_ADDRESS PA ON CLP.PREFERRED_CONTACT_MECH_ID = PA.CONTACT_MECH_ID", resultSetMapping="ContactListPartyAndAddressMapping")
+@NamedNativeQuery(name="selectContactListPartyAndAddresss", query="SELECT CLP.CONTACT_LIST_ID AS \"contactListId\",CLP.PARTY_ID AS \"partyId\",CLP.FROM_DATE AS \"fromDate\",CLP.THRU_DATE AS \"thruDate\",CLP.STATUS_ID AS \"statusId\",CLP.PREFERRED_CONTACT_MECH_ID AS \"preferredContactMechId\",PA.CONTACT_MECH_ID AS \"contactMechId\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PA.GEO_POINT_ID AS \"geoPointId\" FROM CONTACT_LIST_PARTY CLP INNER JOIN POSTAL_ADDRESS PA ON CLP.PREFERRED_CONTACT_MECH_ID = PA.CONTACT_MECH_ID", resultSetMapping="ContactListPartyAndAddressMapping")
 @SqlResultSetMapping(name="ContactListPartyAndAddressMapping", entities={
 @EntityResult(entityClass=ContactListPartyAndAddress.class, fields = {
 @FieldResult(name="contactListId", column="contactListId")
@@ -70,6 +70,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="stateProvinceGeoId", column="stateProvinceGeoId")
 ,@FieldResult(name="countyGeoId", column="countyGeoId")
 ,@FieldResult(name="postalCodeGeoId", column="postalCodeGeoId")
+,@FieldResult(name="geoPointId", column="geoPointId")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -95,6 +96,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("stateProvinceGeoId", "PA.STATE_PROVINCE_GEO_ID");
         fields.put("countyGeoId", "PA.COUNTY_GEO_ID");
         fields.put("postalCodeGeoId", "PA.POSTAL_CODE_GEO_ID");
+        fields.put("geoPointId", "PA.GEO_POINT_ID");
 fieldMapColumns.put("ContactListPartyAndAddress", fields);
 }
   public static enum Fields implements EntityFieldInterface<ContactListPartyAndAddress> {
@@ -116,7 +118,8 @@ fieldMapColumns.put("ContactListPartyAndAddress", fields);
     countryGeoId("countryGeoId"),
     stateProvinceGeoId("stateProvinceGeoId"),
     countyGeoId("countyGeoId"),
-    postalCodeGeoId("postalCodeGeoId");
+    postalCodeGeoId("postalCodeGeoId"),
+    geoPointId("geoPointId");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -165,6 +168,8 @@ fieldMapColumns.put("ContactListPartyAndAddress", fields);
    private String countyGeoId;
     
    private String postalCodeGeoId;
+    
+   private String geoPointId;
 
   /**
    * Default constructor.
@@ -177,7 +182,7 @@ fieldMapColumns.put("ContactListPartyAndAddress", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("contactListId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("contactMechId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("contactListId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("preferredContactMechId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");
+      this.allFieldsNames.add("contactListId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("preferredContactMechId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");this.allFieldsNames.add("geoPointId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -328,6 +333,13 @@ fieldMapColumns.put("ContactListPartyAndAddress", fields);
     private void setPostalCodeGeoId(String postalCodeGeoId) {
         this.postalCodeGeoId = postalCodeGeoId;
     }
+    /**
+     * Auto generated value setter.
+     * @param geoPointId the geoPointId to set
+     */
+    private void setGeoPointId(String geoPointId) {
+        this.geoPointId = geoPointId;
+    }
 
     /**
      * Auto generated value accessor.
@@ -462,6 +474,13 @@ fieldMapColumns.put("ContactListPartyAndAddress", fields);
     public String getPostalCodeGeoId() {
         return this.postalCodeGeoId;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getGeoPointId() {
+        return this.geoPointId;
+    }
 
 
 
@@ -489,6 +508,7 @@ fieldMapColumns.put("ContactListPartyAndAddress", fields);
         setStateProvinceGeoId((String) mapValue.get("stateProvinceGeoId"));
         setCountyGeoId((String) mapValue.get("countyGeoId"));
         setPostalCodeGeoId((String) mapValue.get("postalCodeGeoId"));
+        setGeoPointId((String) mapValue.get("geoPointId"));
         postInit();
     }
 
@@ -515,6 +535,7 @@ fieldMapColumns.put("ContactListPartyAndAddress", fields);
         mapValue.put("stateProvinceGeoId", getStateProvinceGeoId());
         mapValue.put("countyGeoId", getCountyGeoId());
         mapValue.put("postalCodeGeoId", getPostalCodeGeoId());
+        mapValue.put("geoPointId", getGeoPointId());
         return mapValue;
     }
 

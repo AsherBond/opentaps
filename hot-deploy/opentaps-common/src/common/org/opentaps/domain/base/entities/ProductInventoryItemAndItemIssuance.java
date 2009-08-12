@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity ProductInventoryItemAndItemIssuance.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectProductInventoryItemAndItemIssuances", query="SELECT PT.PRODUCT_ID AS \"productId\",PT.PRODUCT_TYPE_ID AS \"productTypeId\",PT.PRIMARY_PRODUCT_CATEGORY_ID AS \"primaryProductCategoryId\",PT.MANUFACTURER_PARTY_ID AS \"manufacturerPartyId\",PT.FACILITY_ID AS \"facilityId\",PT.INTRODUCTION_DATE AS \"introductionDate\",PT.INTERNAL_NAME AS \"internalName\",PT.DESCRIPTION AS \"description\",PT.REQUIRE_INVENTORY AS \"requireInventory\",PT.TAXABLE AS \"taxable\",PT.CHARGE_SHIPPING AS \"chargeShipping\",PT.IS_VIRTUAL AS \"isVirtual\",PT.IS_VARIANT AS \"isVariant\",PT.CREATED_DATE AS \"createdDate\",PT.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",IMIE.ITEM_ISSUANCE_ID AS \"itemIssuanceId\",IMIE.ORDER_ID AS \"orderId\",IMIE.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",IMIE.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",IMIE.INVENTORY_ITEM_ID AS \"inventoryItemId\",IMIE.SHIPMENT_ID AS \"shipmentId\",IMIE.SHIPMENT_ITEM_SEQ_ID AS \"shipmentItemSeqId\",IMIE.FIXED_ASSET_ID AS \"fixedAssetId\",IMIE.MAINT_HIST_SEQ_ID AS \"maintHistSeqId\",IMIE.ISSUED_DATE_TIME AS \"issuedDateTime\",IMIE.ISSUED_BY_USER_LOGIN_ID AS \"issuedByUserLoginId\",IMIE.QUANTITY AS \"quantity\",IYIM.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",IYIM.PARTY_ID AS \"partyId\",IYIM.OWNER_PARTY_ID AS \"ownerPartyId\",IYIM.STATUS_ID AS \"statusId\",IYIM.DATETIME_RECEIVED AS \"datetimeReceived\",IYIM.DATETIME_MANUFACTURED AS \"datetimeManufactured\",IYIM.EXPIRE_DATE AS \"expireDate\",IYIM.CONTAINER_ID AS \"containerId\",IYIM.LOT_ID AS \"lotId\",IYIM.UOM_ID AS \"uomId\",IYIM.BIN_NUMBER AS \"binNumber\",IYIM.LOCATION_SEQ_ID AS \"locationSeqId\",IYIM.COMMENTS AS \"comments\",IYIM.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",IYIM.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",IYIM.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",IYIM.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",IYIM.SERIAL_NUMBER AS \"serialNumber\",IYIM.SOFT_IDENTIFIER AS \"softIdentifier\",IYIM.ACTIVATION_NUMBER AS \"activationNumber\",IYIM.ACTIVATION_VALID_THRU AS \"activationValidThru\",IYIM.UNIT_COST AS \"unitCost\",IYIM.CURRENCY_UOM_ID AS \"currencyUomId\",IYIM.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",IYIM.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",IYIM.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",IYIM.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",IYIM.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",IYIM.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",IYIM.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",IYIM.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",IYIM.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",IYIM.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",IYIM.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\" FROM PRODUCT PT INNER JOIN INVENTORY_ITEM IYIM ON PT.PRODUCT_ID = IYIM.PRODUCT_ID INNER JOIN ITEM_ISSUANCE IMIE ON IYIM.INVENTORY_ITEM_ID = IMIE.INVENTORY_ITEM_ID", resultSetMapping="ProductInventoryItemAndItemIssuanceMapping")
+@NamedNativeQuery(name="selectProductInventoryItemAndItemIssuances", query="SELECT PT.PRODUCT_ID AS \"productId\",PT.PRODUCT_TYPE_ID AS \"productTypeId\",PT.PRIMARY_PRODUCT_CATEGORY_ID AS \"primaryProductCategoryId\",PT.MANUFACTURER_PARTY_ID AS \"manufacturerPartyId\",PT.FACILITY_ID AS \"facilityId\",PT.INTRODUCTION_DATE AS \"introductionDate\",PT.INTERNAL_NAME AS \"internalName\",PT.DESCRIPTION AS \"description\",PT.REQUIRE_INVENTORY AS \"requireInventory\",PT.TAXABLE AS \"taxable\",PT.CHARGE_SHIPPING AS \"chargeShipping\",PT.IS_VIRTUAL AS \"isVirtual\",PT.IS_VARIANT AS \"isVariant\",PT.CREATED_DATE AS \"createdDate\",PT.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",IMIE.ITEM_ISSUANCE_ID AS \"itemIssuanceId\",IMIE.ORDER_ID AS \"orderId\",IMIE.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",IMIE.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",IMIE.INVENTORY_ITEM_ID AS \"inventoryItemId\",IMIE.SHIPMENT_ID AS \"shipmentId\",IMIE.SHIPMENT_ITEM_SEQ_ID AS \"shipmentItemSeqId\",IMIE.FIXED_ASSET_ID AS \"fixedAssetId\",IMIE.MAINT_HIST_SEQ_ID AS \"maintHistSeqId\",IMIE.ISSUED_DATE_TIME AS \"issuedDateTime\",IMIE.ISSUED_BY_USER_LOGIN_ID AS \"issuedByUserLoginId\",IMIE.QUANTITY AS \"quantity\",IMIE.CANCEL_QUANTITY AS \"cancelQuantity\",IYIM.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",IYIM.PARTY_ID AS \"partyId\",IYIM.OWNER_PARTY_ID AS \"ownerPartyId\",IYIM.STATUS_ID AS \"statusId\",IYIM.DATETIME_RECEIVED AS \"datetimeReceived\",IYIM.DATETIME_MANUFACTURED AS \"datetimeManufactured\",IYIM.EXPIRE_DATE AS \"expireDate\",IYIM.CONTAINER_ID AS \"containerId\",IYIM.LOT_ID AS \"lotId\",IYIM.UOM_ID AS \"uomId\",IYIM.BIN_NUMBER AS \"binNumber\",IYIM.LOCATION_SEQ_ID AS \"locationSeqId\",IYIM.COMMENTS AS \"comments\",IYIM.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",IYIM.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",IYIM.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",IYIM.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",IYIM.SERIAL_NUMBER AS \"serialNumber\",IYIM.SOFT_IDENTIFIER AS \"softIdentifier\",IYIM.ACTIVATION_NUMBER AS \"activationNumber\",IYIM.ACTIVATION_VALID_THRU AS \"activationValidThru\",IYIM.UNIT_COST AS \"unitCost\",IYIM.CURRENCY_UOM_ID AS \"currencyUomId\",IYIM.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",IYIM.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",IYIM.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",IYIM.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",IYIM.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",IYIM.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",IYIM.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",IYIM.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",IYIM.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",IYIM.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",IYIM.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\" FROM PRODUCT PT INNER JOIN INVENTORY_ITEM IYIM ON PT.PRODUCT_ID = IYIM.PRODUCT_ID INNER JOIN ITEM_ISSUANCE IMIE ON IYIM.INVENTORY_ITEM_ID = IMIE.INVENTORY_ITEM_ID", resultSetMapping="ProductInventoryItemAndItemIssuanceMapping")
 @SqlResultSetMapping(name="ProductInventoryItemAndItemIssuanceMapping", entities={
 @EntityResult(entityClass=ProductInventoryItemAndItemIssuance.class, fields = {
 @FieldResult(name="productId", column="productId")
@@ -79,6 +79,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="issuedDateTime", column="issuedDateTime")
 ,@FieldResult(name="issuedByUserLoginId", column="issuedByUserLoginId")
 ,@FieldResult(name="quantity", column="quantity")
+,@FieldResult(name="cancelQuantity", column="cancelQuantity")
 ,@FieldResult(name="inventoryItemTypeId", column="inventoryItemTypeId")
 ,@FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="ownerPartyId", column="ownerPartyId")
@@ -146,6 +147,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("issuedDateTime", "IMIE.ISSUED_DATE_TIME");
         fields.put("issuedByUserLoginId", "IMIE.ISSUED_BY_USER_LOGIN_ID");
         fields.put("quantity", "IMIE.QUANTITY");
+        fields.put("cancelQuantity", "IMIE.CANCEL_QUANTITY");
         fields.put("inventoryItemTypeId", "IYIM.INVENTORY_ITEM_TYPE_ID");
         fields.put("partyId", "IYIM.PARTY_ID");
         fields.put("ownerPartyId", "IYIM.OWNER_PARTY_ID");
@@ -210,6 +212,7 @@ fieldMapColumns.put("ProductInventoryItemAndItemIssuance", fields);
     issuedDateTime("issuedDateTime"),
     issuedByUserLoginId("issuedByUserLoginId"),
     quantity("quantity"),
+    cancelQuantity("cancelQuantity"),
     inventoryItemTypeId("inventoryItemTypeId"),
     partyId("partyId"),
     ownerPartyId("ownerPartyId"),
@@ -309,6 +312,8 @@ fieldMapColumns.put("ProductInventoryItemAndItemIssuance", fields);
     
    private BigDecimal quantity;
     
+   private BigDecimal cancelQuantity;
+    
    private String inventoryItemTypeId;
     
    private String partyId;
@@ -390,7 +395,7 @@ fieldMapColumns.put("ProductInventoryItemAndItemIssuance", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");this.primaryKeyNames.add("itemIssuanceId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("primaryProductCategoryId");this.allFieldsNames.add("manufacturerPartyId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("introductionDate");this.allFieldsNames.add("internalName");this.allFieldsNames.add("description");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("taxable");this.allFieldsNames.add("chargeShipping");this.allFieldsNames.add("isVirtual");this.allFieldsNames.add("isVariant");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("itemIssuanceId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentItemSeqId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("issuedDateTime");this.allFieldsNames.add("issuedByUserLoginId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("inventoryItemTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("datetimeManufactured");this.allFieldsNames.add("expireDate");this.allFieldsNames.add("containerId");this.allFieldsNames.add("lotId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("binNumber");this.allFieldsNames.add("locationSeqId");this.allFieldsNames.add("comments");this.allFieldsNames.add("quantityOnHandTotal");this.allFieldsNames.add("availableToPromiseTotal");this.allFieldsNames.add("oldQuantityOnHand");this.allFieldsNames.add("oldAvailableToPromise");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("softIdentifier");this.allFieldsNames.add("activationNumber");this.allFieldsNames.add("activationValidThru");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("parentInventoryItemId");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("productTypeId");this.allFieldsNames.add("primaryProductCategoryId");this.allFieldsNames.add("manufacturerPartyId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("introductionDate");this.allFieldsNames.add("internalName");this.allFieldsNames.add("description");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("taxable");this.allFieldsNames.add("chargeShipping");this.allFieldsNames.add("isVirtual");this.allFieldsNames.add("isVariant");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("itemIssuanceId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentItemSeqId");this.allFieldsNames.add("fixedAssetId");this.allFieldsNames.add("maintHistSeqId");this.allFieldsNames.add("issuedDateTime");this.allFieldsNames.add("issuedByUserLoginId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("cancelQuantity");this.allFieldsNames.add("inventoryItemTypeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("datetimeManufactured");this.allFieldsNames.add("expireDate");this.allFieldsNames.add("containerId");this.allFieldsNames.add("lotId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("binNumber");this.allFieldsNames.add("locationSeqId");this.allFieldsNames.add("comments");this.allFieldsNames.add("quantityOnHandTotal");this.allFieldsNames.add("availableToPromiseTotal");this.allFieldsNames.add("oldQuantityOnHand");this.allFieldsNames.add("oldAvailableToPromise");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("softIdentifier");this.allFieldsNames.add("activationNumber");this.allFieldsNames.add("activationValidThru");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("parentInventoryItemId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -596,6 +601,13 @@ fieldMapColumns.put("ProductInventoryItemAndItemIssuance", fields);
      */
     private void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+    /**
+     * Auto generated value setter.
+     * @param cancelQuantity the cancelQuantity to set
+     */
+    private void setCancelQuantity(BigDecimal cancelQuantity) {
+        this.cancelQuantity = cancelQuantity;
     }
     /**
      * Auto generated value setter.
@@ -1027,6 +1039,13 @@ fieldMapColumns.put("ProductInventoryItemAndItemIssuance", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getCancelQuantity() {
+        return this.cancelQuantity;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getInventoryItemTypeId() {
@@ -1334,6 +1353,7 @@ fieldMapColumns.put("ProductInventoryItemAndItemIssuance", fields);
         setIssuedDateTime((Timestamp) mapValue.get("issuedDateTime"));
         setIssuedByUserLoginId((String) mapValue.get("issuedByUserLoginId"));
         setQuantity(convertToBigDecimal(mapValue.get("quantity")));
+        setCancelQuantity(convertToBigDecimal(mapValue.get("cancelQuantity")));
         setInventoryItemTypeId((String) mapValue.get("inventoryItemTypeId"));
         setPartyId((String) mapValue.get("partyId"));
         setOwnerPartyId((String) mapValue.get("ownerPartyId"));
@@ -1402,6 +1422,7 @@ fieldMapColumns.put("ProductInventoryItemAndItemIssuance", fields);
         mapValue.put("issuedDateTime", getIssuedDateTime());
         mapValue.put("issuedByUserLoginId", getIssuedByUserLoginId());
         mapValue.put("quantity", getQuantity());
+        mapValue.put("cancelQuantity", getCancelQuantity());
         mapValue.put("inventoryItemTypeId", getInventoryItemTypeId());
         mapValue.put("partyId", getPartyId());
         mapValue.put("ownerPartyId", getOwnerPartyId());

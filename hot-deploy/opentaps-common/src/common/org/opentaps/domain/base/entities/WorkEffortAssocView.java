@@ -50,12 +50,19 @@ import java.sql.Timestamp;
  * Auto generated base entity WorkEffortAssocView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectWorkEffortAssocViews", query="SELECT WETO.WORK_EFFORT_NAME AS \"workEffortName\",WETO.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WETO.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WA.WORK_EFFORT_ID_FROM AS \"workEffortIdFrom\",WA.WORK_EFFORT_ID_TO AS \"workEffortIdTo\",WA.WORK_EFFORT_ASSOC_TYPE_ID AS \"workEffortAssocTypeId\",WA.SEQUENCE_NUM AS \"sequenceNum\",WA.FROM_DATE AS \"fromDate\",WA.THRU_DATE AS \"thruDate\" FROM WORK_EFFORT_ASSOC WA INNER JOIN WORK_EFFORT WETO ON WA.WORK_EFFORT_ID_TO = WETO.WORK_EFFORT_ID", resultSetMapping="WorkEffortAssocViewMapping")
+@NamedNativeQuery(name="selectWorkEffortAssocViews", query="SELECT WETO.WORK_EFFORT_NAME AS \"workEffortName\",WETO.ESTIMATED_SETUP_MILLIS AS \"estimatedSetupMillis\",WETO.ESTIMATED_MILLI_SECONDS AS \"estimatedMilliSeconds\",WETO.WORK_EFFORT_PARENT_ID AS \"workEffortParentId\",WETO.CURRENT_STATUS_ID AS \"currentStatusId\",WETO.WORK_EFFORT_PURPOSE_TYPE_ID AS \"workEffortPurposeTypeId\",WETO.ESTIMATED_START_DATE AS \"estimatedStartDate\",WETO.ESTIMATED_COMPLETION_DATE AS \"estimatedCompletionDate\",WETO.ACTUAL_START_DATE AS \"actualStartDate\",WETO.ACTUAL_COMPLETION_DATE AS \"actualCompletionDate\",WA.WORK_EFFORT_ID_FROM AS \"workEffortIdFrom\",WA.WORK_EFFORT_ID_TO AS \"workEffortIdTo\",WA.WORK_EFFORT_ASSOC_TYPE_ID AS \"workEffortAssocTypeId\",WA.SEQUENCE_NUM AS \"sequenceNum\",WA.FROM_DATE AS \"fromDate\",WA.THRU_DATE AS \"thruDate\" FROM WORK_EFFORT_ASSOC WA INNER JOIN WORK_EFFORT WETO ON WA.WORK_EFFORT_ID_TO = WETO.WORK_EFFORT_ID", resultSetMapping="WorkEffortAssocViewMapping")
 @SqlResultSetMapping(name="WorkEffortAssocViewMapping", entities={
 @EntityResult(entityClass=WorkEffortAssocView.class, fields = {
 @FieldResult(name="workEffortToName", column="workEffortToName")
 ,@FieldResult(name="workEffortToSetup", column="workEffortToSetup")
 ,@FieldResult(name="workEffortToRun", column="workEffortToRun")
+,@FieldResult(name="workEffortToParentId", column="workEffortToParentId")
+,@FieldResult(name="workEffortToCurrentStatusId", column="workEffortToCurrentStatusId")
+,@FieldResult(name="workEffortToWorkEffortPurposeTypeId", column="workEffortToWorkEffortPurposeTypeId")
+,@FieldResult(name="workEffortToEstimatedStartDate", column="workEffortToEstimatedStartDate")
+,@FieldResult(name="workEffortToEstimatedCompletionDate", column="workEffortToEstimatedCompletionDate")
+,@FieldResult(name="workEffortToActualStartDate", column="workEffortToActualStartDate")
+,@FieldResult(name="workEffortToActualCompletionDate", column="workEffortToActualCompletionDate")
 ,@FieldResult(name="workEffortIdFrom", column="workEffortIdFrom")
 ,@FieldResult(name="workEffortIdTo", column="workEffortIdTo")
 ,@FieldResult(name="workEffortAssocTypeId", column="workEffortAssocTypeId")
@@ -71,6 +78,13 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("workEffortToName", "WETO.WORK_EFFORT_NAME");
         fields.put("workEffortToSetup", "WETO.ESTIMATED_SETUP_MILLIS");
         fields.put("workEffortToRun", "WETO.ESTIMATED_MILLI_SECONDS");
+        fields.put("workEffortToParentId", "WETO.WORK_EFFORT_PARENT_ID");
+        fields.put("workEffortToCurrentStatusId", "WETO.CURRENT_STATUS_ID");
+        fields.put("workEffortToWorkEffortPurposeTypeId", "WETO.WORK_EFFORT_PURPOSE_TYPE_ID");
+        fields.put("workEffortToEstimatedStartDate", "WETO.ESTIMATED_START_DATE");
+        fields.put("workEffortToEstimatedCompletionDate", "WETO.ESTIMATED_COMPLETION_DATE");
+        fields.put("workEffortToActualStartDate", "WETO.ACTUAL_START_DATE");
+        fields.put("workEffortToActualCompletionDate", "WETO.ACTUAL_COMPLETION_DATE");
         fields.put("workEffortIdFrom", "WA.WORK_EFFORT_ID_FROM");
         fields.put("workEffortIdTo", "WA.WORK_EFFORT_ID_TO");
         fields.put("workEffortAssocTypeId", "WA.WORK_EFFORT_ASSOC_TYPE_ID");
@@ -83,6 +97,13 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
     workEffortToName("workEffortToName"),
     workEffortToSetup("workEffortToSetup"),
     workEffortToRun("workEffortToRun"),
+    workEffortToParentId("workEffortToParentId"),
+    workEffortToCurrentStatusId("workEffortToCurrentStatusId"),
+    workEffortToWorkEffortPurposeTypeId("workEffortToWorkEffortPurposeTypeId"),
+    workEffortToEstimatedStartDate("workEffortToEstimatedStartDate"),
+    workEffortToEstimatedCompletionDate("workEffortToEstimatedCompletionDate"),
+    workEffortToActualStartDate("workEffortToActualStartDate"),
+    workEffortToActualCompletionDate("workEffortToActualCompletionDate"),
     workEffortIdFrom("workEffortIdFrom"),
     workEffortIdTo("workEffortIdTo"),
     workEffortAssocTypeId("workEffortAssocTypeId"),
@@ -105,6 +126,20 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
    private BigDecimal workEffortToSetup;
     
    private BigDecimal workEffortToRun;
+    
+   private String workEffortToParentId;
+    
+   private String workEffortToCurrentStatusId;
+    
+   private String workEffortToWorkEffortPurposeTypeId;
+    
+   private Timestamp workEffortToEstimatedStartDate;
+    
+   private Timestamp workEffortToEstimatedCompletionDate;
+    
+   private Timestamp workEffortToActualStartDate;
+    
+   private Timestamp workEffortToActualCompletionDate;
     @Id
    private String workEffortIdFrom;
     
@@ -136,7 +171,7 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortIdFrom");this.primaryKeyNames.add("workEffortIdTo");this.primaryKeyNames.add("workEffortAssocTypeId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortToName");this.allFieldsNames.add("workEffortToSetup");this.allFieldsNames.add("workEffortToRun");this.allFieldsNames.add("workEffortIdFrom");this.allFieldsNames.add("workEffortIdTo");this.allFieldsNames.add("workEffortAssocTypeId");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");
+      this.allFieldsNames.add("workEffortToName");this.allFieldsNames.add("workEffortToSetup");this.allFieldsNames.add("workEffortToRun");this.allFieldsNames.add("workEffortToParentId");this.allFieldsNames.add("workEffortToCurrentStatusId");this.allFieldsNames.add("workEffortToWorkEffortPurposeTypeId");this.allFieldsNames.add("workEffortToEstimatedStartDate");this.allFieldsNames.add("workEffortToEstimatedCompletionDate");this.allFieldsNames.add("workEffortToActualStartDate");this.allFieldsNames.add("workEffortToActualCompletionDate");this.allFieldsNames.add("workEffortIdFrom");this.allFieldsNames.add("workEffortIdTo");this.allFieldsNames.add("workEffortAssocTypeId");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -174,6 +209,55 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
      */
     private void setWorkEffortToRun(BigDecimal workEffortToRun) {
         this.workEffortToRun = workEffortToRun;
+    }
+    /**
+     * Auto generated value setter.
+     * @param workEffortToParentId the workEffortToParentId to set
+     */
+    private void setWorkEffortToParentId(String workEffortToParentId) {
+        this.workEffortToParentId = workEffortToParentId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param workEffortToCurrentStatusId the workEffortToCurrentStatusId to set
+     */
+    private void setWorkEffortToCurrentStatusId(String workEffortToCurrentStatusId) {
+        this.workEffortToCurrentStatusId = workEffortToCurrentStatusId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param workEffortToWorkEffortPurposeTypeId the workEffortToWorkEffortPurposeTypeId to set
+     */
+    private void setWorkEffortToWorkEffortPurposeTypeId(String workEffortToWorkEffortPurposeTypeId) {
+        this.workEffortToWorkEffortPurposeTypeId = workEffortToWorkEffortPurposeTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param workEffortToEstimatedStartDate the workEffortToEstimatedStartDate to set
+     */
+    private void setWorkEffortToEstimatedStartDate(Timestamp workEffortToEstimatedStartDate) {
+        this.workEffortToEstimatedStartDate = workEffortToEstimatedStartDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param workEffortToEstimatedCompletionDate the workEffortToEstimatedCompletionDate to set
+     */
+    private void setWorkEffortToEstimatedCompletionDate(Timestamp workEffortToEstimatedCompletionDate) {
+        this.workEffortToEstimatedCompletionDate = workEffortToEstimatedCompletionDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param workEffortToActualStartDate the workEffortToActualStartDate to set
+     */
+    private void setWorkEffortToActualStartDate(Timestamp workEffortToActualStartDate) {
+        this.workEffortToActualStartDate = workEffortToActualStartDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param workEffortToActualCompletionDate the workEffortToActualCompletionDate to set
+     */
+    private void setWorkEffortToActualCompletionDate(Timestamp workEffortToActualCompletionDate) {
+        this.workEffortToActualCompletionDate = workEffortToActualCompletionDate;
     }
     /**
      * Auto generated value setter.
@@ -238,6 +322,55 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
      */
     public BigDecimal getWorkEffortToRun() {
         return this.workEffortToRun;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWorkEffortToParentId() {
+        return this.workEffortToParentId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWorkEffortToCurrentStatusId() {
+        return this.workEffortToCurrentStatusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWorkEffortToWorkEffortPurposeTypeId() {
+        return this.workEffortToWorkEffortPurposeTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getWorkEffortToEstimatedStartDate() {
+        return this.workEffortToEstimatedStartDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getWorkEffortToEstimatedCompletionDate() {
+        return this.workEffortToEstimatedCompletionDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getWorkEffortToActualStartDate() {
+        return this.workEffortToActualStartDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getWorkEffortToActualCompletionDate() {
+        return this.workEffortToActualCompletionDate;
     }
     /**
      * Auto generated value accessor.
@@ -310,6 +443,13 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
         setWorkEffortToName((String) mapValue.get("workEffortToName"));
         setWorkEffortToSetup(convertToBigDecimal(mapValue.get("workEffortToSetup")));
         setWorkEffortToRun(convertToBigDecimal(mapValue.get("workEffortToRun")));
+        setWorkEffortToParentId((String) mapValue.get("workEffortToParentId"));
+        setWorkEffortToCurrentStatusId((String) mapValue.get("workEffortToCurrentStatusId"));
+        setWorkEffortToWorkEffortPurposeTypeId((String) mapValue.get("workEffortToWorkEffortPurposeTypeId"));
+        setWorkEffortToEstimatedStartDate((Timestamp) mapValue.get("workEffortToEstimatedStartDate"));
+        setWorkEffortToEstimatedCompletionDate((Timestamp) mapValue.get("workEffortToEstimatedCompletionDate"));
+        setWorkEffortToActualStartDate((Timestamp) mapValue.get("workEffortToActualStartDate"));
+        setWorkEffortToActualCompletionDate((Timestamp) mapValue.get("workEffortToActualCompletionDate"));
         setWorkEffortIdFrom((String) mapValue.get("workEffortIdFrom"));
         setWorkEffortIdTo((String) mapValue.get("workEffortIdTo"));
         setWorkEffortAssocTypeId((String) mapValue.get("workEffortAssocTypeId"));
@@ -326,6 +466,13 @@ fieldMapColumns.put("WorkEffortAssocView", fields);
         mapValue.put("workEffortToName", getWorkEffortToName());
         mapValue.put("workEffortToSetup", getWorkEffortToSetup());
         mapValue.put("workEffortToRun", getWorkEffortToRun());
+        mapValue.put("workEffortToParentId", getWorkEffortToParentId());
+        mapValue.put("workEffortToCurrentStatusId", getWorkEffortToCurrentStatusId());
+        mapValue.put("workEffortToWorkEffortPurposeTypeId", getWorkEffortToWorkEffortPurposeTypeId());
+        mapValue.put("workEffortToEstimatedStartDate", getWorkEffortToEstimatedStartDate());
+        mapValue.put("workEffortToEstimatedCompletionDate", getWorkEffortToEstimatedCompletionDate());
+        mapValue.put("workEffortToActualStartDate", getWorkEffortToActualStartDate());
+        mapValue.put("workEffortToActualCompletionDate", getWorkEffortToActualCompletionDate());
         mapValue.put("workEffortIdFrom", getWorkEffortIdFrom());
         mapValue.put("workEffortIdTo", getWorkEffortIdTo());
         mapValue.put("workEffortAssocTypeId", getWorkEffortAssocTypeId());

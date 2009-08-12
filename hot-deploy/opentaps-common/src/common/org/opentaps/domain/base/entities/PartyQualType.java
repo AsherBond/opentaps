@@ -107,7 +107,7 @@ fieldMapColumns.put("PartyQualType", fields);
    )
    
    private PartyQualType parentPartyQualType = null;
-   @OneToMany(fetch=FetchType.LAZY)
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="partyQualType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="PARTY_QUAL_TYPE_ID")
    
    private List<PartyQual> partyQuals = null;
@@ -312,6 +312,33 @@ fieldMapColumns.put("PartyQualType", fields);
         this.childPartyQualTypes = childPartyQualTypes;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addPartyQual(PartyQual partyQual) {
+        if (this.partyQuals == null) {
+            this.partyQuals = new ArrayList<PartyQual>();
+        }
+        this.partyQuals.add(partyQual);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removePartyQual(PartyQual partyQual) {
+        if (this.partyQuals == null) {
+            return;
+        }
+        this.partyQuals.remove(partyQual);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearPartyQual() {
+        if (this.partyQuals == null) {
+            return;
+        }
+        this.partyQuals.clear();
+    }
 
     /** {@inheritDoc} */
     @Override

@@ -23,6 +23,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 
 import java.lang.String;
+import java.sql.Timestamp;
 
 @Embeddable
 public class PartyContentPk implements Serializable {
@@ -30,6 +31,10 @@ public class PartyContentPk implements Serializable {
     private String partyId;
     @Column(name="CONTENT_ID")
     private String contentId;
+    @Column(name="PARTY_CONTENT_TYPE_ID")
+    private String partyContentTypeId;
+    @Column(name="FROM_DATE")
+    private Timestamp fromDate;
     
     /**
      * Auto generated value setter.
@@ -45,6 +50,20 @@ public class PartyContentPk implements Serializable {
     public void setContentId(String contentId) {
         this.contentId = contentId;
     }
+    /**
+     * Auto generated value setter.
+     * @param partyContentTypeId the partyContentTypeId to set
+     */
+    public void setPartyContentTypeId(String partyContentTypeId) {
+        this.partyContentTypeId = partyContentTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fromDate the fromDate to set
+     */
+    public void setFromDate(Timestamp fromDate) {
+        this.fromDate = fromDate;
+    }
 
     /**
      * Auto generated value accessor.
@@ -59,5 +78,19 @@ public class PartyContentPk implements Serializable {
      */  
     public String getContentId() {
         return this.contentId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */  
+    public String getPartyContentTypeId() {
+        return this.partyContentTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */  
+    public Timestamp getFromDate() {
+        return this.fromDate;
     }
 }

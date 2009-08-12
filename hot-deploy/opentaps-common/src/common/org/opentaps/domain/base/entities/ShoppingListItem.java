@@ -61,6 +61,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("reservLength", "RESERV_LENGTH");
         fields.put("reservPersons", "RESERV_PERSONS");
         fields.put("quantityPurchased", "QUANTITY_PURCHASED");
+        fields.put("configId", "CONFIG_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -76,6 +77,7 @@ fieldMapColumns.put("ShoppingListItem", fields);
     reservLength("reservLength"),
     reservPersons("reservPersons"),
     quantityPurchased("quantityPurchased"),
+    configId("configId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -121,6 +123,8 @@ fieldMapColumns.put("ShoppingListItem", fields);
    private BigDecimal reservPersons;
    @Column(name="QUANTITY_PURCHASED")
    private BigDecimal quantityPurchased;
+   @Column(name="CONFIG_ID")
+   private String configId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -156,7 +160,7 @@ fieldMapColumns.put("ShoppingListItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("shoppingListId");this.primaryKeyNames.add("shoppingListItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("shoppingListId");this.allFieldsNames.add("shoppingListItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("reservStart");this.allFieldsNames.add("reservLength");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("quantityPurchased");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("shoppingListId");this.allFieldsNames.add("shoppingListItemSeqId");this.allFieldsNames.add("productId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("reservStart");this.allFieldsNames.add("reservLength");this.allFieldsNames.add("reservPersons");this.allFieldsNames.add("quantityPurchased");this.allFieldsNames.add("configId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -226,6 +230,13 @@ fieldMapColumns.put("ShoppingListItem", fields);
      */
     public void setQuantityPurchased(BigDecimal quantityPurchased) {
         this.quantityPurchased = quantityPurchased;
+    }
+    /**
+     * Auto generated value setter.
+     * @param configId the configId to set
+     */
+    public void setConfigId(String configId) {
+        this.configId = configId;
     }
     /**
      * Auto generated value setter.
@@ -311,6 +322,13 @@ fieldMapColumns.put("ShoppingListItem", fields);
      */
     public BigDecimal getQuantityPurchased() {
         return this.quantityPurchased;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getConfigId() {
+        return this.configId;
     }
     /**
      * Auto generated value accessor.
@@ -410,6 +428,7 @@ fieldMapColumns.put("ShoppingListItem", fields);
         setReservLength(convertToBigDecimal(mapValue.get("reservLength")));
         setReservPersons(convertToBigDecimal(mapValue.get("reservPersons")));
         setQuantityPurchased(convertToBigDecimal(mapValue.get("quantityPurchased")));
+        setConfigId((String) mapValue.get("configId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -429,6 +448,7 @@ fieldMapColumns.put("ShoppingListItem", fields);
         mapValue.put("reservLength", getReservLength());
         mapValue.put("reservPersons", getReservPersons());
         mapValue.put("quantityPurchased", getQuantityPurchased());
+        mapValue.put("configId", getConfigId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

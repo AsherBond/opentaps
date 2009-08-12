@@ -64,6 +64,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("useLimitPerCustomer", "USE_LIMIT_PER_CUSTOMER");
         fields.put("useLimitPerPromotion", "USE_LIMIT_PER_PROMOTION");
         fields.put("billbackFactor", "BILLBACK_FACTOR");
+        fields.put("overrideOrgPartyId", "OVERRIDE_ORG_PARTY_ID");
         fields.put("createdDate", "CREATED_DATE");
         fields.put("createdByUserLogin", "CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "LAST_MODIFIED_DATE");
@@ -85,6 +86,7 @@ fieldMapColumns.put("ProductPromo", fields);
     useLimitPerCustomer("useLimitPerCustomer"),
     useLimitPerPromotion("useLimitPerPromotion"),
     billbackFactor("billbackFactor"),
+    overrideOrgPartyId("overrideOrgPartyId"),
     createdDate("createdDate"),
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
@@ -126,6 +128,8 @@ fieldMapColumns.put("ProductPromo", fields);
    private Long useLimitPerPromotion;
    @Column(name="BILLBACK_FACTOR")
    private BigDecimal billbackFactor;
+   @Column(name="OVERRIDE_ORG_PARTY_ID")
+   private String overrideOrgPartyId;
    @Column(name="CREATED_DATE")
    private Timestamp createdDate;
    @Column(name="CREATED_BY_USER_LOGIN")
@@ -142,6 +146,13 @@ fieldMapColumns.put("ProductPromo", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="OVERRIDE_ORG_PARTY_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Party party = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="CREATED_BY_USER_LOGIN", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -220,7 +231,7 @@ fieldMapColumns.put("ProductPromo", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productPromoId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productPromoId");this.allFieldsNames.add("promoName");this.allFieldsNames.add("promoText");this.allFieldsNames.add("userEntered");this.allFieldsNames.add("showToCustomer");this.allFieldsNames.add("requireCode");this.allFieldsNames.add("useLimitPerOrder");this.allFieldsNames.add("useLimitPerCustomer");this.allFieldsNames.add("useLimitPerPromotion");this.allFieldsNames.add("billbackFactor");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productPromoId");this.allFieldsNames.add("promoName");this.allFieldsNames.add("promoText");this.allFieldsNames.add("userEntered");this.allFieldsNames.add("showToCustomer");this.allFieldsNames.add("requireCode");this.allFieldsNames.add("useLimitPerOrder");this.allFieldsNames.add("useLimitPerCustomer");this.allFieldsNames.add("useLimitPerPromotion");this.allFieldsNames.add("billbackFactor");this.allFieldsNames.add("overrideOrgPartyId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -304,6 +315,13 @@ fieldMapColumns.put("ProductPromo", fields);
      */
     public void setBillbackFactor(BigDecimal billbackFactor) {
         this.billbackFactor = billbackFactor;
+    }
+    /**
+     * Auto generated value setter.
+     * @param overrideOrgPartyId the overrideOrgPartyId to set
+     */
+    public void setOverrideOrgPartyId(String overrideOrgPartyId) {
+        this.overrideOrgPartyId = overrideOrgPartyId;
     }
     /**
      * Auto generated value setter.
@@ -434,6 +452,13 @@ fieldMapColumns.put("ProductPromo", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOverrideOrgPartyId() {
+        return this.overrideOrgPartyId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getCreatedDate() {
@@ -489,6 +514,17 @@ fieldMapColumns.put("ProductPromo", fields);
         return this.createdTxStamp;
     }
 
+    /**
+     * Auto generated method that gets the related <code>Party</code> by the relation named <code>Party</code>.
+     * @return the <code>Party</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Party getParty() throws RepositoryException {
+        if (this.party == null) {
+            this.party = getRelatedOne(Party.class, "Party");
+        }
+        return this.party;
+    }
     /**
      * Auto generated method that gets the related <code>UserLogin</code> by the relation named <code>CreatedByUserLogin</code>.
      * @return the <code>UserLogin</code>
@@ -655,6 +691,13 @@ fieldMapColumns.put("ProductPromo", fields);
         return this.returnAdjustments;
     }
 
+    /**
+     * Auto generated value setter.
+     * @param party the party to set
+    */
+    public void setParty(Party party) {
+        this.party = party;
+    }
     /**
      * Auto generated value setter.
      * @param relatedCreatedByUserLogin the relatedCreatedByUserLogin to set
@@ -992,6 +1035,7 @@ fieldMapColumns.put("ProductPromo", fields);
         setUseLimitPerCustomer((Long) mapValue.get("useLimitPerCustomer"));
         setUseLimitPerPromotion((Long) mapValue.get("useLimitPerPromotion"));
         setBillbackFactor(convertToBigDecimal(mapValue.get("billbackFactor")));
+        setOverrideOrgPartyId((String) mapValue.get("overrideOrgPartyId"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
@@ -1017,6 +1061,7 @@ fieldMapColumns.put("ProductPromo", fields);
         mapValue.put("useLimitPerCustomer", getUseLimitPerCustomer());
         mapValue.put("useLimitPerPromotion", getUseLimitPerPromotion());
         mapValue.put("billbackFactor", getBillbackFactor());
+        mapValue.put("overrideOrgPartyId", getOverrideOrgPartyId());
         mapValue.put("createdDate", getCreatedDate());
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());

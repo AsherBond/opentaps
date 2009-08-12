@@ -55,6 +55,8 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("benefitTypeId", "BENEFIT_TYPE_ID");
         fields.put("benefitName", "BENEFIT_NAME");
+        fields.put("parentTypeId", "PARENT_TYPE_ID");
+        fields.put("hasTable", "HAS_TABLE");
         fields.put("description", "DESCRIPTION");
         fields.put("employerPaidPercentage", "EMPLOYER_PAID_PERCENTAGE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -66,6 +68,8 @@ fieldMapColumns.put("BenefitType", fields);
   public static enum Fields implements EntityFieldInterface<BenefitType> {
     benefitTypeId("benefitTypeId"),
     benefitName("benefitName"),
+    parentTypeId("parentTypeId"),
+    hasTable("hasTable"),
     description("description"),
     employerPaidPercentage("employerPaidPercentage"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -89,6 +93,10 @@ fieldMapColumns.put("BenefitType", fields);
    private String benefitTypeId;
    @Column(name="BENEFIT_NAME")
    private String benefitName;
+   @Column(name="PARENT_TYPE_ID")
+   private String parentTypeId;
+   @Column(name="HAS_TABLE")
+   private String hasTable;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="EMPLOYER_PAID_PERCENTAGE")
@@ -101,6 +109,17 @@ fieldMapColumns.put("BenefitType", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private BenefitType parentBenefitType = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID")
+   
+   private List<BenefitType> childBenefitTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="benefitType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="BENEFIT_TYPE_ID")
    
@@ -117,7 +136,7 @@ fieldMapColumns.put("BenefitType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("benefitTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("benefitTypeId");this.allFieldsNames.add("benefitName");this.allFieldsNames.add("description");this.allFieldsNames.add("employerPaidPercentage");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("benefitTypeId");this.allFieldsNames.add("benefitName");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("employerPaidPercentage");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -145,6 +164,20 @@ fieldMapColumns.put("BenefitType", fields);
      */
     public void setBenefitName(String benefitName) {
         this.benefitName = benefitName;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentTypeId the parentTypeId to set
+     */
+    public void setParentTypeId(String parentTypeId) {
+        this.parentTypeId = parentTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param hasTable the hasTable to set
+     */
+    public void setHasTable(String hasTable) {
+        this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
@@ -207,6 +240,20 @@ fieldMapColumns.put("BenefitType", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getParentTypeId() {
+        return this.parentTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getHasTable() {
+        return this.hasTable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDescription() {
         return this.description;
     }
@@ -247,6 +294,28 @@ fieldMapColumns.put("BenefitType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>BenefitType</code> by the relation named <code>ParentBenefitType</code>.
+     * @return the <code>BenefitType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public BenefitType getParentBenefitType() throws RepositoryException {
+        if (this.parentBenefitType == null) {
+            this.parentBenefitType = getRelatedOne(BenefitType.class, "ParentBenefitType");
+        }
+        return this.parentBenefitType;
+    }
+    /**
+     * Auto generated method that gets the related <code>BenefitType</code> by the relation named <code>ChildBenefitType</code>.
+     * @return the list of <code>BenefitType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends BenefitType> getChildBenefitTypes() throws RepositoryException {
+        if (this.childBenefitTypes == null) {
+            this.childBenefitTypes = getRelated(BenefitType.class, "ChildBenefitType");
+        }
+        return this.childBenefitTypes;
+    }
+    /**
      * Auto generated method that gets the related <code>PartyBenefit</code> by the relation named <code>PartyBenefit</code>.
      * @return the list of <code>PartyBenefit</code>
      * @throws RepositoryException if an error occurs
@@ -258,6 +327,20 @@ fieldMapColumns.put("BenefitType", fields);
         return this.partyBenefits;
     }
 
+    /**
+     * Auto generated value setter.
+     * @param parentBenefitType the parentBenefitType to set
+    */
+    public void setParentBenefitType(BenefitType parentBenefitType) {
+        this.parentBenefitType = parentBenefitType;
+    }
+    /**
+     * Auto generated value setter.
+     * @param childBenefitTypes the childBenefitTypes to set
+    */
+    public void setChildBenefitTypes(List<BenefitType> childBenefitTypes) {
+        this.childBenefitTypes = childBenefitTypes;
+    }
     /**
      * Auto generated value setter.
      * @param partyBenefits the partyBenefits to set
@@ -300,6 +383,8 @@ fieldMapColumns.put("BenefitType", fields);
         preInit();
         setBenefitTypeId((String) mapValue.get("benefitTypeId"));
         setBenefitName((String) mapValue.get("benefitName"));
+        setParentTypeId((String) mapValue.get("parentTypeId"));
+        setHasTable((String) mapValue.get("hasTable"));
         setDescription((String) mapValue.get("description"));
         setEmployerPaidPercentage(convertToBigDecimal(mapValue.get("employerPaidPercentage")));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -315,6 +400,8 @@ fieldMapColumns.put("BenefitType", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("benefitTypeId", getBenefitTypeId());
         mapValue.put("benefitName", getBenefitName());
+        mapValue.put("parentTypeId", getParentTypeId());
+        mapValue.put("hasTable", getHasTable());
         mapValue.put("description", getDescription());
         mapValue.put("employerPaidPercentage", getEmployerPaidPercentage());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

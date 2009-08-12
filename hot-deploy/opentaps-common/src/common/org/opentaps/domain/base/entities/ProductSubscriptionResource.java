@@ -67,6 +67,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("useTime", "USE_TIME");
         fields.put("useTimeUomId", "USE_TIME_UOM_ID");
         fields.put("useRoleTypeId", "USE_ROLE_TYPE_ID");
+        fields.put("automaticExtend", "AUTOMATIC_EXTEND");
+        fields.put("canclAutmExtTime", "CANCL_AUTM_EXT_TIME");
+        fields.put("canclAutmExtTimeUomId", "CANCL_AUTM_EXT_TIME_UOM_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -88,6 +91,9 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
     useTime("useTime"),
     useTimeUomId("useTimeUomId"),
     useRoleTypeId("useRoleTypeId"),
+    automaticExtend("automaticExtend"),
+    canclAutmExtTime("canclAutmExtTime"),
+    canclAutmExtTimeUomId("canclAutmExtTimeUomId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -143,6 +149,12 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
    private String useTimeUomId;
    @Column(name="USE_ROLE_TYPE_ID")
    private String useRoleTypeId;
+   @Column(name="AUTOMATIC_EXTEND")
+   private String automaticExtend;
+   @Column(name="CANCL_AUTM_EXT_TIME")
+   private Long canclAutmExtTime;
+   @Column(name="CANCL_AUTM_EXT_TIME_UOM_ID")
+   private String canclAutmExtTimeUomId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -180,6 +192,13 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
    
    private Uom useTimeUom = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="CANCL_AUTM_EXT_TIME_UOM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Uom cancelTimeUom = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="AVAILABLE_TIME_UOM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -205,7 +224,7 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");this.primaryKeyNames.add("subscriptionResourceId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("subscriptionResourceId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("purchaseFromDate");this.allFieldsNames.add("purchaseThruDate");this.allFieldsNames.add("maxLifeTime");this.allFieldsNames.add("maxLifeTimeUomId");this.allFieldsNames.add("availableTime");this.allFieldsNames.add("availableTimeUomId");this.allFieldsNames.add("useCountLimit");this.allFieldsNames.add("useTime");this.allFieldsNames.add("useTimeUomId");this.allFieldsNames.add("useRoleTypeId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("subscriptionResourceId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("purchaseFromDate");this.allFieldsNames.add("purchaseThruDate");this.allFieldsNames.add("maxLifeTime");this.allFieldsNames.add("maxLifeTimeUomId");this.allFieldsNames.add("availableTime");this.allFieldsNames.add("availableTimeUomId");this.allFieldsNames.add("useCountLimit");this.allFieldsNames.add("useTime");this.allFieldsNames.add("useTimeUomId");this.allFieldsNames.add("useRoleTypeId");this.allFieldsNames.add("automaticExtend");this.allFieldsNames.add("canclAutmExtTime");this.allFieldsNames.add("canclAutmExtTimeUomId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -317,6 +336,27 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
      */
     public void setUseRoleTypeId(String useRoleTypeId) {
         this.useRoleTypeId = useRoleTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param automaticExtend the automaticExtend to set
+     */
+    public void setAutomaticExtend(String automaticExtend) {
+        this.automaticExtend = automaticExtend;
+    }
+    /**
+     * Auto generated value setter.
+     * @param canclAutmExtTime the canclAutmExtTime to set
+     */
+    public void setCanclAutmExtTime(Long canclAutmExtTime) {
+        this.canclAutmExtTime = canclAutmExtTime;
+    }
+    /**
+     * Auto generated value setter.
+     * @param canclAutmExtTimeUomId the canclAutmExtTimeUomId to set
+     */
+    public void setCanclAutmExtTimeUomId(String canclAutmExtTimeUomId) {
+        this.canclAutmExtTimeUomId = canclAutmExtTimeUomId;
     }
     /**
      * Auto generated value setter.
@@ -447,6 +487,27 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAutomaticExtend() {
+        return this.automaticExtend;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getCanclAutmExtTime() {
+        return this.canclAutmExtTime;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCanclAutmExtTimeUomId() {
+        return this.canclAutmExtTimeUomId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -519,6 +580,17 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
         return this.useTimeUom;
     }
     /**
+     * Auto generated method that gets the related <code>Uom</code> by the relation named <code>CancelTimeUom</code>.
+     * @return the <code>Uom</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Uom getCancelTimeUom() throws RepositoryException {
+        if (this.cancelTimeUom == null) {
+            this.cancelTimeUom = getRelatedOne(Uom.class, "CancelTimeUom");
+        }
+        return this.cancelTimeUom;
+    }
+    /**
      * Auto generated method that gets the related <code>Uom</code> by the relation named <code>AvailableTimeUom</code>.
      * @return the <code>Uom</code>
      * @throws RepositoryException if an error occurs
@@ -571,6 +643,13 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
     }
     /**
      * Auto generated value setter.
+     * @param cancelTimeUom the cancelTimeUom to set
+    */
+    public void setCancelTimeUom(Uom cancelTimeUom) {
+        this.cancelTimeUom = cancelTimeUom;
+    }
+    /**
+     * Auto generated value setter.
      * @param availableTimeUom the availableTimeUom to set
     */
     public void setAvailableTimeUom(Uom availableTimeUom) {
@@ -603,6 +682,9 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
         setUseTime((Long) mapValue.get("useTime"));
         setUseTimeUomId((String) mapValue.get("useTimeUomId"));
         setUseRoleTypeId((String) mapValue.get("useRoleTypeId"));
+        setAutomaticExtend((String) mapValue.get("automaticExtend"));
+        setCanclAutmExtTime((Long) mapValue.get("canclAutmExtTime"));
+        setCanclAutmExtTimeUomId((String) mapValue.get("canclAutmExtTimeUomId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -628,6 +710,9 @@ fieldMapColumns.put("ProductSubscriptionResource", fields);
         mapValue.put("useTime", getUseTime());
         mapValue.put("useTimeUomId", getUseTimeUomId());
         mapValue.put("useRoleTypeId", getUseRoleTypeId());
+        mapValue.put("automaticExtend", getAutomaticExtend());
+        mapValue.put("canclAutmExtTime", getCanclAutmExtTime());
+        mapValue.put("canclAutmExtTimeUomId", getCanclAutmExtTimeUomId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

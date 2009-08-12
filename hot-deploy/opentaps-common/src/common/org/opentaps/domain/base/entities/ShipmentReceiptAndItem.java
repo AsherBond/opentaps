@@ -49,10 +49,13 @@ import java.sql.Timestamp;
  * Auto generated base entity ShipmentReceiptAndItem.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectShipmentReceiptAndItems", query="SELECT II.FACILITY_ID AS \"facilityId\",II.UNIT_COST AS \"unitCost\",SR.RECEIPT_ID AS \"receiptId\",SR.INVENTORY_ITEM_ID AS \"inventoryItemId\",SR.PRODUCT_ID AS \"productId\",SR.SHIPMENT_ID AS \"shipmentId\",SR.SHIPMENT_PACKAGE_SEQ_ID AS \"shipmentPackageSeqId\",SR.ORDER_ID AS \"orderId\",SR.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",SR.RETURN_ID AS \"returnId\",SR.RETURN_ITEM_SEQ_ID AS \"returnItemSeqId\",SR.REJECTION_ID AS \"rejectionId\",SR.RECEIVED_BY_USER_LOGIN_ID AS \"receivedByUserLoginId\",SR.DATETIME_RECEIVED AS \"datetimeReceived\",SR.ITEM_DESCRIPTION AS \"itemDescription\",SR.QUANTITY_ACCEPTED AS \"quantityAccepted\",SR.QUANTITY_REJECTED AS \"quantityRejected\" FROM SHIPMENT_RECEIPT SR INNER JOIN INVENTORY_ITEM II ON SR.INVENTORY_ITEM_ID = II.INVENTORY_ITEM_ID", resultSetMapping="ShipmentReceiptAndItemMapping")
+@NamedNativeQuery(name="selectShipmentReceiptAndItems", query="SELECT II.FACILITY_ID AS \"facilityId\",II.LOCATION_SEQ_ID AS \"locationSeqId\",II.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",II.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",II.UNIT_COST AS \"unitCost\",SR.RECEIPT_ID AS \"receiptId\",SR.INVENTORY_ITEM_ID AS \"inventoryItemId\",SR.PRODUCT_ID AS \"productId\",SR.SHIPMENT_ID AS \"shipmentId\",SR.SHIPMENT_PACKAGE_SEQ_ID AS \"shipmentPackageSeqId\",SR.ORDER_ID AS \"orderId\",SR.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",SR.RETURN_ID AS \"returnId\",SR.RETURN_ITEM_SEQ_ID AS \"returnItemSeqId\",SR.REJECTION_ID AS \"rejectionId\",SR.RECEIVED_BY_USER_LOGIN_ID AS \"receivedByUserLoginId\",SR.DATETIME_RECEIVED AS \"datetimeReceived\",SR.ITEM_DESCRIPTION AS \"itemDescription\",SR.QUANTITY_ACCEPTED AS \"quantityAccepted\",SR.QUANTITY_REJECTED AS \"quantityRejected\" FROM SHIPMENT_RECEIPT SR INNER JOIN INVENTORY_ITEM II ON SR.INVENTORY_ITEM_ID = II.INVENTORY_ITEM_ID", resultSetMapping="ShipmentReceiptAndItemMapping")
 @SqlResultSetMapping(name="ShipmentReceiptAndItemMapping", entities={
 @EntityResult(entityClass=ShipmentReceiptAndItem.class, fields = {
 @FieldResult(name="facilityId", column="facilityId")
+,@FieldResult(name="locationSeqId", column="locationSeqId")
+,@FieldResult(name="quantityOnHandTotal", column="quantityOnHandTotal")
+,@FieldResult(name="availableToPromiseTotal", column="availableToPromiseTotal")
 ,@FieldResult(name="unitCost", column="unitCost")
 ,@FieldResult(name="receiptId", column="receiptId")
 ,@FieldResult(name="inventoryItemId", column="inventoryItemId")
@@ -76,6 +79,9 @@ public class ShipmentReceiptAndItem extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("facilityId", "II.FACILITY_ID");
+        fields.put("locationSeqId", "II.LOCATION_SEQ_ID");
+        fields.put("quantityOnHandTotal", "II.QUANTITY_ON_HAND_TOTAL");
+        fields.put("availableToPromiseTotal", "II.AVAILABLE_TO_PROMISE_TOTAL");
         fields.put("unitCost", "II.UNIT_COST");
         fields.put("receiptId", "SR.RECEIPT_ID");
         fields.put("inventoryItemId", "SR.INVENTORY_ITEM_ID");
@@ -96,6 +102,9 @@ fieldMapColumns.put("ShipmentReceiptAndItem", fields);
 }
   public static enum Fields implements EntityFieldInterface<ShipmentReceiptAndItem> {
     facilityId("facilityId"),
+    locationSeqId("locationSeqId"),
+    quantityOnHandTotal("quantityOnHandTotal"),
+    availableToPromiseTotal("availableToPromiseTotal"),
     unitCost("unitCost"),
     receiptId("receiptId"),
     inventoryItemId("inventoryItemId"),
@@ -124,6 +133,12 @@ fieldMapColumns.put("ShipmentReceiptAndItem", fields);
 
     
    private String facilityId;
+    
+   private String locationSeqId;
+    
+   private BigDecimal quantityOnHandTotal;
+    
+   private BigDecimal availableToPromiseTotal;
     
    private BigDecimal unitCost;
     @Id
@@ -168,7 +183,7 @@ fieldMapColumns.put("ShipmentReceiptAndItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("receiptId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("facilityId");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("productId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentPackageSeqId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("returnId");this.allFieldsNames.add("returnItemSeqId");this.allFieldsNames.add("rejectionId");this.allFieldsNames.add("receivedByUserLoginId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("quantityAccepted");this.allFieldsNames.add("quantityRejected");
+      this.allFieldsNames.add("facilityId");this.allFieldsNames.add("locationSeqId");this.allFieldsNames.add("quantityOnHandTotal");this.allFieldsNames.add("availableToPromiseTotal");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("receiptId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("productId");this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentPackageSeqId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("returnId");this.allFieldsNames.add("returnItemSeqId");this.allFieldsNames.add("rejectionId");this.allFieldsNames.add("receivedByUserLoginId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("itemDescription");this.allFieldsNames.add("quantityAccepted");this.allFieldsNames.add("quantityRejected");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -192,6 +207,27 @@ fieldMapColumns.put("ShipmentReceiptAndItem", fields);
      */
     private void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param locationSeqId the locationSeqId to set
+     */
+    private void setLocationSeqId(String locationSeqId) {
+        this.locationSeqId = locationSeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param quantityOnHandTotal the quantityOnHandTotal to set
+     */
+    private void setQuantityOnHandTotal(BigDecimal quantityOnHandTotal) {
+        this.quantityOnHandTotal = quantityOnHandTotal;
+    }
+    /**
+     * Auto generated value setter.
+     * @param availableToPromiseTotal the availableToPromiseTotal to set
+     */
+    private void setAvailableToPromiseTotal(BigDecimal availableToPromiseTotal) {
+        this.availableToPromiseTotal = availableToPromiseTotal;
     }
     /**
      * Auto generated value setter.
@@ -315,6 +351,27 @@ fieldMapColumns.put("ShipmentReceiptAndItem", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getLocationSeqId() {
+        return this.locationSeqId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getQuantityOnHandTotal() {
+        return this.quantityOnHandTotal;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAvailableToPromiseTotal() {
+        return this.availableToPromiseTotal;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
     public BigDecimal getUnitCost() {
@@ -434,6 +491,9 @@ fieldMapColumns.put("ShipmentReceiptAndItem", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setFacilityId((String) mapValue.get("facilityId"));
+        setLocationSeqId((String) mapValue.get("locationSeqId"));
+        setQuantityOnHandTotal(convertToBigDecimal(mapValue.get("quantityOnHandTotal")));
+        setAvailableToPromiseTotal(convertToBigDecimal(mapValue.get("availableToPromiseTotal")));
         setUnitCost(convertToBigDecimal(mapValue.get("unitCost")));
         setReceiptId((String) mapValue.get("receiptId"));
         setInventoryItemId((String) mapValue.get("inventoryItemId"));
@@ -458,6 +518,9 @@ fieldMapColumns.put("ShipmentReceiptAndItem", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("facilityId", getFacilityId());
+        mapValue.put("locationSeqId", getLocationSeqId());
+        mapValue.put("quantityOnHandTotal", getQuantityOnHandTotal());
+        mapValue.put("availableToPromiseTotal", getAvailableToPromiseTotal());
         mapValue.put("unitCost", getUnitCost());
         mapValue.put("receiptId", getReceiptId());
         mapValue.put("inventoryItemId", getInventoryItemId());

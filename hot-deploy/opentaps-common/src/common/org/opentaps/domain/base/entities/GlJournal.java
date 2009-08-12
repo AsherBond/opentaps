@@ -115,6 +115,10 @@ fieldMapColumns.put("GlJournal", fields);
    @JoinColumn(name="GL_JOURNAL_ID")
    
    private List<AcctgTrans> acctgTranses = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ERROR_GL_JOURNAL_ID")
+   
+   private List<PartyAcctgPreference> partyAcctgPreferences = null;
 
   /**
    * Default constructor.
@@ -292,6 +296,17 @@ fieldMapColumns.put("GlJournal", fields);
         }
         return this.acctgTranses;
     }
+    /**
+     * Auto generated method that gets the related <code>PartyAcctgPreference</code> by the relation named <code>PartyAcctgPreference</code>.
+     * @return the list of <code>PartyAcctgPreference</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyAcctgPreference> getPartyAcctgPreferences() throws RepositoryException {
+        if (this.partyAcctgPreferences == null) {
+            this.partyAcctgPreferences = getRelated(PartyAcctgPreference.class, "PartyAcctgPreference");
+        }
+        return this.partyAcctgPreferences;
+    }
 
     /**
      * Auto generated value setter.
@@ -306,6 +321,13 @@ fieldMapColumns.put("GlJournal", fields);
     */
     public void setAcctgTranses(List<AcctgTrans> acctgTranses) {
         this.acctgTranses = acctgTranses;
+    }
+    /**
+     * Auto generated value setter.
+     * @param partyAcctgPreferences the partyAcctgPreferences to set
+    */
+    public void setPartyAcctgPreferences(List<PartyAcctgPreference> partyAcctgPreferences) {
+        this.partyAcctgPreferences = partyAcctgPreferences;
     }
 
 

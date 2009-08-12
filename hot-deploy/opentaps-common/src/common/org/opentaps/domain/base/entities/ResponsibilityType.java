@@ -53,6 +53,8 @@ public class ResponsibilityType extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("responsibilityTypeId", "RESPONSIBILITY_TYPE_ID");
+        fields.put("parentTypeId", "PARENT_TYPE_ID");
+        fields.put("hasTable", "HAS_TABLE");
         fields.put("description", "DESCRIPTION");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -62,6 +64,8 @@ fieldMapColumns.put("ResponsibilityType", fields);
 }
   public static enum Fields implements EntityFieldInterface<ResponsibilityType> {
     responsibilityTypeId("responsibilityTypeId"),
+    parentTypeId("parentTypeId"),
+    hasTable("hasTable"),
     description("description"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -82,6 +86,10 @@ fieldMapColumns.put("ResponsibilityType", fields);
    @Id
    @Column(name="RESPONSIBILITY_TYPE_ID")
    private String responsibilityTypeId;
+   @Column(name="PARENT_TYPE_ID")
+   private String parentTypeId;
+   @Column(name="HAS_TABLE")
+   private String hasTable;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="LAST_UPDATED_STAMP")
@@ -92,10 +100,21 @@ fieldMapColumns.put("ResponsibilityType", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private ResponsibilityType parentResponsibilityType = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="responsibilityType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RESPONSIBILITY_TYPE_ID")
    
    private List<EmplPositionResponsibility> emplPositionResponsibilitys = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID")
+   
+   private List<ResponsibilityType> childResponsibilityTypes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="responsibilityType", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="RESPONSIBILITY_TYPE_ID")
    
@@ -112,7 +131,7 @@ fieldMapColumns.put("ResponsibilityType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("responsibilityTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("responsibilityTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("responsibilityTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -133,6 +152,20 @@ fieldMapColumns.put("ResponsibilityType", fields);
      */
     public void setResponsibilityTypeId(String responsibilityTypeId) {
         this.responsibilityTypeId = responsibilityTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentTypeId the parentTypeId to set
+     */
+    public void setParentTypeId(String parentTypeId) {
+        this.parentTypeId = parentTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param hasTable the hasTable to set
+     */
+    public void setHasTable(String hasTable) {
+        this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
@@ -181,6 +214,20 @@ fieldMapColumns.put("ResponsibilityType", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getParentTypeId() {
+        return this.parentTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getHasTable() {
+        return this.hasTable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDescription() {
         return this.description;
     }
@@ -214,6 +261,17 @@ fieldMapColumns.put("ResponsibilityType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>ResponsibilityType</code> by the relation named <code>ParentResponsibilityType</code>.
+     * @return the <code>ResponsibilityType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public ResponsibilityType getParentResponsibilityType() throws RepositoryException {
+        if (this.parentResponsibilityType == null) {
+            this.parentResponsibilityType = getRelatedOne(ResponsibilityType.class, "ParentResponsibilityType");
+        }
+        return this.parentResponsibilityType;
+    }
+    /**
      * Auto generated method that gets the related <code>EmplPositionResponsibility</code> by the relation named <code>EmplPositionResponsibility</code>.
      * @return the list of <code>EmplPositionResponsibility</code>
      * @throws RepositoryException if an error occurs
@@ -223,6 +281,17 @@ fieldMapColumns.put("ResponsibilityType", fields);
             this.emplPositionResponsibilitys = getRelated(EmplPositionResponsibility.class, "EmplPositionResponsibility");
         }
         return this.emplPositionResponsibilitys;
+    }
+    /**
+     * Auto generated method that gets the related <code>ResponsibilityType</code> by the relation named <code>ChildResponsibilityType</code>.
+     * @return the list of <code>ResponsibilityType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ResponsibilityType> getChildResponsibilityTypes() throws RepositoryException {
+        if (this.childResponsibilityTypes == null) {
+            this.childResponsibilityTypes = getRelated(ResponsibilityType.class, "ChildResponsibilityType");
+        }
+        return this.childResponsibilityTypes;
     }
     /**
      * Auto generated method that gets the related <code>ValidResponsibility</code> by the relation named <code>ValidResponsibility</code>.
@@ -238,10 +307,24 @@ fieldMapColumns.put("ResponsibilityType", fields);
 
     /**
      * Auto generated value setter.
+     * @param parentResponsibilityType the parentResponsibilityType to set
+    */
+    public void setParentResponsibilityType(ResponsibilityType parentResponsibilityType) {
+        this.parentResponsibilityType = parentResponsibilityType;
+    }
+    /**
+     * Auto generated value setter.
      * @param emplPositionResponsibilitys the emplPositionResponsibilitys to set
     */
     public void setEmplPositionResponsibilitys(List<EmplPositionResponsibility> emplPositionResponsibilitys) {
         this.emplPositionResponsibilitys = emplPositionResponsibilitys;
+    }
+    /**
+     * Auto generated value setter.
+     * @param childResponsibilityTypes the childResponsibilityTypes to set
+    */
+    public void setChildResponsibilityTypes(List<ResponsibilityType> childResponsibilityTypes) {
+        this.childResponsibilityTypes = childResponsibilityTypes;
     }
     /**
      * Auto generated value setter.
@@ -311,6 +394,8 @@ fieldMapColumns.put("ResponsibilityType", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setResponsibilityTypeId((String) mapValue.get("responsibilityTypeId"));
+        setParentTypeId((String) mapValue.get("parentTypeId"));
+        setHasTable((String) mapValue.get("hasTable"));
         setDescription((String) mapValue.get("description"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -324,6 +409,8 @@ fieldMapColumns.put("ResponsibilityType", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("responsibilityTypeId", getResponsibilityTypeId());
+        mapValue.put("parentTypeId", getParentTypeId());
+        mapValue.put("hasTable", getHasTable());
         mapValue.put("description", getDescription());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

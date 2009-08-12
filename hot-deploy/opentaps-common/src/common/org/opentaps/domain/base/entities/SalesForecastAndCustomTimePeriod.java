@@ -50,7 +50,7 @@ import java.sql.Date;
  * Auto generated base entity SalesForecastAndCustomTimePeriod.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectSalesForecastAndCustomTimePeriods", query="SELECT SF.SALES_FORECAST_ID AS \"salesForecastId\",SF.PARENT_SALES_FORECAST_ID AS \"parentSalesForecastId\",SF.ORGANIZATION_PARTY_ID AS \"organizationPartyId\",SF.INTERNAL_PARTY_ID AS \"internalPartyId\",SF.CUSTOM_TIME_PERIOD_ID AS \"customTimePeriodId\",SF.CURRENCY_UOM_ID AS \"currencyUomId\",SF.QUOTA_AMOUNT AS \"quotaAmount\",SF.FORECAST_AMOUNT AS \"forecastAmount\",SF.BEST_CASE_AMOUNT AS \"bestCaseAmount\",SF.CLOSED_AMOUNT AS \"closedAmount\",SF.PERCENT_OF_QUOTA_FORECAST AS \"percentOfQuotaForecast\",SF.PERCENT_OF_QUOTA_CLOSED AS \"percentOfQuotaClosed\",SF.CREATED_BY_USER_LOGIN_ID AS \"createdByUserLoginId\",SF.MODIFIED_BY_USER_LOGIN_ID AS \"modifiedByUserLoginId\",CTP.PARENT_PERIOD_ID AS \"parentPeriodId\",CTP.PERIOD_TYPE_ID AS \"periodTypeId\",CTP.PERIOD_NUM AS \"periodNum\",CTP.PERIOD_NAME AS \"periodName\",CTP.FROM_DATE AS \"fromDate\",CTP.THRU_DATE AS \"thruDate\",CTP.IS_CLOSED AS \"isClosed\" FROM SALES_FORECAST SF INNER JOIN CUSTOM_TIME_PERIOD CTP ON SF.CUSTOM_TIME_PERIOD_ID = CTP.CUSTOM_TIME_PERIOD_ID", resultSetMapping="SalesForecastAndCustomTimePeriodMapping")
+@NamedNativeQuery(name="selectSalesForecastAndCustomTimePeriods", query="SELECT SF.SALES_FORECAST_ID AS \"salesForecastId\",SF.PARENT_SALES_FORECAST_ID AS \"parentSalesForecastId\",SF.ORGANIZATION_PARTY_ID AS \"organizationPartyId\",SF.INTERNAL_PARTY_ID AS \"internalPartyId\",SF.CUSTOM_TIME_PERIOD_ID AS \"customTimePeriodId\",SF.CURRENCY_UOM_ID AS \"currencyUomId\",SF.QUOTA_AMOUNT AS \"quotaAmount\",SF.FORECAST_AMOUNT AS \"forecastAmount\",SF.BEST_CASE_AMOUNT AS \"bestCaseAmount\",SF.CLOSED_AMOUNT AS \"closedAmount\",SF.PERCENT_OF_QUOTA_FORECAST AS \"percentOfQuotaForecast\",SF.PERCENT_OF_QUOTA_CLOSED AS \"percentOfQuotaClosed\",SF.PIPELINE_AMOUNT AS \"pipelineAmount\",SF.CREATED_BY_USER_LOGIN_ID AS \"createdByUserLoginId\",SF.MODIFIED_BY_USER_LOGIN_ID AS \"modifiedByUserLoginId\",CTP.PARENT_PERIOD_ID AS \"parentPeriodId\",CTP.PERIOD_TYPE_ID AS \"periodTypeId\",CTP.PERIOD_NUM AS \"periodNum\",CTP.PERIOD_NAME AS \"periodName\",CTP.FROM_DATE AS \"fromDate\",CTP.THRU_DATE AS \"thruDate\",CTP.IS_CLOSED AS \"isClosed\" FROM SALES_FORECAST SF INNER JOIN CUSTOM_TIME_PERIOD CTP ON SF.CUSTOM_TIME_PERIOD_ID = CTP.CUSTOM_TIME_PERIOD_ID", resultSetMapping="SalesForecastAndCustomTimePeriodMapping")
 @SqlResultSetMapping(name="SalesForecastAndCustomTimePeriodMapping", entities={
 @EntityResult(entityClass=SalesForecastAndCustomTimePeriod.class, fields = {
 @FieldResult(name="salesForecastId", column="salesForecastId")
@@ -65,6 +65,7 @@ import java.sql.Date;
 ,@FieldResult(name="closedAmount", column="closedAmount")
 ,@FieldResult(name="percentOfQuotaForecast", column="percentOfQuotaForecast")
 ,@FieldResult(name="percentOfQuotaClosed", column="percentOfQuotaClosed")
+,@FieldResult(name="pipelineAmount", column="pipelineAmount")
 ,@FieldResult(name="createdByUserLoginId", column="createdByUserLoginId")
 ,@FieldResult(name="modifiedByUserLoginId", column="modifiedByUserLoginId")
 ,@FieldResult(name="parentPeriodId", column="parentPeriodId")
@@ -92,6 +93,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("closedAmount", "SF.CLOSED_AMOUNT");
         fields.put("percentOfQuotaForecast", "SF.PERCENT_OF_QUOTA_FORECAST");
         fields.put("percentOfQuotaClosed", "SF.PERCENT_OF_QUOTA_CLOSED");
+        fields.put("pipelineAmount", "SF.PIPELINE_AMOUNT");
         fields.put("createdByUserLoginId", "SF.CREATED_BY_USER_LOGIN_ID");
         fields.put("modifiedByUserLoginId", "SF.MODIFIED_BY_USER_LOGIN_ID");
         fields.put("parentPeriodId", "CTP.PARENT_PERIOD_ID");
@@ -116,6 +118,7 @@ fieldMapColumns.put("SalesForecastAndCustomTimePeriod", fields);
     closedAmount("closedAmount"),
     percentOfQuotaForecast("percentOfQuotaForecast"),
     percentOfQuotaClosed("percentOfQuotaClosed"),
+    pipelineAmount("pipelineAmount"),
     createdByUserLoginId("createdByUserLoginId"),
     modifiedByUserLoginId("modifiedByUserLoginId"),
     parentPeriodId("parentPeriodId"),
@@ -160,6 +163,8 @@ fieldMapColumns.put("SalesForecastAndCustomTimePeriod", fields);
     
    private BigDecimal percentOfQuotaClosed;
     
+   private BigDecimal pipelineAmount;
+    
    private String createdByUserLoginId;
     
    private String modifiedByUserLoginId;
@@ -189,7 +194,7 @@ fieldMapColumns.put("SalesForecastAndCustomTimePeriod", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("salesForecastId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("salesForecastId");this.allFieldsNames.add("parentSalesForecastId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("internalPartyId");this.allFieldsNames.add("customTimePeriodId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("quotaAmount");this.allFieldsNames.add("forecastAmount");this.allFieldsNames.add("bestCaseAmount");this.allFieldsNames.add("closedAmount");this.allFieldsNames.add("percentOfQuotaForecast");this.allFieldsNames.add("percentOfQuotaClosed");this.allFieldsNames.add("createdByUserLoginId");this.allFieldsNames.add("modifiedByUserLoginId");this.allFieldsNames.add("parentPeriodId");this.allFieldsNames.add("periodTypeId");this.allFieldsNames.add("periodNum");this.allFieldsNames.add("periodName");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("isClosed");
+      this.allFieldsNames.add("salesForecastId");this.allFieldsNames.add("parentSalesForecastId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("internalPartyId");this.allFieldsNames.add("customTimePeriodId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("quotaAmount");this.allFieldsNames.add("forecastAmount");this.allFieldsNames.add("bestCaseAmount");this.allFieldsNames.add("closedAmount");this.allFieldsNames.add("percentOfQuotaForecast");this.allFieldsNames.add("percentOfQuotaClosed");this.allFieldsNames.add("pipelineAmount");this.allFieldsNames.add("createdByUserLoginId");this.allFieldsNames.add("modifiedByUserLoginId");this.allFieldsNames.add("parentPeriodId");this.allFieldsNames.add("periodTypeId");this.allFieldsNames.add("periodNum");this.allFieldsNames.add("periodName");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("isClosed");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -290,6 +295,13 @@ fieldMapColumns.put("SalesForecastAndCustomTimePeriod", fields);
      */
     private void setPercentOfQuotaClosed(BigDecimal percentOfQuotaClosed) {
         this.percentOfQuotaClosed = percentOfQuotaClosed;
+    }
+    /**
+     * Auto generated value setter.
+     * @param pipelineAmount the pipelineAmount to set
+     */
+    private void setPipelineAmount(BigDecimal pipelineAmount) {
+        this.pipelineAmount = pipelineAmount;
     }
     /**
      * Auto generated value setter.
@@ -441,6 +453,13 @@ fieldMapColumns.put("SalesForecastAndCustomTimePeriod", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPipelineAmount() {
+        return this.pipelineAmount;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getCreatedByUserLoginId() {
@@ -522,6 +541,7 @@ fieldMapColumns.put("SalesForecastAndCustomTimePeriod", fields);
         setClosedAmount(convertToBigDecimal(mapValue.get("closedAmount")));
         setPercentOfQuotaForecast(convertToBigDecimal(mapValue.get("percentOfQuotaForecast")));
         setPercentOfQuotaClosed(convertToBigDecimal(mapValue.get("percentOfQuotaClosed")));
+        setPipelineAmount(convertToBigDecimal(mapValue.get("pipelineAmount")));
         setCreatedByUserLoginId((String) mapValue.get("createdByUserLoginId"));
         setModifiedByUserLoginId((String) mapValue.get("modifiedByUserLoginId"));
         setParentPeriodId((String) mapValue.get("parentPeriodId"));
@@ -550,6 +570,7 @@ fieldMapColumns.put("SalesForecastAndCustomTimePeriod", fields);
         mapValue.put("closedAmount", getClosedAmount());
         mapValue.put("percentOfQuotaForecast", getPercentOfQuotaForecast());
         mapValue.put("percentOfQuotaClosed", getPercentOfQuotaClosed());
+        mapValue.put("pipelineAmount", getPipelineAmount());
         mapValue.put("createdByUserLoginId", getCreatedByUserLoginId());
         mapValue.put("modifiedByUserLoginId", getModifiedByUserLoginId());
         mapValue.put("parentPeriodId", getParentPeriodId());

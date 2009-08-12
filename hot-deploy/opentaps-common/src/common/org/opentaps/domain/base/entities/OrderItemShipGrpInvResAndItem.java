@@ -50,7 +50,7 @@ import java.sql.Timestamp;
  * Auto generated base entity OrderItemShipGrpInvResAndItem.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectOrderItemShipGrpInvResAndItems", query="SELECT OISGIR.ORDER_ID AS \"orderId\",OISGIR.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",OISGIR.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",OISGIR.INVENTORY_ITEM_ID AS \"inventoryItemId\",OISGIR.RESERVE_ORDER_ENUM_ID AS \"reserveOrderEnumId\",OISGIR.QUANTITY AS \"quantity\",OISGIR.QUANTITY_NOT_AVAILABLE AS \"quantityNotAvailable\",OISGIR.RESERVED_DATETIME AS \"reservedDatetime\",OISGIR.CREATED_DATETIME AS \"createdDatetime\",OISGIR.PROMISED_DATETIME AS \"promisedDatetime\",OISGIR.CURRENT_PROMISED_DATE AS \"currentPromisedDate\",OISGIR.SEQUENCE_ID AS \"sequenceId\",OISGIR.OLD_PICK_START_DATE AS \"oldPickStartDate\",II.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",II.PRODUCT_ID AS \"productId\",II.PARTY_ID AS \"partyId\",II.OWNER_PARTY_ID AS \"ownerPartyId\",II.STATUS_ID AS \"statusId\",II.DATETIME_RECEIVED AS \"datetimeReceived\",II.DATETIME_MANUFACTURED AS \"datetimeManufactured\",II.EXPIRE_DATE AS \"expireDate\",II.FACILITY_ID AS \"facilityId\",II.CONTAINER_ID AS \"containerId\",II.LOT_ID AS \"lotId\",II.UOM_ID AS \"uomId\",II.BIN_NUMBER AS \"binNumber\",II.LOCATION_SEQ_ID AS \"locationSeqId\",II.COMMENTS AS \"comments\",II.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",II.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",II.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",II.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",II.SERIAL_NUMBER AS \"serialNumber\",II.SOFT_IDENTIFIER AS \"softIdentifier\",II.ACTIVATION_NUMBER AS \"activationNumber\",II.ACTIVATION_VALID_THRU AS \"activationValidThru\",II.UNIT_COST AS \"unitCost\",II.CURRENCY_UOM_ID AS \"currencyUomId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",II.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\" FROM ORDER_ITEM_SHIP_GRP_INV_RES OISGIR INNER JOIN INVENTORY_ITEM II ON OISGIR.INVENTORY_ITEM_ID = II.INVENTORY_ITEM_ID", resultSetMapping="OrderItemShipGrpInvResAndItemMapping")
+@NamedNativeQuery(name="selectOrderItemShipGrpInvResAndItems", query="SELECT OISGIR.ORDER_ID AS \"orderId\",OISGIR.SHIP_GROUP_SEQ_ID AS \"shipGroupSeqId\",OISGIR.ORDER_ITEM_SEQ_ID AS \"orderItemSeqId\",OISGIR.INVENTORY_ITEM_ID AS \"inventoryItemId\",OISGIR.RESERVE_ORDER_ENUM_ID AS \"reserveOrderEnumId\",OISGIR.QUANTITY AS \"quantity\",OISGIR.QUANTITY_NOT_AVAILABLE AS \"quantityNotAvailable\",OISGIR.RESERVED_DATETIME AS \"reservedDatetime\",OISGIR.CREATED_DATETIME AS \"createdDatetime\",OISGIR.PROMISED_DATETIME AS \"promisedDatetime\",OISGIR.CURRENT_PROMISED_DATE AS \"currentPromisedDate\",OISGIR.PRIORITY AS \"priority\",OISGIR.SEQUENCE_ID AS \"sequenceId\",OISGIR.OLD_PICK_START_DATE AS \"oldPickStartDate\",II.INVENTORY_ITEM_TYPE_ID AS \"inventoryItemTypeId\",II.PRODUCT_ID AS \"productId\",II.PARTY_ID AS \"partyId\",II.OWNER_PARTY_ID AS \"ownerPartyId\",II.STATUS_ID AS \"statusId\",II.DATETIME_RECEIVED AS \"datetimeReceived\",II.DATETIME_MANUFACTURED AS \"datetimeManufactured\",II.EXPIRE_DATE AS \"expireDate\",II.FACILITY_ID AS \"facilityId\",II.CONTAINER_ID AS \"containerId\",II.LOT_ID AS \"lotId\",II.UOM_ID AS \"uomId\",II.BIN_NUMBER AS \"binNumber\",II.LOCATION_SEQ_ID AS \"locationSeqId\",II.COMMENTS AS \"comments\",II.QUANTITY_ON_HAND_TOTAL AS \"quantityOnHandTotal\",II.AVAILABLE_TO_PROMISE_TOTAL AS \"availableToPromiseTotal\",II.OLD_QUANTITY_ON_HAND AS \"oldQuantityOnHand\",II.OLD_AVAILABLE_TO_PROMISE AS \"oldAvailableToPromise\",II.SERIAL_NUMBER AS \"serialNumber\",II.SOFT_IDENTIFIER AS \"softIdentifier\",II.ACTIVATION_NUMBER AS \"activationNumber\",II.ACTIVATION_VALID_THRU AS \"activationValidThru\",II.UNIT_COST AS \"unitCost\",II.CURRENCY_UOM_ID AS \"currencyUomId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\",II.PARENT_INVENTORY_ITEM_ID AS \"parentInventoryItemId\" FROM ORDER_ITEM_SHIP_GRP_INV_RES OISGIR INNER JOIN INVENTORY_ITEM II ON OISGIR.INVENTORY_ITEM_ID = II.INVENTORY_ITEM_ID", resultSetMapping="OrderItemShipGrpInvResAndItemMapping")
 @SqlResultSetMapping(name="OrderItemShipGrpInvResAndItemMapping", entities={
 @EntityResult(entityClass=OrderItemShipGrpInvResAndItem.class, fields = {
 @FieldResult(name="orderId", column="orderId")
@@ -64,6 +64,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="createdDatetime", column="createdDatetime")
 ,@FieldResult(name="promisedDatetime", column="promisedDatetime")
 ,@FieldResult(name="currentPromisedDate", column="currentPromisedDate")
+,@FieldResult(name="priority", column="priority")
 ,@FieldResult(name="sequenceId", column="sequenceId")
 ,@FieldResult(name="oldPickStartDate", column="oldPickStartDate")
 ,@FieldResult(name="inventoryItemTypeId", column="inventoryItemTypeId")
@@ -119,6 +120,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdDatetime", "OISGIR.CREATED_DATETIME");
         fields.put("promisedDatetime", "OISGIR.PROMISED_DATETIME");
         fields.put("currentPromisedDate", "OISGIR.CURRENT_PROMISED_DATE");
+        fields.put("priority", "OISGIR.PRIORITY");
         fields.put("sequenceId", "OISGIR.SEQUENCE_ID");
         fields.put("oldPickStartDate", "OISGIR.OLD_PICK_START_DATE");
         fields.put("inventoryItemTypeId", "II.INVENTORY_ITEM_TYPE_ID");
@@ -171,6 +173,7 @@ fieldMapColumns.put("OrderItemShipGrpInvResAndItem", fields);
     createdDatetime("createdDatetime"),
     promisedDatetime("promisedDatetime"),
     currentPromisedDate("currentPromisedDate"),
+    priority("priority"),
     sequenceId("sequenceId"),
     oldPickStartDate("oldPickStartDate"),
     inventoryItemTypeId("inventoryItemTypeId"),
@@ -241,6 +244,8 @@ fieldMapColumns.put("OrderItemShipGrpInvResAndItem", fields);
    private Timestamp promisedDatetime;
     
    private Timestamp currentPromisedDate;
+    
+   private String priority;
     
    private Long sequenceId;
     
@@ -329,7 +334,7 @@ fieldMapColumns.put("OrderItemShipGrpInvResAndItem", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("shipGroupSeqId");this.primaryKeyNames.add("orderItemSeqId");this.primaryKeyNames.add("inventoryItemId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("reserveOrderEnumId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("quantityNotAvailable");this.allFieldsNames.add("reservedDatetime");this.allFieldsNames.add("createdDatetime");this.allFieldsNames.add("promisedDatetime");this.allFieldsNames.add("currentPromisedDate");this.allFieldsNames.add("sequenceId");this.allFieldsNames.add("oldPickStartDate");this.allFieldsNames.add("inventoryItemTypeId");this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("datetimeManufactured");this.allFieldsNames.add("expireDate");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("containerId");this.allFieldsNames.add("lotId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("binNumber");this.allFieldsNames.add("locationSeqId");this.allFieldsNames.add("comments");this.allFieldsNames.add("quantityOnHandTotal");this.allFieldsNames.add("availableToPromiseTotal");this.allFieldsNames.add("oldQuantityOnHand");this.allFieldsNames.add("oldAvailableToPromise");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("softIdentifier");this.allFieldsNames.add("activationNumber");this.allFieldsNames.add("activationValidThru");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("parentInventoryItemId");
+      this.allFieldsNames.add("orderId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("reserveOrderEnumId");this.allFieldsNames.add("quantity");this.allFieldsNames.add("quantityNotAvailable");this.allFieldsNames.add("reservedDatetime");this.allFieldsNames.add("createdDatetime");this.allFieldsNames.add("promisedDatetime");this.allFieldsNames.add("currentPromisedDate");this.allFieldsNames.add("priority");this.allFieldsNames.add("sequenceId");this.allFieldsNames.add("oldPickStartDate");this.allFieldsNames.add("inventoryItemTypeId");this.allFieldsNames.add("productId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("ownerPartyId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("datetimeReceived");this.allFieldsNames.add("datetimeManufactured");this.allFieldsNames.add("expireDate");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("containerId");this.allFieldsNames.add("lotId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("binNumber");this.allFieldsNames.add("locationSeqId");this.allFieldsNames.add("comments");this.allFieldsNames.add("quantityOnHandTotal");this.allFieldsNames.add("availableToPromiseTotal");this.allFieldsNames.add("oldQuantityOnHand");this.allFieldsNames.add("oldAvailableToPromise");this.allFieldsNames.add("serialNumber");this.allFieldsNames.add("softIdentifier");this.allFieldsNames.add("activationNumber");this.allFieldsNames.add("activationValidThru");this.allFieldsNames.add("unitCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");this.allFieldsNames.add("parentInventoryItemId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -423,6 +428,13 @@ fieldMapColumns.put("OrderItemShipGrpInvResAndItem", fields);
      */
     private void setCurrentPromisedDate(Timestamp currentPromisedDate) {
         this.currentPromisedDate = currentPromisedDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param priority the priority to set
+     */
+    private void setPriority(String priority) {
+        this.priority = priority;
     }
     /**
      * Auto generated value setter.
@@ -770,6 +782,13 @@ fieldMapColumns.put("OrderItemShipGrpInvResAndItem", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPriority() {
+        return this.priority;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Long</code>
      */
     public Long getSequenceId() {
@@ -1053,6 +1072,7 @@ fieldMapColumns.put("OrderItemShipGrpInvResAndItem", fields);
         setCreatedDatetime((Timestamp) mapValue.get("createdDatetime"));
         setPromisedDatetime((Timestamp) mapValue.get("promisedDatetime"));
         setCurrentPromisedDate((Timestamp) mapValue.get("currentPromisedDate"));
+        setPriority((String) mapValue.get("priority"));
         setSequenceId((Long) mapValue.get("sequenceId"));
         setOldPickStartDate((Timestamp) mapValue.get("oldPickStartDate"));
         setInventoryItemTypeId((String) mapValue.get("inventoryItemTypeId"));
@@ -1109,6 +1129,7 @@ fieldMapColumns.put("OrderItemShipGrpInvResAndItem", fields);
         mapValue.put("createdDatetime", getCreatedDatetime());
         mapValue.put("promisedDatetime", getPromisedDatetime());
         mapValue.put("currentPromisedDate", getCurrentPromisedDate());
+        mapValue.put("priority", getPriority());
         mapValue.put("sequenceId", getSequenceId());
         mapValue.put("oldPickStartDate", getOldPickStartDate());
         mapValue.put("inventoryItemTypeId", getInventoryItemTypeId());

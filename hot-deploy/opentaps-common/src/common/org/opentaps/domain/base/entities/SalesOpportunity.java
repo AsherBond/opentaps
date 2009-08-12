@@ -182,6 +182,18 @@ fieldMapColumns.put("SalesOpportunity", fields);
    )
    
    private UserLogin userLogin = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="SALES_OPPORTUNITY_ID")
+   
+   private List<InvoiceItem> invoiceItems = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="SALES_OPPORTUNITY_ID")
+   
+   private List<OrderItem> orderItems = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="SALES_OPPORTUNITY_ID")
+   
+   private List<SalesOpportunityCompetitor> salesOpportunityCompetitors = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
@@ -198,6 +210,10 @@ fieldMapColumns.put("SalesOpportunity", fields);
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    @ContainedIn
    private List<SalesOpportunityRole> salesOpportunityRoles = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="SALES_OPPORTUNITY_ID")
+   
+   private List<SalesOpportunityTrckCode> salesOpportunityTrckCodes = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="salesOpportunity", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SALES_OPPORTUNITY_ID")
    
@@ -525,6 +541,39 @@ fieldMapColumns.put("SalesOpportunity", fields);
         return this.userLogin;
     }
     /**
+     * Auto generated method that gets the related <code>InvoiceItem</code> by the relation named <code>InvoiceItem</code>.
+     * @return the list of <code>InvoiceItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends InvoiceItem> getInvoiceItems() throws RepositoryException {
+        if (this.invoiceItems == null) {
+            this.invoiceItems = getRelated(InvoiceItem.class, "InvoiceItem");
+        }
+        return this.invoiceItems;
+    }
+    /**
+     * Auto generated method that gets the related <code>OrderItem</code> by the relation named <code>OrderItem</code>.
+     * @return the list of <code>OrderItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderItem> getOrderItems() throws RepositoryException {
+        if (this.orderItems == null) {
+            this.orderItems = getRelated(OrderItem.class, "OrderItem");
+        }
+        return this.orderItems;
+    }
+    /**
+     * Auto generated method that gets the related <code>SalesOpportunityCompetitor</code> by the relation named <code>SalesOpportunityCompetitor</code>.
+     * @return the list of <code>SalesOpportunityCompetitor</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends SalesOpportunityCompetitor> getSalesOpportunityCompetitors() throws RepositoryException {
+        if (this.salesOpportunityCompetitors == null) {
+            this.salesOpportunityCompetitors = getRelated(SalesOpportunityCompetitor.class, "SalesOpportunityCompetitor");
+        }
+        return this.salesOpportunityCompetitors;
+    }
+    /**
      * Auto generated method that gets the related <code>SalesOpportunityContent</code> by the relation named <code>SalesOpportunityContent</code>.
      * @return the list of <code>SalesOpportunityContent</code>
      * @throws RepositoryException if an error occurs
@@ -567,6 +616,17 @@ fieldMapColumns.put("SalesOpportunity", fields);
             this.salesOpportunityRoles = getRelated(SalesOpportunityRole.class, "SalesOpportunityRole");
         }
         return this.salesOpportunityRoles;
+    }
+    /**
+     * Auto generated method that gets the related <code>SalesOpportunityTrckCode</code> by the relation named <code>SalesOpportunityTrckCode</code>.
+     * @return the list of <code>SalesOpportunityTrckCode</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends SalesOpportunityTrckCode> getSalesOpportunityTrckCodes() throws RepositoryException {
+        if (this.salesOpportunityTrckCodes == null) {
+            this.salesOpportunityTrckCodes = getRelated(SalesOpportunityTrckCode.class, "SalesOpportunityTrckCode");
+        }
+        return this.salesOpportunityTrckCodes;
     }
     /**
      * Auto generated method that gets the related <code>SalesOpportunityWorkEffort</code> by the relation named <code>SalesOpportunityWorkEffort</code>.
@@ -617,6 +677,27 @@ fieldMapColumns.put("SalesOpportunity", fields);
     }
     /**
      * Auto generated value setter.
+     * @param invoiceItems the invoiceItems to set
+    */
+    public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
+        this.invoiceItems = invoiceItems;
+    }
+    /**
+     * Auto generated value setter.
+     * @param orderItems the orderItems to set
+    */
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesOpportunityCompetitors the salesOpportunityCompetitors to set
+    */
+    public void setSalesOpportunityCompetitors(List<SalesOpportunityCompetitor> salesOpportunityCompetitors) {
+        this.salesOpportunityCompetitors = salesOpportunityCompetitors;
+    }
+    /**
+     * Auto generated value setter.
      * @param salesOpportunityContents the salesOpportunityContents to set
     */
     public void setSalesOpportunityContents(List<SalesOpportunityContent> salesOpportunityContents) {
@@ -645,12 +726,46 @@ fieldMapColumns.put("SalesOpportunity", fields);
     }
     /**
      * Auto generated value setter.
+     * @param salesOpportunityTrckCodes the salesOpportunityTrckCodes to set
+    */
+    public void setSalesOpportunityTrckCodes(List<SalesOpportunityTrckCode> salesOpportunityTrckCodes) {
+        this.salesOpportunityTrckCodes = salesOpportunityTrckCodes;
+    }
+    /**
+     * Auto generated value setter.
      * @param salesOpportunityWorkEfforts the salesOpportunityWorkEfforts to set
     */
     public void setSalesOpportunityWorkEfforts(List<SalesOpportunityWorkEffort> salesOpportunityWorkEfforts) {
         this.salesOpportunityWorkEfforts = salesOpportunityWorkEfforts;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addSalesOpportunityCompetitor(SalesOpportunityCompetitor salesOpportunityCompetitor) {
+        if (this.salesOpportunityCompetitors == null) {
+            this.salesOpportunityCompetitors = new ArrayList<SalesOpportunityCompetitor>();
+        }
+        this.salesOpportunityCompetitors.add(salesOpportunityCompetitor);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeSalesOpportunityCompetitor(SalesOpportunityCompetitor salesOpportunityCompetitor) {
+        if (this.salesOpportunityCompetitors == null) {
+            return;
+        }
+        this.salesOpportunityCompetitors.remove(salesOpportunityCompetitor);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearSalesOpportunityCompetitor() {
+        if (this.salesOpportunityCompetitors == null) {
+            return;
+        }
+        this.salesOpportunityCompetitors.clear();
+    }
     /**
      * Auto generated method that add item to collection.
      */
@@ -731,6 +846,33 @@ fieldMapColumns.put("SalesOpportunity", fields);
             return;
         }
         this.salesOpportunityRoles.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addSalesOpportunityTrckCode(SalesOpportunityTrckCode salesOpportunityTrckCode) {
+        if (this.salesOpportunityTrckCodes == null) {
+            this.salesOpportunityTrckCodes = new ArrayList<SalesOpportunityTrckCode>();
+        }
+        this.salesOpportunityTrckCodes.add(salesOpportunityTrckCode);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeSalesOpportunityTrckCode(SalesOpportunityTrckCode salesOpportunityTrckCode) {
+        if (this.salesOpportunityTrckCodes == null) {
+            return;
+        }
+        this.salesOpportunityTrckCodes.remove(salesOpportunityTrckCode);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearSalesOpportunityTrckCode() {
+        if (this.salesOpportunityTrckCodes == null) {
+            return;
+        }
+        this.salesOpportunityTrckCodes.clear();
     }
     /**
      * Auto generated method that add item to collection.

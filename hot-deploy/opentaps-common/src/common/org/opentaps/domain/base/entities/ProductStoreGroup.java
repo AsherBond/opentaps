@@ -146,6 +146,10 @@ fieldMapColumns.put("ProductStoreGroup", fields);
    @JoinColumn(name="PARENT_GROUP_ID")
    
    private List<ProductStoreGroupRollup> parentProductStoreGroupRollups = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="productStoreGroup", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="PRODUCT_STORE_GROUP_ID")
+   
+   private List<VendorProduct> vendorProducts = null;
 
   /**
    * Default constructor.
@@ -400,6 +404,17 @@ fieldMapColumns.put("ProductStoreGroup", fields);
         }
         return this.parentProductStoreGroupRollups;
     }
+    /**
+     * Auto generated method that gets the related <code>VendorProduct</code> by the relation named <code>VendorProduct</code>.
+     * @return the list of <code>VendorProduct</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends VendorProduct> getVendorProducts() throws RepositoryException {
+        if (this.vendorProducts == null) {
+            this.vendorProducts = getRelated(VendorProduct.class, "VendorProduct");
+        }
+        return this.vendorProducts;
+    }
 
     /**
      * Auto generated value setter.
@@ -463,6 +478,13 @@ fieldMapColumns.put("ProductStoreGroup", fields);
     */
     public void setParentProductStoreGroupRollups(List<ProductStoreGroupRollup> parentProductStoreGroupRollups) {
         this.parentProductStoreGroupRollups = parentProductStoreGroupRollups;
+    }
+    /**
+     * Auto generated value setter.
+     * @param vendorProducts the vendorProducts to set
+    */
+    public void setVendorProducts(List<VendorProduct> vendorProducts) {
+        this.vendorProducts = vendorProducts;
     }
 
     /**
@@ -626,6 +648,33 @@ fieldMapColumns.put("ProductStoreGroup", fields);
             return;
         }
         this.parentProductStoreGroupRollups.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addVendorProduct(VendorProduct vendorProduct) {
+        if (this.vendorProducts == null) {
+            this.vendorProducts = new ArrayList<VendorProduct>();
+        }
+        this.vendorProducts.add(vendorProduct);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeVendorProduct(VendorProduct vendorProduct) {
+        if (this.vendorProducts == null) {
+            return;
+        }
+        this.vendorProducts.remove(vendorProduct);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearVendorProduct() {
+        if (this.vendorProducts == null) {
+            return;
+        }
+        this.vendorProducts.clear();
     }
 
     /** {@inheritDoc} */

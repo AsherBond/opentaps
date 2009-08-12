@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity WorkEffortOrderHeaderView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectWorkEffortOrderHeaderViews", query="SELECT OT.DESCRIPTION AS \"description\",SI.DESCRIPTION AS \"description\",OHWE.ORDER_ID AS \"orderId\",OHWE.WORK_EFFORT_ID AS \"workEffortId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_NAME AS \"orderName\",OH.EXTERNAL_ID AS \"externalId\",OH.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",OH.ORDER_DATE AS \"orderDate\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.TERMINAL_ID AS \"terminalId\",OH.TRANSACTION_ID AS \"transactionId\",OH.AUTO_ORDER_SHOPPING_LIST_ID AS \"autoOrderShoppingListId\",OH.NEEDS_INVENTORY_ISSUANCE AS \"needsInventoryIssuance\",OH.IS_RUSH_ORDER AS \"isRushOrder\",OH.INTERNAL_CODE AS \"internalCode\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OH.GRAND_TOTAL AS \"grandTotal\",OH.BILL_FROM_PARTY_ID AS \"billFromPartyId\",OH.BILL_TO_PARTY_ID AS \"billToPartyId\" FROM ORDER_HEADER_WORK_EFFORT OHWE INNER JOIN ORDER_HEADER OH ON OHWE.ORDER_ID = OH.ORDER_ID LEFT JOIN ORDER_TYPE OT ON OH.ORDER_TYPE_ID = OT.ORDER_TYPE_ID LEFT JOIN STATUS_ITEM SI ON OH.STATUS_ID = SI.STATUS_ID", resultSetMapping="WorkEffortOrderHeaderViewMapping")
+@NamedNativeQuery(name="selectWorkEffortOrderHeaderViews", query="SELECT OT.DESCRIPTION AS \"description\",SI.DESCRIPTION AS \"description\",OHWE.ORDER_ID AS \"orderId\",OHWE.WORK_EFFORT_ID AS \"workEffortId\",OH.ORDER_TYPE_ID AS \"orderTypeId\",OH.ORDER_NAME AS \"orderName\",OH.EXTERNAL_ID AS \"externalId\",OH.SALES_CHANNEL_ENUM_ID AS \"salesChannelEnumId\",OH.ORDER_DATE AS \"orderDate\",OH.PRIORITY AS \"priority\",OH.ENTRY_DATE AS \"entryDate\",OH.VISIT_ID AS \"visitId\",OH.STATUS_ID AS \"statusId\",OH.CREATED_BY AS \"createdBy\",OH.FIRST_ATTEMPT_ORDER_ID AS \"firstAttemptOrderId\",OH.CURRENCY_UOM AS \"currencyUom\",OH.SYNC_STATUS_ID AS \"syncStatusId\",OH.BILLING_ACCOUNT_ID AS \"billingAccountId\",OH.ORIGIN_FACILITY_ID AS \"originFacilityId\",OH.WEB_SITE_ID AS \"webSiteId\",OH.PRODUCT_STORE_ID AS \"productStoreId\",OH.TERMINAL_ID AS \"terminalId\",OH.TRANSACTION_ID AS \"transactionId\",OH.AUTO_ORDER_SHOPPING_LIST_ID AS \"autoOrderShoppingListId\",OH.NEEDS_INVENTORY_ISSUANCE AS \"needsInventoryIssuance\",OH.IS_RUSH_ORDER AS \"isRushOrder\",OH.INTERNAL_CODE AS \"internalCode\",OH.REMAINING_SUB_TOTAL AS \"remainingSubTotal\",OH.GRAND_TOTAL AS \"grandTotal\",OH.BILL_FROM_PARTY_ID AS \"billFromPartyId\",OH.BILL_TO_PARTY_ID AS \"billToPartyId\" FROM ORDER_HEADER_WORK_EFFORT OHWE INNER JOIN ORDER_HEADER OH ON OHWE.ORDER_ID = OH.ORDER_ID LEFT JOIN ORDER_TYPE OT ON OH.ORDER_TYPE_ID = OT.ORDER_TYPE_ID LEFT JOIN STATUS_ITEM SI ON OH.STATUS_ID = SI.STATUS_ID", resultSetMapping="WorkEffortOrderHeaderViewMapping")
 @SqlResultSetMapping(name="WorkEffortOrderHeaderViewMapping", entities={
 @EntityResult(entityClass=WorkEffortOrderHeaderView.class, fields = {
 @FieldResult(name="orderTypeDescription", column="orderTypeDescription")
@@ -61,6 +61,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="externalId", column="externalId")
 ,@FieldResult(name="salesChannelEnumId", column="salesChannelEnumId")
 ,@FieldResult(name="orderDate", column="orderDate")
+,@FieldResult(name="priority", column="priority")
 ,@FieldResult(name="entryDate", column="entryDate")
 ,@FieldResult(name="visitId", column="visitId")
 ,@FieldResult(name="statusId", column="statusId")
@@ -97,6 +98,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("externalId", "OH.EXTERNAL_ID");
         fields.put("salesChannelEnumId", "OH.SALES_CHANNEL_ENUM_ID");
         fields.put("orderDate", "OH.ORDER_DATE");
+        fields.put("priority", "OH.PRIORITY");
         fields.put("entryDate", "OH.ENTRY_DATE");
         fields.put("visitId", "OH.VISIT_ID");
         fields.put("statusId", "OH.STATUS_ID");
@@ -130,6 +132,7 @@ fieldMapColumns.put("WorkEffortOrderHeaderView", fields);
     externalId("externalId"),
     salesChannelEnumId("salesChannelEnumId"),
     orderDate("orderDate"),
+    priority("priority"),
     entryDate("entryDate"),
     visitId("visitId"),
     statusId("statusId"),
@@ -179,6 +182,8 @@ fieldMapColumns.put("WorkEffortOrderHeaderView", fields);
    private String salesChannelEnumId;
     
    private Timestamp orderDate;
+    
+   private String priority;
     
    private Timestamp entryDate;
     
@@ -261,7 +266,7 @@ fieldMapColumns.put("WorkEffortOrderHeaderView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderId");this.primaryKeyNames.add("workEffortId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderTypeDescription");this.allFieldsNames.add("statusItemDescription");this.allFieldsNames.add("orderId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderName");this.allFieldsNames.add("externalId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("terminalId");this.allFieldsNames.add("transactionId");this.allFieldsNames.add("autoOrderShoppingListId");this.allFieldsNames.add("needsInventoryIssuance");this.allFieldsNames.add("isRushOrder");this.allFieldsNames.add("internalCode");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");
+      this.allFieldsNames.add("orderTypeDescription");this.allFieldsNames.add("statusItemDescription");this.allFieldsNames.add("orderId");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("orderTypeId");this.allFieldsNames.add("orderName");this.allFieldsNames.add("externalId");this.allFieldsNames.add("salesChannelEnumId");this.allFieldsNames.add("orderDate");this.allFieldsNames.add("priority");this.allFieldsNames.add("entryDate");this.allFieldsNames.add("visitId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdBy");this.allFieldsNames.add("firstAttemptOrderId");this.allFieldsNames.add("currencyUom");this.allFieldsNames.add("syncStatusId");this.allFieldsNames.add("billingAccountId");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("terminalId");this.allFieldsNames.add("transactionId");this.allFieldsNames.add("autoOrderShoppingListId");this.allFieldsNames.add("needsInventoryIssuance");this.allFieldsNames.add("isRushOrder");this.allFieldsNames.add("internalCode");this.allFieldsNames.add("remainingSubTotal");this.allFieldsNames.add("grandTotal");this.allFieldsNames.add("billFromPartyId");this.allFieldsNames.add("billToPartyId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -341,6 +346,13 @@ fieldMapColumns.put("WorkEffortOrderHeaderView", fields);
      */
     private void setOrderDate(Timestamp orderDate) {
         this.orderDate = orderDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param priority the priority to set
+     */
+    private void setPriority(String priority) {
+        this.priority = priority;
     }
     /**
      * Auto generated value setter.
@@ -552,6 +564,13 @@ fieldMapColumns.put("WorkEffortOrderHeaderView", fields);
      */
     public Timestamp getOrderDate() {
         return this.orderDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPriority() {
+        return this.priority;
     }
     /**
      * Auto generated value accessor.
@@ -789,6 +808,7 @@ fieldMapColumns.put("WorkEffortOrderHeaderView", fields);
         setExternalId((String) mapValue.get("externalId"));
         setSalesChannelEnumId((String) mapValue.get("salesChannelEnumId"));
         setOrderDate((Timestamp) mapValue.get("orderDate"));
+        setPriority((String) mapValue.get("priority"));
         setEntryDate((Timestamp) mapValue.get("entryDate"));
         setVisitId((String) mapValue.get("visitId"));
         setStatusId((String) mapValue.get("statusId"));
@@ -826,6 +846,7 @@ fieldMapColumns.put("WorkEffortOrderHeaderView", fields);
         mapValue.put("externalId", getExternalId());
         mapValue.put("salesChannelEnumId", getSalesChannelEnumId());
         mapValue.put("orderDate", getOrderDate());
+        mapValue.put("priority", getPriority());
         mapValue.put("entryDate", getEntryDate());
         mapValue.put("visitId", getVisitId());
         mapValue.put("statusId", getStatusId());

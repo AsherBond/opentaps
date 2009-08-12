@@ -52,14 +52,11 @@ import java.sql.Timestamp;
 public class PartyQual extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
-        fields.put("partyQualId", "PARTY_QUAL_ID");
         fields.put("partyId", "PARTY_ID");
         fields.put("partyQualTypeId", "PARTY_QUAL_TYPE_ID");
-        fields.put("institutionPartyId", "INSTITUTION_PARTY_ID");
+        fields.put("qualificationDesc", "QUALIFICATION_DESC");
         fields.put("title", "TITLE");
         fields.put("statusId", "STATUS_ID");
-        fields.put("institutionInternalId", "INSTITUTION_INTERNAL_ID");
-        fields.put("infoString", "INFO_STRING");
         fields.put("verifStatusId", "VERIF_STATUS_ID");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
@@ -70,14 +67,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("PartyQual", fields);
 }
   public static enum Fields implements EntityFieldInterface<PartyQual> {
-    partyQualId("partyQualId"),
     partyId("partyId"),
     partyQualTypeId("partyQualTypeId"),
-    institutionPartyId("institutionPartyId"),
+    qualificationDesc("qualificationDesc"),
     title("title"),
     statusId("statusId"),
-    institutionInternalId("institutionInternalId"),
-    infoString("infoString"),
     verifStatusId("verifStatusId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
@@ -95,29 +89,33 @@ fieldMapColumns.put("PartyQual", fields);
     public String desc() { return fieldName + " DESC"; }
   }
 
-   @org.hibernate.annotations.GenericGenerator(name="PartyQual_GEN",  strategy="org.opentaps.foundation.entity.hibernate.OpentapsIdentifierGenerator")
-   @GeneratedValue(generator="PartyQual_GEN")
-   @Id
-   @Column(name="PARTY_QUAL_ID")
-   private String partyQualId;
-   @Column(name="PARTY_ID")
-   private String partyId;
-   @Column(name="PARTY_QUAL_TYPE_ID")
-   private String partyQualTypeId;
-   @Column(name="INSTITUTION_PARTY_ID")
-   private String institutionPartyId;
+   @EmbeddedId
+
+   @FieldBridge(impl = org.opentaps.domain.base.entities.bridge.PartyQualPkBridge.class)
+     private PartyQualPk id = new PartyQualPk();
+   
+    /**
+     * Auto generated Id accessor.
+     * @return <code>PartyQualPk</code>
+     */
+      public PartyQualPk getId() {
+         return id;
+      }
+    /**
+     * Auto generated Id setter.
+     * @param id a <code>PartyQualPk</code> value to set
+    */   
+      public void setId(PartyQualPk id) {
+         this.id = id;
+      }
+   @Column(name="QUALIFICATION_DESC")
+   private String qualificationDesc;
    @Column(name="TITLE")
    private String title;
    @Column(name="STATUS_ID")
    private String statusId;
-   @Column(name="INSTITUTION_INTERNAL_ID")
-   private String institutionInternalId;
-   @Column(name="INFO_STRING")
-   private String infoString;
    @Column(name="VERIF_STATUS_ID")
    private String verifStatusId;
-   @Column(name="FROM_DATE")
-   private Timestamp fromDate;
    @Column(name="THRU_DATE")
    private Timestamp thruDate;
    @Column(name="LAST_UPDATED_STAMP")
@@ -143,13 +141,6 @@ fieldMapColumns.put("PartyQual", fields);
    
    private PartyQualType partyQualType = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="INSTITUTION_PARTY_ID", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
-   
-   private Party institutionParty = null;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -173,9 +164,9 @@ fieldMapColumns.put("PartyQual", fields);
       this.isView = false;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("partyQualId");
+      this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("partyQualTypeId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyQualId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyQualTypeId");this.allFieldsNames.add("institutionPartyId");this.allFieldsNames.add("title");this.allFieldsNames.add("statusId");this.allFieldsNames.add("institutionInternalId");this.allFieldsNames.add("infoString");this.allFieldsNames.add("verifStatusId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyQualTypeId");this.allFieldsNames.add("qualificationDesc");this.allFieldsNames.add("title");this.allFieldsNames.add("statusId");this.allFieldsNames.add("verifStatusId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -192,31 +183,24 @@ fieldMapColumns.put("PartyQual", fields);
 
     /**
      * Auto generated value setter.
-     * @param partyQualId the partyQualId to set
-     */
-    public void setPartyQualId(String partyQualId) {
-        this.partyQualId = partyQualId;
-    }
-    /**
-     * Auto generated value setter.
      * @param partyId the partyId to set
      */
     public void setPartyId(String partyId) {
-        this.partyId = partyId;
+        id.setPartyId(partyId);
     }
     /**
      * Auto generated value setter.
      * @param partyQualTypeId the partyQualTypeId to set
      */
     public void setPartyQualTypeId(String partyQualTypeId) {
-        this.partyQualTypeId = partyQualTypeId;
+        id.setPartyQualTypeId(partyQualTypeId);
     }
     /**
      * Auto generated value setter.
-     * @param institutionPartyId the institutionPartyId to set
+     * @param qualificationDesc the qualificationDesc to set
      */
-    public void setInstitutionPartyId(String institutionPartyId) {
-        this.institutionPartyId = institutionPartyId;
+    public void setQualificationDesc(String qualificationDesc) {
+        this.qualificationDesc = qualificationDesc;
     }
     /**
      * Auto generated value setter.
@@ -234,20 +218,6 @@ fieldMapColumns.put("PartyQual", fields);
     }
     /**
      * Auto generated value setter.
-     * @param institutionInternalId the institutionInternalId to set
-     */
-    public void setInstitutionInternalId(String institutionInternalId) {
-        this.institutionInternalId = institutionInternalId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param infoString the infoString to set
-     */
-    public void setInfoString(String infoString) {
-        this.infoString = infoString;
-    }
-    /**
-     * Auto generated value setter.
      * @param verifStatusId the verifStatusId to set
      */
     public void setVerifStatusId(String verifStatusId) {
@@ -258,7 +228,7 @@ fieldMapColumns.put("PartyQual", fields);
      * @param fromDate the fromDate to set
      */
     public void setFromDate(Timestamp fromDate) {
-        this.fromDate = fromDate;
+        id.setFromDate(fromDate);
     }
     /**
      * Auto generated value setter.
@@ -300,29 +270,22 @@ fieldMapColumns.put("PartyQual", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getPartyQualId() {
-        return this.partyQualId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getPartyId() {
-        return this.partyId;
+        return this.id.getPartyId();
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getPartyQualTypeId() {
-        return this.partyQualTypeId;
+        return this.id.getPartyQualTypeId();
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getInstitutionPartyId() {
-        return this.institutionPartyId;
+    public String getQualificationDesc() {
+        return this.qualificationDesc;
     }
     /**
      * Auto generated value accessor.
@@ -342,20 +305,6 @@ fieldMapColumns.put("PartyQual", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getInstitutionInternalId() {
-        return this.institutionInternalId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getInfoString() {
-        return this.infoString;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
     public String getVerifStatusId() {
         return this.verifStatusId;
     }
@@ -364,7 +313,7 @@ fieldMapColumns.put("PartyQual", fields);
      * @return <code>Timestamp</code>
      */
     public Timestamp getFromDate() {
-        return this.fromDate;
+        return this.id.getFromDate();
     }
     /**
      * Auto generated value accessor.
@@ -425,17 +374,6 @@ fieldMapColumns.put("PartyQual", fields);
         return this.partyQualType;
     }
     /**
-     * Auto generated method that gets the related <code>Party</code> by the relation named <code>InstitutionParty</code>.
-     * @return the <code>Party</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public Party getInstitutionParty() throws RepositoryException {
-        if (this.institutionParty == null) {
-            this.institutionParty = getRelatedOne(Party.class, "InstitutionParty");
-        }
-        return this.institutionParty;
-    }
-    /**
      * Auto generated method that gets the related <code>StatusItem</code> by the relation named <code>StatusItem</code>.
      * @return the <code>StatusItem</code>
      * @throws RepositoryException if an error occurs
@@ -474,13 +412,6 @@ fieldMapColumns.put("PartyQual", fields);
     }
     /**
      * Auto generated value setter.
-     * @param institutionParty the institutionParty to set
-    */
-    public void setInstitutionParty(Party institutionParty) {
-        this.institutionParty = institutionParty;
-    }
-    /**
-     * Auto generated value setter.
      * @param statusItem the statusItem to set
     */
     public void setStatusItem(StatusItem statusItem) {
@@ -499,14 +430,11 @@ fieldMapColumns.put("PartyQual", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
-        setPartyQualId((String) mapValue.get("partyQualId"));
         setPartyId((String) mapValue.get("partyId"));
         setPartyQualTypeId((String) mapValue.get("partyQualTypeId"));
-        setInstitutionPartyId((String) mapValue.get("institutionPartyId"));
+        setQualificationDesc((String) mapValue.get("qualificationDesc"));
         setTitle((String) mapValue.get("title"));
         setStatusId((String) mapValue.get("statusId"));
-        setInstitutionInternalId((String) mapValue.get("institutionInternalId"));
-        setInfoString((String) mapValue.get("infoString"));
         setVerifStatusId((String) mapValue.get("verifStatusId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
@@ -521,14 +449,11 @@ fieldMapColumns.put("PartyQual", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
-        mapValue.put("partyQualId", getPartyQualId());
         mapValue.put("partyId", getPartyId());
         mapValue.put("partyQualTypeId", getPartyQualTypeId());
-        mapValue.put("institutionPartyId", getInstitutionPartyId());
+        mapValue.put("qualificationDesc", getQualificationDesc());
         mapValue.put("title", getTitle());
         mapValue.put("statusId", getStatusId());
-        mapValue.put("institutionInternalId", getInstitutionInternalId());
-        mapValue.put("infoString", getInfoString());
         mapValue.put("verifStatusId", getVerifStatusId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());

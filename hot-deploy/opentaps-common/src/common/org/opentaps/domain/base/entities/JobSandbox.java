@@ -67,6 +67,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("runAsUser", "RUN_AS_USER");
         fields.put("runtimeDataId", "RUNTIME_DATA_ID");
         fields.put("recurrenceInfoId", "RECURRENCE_INFO_ID");
+        fields.put("tempExprId", "TEMP_EXPR_ID");
+        fields.put("currentRecurrenceCount", "CURRENT_RECURRENCE_COUNT");
+        fields.put("maxRecurrenceCount", "MAX_RECURRENCE_COUNT");
         fields.put("runByInstanceId", "RUN_BY_INSTANCE_ID");
         fields.put("startDateTime", "START_DATE_TIME");
         fields.put("finishDateTime", "FINISH_DATE_TIME");
@@ -92,6 +95,9 @@ fieldMapColumns.put("JobSandbox", fields);
     runAsUser("runAsUser"),
     runtimeDataId("runtimeDataId"),
     recurrenceInfoId("recurrenceInfoId"),
+    tempExprId("tempExprId"),
+    currentRecurrenceCount("currentRecurrenceCount"),
+    maxRecurrenceCount("maxRecurrenceCount"),
     runByInstanceId("runByInstanceId"),
     startDateTime("startDateTime"),
     finishDateTime("finishDateTime"),
@@ -141,6 +147,12 @@ fieldMapColumns.put("JobSandbox", fields);
    private String runtimeDataId;
    @Column(name="RECURRENCE_INFO_ID")
    private String recurrenceInfoId;
+   @Column(name="TEMP_EXPR_ID")
+   private String tempExprId;
+   @Column(name="CURRENT_RECURRENCE_COUNT")
+   private Long currentRecurrenceCount;
+   @Column(name="MAX_RECURRENCE_COUNT")
+   private Long maxRecurrenceCount;
    @Column(name="RUN_BY_INSTANCE_ID")
    private String runByInstanceId;
    @Column(name="START_DATE_TIME")
@@ -164,6 +176,13 @@ fieldMapColumns.put("JobSandbox", fields);
    )
    
    private RecurrenceInfo recurrenceInfo = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="TEMP_EXPR_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private TemporalExpression temporalExpression = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="RUNTIME_DATA_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -204,7 +223,7 @@ fieldMapColumns.put("JobSandbox", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("jobId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("jobId");this.allFieldsNames.add("jobName");this.allFieldsNames.add("runTime");this.allFieldsNames.add("poolId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("parentJobId");this.allFieldsNames.add("previousJobId");this.allFieldsNames.add("serviceName");this.allFieldsNames.add("loaderName");this.allFieldsNames.add("maxRetry");this.allFieldsNames.add("authUserLoginId");this.allFieldsNames.add("runAsUser");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("runByInstanceId");this.allFieldsNames.add("startDateTime");this.allFieldsNames.add("finishDateTime");this.allFieldsNames.add("cancelDateTime");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("jobId");this.allFieldsNames.add("jobName");this.allFieldsNames.add("runTime");this.allFieldsNames.add("poolId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("parentJobId");this.allFieldsNames.add("previousJobId");this.allFieldsNames.add("serviceName");this.allFieldsNames.add("loaderName");this.allFieldsNames.add("maxRetry");this.allFieldsNames.add("authUserLoginId");this.allFieldsNames.add("runAsUser");this.allFieldsNames.add("runtimeDataId");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("tempExprId");this.allFieldsNames.add("currentRecurrenceCount");this.allFieldsNames.add("maxRecurrenceCount");this.allFieldsNames.add("runByInstanceId");this.allFieldsNames.add("startDateTime");this.allFieldsNames.add("finishDateTime");this.allFieldsNames.add("cancelDateTime");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -316,6 +335,27 @@ fieldMapColumns.put("JobSandbox", fields);
      */
     public void setRecurrenceInfoId(String recurrenceInfoId) {
         this.recurrenceInfoId = recurrenceInfoId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tempExprId the tempExprId to set
+     */
+    public void setTempExprId(String tempExprId) {
+        this.tempExprId = tempExprId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param currentRecurrenceCount the currentRecurrenceCount to set
+     */
+    public void setCurrentRecurrenceCount(Long currentRecurrenceCount) {
+        this.currentRecurrenceCount = currentRecurrenceCount;
+    }
+    /**
+     * Auto generated value setter.
+     * @param maxRecurrenceCount the maxRecurrenceCount to set
+     */
+    public void setMaxRecurrenceCount(Long maxRecurrenceCount) {
+        this.maxRecurrenceCount = maxRecurrenceCount;
     }
     /**
      * Auto generated value setter.
@@ -476,6 +516,27 @@ fieldMapColumns.put("JobSandbox", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getTempExprId() {
+        return this.tempExprId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getCurrentRecurrenceCount() {
+        return this.currentRecurrenceCount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getMaxRecurrenceCount() {
+        return this.maxRecurrenceCount;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getRunByInstanceId() {
         return this.runByInstanceId;
     }
@@ -541,6 +602,17 @@ fieldMapColumns.put("JobSandbox", fields);
         return this.recurrenceInfo;
     }
     /**
+     * Auto generated method that gets the related <code>TemporalExpression</code> by the relation named <code>TemporalExpression</code>.
+     * @return the <code>TemporalExpression</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public TemporalExpression getTemporalExpression() throws RepositoryException {
+        if (this.temporalExpression == null) {
+            this.temporalExpression = getRelatedOne(TemporalExpression.class, "TemporalExpression");
+        }
+        return this.temporalExpression;
+    }
+    /**
      * Auto generated method that gets the related <code>RuntimeData</code> by the relation named <code>RuntimeData</code>.
      * @return the <code>RuntimeData</code>
      * @throws RepositoryException if an error occurs
@@ -594,6 +666,13 @@ fieldMapColumns.put("JobSandbox", fields);
     }
     /**
      * Auto generated value setter.
+     * @param temporalExpression the temporalExpression to set
+    */
+    public void setTemporalExpression(TemporalExpression temporalExpression) {
+        this.temporalExpression = temporalExpression;
+    }
+    /**
+     * Auto generated value setter.
      * @param runtimeData the runtimeData to set
     */
     public void setRuntimeData(RuntimeData runtimeData) {
@@ -640,6 +719,9 @@ fieldMapColumns.put("JobSandbox", fields);
         setRunAsUser((String) mapValue.get("runAsUser"));
         setRuntimeDataId((String) mapValue.get("runtimeDataId"));
         setRecurrenceInfoId((String) mapValue.get("recurrenceInfoId"));
+        setTempExprId((String) mapValue.get("tempExprId"));
+        setCurrentRecurrenceCount((Long) mapValue.get("currentRecurrenceCount"));
+        setMaxRecurrenceCount((Long) mapValue.get("maxRecurrenceCount"));
         setRunByInstanceId((String) mapValue.get("runByInstanceId"));
         setStartDateTime((Timestamp) mapValue.get("startDateTime"));
         setFinishDateTime((Timestamp) mapValue.get("finishDateTime"));
@@ -669,6 +751,9 @@ fieldMapColumns.put("JobSandbox", fields);
         mapValue.put("runAsUser", getRunAsUser());
         mapValue.put("runtimeDataId", getRuntimeDataId());
         mapValue.put("recurrenceInfoId", getRecurrenceInfoId());
+        mapValue.put("tempExprId", getTempExprId());
+        mapValue.put("currentRecurrenceCount", getCurrentRecurrenceCount());
+        mapValue.put("maxRecurrenceCount", getMaxRecurrenceCount());
         mapValue.put("runByInstanceId", getRunByInstanceId());
         mapValue.put("startDateTime", getStartDateTime());
         mapValue.put("finishDateTime", getFinishDateTime());

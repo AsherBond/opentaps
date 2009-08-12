@@ -53,6 +53,8 @@ public class TerminationType extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("terminationTypeId", "TERMINATION_TYPE_ID");
+        fields.put("parentTypeId", "PARENT_TYPE_ID");
+        fields.put("hasTable", "HAS_TABLE");
         fields.put("description", "DESCRIPTION");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -62,6 +64,8 @@ fieldMapColumns.put("TerminationType", fields);
 }
   public static enum Fields implements EntityFieldInterface<TerminationType> {
     terminationTypeId("terminationTypeId"),
+    parentTypeId("parentTypeId"),
+    hasTable("hasTable"),
     description("description"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -82,6 +86,10 @@ fieldMapColumns.put("TerminationType", fields);
    @Id
    @Column(name="TERMINATION_TYPE_ID")
    private String terminationTypeId;
+   @Column(name="PARENT_TYPE_ID")
+   private String parentTypeId;
+   @Column(name="HAS_TABLE")
+   private String hasTable;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="LAST_UPDATED_STAMP")
@@ -92,10 +100,21 @@ fieldMapColumns.put("TerminationType", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private TerminationType parentTerminationType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="TERMINATION_TYPE_ID")
    
    private List<Employment> employments = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID")
+   
+   private List<TerminationType> childTerminationTypes = null;
 
   /**
    * Default constructor.
@@ -108,7 +127,7 @@ fieldMapColumns.put("TerminationType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("terminationTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("terminationTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("terminationTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -129,6 +148,20 @@ fieldMapColumns.put("TerminationType", fields);
      */
     public void setTerminationTypeId(String terminationTypeId) {
         this.terminationTypeId = terminationTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentTypeId the parentTypeId to set
+     */
+    public void setParentTypeId(String parentTypeId) {
+        this.parentTypeId = parentTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param hasTable the hasTable to set
+     */
+    public void setHasTable(String hasTable) {
+        this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
@@ -177,6 +210,20 @@ fieldMapColumns.put("TerminationType", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getParentTypeId() {
+        return this.parentTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getHasTable() {
+        return this.hasTable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDescription() {
         return this.description;
     }
@@ -210,6 +257,17 @@ fieldMapColumns.put("TerminationType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>TerminationType</code> by the relation named <code>ParentTerminationType</code>.
+     * @return the <code>TerminationType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public TerminationType getParentTerminationType() throws RepositoryException {
+        if (this.parentTerminationType == null) {
+            this.parentTerminationType = getRelatedOne(TerminationType.class, "ParentTerminationType");
+        }
+        return this.parentTerminationType;
+    }
+    /**
      * Auto generated method that gets the related <code>Employment</code> by the relation named <code>Employment</code>.
      * @return the list of <code>Employment</code>
      * @throws RepositoryException if an error occurs
@@ -220,13 +278,38 @@ fieldMapColumns.put("TerminationType", fields);
         }
         return this.employments;
     }
+    /**
+     * Auto generated method that gets the related <code>TerminationType</code> by the relation named <code>ChildTerminationType</code>.
+     * @return the list of <code>TerminationType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends TerminationType> getChildTerminationTypes() throws RepositoryException {
+        if (this.childTerminationTypes == null) {
+            this.childTerminationTypes = getRelated(TerminationType.class, "ChildTerminationType");
+        }
+        return this.childTerminationTypes;
+    }
 
+    /**
+     * Auto generated value setter.
+     * @param parentTerminationType the parentTerminationType to set
+    */
+    public void setParentTerminationType(TerminationType parentTerminationType) {
+        this.parentTerminationType = parentTerminationType;
+    }
     /**
      * Auto generated value setter.
      * @param employments the employments to set
     */
     public void setEmployments(List<Employment> employments) {
         this.employments = employments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param childTerminationTypes the childTerminationTypes to set
+    */
+    public void setChildTerminationTypes(List<TerminationType> childTerminationTypes) {
+        this.childTerminationTypes = childTerminationTypes;
     }
 
 
@@ -235,6 +318,8 @@ fieldMapColumns.put("TerminationType", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setTerminationTypeId((String) mapValue.get("terminationTypeId"));
+        setParentTypeId((String) mapValue.get("parentTypeId"));
+        setHasTable((String) mapValue.get("hasTable"));
         setDescription((String) mapValue.get("description"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -248,6 +333,8 @@ fieldMapColumns.put("TerminationType", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("terminationTypeId", getTerminationTypeId());
+        mapValue.put("parentTypeId", getParentTypeId());
+        mapValue.put("hasTable", getHasTable());
         mapValue.put("description", getDescription());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

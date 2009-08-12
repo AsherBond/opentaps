@@ -121,6 +121,7 @@ fieldMapColumns.put("ProductConfigConfig", fields);
    
    private ProductConfigItem configItemProductConfigItem = null;
    private transient ProductConfigOption configOptionProductConfigOption = null;
+   private transient List<ConfigOptionProductOption> configConfigOptionProductOptions = null;
 
   /**
    * Default constructor.
@@ -298,6 +299,17 @@ fieldMapColumns.put("ProductConfigConfig", fields);
         }
         return this.configOptionProductConfigOption;
     }
+    /**
+     * Auto generated method that gets the related <code>ConfigOptionProductOption</code> by the relation named <code>ConfigConfigOptionProductOption</code>.
+     * @return the list of <code>ConfigOptionProductOption</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ConfigOptionProductOption> getConfigConfigOptionProductOptions() throws RepositoryException {
+        if (this.configConfigOptionProductOptions == null) {
+            this.configConfigOptionProductOptions = getRelated(ConfigOptionProductOption.class, "ConfigConfigOptionProductOption");
+        }
+        return this.configConfigOptionProductOptions;
+    }
 
     /**
      * Auto generated value setter.
@@ -312,6 +324,13 @@ fieldMapColumns.put("ProductConfigConfig", fields);
     */
     public void setConfigOptionProductConfigOption(ProductConfigOption configOptionProductConfigOption) {
         this.configOptionProductConfigOption = configOptionProductConfigOption;
+    }
+    /**
+     * Auto generated value setter.
+     * @param configConfigOptionProductOptions the configConfigOptionProductOptions to set
+    */
+    public void setConfigConfigOptionProductOptions(List<ConfigOptionProductOption> configConfigOptionProductOptions) {
+        this.configConfigOptionProductOptions = configConfigOptionProductOptions;
     }
 
 

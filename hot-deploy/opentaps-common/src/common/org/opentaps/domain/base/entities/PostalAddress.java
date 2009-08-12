@@ -65,6 +65,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("stateProvinceGeoId", "STATE_PROVINCE_GEO_ID");
         fields.put("countyGeoId", "COUNTY_GEO_ID");
         fields.put("postalCodeGeoId", "POSTAL_CODE_GEO_ID");
+        fields.put("geoPointId", "GEO_POINT_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -85,6 +86,7 @@ fieldMapColumns.put("PostalAddress", fields);
     stateProvinceGeoId("stateProvinceGeoId"),
     countyGeoId("countyGeoId"),
     postalCodeGeoId("postalCodeGeoId"),
+    geoPointId("geoPointId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -128,6 +130,8 @@ fieldMapColumns.put("PostalAddress", fields);
    private String countyGeoId;
    @Column(name="POSTAL_CODE_GEO_ID")
    private String postalCodeGeoId;
+   @Column(name="GEO_POINT_ID")
+   private String geoPointId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -143,10 +147,6 @@ fieldMapColumns.put("PostalAddress", fields);
    )
    
    private ContactMech contactMech = null;
-   @OneToMany(fetch=FetchType.LAZY)
-   @JoinColumn(name="STATE_PROVINCE_GEO_ID")
-   
-   private List<SimpleSalesTaxLookup> simpleSalesTaxLookups = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="COUNTRY_GEO_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -175,6 +175,13 @@ fieldMapColumns.put("PostalAddress", fields);
    )
    
    private Geo postalCodeGeo = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="GEO_POINT_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private GeoPoint geoPointGeoPoint = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="CONTACT_MECH_ID")
    
@@ -251,7 +258,7 @@ fieldMapColumns.put("PostalAddress", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("contactMechId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");this.allFieldsNames.add("geoPointId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -356,6 +363,13 @@ fieldMapColumns.put("PostalAddress", fields);
      */
     public void setPostalCodeGeoId(String postalCodeGeoId) {
         this.postalCodeGeoId = postalCodeGeoId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param geoPointId the geoPointId to set
+     */
+    public void setGeoPointId(String geoPointId) {
+        this.geoPointId = geoPointId;
     }
     /**
      * Auto generated value setter.
@@ -479,6 +493,13 @@ fieldMapColumns.put("PostalAddress", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getGeoPointId() {
+        return this.geoPointId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -516,17 +537,6 @@ fieldMapColumns.put("PostalAddress", fields);
             this.contactMech = getRelatedOne(ContactMech.class, "ContactMech");
         }
         return this.contactMech;
-    }
-    /**
-     * Auto generated method that gets the related <code>SimpleSalesTaxLookup</code> by the relation named <code>SimpleSalesTaxLookup</code>.
-     * @return the list of <code>SimpleSalesTaxLookup</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends SimpleSalesTaxLookup> getSimpleSalesTaxLookups() throws RepositoryException {
-        if (this.simpleSalesTaxLookups == null) {
-            this.simpleSalesTaxLookups = getRelated(SimpleSalesTaxLookup.class, "SimpleSalesTaxLookup");
-        }
-        return this.simpleSalesTaxLookups;
     }
     /**
      * Auto generated method that gets the related <code>Geo</code> by the relation named <code>CountryGeo</code>.
@@ -571,6 +581,17 @@ fieldMapColumns.put("PostalAddress", fields);
             this.postalCodeGeo = getRelatedOne(Geo.class, "PostalCodeGeo");
         }
         return this.postalCodeGeo;
+    }
+    /**
+     * Auto generated method that gets the related <code>GeoPoint</code> by the relation named <code>Geo PointGeoPoint</code>.
+     * @return the <code>GeoPoint</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public GeoPoint getGeoPointGeoPoint() throws RepositoryException {
+        if (this.geoPointGeoPoint == null) {
+            this.geoPointGeoPoint = getRelatedOne(GeoPoint.class, "Geo PointGeoPoint");
+        }
+        return this.geoPointGeoPoint;
     }
     /**
      * Auto generated method that gets the related <code>BillingAccount</code> by the relation named <code>BillingAccount</code>.
@@ -758,13 +779,6 @@ fieldMapColumns.put("PostalAddress", fields);
     }
     /**
      * Auto generated value setter.
-     * @param simpleSalesTaxLookups the simpleSalesTaxLookups to set
-    */
-    public void setSimpleSalesTaxLookups(List<SimpleSalesTaxLookup> simpleSalesTaxLookups) {
-        this.simpleSalesTaxLookups = simpleSalesTaxLookups;
-    }
-    /**
-     * Auto generated value setter.
      * @param countryGeo the countryGeo to set
     */
     public void setCountryGeo(Geo countryGeo) {
@@ -790,6 +804,13 @@ fieldMapColumns.put("PostalAddress", fields);
     */
     public void setPostalCodeGeo(Geo postalCodeGeo) {
         this.postalCodeGeo = postalCodeGeo;
+    }
+    /**
+     * Auto generated value setter.
+     * @param geoPointGeoPoint the geoPointGeoPoint to set
+    */
+    public void setGeoPointGeoPoint(GeoPoint geoPointGeoPoint) {
+        this.geoPointGeoPoint = geoPointGeoPoint;
     }
     /**
      * Auto generated value setter.
@@ -1030,6 +1051,7 @@ fieldMapColumns.put("PostalAddress", fields);
         setStateProvinceGeoId((String) mapValue.get("stateProvinceGeoId"));
         setCountyGeoId((String) mapValue.get("countyGeoId"));
         setPostalCodeGeoId((String) mapValue.get("postalCodeGeoId"));
+        setGeoPointId((String) mapValue.get("geoPointId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -1054,6 +1076,7 @@ fieldMapColumns.put("PostalAddress", fields);
         mapValue.put("stateProvinceGeoId", getStateProvinceGeoId());
         mapValue.put("countyGeoId", getCountyGeoId());
         mapValue.put("postalCodeGeoId", getPostalCodeGeoId());
+        mapValue.put("geoPointId", getGeoPointId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

@@ -65,6 +65,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("closedAmount", "CLOSED_AMOUNT");
         fields.put("percentOfQuotaForecast", "PERCENT_OF_QUOTA_FORECAST");
         fields.put("percentOfQuotaClosed", "PERCENT_OF_QUOTA_CLOSED");
+        fields.put("pipelineAmount", "PIPELINE_AMOUNT");
         fields.put("createdByUserLoginId", "CREATED_BY_USER_LOGIN_ID");
         fields.put("modifiedByUserLoginId", "MODIFIED_BY_USER_LOGIN_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -86,6 +87,7 @@ fieldMapColumns.put("SalesForecast", fields);
     closedAmount("closedAmount"),
     percentOfQuotaForecast("percentOfQuotaForecast"),
     percentOfQuotaClosed("percentOfQuotaClosed"),
+    pipelineAmount("pipelineAmount"),
     createdByUserLoginId("createdByUserLoginId"),
     modifiedByUserLoginId("modifiedByUserLoginId"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -129,6 +131,8 @@ fieldMapColumns.put("SalesForecast", fields);
    private BigDecimal percentOfQuotaForecast;
    @Column(name="PERCENT_OF_QUOTA_CLOSED")
    private BigDecimal percentOfQuotaClosed;
+   @Column(name="PIPELINE_AMOUNT")
+   private BigDecimal pipelineAmount;
    @Column(name="CREATED_BY_USER_LOGIN_ID")
    private String createdByUserLoginId;
    @Column(name="MODIFIED_BY_USER_LOGIN_ID")
@@ -194,6 +198,10 @@ fieldMapColumns.put("SalesForecast", fields);
    @JoinColumn(name="PARENT_SALES_FORECAST_ID")
    
    private List<SalesForecast> childSalesForecasts = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="salesForecast", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="SALES_FORECAST_ID")
+   
+   private List<SalesForecastDetail> salesForecastDetails = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="SALES_FORECAST_ID")
    
@@ -214,7 +222,7 @@ fieldMapColumns.put("SalesForecast", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("salesForecastId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("salesForecastId");this.allFieldsNames.add("parentSalesForecastId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("internalPartyId");this.allFieldsNames.add("customTimePeriodId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("quotaAmount");this.allFieldsNames.add("forecastAmount");this.allFieldsNames.add("bestCaseAmount");this.allFieldsNames.add("closedAmount");this.allFieldsNames.add("percentOfQuotaForecast");this.allFieldsNames.add("percentOfQuotaClosed");this.allFieldsNames.add("createdByUserLoginId");this.allFieldsNames.add("modifiedByUserLoginId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("salesForecastId");this.allFieldsNames.add("parentSalesForecastId");this.allFieldsNames.add("organizationPartyId");this.allFieldsNames.add("internalPartyId");this.allFieldsNames.add("customTimePeriodId");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("quotaAmount");this.allFieldsNames.add("forecastAmount");this.allFieldsNames.add("bestCaseAmount");this.allFieldsNames.add("closedAmount");this.allFieldsNames.add("percentOfQuotaForecast");this.allFieldsNames.add("percentOfQuotaClosed");this.allFieldsNames.add("pipelineAmount");this.allFieldsNames.add("createdByUserLoginId");this.allFieldsNames.add("modifiedByUserLoginId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -312,6 +320,13 @@ fieldMapColumns.put("SalesForecast", fields);
      */
     public void setPercentOfQuotaClosed(BigDecimal percentOfQuotaClosed) {
         this.percentOfQuotaClosed = percentOfQuotaClosed;
+    }
+    /**
+     * Auto generated value setter.
+     * @param pipelineAmount the pipelineAmount to set
+     */
+    public void setPipelineAmount(BigDecimal pipelineAmount) {
+        this.pipelineAmount = pipelineAmount;
     }
     /**
      * Auto generated value setter.
@@ -439,6 +454,13 @@ fieldMapColumns.put("SalesForecast", fields);
      */
     public BigDecimal getPercentOfQuotaClosed() {
         return this.percentOfQuotaClosed;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPipelineAmount() {
+        return this.pipelineAmount;
     }
     /**
      * Auto generated value accessor.
@@ -572,6 +594,17 @@ fieldMapColumns.put("SalesForecast", fields);
         return this.childSalesForecasts;
     }
     /**
+     * Auto generated method that gets the related <code>SalesForecastDetail</code> by the relation named <code>SalesForecastDetail</code>.
+     * @return the list of <code>SalesForecastDetail</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends SalesForecastDetail> getSalesForecastDetails() throws RepositoryException {
+        if (this.salesForecastDetails == null) {
+            this.salesForecastDetails = getRelated(SalesForecastDetail.class, "SalesForecastDetail");
+        }
+        return this.salesForecastDetails;
+    }
+    /**
      * Auto generated method that gets the related <code>SalesForecastHistory</code> by the relation named <code>SalesForecastHistory</code>.
      * @return the list of <code>SalesForecastHistory</code>
      * @throws RepositoryException if an error occurs
@@ -652,6 +685,13 @@ fieldMapColumns.put("SalesForecast", fields);
     }
     /**
      * Auto generated value setter.
+     * @param salesForecastDetails the salesForecastDetails to set
+    */
+    public void setSalesForecastDetails(List<SalesForecastDetail> salesForecastDetails) {
+        this.salesForecastDetails = salesForecastDetails;
+    }
+    /**
+     * Auto generated value setter.
      * @param salesForecastHistorys the salesForecastHistorys to set
     */
     public void setSalesForecastHistorys(List<SalesForecastHistory> salesForecastHistorys) {
@@ -665,6 +705,33 @@ fieldMapColumns.put("SalesForecast", fields);
         this.salesForecastItems = salesForecastItems;
     }
 
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addSalesForecastDetail(SalesForecastDetail salesForecastDetail) {
+        if (this.salesForecastDetails == null) {
+            this.salesForecastDetails = new ArrayList<SalesForecastDetail>();
+        }
+        this.salesForecastDetails.add(salesForecastDetail);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeSalesForecastDetail(SalesForecastDetail salesForecastDetail) {
+        if (this.salesForecastDetails == null) {
+            return;
+        }
+        this.salesForecastDetails.remove(salesForecastDetail);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearSalesForecastDetail() {
+        if (this.salesForecastDetails == null) {
+            return;
+        }
+        this.salesForecastDetails.clear();
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -682,6 +749,7 @@ fieldMapColumns.put("SalesForecast", fields);
         setClosedAmount(convertToBigDecimal(mapValue.get("closedAmount")));
         setPercentOfQuotaForecast(convertToBigDecimal(mapValue.get("percentOfQuotaForecast")));
         setPercentOfQuotaClosed(convertToBigDecimal(mapValue.get("percentOfQuotaClosed")));
+        setPipelineAmount(convertToBigDecimal(mapValue.get("pipelineAmount")));
         setCreatedByUserLoginId((String) mapValue.get("createdByUserLoginId"));
         setModifiedByUserLoginId((String) mapValue.get("modifiedByUserLoginId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -707,6 +775,7 @@ fieldMapColumns.put("SalesForecast", fields);
         mapValue.put("closedAmount", getClosedAmount());
         mapValue.put("percentOfQuotaForecast", getPercentOfQuotaForecast());
         mapValue.put("percentOfQuotaClosed", getPercentOfQuotaClosed());
+        mapValue.put("pipelineAmount", getPipelineAmount());
         mapValue.put("createdByUserLoginId", getCreatedByUserLoginId());
         mapValue.put("modifiedByUserLoginId", getModifiedByUserLoginId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

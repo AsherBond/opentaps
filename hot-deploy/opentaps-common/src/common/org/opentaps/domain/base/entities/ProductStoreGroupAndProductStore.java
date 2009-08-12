@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity ProductStoreGroupAndProductStore.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectProductStoreGroupAndProductStores", query="SELECT PSG.PRODUCT_STORE_GROUP_ID AS \"productStoreGroupId\",PSG.PRODUCT_STORE_GROUP_TYPE_ID AS \"productStoreGroupTypeId\",PSG.PRIMARY_PARENT_GROUP_ID AS \"primaryParentGroupId\",PSG.PRODUCT_STORE_GROUP_NAME AS \"productStoreGroupName\",PSG.DESCRIPTION AS \"description\",PSGM.FROM_DATE AS \"fromDate\",PSGM.THRU_DATE AS \"thruDate\",PSGM.SEQUENCE_NUM AS \"sequenceNum\",PS.PRODUCT_STORE_ID AS \"productStoreId\",PS.PRIMARY_STORE_GROUP_ID AS \"primaryStoreGroupId\",PS.STORE_NAME AS \"storeName\",PS.COMPANY_NAME AS \"companyName\",PS.TITLE AS \"title\",PS.SUBTITLE AS \"subtitle\",PS.PAY_TO_PARTY_ID AS \"payToPartyId\",PS.DAYS_TO_CANCEL_NON_PAY AS \"daysToCancelNonPay\",PS.MANUAL_AUTH_IS_CAPTURE AS \"manualAuthIsCapture\",PS.PRORATE_SHIPPING AS \"prorateShipping\",PS.PRORATE_TAXES AS \"prorateTaxes\",PS.VIEW_CART_ON_ADD AS \"viewCartOnAdd\",PS.AUTO_SAVE_CART AS \"autoSaveCart\",PS.AUTO_APPROVE_REVIEWS AS \"autoApproveReviews\",PS.IS_DEMO_STORE AS \"isDemoStore\",PS.IS_IMMEDIATELY_FULFILLED AS \"isImmediatelyFulfilled\",PS.INVENTORY_FACILITY_ID AS \"inventoryFacilityId\",PS.ONE_INVENTORY_FACILITY AS \"oneInventoryFacility\",PS.CHECK_INVENTORY AS \"checkInventory\",PS.RESERVE_INVENTORY AS \"reserveInventory\",PS.RESERVE_ORDER_ENUM_ID AS \"reserveOrderEnumId\",PS.REQUIRE_INVENTORY AS \"requireInventory\",PS.REQUIREMENT_METHOD_ENUM_ID AS \"requirementMethodEnumId\",PS.ORDER_NUMBER_PREFIX AS \"orderNumberPrefix\",PS.DEFAULT_LOCALE_STRING AS \"defaultLocaleString\",PS.DEFAULT_CURRENCY_UOM_ID AS \"defaultCurrencyUomId\",PS.DEFAULT_SALES_CHANNEL_ENUM_ID AS \"defaultSalesChannelEnumId\",PS.ALLOW_PASSWORD AS \"allowPassword\",PS.DEFAULT_PASSWORD AS \"defaultPassword\",PS.EXPLODE_ORDER_ITEMS AS \"explodeOrderItems\",PS.CHECK_GC_BALANCE AS \"checkGcBalance\",PS.RETRY_FAILED_AUTHS AS \"retryFailedAuths\",PS.HEADER_APPROVED_STATUS AS \"headerApprovedStatus\",PS.ITEM_APPROVED_STATUS AS \"itemApprovedStatus\",PS.DIGITAL_ITEM_APPROVED_STATUS AS \"digitalItemApprovedStatus\",PS.HEADER_DECLINED_STATUS AS \"headerDeclinedStatus\",PS.ITEM_DECLINED_STATUS AS \"itemDeclinedStatus\",PS.HEADER_CANCEL_STATUS AS \"headerCancelStatus\",PS.ITEM_CANCEL_STATUS AS \"itemCancelStatus\",PS.AUTH_DECLINED_MESSAGE AS \"authDeclinedMessage\",PS.AUTH_FRAUD_MESSAGE AS \"authFraudMessage\",PS.AUTH_ERROR_MESSAGE AS \"authErrorMessage\",PS.STYLE_SHEET AS \"styleSheet\",PS.HEADER_LOGO AS \"headerLogo\",PS.HEADER_MIDDLE_BACKGROUND AS \"headerMiddleBackground\",PS.HEADER_RIGHT_BACKGROUND AS \"headerRightBackground\",PS.USE_PRIMARY_EMAIL_USERNAME AS \"usePrimaryEmailUsername\",PS.REQUIRE_CUSTOMER_ROLE AS \"requireCustomerRole\",PS.AUTO_INVOICE_DIGITAL_ITEMS AS \"autoInvoiceDigitalItems\",PS.REQ_SHIP_ADDR_FOR_DIG_ITEMS AS \"reqShipAddrForDigItems\",PS.SHOW_CHECKOUT_GIFT_OPTIONS AS \"showCheckoutGiftOptions\",PS.SELECT_PAYMENT_TYPE_PER_ITEM AS \"selectPaymentTypePerItem\",PS.SHOW_PRICES_WITH_VAT_TAX AS \"showPricesWithVatTax\",PS.SHOW_TAX_IS_EXEMPT AS \"showTaxIsExempt\",PS.VAT_TAX_AUTH_GEO_ID AS \"vatTaxAuthGeoId\",PS.VAT_TAX_AUTH_PARTY_ID AS \"vatTaxAuthPartyId\",PS.ENABLE_AUTO_SUGGESTION_LIST AS \"enableAutoSuggestionList\",PS.ENABLE_DIG_PROD_UPLOAD AS \"enableDigProdUpload\",PS.PROD_SEARCH_EXCLUDE_VARIANTS AS \"prodSearchExcludeVariants\",PS.DIG_PROD_UPLOAD_CATEGORY_ID AS \"digProdUploadCategoryId\",PS.AUTO_ORDER_CC_TRY_EXP AS \"autoOrderCcTryExp\",PS.AUTO_ORDER_CC_TRY_OTHER_CARDS AS \"autoOrderCcTryOtherCards\",PS.AUTO_ORDER_CC_TRY_LATER_NSF AS \"autoOrderCcTryLaterNsf\",PS.AUTO_ORDER_CC_TRY_LATER_MAX AS \"autoOrderCcTryLaterMax\",PS.STORE_CREDIT_VALID_DAYS AS \"storeCreditValidDays\",PS.AUTO_APPROVE_INVOICE AS \"autoApproveInvoice\",PS.AUTO_APPROVE_ORDER AS \"autoApproveOrder\",PS.SHIP_IF_CAPTURE_FAILS AS \"shipIfCaptureFails\",PS.NO_SHIP_ON_DROP_SHIP_GROUPS AS \"noShipOnDropShipGroups\",PS.ALLOW_DO_NOT_SHIP_ORDERS AS \"allowDoNotShipOrders\",PS.DEFAULT_SHIPMENT_METHOD_TYPE_ID AS \"defaultShipmentMethodTypeId\",PS.DEFAULT_SHIPPING_CARRIER_PARTY_ID AS \"defaultShippingCarrierPartyId\",PS.BILL_TO_THIRD_PARTY_ID AS \"billToThirdPartyId\" FROM PRODUCT_STORE_GROUP PSG LEFT JOIN PRODUCT_STORE_GROUP_MEMBER PSGM ON PSG.PRODUCT_STORE_GROUP_ID = PSGM.PRODUCT_STORE_GROUP_ID LEFT JOIN PRODUCT_STORE PS ON PSGM.PRODUCT_STORE_ID = PS.PRODUCT_STORE_ID", resultSetMapping="ProductStoreGroupAndProductStoreMapping")
+@NamedNativeQuery(name="selectProductStoreGroupAndProductStores", query="SELECT PSG.PRODUCT_STORE_GROUP_ID AS \"productStoreGroupId\",PSG.PRODUCT_STORE_GROUP_TYPE_ID AS \"productStoreGroupTypeId\",PSG.PRIMARY_PARENT_GROUP_ID AS \"primaryParentGroupId\",PSG.PRODUCT_STORE_GROUP_NAME AS \"productStoreGroupName\",PSG.DESCRIPTION AS \"description\",PSGM.FROM_DATE AS \"fromDate\",PSGM.THRU_DATE AS \"thruDate\",PSGM.SEQUENCE_NUM AS \"sequenceNum\",PS.PRODUCT_STORE_ID AS \"productStoreId\",PS.PRIMARY_STORE_GROUP_ID AS \"primaryStoreGroupId\",PS.STORE_NAME AS \"storeName\",PS.COMPANY_NAME AS \"companyName\",PS.TITLE AS \"title\",PS.SUBTITLE AS \"subtitle\",PS.PAY_TO_PARTY_ID AS \"payToPartyId\",PS.DAYS_TO_CANCEL_NON_PAY AS \"daysToCancelNonPay\",PS.MANUAL_AUTH_IS_CAPTURE AS \"manualAuthIsCapture\",PS.PRORATE_SHIPPING AS \"prorateShipping\",PS.PRORATE_TAXES AS \"prorateTaxes\",PS.VIEW_CART_ON_ADD AS \"viewCartOnAdd\",PS.AUTO_SAVE_CART AS \"autoSaveCart\",PS.AUTO_APPROVE_REVIEWS AS \"autoApproveReviews\",PS.IS_DEMO_STORE AS \"isDemoStore\",PS.IS_IMMEDIATELY_FULFILLED AS \"isImmediatelyFulfilled\",PS.INVENTORY_FACILITY_ID AS \"inventoryFacilityId\",PS.ONE_INVENTORY_FACILITY AS \"oneInventoryFacility\",PS.CHECK_INVENTORY AS \"checkInventory\",PS.RESERVE_INVENTORY AS \"reserveInventory\",PS.RESERVE_ORDER_ENUM_ID AS \"reserveOrderEnumId\",PS.REQUIRE_INVENTORY AS \"requireInventory\",PS.BALANCE_RES_ON_ORDER_CREATION AS \"balanceResOnOrderCreation\",PS.REQUIREMENT_METHOD_ENUM_ID AS \"requirementMethodEnumId\",PS.ORDER_NUMBER_PREFIX AS \"orderNumberPrefix\",PS.DEFAULT_LOCALE_STRING AS \"defaultLocaleString\",PS.DEFAULT_CURRENCY_UOM_ID AS \"defaultCurrencyUomId\",PS.DEFAULT_SALES_CHANNEL_ENUM_ID AS \"defaultSalesChannelEnumId\",PS.ALLOW_PASSWORD AS \"allowPassword\",PS.DEFAULT_PASSWORD AS \"defaultPassword\",PS.EXPLODE_ORDER_ITEMS AS \"explodeOrderItems\",PS.CHECK_GC_BALANCE AS \"checkGcBalance\",PS.RETRY_FAILED_AUTHS AS \"retryFailedAuths\",PS.HEADER_APPROVED_STATUS AS \"headerApprovedStatus\",PS.ITEM_APPROVED_STATUS AS \"itemApprovedStatus\",PS.DIGITAL_ITEM_APPROVED_STATUS AS \"digitalItemApprovedStatus\",PS.HEADER_DECLINED_STATUS AS \"headerDeclinedStatus\",PS.ITEM_DECLINED_STATUS AS \"itemDeclinedStatus\",PS.HEADER_CANCEL_STATUS AS \"headerCancelStatus\",PS.ITEM_CANCEL_STATUS AS \"itemCancelStatus\",PS.AUTH_DECLINED_MESSAGE AS \"authDeclinedMessage\",PS.AUTH_FRAUD_MESSAGE AS \"authFraudMessage\",PS.AUTH_ERROR_MESSAGE AS \"authErrorMessage\",PS.VISUAL_THEME_ID AS \"visualThemeId\",PS.OLD_STYLE_SHEET AS \"oldStyleSheet\",PS.OLD_HEADER_LOGO AS \"oldHeaderLogo\",PS.OLD_HEADER_MIDDLE_BACKGROUND AS \"oldHeaderMiddleBackground\",PS.OLD_HEADER_RIGHT_BACKGROUND AS \"oldHeaderRightBackground\",PS.USE_PRIMARY_EMAIL_USERNAME AS \"usePrimaryEmailUsername\",PS.REQUIRE_CUSTOMER_ROLE AS \"requireCustomerRole\",PS.AUTO_INVOICE_DIGITAL_ITEMS AS \"autoInvoiceDigitalItems\",PS.REQ_SHIP_ADDR_FOR_DIG_ITEMS AS \"reqShipAddrForDigItems\",PS.SHOW_CHECKOUT_GIFT_OPTIONS AS \"showCheckoutGiftOptions\",PS.SELECT_PAYMENT_TYPE_PER_ITEM AS \"selectPaymentTypePerItem\",PS.SHOW_PRICES_WITH_VAT_TAX AS \"showPricesWithVatTax\",PS.SHOW_TAX_IS_EXEMPT AS \"showTaxIsExempt\",PS.VAT_TAX_AUTH_GEO_ID AS \"vatTaxAuthGeoId\",PS.VAT_TAX_AUTH_PARTY_ID AS \"vatTaxAuthPartyId\",PS.ENABLE_AUTO_SUGGESTION_LIST AS \"enableAutoSuggestionList\",PS.ENABLE_DIG_PROD_UPLOAD AS \"enableDigProdUpload\",PS.PROD_SEARCH_EXCLUDE_VARIANTS AS \"prodSearchExcludeVariants\",PS.DIG_PROD_UPLOAD_CATEGORY_ID AS \"digProdUploadCategoryId\",PS.AUTO_ORDER_CC_TRY_EXP AS \"autoOrderCcTryExp\",PS.AUTO_ORDER_CC_TRY_OTHER_CARDS AS \"autoOrderCcTryOtherCards\",PS.AUTO_ORDER_CC_TRY_LATER_NSF AS \"autoOrderCcTryLaterNsf\",PS.AUTO_ORDER_CC_TRY_LATER_MAX AS \"autoOrderCcTryLaterMax\",PS.STORE_CREDIT_VALID_DAYS AS \"storeCreditValidDays\",PS.AUTO_APPROVE_INVOICE AS \"autoApproveInvoice\",PS.AUTO_APPROVE_ORDER AS \"autoApproveOrder\",PS.SHIP_IF_CAPTURE_FAILS AS \"shipIfCaptureFails\",PS.SET_OWNER_UPON_ISSUANCE AS \"setOwnerUponIssuance\",PS.REQ_RETURN_INVENTORY_RECEIVE AS \"reqReturnInventoryReceive\",PS.ADD_TO_CART_REMOVE_INCOMPAT AS \"addToCartRemoveIncompat\",PS.ADD_TO_CART_REPLACE_UPSELL AS \"addToCartReplaceUpsell\",PS.SPLIT_PAY_PREF_PER_SHP_GRP AS \"splitPayPrefPerShpGrp\",PS.NO_SHIP_ON_DROP_SHIP_GROUPS AS \"noShipOnDropShipGroups\",PS.ALLOW_DO_NOT_SHIP_ORDERS AS \"allowDoNotShipOrders\",PS.DEFAULT_SHIPMENT_METHOD_TYPE_ID AS \"defaultShipmentMethodTypeId\",PS.DEFAULT_SHIPPING_CARRIER_PARTY_ID AS \"defaultShippingCarrierPartyId\",PS.BILL_TO_THIRD_PARTY_ID AS \"billToThirdPartyId\" FROM PRODUCT_STORE_GROUP PSG LEFT JOIN PRODUCT_STORE_GROUP_MEMBER PSGM ON PSG.PRODUCT_STORE_GROUP_ID = PSGM.PRODUCT_STORE_GROUP_ID LEFT JOIN PRODUCT_STORE PS ON PSGM.PRODUCT_STORE_ID = PS.PRODUCT_STORE_ID", resultSetMapping="ProductStoreGroupAndProductStoreMapping")
 @SqlResultSetMapping(name="ProductStoreGroupAndProductStoreMapping", entities={
 @EntityResult(entityClass=ProductStoreGroupAndProductStore.class, fields = {
 @FieldResult(name="productStoreGroupId", column="productStoreGroupId")
@@ -82,6 +82,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="reserveInventory", column="reserveInventory")
 ,@FieldResult(name="reserveOrderEnumId", column="reserveOrderEnumId")
 ,@FieldResult(name="requireInventory", column="requireInventory")
+,@FieldResult(name="balanceResOnOrderCreation", column="balanceResOnOrderCreation")
 ,@FieldResult(name="requirementMethodEnumId", column="requirementMethodEnumId")
 ,@FieldResult(name="orderNumberPrefix", column="orderNumberPrefix")
 ,@FieldResult(name="defaultLocaleString", column="defaultLocaleString")
@@ -102,10 +103,11 @@ import java.sql.Timestamp;
 ,@FieldResult(name="authDeclinedMessage", column="authDeclinedMessage")
 ,@FieldResult(name="authFraudMessage", column="authFraudMessage")
 ,@FieldResult(name="authErrorMessage", column="authErrorMessage")
-,@FieldResult(name="styleSheet", column="styleSheet")
-,@FieldResult(name="headerLogo", column="headerLogo")
-,@FieldResult(name="headerMiddleBackground", column="headerMiddleBackground")
-,@FieldResult(name="headerRightBackground", column="headerRightBackground")
+,@FieldResult(name="visualThemeId", column="visualThemeId")
+,@FieldResult(name="oldStyleSheet", column="oldStyleSheet")
+,@FieldResult(name="oldHeaderLogo", column="oldHeaderLogo")
+,@FieldResult(name="oldHeaderMiddleBackground", column="oldHeaderMiddleBackground")
+,@FieldResult(name="oldHeaderRightBackground", column="oldHeaderRightBackground")
 ,@FieldResult(name="usePrimaryEmailUsername", column="usePrimaryEmailUsername")
 ,@FieldResult(name="requireCustomerRole", column="requireCustomerRole")
 ,@FieldResult(name="autoInvoiceDigitalItems", column="autoInvoiceDigitalItems")
@@ -128,6 +130,11 @@ import java.sql.Timestamp;
 ,@FieldResult(name="autoApproveInvoice", column="autoApproveInvoice")
 ,@FieldResult(name="autoApproveOrder", column="autoApproveOrder")
 ,@FieldResult(name="shipIfCaptureFails", column="shipIfCaptureFails")
+,@FieldResult(name="setOwnerUponIssuance", column="setOwnerUponIssuance")
+,@FieldResult(name="reqReturnInventoryReceive", column="reqReturnInventoryReceive")
+,@FieldResult(name="addToCartRemoveIncompat", column="addToCartRemoveIncompat")
+,@FieldResult(name="addToCartReplaceUpsell", column="addToCartReplaceUpsell")
+,@FieldResult(name="splitPayPrefPerShpGrp", column="splitPayPrefPerShpGrp")
 ,@FieldResult(name="noShipOnDropShipGroups", column="noShipOnDropShipGroups")
 ,@FieldResult(name="allowDoNotShipOrders", column="allowDoNotShipOrders")
 ,@FieldResult(name="defaultShipmentMethodTypeId", column="defaultShipmentMethodTypeId")
@@ -169,6 +176,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("reserveInventory", "PS.RESERVE_INVENTORY");
         fields.put("reserveOrderEnumId", "PS.RESERVE_ORDER_ENUM_ID");
         fields.put("requireInventory", "PS.REQUIRE_INVENTORY");
+        fields.put("balanceResOnOrderCreation", "PS.BALANCE_RES_ON_ORDER_CREATION");
         fields.put("requirementMethodEnumId", "PS.REQUIREMENT_METHOD_ENUM_ID");
         fields.put("orderNumberPrefix", "PS.ORDER_NUMBER_PREFIX");
         fields.put("defaultLocaleString", "PS.DEFAULT_LOCALE_STRING");
@@ -189,10 +197,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("authDeclinedMessage", "PS.AUTH_DECLINED_MESSAGE");
         fields.put("authFraudMessage", "PS.AUTH_FRAUD_MESSAGE");
         fields.put("authErrorMessage", "PS.AUTH_ERROR_MESSAGE");
-        fields.put("styleSheet", "PS.STYLE_SHEET");
-        fields.put("headerLogo", "PS.HEADER_LOGO");
-        fields.put("headerMiddleBackground", "PS.HEADER_MIDDLE_BACKGROUND");
-        fields.put("headerRightBackground", "PS.HEADER_RIGHT_BACKGROUND");
+        fields.put("visualThemeId", "PS.VISUAL_THEME_ID");
+        fields.put("oldStyleSheet", "PS.OLD_STYLE_SHEET");
+        fields.put("oldHeaderLogo", "PS.OLD_HEADER_LOGO");
+        fields.put("oldHeaderMiddleBackground", "PS.OLD_HEADER_MIDDLE_BACKGROUND");
+        fields.put("oldHeaderRightBackground", "PS.OLD_HEADER_RIGHT_BACKGROUND");
         fields.put("usePrimaryEmailUsername", "PS.USE_PRIMARY_EMAIL_USERNAME");
         fields.put("requireCustomerRole", "PS.REQUIRE_CUSTOMER_ROLE");
         fields.put("autoInvoiceDigitalItems", "PS.AUTO_INVOICE_DIGITAL_ITEMS");
@@ -215,6 +224,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("autoApproveInvoice", "PS.AUTO_APPROVE_INVOICE");
         fields.put("autoApproveOrder", "PS.AUTO_APPROVE_ORDER");
         fields.put("shipIfCaptureFails", "PS.SHIP_IF_CAPTURE_FAILS");
+        fields.put("setOwnerUponIssuance", "PS.SET_OWNER_UPON_ISSUANCE");
+        fields.put("reqReturnInventoryReceive", "PS.REQ_RETURN_INVENTORY_RECEIVE");
+        fields.put("addToCartRemoveIncompat", "PS.ADD_TO_CART_REMOVE_INCOMPAT");
+        fields.put("addToCartReplaceUpsell", "PS.ADD_TO_CART_REPLACE_UPSELL");
+        fields.put("splitPayPrefPerShpGrp", "PS.SPLIT_PAY_PREF_PER_SHP_GRP");
         fields.put("noShipOnDropShipGroups", "PS.NO_SHIP_ON_DROP_SHIP_GROUPS");
         fields.put("allowDoNotShipOrders", "PS.ALLOW_DO_NOT_SHIP_ORDERS");
         fields.put("defaultShipmentMethodTypeId", "PS.DEFAULT_SHIPMENT_METHOD_TYPE_ID");
@@ -253,6 +267,7 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
     reserveInventory("reserveInventory"),
     reserveOrderEnumId("reserveOrderEnumId"),
     requireInventory("requireInventory"),
+    balanceResOnOrderCreation("balanceResOnOrderCreation"),
     requirementMethodEnumId("requirementMethodEnumId"),
     orderNumberPrefix("orderNumberPrefix"),
     defaultLocaleString("defaultLocaleString"),
@@ -273,10 +288,11 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
     authDeclinedMessage("authDeclinedMessage"),
     authFraudMessage("authFraudMessage"),
     authErrorMessage("authErrorMessage"),
-    styleSheet("styleSheet"),
-    headerLogo("headerLogo"),
-    headerMiddleBackground("headerMiddleBackground"),
-    headerRightBackground("headerRightBackground"),
+    visualThemeId("visualThemeId"),
+    oldStyleSheet("oldStyleSheet"),
+    oldHeaderLogo("oldHeaderLogo"),
+    oldHeaderMiddleBackground("oldHeaderMiddleBackground"),
+    oldHeaderRightBackground("oldHeaderRightBackground"),
     usePrimaryEmailUsername("usePrimaryEmailUsername"),
     requireCustomerRole("requireCustomerRole"),
     autoInvoiceDigitalItems("autoInvoiceDigitalItems"),
@@ -299,6 +315,11 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
     autoApproveInvoice("autoApproveInvoice"),
     autoApproveOrder("autoApproveOrder"),
     shipIfCaptureFails("shipIfCaptureFails"),
+    setOwnerUponIssuance("setOwnerUponIssuance"),
+    reqReturnInventoryReceive("reqReturnInventoryReceive"),
+    addToCartRemoveIncompat("addToCartRemoveIncompat"),
+    addToCartReplaceUpsell("addToCartReplaceUpsell"),
+    splitPayPrefPerShpGrp("splitPayPrefPerShpGrp"),
     noShipOnDropShipGroups("noShipOnDropShipGroups"),
     allowDoNotShipOrders("allowDoNotShipOrders"),
     defaultShipmentMethodTypeId("defaultShipmentMethodTypeId"),
@@ -375,6 +396,8 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
     
    private String requireInventory;
     
+   private String balanceResOnOrderCreation;
+    
    private String requirementMethodEnumId;
     
    private String orderNumberPrefix;
@@ -415,13 +438,15 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
     
    private String authErrorMessage;
     
-   private String styleSheet;
+   private String visualThemeId;
     
-   private String headerLogo;
+   private String oldStyleSheet;
     
-   private String headerMiddleBackground;
+   private String oldHeaderLogo;
     
-   private String headerRightBackground;
+   private String oldHeaderMiddleBackground;
+    
+   private String oldHeaderRightBackground;
     
    private String usePrimaryEmailUsername;
     
@@ -467,6 +492,16 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
     
    private String shipIfCaptureFails;
     
+   private String setOwnerUponIssuance;
+    
+   private String reqReturnInventoryReceive;
+    
+   private String addToCartRemoveIncompat;
+    
+   private String addToCartReplaceUpsell;
+    
+   private String splitPayPrefPerShpGrp;
+    
    private String noShipOnDropShipGroups;
     
    private String allowDoNotShipOrders;
@@ -502,7 +537,7 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productStoreGroupId");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("productStoreId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productStoreGroupId");this.allFieldsNames.add("productStoreGroupTypeId");this.allFieldsNames.add("primaryParentGroupId");this.allFieldsNames.add("productStoreGroupName");this.allFieldsNames.add("description");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("primaryStoreGroupId");this.allFieldsNames.add("storeName");this.allFieldsNames.add("companyName");this.allFieldsNames.add("title");this.allFieldsNames.add("subtitle");this.allFieldsNames.add("payToPartyId");this.allFieldsNames.add("daysToCancelNonPay");this.allFieldsNames.add("manualAuthIsCapture");this.allFieldsNames.add("prorateShipping");this.allFieldsNames.add("prorateTaxes");this.allFieldsNames.add("viewCartOnAdd");this.allFieldsNames.add("autoSaveCart");this.allFieldsNames.add("autoApproveReviews");this.allFieldsNames.add("isDemoStore");this.allFieldsNames.add("isImmediatelyFulfilled");this.allFieldsNames.add("inventoryFacilityId");this.allFieldsNames.add("oneInventoryFacility");this.allFieldsNames.add("checkInventory");this.allFieldsNames.add("reserveInventory");this.allFieldsNames.add("reserveOrderEnumId");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("requirementMethodEnumId");this.allFieldsNames.add("orderNumberPrefix");this.allFieldsNames.add("defaultLocaleString");this.allFieldsNames.add("defaultCurrencyUomId");this.allFieldsNames.add("defaultSalesChannelEnumId");this.allFieldsNames.add("allowPassword");this.allFieldsNames.add("defaultPassword");this.allFieldsNames.add("explodeOrderItems");this.allFieldsNames.add("checkGcBalance");this.allFieldsNames.add("retryFailedAuths");this.allFieldsNames.add("headerApprovedStatus");this.allFieldsNames.add("itemApprovedStatus");this.allFieldsNames.add("digitalItemApprovedStatus");this.allFieldsNames.add("headerDeclinedStatus");this.allFieldsNames.add("itemDeclinedStatus");this.allFieldsNames.add("headerCancelStatus");this.allFieldsNames.add("itemCancelStatus");this.allFieldsNames.add("authDeclinedMessage");this.allFieldsNames.add("authFraudMessage");this.allFieldsNames.add("authErrorMessage");this.allFieldsNames.add("styleSheet");this.allFieldsNames.add("headerLogo");this.allFieldsNames.add("headerMiddleBackground");this.allFieldsNames.add("headerRightBackground");this.allFieldsNames.add("usePrimaryEmailUsername");this.allFieldsNames.add("requireCustomerRole");this.allFieldsNames.add("autoInvoiceDigitalItems");this.allFieldsNames.add("reqShipAddrForDigItems");this.allFieldsNames.add("showCheckoutGiftOptions");this.allFieldsNames.add("selectPaymentTypePerItem");this.allFieldsNames.add("showPricesWithVatTax");this.allFieldsNames.add("showTaxIsExempt");this.allFieldsNames.add("vatTaxAuthGeoId");this.allFieldsNames.add("vatTaxAuthPartyId");this.allFieldsNames.add("enableAutoSuggestionList");this.allFieldsNames.add("enableDigProdUpload");this.allFieldsNames.add("prodSearchExcludeVariants");this.allFieldsNames.add("digProdUploadCategoryId");this.allFieldsNames.add("autoOrderCcTryExp");this.allFieldsNames.add("autoOrderCcTryOtherCards");this.allFieldsNames.add("autoOrderCcTryLaterNsf");this.allFieldsNames.add("autoOrderCcTryLaterMax");this.allFieldsNames.add("storeCreditValidDays");this.allFieldsNames.add("autoApproveInvoice");this.allFieldsNames.add("autoApproveOrder");this.allFieldsNames.add("shipIfCaptureFails");this.allFieldsNames.add("noShipOnDropShipGroups");this.allFieldsNames.add("allowDoNotShipOrders");this.allFieldsNames.add("defaultShipmentMethodTypeId");this.allFieldsNames.add("defaultShippingCarrierPartyId");this.allFieldsNames.add("billToThirdPartyId");
+      this.allFieldsNames.add("productStoreGroupId");this.allFieldsNames.add("productStoreGroupTypeId");this.allFieldsNames.add("primaryParentGroupId");this.allFieldsNames.add("productStoreGroupName");this.allFieldsNames.add("description");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("primaryStoreGroupId");this.allFieldsNames.add("storeName");this.allFieldsNames.add("companyName");this.allFieldsNames.add("title");this.allFieldsNames.add("subtitle");this.allFieldsNames.add("payToPartyId");this.allFieldsNames.add("daysToCancelNonPay");this.allFieldsNames.add("manualAuthIsCapture");this.allFieldsNames.add("prorateShipping");this.allFieldsNames.add("prorateTaxes");this.allFieldsNames.add("viewCartOnAdd");this.allFieldsNames.add("autoSaveCart");this.allFieldsNames.add("autoApproveReviews");this.allFieldsNames.add("isDemoStore");this.allFieldsNames.add("isImmediatelyFulfilled");this.allFieldsNames.add("inventoryFacilityId");this.allFieldsNames.add("oneInventoryFacility");this.allFieldsNames.add("checkInventory");this.allFieldsNames.add("reserveInventory");this.allFieldsNames.add("reserveOrderEnumId");this.allFieldsNames.add("requireInventory");this.allFieldsNames.add("balanceResOnOrderCreation");this.allFieldsNames.add("requirementMethodEnumId");this.allFieldsNames.add("orderNumberPrefix");this.allFieldsNames.add("defaultLocaleString");this.allFieldsNames.add("defaultCurrencyUomId");this.allFieldsNames.add("defaultSalesChannelEnumId");this.allFieldsNames.add("allowPassword");this.allFieldsNames.add("defaultPassword");this.allFieldsNames.add("explodeOrderItems");this.allFieldsNames.add("checkGcBalance");this.allFieldsNames.add("retryFailedAuths");this.allFieldsNames.add("headerApprovedStatus");this.allFieldsNames.add("itemApprovedStatus");this.allFieldsNames.add("digitalItemApprovedStatus");this.allFieldsNames.add("headerDeclinedStatus");this.allFieldsNames.add("itemDeclinedStatus");this.allFieldsNames.add("headerCancelStatus");this.allFieldsNames.add("itemCancelStatus");this.allFieldsNames.add("authDeclinedMessage");this.allFieldsNames.add("authFraudMessage");this.allFieldsNames.add("authErrorMessage");this.allFieldsNames.add("visualThemeId");this.allFieldsNames.add("oldStyleSheet");this.allFieldsNames.add("oldHeaderLogo");this.allFieldsNames.add("oldHeaderMiddleBackground");this.allFieldsNames.add("oldHeaderRightBackground");this.allFieldsNames.add("usePrimaryEmailUsername");this.allFieldsNames.add("requireCustomerRole");this.allFieldsNames.add("autoInvoiceDigitalItems");this.allFieldsNames.add("reqShipAddrForDigItems");this.allFieldsNames.add("showCheckoutGiftOptions");this.allFieldsNames.add("selectPaymentTypePerItem");this.allFieldsNames.add("showPricesWithVatTax");this.allFieldsNames.add("showTaxIsExempt");this.allFieldsNames.add("vatTaxAuthGeoId");this.allFieldsNames.add("vatTaxAuthPartyId");this.allFieldsNames.add("enableAutoSuggestionList");this.allFieldsNames.add("enableDigProdUpload");this.allFieldsNames.add("prodSearchExcludeVariants");this.allFieldsNames.add("digProdUploadCategoryId");this.allFieldsNames.add("autoOrderCcTryExp");this.allFieldsNames.add("autoOrderCcTryOtherCards");this.allFieldsNames.add("autoOrderCcTryLaterNsf");this.allFieldsNames.add("autoOrderCcTryLaterMax");this.allFieldsNames.add("storeCreditValidDays");this.allFieldsNames.add("autoApproveInvoice");this.allFieldsNames.add("autoApproveOrder");this.allFieldsNames.add("shipIfCaptureFails");this.allFieldsNames.add("setOwnerUponIssuance");this.allFieldsNames.add("reqReturnInventoryReceive");this.allFieldsNames.add("addToCartRemoveIncompat");this.allFieldsNames.add("addToCartReplaceUpsell");this.allFieldsNames.add("splitPayPrefPerShpGrp");this.allFieldsNames.add("noShipOnDropShipGroups");this.allFieldsNames.add("allowDoNotShipOrders");this.allFieldsNames.add("defaultShipmentMethodTypeId");this.allFieldsNames.add("defaultShippingCarrierPartyId");this.allFieldsNames.add("billToThirdPartyId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -732,6 +767,13 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
     }
     /**
      * Auto generated value setter.
+     * @param balanceResOnOrderCreation the balanceResOnOrderCreation to set
+     */
+    private void setBalanceResOnOrderCreation(String balanceResOnOrderCreation) {
+        this.balanceResOnOrderCreation = balanceResOnOrderCreation;
+    }
+    /**
+     * Auto generated value setter.
      * @param requirementMethodEnumId the requirementMethodEnumId to set
      */
     private void setRequirementMethodEnumId(String requirementMethodEnumId) {
@@ -872,31 +914,38 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
     }
     /**
      * Auto generated value setter.
-     * @param styleSheet the styleSheet to set
+     * @param visualThemeId the visualThemeId to set
      */
-    private void setStyleSheet(String styleSheet) {
-        this.styleSheet = styleSheet;
+    private void setVisualThemeId(String visualThemeId) {
+        this.visualThemeId = visualThemeId;
     }
     /**
      * Auto generated value setter.
-     * @param headerLogo the headerLogo to set
+     * @param oldStyleSheet the oldStyleSheet to set
      */
-    private void setHeaderLogo(String headerLogo) {
-        this.headerLogo = headerLogo;
+    private void setOldStyleSheet(String oldStyleSheet) {
+        this.oldStyleSheet = oldStyleSheet;
     }
     /**
      * Auto generated value setter.
-     * @param headerMiddleBackground the headerMiddleBackground to set
+     * @param oldHeaderLogo the oldHeaderLogo to set
      */
-    private void setHeaderMiddleBackground(String headerMiddleBackground) {
-        this.headerMiddleBackground = headerMiddleBackground;
+    private void setOldHeaderLogo(String oldHeaderLogo) {
+        this.oldHeaderLogo = oldHeaderLogo;
     }
     /**
      * Auto generated value setter.
-     * @param headerRightBackground the headerRightBackground to set
+     * @param oldHeaderMiddleBackground the oldHeaderMiddleBackground to set
      */
-    private void setHeaderRightBackground(String headerRightBackground) {
-        this.headerRightBackground = headerRightBackground;
+    private void setOldHeaderMiddleBackground(String oldHeaderMiddleBackground) {
+        this.oldHeaderMiddleBackground = oldHeaderMiddleBackground;
+    }
+    /**
+     * Auto generated value setter.
+     * @param oldHeaderRightBackground the oldHeaderRightBackground to set
+     */
+    private void setOldHeaderRightBackground(String oldHeaderRightBackground) {
+        this.oldHeaderRightBackground = oldHeaderRightBackground;
     }
     /**
      * Auto generated value setter.
@@ -1051,6 +1100,41 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
      */
     private void setShipIfCaptureFails(String shipIfCaptureFails) {
         this.shipIfCaptureFails = shipIfCaptureFails;
+    }
+    /**
+     * Auto generated value setter.
+     * @param setOwnerUponIssuance the setOwnerUponIssuance to set
+     */
+    private void setSetOwnerUponIssuance(String setOwnerUponIssuance) {
+        this.setOwnerUponIssuance = setOwnerUponIssuance;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reqReturnInventoryReceive the reqReturnInventoryReceive to set
+     */
+    private void setReqReturnInventoryReceive(String reqReturnInventoryReceive) {
+        this.reqReturnInventoryReceive = reqReturnInventoryReceive;
+    }
+    /**
+     * Auto generated value setter.
+     * @param addToCartRemoveIncompat the addToCartRemoveIncompat to set
+     */
+    private void setAddToCartRemoveIncompat(String addToCartRemoveIncompat) {
+        this.addToCartRemoveIncompat = addToCartRemoveIncompat;
+    }
+    /**
+     * Auto generated value setter.
+     * @param addToCartReplaceUpsell the addToCartReplaceUpsell to set
+     */
+    private void setAddToCartReplaceUpsell(String addToCartReplaceUpsell) {
+        this.addToCartReplaceUpsell = addToCartReplaceUpsell;
+    }
+    /**
+     * Auto generated value setter.
+     * @param splitPayPrefPerShpGrp the splitPayPrefPerShpGrp to set
+     */
+    private void setSplitPayPrefPerShpGrp(String splitPayPrefPerShpGrp) {
+        this.splitPayPrefPerShpGrp = splitPayPrefPerShpGrp;
     }
     /**
      * Auto generated value setter.
@@ -1302,6 +1386,13 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getBalanceResOnOrderCreation() {
+        return this.balanceResOnOrderCreation;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getRequirementMethodEnumId() {
         return this.requirementMethodEnumId;
     }
@@ -1442,29 +1533,36 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getStyleSheet() {
-        return this.styleSheet;
+    public String getVisualThemeId() {
+        return this.visualThemeId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getHeaderLogo() {
-        return this.headerLogo;
+    public String getOldStyleSheet() {
+        return this.oldStyleSheet;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getHeaderMiddleBackground() {
-        return this.headerMiddleBackground;
+    public String getOldHeaderLogo() {
+        return this.oldHeaderLogo;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getHeaderRightBackground() {
-        return this.headerRightBackground;
+    public String getOldHeaderMiddleBackground() {
+        return this.oldHeaderMiddleBackground;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getOldHeaderRightBackground() {
+        return this.oldHeaderRightBackground;
     }
     /**
      * Auto generated value accessor.
@@ -1624,6 +1722,41 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getSetOwnerUponIssuance() {
+        return this.setOwnerUponIssuance;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReqReturnInventoryReceive() {
+        return this.reqReturnInventoryReceive;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAddToCartRemoveIncompat() {
+        return this.addToCartRemoveIncompat;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAddToCartReplaceUpsell() {
+        return this.addToCartReplaceUpsell;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSplitPayPrefPerShpGrp() {
+        return this.splitPayPrefPerShpGrp;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getNoShipOnDropShipGroups() {
         return this.noShipOnDropShipGroups;
     }
@@ -1729,6 +1862,7 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
         setReserveInventory((String) mapValue.get("reserveInventory"));
         setReserveOrderEnumId((String) mapValue.get("reserveOrderEnumId"));
         setRequireInventory((String) mapValue.get("requireInventory"));
+        setBalanceResOnOrderCreation((String) mapValue.get("balanceResOnOrderCreation"));
         setRequirementMethodEnumId((String) mapValue.get("requirementMethodEnumId"));
         setOrderNumberPrefix((String) mapValue.get("orderNumberPrefix"));
         setDefaultLocaleString((String) mapValue.get("defaultLocaleString"));
@@ -1749,10 +1883,11 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
         setAuthDeclinedMessage((String) mapValue.get("authDeclinedMessage"));
         setAuthFraudMessage((String) mapValue.get("authFraudMessage"));
         setAuthErrorMessage((String) mapValue.get("authErrorMessage"));
-        setStyleSheet((String) mapValue.get("styleSheet"));
-        setHeaderLogo((String) mapValue.get("headerLogo"));
-        setHeaderMiddleBackground((String) mapValue.get("headerMiddleBackground"));
-        setHeaderRightBackground((String) mapValue.get("headerRightBackground"));
+        setVisualThemeId((String) mapValue.get("visualThemeId"));
+        setOldStyleSheet((String) mapValue.get("oldStyleSheet"));
+        setOldHeaderLogo((String) mapValue.get("oldHeaderLogo"));
+        setOldHeaderMiddleBackground((String) mapValue.get("oldHeaderMiddleBackground"));
+        setOldHeaderRightBackground((String) mapValue.get("oldHeaderRightBackground"));
         setUsePrimaryEmailUsername((String) mapValue.get("usePrimaryEmailUsername"));
         setRequireCustomerRole((String) mapValue.get("requireCustomerRole"));
         setAutoInvoiceDigitalItems((String) mapValue.get("autoInvoiceDigitalItems"));
@@ -1775,6 +1910,11 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
         setAutoApproveInvoice((String) mapValue.get("autoApproveInvoice"));
         setAutoApproveOrder((String) mapValue.get("autoApproveOrder"));
         setShipIfCaptureFails((String) mapValue.get("shipIfCaptureFails"));
+        setSetOwnerUponIssuance((String) mapValue.get("setOwnerUponIssuance"));
+        setReqReturnInventoryReceive((String) mapValue.get("reqReturnInventoryReceive"));
+        setAddToCartRemoveIncompat((String) mapValue.get("addToCartRemoveIncompat"));
+        setAddToCartReplaceUpsell((String) mapValue.get("addToCartReplaceUpsell"));
+        setSplitPayPrefPerShpGrp((String) mapValue.get("splitPayPrefPerShpGrp"));
         setNoShipOnDropShipGroups((String) mapValue.get("noShipOnDropShipGroups"));
         setAllowDoNotShipOrders((String) mapValue.get("allowDoNotShipOrders"));
         setDefaultShipmentMethodTypeId((String) mapValue.get("defaultShipmentMethodTypeId"));
@@ -1817,6 +1957,7 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
         mapValue.put("reserveInventory", getReserveInventory());
         mapValue.put("reserveOrderEnumId", getReserveOrderEnumId());
         mapValue.put("requireInventory", getRequireInventory());
+        mapValue.put("balanceResOnOrderCreation", getBalanceResOnOrderCreation());
         mapValue.put("requirementMethodEnumId", getRequirementMethodEnumId());
         mapValue.put("orderNumberPrefix", getOrderNumberPrefix());
         mapValue.put("defaultLocaleString", getDefaultLocaleString());
@@ -1837,10 +1978,11 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
         mapValue.put("authDeclinedMessage", getAuthDeclinedMessage());
         mapValue.put("authFraudMessage", getAuthFraudMessage());
         mapValue.put("authErrorMessage", getAuthErrorMessage());
-        mapValue.put("styleSheet", getStyleSheet());
-        mapValue.put("headerLogo", getHeaderLogo());
-        mapValue.put("headerMiddleBackground", getHeaderMiddleBackground());
-        mapValue.put("headerRightBackground", getHeaderRightBackground());
+        mapValue.put("visualThemeId", getVisualThemeId());
+        mapValue.put("oldStyleSheet", getOldStyleSheet());
+        mapValue.put("oldHeaderLogo", getOldHeaderLogo());
+        mapValue.put("oldHeaderMiddleBackground", getOldHeaderMiddleBackground());
+        mapValue.put("oldHeaderRightBackground", getOldHeaderRightBackground());
         mapValue.put("usePrimaryEmailUsername", getUsePrimaryEmailUsername());
         mapValue.put("requireCustomerRole", getRequireCustomerRole());
         mapValue.put("autoInvoiceDigitalItems", getAutoInvoiceDigitalItems());
@@ -1863,6 +2005,11 @@ fieldMapColumns.put("ProductStoreGroupAndProductStore", fields);
         mapValue.put("autoApproveInvoice", getAutoApproveInvoice());
         mapValue.put("autoApproveOrder", getAutoApproveOrder());
         mapValue.put("shipIfCaptureFails", getShipIfCaptureFails());
+        mapValue.put("setOwnerUponIssuance", getSetOwnerUponIssuance());
+        mapValue.put("reqReturnInventoryReceive", getReqReturnInventoryReceive());
+        mapValue.put("addToCartRemoveIncompat", getAddToCartRemoveIncompat());
+        mapValue.put("addToCartReplaceUpsell", getAddToCartReplaceUpsell());
+        mapValue.put("splitPayPrefPerShpGrp", getSplitPayPrefPerShpGrp());
         mapValue.put("noShipOnDropShipGroups", getNoShipOnDropShipGroups());
         mapValue.put("allowDoNotShipOrders", getAllowDoNotShipOrders());
         mapValue.put("defaultShipmentMethodTypeId", getDefaultShipmentMethodTypeId());

@@ -42,6 +42,7 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
+import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -83,7 +84,7 @@ fieldMapColumns.put("OtherDataResource", fields);
    @Column(name="DATA_RESOURCE_ID")
    private String dataResourceId;
    @Column(name="DATA_RESOURCE_CONTENT")
-   private byte[] dataResourceContent;
+   private Blob dataResourceContent;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -137,7 +138,7 @@ fieldMapColumns.put("OtherDataResource", fields);
      * Auto generated value setter.
      * @param dataResourceContent the dataResourceContent to set
      */
-    public void setDataResourceContent(byte[] dataResourceContent) {
+    public void setDataResourceContent(Blob dataResourceContent) {
         this.dataResourceContent = dataResourceContent;
     }
     /**
@@ -178,9 +179,9 @@ fieldMapColumns.put("OtherDataResource", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>byte[]</code>
+     * @return <code>Blob</code>
      */
-    public byte[] getDataResourceContent() {
+    public Blob getDataResourceContent() {
         return this.dataResourceContent;
     }
     /**
@@ -238,7 +239,7 @@ fieldMapColumns.put("OtherDataResource", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setDataResourceId((String) mapValue.get("dataResourceId"));
-        setDataResourceContent((byte[]) mapValue.get("dataResourceContent"));
+        setDataResourceContent((Blob) mapValue.get("dataResourceContent"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));

@@ -48,10 +48,11 @@ import java.sql.Timestamp;
  * Auto generated base entity WorkEffortNoteAndData.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectWorkEffortNoteAndDatas", query="SELECT WEN.WORK_EFFORT_ID AS \"workEffortId\",WEN.NOTE_ID AS \"noteId\",ND.NOTE_NAME AS \"noteName\",ND.NOTE_INFO AS \"noteInfo\",ND.NOTE_PARTY AS \"noteParty\",ND.NOTE_DATE_TIME AS \"noteDateTime\" FROM WORK_EFFORT_NOTE WEN INNER JOIN NOTE_DATA ND ON WEN.NOTE_ID = ND.NOTE_ID", resultSetMapping="WorkEffortNoteAndDataMapping")
+@NamedNativeQuery(name="selectWorkEffortNoteAndDatas", query="SELECT WEN.WORK_EFFORT_ID AS \"workEffortId\",WEN.INTERNAL_NOTE AS \"internalNote\",WEN.NOTE_ID AS \"noteId\",ND.NOTE_NAME AS \"noteName\",ND.NOTE_INFO AS \"noteInfo\",ND.NOTE_PARTY AS \"noteParty\",ND.NOTE_DATE_TIME AS \"noteDateTime\" FROM WORK_EFFORT_NOTE WEN INNER JOIN NOTE_DATA ND ON WEN.NOTE_ID = ND.NOTE_ID", resultSetMapping="WorkEffortNoteAndDataMapping")
 @SqlResultSetMapping(name="WorkEffortNoteAndDataMapping", entities={
 @EntityResult(entityClass=WorkEffortNoteAndData.class, fields = {
 @FieldResult(name="workEffortId", column="workEffortId")
+,@FieldResult(name="internalNote", column="internalNote")
 ,@FieldResult(name="noteId", column="noteId")
 ,@FieldResult(name="noteName", column="noteName")
 ,@FieldResult(name="noteInfo", column="noteInfo")
@@ -64,6 +65,7 @@ public class WorkEffortNoteAndData extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("workEffortId", "WEN.WORK_EFFORT_ID");
+        fields.put("internalNote", "WEN.INTERNAL_NOTE");
         fields.put("noteId", "WEN.NOTE_ID");
         fields.put("noteName", "ND.NOTE_NAME");
         fields.put("noteInfo", "ND.NOTE_INFO");
@@ -73,6 +75,7 @@ fieldMapColumns.put("WorkEffortNoteAndData", fields);
 }
   public static enum Fields implements EntityFieldInterface<WorkEffortNoteAndData> {
     workEffortId("workEffortId"),
+    internalNote("internalNote"),
     noteId("noteId"),
     noteName("noteName"),
     noteInfo("noteInfo"),
@@ -90,6 +93,8 @@ fieldMapColumns.put("WorkEffortNoteAndData", fields);
 
     @Id
    private String workEffortId;
+    
+   private String internalNote;
     
    private String noteId;
     
@@ -134,7 +139,7 @@ fieldMapColumns.put("WorkEffortNoteAndData", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("noteId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("noteId");this.allFieldsNames.add("noteName");this.allFieldsNames.add("noteInfo");this.allFieldsNames.add("noteParty");this.allFieldsNames.add("noteDateTime");
+      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("internalNote");this.allFieldsNames.add("noteId");this.allFieldsNames.add("noteName");this.allFieldsNames.add("noteInfo");this.allFieldsNames.add("noteParty");this.allFieldsNames.add("noteDateTime");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -158,6 +163,13 @@ fieldMapColumns.put("WorkEffortNoteAndData", fields);
      */
     private void setWorkEffortId(String workEffortId) {
         this.workEffortId = workEffortId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param internalNote the internalNote to set
+     */
+    private void setInternalNote(String internalNote) {
+        this.internalNote = internalNote;
     }
     /**
      * Auto generated value setter.
@@ -201,6 +213,13 @@ fieldMapColumns.put("WorkEffortNoteAndData", fields);
      */
     public String getWorkEffortId() {
         return this.workEffortId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getInternalNote() {
+        return this.internalNote;
     }
     /**
      * Auto generated value accessor.
@@ -318,6 +337,7 @@ fieldMapColumns.put("WorkEffortNoteAndData", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setWorkEffortId((String) mapValue.get("workEffortId"));
+        setInternalNote((String) mapValue.get("internalNote"));
         setNoteId((String) mapValue.get("noteId"));
         setNoteName((String) mapValue.get("noteName"));
         setNoteInfo((String) mapValue.get("noteInfo"));
@@ -331,6 +351,7 @@ fieldMapColumns.put("WorkEffortNoteAndData", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("workEffortId", getWorkEffortId());
+        mapValue.put("internalNote", getInternalNote());
         mapValue.put("noteId", getNoteId());
         mapValue.put("noteName", getNoteName());
         mapValue.put("noteInfo", getNoteInfo());

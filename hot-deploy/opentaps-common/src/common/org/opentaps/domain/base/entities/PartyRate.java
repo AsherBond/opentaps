@@ -49,15 +49,16 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyRate.
  */
 @javax.persistence.Entity
-@Table(name="PARTY_RATE")
+@Table(name="PARTY_RATE_NEW")
 public class PartyRate extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("partyId", "PARTY_ID");
         fields.put("rateTypeId", "RATE_TYPE_ID");
+        fields.put("defaultRate", "DEFAULT_RATE");
+        fields.put("percentageUsed", "PERCENTAGE_USED");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
-        fields.put("rate", "RATE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -67,9 +68,10 @@ fieldMapColumns.put("PartyRate", fields);
   public static enum Fields implements EntityFieldInterface<PartyRate> {
     partyId("partyId"),
     rateTypeId("rateTypeId"),
+    defaultRate("defaultRate"),
+    percentageUsed("percentageUsed"),
     fromDate("fromDate"),
     thruDate("thruDate"),
-    rate("rate"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -103,10 +105,12 @@ fieldMapColumns.put("PartyRate", fields);
       public void setId(PartyRatePk id) {
          this.id = id;
       }
+   @Column(name="DEFAULT_RATE")
+   private String defaultRate;
+   @Column(name="PERCENTAGE_USED")
+   private BigDecimal percentageUsed;
    @Column(name="THRU_DATE")
    private Timestamp thruDate;
-   @Column(name="RATE")
-   private BigDecimal rate;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -141,7 +145,7 @@ fieldMapColumns.put("PartyRate", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("rateTypeId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("rateTypeId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("rate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("rateTypeId");this.allFieldsNames.add("defaultRate");this.allFieldsNames.add("percentageUsed");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -172,6 +176,20 @@ fieldMapColumns.put("PartyRate", fields);
     }
     /**
      * Auto generated value setter.
+     * @param defaultRate the defaultRate to set
+     */
+    public void setDefaultRate(String defaultRate) {
+        this.defaultRate = defaultRate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param percentageUsed the percentageUsed to set
+     */
+    public void setPercentageUsed(BigDecimal percentageUsed) {
+        this.percentageUsed = percentageUsed;
+    }
+    /**
+     * Auto generated value setter.
      * @param fromDate the fromDate to set
      */
     public void setFromDate(Timestamp fromDate) {
@@ -183,13 +201,6 @@ fieldMapColumns.put("PartyRate", fields);
      */
     public void setThruDate(Timestamp thruDate) {
         this.thruDate = thruDate;
-    }
-    /**
-     * Auto generated value setter.
-     * @param rate the rate to set
-     */
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
     }
     /**
      * Auto generated value setter.
@@ -236,6 +247,20 @@ fieldMapColumns.put("PartyRate", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDefaultRate() {
+        return this.defaultRate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getPercentageUsed() {
+        return this.percentageUsed;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getFromDate() {
@@ -247,13 +272,6 @@ fieldMapColumns.put("PartyRate", fields);
      */
     public Timestamp getThruDate() {
         return this.thruDate;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>BigDecimal</code>
-     */
-    public BigDecimal getRate() {
-        return this.rate;
     }
     /**
      * Auto generated value accessor.
@@ -329,9 +347,10 @@ fieldMapColumns.put("PartyRate", fields);
         preInit();
         setPartyId((String) mapValue.get("partyId"));
         setRateTypeId((String) mapValue.get("rateTypeId"));
+        setDefaultRate((String) mapValue.get("defaultRate"));
+        setPercentageUsed(convertToBigDecimal(mapValue.get("percentageUsed")));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
-        setRate(convertToBigDecimal(mapValue.get("rate")));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -345,9 +364,10 @@ fieldMapColumns.put("PartyRate", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("partyId", getPartyId());
         mapValue.put("rateTypeId", getRateTypeId());
+        mapValue.put("defaultRate", getDefaultRate());
+        mapValue.put("percentageUsed", getPercentageUsed());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
-        mapValue.put("rate", getRate());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

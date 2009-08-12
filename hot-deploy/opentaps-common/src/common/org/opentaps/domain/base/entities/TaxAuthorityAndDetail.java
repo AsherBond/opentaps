@@ -41,13 +41,15 @@ import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
+import java.lang.Long;
 import java.lang.String;
+import java.math.BigDecimal;
 
 /**
  * Auto generated base entity TaxAuthorityAndDetail.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectTaxAuthorityAndDetails", query="SELECT TA.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",TA.TAX_AUTH_PARTY_ID AS \"taxAuthPartyId\",TA.REQUIRE_TAX_ID_FOR_EXEMPTION AS \"requireTaxIdForExemption\",TA.TAX_ID_FORMAT_PATTERN AS \"taxIdFormatPattern\",TA.INCLUDE_TAX_IN_PRICE AS \"includeTaxInPrice\",PG.PARTY_ID AS \"partyId\",PG.GROUP_NAME AS \"groupName\",PG.GROUP_NAME_LOCAL AS \"groupNameLocal\",PG.OFFICE_SITE_NAME AS \"officeSiteName\",PG.COMMENTS AS \"comments\",PG.LOGO_IMAGE_URL AS \"logoImageUrl\",PG.IS_INCORPORATED AS \"isIncorporated\",PG.FEDERAL_TAX_ID AS \"federalTaxId\",PG.REQUIRES1099 AS \"requires1099\",GEO.GEO_ID AS \"geoId\",GEO.GEO_TYPE_ID AS \"geoTypeId\",GEO.GEO_NAME AS \"geoName\",GEO.GEO_CODE AS \"geoCode\",GEO.GEO_SEC_CODE AS \"geoSecCode\",GEO.ABBREVIATION AS \"abbreviation\" FROM TAX_AUTHORITY TA INNER JOIN PARTY_GROUP PG ON TA.TAX_AUTH_PARTY_ID = PG.PARTY_ID INNER JOIN GEO GEO ON TA.TAX_AUTH_GEO_ID = GEO.GEO_ID", resultSetMapping="TaxAuthorityAndDetailMapping")
+@NamedNativeQuery(name="selectTaxAuthorityAndDetails", query="SELECT TA.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",TA.TAX_AUTH_PARTY_ID AS \"taxAuthPartyId\",TA.REQUIRE_TAX_ID_FOR_EXEMPTION AS \"requireTaxIdForExemption\",TA.TAX_ID_FORMAT_PATTERN AS \"taxIdFormatPattern\",TA.INCLUDE_TAX_IN_PRICE AS \"includeTaxInPrice\",PG.PARTY_ID AS \"partyId\",PG.GROUP_NAME AS \"groupName\",PG.GROUP_NAME_LOCAL AS \"groupNameLocal\",PG.OFFICE_SITE_NAME AS \"officeSiteName\",PG.ANNUAL_REVENUE AS \"annualRevenue\",PG.NUM_EMPLOYEES AS \"numEmployees\",PG.TICKER_SYMBOL AS \"tickerSymbol\",PG.COMMENTS AS \"comments\",PG.LOGO_IMAGE_URL AS \"logoImageUrl\",PG.IS_INCORPORATED AS \"isIncorporated\",PG.FEDERAL_TAX_ID AS \"federalTaxId\",PG.REQUIRES1099 AS \"requires1099\",GEO.GEO_ID AS \"geoId\",GEO.GEO_TYPE_ID AS \"geoTypeId\",GEO.GEO_NAME AS \"geoName\",GEO.GEO_CODE AS \"geoCode\",GEO.GEO_SEC_CODE AS \"geoSecCode\",GEO.ABBREVIATION AS \"abbreviation\",GEO.WELL_KNOWN_TEXT AS \"wellKnownText\" FROM TAX_AUTHORITY TA INNER JOIN PARTY_GROUP PG ON TA.TAX_AUTH_PARTY_ID = PG.PARTY_ID INNER JOIN GEO GEO ON TA.TAX_AUTH_GEO_ID = GEO.GEO_ID", resultSetMapping="TaxAuthorityAndDetailMapping")
 @SqlResultSetMapping(name="TaxAuthorityAndDetailMapping", entities={
 @EntityResult(entityClass=TaxAuthorityAndDetail.class, fields = {
 @FieldResult(name="taxAuthGeoId", column="taxAuthGeoId")
@@ -59,6 +61,9 @@ import java.lang.String;
 ,@FieldResult(name="groupName", column="groupName")
 ,@FieldResult(name="groupNameLocal", column="groupNameLocal")
 ,@FieldResult(name="officeSiteName", column="officeSiteName")
+,@FieldResult(name="annualRevenue", column="annualRevenue")
+,@FieldResult(name="numEmployees", column="numEmployees")
+,@FieldResult(name="tickerSymbol", column="tickerSymbol")
 ,@FieldResult(name="comments", column="comments")
 ,@FieldResult(name="logoImageUrl", column="logoImageUrl")
 ,@FieldResult(name="isIncorporated", column="isIncorporated")
@@ -70,6 +75,7 @@ import java.lang.String;
 ,@FieldResult(name="geoCode", column="geoCode")
 ,@FieldResult(name="geoSecCode", column="geoSecCode")
 ,@FieldResult(name="abbreviation", column="abbreviation")
+,@FieldResult(name="wellKnownText", column="wellKnownText")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -85,6 +91,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("groupName", "PG.GROUP_NAME");
         fields.put("groupNameLocal", "PG.GROUP_NAME_LOCAL");
         fields.put("officeSiteName", "PG.OFFICE_SITE_NAME");
+        fields.put("annualRevenue", "PG.ANNUAL_REVENUE");
+        fields.put("numEmployees", "PG.NUM_EMPLOYEES");
+        fields.put("tickerSymbol", "PG.TICKER_SYMBOL");
         fields.put("comments", "PG.COMMENTS");
         fields.put("logoImageUrl", "PG.LOGO_IMAGE_URL");
         fields.put("isIncorporated", "PG.IS_INCORPORATED");
@@ -96,6 +105,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("geoCode", "GEO.GEO_CODE");
         fields.put("geoSecCode", "GEO.GEO_SEC_CODE");
         fields.put("abbreviation", "GEO.ABBREVIATION");
+        fields.put("wellKnownText", "GEO.WELL_KNOWN_TEXT");
 fieldMapColumns.put("TaxAuthorityAndDetail", fields);
 }
   public static enum Fields implements EntityFieldInterface<TaxAuthorityAndDetail> {
@@ -108,6 +118,9 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
     groupName("groupName"),
     groupNameLocal("groupNameLocal"),
     officeSiteName("officeSiteName"),
+    annualRevenue("annualRevenue"),
+    numEmployees("numEmployees"),
+    tickerSymbol("tickerSymbol"),
     comments("comments"),
     logoImageUrl("logoImageUrl"),
     isIncorporated("isIncorporated"),
@@ -118,7 +131,8 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
     geoName("geoName"),
     geoCode("geoCode"),
     geoSecCode("geoSecCode"),
-    abbreviation("abbreviation");
+    abbreviation("abbreviation"),
+    wellKnownText("wellKnownText");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -148,6 +162,12 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
     
    private String officeSiteName;
     
+   private BigDecimal annualRevenue;
+    
+   private Long numEmployees;
+    
+   private String tickerSymbol;
+    
    private String comments;
     
    private String logoImageUrl;
@@ -169,6 +189,8 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
    private String geoSecCode;
     
    private String abbreviation;
+    
+   private String wellKnownText;
 
   /**
    * Default constructor.
@@ -181,7 +203,7 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("taxAuthGeoId");this.primaryKeyNames.add("taxAuthPartyId");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("geoId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("requireTaxIdForExemption");this.allFieldsNames.add("taxIdFormatPattern");this.allFieldsNames.add("includeTaxInPrice");this.allFieldsNames.add("partyId");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("comments");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");this.allFieldsNames.add("geoId");this.allFieldsNames.add("geoTypeId");this.allFieldsNames.add("geoName");this.allFieldsNames.add("geoCode");this.allFieldsNames.add("geoSecCode");this.allFieldsNames.add("abbreviation");
+      this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("requireTaxIdForExemption");this.allFieldsNames.add("taxIdFormatPattern");this.allFieldsNames.add("includeTaxInPrice");this.allFieldsNames.add("partyId");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("officeSiteName");this.allFieldsNames.add("annualRevenue");this.allFieldsNames.add("numEmployees");this.allFieldsNames.add("tickerSymbol");this.allFieldsNames.add("comments");this.allFieldsNames.add("logoImageUrl");this.allFieldsNames.add("isIncorporated");this.allFieldsNames.add("federalTaxId");this.allFieldsNames.add("requires1099");this.allFieldsNames.add("geoId");this.allFieldsNames.add("geoTypeId");this.allFieldsNames.add("geoName");this.allFieldsNames.add("geoCode");this.allFieldsNames.add("geoSecCode");this.allFieldsNames.add("abbreviation");this.allFieldsNames.add("wellKnownText");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -264,6 +286,27 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
     }
     /**
      * Auto generated value setter.
+     * @param annualRevenue the annualRevenue to set
+     */
+    private void setAnnualRevenue(BigDecimal annualRevenue) {
+        this.annualRevenue = annualRevenue;
+    }
+    /**
+     * Auto generated value setter.
+     * @param numEmployees the numEmployees to set
+     */
+    private void setNumEmployees(Long numEmployees) {
+        this.numEmployees = numEmployees;
+    }
+    /**
+     * Auto generated value setter.
+     * @param tickerSymbol the tickerSymbol to set
+     */
+    private void setTickerSymbol(String tickerSymbol) {
+        this.tickerSymbol = tickerSymbol;
+    }
+    /**
+     * Auto generated value setter.
      * @param comments the comments to set
      */
     private void setComments(String comments) {
@@ -339,6 +382,13 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
     private void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;
     }
+    /**
+     * Auto generated value setter.
+     * @param wellKnownText the wellKnownText to set
+     */
+    private void setWellKnownText(String wellKnownText) {
+        this.wellKnownText = wellKnownText;
+    }
 
     /**
      * Auto generated value accessor.
@@ -402,6 +452,27 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
      */
     public String getOfficeSiteName() {
         return this.officeSiteName;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
+    public BigDecimal getAnnualRevenue() {
+        return this.annualRevenue;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Long</code>
+     */
+    public Long getNumEmployees() {
+        return this.numEmployees;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getTickerSymbol() {
+        return this.tickerSymbol;
     }
     /**
      * Auto generated value accessor.
@@ -480,6 +551,13 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
     public String getAbbreviation() {
         return this.abbreviation;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getWellKnownText() {
+        return this.wellKnownText;
+    }
 
 
 
@@ -497,6 +575,9 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
         setGroupName((String) mapValue.get("groupName"));
         setGroupNameLocal((String) mapValue.get("groupNameLocal"));
         setOfficeSiteName((String) mapValue.get("officeSiteName"));
+        setAnnualRevenue(convertToBigDecimal(mapValue.get("annualRevenue")));
+        setNumEmployees((Long) mapValue.get("numEmployees"));
+        setTickerSymbol((String) mapValue.get("tickerSymbol"));
         setComments((String) mapValue.get("comments"));
         setLogoImageUrl((String) mapValue.get("logoImageUrl"));
         setIsIncorporated((String) mapValue.get("isIncorporated"));
@@ -508,6 +589,7 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
         setGeoCode((String) mapValue.get("geoCode"));
         setGeoSecCode((String) mapValue.get("geoSecCode"));
         setAbbreviation((String) mapValue.get("abbreviation"));
+        setWellKnownText((String) mapValue.get("wellKnownText"));
         postInit();
     }
 
@@ -524,6 +606,9 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
         mapValue.put("groupName", getGroupName());
         mapValue.put("groupNameLocal", getGroupNameLocal());
         mapValue.put("officeSiteName", getOfficeSiteName());
+        mapValue.put("annualRevenue", getAnnualRevenue());
+        mapValue.put("numEmployees", getNumEmployees());
+        mapValue.put("tickerSymbol", getTickerSymbol());
         mapValue.put("comments", getComments());
         mapValue.put("logoImageUrl", getLogoImageUrl());
         mapValue.put("isIncorporated", getIsIncorporated());
@@ -535,6 +620,7 @@ fieldMapColumns.put("TaxAuthorityAndDetail", fields);
         mapValue.put("geoCode", getGeoCode());
         mapValue.put("geoSecCode", getGeoSecCode());
         mapValue.put("abbreviation", getAbbreviation());
+        mapValue.put("wellKnownText", getWellKnownText());
         return mapValue;
     }
 

@@ -59,11 +59,6 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("managerRoleTypeId", "MANAGER_ROLE_TYPE_ID");
         fields.put("paymentId", "PAYMENT_ID");
         fields.put("emplPositionId", "EMPL_POSITION_ID");
-        fields.put("payHistoryRoleTypeIdFrom", "PAY_HISTORY_ROLE_TYPE_ID_FROM");
-        fields.put("payHistoryRoleTypeIdTo", "PAY_HISTORY_ROLE_TYPE_ID_TO");
-        fields.put("payHistoryPartyIdFrom", "PAY_HISTORY_PARTY_ID_FROM");
-        fields.put("payHistoryPartyIdTo", "PAY_HISTORY_PARTY_ID_TO");
-        fields.put("payHistoryFromDate", "PAY_HISTORY_FROM_DATE");
         fields.put("fromDate", "FROM_DATE");
         fields.put("thruDate", "THRU_DATE");
         fields.put("comments", "COMMENTS");
@@ -81,11 +76,6 @@ fieldMapColumns.put("PerfReview", fields);
     managerRoleTypeId("managerRoleTypeId"),
     paymentId("paymentId"),
     emplPositionId("emplPositionId"),
-    payHistoryRoleTypeIdFrom("payHistoryRoleTypeIdFrom"),
-    payHistoryRoleTypeIdTo("payHistoryRoleTypeIdTo"),
-    payHistoryPartyIdFrom("payHistoryPartyIdFrom"),
-    payHistoryPartyIdTo("payHistoryPartyIdTo"),
-    payHistoryFromDate("payHistoryFromDate"),
     fromDate("fromDate"),
     thruDate("thruDate"),
     comments("comments"),
@@ -130,16 +120,6 @@ fieldMapColumns.put("PerfReview", fields);
    private String paymentId;
    @Column(name="EMPL_POSITION_ID")
    private String emplPositionId;
-   @Column(name="PAY_HISTORY_ROLE_TYPE_ID_FROM")
-   private String payHistoryRoleTypeIdFrom;
-   @Column(name="PAY_HISTORY_ROLE_TYPE_ID_TO")
-   private String payHistoryRoleTypeIdTo;
-   @Column(name="PAY_HISTORY_PARTY_ID_FROM")
-   private String payHistoryPartyIdFrom;
-   @Column(name="PAY_HISTORY_PARTY_ID_TO")
-   private String payHistoryPartyIdTo;
-   @Column(name="PAY_HISTORY_FROM_DATE")
-   private Timestamp payHistoryFromDate;
    @Column(name="FROM_DATE")
    private Timestamp fromDate;
    @Column(name="THRU_DATE")
@@ -184,22 +164,6 @@ fieldMapColumns.put("PerfReview", fields);
    )
    
    private EmplPosition emplPosition = null;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="PAY_HISTORY_PARTY_ID_FROM", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
-   
-   private Party payHistoryFromParty = null;
-   private transient PartyRole payHistoryFromPartyRole = null;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
-   @JoinColumn(name="PAY_HISTORY_PARTY_ID_TO", insertable=false, updatable=false)
-   @org.hibernate.annotations.Generated(
-      org.hibernate.annotations.GenerationTime.ALWAYS
-   )
-   
-   private Party payHistoryToParty = null;
-   private transient PartyRole payHistoryToPartyRole = null;
    private transient List<PerfReviewItem> perfReviewItems = null;
 
   /**
@@ -213,7 +177,7 @@ fieldMapColumns.put("PerfReview", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("employeePartyId");this.primaryKeyNames.add("employeeRoleTypeId");this.primaryKeyNames.add("perfReviewId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("employeePartyId");this.allFieldsNames.add("employeeRoleTypeId");this.allFieldsNames.add("perfReviewId");this.allFieldsNames.add("managerPartyId");this.allFieldsNames.add("managerRoleTypeId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("emplPositionId");this.allFieldsNames.add("payHistoryRoleTypeIdFrom");this.allFieldsNames.add("payHistoryRoleTypeIdTo");this.allFieldsNames.add("payHistoryPartyIdFrom");this.allFieldsNames.add("payHistoryPartyIdTo");this.allFieldsNames.add("payHistoryFromDate");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("employeePartyId");this.allFieldsNames.add("employeeRoleTypeId");this.allFieldsNames.add("perfReviewId");this.allFieldsNames.add("managerPartyId");this.allFieldsNames.add("managerRoleTypeId");this.allFieldsNames.add("paymentId");this.allFieldsNames.add("emplPositionId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -276,41 +240,6 @@ fieldMapColumns.put("PerfReview", fields);
      */
     public void setEmplPositionId(String emplPositionId) {
         this.emplPositionId = emplPositionId;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryRoleTypeIdFrom the payHistoryRoleTypeIdFrom to set
-     */
-    public void setPayHistoryRoleTypeIdFrom(String payHistoryRoleTypeIdFrom) {
-        this.payHistoryRoleTypeIdFrom = payHistoryRoleTypeIdFrom;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryRoleTypeIdTo the payHistoryRoleTypeIdTo to set
-     */
-    public void setPayHistoryRoleTypeIdTo(String payHistoryRoleTypeIdTo) {
-        this.payHistoryRoleTypeIdTo = payHistoryRoleTypeIdTo;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryPartyIdFrom the payHistoryPartyIdFrom to set
-     */
-    public void setPayHistoryPartyIdFrom(String payHistoryPartyIdFrom) {
-        this.payHistoryPartyIdFrom = payHistoryPartyIdFrom;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryPartyIdTo the payHistoryPartyIdTo to set
-     */
-    public void setPayHistoryPartyIdTo(String payHistoryPartyIdTo) {
-        this.payHistoryPartyIdTo = payHistoryPartyIdTo;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryFromDate the payHistoryFromDate to set
-     */
-    public void setPayHistoryFromDate(Timestamp payHistoryFromDate) {
-        this.payHistoryFromDate = payHistoryFromDate;
     }
     /**
      * Auto generated value setter.
@@ -410,41 +339,6 @@ fieldMapColumns.put("PerfReview", fields);
      */
     public String getEmplPositionId() {
         return this.emplPositionId;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getPayHistoryRoleTypeIdFrom() {
-        return this.payHistoryRoleTypeIdFrom;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getPayHistoryRoleTypeIdTo() {
-        return this.payHistoryRoleTypeIdTo;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getPayHistoryPartyIdFrom() {
-        return this.payHistoryPartyIdFrom;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getPayHistoryPartyIdTo() {
-        return this.payHistoryPartyIdTo;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>Timestamp</code>
-     */
-    public Timestamp getPayHistoryFromDate() {
-        return this.payHistoryFromDate;
     }
     /**
      * Auto generated value accessor.
@@ -563,50 +457,6 @@ fieldMapColumns.put("PerfReview", fields);
         return this.emplPosition;
     }
     /**
-     * Auto generated method that gets the related <code>Party</code> by the relation named <code>PayHistoryFromParty</code>.
-     * @return the <code>Party</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public Party getPayHistoryFromParty() throws RepositoryException {
-        if (this.payHistoryFromParty == null) {
-            this.payHistoryFromParty = getRelatedOne(Party.class, "PayHistoryFromParty");
-        }
-        return this.payHistoryFromParty;
-    }
-    /**
-     * Auto generated method that gets the related <code>PartyRole</code> by the relation named <code>PayHistoryFromPartyRole</code>.
-     * @return the <code>PartyRole</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public PartyRole getPayHistoryFromPartyRole() throws RepositoryException {
-        if (this.payHistoryFromPartyRole == null) {
-            this.payHistoryFromPartyRole = getRelatedOne(PartyRole.class, "PayHistoryFromPartyRole");
-        }
-        return this.payHistoryFromPartyRole;
-    }
-    /**
-     * Auto generated method that gets the related <code>Party</code> by the relation named <code>PayHistoryToParty</code>.
-     * @return the <code>Party</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public Party getPayHistoryToParty() throws RepositoryException {
-        if (this.payHistoryToParty == null) {
-            this.payHistoryToParty = getRelatedOne(Party.class, "PayHistoryToParty");
-        }
-        return this.payHistoryToParty;
-    }
-    /**
-     * Auto generated method that gets the related <code>PartyRole</code> by the relation named <code>PayHistoryToPartyRole</code>.
-     * @return the <code>PartyRole</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public PartyRole getPayHistoryToPartyRole() throws RepositoryException {
-        if (this.payHistoryToPartyRole == null) {
-            this.payHistoryToPartyRole = getRelatedOne(PartyRole.class, "PayHistoryToPartyRole");
-        }
-        return this.payHistoryToPartyRole;
-    }
-    /**
      * Auto generated method that gets the related <code>PerfReviewItem</code> by the relation named <code>PerfReviewItem</code>.
      * @return the list of <code>PerfReviewItem</code>
      * @throws RepositoryException if an error occurs
@@ -662,34 +512,6 @@ fieldMapColumns.put("PerfReview", fields);
     }
     /**
      * Auto generated value setter.
-     * @param payHistoryFromParty the payHistoryFromParty to set
-    */
-    public void setPayHistoryFromParty(Party payHistoryFromParty) {
-        this.payHistoryFromParty = payHistoryFromParty;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryFromPartyRole the payHistoryFromPartyRole to set
-    */
-    public void setPayHistoryFromPartyRole(PartyRole payHistoryFromPartyRole) {
-        this.payHistoryFromPartyRole = payHistoryFromPartyRole;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryToParty the payHistoryToParty to set
-    */
-    public void setPayHistoryToParty(Party payHistoryToParty) {
-        this.payHistoryToParty = payHistoryToParty;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryToPartyRole the payHistoryToPartyRole to set
-    */
-    public void setPayHistoryToPartyRole(PartyRole payHistoryToPartyRole) {
-        this.payHistoryToPartyRole = payHistoryToPartyRole;
-    }
-    /**
-     * Auto generated value setter.
      * @param perfReviewItems the perfReviewItems to set
     */
     public void setPerfReviewItems(List<PerfReviewItem> perfReviewItems) {
@@ -708,11 +530,6 @@ fieldMapColumns.put("PerfReview", fields);
         setManagerRoleTypeId((String) mapValue.get("managerRoleTypeId"));
         setPaymentId((String) mapValue.get("paymentId"));
         setEmplPositionId((String) mapValue.get("emplPositionId"));
-        setPayHistoryRoleTypeIdFrom((String) mapValue.get("payHistoryRoleTypeIdFrom"));
-        setPayHistoryRoleTypeIdTo((String) mapValue.get("payHistoryRoleTypeIdTo"));
-        setPayHistoryPartyIdFrom((String) mapValue.get("payHistoryPartyIdFrom"));
-        setPayHistoryPartyIdTo((String) mapValue.get("payHistoryPartyIdTo"));
-        setPayHistoryFromDate((Timestamp) mapValue.get("payHistoryFromDate"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
         setComments((String) mapValue.get("comments"));
@@ -734,11 +551,6 @@ fieldMapColumns.put("PerfReview", fields);
         mapValue.put("managerRoleTypeId", getManagerRoleTypeId());
         mapValue.put("paymentId", getPaymentId());
         mapValue.put("emplPositionId", getEmplPositionId());
-        mapValue.put("payHistoryRoleTypeIdFrom", getPayHistoryRoleTypeIdFrom());
-        mapValue.put("payHistoryRoleTypeIdTo", getPayHistoryRoleTypeIdTo());
-        mapValue.put("payHistoryPartyIdFrom", getPayHistoryPartyIdFrom());
-        mapValue.put("payHistoryPartyIdTo", getPayHistoryPartyIdTo());
-        mapValue.put("payHistoryFromDate", getPayHistoryFromDate());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
         mapValue.put("comments", getComments());

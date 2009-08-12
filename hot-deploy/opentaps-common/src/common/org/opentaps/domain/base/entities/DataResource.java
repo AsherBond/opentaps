@@ -63,6 +63,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("mimeTypeId", "MIME_TYPE_ID");
         fields.put("characterSetId", "CHARACTER_SET_ID");
         fields.put("objectInfo", "OBJECT_INFO");
+        fields.put("surveyId", "SURVEY_ID");
+        fields.put("surveyResponseId", "SURVEY_RESPONSE_ID");
         fields.put("relatedDetailId", "RELATED_DETAIL_ID");
         fields.put("isPublic", "IS_PUBLIC");
         fields.put("createdDate", "CREATED_DATE");
@@ -87,6 +89,8 @@ fieldMapColumns.put("DataResource", fields);
     mimeTypeId("mimeTypeId"),
     characterSetId("characterSetId"),
     objectInfo("objectInfo"),
+    surveyId("surveyId"),
+    surveyResponseId("surveyResponseId"),
     relatedDetailId("relatedDetailId"),
     isPublic("isPublic"),
     createdDate("createdDate"),
@@ -132,6 +136,10 @@ fieldMapColumns.put("DataResource", fields);
    private String characterSetId;
    @Column(name="OBJECT_INFO")
    private String objectInfo;
+   @Column(name="SURVEY_ID")
+   private String surveyId;
+   @Column(name="SURVEY_RESPONSE_ID")
+   private String surveyResponseId;
    @Column(name="RELATED_DETAIL_ID")
    private String relatedDetailId;
    @Column(name="IS_PUBLIC")
@@ -219,6 +227,20 @@ fieldMapColumns.put("DataResource", fields);
    )
    
    private UserLogin relatedLastModifiedByUserLogin = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="SURVEY_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Survey survey = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="SURVEY_RESPONSE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private SurveyResponse surveyResponse = null;
    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="DATA_RESOURCE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -302,7 +324,7 @@ fieldMapColumns.put("DataResource", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("dataResourceId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("dataResourceId");this.allFieldsNames.add("dataResourceTypeId");this.allFieldsNames.add("dataTemplateTypeId");this.allFieldsNames.add("dataCategoryId");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("dataResourceName");this.allFieldsNames.add("localeString");this.allFieldsNames.add("mimeTypeId");this.allFieldsNames.add("characterSetId");this.allFieldsNames.add("objectInfo");this.allFieldsNames.add("relatedDetailId");this.allFieldsNames.add("isPublic");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("dataResourceId");this.allFieldsNames.add("dataResourceTypeId");this.allFieldsNames.add("dataTemplateTypeId");this.allFieldsNames.add("dataCategoryId");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("dataResourceName");this.allFieldsNames.add("localeString");this.allFieldsNames.add("mimeTypeId");this.allFieldsNames.add("characterSetId");this.allFieldsNames.add("objectInfo");this.allFieldsNames.add("surveyId");this.allFieldsNames.add("surveyResponseId");this.allFieldsNames.add("relatedDetailId");this.allFieldsNames.add("isPublic");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -393,6 +415,20 @@ fieldMapColumns.put("DataResource", fields);
      */
     public void setObjectInfo(String objectInfo) {
         this.objectInfo = objectInfo;
+    }
+    /**
+     * Auto generated value setter.
+     * @param surveyId the surveyId to set
+     */
+    public void setSurveyId(String surveyId) {
+        this.surveyId = surveyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param surveyResponseId the surveyResponseId to set
+     */
+    public void setSurveyResponseId(String surveyResponseId) {
+        this.surveyResponseId = surveyResponseId;
     }
     /**
      * Auto generated value setter.
@@ -541,6 +577,20 @@ fieldMapColumns.put("DataResource", fields);
      */
     public String getObjectInfo() {
         return this.objectInfo;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSurveyId() {
+        return this.surveyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSurveyResponseId() {
+        return this.surveyResponseId;
     }
     /**
      * Auto generated value accessor.
@@ -722,6 +772,28 @@ fieldMapColumns.put("DataResource", fields);
             this.relatedLastModifiedByUserLogin = getRelatedOne(UserLogin.class, "LastModifiedByUserLogin");
         }
         return this.relatedLastModifiedByUserLogin;
+    }
+    /**
+     * Auto generated method that gets the related <code>Survey</code> by the relation named <code>Survey</code>.
+     * @return the <code>Survey</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Survey getSurvey() throws RepositoryException {
+        if (this.survey == null) {
+            this.survey = getRelatedOne(Survey.class, "Survey");
+        }
+        return this.survey;
+    }
+    /**
+     * Auto generated method that gets the related <code>SurveyResponse</code> by the relation named <code>SurveyResponse</code>.
+     * @return the <code>SurveyResponse</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public SurveyResponse getSurveyResponse() throws RepositoryException {
+        if (this.surveyResponse == null) {
+            this.surveyResponse = getRelatedOne(SurveyResponse.class, "SurveyResponse");
+        }
+        return this.surveyResponse;
     }
     /**
      * Auto generated method that gets the related <code>AudioDataResource</code> by the relation named <code>AudioDataResource</code>.
@@ -947,6 +1019,20 @@ fieldMapColumns.put("DataResource", fields);
     */
     public void setRelatedLastModifiedByUserLogin(UserLogin relatedLastModifiedByUserLogin) {
         this.relatedLastModifiedByUserLogin = relatedLastModifiedByUserLogin;
+    }
+    /**
+     * Auto generated value setter.
+     * @param survey the survey to set
+    */
+    public void setSurvey(Survey survey) {
+        this.survey = survey;
+    }
+    /**
+     * Auto generated value setter.
+     * @param surveyResponse the surveyResponse to set
+    */
+    public void setSurveyResponse(SurveyResponse surveyResponse) {
+        this.surveyResponse = surveyResponse;
     }
     /**
      * Auto generated value setter.
@@ -1198,6 +1284,8 @@ fieldMapColumns.put("DataResource", fields);
         setMimeTypeId((String) mapValue.get("mimeTypeId"));
         setCharacterSetId((String) mapValue.get("characterSetId"));
         setObjectInfo((String) mapValue.get("objectInfo"));
+        setSurveyId((String) mapValue.get("surveyId"));
+        setSurveyResponseId((String) mapValue.get("surveyResponseId"));
         setRelatedDetailId((String) mapValue.get("relatedDetailId"));
         setIsPublic((String) mapValue.get("isPublic"));
         setCreatedDate((Timestamp) mapValue.get("createdDate"));
@@ -1226,6 +1314,8 @@ fieldMapColumns.put("DataResource", fields);
         mapValue.put("mimeTypeId", getMimeTypeId());
         mapValue.put("characterSetId", getCharacterSetId());
         mapValue.put("objectInfo", getObjectInfo());
+        mapValue.put("surveyId", getSurveyId());
+        mapValue.put("surveyResponseId", getSurveyResponseId());
         mapValue.put("relatedDetailId", getRelatedDetailId());
         mapValue.put("isPublic", getIsPublic());
         mapValue.put("createdDate", getCreatedDate());

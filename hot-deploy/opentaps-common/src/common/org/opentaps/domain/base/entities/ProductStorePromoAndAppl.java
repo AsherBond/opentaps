@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity ProductStorePromoAndAppl.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectProductStorePromoAndAppls", query="SELECT PP.PROMO_NAME AS \"promoName\",PP.USER_ENTERED AS \"userEntered\",PSPA.PRODUCT_STORE_ID AS \"productStoreId\",PSPA.PRODUCT_PROMO_ID AS \"productPromoId\",PSPA.FROM_DATE AS \"fromDate\",PSPA.THRU_DATE AS \"thruDate\",PSPA.SEQUENCE_NUM AS \"sequenceNum\" FROM PRODUCT_STORE_PROMO_APPL PSPA INNER JOIN PRODUCT_PROMO PP ON PSPA.PRODUCT_PROMO_ID = PP.PRODUCT_PROMO_ID", resultSetMapping="ProductStorePromoAndApplMapping")
+@NamedNativeQuery(name="selectProductStorePromoAndAppls", query="SELECT PP.PROMO_NAME AS \"promoName\",PP.USER_ENTERED AS \"userEntered\",PSPA.PRODUCT_STORE_ID AS \"productStoreId\",PSPA.PRODUCT_PROMO_ID AS \"productPromoId\",PSPA.FROM_DATE AS \"fromDate\",PSPA.THRU_DATE AS \"thruDate\",PSPA.SEQUENCE_NUM AS \"sequenceNum\",PSPA.MANUAL_ONLY AS \"manualOnly\" FROM PRODUCT_STORE_PROMO_APPL PSPA INNER JOIN PRODUCT_PROMO PP ON PSPA.PRODUCT_PROMO_ID = PP.PRODUCT_PROMO_ID", resultSetMapping="ProductStorePromoAndApplMapping")
 @SqlResultSetMapping(name="ProductStorePromoAndApplMapping", entities={
 @EntityResult(entityClass=ProductStorePromoAndAppl.class, fields = {
 @FieldResult(name="promoName", column="promoName")
@@ -59,6 +59,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="fromDate", column="fromDate")
 ,@FieldResult(name="thruDate", column="thruDate")
 ,@FieldResult(name="sequenceNum", column="sequenceNum")
+,@FieldResult(name="manualOnly", column="manualOnly")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -72,6 +73,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("fromDate", "PSPA.FROM_DATE");
         fields.put("thruDate", "PSPA.THRU_DATE");
         fields.put("sequenceNum", "PSPA.SEQUENCE_NUM");
+        fields.put("manualOnly", "PSPA.MANUAL_ONLY");
 fieldMapColumns.put("ProductStorePromoAndAppl", fields);
 }
   public static enum Fields implements EntityFieldInterface<ProductStorePromoAndAppl> {
@@ -81,7 +83,8 @@ fieldMapColumns.put("ProductStorePromoAndAppl", fields);
     productPromoId("productPromoId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
-    sequenceNum("sequenceNum");
+    sequenceNum("sequenceNum"),
+    manualOnly("manualOnly");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -106,6 +109,8 @@ fieldMapColumns.put("ProductStorePromoAndAppl", fields);
    private Timestamp thruDate;
     
    private Long sequenceNum;
+    
+   private String manualOnly;
 
   /**
    * Default constructor.
@@ -118,7 +123,7 @@ fieldMapColumns.put("ProductStorePromoAndAppl", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productStoreId");this.primaryKeyNames.add("productPromoId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("promoName");this.allFieldsNames.add("userEntered");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("productPromoId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");
+      this.allFieldsNames.add("promoName");this.allFieldsNames.add("userEntered");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("productPromoId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("manualOnly");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -185,6 +190,13 @@ fieldMapColumns.put("ProductStorePromoAndAppl", fields);
     private void setSequenceNum(Long sequenceNum) {
         this.sequenceNum = sequenceNum;
     }
+    /**
+     * Auto generated value setter.
+     * @param manualOnly the manualOnly to set
+     */
+    private void setManualOnly(String manualOnly) {
+        this.manualOnly = manualOnly;
+    }
 
     /**
      * Auto generated value accessor.
@@ -235,6 +247,13 @@ fieldMapColumns.put("ProductStorePromoAndAppl", fields);
     public Long getSequenceNum() {
         return this.sequenceNum;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getManualOnly() {
+        return this.manualOnly;
+    }
 
 
 
@@ -250,6 +269,7 @@ fieldMapColumns.put("ProductStorePromoAndAppl", fields);
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
         setSequenceNum((Long) mapValue.get("sequenceNum"));
+        setManualOnly((String) mapValue.get("manualOnly"));
         postInit();
     }
 
@@ -264,6 +284,7 @@ fieldMapColumns.put("ProductStorePromoAndAppl", fields);
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
         mapValue.put("sequenceNum", getSequenceNum());
+        mapValue.put("manualOnly", getManualOnly());
         return mapValue;
     }
 

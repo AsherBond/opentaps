@@ -48,7 +48,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyAndStatus.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyAndStatuss", query="SELECT PT.PARTY_ID AS \"partyId\",PT.PARTY_TYPE_ID AS \"partyTypeId\",PT.EXTERNAL_ID AS \"externalId\",PT.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PT.DESCRIPTION AS \"description\",PT.STATUS_ID AS \"statusId\",PT.CREATED_DATE AS \"createdDate\",PT.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PT.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PT.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",SI.STATUS_TYPE_ID AS \"statusTypeId\",SI.STATUS_CODE AS \"statusCode\",SI.SEQUENCE_ID AS \"sequenceId\" FROM PARTY PT INNER JOIN STATUS_ITEM SI ON PT.STATUS_ID = SI.STATUS_ID", resultSetMapping="PartyAndStatusMapping")
+@NamedNativeQuery(name="selectPartyAndStatuss", query="SELECT PT.PARTY_ID AS \"partyId\",PT.PARTY_TYPE_ID AS \"partyTypeId\",PT.EXTERNAL_ID AS \"externalId\",PT.PREFERRED_CURRENCY_UOM_ID AS \"preferredCurrencyUomId\",PT.DESCRIPTION AS \"description\",PT.STATUS_ID AS \"statusId\",PT.CREATED_DATE AS \"createdDate\",PT.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",PT.LAST_MODIFIED_DATE AS \"lastModifiedDate\",PT.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",PT.DATA_SOURCE_ID AS \"dataSourceId\",PT.IS_UNREAD AS \"isUnread\",SI.STATUS_TYPE_ID AS \"statusTypeId\",SI.STATUS_CODE AS \"statusCode\",SI.SEQUENCE_ID AS \"sequenceId\" FROM PARTY PT INNER JOIN STATUS_ITEM SI ON PT.STATUS_ID = SI.STATUS_ID", resultSetMapping="PartyAndStatusMapping")
 @SqlResultSetMapping(name="PartyAndStatusMapping", entities={
 @EntityResult(entityClass=PartyAndStatus.class, fields = {
 @FieldResult(name="partyId", column="partyId")
@@ -61,6 +61,8 @@ import java.sql.Timestamp;
 ,@FieldResult(name="createdByUserLogin", column="createdByUserLogin")
 ,@FieldResult(name="lastModifiedDate", column="lastModifiedDate")
 ,@FieldResult(name="lastModifiedByUserLogin", column="lastModifiedByUserLogin")
+,@FieldResult(name="dataSourceId", column="dataSourceId")
+,@FieldResult(name="isUnread", column="isUnread")
 ,@FieldResult(name="statusTypeId", column="statusTypeId")
 ,@FieldResult(name="statusCode", column="statusCode")
 ,@FieldResult(name="sequenceId", column="sequenceId")
@@ -80,6 +82,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("createdByUserLogin", "PT.CREATED_BY_USER_LOGIN");
         fields.put("lastModifiedDate", "PT.LAST_MODIFIED_DATE");
         fields.put("lastModifiedByUserLogin", "PT.LAST_MODIFIED_BY_USER_LOGIN");
+        fields.put("dataSourceId", "PT.DATA_SOURCE_ID");
+        fields.put("isUnread", "PT.IS_UNREAD");
         fields.put("statusTypeId", "SI.STATUS_TYPE_ID");
         fields.put("statusCode", "SI.STATUS_CODE");
         fields.put("sequenceId", "SI.SEQUENCE_ID");
@@ -96,6 +100,8 @@ fieldMapColumns.put("PartyAndStatus", fields);
     createdByUserLogin("createdByUserLogin"),
     lastModifiedDate("lastModifiedDate"),
     lastModifiedByUserLogin("lastModifiedByUserLogin"),
+    dataSourceId("dataSourceId"),
+    isUnread("isUnread"),
     statusTypeId("statusTypeId"),
     statusCode("statusCode"),
     sequenceId("sequenceId");
@@ -130,6 +136,10 @@ fieldMapColumns.put("PartyAndStatus", fields);
     
    private String lastModifiedByUserLogin;
     
+   private String dataSourceId;
+    
+   private String isUnread;
+    
    private String statusTypeId;
     
    private String statusCode;
@@ -147,7 +157,7 @@ fieldMapColumns.put("PartyAndStatus", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("statusTypeId");this.allFieldsNames.add("statusCode");this.allFieldsNames.add("sequenceId");
+      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("externalId");this.allFieldsNames.add("preferredCurrencyUomId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("isUnread");this.allFieldsNames.add("statusTypeId");this.allFieldsNames.add("statusCode");this.allFieldsNames.add("sequenceId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -234,6 +244,20 @@ fieldMapColumns.put("PartyAndStatus", fields);
      */
     private void setLastModifiedByUserLogin(String lastModifiedByUserLogin) {
         this.lastModifiedByUserLogin = lastModifiedByUserLogin;
+    }
+    /**
+     * Auto generated value setter.
+     * @param dataSourceId the dataSourceId to set
+     */
+    private void setDataSourceId(String dataSourceId) {
+        this.dataSourceId = dataSourceId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param isUnread the isUnread to set
+     */
+    private void setIsUnread(String isUnread) {
+        this.isUnread = isUnread;
     }
     /**
      * Auto generated value setter.
@@ -331,6 +355,20 @@ fieldMapColumns.put("PartyAndStatus", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getDataSourceId() {
+        return this.dataSourceId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getIsUnread() {
+        return this.isUnread;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getStatusTypeId() {
         return this.statusTypeId;
     }
@@ -366,6 +404,8 @@ fieldMapColumns.put("PartyAndStatus", fields);
         setCreatedByUserLogin((String) mapValue.get("createdByUserLogin"));
         setLastModifiedDate((Timestamp) mapValue.get("lastModifiedDate"));
         setLastModifiedByUserLogin((String) mapValue.get("lastModifiedByUserLogin"));
+        setDataSourceId((String) mapValue.get("dataSourceId"));
+        setIsUnread((String) mapValue.get("isUnread"));
         setStatusTypeId((String) mapValue.get("statusTypeId"));
         setStatusCode((String) mapValue.get("statusCode"));
         setSequenceId((String) mapValue.get("sequenceId"));
@@ -386,6 +426,8 @@ fieldMapColumns.put("PartyAndStatus", fields);
         mapValue.put("createdByUserLogin", getCreatedByUserLogin());
         mapValue.put("lastModifiedDate", getLastModifiedDate());
         mapValue.put("lastModifiedByUserLogin", getLastModifiedByUserLogin());
+        mapValue.put("dataSourceId", getDataSourceId());
+        mapValue.put("isUnread", getIsUnread());
         mapValue.put("statusTypeId", getStatusTypeId());
         mapValue.put("statusCode", getStatusCode());
         mapValue.put("sequenceId", getSequenceId());

@@ -56,6 +56,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("statusId", "STATUS_ID");
         fields.put("statusDatetime", "STATUS_DATETIME");
         fields.put("setByUserLogin", "SET_BY_USER_LOGIN");
+        fields.put("reason", "REASON");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -67,6 +68,7 @@ fieldMapColumns.put("WorkEffortStatus", fields);
     statusId("statusId"),
     statusDatetime("statusDatetime"),
     setByUserLogin("setByUserLogin"),
+    reason("reason"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -102,6 +104,8 @@ fieldMapColumns.put("WorkEffortStatus", fields);
       }
    @Column(name="SET_BY_USER_LOGIN")
    private String setByUserLogin;
+   @Column(name="REASON")
+   private String reason;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -143,7 +147,7 @@ fieldMapColumns.put("WorkEffortStatus", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("statusId");this.primaryKeyNames.add("statusDatetime");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("statusDatetime");this.allFieldsNames.add("setByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("statusDatetime");this.allFieldsNames.add("setByUserLogin");this.allFieldsNames.add("reason");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -185,6 +189,13 @@ fieldMapColumns.put("WorkEffortStatus", fields);
      */
     public void setSetByUserLogin(String setByUserLogin) {
         this.setByUserLogin = setByUserLogin;
+    }
+    /**
+     * Auto generated value setter.
+     * @param reason the reason to set
+     */
+    public void setReason(String reason) {
+        this.reason = reason;
     }
     /**
      * Auto generated value setter.
@@ -242,6 +253,13 @@ fieldMapColumns.put("WorkEffortStatus", fields);
      */
     public String getSetByUserLogin() {
         return this.setByUserLogin;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReason() {
+        return this.reason;
     }
     /**
      * Auto generated value accessor.
@@ -337,6 +355,7 @@ fieldMapColumns.put("WorkEffortStatus", fields);
         setStatusId((String) mapValue.get("statusId"));
         setStatusDatetime((Timestamp) mapValue.get("statusDatetime"));
         setSetByUserLogin((String) mapValue.get("setByUserLogin"));
+        setReason((String) mapValue.get("reason"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -352,6 +371,7 @@ fieldMapColumns.put("WorkEffortStatus", fields);
         mapValue.put("statusId", getStatusId());
         mapValue.put("statusDatetime", getStatusDatetime());
         mapValue.put("setByUserLogin", getSetByUserLogin());
+        mapValue.put("reason", getReason());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

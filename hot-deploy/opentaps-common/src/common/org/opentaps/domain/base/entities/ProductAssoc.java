@@ -66,6 +66,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("instruction", "INSTRUCTION");
         fields.put("routingWorkEffortId", "ROUTING_WORK_EFFORT_ID");
         fields.put("estimateCalcMethod", "ESTIMATE_CALC_METHOD");
+        fields.put("recurrenceInfoId", "RECURRENCE_INFO_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -86,6 +87,7 @@ fieldMapColumns.put("ProductAssoc", fields);
     instruction("instruction"),
     routingWorkEffortId("routingWorkEffortId"),
     estimateCalcMethod("estimateCalcMethod"),
+    recurrenceInfoId("recurrenceInfoId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -136,6 +138,8 @@ fieldMapColumns.put("ProductAssoc", fields);
    private String routingWorkEffortId;
    @Column(name="ESTIMATE_CALC_METHOD")
    private String estimateCalcMethod;
+   @Column(name="RECURRENCE_INFO_ID")
+   private String recurrenceInfoId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -182,6 +186,13 @@ fieldMapColumns.put("ProductAssoc", fields);
    
    private CustomMethod customMethod = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="RECURRENCE_INFO_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private RecurrenceInfo recurrenceInfo = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="SPEC_ROU_WEFF_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -200,7 +211,7 @@ fieldMapColumns.put("ProductAssoc", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productId");this.primaryKeyNames.add("productIdTo");this.primaryKeyNames.add("productAssocTypeId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productId");this.allFieldsNames.add("productIdTo");this.allFieldsNames.add("productAssocTypeId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("reason");this.allFieldsNames.add("quantity");this.allFieldsNames.add("scrapFactor");this.allFieldsNames.add("instruction");this.allFieldsNames.add("routingWorkEffortId");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("specificRoutingWorkEffortId");
+      this.allFieldsNames.add("productId");this.allFieldsNames.add("productIdTo");this.allFieldsNames.add("productAssocTypeId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("sequenceNum");this.allFieldsNames.add("reason");this.allFieldsNames.add("quantity");this.allFieldsNames.add("scrapFactor");this.allFieldsNames.add("instruction");this.allFieldsNames.add("routingWorkEffortId");this.allFieldsNames.add("estimateCalcMethod");this.allFieldsNames.add("recurrenceInfoId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("specificRoutingWorkEffortId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -298,6 +309,13 @@ fieldMapColumns.put("ProductAssoc", fields);
      */
     public void setEstimateCalcMethod(String estimateCalcMethod) {
         this.estimateCalcMethod = estimateCalcMethod;
+    }
+    /**
+     * Auto generated value setter.
+     * @param recurrenceInfoId the recurrenceInfoId to set
+     */
+    public void setRecurrenceInfoId(String recurrenceInfoId) {
+        this.recurrenceInfoId = recurrenceInfoId;
     }
     /**
      * Auto generated value setter.
@@ -421,6 +439,13 @@ fieldMapColumns.put("ProductAssoc", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getRecurrenceInfoId() {
+        return this.recurrenceInfoId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -511,6 +536,17 @@ fieldMapColumns.put("ProductAssoc", fields);
         return this.customMethod;
     }
     /**
+     * Auto generated method that gets the related <code>RecurrenceInfo</code> by the relation named <code>RecurrenceInfo</code>.
+     * @return the <code>RecurrenceInfo</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public RecurrenceInfo getRecurrenceInfo() throws RepositoryException {
+        if (this.recurrenceInfo == null) {
+            this.recurrenceInfo = getRelatedOne(RecurrenceInfo.class, "RecurrenceInfo");
+        }
+        return this.recurrenceInfo;
+    }
+    /**
      * Auto generated method that gets the related <code>WorkEffort</code> by the relation named <code>WorkEffort</code>.
      * @return the <code>WorkEffort</code>
      * @throws RepositoryException if an error occurs
@@ -559,6 +595,13 @@ fieldMapColumns.put("ProductAssoc", fields);
     }
     /**
      * Auto generated value setter.
+     * @param recurrenceInfo the recurrenceInfo to set
+    */
+    public void setRecurrenceInfo(RecurrenceInfo recurrenceInfo) {
+        this.recurrenceInfo = recurrenceInfo;
+    }
+    /**
+     * Auto generated value setter.
      * @param workEffort the workEffort to set
     */
     public void setWorkEffort(WorkEffort workEffort) {
@@ -582,6 +625,7 @@ fieldMapColumns.put("ProductAssoc", fields);
         setInstruction((String) mapValue.get("instruction"));
         setRoutingWorkEffortId((String) mapValue.get("routingWorkEffortId"));
         setEstimateCalcMethod((String) mapValue.get("estimateCalcMethod"));
+        setRecurrenceInfoId((String) mapValue.get("recurrenceInfoId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -606,6 +650,7 @@ fieldMapColumns.put("ProductAssoc", fields);
         mapValue.put("instruction", getInstruction());
         mapValue.put("routingWorkEffortId", getRoutingWorkEffortId());
         mapValue.put("estimateCalcMethod", getEstimateCalcMethod());
+        mapValue.put("recurrenceInfoId", getRecurrenceInfoId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

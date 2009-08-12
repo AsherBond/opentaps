@@ -108,7 +108,7 @@ fieldMapColumns.put("CharacterSet", fields);
       super();
       this.baseEntityName = "CharacterSet";
       this.isView = false;
-      
+      this.resourceName = "ContentEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("characterSetId");
       this.allFieldsNames = new ArrayList<String>();

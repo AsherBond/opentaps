@@ -53,6 +53,8 @@ public class PerfReviewItemType extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("perfReviewItemTypeId", "PERF_REVIEW_ITEM_TYPE_ID");
+        fields.put("parentTypeId", "PARENT_TYPE_ID");
+        fields.put("hasTable", "HAS_TABLE");
         fields.put("description", "DESCRIPTION");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -62,6 +64,8 @@ fieldMapColumns.put("PerfReviewItemType", fields);
 }
   public static enum Fields implements EntityFieldInterface<PerfReviewItemType> {
     perfReviewItemTypeId("perfReviewItemTypeId"),
+    parentTypeId("parentTypeId"),
+    hasTable("hasTable"),
     description("description"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -82,6 +86,10 @@ fieldMapColumns.put("PerfReviewItemType", fields);
    @Id
    @Column(name="PERF_REVIEW_ITEM_TYPE_ID")
    private String perfReviewItemTypeId;
+   @Column(name="PARENT_TYPE_ID")
+   private String parentTypeId;
+   @Column(name="HAS_TABLE")
+   private String hasTable;
    @Column(name="DESCRIPTION")
    private String description;
    @Column(name="LAST_UPDATED_STAMP")
@@ -92,10 +100,21 @@ fieldMapColumns.put("PerfReviewItemType", fields);
    private Timestamp createdStamp;
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private PerfReviewItemType parentPerfReviewItemType = null;
    @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PERF_REVIEW_ITEM_TYPE_ID")
    
    private List<PerfReviewItem> perfReviewItems = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="PARENT_TYPE_ID")
+   
+   private List<PerfReviewItemType> childPerfReviewItemTypes = null;
 
   /**
    * Default constructor.
@@ -108,7 +127,7 @@ fieldMapColumns.put("PerfReviewItemType", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("perfReviewItemTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("perfReviewItemTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("perfReviewItemTypeId");this.allFieldsNames.add("parentTypeId");this.allFieldsNames.add("hasTable");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -129,6 +148,20 @@ fieldMapColumns.put("PerfReviewItemType", fields);
      */
     public void setPerfReviewItemTypeId(String perfReviewItemTypeId) {
         this.perfReviewItemTypeId = perfReviewItemTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param parentTypeId the parentTypeId to set
+     */
+    public void setParentTypeId(String parentTypeId) {
+        this.parentTypeId = parentTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param hasTable the hasTable to set
+     */
+    public void setHasTable(String hasTable) {
+        this.hasTable = hasTable;
     }
     /**
      * Auto generated value setter.
@@ -177,6 +210,20 @@ fieldMapColumns.put("PerfReviewItemType", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getParentTypeId() {
+        return this.parentTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getHasTable() {
+        return this.hasTable;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getDescription() {
         return this.description;
     }
@@ -210,6 +257,17 @@ fieldMapColumns.put("PerfReviewItemType", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>PerfReviewItemType</code> by the relation named <code>ParentPerfReviewItemType</code>.
+     * @return the <code>PerfReviewItemType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public PerfReviewItemType getParentPerfReviewItemType() throws RepositoryException {
+        if (this.parentPerfReviewItemType == null) {
+            this.parentPerfReviewItemType = getRelatedOne(PerfReviewItemType.class, "ParentPerfReviewItemType");
+        }
+        return this.parentPerfReviewItemType;
+    }
+    /**
      * Auto generated method that gets the related <code>PerfReviewItem</code> by the relation named <code>PerfReviewItem</code>.
      * @return the list of <code>PerfReviewItem</code>
      * @throws RepositoryException if an error occurs
@@ -220,13 +278,38 @@ fieldMapColumns.put("PerfReviewItemType", fields);
         }
         return this.perfReviewItems;
     }
+    /**
+     * Auto generated method that gets the related <code>PerfReviewItemType</code> by the relation named <code>ChildPerfReviewItemType</code>.
+     * @return the list of <code>PerfReviewItemType</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PerfReviewItemType> getChildPerfReviewItemTypes() throws RepositoryException {
+        if (this.childPerfReviewItemTypes == null) {
+            this.childPerfReviewItemTypes = getRelated(PerfReviewItemType.class, "ChildPerfReviewItemType");
+        }
+        return this.childPerfReviewItemTypes;
+    }
 
+    /**
+     * Auto generated value setter.
+     * @param parentPerfReviewItemType the parentPerfReviewItemType to set
+    */
+    public void setParentPerfReviewItemType(PerfReviewItemType parentPerfReviewItemType) {
+        this.parentPerfReviewItemType = parentPerfReviewItemType;
+    }
     /**
      * Auto generated value setter.
      * @param perfReviewItems the perfReviewItems to set
     */
     public void setPerfReviewItems(List<PerfReviewItem> perfReviewItems) {
         this.perfReviewItems = perfReviewItems;
+    }
+    /**
+     * Auto generated value setter.
+     * @param childPerfReviewItemTypes the childPerfReviewItemTypes to set
+    */
+    public void setChildPerfReviewItemTypes(List<PerfReviewItemType> childPerfReviewItemTypes) {
+        this.childPerfReviewItemTypes = childPerfReviewItemTypes;
     }
 
 
@@ -235,6 +318,8 @@ fieldMapColumns.put("PerfReviewItemType", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setPerfReviewItemTypeId((String) mapValue.get("perfReviewItemTypeId"));
+        setParentTypeId((String) mapValue.get("parentTypeId"));
+        setHasTable((String) mapValue.get("hasTable"));
         setDescription((String) mapValue.get("description"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -248,6 +333,8 @@ fieldMapColumns.put("PerfReviewItemType", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("perfReviewItemTypeId", getPerfReviewItemTypeId());
+        mapValue.put("parentTypeId", getParentTypeId());
+        mapValue.put("hasTable", getHasTable());
         mapValue.put("description", getDescription());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

@@ -48,7 +48,7 @@ import java.math.BigDecimal;
  * Auto generated base entity InvoiceItemAndDescriptions.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectInvoiceItemAndDescriptionss", query="SELECT IIT.DESCRIPTION AS \"description\",PG.GROUP_NAME AS \"groupName\",P.INTERNAL_NAME AS \"internalName\",GL.ACCOUNT_NAME AS \"accountName\",II.INVOICE_ID AS \"invoiceId\",II.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",II.INVOICE_ITEM_TYPE_ID AS \"invoiceItemTypeId\",II.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.PRODUCT_ID AS \"productId\",II.PRODUCT_FEATURE_ID AS \"productFeatureId\",II.PARENT_INVOICE_ID AS \"parentInvoiceId\",II.PARENT_INVOICE_ITEM_SEQ_ID AS \"parentInvoiceItemSeqId\",II.UOM_ID AS \"uomId\",II.TAXABLE_FLAG AS \"taxableFlag\",II.QUANTITY AS \"quantity\",II.AMOUNT AS \"amount\",II.DESCRIPTION AS \"description\",II.TAX_AUTH_PARTY_ID AS \"taxAuthPartyId\",II.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",II.TAX_AUTHORITY_RATE_SEQ_ID AS \"taxAuthorityRateSeqId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM INVOICE_ITEM II LEFT JOIN INVOICE_ITEM_TYPE IIT ON II.INVOICE_ITEM_TYPE_ID = IIT.INVOICE_ITEM_TYPE_ID LEFT JOIN PARTY_GROUP PG ON II.TAX_AUTH_PARTY_ID = PG.PARTY_ID LEFT JOIN PRODUCT P ON II.PRODUCT_ID = P.PRODUCT_ID LEFT JOIN GL_ACCOUNT GL ON II.OVERRIDE_GL_ACCOUNT_ID = GL.GL_ACCOUNT_ID", resultSetMapping="InvoiceItemAndDescriptionsMapping")
+@NamedNativeQuery(name="selectInvoiceItemAndDescriptionss", query="SELECT IIT.DESCRIPTION AS \"description\",PG.GROUP_NAME AS \"groupName\",P.INTERNAL_NAME AS \"internalName\",GL.ACCOUNT_NAME AS \"accountName\",II.INVOICE_ID AS \"invoiceId\",II.INVOICE_ITEM_SEQ_ID AS \"invoiceItemSeqId\",II.INVOICE_ITEM_TYPE_ID AS \"invoiceItemTypeId\",II.OVERRIDE_GL_ACCOUNT_ID AS \"overrideGlAccountId\",II.OVERRIDE_ORG_PARTY_ID AS \"overrideOrgPartyId\",II.INVENTORY_ITEM_ID AS \"inventoryItemId\",II.PRODUCT_ID AS \"productId\",II.PRODUCT_FEATURE_ID AS \"productFeatureId\",II.PARENT_INVOICE_ID AS \"parentInvoiceId\",II.PARENT_INVOICE_ITEM_SEQ_ID AS \"parentInvoiceItemSeqId\",II.UOM_ID AS \"uomId\",II.TAXABLE_FLAG AS \"taxableFlag\",II.QUANTITY AS \"quantity\",II.AMOUNT AS \"amount\",II.DESCRIPTION AS \"description\",II.TAX_AUTH_PARTY_ID AS \"taxAuthPartyId\",II.TAX_AUTH_GEO_ID AS \"taxAuthGeoId\",II.TAX_AUTHORITY_RATE_SEQ_ID AS \"taxAuthorityRateSeqId\",II.SALES_OPPORTUNITY_ID AS \"salesOpportunityId\",II.ACCTG_TAG_ENUM_ID1 AS \"acctgTagEnumId1\",II.ACCTG_TAG_ENUM_ID2 AS \"acctgTagEnumId2\",II.ACCTG_TAG_ENUM_ID3 AS \"acctgTagEnumId3\",II.ACCTG_TAG_ENUM_ID4 AS \"acctgTagEnumId4\",II.ACCTG_TAG_ENUM_ID5 AS \"acctgTagEnumId5\",II.ACCTG_TAG_ENUM_ID6 AS \"acctgTagEnumId6\",II.ACCTG_TAG_ENUM_ID7 AS \"acctgTagEnumId7\",II.ACCTG_TAG_ENUM_ID8 AS \"acctgTagEnumId8\",II.ACCTG_TAG_ENUM_ID9 AS \"acctgTagEnumId9\",II.ACCTG_TAG_ENUM_ID10 AS \"acctgTagEnumId10\" FROM INVOICE_ITEM II LEFT JOIN INVOICE_ITEM_TYPE IIT ON II.INVOICE_ITEM_TYPE_ID = IIT.INVOICE_ITEM_TYPE_ID LEFT JOIN PARTY_GROUP PG ON II.TAX_AUTH_PARTY_ID = PG.PARTY_ID LEFT JOIN PRODUCT P ON II.PRODUCT_ID = P.PRODUCT_ID LEFT JOIN GL_ACCOUNT GL ON II.OVERRIDE_GL_ACCOUNT_ID = GL.GL_ACCOUNT_ID", resultSetMapping="InvoiceItemAndDescriptionsMapping")
 @SqlResultSetMapping(name="InvoiceItemAndDescriptionsMapping", entities={
 @EntityResult(entityClass=InvoiceItemAndDescriptions.class, fields = {
 @FieldResult(name="invoiceItemTypeIdDescription", column="invoiceItemTypeIdDescription")
@@ -59,6 +59,7 @@ import java.math.BigDecimal;
 ,@FieldResult(name="invoiceItemSeqId", column="invoiceItemSeqId")
 ,@FieldResult(name="invoiceItemTypeId", column="invoiceItemTypeId")
 ,@FieldResult(name="overrideGlAccountId", column="overrideGlAccountId")
+,@FieldResult(name="overrideOrgPartyId", column="overrideOrgPartyId")
 ,@FieldResult(name="inventoryItemId", column="inventoryItemId")
 ,@FieldResult(name="productId", column="productId")
 ,@FieldResult(name="productFeatureId", column="productFeatureId")
@@ -72,6 +73,7 @@ import java.math.BigDecimal;
 ,@FieldResult(name="taxAuthPartyId", column="taxAuthPartyId")
 ,@FieldResult(name="taxAuthGeoId", column="taxAuthGeoId")
 ,@FieldResult(name="taxAuthorityRateSeqId", column="taxAuthorityRateSeqId")
+,@FieldResult(name="salesOpportunityId", column="salesOpportunityId")
 ,@FieldResult(name="acctgTagEnumId1", column="acctgTagEnumId1")
 ,@FieldResult(name="acctgTagEnumId2", column="acctgTagEnumId2")
 ,@FieldResult(name="acctgTagEnumId3", column="acctgTagEnumId3")
@@ -96,6 +98,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("invoiceItemSeqId", "II.INVOICE_ITEM_SEQ_ID");
         fields.put("invoiceItemTypeId", "II.INVOICE_ITEM_TYPE_ID");
         fields.put("overrideGlAccountId", "II.OVERRIDE_GL_ACCOUNT_ID");
+        fields.put("overrideOrgPartyId", "II.OVERRIDE_ORG_PARTY_ID");
         fields.put("inventoryItemId", "II.INVENTORY_ITEM_ID");
         fields.put("productId", "II.PRODUCT_ID");
         fields.put("productFeatureId", "II.PRODUCT_FEATURE_ID");
@@ -109,6 +112,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("taxAuthPartyId", "II.TAX_AUTH_PARTY_ID");
         fields.put("taxAuthGeoId", "II.TAX_AUTH_GEO_ID");
         fields.put("taxAuthorityRateSeqId", "II.TAX_AUTHORITY_RATE_SEQ_ID");
+        fields.put("salesOpportunityId", "II.SALES_OPPORTUNITY_ID");
         fields.put("acctgTagEnumId1", "II.ACCTG_TAG_ENUM_ID1");
         fields.put("acctgTagEnumId2", "II.ACCTG_TAG_ENUM_ID2");
         fields.put("acctgTagEnumId3", "II.ACCTG_TAG_ENUM_ID3");
@@ -130,6 +134,7 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
     invoiceItemSeqId("invoiceItemSeqId"),
     invoiceItemTypeId("invoiceItemTypeId"),
     overrideGlAccountId("overrideGlAccountId"),
+    overrideOrgPartyId("overrideOrgPartyId"),
     inventoryItemId("inventoryItemId"),
     productId("productId"),
     productFeatureId("productFeatureId"),
@@ -143,6 +148,7 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
     taxAuthPartyId("taxAuthPartyId"),
     taxAuthGeoId("taxAuthGeoId"),
     taxAuthorityRateSeqId("taxAuthorityRateSeqId"),
+    salesOpportunityId("salesOpportunityId"),
     acctgTagEnumId1("acctgTagEnumId1"),
     acctgTagEnumId2("acctgTagEnumId2"),
     acctgTagEnumId3("acctgTagEnumId3"),
@@ -180,6 +186,8 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
     
    private String overrideGlAccountId;
     
+   private String overrideOrgPartyId;
+    
    private String inventoryItemId;
     
    private String productId;
@@ -205,6 +213,8 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
    private String taxAuthGeoId;
     
    private String taxAuthorityRateSeqId;
+    
+   private String salesOpportunityId;
     
    private String acctgTagEnumId1;
     
@@ -237,7 +247,7 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("invoiceId");this.primaryKeyNames.add("invoiceItemSeqId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("invoiceItemTypeIdDescription");this.allFieldsNames.add("taxAuthPartyIdDescription");this.allFieldsNames.add("productIdDescription");this.allFieldsNames.add("overrideGlAccountIdDescription");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("invoiceItemTypeId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("parentInvoiceId");this.allFieldsNames.add("parentInvoiceItemSeqId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("taxableFlag");this.allFieldsNames.add("quantity");this.allFieldsNames.add("amount");this.allFieldsNames.add("description");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("taxAuthorityRateSeqId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
+      this.allFieldsNames.add("invoiceItemTypeIdDescription");this.allFieldsNames.add("taxAuthPartyIdDescription");this.allFieldsNames.add("productIdDescription");this.allFieldsNames.add("overrideGlAccountIdDescription");this.allFieldsNames.add("invoiceId");this.allFieldsNames.add("invoiceItemSeqId");this.allFieldsNames.add("invoiceItemTypeId");this.allFieldsNames.add("overrideGlAccountId");this.allFieldsNames.add("overrideOrgPartyId");this.allFieldsNames.add("inventoryItemId");this.allFieldsNames.add("productId");this.allFieldsNames.add("productFeatureId");this.allFieldsNames.add("parentInvoiceId");this.allFieldsNames.add("parentInvoiceItemSeqId");this.allFieldsNames.add("uomId");this.allFieldsNames.add("taxableFlag");this.allFieldsNames.add("quantity");this.allFieldsNames.add("amount");this.allFieldsNames.add("description");this.allFieldsNames.add("taxAuthPartyId");this.allFieldsNames.add("taxAuthGeoId");this.allFieldsNames.add("taxAuthorityRateSeqId");this.allFieldsNames.add("salesOpportunityId");this.allFieldsNames.add("acctgTagEnumId1");this.allFieldsNames.add("acctgTagEnumId2");this.allFieldsNames.add("acctgTagEnumId3");this.allFieldsNames.add("acctgTagEnumId4");this.allFieldsNames.add("acctgTagEnumId5");this.allFieldsNames.add("acctgTagEnumId6");this.allFieldsNames.add("acctgTagEnumId7");this.allFieldsNames.add("acctgTagEnumId8");this.allFieldsNames.add("acctgTagEnumId9");this.allFieldsNames.add("acctgTagEnumId10");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -310,6 +320,13 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
      */
     private void setOverrideGlAccountId(String overrideGlAccountId) {
         this.overrideGlAccountId = overrideGlAccountId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param overrideOrgPartyId the overrideOrgPartyId to set
+     */
+    private void setOverrideOrgPartyId(String overrideOrgPartyId) {
+        this.overrideOrgPartyId = overrideOrgPartyId;
     }
     /**
      * Auto generated value setter.
@@ -401,6 +418,13 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
      */
     private void setTaxAuthorityRateSeqId(String taxAuthorityRateSeqId) {
         this.taxAuthorityRateSeqId = taxAuthorityRateSeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param salesOpportunityId the salesOpportunityId to set
+     */
+    private void setSalesOpportunityId(String salesOpportunityId) {
+        this.salesOpportunityId = salesOpportunityId;
     }
     /**
      * Auto generated value setter.
@@ -533,6 +557,13 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getOverrideOrgPartyId() {
+        return this.overrideOrgPartyId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getInventoryItemId() {
         return this.inventoryItemId;
     }
@@ -624,6 +655,13 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getSalesOpportunityId() {
+        return this.salesOpportunityId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getAcctgTagEnumId1() {
         return this.acctgTagEnumId1;
     }
@@ -706,6 +744,7 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
         setInvoiceItemSeqId((String) mapValue.get("invoiceItemSeqId"));
         setInvoiceItemTypeId((String) mapValue.get("invoiceItemTypeId"));
         setOverrideGlAccountId((String) mapValue.get("overrideGlAccountId"));
+        setOverrideOrgPartyId((String) mapValue.get("overrideOrgPartyId"));
         setInventoryItemId((String) mapValue.get("inventoryItemId"));
         setProductId((String) mapValue.get("productId"));
         setProductFeatureId((String) mapValue.get("productFeatureId"));
@@ -719,6 +758,7 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
         setTaxAuthPartyId((String) mapValue.get("taxAuthPartyId"));
         setTaxAuthGeoId((String) mapValue.get("taxAuthGeoId"));
         setTaxAuthorityRateSeqId((String) mapValue.get("taxAuthorityRateSeqId"));
+        setSalesOpportunityId((String) mapValue.get("salesOpportunityId"));
         setAcctgTagEnumId1((String) mapValue.get("acctgTagEnumId1"));
         setAcctgTagEnumId2((String) mapValue.get("acctgTagEnumId2"));
         setAcctgTagEnumId3((String) mapValue.get("acctgTagEnumId3"));
@@ -744,6 +784,7 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
         mapValue.put("invoiceItemSeqId", getInvoiceItemSeqId());
         mapValue.put("invoiceItemTypeId", getInvoiceItemTypeId());
         mapValue.put("overrideGlAccountId", getOverrideGlAccountId());
+        mapValue.put("overrideOrgPartyId", getOverrideOrgPartyId());
         mapValue.put("inventoryItemId", getInventoryItemId());
         mapValue.put("productId", getProductId());
         mapValue.put("productFeatureId", getProductFeatureId());
@@ -757,6 +798,7 @@ fieldMapColumns.put("InvoiceItemAndDescriptions", fields);
         mapValue.put("taxAuthPartyId", getTaxAuthPartyId());
         mapValue.put("taxAuthGeoId", getTaxAuthGeoId());
         mapValue.put("taxAuthorityRateSeqId", getTaxAuthorityRateSeqId());
+        mapValue.put("salesOpportunityId", getSalesOpportunityId());
         mapValue.put("acctgTagEnumId1", getAcctgTagEnumId1());
         mapValue.put("acctgTagEnumId2", getAcctgTagEnumId2());
         mapValue.put("acctgTagEnumId3", getAcctgTagEnumId3());

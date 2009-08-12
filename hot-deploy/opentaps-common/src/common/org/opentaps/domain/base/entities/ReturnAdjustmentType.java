@@ -127,7 +127,7 @@ fieldMapColumns.put("ReturnAdjustmentType", fields);
       super();
       this.baseEntityName = "ReturnAdjustmentType";
       this.isView = false;
-      
+      this.resourceName = "OrderEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("returnAdjustmentTypeId");
       this.allFieldsNames = new ArrayList<String>();

@@ -54,7 +54,6 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("webSiteId", "WEB_SITE_ID");
         fields.put("siteName", "SITE_NAME");
-        fields.put("allowProductStoreChange", "ALLOW_PRODUCT_STORE_CHANGE");
         fields.put("httpHost", "HTTP_HOST");
         fields.put("httpPort", "HTTP_PORT");
         fields.put("httpsHost", "HTTPS_HOST");
@@ -63,17 +62,18 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("standardContentPrefix", "STANDARD_CONTENT_PREFIX");
         fields.put("secureContentPrefix", "SECURE_CONTENT_PREFIX");
         fields.put("cookieDomain", "COOKIE_DOMAIN");
+        fields.put("visualThemeSetId", "VISUAL_THEME_SET_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
         fields.put("createdTxStamp", "CREATED_TX_STAMP");
         fields.put("productStoreId", "PRODUCT_STORE_ID");
+        fields.put("allowProductStoreChange", "ALLOW_PRODUCT_STORE_CHANGE");
 fieldMapColumns.put("WebSite", fields);
 }
   public static enum Fields implements EntityFieldInterface<WebSite> {
     webSiteId("webSiteId"),
     siteName("siteName"),
-    allowProductStoreChange("allowProductStoreChange"),
     httpHost("httpHost"),
     httpPort("httpPort"),
     httpsHost("httpsHost"),
@@ -82,11 +82,13 @@ fieldMapColumns.put("WebSite", fields);
     standardContentPrefix("standardContentPrefix"),
     secureContentPrefix("secureContentPrefix"),
     cookieDomain("cookieDomain"),
+    visualThemeSetId("visualThemeSetId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
     createdTxStamp("createdTxStamp"),
-    productStoreId("productStoreId");
+    productStoreId("productStoreId"),
+    allowProductStoreChange("allowProductStoreChange");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -104,8 +106,6 @@ fieldMapColumns.put("WebSite", fields);
    private String webSiteId;
    @Column(name="SITE_NAME")
    private String siteName;
-   @Column(name="ALLOW_PRODUCT_STORE_CHANGE")
-   private String allowProductStoreChange;
    @Column(name="HTTP_HOST")
    private String httpHost;
    @Column(name="HTTP_PORT")
@@ -122,6 +122,8 @@ fieldMapColumns.put("WebSite", fields);
    private String secureContentPrefix;
    @Column(name="COOKIE_DOMAIN")
    private String cookieDomain;
+   @Column(name="VISUAL_THEME_SET_ID")
+   private String visualThemeSetId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -132,6 +134,15 @@ fieldMapColumns.put("WebSite", fields);
    private Timestamp createdTxStamp;
    @Column(name="PRODUCT_STORE_ID")
    private String productStoreId;
+   @Column(name="ALLOW_PRODUCT_STORE_CHANGE")
+   private String allowProductStoreChange;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="VISUAL_THEME_SET_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private VisualThemeSet visualThemeSet = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_STORE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -159,6 +170,10 @@ fieldMapColumns.put("WebSite", fields);
    @JoinColumn(name="WEB_SITE_ID")
    
    private List<WebSiteRole> webSiteRoles = null;
+   @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="WEB_SITE_ID")
+   
+   private List<WebslingerServer> webslingerServers = null;
 
   /**
    * Default constructor.
@@ -171,7 +186,7 @@ fieldMapColumns.put("WebSite", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("webSiteId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("siteName");this.allFieldsNames.add("allowProductStoreChange");this.allFieldsNames.add("httpHost");this.allFieldsNames.add("httpPort");this.allFieldsNames.add("httpsHost");this.allFieldsNames.add("httpsPort");this.allFieldsNames.add("enableHttps");this.allFieldsNames.add("standardContentPrefix");this.allFieldsNames.add("secureContentPrefix");this.allFieldsNames.add("cookieDomain");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("productStoreId");
+      this.allFieldsNames.add("webSiteId");this.allFieldsNames.add("siteName");this.allFieldsNames.add("httpHost");this.allFieldsNames.add("httpPort");this.allFieldsNames.add("httpsHost");this.allFieldsNames.add("httpsPort");this.allFieldsNames.add("enableHttps");this.allFieldsNames.add("standardContentPrefix");this.allFieldsNames.add("secureContentPrefix");this.allFieldsNames.add("cookieDomain");this.allFieldsNames.add("visualThemeSetId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("allowProductStoreChange");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -199,13 +214,6 @@ fieldMapColumns.put("WebSite", fields);
      */
     public void setSiteName(String siteName) {
         this.siteName = siteName;
-    }
-    /**
-     * Auto generated value setter.
-     * @param allowProductStoreChange the allowProductStoreChange to set
-     */
-    public void setAllowProductStoreChange(String allowProductStoreChange) {
-        this.allowProductStoreChange = allowProductStoreChange;
     }
     /**
      * Auto generated value setter.
@@ -265,6 +273,13 @@ fieldMapColumns.put("WebSite", fields);
     }
     /**
      * Auto generated value setter.
+     * @param visualThemeSetId the visualThemeSetId to set
+     */
+    public void setVisualThemeSetId(String visualThemeSetId) {
+        this.visualThemeSetId = visualThemeSetId;
+    }
+    /**
+     * Auto generated value setter.
      * @param lastUpdatedStamp the lastUpdatedStamp to set
      */
     public void setLastUpdatedStamp(Timestamp lastUpdatedStamp) {
@@ -298,6 +313,13 @@ fieldMapColumns.put("WebSite", fields);
     public void setProductStoreId(String productStoreId) {
         this.productStoreId = productStoreId;
     }
+    /**
+     * Auto generated value setter.
+     * @param allowProductStoreChange the allowProductStoreChange to set
+     */
+    public void setAllowProductStoreChange(String allowProductStoreChange) {
+        this.allowProductStoreChange = allowProductStoreChange;
+    }
 
     /**
      * Auto generated value accessor.
@@ -312,13 +334,6 @@ fieldMapColumns.put("WebSite", fields);
      */
     public String getSiteName() {
         return this.siteName;
-    }
-    /**
-     * Auto generated value accessor.
-     * @return <code>String</code>
-     */
-    public String getAllowProductStoreChange() {
-        return this.allowProductStoreChange;
     }
     /**
      * Auto generated value accessor.
@@ -378,6 +393,13 @@ fieldMapColumns.put("WebSite", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getVisualThemeSetId() {
+        return this.visualThemeSetId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getLastUpdatedStamp() {
@@ -411,7 +433,25 @@ fieldMapColumns.put("WebSite", fields);
     public String getProductStoreId() {
         return this.productStoreId;
     }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getAllowProductStoreChange() {
+        return this.allowProductStoreChange;
+    }
 
+    /**
+     * Auto generated method that gets the related <code>VisualThemeSet</code> by the relation named <code>VisualThemeSet</code>.
+     * @return the <code>VisualThemeSet</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public VisualThemeSet getVisualThemeSet() throws RepositoryException {
+        if (this.visualThemeSet == null) {
+            this.visualThemeSet = getRelatedOne(VisualThemeSet.class, "VisualThemeSet");
+        }
+        return this.visualThemeSet;
+    }
     /**
      * Auto generated method that gets the related <code>ProductStore</code> by the relation named <code>ProductStore</code>.
      * @return the <code>ProductStore</code>
@@ -478,7 +518,25 @@ fieldMapColumns.put("WebSite", fields);
         }
         return this.webSiteRoles;
     }
+    /**
+     * Auto generated method that gets the related <code>WebslingerServer</code> by the relation named <code>WebslingerServer</code>.
+     * @return the list of <code>WebslingerServer</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends WebslingerServer> getWebslingerServers() throws RepositoryException {
+        if (this.webslingerServers == null) {
+            this.webslingerServers = getRelated(WebslingerServer.class, "WebslingerServer");
+        }
+        return this.webslingerServers;
+    }
 
+    /**
+     * Auto generated value setter.
+     * @param visualThemeSet the visualThemeSet to set
+    */
+    public void setVisualThemeSet(VisualThemeSet visualThemeSet) {
+        this.visualThemeSet = visualThemeSet;
+    }
     /**
      * Auto generated value setter.
      * @param productStore the productStore to set
@@ -520,6 +578,13 @@ fieldMapColumns.put("WebSite", fields);
     */
     public void setWebSiteRoles(List<WebSiteRole> webSiteRoles) {
         this.webSiteRoles = webSiteRoles;
+    }
+    /**
+     * Auto generated value setter.
+     * @param webslingerServers the webslingerServers to set
+    */
+    public void setWebslingerServers(List<WebslingerServer> webslingerServers) {
+        this.webslingerServers = webslingerServers;
     }
 
     /**
@@ -610,7 +675,6 @@ fieldMapColumns.put("WebSite", fields);
         preInit();
         setWebSiteId((String) mapValue.get("webSiteId"));
         setSiteName((String) mapValue.get("siteName"));
-        setAllowProductStoreChange((String) mapValue.get("allowProductStoreChange"));
         setHttpHost((String) mapValue.get("httpHost"));
         setHttpPort((String) mapValue.get("httpPort"));
         setHttpsHost((String) mapValue.get("httpsHost"));
@@ -619,11 +683,13 @@ fieldMapColumns.put("WebSite", fields);
         setStandardContentPrefix((String) mapValue.get("standardContentPrefix"));
         setSecureContentPrefix((String) mapValue.get("secureContentPrefix"));
         setCookieDomain((String) mapValue.get("cookieDomain"));
+        setVisualThemeSetId((String) mapValue.get("visualThemeSetId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
         setCreatedTxStamp((Timestamp) mapValue.get("createdTxStamp"));
         setProductStoreId((String) mapValue.get("productStoreId"));
+        setAllowProductStoreChange((String) mapValue.get("allowProductStoreChange"));
         postInit();
     }
 
@@ -633,7 +699,6 @@ fieldMapColumns.put("WebSite", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("webSiteId", getWebSiteId());
         mapValue.put("siteName", getSiteName());
-        mapValue.put("allowProductStoreChange", getAllowProductStoreChange());
         mapValue.put("httpHost", getHttpHost());
         mapValue.put("httpPort", getHttpPort());
         mapValue.put("httpsHost", getHttpsHost());
@@ -642,11 +707,13 @@ fieldMapColumns.put("WebSite", fields);
         mapValue.put("standardContentPrefix", getStandardContentPrefix());
         mapValue.put("secureContentPrefix", getSecureContentPrefix());
         mapValue.put("cookieDomain", getCookieDomain());
+        mapValue.put("visualThemeSetId", getVisualThemeSetId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());
         mapValue.put("createdTxStamp", getCreatedTxStamp());
         mapValue.put("productStoreId", getProductStoreId());
+        mapValue.put("allowProductStoreChange", getAllowProductStoreChange());
         return mapValue;
     }
 

@@ -125,6 +125,10 @@ fieldMapColumns.put("Survey", fields);
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="SURVEY_ID")
+   
+   private List<DataResource> dataResources = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PURCHASE_SURVEY_ID")
    
    private List<ProductStoreFinActSetting> productStoreFinActSettings = null;
@@ -378,6 +382,17 @@ fieldMapColumns.put("Survey", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>DataResource</code> by the relation named <code>DataResource</code>.
+     * @return the list of <code>DataResource</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends DataResource> getDataResources() throws RepositoryException {
+        if (this.dataResources == null) {
+            this.dataResources = getRelated(DataResource.class, "DataResource");
+        }
+        return this.dataResources;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductStoreFinActSetting</code> by the relation named <code>ProductStoreFinActSetting</code>.
      * @return the list of <code>ProductStoreFinActSetting</code>
      * @throws RepositoryException if an error occurs
@@ -455,6 +470,13 @@ fieldMapColumns.put("Survey", fields);
         return this.surveyTriggers;
     }
 
+    /**
+     * Auto generated value setter.
+     * @param dataResources the dataResources to set
+    */
+    public void setDataResources(List<DataResource> dataResources) {
+        this.dataResources = dataResources;
+    }
     /**
      * Auto generated value setter.
      * @param productStoreFinActSettings the productStoreFinActSettings to set

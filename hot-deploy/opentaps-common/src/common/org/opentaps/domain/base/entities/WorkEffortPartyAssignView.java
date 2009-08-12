@@ -48,12 +48,14 @@ import java.sql.Timestamp;
  * Auto generated base entity WorkEffortPartyAssignView.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectWorkEffortPartyAssignViews", query="SELECT PNV.PARTY_ID AS \"partyId\",PNV.PARTY_TYPE_ID AS \"partyTypeId\",PNV.DESCRIPTION AS \"description\",PNV.FIRST_NAME AS \"firstName\",PNV.MIDDLE_NAME AS \"middleName\",PNV.LAST_NAME AS \"lastName\",PNV.FIRST_NAME_LOCAL AS \"firstNameLocal\",PNV.LAST_NAME_LOCAL AS \"lastNameLocal\",PNV.PERSONAL_TITLE AS \"personalTitle\",PNV.SUFFIX AS \"suffix\",PNV.GROUP_NAME AS \"groupName\",PNV.GROUP_NAME_LOCAL AS \"groupNameLocal\",WEPA.WORK_EFFORT_ID AS \"workEffortId\",WEPA.ROLE_TYPE_ID AS \"roleTypeId\",WEPA.FROM_DATE AS \"fromDate\",WEPA.THRU_DATE AS \"thruDate\",WEPA.STATUS_ID AS \"statusId\",WEPA.STATUS_DATE_TIME AS \"statusDateTime\",WEPA.EXPECTATION_ENUM_ID AS \"expectationEnumId\",WEPA.FACILITY_ID AS \"facilityId\",WEPA.COMMENTS AS \"comments\",WEPA.MUST_RSVP AS \"mustRsvp\",WEPA.AVAILABILITY_STATUS_ID AS \"availabilityStatusId\" FROM WORK_EFFORT_PARTY_ASSIGNMENT WEPA INNER JOIN PARTY_NAME_VIEW PNV ON WEPA.PARTY_ID = PNV.PARTY_ID", resultSetMapping="WorkEffortPartyAssignViewMapping")
+@NamedNativeQuery(name="selectWorkEffortPartyAssignViews", query="SELECT WEPA.STATUS_ID AS \"statusId\",PNV.PARTY_ID AS \"partyId\",PNV.PARTY_TYPE_ID AS \"partyTypeId\",PNV.DESCRIPTION AS \"description\",PNV.STATUS_ID AS \"statusId\",PNV.FIRST_NAME AS \"firstName\",PNV.MIDDLE_NAME AS \"middleName\",PNV.LAST_NAME AS \"lastName\",PNV.FIRST_NAME_LOCAL AS \"firstNameLocal\",PNV.LAST_NAME_LOCAL AS \"lastNameLocal\",PNV.PERSONAL_TITLE AS \"personalTitle\",PNV.SUFFIX AS \"suffix\",PNV.GROUP_NAME AS \"groupName\",PNV.GROUP_NAME_LOCAL AS \"groupNameLocal\",WEPA.WORK_EFFORT_ID AS \"workEffortId\",WEPA.ROLE_TYPE_ID AS \"roleTypeId\",WEPA.FROM_DATE AS \"fromDate\",WEPA.THRU_DATE AS \"thruDate\",WEPA.ASSIGNED_BY_USER_LOGIN_ID AS \"assignedByUserLoginId\",WEPA.STATUS_DATE_TIME AS \"statusDateTime\",WEPA.EXPECTATION_ENUM_ID AS \"expectationEnumId\",WEPA.DELEGATE_REASON_ENUM_ID AS \"delegateReasonEnumId\",WEPA.FACILITY_ID AS \"facilityId\",WEPA.COMMENTS AS \"comments\",WEPA.MUST_RSVP AS \"mustRsvp\",WEPA.AVAILABILITY_STATUS_ID AS \"availabilityStatusId\" FROM WORK_EFFORT_PARTY_ASSIGNMENT WEPA INNER JOIN PARTY_NAME_VIEW PNV ON WEPA.PARTY_ID = PNV.PARTY_ID", resultSetMapping="WorkEffortPartyAssignViewMapping")
 @SqlResultSetMapping(name="WorkEffortPartyAssignViewMapping", entities={
 @EntityResult(entityClass=WorkEffortPartyAssignView.class, fields = {
-@FieldResult(name="partyId", column="partyId")
+@FieldResult(name="assignmentStatusId", column="assignmentStatusId")
+,@FieldResult(name="partyId", column="partyId")
 ,@FieldResult(name="partyTypeId", column="partyTypeId")
 ,@FieldResult(name="description", column="description")
+,@FieldResult(name="statusId", column="statusId")
 ,@FieldResult(name="firstName", column="firstName")
 ,@FieldResult(name="middleName", column="middleName")
 ,@FieldResult(name="lastName", column="lastName")
@@ -67,9 +69,10 @@ import java.sql.Timestamp;
 ,@FieldResult(name="roleTypeId", column="roleTypeId")
 ,@FieldResult(name="fromDate", column="fromDate")
 ,@FieldResult(name="thruDate", column="thruDate")
-,@FieldResult(name="statusId", column="statusId")
+,@FieldResult(name="assignedByUserLoginId", column="assignedByUserLoginId")
 ,@FieldResult(name="statusDateTime", column="statusDateTime")
 ,@FieldResult(name="expectationEnumId", column="expectationEnumId")
+,@FieldResult(name="delegateReasonEnumId", column="delegateReasonEnumId")
 ,@FieldResult(name="facilityId", column="facilityId")
 ,@FieldResult(name="comments", column="comments")
 ,@FieldResult(name="mustRsvp", column="mustRsvp")
@@ -80,9 +83,11 @@ import java.sql.Timestamp;
 public class WorkEffortPartyAssignView extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
+        fields.put("assignmentStatusId", "WEPA.STATUS_ID");
         fields.put("partyId", "PNV.PARTY_ID");
         fields.put("partyTypeId", "PNV.PARTY_TYPE_ID");
         fields.put("description", "PNV.DESCRIPTION");
+        fields.put("statusId", "PNV.STATUS_ID");
         fields.put("firstName", "PNV.FIRST_NAME");
         fields.put("middleName", "PNV.MIDDLE_NAME");
         fields.put("lastName", "PNV.LAST_NAME");
@@ -96,9 +101,10 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("roleTypeId", "WEPA.ROLE_TYPE_ID");
         fields.put("fromDate", "WEPA.FROM_DATE");
         fields.put("thruDate", "WEPA.THRU_DATE");
-        fields.put("statusId", "WEPA.STATUS_ID");
+        fields.put("assignedByUserLoginId", "WEPA.ASSIGNED_BY_USER_LOGIN_ID");
         fields.put("statusDateTime", "WEPA.STATUS_DATE_TIME");
         fields.put("expectationEnumId", "WEPA.EXPECTATION_ENUM_ID");
+        fields.put("delegateReasonEnumId", "WEPA.DELEGATE_REASON_ENUM_ID");
         fields.put("facilityId", "WEPA.FACILITY_ID");
         fields.put("comments", "WEPA.COMMENTS");
         fields.put("mustRsvp", "WEPA.MUST_RSVP");
@@ -106,9 +112,11 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
 fieldMapColumns.put("WorkEffortPartyAssignView", fields);
 }
   public static enum Fields implements EntityFieldInterface<WorkEffortPartyAssignView> {
+    assignmentStatusId("assignmentStatusId"),
     partyId("partyId"),
     partyTypeId("partyTypeId"),
     description("description"),
+    statusId("statusId"),
     firstName("firstName"),
     middleName("middleName"),
     lastName("lastName"),
@@ -122,9 +130,10 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
     roleTypeId("roleTypeId"),
     fromDate("fromDate"),
     thruDate("thruDate"),
-    statusId("statusId"),
+    assignedByUserLoginId("assignedByUserLoginId"),
     statusDateTime("statusDateTime"),
     expectationEnumId("expectationEnumId"),
+    delegateReasonEnumId("delegateReasonEnumId"),
     facilityId("facilityId"),
     comments("comments"),
     mustRsvp("mustRsvp"),
@@ -140,11 +149,15 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
   }
 
     
+   private String assignmentStatusId;
+    
    private String partyId;
     
    private String partyTypeId;
     
    private String description;
+    
+   private String statusId;
     
    private String firstName;
     
@@ -172,11 +185,13 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
     
    private Timestamp thruDate;
     
-   private String statusId;
+   private String assignedByUserLoginId;
     
    private Timestamp statusDateTime;
     
    private String expectationEnumId;
+    
+   private String delegateReasonEnumId;
     
    private String facilityId;
     
@@ -211,12 +226,26 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
    
    private StatusItem statusItem = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="ASSIGNMENT_STATUS_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private StatusItem assignmentStatusItem = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="EXPECTATION_ENUM_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
    )
    
    private Enumeration expectationEnumeration = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="DELEGATE_REASON_ENUM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration delegateReasonEnumeration = null;
 
   /**
    * Default constructor.
@@ -229,7 +258,7 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("workEffortId");this.primaryKeyNames.add("roleTypeId");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("statusDateTime");this.allFieldsNames.add("expectationEnumId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("comments");this.allFieldsNames.add("mustRsvp");this.allFieldsNames.add("availabilityStatusId");
+      this.allFieldsNames.add("assignmentStatusId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("partyTypeId");this.allFieldsNames.add("description");this.allFieldsNames.add("statusId");this.allFieldsNames.add("firstName");this.allFieldsNames.add("middleName");this.allFieldsNames.add("lastName");this.allFieldsNames.add("firstNameLocal");this.allFieldsNames.add("lastNameLocal");this.allFieldsNames.add("personalTitle");this.allFieldsNames.add("suffix");this.allFieldsNames.add("groupName");this.allFieldsNames.add("groupNameLocal");this.allFieldsNames.add("workEffortId");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("assignedByUserLoginId");this.allFieldsNames.add("statusDateTime");this.allFieldsNames.add("expectationEnumId");this.allFieldsNames.add("delegateReasonEnumId");this.allFieldsNames.add("facilityId");this.allFieldsNames.add("comments");this.allFieldsNames.add("mustRsvp");this.allFieldsNames.add("availabilityStatusId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -247,6 +276,13 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
     /**
      * This is a view-entity, so the setter methods will be private to this class and for use in its fromMap constructor only
      */
+    /**
+     * Auto generated value setter.
+     * @param assignmentStatusId the assignmentStatusId to set
+     */
+    private void setAssignmentStatusId(String assignmentStatusId) {
+        this.assignmentStatusId = assignmentStatusId;
+    }
     /**
      * Auto generated value setter.
      * @param partyId the partyId to set
@@ -267,6 +303,13 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
      */
     private void setDescription(String description) {
         this.description = description;
+    }
+    /**
+     * Auto generated value setter.
+     * @param statusId the statusId to set
+     */
+    private void setStatusId(String statusId) {
+        this.statusId = statusId;
     }
     /**
      * Auto generated value setter.
@@ -361,10 +404,10 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
     }
     /**
      * Auto generated value setter.
-     * @param statusId the statusId to set
+     * @param assignedByUserLoginId the assignedByUserLoginId to set
      */
-    private void setStatusId(String statusId) {
-        this.statusId = statusId;
+    private void setAssignedByUserLoginId(String assignedByUserLoginId) {
+        this.assignedByUserLoginId = assignedByUserLoginId;
     }
     /**
      * Auto generated value setter.
@@ -379,6 +422,13 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
      */
     private void setExpectationEnumId(String expectationEnumId) {
         this.expectationEnumId = expectationEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param delegateReasonEnumId the delegateReasonEnumId to set
+     */
+    private void setDelegateReasonEnumId(String delegateReasonEnumId) {
+        this.delegateReasonEnumId = delegateReasonEnumId;
     }
     /**
      * Auto generated value setter.
@@ -413,6 +463,13 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getAssignmentStatusId() {
+        return this.assignmentStatusId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getPartyId() {
         return this.partyId;
     }
@@ -429,6 +486,13 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
      */
     public String getDescription() {
         return this.description;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getStatusId() {
+        return this.statusId;
     }
     /**
      * Auto generated value accessor.
@@ -525,8 +589,8 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
-    public String getStatusId() {
-        return this.statusId;
+    public String getAssignedByUserLoginId() {
+        return this.assignedByUserLoginId;
     }
     /**
      * Auto generated value accessor.
@@ -541,6 +605,13 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
      */
     public String getExpectationEnumId() {
         return this.expectationEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getDelegateReasonEnumId() {
+        return this.delegateReasonEnumId;
     }
     /**
      * Auto generated value accessor.
@@ -649,6 +720,17 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
         return this.statusItem;
     }
     /**
+     * Auto generated method that gets the related <code>StatusItem</code> by the relation named <code>AssignmentStatusItem</code>.
+     * @return the <code>StatusItem</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public StatusItem getAssignmentStatusItem() throws RepositoryException {
+        if (this.assignmentStatusItem == null) {
+            this.assignmentStatusItem = getRelatedOne(StatusItem.class, "AssignmentStatusItem");
+        }
+        return this.assignmentStatusItem;
+    }
+    /**
      * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>ExpectationEnumeration</code>.
      * @return the <code>Enumeration</code>
      * @throws RepositoryException if an error occurs
@@ -658,6 +740,17 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
             this.expectationEnumeration = getRelatedOne(Enumeration.class, "ExpectationEnumeration");
         }
         return this.expectationEnumeration;
+    }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>DelegateReasonEnumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration getDelegateReasonEnumeration() throws RepositoryException {
+        if (this.delegateReasonEnumeration == null) {
+            this.delegateReasonEnumeration = getRelatedOne(Enumeration.class, "DelegateReasonEnumeration");
+        }
+        return this.delegateReasonEnumeration;
     }
 
     /**
@@ -711,10 +804,24 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
     }
     /**
      * Auto generated value setter.
+     * @param assignmentStatusItem the assignmentStatusItem to set
+    */
+    public void setAssignmentStatusItem(StatusItem assignmentStatusItem) {
+        this.assignmentStatusItem = assignmentStatusItem;
+    }
+    /**
+     * Auto generated value setter.
      * @param expectationEnumeration the expectationEnumeration to set
     */
     public void setExpectationEnumeration(Enumeration expectationEnumeration) {
         this.expectationEnumeration = expectationEnumeration;
+    }
+    /**
+     * Auto generated value setter.
+     * @param delegateReasonEnumeration the delegateReasonEnumeration to set
+    */
+    public void setDelegateReasonEnumeration(Enumeration delegateReasonEnumeration) {
+        this.delegateReasonEnumeration = delegateReasonEnumeration;
     }
 
 
@@ -722,9 +829,11 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
     @Override
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
+        setAssignmentStatusId((String) mapValue.get("assignmentStatusId"));
         setPartyId((String) mapValue.get("partyId"));
         setPartyTypeId((String) mapValue.get("partyTypeId"));
         setDescription((String) mapValue.get("description"));
+        setStatusId((String) mapValue.get("statusId"));
         setFirstName((String) mapValue.get("firstName"));
         setMiddleName((String) mapValue.get("middleName"));
         setLastName((String) mapValue.get("lastName"));
@@ -738,9 +847,10 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
         setRoleTypeId((String) mapValue.get("roleTypeId"));
         setFromDate((Timestamp) mapValue.get("fromDate"));
         setThruDate((Timestamp) mapValue.get("thruDate"));
-        setStatusId((String) mapValue.get("statusId"));
+        setAssignedByUserLoginId((String) mapValue.get("assignedByUserLoginId"));
         setStatusDateTime((Timestamp) mapValue.get("statusDateTime"));
         setExpectationEnumId((String) mapValue.get("expectationEnumId"));
+        setDelegateReasonEnumId((String) mapValue.get("delegateReasonEnumId"));
         setFacilityId((String) mapValue.get("facilityId"));
         setComments((String) mapValue.get("comments"));
         setMustRsvp((String) mapValue.get("mustRsvp"));
@@ -752,9 +862,11 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
     @Override
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
+        mapValue.put("assignmentStatusId", getAssignmentStatusId());
         mapValue.put("partyId", getPartyId());
         mapValue.put("partyTypeId", getPartyTypeId());
         mapValue.put("description", getDescription());
+        mapValue.put("statusId", getStatusId());
         mapValue.put("firstName", getFirstName());
         mapValue.put("middleName", getMiddleName());
         mapValue.put("lastName", getLastName());
@@ -768,9 +880,10 @@ fieldMapColumns.put("WorkEffortPartyAssignView", fields);
         mapValue.put("roleTypeId", getRoleTypeId());
         mapValue.put("fromDate", getFromDate());
         mapValue.put("thruDate", getThruDate());
-        mapValue.put("statusId", getStatusId());
+        mapValue.put("assignedByUserLoginId", getAssignedByUserLoginId());
         mapValue.put("statusDateTime", getStatusDateTime());
         mapValue.put("expectationEnumId", getExpectationEnumId());
+        mapValue.put("delegateReasonEnumId", getDelegateReasonEnumId());
         mapValue.put("facilityId", getFacilityId());
         mapValue.put("comments", getComments());
         mapValue.put("mustRsvp", getMustRsvp());

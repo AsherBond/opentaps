@@ -63,6 +63,8 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("securityGroupId", "SECURITY_GROUP_ID");
         fields.put("priorityTypeId", "PRIORITY_TYPE_ID");
         fields.put("partyRelationshipTypeId", "PARTY_RELATIONSHIP_TYPE_ID");
+        fields.put("permissionsEnumId", "PERMISSIONS_ENUM_ID");
+        fields.put("positionTitle", "POSITION_TITLE");
         fields.put("comments", "COMMENTS");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
@@ -82,6 +84,8 @@ fieldMapColumns.put("PartyRelationship", fields);
     securityGroupId("securityGroupId"),
     priorityTypeId("priorityTypeId"),
     partyRelationshipTypeId("partyRelationshipTypeId"),
+    permissionsEnumId("permissionsEnumId"),
+    positionTitle("positionTitle"),
     comments("comments"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
@@ -128,6 +132,10 @@ fieldMapColumns.put("PartyRelationship", fields);
    private String priorityTypeId;
    @Column(name="PARTY_RELATIONSHIP_TYPE_ID")
    private String partyRelationshipTypeId;
+   @Column(name="PERMISSIONS_ENUM_ID")
+   private String permissionsEnumId;
+   @Column(name="POSITION_TITLE")
+   private String positionTitle;
    @Column(name="COMMENTS")
    private String comments;
    @Column(name="LAST_UPDATED_STAMP")
@@ -208,7 +216,7 @@ fieldMapColumns.put("PartyRelationship", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("partyIdFrom");this.primaryKeyNames.add("partyIdTo");this.primaryKeyNames.add("roleTypeIdFrom");this.primaryKeyNames.add("roleTypeIdTo");this.primaryKeyNames.add("fromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("relationshipName");this.allFieldsNames.add("securityGroupId");this.allFieldsNames.add("priorityTypeId");this.allFieldsNames.add("partyRelationshipTypeId");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("roleTypeIdFrom");this.allFieldsNames.add("roleTypeIdTo");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("statusId");this.allFieldsNames.add("relationshipName");this.allFieldsNames.add("securityGroupId");this.allFieldsNames.add("priorityTypeId");this.allFieldsNames.add("partyRelationshipTypeId");this.allFieldsNames.add("permissionsEnumId");this.allFieldsNames.add("positionTitle");this.allFieldsNames.add("comments");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -299,6 +307,20 @@ fieldMapColumns.put("PartyRelationship", fields);
      */
     public void setPartyRelationshipTypeId(String partyRelationshipTypeId) {
         this.partyRelationshipTypeId = partyRelationshipTypeId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param permissionsEnumId the permissionsEnumId to set
+     */
+    public void setPermissionsEnumId(String permissionsEnumId) {
+        this.permissionsEnumId = permissionsEnumId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param positionTitle the positionTitle to set
+     */
+    public void setPositionTitle(String positionTitle) {
+        this.positionTitle = positionTitle;
     }
     /**
      * Auto generated value setter.
@@ -412,6 +434,20 @@ fieldMapColumns.put("PartyRelationship", fields);
      */
     public String getPartyRelationshipTypeId() {
         return this.partyRelationshipTypeId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPermissionsEnumId() {
+        return this.permissionsEnumId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPositionTitle() {
+        return this.positionTitle;
     }
     /**
      * Auto generated value accessor.
@@ -647,6 +683,8 @@ fieldMapColumns.put("PartyRelationship", fields);
         setSecurityGroupId((String) mapValue.get("securityGroupId"));
         setPriorityTypeId((String) mapValue.get("priorityTypeId"));
         setPartyRelationshipTypeId((String) mapValue.get("partyRelationshipTypeId"));
+        setPermissionsEnumId((String) mapValue.get("permissionsEnumId"));
+        setPositionTitle((String) mapValue.get("positionTitle"));
         setComments((String) mapValue.get("comments"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
@@ -670,6 +708,8 @@ fieldMapColumns.put("PartyRelationship", fields);
         mapValue.put("securityGroupId", getSecurityGroupId());
         mapValue.put("priorityTypeId", getPriorityTypeId());
         mapValue.put("partyRelationshipTypeId", getPartyRelationshipTypeId());
+        mapValue.put("permissionsEnumId", getPermissionsEnumId());
+        mapValue.put("positionTitle", getPositionTitle());
         mapValue.put("comments", getComments());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());

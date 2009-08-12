@@ -127,7 +127,7 @@ fieldMapColumns.put("DocumentType", fields);
       super();
       this.baseEntityName = "DocumentType";
       this.isView = false;
-      
+      this.resourceName = "ContentEntityLabels";
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("documentTypeId");
       this.allFieldsNames = new ArrayList<String>();

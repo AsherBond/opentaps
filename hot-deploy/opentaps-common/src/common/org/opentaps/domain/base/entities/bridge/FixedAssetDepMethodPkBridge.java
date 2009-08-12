@@ -47,8 +47,8 @@ public class FixedAssetDepMethodPkBridge implements TwoWayFieldBridge {
     public Object get(String name, Document document) {
         FixedAssetDepMethodPk id = new FixedAssetDepMethodPk();
         Field field = null;
-        field = document.getField(name + ".depreciationMethodId");
-        id.setDepreciationMethodId(field.stringValue());
+        field = document.getField(name + ".depreciationCustomMethodId");
+        id.setDepreciationCustomMethodId(field.stringValue());
         field = document.getField(name + ".fixedAssetId");
         id.setFixedAssetId(field.stringValue());
         return id;
@@ -63,7 +63,7 @@ public class FixedAssetDepMethodPkBridge implements TwoWayFieldBridge {
         FixedAssetDepMethodPk id = (FixedAssetDepMethodPk) object;
         StringBuilder sb = new StringBuilder("");
         
-        sb.append(id.getDepreciationMethodId());
+        sb.append(id.getDepreciationCustomMethodId());
         sb.append(" ");
         sb.append(id.getFixedAssetId());
         return sb.toString();
@@ -84,7 +84,7 @@ public class FixedAssetDepMethodPkBridge implements TwoWayFieldBridge {
         Float boost = luceneOptions.getBoost();
 
         Field field = null;
-        field = new Field(name + ".depreciationMethodId", id.getDepreciationMethodId(), store, index, termVector);
+        field = new Field(name + ".depreciationCustomMethodId", id.getDepreciationCustomMethodId(), store, index, termVector);
         field.setBoost(boost);
         document.add(field);
         field = new Field(name + ".fixedAssetId", id.getFixedAssetId(), store, index, termVector);

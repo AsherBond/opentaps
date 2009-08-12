@@ -27,26 +27,26 @@ import java.sql.Timestamp;
 
 @Embeddable
 public class CustRequestContentPk implements Serializable {
-    @Column(name="CONTENT_ID")
-    private String contentId;
     @Column(name="CUST_REQUEST_ID")
     private String custRequestId;
+    @Column(name="CONTENT_ID")
+    private String contentId;
     @Column(name="FROM_DATE")
     private Timestamp fromDate;
     
-    /**
-     * Auto generated value setter.
-     * @param contentId the contentId to set
-     */
-    public void setContentId(String contentId) {
-        this.contentId = contentId;
-    }
     /**
      * Auto generated value setter.
      * @param custRequestId the custRequestId to set
      */
     public void setCustRequestId(String custRequestId) {
         this.custRequestId = custRequestId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param contentId the contentId to set
+     */
+    public void setContentId(String contentId) {
+        this.contentId = contentId;
     }
     /**
      * Auto generated value setter.
@@ -60,15 +60,15 @@ public class CustRequestContentPk implements Serializable {
      * Auto generated value accessor.
      * @return <code>String</code>
      */  
-    public String getContentId() {
-        return this.contentId;
+    public String getCustRequestId() {
+        return this.custRequestId;
     }
     /**
      * Auto generated value accessor.
      * @return <code>String</code>
      */  
-    public String getCustRequestId() {
-        return this.custRequestId;
+    public String getContentId() {
+        return this.contentId;
     }
     /**
      * Auto generated value accessor.

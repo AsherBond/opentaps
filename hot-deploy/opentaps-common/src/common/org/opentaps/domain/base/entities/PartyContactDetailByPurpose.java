@@ -49,7 +49,7 @@ import java.sql.Timestamp;
  * Auto generated base entity PartyContactDetailByPurpose.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectPartyContactDetailByPurposes", query="SELECT PCMP.CONTACT_MECH_PURPOSE_TYPE_ID AS \"contactMechPurposeTypeId\",PCMP.FROM_DATE AS \"fromDate\",PCMP.THRU_DATE AS \"thruDate\",CM.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CM.INFO_STRING AS \"infoString\",PCM.PARTY_ID AS \"partyId\",PCM.CONTACT_MECH_ID AS \"contactMechId\",PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",PCM.ROLE_TYPE_ID AS \"roleTypeId\",PCM.ALLOW_SOLICITATION AS \"allowSolicitation\",PCM.EXTENSION AS \"extension\",PCM.VERIFIED AS \"verified\",PCM.COMMENTS AS \"comments\",PCM.YEARS_WITH_CONTACT_MECH AS \"yearsWithContactMech\",PCM.MONTHS_WITH_CONTACT_MECH AS \"monthsWithContactMech\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",TN.COUNTRY_CODE AS \"countryCode\",TN.AREA_CODE AS \"areaCode\",TN.CONTACT_NUMBER AS \"contactNumber\",TN.ASK_FOR_NAME AS \"askForName\",STTG.GEO_ID AS \"geoId\",STTG.GEO_TYPE_ID AS \"geoTypeId\",STTG.GEO_NAME AS \"geoName\",STTG.GEO_CODE AS \"geoCode\",STTG.GEO_SEC_CODE AS \"geoSecCode\",STTG.ABBREVIATION AS \"abbreviation\",CTYG.GEO_TYPE_ID AS \"geoTypeId\",CTYG.GEO_NAME AS \"geoName\",CTYG.GEO_CODE AS \"geoCode\",CTYG.GEO_SEC_CODE AS \"geoSecCode\",CTYG.ABBREVIATION AS \"abbreviation\",CTRYG.GEO_TYPE_ID AS \"geoTypeId\",CTRYG.GEO_NAME AS \"geoName\",CTRYG.GEO_CODE AS \"geoCode\",CTRYG.GEO_SEC_CODE AS \"geoSecCode\",CTRYG.ABBREVIATION AS \"abbreviation\" FROM PARTY_CONTACT_MECH PCM INNER JOIN PARTY_CONTACT_MECH_PURPOSE PCMP ON PCM.PARTY_ID = PCMP.PARTY_ID AND PCM.CONTACT_MECH_ID = PCMP.CONTACT_MECH_ID INNER JOIN CONTACT_MECH CM ON PCM.CONTACT_MECH_ID = CM.CONTACT_MECH_ID LEFT JOIN POSTAL_ADDRESS PA ON CM.CONTACT_MECH_ID = PA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER TN ON CM.CONTACT_MECH_ID = TN.CONTACT_MECH_ID LEFT JOIN GEO STTG ON PA.STATE_PROVINCE_GEO_ID = STTG.GEO_ID LEFT JOIN GEO CTYG ON PA.COUNTY_GEO_ID = CTYG.GEO_ID LEFT JOIN GEO CTRYG ON PA.COUNTRY_GEO_ID = CTRYG.GEO_ID", resultSetMapping="PartyContactDetailByPurposeMapping")
+@NamedNativeQuery(name="selectPartyContactDetailByPurposes", query="SELECT PCMP.CONTACT_MECH_PURPOSE_TYPE_ID AS \"contactMechPurposeTypeId\",PCMP.FROM_DATE AS \"fromDate\",PCMP.THRU_DATE AS \"thruDate\",CM.CONTACT_MECH_TYPE_ID AS \"contactMechTypeId\",CM.INFO_STRING AS \"infoString\",PCM.PARTY_ID AS \"partyId\",PCM.CONTACT_MECH_ID AS \"contactMechId\",PCM.FROM_DATE AS \"fromDate\",PCM.THRU_DATE AS \"thruDate\",PCM.ROLE_TYPE_ID AS \"roleTypeId\",PCM.ALLOW_SOLICITATION AS \"allowSolicitation\",PCM.EXTENSION AS \"extension\",PCM.VERIFIED AS \"verified\",PCM.COMMENTS AS \"comments\",PCM.YEARS_WITH_CONTACT_MECH AS \"yearsWithContactMech\",PCM.MONTHS_WITH_CONTACT_MECH AS \"monthsWithContactMech\",PA.TO_NAME AS \"toName\",PA.ATTN_NAME AS \"attnName\",PA.ADDRESS1 AS \"address1\",PA.ADDRESS2 AS \"address2\",PA.DIRECTIONS AS \"directions\",PA.CITY AS \"city\",PA.POSTAL_CODE AS \"postalCode\",PA.POSTAL_CODE_EXT AS \"postalCodeExt\",PA.COUNTRY_GEO_ID AS \"countryGeoId\",PA.STATE_PROVINCE_GEO_ID AS \"stateProvinceGeoId\",PA.COUNTY_GEO_ID AS \"countyGeoId\",PA.POSTAL_CODE_GEO_ID AS \"postalCodeGeoId\",PA.GEO_POINT_ID AS \"geoPointId\",TN.COUNTRY_CODE AS \"countryCode\",TN.AREA_CODE AS \"areaCode\",TN.CONTACT_NUMBER AS \"contactNumber\",TN.ASK_FOR_NAME AS \"askForName\",STTG.GEO_ID AS \"geoId\",STTG.GEO_TYPE_ID AS \"geoTypeId\",STTG.GEO_NAME AS \"geoName\",STTG.GEO_CODE AS \"geoCode\",STTG.GEO_SEC_CODE AS \"geoSecCode\",STTG.ABBREVIATION AS \"abbreviation\",STTG.WELL_KNOWN_TEXT AS \"wellKnownText\",CTYG.GEO_TYPE_ID AS \"geoTypeId\",CTYG.GEO_NAME AS \"geoName\",CTYG.GEO_CODE AS \"geoCode\",CTYG.GEO_SEC_CODE AS \"geoSecCode\",CTYG.ABBREVIATION AS \"abbreviation\",CTYG.WELL_KNOWN_TEXT AS \"wellKnownText\",CTRYG.GEO_TYPE_ID AS \"geoTypeId\",CTRYG.GEO_NAME AS \"geoName\",CTRYG.GEO_CODE AS \"geoCode\",CTRYG.GEO_SEC_CODE AS \"geoSecCode\",CTRYG.ABBREVIATION AS \"abbreviation\",CTRYG.WELL_KNOWN_TEXT AS \"wellKnownText\" FROM PARTY_CONTACT_MECH PCM INNER JOIN PARTY_CONTACT_MECH_PURPOSE PCMP ON PCM.PARTY_ID = PCMP.PARTY_ID AND PCM.CONTACT_MECH_ID = PCMP.CONTACT_MECH_ID INNER JOIN CONTACT_MECH CM ON PCM.CONTACT_MECH_ID = CM.CONTACT_MECH_ID LEFT JOIN POSTAL_ADDRESS PA ON CM.CONTACT_MECH_ID = PA.CONTACT_MECH_ID LEFT JOIN TELECOM_NUMBER TN ON CM.CONTACT_MECH_ID = TN.CONTACT_MECH_ID LEFT JOIN GEO STTG ON PA.STATE_PROVINCE_GEO_ID = STTG.GEO_ID LEFT JOIN GEO CTYG ON PA.COUNTY_GEO_ID = CTYG.GEO_ID LEFT JOIN GEO CTRYG ON PA.COUNTRY_GEO_ID = CTRYG.GEO_ID", resultSetMapping="PartyContactDetailByPurposeMapping")
 @SqlResultSetMapping(name="PartyContactDetailByPurposeMapping", entities={
 @EntityResult(entityClass=PartyContactDetailByPurpose.class, fields = {
 @FieldResult(name="contactMechPurposeTypeId", column="contactMechPurposeTypeId")
@@ -80,6 +80,7 @@ import java.sql.Timestamp;
 ,@FieldResult(name="stateProvinceGeoId", column="stateProvinceGeoId")
 ,@FieldResult(name="countyGeoId", column="countyGeoId")
 ,@FieldResult(name="postalCodeGeoId", column="postalCodeGeoId")
+,@FieldResult(name="geoPointId", column="geoPointId")
 ,@FieldResult(name="countryCode", column="countryCode")
 ,@FieldResult(name="areaCode", column="areaCode")
 ,@FieldResult(name="contactNumber", column="contactNumber")
@@ -90,16 +91,19 @@ import java.sql.Timestamp;
 ,@FieldResult(name="stateGeoCode", column="stateGeoCode")
 ,@FieldResult(name="stateGeoSecCode", column="stateGeoSecCode")
 ,@FieldResult(name="stateAbbreviation", column="stateAbbreviation")
+,@FieldResult(name="stateWellKnownText", column="stateWellKnownText")
 ,@FieldResult(name="countyGeoTypeId", column="countyGeoTypeId")
 ,@FieldResult(name="countyGeoName", column="countyGeoName")
 ,@FieldResult(name="countyGeoCode", column="countyGeoCode")
 ,@FieldResult(name="countyGeoSecCode", column="countyGeoSecCode")
 ,@FieldResult(name="countyAbbreviation", column="countyAbbreviation")
+,@FieldResult(name="countyWellKnownText", column="countyWellKnownText")
 ,@FieldResult(name="countryGeoTypeId", column="countryGeoTypeId")
 ,@FieldResult(name="countryGeoName", column="countryGeoName")
 ,@FieldResult(name="countryGeoCode", column="countryGeoCode")
 ,@FieldResult(name="countryGeoSecCode", column="countryGeoSecCode")
 ,@FieldResult(name="countryAbbreviation", column="countryAbbreviation")
+,@FieldResult(name="countryWellKnownText", column="countryWellKnownText")
 })})
 @org.hibernate.annotations.Entity(mutable = false)
 @org.hibernate.annotations.AccessType("field")
@@ -134,6 +138,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("stateProvinceGeoId", "PA.STATE_PROVINCE_GEO_ID");
         fields.put("countyGeoId", "PA.COUNTY_GEO_ID");
         fields.put("postalCodeGeoId", "PA.POSTAL_CODE_GEO_ID");
+        fields.put("geoPointId", "PA.GEO_POINT_ID");
         fields.put("countryCode", "TN.COUNTRY_CODE");
         fields.put("areaCode", "TN.AREA_CODE");
         fields.put("contactNumber", "TN.CONTACT_NUMBER");
@@ -144,16 +149,19 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("stateGeoCode", "STTG.GEO_CODE");
         fields.put("stateGeoSecCode", "STTG.GEO_SEC_CODE");
         fields.put("stateAbbreviation", "STTG.ABBREVIATION");
+        fields.put("stateWellKnownText", "STTG.WELL_KNOWN_TEXT");
         fields.put("countyGeoTypeId", "CTYG.GEO_TYPE_ID");
         fields.put("countyGeoName", "CTYG.GEO_NAME");
         fields.put("countyGeoCode", "CTYG.GEO_CODE");
         fields.put("countyGeoSecCode", "CTYG.GEO_SEC_CODE");
         fields.put("countyAbbreviation", "CTYG.ABBREVIATION");
+        fields.put("countyWellKnownText", "CTYG.WELL_KNOWN_TEXT");
         fields.put("countryGeoTypeId", "CTRYG.GEO_TYPE_ID");
         fields.put("countryGeoName", "CTRYG.GEO_NAME");
         fields.put("countryGeoCode", "CTRYG.GEO_CODE");
         fields.put("countryGeoSecCode", "CTRYG.GEO_SEC_CODE");
         fields.put("countryAbbreviation", "CTRYG.ABBREVIATION");
+        fields.put("countryWellKnownText", "CTRYG.WELL_KNOWN_TEXT");
 fieldMapColumns.put("PartyContactDetailByPurpose", fields);
 }
   public static enum Fields implements EntityFieldInterface<PartyContactDetailByPurpose> {
@@ -185,6 +193,7 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
     stateProvinceGeoId("stateProvinceGeoId"),
     countyGeoId("countyGeoId"),
     postalCodeGeoId("postalCodeGeoId"),
+    geoPointId("geoPointId"),
     countryCode("countryCode"),
     areaCode("areaCode"),
     contactNumber("contactNumber"),
@@ -195,16 +204,19 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
     stateGeoCode("stateGeoCode"),
     stateGeoSecCode("stateGeoSecCode"),
     stateAbbreviation("stateAbbreviation"),
+    stateWellKnownText("stateWellKnownText"),
     countyGeoTypeId("countyGeoTypeId"),
     countyGeoName("countyGeoName"),
     countyGeoCode("countyGeoCode"),
     countyGeoSecCode("countyGeoSecCode"),
     countyAbbreviation("countyAbbreviation"),
+    countyWellKnownText("countyWellKnownText"),
     countryGeoTypeId("countryGeoTypeId"),
     countryGeoName("countryGeoName"),
     countryGeoCode("countryGeoCode"),
     countryGeoSecCode("countryGeoSecCode"),
-    countryAbbreviation("countryAbbreviation");
+    countryAbbreviation("countryAbbreviation"),
+    countryWellKnownText("countryWellKnownText");
     private final String fieldName;
     private Fields(String name) { fieldName = name; }
     /** {@inheritDoc} */
@@ -272,6 +284,8 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
     
    private String postalCodeGeoId;
     
+   private String geoPointId;
+    
    private String countryCode;
     
    private String areaCode;
@@ -292,6 +306,8 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
     
    private String stateAbbreviation;
     
+   private String stateWellKnownText;
+    
    private String countyGeoTypeId;
     
    private String countyGeoName;
@@ -302,6 +318,8 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
     
    private String countyAbbreviation;
     
+   private String countyWellKnownText;
+    
    private String countryGeoTypeId;
     
    private String countryGeoName;
@@ -311,6 +329,8 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
    private String countryGeoSecCode;
     
    private String countryAbbreviation;
+    
+   private String countryWellKnownText;
 
   /**
    * Default constructor.
@@ -323,7 +343,7 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("contactMechPurposeTypeId");this.primaryKeyNames.add("purposeFromDate");this.primaryKeyNames.add("partyId");this.primaryKeyNames.add("contactMechId");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("stateGeoId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("contactMechPurposeTypeId");this.allFieldsNames.add("purposeFromDate");this.allFieldsNames.add("purposeThruDate");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("infoString");this.allFieldsNames.add("partyId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("allowSolicitation");this.allFieldsNames.add("extension");this.allFieldsNames.add("verified");this.allFieldsNames.add("comments");this.allFieldsNames.add("yearsWithContactMech");this.allFieldsNames.add("monthsWithContactMech");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");this.allFieldsNames.add("countryCode");this.allFieldsNames.add("areaCode");this.allFieldsNames.add("contactNumber");this.allFieldsNames.add("askForName");this.allFieldsNames.add("stateGeoId");this.allFieldsNames.add("stateGeoTypeId");this.allFieldsNames.add("stateGeoName");this.allFieldsNames.add("stateGeoCode");this.allFieldsNames.add("stateGeoSecCode");this.allFieldsNames.add("stateAbbreviation");this.allFieldsNames.add("countyGeoTypeId");this.allFieldsNames.add("countyGeoName");this.allFieldsNames.add("countyGeoCode");this.allFieldsNames.add("countyGeoSecCode");this.allFieldsNames.add("countyAbbreviation");this.allFieldsNames.add("countryGeoTypeId");this.allFieldsNames.add("countryGeoName");this.allFieldsNames.add("countryGeoCode");this.allFieldsNames.add("countryGeoSecCode");this.allFieldsNames.add("countryAbbreviation");
+      this.allFieldsNames.add("contactMechPurposeTypeId");this.allFieldsNames.add("purposeFromDate");this.allFieldsNames.add("purposeThruDate");this.allFieldsNames.add("contactMechTypeId");this.allFieldsNames.add("infoString");this.allFieldsNames.add("partyId");this.allFieldsNames.add("contactMechId");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("roleTypeId");this.allFieldsNames.add("allowSolicitation");this.allFieldsNames.add("extension");this.allFieldsNames.add("verified");this.allFieldsNames.add("comments");this.allFieldsNames.add("yearsWithContactMech");this.allFieldsNames.add("monthsWithContactMech");this.allFieldsNames.add("toName");this.allFieldsNames.add("attnName");this.allFieldsNames.add("address1");this.allFieldsNames.add("address2");this.allFieldsNames.add("directions");this.allFieldsNames.add("city");this.allFieldsNames.add("postalCode");this.allFieldsNames.add("postalCodeExt");this.allFieldsNames.add("countryGeoId");this.allFieldsNames.add("stateProvinceGeoId");this.allFieldsNames.add("countyGeoId");this.allFieldsNames.add("postalCodeGeoId");this.allFieldsNames.add("geoPointId");this.allFieldsNames.add("countryCode");this.allFieldsNames.add("areaCode");this.allFieldsNames.add("contactNumber");this.allFieldsNames.add("askForName");this.allFieldsNames.add("stateGeoId");this.allFieldsNames.add("stateGeoTypeId");this.allFieldsNames.add("stateGeoName");this.allFieldsNames.add("stateGeoCode");this.allFieldsNames.add("stateGeoSecCode");this.allFieldsNames.add("stateAbbreviation");this.allFieldsNames.add("stateWellKnownText");this.allFieldsNames.add("countyGeoTypeId");this.allFieldsNames.add("countyGeoName");this.allFieldsNames.add("countyGeoCode");this.allFieldsNames.add("countyGeoSecCode");this.allFieldsNames.add("countyAbbreviation");this.allFieldsNames.add("countyWellKnownText");this.allFieldsNames.add("countryGeoTypeId");this.allFieldsNames.add("countryGeoName");this.allFieldsNames.add("countryGeoCode");this.allFieldsNames.add("countryGeoSecCode");this.allFieldsNames.add("countryAbbreviation");this.allFieldsNames.add("countryWellKnownText");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -539,6 +559,13 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
     }
     /**
      * Auto generated value setter.
+     * @param geoPointId the geoPointId to set
+     */
+    private void setGeoPointId(String geoPointId) {
+        this.geoPointId = geoPointId;
+    }
+    /**
+     * Auto generated value setter.
      * @param countryCode the countryCode to set
      */
     private void setCountryCode(String countryCode) {
@@ -609,6 +636,13 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
     }
     /**
      * Auto generated value setter.
+     * @param stateWellKnownText the stateWellKnownText to set
+     */
+    private void setStateWellKnownText(String stateWellKnownText) {
+        this.stateWellKnownText = stateWellKnownText;
+    }
+    /**
+     * Auto generated value setter.
      * @param countyGeoTypeId the countyGeoTypeId to set
      */
     private void setCountyGeoTypeId(String countyGeoTypeId) {
@@ -644,6 +678,13 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
     }
     /**
      * Auto generated value setter.
+     * @param countyWellKnownText the countyWellKnownText to set
+     */
+    private void setCountyWellKnownText(String countyWellKnownText) {
+        this.countyWellKnownText = countyWellKnownText;
+    }
+    /**
+     * Auto generated value setter.
      * @param countryGeoTypeId the countryGeoTypeId to set
      */
     private void setCountryGeoTypeId(String countryGeoTypeId) {
@@ -676,6 +717,13 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
      */
     private void setCountryAbbreviation(String countryAbbreviation) {
         this.countryAbbreviation = countryAbbreviation;
+    }
+    /**
+     * Auto generated value setter.
+     * @param countryWellKnownText the countryWellKnownText to set
+     */
+    private void setCountryWellKnownText(String countryWellKnownText) {
+        this.countryWellKnownText = countryWellKnownText;
     }
 
     /**
@@ -878,6 +926,13 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getGeoPointId() {
+        return this.geoPointId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getCountryCode() {
         return this.countryCode;
     }
@@ -948,6 +1003,13 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getStateWellKnownText() {
+        return this.stateWellKnownText;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getCountyGeoTypeId() {
         return this.countyGeoTypeId;
     }
@@ -983,6 +1045,13 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getCountyWellKnownText() {
+        return this.countyWellKnownText;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getCountryGeoTypeId() {
         return this.countryGeoTypeId;
     }
@@ -1013,6 +1082,13 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
      */
     public String getCountryAbbreviation() {
         return this.countryAbbreviation;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getCountryWellKnownText() {
+        return this.countryWellKnownText;
     }
 
 
@@ -1050,6 +1126,7 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
         setStateProvinceGeoId((String) mapValue.get("stateProvinceGeoId"));
         setCountyGeoId((String) mapValue.get("countyGeoId"));
         setPostalCodeGeoId((String) mapValue.get("postalCodeGeoId"));
+        setGeoPointId((String) mapValue.get("geoPointId"));
         setCountryCode((String) mapValue.get("countryCode"));
         setAreaCode((String) mapValue.get("areaCode"));
         setContactNumber((String) mapValue.get("contactNumber"));
@@ -1060,16 +1137,19 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
         setStateGeoCode((String) mapValue.get("stateGeoCode"));
         setStateGeoSecCode((String) mapValue.get("stateGeoSecCode"));
         setStateAbbreviation((String) mapValue.get("stateAbbreviation"));
+        setStateWellKnownText((String) mapValue.get("stateWellKnownText"));
         setCountyGeoTypeId((String) mapValue.get("countyGeoTypeId"));
         setCountyGeoName((String) mapValue.get("countyGeoName"));
         setCountyGeoCode((String) mapValue.get("countyGeoCode"));
         setCountyGeoSecCode((String) mapValue.get("countyGeoSecCode"));
         setCountyAbbreviation((String) mapValue.get("countyAbbreviation"));
+        setCountyWellKnownText((String) mapValue.get("countyWellKnownText"));
         setCountryGeoTypeId((String) mapValue.get("countryGeoTypeId"));
         setCountryGeoName((String) mapValue.get("countryGeoName"));
         setCountryGeoCode((String) mapValue.get("countryGeoCode"));
         setCountryGeoSecCode((String) mapValue.get("countryGeoSecCode"));
         setCountryAbbreviation((String) mapValue.get("countryAbbreviation"));
+        setCountryWellKnownText((String) mapValue.get("countryWellKnownText"));
         postInit();
     }
 
@@ -1105,6 +1185,7 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
         mapValue.put("stateProvinceGeoId", getStateProvinceGeoId());
         mapValue.put("countyGeoId", getCountyGeoId());
         mapValue.put("postalCodeGeoId", getPostalCodeGeoId());
+        mapValue.put("geoPointId", getGeoPointId());
         mapValue.put("countryCode", getCountryCode());
         mapValue.put("areaCode", getAreaCode());
         mapValue.put("contactNumber", getContactNumber());
@@ -1115,16 +1196,19 @@ fieldMapColumns.put("PartyContactDetailByPurpose", fields);
         mapValue.put("stateGeoCode", getStateGeoCode());
         mapValue.put("stateGeoSecCode", getStateGeoSecCode());
         mapValue.put("stateAbbreviation", getStateAbbreviation());
+        mapValue.put("stateWellKnownText", getStateWellKnownText());
         mapValue.put("countyGeoTypeId", getCountyGeoTypeId());
         mapValue.put("countyGeoName", getCountyGeoName());
         mapValue.put("countyGeoCode", getCountyGeoCode());
         mapValue.put("countyGeoSecCode", getCountyGeoSecCode());
         mapValue.put("countyAbbreviation", getCountyAbbreviation());
+        mapValue.put("countyWellKnownText", getCountyWellKnownText());
         mapValue.put("countryGeoTypeId", getCountryGeoTypeId());
         mapValue.put("countryGeoName", getCountryGeoName());
         mapValue.put("countryGeoCode", getCountryGeoCode());
         mapValue.put("countryGeoSecCode", getCountryGeoSecCode());
         mapValue.put("countryAbbreviation", getCountryAbbreviation());
+        mapValue.put("countryWellKnownText", getCountryWellKnownText());
         return mapValue;
     }
 

@@ -57,12 +57,15 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("orderPaymentPreferenceId", "ORDER_PAYMENT_PREFERENCE_ID");
         fields.put("orderId", "ORDER_ID");
         fields.put("orderItemSeqId", "ORDER_ITEM_SEQ_ID");
+        fields.put("shipGroupSeqId", "SHIP_GROUP_SEQ_ID");
         fields.put("productPricePurposeId", "PRODUCT_PRICE_PURPOSE_ID");
         fields.put("paymentMethodTypeId", "PAYMENT_METHOD_TYPE_ID");
         fields.put("paymentMethodId", "PAYMENT_METHOD_ID");
         fields.put("finAccountId", "FIN_ACCOUNT_ID");
         fields.put("securityCode", "SECURITY_CODE");
+        fields.put("track2", "TRACK2");
         fields.put("presentFlag", "PRESENT_FLAG");
+        fields.put("swipedFlag", "SWIPED_FLAG");
         fields.put("overflowFlag", "OVERFLOW_FLAG");
         fields.put("maxAmount", "MAX_AMOUNT");
         fields.put("processAttempt", "PROCESS_ATTEMPT");
@@ -83,12 +86,15 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
     orderPaymentPreferenceId("orderPaymentPreferenceId"),
     orderId("orderId"),
     orderItemSeqId("orderItemSeqId"),
+    shipGroupSeqId("shipGroupSeqId"),
     productPricePurposeId("productPricePurposeId"),
     paymentMethodTypeId("paymentMethodTypeId"),
     paymentMethodId("paymentMethodId"),
     finAccountId("finAccountId"),
     securityCode("securityCode"),
+    track2("track2"),
     presentFlag("presentFlag"),
+    swipedFlag("swipedFlag"),
     overflowFlag("overflowFlag"),
     maxAmount("maxAmount"),
     processAttempt("processAttempt"),
@@ -122,6 +128,8 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
    private String orderId;
    @Column(name="ORDER_ITEM_SEQ_ID")
    private String orderItemSeqId;
+   @Column(name="SHIP_GROUP_SEQ_ID")
+   private String shipGroupSeqId;
    @Column(name="PRODUCT_PRICE_PURPOSE_ID")
    private String productPricePurposeId;
    @Column(name="PAYMENT_METHOD_TYPE_ID")
@@ -132,8 +140,12 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
    private String finAccountId;
    @Column(name="SECURITY_CODE")
    private String securityCode;
+   @Column(name="TRACK2")
+   private String track2;
    @Column(name="PRESENT_FLAG")
    private String presentFlag;
+   @Column(name="SWIPED_FLAG")
+   private String swipedFlag;
    @Column(name="OVERFLOW_FLAG")
    private String overflowFlag;
    @Column(name="MAX_AMOUNT")
@@ -170,6 +182,7 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
    
    private OrderHeader orderHeader = null;
    private transient OrderItem orderItem = null;
+   private transient OrderItemShipGroup orderItemShipGroup = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PRODUCT_PRICE_PURPOSE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -191,6 +204,13 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
    )
    
    private PaymentMethod paymentMethod = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="FIN_ACCOUNT_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private FinAccount finAccount = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="STATUS_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
@@ -227,6 +247,10 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
    
    private GiftCard giftCard = null;
    @OneToMany(fetch=FetchType.LAZY)
+   @JoinColumn(name="ORDER_PAYMENT_PREFERENCE_ID")
+   
+   private List<OrderStatus> orderStatuses = null;
+   @OneToMany(fetch=FetchType.LAZY)
    @JoinColumn(name="PAYMENT_PREFERENCE_ID")
    
    private List<Payment> payments = null;
@@ -250,7 +274,7 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderPaymentPreferenceId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderPaymentPreferenceId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("productPricePurposeId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("finAccountId");this.allFieldsNames.add("securityCode");this.allFieldsNames.add("presentFlag");this.allFieldsNames.add("overflowFlag");this.allFieldsNames.add("maxAmount");this.allFieldsNames.add("processAttempt");this.allFieldsNames.add("billingPostalCode");this.allFieldsNames.add("manualAuthCode");this.allFieldsNames.add("manualRefNum");this.allFieldsNames.add("statusId");this.allFieldsNames.add("needsNsfRetry");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("orderPaymentPreferenceId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("shipGroupSeqId");this.allFieldsNames.add("productPricePurposeId");this.allFieldsNames.add("paymentMethodTypeId");this.allFieldsNames.add("paymentMethodId");this.allFieldsNames.add("finAccountId");this.allFieldsNames.add("securityCode");this.allFieldsNames.add("track2");this.allFieldsNames.add("presentFlag");this.allFieldsNames.add("swipedFlag");this.allFieldsNames.add("overflowFlag");this.allFieldsNames.add("maxAmount");this.allFieldsNames.add("processAttempt");this.allFieldsNames.add("billingPostalCode");this.allFieldsNames.add("manualAuthCode");this.allFieldsNames.add("manualRefNum");this.allFieldsNames.add("statusId");this.allFieldsNames.add("needsNsfRetry");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -285,6 +309,13 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
      */
     public void setOrderItemSeqId(String orderItemSeqId) {
         this.orderItemSeqId = orderItemSeqId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param shipGroupSeqId the shipGroupSeqId to set
+     */
+    public void setShipGroupSeqId(String shipGroupSeqId) {
+        this.shipGroupSeqId = shipGroupSeqId;
     }
     /**
      * Auto generated value setter.
@@ -323,10 +354,24 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
     }
     /**
      * Auto generated value setter.
+     * @param track2 the track2 to set
+     */
+    public void setTrack2(String track2) {
+        this.track2 = track2;
+    }
+    /**
+     * Auto generated value setter.
      * @param presentFlag the presentFlag to set
      */
     public void setPresentFlag(String presentFlag) {
         this.presentFlag = presentFlag;
+    }
+    /**
+     * Auto generated value setter.
+     * @param swipedFlag the swipedFlag to set
+     */
+    public void setSwipedFlag(String swipedFlag) {
+        this.swipedFlag = swipedFlag;
     }
     /**
      * Auto generated value setter.
@@ -452,6 +497,13 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getShipGroupSeqId() {
+        return this.shipGroupSeqId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getProductPricePurposeId() {
         return this.productPricePurposeId;
     }
@@ -487,8 +539,22 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
      * Auto generated value accessor.
      * @return <code>String</code>
      */
+    public String getTrack2() {
+        return this.track2;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
     public String getPresentFlag() {
         return this.presentFlag;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getSwipedFlag() {
+        return this.swipedFlag;
     }
     /**
      * Auto generated value accessor.
@@ -612,6 +678,17 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
         return this.orderItem;
     }
     /**
+     * Auto generated method that gets the related <code>OrderItemShipGroup</code> by the relation named <code>OrderItemShipGroup</code>.
+     * @return the <code>OrderItemShipGroup</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public OrderItemShipGroup getOrderItemShipGroup() throws RepositoryException {
+        if (this.orderItemShipGroup == null) {
+            this.orderItemShipGroup = getRelatedOne(OrderItemShipGroup.class, "OrderItemShipGroup");
+        }
+        return this.orderItemShipGroup;
+    }
+    /**
      * Auto generated method that gets the related <code>ProductPricePurpose</code> by the relation named <code>ProductPricePurpose</code>.
      * @return the <code>ProductPricePurpose</code>
      * @throws RepositoryException if an error occurs
@@ -643,6 +720,17 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
             this.paymentMethod = getRelatedOne(PaymentMethod.class, "PaymentMethod");
         }
         return this.paymentMethod;
+    }
+    /**
+     * Auto generated method that gets the related <code>FinAccount</code> by the relation named <code>FinAccount</code>.
+     * @return the <code>FinAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public FinAccount getFinAccount() throws RepositoryException {
+        if (this.finAccount == null) {
+            this.finAccount = getRelatedOne(FinAccount.class, "FinAccount");
+        }
+        return this.finAccount;
     }
     /**
      * Auto generated method that gets the related <code>StatusItem</code> by the relation named <code>StatusItem</code>.
@@ -700,6 +788,17 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
         return this.giftCard;
     }
     /**
+     * Auto generated method that gets the related <code>OrderStatus</code> by the relation named <code>OrderStatus</code>.
+     * @return the list of <code>OrderStatus</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends OrderStatus> getOrderStatuses() throws RepositoryException {
+        if (this.orderStatuses == null) {
+            this.orderStatuses = getRelated(OrderStatus.class, "OrderStatus");
+        }
+        return this.orderStatuses;
+    }
+    /**
      * Auto generated method that gets the related <code>Payment</code> by the relation named <code>Payment</code>.
      * @return the list of <code>Payment</code>
      * @throws RepositoryException if an error occurs
@@ -749,6 +848,13 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
     }
     /**
      * Auto generated value setter.
+     * @param orderItemShipGroup the orderItemShipGroup to set
+    */
+    public void setOrderItemShipGroup(OrderItemShipGroup orderItemShipGroup) {
+        this.orderItemShipGroup = orderItemShipGroup;
+    }
+    /**
+     * Auto generated value setter.
      * @param productPricePurpose the productPricePurpose to set
     */
     public void setProductPricePurpose(ProductPricePurpose productPricePurpose) {
@@ -767,6 +873,13 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
     */
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+    /**
+     * Auto generated value setter.
+     * @param finAccount the finAccount to set
+    */
+    public void setFinAccount(FinAccount finAccount) {
+        this.finAccount = finAccount;
     }
     /**
      * Auto generated value setter.
@@ -805,6 +918,13 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
     }
     /**
      * Auto generated value setter.
+     * @param orderStatuses the orderStatuses to set
+    */
+    public void setOrderStatuses(List<OrderStatus> orderStatuses) {
+        this.orderStatuses = orderStatuses;
+    }
+    /**
+     * Auto generated value setter.
      * @param payments the payments to set
     */
     public void setPayments(List<Payment> payments) {
@@ -833,12 +953,15 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
         setOrderPaymentPreferenceId((String) mapValue.get("orderPaymentPreferenceId"));
         setOrderId((String) mapValue.get("orderId"));
         setOrderItemSeqId((String) mapValue.get("orderItemSeqId"));
+        setShipGroupSeqId((String) mapValue.get("shipGroupSeqId"));
         setProductPricePurposeId((String) mapValue.get("productPricePurposeId"));
         setPaymentMethodTypeId((String) mapValue.get("paymentMethodTypeId"));
         setPaymentMethodId((String) mapValue.get("paymentMethodId"));
         setFinAccountId((String) mapValue.get("finAccountId"));
         setSecurityCode((String) mapValue.get("securityCode"));
+        setTrack2((String) mapValue.get("track2"));
         setPresentFlag((String) mapValue.get("presentFlag"));
+        setSwipedFlag((String) mapValue.get("swipedFlag"));
         setOverflowFlag((String) mapValue.get("overflowFlag"));
         setMaxAmount(convertToBigDecimal(mapValue.get("maxAmount")));
         setProcessAttempt((Long) mapValue.get("processAttempt"));
@@ -863,12 +986,15 @@ fieldMapColumns.put("OrderPaymentPreference", fields);
         mapValue.put("orderPaymentPreferenceId", getOrderPaymentPreferenceId());
         mapValue.put("orderId", getOrderId());
         mapValue.put("orderItemSeqId", getOrderItemSeqId());
+        mapValue.put("shipGroupSeqId", getShipGroupSeqId());
         mapValue.put("productPricePurposeId", getProductPricePurposeId());
         mapValue.put("paymentMethodTypeId", getPaymentMethodTypeId());
         mapValue.put("paymentMethodId", getPaymentMethodId());
         mapValue.put("finAccountId", getFinAccountId());
         mapValue.put("securityCode", getSecurityCode());
+        mapValue.put("track2", getTrack2());
         mapValue.put("presentFlag", getPresentFlag());
+        mapValue.put("swipedFlag", getSwipedFlag());
         mapValue.put("overflowFlag", getOverflowFlag());
         mapValue.put("maxAmount", getMaxAmount());
         mapValue.put("processAttempt", getProcessAttempt());

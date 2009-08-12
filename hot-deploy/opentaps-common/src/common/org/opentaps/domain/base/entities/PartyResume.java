@@ -54,6 +54,7 @@ static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("resumeId", "RESUME_ID");
         fields.put("partyId", "PARTY_ID");
+        fields.put("contentId", "CONTENT_ID");
         fields.put("resumeDate", "RESUME_DATE");
         fields.put("resumeText", "RESUME_TEXT");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
@@ -65,6 +66,7 @@ fieldMapColumns.put("PartyResume", fields);
   public static enum Fields implements EntityFieldInterface<PartyResume> {
     resumeId("resumeId"),
     partyId("partyId"),
+    contentId("contentId"),
     resumeDate("resumeDate"),
     resumeText("resumeText"),
     lastUpdatedStamp("lastUpdatedStamp"),
@@ -88,6 +90,8 @@ fieldMapColumns.put("PartyResume", fields);
    private String resumeId;
    @Column(name="PARTY_ID")
    private String partyId;
+   @Column(name="CONTENT_ID")
+   private String contentId;
    @Column(name="RESUME_DATE")
    private Timestamp resumeDate;
    @Column(name="RESUME_TEXT")
@@ -107,6 +111,13 @@ fieldMapColumns.put("PartyResume", fields);
    )
    
    private Party party = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="CONTENT_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Content content = null;
 
   /**
    * Default constructor.
@@ -119,7 +130,7 @@ fieldMapColumns.put("PartyResume", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("resumeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("resumeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("resumeDate");this.allFieldsNames.add("resumeText");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("resumeId");this.allFieldsNames.add("partyId");this.allFieldsNames.add("contentId");this.allFieldsNames.add("resumeDate");this.allFieldsNames.add("resumeText");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -147,6 +158,13 @@ fieldMapColumns.put("PartyResume", fields);
      */
     public void setPartyId(String partyId) {
         this.partyId = partyId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param contentId the contentId to set
+     */
+    public void setContentId(String contentId) {
+        this.contentId = contentId;
     }
     /**
      * Auto generated value setter.
@@ -207,6 +225,13 @@ fieldMapColumns.put("PartyResume", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getContentId() {
+        return this.contentId;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>Timestamp</code>
      */
     public Timestamp getResumeDate() {
@@ -259,6 +284,17 @@ fieldMapColumns.put("PartyResume", fields);
         }
         return this.party;
     }
+    /**
+     * Auto generated method that gets the related <code>Content</code> by the relation named <code>Content</code>.
+     * @return the <code>Content</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Content getContent() throws RepositoryException {
+        if (this.content == null) {
+            this.content = getRelatedOne(Content.class, "Content");
+        }
+        return this.content;
+    }
 
     /**
      * Auto generated value setter.
@@ -266,6 +302,13 @@ fieldMapColumns.put("PartyResume", fields);
     */
     public void setParty(Party party) {
         this.party = party;
+    }
+    /**
+     * Auto generated value setter.
+     * @param content the content to set
+    */
+    public void setContent(Content content) {
+        this.content = content;
     }
 
 
@@ -275,6 +318,7 @@ fieldMapColumns.put("PartyResume", fields);
         preInit();
         setResumeId((String) mapValue.get("resumeId"));
         setPartyId((String) mapValue.get("partyId"));
+        setContentId((String) mapValue.get("contentId"));
         setResumeDate((Timestamp) mapValue.get("resumeDate"));
         setResumeText((String) mapValue.get("resumeText"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
@@ -290,6 +334,7 @@ fieldMapColumns.put("PartyResume", fields);
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("resumeId", getResumeId());
         mapValue.put("partyId", getPartyId());
+        mapValue.put("contentId", getContentId());
         mapValue.put("resumeDate", getResumeDate());
         mapValue.put("resumeText", getResumeText());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());

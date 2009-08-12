@@ -66,7 +66,9 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("purchSurveySendTo", "PURCH_SURVEY_SEND_TO");
         fields.put("purchSurveyCopyMe", "PURCH_SURVEY_COPY_ME");
         fields.put("allowAuthToNegative", "ALLOW_AUTH_TO_NEGATIVE");
+        fields.put("minBalance", "MIN_BALANCE");
         fields.put("replenishThreshold", "REPLENISH_THRESHOLD");
+        fields.put("replenishMethodEnumId", "REPLENISH_METHOD_ENUM_ID");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -86,7 +88,9 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
     purchSurveySendTo("purchSurveySendTo"),
     purchSurveyCopyMe("purchSurveyCopyMe"),
     allowAuthToNegative("allowAuthToNegative"),
+    minBalance("minBalance"),
     replenishThreshold("replenishThreshold"),
+    replenishMethodEnumId("replenishMethodEnumId"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -140,8 +144,12 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
    private String purchSurveyCopyMe;
    @Column(name="ALLOW_AUTH_TO_NEGATIVE")
    private String allowAuthToNegative;
+   @Column(name="MIN_BALANCE")
+   private BigDecimal minBalance;
    @Column(name="REPLENISH_THRESHOLD")
    private BigDecimal replenishThreshold;
+   @Column(name="REPLENISH_METHOD_ENUM_ID")
+   private String replenishMethodEnumId;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -171,6 +179,13 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
    )
    
    private Survey survey = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="REPLENISH_METHOD_ENUM_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Enumeration replenishMethodEnumeration = null;
 
   /**
    * Default constructor.
@@ -183,7 +198,7 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("productStoreId");this.primaryKeyNames.add("finAccountTypeId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("finAccountTypeId");this.allFieldsNames.add("requirePinCode");this.allFieldsNames.add("validateGCFinAcct");this.allFieldsNames.add("accountCodeLength");this.allFieldsNames.add("pinCodeLength");this.allFieldsNames.add("accountValidDays");this.allFieldsNames.add("authValidDays");this.allFieldsNames.add("purchaseSurveyId");this.allFieldsNames.add("purchSurveySendTo");this.allFieldsNames.add("purchSurveyCopyMe");this.allFieldsNames.add("allowAuthToNegative");this.allFieldsNames.add("replenishThreshold");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("productStoreId");this.allFieldsNames.add("finAccountTypeId");this.allFieldsNames.add("requirePinCode");this.allFieldsNames.add("validateGCFinAcct");this.allFieldsNames.add("accountCodeLength");this.allFieldsNames.add("pinCodeLength");this.allFieldsNames.add("accountValidDays");this.allFieldsNames.add("authValidDays");this.allFieldsNames.add("purchaseSurveyId");this.allFieldsNames.add("purchSurveySendTo");this.allFieldsNames.add("purchSurveyCopyMe");this.allFieldsNames.add("allowAuthToNegative");this.allFieldsNames.add("minBalance");this.allFieldsNames.add("replenishThreshold");this.allFieldsNames.add("replenishMethodEnumId");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -284,10 +299,24 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
     }
     /**
      * Auto generated value setter.
+     * @param minBalance the minBalance to set
+     */
+    public void setMinBalance(BigDecimal minBalance) {
+        this.minBalance = minBalance;
+    }
+    /**
+     * Auto generated value setter.
      * @param replenishThreshold the replenishThreshold to set
      */
     public void setReplenishThreshold(BigDecimal replenishThreshold) {
         this.replenishThreshold = replenishThreshold;
+    }
+    /**
+     * Auto generated value setter.
+     * @param replenishMethodEnumId the replenishMethodEnumId to set
+     */
+    public void setReplenishMethodEnumId(String replenishMethodEnumId) {
+        this.replenishMethodEnumId = replenishMethodEnumId;
     }
     /**
      * Auto generated value setter.
@@ -406,8 +435,22 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
      * Auto generated value accessor.
      * @return <code>BigDecimal</code>
      */
+    public BigDecimal getMinBalance() {
+        return this.minBalance;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>BigDecimal</code>
+     */
     public BigDecimal getReplenishThreshold() {
         return this.replenishThreshold;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getReplenishMethodEnumId() {
+        return this.replenishMethodEnumId;
     }
     /**
      * Auto generated value accessor.
@@ -471,6 +514,17 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
         }
         return this.survey;
     }
+    /**
+     * Auto generated method that gets the related <code>Enumeration</code> by the relation named <code>ReplenishMethodEnumeration</code>.
+     * @return the <code>Enumeration</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Enumeration getReplenishMethodEnumeration() throws RepositoryException {
+        if (this.replenishMethodEnumeration == null) {
+            this.replenishMethodEnumeration = getRelatedOne(Enumeration.class, "ReplenishMethodEnumeration");
+        }
+        return this.replenishMethodEnumeration;
+    }
 
     /**
      * Auto generated value setter.
@@ -493,6 +547,13 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
     public void setSurvey(Survey survey) {
         this.survey = survey;
     }
+    /**
+     * Auto generated value setter.
+     * @param replenishMethodEnumeration the replenishMethodEnumeration to set
+    */
+    public void setReplenishMethodEnumeration(Enumeration replenishMethodEnumeration) {
+        this.replenishMethodEnumeration = replenishMethodEnumeration;
+    }
 
 
     /** {@inheritDoc} */
@@ -511,7 +572,9 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
         setPurchSurveySendTo((String) mapValue.get("purchSurveySendTo"));
         setPurchSurveyCopyMe((String) mapValue.get("purchSurveyCopyMe"));
         setAllowAuthToNegative((String) mapValue.get("allowAuthToNegative"));
+        setMinBalance(convertToBigDecimal(mapValue.get("minBalance")));
         setReplenishThreshold(convertToBigDecimal(mapValue.get("replenishThreshold")));
+        setReplenishMethodEnumId((String) mapValue.get("replenishMethodEnumId"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -535,7 +598,9 @@ fieldMapColumns.put("ProductStoreFinActSetting", fields);
         mapValue.put("purchSurveySendTo", getPurchSurveySendTo());
         mapValue.put("purchSurveyCopyMe", getPurchSurveyCopyMe());
         mapValue.put("allowAuthToNegative", getAllowAuthToNegative());
+        mapValue.put("minBalance", getMinBalance());
         mapValue.put("replenishThreshold", getReplenishThreshold());
+        mapValue.put("replenishMethodEnumId", getReplenishMethodEnumId());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

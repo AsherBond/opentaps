@@ -134,12 +134,13 @@ fieldMapColumns.put("PartyRole", fields);
    private transient List<CommunicationEvent> fromCommunicationEvents = null;
    private transient List<CommunicationEventRole> communicationEventRoles = null;
    private transient List<ContentRole> contentRoles = null;
+   private transient List<CustRequestParty> custRequestPartys = null;
    private transient List<CustRequestRole> custRequestRoles = null;
    private transient List<DataResourceRole> dataResourceRoles = null;
-   private transient List<EmplPositionType> emplPositionTypes = null;
    private transient List<Employment> toEmployments = null;
    private transient List<Employment> fromEmployments = null;
    private transient List<FacilityGroupRole> facilityGroupRoles = null;
+   private transient List<FacilityParty> facilityPartys = null;
    private transient List<FinAccountRole> finAccountRoles = null;
    private transient List<FixedAsset> fixedAssets = null;
    private transient List<GlAccountOrganization> glAccountOrganizations = null;
@@ -156,6 +157,7 @@ fieldMapColumns.put("PartyRole", fields);
    private transient List<PartyBenefit> fromPartyBenefits = null;
    private transient List<PartyContactMech> partyContactMeches = null;
    private transient List<PartyFixedAssetAssignment> partyFixedAssetAssignments = null;
+   private transient List<PartyGlAccount> partyGlAccounts = null;
    private transient List<PartyNeed> partyNeeds = null;
    private transient List<PartyRelationship> fromPartyRelationships = null;
    private transient List<PartyRelationship> toPartyRelationships = null;
@@ -163,13 +165,12 @@ fieldMapColumns.put("PartyRole", fields);
    private transient List<PayrollPreference> payrollPreferences = null;
    private transient List<PerfReview> employeePerfReviews = null;
    private transient List<PerfReview> managerPerfReviews = null;
-   private transient List<PerfReview> payHistoryFromPerfReviews = null;
-   private transient List<PerfReview> payHistoryToPerfReviews = null;
    private transient List<PerfReviewItem> employeePerfReviewItems = null;
    private transient List<PerformanceNote> performanceNotes = null;
    private transient List<PicklistRole> picklistRoles = null;
    private transient List<ProdCatalogRole> prodCatalogRoles = null;
    private transient List<ProductCategoryRole> productCategoryRoles = null;
+   private transient List<ProductRole> productRoles = null;
    private transient List<ProductStoreGroupRole> productStoreGroupRoles = null;
    private transient List<ProductStoreRole> productStoreRoles = null;
    private transient List<QuoteRole> quoteRoles = null;
@@ -485,6 +486,17 @@ fieldMapColumns.put("PartyRole", fields);
         return this.contentRoles;
     }
     /**
+     * Auto generated method that gets the related <code>CustRequestParty</code> by the relation named <code>CustRequestParty</code>.
+     * @return the list of <code>CustRequestParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends CustRequestParty> getCustRequestPartys() throws RepositoryException {
+        if (this.custRequestPartys == null) {
+            this.custRequestPartys = getRelated(CustRequestParty.class, "CustRequestParty");
+        }
+        return this.custRequestPartys;
+    }
+    /**
      * Auto generated method that gets the related <code>CustRequestRole</code> by the relation named <code>CustRequestRole</code>.
      * @return the list of <code>CustRequestRole</code>
      * @throws RepositoryException if an error occurs
@@ -505,17 +517,6 @@ fieldMapColumns.put("PartyRole", fields);
             this.dataResourceRoles = getRelated(DataResourceRole.class, "DataResourceRole");
         }
         return this.dataResourceRoles;
-    }
-    /**
-     * Auto generated method that gets the related <code>EmplPositionType</code> by the relation named <code>EmplPositionType</code>.
-     * @return the list of <code>EmplPositionType</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends EmplPositionType> getEmplPositionTypes() throws RepositoryException {
-        if (this.emplPositionTypes == null) {
-            this.emplPositionTypes = getRelated(EmplPositionType.class, "EmplPositionType");
-        }
-        return this.emplPositionTypes;
     }
     /**
      * Auto generated method that gets the related <code>Employment</code> by the relation named <code>ToEmployment</code>.
@@ -549,6 +550,17 @@ fieldMapColumns.put("PartyRole", fields);
             this.facilityGroupRoles = getRelated(FacilityGroupRole.class, "FacilityGroupRole");
         }
         return this.facilityGroupRoles;
+    }
+    /**
+     * Auto generated method that gets the related <code>FacilityParty</code> by the relation named <code>FacilityParty</code>.
+     * @return the list of <code>FacilityParty</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends FacilityParty> getFacilityPartys() throws RepositoryException {
+        if (this.facilityPartys == null) {
+            this.facilityPartys = getRelated(FacilityParty.class, "FacilityParty");
+        }
+        return this.facilityPartys;
     }
     /**
      * Auto generated method that gets the related <code>FinAccountRole</code> by the relation named <code>FinAccountRole</code>.
@@ -727,6 +739,17 @@ fieldMapColumns.put("PartyRole", fields);
         return this.partyFixedAssetAssignments;
     }
     /**
+     * Auto generated method that gets the related <code>PartyGlAccount</code> by the relation named <code>PartyGlAccount</code>.
+     * @return the list of <code>PartyGlAccount</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends PartyGlAccount> getPartyGlAccounts() throws RepositoryException {
+        if (this.partyGlAccounts == null) {
+            this.partyGlAccounts = getRelated(PartyGlAccount.class, "PartyGlAccount");
+        }
+        return this.partyGlAccounts;
+    }
+    /**
      * Auto generated method that gets the related <code>PartyNeed</code> by the relation named <code>PartyNeed</code>.
      * @return the list of <code>PartyNeed</code>
      * @throws RepositoryException if an error occurs
@@ -804,28 +827,6 @@ fieldMapColumns.put("PartyRole", fields);
         return this.managerPerfReviews;
     }
     /**
-     * Auto generated method that gets the related <code>PerfReview</code> by the relation named <code>PayHistoryFromPerfReview</code>.
-     * @return the list of <code>PerfReview</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends PerfReview> getPayHistoryFromPerfReviews() throws RepositoryException {
-        if (this.payHistoryFromPerfReviews == null) {
-            this.payHistoryFromPerfReviews = getRelated(PerfReview.class, "PayHistoryFromPerfReview");
-        }
-        return this.payHistoryFromPerfReviews;
-    }
-    /**
-     * Auto generated method that gets the related <code>PerfReview</code> by the relation named <code>PayHistoryToPerfReview</code>.
-     * @return the list of <code>PerfReview</code>
-     * @throws RepositoryException if an error occurs
-     */
-    public List<? extends PerfReview> getPayHistoryToPerfReviews() throws RepositoryException {
-        if (this.payHistoryToPerfReviews == null) {
-            this.payHistoryToPerfReviews = getRelated(PerfReview.class, "PayHistoryToPerfReview");
-        }
-        return this.payHistoryToPerfReviews;
-    }
-    /**
      * Auto generated method that gets the related <code>PerfReviewItem</code> by the relation named <code>EmployeePerfReviewItem</code>.
      * @return the list of <code>PerfReviewItem</code>
      * @throws RepositoryException if an error occurs
@@ -879,6 +880,17 @@ fieldMapColumns.put("PartyRole", fields);
             this.productCategoryRoles = getRelated(ProductCategoryRole.class, "ProductCategoryRole");
         }
         return this.productCategoryRoles;
+    }
+    /**
+     * Auto generated method that gets the related <code>ProductRole</code> by the relation named <code>ProductRole</code>.
+     * @return the list of <code>ProductRole</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ProductRole> getProductRoles() throws RepositoryException {
+        if (this.productRoles == null) {
+            this.productRoles = getRelated(ProductRole.class, "ProductRole");
+        }
+        return this.productRoles;
     }
     /**
      * Auto generated method that gets the related <code>ProductStoreGroupRole</code> by the relation named <code>ProductStoreGroupRole</code>.
@@ -1156,6 +1168,13 @@ fieldMapColumns.put("PartyRole", fields);
     }
     /**
      * Auto generated value setter.
+     * @param custRequestPartys the custRequestPartys to set
+    */
+    public void setCustRequestPartys(List<CustRequestParty> custRequestPartys) {
+        this.custRequestPartys = custRequestPartys;
+    }
+    /**
+     * Auto generated value setter.
      * @param custRequestRoles the custRequestRoles to set
     */
     public void setCustRequestRoles(List<CustRequestRole> custRequestRoles) {
@@ -1167,13 +1186,6 @@ fieldMapColumns.put("PartyRole", fields);
     */
     public void setDataResourceRoles(List<DataResourceRole> dataResourceRoles) {
         this.dataResourceRoles = dataResourceRoles;
-    }
-    /**
-     * Auto generated value setter.
-     * @param emplPositionTypes the emplPositionTypes to set
-    */
-    public void setEmplPositionTypes(List<EmplPositionType> emplPositionTypes) {
-        this.emplPositionTypes = emplPositionTypes;
     }
     /**
      * Auto generated value setter.
@@ -1195,6 +1207,13 @@ fieldMapColumns.put("PartyRole", fields);
     */
     public void setFacilityGroupRoles(List<FacilityGroupRole> facilityGroupRoles) {
         this.facilityGroupRoles = facilityGroupRoles;
+    }
+    /**
+     * Auto generated value setter.
+     * @param facilityPartys the facilityPartys to set
+    */
+    public void setFacilityPartys(List<FacilityParty> facilityPartys) {
+        this.facilityPartys = facilityPartys;
     }
     /**
      * Auto generated value setter.
@@ -1310,6 +1329,13 @@ fieldMapColumns.put("PartyRole", fields);
     }
     /**
      * Auto generated value setter.
+     * @param partyGlAccounts the partyGlAccounts to set
+    */
+    public void setPartyGlAccounts(List<PartyGlAccount> partyGlAccounts) {
+        this.partyGlAccounts = partyGlAccounts;
+    }
+    /**
+     * Auto generated value setter.
      * @param partyNeeds the partyNeeds to set
     */
     public void setPartyNeeds(List<PartyNeed> partyNeeds) {
@@ -1359,20 +1385,6 @@ fieldMapColumns.put("PartyRole", fields);
     }
     /**
      * Auto generated value setter.
-     * @param payHistoryFromPerfReviews the payHistoryFromPerfReviews to set
-    */
-    public void setPayHistoryFromPerfReviews(List<PerfReview> payHistoryFromPerfReviews) {
-        this.payHistoryFromPerfReviews = payHistoryFromPerfReviews;
-    }
-    /**
-     * Auto generated value setter.
-     * @param payHistoryToPerfReviews the payHistoryToPerfReviews to set
-    */
-    public void setPayHistoryToPerfReviews(List<PerfReview> payHistoryToPerfReviews) {
-        this.payHistoryToPerfReviews = payHistoryToPerfReviews;
-    }
-    /**
-     * Auto generated value setter.
      * @param employeePerfReviewItems the employeePerfReviewItems to set
     */
     public void setEmployeePerfReviewItems(List<PerfReviewItem> employeePerfReviewItems) {
@@ -1405,6 +1417,13 @@ fieldMapColumns.put("PartyRole", fields);
     */
     public void setProductCategoryRoles(List<ProductCategoryRole> productCategoryRoles) {
         this.productCategoryRoles = productCategoryRoles;
+    }
+    /**
+     * Auto generated value setter.
+     * @param productRoles the productRoles to set
+    */
+    public void setProductRoles(List<ProductRole> productRoles) {
+        this.productRoles = productRoles;
     }
     /**
      * Auto generated value setter.

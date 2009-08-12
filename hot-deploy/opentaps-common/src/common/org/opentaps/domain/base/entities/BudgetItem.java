@@ -122,6 +122,13 @@ fieldMapColumns.put("BudgetItem", fields);
    @Column(name="CREATED_TX_STAMP")
    private Timestamp createdTxStamp;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="BUDGET_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private Budget budget = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="BUDGET_ITEM_TYPE_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -305,6 +312,17 @@ fieldMapColumns.put("BudgetItem", fields);
     }
 
     /**
+     * Auto generated method that gets the related <code>Budget</code> by the relation named <code>Budget</code>.
+     * @return the <code>Budget</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public Budget getBudget() throws RepositoryException {
+        if (this.budget == null) {
+            this.budget = getRelatedOne(Budget.class, "Budget");
+        }
+        return this.budget;
+    }
+    /**
      * Auto generated method that gets the related <code>BudgetItemType</code> by the relation named <code>BudgetItemType</code>.
      * @return the <code>BudgetItemType</code>
      * @throws RepositoryException if an error occurs
@@ -393,6 +411,13 @@ fieldMapColumns.put("BudgetItem", fields);
         return this.requirementBudgetAllocations;
     }
 
+    /**
+     * Auto generated value setter.
+     * @param budget the budget to set
+    */
+    public void setBudget(Budget budget) {
+        this.budget = budget;
+    }
     /**
      * Auto generated value setter.
      * @param budgetItemType the budgetItemType to set

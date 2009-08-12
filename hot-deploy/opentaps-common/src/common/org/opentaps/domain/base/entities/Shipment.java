@@ -57,6 +57,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("shipmentTypeId", "SHIPMENT_TYPE_ID");
         fields.put("statusId", "STATUS_ID");
         fields.put("primaryOrderId", "PRIMARY_ORDER_ID");
+        fields.put("primaryReturnId", "PRIMARY_RETURN_ID");
         fields.put("primaryShipGroupSeqId", "PRIMARY_SHIP_GROUP_SEQ_ID");
         fields.put("picklistBinId", "PICKLIST_BIN_ID");
         fields.put("estimatedReadyDate", "ESTIMATED_READY_DATE");
@@ -94,6 +95,7 @@ fieldMapColumns.put("Shipment", fields);
     shipmentTypeId("shipmentTypeId"),
     statusId("statusId"),
     primaryOrderId("primaryOrderId"),
+    primaryReturnId("primaryReturnId"),
     primaryShipGroupSeqId("primaryShipGroupSeqId"),
     picklistBinId("picklistBinId"),
     estimatedReadyDate("estimatedReadyDate"),
@@ -145,6 +147,8 @@ fieldMapColumns.put("Shipment", fields);
    private String statusId;
    @Column(name="PRIMARY_ORDER_ID")
    private String primaryOrderId;
+   @Column(name="PRIMARY_RETURN_ID")
+   private String primaryReturnId;
    @Column(name="PRIMARY_SHIP_GROUP_SEQ_ID")
    private String primaryShipGroupSeqId;
    @Column(name="PICKLIST_BIN_ID")
@@ -304,6 +308,13 @@ fieldMapColumns.put("Shipment", fields);
    
    private OrderHeader primaryOrderHeader = null;
    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
+   @JoinColumn(name="PRIMARY_RETURN_ID", insertable=false, updatable=false)
+   @org.hibernate.annotations.Generated(
+      org.hibernate.annotations.GenerationTime.ALWAYS
+   )
+   
+   private ReturnHeader primaryReturnHeader = null;
+   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
    @JoinColumn(name="PICKLIST_BIN_ID", insertable=false, updatable=false)
    @org.hibernate.annotations.Generated(
       org.hibernate.annotations.GenerationTime.ALWAYS
@@ -353,6 +364,10 @@ fieldMapColumns.put("Shipment", fields);
    @JoinColumn(name="SHIPMENT_ID")
    
    private List<OrderShipment> orderShipments = null;
+   @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+   @JoinColumn(name="SHIPMENT_ID")
+   
+   private List<ReturnItemShipment> returnItemShipments = null;
    @OneToMany(fetch=FetchType.LAZY, mappedBy="shipment", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
    @JoinColumn(name="SHIPMENT_ID")
    
@@ -409,7 +424,7 @@ fieldMapColumns.put("Shipment", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("shipmentId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("primaryOrderId");this.allFieldsNames.add("primaryShipGroupSeqId");this.allFieldsNames.add("picklistBinId");this.allFieldsNames.add("estimatedReadyDate");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("estimatedShipWorkEffId");this.allFieldsNames.add("estimatedArrivalDate");this.allFieldsNames.add("estimatedArrivalWorkEffId");this.allFieldsNames.add("latestCancelDate");this.allFieldsNames.add("estimatedShipCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("handlingInstructions");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("destinationFacilityId");this.allFieldsNames.add("originContactMechId");this.allFieldsNames.add("originTelecomNumberId");this.allFieldsNames.add("destinationContactMechId");this.allFieldsNames.add("destinationTelecomNumberId");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("additionalShippingCharge");this.allFieldsNames.add("addtlShippingChargeDesc");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("returnId");
+      this.allFieldsNames.add("shipmentId");this.allFieldsNames.add("shipmentTypeId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("primaryOrderId");this.allFieldsNames.add("primaryReturnId");this.allFieldsNames.add("primaryShipGroupSeqId");this.allFieldsNames.add("picklistBinId");this.allFieldsNames.add("estimatedReadyDate");this.allFieldsNames.add("estimatedShipDate");this.allFieldsNames.add("estimatedShipWorkEffId");this.allFieldsNames.add("estimatedArrivalDate");this.allFieldsNames.add("estimatedArrivalWorkEffId");this.allFieldsNames.add("latestCancelDate");this.allFieldsNames.add("estimatedShipCost");this.allFieldsNames.add("currencyUomId");this.allFieldsNames.add("handlingInstructions");this.allFieldsNames.add("originFacilityId");this.allFieldsNames.add("destinationFacilityId");this.allFieldsNames.add("originContactMechId");this.allFieldsNames.add("originTelecomNumberId");this.allFieldsNames.add("destinationContactMechId");this.allFieldsNames.add("destinationTelecomNumberId");this.allFieldsNames.add("partyIdTo");this.allFieldsNames.add("partyIdFrom");this.allFieldsNames.add("additionalShippingCharge");this.allFieldsNames.add("addtlShippingChargeDesc");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");this.allFieldsNames.add("returnId");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -451,6 +466,13 @@ fieldMapColumns.put("Shipment", fields);
      */
     public void setPrimaryOrderId(String primaryOrderId) {
         this.primaryOrderId = primaryOrderId;
+    }
+    /**
+     * Auto generated value setter.
+     * @param primaryReturnId the primaryReturnId to set
+     */
+    public void setPrimaryReturnId(String primaryReturnId) {
+        this.primaryReturnId = primaryReturnId;
     }
     /**
      * Auto generated value setter.
@@ -690,6 +712,13 @@ fieldMapColumns.put("Shipment", fields);
      */
     public String getPrimaryOrderId() {
         return this.primaryOrderId;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getPrimaryReturnId() {
+        return this.primaryReturnId;
     }
     /**
      * Auto generated value accessor.
@@ -1057,6 +1086,17 @@ fieldMapColumns.put("Shipment", fields);
         return this.primaryOrderHeader;
     }
     /**
+     * Auto generated method that gets the related <code>ReturnHeader</code> by the relation named <code>PrimaryReturnHeader</code>.
+     * @return the <code>ReturnHeader</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public ReturnHeader getPrimaryReturnHeader() throws RepositoryException {
+        if (this.primaryReturnHeader == null) {
+            this.primaryReturnHeader = getRelatedOne(ReturnHeader.class, "PrimaryReturnHeader");
+        }
+        return this.primaryReturnHeader;
+    }
+    /**
      * Auto generated method that gets the related <code>PicklistBin</code> by the relation named <code>PicklistBin</code>.
      * @return the <code>PicklistBin</code>
      * @throws RepositoryException if an error occurs
@@ -1209,6 +1249,17 @@ fieldMapColumns.put("Shipment", fields);
             this.orderShipments = getRelated(OrderShipment.class, "OrderShipment");
         }
         return this.orderShipments;
+    }
+    /**
+     * Auto generated method that gets the related <code>ReturnItemShipment</code> by the relation named <code>ReturnItemShipment</code>.
+     * @return the list of <code>ReturnItemShipment</code>
+     * @throws RepositoryException if an error occurs
+     */
+    public List<? extends ReturnItemShipment> getReturnItemShipments() throws RepositoryException {
+        if (this.returnItemShipments == null) {
+            this.returnItemShipments = getRelated(ReturnItemShipment.class, "ReturnItemShipment");
+        }
+        return this.returnItemShipments;
     }
     /**
      * Auto generated method that gets the related <code>ShipmentAttribute</code> by the relation named <code>ShipmentAttribute</code>.
@@ -1432,6 +1483,13 @@ fieldMapColumns.put("Shipment", fields);
     }
     /**
      * Auto generated value setter.
+     * @param primaryReturnHeader the primaryReturnHeader to set
+    */
+    public void setPrimaryReturnHeader(ReturnHeader primaryReturnHeader) {
+        this.primaryReturnHeader = primaryReturnHeader;
+    }
+    /**
+     * Auto generated value setter.
      * @param picklistBin the picklistBin to set
     */
     public void setPicklistBin(PicklistBin picklistBin) {
@@ -1527,6 +1585,13 @@ fieldMapColumns.put("Shipment", fields);
     */
     public void setOrderShipments(List<OrderShipment> orderShipments) {
         this.orderShipments = orderShipments;
+    }
+    /**
+     * Auto generated value setter.
+     * @param returnItemShipments the returnItemShipments to set
+    */
+    public void setReturnItemShipments(List<ReturnItemShipment> returnItemShipments) {
+        this.returnItemShipments = returnItemShipments;
     }
     /**
      * Auto generated value setter.
@@ -1632,6 +1697,33 @@ fieldMapColumns.put("Shipment", fields);
             return;
         }
         this.orderShipments.clear();
+    }
+    /**
+     * Auto generated method that add item to collection.
+     */
+    public void addReturnItemShipment(ReturnItemShipment returnItemShipment) {
+        if (this.returnItemShipments == null) {
+            this.returnItemShipments = new ArrayList<ReturnItemShipment>();
+        }
+        this.returnItemShipments.add(returnItemShipment);
+    }
+    /**
+     * Auto generated method that remove item from collection.
+     */
+    public void removeReturnItemShipment(ReturnItemShipment returnItemShipment) {
+        if (this.returnItemShipments == null) {
+            return;
+        }
+        this.returnItemShipments.remove(returnItemShipment);
+    }
+    /**
+     * Auto generated method that clear items from collection.
+     */
+    public void clearReturnItemShipment() {
+        if (this.returnItemShipments == null) {
+            return;
+        }
+        this.returnItemShipments.clear();
     }
     /**
      * Auto generated method that add item to collection.
@@ -1912,6 +2004,7 @@ fieldMapColumns.put("Shipment", fields);
         setShipmentTypeId((String) mapValue.get("shipmentTypeId"));
         setStatusId((String) mapValue.get("statusId"));
         setPrimaryOrderId((String) mapValue.get("primaryOrderId"));
+        setPrimaryReturnId((String) mapValue.get("primaryReturnId"));
         setPrimaryShipGroupSeqId((String) mapValue.get("primaryShipGroupSeqId"));
         setPicklistBinId((String) mapValue.get("picklistBinId"));
         setEstimatedReadyDate((Timestamp) mapValue.get("estimatedReadyDate"));
@@ -1953,6 +2046,7 @@ fieldMapColumns.put("Shipment", fields);
         mapValue.put("shipmentTypeId", getShipmentTypeId());
         mapValue.put("statusId", getStatusId());
         mapValue.put("primaryOrderId", getPrimaryOrderId());
+        mapValue.put("primaryReturnId", getPrimaryReturnId());
         mapValue.put("primaryShipGroupSeqId", getPrimaryShipGroupSeqId());
         mapValue.put("picklistBinId", getPicklistBinId());
         mapValue.put("estimatedReadyDate", getEstimatedReadyDate());

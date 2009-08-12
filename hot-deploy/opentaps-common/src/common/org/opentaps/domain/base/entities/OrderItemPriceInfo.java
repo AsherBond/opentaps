@@ -60,6 +60,7 @@ java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("productPriceActionSeqId", "PRODUCT_PRICE_ACTION_SEQ_ID");
         fields.put("modifyAmount", "MODIFY_AMOUNT");
         fields.put("description", "DESCRIPTION");
+        fields.put("rateCode", "RATE_CODE");
         fields.put("lastUpdatedStamp", "LAST_UPDATED_STAMP");
         fields.put("lastUpdatedTxStamp", "LAST_UPDATED_TX_STAMP");
         fields.put("createdStamp", "CREATED_STAMP");
@@ -74,6 +75,7 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
     productPriceActionSeqId("productPriceActionSeqId"),
     modifyAmount("modifyAmount"),
     description("description"),
+    rateCode("rateCode"),
     lastUpdatedStamp("lastUpdatedStamp"),
     lastUpdatedTxStamp("lastUpdatedTxStamp"),
     createdStamp("createdStamp"),
@@ -105,6 +107,8 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
    private BigDecimal modifyAmount;
    @Column(name="DESCRIPTION")
    private String description;
+   @Column(name="RATE_CODE")
+   private String rateCode;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -141,7 +145,7 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
       this.primaryKeyNames = new ArrayList<String>();
       this.primaryKeyNames.add("orderItemPriceInfoId");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("orderItemPriceInfoId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("productPriceRuleId");this.allFieldsNames.add("productPriceActionSeqId");this.allFieldsNames.add("modifyAmount");this.allFieldsNames.add("description");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
+      this.allFieldsNames.add("orderItemPriceInfoId");this.allFieldsNames.add("orderId");this.allFieldsNames.add("orderItemSeqId");this.allFieldsNames.add("productPriceRuleId");this.allFieldsNames.add("productPriceActionSeqId");this.allFieldsNames.add("modifyAmount");this.allFieldsNames.add("description");this.allFieldsNames.add("rateCode");this.allFieldsNames.add("lastUpdatedStamp");this.allFieldsNames.add("lastUpdatedTxStamp");this.allFieldsNames.add("createdStamp");this.allFieldsNames.add("createdTxStamp");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -204,6 +208,13 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
      */
     public void setDescription(String description) {
         this.description = description;
+    }
+    /**
+     * Auto generated value setter.
+     * @param rateCode the rateCode to set
+     */
+    public void setRateCode(String rateCode) {
+        this.rateCode = rateCode;
     }
     /**
      * Auto generated value setter.
@@ -282,6 +293,13 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
      */
     public String getDescription() {
         return this.description;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>String</code>
+     */
+    public String getRateCode() {
+        return this.rateCode;
     }
     /**
      * Auto generated value accessor.
@@ -398,6 +416,7 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
         setProductPriceActionSeqId((String) mapValue.get("productPriceActionSeqId"));
         setModifyAmount(convertToBigDecimal(mapValue.get("modifyAmount")));
         setDescription((String) mapValue.get("description"));
+        setRateCode((String) mapValue.get("rateCode"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
@@ -416,6 +435,7 @@ fieldMapColumns.put("OrderItemPriceInfo", fields);
         mapValue.put("productPriceActionSeqId", getProductPriceActionSeqId());
         mapValue.put("modifyAmount", getModifyAmount());
         mapValue.put("description", getDescription());
+        mapValue.put("rateCode", getRateCode());
         mapValue.put("lastUpdatedStamp", getLastUpdatedStamp());
         mapValue.put("lastUpdatedTxStamp", getLastUpdatedTxStamp());
         mapValue.put("createdStamp", getCreatedStamp());

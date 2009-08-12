@@ -49,10 +49,12 @@ import java.sql.Timestamp;
  * Auto generated base entity ContentAssocViewFrom.
  */
 @javax.persistence.Entity
-@NamedNativeQuery(name="selectContentAssocViewFroms", query="SELECT CA.CONTENT_ID_TO AS \"contentIdTo\",CO.CONTENT_ID AS \"contentId\",CO.CONTENT_TYPE_ID AS \"contentTypeId\",CO.OWNER_CONTENT_ID AS \"ownerContentId\",CO.DECORATOR_CONTENT_ID AS \"decoratorContentId\",CO.INSTANCE_OF_CONTENT_ID AS \"instanceOfContentId\",CO.DATA_RESOURCE_ID AS \"dataResourceId\",CO.TEMPLATE_DATA_RESOURCE_ID AS \"templateDataResourceId\",CO.DATA_SOURCE_ID AS \"dataSourceId\",CO.STATUS_ID AS \"statusId\",CO.PRIVILEGE_ENUM_ID AS \"privilegeEnumId\",CO.SERVICE_NAME AS \"serviceName\",CO.CONTENT_NAME AS \"contentName\",CO.DESCRIPTION AS \"description\",CO.LOCALE_STRING AS \"localeString\",CO.MIME_TYPE_ID AS \"mimeTypeId\",CO.CHARACTER_SET_ID AS \"characterSetId\",CO.CHILD_LEAF_COUNT AS \"childLeafCount\",CO.CHILD_BRANCH_COUNT AS \"childBranchCount\",CO.CREATED_DATE AS \"createdDate\",CO.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CO.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CO.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CO.CLASSIFICATION_ENUM_ID AS \"classificationEnumId\",CA.CONTENT_ID AS \"contentId\",CA.CONTENT_ID_TO AS \"contentIdTo\",CA.CONTENT_ASSOC_TYPE_ID AS \"contentAssocTypeId\",CA.FROM_DATE AS \"fromDate\",CA.THRU_DATE AS \"thruDate\",CA.CONTENT_ASSOC_PREDICATE_ID AS \"contentAssocPredicateId\",CA.DATA_SOURCE_ID AS \"dataSourceId\",CA.SEQUENCE_NUM AS \"sequenceNum\",CA.MAP_KEY AS \"mapKey\",CA.UPPER_COORDINATE AS \"upperCoordinate\",CA.LEFT_COORDINATE AS \"leftCoordinate\",CA.CREATED_DATE AS \"createdDate\",CA.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CA.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CA.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\" FROM CONTENT CO INNER JOIN CONTENT_ASSOC CA ON CA.CONTENT_ID = CO.CONTENT_ID", resultSetMapping="ContentAssocViewFromMapping")
+@NamedNativeQuery(name="selectContentAssocViewFroms", query="SELECT CA.CONTENT_ID_TO AS \"contentIdTo\",CA.FROM_DATE AS \"fromDate\",CA.THRU_DATE AS \"thruDate\",CO.CONTENT_ID AS \"contentId\",CO.CONTENT_TYPE_ID AS \"contentTypeId\",CO.OWNER_CONTENT_ID AS \"ownerContentId\",CO.DECORATOR_CONTENT_ID AS \"decoratorContentId\",CO.INSTANCE_OF_CONTENT_ID AS \"instanceOfContentId\",CO.DATA_RESOURCE_ID AS \"dataResourceId\",CO.TEMPLATE_DATA_RESOURCE_ID AS \"templateDataResourceId\",CO.DATA_SOURCE_ID AS \"dataSourceId\",CO.STATUS_ID AS \"statusId\",CO.PRIVILEGE_ENUM_ID AS \"privilegeEnumId\",CO.SERVICE_NAME AS \"serviceName\",CO.CONTENT_NAME AS \"contentName\",CO.DESCRIPTION AS \"description\",CO.LOCALE_STRING AS \"localeString\",CO.MIME_TYPE_ID AS \"mimeTypeId\",CO.CHARACTER_SET_ID AS \"characterSetId\",CO.CHILD_LEAF_COUNT AS \"childLeafCount\",CO.CHILD_BRANCH_COUNT AS \"childBranchCount\",CO.CREATED_DATE AS \"createdDate\",CO.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CO.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CO.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\",CO.CLASSIFICATION_ENUM_ID AS \"classificationEnumId\",CA.CONTENT_ID AS \"contentId\",CA.CONTENT_ID_TO AS \"contentIdTo\",CA.CONTENT_ASSOC_TYPE_ID AS \"contentAssocTypeId\",CA.FROM_DATE AS \"fromDate\",CA.THRU_DATE AS \"thruDate\",CA.CONTENT_ASSOC_PREDICATE_ID AS \"contentAssocPredicateId\",CA.DATA_SOURCE_ID AS \"dataSourceId\",CA.SEQUENCE_NUM AS \"sequenceNum\",CA.MAP_KEY AS \"mapKey\",CA.UPPER_COORDINATE AS \"upperCoordinate\",CA.LEFT_COORDINATE AS \"leftCoordinate\",CA.CREATED_DATE AS \"createdDate\",CA.CREATED_BY_USER_LOGIN AS \"createdByUserLogin\",CA.LAST_MODIFIED_DATE AS \"lastModifiedDate\",CA.LAST_MODIFIED_BY_USER_LOGIN AS \"lastModifiedByUserLogin\" FROM CONTENT CO INNER JOIN CONTENT_ASSOC CA ON CA.CONTENT_ID = CO.CONTENT_ID", resultSetMapping="ContentAssocViewFromMapping")
 @SqlResultSetMapping(name="ContentAssocViewFromMapping", entities={
 @EntityResult(entityClass=ContentAssocViewFrom.class, fields = {
 @FieldResult(name="contentIdStart", column="contentIdStart")
+,@FieldResult(name="fromDate", column="fromDate")
+,@FieldResult(name="thruDate", column="thruDate")
 ,@FieldResult(name="contentId", column="contentId")
 ,@FieldResult(name="contentTypeId", column="contentTypeId")
 ,@FieldResult(name="ownerContentId", column="ownerContentId")
@@ -98,6 +100,8 @@ public class ContentAssocViewFrom extends Entity {
 static {
 java.util.Map<String, String> fields = new java.util.HashMap<String, String>();
         fields.put("contentIdStart", "CA.CONTENT_ID_TO");
+        fields.put("fromDate", "CA.FROM_DATE");
+        fields.put("thruDate", "CA.THRU_DATE");
         fields.put("contentId", "CO.CONTENT_ID");
         fields.put("contentTypeId", "CO.CONTENT_TYPE_ID");
         fields.put("ownerContentId", "CO.OWNER_CONTENT_ID");
@@ -140,6 +144,8 @@ fieldMapColumns.put("ContentAssocViewFrom", fields);
 }
   public static enum Fields implements EntityFieldInterface<ContentAssocViewFrom> {
     contentIdStart("contentIdStart"),
+    fromDate("fromDate"),
+    thruDate("thruDate"),
     contentId("contentId"),
     contentTypeId("contentTypeId"),
     ownerContentId("ownerContentId"),
@@ -190,6 +196,10 @@ fieldMapColumns.put("ContentAssocViewFrom", fields);
 
     
    private String contentIdStart;
+    
+   private Timestamp fromDate;
+    
+   private Timestamp thruDate;
     @Id
    private String contentId;
     
@@ -276,9 +286,9 @@ fieldMapColumns.put("ContentAssocViewFrom", fields);
       this.isView = true;
       
       this.primaryKeyNames = new ArrayList<String>();
-      this.primaryKeyNames.add("contentIdStart");this.primaryKeyNames.add("contentId");this.primaryKeyNames.add("caContentId");this.primaryKeyNames.add("caContentIdTo");this.primaryKeyNames.add("caContentAssocTypeId");this.primaryKeyNames.add("caFromDate");
+      this.primaryKeyNames.add("contentIdStart");this.primaryKeyNames.add("fromDate");this.primaryKeyNames.add("contentId");this.primaryKeyNames.add("caContentId");this.primaryKeyNames.add("caContentIdTo");this.primaryKeyNames.add("caContentAssocTypeId");this.primaryKeyNames.add("caFromDate");
       this.allFieldsNames = new ArrayList<String>();
-      this.allFieldsNames.add("contentIdStart");this.allFieldsNames.add("contentId");this.allFieldsNames.add("contentTypeId");this.allFieldsNames.add("ownerContentId");this.allFieldsNames.add("decoratorContentId");this.allFieldsNames.add("instanceOfContentId");this.allFieldsNames.add("dataResourceId");this.allFieldsNames.add("templateDataResourceId");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("privilegeEnumId");this.allFieldsNames.add("serviceName");this.allFieldsNames.add("contentName");this.allFieldsNames.add("description");this.allFieldsNames.add("localeString");this.allFieldsNames.add("mimeTypeId");this.allFieldsNames.add("characterSetId");this.allFieldsNames.add("childLeafCount");this.allFieldsNames.add("childBranchCount");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("classificationEnumId");this.allFieldsNames.add("caContentId");this.allFieldsNames.add("caContentIdTo");this.allFieldsNames.add("caContentAssocTypeId");this.allFieldsNames.add("caFromDate");this.allFieldsNames.add("caThruDate");this.allFieldsNames.add("caContentAssocPredicateId");this.allFieldsNames.add("caDataSourceId");this.allFieldsNames.add("caSequenceNum");this.allFieldsNames.add("caMapKey");this.allFieldsNames.add("caUpperCoordinate");this.allFieldsNames.add("caLeftCoordinate");this.allFieldsNames.add("caCreatedDate");this.allFieldsNames.add("caCreatedByUserLogin");this.allFieldsNames.add("caLastModifiedDate");this.allFieldsNames.add("caLastModifiedByUserLogin");
+      this.allFieldsNames.add("contentIdStart");this.allFieldsNames.add("fromDate");this.allFieldsNames.add("thruDate");this.allFieldsNames.add("contentId");this.allFieldsNames.add("contentTypeId");this.allFieldsNames.add("ownerContentId");this.allFieldsNames.add("decoratorContentId");this.allFieldsNames.add("instanceOfContentId");this.allFieldsNames.add("dataResourceId");this.allFieldsNames.add("templateDataResourceId");this.allFieldsNames.add("dataSourceId");this.allFieldsNames.add("statusId");this.allFieldsNames.add("privilegeEnumId");this.allFieldsNames.add("serviceName");this.allFieldsNames.add("contentName");this.allFieldsNames.add("description");this.allFieldsNames.add("localeString");this.allFieldsNames.add("mimeTypeId");this.allFieldsNames.add("characterSetId");this.allFieldsNames.add("childLeafCount");this.allFieldsNames.add("childBranchCount");this.allFieldsNames.add("createdDate");this.allFieldsNames.add("createdByUserLogin");this.allFieldsNames.add("lastModifiedDate");this.allFieldsNames.add("lastModifiedByUserLogin");this.allFieldsNames.add("classificationEnumId");this.allFieldsNames.add("caContentId");this.allFieldsNames.add("caContentIdTo");this.allFieldsNames.add("caContentAssocTypeId");this.allFieldsNames.add("caFromDate");this.allFieldsNames.add("caThruDate");this.allFieldsNames.add("caContentAssocPredicateId");this.allFieldsNames.add("caDataSourceId");this.allFieldsNames.add("caSequenceNum");this.allFieldsNames.add("caMapKey");this.allFieldsNames.add("caUpperCoordinate");this.allFieldsNames.add("caLeftCoordinate");this.allFieldsNames.add("caCreatedDate");this.allFieldsNames.add("caCreatedByUserLogin");this.allFieldsNames.add("caLastModifiedDate");this.allFieldsNames.add("caLastModifiedByUserLogin");
       this.nonPrimaryKeyNames = new ArrayList<String>();
       this.nonPrimaryKeyNames.addAll(allFieldsNames);
       this.nonPrimaryKeyNames.removeAll(primaryKeyNames);
@@ -302,6 +312,20 @@ fieldMapColumns.put("ContentAssocViewFrom", fields);
      */
     private void setContentIdStart(String contentIdStart) {
         this.contentIdStart = contentIdStart;
+    }
+    /**
+     * Auto generated value setter.
+     * @param fromDate the fromDate to set
+     */
+    private void setFromDate(Timestamp fromDate) {
+        this.fromDate = fromDate;
+    }
+    /**
+     * Auto generated value setter.
+     * @param thruDate the thruDate to set
+     */
+    private void setThruDate(Timestamp thruDate) {
+        this.thruDate = thruDate;
     }
     /**
      * Auto generated value setter.
@@ -579,6 +603,20 @@ fieldMapColumns.put("ContentAssocViewFrom", fields);
     }
     /**
      * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getFromDate() {
+        return this.fromDate;
+    }
+    /**
+     * Auto generated value accessor.
+     * @return <code>Timestamp</code>
+     */
+    public Timestamp getThruDate() {
+        return this.thruDate;
+    }
+    /**
+     * Auto generated value accessor.
      * @return <code>String</code>
      */
     public String getContentId() {
@@ -852,6 +890,8 @@ fieldMapColumns.put("ContentAssocViewFrom", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setContentIdStart((String) mapValue.get("contentIdStart"));
+        setFromDate((Timestamp) mapValue.get("fromDate"));
+        setThruDate((Timestamp) mapValue.get("thruDate"));
         setContentId((String) mapValue.get("contentId"));
         setContentTypeId((String) mapValue.get("contentTypeId"));
         setOwnerContentId((String) mapValue.get("ownerContentId"));
@@ -898,6 +938,8 @@ fieldMapColumns.put("ContentAssocViewFrom", fields);
     public Map<String, Object> toMap() {
         Map<String, Object> mapValue = new FastMap<String, Object>();
         mapValue.put("contentIdStart", getContentIdStart());
+        mapValue.put("fromDate", getFromDate());
+        mapValue.put("thruDate", getThruDate());
         mapValue.put("contentId", getContentId());
         mapValue.put("contentTypeId", getContentTypeId());
         mapValue.put("ownerContentId", getOwnerContentId());
