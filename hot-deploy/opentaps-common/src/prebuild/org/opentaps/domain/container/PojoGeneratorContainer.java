@@ -333,7 +333,7 @@ public class PojoGeneratorContainer implements Container {
                         // this converts String to java.lang.String, Timestamp to java.sql.Timestamp, etc.
                         ModelFieldType fieldType = delegator.getEntityFieldType(modelEntity, modelField.getType());
                         if (fieldType == null) {
-                            throw new GenericEntityException("No helper defined for entity "  + entityName + ". Check if this entity has an entitygroup.xml definition");
+                            throw new GenericEntityException("No field type defined for field " + fieldName);
                         }
                         type = ObjectType.loadClass(fieldType.getJavaType()).getName();
                     } catch (Exception e) {
