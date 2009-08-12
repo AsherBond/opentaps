@@ -17,7 +17,23 @@ r12978 Added the POJOJavaEngine as a service engine. This is a needed part of op
 
 framework/base/config/pojoentities-containers.xml
 framework/start/src/org/ofbiz/base/start/pojoentities.properties
-- Added the POJO generator configuration
+r13007 Added the POJO generator configuration
+
+framework/base/config/hibernatecfg-containers.xml
+framework/base/config/ofbiz-containers.xml
+framework/base/config/test-containers.xml
+framework/start/src/org/ofbiz/base/start/hibernatecfg.properties
+r13030 Added hibernate configuration generator container
+
+framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
+- fix a bug in the validation which did not work if the rhs was an empty collection
+
+framework/entity/fieldtype/fieldtypederby.xml
+framework/entity/fieldtype/fieldtypemysql.xml
+framework/entity/fieldtype/fieldtypeoracle.xml
+framework/entity/fieldtype/fieldtypepostgres.xml
+framework/entity/fieldtype/fieldtypepostnew.xml
+r13031 add field types for pentaho integration
 
 Applications changes
 --------------------
