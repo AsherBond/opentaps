@@ -58,4 +58,10 @@ under the License.
     <field-type-def type="id-long-ne" sql-type="VARCHAR(60)" java-type="String"><validate method="isNotEmpty"/></field-type-def>
     <field-type-def type="id-vlong-ne" sql-type="VARCHAR(255)" java-type="String"><validate method="isNotEmpty"/></field-type-def>
     <field-type-def type="tel-number" sql-type="VARCHAR(60)" java-type="String"><validate method="isInternationalPhoneNumber"/></field-type-def>
+
+    <!-- Pentaho Data Integration (aka Kettle) SQL Types -->
+    <field-type-def type="surrogate-key" sql-type="INT8" java-type="Long"><validate method="isSignedLong" /></field-type-def>
+    <field-type-def type="version" sql-type="INT4" java-type="Long"><validate method="isSignedLong" /></field-type-def>
+    <field-type-def type="fact-amount" sql-type="NUMERIC(17,2)" java-type="Double"><validate method="isSignedDouble" /></field-type-def>
+
 </fieldtypemodel>
