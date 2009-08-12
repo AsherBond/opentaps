@@ -20,9 +20,9 @@ under the License.
 
 <project name="OFBiz Main Build" default="build" basedir=".">
     <property name="site.dir" value="../site"/>
-    <property name="memory.initial.param" value="-Xms128M"/>
-    <property name="memory.max.param" value="-Xmx512M"/>
-    <property name="permmemory.max.param" value="-XX:MaxPermSize=256m"/>
+    <property name="memory.initial.param" value="-Xms256M"/>
+    <property name="memory.max.param" value="-Xmx2048M"/>
+    <property name="permmemory.max.param" value="-XX:MaxPermSize=512m"/>
 
 
     <available file="applications/build.xml" property="applications.present"/>
@@ -452,6 +452,7 @@ under the License.
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${permmemory.max.param}"/>
             <arg value="test"/>
         </java>
     </target>
