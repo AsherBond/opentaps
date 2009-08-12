@@ -15,23 +15,25 @@
  */
 package org.opentaps.domain.order;
 
+import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
 import java.util.Set;
-import java.sql.Timestamp;
 
+import org.ofbiz.base.util.Debug;
+import org.opentaps.domain.base.entities.OrderShipmentInfoSummary;
+import org.opentaps.domain.party.Party;
 import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
-
-import org.opentaps.domain.base.entities.OrderShipmentInfoSummary;
-import org.opentaps.domain.party.Party;
 
 /**
  * Order Item Ship Group entity.
  */
 public class OrderItemShipGroup extends org.opentaps.domain.base.entities.OrderItemShipGroup {
+
+    private static final String MODULE = OrderItemShipGroup.class.getName();
 
     private Party supplier;
     private Timestamp estimatedShipDate;
@@ -66,24 +68,33 @@ public class OrderItemShipGroup extends org.opentaps.domain.base.entities.OrderI
     /**
      * Gets the estimated ship date base on the promisedDate of the related <code>OrderItemShipGrpInvRes</code>.
      * @return the estimated ship date
-     * @throws RepositoryException if an error occurs
      */
-    public Timestamp getEstimatedShipDate() throws RepositoryException {
+    public Timestamp getEstimatedShipDate() {
         if (estimatedShipDate == null) {
-            Timestamp result = null;
-            for (OrderItemShipGrpInvRes res : getInventoryReservations()) {
-                if (res.getPromisedDatetime() == null) {
-                    continue;
-                }
+            Timestamp result = super.getEstimatedShipDate();
 
-                if (result == null) {
-                    result = res.getPromisedDatetime();
-                } else if ("Y".equals(getMaySplit())) {
-                    if (res.getPromisedDatetime().before(result)) { result = res.getPromisedDatetime(); }
-                } else {
-                    if (res.getPromisedDatetime().after(result)) { result = res.getPromisedDatetime(); }
+            try {
+                for (OrderItemShipGrpInvRes res : getInventoryReservations()) {
+                    if (res.getPromisedDatetime() == null) {
+                        continue;
+                    }
+
+                    if (result == null) {
+                        result = res.getPromisedDatetime();
+                    } else if ("Y".equals(getMaySplit())) {
+                        if (res.getPromisedDatetime().before(result)) {
+                            result = res.getPromisedDatetime();
+                        }
+                    } else {
+                        if (res.getPromisedDatetime().after(result)) {
+                            result = res.getPromisedDatetime();
+                        }
+                    }
                 }
+            } catch (RepositoryException e) {
+                Debug.logError(e, MODULE);
             }
+
             estimatedShipDate = result;
         }
         return estimatedShipDate;
