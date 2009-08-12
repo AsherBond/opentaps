@@ -223,5 +223,10 @@ under the License.
         <!-- this is now run through the new testtools stuff <property name="service-test" value="org.ofbiz.service.test.ServiceEngineTests"/> -->
     </container>
 
+    <!-- load Hibernate SessionFactory at OFbiz Startup -->
+    <container name="hibernate-container" class="org.opentaps.common.container.HibernateContainer">
+        <property name="delegator-name" value="test"/>
+    </container>
+
     <container name="testtools-container" class="org.ofbiz.testtools.TestRunContainer"/>
 </ofbiz-containers>

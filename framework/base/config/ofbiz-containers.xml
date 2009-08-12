@@ -262,4 +262,9 @@ under the License.
         <property name="telnet-port" value="9990"/>
         <property name="app-name" value="OFBiz"/>
     </container>
+
+    <!-- load Hibernate SessionFactory at OFbiz Startup -->
+    <container name="hibernate-container" class="org.opentaps.common.container.HibernateContainer">
+        <property name="delegator-name" value="default"/>
+    </container>
 </ofbiz-containers>
