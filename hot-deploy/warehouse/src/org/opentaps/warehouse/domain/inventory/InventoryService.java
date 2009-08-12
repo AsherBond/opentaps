@@ -237,7 +237,7 @@ public class InventoryService extends Service implements InventoryServiceInterfa
                 input.remove("oldAvailableToPromiseTotal");
                 input.remove("oldQuantityOnHandTotal");
                 // convert BigDecimal to back their expected values
-                input.put("unitCost", sourceInventoryItem.getUnitCost().doubleValue());
+                input.put("unitCost", sourceInventoryItem.getUnitCost());
                 Map<String, Object> tmpResult = runSync("createInventoryItem", input);
                 String newInventoryItemId = (String) tmpResult.get("inventoryItemId");
 
