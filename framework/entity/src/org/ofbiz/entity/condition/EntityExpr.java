@@ -232,6 +232,9 @@ public class EntityExpr extends EntityCondition {
             Collection valueCol = (Collection) value;
             if (valueCol.size() > 0) {
                 value = valueCol.iterator().next();
+            } else {
+                // nothing to check
+                return;
             }
         }
 
