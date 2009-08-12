@@ -1775,9 +1775,6 @@ under the License.
         <relation type="one-nofk" title="Current" rel-entity-name="StatusItem">
             <key-map field-name="currentStatusId" rel-field-name="statusId"/>
         </relation>
-        <relation type="one-nofk" rel-entity-name="WorkEffortType">
-            <key-map field-name="workEffortTypeId"/>
-        </relation>
         <relation type="one-nofk" rel-entity-name="WorkEffortPurposeType">
             <key-map field-name="workEffortPurposeTypeId"/>
         </relation>
