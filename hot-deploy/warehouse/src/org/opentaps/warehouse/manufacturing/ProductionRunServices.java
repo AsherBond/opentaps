@@ -1987,8 +1987,8 @@ public final class ProductionRunServices {
                         serviceContext.clear();
                         serviceContext.put("inventoryItemId", inventoryItemId);
                         serviceContext.put("workEffortId", productionRunId);
-                        serviceContext.put("availableToPromiseDiff", new Double(1));
-                        serviceContext.put("quantityOnHandDiff", new Double(1));
+                        serviceContext.put("availableToPromiseDiff", BigDecimal.ONE);
+                        serviceContext.put("quantityOnHandDiff", BigDecimal.ONE);
                         serviceContext.put("userLogin", userLogin);
                         resultService = dispatcher.runSync("createInventoryItemDetail", serviceContext);
                         // Recompute reservations
@@ -2020,8 +2020,8 @@ public final class ProductionRunServices {
                     serviceContext.clear();
                     serviceContext.put("inventoryItemId", inventoryItemId);
                     serviceContext.put("workEffortId", productionRunId);
-                    serviceContext.put("availableToPromiseDiff", quantity.doubleValue());
-                    serviceContext.put("quantityOnHandDiff", quantity.doubleValue());
+                    serviceContext.put("availableToPromiseDiff", quantity);
+                    serviceContext.put("quantityOnHandDiff", quantity);
                     serviceContext.put("userLogin", userLogin);
                     resultService = dispatcher.runSync("createInventoryItemDetail", serviceContext);
                     // Recompute reservations

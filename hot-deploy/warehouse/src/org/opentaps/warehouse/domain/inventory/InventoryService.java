@@ -130,8 +130,8 @@ public class InventoryService extends Service implements InventoryServiceInterfa
 
                 Map<String, Object> createDetailMap =
                     UtilMisc.<String, Object>toMap(
-                            "availableToPromiseDiff", atp.negate().doubleValue(),
-                            "quantityOnHandDiff", qoh.negate().doubleValue(),
+                            "availableToPromiseDiff", atp.negate(),
+                            "quantityOnHandDiff", qoh.negate(),
                             "inventoryItemId", destinationInventoryItem.getInventoryItemId(),
                             "userLogin", getUser().getOfbizUserLogin()
                     );
@@ -143,8 +143,8 @@ public class InventoryService extends Service implements InventoryServiceInterfa
 
                 createDetailMap =
                     UtilMisc.<String, Object>toMap(
-                            "availableToPromiseDiff", qoh.doubleValue(),
-                            "quantityOnHandDiff", qoh.doubleValue(),
+                            "availableToPromiseDiff", qoh,
+                            "quantityOnHandDiff", qoh,
                             "inventoryItemId", originInventoryItem.getInventoryItemId(),
                             "userLogin", getUser().getOfbizUserLogin()
                     );
@@ -243,15 +243,15 @@ public class InventoryService extends Service implements InventoryServiceInterfa
 
                 // create the InventoryItemDetail for the transfer destination
                 input = createInputMap();
-                input.put("availableToPromiseDiff", xferQty.doubleValue());
-                input.put("quantityOnHandDiff", xferQty.doubleValue());
+                input.put("availableToPromiseDiff", xferQty);
+                input.put("quantityOnHandDiff", xferQty);
                 input.put("inventoryItemId", newInventoryItemId);
                 runSync("createInventoryItemDetail", input);
 
                 // create the InventoryItemDetail for the transfer source
                 input = createInputMap();
-                input.put("availableToPromiseDiff", xferQty.negate().doubleValue());
-                input.put("quantityOnHandDiff", xferQty.negate().doubleValue());
+                input.put("availableToPromiseDiff", xferQty.negate());
+                input.put("quantityOnHandDiff", xferQty.negate());
                 input.put("inventoryItemId", inventoryItemId);
                 runSync("createInventoryItemDetail", input);
 
@@ -262,7 +262,7 @@ public class InventoryService extends Service implements InventoryServiceInterfa
                 atp = destinationInventoryItem.getAvailableToPromiseTotal();
                 if (atp.signum() != 0) {
                     input = createInputMap();
-                    input.put("availableToPromiseDiff", atp.negate().doubleValue());
+                    input.put("availableToPromiseDiff", atp.negate());
                     input.put("inventoryItemId", destinationInventoryItem.getInventoryItemId());
                     runSync("createInventoryItemDetail", input);
                 }

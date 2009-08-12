@@ -397,7 +397,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                         createDetailMap.put("inventoryItemId", inventoryItem.getInventoryItemId());
                         createDetailMap.put("orderId", orderId);
                         createDetailMap.put("orderItemSeqId", orderItemSeqId);
-                        createDetailMap.put("availableToPromiseDiff", deductAmount.negate().doubleValue());
+                        createDetailMap.put("availableToPromiseDiff", deductAmount.negate());
                         getInfrastructure().getDispatcher().runSync("createInventoryItemDetail", createDetailMap);
 
                         // create OrderItemShipGrpInvRes record
@@ -577,7 +577,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                         context.put("orderId", orderId);
                         context.put("orderItemSeqId", orderItemSeqId);
                         context.put("shipGroupSeqId", shipGroupSeqId);
-                        context.put("availableToPromiseDiff", toReserve.negate().doubleValue());
+                        context.put("availableToPromiseDiff", toReserve.negate());
                         runSync("createInventoryItemDetail", context);
 
                         // calculate the promiseDatetime
@@ -627,7 +627,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                     context.put("orderId", orderId);
                     context.put("orderItemSeqId", orderItemSeqId);
                     context.put("shipGroupSeqId", shipGroupSeqId);
-                    context.put("availableToPromiseDiff", quantityNotReserved.negate().doubleValue());
+                    context.put("availableToPromiseDiff", quantityNotReserved.negate());
                     runSync("createInventoryItemDetail", context);
 
                     // calculate the promiseDatetime
