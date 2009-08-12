@@ -21,12 +21,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.CRC32;
+import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.UserTransaction;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -975,7 +977,7 @@ public class HibernateTests extends OpentapsTestCase {
         // create a TestEntity and set field values
         TestEntity testEntity = new TestEntity();
         testEntity.setTestStringField("testBlobFields-step1");
-        testEntity.setTestBlobField(data1);
+        testEntity.setTestBlobField(new SerialBlob(data1));
         session.save(testEntity);
         session.flush();
         tx.commit();
@@ -984,7 +986,7 @@ public class HibernateTests extends OpentapsTestCase {
         // reload testEntity from Database
         testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
         // verify hibernate can retrieve blob field from entity
-        String currentCRCCode = getCRCCode(testEntity.getTestBlobField());
+        String currentCRCCode = getCRCCode(testEntity.getTestBlobField().getBytes(1L, (int) testEntity.getTestBlobField().length()));
         assertEquals("hibernate should retrieve same blob field value from entity, crc32 code : " + fileCRCCode1, fileCRCCode1, currentCRCCode);
 
         //update string field
@@ -998,13 +1000,13 @@ public class HibernateTests extends OpentapsTestCase {
         // reload testEntity from Database
         testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
         // verify hibernate can retrieve blob field from entity
-        currentCRCCode = getCRCCode(testEntity.getTestBlobField());
+        currentCRCCode = getCRCCode(testEntity.getTestBlobField().getBytes(1L, (int) testEntity.getTestBlobField().length()));
         assertEquals("testBlobField should not change.", fileCRCCode1, currentCRCCode);
 
         //update blob field
         tx.begin();
         testEntity.setTestStringField("testBlobFields-step3");
-        testEntity.setTestBlobField(data2);
+        testEntity.setTestBlobField(new SerialBlob(data2));
         session.save(testEntity);
         session.flush();
         tx.commit();
@@ -1013,7 +1015,7 @@ public class HibernateTests extends OpentapsTestCase {
         // reload testEntity from Database
         testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
         // verify hibernate can retrieve blob field from entity
-        currentCRCCode = getCRCCode(testEntity.getTestBlobField());
+        currentCRCCode = getCRCCode(testEntity.getTestBlobField().getBytes(1L, (int) testEntity.getTestBlobField().length()));
         assertEquals("testBlobField should change to " + fileCRCCode2 + ".", fileCRCCode2, currentCRCCode);
 
     }
@@ -1052,7 +1054,7 @@ public class HibernateTests extends OpentapsTestCase {
 
         // create a TestEntity and set field values
         TestEntity testEntity = new TestEntity();
-        testEntity.setTestBlobField(data);
+        testEntity.setTestBlobField(new SerialBlob(data));
         testEntity.setTestCreditCardDateField(testCreditCardDateField);
         testEntity.setTestCreditCardNumberField(testCreditCardNumberField);
         testEntity.setTestDateTimeField(testDateTimeField);
@@ -1069,7 +1071,7 @@ public class HibernateTests extends OpentapsTestCase {
         // reload testEntity from Database
         testEntity = (TestEntity) session.load(TestEntity.class, testEntity.getTestId());
         // verify hibernate can retrieve blob field from entity
-        String newCRCCode = getCRCCode(testEntity.getTestBlobField());
+        String newCRCCode = getCRCCode(testEntity.getTestBlobField().getBytes(1L, (int) testEntity.getTestBlobField().length()));
         Debug.logInfo("old crc32 is :" + oldCRCCode + ", new crc 32 is : " + newCRCCode, MODULE);
         assertEquals("hibernate should retrieve same blob field value from entity, crc32 code : " + oldCRCCode, oldCRCCode, newCRCCode);
         // verify hibernate can retrieve credit card date field from entity
