@@ -74,7 +74,7 @@ public final class UtilWarehouse {
                                EntityCondition.makeCondition("facilityIdTo", EntityOperator.EQUALS, facilityId),
                                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "IXF_REQUESTED"));
             }
-            return delegator.findByAnd("InventoryTransfer", exprsTo, UtilMisc.toList("sendDate"));
+            return delegator.findList("InventoryTransfer", exprsTo, null, UtilMisc.toList("sendDate"), null, false);
         } else {
             // get the 'from' this facility transfers
             EntityCondition exprsFrom = null;
@@ -92,7 +92,7 @@ public final class UtilWarehouse {
                                EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
                                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "IXF_REQUESTED"));
             }
-            return delegator.findByAnd("InventoryTransfer", exprsFrom, UtilMisc.toList("sendDate"));
+            return delegator.findList("InventoryTransfer", exprsFrom, null, UtilMisc.toList("sendDate"), null, false);
         }
 
     }

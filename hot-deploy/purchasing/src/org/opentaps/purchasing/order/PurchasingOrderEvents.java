@@ -556,7 +556,7 @@ public final class PurchasingOrderEvents {
 
         // loop through the requirements
         try {
-            List<GenericValue> requirementValues = delegator.findByAnd("Requirement", EntityCondition.makeCondition("requirementId", EntityOperator.IN, requirements), UtilMisc.toList("productId", "requiredByDate"));
+            List<GenericValue> requirementValues = delegator.findList("Requirement", EntityCondition.makeCondition("requirementId", EntityOperator.IN, requirements), null, UtilMisc.toList("productId", "requiredByDate"), null, false);
             for (GenericValue requirement : requirementValues) {
                 String productId = requirement.getString("productId");
                 String requirementId = requirement.getString("requirementId");

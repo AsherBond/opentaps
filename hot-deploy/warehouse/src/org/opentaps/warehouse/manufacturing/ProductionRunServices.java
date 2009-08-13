@@ -1593,11 +1593,11 @@ public final class ProductionRunServices {
             // find the associated tasks, ordered by sequence
             List<GenericValue> tasks = null;
             if (routing != null) {
-                EntityCondition conditions = EntityCondition.makeCondition(
+                EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                                   EntityCondition.makeCondition("workEffortIdFrom", EntityOperator.EQUALS, routing.get("workEffortId")),
                                   EntityCondition.makeCondition("workEffortAssocTypeId", EntityOperator.EQUALS, "ROUTING_COMPONENT"),
                                   EntityDateFilterCondition.makeCondition(applicableDate, "fromDate", "thruDate"));
-                tasks = delegator.findByAnd("WorkEffortAssoc", conditions, Arrays.asList("sequenceNum"));
+                tasks = delegator.findList("WorkEffortAssoc", conditions, null, Arrays.asList("sequenceNum"), null, false);
             }
 
             Debug.logInfo("getProductRouting: returning routing [" + routing + "]", MODULE);

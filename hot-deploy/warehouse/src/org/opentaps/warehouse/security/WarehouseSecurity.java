@@ -164,7 +164,7 @@ public class WarehouseSecurity extends OpentapsSecurity {
                 EntityCondition conditions = EntityCondition.makeCondition(
                     EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, userLogin.get("partyId")),
                     EntityUtil.getFilterByDateExpr());
-                facilities.addAll(delegator.findByAnd("FacilityPartyPermissionDetail", conditions, UtilMisc.toList("facilityName")));
+                facilities.addAll(delegator.findList("FacilityPartyPermissionDetail", conditions, null, UtilMisc.toList("facilityName"), null, false));
             }
         } catch (GenericEntityException e) {
             Debug.logError(e.getMessage(), MODULE);
