@@ -15,8 +15,22 @@
  */
 package com.opensourcestrategies.crmsfa.party;
 
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
-import org.ofbiz.base.util.*;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -36,11 +50,10 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
 
-import java.util.*;
-import java.sql.Timestamp;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 
 /**
  * Services common to CRM parties such as accounts/contacts/leads. The service documentation is in services_party.xml.
@@ -652,36 +665,53 @@ public final class PartyServices {
                 return ServiceUtil.returnSuccess();
             }
 
-            // Check to see if the party has the BILL_TO_CUSTOMER role
-            GenericValue billToRole = delegator.findByPrimaryKey("PartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", "BILL_TO_CUSTOMER"));
-
-
             // Check to see if the party already has a CRM client role
             String crmRoleTypeId = PartyHelper.getFirstValidRoleTypeId(partyId, PartyHelper.CLIENT_PARTY_ROLES, delegator);
 
-            // If the party already has a role, there's nothing to do
-            if (UtilValidate.isNotEmpty(crmRoleTypeId)) {
-                UtilMessage.logServiceInfo("crmsfa.autoAssignParty_CrmRoleExists", UtilMisc.toMap("partyId", partyId, "crmRoleTypeId", crmRoleTypeId), locale, MODULE);
-                return ServiceUtil.returnSuccess();
+            // Create the CRM role unless it has it already
+            if (UtilValidate.isEmpty(crmRoleTypeId)) {
+                crmRoleTypeId = "PERSON".equals(party.getString("partyTypeId")) ? "CONTACT" : "ACCOUNT";
+                Map createPartyRoleResult = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", crmRoleTypeId, "userLogin", userLogin));
+                if (ServiceUtil.isError(createPartyRoleResult)) {
+                    return createPartyRoleResult;
+                }
             }
 
-            // Create the CRM role
-            crmRoleTypeId = "PERSON".equals(party.getString("partyTypeId")) ? "CONTACT" : "ACCOUNT";
-            Map createPartyRoleResult = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", crmRoleTypeId, "userLogin", userLogin));
-            if (ServiceUtil.isError(createPartyRoleResult)) {
-                return createPartyRoleResult;
+            // Since ofbiz 09.04: now they use party roles CONTACT or ACCOUNT and it's possible
+            // a party already has right crmsfa relationships. We must establish relationship to autoresponsible
+            // party only if the party has no ASSIGNET_TO (for person) or RESPONSIBLE_FOR (for account)
+            // relationship already.
+            List<EntityCondition> relationshipConditions = null;
+            if ("PERSON".equals(party.getString("partyTypeId"))) {
+                relationshipConditions = UtilMisc.toList(
+                        EntityCondition.makeCondition("partyIdFrom", partyId),
+                        EntityCondition.makeCondition("roleTypeIdFrom", "CONTACT"),
+                        EntityCondition.makeCondition("partyRelationshipTypeId", "ASSIGNED_TO"),
+                        EntityUtil.getFilterByDateExpr()
+                );
+            } else {
+                relationshipConditions = UtilMisc.toList(
+                        EntityCondition.makeCondition("partyIdFrom", partyId),
+                        EntityCondition.makeCondition("roleTypeIdFrom", "ACCOUNT"),
+                        EntityCondition.makeCondition("partyRelationshipTypeId", "RESPONSIBLE_FOR"),
+                        EntityUtil.getFilterByDateExpr()
+                );
             }
+
+            List<GenericValue> relationships = delegator.findByAnd("PartyRelationship", relationshipConditions);
 
             // Assign responsibility for the party to the AutoResponsibleParty from the seed data
-            Map reassignServiceContext = UtilMisc.toMap("newPartyId", autoResponsiblePartyId, "userLogin", userLogin);
+            if (UtilValidate.isEmpty(relationships)) {
+                Map reassignServiceContext = UtilMisc.toMap("newPartyId", autoResponsiblePartyId, "userLogin", userLogin);
 
-            String subjectPartyIdKey = "PERSON".equals(party.getString("partyTypeId")) ? "contactPartyId" : "accountPartyId";
-            reassignServiceContext.put(subjectPartyIdKey, partyId);
+                String subjectPartyIdKey = "PERSON".equals(party.getString("partyTypeId")) ? "contactPartyId" : "accountPartyId";
+                reassignServiceContext.put(subjectPartyIdKey, partyId);
 
-            String serviceName = "PERSON".equals(party.getString("partyTypeId")) ? "crmsfa.reassignContactResponsibleParty" : "crmsfa.reassignAccountResponsibleParty";
-            Map reassignServiceResult = dispatcher.runSync(serviceName, reassignServiceContext);
-            if (ServiceUtil.isError(reassignServiceResult)) {
-                return reassignServiceResult;
+                String serviceName = "PERSON".equals(party.getString("partyTypeId")) ? "crmsfa.reassignContactResponsibleParty" : "crmsfa.reassignAccountResponsibleParty";
+                Map reassignServiceResult = dispatcher.runSync(serviceName, reassignServiceContext);
+                if (ServiceUtil.isError(reassignServiceResult)) {
+                    return reassignServiceResult;
+                }
             }
 
         } catch (GenericServiceException e) {
@@ -691,7 +721,6 @@ public final class PartyServices {
         }
 
         return ServiceUtil.returnSuccess();
-
     }
 
     @SuppressWarnings("unchecked")

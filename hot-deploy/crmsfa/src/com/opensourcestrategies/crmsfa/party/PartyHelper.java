@@ -44,10 +44,22 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
 
-import freemarker.template.TemplateException;
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericEntityNotFoundException;
@@ -69,6 +81,8 @@ import org.opentaps.common.party.PartyContactHelper;
 import org.opentaps.common.template.freemarker.FreemarkerUtil;
 import org.opentaps.common.util.UtilCommon;
 
+import freemarker.template.TemplateException;
+
 /**
  * Party Helper methods which are designed to provide a consistent set of APIs that can be reused by 
  * higher level services.
@@ -85,9 +99,9 @@ public class PartyHelper {
 
     public static final String module = PartyHelper.class.getName();
 
-    public static List TEAM_MEMBER_ROLES = UtilMisc.toList("ACCOUNT_MANAGER", "ACCOUNT_REP", "CUST_SERVICE_REP");
-    public static List CLIENT_PARTY_ROLES = UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER");
-    public static List FIND_PARTY_FIELDS = Arrays.asList(new String[]{"firstName", "lastName", "groupName", "partyId", "companyName", "primaryEmailId", "primaryPostalAddressId", "primaryTelecomNumberId", "primaryCity", "primaryStateProvinceGeoId", "primaryCountryGeoId", "primaryEmail", "primaryCountryCode", "primaryAreaCode", "primaryContactNumber"});
+    public static List<String> TEAM_MEMBER_ROLES = UtilMisc.toList("ACCOUNT_MANAGER", "ACCOUNT_REP", "CUST_SERVICE_REP");
+    public static List<String> CLIENT_PARTY_ROLES = UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER");
+    public static List<String> FIND_PARTY_FIELDS = Arrays.asList(new String[]{"firstName", "lastName", "groupName", "partyId", "companyName", "primaryEmailId", "primaryPostalAddressId", "primaryTelecomNumberId", "primaryCity", "primaryStateProvinceGeoId", "primaryCountryGeoId", "primaryEmail", "primaryCountryCode", "primaryAreaCode", "primaryContactNumber"});
 
     /**
      * A helper method which finds the first valid roleTypeId for a partyId, using a List of possible roleTypeIds
