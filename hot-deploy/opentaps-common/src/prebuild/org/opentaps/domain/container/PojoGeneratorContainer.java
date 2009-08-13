@@ -355,7 +355,7 @@ public class PojoGeneratorContainer implements Container {
                     }
 
                     // make all Object field to byte[]
-                    if ("java.lang.Object".equals(type)) {
+                    if ("java.lang.Object".equals(type) || "java.sql.Blob".equals(type)) {
                         type = "byte[]";
                     } else {
                         types.add(type);

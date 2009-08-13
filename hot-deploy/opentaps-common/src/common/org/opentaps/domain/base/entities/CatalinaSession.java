@@ -43,7 +43,6 @@ import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.Long;
 import java.lang.String;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -95,7 +94,7 @@ fieldMapColumns.put("CatalinaSession", fields);
    @Column(name="SESSION_SIZE")
    private Long sessionSize;
    @Column(name="SESSION_INFO")
-   private Blob sessionInfo;
+   private byte[] sessionInfo;
    @Column(name="IS_VALID")
    private String isValid;
    @Column(name="MAX_IDLE")
@@ -155,7 +154,7 @@ fieldMapColumns.put("CatalinaSession", fields);
      * Auto generated value setter.
      * @param sessionInfo the sessionInfo to set
      */
-    public void setSessionInfo(Blob sessionInfo) {
+    public void setSessionInfo(byte[] sessionInfo) {
         this.sessionInfo = sessionInfo;
     }
     /**
@@ -224,9 +223,9 @@ fieldMapColumns.put("CatalinaSession", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getSessionInfo() {
+    public byte[] getSessionInfo() {
         return this.sessionInfo;
     }
     /**
@@ -288,7 +287,7 @@ fieldMapColumns.put("CatalinaSession", fields);
         preInit();
         setSessionId((String) mapValue.get("sessionId"));
         setSessionSize((Long) mapValue.get("sessionSize"));
-        setSessionInfo((Blob) mapValue.get("sessionInfo"));
+        setSessionInfo((byte[]) mapValue.get("sessionInfo"));
         setIsValid((String) mapValue.get("isValid"));
         setMaxIdle((Long) mapValue.get("maxIdle"));
         setLastAccessed((Long) mapValue.get("lastAccessed"));

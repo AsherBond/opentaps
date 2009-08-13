@@ -44,7 +44,6 @@ import org.hibernate.search.annotations.*;
 import java.lang.Long;
 import java.lang.String;
 import java.math.BigDecimal;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -114,7 +113,7 @@ fieldMapColumns.put("TestEntity", fields);
    @Column(name="TEST_DATE_TIME_FIELD")
    private Timestamp testDateTimeField;
    @Column(name="TEST_BLOB_FIELD")
-   private Blob testBlobField;
+   private byte[] testBlobField;
    @Column(name="TEST_NUMERIC_FIELD")
    private Long testNumericField;
    @Column(name="TEST_FLOATING_POINT_FIELD")
@@ -206,7 +205,7 @@ fieldMapColumns.put("TestEntity", fields);
      * Auto generated value setter.
      * @param testBlobField the testBlobField to set
      */
-    public void setTestBlobField(Blob testBlobField) {
+    public void setTestBlobField(byte[] testBlobField) {
         this.testBlobField = testBlobField;
     }
     /**
@@ -331,9 +330,9 @@ fieldMapColumns.put("TestEntity", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getTestBlobField() {
+    public byte[] getTestBlobField() {
         return this.testBlobField;
     }
     /**
@@ -508,7 +507,7 @@ fieldMapColumns.put("TestEntity", fields);
         setTestId((String) mapValue.get("testId"));
         setTestStringField((String) mapValue.get("testStringField"));
         setTestDateTimeField((Timestamp) mapValue.get("testDateTimeField"));
-        setTestBlobField((Blob) mapValue.get("testBlobField"));
+        setTestBlobField((byte[]) mapValue.get("testBlobField"));
         setTestNumericField((Long) mapValue.get("testNumericField"));
         setTestFloatingPointField(convertToBigDecimal(mapValue.get("testFloatingPointField")));
         setTestCurrencyPreciseField(convertToBigDecimal(mapValue.get("testCurrencyPreciseField")));

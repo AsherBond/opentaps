@@ -42,7 +42,6 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -84,7 +83,7 @@ fieldMapColumns.put("AudioDataResource", fields);
    @Column(name="DATA_RESOURCE_ID")
    private String dataResourceId;
    @Column(name="AUDIO_DATA")
-   private Blob audioData;
+   private byte[] audioData;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -138,7 +137,7 @@ fieldMapColumns.put("AudioDataResource", fields);
      * Auto generated value setter.
      * @param audioData the audioData to set
      */
-    public void setAudioData(Blob audioData) {
+    public void setAudioData(byte[] audioData) {
         this.audioData = audioData;
     }
     /**
@@ -179,9 +178,9 @@ fieldMapColumns.put("AudioDataResource", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getAudioData() {
+    public byte[] getAudioData() {
         return this.audioData;
     }
     /**
@@ -239,7 +238,7 @@ fieldMapColumns.put("AudioDataResource", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setDataResourceId((String) mapValue.get("dataResourceId"));
-        setAudioData((Blob) mapValue.get("audioData"));
+        setAudioData((byte[]) mapValue.get("audioData"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));

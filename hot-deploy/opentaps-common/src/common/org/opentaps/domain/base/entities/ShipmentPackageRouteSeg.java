@@ -43,7 +43,6 @@ import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
 import java.math.BigDecimal;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -129,9 +128,9 @@ fieldMapColumns.put("ShipmentPackageRouteSeg", fields);
    @Column(name="BOX_NUMBER")
    private String boxNumber;
    @Column(name="LABEL_IMAGE")
-   private Blob labelImage;
+   private byte[] labelImage;
    @Column(name="LABEL_INTL_SIGN_IMAGE")
-   private Blob labelIntlSignImage;
+   private byte[] labelIntlSignImage;
    @Column(name="LABEL_HTML")
    private String labelHtml;
    @Column(name="LABEL_PRINTED")
@@ -238,14 +237,14 @@ fieldMapColumns.put("ShipmentPackageRouteSeg", fields);
      * Auto generated value setter.
      * @param labelImage the labelImage to set
      */
-    public void setLabelImage(Blob labelImage) {
+    public void setLabelImage(byte[] labelImage) {
         this.labelImage = labelImage;
     }
     /**
      * Auto generated value setter.
      * @param labelIntlSignImage the labelIntlSignImage to set
      */
-    public void setLabelIntlSignImage(Blob labelIntlSignImage) {
+    public void setLabelIntlSignImage(byte[] labelIntlSignImage) {
         this.labelIntlSignImage = labelIntlSignImage;
     }
     /**
@@ -370,16 +369,16 @@ fieldMapColumns.put("ShipmentPackageRouteSeg", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getLabelImage() {
+    public byte[] getLabelImage() {
         return this.labelImage;
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getLabelIntlSignImage() {
+    public byte[] getLabelIntlSignImage() {
         return this.labelIntlSignImage;
     }
     /**
@@ -551,8 +550,8 @@ fieldMapColumns.put("ShipmentPackageRouteSeg", fields);
         setShipmentRouteSegmentId((String) mapValue.get("shipmentRouteSegmentId"));
         setTrackingCode((String) mapValue.get("trackingCode"));
         setBoxNumber((String) mapValue.get("boxNumber"));
-        setLabelImage((Blob) mapValue.get("labelImage"));
-        setLabelIntlSignImage((Blob) mapValue.get("labelIntlSignImage"));
+        setLabelImage((byte[]) mapValue.get("labelImage"));
+        setLabelIntlSignImage((byte[]) mapValue.get("labelIntlSignImage"));
         setLabelHtml((String) mapValue.get("labelHtml"));
         setLabelPrinted((String) mapValue.get("labelPrinted"));
         setPackageTransportCost(convertToBigDecimal(mapValue.get("packageTransportCost")));

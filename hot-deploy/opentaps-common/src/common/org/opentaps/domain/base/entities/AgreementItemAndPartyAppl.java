@@ -42,7 +42,6 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -145,7 +144,7 @@ fieldMapColumns.put("AgreementItemAndPartyAppl", fields);
     
    private String agreementText;
     
-   private Blob agreementImage;
+   private byte[] agreementImage;
     
    private String partyId;
     
@@ -245,7 +244,7 @@ fieldMapColumns.put("AgreementItemAndPartyAppl", fields);
      * Auto generated value setter.
      * @param agreementImage the agreementImage to set
      */
-    private void setAgreementImage(Blob agreementImage) {
+    private void setAgreementImage(byte[] agreementImage) {
         this.agreementImage = agreementImage;
     }
     /**
@@ -391,9 +390,9 @@ fieldMapColumns.put("AgreementItemAndPartyAppl", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getAgreementImage() {
+    public byte[] getAgreementImage() {
         return this.agreementImage;
     }
     /**
@@ -514,7 +513,7 @@ fieldMapColumns.put("AgreementItemAndPartyAppl", fields);
         setAgreementItemTypeId((String) mapValue.get("agreementItemTypeId"));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setAgreementText((String) mapValue.get("agreementText"));
-        setAgreementImage((Blob) mapValue.get("agreementImage"));
+        setAgreementImage((byte[]) mapValue.get("agreementImage"));
         setPartyId((String) mapValue.get("partyId"));
         setPartyIdFrom((String) mapValue.get("partyIdFrom"));
         setPartyIdTo((String) mapValue.get("partyIdTo"));

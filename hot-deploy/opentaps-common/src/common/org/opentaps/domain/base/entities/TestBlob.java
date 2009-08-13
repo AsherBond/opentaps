@@ -42,7 +42,6 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -84,7 +83,7 @@ fieldMapColumns.put("TestBlob", fields);
    @Column(name="TEST_BLOB_ID")
    private String testBlobId;
    @Column(name="TEST_BLOB_FIELD")
-   private Blob testBlobField;
+   private byte[] testBlobField;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -131,7 +130,7 @@ fieldMapColumns.put("TestBlob", fields);
      * Auto generated value setter.
      * @param testBlobField the testBlobField to set
      */
-    public void setTestBlobField(Blob testBlobField) {
+    public void setTestBlobField(byte[] testBlobField) {
         this.testBlobField = testBlobField;
     }
     /**
@@ -172,9 +171,9 @@ fieldMapColumns.put("TestBlob", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getTestBlobField() {
+    public byte[] getTestBlobField() {
         return this.testBlobField;
     }
     /**
@@ -214,7 +213,7 @@ fieldMapColumns.put("TestBlob", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setTestBlobId((String) mapValue.get("testBlobId"));
-        setTestBlobField((Blob) mapValue.get("testBlobField"));
+        setTestBlobField((byte[]) mapValue.get("testBlobField"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));

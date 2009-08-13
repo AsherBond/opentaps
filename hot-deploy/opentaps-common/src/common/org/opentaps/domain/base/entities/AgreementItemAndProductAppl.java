@@ -43,7 +43,6 @@ import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
 import java.math.BigDecimal;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -149,7 +148,7 @@ fieldMapColumns.put("AgreementItemAndProductAppl", fields);
     
    private String agreementText;
     
-   private Blob agreementImage;
+   private byte[] agreementImage;
     
    private String productId;
     
@@ -258,7 +257,7 @@ fieldMapColumns.put("AgreementItemAndProductAppl", fields);
      * Auto generated value setter.
      * @param agreementImage the agreementImage to set
      */
-    private void setAgreementImage(Blob agreementImage) {
+    private void setAgreementImage(byte[] agreementImage) {
         this.agreementImage = agreementImage;
     }
     /**
@@ -411,9 +410,9 @@ fieldMapColumns.put("AgreementItemAndProductAppl", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getAgreementImage() {
+    public byte[] getAgreementImage() {
         return this.agreementImage;
     }
     /**
@@ -559,7 +558,7 @@ fieldMapColumns.put("AgreementItemAndProductAppl", fields);
         setAgreementItemTypeId((String) mapValue.get("agreementItemTypeId"));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setAgreementText((String) mapValue.get("agreementText"));
-        setAgreementImage((Blob) mapValue.get("agreementImage"));
+        setAgreementImage((byte[]) mapValue.get("agreementImage"));
         setProductId((String) mapValue.get("productId"));
         setPrice(convertToBigDecimal(mapValue.get("price")));
         setPartyIdFrom((String) mapValue.get("partyIdFrom"));

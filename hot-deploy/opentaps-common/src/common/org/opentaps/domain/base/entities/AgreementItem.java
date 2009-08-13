@@ -42,7 +42,6 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -112,7 +111,7 @@ fieldMapColumns.put("AgreementItem", fields);
    @Column(name="AGREEMENT_TEXT")
    private String agreementText;
    @Column(name="AGREEMENT_IMAGE")
-   private Blob agreementImage;
+   private byte[] agreementImage;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -213,7 +212,7 @@ fieldMapColumns.put("AgreementItem", fields);
      * Auto generated value setter.
      * @param agreementImage the agreementImage to set
      */
-    public void setAgreementImage(Blob agreementImage) {
+    public void setAgreementImage(byte[] agreementImage) {
         this.agreementImage = agreementImage;
     }
     /**
@@ -282,9 +281,9 @@ fieldMapColumns.put("AgreementItem", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getAgreementImage() {
+    public byte[] getAgreementImage() {
         return this.agreementImage;
     }
     /**
@@ -580,7 +579,7 @@ fieldMapColumns.put("AgreementItem", fields);
         setAgreementItemTypeId((String) mapValue.get("agreementItemTypeId"));
         setCurrencyUomId((String) mapValue.get("currencyUomId"));
         setAgreementText((String) mapValue.get("agreementText"));
-        setAgreementImage((Blob) mapValue.get("agreementImage"));
+        setAgreementImage((byte[]) mapValue.get("agreementImage"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));

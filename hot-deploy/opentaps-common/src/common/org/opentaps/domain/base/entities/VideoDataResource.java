@@ -42,7 +42,6 @@ import org.opentaps.foundation.repository.RepositoryInterface;
 import javax.persistence.*;
 import org.hibernate.search.annotations.*;
 import java.lang.String;
-import java.sql.Blob;
 import java.sql.Timestamp;
 
 /**
@@ -84,7 +83,7 @@ fieldMapColumns.put("VideoDataResource", fields);
    @Column(name="DATA_RESOURCE_ID")
    private String dataResourceId;
    @Column(name="VIDEO_DATA")
-   private Blob videoData;
+   private byte[] videoData;
    @Column(name="LAST_UPDATED_STAMP")
    private Timestamp lastUpdatedStamp;
    @Column(name="LAST_UPDATED_TX_STAMP")
@@ -138,7 +137,7 @@ fieldMapColumns.put("VideoDataResource", fields);
      * Auto generated value setter.
      * @param videoData the videoData to set
      */
-    public void setVideoData(Blob videoData) {
+    public void setVideoData(byte[] videoData) {
         this.videoData = videoData;
     }
     /**
@@ -179,9 +178,9 @@ fieldMapColumns.put("VideoDataResource", fields);
     }
     /**
      * Auto generated value accessor.
-     * @return <code>Blob</code>
+     * @return <code>byte[]</code>
      */
-    public Blob getVideoData() {
+    public byte[] getVideoData() {
         return this.videoData;
     }
     /**
@@ -239,7 +238,7 @@ fieldMapColumns.put("VideoDataResource", fields);
     public void fromMap(Map<String, Object> mapValue) {
         preInit();
         setDataResourceId((String) mapValue.get("dataResourceId"));
-        setVideoData((Blob) mapValue.get("videoData"));
+        setVideoData((byte[]) mapValue.get("videoData"));
         setLastUpdatedStamp((Timestamp) mapValue.get("lastUpdatedStamp"));
         setLastUpdatedTxStamp((Timestamp) mapValue.get("lastUpdatedTxStamp"));
         setCreatedStamp((Timestamp) mapValue.get("createdStamp"));
