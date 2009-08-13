@@ -255,7 +255,7 @@ public final class UtilMessage {
     }
 
     /**
-     * Adds a <b>parametrized</b> error message that will appear in the main message area.
+     * Adds a <b>parameterized</b> error message that will appear in the main message area.
      * @param request a <code>HttpServletRequest</code> value
      * @param label the label to expand
      * @param context the context <code>Map</code> to use when expanding the label
@@ -288,7 +288,7 @@ public final class UtilMessage {
     }
 
     /**
-     * Adds a <b>parametrized field</b> error message that can be placed next to the offending field.
+     * Adds a <b>parameterized field</b> error message that can be placed next to the offending field.
      * To retrieve it:  opentapsErrors.field.${fieldName} or use <@displayError name="${fieldName}" />.
      * @param request a <code>HttpServletRequest</code> value
      * @param fieldName the name of the field for which the error occurred
@@ -363,7 +363,7 @@ public final class UtilMessage {
     }
 
     /**
-     * Adds a <b>parametrized</b> error message to <b>toplevel</b> and logs it at level ERROR.
+     * Adds a <b>parameterized</b> error message to <b>toplevel</b> and logs it at level ERROR.
      * Returns "error" as a convenience.
      * @param request a <code>HttpServletRequest</code> value
      * @param label the label to expand
@@ -419,26 +419,18 @@ public final class UtilMessage {
     /**                                                                    **/
     /************************************************************************/
 
-    /**
-     * Return a <b>simple</b> service success.
-     * @param label the label to expand
-     * @param locale a <code>Locale</code> value
-     * @return a service success <code>Map</code> response
-     */
-    @SuppressWarnings("unchecked")
-    public static Map createServiceSuccess(String label, Locale locale) {
+    public static Map<String, ?> createServiceSuccess(String label, Locale locale) {
         return ServiceUtil.returnSuccess(expandLabel(label, locale));
     }
 
     /**
-     * Return a <b>parametrized</b> service success.
+     * Return a <b>parameterized</b> service success.
      * @param label the label to expand
      * @param locale a <code>Locale</code> value
      * @param context the context <code>Map</code> to use when expanding the label
      * @return a service success <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createServiceSuccess(String label, Locale locale, Map context) {
+    public static Map<String, ?> createServiceSuccess(String label, Locale locale, Map<String, ?> context) {
         return ServiceUtil.returnSuccess(expandLabel(label, locale, context));
     }
 
@@ -448,20 +440,18 @@ public final class UtilMessage {
      * @param locale a <code>Locale</code> value
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createServiceError(String label, Locale locale) {
+    public static Map<String, ?> createServiceError(String label, Locale locale) {
         return ServiceUtil.returnError(expandLabel(label, locale));
     }
 
     /**
-     * Return a <b>parametrized</b> service error.
+     * Return a <b>parameterized</b> service error.
      * @param label the label to expand
      * @param locale a <code>Locale</code> value
      * @param context the context <code>Map</code> to use when expanding the label
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createServiceError(String label, Locale locale, Map context) {
+    public static Map<String, ?> createServiceError(String label, Locale locale, Map<String, ?> context) {
         return ServiceUtil.returnError(expandLabel(label, locale, context));
     }
 
@@ -472,8 +462,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(String label, Locale locale, String module) {
+    public static Map<String, ?> createAndLogServiceError(String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -485,8 +474,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service failure <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceFailure(String errorMsg, String module) {
+    public static Map<String, ?> createAndLogServiceFailure(String errorMsg, String module) {
         Debug.log(Debug.WARNING, null, errorMsg, module, MODULE);
         return ServiceUtil.returnFailure(errorMsg);
     }
@@ -498,8 +486,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service failure <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceFailure(String label, Locale locale, String module) {
+    public static Map<String, ?> createAndLogServiceFailure(String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale);
         Debug.log(Debug.WARNING, null, errorMsg, module, MODULE);
         return ServiceUtil.returnFailure(errorMsg);
@@ -512,8 +499,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service success <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceSuccess(String label, Locale locale, String module) {
+    public static Map<String, ?> createAndLogServiceSuccess(String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale);
         Debug.log(Debug.INFO, null, errorMsg, module, MODULE);
         return ServiceUtil.returnSuccess(errorMsg);
@@ -528,8 +514,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(String prefixLabel, String suffixLabel, Locale locale, String module) {
+    public static Map<String, ?> createAndLogServiceError(String prefixLabel, String suffixLabel, Locale locale, String module) {
         String errorMsg = expandLabel(prefixLabel, locale) + " " +  expandLabel(suffixLabel, locale);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -542,8 +527,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(Map serviceResult, String module) {
+    public static Map<String, ?> createAndLogServiceError(Map<String, ?> serviceResult, String module) {
         String errorMsg = ServiceUtil.getErrorMessage(serviceResult);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -558,8 +542,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(Map serviceResult, String label, Locale locale, String module) {
+    public static Map<String, ?> createAndLogServiceError(Map<String, ?> serviceResult, String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale) + " " + ServiceUtil.getErrorMessage(serviceResult);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -572,8 +555,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(Exception e, String message, String module) {
+    public static Map<String, ?> createAndLogServiceError(Exception e, String message, String module) {
         String errorMsg = message + " " + e.getMessage();
         Debug.log(Debug.ERROR, e, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -588,8 +570,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(Exception e, String label, Locale locale, String module) {
+    public static Map<String, ?> createAndLogServiceError(Exception e, String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale) + " " + e.getMessage();
         Debug.log(Debug.ERROR, e, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -601,8 +582,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(String message, String module) {
+    public static Map<String, ?> createAndLogServiceError(String message, String module) {
         Debug.logError(message, module);
         return ServiceUtil.returnError(message);
     }
@@ -613,8 +593,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(Exception e, String module) {
+    public static Map<String, ?> createAndLogServiceError(Exception e, String module) {
         Debug.log(Debug.ERROR, e, e.getMessage(), module, MODULE);
         return ServiceUtil.returnError(e.getMessage());
     }
@@ -627,8 +606,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(Exception e, Locale locale, String module) {
+    public static Map<String, ?> createAndLogServiceError(Exception e, Locale locale, String module) {
         Debug.log(Debug.ERROR, e, e.getMessage(), module, MODULE);
         return ServiceUtil.returnError(expandLabel(GENERIC_ERROR_LABEL, locale) + ": " + e.getMessage());
     }
@@ -641,8 +619,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceError(String label, Map context, Locale locale, String module) {
+    public static Map<String, ?> createAndLogServiceError(String label, Map<String, ?> context, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale, context);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -656,8 +633,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service failure <code>Map</code> response
      */
-    @SuppressWarnings("unchecked")
-    public static Map createAndLogServiceFailure(String label, Map context, Locale locale, String module) {
+    public static Map<String, ?> createAndLogServiceFailure(String label, Map<String, ?> context, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale, context);
         Debug.log(Debug.WARNING, null, errorMsg, module, MODULE);
         return ServiceUtil.returnFailure(errorMsg);
@@ -674,7 +650,7 @@ public final class UtilMessage {
     }
 
     /**
-     * Logs a <b>parametrized</b> service message at Info level.
+     * Logs a <b>parameterized</b> service message at Info level.
      * @param label the label to expand
      * @param context the context <code>Map</code> to use when expanding the label
      * @param locale a <code>Locale</code> value
@@ -696,7 +672,7 @@ public final class UtilMessage {
     }
 
     /**
-     * Logs a <b>parametrized</b> service message at Warning level.
+     * Logs a <b>parameterized</b> service message at Warning level.
      * @param label the label to expand
      * @param context the context <code>Map</code> to use when expanding the label
      * @param locale a <code>Locale</code> value
@@ -718,7 +694,7 @@ public final class UtilMessage {
     }
 
     /**
-     * Logs a <b>parametrized</b> service message at Error level.
+     * Logs a <b>parameterized</b> service message at Error level.
      * @param label the label to expand
      * @param context the context <code>Map</code> to use when expanding the label
      * @param locale a <code>Locale</code> value
@@ -741,7 +717,7 @@ public final class UtilMessage {
     }
 
     /**
-     * Logs a <b>parametrized</b> service message with an Exception at Error level.
+     * Logs a <b>parameterized</b> service message with an Exception at Error level.
      * @param e the <code>Exception</code> to log
      * @param label the label to expand
      * @param context the context <code>Map</code> to use when expanding the label
@@ -796,7 +772,7 @@ public final class UtilMessage {
     }
 
     /**
-     * Returns a <b>parametrized</b> error message writer.
+     * Returns a <b>parameterized</b> error message writer.
      * @param out a <code>Writer</code> value
      * @param label the label to expand
      * @param context the context <code>Map</code> to use when expanding the label

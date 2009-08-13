@@ -60,6 +60,8 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.TransactionUtil;
 import org.ofbiz.entity.util.EntityUtil;
@@ -79,7 +81,7 @@ public final class PartyServices {
 
     private static String MODULE = PartyServices.class.getName();
 
-    public static Map createViewPreference(DispatchContext dctx, Map context) {
+    public static Map<String, ?> createViewPreference(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -102,7 +104,7 @@ public final class PartyServices {
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map updateViewPreference(DispatchContext dctx, Map context) {
+    public static Map<String, ?> updateViewPreference(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -128,7 +130,7 @@ public final class PartyServices {
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map setViewPreference(DispatchContext dctx, Map context) {
+    public static Map<String, ?> setViewPreference(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -168,11 +170,10 @@ public final class PartyServices {
         }
     }
 
-    public static Map checkReceiveEmailOwnerUniqueness(DispatchContext dctx, Map context) {
+    public static Map<String, ?> checkReceiveEmailOwnerUniqueness(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
-        String partyId = (String) context.get("partyId");
         String contactMechId = (String) context.get("contactMechId");
         String contactMechPurposeTypeId = (String) context.get("contactMechPurposeTypeId");
 
@@ -190,10 +191,10 @@ public final class PartyServices {
 
             Timestamp now = UtilDateTime.nowTimestamp();
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                           EntityCondition.makeCondition("contactMechPurposeTypeId", "RECEIVE_EMAIL_OWNER"),
-                           EntityCondition.makeCondition("contactMechTypeId", "EMAIL_ADDRESS"),
-                           EntityUtil.getFilterByDateExpr(now, "contactFromDate", "contactThruDate"),
-                           EntityUtil.getFilterByDateExpr(now, "purposeFromDate", "purposeThruDate"));
+                    EntityCondition.makeCondition("contactMechPurposeTypeId", "RECEIVE_EMAIL_OWNER"),
+                    EntityCondition.makeCondition("contactMechTypeId", "EMAIL_ADDRESS"),
+                    EntityUtil.getFilterByDateExpr(now, "contactFromDate", "contactThruDate"),
+                    EntityUtil.getFilterByDateExpr(now, "purposeFromDate", "purposeThruDate"));
 
             List<GenericValue> contactMechs = delegator.findByCondition("PartyContactWithPurpose", conditions, null, null);
 
@@ -215,7 +216,7 @@ public final class PartyServices {
      * Expires any existing PartyClassifications for a partyId where partyClassificationGroupId is any partyClassificationGroupId related to partyClassificationTypeId,
      *  and creates a new PartyClassification.
      */
-    public static Map expireAndCreatePartyClassification(DispatchContext dctx, Map context) {
+    public static Map<String, ?> expireAndCreatePartyClassification(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -229,8 +230,8 @@ public final class PartyServices {
             List<String> partyClassGroupIds = EntityUtil.<String>getFieldListFromEntityList(partyClassGroups, "partyClassificationGroupId", true);
 
             EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
-                                                                 EntityCondition.makeCondition("partyId", partyId),
-                                                                 EntityCondition.makeCondition("partyClassificationGroupId", EntityOperator.IN, partyClassGroupIds));
+                    EntityCondition.makeCondition("partyId", partyId),
+                    EntityCondition.makeCondition("partyClassificationGroupId", EntityOperator.IN, partyClassGroupIds));
             List<GenericValue> partyClassifications = delegator.findByCondition("PartyClassification", cond, null, null);
             partyClassifications = EntityUtil.filterByDate(partyClassifications, now);
             for (GenericValue partyClassification : partyClassifications) {
@@ -256,7 +257,8 @@ public final class PartyServices {
     /*
      * opentaps.sendInternalMessage to send a message.
      */
-    public static Map sendInternalMessage(DispatchContext dctx, Map context) {
+    @SuppressWarnings("unchecked")
+    public static Map<String, ?> sendInternalMessage(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -333,10 +335,9 @@ public final class PartyServices {
     /*
      * opentaps.receiveInternalMessage to receive a message.
      */
-    public static Map receiveInternalMessage(DispatchContext dctx, Map context) {
+    @SuppressWarnings("unchecked")
+    public static Map<String, ?> receiveInternalMessage(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = (Locale) context.get("locale");
 
         // get filter options
@@ -403,7 +404,7 @@ public final class PartyServices {
         return result;
     }
 
-    public static Map removeParty(DispatchContext dctx, Map context) {
+    public static Map<String, ?> removeParty(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
 
@@ -446,7 +447,7 @@ public final class PartyServices {
      *@param context Map containing the input parameters
      *@return Map with the result of the service, the output parameters
      */
-    public static Map createPartyContactMechPurpose(DispatchContext ctx, Map context) {
+    public static Map<String, ?> createPartyContactMechPurpose(DispatchContext ctx, Map<String, ?> context) {
 
         GenericDelegator delegator = ctx.getDelegator();
         Security security = ctx.getSecurity();
@@ -487,9 +488,9 @@ public final class PartyServices {
 
             // check the PartyContactMech not to be expired
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                 EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
-                                 EntityCondition.makeCondition("contactMechId", EntityOperator.EQUALS, contactMechId),
-                                 EntityUtil.getFilterByDateExpr());
+                    EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, partyId),
+                    EntityCondition.makeCondition("contactMechId", EntityOperator.EQUALS, contactMechId),
+                    EntityUtil.getFilterByDateExpr());
             List<GenericValue> partyContactMechs = delegator.findByCondition("PartyContactMech", conditions, null, null);
             GenericValue partyContactMech = EntityUtil.getFirst(partyContactMechs);
             if (partyContactMech == null) {
@@ -518,13 +519,13 @@ public final class PartyServices {
             }
 
             // get the associated partySupplementalData
-            Debug.logInfo("Updating partySupplementalData for partyId " + partyId, MODULE);
+            Debug.logInfo(UtilMessage.expandLabel("OpentapsInfo_UpdatePartySupplimentalData", UtilMisc.toMap("partyId", partyId), locale), MODULE);
             input = UtilMisc.<String, Object>toMap("partyId", partyId);
             GenericValue partySupplementalData = delegator.findByPrimaryKey("PartySupplementalData", input);
 
             if ("GENERAL_LOCATION".equals(contactMechPurposeTypeId)
-                || "PRIMARY_PHONE".equals(contactMechPurposeTypeId)
-                || "PRIMARY_EMAIL".equals(contactMechPurposeTypeId)) {
+                    || "PRIMARY_PHONE".equals(contactMechPurposeTypeId)
+                    || "PRIMARY_EMAIL".equals(contactMechPurposeTypeId)) {
                 if (partySupplementalData == null) {
                     // create a new partySupplementalData
                     input = UtilMisc.<String, Object>toMap("partyId", partyId, fieldToUpdate, contactMechId);
@@ -556,7 +557,7 @@ public final class PartyServices {
      *@param context Map containing the input parameters
      *@return Map with the result of the service, the output parameters
      */
-    public static Map deletePartyContactMechPurpose(DispatchContext ctx, Map context) {
+    public static Map<String, ?> deletePartyContactMechPurpose(DispatchContext ctx, Map<String, ?> context) {
 
         GenericDelegator delegator = ctx.getDelegator();
         Security security = ctx.getSecurity();
@@ -610,13 +611,13 @@ public final class PartyServices {
             }
 
             // get the associated partySupplementalData
-            Debug.logInfo("Updating partySupplementalData for partyId " + partyId, MODULE);
+            Debug.logInfo(UtilMessage.expandLabel("OpentapsInfo_UpdatePartySupplimentalData", UtilMisc.toMap("partyId", partyId), locale), MODULE);
             input = UtilMisc.<String, Object>toMap("partyId", partyId);
             GenericValue partySupplementalData = delegator.findByPrimaryKey("PartySupplementalData", input);
 
             if ("GENERAL_LOCATION".equals(contactMechPurposeTypeId)
-                || "PRIMARY_PHONE".equals(contactMechPurposeTypeId)
-                || "PRIMARY_EMAIL".equals(contactMechPurposeTypeId)) {
+                    || "PRIMARY_PHONE".equals(contactMechPurposeTypeId)
+                    || "PRIMARY_EMAIL".equals(contactMechPurposeTypeId)) {
                 if (partySupplementalData != null) {
                     // create or update the field
                     partySupplementalData.set(fieldToUpdate, null);
@@ -635,11 +636,129 @@ public final class PartyServices {
         return result;
     }
 
-    public static Map setSupplementalDataForAllParties(DispatchContext dctx, Map context) {
+    /**
+     * Updates PartySupplementalData contact mech ids running as SECA on updatePartyContactMechService.
+     *  
+     * @param ctx The DispatchContext that this service is operating in
+     * @param context Map containing the input parameters
+     * @return Map with the result of the service, the output parameters
+     */
+    public static Map<String, ?> updatePartySupplementalData(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        Map<String, ?> results = ServiceUtil.returnSuccess();
+
+        String partyId = (String) context.get("partyId");
+        String contactMechId = (String) context.get("contactMechId");
+        String contactMechTypeId = (String) context.get("contactMechTypeId");
+
+        String purpose = null;
+        String fieldToUpdate = null;
+        if ("POSTAL_ADDRESS".equals(contactMechTypeId)) {
+            purpose = "GENERAL_LOCATION";
+            fieldToUpdate = "primaryPostalAddressId";
+        } else if ("TELECOM_NUMBER".equals(contactMechTypeId)) {
+            purpose = "PRIMARY_PHONE";
+            fieldToUpdate = "primaryTelecomNumberId";
+        } else if ("EMAIL_ADDRESS".equals(contactMechTypeId)) {
+            purpose = "PRIMARY_EMAIL";
+            fieldToUpdate = "primaryEmailId";
+        } else {
+            return results;
+        }
+
+        try {
+            EntityConditionList<EntityCondition> conditionList = EntityCondition.makeCondition(
+                    UtilMisc.toList(
+                            EntityCondition.makeCondition("partyId", partyId), 
+                            EntityCondition.makeCondition("contactMechId", contactMechId),
+                            EntityCondition.makeCondition("contactMechTypeId", contactMechTypeId),
+                            EntityUtil.getFilterByDateExpr("contactFromDate", "contactThruDate"),
+                            EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate")
+                    ), EntityOperator.AND
+            );
+            List<GenericValue> contactMechAndPurpose = delegator.findList("PartyContactWithPurpose", conditionList, UtilMisc.toSet("contactMechPurposeTypeId"), UtilMisc.toList("purposeFromDate DESC"), null, false);
+            if (UtilValidate.isNotEmpty(contactMechAndPurpose)) {
+                for (GenericValue contactMechPurpose : contactMechAndPurpose) {
+                    if (purpose.equals(contactMechPurpose.getString("contactMechPurposeTypeId"))) {
+                        GenericValue partySupplData = delegator.findByPrimaryKey("PartySupplementalData", UtilMisc.toMap("partyId", partyId));
+                        if (partySupplData != null && !contactMechId.equals(partySupplData.getString(fieldToUpdate))) {
+                            Debug.logInfo(UtilMessage.expandLabel("OpentapsInfo_UpdatePartySupplimentalData", UtilMisc.toMap("partyId", partyId), locale), MODULE);
+                            partySupplData.set(fieldToUpdate, contactMechId);
+                            partySupplData.store();
+                        }
+                    }
+                }
+            }
+
+        } catch(GenericEntityException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
+        }
+
+        return results;
+    }
+
+    /**
+     * Sets PartySupplementalData contact mech ids to null if corresponding contact mech is deleted.<br>
+     * It is called as SECA on deletePartyContactMech service.
+     * 
+     * @param ctx The DispatchContext that this service is operating in
+     * @param context Map containing the input parameters
+     * @return Map with the result of the service, the output parameters
+     */
+    public static Map<String, ?> clearPartySupplementalData(DispatchContext dctx, Map<String, ?> context) {
+        GenericDelegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        Map<String, ?> results = ServiceUtil.returnSuccess();
+
+        String partyId = (String) context.get("partyId");
+        String contactMechId = (String) context.get("contactMechId");
+
+        try {
+            EntityConditionList<EntityExpr> conditionList = EntityCondition.makeCondition(
+                    UtilMisc.toList(
+                            EntityCondition.makeCondition("partyId", partyId), 
+                            EntityCondition.makeCondition("contactMechId", contactMechId)
+                    ), EntityOperator.AND
+            );
+            GenericValue partyContactMech = EntityUtil.getFirst(delegator.findList("PartyContactMech", conditionList, null, UtilMisc.toList("fromDate DESC"), null, false));
+            if (UtilValidate.isNotEmpty(partyContactMech)) {
+                List<GenericValue> partyContactMechPurps = partyContactMech.getRelated("PartyContactMechPurpose", UtilMisc.toList("fromDate DESC"));
+                if (UtilValidate.isNotEmpty(partyContactMechPurps)) {
+                    for (GenericValue contactMechPurpose : partyContactMechPurps) {
+                        String purposeTypeId = contactMechPurpose.getString("contactMechPurposeTypeId");
+                        String fieldToUpdate = null;
+                        if ("GENERAL_LOCATION".equals(purposeTypeId)) {
+                            fieldToUpdate = "primaryPostalAddressId";
+                        } else if ("PRIMARY_PHONE".equals(purposeTypeId)) {
+                            fieldToUpdate = "primaryTelecomNumberId";
+                        } else if ("PRIMARY_EMAIL".equals(purposeTypeId)) {
+                            fieldToUpdate = "primaryEmailId";
+                        } else {
+                            return results;
+                        }
+
+                        GenericValue partySupplData = delegator.findByPrimaryKey("PartySupplementalData", UtilMisc.toMap("partyId", partyId));
+                        if (partySupplData != null && UtilValidate.isNotEmpty(partySupplData.getString(fieldToUpdate))) {
+                            Debug.logInfo(UtilMessage.expandLabel("OpentapsInfo_UpdatePartySupplimentalData", UtilMisc.toMap("partyId", partyId), locale), MODULE);
+                            partySupplData.set(fieldToUpdate, null);
+                            partySupplData.store();
+                        }
+                        
+                    }
+                }
+            }
+            
+            
+        } catch(GenericEntityException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
+        }
+
+        return results;
+    }
+
+    public static Map<String, ?> setSupplementalDataForAllParties(DispatchContext dctx, Map<String, ?> context) {
+        GenericDelegator delegator = dctx.getDelegator();
 
         Map<String, Object> result = ServiceUtil.returnSuccess();
         int partyUpdated = 0;
@@ -664,7 +783,6 @@ public final class PartyServices {
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     public static Map<String, ? extends Object> createPartyCarrierAccount(DispatchContext dctx, Map<String, ? extends Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
@@ -691,10 +809,10 @@ public final class PartyServices {
             // Only default account may exist for partyId & carrierPartyId combination
             if ("Y".equals(isDefault)) {
                 EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                EntityCondition.makeCondition("partyId", partyId),
-                                EntityCondition.makeCondition("carrierPartyId", carrierPartyId),
-                                EntityCondition.makeCondition("isDefault", "Y"),
-                                EntityUtil.getFilterByDateExpr());
+                        EntityCondition.makeCondition("partyId", partyId),
+                        EntityCondition.makeCondition("carrierPartyId", carrierPartyId),
+                        EntityCondition.makeCondition("isDefault", "Y"),
+                        EntityUtil.getFilterByDateExpr());
                 delegator.storeByCondition("PartyCarrierAccount", UtilMisc.toMap("isDefault", "N"), conditions);
             }
 
@@ -749,10 +867,10 @@ public final class PartyServices {
             // Only default account may exist for partyId & carrierPartyId combination
             if ("Y".equals(isDefault)) {
                 EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                                EntityCondition.makeCondition("partyId", partyId),
-                                EntityCondition.makeCondition("carrierPartyId", carrierPartyId),
-                                EntityCondition.makeCondition("isDefault", "Y"),
-                                EntityUtil.getFilterByDateExpr());
+                        EntityCondition.makeCondition("partyId", partyId),
+                        EntityCondition.makeCondition("carrierPartyId", carrierPartyId),
+                        EntityCondition.makeCondition("isDefault", "Y"),
+                        EntityUtil.getFilterByDateExpr());
                 delegator.storeByCondition("PartyCarrierAccount", UtilMisc.toMap("isDefault", "N"), conditions);
             }
 

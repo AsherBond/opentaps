@@ -106,6 +106,20 @@
         <attribute name="contactMechPurposeTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="fromDate" type="Timestamp" mode="IN" optional="false"/>
     </service>
+    <service name="opentaps.updatePartySupplementalData" engine="java"
+        location="org.opentaps.common.party.PartyServices" invoke="updatePartySupplementalData">
+        <description>Update party contact mech. Replace OfBiz service with the same name but internally call it</description>
+        <attribute name="partyId" mode="IN" type="String" optional="true"/>
+        <attribute name="contactMechId" mode="IN" type="String"/>
+        <attribute name="newContactMechId" mode="IN" type="String" optional="true"/>
+        <attribute name="contactMechTypeId" mode="IN" type="String"/>
+    </service>
+    <service name="opentaps.clearPartySupplementalData" engine="java"
+        location="org.opentaps.common.party.PartyServices" invoke="clearPartySupplementalData" auth="true">
+        <description>Clear party supplemental contact mech id if it has been deleted.</description>
+        <attribute name="partyId" mode="IN" type="String" optional="true"/>
+        <attribute name="contactMechId" mode="IN" type="String"/>
+    </service>
 
     <service name="opentaps.setSupplementalDataForAllParties" engine="java" use-transaction="false"
              location="org.opentaps.common.party.PartyServices" invoke="setSupplementalDataForAllParties">
