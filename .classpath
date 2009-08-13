@@ -48,6 +48,7 @@
 	<classpathentry kind="src" path="framework/webtools/src"/>
 	<classpathentry kind="src" path="framework/widget/src"/>
 	<classpathentry kind="src" path="specialpurpose/workflow/src"/>
+	<classpathentry kind="src" path="hot-deploy/opentaps-tests/src"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/velocity-1.6.1.jar"/>
 	<classpathentry kind="lib" path="framework/webapp/lib/DataVision-1.0.0.jar"/>
 	<classpathentry kind="lib" path="framework/service/lib/wsdl4j.jar"/>
@@ -62,7 +63,6 @@
 	<classpathentry kind="lib" path="framework/guiapp/lib/XuiCoreSwing-v3.2rc2b.jar"/>
 	<classpathentry kind="lib" path="framework/guiapp/lib/XuiOptional-v3.2rc2b.jar"/>
 	<classpathentry kind="lib" path="applications/content/lib/poi-3.2-FINAL-20081019.jar"/>
-	<classpathentry kind="lib" path="applications/content/lib/lucene-2.2.0.jar"/>
 	<classpathentry kind="lib" path="framework/catalina/lib/tomcat-6.0.16-catalina-ha.jar"/>
 	<classpathentry kind="lib" path="framework/catalina/lib/tomcat-6.0.16-catalina-tribes.jar"/>
 	<classpathentry kind="lib" path="framework/catalina/lib/tomcat-6.0.16-catalina.jar"/>
@@ -193,5 +193,6 @@
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/aspectwerkz/aspectwerkz-core-2.0.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/jetm.jar"/>
 	<classpathentry kind="lib" path="hot-deploy/opentaps-common/lib/opentapsFedEx_RateService_Axis-1.0.jar"/>
+	<classpathentry kind="lib" path="applications/content/lib/lucene-core-2.4.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
