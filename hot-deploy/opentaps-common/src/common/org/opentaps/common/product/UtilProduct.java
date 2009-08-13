@@ -268,9 +268,9 @@ public final class UtilProduct {
             // first look up the standard costs (the CostComponents with prefix EST_STD_)  If we found a non-zero standard cost, then it becomes a cost
             Map results = dispatcher.runSync("calculateProductCosts", UtilMisc.toMap("productId", productId, "currencyUomId", currencyUomId, "costComponentTypePrefix", "EST_STD", "userLogin", userLogin));
             if (!ServiceUtil.isError(results) && !ServiceUtil.isFailure(results)) {
-                Double totalCost = (Double) results.get("totalCost");
-                if ((totalCost != null) && (totalCost.doubleValue() != 0.0)) {
-                    cost = new BigDecimal(totalCost.doubleValue());
+                BigDecimal totalCost = (BigDecimal) results.get("totalCost");
+                if ((totalCost != null) && (totalCost.signum() != 0)) {
+                    cost = totalCost;
                     Debug.logInfo("Conservative value for product [" + productId + "] in currency [" + currencyUomId + "] is the standard cost of [" + cost + "]", MODULE);
                 }
             }
