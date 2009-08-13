@@ -37,12 +37,14 @@
 
 package org.opentaps.common.product;
 
+import java.math.BigDecimal;
+import java.util.*;
+
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.product.ProductContentWrapper;
@@ -50,10 +52,6 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
-
-import java.math.BigDecimal;
-import java.util.*;
-import org.ofbiz.entity.condition.EntityCondition;
 
 /**
  * Utility methods for working with products.
@@ -170,7 +168,6 @@ public final class UtilProduct {
      * @return the Product UPC, or <code>null</code> if no UPC is set
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static String getProductUPC(String productId, GenericDelegator delegator) throws GenericEntityException {
         String upc = null;
         EntityCondition cond = EntityCondition.makeCondition(EntityOperator.AND,
@@ -435,7 +432,6 @@ public final class UtilProduct {
      * @return the <code>List</code> of productStoreIds from the given productStoreGroupId
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<String> getProductStoreIdsFromGroup(String productStoreGroupId, GenericDelegator delegator) throws GenericEntityException {
         List<String> productStoreIds = null;
         if (UtilValidate.isNotEmpty(productStoreGroupId)) {
