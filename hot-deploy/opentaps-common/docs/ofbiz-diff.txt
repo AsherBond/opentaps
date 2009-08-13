@@ -54,6 +54,8 @@ r12972 re-added CustRequestRole/InventoryEventPlanned/InventoryEventPlannedType/
 ofbiz remove contentPurposeEnumId from entity PartyContent, also add partyContentTypeId as part of primary key.
 I re-add contentPurposeEnumId in r12982, and going to refactor relate codes. 
 
+Accounting related:
+ * commented out secas_ledger.xml from applications/accounting/ofbiz-component.xml
 
 Other API Changes
 -----------------

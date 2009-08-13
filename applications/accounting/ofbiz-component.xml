@@ -74,7 +74,9 @@ under the License.
     <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas_payment.xml"/>
-    <service-resource type="eca" loader="main" location="servicedef/secas_ledger.xml"/>
+    <!-- The ofbiz ledger posting routines need to be commented out because they may be duplicating
+    or incompatible with the ones running in opentaps Financials
+    service-resource type="eca" loader="main" location="servicedef/secas_ledger.xml"/ -->
     <service-resource type="eca" loader="main" location="servicedef/secas_olap.xml"/>
 
     <test-suite loader="main" location="testdef/accountingtests.xml"/>
