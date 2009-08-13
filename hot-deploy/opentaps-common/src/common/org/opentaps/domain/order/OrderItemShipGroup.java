@@ -66,7 +66,7 @@ public class OrderItemShipGroup extends org.opentaps.domain.base.entities.OrderI
     }
 
     /**
-     * Gets the estimated ship date base on the promisedDate of the related <code>OrderItemShipGrpInvRes</code>.
+     * Gets the estimated ship date base on the estimated ship date of this ship group and the promisedDate of the related <code>OrderItemShipGrpInvRes</code>.
      * @return the estimated ship date
      */
     public Timestamp getEstimatedShipDate() {

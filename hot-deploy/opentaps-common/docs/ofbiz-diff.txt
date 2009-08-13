@@ -88,3 +88,13 @@ Note: this only affects two services in WorkEffortServices.java : processWorkEff
 - ServiceUtil.isSucess was moved to UtilCommon
 
 - The base users (admin, system, ...) and UserLogin seed data is no longer loaded by ofbiz, instead it is loaded as demo data. The needed data was added into CommonSecurityData.xml
+
+
+Possible buisness logic changes
+-------------------------------
+
+hot-deploy/opentaps-common/src/common/org/opentaps/domain/order/OrderItemShipGroup.java
+r13023 getEstimatedShipDate is now also a field of the OISG entity, the method now takes this value into account.
+If the ship group may split, the calculated date is the earliest of the estimatedShipDate set on the OISG and the promisedDatetime of the related OrderItemShipGrpInvRes.
+Else it is the latest of those values.
+TODO: see when this value get set and with which value, else we can use it to cache the result of this method or just ignore it and leave it to null.
