@@ -1976,8 +1976,9 @@ public class GenericDelegator implements DelegatorInterface {
      * @param entityName The Name of the Entity as defined in the entity XML file
      * @param fields The fields of the named entity to query by with their corresponging values
      * @return List of GenericValue instances that match the query
+     * @deprecated
      */
-    public List<GenericValue> findByAnd(String entityName, Object... fields) throws GenericEntityException {
+     @Deprecated public List<GenericValue> findByAnd(String entityName, Object... fields) throws GenericEntityException {
         return findByAnd(entityName, UtilMisc.<String, Object>toMap(fields));
     }
 
@@ -1997,8 +1998,9 @@ public class GenericDelegator implements DelegatorInterface {
      * @param entityName The Name of the Entity as defined in the entity XML file
      * @param fields The fields of the named entity to query by with their corresponging values
      * @return List of GenericValue instances that match the query
+     * @deprecated
      */
-    public List<GenericValue> findByOr(String entityName, Object... fields) throws GenericEntityException {
+    @Deprecated public List<GenericValue> findByOr(String entityName, Object... fields) throws GenericEntityException {
         EntityCondition ecl = EntityCondition.makeCondition(EntityOperator.OR, fields);
         return this.findList(entityName, ecl, null, null, null, false);
     }
