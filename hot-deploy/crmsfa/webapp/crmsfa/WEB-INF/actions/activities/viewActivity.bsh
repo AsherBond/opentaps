@@ -60,7 +60,7 @@ workEffortMap.put("localizedCurrentStatus", statusItem.get("description", "Commo
 
 // get activity security and add OpentapsEntityLabels.properties overriding scopeEnum description
 scopeEnum = delegator.findByPrimaryKeyCache("Enumeration", UtilMisc.toMap("enumId", workEffort.get("scopeEnumId")));
-if (scopeEnum != null) workEffortMap.put("localizedScopeEnumDescription", scopeEnum.get("description", "OpentapsEntityLabels", context.get("locale")));
+if (scopeEnum != null) workEffortMap.put("localizedScopeEnumDescription", scopeEnum.get("description", "OpentapsEntityLabels", UtilCommon.getLocale(context)));
 
 // put workEffort map in context with additional fields
 context.put("workEffort", workEffortMap);
@@ -163,7 +163,7 @@ if (hasUpdatePermission) {
         scopeEnum = iter.next();
         scopeEnumMap = new HashMap();
         scopeEnumMap.put("enumId", scopeEnum.getString("enumId"));
-        scopeEnumMap.put("description", scopeEnum.get("description", "OpentapsEntityLabels", context.get("locale")));
+        scopeEnumMap.put("description", scopeEnum.get("description", "OpentapsEntityLabels", UtilCommon.getLocale(context)));
         localizedScopeEnum = GenericValue.create(delegator.getModelEntity("Enumeration"), scopeEnumMap);
         localizedScopeEnumList.add(localizedScopeEnum);
     }

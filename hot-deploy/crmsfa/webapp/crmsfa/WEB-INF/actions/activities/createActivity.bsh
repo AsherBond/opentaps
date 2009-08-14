@@ -22,6 +22,7 @@ import org.ofbiz.entity.util.*;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.model.ModelEntity;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.opentaps.common.util.UtilCommon;
 
 if (parameters.get("partyId") != null) {
     context.put("internalPartyId", parameters.get("partyId"));
@@ -41,7 +42,7 @@ for (iter = scopeEnumList.iterator(); iter.hasNext(); ) {
     scopeEnum = iter.next();
     scopeEnumMap = new HashMap();
     scopeEnumMap.put("enumId", scopeEnum.getString("enumId"));
-    scopeEnumMap.put("description", scopeEnum.get("description", "OpentapsEntityLabels", context.get("locale")));
+    scopeEnumMap.put("description", scopeEnum.get("description", "OpentapsEntityLabels", UtilCommon.getLocale(context)));
     localizedScopeEnum = GenericValue.create(delegator.getModelEntity("Enumeration"), scopeEnumMap);
     localizedScopeEnumList.add(localizedScopeEnum);
 }

@@ -1,6 +1,23 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
 import javolution.util.FastMap;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.common.util.UtilCommon;
 
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.order.Order;
@@ -62,7 +79,7 @@ for (iter = orderItems.iterator(); iter.hasNext(); ) {
         row.put("groupAdjustmentTotal", new Double(getItemAdjustmentTotal(item)));
         orderItemType = item.getRelatedOne("OrderItemType");
         if (orderItemType != null) {
-            row.put("orderItemTypeDescription", orderItemType.get("description", context.get("locale")));
+            row.put("orderItemTypeDescription", orderItemType.get("description", UtilCommon.getLocale(context)));
         }
         groupedItems.put(key, row);
         continue;

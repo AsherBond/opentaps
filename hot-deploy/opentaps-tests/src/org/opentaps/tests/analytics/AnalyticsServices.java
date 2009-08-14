@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -22,9 +22,9 @@
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
  * with the License.  You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing,
  * software distributed under the License is distributed on an
  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
@@ -47,8 +47,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.DispatchContext;
@@ -56,14 +55,17 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.tests.analytics.tests.AbstractExpectedResultset;
 import org.opentaps.tests.analytics.tests.CustomersByGeoLocation;
 import org.opentaps.tests.analytics.tests.TestObjectGenerator;
 
-public class AnalyticsServices {
+public final class AnalyticsServices {
 
-    public static final String module = AnalyticsServices.class.getName();
+    private AnalyticsServices() { }
+
+    private static final String MODULE = AnalyticsServices.class.getName();
 
 
     /**
@@ -73,12 +75,14 @@ public class AnalyticsServices {
      * - organizationPartyId : the organization for which are made the generated orders
      * - ordersToGenerate : number of random orders to generate (the number of generated accounts will be this number / 2)
      * - fromDate/thruDate: accounts & orders should be created within given time lag.
+     * @param dctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a service response <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map<String, ? extends Object> createCustomerDimensionTestData(DispatchContext dctx, Map<String, ? extends Object> context) {
+    public static Map<String, Object> createCustomerDimensionTestData(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale)context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // read parameters
         Integer ordersToGenerate = (Integer) context.get("ordersToGenerate");
@@ -99,14 +103,16 @@ public class AnalyticsServices {
         }
 
         boolean dataOnly = false;
-        if (testDataOnly != null)
+        if (testDataOnly != null) {
             dataOnly = testDataOnly.booleanValue();
+        }
 
         AbstractExpectedResultset<CustomersByGeoLocation> expectedResults = null;
 
         try {
-            if (!dataOnly)
+            if (!dataOnly) {
                 expectedResults = new AbstractExpectedResultset<CustomersByGeoLocation>("CustomersByGeoLocation", CustomersByGeoLocation.class);
+            }
 
             TestObjectGenerator testObjects = new TestObjectGenerator(delegator, dispatcher);
 
@@ -116,16 +122,15 @@ public class AnalyticsServices {
             // generate N random orders made by a pool of N/2 random accounts
             List<String> orderIds = testObjects.getOrders(ordersToGenerate, organizationPartyId, fromDate, thruDate, productIds);
 
-            if (dataOnly)
+            if (dataOnly) {
                 return ServiceUtil.returnSuccess();
+            }
 
             // retrieve those orders with the customer address that will end up in the report
-            EntityConditionList conditionList = new EntityConditionList(Arrays.asList(
-                    new EntityExpr("orderId", EntityOperator.IN, orderIds)
-            ), EntityOperator.AND);
+            EntityCondition conditionList = EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("orderId", EntityOperator.IN, orderIds));
             List<GenericValue> orders = delegator.findByCondition("OrderHeader", conditionList, Arrays.asList("billToPartyId"), null);
             List<String> customerIds = EntityUtil.getFieldListFromEntityList(orders, "billToPartyId", true);
-            List<GenericValue> customers = delegator.findByCondition("Party", new EntityExpr("partyId", EntityOperator.IN, customerIds), null, null);
+            List<GenericValue> customers = delegator.findByCondition("Party", EntityCondition.makeCondition("partyId", EntityOperator.IN, customerIds), null, null);
             for (GenericValue customer : customers) {
                 GenericValue primaryAddress = PartyContactHelper.getPostalAddressValueByPurpose(customer.getString("partyId"), "GENERAL_LOCATION", false, delegator);
                 GenericValue country = primaryAddress.getRelatedOne("CountryGeo");
@@ -152,11 +157,11 @@ public class AnalyticsServices {
             expectedResults.store();
 
         } catch (GenericEntityException gee) {
-            return UtilMessage.createAndLogServiceError(gee, locale, module);
+            return UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         } catch (GenericServiceException gse) {
-            return UtilMessage.createAndLogServiceError(gse, locale, module);
+            return UtilMessage.createAndLogServiceError(gse, locale, MODULE);
         } catch (Exception e) {
-            return UtilMessage.createAndLogServiceError(e, locale, module);
+            return UtilMessage.createAndLogServiceError(e, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();

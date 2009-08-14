@@ -408,7 +408,7 @@ public final class InvoiceServices {
             List invoiceLines = InvoiceHelper.getInvoiceLinesForPresentation(delegator, invoiceId);
 
             // context parameters for the invoice fo.ftl
-            Map bodyParameters = UtilMisc.toMap("invoiceId", invoiceId, "userLogin", userLogin, "locale", context.get("locale"), "invoiceLines", invoiceLines);
+            Map bodyParameters = UtilMisc.toMap("invoiceId", invoiceId, "userLogin", userLogin, "locale", UtilCommon.getLocale(context), "invoiceLines", invoiceLines);
             bodyParameters.putAll(UtilCommon.getOrganizationHeaderInfo(invoice.getString(whichPartyField), delegator));
 
             ModelService service = dctx.getModelService("sendMailFromScreen");
