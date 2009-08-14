@@ -23,6 +23,7 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.purchasing.security.PurchasingSecurity;
 
@@ -39,7 +40,7 @@ public class SupplierServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         PurchasingSecurity purchasingSecurity = new PurchasingSecurity(security, userLogin);
         String organizationPartyId = (String)dctx.getAttribute("organizationPartyId");
 
@@ -83,7 +84,7 @@ public class SupplierServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String supplierPartyId = (String) context.get("partyId");
 
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         Map result = ServiceUtil.returnSuccess();
         try {
@@ -197,7 +198,7 @@ public class SupplierServices {
     public static Map outsourceRoutingTask(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String partyId = (String) context.get("partyId");

@@ -53,6 +53,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 /**
@@ -77,7 +78,7 @@ public final class PackingServices {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> warehouseCompletePack(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         org.opentaps.warehouse.shipment.packing.PackingSession session = (PackingSession) context.get("packingSession");
 

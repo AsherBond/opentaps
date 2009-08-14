@@ -782,7 +782,7 @@ public final class FinancialServices {
     @SuppressWarnings("unchecked")
     public static Map getComparativeBalanceSheet(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // input parameters
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -839,7 +839,7 @@ public final class FinancialServices {
     @SuppressWarnings("unchecked")
     public static Map getComparativeIncomeStatement(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // input parameters
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -899,7 +899,7 @@ public final class FinancialServices {
     @SuppressWarnings("unchecked")
     public static Map getComparativeCashFlowStatement(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // input parameters
         String organizationPartyId = (String) context.get("organizationPartyId");

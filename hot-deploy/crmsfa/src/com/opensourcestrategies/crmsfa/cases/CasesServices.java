@@ -57,6 +57,7 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.security.Security;
 
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 /**
@@ -75,7 +76,7 @@ public class CasesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // verify that a partyId of some sort was supplied
         String accountPartyId = (String) context.get("accountPartyId");
@@ -177,7 +178,7 @@ public class CasesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String custRequestId = (String) context.get("custRequestId");
 
@@ -234,7 +235,7 @@ public class CasesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String custRequestId = (String) context.get("custRequestId");
 

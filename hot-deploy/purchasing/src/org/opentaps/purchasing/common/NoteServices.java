@@ -27,6 +27,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.security.Security;
 import org.ofbiz.base.util.Debug;
 
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.purchasing.security.PurchasingSecurity;
 
@@ -68,7 +69,7 @@ public class NoteServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         PurchasingSecurity purchasingSecurity = new PurchasingSecurity(security, userLogin);
         String organizationId = (String)dctx.getAttribute("organizationId");
 

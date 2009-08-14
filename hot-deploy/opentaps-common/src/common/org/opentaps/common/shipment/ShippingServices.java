@@ -91,7 +91,7 @@ public final class ShippingServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String shipmentId = (String) context.get("shipmentId");
         String shipmentRouteSegmentId = (String) context.get("shipmentRouteSegmentId");
@@ -188,7 +188,7 @@ public final class ShippingServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
         String shipGroupSeqId = (String) context.get("shipGroupSeqId");
@@ -308,7 +308,7 @@ public final class ShippingServices {
     @SuppressWarnings("unchecked")
     public static Map checkCanPack(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String shipmentId = (String) context.get("shipmentId");
         Map input = UtilMisc.toMap("shipmentId", shipmentId);
@@ -349,7 +349,7 @@ public final class ShippingServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String returnId = (String) context.get("returnId");
 
@@ -453,7 +453,7 @@ public final class ShippingServices {
     @SuppressWarnings("unchecked")
     public static Map scheduleReturnShipmentUPS(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         if (shipmentUpsSaveCertificationInfo) {
             File shipmentUpsSaveCertificationFile = new File(shipmentUpsSaveCertificationPath);

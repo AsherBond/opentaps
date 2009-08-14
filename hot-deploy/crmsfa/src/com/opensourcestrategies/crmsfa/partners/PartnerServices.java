@@ -1,5 +1,8 @@
 package com.opensourcestrategies.crmsfa.partners;
 
+import java.util.Locale;
+import java.util.Map;
+
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.GeneralException;
@@ -10,10 +13,8 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * CRMSFA specific partner services.
@@ -27,7 +28,7 @@ public class PartnerServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         if (!security.hasPermission("CRMSFA_PARTNER_CREATE", userLogin)) {
             return UtilMessage.createServiceError("CrmErrorPermissionDenied", locale);
@@ -94,7 +95,7 @@ public class PartnerServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String partnerPartyId = (String) context.get("partyId");
 
@@ -146,7 +147,7 @@ public class PartnerServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String partnerPartyId = (String) context.get("partyIdFrom");
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_PARTNER", "_CREATE", userLogin, partnerPartyId)) {

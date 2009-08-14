@@ -80,7 +80,7 @@ public final class PaymentServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         if (!(security.hasEntityPermission("FINANCIALS", "_AP_PCRTE", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PCRTE", userLogin))) {
@@ -179,7 +179,7 @@ public final class PaymentServices {
     public static Map updatePayment(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         if (!(security.hasEntityPermission("FINANCIALS", "_AP_PUPDT", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PUPDT", userLogin))) {
@@ -238,7 +238,7 @@ public final class PaymentServices {
         String paymentMethodId = (String) context.get("paymentMethodId");
         String paymentMethodTypeId = (String) context.get("paymentMethodTypeId");
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Map result = ServiceUtil.returnSuccess();
 
         try {
@@ -278,7 +278,7 @@ public final class PaymentServices {
     public static Map createPaymentApplication(DispatchContext dctx, Map context) throws GenericServiceException {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         // get parameters
@@ -496,7 +496,7 @@ public final class PaymentServices {
     public static Map setPaymentStatus(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         if (!(security.hasEntityPermission("ACCOUNTING", "_UPDATE", userLogin) || security.hasEntityPermission("ACCOUNTING_ROLE", "_UPDATE", userLogin))) {

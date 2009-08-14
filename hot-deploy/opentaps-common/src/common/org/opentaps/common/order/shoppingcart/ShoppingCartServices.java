@@ -62,6 +62,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 /**
@@ -88,7 +89,7 @@ public final class ShoppingCartServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String quoteId = (String) context.get("quoteId");
         String applyQuoteAdjustmentsString = (String) context.get("applyQuoteAdjustments");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         boolean applyQuoteAdjustments = applyQuoteAdjustmentsString == null || "true".equals(applyQuoteAdjustmentsString);
 
@@ -336,7 +337,7 @@ public final class ShoppingCartServices {
         String orderId = (String) context.get("orderId");
         Boolean skipInventoryChecks = (Boolean) context.get("skipInventoryChecks");
         Boolean skipProductChecks = (Boolean) context.get("skipProductChecks");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         if (UtilValidate.isEmpty(skipInventoryChecks)) {
             skipInventoryChecks = Boolean.FALSE;

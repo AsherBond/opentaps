@@ -81,6 +81,7 @@ import org.opentaps.common.party.PartyNotFoundException;
 import org.opentaps.common.party.PartyReader;
 import org.opentaps.common.quote.QuoteEvents;
 import org.opentaps.common.reporting.UtilReports;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
@@ -156,7 +157,7 @@ public final class EmailServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
         String sendTo = (String) context.get("sendTo");
         String subject = (String) context.get("subject");
@@ -216,7 +217,7 @@ public final class EmailServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String invoiceId = (String) context.get("invoiceId");
         String sendTo = (String) context.get("sendTo");
         String subject = (String) context.get("subject");
@@ -294,7 +295,7 @@ public final class EmailServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");
         String sendTo = (String) context.get("sendTo");
         String subject = (String) context.get("subject");
@@ -377,7 +378,7 @@ public final class EmailServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");
         String subject = (String) context.get("subject");
         String content = (String) context.get("content");
@@ -495,7 +496,7 @@ public final class EmailServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String toEmail = (sendTo == null || sendTo.equals("")) ? "" : sendTo;
         // generate pdf report
         String author = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, userLogin.getString("partyId"), false);

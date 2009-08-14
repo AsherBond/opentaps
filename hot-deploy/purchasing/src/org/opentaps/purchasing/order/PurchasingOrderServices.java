@@ -28,6 +28,7 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 
 public class PurchasingOrderServices {
 
@@ -47,7 +48,7 @@ public class PurchasingOrderServices {
      */
     public static Map updateOrderItemEstimatedDeliveryDate(DispatchContext ctx, Map context) throws GenericEntityException {
         GenericDelegator delegator = ctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // Service parameters
         String orderId = (String)context.get("orderId");

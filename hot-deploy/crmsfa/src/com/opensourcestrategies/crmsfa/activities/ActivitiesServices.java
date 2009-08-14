@@ -135,7 +135,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // use the toEmail and internalPartyId to find the contactMechIdTo
         String toEmail = (String) context.get("toEmail");
@@ -603,7 +603,7 @@ public class ActivitiesServices {
     public static Map processIncomingEmail(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue login = (GenericValue) context.get("userLogin");
         MimeMessageWrapper wrapper = (MimeMessageWrapper) context.get("messageWrapper");
         Map serviceResults = null; 
@@ -780,7 +780,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
 
         try {
@@ -865,7 +865,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
 
         String workEffortId = (String) context.get("workEffortId");
@@ -953,7 +953,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String workEffortId = (String) context.get("workEffortId");
         try {
@@ -989,7 +989,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String workEffortId = (String) context.get("workEffortId");
         Map input = null;
@@ -1105,7 +1105,7 @@ public class ActivitiesServices {
         String newOwnerPartyId = (String) context.get("newOwnerPartyId");
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
 
@@ -1211,7 +1211,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
         String workEffortPurposeTypeId = (String) context.get("workEffortPurposeTypeId");
         
@@ -1320,7 +1320,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String workEffortId = (String) context.get("workEffortId");
         String partyId = (String) context.get("partyId");
@@ -1370,7 +1370,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String workEffortId = (String) context.get("workEffortId");
         String partyId = (String) context.get("partyId");
@@ -1409,7 +1409,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String workEffortId = (String) context.get("workEffortId");
         String partyId = (String) context.get("partyId");
@@ -1450,7 +1450,7 @@ public class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");        
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String partyId = (String) context.get("partyId");
         String salesOpportunityId = (String) context.get("salesOpportunityId");
         String custRequestId = (String) context.get("custRequestId");
@@ -1573,7 +1573,7 @@ public class ActivitiesServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Map input = null;
         Map serviceResults = null;
 
@@ -1697,7 +1697,7 @@ public class ActivitiesServices {
         throws GenericEntityException, GenericServiceException {
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         // association IDs
@@ -1738,7 +1738,7 @@ public class ActivitiesServices {
     public static Map autoCreateTimesheetEntryForActivity(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String workEffortId = (String) context.get("workEffortId");
 
         try {
@@ -1838,7 +1838,7 @@ public class ActivitiesServices {
         String workEffortId = (String) context.get("workEffortId");
         String partyId = (String) context.get("partyId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
 
@@ -1907,7 +1907,7 @@ public class ActivitiesServices {
         String workEffortPurposeTypeId = (String) context.get("workEffortPurposeTypeId");
         String currentStatusId = (String) context.get("currentStatusId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         // Make sure we don't do anything if this isn't an email task activity that has been cancelled
@@ -1955,7 +1955,7 @@ public class ActivitiesServices {
         String delContentDataResourceStr = (String) context.get("delContentDataResource");
         String donePage = (String) context.get("donePage");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         // by default delete the attachments

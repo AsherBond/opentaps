@@ -62,7 +62,7 @@ public final class QuoteServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
 
         if (!security.hasEntityPermission("ORDERMGR", "_CREATE", userLogin)) {
@@ -166,7 +166,7 @@ public final class QuoteServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
         String quoteItemSeqId = (String) context.get("quoteItemSeqId");
 
@@ -229,7 +229,7 @@ public final class QuoteServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
         String quoteItemSeqId = (String) context.get("quoteItemSeqId");
 
@@ -267,7 +267,7 @@ public final class QuoteServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
         String statusId = (String) context.get("statusId");
 
@@ -308,7 +308,7 @@ public final class QuoteServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
 
         if (!security.hasEntityPermission("ORDERMGR", "_UPDATE", userLogin)) {
@@ -353,7 +353,7 @@ public final class QuoteServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
         String quoteItemSeqId = (String) context.get("quoteItemSeqId");
 
@@ -392,7 +392,7 @@ public final class QuoteServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
         String quoteItemSeqId = (String) context.get("quoteItemSeqId");
 
@@ -439,7 +439,7 @@ public final class QuoteServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
         String quoteItemSeqId = (String) context.get("quoteItemSeqId");
 
@@ -497,7 +497,7 @@ public final class QuoteServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
         String quoteItemSeqId = (String) context.get("quoteItemSeqId");
 
@@ -550,7 +550,7 @@ public final class QuoteServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
 
         if (!security.hasEntityPermission("ORDERMGR", "_CREATE", userLogin)) {
@@ -677,7 +677,7 @@ public final class QuoteServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
         String quoteItemSeqId = (String) context.get("quoteItemSeqId");
 
@@ -768,7 +768,7 @@ public final class QuoteServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String quoteId = (String) context.get("quoteId");
 
         if (!security.hasEntityPermission("ORDERMGR", "_UPDATE", userLogin)) {
@@ -814,7 +814,7 @@ public final class QuoteServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String note = (String) context.get("note");
         String quoteId = (String) context.get("quoteId");

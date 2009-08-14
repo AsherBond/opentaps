@@ -90,6 +90,7 @@ import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.warehouse.security.WarehouseSecurity;
+import org.opentaps.common.util.UtilCommon;
 
 /**
  * Services for Warehouse application Production Runs.
@@ -383,7 +384,7 @@ public final class ProductionRunServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String facilityId = (String) context.get("facilityId");
         WarehouseSecurity wsecurity = new WarehouseSecurity(security, userLogin, facilityId);
@@ -534,7 +535,7 @@ public final class ProductionRunServices {
             throws GenericEntityException, GenericServiceException {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         Map<String, Object> input;
@@ -608,7 +609,7 @@ public final class ProductionRunServices {
     public static Map<String, Object> addProductionRunRoutingTask(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // this task is the new one created from a template, so we will have to find the template this is associated with
         String routingTaskId = (String) context.get("routingTaskId");
@@ -667,7 +668,7 @@ public final class ProductionRunServices {
     public static Map<String, Object> approveOutsourcedProductRequirements(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String productionRunId = (String) context.get("productionRunId");
@@ -794,7 +795,7 @@ public final class ProductionRunServices {
     public static Map<String, Object> cancelProductionRun(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String productionRunId = (String) context.get("productionRunId");
@@ -950,7 +951,7 @@ public final class ProductionRunServices {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> reduceWorkEffortGoodStandard(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String workEffortId = (String) context.get("workEffortId");
         String productId = (String) context.get("productId");
@@ -1193,7 +1194,7 @@ public final class ProductionRunServices {
     public static Map<String, Object> createProductionRunRefactored(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         // Mandatory input fields
@@ -1814,7 +1815,7 @@ public final class ProductionRunServices {
         Map result = new HashMap();
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         // Mandatory input fields
@@ -2265,7 +2266,7 @@ public final class ProductionRunServices {
         final String resource = "ManufacturingUiLabels";
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         // Mandatory input fields
@@ -2384,7 +2385,7 @@ public final class ProductionRunServices {
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Timestamp now = UtilDateTime.nowTimestamp();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String inventoryItemId = (String) context.get("inventoryItemId");
         Double quantity = (Double) context.get("quantity");

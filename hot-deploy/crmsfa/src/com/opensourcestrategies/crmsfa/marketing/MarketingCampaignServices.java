@@ -73,7 +73,7 @@ public class MarketingCampaignServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String partyId = (String) context.get("partyId");
         String marketingCampaignId = (String) context.get("marketingCampaignId");
@@ -118,7 +118,7 @@ public class MarketingCampaignServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String partyId = (String) context.get("partyId");
         String marketingCampaignId = (String) context.get("marketingCampaignId");
@@ -148,7 +148,7 @@ public class MarketingCampaignServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String marketingCampaignId = (String) context.get("marketingCampaignId");
 
         // TODO: security
@@ -190,7 +190,7 @@ public class MarketingCampaignServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String contactListId = (String) context.get("contactListId");
         String includeCountryGeoId = (String) context.get("includeCountryGeoId");
@@ -246,7 +246,7 @@ public class MarketingCampaignServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String contactListId = (String) context.get("contactListId");
         Timestamp now = UtilDateTime.nowTimestamp();
 
@@ -429,7 +429,7 @@ public class MarketingCampaignServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // Make sure FacetPhone integration is turned on
         boolean facetPhoneIntegrate = "true".equalsIgnoreCase( UtilProperties.getPropertyValue("VoIP", "facetPhone.integrate", ""));
@@ -514,7 +514,7 @@ public class MarketingCampaignServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String contactListId = (String) context.get("contactListId");
         Timestamp now = UtilDateTime.nowTimestamp();
 
@@ -585,7 +585,7 @@ public class MarketingCampaignServices {
      */
     public static Map addContactListToMarketingCampaign(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String contactListId = (String) context.get("contactListId");
         String marketingCampaignId = (String) context.get("marketingCampaignId");
@@ -643,7 +643,7 @@ public class MarketingCampaignServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String campaignListId = (String) context.get("campaignListId");
         Timestamp now = UtilDateTime.nowTimestamp();
@@ -684,7 +684,7 @@ public class MarketingCampaignServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String marketingCampaignId = (String)context.get("marketingCampaignId");
 
@@ -725,7 +725,7 @@ public class MarketingCampaignServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         EntityListIterator contactListIterator = null;
 

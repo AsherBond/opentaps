@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -21,6 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.util.*;
+import javax.xml.rpc.ServiceException;
 
 import org.apache.axis.AxisFault;
 import org.apache.axis.message.RPCElement;
@@ -39,9 +40,8 @@ import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.shipment.thirdparty.fedex.FedexServices;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.shipping.fedex.soap.axis.*;
-
-import javax.xml.rpc.ServiceException;
 
 
 public class OpentapsFedexServices {
@@ -51,7 +51,7 @@ public class OpentapsFedexServices {
     public static final String PAYMENT_TYPE_SENDER = "SENDER";
     public static final String DROPOFF_TYPE = "shipment.fedex.default.dropoffType";
     public static final String PACKAGING_TYPE = "shipment.fedex.default.packagingType";
-    
+
     static URL fedexSoapUrl = null;
     static RateServiceSoapBindingStub rateInterface = null;
     static {
@@ -71,40 +71,40 @@ public class OpentapsFedexServices {
             Debug.logError(e, module);
         }
     }
-    
+
     /**
      * Requests the Rate Service
-     * 
+     *
      * @param dctx
      * @param context
      * @return
      */
 
     public static Map fedexRateRequest(DispatchContext dctx, Map context) {
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // Creating the result map
     	Map result = null;
 
     	GenericDelegator delegator = dctx.getDelegator();
-    	
+
     	// the client detail account number
     	String accountNumber = UtilProperties.getPropertyValue(shipmentPropertiesFile, "shipment.fedex.access.accountNbr");
-    	
+
     	if (UtilValidate.isEmpty(accountNumber)) {
             return ServiceUtil.returnFailure("accountNbr not found for Fedex rate service request.");
         }
-    	
+
     	// the client detail meter number
     	String meterNumber = UtilProperties.getPropertyValue(shipmentPropertiesFile, "shipment.fedex.access.meterNumber");
-    	
+
     	// setting the customer transaction id
     	String customerTransactionId = "Rating and Service";
 
     	// setting the user credentials
     	String userCredentialKey = UtilProperties.getPropertyValue(shipmentPropertiesFile, "shipment.fedex.access.userCredential.key");
     	String userCredentialPassword = UtilProperties.getPropertyValue(shipmentPropertiesFile, "shipment.fedex.access.userCredential.password");
-    	
+
         String weightUomId = UtilProperties.getPropertyValue(shipmentPropertiesFile, "shipment.default.weight.uom");
         if (UtilValidate.isEmpty(weightUomId)) {
             return ServiceUtil.returnFailure("Default weightUomId not found for Fedex rate request - should be in " + shipmentPropertiesFile + ":shipment.default.weight.uom.");
@@ -196,7 +196,7 @@ public class OpentapsFedexServices {
             if (UtilValidate.isNotEmpty(shippingContactMechId)) {
                 shipToAddress = delegator.findByPrimaryKey("PostalAddress",
                         UtilMisc.toMap("contactMechId", shippingContactMechId));
-    
+
                 if (shipToAddress != null) {
                     destinationZip = shipToAddress.getString("postalCode");
                 }
@@ -299,17 +299,17 @@ public class OpentapsFedexServices {
                     }
                 }
             }
-            
+
             result = ServiceUtil.returnSuccess();
             if (shippingEstimateAmount != null) result.put("shippingEstimateAmount", new Double(shippingEstimateAmount.doubleValue()));
-            
+
         } catch (GenericEntityException e) {
             Debug.logError(e, module);
             return ServiceUtil.returnFailure(e.getMessage());
         }
 
         return result;
-	
+
     }
 
     /**
@@ -323,7 +323,7 @@ public class OpentapsFedexServices {
 
     /**
      * Factory Method to retrieve the correct PackagingType
-     * 
+     *
      * @param propertyValue The property value to be compared
      * @return PackagingType The correct DropoffType object
      */
@@ -347,7 +347,7 @@ public class OpentapsFedexServices {
 
 	/**
      * Factory Method to retrieve the correct ServiceType
-     * 
+     *
      * @param object The property value to be compared
      * @return ServiceType The correct ServiceType object
      */
@@ -395,7 +395,7 @@ public class OpentapsFedexServices {
 
 	/**
      * Factory Method to retrieve the correct DropoffType
-     * 
+     *
      * @param propertyValue The property value to be compared
      * @return DropoffType The correct DropoffType object
      */

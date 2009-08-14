@@ -67,7 +67,7 @@ public class AgreementInvoiceFactory {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
 
         // this is always true whether the agreement is for disbursement invoices or receipts
@@ -179,7 +179,7 @@ public class AgreementInvoiceFactory {
      */
     private static Collection<Map<String,Object>> processAgreementTerm(DispatchContext dctx, Map context, GenericValue agreement, GenericValue term, Collection<GenericValue> invoices) throws GeneralException {
         List<Map<String,Object>> items = FastList.newInstance();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         if (! "COMM_RATES".equals(term.get("agreementItemTypeId"))) return items;
 

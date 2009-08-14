@@ -58,6 +58,7 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.engine.GenericAsyncEngine;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.service.Service;
@@ -175,7 +176,7 @@ public class POJOJavaEngine extends GenericAsyncEngine {
             context.remove("userLogin");
 
             // get the locale as well from the context.
-            Locale locale = (Locale) context.get("locale");
+            Locale locale = UtilCommon.getLocale(context);
             service.setLocale(locale);
             context.remove("locale");
 

@@ -54,9 +54,9 @@ public class OrderAspects {
                 }
             }
         } catch (GenericEntityException gee) {
-            return UtilMessage.createAndLogServiceError(gee, (Locale) context.get("locale"), module);
+            return UtilMessage.createAndLogServiceError(gee, UtilCommon.getLocale(context), module);
         } catch (Throwable e) {
-            return UtilMessage.createAndLogServiceError(e.getLocalizedMessage(), (Locale) context.get("locale"), module);
+            return UtilMessage.createAndLogServiceError(e.getLocalizedMessage(), UtilCommon.getLocale(context), module);
         }
 
         return results;

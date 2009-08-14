@@ -27,6 +27,7 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 /**
  * TestEntity services for Opentaps-Common, for verify eecas in hibernate.
@@ -59,7 +60,7 @@ public class TestEntityServices {
             Debug.logInfo("run opentaps.testReturnStoreTestEntitySeca sucessed, testEntityHistoryId : " + getNextSeqId + " testId : " + testId + " modifyTimestamp : " + timeStamp, module);
         } catch (GenericEntityException e) {
             Debug.logInfo("run opentaps.testReturnStoreTestEntitySeca failed, testEntityHistoryId : " + getNextSeqId + " testId : " + testId + " modifyTimestamp : " + timeStamp + "." + e.getMessage(), module);
-            return UtilMessage.createAndLogServiceError(e, (Locale) context.get("locale"), module);
+            return UtilMessage.createAndLogServiceError(e, UtilCommon.getLocale(context), module);
         }
         return ServiceUtil.returnSuccess();
     }

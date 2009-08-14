@@ -87,7 +87,7 @@ public final class InventoryServices {
     @SuppressWarnings("unchecked")
     public static Map checkInventoryItemQOHOverZero(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String inventoryItemId = (String) context.get("inventoryItemId");
 
@@ -125,7 +125,7 @@ public final class InventoryServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String facilityId = (String) context.get("facilityId");
         WarehouseSecurity warehouseSecurity = new WarehouseSecurity(security, userLogin, facilityId);
@@ -169,7 +169,7 @@ public final class InventoryServices {
         GenericDelegator delegator  = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String facilityId = (String) context.get("facilityId");
         WarehouseSecurity warehouseSecurity = new WarehouseSecurity(security, userLogin, facilityId);
@@ -212,7 +212,7 @@ public final class InventoryServices {
     public static Map issueOrderItemToShipmentAndReceiveAgainstPO(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         Map result = ServiceUtil.returnSuccess();
 

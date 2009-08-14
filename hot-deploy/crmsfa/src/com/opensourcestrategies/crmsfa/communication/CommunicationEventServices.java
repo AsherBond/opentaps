@@ -65,7 +65,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.template.freemarker.FreemarkerUtil;
-import org.opentaps.common.util.UtilDate;
+import org.opentaps.common.util.UtilCommon;
 
 public class CommunicationEventServices {
 
@@ -84,7 +84,7 @@ public class CommunicationEventServices {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
 
         if (timeZone == null) {

@@ -59,6 +59,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
@@ -81,7 +82,7 @@ public class AccountsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         if (!security.hasPermission("CRMSFA_ACCOUNT_CREATE", userLogin)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
@@ -187,7 +188,7 @@ public class AccountsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String accountPartyId = (String) context.get("partyId");
 
@@ -230,7 +231,7 @@ public class AccountsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // what account we're expiring
         String accountPartyId = (String) context.get("partyId");
@@ -275,7 +276,7 @@ public class AccountsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String accountPartyId = (String) context.get("accountPartyId");
         String newPartyId = (String) context.get("newPartyId");
@@ -307,7 +308,7 @@ public class AccountsServices {
         String newPartyId = (String) context.get("newPartyId");
         String accountPartyId = (String) context.get("accountPartyId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
 
@@ -349,7 +350,7 @@ public class AccountsServices {
         String teamMemberPartyId = (String) context.get("teamMemberPartyId");
         String accountTeamPartyId = (String) context.get("accountTeamPartyId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
 

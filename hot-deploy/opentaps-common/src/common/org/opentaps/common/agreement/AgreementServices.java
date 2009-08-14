@@ -31,14 +31,15 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 /**
  * Agreement-related services for Opentaps-common
- * 
- * @version    $Rev:  $
  */
-public class AgreementServices {
+public final class AgreementServices {
+
+    private AgreementServices() { }
 
     public static final String module = AgreementServices.class.getName();
     public static final String resource = "OpentapsUiLabels";
@@ -46,17 +47,17 @@ public class AgreementServices {
 
     /**
      * Given an Agreement header, creates the AgreementItem(s) and AgreementTerms based on a template.
-     * If agreementItemTypeId found in context the service create item of specified type and its terms. 
+     * If agreementItemTypeId found in context the service create item of specified type and its terms.
      * The template is modeled in the entities AgreementToItemMap and AgreementItemToTermMap.
-     * 
+     *
      * @param dctx DispatchContext
      * @param context Map
      * @return Map
      */
     public static Map autoCreateAgreementItemsAndTerms(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        
-        Locale locale = (Locale) context.get("locale");
+
+        Locale locale = UtilCommon.getLocale(context);
         String agreementId = (String) context.get("agreementId");
         String agreementItemTypeId = (String) context.get("agreementItemTypeId");
         String currencyUomId = (String) context.get("currencyUomId");
@@ -86,7 +87,7 @@ public class AgreementServices {
                 }
             } else {
                 // create agreement item of specified type
-                
+
                 // Check if this agreement item type is valid for given agreement
                 GenericValue itemMappings = delegator.findByPrimaryKey("AgreementToItemMap", UtilMisc.toMap("agreementTypeId", agreement.get("agreementTypeId"), "agreementItemTypeId", agreementItemTypeId));
                 if (itemMappings == null) {
@@ -128,59 +129,59 @@ public class AgreementServices {
             return UtilMessage.createAndLogServiceError(e, locale, module);
         }
     }
-    
+
     /**
      * Run as SECA and set initial status of the agreement.
-     *  
+     *
      * @param dctx DispatchContext
      * @param context Map
      * @return Map
      */
     public static Map setInitialAgreementStatus(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        
+
         String agreementId = (String)context.get("agreementId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
-        
+        Locale locale = UtilCommon.getLocale(context);
+
         Map params = FastMap.newInstance();
         params.put("agreementId", agreementId);
         params.put("statusId", "AGR_CREATED");
         params.put("userLogin", userLogin);
-        
+
         try {
             dispatcher.runSync("updateAgreement", params);
         } catch (GenericServiceException e) {
             return UtilMessage.createAndLogServiceError(e, locale, module);
         }
-        
+
         return ServiceUtil.returnSuccess();
-        
+
     }
-    
+
     public static Map removeAgreementItemAndTerms(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        
+
         Locale locale = (Locale)context.get("locale");
-        
+
         String agreementId = (String)context.get("agreementId");
         String agreementItemSeqId = (String)context.get("agreementItemSeqId");
-        
+
         try {
-            
+
             delegator.removeByAnd("AgreementTerm", UtilMisc.toMap("agreementId", agreementId, "agreementItemSeqId", agreementItemSeqId));
             delegator.removeByAnd("AgreementItem", UtilMisc.toMap("agreementId", agreementId, "agreementItemSeqId", agreementItemSeqId));
-        
+
         } catch(GenericEntityException gee) {
             return UtilMessage.createAndLogServiceError(gee, locale, module);
         }
-        
+
         return ServiceUtil.returnSuccess();
     }
 
     /**
      * Service create commission agreement.
-     * 
+     *
      * @param dctx DispatchContext
      * @param context Map
      * @return Map
@@ -189,34 +190,34 @@ public class AgreementServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale)context.get("locale");
         Map result = ServiceUtil.returnSuccess();
-        
+
         String partyId = (String) context.get("partyIdTo");
         String roleTypeId = (String) context.get("roleTypeIdTo");
         String agreementTypeId = (String) context.get("agreementTypeId");
-        
+
         boolean applicableRole = false;
         if ("COMMISSION_AGREEMENT".equals(agreementTypeId)) {
             applicableRole = "COMMISSION_AGENT".equals(roleTypeId);
         } else if ("PARTNER_SALES_AGR".equals(agreementTypeId)) {
-            applicableRole = Arrays.asList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER").contains(roleTypeId); 
+            applicableRole = Arrays.asList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER").contains(roleTypeId);
         }
         if (!applicableRole) {
             return UtilMessage.createAndLogServiceError("OpentapsError_CreateAgreementFailSinceRole", UtilMisc.toMap("agreementTypeId", agreementTypeId, "roleTypeId", roleTypeId), locale, module);
         }
-        
+
         try {
-            
+
             Map ensurePartyRoleResult = dispatcher.runSync("ensurePartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", roleTypeId));
             if (ServiceUtil.isError(ensurePartyRoleResult)) {
                 return UtilMessage.createAndLogServiceError(ensurePartyRoleResult, module);
             }
-            
+
             result = dispatcher.runSync("createAgreement", context);
-            
+
         } catch (GenericServiceException gse) {
             return UtilMessage.createAndLogServiceError(gse, locale, module);
         }
-        
+
         return result;
     }
 }

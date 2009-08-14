@@ -40,22 +40,21 @@
  */
 package com.opensourcestrategies.crmsfa.forecasts;
 
-import java.util.*;
 import java.sql.Timestamp;
+import java.util.*;
 
+import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import org.ofbiz.base.util.*;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.entity.*;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.service.*;
 import org.ofbiz.security.Security;
-
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
-
+import org.ofbiz.service.*;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilConfig;
 import org.opentaps.common.util.UtilMessage;
-import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
 
 /**
  * Forecasts services. The service documentation is in services_forecasts.xml.
@@ -76,7 +75,7 @@ public class ForecastsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String salesForecastId = (String) context.get("salesForecastId");
         Double quotaAmount = (Double) context.get("quotaAmount");
@@ -139,7 +138,7 @@ public class ForecastsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String customTimePeriodId = (String) context.get("customTimePeriodId");
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -199,7 +198,7 @@ public class ForecastsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String parentPeriodId = (String) context.get("parentPeriodId");
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -263,7 +262,7 @@ public class ForecastsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         ResourceBundleMapWrapper uiLabelMap = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("CRMSFAUiLabels", locale);
 
         String salesOpportunityId = (String) context.get("salesOpportunityId");

@@ -63,7 +63,7 @@ public class CrmsfaOrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         Boolean onlyApprovedOrders = (Boolean) context.get("onlyApprovedOrders");
         String containsProductId = (String) context.get("containsProductId");
@@ -176,7 +176,7 @@ public class CrmsfaOrderServices {
 
     public static Map deleteOrderShipGroupPriority(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
 
@@ -191,7 +191,7 @@ public class CrmsfaOrderServices {
 
     public static Map createOrderShipGroupPriority(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
 
@@ -238,7 +238,7 @@ public class CrmsfaOrderServices {
 
     public static Map rescheduleOrderShipDates(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
         
         String orderId = (String) context.get("orderId");
@@ -265,7 +265,7 @@ public class CrmsfaOrderServices {
 
     public static Map resequenceOrderShipGroupPriorities(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
 
         // These maps will look like {"0": "WS10000", "1":"WS10010"}
@@ -344,7 +344,7 @@ public class CrmsfaOrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         Map result = ServiceUtil.returnSuccess();
 
@@ -432,7 +432,7 @@ public class CrmsfaOrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
 
@@ -527,7 +527,7 @@ public class CrmsfaOrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String billToPartyId = (String) context.get("billToPartyId");
         String productStoreId = (String) context.get("productStoreId");
@@ -672,7 +672,7 @@ public class CrmsfaOrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
         try {
@@ -742,7 +742,7 @@ public class CrmsfaOrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // first verify that the CVV is entered and 3-4 digits
         String securityCode = (String) context.get("securityCode");
@@ -785,7 +785,7 @@ public class CrmsfaOrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Map result = ServiceUtil.returnSuccess();
 
         String orderId = (String) context.get("orderId");
@@ -875,7 +875,7 @@ public class CrmsfaOrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
         String orderItemSeqId = (String) context.get("orderItemSeqId");
@@ -913,7 +913,7 @@ public class CrmsfaOrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // service arguments
         String orderId = (String) context.get("orderId");

@@ -139,7 +139,7 @@ public final class CommonServices {
     @SuppressWarnings("unchecked")
     public static Map purgeNavHistory(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
             Timestamp now = UtilDateTime.nowTimestamp();

@@ -30,6 +30,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 /**
@@ -234,7 +235,7 @@ public final class ConfigurationServices {
     public static Map updatePartyAcctgPreference(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
         String partyId = (String) context.get("partyId");
 
@@ -361,7 +362,7 @@ public final class ConfigurationServices {
     @SuppressWarnings("unchecked")
     public static Map deleteAccountingTag(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
             GenericValue pk = delegator.makeValue("Enumeration");

@@ -36,9 +36,13 @@
  */
 package com.opensourcestrategies.crmsfa.leads;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
-import org.opentaps.common.util.UtilMessage;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
@@ -51,11 +55,8 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.*;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilMessage;
 
 /**
  * Leads services. The service documentation is in services_leads.xml.
@@ -73,7 +74,7 @@ public class LeadsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         if (!security.hasPermission("CRMSFA_LEAD_CREATE", userLogin)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
@@ -177,7 +178,7 @@ public class LeadsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String leadPartyId = (String) context.get("partyId");
          
@@ -246,7 +247,7 @@ public class LeadsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String leadPartyId = (String) context.get("leadPartyId");
         String accountPartyId = (String) context.get("accountPartyId");
@@ -446,7 +447,7 @@ public class LeadsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String leadPartyId = (String) context.get("leadPartyId");
         String newPartyId = (String) context.get("newPartyId");
@@ -488,7 +489,7 @@ public class LeadsServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String leadPartyId = (String) context.get("leadPartyId");
 
@@ -525,7 +526,7 @@ public class LeadsServices {
     public static Map createCatalogRequestWithSurvey(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         try {
@@ -622,7 +623,7 @@ public class LeadsServices {
         String newPartyId = (String) context.get("newPartyId");
         String leadPartyId = (String) context.get("leadPartyId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
 

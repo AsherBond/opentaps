@@ -50,8 +50,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import freemarker.ext.dom.NodeModel;
+import freemarker.template.TemplateException;
 import javolution.util.FastList;
-
 import org.ofbiz.base.location.ComponentLocationResolver;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
@@ -64,26 +65,22 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.category.CategoryContentWrapper;
 import org.ofbiz.product.product.ProductContentWrapper;
-import org.ofbiz.security.Security;
 import org.ofbiz.product.product.ProductWorker;
+import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilConfig;
 import org.opentaps.common.util.UtilMessage;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-
-import freemarker.ext.dom.NodeModel;
-import freemarker.template.TemplateException;
 
 /**
  * Common product services.
@@ -97,7 +94,7 @@ public final class ProductServices {
 
     public static Map getProductByComprehensiveSearch(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String productId = (String) context.get("productId");
         Boolean lookupSupplierProductsBoolean = (Boolean) context.get("lookupSupplierProducts");
@@ -233,7 +230,7 @@ public final class ProductServices {
      */
     public static Map checkGoodIdentifierUniqueness(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String goodIdentificationTypeId = (String) context.get("goodIdentificationTypeId");
         String productId = (String) context.get("productId");
@@ -273,7 +270,7 @@ public final class ProductServices {
     public static Map generateSiteMapFile(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String productStoreId = (String) context.get("productStoreId");;
         Locale outputLocale = UtilMisc.ensureLocale(context.get("outputLocale"));

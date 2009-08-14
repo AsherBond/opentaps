@@ -52,6 +52,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.security.Security;
 
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 /**
@@ -81,7 +82,7 @@ public class DataSourceServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String partyId = (String) context.get("partyId");
         String dataSourceId = (String) context.get("dataSourceId");
@@ -119,7 +120,7 @@ public class DataSourceServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String partyId = (String) context.get("partyId");
         String dataSourceId = (String) context.get("dataSourceId");

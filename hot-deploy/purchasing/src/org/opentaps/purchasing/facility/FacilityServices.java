@@ -27,6 +27,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.party.PartyContactHelper;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 import java.sql.Timestamp;
@@ -54,7 +55,7 @@ public final class FacilityServices {
         }
         try {
             if (!security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
-                return ServiceUtil.returnError(UtilMessage.getPermissionDeniedError((Locale) context.get("locale")));
+                return ServiceUtil.returnError(UtilMessage.getPermissionDeniedError(UtilCommon.getLocale(context)));
             }
 
             GenericValue assoc = delegator.makeValue("FacilityAssoc");
@@ -77,7 +78,7 @@ public final class FacilityServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         try {
             if (!security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
                 return ServiceUtil.returnError(UtilMessage.getPermissionDeniedError(locale));
@@ -112,7 +113,7 @@ public final class FacilityServices {
         String organizationPartyId = (String) context.get("organizationPartyId");
         try {
             if (!security.hasEntityPermission("PRCH", "_WRHS_CONFIG", userLogin)) {
-                return ServiceUtil.returnError(UtilMessage.getPermissionDeniedError((Locale) context.get("locale")));
+                return ServiceUtil.returnError(UtilMessage.getPermissionDeniedError(UtilCommon.getLocale(context)));
             }
 
             Map<String, Object> input = FastMap.newInstance();

@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
 package org.opentaps.common.forms;
 
 import java.util.Locale;
@@ -11,13 +26,13 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 
 /**
  * Merge Form services. The service documentation is in services_forms.xml.
  *
  * @author <a href="mailto:richard.a.coss@state.or.us">Richard Coss</a>
  */
-
 public class MergeFormServices {
 
     public static final String module = MergeFormServices.class.getName();
@@ -27,7 +42,7 @@ public class MergeFormServices {
 
     public static Map createMergeForm(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Boolean privateForm = "Y".equals((String) context.get("privateForm"));
 
         GenericValue mergeForm = null;
@@ -50,7 +65,7 @@ public class MergeFormServices {
     public static Map updateMergeForm(DispatchContext dctx, Map context) {
         Map result = ServiceUtil.returnSuccess();
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String mergeFormId = (String) context.get("mergeFormId");
         Boolean privateForm = "Y".equals((String) context.get("privateForm"));
 
@@ -74,7 +89,7 @@ public class MergeFormServices {
     public static Map deleteMergeForm(DispatchContext dctx, Map context) {
         Map result = ServiceUtil.returnSuccess();
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String mergeFormId = (String) context.get("mergeFormId");
 
         try {
@@ -92,7 +107,7 @@ public class MergeFormServices {
 
     public static Map createMergeFormCategory(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         GenericValue mergeFormCategory = null;
@@ -115,7 +130,7 @@ public class MergeFormServices {
     public static Map updateMergeFormCategory(DispatchContext dctx, Map context) {
         Map result = ServiceUtil.returnSuccess();
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String mergeFormCategoryId = (String) context.get("mergeFormCategoryId");
 
         GenericValue mergeFormCategory = null;
@@ -137,7 +152,7 @@ public class MergeFormServices {
     public static Map deleteMergeFormCategory(DispatchContext dctx, Map context) {
         Map result = ServiceUtil.returnSuccess();
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String mergeFormCategoryId = (String) context.get("mergeFormCategoryId");
         
         try {

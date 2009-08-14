@@ -144,7 +144,7 @@ public final class InvoiceServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String agreementId = (String) context.get("agreementId");
         String organizationPartyId = (String) context.get("organizationPartyId");
@@ -248,7 +248,7 @@ public final class InvoiceServices {
 
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         if (!security.hasEntityPermission("FINANCIALS", "_AR_INCRTE", userLogin)) {
@@ -337,7 +337,7 @@ public final class InvoiceServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         if (!(security.hasEntityPermission("FINANCIALS", "_AP_INUPDT", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_INUPDT", userLogin))) {
@@ -440,7 +440,7 @@ public final class InvoiceServices {
     public static Map processCheckRun(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         if (!security.hasEntityPermission("FINANCIALS", "_AR_PCRTE", userLogin)) {
@@ -633,7 +633,7 @@ public final class InvoiceServices {
         String recurrenceRuleId = (String) context.get("recurrenceRuleId");
         String recurrenceInfoId = (String) context.get("recurrenceInfoId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
         Timestamp now = UtilDateTime.nowTimestamp();
 
@@ -708,7 +708,7 @@ public final class InvoiceServices {
         GenericDelegator delegator = dctx.getDelegator();
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
 
         try {
@@ -815,7 +815,7 @@ public final class InvoiceServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String invoiceId = (String) context.get("invoiceId");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         Timestamp now = UtilDateTime.nowTimestamp();
@@ -915,7 +915,7 @@ public final class InvoiceServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         String invoiceId = (String) context.get("invoiceId");
@@ -1033,7 +1033,7 @@ public final class InvoiceServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String invoiceId = (String) context.get("invoiceId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
             // Get the agreement terms that apply to the invoice
@@ -1091,7 +1091,7 @@ public final class InvoiceServices {
     public static Map createInvoiceTerm(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         if ((!security.hasEntityPermission("FINANCIALS", "_AP_INUPDT", userLogin)) && (!security.hasEntityPermission("FINANCIALS", "_AR_INUPDT", userLogin))) {
@@ -1145,7 +1145,7 @@ public final class InvoiceServices {
     public static Map updateInvoiceTerm(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         if ((!security.hasEntityPermission("FINANCIALS", "_AP_INUPDT", userLogin)) && (!security.hasEntityPermission("FINANCIALS", "_AR_INUPDT", userLogin))) {
@@ -1205,7 +1205,7 @@ public final class InvoiceServices {
         GenericDelegator delegator = dctx.getDelegator();
         String invoiceId = (String) context.get("invoiceId");
         TimeZone timeZone = (TimeZone) context.get("timeZone");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
 
@@ -1358,7 +1358,7 @@ public final class InvoiceServices {
     public static Map saveInvoicePDFToFile(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String screenLocation = (String) context.get("screenLocation");
         String invoiceId = (String) context.get("invoiceId");
@@ -1428,7 +1428,7 @@ public final class InvoiceServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         // check that user can create AR payments and invoices
@@ -1698,7 +1698,7 @@ public final class InvoiceServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
         Security security = dctx.getSecurity();
 
@@ -1848,7 +1848,7 @@ public final class InvoiceServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String invoiceId = (String) context.get("invoiceId");
         try {
@@ -1953,7 +1953,7 @@ return results;
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String invoiceId = (String) context.get("invoiceId");
 
@@ -2057,7 +2057,7 @@ return results;
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Security security = dctx.getSecurity();
 
         String invoiceId = (String) context.get("invoiceId");
@@ -2119,7 +2119,7 @@ return results;
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String paymentId = (String) context.get("paymentId");
 
@@ -2248,7 +2248,7 @@ return results;
     public static Map invoiceSuppliesOrWorkEffortOrderItems(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericDelegator delegator = dispatcher.getDelegator();
 
         // invoice created by the service
@@ -2407,7 +2407,7 @@ return results;
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         if (decimals == -1 || rounding == -1) {
             return UtilMessage.createAndLogServiceError("AccountingAritmeticPropertiesNotConfigured", locale, MODULE);

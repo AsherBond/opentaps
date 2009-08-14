@@ -43,6 +43,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 
 /**
  * Services for exporting General Ledger activities 
@@ -64,7 +65,7 @@ public class GLExportServices {
     public static Map exportGLToFile(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         List allTransactions = (List) context.get("valuesToCreate");
         allTransactions.addAll((List) context.get("valuesToStore"));
 

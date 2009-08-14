@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -35,6 +35,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 
 /**
  * Services for working with VoIP systems
@@ -57,7 +58,7 @@ public class VoIPServices {
      */
     public static Map retrieveLatestCallFromFacetPhoneServer( DispatchContext dctx, Map context) {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // FacetPhone server requires and sends an EOT after each query and response
         byte endOfTransmission = 0x04;
@@ -74,7 +75,7 @@ public class VoIPServices {
 
         String facetPhoneServerPortStr = UtilProperties.getPropertyValue("VoIP", "facetPhone.server.connect.port", "6500");
         int facetPhoneServerPort = Integer.parseInt(facetPhoneServerPortStr);
-        
+
         String facetPhoneServerTimeoutStr = UtilProperties.getPropertyValue("VoIP", "facetPhone.server.connect.timeout", "10000");
         int facetPhoneServerTimeout = Integer.parseInt(facetPhoneServerTimeoutStr);
 
@@ -144,7 +145,7 @@ public class VoIPServices {
 
     /**
      * Retrieves and parses the incoming number of the latest call for the user from the FacetPhone server, using the retrieveLatestCallFromFacetPhoneServer service.
-     * 
+     *
      * @param dctx
      * @param context
      * @return
@@ -152,10 +153,10 @@ public class VoIPServices {
     public static Map getCurrentIncomingNumberFromFacetPhoneServer( DispatchContext dctx, Map context) {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         LocalDispatcher dispatcher = (LocalDispatcher) dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         Map result = ServiceUtil.returnSuccess();
-        
+
         String callStateRegexp = UtilProperties.getPropertyValue("VoIP", "facetPhone.cid.callState.regexp");
         if (UtilValidate.isEmpty(callStateRegexp)) {
             String message = UtilProperties.getMessage(errorResource, "CrmErrorPropertyNotConfigured", UtilMisc.toMap("propertyName", "facetPhone.cid.callState.regexp", "fileName", resource + ".properties"), locale);
@@ -189,7 +190,7 @@ public class VoIPServices {
             Debug.logError(ServiceUtil.getErrorMessage(retrieveLatestCallFromFacetPhoneServerMap), module);
             return ServiceUtil.returnFailure(ServiceUtil.getErrorMessage(retrieveLatestCallFromFacetPhoneServerMap));
         }
-        
+
         latestCallData = (String) retrieveLatestCallFromFacetPhoneServerMap.get("latestCallData");
         if (UtilValidate.isEmpty(latestCallData)) {
             String errorMessage = UtilProperties.getMessage(errorResource, "CrmErrorVoIPErrorLatestCallFromFacetPhone", locale);
@@ -203,28 +204,28 @@ public class VoIPServices {
         while (matcher.find()) {
             if (matcher.group(1) != null) state = matcher.group(1);
         }
-        
+
         // Ignore the results if there's no active call
         if (! "active".equalsIgnoreCase(state)) {
             String message = UtilProperties.getMessage(errorResource, "CrmErrorVoIPErrorNoCurrentCall", userLogin, locale);
             Debug.logVerbose(message, module);
             return ServiceUtil.returnSuccess();
         }
-        
+
         // Get the caller's number by retrieving it from the latestCallData via regular expression
         matcher = Pattern.compile(numberIdentifyRegexp).matcher(latestCallData);
         String number = null;
         while (matcher.find()) {
             if (matcher.group(1) != null) number = matcher.group(1);
         }
-        
+
         // Ignore the results if there's no number for the call
         if (UtilValidate.isEmpty(number)) {
             String message = UtilProperties.getMessage(errorResource, "CrmErrorVoIPErrorNoNumberForCurrentCall", userLogin, locale);
             Debug.logVerbose(message, module);
             return ServiceUtil.returnSuccess();
         }
-        
+
         matcher = Pattern.compile(numberParseRegexp).matcher(number);
         int phoneNumberPatternCountryCodeGroup = Integer.parseInt(UtilProperties.getPropertyValue(resource, "voip.number.parse.regexp.group.countryCode"));
         int phoneNumberPatternAreaCodeGroup = Integer.parseInt(UtilProperties.getPropertyValue(resource, "voip.number.parse.regexp.group.areaCode"));
@@ -234,12 +235,12 @@ public class VoIPServices {
             if (UtilValidate.isNotEmpty(matcher.group(phoneNumberPatternAreaCodeGroup))) result.put("areaCode", matcher.group(phoneNumberPatternAreaCodeGroup));
             if (UtilValidate.isNotEmpty(matcher.group(phoneNumberPatternPhoneNumberGroup))) result.put("contactNumber", matcher.group(phoneNumberPatternPhoneNumberGroup));
         } else {
-            String message = UtilProperties.getMessage(errorResource, "CrmErrorVoIPErrorNumberFromFacetPhone", UtilMisc.toMap("latestCallData", latestCallData), locale);            
+            String message = UtilProperties.getMessage(errorResource, "CrmErrorVoIPErrorNumberFromFacetPhone", UtilMisc.toMap("latestCallData", latestCallData), locale);
             Debug.logWarning(message, module);
             result.put("contactNumber", number);
-        }        
-        
+        }
+
         return result;
-        
+
     }
 }

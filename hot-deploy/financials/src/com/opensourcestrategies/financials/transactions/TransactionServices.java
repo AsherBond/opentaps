@@ -147,7 +147,7 @@ public final class TransactionServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Security security = dctx.getSecurity();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String acctgTransId = (String) context.get("acctgTransId");
 
         if (!security.hasEntityPermission("FINANCIALS", "_REVERSE", userLogin)) {
@@ -225,7 +225,7 @@ public final class TransactionServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Security security = dctx.getSecurity();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String paymentId = (String) context.get("paymentId");
 
         if (!security.hasEntityPermission("FINANCIALS", "_REVERSE", userLogin)) {
@@ -311,7 +311,7 @@ public final class TransactionServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Security security = dctx.getSecurity();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         if (!security.hasEntityPermission("ACCOUNTING", "_ATX_POST", userLogin)) {
             return ServiceUtil.returnError(UtilProperties.getMessage("FinancialsUiLabels", "FinancialsServiceErrorNoPermission", locale));
@@ -356,7 +356,7 @@ public final class TransactionServices {
     public static Map createAcctgTransEntryManual(DispatchContext dctx, Map context) throws GenericServiceException {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         try {
@@ -403,7 +403,7 @@ public final class TransactionServices {
     @SuppressWarnings("unchecked")
     public static Map updateAcctgTransEntryManual(DispatchContext dctx, Map context) throws GenericServiceException {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         try {
             LedgerRepositoryInterface ledgerRepository = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin)).loadDomainsDirectory().getLedgerDomain().getLedgerRepository();

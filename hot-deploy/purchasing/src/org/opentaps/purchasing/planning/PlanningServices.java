@@ -104,7 +104,7 @@ public final class PlanningServices {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         List requirements = FastList.newInstance();
         String partyId = (String) context.get("partyId");
         String requirementId = null;

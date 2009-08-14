@@ -78,6 +78,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.order.shoppingcart.OpentapsShoppingCart;
 import org.opentaps.common.product.UtilProduct;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
@@ -85,13 +86,13 @@ import org.opentaps.domain.base.entities.OrderItemShipGroupAssoc;
 import org.opentaps.domain.order.Order;
 import org.opentaps.domain.order.OrderItem;
 import org.opentaps.domain.order.OrderRepositoryInterface;
+import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 
 /**
  * Common order services.
@@ -219,7 +220,7 @@ public final class OrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
         Double disbursementAmount = (Double) context.get("disbursementAmount");
@@ -288,7 +289,7 @@ public final class OrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String currencyUomId = (String) context.get("currencyUomId");
         String operatorUserLoginId = (String) context.get("operatorUserLoginId");
@@ -352,7 +353,7 @@ public final class OrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String cashDrawerId = (String) context.get("cashDrawerId");
         BigDecimal finalAmount = ((BigDecimal) context.get("finalAmount")).setScale(decimals, rounding);
@@ -410,7 +411,7 @@ public final class OrderServices {
     public static Map recordCashDrawerTransaction(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         Map result = ServiceUtil.returnSuccess();
 
@@ -527,7 +528,7 @@ public final class OrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
         String productId = (String) context.get("productId");
@@ -703,7 +704,7 @@ public final class OrderServices {
     public static Map updateApprovedOrderItems(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String orderId = (String) context.get("orderId");
         Map overridePriceMap = (Map) context.get("overridePriceMap");
@@ -898,7 +899,7 @@ public final class OrderServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");
         Map overridePriceMap = (Map) context.get("overridePriceMap");
         Map itemDescriptionMap = (Map) context.get("itemDescriptionMap");
@@ -1069,7 +1070,7 @@ public final class OrderServices {
     public static Map appendOrderItem(DispatchContext dctx, Map context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String productId = (String) context.get("productId");
@@ -1179,7 +1180,7 @@ public final class OrderServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String shipGroupSeqId = (String) context.get("shipGroupSeqId");
         String orderId = (String) context.get("orderId");
         String productId = (String) context.get("productId");
@@ -1284,9 +1285,9 @@ public final class OrderServices {
      * @return the service result <code>Map</code>
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ? extends Object> cancelOrderItemBilling(DispatchContext dctx, Map<String, Object> context) {
+    public static Map<String, Object> cancelOrderItemBilling(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String invoiceId = (String) context.get("invoiceId");
 
@@ -1309,7 +1310,7 @@ public final class OrderServices {
      * @return the service result <code>Map</code>
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ? extends Object> updatePostalAddressForProductStoreFacilityByAddress(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updatePostalAddressForProductStoreFacilityByAddress(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         String oldContactMechId = (String) context.get("oldContactMechId");
         String contactMechId = (String) context.get("contactMechId");
@@ -1664,7 +1665,7 @@ public final class OrderServices {
         GenericDelegator delegator = dctx.getDelegator();
         String orderId = (String) context.get("orderId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // check and make sure we have permission to change the order
         Security security = dctx.getSecurity();
@@ -1774,7 +1775,7 @@ public final class OrderServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");
         Map overridePriceMap = (Map) context.get("overridePriceMap");
         Map itemDescriptionMap = (Map) context.get("itemDescriptionMap");

@@ -15,25 +15,26 @@
  */
 package org.opentaps.warehouse.configuration;
 
-import java.util.Map;
+import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.sql.Timestamp;
+import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-import org.ofbiz.security.Security;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.warehouse.security.WarehouseSecurity;
 
 /**
@@ -61,7 +62,7 @@ public class ConfigurationServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String facilityId = (String) context.get("facilityId");
         WarehouseSecurity warehouseSecurity = new WarehouseSecurity(security, userLogin, facilityId);
@@ -88,7 +89,7 @@ public class ConfigurationServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String facilityId = (String) context.get("facilityId");
         WarehouseSecurity warehouseSecurity = new WarehouseSecurity(security, userLogin, facilityId);

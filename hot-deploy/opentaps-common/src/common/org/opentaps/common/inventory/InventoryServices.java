@@ -34,6 +34,7 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.domain.organization.OrganizationRepository;
 import org.opentaps.common.util.UtilAccountingTags;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.organization.AccountingTagConfigurationForOrganizationAndUsage;
 
@@ -61,7 +62,7 @@ public final class InventoryServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         Boolean validateAccountingTags = (Boolean) context.get("validateAccountingTags");
         if (validateAccountingTags == null) {
             validateAccountingTags = false;
@@ -150,7 +151,7 @@ public final class InventoryServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String inventoryItemId = (String) context.get("inventoryItemId");
         Boolean validateAccountingTags = (Boolean) context.get("validateAccountingTags");
@@ -217,7 +218,7 @@ public final class InventoryServices {
     public static Map updateInventoryItemValueHistory(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String inventoryItemId = (String) context.get("inventoryItemId");
 
@@ -275,7 +276,7 @@ public final class InventoryServices {
     @SuppressWarnings("unchecked")
     public static Map checkInventoryAlreadyReserved(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String orderId = (String) context.get("orderId");
         String orderItemSeqId = (String) context.get("orderItemSeqId");

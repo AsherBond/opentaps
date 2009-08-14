@@ -114,7 +114,7 @@ public final class OpentapsMrpServices {
     public static Map initInventoryEventPlanned(DispatchContext ctx, Map context) {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -959,7 +959,7 @@ public final class OpentapsMrpServices {
     public static Map<String, Object> runMrpForFacility(DispatchContext ctx, Map context) {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
@@ -1602,7 +1602,7 @@ public final class OpentapsMrpServices {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
 
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String requirementId = (String) context.get("requirementId");
         Double quantity = (Double) context.get("quantity");
@@ -1676,7 +1676,7 @@ public final class OpentapsMrpServices {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         List<String> requirementIds = (List<String>) context.get("requirementIds");
         Map<String, String> facilityIds = (Map<String, String>) context.get("facilityIds");

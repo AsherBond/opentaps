@@ -40,6 +40,8 @@
  */
 package com.opensourcestrategies.crmsfa.common;
 
+import java.util.*;
+
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
@@ -54,9 +56,8 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
-
-import java.util.*;
 
 /**
  * Services for providing notification to parties of CRM events.
@@ -80,7 +81,7 @@ public class NotificationServices {
         List notifyPartyIds = (List) context.get("notifyPartyIds");
         Set uniquePartyIds = new HashSet(notifyPartyIds);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         try {
 

@@ -59,6 +59,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
@@ -79,7 +80,7 @@ public class ContactsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         if (!security.hasPermission("CRMSFA_CONTACT_CREATE", userLogin)) {
             return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
@@ -168,7 +169,7 @@ public class ContactsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String contactPartyId = (String) context.get("partyId");
 
@@ -214,7 +215,7 @@ public class ContactsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String contactPartyId = (String) context.get("contactPartyId");
         String accountPartyId = (String) context.get("accountPartyId");
@@ -256,7 +257,7 @@ public class ContactsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String contactPartyId = (String) context.get("contactPartyId");
         String newPartyId = (String) context.get("newPartyId");
@@ -298,7 +299,7 @@ public class ContactsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String contactPartyId = (String) context.get("contactPartyId");
         String accountPartyId = (String) context.get("accountPartyId");
@@ -325,7 +326,7 @@ public class ContactsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // what contact we're expiring
         String contactPartyId = (String) context.get("partyId");

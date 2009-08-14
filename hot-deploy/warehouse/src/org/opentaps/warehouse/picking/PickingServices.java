@@ -58,6 +58,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.warehouse.security.WarehouseSecurity;
+import org.opentaps.common.util.UtilCommon;
 
 /**
  * Services for Warehouse application Picking section.
@@ -90,7 +91,7 @@ public final class PickingServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String picklistId = (String) context.get("picklistId");
         String printerName = (String) context.get("printerName");
@@ -145,7 +146,7 @@ public final class PickingServices {
     public static Map closePicklist(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String picklistId = (String) context.get("picklistId");
 
@@ -206,7 +207,7 @@ public final class PickingServices {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // service input parameters
         String facilityId = (String) context.get("facilityId");

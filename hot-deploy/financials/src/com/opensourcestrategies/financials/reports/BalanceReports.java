@@ -84,7 +84,7 @@ public final class BalanceReports {
      */
     @SuppressWarnings("unchecked")
     public static Map balanceStatementReport(DispatchContext dctx, Map context) {
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();

@@ -118,7 +118,7 @@ public class ReturnServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");
 
         if (! security.hasEntityPermission("CRMSFA", "_RETURN_CREATE", userLogin)) {
@@ -159,7 +159,7 @@ public class ReturnServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String returnId = (String) context.get("returnId");
         String billingAccountId = (String) context.get("billingAccountId");
@@ -195,7 +195,7 @@ public class ReturnServices {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String returnId = (String) context.get("returnId");
         String shipmentId = (String) context.get("shipmentId");

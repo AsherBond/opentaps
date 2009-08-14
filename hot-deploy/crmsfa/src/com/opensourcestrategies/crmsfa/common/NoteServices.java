@@ -50,6 +50,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.security.Security;
 
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 /**
@@ -121,7 +122,7 @@ public final class NoteServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // what party this note is for
         String partyId = (String) context.get("partyId");
@@ -154,7 +155,7 @@ public final class NoteServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         // what CustRequest this note is for
         String custRequestId = (String) context.get("custRequestId");

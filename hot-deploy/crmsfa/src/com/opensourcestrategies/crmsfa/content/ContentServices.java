@@ -37,6 +37,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 /**
@@ -59,7 +60,7 @@ public final class ContentServices {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> createContentForParty(DispatchContext dctx, Map<String, Object> context) {
         Security security = dctx.getSecurity();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String partyId = (String) context.get("partyId");
@@ -100,7 +101,7 @@ public final class ContentServices {
     public static Map<String, Object> createContentForCase(DispatchContext dctx, Map<String, Object> context) {
         String custRequestId = (String) context.get("custRequestId");
         if (!CrmsfaSecurity.hasCasePermission(dctx.getSecurity(), "_UPDATE", (GenericValue) context.get("userLogin"), custRequestId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", (Locale) context.get("locale"), MODULE);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", UtilCommon.getLocale(context), MODULE);
         }
         Map results = createContent(dctx, context, "crmsfa.createCustRequestContent");
         if (ServiceUtil.isError(results)) {
@@ -121,7 +122,7 @@ public final class ContentServices {
     public static Map<String, Object> createContentForOpportunity(DispatchContext dctx, Map<String, Object> context) {
         String salesOpportunityId = (String) context.get("salesOpportunityId");
         if (!CrmsfaSecurity.hasOpportunityPermission(dctx.getSecurity(), "_UPDATE", (GenericValue) context.get("userLogin"), salesOpportunityId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", (Locale) context.get("locale"), MODULE);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", UtilCommon.getLocale(context), MODULE);
         }
         Map results = createContent(dctx, context, "crmsfa.createSalesOpportunityContent");
         if (ServiceUtil.isError(results)) {
@@ -141,7 +142,7 @@ public final class ContentServices {
     public static Map<String, Object> createContentForActivity(DispatchContext dctx, Map<String, Object> context) {
         String workEffortId = (String) context.get("workEffortId");
         if (!CrmsfaSecurity.hasActivityPermission(dctx.getSecurity(), "_UPDATE", (GenericValue) context.get("userLogin"), workEffortId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", (Locale) context.get("locale"), MODULE);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", UtilCommon.getLocale(context), MODULE);
         }
         context.put("workEffortContentTypeId", "CREATED_MEDIA");
         Map results = createContent(dctx, context, "createWorkEffortContent");
@@ -162,7 +163,7 @@ public final class ContentServices {
     @SuppressWarnings("unchecked")
     private static Map<String, Object> createContent(DispatchContext dctx, Map<String, Object> context, String createContentAssocService) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String contentTypeId = (String) context.get("contentTypeId");
         try {
@@ -209,7 +210,7 @@ public final class ContentServices {
      */
     public static Map<String, Object> createPartyContent(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         try {
             GenericValue value = delegator.makeValue("PartyContent");
             value.setPKFields(context);
@@ -235,7 +236,7 @@ public final class ContentServices {
      */
     public static Map<String, Object> createCustRequestContent(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         try {
             GenericValue value = delegator.makeValue("CustRequestContent");
             value.setPKFields(context);
@@ -258,7 +259,7 @@ public final class ContentServices {
      */
     public static Map<String, Object> createSalesOpportunityContent(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         try {
             GenericValue value = delegator.makeValue("SalesOpportunityContent");
             value.setPKFields(context);
@@ -281,7 +282,7 @@ public final class ContentServices {
      */
     public static Map<String, Object> updateContentForParty(DispatchContext dctx, Map<String, Object> context) {
         Security security = dctx.getSecurity();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String partyId = (String) context.get("partyId");
@@ -315,7 +316,7 @@ public final class ContentServices {
     public static Map<String, Object> updateContentForCase(DispatchContext dctx, Map<String, Object> context) {
         String custRequestId = (String) context.get("custRequestId");
         if (!CrmsfaSecurity.hasCasePermission(dctx.getSecurity(), "_UPDATE", (GenericValue) context.get("userLogin"), custRequestId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", (Locale) context.get("locale"), MODULE);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", UtilCommon.getLocale(context), MODULE);
         }
         Map<String, Object> results = updateContent(dctx, context);
         if (ServiceUtil.isError(results)) {
@@ -334,7 +335,7 @@ public final class ContentServices {
     public static Map<String, Object> updateContentForOpportunity(DispatchContext dctx, Map<String, Object> context) {
         String salesOpportunityId = (String) context.get("salesOpportunityId");
         if (!CrmsfaSecurity.hasOpportunityPermission(dctx.getSecurity(), "_UPDATE", (GenericValue) context.get("userLogin"), salesOpportunityId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", (Locale) context.get("locale"), MODULE);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", UtilCommon.getLocale(context), MODULE);
         }
         Map<String, Object> results = updateContent(dctx, context);
         if (ServiceUtil.isError(results)) {
@@ -353,7 +354,7 @@ public final class ContentServices {
     public static Map<String, Object> updateContentForActivity(DispatchContext dctx, Map<String, Object> context) {
         String workEffortId = (String) context.get("workEffortId");
         if (!CrmsfaSecurity.hasActivityPermission(dctx.getSecurity(), "_UPDATE", (GenericValue) context.get("userLogin"), workEffortId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", (Locale) context.get("locale"), MODULE);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", UtilCommon.getLocale(context), MODULE);
         }
         Map<String, Object> results = updateContent(dctx, context);
         if (ServiceUtil.isError(results)) {
@@ -372,7 +373,7 @@ public final class ContentServices {
     private static Map<String, Object> updateContent(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         // the forms control what gets updated an how, this service simply updates the contentName, description and url fields
@@ -420,7 +421,7 @@ public final class ContentServices {
     public static Map<String, Object> removeContent(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String contentId = (String) context.get("contentId");
@@ -502,7 +503,7 @@ public final class ContentServices {
     @SuppressWarnings("unchecked")
     public static Map<String, Object> createOrderContent(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         try {
             String contentId = (String) context.get("contentId");
             String orderId = (String) context.get("orderId");
@@ -597,7 +598,7 @@ public final class ContentServices {
      */
     public static Map<String, Object> createQuoteContent(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String contentId = (String) context.get("contentId");
         String quoteId = (String) context.get("quoteId");

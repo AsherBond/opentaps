@@ -16,9 +16,15 @@
 
 package com.opensourcestrategies.crmsfa.opportunities;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
-
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
@@ -30,15 +36,9 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
-
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
 
 /**
  * Opportunities services. The service documentation is in services_opportunities.xml.
@@ -55,8 +55,8 @@ public final class OpportunitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        Locale locale = UtilCommon.getLocale(context);
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
 
         String internalPartyId = (String) context.get("internalPartyId");
         String accountPartyId = (String) context.get("accountPartyId");
@@ -185,7 +185,7 @@ public final class OpportunitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
         TimeZone timeZone = (TimeZone) context.get("timeZone");
 
         String salesOpportunityId = (String) context.get("salesOpportunityId");
@@ -264,7 +264,7 @@ public final class OpportunitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String salesOpportunityId = (String) context.get("salesOpportunityId");
 
@@ -288,7 +288,7 @@ public final class OpportunitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String salesOpportunityId = (String) context.get("salesOpportunityId");
         String contactPartyId = (String) context.get("contactPartyId");
@@ -346,7 +346,7 @@ public final class OpportunitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String salesOpportunityId = (String) context.get("salesOpportunityId");
         String contactPartyId = (String) context.get("contactPartyId");
@@ -385,7 +385,7 @@ public final class OpportunitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String salesOpportunityId = (String) context.get("salesOpportunityId");
         String quoteId = (String) context.get("quoteId");
@@ -425,7 +425,7 @@ public final class OpportunitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = (Locale) context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
         String salesOpportunityId = (String) context.get("salesOpportunityId");
         String quoteId = (String) context.get("quoteId");
