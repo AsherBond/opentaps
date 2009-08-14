@@ -810,8 +810,7 @@ public final class QuoteServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
-    public static Map<String, ?> createQuoteNote(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> createQuoteNote(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -821,10 +820,10 @@ public final class QuoteServices {
         String quoteId = (String) context.get("quoteId");
         String internalNote = (String) context.get("internalNote");
 
-        Map noteCtx = UtilMisc.toMap("note", note, "userLogin", userLogin);
+        Map<String, Object> noteCtx = UtilMisc.toMap("note", note, "userLogin", userLogin);
 
         try {
-            Map<String, ?> noteRes = dispatcher.runSync("createNote", noteCtx);
+            Map<String, Object> noteRes = dispatcher.runSync("createNote", noteCtx);
             if (ServiceUtil.isError(noteRes)) {
                 return noteRes;
             }

@@ -75,7 +75,7 @@ public final class PackingServices {
      * @return the service result <code>Map</code>
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ?> warehouseCompletePack(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> warehouseCompletePack(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -106,7 +106,7 @@ public final class PackingServices {
             Set<String> keySet = productQuantities.keySet();
             for (String productId : keySet) {
                 Double quantity = productQuantities.get(productId);
-                Map<String, ?> serviceResult = null;
+                Map<String, Object> serviceResult = null;
                 try {
                     serviceResult = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", productId, "facilityId", session.getFacilityId(), "userLogin", userLogin));
                     if (ServiceUtil.isError(serviceResult)) {
@@ -127,7 +127,7 @@ public final class PackingServices {
 
         // Call the OFBiz completePack service. The PackingSession object passed is an opentaps PackingSession, so that when
         // PackingSession.complete() is called by completePack, the overridden method is used instead, and additional steps are performed.
-        Map<String, ?> completePackResult = null;
+        Map<String, Object> completePackResult = null;
         try {
             completePackResult = dispatcher.runSync("completePack", context);
         } catch (GenericServiceException e) {

@@ -121,7 +121,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map createInventoryTransferForFacilityProduct(DispatchContext ctx, Map context) {
+    public static Map<String, Object> createInventoryTransferForFacilityProduct(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -205,7 +205,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map autoCreateInventoryTransfers(DispatchContext ctx, Map context) {
+    public static Map<String, Object> autoCreateInventoryTransfers(DispatchContext ctx, Map<String, Object> context) {
         Map result = new HashMap();
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
@@ -323,7 +323,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map createProductionRunsForProductBom(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createProductionRunsForProductBom(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -379,7 +379,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map createProductionRun(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createProductionRun(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -529,7 +529,7 @@ public final class ProductionRunServices {
     }
 
     @SuppressWarnings("unchecked")
-    private static Map createOutsourcedTaskInstance(DispatchContext dctx, Map context,
+    private static Map createOutsourcedTaskInstance(DispatchContext dctx, Map<String, Object> context,
             GenericValue outsourcedTask, double templateQuantity, GenericValue productionRun, GenericValue supplierProduct)
             throws GenericEntityException, GenericServiceException {
         GenericDelegator delegator = dctx.getDelegator();
@@ -605,7 +605,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map addProductionRunRoutingTask(DispatchContext dctx, Map context) {
+    public static Map<String, Object> addProductionRunRoutingTask(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -664,7 +664,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map approveOutsourcedProductRequirements(DispatchContext dctx, Map context) {
+    public static Map<String, Object> approveOutsourcedProductRequirements(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -702,7 +702,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map setOutsourcedTasksToPending(DispatchContext dctx, Map context) {
+    public static Map<String, Object> setOutsourcedTasksToPending(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         String productionRunId = (String) context.get("productionRunId");
@@ -749,7 +749,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map runOutsourcedProductionRun(DispatchContext dctx, Map context) {
+    public static Map<String, Object> runOutsourcedProductionRun(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -791,7 +791,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map cancelProductionRun(DispatchContext dctx, Map context) {
+    public static Map<String, Object> cancelProductionRun(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -845,7 +845,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map qualifyOutsourcedTasks(DispatchContext dctx, Map context) {
+    public static Map<String, Object> qualifyOutsourcedTasks(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         // this service sould be triggered by a seca that checks that this is an approved PURCHASE_ORDER
@@ -888,7 +888,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map calcOutSourcedTaskCost(DispatchContext dctx, Map context) {
+    public static Map<String, Object> calcOutSourcedTaskCost(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -948,7 +948,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map reduceWorkEffortGoodStandard(DispatchContext ctx, Map context) {
+    public static Map<String, Object> reduceWorkEffortGoodStandard(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
@@ -1020,8 +1020,7 @@ public final class ProductionRunServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map addProductToProduce(DispatchContext ctx, Map context) {
+    public static Map<String, Object> addProductToProduce(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         String productionRunId = (String) context.get("productionRunId");
         String productId = (String) context.get("productId");
@@ -1048,8 +1047,7 @@ public final class ProductionRunServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map removeProductToProduce(DispatchContext ctx, Map context) {
+    public static Map<String, Object> removeProductToProduce(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         String productionRunId = (String) context.get("productionRunId");
         String productId = (String) context.get("productId");
@@ -1082,8 +1080,7 @@ public final class ProductionRunServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map addMaterialToProdRunTask(DispatchContext ctx, Map context) {
+    public static Map<String, Object> addMaterialToProdRunTask(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         String productionRunTaskId = (String) context.get("productionRunTaskId");
         String productId = (String) context.get("productId");
@@ -1110,14 +1107,13 @@ public final class ProductionRunServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map removeMaterialFrmProdRunTask(DispatchContext ctx, Map context) {
+    public static Map<String, Object> removeMaterialFrmProdRunTask(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         String productionRunTaskId = (String) context.get("productionRunTaskId");
         String productId = (String) context.get("productId");
         Timestamp now = UtilDateTime.nowTimestamp();
         try {
-            List conditions = UtilMisc.toList(
+            List<EntityCondition> conditions = UtilMisc.toList(
                     EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, productionRunTaskId),
                     EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
                     EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"),
@@ -1144,14 +1140,13 @@ public final class ProductionRunServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map removeAllMateriaslFrmProdRunTask(DispatchContext ctx, Map context) {
+    public static Map<String, Object> removeAllMateriaslFrmProdRunTask(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         String productionRunTaskId = (String) context.get("productionRunTaskId");
         Timestamp now = UtilDateTime.nowTimestamp();
         try {
-            List<Map> productsRemoved = FastList.newInstance();
-            List conditions = UtilMisc.toList(
+            List<Map<String, Object>> productsRemoved = FastList.newInstance();
+            List<EntityCondition> conditions = UtilMisc.toList(
                     EntityCondition.makeCondition("workEffortId", EntityOperator.EQUALS, productionRunTaskId),
                     EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUNT_PROD_NEEDED"),
                     EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "WEGS_COMPLETED"),
@@ -1169,7 +1164,7 @@ public final class ProductionRunServices {
                 wegs.store();
             }
 
-            Map results = ServiceUtil.returnSuccess();
+            Map<String, Object> results = ServiceUtil.returnSuccess();
             results.put("productsRemoved", productsRemoved);
             return results;
         } catch (GeneralException e) {
@@ -1195,8 +1190,7 @@ public final class ProductionRunServices {
      * @param context Map containing the input parameters, productId, routingId, pRQuantity, startDate, workEffortName, description
      * @return Map with the result of the service, the output parameters.
      */
-    @SuppressWarnings("unchecked")
-    public static Map createProductionRunRefactored(DispatchContext ctx, Map context) {
+    public static Map<String, Object> createProductionRunRefactored(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -1224,7 +1218,7 @@ public final class ProductionRunServices {
 
         GenericValue routing = null;
         GenericValue product = null;
-        List routingTaskAssocs = null;
+        List<GenericValue> routingTaskAssocs = null;
 
         try {
             // Find the product
@@ -1243,13 +1237,13 @@ public final class ProductionRunServices {
         // Select the product's routing
         try {
             String getRoutingService = disassemble ? "getProductRoutingDisassemble" : "getProductRouting";
-            Map routingInMap = UtilMisc.toMap("productId", productId, "applicableDate", startDate, "userLogin", userLogin);
+            Map<String, Object> routingInMap = UtilMisc.toMap("productId", productId, "applicableDate", startDate, "userLogin", userLogin);
             if (workEffortId != null) {
                 routingInMap.put("workEffortId", workEffortId);
             }
-            Map routingOutMap = dispatcher.runSync(getRoutingService, routingInMap);
+            Map<String, Object> routingOutMap = dispatcher.runSync(getRoutingService, routingInMap);
             routing = (GenericValue) routingOutMap.get("routing");
-            routingTaskAssocs = (List) routingOutMap.get("tasks");
+            routingTaskAssocs = (List<GenericValue>) routingOutMap.get("tasks");
         } catch (GenericServiceException gse) {
             Debug.logWarning(gse.getMessage(), MODULE);
         }
@@ -1268,8 +1262,8 @@ public final class ProductionRunServices {
         // -------------------
         // The components are retrieved using the getManufacturingComponents service
         // (that performs a bom breakdown and if needed runs the configurator).
-        List components = null;
-        Map serviceContext = new HashMap();
+        List<BomNode> components = null;
+        Map<String, Object> serviceContext = new HashMap<String, Object>();
         serviceContext.put("productId", productId); // the product that we want to manufacture or disassemble
         serviceContext.put("quantity", pRQuantity); // the quantity that we want to manufacture
         serviceContext.put("userLogin", userLogin);
@@ -1289,7 +1283,7 @@ public final class ProductionRunServices {
             serviceContext.put("routingId", routing.get("workEffortId")); // the routing to use for the BOM
         }
 
-        Map resultService = null;
+        Map<String, Object> resultService = null;
         try {
             resultService = dispatcher.runSync("getManufacturingComponents", serviceContext);
             components = (List<BomNode>) resultService.get("components"); // a list of objects representing the product's components
@@ -1341,16 +1335,16 @@ public final class ProductionRunServices {
 
         // ProductionRun,  product will be produce creation = WorkEffortGoodStandard for the productId
         // if disassembling, then the produced products are the components
-        List<Map> productionList = FastList.newInstance();
+        List<Map<String, Object>> productionList = FastList.newInstance();
         if (disassemble) {
             for (Iterator<BomNode> iter = components.iterator(); iter.hasNext();) {
                 BomNode node = iter.next();
                 productionList.add(UtilMisc.toMap("productId", node.getProduct().get("productId"), "quantity", node.getQuantity().doubleValue()));
             }
         } else {
-            productionList.add(UtilMisc.toMap("productId", productId, "quantity", pRQuantity));
+            productionList.add(UtilMisc.<String, Object>toMap("productId", productId, "quantity", pRQuantity));
         }
-        for (Map production : productionList) {
+        for (Map<String, Object> production : productionList) {
             String producedProductId = (String) production.get("productId");
             Double producedQuantity = (Double) production.get("quantity");
             serviceContext.clear();
@@ -1388,10 +1382,10 @@ public final class ProductionRunServices {
         }
 
         // Multi creation (like clone) ProductionRunTask and GoodAssoc
-        Iterator  rt = routingTaskAssocs.iterator();
+        Iterator<GenericValue> rt = routingTaskAssocs.iterator();
         boolean first = true;
         while (rt.hasNext()) {
-            GenericValue routingTaskAssoc = (GenericValue) rt.next();
+            GenericValue routingTaskAssoc = rt.next();
 
             if (EntityUtil.isValueActive(routingTaskAssoc, startDate)) {
                 GenericValue routingTask = null;
@@ -1442,7 +1436,7 @@ public final class ProductionRunServices {
                     Debug.logError(e, "Problem calling the createWorkEffortAssoc service", MODULE);
                 }
                 // copy date valid WorkEffortPartyAssignments from the routing task to the run task
-                List workEffortPartyAssignments = null;
+                List<GenericValue> workEffortPartyAssignments = null;
                 try {
                     workEffortPartyAssignments = EntityUtil.filterByDate(delegator.findByAnd("WorkEffortPartyAssignment",
                             UtilMisc.toMap("workEffortId", routingTaskAssoc.getString("workEffortIdTo"))));
@@ -1450,10 +1444,10 @@ public final class ProductionRunServices {
                     Debug.logError(e.getMessage(), MODULE);
                 }
                 if (workEffortPartyAssignments != null) {
-                    Iterator i = workEffortPartyAssignments.iterator();
+                    Iterator<GenericValue> i = workEffortPartyAssignments.iterator();
                     while (i.hasNext()) {
-                        GenericValue workEffortPartyAssignment = (GenericValue) i.next();
-                        Map partyToWorkEffort = UtilMisc.toMap(
+                        GenericValue workEffortPartyAssignment = i.next();
+                        Map<String, Object> partyToWorkEffort = UtilMisc.toMap(
                                 "workEffortId",  productionRunTaskId,
                                 "partyId",  workEffortPartyAssignment.getString("partyId"),
                                 "roleTypeId",  workEffortPartyAssignment.getString("roleTypeId"),
@@ -1537,7 +1531,7 @@ public final class ProductionRunServices {
         } catch (GenericServiceException e) {
             Debug.logError(e, "Problem calling the updateWorkEffort service", MODULE);
         }
-        Map result = UtilMessage.createServiceSuccess("ManufacturingProductionRunCreated", locale, UtilMisc.toMap("productionRunId", productionRunId));
+        Map<String, Object> result = UtilMessage.createServiceSuccess("ManufacturingProductionRunCreated", locale, UtilMisc.toMap("productionRunId", productionRunId));
         result.put("productionRunId", productionRunId);
         result.put("estimatedCompletionDate", startDate);
         return result;
@@ -1551,7 +1545,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map getProductRouting(DispatchContext dctx, Map context) {
+    public static Map<String, Object> getProductRouting(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         String productId = (String) context.get("productId");
@@ -1613,7 +1607,6 @@ public final class ProductionRunServices {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private static String getProductRouting(String productId, String workEffortId, Timestamp applicableDate, Double quantity, boolean ignoreDefRouting, GenericDelegator delegator) throws GenericEntityException {
         // find active routings for the productId and workEffortId (optional)
         List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
@@ -1729,7 +1722,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map getProductRoutingDisassemble(DispatchContext dctx, Map context) {
+    public static Map<String, Object> getProductRoutingDisassemble(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         String productId = (String) context.get("productId");
@@ -1817,7 +1810,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map productionRunProduceRefactored(DispatchContext ctx, Map context) {
+    public static Map<String, Object> productionRunProduceRefactored(DispatchContext ctx, Map<String, Object> context) {
         Map result = new HashMap();
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
@@ -2077,7 +2070,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map revertProductionRunAndSaveAllParts(DispatchContext ctx, Map context) {
+    public static Map<String, Object> revertProductionRunAndSaveAllParts(DispatchContext ctx, Map<String, Object> context) {
 
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
@@ -2129,7 +2122,7 @@ public final class ProductionRunServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map revertProductionRun(DispatchContext ctx, Map context) {
+    public static Map<String, Object> revertProductionRun(DispatchContext ctx, Map<String, Object> context) {
 
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
@@ -2237,8 +2230,7 @@ public final class ProductionRunServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map resetWegsFromDate(DispatchContext ctx, Map context) {
+    public static Map<String, Object> resetWegsFromDate(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         String productionRunId = (String) context.get("productionRunId");
 
@@ -2259,15 +2251,17 @@ public final class ProductionRunServices {
     }
 
     /**
-     * Creates a production run for a marketing package when the ordered item is out of stock (ATP 
+     * Creates a production run for a marketing package when the ordered item is out of stock (ATP
      * quantity less than zero).<br/>
      * The quantity produced is either the quantity ordered or to bring total ATP quantity of the
      * product back up to zero,  whichever is less.
      * NOTE: This is based on the ofbiz version of the same service, but uses the opentaps production run services
      * so that inventory is counted correctly.
+     * @param ctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map<String, ?> createProductionRunForMktgPkg(DispatchContext ctx, Map<String, ?> context) {
+    public static Map<String, Object> createProductionRunForMktgPkg(DispatchContext ctx, Map<String, Object> context) {
         final String resource = "ManufacturingUiLabels";
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
@@ -2323,7 +2317,7 @@ public final class ProductionRunServices {
                 serviceContext.put("startDate", UtilDateTime.nowTimestamp());
                 serviceContext.put("facilityId", facilityId);
                 serviceContext.put("userLogin", userLogin);
-                Map<String, ?> resultService = dispatcher.runSync("createProductionRun", serviceContext);
+                Map<String, Object> resultService = dispatcher.runSync("createProductionRun", serviceContext);
 
                 String productionRunId = (String) resultService.get("productionRunId");
                 result.put("productionRunId", productionRunId);
@@ -2380,10 +2374,12 @@ public final class ProductionRunServices {
 
     /**
      * Replace legacy service of the same name.
-     * Called if marketing package order item is canceled and disassemble product. 
+     * Called if marketing package order item is canceled and disassemble product.
+     * @param ctx a <code>DispatchContext</code> value
+     * @param context a <code>Map</code> value
+     * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map decomposeInventoryItem(DispatchContext ctx, Map context) {
+    public static Map<String, Object> decomposeInventoryItem(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2416,7 +2412,7 @@ public final class ProductionRunServices {
             ctxt.put("facilityId", inventoryItem.getString("facilityId"));
             ctxt.put("routingId", "DEF_DISASMBL_TMP");
             ctxt.put("workEffortName", UtilMessage.expandLabel("ManufacturingDecomposingInventoryItem", locale, UtilMisc.toMap("productId", inventoryItem.getString("productId"), "inventoryItemId", inventoryItem.getString("inventoryItemId"))));
-            Map<String, ?> results = dispatcher.runSync("opentaps.createProductionRun", ctxt, -1, false);
+            Map<String, Object> results = dispatcher.runSync("opentaps.createProductionRun", ctxt, -1, false);
             String productionRunId = (String) results.get("productionRunId");
 
             // set the production run as confirmed

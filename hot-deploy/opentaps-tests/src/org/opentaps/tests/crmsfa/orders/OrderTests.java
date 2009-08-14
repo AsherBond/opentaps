@@ -34,8 +34,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
@@ -59,32 +58,32 @@ import org.opentaps.tests.warehouse.InventoryAsserts;
  */
 public class OrderTests extends OrderTestCase {
 
-    public static final String module = OrderTests.class.getName();
+    private static final String MODULE = OrderTests.class.getName();
 
-    GenericValue DemoAccount1;
-    GenericValue DemoCustomer;
-    GenericValue DemoCSR;
-    GenericValue DemoCSR2;
-    GenericValue demowarehouse1;
-    GenericValue DemoSalesManager;
-    GenericValue GZ1005;
-    GenericValue WG5569;
-    GenericValue WG1111;
-    GenericValue ProductStore;
-    GenericValue RetailStore;
-    GenericValue Facility;
-    Security security = null;
-    static final String organizationPartyId = "Company";
-    static final String productStoreId = "9000";
-    static final String productStoreId1 = "9100";   //retail store
-    static final String facilityId = "WebStoreWarehouse";
-    static final String facilityId1 = "MyRetailStore";
+    private GenericValue DemoAccount1;
+    private GenericValue DemoCustomer;
+    private GenericValue DemoCSR;
+    private GenericValue DemoCSR2;
+    private GenericValue demowarehouse1;
+    private GenericValue DemoSalesManager;
+    private GenericValue GZ1005;
+    private GenericValue WG5569;
+    private GenericValue WG1111;
+    private GenericValue ProductStore;
+    private GenericValue RetailStore;
+    private GenericValue Facility;
+    private Security security = null;
+    private static final String organizationPartyId = "Company";
+    private static final String productStoreId = "9000";
+    private static final String productStoreId1 = "9100";   //retail store
+    private static final String facilityId = "WebStoreWarehouse";
+    private static final String facilityId1 = "MyRetailStore";
 
-    OrderRepositoryInterface orderRepository;
-    InvoiceRepositoryInterface invoiceRepository;
-    String defaultProductStoreAutoApproveInvoice;
-    String defaultProductStoreInventoryReservationEnum;
-    String defaultFacilityInventoryReservationEnum;
+    private OrderRepositoryInterface orderRepository;
+    private InvoiceRepositoryInterface invoiceRepository;
+    private String defaultProductStoreAutoApproveInvoice;
+    private String defaultProductStoreInventoryReservationEnum;
+    private String defaultFacilityInventoryReservationEnum;
 
     @Override
     public void setUp() throws Exception {
@@ -184,7 +183,7 @@ public class OrderTests extends OrderTestCase {
         order.put(WG5569, 4.0);
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId, "EXT_OFFLINE", "DemoAddress2");
-        Debug.logInfo("testCreateSalesOrder created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testCreateSalesOrder created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // Call opentaps.appendOrderItem to add 1 additional GZ-1000
         // append item to order by UPC
@@ -207,11 +206,11 @@ public class OrderTests extends OrderTestCase {
 
         // get initial grand total
         BigDecimal grandTotal = salesOrder.getGrandTotal();
-        Debug.logInfo("Initial Grand total: " + grandTotal, module);
+        Debug.logInfo("Initial Grand total: " + grandTotal, MODULE);
         // get initial atp
         Map<String, Object> callResults = getProductAvailability(additionalProduct.getProductId());
         Double atp = (Double) callResults.get("availableToPromiseTotal");
-        Debug.logInfo("Initial ATP:" + atp, module);
+        Debug.logInfo("Initial ATP:" + atp, MODULE);
 
         // append item to order
         GenericValue genericValueOfAdditionalProduct = Repository.genericValueFromEntity(delegator, additionalProduct);
@@ -219,11 +218,11 @@ public class OrderTests extends OrderTestCase {
 
         // get final grand total
         BigDecimal grandTotal2 = salesOrder.getGrandTotal();
-        Debug.logInfo("Final Grand total: " + grandTotal2, module);
+        Debug.logInfo("Final Grand total: " + grandTotal2, MODULE);
         // get final atp
         callResults = getProductAvailability(additionalProduct.getProductId());
         Double atp2 = (Double) callResults.get("availableToPromiseTotal");
-        Debug.logInfo("Final ATP: " + atp2, module);
+        Debug.logInfo("Final ATP: " + atp2, MODULE);
 
         // check that the ATP has declined by 1
         Double expectedATP = atp - 1.0;
@@ -257,7 +256,6 @@ public class OrderTests extends OrderTestCase {
      * This test verifies the <code>Order</code> domain object.
      * @exception Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testOrderDomain() throws Exception {
         final double product1Qty = 1.0;
         final double product2Qty = 4.0;
@@ -281,7 +279,7 @@ public class OrderTests extends OrderTestCase {
         orderSpec.put(testWG1111, product3Qty);
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(orderSpec, DemoAccount1, productStoreId, "EXT_OFFLINE", "DemoAddress2");
-        Debug.logInfo("testOrderDomain created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testOrderDomain created order [" + salesOrder.getOrderId() + "]", MODULE);
         salesOrder.approveOrder();
 
         OrderRepositoryInterface repository = getOrderRepository(admin);
@@ -336,13 +334,13 @@ public class OrderTests extends OrderTestCase {
 
         // check order totals
         BigDecimal expectedItemsSubTotal = BigDecimal.valueOf(product1UnitPrice).multiply(BigDecimal.valueOf(product1Qty));
-        Debug.logInfo("Expected product 1 price: " + product1UnitPrice + " x " + product1Qty + " = " + product1UnitPrice * product1Qty, module);
+        Debug.logInfo("Expected product 1 price: " + product1UnitPrice + " x " + product1Qty + " = " + product1UnitPrice * product1Qty, MODULE);
         expectedItemsSubTotal = expectedItemsSubTotal.add(BigDecimal.valueOf(product2UnitPrice).multiply(BigDecimal.valueOf(product2Qty)));
-        Debug.logInfo("Expected product 2 price: " + product2UnitPrice + " x " + product2Qty + " = " + product2UnitPrice * product2Qty, module);
+        Debug.logInfo("Expected product 2 price: " + product2UnitPrice + " x " + product2Qty + " = " + product2UnitPrice * product2Qty, MODULE);
         expectedItemsSubTotal = expectedItemsSubTotal.add(BigDecimal.valueOf(product3UnitPrice).multiply(BigDecimal.valueOf(product3Qty)));
-        Debug.logInfo("Expected product 3 price: " + product3UnitPrice + " x " + product3Qty + " = " + product3UnitPrice * product3Qty, module);
+        Debug.logInfo("Expected product 3 price: " + product3UnitPrice + " x " + product3Qty + " = " + product3UnitPrice * product3Qty, MODULE);
 
-        Debug.logInfo("order sub total = " + order.getItemsSubTotal(), module);
+        Debug.logInfo("order sub total = " + order.getItemsSubTotal(), MODULE);
         assertEquals("Unexpected items sub total", expectedItemsSubTotal, order.getItemsSubTotal());
 
         List<GenericValue> adjustments = delegator.findByAnd("OrderAdjustment", UtilMisc.toMap("orderId", order.getOrderId()));
@@ -353,7 +351,7 @@ public class OrderTests extends OrderTestCase {
 
         BigDecimal expectedOrderTotal = expectedItemsSubTotal.add(adjustmentsTotal);
 
-        Debug.logInfo("order total = " + order.getTotal(), module);
+        Debug.logInfo("order total = " + order.getTotal(), MODULE);
         assertEquals("Unexpected order total", expectedOrderTotal, order.getTotal());
 
     }
@@ -390,10 +388,10 @@ public class OrderTests extends OrderTestCase {
         // Products are receiving separately specially to assign different datetimeReceived.
         List<String> firstFive = new ArrayList<String>();
         for (int i = 0; i < 10; i++) {
-            Map<String, String> res = (Map<String, String>) receiveInventoryProduct(testProduct, 1.0, "SERIALIZED_INV_ITEM", 199.0, demowarehouse1);
+            Map<String, Object> res = receiveInventoryProduct(testProduct, 1.0, "SERIALIZED_INV_ITEM", 199.0, demowarehouse1);
             // memorize first 5 inventory items
             if (i < 5) {
-                firstFive.add(res.get("inventoryItemId"));
+                firstFive.add((String) res.get("inventoryItemId"));
             }
         }
 
@@ -407,7 +405,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
         String orderId = orderFactory.getOrderId();
-        Debug.logInfo("testSerializedInventoryReservation created order [" + orderId + "]", module);
+        Debug.logInfo("testSerializedInventoryReservation created order [" + orderId + "]", MODULE);
 
         // verify ATP = 5
         Map<String, GenericValue> productData = runAndAssertServiceSuccess("getProduct", UtilMisc.toMap("productId", productId, "userLogin", demowarehouse1));
@@ -417,11 +415,11 @@ public class OrderTests extends OrderTestCase {
         assertEquals(String.format("Wrong ATP value of product [%1$s]", productId), 5, availableToPromis.longValue());
 
         // find first 5 inventory of the products
-        EntityConditionList conditionList = new EntityConditionList(
+        EntityCondition conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                        new EntityExpr("inventoryItemId", EntityOperator.IN, firstFive)
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                        EntityCondition.makeCondition("inventoryItemId", EntityOperator.IN, firstFive)
                 ),
                 EntityOperator.AND);
         long reservedInventoryItemsCount = delegator.findCountByCondition("OrderItemShipGrpInvResAndItem", conditionList, null);
@@ -449,27 +447,27 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
         orderId = orderFactory.getOrderId();
-        Debug.logInfo("testSerializedInventoryReservation created order [" + orderId + "]", module);
+        Debug.logInfo("testSerializedInventoryReservation created order [" + orderId + "]", MODULE);
 
         // verify ATP = 5
         assertProductATP(product, 5.0);
 
         // verify reservation of last received inventory items
-        conditionList = new EntityConditionList(
+        conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                        new EntityExpr("inventoryItemTypeId", EntityOperator.EQUALS, "SERIALIZED_INV_ITEM")
+                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                        EntityCondition.makeCondition("inventoryItemTypeId", EntityOperator.EQUALS, "SERIALIZED_INV_ITEM")
                 )
                 , EntityOperator.AND);
         List<GenericValue> inventoryItems = delegator.findByCondition("InventoryItem", conditionList, null, Arrays.asList("datetimeReceived DESC"));
         // get inventory item ids which should be reserved.
         List<String> invIds = EntityUtil.<String>getFieldListFromEntityList(inventoryItems, "inventoryItemId", false).subList(0, 5);
 
-        conditionList = new EntityConditionList(
+        conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("productId", EntityOperator.EQUALS, productId),
-                        new EntityExpr("inventoryItemId", EntityOperator.IN, invIds)
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
+                        EntityCondition.makeCondition("inventoryItemId", EntityOperator.IN, invIds)
                 ),
                 EntityOperator.AND);
         reservedInventoryItemsCount = delegator.findCountByCondition("OrderItemShipGrpInvResAndItem", conditionList, null);
@@ -485,7 +483,6 @@ public class OrderTests extends OrderTestCase {
      * 5. Verify that the InventoryItem from step (3) now has ATP and QOH quantity of 0.0, and a new InventoryItem has a quantity of ATP=4.0, QOH=5.0
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testNonSerInventoryItemBalancing() throws GeneralException {
         // 1. create test product
         GenericValue product = createTestProduct("Non-Serialized Balancing Test Product", demowarehouse1);
@@ -499,7 +496,7 @@ public class OrderTests extends OrderTestCase {
         order.put(product, 1.0);
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
-        Debug.logInfo("testNonSerInventoryItemBalancing created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testNonSerInventoryItemBalancing created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // 3. check there is a new InventoryItem with an ATP of -1.0 and a QOH of 0.0
         List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId));
@@ -529,7 +526,6 @@ public class OrderTests extends OrderTestCase {
      * except that step (4) should be to receive 5.0 unit of the product as serialized inventory.
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testSerInventoryItemBalancing() throws GeneralException {
         // 1. create test product
         GenericValue product = createTestProduct("Serialized Balancing Test Product", demowarehouse1);
@@ -543,7 +539,7 @@ public class OrderTests extends OrderTestCase {
         order.put(product, 1.0);
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
-        Debug.logInfo("testSerInventoryItemBalancing created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testSerInventoryItemBalancing created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // 3. check there is a new InventoryItem with an ATP of -1.0 and a QOH of 0.0
         List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId));
@@ -598,7 +594,7 @@ public class OrderTests extends OrderTestCase {
         // receive 5.0 units of the product as serialized inventory
         receiveInventoryProduct(testProduct, 5.0, "SERIALIZED_INV_ITEM", 99.0, demowarehouse1);
 
-        List<GenericValue> inventories = delegator.findByCondition("ProductInventoryItem", new EntityExpr("productId", EntityOperator.EQUALS, productId), Arrays.asList("inventoryItemId"), Arrays.asList("inventoryItemId"));
+        List<GenericValue> inventories = delegator.findByCondition("ProductInventoryItem", EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId), Arrays.asList("inventoryItemId"), Arrays.asList("inventoryItemId"));
         assertEquals(String.format("Wrong count inventory items for product [%1$s]", productId), 5, inventories.size());
 
         // set status of first two inventory items to Defective
@@ -632,13 +628,13 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
         String orderId = orderFactory.getOrderId();
-        Debug.logInfo("testDefectiveSerInventoryItemReservation created order [" + orderId + "]", module);
+        Debug.logInfo("testDefectiveSerInventoryItemReservation created order [" + orderId + "]", MODULE);
 
         // get list of reserved inventory items and check if they had status Available before order approval.
-        EntityConditionList conditionList = new EntityConditionList(
+        EntityCondition conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, null)
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, null)
                 ), EntityOperator.AND
         );
         List<GenericValue> reservedInventoryItems = delegator.findByCondition("OrderItemShipGrpInvRes", conditionList, Arrays.asList("orderId", "inventoryItemId", "quantity"), null);
@@ -676,8 +672,8 @@ public class OrderTests extends OrderTestCase {
         assignDefaultPrice(testProduct, 100.0, admin);
 
         // receive 5.0 units of the product as non-serialized inventory
-        Map<String, String> inventory = (Map<String, String>) receiveInventoryProduct(testProduct, 5.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
-        String inventoryItemId = inventory.get("inventoryItemId");
+        Map<String, Object> inventory = receiveInventoryProduct(testProduct, 5.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        String inventoryItemId = (String) inventory.get("inventoryItemId");
 
         // create a physical inventory variance for -2.0 QOH and -2.0 ATP with reason "Damaged"
         Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_DAMAGED");
@@ -694,15 +690,15 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
         String orderId = orderFactory.getOrderId();
-        Debug.logInfo("testDefectiveInventoryItemReservation created order [" + orderId + "]", module);
+        Debug.logInfo("testDefectiveInventoryItemReservation created order [" + orderId + "]", MODULE);
 
         // get count of reserved inventory items. Should be 1 inventory item and quantity = 5, quantityNotAvaible = -2.
-        EntityConditionList conditionList = new EntityConditionList(
+        EntityCondition conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
-                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, new Double(2.0)),
-                        new EntityExpr("quantity", EntityOperator.EQUALS, new Double(5.0))
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(2.0)),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(5.0))
                 ),
                 EntityOperator.AND
         );
@@ -734,7 +730,7 @@ public class OrderTests extends OrderTestCase {
         order.put(WG5569, 4.0);
         User = DemoCSR2;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
-        Debug.logInfo("testCreateSecondSalesOrder created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testCreateSecondSalesOrder created order [" + salesOrder.getOrderId() + "]", MODULE);
     }
 
     /**
@@ -751,7 +747,7 @@ public class OrderTests extends OrderTestCase {
         order.put(WG5569, 4.0);
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
-        Debug.logInfo("testCancelSalesOrder created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testCancelSalesOrder created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // to store ATP before and after we cancel order items
         Map<GenericValue, Double> product_ATP_initial, product_ATP_final;
@@ -767,7 +763,7 @@ public class OrderTests extends OrderTestCase {
             GenericValue product = iter.next();
             callResults = getProductAvailability(product.getString("productId"));
             product_ATP_initial.put(product, (Double) callResults.get("availableToPromiseTotal"));
-            Debug.logInfo("Initial availability of [" + product.get("productId") + "] : ATP=" + product_ATP_initial.get(product), module);
+            Debug.logInfo("Initial availability of [" + product.get("productId") + "] : ATP=" + product_ATP_initial.get(product), MODULE);
         }
 
         // cancel 2.0 or product2
@@ -781,7 +777,7 @@ public class OrderTests extends OrderTestCase {
             GenericValue product = iter.next();
             callResults = getProductAvailability(product.getString("productId"));
             product_ATP_final.put(product, (Double) callResults.get("availableToPromiseTotal"));
-            Debug.logInfo("Final availability of [" + product.get("productId") + "] : ATP=" + product_ATP_final.get(product), module);
+            Debug.logInfo("Final availability of [" + product.get("productId") + "] : ATP=" + product_ATP_final.get(product), MODULE);
         }
 
         // product1 ATP should have increased by 1
@@ -827,7 +823,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, DemoCustomer, productStoreId);
         String orderId = salesOrder.getOrderId();
-        Debug.logInfo("testCancelSalesOrderWithPromoItems created order [" + orderId + "]", module);
+        Debug.logInfo("testCancelSalesOrderWithPromoItems created order [" + orderId + "]", MODULE);
         OrderRepositoryInterface repository = getOrderRepository(admin);
         Order order = repository.getOrderById(salesOrder.getOrderId());
 
@@ -868,7 +864,7 @@ public class OrderTests extends OrderTestCase {
         assertPromoItemExists(orderId, "WG-1111", 1.0, "9000", "ITEM_CREATED");
 
         // check order totals
-        Debug.logInfo("testCancelSalesOrderWithPromoItems: step 1 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", module);
+        Debug.logInfo("testCancelSalesOrderWithPromoItems: step 1 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", MODULE);
         // Order items sub total should be:
         //  10 - 4 free WG-1111 = 359.94
         //  1 x GZ-1005 - 20% off = 2239.992
@@ -899,7 +895,7 @@ public class OrderTests extends OrderTestCase {
 
         // check new order totals
         order = repository.getOrderById(salesOrder.getOrderId());
-        Debug.logInfo("testCancelSalesOrderWithPromoItems: step 2 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", module);
+        Debug.logInfo("testCancelSalesOrderWithPromoItems: step 2 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", MODULE);
         // Order items sub total should be:
         //  2 x WG-1111 = 119.98
         //  1 x GZ-1005 - 20% off = 2239.992
@@ -928,7 +924,7 @@ public class OrderTests extends OrderTestCase {
 
         // check new order totals
         order = repository.getOrderById(salesOrder.getOrderId());
-        Debug.logInfo("testCancelSalesOrderWithPromoItems: step 3 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", module);
+        Debug.logInfo("testCancelSalesOrderWithPromoItems: step 3 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", MODULE);
         // Order items sub total should be:
         //  2 x WG-1111 = 119.98
         assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("119.98"));
@@ -969,7 +965,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId, null, "DemoAddress1");
         String orderId = salesOrder.getOrderId();
-        Debug.logInfo("testTaxCalculation created order [" + orderId + "]", module);
+        Debug.logInfo("testTaxCalculation created order [" + orderId + "]", MODULE);
 
         // service call context
         Map<String, Object> callCtxt = new HashMap<String, Object>();
@@ -1002,7 +998,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
         String orderId = salesOrder.getOrderId();
-        Debug.logInfo("testCancelByUpdateOrderItems created order [" + orderId + "]", module);
+        Debug.logInfo("testCancelByUpdateOrderItems created order [" + orderId + "]", MODULE);
 
         // cancel the items by changing its quantity to 0
         Map<String, Object> callCtxt = new HashMap<String, Object>();
@@ -1018,7 +1014,7 @@ public class OrderTests extends OrderTestCase {
         // try another order with payment method EXT_COD
         salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId, "EXT_COD", null);
         orderId = salesOrder.getOrderId();
-        Debug.logInfo("testCancelByUpdateOrderItems created second order [" + orderId + "]", module);
+        Debug.logInfo("testCancelByUpdateOrderItems created second order [" + orderId + "]", MODULE);
 
         // cancel the items by changing its quantity to 0
         callCtxt = new HashMap<String, Object>();
@@ -1042,7 +1038,7 @@ public class OrderTests extends OrderTestCase {
         order.put(GZ1005, 5.0);
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
-        Debug.logInfo("testInventoryOverReservation created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testInventoryOverReservation created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // try to reserve more inventory using various methods
         Map commonInput = FastMap.newInstance();
@@ -1108,8 +1104,8 @@ public class OrderTests extends OrderTestCase {
         Map initialInventory = inventoryAsserts.getInventory(productId);
 
         // 3. receive 10.0 units of the product as non-serialized inventory
-        Map<String, String> inventory = (Map<String, String>) receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
-        String inventoryItemId = inventory.get("inventoryItemId");
+        Map<String, Object> inventory = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        String inventoryItemId = (String) inventory.get("inventoryItemId");
 
         // 4. check product inventory changed by +10.0 relative to initial inventory (QOH = +10.0, ATP = +10.0)
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("10.0"), initialInventory);
@@ -1120,7 +1116,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
         String orderId = salesOrder.getOrderId();
-        Debug.logInfo("testCreateBackorderedItem created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testCreateBackorderedItem created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // 6. check product QOH changed by +10.0 and ATP changed by +3.0 relative to initial inventory (QOH = +10.0, ATP = +3.0)
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("10.0"), new BigDecimal("3.0"), initialInventory);
@@ -1134,12 +1130,12 @@ public class OrderTests extends OrderTestCase {
 
         // 9. check that the order item became backordered
         // TODO: replace block below with assert that OrderItem.getShortfalledQuantity() is 7.0
-        EntityConditionList conditionList = new EntityConditionList(
+        EntityCondition conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
-                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, new Double(7.0)),
-                        new EntityExpr("quantity", EntityOperator.EQUALS, new Double(7.0))
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(7.0)),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(7.0))
                 ),
                 EntityOperator.AND
         );
@@ -1177,23 +1173,18 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
         String orderId = salesOrder.getOrderId();
-        Debug.logInfo("testCreateBackorderedItem created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testCreateBackorderedItem created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // 6. check product QOH changed by +10.0 and ATP changed by +3.0 relative to initial inventory (QOH = +10.0, ATP = +3.0)
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("10.0"), new BigDecimal("3.0"), initialInventory);
 
         // 7. check that the order item became backordered
-        EntityConditionList conditionList = new EntityConditionList(
-                Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityConditionList(
-                                Arrays.asList(
-                                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, null),
-                                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, new Double(0.0))),
-                                        EntityOperator.OR),
-                                        new EntityExpr("quantity", EntityOperator.EQUALS, new Double(1.0))
-                ),
-                EntityOperator.AND
+        EntityCondition conditionList = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(1.0)),
+                EntityCondition.makeCondition(EntityOperator.OR,
+                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, null),
+                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(0.0)))
         );
         long backorderedInventoryItemsCount = delegator.findCountByCondition("OrderItemShipGrpInvRes", conditionList, null);
         assertEquals(String.format("Wrong number of backordered items of product [%1$s] against order [%2$s]", productId, orderId), 7, backorderedInventoryItemsCount);
@@ -1218,8 +1209,8 @@ public class OrderTests extends OrderTestCase {
         Map initialInventory = inventoryAsserts.getInventory(productId);
 
         // 3. receive 3.0 units of the product as non-serialized inventory
-        Map<String, String> inventory = (Map<String, String>) receiveInventoryProduct(product, 3.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
-        String inventoryItemId = inventory.get("inventoryItemId");
+        Map<String, Object> inventory = receiveInventoryProduct(product, 3.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        String inventoryItemId = (String) inventory.get("inventoryItemId");
         List<String> inventoryItemIds = UtilMisc.toList(inventoryItemId);
 
         // check product inventory changed by +3.0 relative to initial inventory (QOH = +3.0, ATP = +3.0)
@@ -1231,19 +1222,19 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
         String orderId = salesOrder.getOrderId();
-        Debug.logInfo("testReceiveInventoryAgainstBackorderedItem created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testReceiveInventoryAgainstBackorderedItem created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // 5. check product QOH changed by 3.0 and ATP by -7.0 relative to initial inventory (QOH = +3.0, ATP = -7.0)
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("3.0"), new BigDecimal("-7.0"), initialInventory);
 
         // 6. check that the order item became backordered
         // TODO: replace block below with assert that OrderItem.getShortfalledQuantity() is 7.0
-        EntityConditionList conditionList = new EntityConditionList(
+        EntityCondition conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
-                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, new Double(7.0)),
-                        new EntityExpr("quantity", EntityOperator.EQUALS, new Double(10.0))
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(7.0)),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(10.0))
                 ),
                 EntityOperator.AND
         );
@@ -1251,8 +1242,8 @@ public class OrderTests extends OrderTestCase {
         assertEquals(String.format("Wrong number of backordered items of product [%1$s] against order [%2$s]", productId, orderId), 1, backorderedInventoryItemsCount);
 
         // 7. receive 5 units of the product as non-serialized inventory
-        inventory = (Map<String, String>) receiveInventoryProduct(product, 5.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
-        inventoryItemId = inventory.get("inventoryItemId");
+        inventory = receiveInventoryProduct(product, 5.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        inventoryItemId = (String) inventory.get("inventoryItemId");
         inventoryItemIds.add(inventoryItemId);
 
         // 8. use createPhysicalInventoryVariance service to increase ATP and QOH of newly received item by +5 and +5
@@ -1264,12 +1255,12 @@ public class OrderTests extends OrderTestCase {
 
         // 10. check that the order item is no longer backordered
         // TODO: replace block below with assert that OrderItem.getShortfalledQuantity() is 0.0
-        conditionList = new EntityConditionList(
+        conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("inventoryItemId", EntityOperator.IN, inventoryItemIds),
-                        new EntityExpr("quantityNotAvailable", EntityOperator.NOT_EQUAL, null),
-                        new EntityExpr("quantityNotAvailable", EntityOperator.NOT_EQUAL, new Double(0.0))
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("inventoryItemId", EntityOperator.IN, inventoryItemIds),
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.NOT_EQUAL, null),
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.NOT_EQUAL, new Double(0.0))
                 ),
                 EntityOperator.AND
         );
@@ -1307,33 +1298,27 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoAccount1, productStoreId);
         String orderId = salesOrder.getOrderId();
-        Debug.logInfo("testReceiveInventoryAgainstBackorderedItem created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testReceiveInventoryAgainstBackorderedItem created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // 5. check product QOH changed by 3.0 and ATP by -7.0 relative to initial inventory (QOH = +3.0, ATP = -7.0)
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("3.0"), new BigDecimal("-7.0"), initialInventory);
 
         // 6. check that the order item became backordered
-        EntityConditionList conditionList = new EntityConditionList(
-                Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityConditionList(
-                                Arrays.asList(
-                                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, null),
-                                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, new Double(0.0))),
-                                        EntityOperator.OR
-                        ),
-                        new EntityExpr("quantity", EntityOperator.EQUALS, new Double(1.0))
-                ),
-                EntityOperator.AND
+        EntityCondition conditionList = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(1.0)),
+                        EntityCondition.makeCondition(EntityOperator.OR,
+                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, null),
+                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(0.0)))
         );
         long backorderedInventoryItemsCount = delegator.findCountByCondition("OrderItemShipGrpInvRes", conditionList, null);
         assertEquals(String.format("Wrong number of backordered items available of product [%1$s] against order [%2$s]", productId, orderId), 3, backorderedInventoryItemsCount);
 
-        conditionList = new EntityConditionList(
+        conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, new Double(7.0)),
-                        new EntityExpr("quantity", EntityOperator.EQUALS, new Double(7.0))
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(7.0)),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(7.0))
                 ),
                 EntityOperator.AND
         );
@@ -1347,27 +1332,21 @@ public class OrderTests extends OrderTestCase {
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("8.0"), new BigDecimal("-2.0"), initialInventory);
 
         // 9. check that the order item is no longer backordered
-        conditionList = new EntityConditionList(
-                Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityConditionList(
-                                Arrays.asList(
-                                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, null),
-                                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, new Double(0.0))),
-                                        EntityOperator.OR
-                        ),
-                        new EntityExpr("quantity", EntityOperator.EQUALS, new Double(1.0))
-                ),
-                EntityOperator.AND
+        conditionList = EntityCondition.makeCondition(EntityOperator.AND,
+                          EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                          EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(1.0)),
+                          EntityCondition.makeCondition(EntityOperator.OR,
+                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, null),
+                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(0.0)))
         );
         long nonBackorderedInventoryItemsCount = delegator.findCountByCondition("OrderItemShipGrpInvRes", conditionList, null);
         assertEquals(String.format("Wrong number of nonbackordered items of product [%1$s] against order [%2$s]", productId, orderId), 8, nonBackorderedInventoryItemsCount);
 
-        conditionList = new EntityConditionList(
+        conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("quantityNotAvailable", EntityOperator.EQUALS, new Double(2.0)),
-                        new EntityExpr("quantity", EntityOperator.EQUALS, new Double(2.0))
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(2.0)),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(2.0))
                 ),
                 EntityOperator.AND
         );
@@ -1456,7 +1435,7 @@ public class OrderTests extends OrderTestCase {
         Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
         order.put(GZ1005, 1.0);
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, party, productStoreId);
-        Debug.logInfo("testDontShipOrder has created order [" + salesOrder.getOrderId() + "]", module);
+        Debug.logInfo("testDontShipOrder has created order [" + salesOrder.getOrderId() + "]", MODULE);
 
         // try ship test order
         runAndAssertServiceError("testShipOrder", UtilMisc.toMap("orderId", salesOrder.getOrderId(), "facilityId", facilityId, "userLogin", demowarehouse1));
@@ -1488,8 +1467,8 @@ public class OrderTests extends OrderTestCase {
         assignDefaultPrice(testProduct, 50.0, admin);
 
         // 2.  Receive 100 units of product into stock
-        Map<String, String> inventory = (Map<String, String>) receiveInventoryProduct(testProduct, 100.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
-        String inventoryItemId = inventory.get("inventoryItemId");
+        Map<String, Object> inventory = receiveInventoryProduct(testProduct, 100.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        String inventoryItemId = (String) inventory.get("inventoryItemId");
 
         // 3.  Create an order for 100 units of the product.
         // 4.  Approve order
@@ -1498,7 +1477,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
         String orderId = orderFactory.getOrderId();
-        Debug.logInfo("testSplitShipment created order [" + orderId + "]", module);
+        Debug.logInfo("testSplitShipment created order [" + orderId + "]", MODULE);
 
         // 5.  Ship 25 units
         Map input = UtilMisc.toMap("userLogin", admin);
@@ -1561,7 +1540,6 @@ public class OrderTests extends OrderTestCase {
      * - during the test also check that OrderItem and OrderItemShipGroupAssoc are consistent
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testUpdateSplitShipment() throws GeneralException {
         // 1.  Create a product
         GenericValue testProduct = createTestProduct("Product for update split shipment Test", demowarehouse1);
@@ -1569,7 +1547,7 @@ public class OrderTests extends OrderTestCase {
         assignDefaultPrice(testProduct, 50.0, admin);
 
         // 2.  Receive 100 units of product into stock
-        Map<String, String> inventory = (Map<String, String>) receiveInventoryProduct(testProduct, 100.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        Map<String, Object> inventory = receiveInventoryProduct(testProduct, 100.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
         inventory.get("inventoryItemId");
 
         // 3.  Create an order for 100 units of the product.
@@ -1579,7 +1557,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
         String orderId = orderFactory.getOrderId();
-        Debug.logInfo("testUpdateSplitShipment created order [" + orderId + "]", module);
+        Debug.logInfo("testUpdateSplitShipment created order [" + orderId + "]", MODULE);
         assertOrderItemQuantity(orderId, "00001", 100.0, null);
         assertShipGroupValid(orderId, "00001");
 
@@ -1606,7 +1584,7 @@ public class OrderTests extends OrderTestCase {
         assertOrderItemsHaveShipGroupAssoc(orderId);
 
         // 9.  Cancel the third ship group
-        Debug.logInfo("Cancelling third ship group ......", module);
+        Debug.logInfo("Cancelling third ship group ......", MODULE);
         assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002", "00003"), UtilMisc.toList(60.0, 50.0, 0.0));
         assertOrderItemsHaveShipGroupAssoc(orderId);
         assertShipGroupValid(orderId);
@@ -1626,7 +1604,7 @@ public class OrderTests extends OrderTestCase {
         assertOrderItemQuantity(orderId, "00001", 270.0, 20.0);
 
         // 14. Cancel the first and second ship groups
-        Debug.logInfo("Cancelling last two ship groups ......", module);
+        Debug.logInfo("Cancelling last two ship groups ......", MODULE);
         assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002"), UtilMisc.toList(0.0, 0.0));
         assertShipGroupValid(orderId);
 
@@ -1657,7 +1635,7 @@ public class OrderTests extends OrderTestCase {
         assignDefaultPrice(testProduct, 50.0, admin);
 
         // 2.  Receive 100 units of product into stock
-        Map<String, String> inventory = (Map<String, String>) receiveInventoryProduct(testProduct, 100.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        Map<String, Object> inventory = receiveInventoryProduct(testProduct, 100.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
         inventory.get("inventoryItemId");
 
         // 3.  Create an order for 100 units of the product.
@@ -1668,7 +1646,7 @@ public class OrderTests extends OrderTestCase {
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
         String orderId = orderFactory.getOrderId();
         orderFactory.approveOrder();
-        Debug.logInfo("testCancelOrderWithPromoItems created order [" + orderId + "]", module);
+        Debug.logInfo("testCancelOrderWithPromoItems created order [" + orderId + "]", MODULE);
         assertOrderItemQuantity(orderId, "00001", 1000.0, null);
         assertShipGroupValid(orderId, "00001");
 
@@ -1679,7 +1657,7 @@ public class OrderTests extends OrderTestCase {
         assertOrderItemsHaveShipGroupAssoc(orderId);
 
         // 6. Cancel the ship group (manullay building the whole map to match what the web interface would send)
-        Debug.logInfo("testCancelOrderWithPromoItems Cancelling ship group ......", module);
+        Debug.logInfo("testCancelOrderWithPromoItems Cancelling ship group ......", MODULE);
         HashMap<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("userLogin", DemoCSR);
         callCtxt.put("orderId", orderId);
@@ -1866,7 +1844,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, customer, productStoreId);
         String orderId = orderFactory.getOrderId();
-        Debug.logInfo("testOrderPayments created order [" + orderId + "]", module);
+        Debug.logInfo("testOrderPayments created order [" + orderId + "]", MODULE);
         orderFactory.approveOrder();
 
         // 6.  Receive a check and a credit card payment for $100 and the balance of the order from the customer and set both to received
@@ -1907,7 +1885,7 @@ public class OrderTests extends OrderTestCase {
         GenericValue product = createTestProduct("testReserveInventoryForStoreLIFOReceived Test Product", demowarehouse1);
 
         // receive 10 into the warehouse and store the inventoryItemId as inventoryItemId1
-        Map<String, ?> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
 
         pause("Workaround pause for MySQL");
@@ -1943,7 +1921,7 @@ public class OrderTests extends OrderTestCase {
         GenericValue product = createTestProduct("testReserveInventoryForStoreFIFOReceived Test Product", demowarehouse1);
 
         // receive 10 into the warehouse and store the inventoryItemId as inventoryItemId1
-        Map<String, ?> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.1, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.1, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
 
         // we need to take a pause so that the two inventory items have different received daytime timestamps even in mysql
@@ -1986,7 +1964,7 @@ public class OrderTests extends OrderTestCase {
         GenericValue product = createTestProduct("testReserveInventoryForFacilityLIFOReceived Test Product", demowarehouse1);
 
         // receive 10 into the warehouse and store the inventoryItemId as inventoryItemId1
-        Map<String, ?> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
 
         pause("Workaround pause for MySQL");
@@ -2027,7 +2005,7 @@ public class OrderTests extends OrderTestCase {
         GenericValue product = createTestProduct("testReserveInventoryForFacilityFIFOReceived Test Product", demowarehouse1);
 
         // receive 10 into the warehouse and store the inventoryItemId as inventoryItemId1
-        Map<String, ?> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
 
         pause("Workaround pause for MySQL");
@@ -2059,7 +2037,7 @@ public class OrderTests extends OrderTestCase {
         GenericValue product = createTestProduct("testReReserveInventoryCreatesBackOrder Test Product", demowarehouse1);
 
         // receive 10 into the warehouse.  This is inventoryItemId1
-        Map<String, ?> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
 
         // set ProductStore's reserveOrderEnumId to INVRO_LIFO_REC
@@ -2096,7 +2074,7 @@ public class OrderTests extends OrderTestCase {
         Order order = repository.getOrderById(orderFactory.getOrderId());
         OrderItem orderItem = repository.getOrderItem(order, "00001");
         BigDecimal beforeReservedQuantity = orderItem.getReservedQuantity();
-        Debug.logInfo("Initial ReservedQuantity: " + beforeReservedQuantity, module);
+        Debug.logInfo("Initial ReservedQuantity: " + beforeReservedQuantity, MODULE);
 
         // call reReserveInventoryProduct to re-reserve the inventory for 5 of the order item in the RetailStore warehouse
         reReserveInventory(orderFactory, inventoryItemId1, 5.0);
@@ -2114,7 +2092,7 @@ public class OrderTests extends OrderTestCase {
         // verify current OrderItem.getReservedQuantity() equals OrderItem.getReservedQuantity() of before re-reserved to another facility.
         orderItem = repository.getOrderItem(order, "00001");
         BigDecimal afterReservedQuantity = orderItem.getReservedQuantity();
-        Debug.logInfo("After re-reserved to another facility ReservedQuantity: " + afterReservedQuantity, module);
+        Debug.logInfo("After re-reserved to another facility ReservedQuantity: " + afterReservedQuantity, MODULE);
         assertEquals("after product re-reserved to another facility, OrderItem.getReservedQuantity() should not changed.", afterReservedQuantity, beforeReservedQuantity);
         // cancel the order
         Map<String, Object> context = FastMap.newInstance();
@@ -2148,7 +2126,7 @@ public class OrderTests extends OrderTestCase {
         GenericValue product = createTestProduct("testReReserveInventoryCreatesBackOrder Test Product", demowarehouse1);
 
         // receive 10 into the warehouse.  This is inventoryItemId1
-        Map<String, ?> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
 
         // create a sales order for 5
@@ -2224,7 +2202,6 @@ public class OrderTests extends OrderTestCase {
      * This test verifies that re-reserving inventory in a new facility can also create back orders.
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testReReserveInventoryCreatesBackOrder() throws GeneralException {
         OrderRepositoryInterface repository = getOrderRepository(admin);
         // create a product
@@ -2238,7 +2215,7 @@ public class OrderTests extends OrderTestCase {
         Order order = repository.getOrderById(orderFactory.getOrderId());
         OrderItem orderItem = repository.getOrderItem(order, "00001");
         BigDecimal beforeReservedQuantity = orderItem.getReservedQuantity();
-        Debug.logInfo("Initial ReservedQuantity: " + beforeReservedQuantity, module);
+        Debug.logInfo("Initial ReservedQuantity: " + beforeReservedQuantity, MODULE);
 
         // verify that in the WebStoreWarehouse there is an inventory item with ATP = -5, QOH = 0 for this product.  This is inventoryItemId1
         List<GenericValue> inventoryItems = delegator.findByAnd(
@@ -2260,7 +2237,7 @@ public class OrderTests extends OrderTestCase {
         // verify current OrderItem.getReservedQuantity() equals OrderItem.getReservedQuantity() of before re-reserved to another facility.
         orderItem = repository.getOrderItem(order, "00001");
         BigDecimal afterReservedQuantity = orderItem.getReservedQuantity();
-        Debug.logInfo("After re-reserved to another facility ReservedQuantity: " + afterReservedQuantity, module);
+        Debug.logInfo("After re-reserved to another facility ReservedQuantity: " + afterReservedQuantity, MODULE);
         assertEquals("after product re-reserved to another facility, OrderItem.getReservedQuantity() should not changed.", afterReservedQuantity, beforeReservedQuantity);
 
         // verify that inventoryItemId1 has ATP = 0, QOH = 0
@@ -2300,14 +2277,13 @@ public class OrderTests extends OrderTestCase {
      * This test verifies re-reserving inventory in a new facility in the case when order ship-to address has associated facility.
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testReReserveInventoryAndAddressFacilityAssoc() throws GeneralException {
         OrderRepositoryInterface repository = getOrderRepository(admin);
         // create a product
         GenericValue product = createTestProduct("testReReserveInventoryAndAddressFacilityAssoc Test Product", demowarehouse1);
 
         // receive 10 into the warehouse.  This is inventoryItemId1
-        Map<String, ?> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(product, 10.0, "NON_SERIAL_INV_ITEM", 1.0, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
 
         // create a sales order for 8
@@ -2329,7 +2305,7 @@ public class OrderTests extends OrderTestCase {
         // get initial OrderItem.getReservedQuantity()
         OrderItem orderItem = repository.getOrderItem(order, "00001");
         BigDecimal beforeReservedQuantity = orderItem.getReservedQuantity();
-        Debug.logInfo("Initial ReservedQuantity: " + beforeReservedQuantity, module);
+        Debug.logInfo("Initial ReservedQuantity: " + beforeReservedQuantity, MODULE);
 
         // call reReserveInventoryProduct to re-reserve the inventory for 5 of the order item in the RetailStore warehouse
         reReserveInventory(orderFactory, inventoryItemId1, 5.0);
@@ -2346,7 +2322,7 @@ public class OrderTests extends OrderTestCase {
         // verify current OrderItem.getReservedQuantity() equals OrderItem.getReservedQuantity() of before re-reserved to another facility.
         orderItem = repository.getOrderItem(order, "00001");
         BigDecimal afterReservedQuantity = orderItem.getReservedQuantity();
-        Debug.logInfo("After re-reserved to another facility ReservedQuantity: " + afterReservedQuantity, module);
+        Debug.logInfo("After re-reserved to another facility ReservedQuantity: " + afterReservedQuantity, MODULE);
         assertEquals("after product re-reserved to another facility, OrderItem.getReservedQuantity() should not changed.", afterReservedQuantity, beforeReservedQuantity);
 
     }
@@ -2395,7 +2371,7 @@ public class OrderTests extends OrderTestCase {
         assertNotNull("Order Item for product A not found.", orderItemProductA);
         assertNotNull("Order Item for product B not found.", orderItemProductB);
         assertNotNull("Order Item for product C not found.", orderItemProductC);
-        Debug.logInfo("testReReserveInventoryOnSplitOrder() create orderId: " + salesOrder.getOrderId(), module);
+        Debug.logInfo("testReReserveInventoryOnSplitOrder() create orderId: " + salesOrder.getOrderId(), MODULE);
 
         // re-reserve 5 of productB in My Retail Store
         //reReserveOrderItemInventory(order.getOrderId(), orderItemProductB.getOrderItemSeqId(), facilityId1, 5.0);
@@ -2517,7 +2493,7 @@ public class OrderTests extends OrderTestCase {
         SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, customer, productStoreId);
         salesOrder.approveOrder();
         Order order = orderRepository.getOrderById(salesOrder.getOrderId());
-        Debug.logInfo("testMultiFacilityMultiShipGroupOrder() create orderId: " + salesOrder.getOrderId(), module);
+        Debug.logInfo("testMultiFacilityMultiShipGroupOrder() create orderId: " + salesOrder.getOrderId(), MODULE);
 
         OrderItem orderItemProductA = null;
         OrderItem orderItemProductB = null;
@@ -2614,9 +2590,7 @@ public class OrderTests extends OrderTestCase {
         List orderIdList = UtilMisc.toList(order.getOrderId());
         results = runAndAssertServiceSuccess("createPicklistFromOrders", UtilMisc.toMap("orderIdList", orderIdList, "facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
         String picklistIdForWebStore  = (String) results.get("picklistId");
-        List conditions = new ArrayList();
-        conditions.add(new EntityExpr("pPicklistId", EntityOperator.EQUALS, picklistIdForWebStore));
-        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("pPicklistId", EntityOperator.EQUALS, picklistIdForWebStore)), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
         boolean have5ProductAForWebStore = false;
         boolean have3ProductBForWebStore = false;
         // productC is split in two ship groups
@@ -2656,9 +2630,7 @@ public class OrderTests extends OrderTestCase {
 
         results = runAndAssertServiceSuccess("createPicklistFromOrders", UtilMisc.toMap("orderIdList", orderIdList, "facilityId", facilityId1, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
         String picklistIdForMyRetail  = (String) results.get("picklistId");
-        conditions = new ArrayList();
-        conditions.add(new EntityExpr("pPicklistId", EntityOperator.EQUALS, picklistIdForMyRetail));
-        picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+        picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("pPicklistId", EntityOperator.EQUALS, picklistIdForMyRetail)), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
         boolean have5ProductBForMyRetail = false;
         boolean have3ProductCForMyRetail = false;
 
@@ -2833,7 +2805,7 @@ public class OrderTests extends OrderTestCase {
         String customerPartyId = createPartyFromTemplate(DemoCustomer.getString("partyId"), "Customer for testOrderAccountingTags");
 
         // receive in Web Store 5 x productA, 3 x productB
-        Map<String, ?> results = receiveInventoryProduct(productA, 5.0, "NON_SERIAL_INV_ITEM", 10.0, facilityId, inventoryTagsA, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(productA, 5.0, "NON_SERIAL_INV_ITEM", 10.0, facilityId, inventoryTagsA, demowarehouse1);
         String inventoryAId = (String) results.get("inventoryItemId");
         results = receiveInventoryProduct(productB, 3.0, "NON_SERIAL_INV_ITEM", 10.0, facilityId, inventoryTagsB, demowarehouse1);
         String inventoryBId = (String) results.get("inventoryItemId");

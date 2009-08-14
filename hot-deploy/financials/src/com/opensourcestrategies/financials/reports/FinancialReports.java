@@ -126,26 +126,26 @@ public final class FinancialReports {
             ctxt.put("thruDate", thruDate);
             UtilAccountingTags.addTagParameters(request, ctxt);
 
-            Map<String, ?> results = dispatcher.runSync("getIncomeStatementByDates", ctxt);
-            Map<String, ?> glAccountSums = (Map<String, ?>) results.get("glAccountSums");
+            Map<String, Object> results = dispatcher.runSync("getIncomeStatementByDates", ctxt);
+            Map<String, Object> glAccountSums = (Map<String, Object>) results.get("glAccountSums");
             BigDecimal grossProfit = (BigDecimal) results.get("grossProfit");
             BigDecimal operatingIncome = (BigDecimal) results.get("operatingIncome");
             BigDecimal pretaxIncome = (BigDecimal) results.get("pretaxIncome");
             BigDecimal netIncome = (BigDecimal) results.get("netIncome");
             Map<String, BigDecimal> glAccountGroupSums = (Map) results.get("glAccountGroupSums");
 
-            List<Map<String, ?>> rows = FastList.newInstance();
+            List<Map<String, Object>> rows = FastList.newInstance();
 
             Integer i = 1;
             for (String glAccountTypeId : FinancialServices.INCOME_STATEMENT_TYPES) {
-                List<Map<String, ?>> accounts = (List<Map<String, ?>>) glAccountSums.get(glAccountTypeId);
+                List<Map<String, Object>> accounts = (List<Map<String, Object>>) glAccountSums.get(glAccountTypeId);
 
                 // find account type
                 GenericValue glAccountType = delegator.findByPrimaryKey("GlAccountType", UtilMisc.toMap("glAccountTypeId", glAccountTypeId));
 
                 // create records for report
                 if (UtilValidate.isNotEmpty(accounts)) {
-                    for (Map<String, ?> account : accounts) {
+                    for (Map<String, Object> account : accounts) {
                         Map<String, Object> row = FastMap.newInstance();
                         row.put("typeSeqNum", i);
                         row.put("accountCode", account.get("accountCode"));
@@ -191,8 +191,8 @@ public final class FinancialReports {
             }
 
             // sort records by account code
-            Collections.sort(rows, new Comparator<Map<String, ?>>() {
-                public int compare(Map<String, ?> o1, Map<String, ?> o2) {
+            Collections.sort(rows, new Comparator<Map<String, Object>>() {
+                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                     Integer seqNum1 = (Integer) o1.get("typeSeqNum");
                     Integer seqNum2 = (Integer) o2.get("typeSeqNum");
                     int isSeqNumEq = seqNum1.compareTo(seqNum2);
@@ -307,10 +307,10 @@ public final class FinancialReports {
             context.put("thruDate2", thruDate2);
             UtilAccountingTags.addTagParameters(request, context);
 
-            Map<String, ?> results = dispatcher.runSync("getComparativeIncomeStatement", context);
+            Map<String, Object> results = dispatcher.runSync("getComparativeIncomeStatement", context);
 
-            Map<String, ?> set1IncomeStatement = (Map<String, ?>) results.get("set1IncomeStatement");
-            Map<String, ?> set2IncomeStatement = (Map<String, ?>) results.get("set2IncomeStatement");
+            Map<String, Object> set1IncomeStatement = (Map<String, Object>) results.get("set1IncomeStatement");
+            Map<String, Object> set2IncomeStatement = (Map<String, Object>) results.get("set2IncomeStatement");
             BigDecimal netIncome1 = (BigDecimal) set1IncomeStatement.get("netIncome");
             BigDecimal netIncome2 = (BigDecimal) set2IncomeStatement.get("netIncome");
             Map<GenericValue, BigDecimal> accountBalances = (Map<GenericValue, BigDecimal>) results.get("accountBalances");
@@ -319,7 +319,7 @@ public final class FinancialReports {
             GenericValue glFiscalType1 = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId1));
             GenericValue glFiscalType2 = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", glFiscalTypeId2));
 
-            List<Map<String, ?>> rows = FastList.newInstance();
+            List<Map<String, Object>> rows = FastList.newInstance();
 
             // create records for report
             Set<GenericValue> accounts = accountBalances.keySet();
@@ -335,8 +335,8 @@ public final class FinancialReports {
             }
 
             // sort records by account code
-            Collections.sort(rows, new Comparator<Map<String, ?>>() {
-                public int compare(Map<String, ?> o1, Map<String, ?> o2) {
+            Collections.sort(rows, new Comparator<Map<String, Object>>() {
+                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                     String accountCode1 = (String) o1.get("accountCode");
                     String accountCode2 = (String) o2.get("accountCode");
                     if (accountCode1 == null && accountCode2 == null) {
@@ -427,9 +427,9 @@ public final class FinancialReports {
             ctxt.put("asOfDate", asOfDate);
             UtilAccountingTags.addTagParameters(request, ctxt);
 
-            Map<String, ?> results = dispatcher.runSync("getTrialBalanceForDate", ctxt);
+            Map<String, Object> results = dispatcher.runSync("getTrialBalanceForDate", ctxt);
 
-            List<Map<String, ?>> rows = FastList.newInstance();
+            List<Map<String, Object>> rows = FastList.newInstance();
 
             // the account groups that will be included in the report, in the same order
             Map<String, String> accountLabels = new LinkedHashMap<String, String>();
@@ -538,7 +538,7 @@ public final class FinancialReports {
             ctxt.put("asOfDate", asOfDate);
             UtilAccountingTags.addTagParameters(request, ctxt);
 
-            Map<String, ?> results = dispatcher.runSync("getBalanceSheetForDate", ctxt);
+            Map<String, Object> results = dispatcher.runSync("getBalanceSheetForDate", ctxt);
             List<GenericValue> assetAccounts = EntityUtil.orderBy(((Map) results.get("assetAccountBalances")).keySet(), UtilMisc.toList("glAccountId"));
             Map<GenericValue, BigDecimal> assetAccountBalances = (Map) results.get("assetAccountBalances");
             List<GenericValue> liabilityAccounts = EntityUtil.orderBy(((Map) results.get("liabilityAccountBalances")).keySet(), UtilMisc.toList("glAccountId"));
@@ -546,7 +546,7 @@ public final class FinancialReports {
             List<GenericValue> equityAccounts = EntityUtil.orderBy(((Map) results.get("equityAccountBalances")).keySet(), UtilMisc.toList("glAccountId"));
             Map<GenericValue, BigDecimal> equityAccountBalances = (Map) results.get("equityAccountBalances");
 
-            List<Map<String, ?>> rows = FastList.newInstance();
+            List<Map<String, Object>> rows = FastList.newInstance();
 
             // create record set for report
             if (UtilValidate.isNotEmpty(assetAccounts)) {
@@ -593,8 +593,8 @@ public final class FinancialReports {
 
 
             // sort records by account code
-            Collections.sort(rows, new Comparator<Map<String, ?>>() {
-                public int compare(Map<String, ?> o1, Map<String, ?> o2) {
+            Collections.sort(rows, new Comparator<Map<String, Object>>() {
+                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                     Integer accountTypeSeqNum1 = (Integer) o1.get("accountTypeSeqNum");
                     Integer accountTypeSeqNum2 = (Integer) o2.get("accountTypeSeqNum");
                     int c = accountTypeSeqNum1.compareTo(accountTypeSeqNum2);
@@ -694,7 +694,7 @@ public final class FinancialReports {
             context.put("thruDate", thruDate);
             UtilAccountingTags.addTagParameters(request, context);
 
-            Map<String, ?> results = dispatcher.runSync("getComparativeBalanceSheet", context);
+            Map<String, Object> results = dispatcher.runSync("getComparativeBalanceSheet", context);
 
             List<GenericValue> assetAccounts = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) results.get("assetAccountBalances")).keySet(), UtilMisc.toList("glAccountId"));
             Map<GenericValue, BigDecimal> assetAccountBalances = (Map<GenericValue, BigDecimal>) results.get("assetAccountBalances");
@@ -703,12 +703,12 @@ public final class FinancialReports {
             List<GenericValue> equityAccounts = EntityUtil.orderBy(((Map<GenericValue, BigDecimal>) results.get("equityAccountBalances")).keySet(), UtilMisc.toList("glAccountId"));
             Map<GenericValue, BigDecimal> equityAccountBalances = (Map<GenericValue, BigDecimal>) results.get("equityAccountBalances");
 
-            Map<String, ?> fromDateAccountBalances = (Map<String, ?>) results.get("fromDateAccountBalances");
+            Map<String, Object> fromDateAccountBalances = (Map<String, Object>) results.get("fromDateAccountBalances");
             Map<GenericValue, BigDecimal> fromAssetAccountBalances = (Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("assetAccountBalances");
             Map<GenericValue, BigDecimal> fromLiabilityAccountBalances = (Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("liabilityAccountBalances");
             Map<GenericValue, BigDecimal> fromEquityAccountBalances = (Map<GenericValue, BigDecimal>) fromDateAccountBalances.get("equityAccountBalances");
 
-            Map<String, ?> thruDateAccountBalances = (Map<String, ?>) results.get("thruDateAccountBalances");
+            Map<String, Object> thruDateAccountBalances = (Map<String, Object>) results.get("thruDateAccountBalances");
             Map<GenericValue, BigDecimal> toAssetAccountBalances = (Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("assetAccountBalances");
             Map<GenericValue, BigDecimal> toLiabilityAccountBalances = (Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("liabilityAccountBalances");
             Map<GenericValue, BigDecimal> toEquityAccountBalances = (Map<GenericValue, BigDecimal>) thruDateAccountBalances.get("equityAccountBalances");
@@ -716,7 +716,7 @@ public final class FinancialReports {
             GenericValue fromGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", fromGlFiscalTypeId));
             GenericValue toGlFiscalType = delegator.findByPrimaryKey("GlFiscalType", UtilMisc.toMap("glFiscalTypeId", toGlFiscalTypeId));
 
-            List<Map<String, ?>> rows = FastList.newInstance();
+            List<Map<String, Object>> rows = FastList.newInstance();
 
             // create record set for report
             if (UtilValidate.isNotEmpty(assetAccounts)) {
@@ -768,8 +768,8 @@ public final class FinancialReports {
             }
 
             // sort records by account code
-            Collections.sort(rows, new Comparator<Map<String, ?>>() {
-                public int compare(Map<String, ?> o1, Map<String, ?> o2) {
+            Collections.sort(rows, new Comparator<Map<String, Object>>() {
+                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                     Integer accountTypeSeqNum1 = (Integer) o1.get("accountTypeSeqNum");
                     Integer accountTypeSeqNum2 = (Integer) o2.get("accountTypeSeqNum");
                     int c = accountTypeSeqNum1.compareTo(accountTypeSeqNum2);
@@ -871,7 +871,7 @@ public final class FinancialReports {
             ctxt.put("thruDate", thruDate);
             UtilAccountingTags.addTagParameters(request, ctxt);
 
-            Map<String, ?> results = dispatcher.runSync("getCashFlowStatementForDates", ctxt);
+            Map<String, Object> results = dispatcher.runSync("getCashFlowStatementForDates", ctxt);
             BigDecimal beginningCashAmount = (BigDecimal) results.get("beginningCashAmount");
             BigDecimal endingCashAmount = (BigDecimal) results.get("endingCashAmount");
             BigDecimal operatingCashFlow = (BigDecimal) results.get("operatingCashFlow");
@@ -887,7 +887,7 @@ public final class FinancialReports {
             List<GenericValue> investingAccounts = EntityUtil.orderBy(investingCashFlowAccountBalances.keySet(), UtilMisc.toList("glAccountId"));
             List<GenericValue> financingAccounts = EntityUtil.orderBy(financingCashFlowAccountBalances.keySet(), UtilMisc.toList("glAccountId"));
 
-            List<Map<String, ?>> rows = FastList.newInstance();
+            List<Map<String, Object>> rows = FastList.newInstance();
 
             // create record set for report
             for (GenericValue account : operatingAccounts) {
@@ -1027,10 +1027,10 @@ public final class FinancialReports {
             ctxt.put("thruDate2", thruDate2);
             UtilAccountingTags.addTagParameters(request, ctxt);
 
-            Map<String, ?> results = dispatcher.runSync("getComparativeCashFlowStatement", ctxt);
+            Map<String, Object> results = dispatcher.runSync("getComparativeCashFlowStatement", ctxt);
 
-            Map<String, ?> set1CashFlowStatement = (Map<String, ?>) results.get("set1CashFlowStatement");
-            Map<String, ?> set2CashFlowStatement = (Map<String, ?>) results.get("set2CashFlowStatement");
+            Map<String, Object> set1CashFlowStatement = (Map<String, Object>) results.get("set1CashFlowStatement");
+            Map<String, Object> set2CashFlowStatement = (Map<String, Object>) results.get("set2CashFlowStatement");
 
             BigDecimal beginningCashAmount1 = (BigDecimal) set1CashFlowStatement.get("beginningCashAmount");
             BigDecimal beginningCashAmount2 = (BigDecimal) set2CashFlowStatement.get("beginningCashAmount");
@@ -1062,7 +1062,7 @@ public final class FinancialReports {
             List<GenericValue> investingAccounts = EntityUtil.orderBy(investingCashFlowAccountBalances.keySet(), UtilMisc.toList("glAccountId"));
             List<GenericValue> financingAccounts = EntityUtil.orderBy(financingCashFlowAccountBalances.keySet(), UtilMisc.toList("glAccountId"));
 
-            List<Map<String, ?>> rows = FastList.newInstance();
+            List<Map<String, Object>> rows = FastList.newInstance();
 
             // create record set for report
             for (GenericValue account : operatingAccounts) {
@@ -1114,8 +1114,8 @@ public final class FinancialReports {
             }
 
             // sort records by account code
-            Collections.sort(rows, new Comparator<Map<String, ?>>() {
-                public int compare(Map<String, ?> o1, Map<String, ?> o2) {
+            Collections.sort(rows, new Comparator<Map<String, Object>>() {
+                public int compare(Map<String, Object> o1, Map<String, Object> o2) {
                     String accountCode1 = (String) o1.get("accountCode");
                     String accountCode2 = (String) o2.get("accountCode");
                     if (accountCode1 == null && accountCode2 == null) {

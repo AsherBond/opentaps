@@ -136,7 +136,7 @@ public class InventoryService extends Service implements InventoryServiceInterfa
                             "userLogin", getUser().getOfbizUserLogin()
                     );
 
-                Map<String, ?> result = runSync("createInventoryItemDetail", createDetailMap);
+                Map<String, Object> result = runSync("createInventoryItemDetail", createDetailMap);
                 if (ServiceUtil.isError(result)) {
                     throw new ServiceException("Inventory Item Detail create problem in cancel inventory transfer");
                 }

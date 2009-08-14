@@ -18,7 +18,6 @@ package org.opentaps.tests;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -44,7 +43,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.model.ModelField;
@@ -620,9 +619,9 @@ public class OpentapsTestCase extends TestCase {
     }
 
     /**
-     * check that all values of the actual Map agree with the expected Map
+     * Check that all values of the actual Map agree with the expected Map
      * note it will only check the key values in expectedMap against actualMap
-     * use expectedMap of new HashMap() to check that the actualMap should be empty
+     * use expectedMap of new HashMap() to check that the actualMap should be empty.
      * @param actualMap
      * @param expectedMap
      */
@@ -634,14 +633,14 @@ public class OpentapsTestCase extends TestCase {
 
             BigDecimal expectedBd = asBigDecimal(expectedValue);
             BigDecimal actualBd = asBigDecimal(actualValue);
-            
+
             if (actualBd.compareTo(expectedBd) != 0) {
                 String failMessage = "Unexpected value of [" + actualBd + "] for [" + key + "]; was expecting [" + expectedBd + "]";
                 TestCase.fail(failMessage);
             }
-    	}
+        }
     }
-    
+
     /**
      * For each key, asserts that the numeric difference is as expected:  Sum(finalValue) - Sum(initialValue) = expectedValue.
      * If a value is null, it is assumed to be zero.  The values must be either Numbers or Strings representing Numbers.
@@ -882,7 +881,7 @@ public class OpentapsTestCase extends TestCase {
         }
         productRoutingContext.put("workEffortName", workEffortName);
         productRoutingContext.put("quantityToProduce", new Double(0.0));
-        Map<String, ?> createProductRoutingResult = runAndAssertServiceSuccess("createWorkEffort", productRoutingContext);
+        Map<String, Object> createProductRoutingResult = runAndAssertServiceSuccess("createWorkEffort", productRoutingContext);
         final String productRoutingId = (String) createProductRoutingResult.get("workEffortId");
 
         // create a routing task for the test product routing
@@ -899,7 +898,7 @@ public class OpentapsTestCase extends TestCase {
         routingTaskContext.put("fixedAssetId", "WORKCENTER_COST");
         routingTaskContext.put("estimatedMilliSeconds", estimatedMilliSeconds);
         routingTaskContext.put("estimatedSetupMillis", estimatedSetupMillis);
-        Map<String, ?> createRoutingTaskResult = runAndAssertServiceSuccess("createWorkEffort", routingTaskContext);
+        Map<String, Object> createRoutingTaskResult = runAndAssertServiceSuccess("createWorkEffort", routingTaskContext);
         final String routingTaskId = (String) createRoutingTaskResult.get("workEffortId");
 
         // create a WorkEffortAssoc between the product routing and the routing task for the test product routing
@@ -1048,7 +1047,7 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin user that will call the service
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
-    protected Map<String, ?> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, GenericValue userLogin) {
+    protected Map<String, Object> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, GenericValue userLogin) {
         return receiveInventoryProduct(product, quantity, inventoryItemTypeId, 0.1, userLogin);
     }
 
@@ -1061,7 +1060,7 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin user that will call the service
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
-    protected Map<String, ?> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, Double unitCost, GenericValue userLogin) {
+    protected Map<String, Object> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, Double unitCost, GenericValue userLogin) {
         return receiveInventoryProduct(product, quantity, inventoryItemTypeId, unitCost, getFacilityId(), userLogin);
     }
 
@@ -1076,7 +1075,7 @@ public class OpentapsTestCase extends TestCase {
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
     @SuppressWarnings("unchecked")
-    protected Map<String, ?> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, Double unitCost, String facilityId, GenericValue userLogin) {
+    protected Map<String, Object> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, Double unitCost, String facilityId, GenericValue userLogin) {
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("productId", product.getString("productId"));
         callCtxt.put("facilityId", facilityId);
@@ -1102,7 +1101,7 @@ public class OpentapsTestCase extends TestCase {
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
     @SuppressWarnings("unchecked")
-    protected Map<String, ?> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, Double unitCost, String facilityId, Map<String, String> tags, GenericValue userLogin) {
+    protected Map<String, Object> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, Double unitCost, String facilityId, Map<String, String> tags, GenericValue userLogin) {
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("productId", product.getString("productId"));
         callCtxt.put("facilityId", facilityId);
@@ -1548,11 +1547,11 @@ public class OpentapsTestCase extends TestCase {
         }
 
         return pof;
-    
+
     }
-    
+
     /**
-     * Method to simulate the edit/add order item form's call to updateOrderItem service.  
+     * Method to simulate the edit/add order item form's call to updateOrderItem service.
      * @param orderId
      * @param orderItemSeqId
      * @param newQuantity
@@ -1562,10 +1561,9 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin
      * @throws GeneralException
      */
-    protected void updateOrderItem(String orderId, String orderItemSeqId, String newQuantity, String newUnitPrice, String newDescription, 
-    		                       GenericValue userLogin) throws GeneralException {
+    protected void updateOrderItem(String orderId, String orderItemSeqId, String newQuantity, String newUnitPrice, String newDescription, GenericValue userLogin) throws GeneralException {
         // these parameters match the web form for update order item
-    	Map<String, Object> callCtxt = new HashMap<String, Object>();
+        Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("userLogin", userLogin);
         callCtxt.put("orderId", orderId);
         callCtxt.put("itemDescriptionMap", UtilMisc.toMap(orderItemSeqId, newDescription));
@@ -1575,7 +1573,7 @@ public class OpentapsTestCase extends TestCase {
             // this is a Map of orderItemSeqId checkboxes, so "Y" denotes update this price
             callCtxt.put("overridePriceMap", UtilMisc.toMap(orderItemSeqId, "Y"));
         } else {
-        	// this is a required parameter, so we need to supply an empty Map
+            // this is a required parameter, so we need to supply an empty Map
             callCtxt.put("overridePriceMap", new HashMap());
         }
         runAndAssertServiceSuccess("updateOrderItems", callCtxt);
@@ -1592,7 +1590,7 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin
      * @throws GeneralException is exception occur
      */
-    protected void updatePurchaseOrderItem(String orderId, String orderItemSeqId, String newQuantity, String newUnitPrice, String newDescription, 
+    protected void updatePurchaseOrderItem(String orderId, String orderItemSeqId, String newQuantity, String newUnitPrice, String newDescription,
                                    GenericValue userLogin) throws GeneralException {
         // these parameters match the web form for update order item
         Map<String, Object> callCtxt = new HashMap<String, Object>();
@@ -1621,23 +1619,23 @@ public class OpentapsTestCase extends TestCase {
      * @throws GeneralException
      */
     protected void cancelOrderItem(String orderId, String orderItemSeqId, String shipGroupSeqId, Double quantityToCancel, GenericValue userLogin) throws GeneralException {
-        Map<String, Object>callCtxt = new HashMap<String, Object>();
+        Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("userLogin", userLogin);
         callCtxt.put("orderId", orderId);
         callCtxt.put("orderItemSeqId", orderItemSeqId);
         callCtxt.put("shipGroupSeqId", shipGroupSeqId);
         callCtxt.put("cancelQuantity", quantityToCancel);
         runAndAssertServiceSuccess("cancelOrderItem", callCtxt);
-	
+
     }
-    
+
     /**
-     * Same as below, except receives full quantity of all order items and force complete the items
+     * Same as below, except receives full quantity of all order items and force complete the items.
      */
     protected Map<String, Object> createTestInputParametersForReceiveInventoryAgainstPurchaseOrder(final GenericValue purchaseOrderHeader, final GenericValue userLogin) throws GeneralException {
-    	return createTestInputParametersForReceiveInventoryAgainstPurchaseOrder(purchaseOrderHeader, null, true, userLogin);
+        return createTestInputParametersForReceiveInventoryAgainstPurchaseOrder(purchaseOrderHeader, null, true, userLogin);
     }
-    
+
     /**
      * Creates a input parameter map that will be used to call the
      * warehouse.issueOrderItemToShipmentAndReceiveAgainstPO service.
@@ -1687,10 +1685,10 @@ public class OpentapsTestCase extends TestCase {
             for (GenericValue orderItem : orderItems) {
                 // if there is a quantitiesToReceive Map, then skip the order items not in this map, so they don't get received
                 if ((quantitiesToReceive != null) && (quantitiesToReceive.get(orderItem.getString("orderItemSeqId")) == null)) {
-                	Debug.logInfo("Item [" + orderItem.getString("orderItemSeqId") + "] so it will not be in the test receiving", MODULE);
-                	continue;
+                    Debug.logInfo("Item [" + orderItem.getString("orderItemSeqId") + "] so it will not be in the test receiving", MODULE);
+                    continue;
                 }
-            	
+
                 String strRowNumber = Integer.toString(rowNumber);
 
                 String orderItemSeqId = orderItem.getString("orderItemSeqId");
@@ -1701,13 +1699,13 @@ public class OpentapsTestCase extends TestCase {
 
                 if (quantitiesToReceive != null) {
                     // use the quantitiesToReceive Map value if there is one
-                	quantitiesAccepted.put(strRowNumber, quantitiesToReceive.get(orderItemSeqId));
-            	} else {
+                    quantitiesAccepted.put(strRowNumber, quantitiesToReceive.get(orderItemSeqId));
+                } else {
                     // receive full quantity of the order item
                     Double acceptedQuantity = orderItem.getDouble("quantity");
                     quantitiesAccepted.put(strRowNumber, acceptedQuantity == null ? "0.0" : acceptedQuantity.toString());
                 }
-                
+
                 quantitiesRejected.put(strRowNumber, "0.0");
                 // set the unit cost from the order item unit price, or if we use standard cost, set it with the item standard cost
                 String unitCost = "0.0";
@@ -1755,11 +1753,11 @@ public class OpentapsTestCase extends TestCase {
         retval.put("purchaseOrderId", orh.getOrderId());
         retval.put("facilityId", facilityId);
         if (forceComplete) {
-        	retval.put("completePurchaseOrder", "Y");
+            retval.put("completePurchaseOrder", "Y");
         } else {
-        	retval.put("completePurchaseOrder", "N");
+            retval.put("completePurchaseOrder", "N");
         }
-    	retval.put("ownerPartyId", organizationPartyId);
+        retval.put("ownerPartyId", organizationPartyId);
         retval.put("shipGroupSeqId", shipGroupSeqId);
         retval.put("userLogin", userLogin);
 
@@ -1954,7 +1952,6 @@ public class OpentapsTestCase extends TestCase {
      * @return the partyId of the new <code>Party</code>
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     private String createPartyFromTemplate(String templatePartyId, String newFirstName, String newLastName, String newCompanyName) throws GenericEntityException {
         GenericValue partyTemplate = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", templatePartyId));
         assertNotNull("Failed to find Party template with ID [" + templatePartyId + "]", templatePartyId);
@@ -2135,20 +2132,19 @@ public class OpentapsTestCase extends TestCase {
      * @return the partyId of the new <code>Party</code>
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public String createOrganizationFromTemplate(String templatePartyId, String newOrganizationName) throws GeneralException {
         String newPartyId = createPartyFromTemplate(templatePartyId, newOrganizationName);
         GenericValue partyAcctgPreference = delegator.findByPrimaryKey("PartyAcctgPreference", UtilMisc.toMap("partyId", templatePartyId));
-        List<GenericValue> glAccountOrganizations = delegator.findByCondition("GlAccountOrganization", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> customTimePeriods = delegator.findByCondition("CustomTimePeriod", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> glAccountTypeDefaults = delegator.findByCondition("GlAccountTypeDefault", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> paymentGlAccountTypeMaps = delegator.findByCondition("PaymentGlAccountTypeMap", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> paymentMethodTypeGlAccounts = delegator.findByCondition("PaymentMethodTypeGlAccount", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> creditCardTypeGlAccounts = delegator.findByCondition("CreditCardTypeGlAccount", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> varianceReasonGlAccounts = delegator.findByCondition("VarianceReasonGlAccount", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> invoiceGlAccountTypes = delegator.findByCondition("InvoiceGlAccountType", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> invoiceAdjustmentGlAccounts = delegator.findByCondition("InvoiceAdjustmentGlAccount", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
-        List<GenericValue> acctgTagEnumTypes = delegator.findByCondition("AcctgTagEnumType", new EntityExpr("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> glAccountOrganizations = delegator.findByCondition("GlAccountOrganization", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> customTimePeriods = delegator.findByCondition("CustomTimePeriod", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> glAccountTypeDefaults = delegator.findByCondition("GlAccountTypeDefault", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> paymentGlAccountTypeMaps = delegator.findByCondition("PaymentGlAccountTypeMap", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> paymentMethodTypeGlAccounts = delegator.findByCondition("PaymentMethodTypeGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> creditCardTypeGlAccounts = delegator.findByCondition("CreditCardTypeGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> varianceReasonGlAccounts = delegator.findByCondition("VarianceReasonGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> invoiceGlAccountTypes = delegator.findByCondition("InvoiceGlAccountType", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> invoiceAdjustmentGlAccounts = delegator.findByCondition("InvoiceAdjustmentGlAccount", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
+        List<GenericValue> acctgTagEnumTypes = delegator.findByCondition("AcctgTagEnumType", EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, templatePartyId), null, null);
         List<GenericValue> copies = new FastList<GenericValue>();
         // copy PartyAcctgPreference
         if (partyAcctgPreference != null) {

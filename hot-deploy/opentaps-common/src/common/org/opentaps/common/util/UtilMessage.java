@@ -419,7 +419,13 @@ public final class UtilMessage {
     /**                                                                    **/
     /************************************************************************/
 
-    public static Map<String, ?> createServiceSuccess(String label, Locale locale) {
+    /**
+     * Return a <b>simple</b> service success.
+     * @param label the label to expand
+     * @param locale a <code>Locale</code> value
+     * @return a service success <code>Map</code> response
+     */
+    public static Map<String, Object> createServiceSuccess(String label, Locale locale) {
         return ServiceUtil.returnSuccess(expandLabel(label, locale));
     }
 
@@ -430,7 +436,7 @@ public final class UtilMessage {
      * @param context the context <code>Map</code> to use when expanding the label
      * @return a service success <code>Map</code> response
      */
-    public static Map<String, ?> createServiceSuccess(String label, Locale locale, Map<String, ?> context) {
+    public static Map<String, Object> createServiceSuccess(String label, Locale locale, Map<String, ?> context) {
         return ServiceUtil.returnSuccess(expandLabel(label, locale, context));
     }
 
@@ -440,7 +446,7 @@ public final class UtilMessage {
      * @param locale a <code>Locale</code> value
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createServiceError(String label, Locale locale) {
+    public static Map<String, Object> createServiceError(String label, Locale locale) {
         return ServiceUtil.returnError(expandLabel(label, locale));
     }
 
@@ -451,7 +457,7 @@ public final class UtilMessage {
      * @param context the context <code>Map</code> to use when expanding the label
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createServiceError(String label, Locale locale, Map<String, ?> context) {
+    public static Map<String, Object> createServiceError(String label, Locale locale, Map<String, ?> context) {
         return ServiceUtil.returnError(expandLabel(label, locale, context));
     }
 
@@ -462,7 +468,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(String label, Locale locale, String module) {
+    public static Map<String, Object> createAndLogServiceError(String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -474,7 +480,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service failure <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceFailure(String errorMsg, String module) {
+    public static Map<String, Object> createAndLogServiceFailure(String errorMsg, String module) {
         Debug.log(Debug.WARNING, null, errorMsg, module, MODULE);
         return ServiceUtil.returnFailure(errorMsg);
     }
@@ -486,7 +492,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service failure <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceFailure(String label, Locale locale, String module) {
+    public static Map<String, Object> createAndLogServiceFailure(String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale);
         Debug.log(Debug.WARNING, null, errorMsg, module, MODULE);
         return ServiceUtil.returnFailure(errorMsg);
@@ -499,7 +505,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service success <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceSuccess(String label, Locale locale, String module) {
+    public static Map<String, Object> createAndLogServiceSuccess(String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale);
         Debug.log(Debug.INFO, null, errorMsg, module, MODULE);
         return ServiceUtil.returnSuccess(errorMsg);
@@ -514,7 +520,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(String prefixLabel, String suffixLabel, Locale locale, String module) {
+    public static Map<String, Object> createAndLogServiceError(String prefixLabel, String suffixLabel, Locale locale, String module) {
         String errorMsg = expandLabel(prefixLabel, locale) + " " +  expandLabel(suffixLabel, locale);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -527,7 +533,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(Map<String, ?> serviceResult, String module) {
+    public static Map<String, Object> createAndLogServiceError(Map<String, Object> serviceResult, String module) {
         String errorMsg = ServiceUtil.getErrorMessage(serviceResult);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -542,7 +548,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(Map<String, ?> serviceResult, String label, Locale locale, String module) {
+    public static Map<String, Object> createAndLogServiceError(Map<String, Object> serviceResult, String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale) + " " + ServiceUtil.getErrorMessage(serviceResult);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -555,7 +561,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(Exception e, String message, String module) {
+    public static Map<String, Object> createAndLogServiceError(Exception e, String message, String module) {
         String errorMsg = message + " " + e.getMessage();
         Debug.log(Debug.ERROR, e, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -570,7 +576,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(Exception e, String label, Locale locale, String module) {
+    public static Map<String, Object> createAndLogServiceError(Exception e, String label, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale) + " " + e.getMessage();
         Debug.log(Debug.ERROR, e, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -582,7 +588,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(String message, String module) {
+    public static Map<String, Object> createAndLogServiceError(String message, String module) {
         Debug.logError(message, module);
         return ServiceUtil.returnError(message);
     }
@@ -593,7 +599,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(Exception e, String module) {
+    public static Map<String, Object> createAndLogServiceError(Exception e, String module) {
         Debug.log(Debug.ERROR, e, e.getMessage(), module, MODULE);
         return ServiceUtil.returnError(e.getMessage());
     }
@@ -606,7 +612,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(Exception e, Locale locale, String module) {
+    public static Map<String, Object> createAndLogServiceError(Exception e, Locale locale, String module) {
         Debug.log(Debug.ERROR, e, e.getMessage(), module, MODULE);
         return ServiceUtil.returnError(expandLabel(GENERIC_ERROR_LABEL, locale) + ": " + e.getMessage());
     }
@@ -619,7 +625,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service error <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceError(String label, Map<String, ?> context, Locale locale, String module) {
+    public static Map<String, Object> createAndLogServiceError(String label, Map<String, ?> context, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale, context);
         Debug.log(Debug.ERROR, null, errorMsg, module, MODULE);
         return ServiceUtil.returnError(errorMsg);
@@ -633,7 +639,7 @@ public final class UtilMessage {
      * @param module a <code>String</code> value, normally the name of class where the error occurred
      * @return a service failure <code>Map</code> response
      */
-    public static Map<String, ?> createAndLogServiceFailure(String label, Map<String, ?> context, Locale locale, String module) {
+    public static Map<String, Object> createAndLogServiceFailure(String label, Map<String, ?> context, Locale locale, String module) {
         String errorMsg = expandLabel(label, locale, context);
         Debug.log(Debug.WARNING, null, errorMsg, module, MODULE);
         return ServiceUtil.returnFailure(errorMsg);

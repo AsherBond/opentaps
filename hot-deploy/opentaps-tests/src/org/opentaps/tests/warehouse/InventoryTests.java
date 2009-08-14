@@ -24,15 +24,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
@@ -48,8 +48,6 @@ import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.tests.financials.FinancialAsserts;
 import org.opentaps.tests.financials.FinancialsTestCase;
-
-import com.opensourcestrategies.financials.util.UtilFinancial;
 
 // testNonSerializedReceipt specification
 final class NonSerializedTestSpecs {
@@ -151,10 +149,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // assert transaction equivalence with the reference transaction
         List<EntityExpr> conditions = new ArrayList<EntityExpr>();
-        conditions.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
-        conditions.add(new EntityExpr("isPosted", EntityOperator.EQUALS, "Y"));
-        conditions.add(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "SHIPMENT_RCPT_ATX"));
-        Set<String> acctgTransIds = getAcctgTransSinceDate(new EntityConditionList(conditions, EntityOperator.AND), now, delegator);
+        conditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
+        conditions.add(EntityCondition.makeCondition("isPosted", EntityOperator.EQUALS, "Y"));
+        conditions.add(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "SHIPMENT_RCPT_ATX"));
+        Set<String> acctgTransIds = getAcctgTransSinceDate(EntityCondition.makeCondition(conditions, EntityOperator.AND), now, delegator);
         Set<String> acctgTransTemplateIds = UtilMisc.toSet("INV_RCV_NS_TEST-1");
         assertTransactionEquivalence(acctgTransIds, acctgTransTemplateIds);
 
@@ -206,7 +204,7 @@ public class InventoryTests extends FinancialsTestCase {
             input.put("unitCost", unitCost.doubleValue());
             Map output = runAndAssertServiceSuccess("receiveInventoryProduct", input);
             String inventoryItemId = (String) output.get("inventoryItemId");
-            inventoryItems.add(UtilMisc.toMap("inventoryItemId", inventoryItemId, "unitCost", unitCost));
+            inventoryItems.add(UtilMisc.<String, Object>toMap("inventoryItemId", inventoryItemId, "unitCost", unitCost));
             // make sure accounting and inventory items values equals
             inventoryAsserts.assertInventoryValuesEqual(productId);
         }
@@ -222,7 +220,7 @@ public class InventoryTests extends FinancialsTestCase {
         }
 
         // assert transactions equivalence with the reference transactions
-        Set<String> acctgTransIds = getAcctgTransSinceDate(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), now, delegator);
+        Set<String> acctgTransIds = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), now, delegator);
         assertTransactionEquivalence(acctgTransIds, UtilMisc.toSet("INV_RCV_SER_TEST-1", "INV_RCV_SER_TEST-2", "INV_RCV_SER_TEST-3"));
 
         // gets current balances and check theirs correctness for given accounts by comparing with initial values.
@@ -305,7 +303,7 @@ public class InventoryTests extends FinancialsTestCase {
         toInventoryAsserts.assertInventoryChange(productId, new BigDecimal("5.0"), originalToFacilityInventory);
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), start, delegator);
         assertNotEmpty("Inventory transfer transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
@@ -415,7 +413,7 @@ public class InventoryTests extends FinancialsTestCase {
         toInventoryAsserts.assertInventoryChange(productId1, new BigDecimal("5.0"), originalToFacilityInventory);
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), start, delegator);
         assertNotEmpty("Inventory transfer transaction not created.", transactions);
 
         // check the accounting transactions are tagged
@@ -516,7 +514,7 @@ public class InventoryTests extends FinancialsTestCase {
         toInventoryAsserts.assertInventoryChange(productId, new BigDecimal(xferQty), originalToFacilityInventory);
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), start, delegator);
         assertNotEmpty("Inventory transfer transaction not created.", transactions);
 
         // verify that the difference in balances work out
@@ -619,7 +617,7 @@ public class InventoryTests extends FinancialsTestCase {
             pause("allow distinct transactions inventory timestamps");
 
             // get the transactions since starting
-            Set<String> transactions = getAcctgTransSinceDate(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), startTransfer, delegator);
+            Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "INVENTORY"), startTransfer, delegator);
             assertNotEmpty("Inventory transfer transaction not created.", transactions);
 
             // make sure accounting and inventory items values equals
@@ -707,9 +705,9 @@ public class InventoryTests extends FinancialsTestCase {
 
         This may cause problems because AcctTransEntries may have unpredictable amounts due to changes in product average cost
          */
-        List cond = UtilMisc.toList(new EntityExpr("inventoryItemId", EntityOperator.EQUALS, receiveInventoryItemId),
-                new EntityExpr("physicalInventoryId", EntityOperator.IN, UtilMisc.toList(damagedPhysicalInventoryItemId, transitPhysicalInventoryItemId)));
-        List<GenericValue> newAcctgTrans = delegator.findByCondition("AcctgTrans", new EntityConditionList(cond, EntityOperator.AND), null, null);
+        List cond = UtilMisc.toList(EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, receiveInventoryItemId),
+                EntityCondition.makeCondition("physicalInventoryId", EntityOperator.IN, UtilMisc.toList(damagedPhysicalInventoryItemId, transitPhysicalInventoryItemId)));
+        List<GenericValue> newAcctgTrans = delegator.findByCondition("AcctgTrans", EntityCondition.makeCondition(cond, EntityOperator.AND), null, null);
         List<String> referenceAcctgTrans = UtilMisc.toList("INV_VAR_TEST-1", "INV_VAR_TEST-2");
         assertTransactionEquivalence(newAcctgTrans, referenceAcctgTrans);
     }
@@ -758,13 +756,11 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Create an inventory variance for -1 of ATP and -1 of QOH as "Damaged"
         Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -1.0, "quantityOnHandVar", -1.0, "varianceReasonId", "VAR_DAMAGED");
-        Map varianceResult = runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
-        String damagedPhysicalInventoryItemId = (String) varianceResult.get("physicalInventoryId");
+        runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
 
         // Create an inventory variance for -2 of ATP and -2 of QOH as "Lost/Damaged in Transit"
         varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_TRANSIT");
-        varianceResult = runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
-        String transitPhysicalInventoryItemId = (String) varianceResult.get("physicalInventoryId");
+        runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
 
         // check the accounting transactions from the variance are tagged
         entries1 = delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("productId", productId1));
@@ -836,7 +832,7 @@ public class InventoryTests extends FinancialsTestCase {
         inventoryAsserts.assertEquals("Unexpected balance for inventory GlAccount: ", expectedBalance, newBalance);
 
         // Verify that accounting transactions are equivalent to those of INV_RCV_SER_TEST-4, INV_VAR_TEST-1
-        List<GenericValue> newAcctgTrans = delegator.findByCondition("AcctgTrans", new EntityExpr("inventoryItemId", EntityOperator.EQUALS, receiveInventoryItemId), null, null);
+        List<GenericValue> newAcctgTrans = delegator.findByCondition("AcctgTrans", EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, receiveInventoryItemId), null, null);
         List<String> referenceAcctgTrans = UtilMisc.toList("INV_RCV_SER_TEST-4", "INV_SER_VAR_TEST-1");
         assertTransactionEquivalence(newAcctgTrans, referenceAcctgTrans);
     }
@@ -1011,7 +1007,7 @@ public class InventoryTests extends FinancialsTestCase {
         inventoryAsserts.assertEquals("Unexpected balance for inventory GlAccount: ", expectedBalanceInv, newBalanceInv);
 
         // check the accounting transaction generated
-        List<GenericValue> transactions = delegator.findByAnd("AcctgTrans", UtilMisc.toList(new EntityExpr("transactionDate", EntityOperator.GREATER_THAN, start)));
+        List<GenericValue> transactions = delegator.findByAnd("AcctgTrans", UtilMisc.toList(EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN, start)));
         assertEquals("There should be one adjustment transaction after accounting tag update", 1, transactions.size());
         List<GenericValue> entries = delegator.findByAnd("AcctgTransEntry", UtilMisc.toMap("acctgTransId", transactions.get(0).get("acctgTransId")));
         assertEquals("There should be two adjustment transaction entries after accounting tag update", 2, entries.size());
@@ -1046,7 +1042,7 @@ public class InventoryTests extends FinancialsTestCase {
         inventoryAsserts.assertEquals("Unexpected balance for inventory GlAccount: ", expectedBalanceInv, newBalanceInv);
 
         // check the accounting transaction generated, should be none
-        transactions = delegator.findByAnd("AcctgTrans", UtilMisc.toList(new EntityExpr("transactionDate", EntityOperator.GREATER_THAN, start)));
+        transactions = delegator.findByAnd("AcctgTrans", UtilMisc.toList(EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN, start)));
         assertEquals("There should be NO adjustment transaction after accounting tag update with the same tags", 0, transactions.size());
 
     }
@@ -1096,7 +1092,7 @@ public class InventoryTests extends FinancialsTestCase {
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
         // Verify that accounting transactions are equivalent to those of INV_NS_REVAL_TEST-1 and INV_NS_REVAL_TEST-2
-        List<GenericValue> newAcctgTrans = delegator.findByCondition("AcctgTrans", new EntityExpr("inventoryItemId", EntityOperator.EQUALS, receiveInventoryItemId), null, UtilMisc.toList("acctgTransId"));
+        List<GenericValue> newAcctgTrans = delegator.findByCondition("AcctgTrans", EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, receiveInventoryItemId), null, UtilMisc.toList("acctgTransId"));
         List<String> referenceAcctgTrans = UtilMisc.toList("INV_NS_REVAL_TEST-1", "INV_NS_REVAL_TEST-2");
         assertTransactionEquivalence(newAcctgTrans, referenceAcctgTrans);
 
@@ -1247,7 +1243,6 @@ public class InventoryTests extends FinancialsTestCase {
      * 6.  Verify that the ATP of the test product is -3, the QOH is 5.0
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testOrderReservationOnSerializedInventoryTransfer() throws GeneralException {
 
         final double inventoryQty = 5.0;
@@ -1425,7 +1420,7 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct = createTestProduct("Product for testInventoryItemIssuanceTracing", admin);
 
         // receives 1 test product
-        Map<String, ?> result = receiveInventoryProduct(testProduct, 1.0, "NON_SERIAL_INV_ITEM", demowarehouse1);
+        Map<String, Object> result = receiveInventoryProduct(testProduct, 1.0, "NON_SERIAL_INV_ITEM", demowarehouse1);
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // creates and approves sales order
@@ -1442,7 +1437,7 @@ public class InventoryTests extends FinancialsTestCase {
         result = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", inventoryItemId, "traceDirection", "FORWARD", "userLogin", admin));
 
         // gets trace log in forward direction for original inventory item
-        List<InventoryItemTraceDetail> usageLog = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
+        List<InventoryItemTraceDetail> usageLog = ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
 
         // should be two records there
         assertEquals("Unexpected count of trace events", 2, usageLog.size());
@@ -1456,7 +1451,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // similar check for trace log created for final inventory item in backward direction
         result = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", inventoryItemId, "traceDirection", "BACKWARD", "userLogin", admin));
-        usageLog = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
+        usageLog = ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
 
         //should be 2 records as well
         assertEquals("Unexpected count of trace events", 2, usageLog.size());
@@ -1481,7 +1476,7 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct = createTestProduct("Product for testInventoryFullTransferTracing", admin);
 
         // receives 10 test products
-        Map<String, ?> result = receiveInventoryProduct(testProduct, 10.0, "NON_SERIAL_INV_ITEM", 5.0, demowarehouse1);
+        Map<String, Object> result = receiveInventoryProduct(testProduct, 10.0, "NON_SERIAL_INV_ITEM", 5.0, demowarehouse1);
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // transfers 10 of them
@@ -1508,7 +1503,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // gets trace log in forward direction for original inventory item
         pause("Workaround pause for MySQL");
-        List<InventoryItemTraceDetail> usageLog = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
+        List<InventoryItemTraceDetail> usageLog = ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
 
         // should be two records there
         assertEquals("Unexpected count of trace events", 2, usageLog.size());
@@ -1526,7 +1521,7 @@ public class InventoryTests extends FinancialsTestCase {
         // similar check for trace log created for final inventory item in backward direction
         pause("Workaround pause for MySQL");
         result = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", inventoryItemId1, "traceDirection", "BACKWARD", "userLogin", admin));
-        usageLog = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
+        usageLog = ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
 
         // should be 2 records as well
         assertEquals("Unexpected count of trace events", 2, usageLog.size());
@@ -1550,7 +1545,7 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct = createTestProduct("Product for testInventoryTransferTracing", admin);
 
         // receives 10 test products
-        Map<String, ?> result = receiveInventoryProduct(testProduct, 10.0, "NON_SERIAL_INV_ITEM", 5.0, demowarehouse1);
+        Map<String, Object> result = receiveInventoryProduct(testProduct, 10.0, "NON_SERIAL_INV_ITEM", 5.0, demowarehouse1);
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // transfers 5 of them
@@ -1574,7 +1569,7 @@ public class InventoryTests extends FinancialsTestCase {
         // gets trace log in forward direction for original inventory item
         pause("Workaround pause for MySQL");
         result = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", inventoryItemId, "traceDirection", "FORWARD", "userLogin", admin));
-        List<InventoryItemTraceDetail> usageLog = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
+        List<InventoryItemTraceDetail> usageLog = ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
 
         // should be two records there
         assertEquals("Unexpected count of trace events", 2, usageLog.size());
@@ -1596,7 +1591,7 @@ public class InventoryTests extends FinancialsTestCase {
         // similar check for trace log created for final inventory item in backward direction
         pause("Workaround pause for MySQL");
         result = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", finalInventoryItemId, "traceDirection", "BACKWARD", "userLogin", admin));
-        usageLog = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
+        usageLog = ((List<List<InventoryItemTraceDetail>>) result.get("usageLog")).get(0);
 
         // should be 2 records as well
         assertEquals("Unexpected count of trace events", 2, usageLog.size());
@@ -1621,7 +1616,7 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct4 = createTestProduct("Product 4 for testLotTracing", admin);
 
         // 1. Receive test product to inventory items 1, 2, 3 and 4
-        Map<String, ?> results = receiveInventoryProduct(testProduct1, 10.0, "NON_SERIAL_INV_ITEM", 15.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(testProduct1, 10.0, "NON_SERIAL_INV_ITEM", 15.0, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
 
         results = receiveInventoryProduct(testProduct2, 10.0, "NON_SERIAL_INV_ITEM", 25.0, demowarehouse1);
@@ -1638,8 +1633,8 @@ public class InventoryTests extends FinancialsTestCase {
         results = runAndAssertServiceSuccess("warehouse.createLot", callCtxt);
         String lotId = (String) results.get("lotId");
 
-        delegator.storeByCondition("InventoryItem", UtilMisc.toMap("lotId", lotId), new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItemId1));
-        delegator.storeByCondition("InventoryItem", UtilMisc.toMap("lotId", lotId), new EntityExpr("inventoryItemId", EntityOperator.EQUALS, inventoryItemId2));
+        delegator.storeByCondition("InventoryItem", UtilMisc.toMap("lotId", lotId), EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemId1));
+        delegator.storeByCondition("InventoryItem", UtilMisc.toMap("lotId", lotId), EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemId2));
 
         // 2. Transfer inventory item 1 to item 5
         pause("Workaround pause for MySQL");
@@ -1736,7 +1731,7 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct3 = createTestProduct("Product 3 for testTraceComplexInventoryUsage", admin);
 
         // 1. Receive 20 of product 1. This should be inventoryItemId1.
-        Map<String, ?> results = receiveInventoryProduct(testProduct1, 20.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(testProduct1, 20.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
         pause("Workaround pause for MySQL");
 
@@ -1907,7 +1902,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // 8. Check forward tracing for inventoryItemId1
         results = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", inventoryItemId1, "traceDirection", "FORWARD", "userLogin", admin));
-        List<InventoryItemTraceDetail> events = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) results.get("usageLog")).get(0);
+        List<InventoryItemTraceDetail> events = ((List<List<InventoryItemTraceDetail>>) results.get("usageLog")).get(0);
         assertEquals("Wrong trace events count", 3, events.size());
 
         //       Should be for inventoryItemId1:
@@ -1924,7 +1919,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // 9. Check forward tracing for inventoryItemId3
         results = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", inventoryItemId3, "traceDirection", "FORWARD", "userLogin", admin));
-        events = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) results.get("usageLog")).get(0);
+        events = ((List<List<InventoryItemTraceDetail>>) results.get("usageLog")).get(0);
         assertEquals("Wrong trace events count", 3, events.size());
 
         //       Should be for inventoryItemId3:
@@ -1945,7 +1940,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // begin build tracing data starting from intermediate item
         results = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", inventoryItemId6, "traceDirection", "BACKWARD", "userLogin", admin));
-        events = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) results.get("usageLog")).get(0);
+        events = ((List<List<InventoryItemTraceDetail>>) results.get("usageLog")).get(0);
         assertEquals("Wrong trace events count", 5, events.size());
 
         //       Should be for inventoryItemId6:
@@ -2006,7 +2001,7 @@ public class InventoryTests extends FinancialsTestCase {
         input.put("quantityAccepted", new Double(10.0));
         input.put("quantityRejected", new Double(0));
         input.put("userLogin", demowarehouse1);
-        Map result = runAndAssertServiceSuccess("receiveInventoryProduct", input);
+        runAndAssertServiceSuccess("receiveInventoryProduct", input);
         // check inventory
         // verify product's ATP/QOH are unchanged, still zero
         inventoryAsserts.assertInventoriesChange(productId, new BigDecimal("0.0"), origProductInventories);

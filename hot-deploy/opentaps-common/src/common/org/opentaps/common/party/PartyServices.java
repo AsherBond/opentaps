@@ -81,7 +81,7 @@ public final class PartyServices {
 
     private static String MODULE = PartyServices.class.getName();
 
-    public static Map<String, ?> createViewPreference(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> createViewPreference(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -104,7 +104,7 @@ public final class PartyServices {
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map<String, ?> updateViewPreference(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> updateViewPreference(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -130,7 +130,7 @@ public final class PartyServices {
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map<String, ?> setViewPreference(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> setViewPreference(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -170,7 +170,7 @@ public final class PartyServices {
         }
     }
 
-    public static Map<String, ?> checkReceiveEmailOwnerUniqueness(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> checkReceiveEmailOwnerUniqueness(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
@@ -216,7 +216,7 @@ public final class PartyServices {
      * Expires any existing PartyClassifications for a partyId where partyClassificationGroupId is any partyClassificationGroupId related to partyClassificationTypeId,
      *  and creates a new PartyClassification.
      */
-    public static Map<String, ?> expireAndCreatePartyClassification(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> expireAndCreatePartyClassification(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -258,7 +258,7 @@ public final class PartyServices {
      * opentaps.sendInternalMessage to send a message.
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ?> sendInternalMessage(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> sendInternalMessage(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -280,7 +280,7 @@ public final class PartyServices {
             partyIdTo = FastList.newInstance();
         }
 
-        String partyIdToAsString = (String)context.get("partyIdToAsString");
+        String partyIdToAsString = (String) context.get("partyIdToAsString");
         String[] toAddrs = partyIdToAsString.split("[,;]");
         if (toAddrs.length > 0) {
             for (String addr : toAddrs) {
@@ -336,7 +336,7 @@ public final class PartyServices {
      * opentaps.receiveInternalMessage to receive a message.
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ?> receiveInternalMessage(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> receiveInternalMessage(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
 
@@ -379,11 +379,11 @@ public final class PartyServices {
         }
 
         if (UtilValidate.isNotEmpty(dateFrom)) {
-            conditions.add(EntityCondition.makeCondition("entryDate", EntityOperator.GREATER_THAN_EQUAL_TO, dateFrom ));
+            conditions.add(EntityCondition.makeCondition("entryDate", EntityOperator.GREATER_THAN_EQUAL_TO, dateFrom));
         }
 
         if (UtilValidate.isNotEmpty(dateTo)) {
-            conditions.add(EntityCondition.makeCondition("entryDate", EntityOperator.LESS_THAN_EQUAL_TO, dateTo ));
+            conditions.add(EntityCondition.makeCondition("entryDate", EntityOperator.LESS_THAN_EQUAL_TO, dateTo));
         }
 
         List<String> orderBy = Arrays.asList("entryDate");
@@ -404,7 +404,7 @@ public final class PartyServices {
         return result;
     }
 
-    public static Map<String, ?> removeParty(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> removeParty(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
 
@@ -447,7 +447,7 @@ public final class PartyServices {
      *@param context Map containing the input parameters
      *@return Map with the result of the service, the output parameters
      */
-    public static Map<String, ?> createPartyContactMechPurpose(DispatchContext ctx, Map<String, ?> context) {
+    public static Map<String, Object> createPartyContactMechPurpose(DispatchContext ctx, Map<String, Object> context) {
 
         GenericDelegator delegator = ctx.getDelegator();
         Security security = ctx.getSecurity();
@@ -557,7 +557,7 @@ public final class PartyServices {
      *@param context Map containing the input parameters
      *@return Map with the result of the service, the output parameters
      */
-    public static Map<String, ?> deletePartyContactMechPurpose(DispatchContext ctx, Map<String, ?> context) {
+    public static Map<String, Object> deletePartyContactMechPurpose(DispatchContext ctx, Map<String, Object> context) {
 
         GenericDelegator delegator = ctx.getDelegator();
         Security security = ctx.getSecurity();
@@ -638,15 +638,15 @@ public final class PartyServices {
 
     /**
      * Updates PartySupplementalData contact mech ids running as SECA on updatePartyContactMechService.
-     *  
-     * @param ctx The DispatchContext that this service is operating in
+     *
+     * @param dctx The DispatchContext that this service is operating in
      * @param context Map containing the input parameters
      * @return Map with the result of the service, the output parameters
      */
-    public static Map<String, ?> updatePartySupplementalData(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> updatePartySupplementalData(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
-        Map<String, ?> results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
 
         String partyId = (String) context.get("partyId");
         String contactMechId = (String) context.get("contactMechId");
@@ -670,7 +670,7 @@ public final class PartyServices {
         try {
             EntityConditionList<EntityCondition> conditionList = EntityCondition.makeCondition(
                     UtilMisc.toList(
-                            EntityCondition.makeCondition("partyId", partyId), 
+                            EntityCondition.makeCondition("partyId", partyId),
                             EntityCondition.makeCondition("contactMechId", contactMechId),
                             EntityCondition.makeCondition("contactMechTypeId", contactMechTypeId),
                             EntityUtil.getFilterByDateExpr("contactFromDate", "contactThruDate"),
@@ -691,7 +691,7 @@ public final class PartyServices {
                 }
             }
 
-        } catch(GenericEntityException e) {
+        } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
 
@@ -701,15 +701,15 @@ public final class PartyServices {
     /**
      * Sets PartySupplementalData contact mech ids to null if corresponding contact mech is deleted.<br>
      * It is called as SECA on deletePartyContactMech service.
-     * 
-     * @param ctx The DispatchContext that this service is operating in
+     *
+     * @param dctx The DispatchContext that this service is operating in
      * @param context Map containing the input parameters
      * @return Map with the result of the service, the output parameters
      */
-    public static Map<String, ?> clearPartySupplementalData(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> clearPartySupplementalData(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = (Locale) context.get("locale");
-        Map<String, ?> results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
 
         String partyId = (String) context.get("partyId");
         String contactMechId = (String) context.get("contactMechId");
@@ -717,7 +717,7 @@ public final class PartyServices {
         try {
             EntityConditionList<EntityExpr> conditionList = EntityCondition.makeCondition(
                     UtilMisc.toList(
-                            EntityCondition.makeCondition("partyId", partyId), 
+                            EntityCondition.makeCondition("partyId", partyId),
                             EntityCondition.makeCondition("contactMechId", contactMechId)
                     ), EntityOperator.AND
             );
@@ -744,20 +744,17 @@ public final class PartyServices {
                             partySupplData.set(fieldToUpdate, null);
                             partySupplData.store();
                         }
-                        
                     }
                 }
             }
-            
-            
-        } catch(GenericEntityException e) {
+        } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
 
         return results;
     }
 
-    public static Map<String, ?> setSupplementalDataForAllParties(DispatchContext dctx, Map<String, ?> context) {
+    public static Map<String, Object> setSupplementalDataForAllParties(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         Map<String, Object> result = ServiceUtil.returnSuccess();

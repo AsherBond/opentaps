@@ -63,7 +63,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.model.ModelEntity;
 import org.ofbiz.entity.util.EntityUtil;
@@ -885,8 +884,7 @@ public final class OpentapsMrpServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map<String, ?> runMrp(DispatchContext ctx, Map<String, Object> context) {
+    public static Map<String, Object> runMrp(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
 
@@ -935,7 +933,7 @@ public final class OpentapsMrpServices {
             Map<String, Object> serviceParams = runMrpForFacility.makeValid(context, "IN");
             for (String mrpFacilityId : facilityIds) {
                 serviceParams.put("facilityId", mrpFacilityId);
-                Map<String, ?> tmpResult = dispatcher.runSync("opentaps.runMrpForFacility", serviceParams, UtilCommon.SEC_IN_2_HOURS, false);  // run in same transaction
+                Map<String, Object> tmpResult = dispatcher.runSync("opentaps.runMrpForFacility", serviceParams, UtilCommon.SEC_IN_2_HOURS, false);  // run in same transaction
                 if (ServiceUtil.isError(tmpResult) || ServiceUtil.isFailure(tmpResult)) {
                     return tmpResult;
                 }
@@ -958,7 +956,7 @@ public final class OpentapsMrpServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map<String, ?> runMrpForFacility(DispatchContext ctx, Map context) {
+    public static Map<String, Object> runMrpForFacility(DispatchContext ctx, Map context) {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
@@ -1058,7 +1056,7 @@ public final class OpentapsMrpServices {
             parameters.put("productId", mrpTargetProductId);
             parameters.put("percentageOfSalesForecast", percentageOfSalesForecast);
 
-            Map<String, ?> result = dispatcher.runSync("opentaps.initInventoryEventPlanned", parameters, UtilCommon.SEC_IN_2_HOURS, false); // use same transaction
+            Map<String, Object> result = dispatcher.runSync("opentaps.initInventoryEventPlanned", parameters, UtilCommon.SEC_IN_2_HOURS, false); // use same transaction
             int bomLevel = 0;
             do {
                 // AG23012008 - if this is a supplier or product specific MRP run then filter by the associated productIds
@@ -1317,7 +1315,7 @@ public final class OpentapsMrpServices {
                                 }
                                 // Debug.logInfo("event date [" + eventDate + "] plannedEventDate [" + plannedEventDate + "]", MODULE);
 
-                                Map<String, ?> eventMap = UtilMisc.toMap(
+                                Map<String, Object> eventMap = UtilMisc.toMap(
                                         "productId", product.getString("productId"),
                                         "eventDate", UtilCommon.laterOf(plannedEventDate, now),
                                         "inventoryEventPlanTypeId", inventoryEventPlanTypeId,
@@ -1832,9 +1830,8 @@ public final class OpentapsMrpServices {
      *     Requirement minimal quantity allowed for given product.
      * @throws GenericEntityException
      */
-    @SuppressWarnings("unchecked")
     private static BigDecimal ensureMinQuantity(BigDecimal qty, String productId, GenericDelegator delegator) throws GenericEntityException {
-        List<EntityExpr> conditions = Arrays.asList(
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
                 EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
                 EntityCondition.makeCondition("minQuantity", EntityOperator.NOT_EQUAL, null),
@@ -1843,7 +1840,7 @@ public final class OpentapsMrpServices {
 
         List<GenericValue> prodLinks = delegator.findByCondition(
                 "WorkEffortGoodStandard",
-                EntityCondition.makeCondition(conditions, EntityOperator.AND),
+                conditions,
                 null, Arrays.asList("minQuantity ASC")
         );
 
@@ -1876,10 +1873,9 @@ public final class OpentapsMrpServices {
      * @return list of quantities for every requirement
      * @throws GenericEntityException on error
      */
-    @SuppressWarnings("unchecked")
     private static List<BigDecimal> splitJob(BigDecimal qty, String productId, GenericDelegator delegator)  throws GenericEntityException {
         // select WEGS for product which has max quantity in descending order
-        List<EntityExpr> conditions = Arrays.asList(
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
                 EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
                 EntityCondition.makeCondition("maxQuantity", EntityOperator.NOT_EQUAL, null),
@@ -1888,7 +1884,7 @@ public final class OpentapsMrpServices {
 
         List<GenericValue> prodLinks = delegator.findByCondition(
                 "WorkEffortGoodStandard",
-                EntityCondition.makeCondition(conditions, EntityOperator.AND),
+                conditions,
                 null, Arrays.asList("maxQuantity DESC")
         );
 
@@ -1900,7 +1896,7 @@ public final class OpentapsMrpServices {
         BigDecimal remainingQuantity = qty;
 
         // last chunk should be aligned to minimal quantity, so we have to find its value.
-        conditions = Arrays.asList(
+        conditions = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
                 EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "ROU_PROD_TEMPLATE"),
                 EntityCondition.makeCondition("minQuantity", EntityOperator.NOT_EQUAL, null)
@@ -1908,7 +1904,7 @@ public final class OpentapsMrpServices {
 
         List<GenericValue> prodLinksForMinQty = delegator.findByCondition(
                 "WorkEffortGoodStandard",
-                EntityCondition.makeCondition(conditions, EntityOperator.AND),
+                conditions,
                 null, Arrays.asList("minQuantity ASC")
         );
 

@@ -71,7 +71,6 @@ public class EncumbranceTests extends FinancialsTestCase {
      * completed, cancelled, received, still outstanding plus general ledger entries on encumbrances.
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testComplexEncumbranceProcess() throws GeneralException {
         // make a copy of "Company" with all its accounting tags.  all subsequent transactions will
         // use this organizationPartyId
@@ -112,7 +111,7 @@ public class EncumbranceTests extends FinancialsTestCase {
         pof3.approveOrder();
         // Fully receive PO #3
         GenericValue orderHeader3 = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", pof3.getOrderId()));
-        Map<String, ?> ctxt = createTestInputParametersForReceiveInventoryAgainstPurchaseOrder(orderHeader3, demopurch1);
+        Map<String, Object> ctxt = createTestInputParametersForReceiveInventoryAgainstPurchaseOrder(orderHeader3, demopurch1);
         runAndAssertServiceSuccess("warehouse.issueOrderItemToShipmentAndReceiveAgainstPO", ctxt);
 
         // this is also used to test a COMPLETED PO

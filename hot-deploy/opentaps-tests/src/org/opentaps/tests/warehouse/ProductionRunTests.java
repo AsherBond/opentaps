@@ -22,14 +22,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.opensourcestrategies.financials.util.UtilCOGS;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.manufacturing.OpentapsProductionRun;
@@ -39,9 +40,6 @@ import org.opentaps.domain.base.entities.InventoryItemTraceDetail;
 import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.tests.financials.FinancialAsserts;
-
-import com.opensourcestrategies.financials.util.UtilCOGS;
-import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * Tests for production run integrity, including postings to the GL.
@@ -112,7 +110,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         List<String> inventoryItemIds = (List<String>) results.get("inventoryItemIds");
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
         assertNotEmpty("Production run transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
@@ -225,7 +223,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         List<String> inventoryItemIds = (List<String>) results.get("inventoryItemIds");
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
         assertNotEmpty("Production run transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
@@ -351,7 +349,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         inventoryAsserts.assertInventoryChange("MAT_B_COST", new BigDecimal("6.0"), origMatBCostInventory);
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
         assertNotEmpty("Production run transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
@@ -492,7 +490,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         List<String> inventoryItemIds = (List<String>) results.get("inventoryItemIds");
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
         assertNotEmpty("Production run transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
@@ -1079,6 +1077,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
     /**
      * Create a production run for 5 x GZ-MANUFACTURED and try to revert it from status PRUN_CREATED. Should fail.
+     * @throws GeneralException if an error occurs
      */
     @SuppressWarnings("unchecked")
     public void testRevertProductionInCreatedStatusFails() throws GeneralException {
@@ -1092,7 +1091,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
     /**
      * Create a production run for GZ-MANUFACTURED, confirm it, issue everything, complete it and try to revert it. Should fail.
-     * @throws GeneralException
+     * @throws GeneralException if an error occurs
      */
     @SuppressWarnings("unchecked")
     public void testRevertProductionInCompletedStatusFails() throws GeneralException {
@@ -1134,13 +1133,13 @@ public class ProductionRunTests extends ProductionRunTestCase {
     }
 
     /**
-     * Convenience method to create a Map of productId -> expectedValue 
-     * @param productIds
-     * @param expectedValue
-     * @return
+     * Convenience method to create a Map of productId -> expectedValue .
+     * @param productIds a list of product ID
+     * @param expectedValue the expected value to put in the map for each product ID
+     * @return the map of product ID -> expected value
      */
-    private Map makeProductIdValueMap(List<String> productIds, String expectedValue) {
-        Map expectedValues =         FastMap.newInstance();
+    private Map<String, String> makeProductIdValueMap(List<String> productIds, String expectedValue) {
+        Map<String, String> expectedValues = FastMap.newInstance();
         for (int i = 0; i < productIds.size(); i++) {
             expectedValues.put(productIds.get(i), expectedValue);
         }
@@ -1149,7 +1148,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
     /**
      * 3. Create a production run for GZ-MANUFACTURED, start the first task, issue all, then revert it. Verify PRUN_REVERTED.
-     * @throws GeneralException
+     * @throws GeneralException if an error occurs
      */
     @SuppressWarnings("unchecked")
     public void testRevertingProductionRunAfterFirstTask() throws GeneralException {
@@ -1168,7 +1167,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Map<String, Number> initialBalances = financialAsserts.getFinancialBalances(UtilDateTime.nowTimestamp());
 
         // set up original inventory values and average costs
-        List<String> productIds = createProductBOMAndRoutingSimilarToGzManufactured("To be Revert after issue all of the first task, should success");;
+        List<String> productIds = createProductBOMAndRoutingSimilarToGzManufactured("To be Revert after issue all of the first task, should success");
         Map[] origInventory = new Map[productIds.size()];
         Map initInvValues = null;
         Timestamp start = null;
@@ -1242,10 +1241,10 @@ public class ProductionRunTests extends ProductionRunTestCase {
             inventoryAsserts.assertInventoryChange(productIds.get(i), new BigDecimal("0.0"), origInventory[i]);
         }
 
-        // verify that inventory values have not changed 
-        Map finalInvValues = FastMap.newInstance();
+        // verify that inventory values have not changed
+        Map<String, BigDecimal> finalInvValues = FastMap.newInstance();
         for (i = 0; i < productIds.size(); i++) {
-            finalInvValues.put(productIds.get(i), inventoryAsserts.getInventoryValueForProduct(productIds.get(i), UtilDateTime.nowTimestamp())); 
+            finalInvValues.put(productIds.get(i), inventoryAsserts.getInventoryValueForProduct(productIds.get(i), UtilDateTime.nowTimestamp()));
         }
         assertMapDifferenceCorrect(initInvValues, finalInvValues, expectedInvValues);
 
@@ -1278,8 +1277,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
     }
 
     /**
-     * 4. Create a production run for GZ-MANUFACTURED, issue the first and second task, then revert it. Verify PRUN_REVERTED.
-     * * @throws GeneralException
+     * Create a production run for GZ-MANUFACTURED, issue the first and second task, then revert it. Verify PRUN_REVERTED.
+     * @throws GeneralException if an error occurs
      */
     @SuppressWarnings("unchecked")
     public void testRevertingProductionRunAfterSecondTask() throws GeneralException {
@@ -1382,10 +1381,10 @@ public class ProductionRunTests extends ProductionRunTestCase {
             inventoryAsserts.assertInventoryChange(productIds.get(i), new BigDecimal("0.0"), origInventory[i]);
         }
 
-        // verify the accounting values of inventory have not changed 
+        // verify the accounting values of inventory have not changed
         Map finalInvValues = FastMap.newInstance();
         for (i = 0; i < productIds.size(); i++) {
-            finalInvValues.put(productIds.get(i), inventoryAsserts.getInventoryValueForProduct(productIds.get(i), UtilDateTime.nowTimestamp())); 
+            finalInvValues.put(productIds.get(i), inventoryAsserts.getInventoryValueForProduct(productIds.get(i), UtilDateTime.nowTimestamp()));
         }
         assertMapDifferenceCorrect(initInvValues, finalInvValues, expectedInvValues);
 
@@ -1435,7 +1434,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
 
         // set up original inventory values and average costs
-        List<String> productIds = createProductBOMAndRoutingSimilarToGzManufactured("To be Revert after part issue of the first task, should success");;
+        List<String> productIds = createProductBOMAndRoutingSimilarToGzManufactured("To be Revert after part issue of the first task, should success");
         Map[] origInventory = new Map[productIds.size()];
         Map initInvValues = null;
         Timestamp start = null;
@@ -1523,7 +1522,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
             inventoryAsserts.assertInventoryChange(productIds.get(i), new BigDecimal("0.0"), origInventory[i]);
         }
 
-        // verify that the inventory value has not changed 
+        // verify that the inventory value has not changed
         Map finalInvValues = FastMap.newInstance();
         for (i = 0; i < productIds.size(); i++) {
             finalInvValues.put(productIds.get(i), inventoryAsserts.getInventoryValueForProduct(productIds.get(i), UtilDateTime.nowTimestamp()));
@@ -1560,14 +1559,9 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
     /**
      * Create a disassemble production run for GZ-MANUFACTURED, issue part of the first task, then revert it. Verify PRUN_REVERTED.
-     * @throws GeneralException
+     * @throws GeneralException if an error occurs
      */
     public void testRevertingDisassemblyProductionRun() throws GeneralException {
-        FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
-        String rawmatInventory = UtilFinancial.getOrgGlAccountId(organizationPartyId, "RAWMAT_INVENTORY", delegator);
-        String wipInventory = UtilFinancial.getOrgGlAccountId(organizationPartyId, "WIP_INVENTORY", delegator);
-        String mfgExpenseInternal = UtilFinancial.getOrgGlAccountId(organizationPartyId, "MFG_EXPENSE_INTERNAL", delegator);
-        String mfgExpenseRevprun = UtilFinancial.getOrgGlAccountId(organizationPartyId, "MFG_EXPENSE_REVPRUN", delegator);
 
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demowarehouse1);
 
@@ -1575,19 +1569,18 @@ public class ProductionRunTests extends ProductionRunTestCase {
         List<String> productIds = UtilMisc.toList("GZ-MANUFACTURED", "MAT-MANUFACTURED-1", "MAT-MANUFACTURED-2", "MAT-MANUFACTURED-3", "MAT-MANUFACTURED-4", "MAT-MANUFACTURED-5");
         productIds.add("MAT-MANUFACTURED-6");
         Map[] origInventory = new Map[productIds.size()];
-        Map initInvValues = null;
+        Map<String, BigDecimal> initInvValues = null;
         Timestamp start = null;
         int i = 0;
 
         BigDecimal[] initAvgCost = new BigDecimal[productIds.size()];
-        Map expectedInvValues = makeProductIdValueMap(productIds, "0");
+        Map<String, String> expectedInvValues = makeProductIdValueMap(productIds, "0");
 
         /**
          * 6. Create a disassembly production run for GZ-MANUFACTURED, issue part of the first task, then revert it. Verify PRUN_REVERTED.
          */
         String productionRunId = createDisassemblyGzManufactured("Test disassembly of 2 GZ-MANUFACTURED", 2);
-        Map input = UtilMisc.toMap("userLogin", demowarehouse1);
-        input.put("productionRunId", productionRunId);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "productionRunId", productionRunId);
 
         // get the two tasks
         List<GenericValue> tasks = delegator.findByAnd("WorkEffort", UtilMisc.toMap("workEffortParentId", productionRunId, "workEffortTypeId", "PROD_ORDER_TASK"), UtilMisc.toList("+workEffortId"));
@@ -1619,8 +1612,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         startTaskAndIssueInventory(productionRunId, taskId);
 
         // Revert the production run
-        input = UtilMisc.toMap("userLogin", demowarehouse1);
-        input.put("productionRunId", productionRunId);
+        input = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "productionRunId", productionRunId);
         runAndAssertServiceSuccess("revertProductionRunAndSaveAllParts", input);
         GenericValue productionRun = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", productionRunId));
         assertEquals("Production Run [" + productionRunId + "] has wrong status.", "PRUN_REVERTED", productionRun.getString("currentStatusId"));
@@ -1635,10 +1627,10 @@ public class ProductionRunTests extends ProductionRunTestCase {
             inventoryAsserts.assertInventoryChange(productIds.get(i), new BigDecimal("0.0"), origInventory[i]);
         }
 
-        // verify the final value of the inventory has not changed 
-        Map finalInvValues = FastMap.newInstance();
+        // verify the final value of the inventory has not changed
+        Map<String, BigDecimal> finalInvValues = FastMap.newInstance();
         for (i = 0; i < productIds.size(); i++) {
-            finalInvValues.put(productIds.get(i), inventoryAsserts.getInventoryValueForProduct(productIds.get(i), UtilDateTime.nowTimestamp())); 
+            finalInvValues.put(productIds.get(i), inventoryAsserts.getInventoryValueForProduct(productIds.get(i), UtilDateTime.nowTimestamp()));
         }
         assertMapDifferenceCorrect(initInvValues, finalInvValues, expectedInvValues);
 
@@ -1664,7 +1656,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         pause("Workaround pause for MySQL");
 
         // 1. Receive 2 of material 1. This should be inventoryItemId1.
-        Map<String, ?> results = receiveInventoryProduct(mat1, 2.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(mat1, 2.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
         pause("Workaround pause for MySQL");
 
@@ -1673,12 +1665,12 @@ public class ProductionRunTests extends ProductionRunTestCase {
         String inventoryItemId2 = (String) results.get("inventoryItemId");
         pause("Workaround pause for MySQL");
 
-        delegator.create("ProductFacility", 
+        delegator.create("ProductFacility",
                 UtilMisc.toMap(
-                        "productId", manufacturedProduct.get("productId"), 
-                        "facilityId", "WebStoreWarehouse", 
-                        "minimumStock", Long.valueOf(0), 
-                        "reorderQuantity", Double.valueOf(1.0), 
+                        "productId", manufacturedProduct.get("productId"),
+                        "facilityId", "WebStoreWarehouse",
+                        "minimumStock", Long.valueOf(0),
+                        "reorderQuantity", Double.valueOf(1.0),
                         "daysToShip", Long.valueOf(1)
                 )
         );
@@ -1688,21 +1680,21 @@ public class ProductionRunTests extends ProductionRunTestCase {
         createMainSupplierForProduct((String) mat2.get("productId"), "DemoSupplier", 13.0, "USD", 0.0, admin);
         pause("Workaround pause for MySQL");
 
-        delegator.create("ProductFacility", 
+        delegator.create("ProductFacility",
                 UtilMisc.toMap(
-                        "productId", mat1.get("productId"), 
-                        "facilityId", "WebStoreWarehouse", 
-                        "minimumStock", Long.valueOf(0), 
-                        "reorderQuantity", Double.valueOf(1.0), 
+                        "productId", mat1.get("productId"),
+                        "facilityId", "WebStoreWarehouse",
+                        "minimumStock", Long.valueOf(0),
+                        "reorderQuantity", Double.valueOf(1.0),
                         "daysToShip", Long.valueOf(1)
                 )
         );
-        delegator.create("ProductFacility", 
+        delegator.create("ProductFacility",
                 UtilMisc.toMap(
-                        "productId", mat2.get("productId"), 
-                        "facilityId", "WebStoreWarehouse", 
-                        "minimumStock", Long.valueOf(0), 
-                        "reorderQuantity", Double.valueOf(1.0), 
+                        "productId", mat2.get("productId"),
+                        "facilityId", "WebStoreWarehouse",
+                        "minimumStock", Long.valueOf(0),
+                        "reorderQuantity", Double.valueOf(1.0),
                         "daysToShip", Long.valueOf(1)
                 )
         );
@@ -1754,7 +1746,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
         // get and verify backward tracing data
         results = runAndAssertServiceSuccess("warehouse.traceInventoryUsage", UtilMisc.toMap("inventoryItemId", producedInventoryId, "traceDirection", "BACKWARD", "userLogin", admin));
-        List<InventoryItemTraceDetail> usageLog = (List<InventoryItemTraceDetail>) ((List<List<InventoryItemTraceDetail>>) results.get("usageLog")).get(0);
+        List<InventoryItemTraceDetail> usageLog = ((List<List<InventoryItemTraceDetail>>) results.get("usageLog")).get(0);
         // should be six records there, 2 RECEIPTs of raw materials and 2 MANUF_RAW_MAT
         assertEquals("Unexpected count of trace events", 4, usageLog.size());
 
@@ -2031,7 +2023,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         List<String> mandatoryWorkEffortIds = EntityUtil.getFieldListFromEntityList(mandatoryWorkEfforts, "workEffortIdFrom", true);
 
         // get the production run for component 1
-        GenericValue mandatoryWorkEffortComp = EntityUtil.getOnly(delegator.findByAnd("WorkEffortGoodStandard", Arrays.asList(new EntityExpr("workEffortId", EntityOperator.IN, mandatoryWorkEffortIds), new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"), new EntityExpr("productId", EntityOperator.EQUALS, productComp1Id))));
+        GenericValue mandatoryWorkEffortComp = EntityUtil.getOnly(delegator.findByAnd("WorkEffortGoodStandard", Arrays.asList(EntityCondition.makeCondition("workEffortId", EntityOperator.IN, mandatoryWorkEffortIds), EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"), EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productComp1Id))));
         // get first component production run
         String prunIdComp = mandatoryWorkEffortComp.getString("workEffortId");
         confirmProductionRun(prunIdComp);
@@ -2058,7 +2050,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         inventoryAsserts.assertInventoriesChange(Arrays.asList(productComp2Id, productComp3Id, productComp11Id, productComp12Id, productComp13Id, productComp14Id, productComp21Id, productComp22Id, productComp23Id, productComp24Id), new BigDecimal("0.0"), origProductInventories);
 
         // get the production run for component 2
-        mandatoryWorkEffortComp = EntityUtil.getOnly(delegator.findByAnd("WorkEffortGoodStandard", Arrays.asList(new EntityExpr("workEffortId", EntityOperator.IN, mandatoryWorkEffortIds), new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"), new EntityExpr("productId", EntityOperator.EQUALS, productComp2Id))));
+        mandatoryWorkEffortComp = EntityUtil.getOnly(delegator.findByAnd("WorkEffortGoodStandard", Arrays.asList(EntityCondition.makeCondition("workEffortId", EntityOperator.IN, mandatoryWorkEffortIds), EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"), EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productComp2Id))));
         // get first component production run
         prunIdComp = mandatoryWorkEffortComp.getString("workEffortId");
         confirmProductionRun(prunIdComp);
@@ -2113,7 +2105,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         mandatoryWorkEffortIds = EntityUtil.getFieldListFromEntityList(mandatoryWorkEfforts, "workEffortIdFrom", true);
 
         // get the production run for component 1
-        mandatoryWorkEffortComp = EntityUtil.getOnly(delegator.findByAnd("WorkEffortGoodStandard", Arrays.asList(new EntityExpr("workEffortId", EntityOperator.IN, mandatoryWorkEffortIds), new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"), new EntityExpr("productId", EntityOperator.EQUALS, productComp1Id))));
+        mandatoryWorkEffortComp = EntityUtil.getOnly(delegator.findByAnd("WorkEffortGoodStandard", Arrays.asList(EntityCondition.makeCondition("workEffortId", EntityOperator.IN, mandatoryWorkEffortIds), EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"), EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productComp1Id))));
         // get first component production run
         prunIdComp = mandatoryWorkEffortComp.getString("workEffortId");
         confirmProductionRun(prunIdComp);
@@ -2140,7 +2132,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         inventoryAsserts.assertInventoriesChange(Arrays.asList(productComp2Id, productComp3Id, productComp11Id, productComp12Id, productComp13Id, productComp14Id, productComp21Id, productComp22Id, productComp23Id, productComp24Id), new BigDecimal("0.0"), origProductInventories);
 
         // get the production run for component 2
-        mandatoryWorkEffortComp = EntityUtil.getOnly(delegator.findByAnd("WorkEffortGoodStandard", Arrays.asList(new EntityExpr("workEffortId", EntityOperator.IN, mandatoryWorkEffortIds), new EntityExpr("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"), new EntityExpr("productId", EntityOperator.EQUALS, productComp2Id))));
+        mandatoryWorkEffortComp = EntityUtil.getOnly(delegator.findByAnd("WorkEffortGoodStandard", Arrays.asList(EntityCondition.makeCondition("workEffortId", EntityOperator.IN, mandatoryWorkEffortIds), EntityCondition.makeCondition("workEffortGoodStdTypeId", EntityOperator.EQUALS, "PRUN_PROD_DELIV"), EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productComp2Id))));
         // get first component production run
         prunIdComp = mandatoryWorkEffortComp.getString("workEffortId");
         confirmProductionRun(prunIdComp);
@@ -2289,8 +2281,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
     }
 
     /**
-     * Produce marketing package GZ-BRACKET and verify inventory changes. 
-     * @throws Exception
+     * Produce marketing package GZ-BRACKET and verify inventory changes.
+     * @throws Exception if an error occurs
      */
     @SuppressWarnings("unchecked")
     public void testProduceMarketingPackage() throws Exception {
@@ -2305,7 +2297,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         context.put("startDate", UtilDateTime.nowTimestamp());
         context.put("facilityId", facilityId);
         context.put("userLogin", demowarehouse1);
-        Map<String, ?> results = runAndAssertServiceSuccess("createProductionRun", context);
+        Map<String, Object> results = runAndAssertServiceSuccess("createProductionRun", context);
         String productionRunId = (String) results.get("productionRunId");
 
         // confirm production run
@@ -2330,7 +2322,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         runAndAssertServiceSuccess("changeProductionRunStatus", context);
 
         // verify inventory changes
-        // initially we have no materials, that's why ATP changes are zero and QOH changes are negative. 
+        // initially we have no materials, that's why ATP changes are zero and QOH changes are negative.
         inventoryAsserts.assertInventoriesChange("GZ-BASKET", new BigDecimal("2.0"), new BigDecimal("2.0"), origProductInventories);
         inventoryAsserts.assertInventoriesChange("GZ-1000", new BigDecimal("2.0").negate(), new BigDecimal("0.0"), origProductInventories);
         inventoryAsserts.assertInventoriesChange("GZ-1001", new BigDecimal("4.0").negate(), new BigDecimal("0.0"), origProductInventories);

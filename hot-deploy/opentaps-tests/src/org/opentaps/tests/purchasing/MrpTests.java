@@ -25,7 +25,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.order.PurchaseOrderFactory;
@@ -84,7 +84,7 @@ public class MrpTests extends MrpTestCase {
         DemoCustomer = null;
 
         // get rid of all FacilityTransferPlans created by the testMrpWithTransferPlanAndTransferRequirement test, or they may interfere with other MRP
-        delegator.removeByCondition("FacilityTransferPlan", new EntityExpr("facilityTransferPlanId", EntityOperator.NOT_EQUAL, null));
+        delegator.removeByCondition("FacilityTransferPlan", EntityCondition.makeCondition("facilityTransferPlanId", EntityOperator.NOT_EQUAL, null));
 
         super.tearDown();
     }
@@ -382,14 +382,14 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. Receive 100 units of this product at $5 into MyRetailWarehouse warehouse
-        Map<String, String> result = (Map<String, String>) receiveInventoryProduct(testProduct, 100.0, "NON_SERIAL_INV_ITEM", 1.0, retailStoreFacilityId, demowarehouse1);
-        String inventoryItemId = result.get("inventoryItemId");
+        Map<String, Object> result = receiveInventoryProduct(testProduct, 100.0, "NON_SERIAL_INV_ITEM", 1.0, retailStoreFacilityId, demowarehouse1);
+        String inventoryItemId = (String) result.get("inventoryItemId");
 
         // 4. Create an inventory transfer from Demo3PL to WebStoreWarehouse for 50 units of this product
         Map transferContext = UtilMisc.toMap("facilityId", retailStoreFacilityId, "facilityIdTo", facilityId, "inventoryItemId", inventoryItemId, "xferQty", new Double(50.0), "statusId", "IXF_REQUESTED", "userLogin", demowarehouse1);
         transferContext.put("sendDate", UtilDateTime.nowTimestamp());  // critical - otherwise MRP will ignore this inventory transfer
         result = runAndAssertServiceSuccess("createInventoryTransfer", transferContext);
-        String inventoryTransferId = result.get("inventoryTransferId");
+        String inventoryTransferId = (String) result.get("inventoryTransferId");
 
         // 5. Create 3 sales order for 15 units, 12, 23 of this product
         User = DemoSalesManager;
@@ -468,8 +468,7 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. Receive 50 units of this product at $5 into MyRetailWarehouse warehouse
-        Map<String, String> result = (Map<String, String>) receiveInventoryProduct(testProduct, 50.0, "NON_SERIAL_INV_ITEM", 1.0, thirdPartyFacilityId, demowarehouse1);
-        String inventoryItemId = result.get("inventoryItemId");
+        receiveInventoryProduct(testProduct, 50.0, "NON_SERIAL_INV_ITEM", 1.0, thirdPartyFacilityId, demowarehouse1);
 
         // 4. Create sales order for 25 units of this product
         User = DemoSalesManager;
@@ -485,7 +484,7 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // 8. Verify that 25 units are to be transferred from Demo3PL to WebStoreWarehouse
-        String inventoryTransferId = assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, 25.0);
+        assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, 25.0);
     }
 
 
@@ -956,7 +955,6 @@ public class MrpTests extends MrpTestCase {
      * its quantity is changed, the component requirements' quantities will also be changed.
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testMrpWithApprovedPendingInternalRequirementsForComponents() throws GeneralException {
         // create a manufactured product
         final GenericValue product = createTestProduct("test Mrp With Approved Pending Internal Requirements For Components Product", demopurch1);
@@ -1086,8 +1084,7 @@ public class MrpTests extends MrpTestCase {
         salesOrder.approveOrder();
 
         // run MRP
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId);
-        runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
+        runAndAssertServiceSuccess("opentaps.runMrp", UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId));
 
         // verify that
         // 1.  manufacturing requirements created for the test product
@@ -1108,7 +1105,6 @@ public class MrpTests extends MrpTestCase {
      *
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testMrpQuantityBelowRoutingMinimumQuantity() throws GeneralException {
         InventoryAsserts webStoreWarehouseInvAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demopurch1);
 
@@ -1127,7 +1123,7 @@ public class MrpTests extends MrpTestCase {
         String rawMaterialId2 = rawMaterial2.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(rawMaterialId2);
 
-        // 4. associate raw materials and finished product 
+        // 4. associate raw materials and finished product
         createBOMProductAssoc(mftProductId, rawMaterialId1, 1L, 2.0, admin);
         createBOMProductAssoc(mftProductId, rawMaterialId2, 2L, 1.0, admin);
 
@@ -1141,9 +1137,9 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // 7. run the MRP for WebStoreWarehouse and product with flag to create pending internal requirements set to Y
-        Map<String, Object> runMrpContext = 
+        Map<String, Object> runMrpContext =
             UtilMisc.<String, Object>toMap(
-                    "userLogin", demopurch1, 
+                    "userLogin", demopurch1,
                     "facilityId", facilityId,
                     "createPendingManufacturingRequirements", true
             );
@@ -1160,7 +1156,8 @@ public class MrpTests extends MrpTestCase {
 
     /**
      * This test verifies that when the quantity needed is above the maximum routing quantity, MRP will create
-     * several requirements and then use them to create requirements for parts
+     * several requirements and then use them to create requirements for parts.
+     * @exception GeneralException if an error occurs
      */
     public void testMrpQuantityAboveMaximumQuantity() throws GeneralException {
         InventoryAsserts webStoreWarehouseInvAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demopurch1);
@@ -1202,7 +1199,7 @@ public class MrpTests extends MrpTestCase {
         //  1 Pending Internal Requirement for testproduct with quantity 500
         //  2 Pending Internal Requirement for testproduct with quantity 100 each
         //  1 Pending Internal Requirement for testproduct with quantity 10
-        assertRequirementExists(testProductId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 
+        assertRequirementExists(testProductId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED",
                 Arrays.asList(Double.valueOf(500.0), Double.valueOf(100.0), Double.valueOf(100.0), Double.valueOf(10.0)));
 
         //  1 Product Requirement for testpart1 with quantity 7100
@@ -1214,7 +1211,6 @@ public class MrpTests extends MrpTestCase {
      *
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testMrpSelectRoutingForQuantity() throws GeneralException {
         InventoryAsserts webStoreWarehouseInvAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demopurch1);
 
@@ -1233,7 +1229,7 @@ public class MrpTests extends MrpTestCase {
         String rawMaterialId2 = rawMaterial2.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(rawMaterialId2);
 
-        // 4. create BOM that imply manufacturing 1 mftProduct from 2 rawMaterial2 
+        // 4. create BOM that imply manufacturing 1 mftProduct from 2 rawMaterial2
         createBOMProductAssoc(mftProductId, rawMaterialId1, 1L, 2.0, admin);
 
         // 5. create a WorkEffortGoodStandard entity for mftProduct, minQuantity 10.0 & maxQuantity 15.0
@@ -1242,7 +1238,7 @@ public class MrpTests extends MrpTestCase {
         // 6. create a WorkEffortGoodStandard entity for mftProduct, minQuantity 15.0 & maxQuantity 20.0
         String alternateRoutingId = createTestAssemblingRouting("Assembling manufactured product for MrpNoRoutingForQuantity tests", mftProductId, 300000.0, 600000.0, 15.0 /*min qty*/, 20.0/*max qty*/);
 
-        // 7. create BOM that imply manufacturing 1 mftProduct from 3 rawMaterial2 
+        // 7. create BOM that imply manufacturing 1 mftProduct from 3 rawMaterial2
         createBOMProductAssoc(mftProductId, rawMaterialId2, alternateRoutingId, 1L, 3.0, admin);
 
         // 8. create sales order of 17x mftProduct
@@ -1253,14 +1249,14 @@ public class MrpTests extends MrpTestCase {
         String orderId = salesOrder.getOrderId();
 
         // 9. run the MRP for WebStoreWarehouse
-        Map<String, ?> runMrpContext = 
+        Map<String, Object> runMrpContext =
             UtilMisc.toMap(
-                    "userLogin", demopurch1, 
-                    "facilityId", facilityId 
+                    "userLogin", demopurch1,
+                    "facilityId", facilityId
             );
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
-        // 10. verify purchasing requirements count, mftProduct 17, rawMaterial2 51, no requirements for rawMaterial1  
+        // 10. verify purchasing requirements count, mftProduct 17, rawMaterial2 51, no requirements for rawMaterial1
         String requirementId1 = assertRequirementExists(mftProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 17.0);
         assertRequirementAssignedToOrder(orderId, requirementId1, 17.0);
         assertRequirementExists(rawMaterialId2, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 51.0);
@@ -1270,10 +1266,9 @@ public class MrpTests extends MrpTestCase {
     /**
      * Verify when MRP use routing with minimal quantity for product, resulting requirements count
      * equals to minimal quantity and don't take into account Facility.minimalStock.
-     * 
-     * @throws GeneralException
+     *
+     * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testMrpApplyMinimalQuantityIrrespectiveOfMinimumStock() throws GeneralException {
         InventoryAsserts webStoreWarehouseInvAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demopurch1);
 
@@ -1304,7 +1299,7 @@ public class MrpTests extends MrpTestCase {
         ctxt.put("userLogin", demowarehouse1);
         runAndAssertServiceSuccess("receiveInventoryProduct", ctxt);
 
-        // 4. create BOM that imply manufacturing 1 mftProduct from 1 rawMaterial 
+        // 4. create BOM that imply manufacturing 1 mftProduct from 1 rawMaterial
         createBOMProductAssoc(mftProductId, rawMaterialId, 1L, 1.0, admin);
 
         // 5. create a WorkEffortGoodStandard entity for mftProduct, minQuantity 100.0
@@ -1318,10 +1313,10 @@ public class MrpTests extends MrpTestCase {
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
-        Map<String, ?> runMrpContext = 
+        Map<String, Object> runMrpContext =
             UtilMisc.toMap(
-                    "userLogin", demopurch1, 
-                    "facilityId", facilityId 
+                    "userLogin", demopurch1,
+                    "facilityId", facilityId
             );
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
@@ -1337,7 +1332,7 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("requirementId", requirementId, "userLogin", demopurch1));
 
         // 7. create outgoing transfer requirement
-        Map<String, Object> requirement = 
+        Map<String, Object> requirement =
             UtilMisc.<String, Object>toMap(
                     "requirementId", delegator.getNextSeqId("Requirement"),
                     "requirementTypeId", "TRANSFER_REQUIREMENT",
@@ -1357,16 +1352,16 @@ public class MrpTests extends MrpTestCase {
         createSalesForecastItem(mftProductId, facilityId, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 1, timeZone, locale), BigDecimal.valueOf(100.0));
 
         // 9. run the MRP for WebStoreWarehouse
-        runMrpContext = 
+        runMrpContext =
             UtilMisc.toMap(
-                    "userLogin", demopurch1, 
+                    "userLogin", demopurch1,
                     "facilityId", facilityId,
                     "percentageOfSalesForecast", new Double(35.00),
                     "createTransferRequirements", Boolean.TRUE
             );
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
-        // 10. verify internal requirements count, should be one requirement for 100 mftProduct  
+        // 10. verify internal requirements count, should be one requirement for 100 mftProduct
         assertRequirementExists(mftProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 100.0);
     }
 
@@ -1374,7 +1369,6 @@ public class MrpTests extends MrpTestCase {
      * This test verify that MRP works with production run after updating their quantity and partially producing them.
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testMrpWithUpdatedProductionRuns() throws GeneralException {
         // create a manufactured test product
         final GenericValue product = createTestProduct("test Mrp With Updated Production Run", demopurch1);
