@@ -115,7 +115,7 @@ public final class OpentapsMrpServices {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         // allow calling service to set a now to synchronize multiple runs, or default to current time if none is supplied
@@ -960,7 +960,7 @@ public final class OpentapsMrpServices {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String mrpName = (String) context.get("mrpName");

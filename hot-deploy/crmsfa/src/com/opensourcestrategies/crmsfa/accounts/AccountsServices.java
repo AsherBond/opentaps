@@ -99,7 +99,7 @@ public final class AccountsServices {
 
             // if we're given the partyId to create, then verify it is free to use
             if (accountPartyId != null) {
-                Map<String, Object> findMap =  UtilMisc.toMap("partyId", accountPartyId);
+                Map<String, Object> findMap =  UtilMisc.<String, Object>toMap("partyId", accountPartyId);
                 GenericValue party = delegator.findByPrimaryKey("Party", findMap);
                 if (party != null) {
                     // TODO maybe a more specific message such as "Account already exists"

@@ -646,7 +646,7 @@ public final class ActivitiesServices {
             }
 
             // Call storeIncomingEmail service
-            input = UtilMisc.toMap("messageWrapper", wrapper, "userLogin", userLogin);
+            input = UtilMisc.<String, Object>toMap("messageWrapper", wrapper, "userLogin", userLogin);
             serviceResults = dispatcher.runSync("storeIncomingEmail", input);
             if (ServiceUtil.isError(serviceResults)) {
                 return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorProcessIncomingEmailFail", locale, MODULE);
@@ -802,7 +802,7 @@ public final class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
 
         try {
             Timestamp estimatedStartDate = (Timestamp) context.get("estimatedStartDate");
@@ -891,7 +891,7 @@ public final class ActivitiesServices {
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
 
         String workEffortId = (String) context.get("workEffortId");
         try {
@@ -1240,7 +1240,7 @@ public final class ActivitiesServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
         String workEffortPurposeTypeId = (String) context.get("workEffortPurposeTypeId");
 
         try {
@@ -1383,7 +1383,7 @@ public final class ActivitiesServices {
             if (oldAssocs.size() == 0) {
 
                 // assign party as a CAL_ATTENDEE with status assigned to the work effort
-                Map<String, Object> input = UtilMisc.toMap("workEffortId", workEffortId, "partyId", partyId, "roleTypeId", "CAL_ATTENDEE", "statusId", "PRTYASGN_ASSIGNED",
+                Map<String, Object> input = UtilMisc.<String, Object>toMap("workEffortId", workEffortId, "partyId", partyId, "roleTypeId", "CAL_ATTENDEE", "statusId", "PRTYASGN_ASSIGNED",
                         "availabilityStatusId", "WEPA_AV_AVAILABLE");
                 input.put("userLogin", userLogin);
                 Map<String, Object> serviceResults = dispatcher.runSync("assignPartyToWorkEffort", input);
@@ -1652,7 +1652,7 @@ public final class ActivitiesServices {
             }
 
             // first make sure the userlogin has a role CAL_OWNER
-            input = UtilMisc.toMap("partyId", userLogin.getString("partyId"), "roleTypeId", "CAL_OWNER");
+            input = UtilMisc.<String, Object>toMap("partyId", userLogin.getString("partyId"), "roleTypeId", "CAL_OWNER");
             List<GenericValue> partyRoles = delegator.findByAnd("PartyRole", input);
             if (partyRoles.size() == 0)  {
                 input.put("userLogin", userLogin);
@@ -1676,7 +1676,7 @@ public final class ActivitiesServices {
 
         // associate the opportunity with the work effort
         if (salesOpportunityId != null) {
-            input = UtilMisc.toMap("salesOpportunityId", salesOpportunityId, "workEffortId", workEffortId);
+            input = UtilMisc.<String, Object>toMap("salesOpportunityId", salesOpportunityId, "workEffortId", workEffortId);
             GenericValue map = delegator.findByPrimaryKey("SalesOpportunityWorkEffort", input);
             if (map == null) {
                 map = delegator.makeValue("SalesOpportunityWorkEffort", input);
@@ -1710,7 +1710,7 @@ public final class ActivitiesServices {
                 }
 
                 // now create the new one
-                input = UtilMisc.toMap("workEffortId", workEffortId, "partyId", partyId, "roleTypeId", roleTypeId, "statusId", "PRTYASGN_ASSIGNED");
+                input = UtilMisc.<String, Object>toMap("workEffortId", workEffortId, "partyId", partyId, "roleTypeId", roleTypeId, "statusId", "PRTYASGN_ASSIGNED");
                 input.put("userLogin", userLogin);
                 serviceResults = dispatcher.runSync("assignPartyToWorkEffort", input);
                 if (ServiceUtil.isError(serviceResults)) {

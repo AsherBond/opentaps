@@ -186,7 +186,7 @@ public final class OpportunitiesServices {
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
 
         String salesOpportunityId = (String) context.get("salesOpportunityId");
 

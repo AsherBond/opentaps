@@ -181,7 +181,7 @@ public class POJOJavaEngine extends GenericAsyncEngine {
             context.remove("locale");
 
             // get the timezone from the context
-            TimeZone timeZone = (TimeZone) context.get("timeZone");
+            TimeZone timeZone = UtilCommon.getTimeZone(context);
             service.setTimeZone(timeZone);
             context.remove("timeZone");
 

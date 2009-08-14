@@ -709,7 +709,7 @@ public final class InvoiceServices {
 
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
 
         try {
             Timestamp now = UtilDateTime.nowTimestamp();
@@ -1204,7 +1204,7 @@ public final class InvoiceServices {
     public static Map setInvoiceDueDate(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         String invoiceId = (String) context.get("invoiceId");
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
         Locale locale = UtilCommon.getLocale(context);
 
         try {
@@ -1699,7 +1699,7 @@ public final class InvoiceServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
         Security security = dctx.getSecurity();
 
         if (!(security.hasEntityPermission("FINANCIALS", "_AR_INCRTE", userLogin) && security.hasEntityPermission("FINANCIALS", "_AR_PCRTE", userLogin))) {

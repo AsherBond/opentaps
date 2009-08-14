@@ -222,7 +222,7 @@ public final class EmailServices {
         String sendTo = (String) context.get("sendTo");
         String subject = (String) context.get("subject");
         String content = (String) context.get("content");
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
         // get jrxml report location
         String jrxml = null;
         try {

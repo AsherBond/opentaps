@@ -239,7 +239,7 @@ public class CrmsfaOrderServices {
     public static Map rescheduleOrderShipDates(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
         
         String orderId = (String) context.get("orderId");
         String shipGroupSeqId = (String) context.get("shipGroupSeqId");
@@ -266,7 +266,7 @@ public class CrmsfaOrderServices {
     public static Map resequenceOrderShipGroupPriorities(DispatchContext dctx, Map context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
-        TimeZone timeZone = (TimeZone) context.get("timeZone");
+        TimeZone timeZone = UtilCommon.getTimeZone(context);
 
         // These maps will look like {"0": "WS10000", "1":"WS10010"}
         Map orderIds = (Map) context.get("orderIds");
