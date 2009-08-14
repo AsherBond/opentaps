@@ -1496,7 +1496,12 @@ public abstract class UtilCommon {
     }
 
     /**
-     * Assuming theMap not null; if null will throw a NullPointerException
+     * Assuming theMap not null; if null will throw a NullPointerException.
+     * @param <K> the key type
+     * @param theMap the <code>Map<K, BigDecimal></code> where to add the value
+     * @param mapKey the key in the map where to add the value
+     * @param addNumber the value to add in the map (can be null)
+     * @return the new value for the given key in the map, after the value is added
      */
     public static <K> BigDecimal addInMapOfBigDecimal(Map<K, BigDecimal> theMap, K mapKey, BigDecimal addNumber) {
         BigDecimal currentNumber = theMap.get(mapKey);
@@ -1513,16 +1518,31 @@ public abstract class UtilCommon {
     }
 
     /**
-     * @deprecated
-     * TODO: for upgrade ofbiz to new version only, refactor the code later.
-     */    
+     * Gets a <code>ByteWrapper</code> object for the given parameters.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param dataResourceId a <code>String</code> value
+     * @param https a <code>String</code> value
+     * @param webSiteId a <code>String</code> value
+     * @param locale a <code>Locale</code> value
+     * @param rootDir a <code>String</code> value
+     * @return the <code>ByteWrapper</code>
+     * @exception IOException if an error occurs
+     * @exception GeneralException if an error occurs
+     * @deprecated for upgrade ofbiz to new version only, refactor the code later, ofbiz no longer uses ByteWrapper, instead use byte[] directly.
+     */
     public static ByteWrapper getContentAsByteWrapper(GenericDelegator delegator, String dataResourceId, String https, String webSiteId, Locale locale, String rootDir) throws IOException, GeneralException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataResourceWorker.streamDataResource(baos, delegator, dataResourceId, https, webSiteId, locale, rootDir);
         ByteWrapper byteWrapper = new ByteWrapper(baos.toByteArray());
         return byteWrapper;
     }
-    
+
+    /**
+     * Checks if a service response is a success.
+     * @param results a service response <code>Map</code>
+     * @return a <code>boolean</code> value
+     */
+    @SuppressWarnings("unchecked")
     public static boolean isSuccess(Map results) {
         if (results == null || results.get(ModelService.RESPONSE_MESSAGE) == null) {
             return false;
