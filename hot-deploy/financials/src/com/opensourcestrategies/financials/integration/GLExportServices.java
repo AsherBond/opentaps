@@ -46,55 +46,50 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 
 /**
- * Services for exporting General Ledger activities 
- * @author     <a href="mailto:sichen@opensourcestrategies.com">Si Chen</a> 
+ * Services for exporting General Ledger activities.
+ * @author     <a href="mailto:sichen@opensourcestrategies.com">Si Chen</a>
  * @version    $Rev$
  * @since      2.2
 */
+public final class GLExportServices {
 
-public class GLExportServices {
-    
-    public static String module = GLExportServices.class.getName();
-    
-    /**
-     * 
-     * @param dctx
-     * @param result
-     * @return
-     */
-    public static Map exportGLToFile(DispatchContext dctx, Map context) {
+    private GLExportServices() { }
+
+    private static String MODULE = GLExportServices.class.getName();
+
+    public static Map<String, Object> exportGLToFile(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
-        List allTransactions = (List) context.get("valuesToCreate");
-        allTransactions.addAll((List) context.get("valuesToStore"));
+        List<GenericValue> allTransactions = (List<GenericValue>) context.get("valuesToCreate");
+        allTransactions.addAll((List<GenericValue>) context.get("valuesToStore"));
 
-        // name of template for generating exported GL and name of file to write it to 
+        // name of template for generating exported GL and name of file to write it to
         String fileName = UtilProperties.getPropertyValue("GLExport.properties", "file.name");
         String templateName = UtilProperties.getPropertyValue("GLExport.properties", "template.name");
-        Debug.logInfo("templateName = " + templateName, module);
-        
+        Debug.logInfo("templateName = " + templateName, MODULE);
+
         StringBuffer exportedGL = new StringBuffer();
-        
+
         try {
             // only export posted transactions
             allTransactions = EntityUtil.filterByAnd(allTransactions, UtilMisc.toMap("isPosted", "Y"));
 
-            Map glAccountMapping = new HashMap();          // map of OFBiz glAccountId to external system's gl account
-            Map externalAccountParties = new HashMap();    // map of external gl account to any required party (vendors, customers)
- 
-            for (Iterator aTi = allTransactions.iterator(); aTi.hasNext(); ) {
-                GenericValue acctgTrans = (GenericValue) aTi.next();
+            Map<String, String> glAccountMapping = new HashMap<String, String>();          // map of OFBiz glAccountId to external system's gl account
+            Map<String, String> externalAccountParties = new HashMap<String, String>();    // map of external gl account to any required party (vendors, customers)
+
+            for (Iterator<GenericValue> aTi = allTransactions.iterator(); aTi.hasNext();) {
+                GenericValue acctgTrans = aTi.next();
                 // peculiar QBXML requirement - debits must come before credits
-                List acctgTransEntries = acctgTrans.getRelated("AcctgTransEntry", UtilMisc.toList("debitCreditFlag DESC", "acctgTransEntrySeqId"));
+                List<GenericValue> acctgTransEntries = acctgTrans.getRelated("AcctgTransEntry", UtilMisc.toList("debitCreditFlag DESC", "acctgTransEntrySeqId"));
                 // update the GL mapping
-                for (Iterator aTEi = acctgTransEntries.iterator(); aTEi.hasNext(); ) {
-                    GenericValue acctgTransEntry = (GenericValue) aTEi.next();
-                    
+                for (Iterator<GenericValue> aTEi = acctgTransEntries.iterator(); aTEi.hasNext();) {
+                    GenericValue acctgTransEntry = aTEi.next();
+
                     if (glAccountMapping.get(acctgTransEntry.getString("glAccountId")) == null) {
                         // gl account mappings are in the properties file
                         String mappedGlAccountId = UtilProperties.getPropertyValue("GLExport.properties", "glAccountId." + acctgTransEntry.getString("glAccountId"));
-                        
+
                         // if there is no target gl account, then the service should fail so the user can fix it and try again
                         if ((mappedGlAccountId == null) || (mappedGlAccountId.equals(""))) {
                             return ServiceUtil.returnError("No mapping for GL account " + acctgTransEntry.getString("glAccountId") + " was found.  Cannot export");
@@ -107,26 +102,26 @@ public class GLExportServices {
                         }
                     }
                 }
-                
+
                 // use the template to generate an exported version of this transactions
-                Map inContext = UtilMisc.toMap("acctgTrans", acctgTrans, "acctgTransEntries", acctgTransEntries, "glAccountMapping", glAccountMapping, 
+                Map<String, Object> inContext = UtilMisc.<String, Object>toMap("acctgTrans", acctgTrans, "acctgTransEntries", acctgTransEntries, "glAccountMapping", glAccountMapping,
                                                "externalAccountParties", externalAccountParties);
-                Debug.logInfo("acctgTransId = " + acctgTrans.getString("acctgTransId") + " with " + acctgTransEntries.size() + " entries", module);
+                Debug.logInfo("acctgTransId = " + acctgTrans.getString("acctgTransId") + " with " + acctgTransEntries.size() + " entries", MODULE);
                 StringWriter outWriter = new StringWriter();
                 ContentWorker.renderContentAsText(dispatcher, delegator, templateName, outWriter, inContext, locale, "text/plain", false);
-                Debug.logInfo("output: " + outWriter.toString(), module);
+                Debug.logInfo("output: " + outWriter.toString(), MODULE);
 
                 // now add it to all the other transactions so far
                 exportedGL.append(outWriter.toString());
             }
-            
+
             // write the file
             PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fileName))));
             out.println(exportedGL.toString());
             out.close();
-            
+
             // all done.  put in some values to satisfy the records
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("toCreateInserted", new Long(allTransactions.size()));
             result.put("toCreateUpdated", new Long(0));
             result.put("toCreateNotUpdated", new Long(0));
@@ -135,7 +130,7 @@ public class GLExportServices {
             result.put("toStoreNotUpdated", new Long(0));
             result.put("toRemoveDeleted", new Long(0));
             result.put("toRemoveAlreadyDeleted", new Long(0));
-            return result;            
+            return result;
         } catch (GenericEntityException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         } catch (GenericServiceException ex) {
@@ -147,6 +142,6 @@ public class GLExportServices {
         } catch (IOException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         }
-        
+
     }
 }

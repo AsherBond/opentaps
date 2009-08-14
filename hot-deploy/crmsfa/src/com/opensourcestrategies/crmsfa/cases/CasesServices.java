@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -40,23 +40,21 @@
  */
 package com.opensourcestrategies.crmsfa.cases;
 
-import java.util.Map;
 import java.util.List;
 import java.util.Locale;
-import java.util.Iterator;
+import java.util.Map;
 
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
-import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.service.ModelService;
-import org.ofbiz.security.Security;
-
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
+import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
@@ -66,13 +64,13 @@ import org.opentaps.common.util.UtilMessage;
  * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
  * @version    $Rev: 488 $
  */
+public final class CasesServices {
 
-public class CasesServices {
+    private CasesServices() { }
 
-    public static final String module = CasesServices.class.getName();
+    private static final String MODULE = CasesServices.class.getName();
 
-    public static Map createCase(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+    public static Map<String, Object> createCase(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -82,13 +80,13 @@ public class CasesServices {
         String accountPartyId = (String) context.get("accountPartyId");
         String contactPartyId = (String) context.get("contactPartyId");
         if (accountPartyId == null && contactPartyId == null) {
-            return UtilMessage.createAndLogServiceError("CrmErrorCreateCaseFailNoAcctCont", "CrmErrorCreateCaseFail", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorCreateCaseFailNoAcctCont", "CrmErrorCreateCaseFail", locale, MODULE);
         }
         try {
             // create the cust request
             context.put("statusId", "CRQ_SUBMITTED");
             ModelService modelService = dctx.getModelService("createCustRequest");
-            Map caseParams = modelService.makeValid(context, "IN");
+            Map<String, Object> caseParams = modelService.makeValid(context, "IN");
 
             // CustRequest.fromPartyId is not used by the CRM/SFA application, which is designed to handle multiple parties
             // but we'll fill it for consistency with OFBiz and use contactPartyId first then accountPartyId
@@ -97,34 +95,34 @@ public class CasesServices {
             } else {
                 caseParams.put("fromPartyId", accountPartyId);
             }
-            
-            Map serviceResults = dispatcher.runSync("createCustRequest", caseParams);
+
+            Map<String, Object> serviceResults = dispatcher.runSync("createCustRequest", caseParams);
             if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, module);
+                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, MODULE);
             }
             String custRequestId = (String) serviceResults.get("custRequestId");
 
             // create the account role if an account is supplied, but only if user has CRMSFA_CREATE_CASE permission on that account
             if (accountPartyId != null) {
                 if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CASE", "_CREATE", userLogin, accountPartyId)) {
-                    return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+                    return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
                 }
-                serviceResults = dispatcher.runSync("createCustRequestRole", 
+                serviceResults = dispatcher.runSync("createCustRequestRole",
                         UtilMisc.toMap("custRequestId", custRequestId, "partyId", accountPartyId, "roleTypeId", "ACCOUNT", "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
-                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, module);
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, MODULE);
                 }
             }
 
-            // create the contact role if a contact is supplied, but only if user has CRMSFA_CASE_CREATE permission on that contact 
+            // create the contact role if a contact is supplied, but only if user has CRMSFA_CASE_CREATE permission on that contact
             if (contactPartyId != null) {
                 if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CASE", "_CREATE", userLogin, contactPartyId)) {
-                    return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+                    return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
                 }
-                serviceResults = dispatcher.runSync("createCustRequestRole", 
+                serviceResults = dispatcher.runSync("createCustRequestRole",
                         UtilMisc.toMap("custRequestId", custRequestId, "partyId", contactPartyId, "roleTypeId", "CONTACT", "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
-                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, module);
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, MODULE);
                 }
             }
 
@@ -133,7 +131,7 @@ public class CasesServices {
             if (note != null) {
                 serviceResults = dispatcher.runSync("createCustRequestNote", UtilMisc.toMap("custRequestId", custRequestId, "note", note, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
-                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, module);
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, MODULE);
                 }
                 String noteId = (String) serviceResults.get("noteId");
 
@@ -141,13 +139,13 @@ public class CasesServices {
                 if (accountPartyId != null) {
                     serviceResults = dispatcher.runSync("createPartyNote", UtilMisc.toMap("partyId", accountPartyId, "noteId", noteId, "userLogin", userLogin));
                     if (ServiceUtil.isError(serviceResults)) {
-                        return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, module);
+                        return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, MODULE);
                     }
                 }
                 if (contactPartyId != null) {
                     serviceResults = dispatcher.runSync("createPartyNote", UtilMisc.toMap("partyId", contactPartyId, "noteId", noteId, "userLogin", userLogin));
                     if (ServiceUtil.isError(serviceResults)) {
-                        return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, module);
+                        return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, MODULE);
                     }
                 }
             }
@@ -157,23 +155,23 @@ public class CasesServices {
             if (workEffortId != null) {
                 serviceResults = dispatcher.runSync("crmsfa.updateActivityAssociation", UtilMisc.toMap("workEffortId", workEffortId, "custRequestId", custRequestId, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
-                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, module);
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateCaseFail", locale, MODULE);
                 }
             }
-            
+
             // return the custRequestId
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("custRequestId", custRequestId);
             if (workEffortId != null) {
                 result.put("workEffortId", workEffortId);
             }
             return result;
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateCaseFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateCaseFail", locale, MODULE);
         }
     }
 
-    public static Map updateCase(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updateCase(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -185,22 +183,22 @@ public class CasesServices {
         try {
             // first make sure userLogin has update permission
             if (!CrmsfaSecurity.hasCasePermission(security, "_UPDATE", userLogin, custRequestId)) {
-                return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+                return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
             }
 
             // if the status is being set to close, check if user has permission to
             String statusId = (String) context.get("statusId");
             if (statusId.equals("CRQ_CANCELLED") || statusId.equals("CRQ_COMPLETED") || statusId.equals("CRQ_REJECTED")) {
                 if (!CrmsfaSecurity.hasCasePermission(security, "_CLOSE", userLogin, custRequestId)) {
-                    return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+                    return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
                 }
             }
 
             // update the cust request
             ModelService modelService = dctx.getModelService("updateCustRequest");
-            Map serviceResults = dispatcher.runSync("updateCustRequest", modelService.makeValid(context, "IN"));
+            Map<String, Object> serviceResults = dispatcher.runSync("updateCustRequest", modelService.makeValid(context, "IN"));
             if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateCaseFail", locale, module);
+                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateCaseFail", locale, MODULE);
             }
 
             // create a note if a note is supplied
@@ -208,30 +206,28 @@ public class CasesServices {
             if (note != null) {
                 serviceResults = dispatcher.runSync("createCustRequestNote", UtilMisc.toMap("custRequestId", custRequestId, "note", note, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
-                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateCaseFail", locale, module);
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateCaseFail", locale, MODULE);
                 }
                 String noteId = (String) serviceResults.get("noteId");
 
                 // associate this note with each case account and contact
-                List parties = UtilCase.getCaseAccountsAndContacts(delegator, custRequestId);
-                for (Iterator iter = parties.iterator(); iter.hasNext(); ) {
-                    GenericValue party = (GenericValue) iter.next();
+                List<GenericValue> parties = UtilCase.getCaseAccountsAndContacts(delegator, custRequestId);
+                for (GenericValue party : parties) {
                     serviceResults = dispatcher.runSync("createPartyNote", UtilMisc.toMap("partyId", party.get("partyId"), "noteId", noteId, "userLogin", userLogin));
                     if (ServiceUtil.isError(serviceResults)) {
-                        return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateCaseFail", locale, module);
+                        return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateCaseFail", locale, MODULE);
                     }
                 }
             }
             return ServiceUtil.returnSuccess();
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateCaseFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateCaseFail", locale, MODULE);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateCaseFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateCaseFail", locale, MODULE);
         }
     }
 
-    public static Map closeCase(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+    public static Map<String, Object> closeCase(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -242,17 +238,17 @@ public class CasesServices {
         try {
             // check if user has permission to close
             if (!CrmsfaSecurity.hasCasePermission(security, "_CLOSE", userLogin, custRequestId)) {
-                return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+                return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
             }
             // close by setting status to CRQ_COMPLETED
-            Map serviceResults = dispatcher.runSync("updateCustRequest", 
+            Map<String, Object> serviceResults = dispatcher.runSync("updateCustRequest",
                     UtilMisc.toMap("custRequestId", custRequestId, "statusId", "CRQ_COMPLETED", "userLogin", userLogin));
             if (ServiceUtil.isError(serviceResults)) {
                 return serviceResults;
             }
             return ServiceUtil.returnSuccess();
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateCaseFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateCaseFail", locale, MODULE);
         }
     }
 }

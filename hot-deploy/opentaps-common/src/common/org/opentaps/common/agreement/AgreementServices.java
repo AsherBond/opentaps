@@ -1,5 +1,3 @@
-package org.opentaps.common.agreement;
-
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  *
@@ -15,15 +13,15 @@ package org.opentaps.common.agreement;
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
+package org.opentaps.common.agreement;
 
-import java.util.*;
 import java.sql.Timestamp;
+import java.util.*;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
@@ -35,13 +33,13 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
 /**
- * Agreement-related services for Opentaps-common
+ * Agreement-related services for Opentaps-common.
  */
 public final class AgreementServices {
 
     private AgreementServices() { }
 
-    public static final String module = AgreementServices.class.getName();
+    private static final String MODULE = AgreementServices.class.getName();
     public static final String resource = "OpentapsUiLabels";
     public static final String errorResource = "OpentapsErrorLabels";
 
@@ -54,7 +52,7 @@ public final class AgreementServices {
      * @param context Map
      * @return Map
      */
-    public static Map autoCreateAgreementItemsAndTerms(DispatchContext dctx, Map context) {
+    public static Map<String, Object> autoCreateAgreementItemsAndTerms(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
         Locale locale = UtilCommon.getLocale(context);
@@ -67,16 +65,15 @@ public final class AgreementServices {
         try {
             GenericValue agreement = delegator.findByPrimaryKey("Agreement", UtilMisc.toMap("agreementId", agreementId));
             if (agreement == null) {
-                return UtilMessage.createAndLogServiceError("OpentapsError_AgreementNotFound", UtilMisc.toMap("agreementId", agreementId), locale, module);
+                return UtilMessage.createAndLogServiceError("OpentapsError_AgreementNotFound", UtilMisc.toMap("agreementId", agreementId), locale, MODULE);
             }
 
-            List agreementItems = FastList.newInstance();
+            List<GenericValue> agreementItems = FastList.newInstance();
 
             if (agreementItemTypeId == null) {
                 // create the agreement items based on the template definition as modeled in AgreementToItemMap
-                List itemMappings = delegator.findByAnd("AgreementToItemMap", UtilMisc.toMap("autoCreate", "Y", "agreementTypeId", agreement.get("agreementTypeId")), UtilMisc.toList("sequenceNum"));
-                for (Iterator iter = itemMappings.iterator(); iter.hasNext(); ) {
-                    GenericValue mapping = (GenericValue) iter.next();
+                List<GenericValue> itemMappings = delegator.findByAnd("AgreementToItemMap", UtilMisc.toMap("autoCreate", "Y", "agreementTypeId", agreement.get("agreementTypeId")), UtilMisc.toList("sequenceNum"));
+                for (GenericValue mapping : itemMappings) {
                     GenericValue item = delegator.makeValue("AgreementItem");
                     item.set("agreementId", agreementId);
                     item.set("agreementItemTypeId", mapping.get("agreementItemTypeId"));
@@ -91,7 +88,7 @@ public final class AgreementServices {
                 // Check if this agreement item type is valid for given agreement
                 GenericValue itemMappings = delegator.findByPrimaryKey("AgreementToItemMap", UtilMisc.toMap("agreementTypeId", agreement.get("agreementTypeId"), "agreementItemTypeId", agreementItemTypeId));
                 if (itemMappings == null) {
-                    return UtilMessage.createAndLogServiceError("OpentapsError_AgreementItemNotValid", UtilMisc.toMap("agreementItemTypeId", agreementItemTypeId, "agreementId", agreementId), locale, module);
+                    return UtilMessage.createAndLogServiceError("OpentapsError_AgreementItemNotValid", UtilMisc.toMap("agreementItemTypeId", agreementItemTypeId, "agreementId", agreementId), locale, MODULE);
                 }
 
                 GenericValue item = delegator.makeValue("AgreementItem");
@@ -105,12 +102,10 @@ public final class AgreementServices {
             }
 
             // create the agreement terms based on the template definition as modeled in AgreementItemToTermMap
-            List agreementTerms = FastList.newInstance();
-            for (Iterator iter = agreementItems.iterator(); iter.hasNext(); ) {
-                GenericValue item = (GenericValue) iter.next();
-                List mappings = delegator.findByAnd("AgreementItemToTermMap", UtilMisc.toMap("autoCreate", "Y", "agreementItemTypeId", item.get("agreementItemTypeId")), UtilMisc.toList("sequenceNum"));
-                for (Iterator termIt = mappings.iterator(); termIt.hasNext(); ) {
-                    GenericValue mapping = (GenericValue) termIt.next();
+            List<GenericValue> agreementTerms = FastList.newInstance();
+            for (GenericValue item : agreementTerms) {
+                List<GenericValue> mappings = delegator.findByAnd("AgreementItemToTermMap", UtilMisc.toMap("autoCreate", "Y", "agreementItemTypeId", item.get("agreementItemTypeId")), UtilMisc.toList("sequenceNum"));
+                for (GenericValue mapping : mappings) {
                     GenericValue term = delegator.makeValue("AgreementTerm");
                     term.set("agreementTermId", delegator.getNextSeqId("AgreementTerm"));
                     term.set("agreementId", agreementId);
@@ -122,11 +117,11 @@ public final class AgreementServices {
                     agreementTerms.add(term);
                 }
             }
-            Map results = ServiceUtil.returnSuccess();
+            Map<String, Object> results = ServiceUtil.returnSuccess();
             results.put("agreementId", agreementId);
             return results;
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, locale, module);
+            return UtilMessage.createAndLogServiceError(e, locale, MODULE);
         }
     }
 
@@ -137,14 +132,14 @@ public final class AgreementServices {
      * @param context Map
      * @return Map
      */
-    public static Map setInitialAgreementStatus(DispatchContext dctx, Map context) {
+    public static Map<String, Object> setInitialAgreementStatus(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
-        String agreementId = (String)context.get("agreementId");
+        String agreementId = (String) context.get("agreementId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
 
-        Map params = FastMap.newInstance();
+        Map<String, Object> params = FastMap.newInstance();
         params.put("agreementId", agreementId);
         params.put("statusId", "AGR_CREATED");
         params.put("userLogin", userLogin);
@@ -152,28 +147,28 @@ public final class AgreementServices {
         try {
             dispatcher.runSync("updateAgreement", params);
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, locale, module);
+            return UtilMessage.createAndLogServiceError(e, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
 
     }
 
-    public static Map removeAgreementItemAndTerms(DispatchContext dctx, Map context) {
+    public static Map<String, Object> removeAgreementItemAndTerms(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
 
-        Locale locale = (Locale)context.get("locale");
+        Locale locale = UtilCommon.getLocale(context);
 
-        String agreementId = (String)context.get("agreementId");
-        String agreementItemSeqId = (String)context.get("agreementItemSeqId");
+        String agreementId = (String) context.get("agreementId");
+        String agreementItemSeqId = (String) context.get("agreementItemSeqId");
 
         try {
 
             delegator.removeByAnd("AgreementTerm", UtilMisc.toMap("agreementId", agreementId, "agreementItemSeqId", agreementItemSeqId));
             delegator.removeByAnd("AgreementItem", UtilMisc.toMap("agreementId", agreementId, "agreementItemSeqId", agreementItemSeqId));
 
-        } catch(GenericEntityException gee) {
-            return UtilMessage.createAndLogServiceError(gee, locale, module);
+        } catch (GenericEntityException gee) {
+            return UtilMessage.createAndLogServiceError(gee, locale, MODULE);
         }
 
         return ServiceUtil.returnSuccess();
@@ -186,10 +181,10 @@ public final class AgreementServices {
      * @param context Map
      * @return Map
      */
-    public static Map createAgreementAndRole(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createAgreementAndRole(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
-        Locale locale = (Locale)context.get("locale");
-        Map result = ServiceUtil.returnSuccess();
+        Locale locale = UtilCommon.getLocale(context);
+        Map<String, Object> result = ServiceUtil.returnSuccess();
 
         String partyId = (String) context.get("partyIdTo");
         String roleTypeId = (String) context.get("roleTypeIdTo");
@@ -202,20 +197,20 @@ public final class AgreementServices {
             applicableRole = Arrays.asList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER").contains(roleTypeId);
         }
         if (!applicableRole) {
-            return UtilMessage.createAndLogServiceError("OpentapsError_CreateAgreementFailSinceRole", UtilMisc.toMap("agreementTypeId", agreementTypeId, "roleTypeId", roleTypeId), locale, module);
+            return UtilMessage.createAndLogServiceError("OpentapsError_CreateAgreementFailSinceRole", UtilMisc.toMap("agreementTypeId", agreementTypeId, "roleTypeId", roleTypeId), locale, MODULE);
         }
 
         try {
 
-            Map ensurePartyRoleResult = dispatcher.runSync("ensurePartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", roleTypeId));
+            Map<String, Object> ensurePartyRoleResult = dispatcher.runSync("ensurePartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", roleTypeId));
             if (ServiceUtil.isError(ensurePartyRoleResult)) {
-                return UtilMessage.createAndLogServiceError(ensurePartyRoleResult, module);
+                return UtilMessage.createAndLogServiceError(ensurePartyRoleResult, MODULE);
             }
 
             result = dispatcher.runSync("createAgreement", context);
 
         } catch (GenericServiceException gse) {
-            return UtilMessage.createAndLogServiceError(gse, locale, module);
+            return UtilMessage.createAndLogServiceError(gse, locale, MODULE);
         }
 
         return result;

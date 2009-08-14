@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -39,19 +39,17 @@
 
 package com.opensourcestrategies.crmsfa.common;
 
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-import org.ofbiz.security.Security;
-
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
@@ -61,24 +59,24 @@ import org.opentaps.common.util.UtilMessage;
  * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
  * @version    $Rev: 488 $
  */
+public final class DataSourceServices {
 
-public class DataSourceServices {
+    private DataSourceServices() { }
 
-    public static final String module = DataSourceServices.class.getName();
+    private static final String MODULE = DataSourceServices.class.getName();
 
-    public static Map addAccountDataSource(DispatchContext dctx, Map context) {
+    public static Map<String, Object> addAccountDataSource(DispatchContext dctx, Map<String, Object> context) {
         return addDataSourceWithPermission(dctx, context, "CRMSFA_ACCOUNT", "_UPDATE");
     }
 
-    public static Map addLeadDataSource(DispatchContext dctx, Map context) {
+    public static Map<String, Object> addLeadDataSource(DispatchContext dctx, Map<String, Object> context) {
         return addDataSourceWithPermission(dctx, context, "CRMSFA_LEAD", "_UPDATE");
     }
 
     /**
      * Parametrized service to add a data source to a party. Pass in the security to check.
      */
-    private static Map addDataSourceWithPermission(DispatchContext dctx, Map context, String module, String operation) {
-        GenericDelegator delegator = dctx.getDelegator();
+    private static Map<String, Object> addDataSourceWithPermission(DispatchContext dctx, Map<String, Object> context, String module, String operation) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -89,25 +87,25 @@ public class DataSourceServices {
 
         // check parametrized security
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, module, operation, userLogin, partyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
         try {
             // create the PartyDataSource to relate the optional data source to this party
-            Map serviceResults = dispatcher.runSync("createPartyDataSource", UtilMisc.toMap("partyId", partyId , "dataSourceId", dataSourceId, "userLogin", userLogin));
+            Map<String, Object> serviceResults = dispatcher.runSync("createPartyDataSource", UtilMisc.toMap("partyId", partyId , "dataSourceId", dataSourceId, "userLogin", userLogin));
             if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorAddDataSource", locale, module);
+                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorAddDataSource", locale, MODULE);
             }
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorAddDataSource", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorAddDataSource", locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map removeAccountDataSource(DispatchContext dctx, Map context) {
+    public static Map<String, Object> removeAccountDataSource(DispatchContext dctx, Map<String, Object> context) {
         return removeDataSourceWithPermission(dctx, context, "CRMSFA_ACCOUNT", "_UPDATE");
     }
 
-    public static Map removeLeadDataSource(DispatchContext dctx, Map context) {
+    public static Map<String, Object> removeLeadDataSource(DispatchContext dctx, Map<String, Object> context) {
         return removeDataSourceWithPermission(dctx, context, "CRMSFA_LEAD", "_UPDATE");
     }
 
@@ -115,19 +113,16 @@ public class DataSourceServices {
      * Parametrized method to remove a data source from a party. Pass in the security to check.
      * TODO: this isn't implemented until necessary
      */
-    private static Map removeDataSourceWithPermission(DispatchContext dctx, Map context, String module, String operation) {
-        GenericDelegator delegator = dctx.getDelegator();
-        LocalDispatcher dispatcher = dctx.getDispatcher();
+    private static Map<String, Object> removeDataSourceWithPermission(DispatchContext dctx, Map<String, Object> context, String module, String operation) {
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
 
         String partyId = (String) context.get("partyId");
-        String dataSourceId = (String) context.get("dataSourceId");
 
         // check parametrized security
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, module, operation, userLogin, partyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
 
         // don't do anything yet

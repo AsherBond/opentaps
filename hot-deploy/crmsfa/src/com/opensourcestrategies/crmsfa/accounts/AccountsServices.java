@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -71,13 +71,14 @@ import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
  * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
  * @version    $Rev: 488 $
  */
+public final class AccountsServices {
 
-public class AccountsServices {
+    private AccountsServices() { }
 
-    public static final String module = AccountsServices.class.getName();
+    private static final String MODULE = AccountsServices.class.getName();
     public static final String notificationResource = "notification";
 
-    public static Map createAccount(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createAccount(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -85,7 +86,7 @@ public class AccountsServices {
         Locale locale = UtilCommon.getLocale(context);
 
         if (!security.hasPermission("CRMSFA_ACCOUNT_CREATE", userLogin)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
 
         // the net result of creating an account is the generation of an Account partyId
@@ -93,23 +94,23 @@ public class AccountsServices {
         try {
             // make sure user has the right crmsfa roles defined.  otherwise the account will be created as deactivated.
             if (UtilValidate.isEmpty(PartyHelper.getFirstValidTeamMemberRoleTypeId(userLogin.getString("partyId"), delegator))) {
-                return UtilMessage.createAndLogServiceError("CrmError_NoRoleForCreateParty", UtilMisc.toMap("userPartyName", org.ofbiz.party.party.PartyHelper.getPartyName(delegator, userLogin.getString("partyId"), false), "requiredRoleTypes", PartyHelper.TEAM_MEMBER_ROLES), locale, module);
+                return UtilMessage.createAndLogServiceError("CrmError_NoRoleForCreateParty", UtilMisc.toMap("userPartyName", org.ofbiz.party.party.PartyHelper.getPartyName(delegator, userLogin.getString("partyId"), false), "requiredRoleTypes", PartyHelper.TEAM_MEMBER_ROLES), locale, MODULE);
             }
 
             // if we're given the partyId to create, then verify it is free to use
             if (accountPartyId != null) {
-                Map findMap =  UtilMisc.toMap("partyId", accountPartyId);
+                Map<String, Object> findMap =  UtilMisc.toMap("partyId", accountPartyId);
                 GenericValue party = delegator.findByPrimaryKey("Party", findMap);
                 if (party != null) {
                     // TODO maybe a more specific message such as "Account already exists"
-                    return UtilMessage.createAndLogServiceError("person.create.person_exists", findMap, locale, module);
+                    return UtilMessage.createAndLogServiceError("person.create.person_exists", findMap, locale, MODULE);
                 }
             }
 
             // create the Party and PartyGroup, which results in a partyId
-            Map input = UtilMisc.toMap("groupName", context.get("accountName"), "groupNameLocal", context.get("groupNameLocal"),
+            Map<String, Object> input = UtilMisc.toMap("groupName", context.get("accountName"), "groupNameLocal", context.get("groupNameLocal"),
                     "officeSiteName", context.get("officeSiteName"), "description", context.get("description"), "partyId", accountPartyId);
-            Map serviceResults = dispatcher.runSync("createPartyGroup", input);
+            Map<String, Object> serviceResults = dispatcher.runSync("createPartyGroup", input);
             if (ServiceUtil.isError(serviceResults)) {
                 return serviceResults;
             }
@@ -132,10 +133,10 @@ public class AccountsServices {
             // if initial data source is provided, add it
             String dataSourceId = (String) context.get("dataSourceId");
             if (dataSourceId != null) {
-                serviceResults = dispatcher.runSync("crmsfa.addAccountDataSource", 
+                serviceResults = dispatcher.runSync("crmsfa.addAccountDataSource",
                         UtilMisc.toMap("partyId", accountPartyId, "dataSourceId", dataSourceId, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
-                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateAccountFail", locale, module);
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateAccountFail", locale, MODULE);
                 }
             }
 
@@ -145,14 +146,14 @@ public class AccountsServices {
                 serviceResults = dispatcher.runSync("crmsfa.addAccountMarketingCampaign",
                         UtilMisc.toMap("partyId", accountPartyId, "marketingCampaignId", marketingCampaignId, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
-                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateAccountFail", locale, module);
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateAccountFail", locale, MODULE);
                 }
             }
- 
+
             // if there's an initialTeamPartyId, assign the team to the account
             String initialTeamPartyId = (String) context.get("initialTeamPartyId");
             if (initialTeamPartyId != null) {
-                serviceResults = dispatcher.runSync("crmsfa.assignTeamToAccount", UtilMisc.toMap("accountPartyId", accountPartyId, 
+                serviceResults = dispatcher.runSync("crmsfa.assignTeamToAccount", UtilMisc.toMap("accountPartyId", accountPartyId,
                             "teamPartyId", initialTeamPartyId, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
                     return serviceResults;
@@ -165,25 +166,25 @@ public class AccountsServices {
             input.put("partyId", accountPartyId);
             serviceResults = dispatcher.runSync(service.name, input);
             if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateAccountFail", locale, module);
+                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateAccountFail", locale, MODULE);
             }
 
             // Send email re: responsible party to all involved parties
-            Map sendEmailResult = dispatcher.runSync("crmsfa.sendAccountResponsibilityNotificationEmails", UtilMisc.toMap("newPartyId", userLogin.getString("partyId"), "accountPartyId", accountPartyId, "userLogin", userLogin));
+            dispatcher.runSync("crmsfa.sendAccountResponsibilityNotificationEmails", UtilMisc.toMap("newPartyId", userLogin.getString("partyId"), "accountPartyId", accountPartyId, "userLogin", userLogin));
 
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateAccountFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateAccountFail", locale, MODULE);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateAccountFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateAccountFail", locale, MODULE);
         }
 
         // return the partyId of the newly created Account
-        Map results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("partyId", accountPartyId);
         return results;
     }
 
-    public static Map updateAccount(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updateAccount(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -194,15 +195,15 @@ public class AccountsServices {
 
         // make sure userLogin has CRMSFA_ACCOUNT_UPDATE permission for this account
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_ACCOUNT", "_UPDATE", userLogin, accountPartyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
         try {
             // update the Party and PartyGroup
-            Map input = UtilMisc.toMap("groupName", context.get("accountName"), "groupNameLocal", context.get("groupNameLocal"), 
+            Map<String, Object> input = UtilMisc.toMap("groupName", context.get("accountName"), "groupNameLocal", context.get("groupNameLocal"),
                     "officeSiteName", context.get("officeSiteName"), "description", context.get("description"));
             input.put("partyId", accountPartyId);
             input.put("userLogin", userLogin);
-            Map serviceResults = dispatcher.runSync("updatePartyGroup", input);
+            Map<String, Object> serviceResults = dispatcher.runSync("updatePartyGroup", input);
             if (ServiceUtil.isError(serviceResults)) {
                 return serviceResults;
             }
@@ -218,15 +219,15 @@ public class AccountsServices {
             partyData.store();
 
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateAccountFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateAccountFail", locale, MODULE);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateAccountFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateAccountFail", locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
 
-    public static Map deactivateAccount(DispatchContext dctx, Map context) {
+    public static Map<String, Object> deactivateAccount(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -238,7 +239,7 @@ public class AccountsServices {
 
         // check that userLogin has CRMSFA_ACCOUNT_DEACTIVATE permission for this account
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_ACCOUNT", "_DEACTIVATE", userLogin, accountPartyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
 
         // when to expire the account
@@ -249,12 +250,12 @@ public class AccountsServices {
 
         // in order to deactivate an account, we expire all party relationships on the expire date
         try {
-            List partyRelationships = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", accountPartyId, "roleTypeIdFrom", "ACCOUNT"));
+            List<GenericValue> partyRelationships = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", accountPartyId, "roleTypeIdFrom", "ACCOUNT"));
             PartyHelper.expirePartyRelationships(partyRelationships, expireDate, dispatcher, userLogin);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateAccountFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateAccountFail", locale, MODULE);
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateAccountFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateAccountFail", locale, MODULE);
         }
 
         // set the account party statusId to PARTY_DISABLED and register PartyDeactivation
@@ -263,15 +264,15 @@ public class AccountsServices {
             GenericValue accountParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", accountPartyId));
             accountParty.put("statusId", "PARTY_DISABLED");
             accountParty.store();
-            
-            delegator.create("PartyDeactivation", UtilMisc.toMap("partyId", accountPartyId, "deactivationTimestamp", expireDate));            
+
+            delegator.create("PartyDeactivation", UtilMisc.toMap("partyId", accountPartyId, "deactivationTimestamp", expireDate));
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateAccountFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateAccountFail", locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map reassignAccountResponsibleParty(DispatchContext dctx, Map context) {
+    public static Map<String, Object> reassignAccountResponsibleParty(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -283,26 +284,26 @@ public class AccountsServices {
 
         // ensure reassign permission on this account
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_ACCOUNT", "_REASSIGN", userLogin, accountPartyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
         try {
             // reassign relationship using a helper method
             boolean result = createResponsibleAccountRelationshipForParty(newPartyId, accountPartyId, userLogin, delegator, dispatcher);
-            if (result == false) {
-                return UtilMessage.createAndLogServiceError("CrmErrorReassignFail", locale, module);
+            if (!result) {
+                return UtilMessage.createAndLogServiceError("CrmErrorReassignFail", locale, MODULE);
             }
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorReassignFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorReassignFail", locale, MODULE);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorReassignFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorReassignFail", locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
     /**
-     *  Prepares context for crmsfa.sendCrmNotificationEmails service with email subject, body parameters, and list of parties to email. 
+     *  Prepares context for crmsfa.sendCrmNotificationEmails service with email subject, body parameters, and list of parties to email.
      */
-    public static Map sendAccountResponsibilityNotificationEmails(DispatchContext dctx, Map context) {
+    public static Map<String, Object> sendAccountResponsibilityNotificationEmails(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String newPartyId = (String) context.get("newPartyId");
@@ -316,35 +317,35 @@ public class AccountsServices {
             String accountPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, accountPartyId, false);
 
             // Get all team members for account
-            List teamMemberRelations = delegator.findByAnd("PartyToSummaryByRelationship", UtilMisc.toMap("partyIdFrom", accountPartyId, "roleTypeIdFrom", "ACCOUNT", "partyRelationshipTypeId", "ASSIGNED_TO"));
+            List<GenericValue> teamMemberRelations = delegator.findByAnd("PartyToSummaryByRelationship", UtilMisc.toMap("partyIdFrom", accountPartyId, "roleTypeIdFrom", "ACCOUNT", "partyRelationshipTypeId", "ASSIGNED_TO"));
             teamMemberRelations = EntityUtil.filterByDate(teamMemberRelations);
-            List teamMembers = EntityUtil.getFieldListFromEntityList(teamMemberRelations, "partyIdTo", true);
+            List<String> teamMembers = EntityUtil.getFieldListFromEntityList(teamMemberRelations, "partyIdTo", true);
             teamMembers.add(newPartyId);
-            
-            Map messageMap = UtilMisc.toMap("newPartyId", newPartyId, "newPartyName", newPartyName, "accountPartyId", accountPartyId, "accountPartyName", accountPartyName);
+
+            Map<String, String> messageMap = UtilMisc.toMap("newPartyId", newPartyId, "newPartyName", newPartyName, "accountPartyId", accountPartyId, "accountPartyName", accountPartyName);
             String url = UtilProperties.getMessage(notificationResource, "crmsfa.url.account", messageMap, locale);
             messageMap.put("url", url);
             String subject = UtilProperties.getMessage(notificationResource, "subject.account.responsible", messageMap, locale);
-            
-            Map bodyParameters = UtilMisc.toMap("eventType", "account");
+
+            Map<String, String> bodyParameters = UtilMisc.toMap("eventType", "account");
             bodyParameters.putAll(messageMap);
 
-            Map sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", teamMembers, "eventType", "account.responsible", "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
+            Map<String, Object> sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", teamMembers, "eventType", "account.responsible", "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
             if (ServiceUtil.isError(sendEmailsResult)) {
-                return sendEmailsResult; 
+                return sendEmailsResult;
             }
         } catch (GenericEntityException ex) {
-            return UtilMessage.createAndLogServiceError(ex, locale, module);
+            return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
         } catch (GenericServiceException ex) {
-            return UtilMessage.createAndLogServiceError(ex, locale, module);
+            return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
     /**
-     *  Prepares context for crmsfa.sendCrmNotificationEmails service with email subject, body parameters, and list of parties to email. 
+     *  Prepares context for crmsfa.sendCrmNotificationEmails service with email subject, body parameters, and list of parties to email.
      */
-    public static Map sendAccountTeamMemberNotificationEmails(DispatchContext dctx, Map context) {
+    public static Map<String, Object> sendAccountTeamMemberNotificationEmails(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String teamMemberPartyId = (String) context.get("teamMemberPartyId");
@@ -358,42 +359,42 @@ public class AccountsServices {
             String accountPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, accountTeamPartyId, false);
 
             // Get all team members for account
-            List teamMemberRelations = delegator.findByAnd("PartyToSummaryByRelationship", UtilMisc.toMap("partyIdFrom", accountTeamPartyId, "roleTypeIdFrom", "ACCOUNT", "partyRelationshipTypeId", "ASSIGNED_TO"));
+            List<GenericValue> teamMemberRelations = delegator.findByAnd("PartyToSummaryByRelationship", UtilMisc.toMap("partyIdFrom", accountTeamPartyId, "roleTypeIdFrom", "ACCOUNT", "partyRelationshipTypeId", "ASSIGNED_TO"));
             teamMemberRelations = EntityUtil.filterByDate(teamMemberRelations);
-            List teamMembers = EntityUtil.getFieldListFromEntityList(teamMemberRelations, "partyIdTo", true);
+            List<String> teamMembers = EntityUtil.getFieldListFromEntityList(teamMemberRelations, "partyIdTo", true);
 
             // Include the current responsible party for the account
             GenericValue responsibleParty = PartyHelper.getCurrentResponsibleParty(accountTeamPartyId, "ACCOUNT", delegator);
             if (responsibleParty != null && responsibleParty.getString("partyId") != null) {
                 teamMembers.add(responsibleParty.getString("partyId"));
             }
-            
+
             String eventType = null;
             if (teamMembers.contains(teamMemberPartyId)) {
                 eventType = "account.addParty";
             } else {
                 eventType = "account.removeParty";
-    
+
                 // The party who was just removed should get an email about it, so add them back in
                 teamMembers.add(teamMemberPartyId);
             }
 
-            Map messageMap = UtilMisc.toMap("teamMemberPartyId", teamMemberPartyId, "teamMemberPartyName", teamMemberPartyName, "accountPartyId", accountTeamPartyId, "accountPartyName", accountPartyName);
+            Map<String, String> messageMap = UtilMisc.toMap("teamMemberPartyId", teamMemberPartyId, "teamMemberPartyName", teamMemberPartyName, "accountPartyId", accountTeamPartyId, "accountPartyName", accountPartyName);
             String url = UtilProperties.getMessage(notificationResource, "crmsfa.url." + eventType, messageMap, locale);
             messageMap.put("url", url);
             String subject = UtilProperties.getMessage(notificationResource, "subject." + eventType, messageMap, locale);
-            
-            Map bodyParameters = UtilMisc.toMap("eventType", eventType);
+
+            Map<String, String> bodyParameters = UtilMisc.toMap("eventType", eventType);
             bodyParameters.putAll(messageMap);
 
-            Map sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", teamMembers, "eventType", eventType, "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
+            Map<String, Object> sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", teamMembers, "eventType", eventType, "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
             if (ServiceUtil.isError(sendEmailsResult)) {
-                return sendEmailsResult; 
+                return sendEmailsResult;
             }
         } catch (GenericEntityException ex) {
-            return UtilMessage.createAndLogServiceError(ex, locale, module);
+            return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
         } catch (GenericServiceException ex) {
-            return UtilMessage.createAndLogServiceError(ex, locale, module);
+            return UtilMessage.createAndLogServiceError(ex, locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
@@ -403,10 +404,10 @@ public class AccountsServices {
     /**************************************************************************/
 
     /**
-     * Creates an account relationship of a given type for the given party and removes all previous relationships of that type. 
+     * Creates an account relationship of a given type for the given party and removes all previous relationships of that type.
      * This method helps avoid semantic mistakes and typos from the repeated use of this code pattern.
      */
-    public static boolean createResponsibleAccountRelationshipForParty(String partyId, String accountPartyId,  
+    public static boolean createResponsibleAccountRelationshipForParty(String partyId, String accountPartyId,
             GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
         throws GenericServiceException, GenericEntityException {
         return PartyHelper.createNewPartyToRelationship(partyId, accountPartyId, "ACCOUNT", "RESPONSIBLE_FOR",

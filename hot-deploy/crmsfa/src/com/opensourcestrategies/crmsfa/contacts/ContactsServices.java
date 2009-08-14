@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -43,14 +43,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.security.Security;
@@ -62,20 +63,18 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
-import com.opensourcestrategies.crmsfa.party.PartyHelper;
-import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
-
 /**
  * Contacts services. The service documentation is in services_contacts.xml.
  *
  * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
  */
+public final class ContactsServices {
 
-public class ContactsServices {
+    private ContactsServices() { }
 
-    public static final String module = ContactsServices.class.getName();
+    private static final String MODULE = ContactsServices.class.getName();
 
-    public static Map createContact(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createContact(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -83,7 +82,7 @@ public class ContactsServices {
         Locale locale = UtilCommon.getLocale(context);
 
         if (!security.hasPermission("CRMSFA_CONTACT_CREATE", userLogin)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
 
         // the net result of creating an contact is the generation of a Contact partyId
@@ -91,37 +90,39 @@ public class ContactsServices {
         try {
             // make sure user has the right crmsfa roles defined.  otherwise the contact will be created as deactivated.
             if (UtilValidate.isEmpty(PartyHelper.getFirstValidTeamMemberRoleTypeId(userLogin.getString("partyId"), delegator))) {
-                return UtilMessage.createAndLogServiceError("CrmError_NoRoleForCreateParty", UtilMisc.toMap("userPartyName", org.ofbiz.party.party.PartyHelper.getPartyName(delegator, userLogin.getString("partyId"), false), "requiredRoleTypes", PartyHelper.TEAM_MEMBER_ROLES), locale, module);
+                return UtilMessage.createAndLogServiceError("CrmError_NoRoleForCreateParty", UtilMisc.toMap("userPartyName", org.ofbiz.party.party.PartyHelper.getPartyName(delegator, userLogin.getString("partyId"), false), "requiredRoleTypes", PartyHelper.TEAM_MEMBER_ROLES), locale, MODULE);
             }
 
             // if we're given the partyId to create, then verify it is free to use
             if (contactPartyId != null) {
-                Map findMap =  UtilMisc.toMap("partyId", contactPartyId);
+                Map<String, Object> findMap = UtilMisc.<String, Object>toMap("partyId", contactPartyId);
                 GenericValue party = delegator.findByPrimaryKey("Party", findMap);
                 if (party != null) {
-                    return UtilMessage.createAndLogServiceError("person.create.person_exists", findMap, locale, module);
+                    return UtilMessage.createAndLogServiceError("person.create.person_exists", findMap, locale, MODULE);
                 }
             }
 
             // create the Party and Person, which results in a partyId
-            Map input = UtilMisc.toMap("firstName", context.get("firstName"), "lastName", context.get("lastName"));
-            if (contactPartyId != null) input.put("partyId", contactPartyId);
+            Map<String, Object> input = UtilMisc.<String, Object>toMap("firstName", context.get("firstName"), "lastName", context.get("lastName"));
+            if (contactPartyId != null) {
+                input.put("partyId", contactPartyId);
+            }
             input.put("firstNameLocal", context.get("firstNameLocal"));
             input.put("lastNameLocal", context.get("lastNameLocal"));
             input.put("personalTitle", context.get("personalTitle"));
             input.put("preferredCurrencyUomId", context.get("preferredCurrencyUomId"));
             input.put("description", context.get("description"));
             input.put("birthDate", context.get("birthDate"));
-            Map serviceResults = dispatcher.runSync("createPerson", input);
+            Map<String, Object> serviceResults = dispatcher.runSync("createPerson", input);
             if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateContactFail", locale, module);
+                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateContactFail", locale, MODULE);
             }
             contactPartyId = (String) serviceResults.get("partyId");
 
             // create a PartyRole for the resulting Contact partyId with roleTypeId = CONTACT
             serviceResults = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", contactPartyId, "roleTypeId", "CONTACT", "userLogin", userLogin));
             if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateContactFail", locale, module);
+                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateContactFail", locale, MODULE);
             }
 
             // create PartySupplementalData
@@ -138,7 +139,7 @@ public class ContactsServices {
                 serviceResults = dispatcher.runSync("crmsfa.addContactMarketingCampaign",
                         UtilMisc.toMap("partyId", contactPartyId, "marketingCampaignId", marketingCampaignId, "userLogin", userLogin));
                 if (ServiceUtil.isError(serviceResults)) {
-                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateContactFail", locale, module);
+                    return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateContactFail", locale, MODULE);
                 }
             }
 
@@ -148,23 +149,23 @@ public class ContactsServices {
             input.put("partyId", contactPartyId);
             serviceResults = dispatcher.runSync(service.name, input);
             if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateContactFail", locale, module);
+                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorCreateContactFail", locale, MODULE);
             }
- 
+
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateContactFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateContactFail", locale, MODULE);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateContactFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateContactFail", locale, MODULE);
         }
 
         // return the partyId of the newly created Contact
-        Map results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("partyId", contactPartyId);
         results.put("contactPartyId", contactPartyId);
         return results;
     }
 
-    public static Map updateContact(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updateContact(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -175,11 +176,11 @@ public class ContactsServices {
 
         // make sure userLogin has CRMSFA_CONTACT_UPDATE permission for this contact
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CONTACT", "_UPDATE", userLogin, contactPartyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
         try {
             // update the Party and Person
-            Map input = UtilMisc.toMap("partyId", contactPartyId, "firstName", context.get("firstName"), "lastName", context.get("lastName"));
+            Map<String, Object> input = UtilMisc.<String, Object>toMap("partyId", contactPartyId, "firstName", context.get("firstName"), "lastName", context.get("lastName"));
             input.put("firstNameLocal", context.get("firstNameLocal"));
             input.put("lastNameLocal", context.get("lastNameLocal"));
             input.put("personalTitle", context.get("personalTitle"));
@@ -187,9 +188,9 @@ public class ContactsServices {
             input.put("description", context.get("description"));
             input.put("birthDate", context.get("birthDate"));
             input.put("userLogin", userLogin);
-            Map serviceResults = dispatcher.runSync("updatePerson", input);
+            Map<String, Object> serviceResults = dispatcher.runSync("updatePerson", input);
             if (ServiceUtil.isError(serviceResults)) {
-                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateContactFail", locale, module);
+                return UtilMessage.createAndLogServiceError(serviceResults, "CrmErrorUpdateContactFail", locale, MODULE);
             }
 
             // update PartySupplementalData
@@ -203,14 +204,14 @@ public class ContactsServices {
             partyData.store();
 
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateContactFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateContactFail", locale, MODULE);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateContactFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorUpdateContactFail", locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map assignContactToAccount(DispatchContext dctx, Map context) {
+    public static Map<String, Object> assignContactToAccount(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -222,37 +223,35 @@ public class ContactsServices {
 
         try {
             // check if this contact is already a contact of this account
-            EntityConditionList searchConditions = new EntityConditionList(UtilMisc.toList(
-            		new EntityExpr("partyIdFrom", EntityOperator.EQUALS, contactPartyId),
-            		new EntityExpr("partyIdTo", EntityOperator.EQUALS, accountPartyId),
-            		new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT"),
-            		new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, "ACCOUNT"),
-            		new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "CONTACT_REL_INV"),
-            		EntityUtil.getFilterByDateExpr()), 
-            		EntityOperator.AND);
-            List existingRelationships = delegator.findByCondition("PartyRelationship", searchConditions, null, null);
+            EntityCondition searchConditions = EntityCondition.makeCondition(EntityOperator.AND,
+                        EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, contactPartyId),
+                        EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, accountPartyId),
+                        EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT"),
+                        EntityCondition.makeCondition("roleTypeIdTo", EntityOperator.EQUALS, "ACCOUNT"),
+                        EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "CONTACT_REL_INV"),
+                        EntityUtil.getFilterByDateExpr());
+            List<GenericValue> existingRelationships = delegator.findByCondition("PartyRelationship", searchConditions, null, null);
             if (existingRelationships.size() > 0) {
-            	return UtilMessage.createAndLogServiceError("CrmErrorContactAlreadyAssociatedToAccount", locale, module);
+                return UtilMessage.createAndLogServiceError("CrmErrorContactAlreadyAssociatedToAccount", locale, MODULE);
             }
-            
+
             // check if userLogin has CRMSFA_ACCOUNT_UPDATE permission for this account
             if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_ACCOUNT", "_UPDATE", userLogin, accountPartyId)) {
-                return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+                return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
             }
             // create the party relationship between the Contact and the Account
             PartyHelper.createNewPartyToRelationship(accountPartyId, contactPartyId, "CONTACT", "CONTACT_REL_INV",
                     null, UtilMisc.toList("ACCOUNT"), false, userLogin, delegator, dispatcher);
-            	
-        }
-         catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorAssignContactToAccountFail", locale, module);
+
+        } catch (GenericServiceException e) {
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorAssignContactToAccountFail", locale, MODULE);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorAssignContactToAccountFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorAssignContactToAccountFail", locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map reassignContactResponsibleParty(DispatchContext dctx, Map context) {
+    public static Map<String, Object> reassignContactResponsibleParty(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -264,37 +263,32 @@ public class ContactsServices {
 
         // ensure reassign permission on this contact
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CONTACT", "_REASSIGN", userLogin, contactPartyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
         try {
-        	// we need to expire all the active ASSIGNED_TO relationships from the contact party to the new owner party
-        	List activeAssignedToRelationships = EntityUtil.filterByDate(
-        		delegator.findByAnd(
-        			"PartyRelationship",
-        			UtilMisc.toMap(
-        				"partyIdFrom", contactPartyId,
-        				"roleTypeIdFrom", "CONTACT",
-        				"partyIdTo", newPartyId,
-        				"partyRelationshipTypeId","ASSIGNED_TO"
-        			)
-        		)
-        	);
-        	PartyHelper.expirePartyRelationships(activeAssignedToRelationships, UtilDateTime.nowTimestamp(), dispatcher, userLogin);
+            // we need to expire all the active ASSIGNED_TO relationships from the contact party to the new owner party
+            List<GenericValue> activeAssignedToRelationships = EntityUtil.filterByDate(
+                   delegator.findByAnd("PartyRelationship", UtilMisc.toMap(
+                                                              "partyIdFrom", contactPartyId,
+                                                              "roleTypeIdFrom", "CONTACT",
+                                                              "partyIdTo", newPartyId,
+                                                              "partyRelationshipTypeId", "ASSIGNED_TO")));
+            PartyHelper.expirePartyRelationships(activeAssignedToRelationships, UtilDateTime.nowTimestamp(), dispatcher, userLogin);
 
             // reassign relationship using a helper method
             boolean result = createResponsibleContactRelationshipForParty(newPartyId, contactPartyId, userLogin, delegator, dispatcher);
-            if (result == false) {
-                return UtilMessage.createAndLogServiceError("CrmErrorReassignFail", locale, module);
+            if (!result) {
+                return UtilMessage.createAndLogServiceError("CrmErrorReassignFail", locale, MODULE);
             }
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorReassignFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorReassignFail", locale, MODULE);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorReassignFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorReassignFail", locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map removeContactFromAccount(DispatchContext dctx, Map context) {
+    public static Map<String, Object> removeContactFromAccount(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -306,22 +300,22 @@ public class ContactsServices {
 
         // ensure update permission on account
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_ACCOUNT", "_UPDATE", userLogin, accountPartyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
         try {
             // find and expire all contact relationships between the contact and account
-            List relations = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdTo", accountPartyId, 
+            List<GenericValue> relations = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdTo", accountPartyId,
                         "partyIdFrom", contactPartyId, "partyRelationshipTypeId", "CONTACT_REL_INV"));
             PartyHelper.expirePartyRelationships(relations, UtilDateTime.nowTimestamp(), dispatcher, userLogin);
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorRemoveContactFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorRemoveContactFail", locale, MODULE);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorRemoveContactFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorRemoveContactFail", locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
 
-    public static Map deactivateContact(DispatchContext dctx, Map context) {
+    public static Map<String, Object> deactivateContact(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -333,7 +327,7 @@ public class ContactsServices {
 
         // check that userLogin has CRMSFA_CONTACT_DEACTIVATE permission for this contact
         if (!CrmsfaSecurity.hasPartyRelationSecurity(security, "CRMSFA_CONTACT", "_DEACTIVATE", userLogin, contactPartyId)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
 
         // when to expire the contact
@@ -344,12 +338,12 @@ public class ContactsServices {
 
         // in order to deactivate a contact, we expire all party relationships on the expire date
         try {
-            List partyRelationships = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", contactPartyId, "roleTypeIdFrom", "CONTACT"));
+            List<GenericValue> partyRelationships = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdFrom", contactPartyId, "roleTypeIdFrom", "CONTACT"));
             PartyHelper.expirePartyRelationships(partyRelationships, expireDate, dispatcher, userLogin);
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateContactFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateContactFail", locale, MODULE);
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateContactFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateContactFail", locale, MODULE);
         }
 
         // set the party statusId to PARTY_DISABLED and register the PartyDeactivation
@@ -357,10 +351,10 @@ public class ContactsServices {
             GenericValue contactParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", contactPartyId));
             contactParty.put("statusId", "PARTY_DISABLED");
             contactParty.store();
-            
-            delegator.create("PartyDeactivation", UtilMisc.toMap("partyId", contactPartyId, "deactivationTimestamp", expireDate));           
+
+            delegator.create("PartyDeactivation", UtilMisc.toMap("partyId", contactPartyId, "deactivationTimestamp", expireDate));
         } catch (GenericEntityException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateAccountFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorDeactivateAccountFail", locale, MODULE);
         }
         return ServiceUtil.returnSuccess();
     }
@@ -371,10 +365,10 @@ public class ContactsServices {
     /**************************************************************************/
 
     /**
-     * Creates an contact relationship of a given type for the given party and removes all previous relationships of that type. 
+     * Creates an contact relationship of a given type for the given party and removes all previous relationships of that type.
      * This method helps avoid semantic mistakes and typos from the repeated use of this code pattern.
      */
-    public static boolean createResponsibleContactRelationshipForParty(String partyId, String contactPartyId,  
+    public static boolean createResponsibleContactRelationshipForParty(String partyId, String contactPartyId,
             GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher)
         throws GenericServiceException, GenericEntityException {
         return PartyHelper.createNewPartyToRelationship(partyId, contactPartyId, "CONTACT", "RESPONSIBLE_FOR",

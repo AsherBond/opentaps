@@ -156,8 +156,8 @@ public final class ConfigurationServices {
             } else {
                 glAccountId = accountCode;
             }
-            
-	    // extract glAccountClassId and glAccountTypeId from GlAccountClassType
+
+            // extract glAccountClassId and glAccountTypeId from GlAccountClassType
             GenericValue gv = delegator.findByPrimaryKey("GlAccountClassTypeMap", UtilMisc.toMap("glAccountClassTypeKey", glAccountClassTypeKey));
 
             String glAccountTypeId = gv.getString("glAccountTypeId");
@@ -165,8 +165,8 @@ public final class ConfigurationServices {
 
             context.put("glAccountTypeId", glAccountTypeId);
             context.put("glAccountClassId", glAccountClassId);
-            
-	    //Add a new Gl Account 
+
+            //Add a new Gl Account
             Map addNewGlAccountContext = UtilMisc.toMap("glAccountId", glAccountId, "accountCode", accountCode, "accountName", accountName, "description", description, "glAccountTypeId", glAccountTypeId, "glAccountClassId", glAccountClassId);
             addNewGlAccountContext.put("glResourceTypeId", glResourceTypeId);
             addNewGlAccountContext.put("parentGlAccountId", parentGlAccountId);
@@ -178,7 +178,7 @@ public final class ConfigurationServices {
                 return addNewGlAccountResult;
             }
 
-	    // associate it with the organization 
+            // associate it with the organization
             Map addNewGlAccountOrganizationContext = UtilMisc.toMap("glAccountId", glAccountId, "organizationPartyId", organizationPartyId, "postedBalance", postedBalance, "userLogin", userLogin);
             Map addNewGlAccountOrganizationResult = dispatcher.runSync("createGlAccountOrganization", addNewGlAccountOrganizationContext, -1, false);
             if (ServiceUtil.isError(addNewGlAccountOrganizationResult)) {

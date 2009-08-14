@@ -55,8 +55,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityUtil;
@@ -67,9 +66,11 @@ import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.template.freemarker.FreemarkerUtil;
 import org.opentaps.common.util.UtilCommon;
 
-public class CommunicationEventServices {
+public final class CommunicationEventServices {
 
-    private static final String module = CommunicationEventServices.class.getName();
+    private CommunicationEventServices() { }
+
+    private static final String MODULE = CommunicationEventServices.class.getName();
 
     /**
      * Send emails to members of a contact list, wrapping each email in its own transaction and tagging each member
@@ -80,7 +81,7 @@ public class CommunicationEventServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    public static Map sendEmailToContactList(DispatchContext ctx, Map context) {
+    public static Map<String, Object> sendEmailToContactList(DispatchContext ctx, Map<String, Object> context) {
         GenericDelegator delegator = ctx.getDelegator();
         LocalDispatcher dispatcher = ctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -116,25 +117,25 @@ public class CommunicationEventServices {
 
             // Find a list of distinct email addresses from active, ACCEPTED parties in the contact list
             //      using a list iterator (because there can be a large number)
-            List conditionList = UtilMisc.toList(
-                        new EntityExpr("contactListId", EntityOperator.EQUALS, contactList.get("contactListId")),
-                        new EntityExpr("statusId", EntityOperator.EQUALS, "CLPT_ACCEPTED"),
-                        new EntityExpr("preferredContactMechId", EntityOperator.NOT_EQUAL, null),
+            List<EntityCondition> conditionList = UtilMisc.toList(
+                        EntityCondition.makeCondition("contactListId", EntityOperator.EQUALS, contactList.get("contactListId")),
+                        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "CLPT_ACCEPTED"),
+                        EntityCondition.makeCondition("preferredContactMechId", EntityOperator.NOT_EQUAL, null),
                         EntityUtil.getFilterByDateExpr(), EntityUtil.getFilterByDateExpr("contactFromDate", "contactThruDate")
                         );
-            EntityConditionList conditions = new EntityConditionList(conditionList, EntityOperator.AND);
-            List fieldsToSelect = UtilMisc.toList("infoString");
+            List<String> fieldsToSelect = UtilMisc.toList("infoString");
 
-            List sendToEmails = delegator.findByCondition("ContactListPartyAndContactMech", conditions,  null, fieldsToSelect, null,
+            EntityCondition conditions = EntityCondition.makeCondition(conditionList, EntityOperator.AND);
+            List<GenericValue> sendToEmails = delegator.findByCondition("ContactListPartyAndContactMech", conditions,  null, fieldsToSelect, null,
                     new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true));
 
             // Send an email to each contact list member
             // TODO: Contact lists for emails really should be written as an EntityListIterator for very large lists!
-            List orderBy = UtilMisc.toList("-fromDate");
-            Iterator sendToEmailsIt = sendToEmails.iterator();
+            List<String> orderBy = UtilMisc.toList("-fromDate");
+            Iterator<GenericValue> sendToEmailsIt = sendToEmails.iterator();
             while (sendToEmailsIt.hasNext()) {
 
-                GenericValue contactListPartyAndContactMech = (GenericValue) sendToEmailsIt.next();
+                GenericValue contactListPartyAndContactMech = sendToEmailsIt.next();
 
                 // Any exceptions thrown in this inner block will only relate to a single email of the list, so should
                 //  only be logged and not cause the service to return an error
@@ -149,7 +150,7 @@ public class CommunicationEventServices {
                     if (!UtilValidate.isEmail(emailAddress)) {
 
                         // If validation fails, just log and skip the email address
-                        Debug.logError(skippingInvalidEmailAddress + ": " + emailAddress, module);
+                        Debug.logError(skippingInvalidEmailAddress + ": " + emailAddress, MODULE);
                         errorMessages.add(skippingInvalidEmailAddress + ": " + emailAddress);
                         continue;
                     }
@@ -157,11 +158,11 @@ public class CommunicationEventServices {
                     // Because we're retrieving infoString only above (so as not to pollute the distinctness), we
                     //      need to retrieve the partyId it's related to. Since this could be multiple parties, get
                     //      only the most recent valid one via ContactListPartyAndContactMech.
-                    List clpConditionList = new ArrayList(conditionList);
-                    clpConditionList.add(new EntityExpr("infoString", EntityOperator.EQUALS, emailAddress));
-                    EntityConditionList clpConditions = new EntityConditionList(clpConditionList, EntityOperator.AND);
+                    List<EntityCondition> clpConditionList = new ArrayList<EntityCondition>(conditionList);
+                    clpConditionList.add(EntityCondition.makeCondition("infoString", EntityOperator.EQUALS, emailAddress));
+                    EntityCondition clpConditions = EntityCondition.makeCondition(clpConditionList, EntityOperator.AND);
 
-                    List emailCLPaCMs = delegator.findByConditionCache("ContactListPartyAndContactMech", clpConditions, null, orderBy);
+                    List<GenericValue> emailCLPaCMs = delegator.findByConditionCache("ContactListPartyAndContactMech", clpConditions, null, orderBy);
                     GenericValue lastContactListPartyACM = EntityUtil.getFirst(emailCLPaCMs);
                     if (lastContactListPartyACM == null) {
                         continue;
@@ -186,7 +187,7 @@ public class CommunicationEventServices {
                             subjectMerged = wr.toString();
                         }
                     } catch (Exception e) {
-                        Debug.logError(e, module);
+                        Debug.logError(e, MODULE);
                     }
                     sendMailParams.put("body", bodyMerged);
                     sendMailParams.put("subject", subjectMerged);
@@ -197,13 +198,13 @@ public class CommunicationEventServices {
                     }
 
                     // Retrieve a record for this contactMechId from ContactListCommStatus
-                    Map contactListCommStatusRecordMap = UtilMisc.toMap("contactListId", contactListId, "communicationEventId", communicationEventId, "contactMechId", lastContactListPartyACM.getString("preferredContactMechId"));
+                    Map<String, Object> contactListCommStatusRecordMap = UtilMisc.<String, Object>toMap("contactListId", contactListId, "communicationEventId", communicationEventId, "contactMechId", lastContactListPartyACM.getString("preferredContactMechId"));
                     GenericValue contactListCommStatusRecord = delegator.findByPrimaryKey("ContactListCommStatus", contactListCommStatusRecordMap);
                     if (contactListCommStatusRecord == null) {
 
                         // No attempt has been made previously to send to this address, so create a record to reflect
                         //  the beginning of the current attempt
-                        Map newContactListCommStatusRecordMap = new HashMap(contactListCommStatusRecordMap);
+                        Map<String, Object> newContactListCommStatusRecordMap = new HashMap<String, Object>(contactListCommStatusRecordMap);
                         newContactListCommStatusRecordMap.put("statusId", "COM_IN_PROGRESS");
                         contactListCommStatusRecord = delegator.create("ContactListCommStatus", newContactListCommStatusRecordMap);
                     } else if (contactListCommStatusRecord.get("statusId") != null && contactListCommStatusRecord.getString("statusId").equals("COM_COMPLETE")) {
@@ -212,14 +213,14 @@ public class CommunicationEventServices {
                         continue;
                     }
 
-                    Map tmpResult = null;
+                    Map<String, Object> tmpResult = null;
 
                     // Make the attempt to send the email to the address
                     tmpResult = dispatcher.runSync("sendMail", sendMailParams);
                     if (tmpResult == null || ServiceUtil.isError(tmpResult)) {
 
                         // If the send attempt fails, just log and skip the email address
-                        Debug.logError(errorCallingSendMailService + ": " + ServiceUtil.getErrorMessage(tmpResult), module);
+                        Debug.logError(errorCallingSendMailService + ": " + ServiceUtil.getErrorMessage(tmpResult), MODULE);
                         errorMessages.add(errorCallingSendMailService + ": " + ServiceUtil.getErrorMessage(tmpResult));
                         continue;
                     }
@@ -233,7 +234,7 @@ public class CommunicationEventServices {
                         if (ServiceUtil.isError(tmpResult)) {
 
                             // If the expiry fails, just log and skip the email address
-                            Debug.logError(errorCallingUpdateContactListPartyService + ": " + ServiceUtil.getErrorMessage(tmpResult), module);
+                            Debug.logError(errorCallingUpdateContactListPartyService + ": " + ServiceUtil.getErrorMessage(tmpResult), MODULE);
                             errorMessages.add(errorCallingUpdateContactListPartyService + ": " + ServiceUtil.getErrorMessage(tmpResult));
                             continue;
                         }
@@ -245,10 +246,10 @@ public class CommunicationEventServices {
 
                 // Don't return a service error just because of failure for one address - just log the error and continue
                 } catch (GenericEntityException nonFatalGEE) {
-                    Debug.logError(nonFatalGEE, errorInSendEmailToContactListService, module);
+                    Debug.logError(nonFatalGEE, errorInSendEmailToContactListService, MODULE);
                     errorMessages.add(errorInSendEmailToContactListService + ": " + nonFatalGEE.getMessage());
                 } catch (GenericServiceException nonFatalGSE) {
-                    Debug.logError(nonFatalGSE, errorInSendEmailToContactListService, module);
+                    Debug.logError(nonFatalGSE, errorInSendEmailToContactListService, MODULE);
                     errorMessages.add(errorInSendEmailToContactListService + ": " + nonFatalGSE.getMessage());
                 }
             }
