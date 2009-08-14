@@ -547,7 +547,7 @@
                  package-name="com.opensourcestrategies.crmsfa.case"
                  title="Used to find cases of accounts and customers that a userLogin can view">
         <member-entity entity-alias="CR" entity-name="CustRequest"/>
-        <member-entity entity-alias="CRR" entity-name="CustRequestParty"/>
+        <member-entity entity-alias="CRR" entity-name="CustRequestRole"/>
         <member-entity entity-alias="PR" entity-name="PartyRelationship"/>
         <alias-all entity-alias="CR"/>
         <alias entity-alias="CRR" name="partyId"/>
