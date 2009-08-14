@@ -177,7 +177,7 @@ public final class OrderEvents {
     public static String addOrderItem(HttpServletRequest request, HttpServletResponse response) {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         HttpSession session = request.getSession(true);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         OpentapsShoppingCart cart = getCart(request);
         if (cart == null) {
@@ -584,7 +584,7 @@ public final class OrderEvents {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         ShoppingCart cart = getOrInitializeCart(request);
-        return updateShipGroup(dispatcher, delegator, cart, shipGroupSeqId, contactMechId, carrierPartyId, shipmentMethodTypeId, maySplit, isGift, shippingInstructions, giftMessage, shipBeforeDate, thirdPartyAccountNumber, thirdPartyPostalCode, thirdPartyCountryCode, isCOD, shipWrapper, UtilHttp.getTimeZone(request), UtilHttp.getLocale(request));
+        return updateShipGroup(dispatcher, delegator, cart, shipGroupSeqId, contactMechId, carrierPartyId, shipmentMethodTypeId, maySplit, isGift, shippingInstructions, giftMessage, shipBeforeDate, thirdPartyAccountNumber, thirdPartyPostalCode, thirdPartyCountryCode, isCOD, shipWrapper, UtilCommon.getTimeZone(request), UtilHttp.getLocale(request));
     }
 
     /**

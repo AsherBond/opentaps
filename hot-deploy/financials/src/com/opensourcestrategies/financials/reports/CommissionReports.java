@@ -70,7 +70,7 @@ public final class CommissionReports {
         Locale locale = UtilHttp.getLocale(request.getSession());
 
         // TODO: in case we need to localize, replace the static labels in the .jrxml with jrParameters generated from these
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
         // get the report constraints

@@ -256,7 +256,7 @@ public final class CrmsfaOrderEvents {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         Locale locale = UtilHttp.getLocale(request);
 
         // get the cart first, otherwise product store might not be set in session

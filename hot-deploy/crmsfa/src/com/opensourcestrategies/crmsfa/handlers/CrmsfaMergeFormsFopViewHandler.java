@@ -27,14 +27,13 @@ package com.opensourcestrategies.crmsfa.handlers;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-
-import org.ofbiz.base.util.*;
-import org.ofbiz.entity.GenericDelegator;
-import org.opentaps.common.webapp.view.MergeFormsFopViewHandler;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.webapp.view.MergeFormsFopViewHandler;
 
 /**
  *
@@ -48,7 +47,7 @@ public class CrmsfaMergeFormsFopViewHandler extends MergeFormsFopViewHandler {
     public Map getFormMergeContext(HttpServletRequest request) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         String targetPartyId = (String) request.getParameter("targetPartyId");
         String orderId = (String) request.getParameter("orderId");
         String shipGroupSeqId = (String) request.getParameter("shipGroupSeqId");

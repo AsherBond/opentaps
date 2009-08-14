@@ -337,7 +337,7 @@ public final class CommonEvents {
 
         boolean printout = "Y".equals(UtilCommon.getParameter(request, "printout")) ? true : false;
         Locale locale = UtilHttp.getLocale(request);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         String json = UtilCommon.getParameter(request, "parametersTypeJSON");
 
         try {

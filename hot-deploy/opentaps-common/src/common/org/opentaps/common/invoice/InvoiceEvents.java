@@ -80,7 +80,7 @@ public final class InvoiceEvents {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
 
         String invoiceId = UtilCommon.getParameter(request, "invoiceId");
         String organizationPartyId = (String) request.getSession().getAttribute("organizationPartyId");

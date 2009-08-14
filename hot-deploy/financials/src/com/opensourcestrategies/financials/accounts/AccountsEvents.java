@@ -89,7 +89,7 @@ public class AccountsEvents {
         }
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request.getSession());
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
         String organizationPartyId = (String) session.getAttribute("organizationPartyId");

@@ -73,7 +73,7 @@ public final class FinancialReports {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -246,7 +246,7 @@ public final class FinancialReports {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -390,7 +390,7 @@ public final class FinancialReports {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -501,7 +501,7 @@ public final class FinancialReports {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -647,7 +647,7 @@ public final class FinancialReports {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -825,7 +825,7 @@ public final class FinancialReports {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 
@@ -966,7 +966,7 @@ public final class FinancialReports {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         ResourceBundleMapWrapper uiLabelMap = UtilMessage.getUiLabels(locale);
 

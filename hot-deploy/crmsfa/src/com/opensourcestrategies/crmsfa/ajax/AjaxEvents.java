@@ -176,7 +176,7 @@ public class AjaxEvents {
     public static String getMergedFormForEmailJSON(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         Locale locale = UtilMisc.ensureLocale(UtilHttp.getLocale(request));
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
         String mergeFormId = request.getParameter("mergeFormId");
         // should tags that are not substituted left verbatim in the result, else they are blanked
         boolean leaveTags = !("false".equalsIgnoreCase(request.getParameter("reportType")) || "N".equalsIgnoreCase(request.getParameter("reportType")));

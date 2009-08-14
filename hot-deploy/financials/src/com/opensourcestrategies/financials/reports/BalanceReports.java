@@ -209,7 +209,7 @@ public final class BalanceReports {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         Locale locale = UtilHttp.getLocale(request.getSession());
-        TimeZone timeZone = UtilHttp.getTimeZone(request);
+        TimeZone timeZone = UtilCommon.getTimeZone(request);
 
         // get the dates and validate (maybe we can simplify this into a UtilCommon.getTimestampParameter() which does all this)
         String fromDateStr = (String) UtilHttp.makeParamValueFromComposite(request, "fromDate", locale);
