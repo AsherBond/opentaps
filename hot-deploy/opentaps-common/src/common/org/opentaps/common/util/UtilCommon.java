@@ -1538,6 +1538,55 @@ public abstract class UtilCommon {
     }
 
     /**
+     * Get a <code>Locale</code> from the <code>HttpServletRequest</code>, or if not set get the default <code>Locale</code>.
+     *
+     * @param request a <code>HttpServletRequest</code> value
+     * @return a <code>Locale</code> value
+     */
+    public static Locale getLocale(HttpServletRequest request) {
+        return UtilHttp.getLocale(request);
+    }
+
+    /**
+     * Get a <code>Locale</code> from a context <code>Map</code>, or if not set get the default <code>Locale</code>.
+     *
+     * @param context a context <code>Map</code> value
+     * @return a <code>Locale</code> value
+     */
+    public static Locale getLocale(Map<String, Object> context) {
+        return UtilMisc.ensureLocale(context.get("locale"));
+    }
+
+    /**
+     * Get a <code>TimeZone</code> from the <code>HttpServletRequest</code>, or if not set return and set the default <code>TimeZone</code>.
+     *
+     * @param request a <code>HttpServletRequest</code> value
+     * @return a <code>TimeZone</code> value
+     */
+    public static TimeZone getTimeZone(HttpServletRequest request) {
+        TimeZone tz = UtilHttp.getTimeZone(request);
+        if (tz == null) {
+            tz = TimeZone.getDefault();
+            UtilHttp.setTimeZone(request.getSession(), tz);
+        }
+        return tz;
+    }
+
+    /**
+     * Get a <code>TimeZone</code> from a context <code>Map</code>, or if not set return the default <code>TimeZone</code>.
+     *
+     * @param context a context <code>Map</code> value
+     * @return a <code>TimeZone</code> value
+     */
+    public static TimeZone getTimeZone(Map<String, Object> context) {
+        TimeZone tz = (TimeZone) context.get("timeZone");
+        if (tz == null) {
+            tz = TimeZone.getDefault();
+        }
+        return tz;
+    }
+
+    /**
      * Checks if a service response is a success.
      * @param results a service response <code>Map</code>
      * @return a <code>boolean</code> value
