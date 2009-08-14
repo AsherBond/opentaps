@@ -1542,8 +1542,7 @@ public abstract class UtilCommon {
      * @param results a service response <code>Map</code>
      * @return a <code>boolean</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static boolean isSuccess(Map results) {
+    public static boolean isSuccess(Map<String, Object> results) {
         if (results == null || results.get(ModelService.RESPONSE_MESSAGE) == null) {
             return false;
         }

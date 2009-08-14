@@ -33,7 +33,6 @@ import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.GenericServiceException;
-import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;

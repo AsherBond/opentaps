@@ -16,7 +16,6 @@
 package org.opentaps.tests.dataimport;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,8 +23,7 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilCommon;
@@ -34,19 +32,22 @@ import org.opentaps.tests.crmsfa.orders.OrderTests;
 import org.opentaps.tests.financials.AgreementTests;
 import org.opentaps.tests.financials.FinancialAsserts;
 
+/**
+ * Tests for the data import component.
+ */
 public class DataImportTests extends OpentapsTestCase {
 
-    public static final String module = DataImportTests.class.getName();
+    private static final String MODULE = DataImportTests.class.getName();
 
-    GenericValue demofinadmin       = null;
-    GenericValue DemoSalesManager   = null;
-    GenericValue demowarehouse1     = null;
-    GenericValue demopurch1         = null;
-    GenericValue product            = null;
+    private GenericValue demofinadmin       = null;
+    private GenericValue DemoSalesManager   = null;
+    private GenericValue demowarehouse1     = null;
+    private GenericValue demopurch1         = null;
+    private GenericValue product            = null;
 
-    String organizationPartyId          = "Company";
-    static final String productStoreId  = "9000";
-    static final String productId       = "GZ-1005";
+    private String organizationPartyId          = "Company";
+    private static final String productStoreId  = "9000";
+    private static final String productId       = "GZ-1005";
 
 
     @Override
@@ -81,8 +82,8 @@ public class DataImportTests extends OpentapsTestCase {
     /**
      * Shortened version of credit limit test. Its purpose is verify if credit limit feature
      * works for some imported customer.
+     * @exception Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testImportedCustomerCreditLimit() throws Exception  {
 
         AgreementTests agreementUnitTests = new AgreementTests();
@@ -90,17 +91,18 @@ public class DataImportTests extends OpentapsTestCase {
 
         List<GenericValue> candidateParties =  delegator.findByAnd("PartyGroup", UtilMisc.toMap("groupName", "Import Customer for Automated Testing (keep this name unique)"));
         String partyId = null;
-        if (UtilValidate.isNotEmpty(candidateParties))
+        if (UtilValidate.isNotEmpty(candidateParties)) {
             partyId = EntityUtil.getFirst(candidateParties).getString("partyId");
+        }
 
         agreementUnitTests.performCreditLimitTest(partyId);
     }
 
     /**
      * The method verifies if sales agreement & net payment days term created and work correctly
-     * for imported customer. 
+     * for imported customer.
+     * @exception Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testImportedCustomerSalesAgreementNetDaysToParty() throws Exception {
 
         AgreementTests agreementUnitTests = new AgreementTests();
@@ -108,8 +110,9 @@ public class DataImportTests extends OpentapsTestCase {
 
         List<GenericValue> candidateParties =  delegator.findByAnd("PartyGroup", UtilMisc.toMap("groupName", "Import Customer for Automated Testing (keep this name unique)"));
         String partyId = null;
-        if (UtilValidate.isNotEmpty(candidateParties))
+        if (UtilValidate.isNotEmpty(candidateParties)) {
             partyId = EntityUtil.getFirst(candidateParties).getString("partyId");
+        }
 
         GenericValue customer = delegator.findByPrimaryKey("DataImportCustomer", UtilMisc.toMap("customerId", "9007"));
         Long netPaymentDays = customer.getLong("netPaymentDays");
@@ -118,9 +121,9 @@ public class DataImportTests extends OpentapsTestCase {
     }
 
     /**
-     * Test impossibility of shipment for imported customer in don't ship classification
+     * Test impossibility of shipment for imported customer in don't ship classification.
+     * @exception Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testImportedDontShipCustomer() throws Exception {
 
         OrderTests orderTests = new OrderTests();
@@ -128,23 +131,25 @@ public class DataImportTests extends OpentapsTestCase {
 
         // find a customer with disabled shipping
         List<GenericValue> dontshipParties = delegator.findByAnd("PartyClassification", UtilMisc.toMap("partyClassificationGroupId", "DONOTSHIP_CUSTOMERS"));
-        List<GenericValue> candidateParties = delegator.findByCondition("PartyGroup", new EntityConditionList(Arrays.asList(new EntityExpr("groupName", EntityOperator.EQUALS, " "), new EntityExpr("partyId", EntityOperator.IN, EntityUtil.getFieldListFromEntityList(dontshipParties, "partyId", true))), EntityOperator.AND), null, null);
+        List<GenericValue> candidateParties = delegator.findByCondition("PartyGroup", EntityCondition.makeCondition(EntityOperator.AND, EntityCondition.makeCondition("groupName", EntityOperator.EQUALS, " "), EntityCondition.makeCondition("partyId", EntityOperator.IN, EntityUtil.getFieldListFromEntityList(dontshipParties, "partyId", true))), null, null);
         GenericValue customer = null;
-        if (UtilValidate.isNotEmpty(candidateParties))
+        if (UtilValidate.isNotEmpty(candidateParties)) {
             customer = EntityUtil.getFirst(candidateParties);
+        }
 
         // run test
         orderTests.performDoNotShipTest(customer.getString("partyId"));
 
     }
 
-    /***
+    /**
      * Import Commissions Tests
      * 1.  Run importCustomers
      * 2.  Run importCustomerCommissions
      * 3.  For each primaryPartyId of customerIds 9005, 9006, 9007
      * 3a.  Create sales invoice and set it ready
      * 3b.  Verify that a sales commission invoice from primaryPartyId of customerId 9010 to Company is created for 10% of the value of sales invoice in 3a
+     * @exception Exception if an error occurs
      */
     public void testImportCustomersCommissions() throws Exception {
         // 1.  Run importCustomers, in case they have not been
@@ -153,13 +158,13 @@ public class DataImportTests extends OpentapsTestCase {
         // 2.  Run importCustomerCommissions
         // Importing services should check the importedRecords, because they always return success
         // here, we just check that non-zero records were imported, so we don't have to keep modifying this test as the data changes
-        Map results = dispatcher.runSync("importCustomersCommissions", UtilMisc.toMap("userLogin", demofinadmin, "organizationPartyId", organizationPartyId));
+        Map<String, Object> results = dispatcher.runSync("importCustomersCommissions", UtilMisc.toMap("userLogin", demofinadmin, "organizationPartyId", organizationPartyId));
         assertTrue("importCustomersCommissions did not run successfully", UtilCommon.isSuccess(results));
         assertNotEquals("importCustomersCommissions did not import any records", new BigDecimal((Integer) results.get("importedRecords")), new BigDecimal("0"));
-         
+
         // 3.  For each primaryPartyId of customerIds 9005, 9006, 9007
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
-        String[] customerIds = { "9005", "9006", "9007" };
+        String[] customerIds = {"9005", "9006", "9007"};
         GenericValue commissionBroker = delegator.findByPrimaryKey("DataImportCustomer", UtilMisc.toMap("customerId", "9010"));
 
         for (String customerId : customerIds) {
@@ -172,8 +177,7 @@ public class DataImportTests extends OpentapsTestCase {
             // 3b.  Verify that a sales commission invoice from primaryPartyId of customerId 9010 to Company is created for 10% of the value of sales invoice in 3a
             List<GenericValue> commissionInvoiceItems = delegator.findByAnd("InvoiceItem", UtilMisc.toMap("parentInvoiceId", invoiceId));
             assertNotNull("There is no commission invoice item for party [" + commissionBroker.getString("primaryPartyId") + "] and invoice [" + invoiceId + "]", commissionInvoiceItems);
-            assertEquals("Incorrect number of commission invoice items for party [" + commissionBroker.getString("primaryPartyId") + "] and parent invoice [" + invoiceId + "] of customer party[" + 
-            		dataImportCustomer.getString("primaryPartyId") + "] imported from DataImportCustomer customerId [" + customerId + "]", 1, commissionInvoiceItems.size());
+            assertEquals("Incorrect number of commission invoice items for party [" + commissionBroker.getString("primaryPartyId") + "] and parent invoice [" + invoiceId + "] of customer party[" + dataImportCustomer.getString("primaryPartyId") + "] imported from DataImportCustomer customerId [" + customerId + "]", 1, commissionInvoiceItems.size());
             GenericValue commissionInvoiceItem = EntityUtil.getFirst(commissionInvoiceItems);
             assertEquals("Commission invoice item [" + commissionInvoiceItem.getString("invoiceId") + "] for party [" + commissionBroker.getString("primaryPartyId") + "] and invoice [" + invoiceId + "] is not on the right product", "WG-1111", commissionInvoiceItem.getString("productId"));
             assertEquals("Commission invoice item [" + commissionInvoiceItem.getString("invoiceId") + "] for party [" + commissionBroker.getString("primaryPartyId") + "] and invoice [" + invoiceId + "] has not the right quantity", 1.0, commissionInvoiceItem.getDouble("quantity"));
@@ -184,7 +188,7 @@ public class DataImportTests extends OpentapsTestCase {
             assertEquals("Commission invoice [" + commissionInvoice.getString("invoiceId") + "] for party [" + commissionBroker.getString("primaryPartyId") + "] and invoice [" + invoiceId + "] has not the right role", "COMMISSION_AGENT", commissionInvoice.getString("roleTypeId"));
             assertEquals("Commission invoice [" + commissionInvoice.getString("invoiceId") + "] for party [" + commissionBroker.getString("primaryPartyId") + "] and invoice [" + invoiceId + "] is not for the right party", organizationPartyId, commissionInvoice.getString("partyId"));
             assertEquals("Commission invoice [" + commissionInvoice.getString("invoiceId") + "] for party [" + commissionBroker.getString("primaryPartyId") + "] and invoice [" + invoiceId + "] has not the right party from", commissionBroker.getString("primaryPartyId"), commissionInvoice.getString("partyIdFrom"));
-            
+
         }
 
     }
