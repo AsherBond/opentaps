@@ -15,10 +15,12 @@
  */
 package org.opentaps.tests.framework;
 
+import java.math.BigDecimal;
+
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.opentaps.tests.OpentapsTestCase;
-import org.ofbiz.base.util.Debug;
 
 /**
  * Tests known race conditions in the code.
@@ -30,7 +32,8 @@ public class RaceConditionTests extends OpentapsTestCase {
     /**
      * Tests the GenericDelegator.setNextSubSeqId() method for a race condition that causes pk violations.
      * Notably occurs in minilang services that use the make-next-seq-id directive.  One known entity with
-     * issues is InventoryItemDetail, for which we'll create one in different threads for WG-1111
+     * issues is InventoryItemDetail, for which we'll create one in different threads for WG-1111.
+     * @exception Exception if an error occurs
      */
     public void testNextSubSeqIdForInventoryItem() throws Exception {
 
@@ -43,7 +46,7 @@ public class RaceConditionTests extends OpentapsTestCase {
         inventoryItem.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
         inventoryItem.put("ownerPartyId", "Company");
         inventoryItem.put("facilityId", "WebStoreWarehouse");
-        inventoryItem.put("unitCost", 22.0);
+        inventoryItem.put("unitCost", new BigDecimal("22.0"));
         inventoryItem.put("currencyUomId", "USD");
         inventoryItem.create();
 
@@ -65,27 +68,37 @@ public class RaceConditionTests extends OpentapsTestCase {
         t1.resumeTest();
 
         // wait for it to finish
-        while (! t1.isFinished()) { Thread.sleep(1000); Debug.logInfo("Waiting for InventoryItemThread 1 (2) ...", MODULE); };
+        while (!t1.isFinished()) {
+            Thread.sleep(1000); Debug.logInfo("Waiting for InventoryItemThread 1 (2) ...", MODULE);
+        }
 
         // if we were not successful, then fail with the exception
-        if (! t1.success) {
-            if (t1.e != null) throw t1.e;
+        if (!t1.success) {
+            if (t1.e != null) {
+                throw t1.e;
+            }
             fail("Thread 1 did not succeed as expected for unknown reason.  No exception thrown.");
         }
 
         // now run the next thread, which should hold a conflicting PK and see if it crashes
         t2.resumeTest();
-        while (! t2.isFinished()) { Thread.sleep(1000); Debug.logInfo("Waiting for InventoryItemThread 2 (2) ...", MODULE); };
-        if (! t2.success) {
-            if (t2.e == null) fail("Thread 2 did not succeed as expected for unknown reason.  No exception thrown.");
+        while (!t2.isFinished()) {
+            Thread.sleep(1000); Debug.logInfo("Waiting for InventoryItemThread 2 (2) ...", MODULE);
+        }
+        if (!t2.success) {
+            if (t2.e == null) {
+                fail("Thread 2 did not succeed as expected for unknown reason.  No exception thrown.");
+            }
             if (t2.e instanceof GenericEntityException) {
                 fail("GenericEntityExeption encountered, this is probably a race condition.  Check if following message contains PK violation on inventoryItemDetailSeqId:\n " + t2.e.getMessage());
-            } else throw t2.e;
+            } else {
+                throw t2.e;
+            }
         }
     }
 
     /**
-     * Special thread object to force a conflict in getting the next inventoryItemDetailSeqId
+     * Special thread object to force a conflict in getting the next inventoryItemDetailSeqId.
      */
     class InventoryItemThread extends Thread {
         protected String inventoryItemId;
@@ -105,11 +118,11 @@ public class RaceConditionTests extends OpentapsTestCase {
         public boolean isFinished() { return finished; }
         public void resumeTest() { synchronized (this) { halted = false; } }
 
-        public void run() {
+        @Override public void run() {
             GenericValue detail = delegator.makeValue("InventoryItemDetail");
             detail.put("inventoryItemId", inventoryItemId);
-            detail.put("quantityOnHandDiff", 1.0);
-            detail.put("availableToPromiseDiff", 1.0);
+            detail.put("quantityOnHandDiff", BigDecimal.ONE);
+            detail.put("availableToPromiseDiff", BigDecimal.ONE);
 
             // get the next sub seq id using standard sequence
             inventoryItemDetailSeqId = delegator.getNextSeqId("InventoryItemDetail");
