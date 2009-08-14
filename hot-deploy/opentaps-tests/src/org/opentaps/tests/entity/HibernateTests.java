@@ -683,6 +683,7 @@ public class HibernateTests extends OpentapsTestCase {
         // open a transaction
         Transaction tx = session.beginTransaction();
         // try to create 10 TestEntity values with auto-sequenced keys
+        boolean shouldFail = false;
         try {
             for (int i = 0; i < 10; i++) {
                 TestEntity testEntity = new TestEntity();
@@ -691,6 +692,7 @@ public class HibernateTests extends OpentapsTestCase {
                 ids = ids.equals("") ? "'" + testEntity.getTestId() + "'" : ids + ",'" + testEntity.getTestId() + "'";
             }
             // try to create a new TestEntity with enumId="NO_SUCH_VALUE"
+            shouldFail = true;
             TestEntity testEntity = new TestEntity();
             testEntity.setEnumId("NO_SUCH_VALUE");
             testEntity.setTestStringField("testTransactionForeignKeyRollback");
@@ -699,7 +701,11 @@ public class HibernateTests extends OpentapsTestCase {
             session.flush();
             tx.commit();
         } catch (HibernateException ex) {
-            Debug.logError(ex, MODULE);
+            // this exception is expected when inserting the "NO_SUCH_VALUE"
+            if (!shouldFail) {
+                Debug.logError(ex, MODULE);
+                fail("Got HibernateException before trying to create the entity that should fail");
+            }
             try {
                 tx.rollback();
             } catch (HibernateException e) {
@@ -748,6 +754,7 @@ public class HibernateTests extends OpentapsTestCase {
             // should have been rolled back already
             tx.commit();
         } catch (HibernateException ex) {
+            Debug.logInfo("A timeout exception is expected here", MODULE);
             Debug.logError(ex, MODULE);
             try {
                 tx.rollback();
