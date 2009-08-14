@@ -50,20 +50,24 @@ if (UtilValidate.isNotEmpty(facilities)) {
         serviceResult = dispatcher.runSync("findStockMovesRecommended", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
         moveByPflInfoList = serviceResult.get("moveByPflInfoList");
 
-        totalStockMoves = 0;
-        if (moveByOisgirInfoList != null)
+        totalStockMoves = new Long(0);
+        if (moveByOisgirInfoList != null) {
             totalStockMoves += moveByOisgirInfoList.size();
-        if (moveByPflInfoList != null)
+        }
+        if (moveByPflInfoList != null) {
             totalStockMoves += moveByPflInfoList.size();
+        }
 
         // to and from Transfers
         List toTransfers = UtilWarehouse.findFacilityActiveOnlytoTransfer(facilityId, delegator);
         List fromTransfers = UtilWarehouse.findFacilityActiveOnlyfromTransfer(facilityId, delegator);
-        totalInventoryTransfers = 0;
-        if (toTransfers != null)
+        totalInventoryTransfers = new Long(0);
+        if (toTransfers != null) {
             totalInventoryTransfers += toTransfers.size();
-        if (fromTransfers != null)
+        }
+        if (fromTransfers != null) {
             totalInventoryTransfers += fromTransfers.size();
+        }
 
         // Back orders
         serviceResult = dispatcher.runSync("getBackOrderedCounts", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
@@ -73,7 +77,7 @@ if (UtilValidate.isNotEmpty(facilities)) {
         // orders Ready to Ship
         shippinghelper = new ShippingHelper(delegator, facilityId);
         ordersTotal = shippinghelper.findAllOrdersReadyToShip();
-        ordersTotalSize = new Integer(shippinghelper.getOrdersTotalSize());
+        ordersTotalSize = new Long(shippinghelper.getOrdersTotalSize());
 
         // Ready to pick
         delegator.removeAll(delegator.findByAnd("WarehouseSummaryPickMove", UtilMisc.toMap("facilityId", facilityId)));
@@ -113,16 +117,18 @@ if (UtilValidate.isNotEmpty(facilities)) {
         // Open picklists
         serviceResult = dispatcher.runSync("getPicklistDisplayInfo", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
         picklistInfoList = serviceResult.get("picklistInfoList");
-        totalOpenPicklists = 0;
-        if (picklistInfoList != null)
+        totalOpenPicklists = new Long(0);
+        if (picklistInfoList != null) {
             totalOpenPicklists += picklistInfoList.size();
+        }
 
         // Picked Picklists
         serviceResult = dispatcher.runSync("getPickedPicklists", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
         pickedPicklistIds = serviceResult.get("pickedPicklistIds");
-        totalPickedPicklistIds = 0;
-        if (pickedPicklistIds != null)
+        totalPickedPicklistIds = new Long(0);
+        if (pickedPicklistIds != null) {
             totalPickedPicklistIds += pickedPicklistIds.size();
+        }
 
         // Production runs (both assemblies and disassemblies)
         findConditions = UtilMisc.toList(
@@ -151,21 +157,21 @@ if (UtilValidate.isNotEmpty(facilities)) {
         findConditions.add( new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_RUNNING") );
         runningProdRuns = delegator.findByAnd("WorkEffortAndGoods", findConditions);
 
-        totalCreatedProdRuns = BigDecimal.ZERO;
+        totalCreatedProdRuns = new Long(0);
         if (createdProdRuns != null) {
-            totalCreatedProdRuns = totalCreatedProdRuns.add(new BigDecimal(createdProdRuns.size()));
+            totalCreatedProdRuns += createdProdRuns.size();
         }
-        totalScheduledProdRuns = BigDecimal.ZERO;
+        totalScheduledProdRuns = new Long(0);
         if (scheduledProdRuns != null) {
-            totalScheduledProdRuns = totalScheduledProdRuns.add(new BigDecimal(scheduledProdRuns.size()));
+            totalScheduledProdRuns += scheduledProdRuns.size();
         }
-        totalConfirmedProdRuns = BigDecimal.ZERO;
+        totalConfirmedProdRuns = new Long(0);
         if (confirmedProdRuns != null) {
-            totalConfirmedProdRuns = totalConfirmedProdRuns.add(new BigDecimal(confirmedProdRuns.size()));
+            totalConfirmedProdRuns += confirmedProdRuns.size();
         }
-        totalRunningProdRuns = BigDecimal.ZERO;
+        totalRunningProdRuns = new Long(0);
         if (runningProdRuns != null) {
-            totalRunningProdRuns = totalRunningProdRuns.add(new BigDecimal(runningProdRuns.size()));
+            totalRunningProdRuns += runningProdRuns.size();
         }
 
         fields = UtilMisc.toMap("facilityId", facilityId);
