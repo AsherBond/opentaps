@@ -22,6 +22,7 @@ import org.ofbiz.entity.condition.*;
 import org.opentaps.warehouse.facility.UtilWarehouse;
 import org.opentaps.warehouse.security.WarehouseSecurity;
 import org.opentaps.warehouse.shipment.ShippingHelper;
+import java.math.BigDecimal;
 
 // bshService.bsh
 delegator = dctx.getDelegator();
@@ -150,18 +151,22 @@ if (UtilValidate.isNotEmpty(facilities)) {
         findConditions.add( new EntityExpr("currentStatusId", EntityOperator.EQUALS, "PRUN_RUNNING") );
         runningProdRuns = delegator.findByAnd("WorkEffortAndGoods", findConditions);
 
-        totalCreatedProdRuns = 0;
-        if (createdProdRuns != null)
-            totalCreatedProdRuns += createdProdRuns.size();
-        totalScheduledProdRuns = 0;
-        if (scheduledProdRuns != null)
-            totalScheduledProdRuns += scheduledProdRuns.size();
-        totalConfirmedProdRuns = 0;
-        if (confirmedProdRuns != null)
-            totalConfirmedProdRuns += confirmedProdRuns.size();
-        totalRunningProdRuns = 0;
-        if (runningProdRuns != null)
-            totalRunningProdRuns += runningProdRuns.size();
+        totalCreatedProdRuns = BigDecimal.ZERO;
+        if (createdProdRuns != null) {
+            totalCreatedProdRuns = totalCreatedProdRuns.add(new BigDecimal(createdProdRuns.size()));
+        }
+        totalScheduledProdRuns = BigDecimal.ZERO;
+        if (scheduledProdRuns != null) {
+            totalScheduledProdRuns = totalScheduledProdRuns.add(new BigDecimal(scheduledProdRuns.size()));
+        }
+        totalConfirmedProdRuns = BigDecimal.ZERO;
+        if (confirmedProdRuns != null) {
+            totalConfirmedProdRuns = totalConfirmedProdRuns.add(new BigDecimal(confirmedProdRuns.size()));
+        }
+        totalRunningProdRuns = BigDecimal.ZERO;
+        if (runningProdRuns != null) {
+            totalRunningProdRuns = totalRunningProdRuns.add(new BigDecimal(runningProdRuns.size()));
+        }
 
         fields = UtilMisc.toMap("facilityId", facilityId);
         fields.putAll(UtilMisc.toMap("RequiredStockMoves", totalStockMoves));

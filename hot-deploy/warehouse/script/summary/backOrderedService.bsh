@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
@@ -16,6 +16,8 @@
 
 // @author Fabien Carrion
 
+import java.math.BigDecimal;
+
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.*;
@@ -30,7 +32,7 @@ delegator = dctx.getDelegator();
 conditions = new EntityConditionList( UtilMisc.toList(
     new EntityExpr("facilityId", EntityOperator.EQUALS, context.get("facilityId")),
     new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
-    new EntityExpr("quantityNotAvailable", EntityOperator.GREATER_THAN, new Double(0)),
+    new EntityExpr("quantityNotAvailable", EntityOperator.GREATER_THAN, BigDecimal.ZERO),
     new EntityExpr("orderStatusId", EntityOperator.IN, UtilMisc.toList("ORDER_APPROVED", "ORDER_ON_HOLD", "ORDER_CREATED")),
     new EntityExpr("orderItemStatusId", EntityOperator.IN, UtilMisc.toList("ITEM_APPROVED", "ITEM_CREATED"))
 ), EntityOperator.AND);
