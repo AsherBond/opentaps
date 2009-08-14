@@ -38,9 +38,10 @@ import java.sql.Timestamp;
 import org.ofbiz.base.util.*;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilDate;
+import org.opentaps.common.util.UtilCommon;
 
 locale = UtilHttp.getLocale(request);
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 dateFormat = UtilDate.getDateFormat(locale);
 
 // get the form data

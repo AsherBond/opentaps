@@ -31,7 +31,7 @@ import java.text.ParseException;
 import org.opentaps.common.util.UtilDate;
 
 locale = UtilHttp.getLocale(request);
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 dateTimeFormat = UtilDate.getDateTimeFormat(locale);
 
 //put to history

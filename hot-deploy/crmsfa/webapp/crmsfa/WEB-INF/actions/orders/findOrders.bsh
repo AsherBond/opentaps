@@ -27,7 +27,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 // this form is used by many pages so the iterator name might vary
 listIteratorNameToUse = parameters.get("listIteratorNameToUse");

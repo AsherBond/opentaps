@@ -43,7 +43,7 @@ import org.opentaps.common.util.UtilDate;
 
  GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
  locale = UtilHttp.getLocale(request);
- timeZone = UtilHttp.getTimeZone(request);
+ timeZone = UtilCommon.getTimeZone(request);
  uiLabelMap = UtilMessage.getUiLabels(locale);
 
  organizationPartyId = UtilCommon.getOrganizationPartyId(request);

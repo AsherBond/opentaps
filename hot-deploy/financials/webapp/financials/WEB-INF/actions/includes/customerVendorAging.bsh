@@ -27,7 +27,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 partyId = UtilCommon.getParameter(request, "partyId");
 context.put("partyId", partyId);

@@ -35,7 +35,7 @@
   
  GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
  locale = UtilHttp.getLocale(request.getSession());
- timeZone = UtilHttp.getTimeZone(request);
+ timeZone = UtilCommon.getTimeZone(request);
  uiLabelMap = UtilMessage.getUiLabels(locale); 
   
  organizationPartyId = UtilCommon.getOrganizationPartyId(request);

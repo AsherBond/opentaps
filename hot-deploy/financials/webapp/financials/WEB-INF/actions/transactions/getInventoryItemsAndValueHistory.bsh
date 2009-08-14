@@ -29,7 +29,7 @@ import org.opentaps.domain.inventory.InventoryItem;
 import org.opentaps.domain.inventory.InventoryRepositoryInterface;
 import org.opentaps.domain.inventory.InventoryDomainInterface;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 organizationPartyId = session.getAttribute("organizationPartyId");
 if (organizationPartyId == null) {

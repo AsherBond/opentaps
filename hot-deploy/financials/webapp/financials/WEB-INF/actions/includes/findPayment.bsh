@@ -25,7 +25,7 @@ import org.ofbiz.accounting.util.*;
 import org.ofbiz.entity.util.*;
 import org.opentaps.common.util.*;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 // this gets overrided later according to the payment type
 context.put("decoratorLocation", "component://opentaps-common/widget/screens/common/CommonScreens.xml");

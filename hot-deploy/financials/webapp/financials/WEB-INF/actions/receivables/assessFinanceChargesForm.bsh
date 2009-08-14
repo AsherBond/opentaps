@@ -21,7 +21,7 @@ import org.ofbiz.base.util.*;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.util.UtilCommon;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 String payeePartyId = parameters.get( "partyId" ) ;
 String partyClassificationGroupId = parameters.get( "partyClassificationGroupId" );

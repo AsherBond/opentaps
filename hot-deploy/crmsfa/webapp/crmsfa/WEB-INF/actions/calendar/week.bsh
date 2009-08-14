@@ -49,8 +49,9 @@ import org.ofbiz.base.util.*;
 import org.ofbiz.webapp.pseudotag.*;
 import org.ofbiz.workeffort.workeffort.*;
 import java.sql.Timestamp;
+import org.opentaps.common.util.UtilCommon;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 String currentDay = parameters.get("currentDay");
 String startParam = parameters.get("start");

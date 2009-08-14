@@ -27,7 +27,7 @@ import com.opensourcestrategies.financials.util.*;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 // really useless right now, but if we ever convert it to java this will be good for debugging
 module = "AverageDSOReport";

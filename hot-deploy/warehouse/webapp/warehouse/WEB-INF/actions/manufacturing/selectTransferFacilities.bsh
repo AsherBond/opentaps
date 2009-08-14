@@ -16,8 +16,9 @@
  
  import org.ofbiz.base.util.*;
  import org.ofbiz.entity.condition.*;
+ import org.opentaps.common.util.UtilCommon;
  
- timeZone = UtilHttp.getTimeZone(request);
+ timeZone = UtilCommon.getTimeZone(request);
  
  // the inventory transfers will always be transferred from other facilities to the current facility
 transferFromFacilities = delegator.findByAnd("Facility", UtilMisc.toList(new EntityExpr("facilityId", EntityOperator.NOT_EQUAL, parameters.get("facilityId"))));

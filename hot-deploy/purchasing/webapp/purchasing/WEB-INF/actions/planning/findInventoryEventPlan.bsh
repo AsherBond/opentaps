@@ -54,7 +54,7 @@ import org.opentaps.purchasing.mrp.UtilMrp;
 import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilCommon;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 GenericDelegator delegator = request.getAttribute("delegator");
 LocalDispatcher dispatcher = request.getAttribute("dispatcher");

@@ -36,7 +36,7 @@ import org.opentaps.domain.billing.lockbox.LockboxBatch;
 
 // used for date parsing
 locale = UtilHttp.getLocale(request);
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 organizationPartyId = session.getAttribute("organizationPartyId");
 context.put("organizationPartyId", organizationPartyId);

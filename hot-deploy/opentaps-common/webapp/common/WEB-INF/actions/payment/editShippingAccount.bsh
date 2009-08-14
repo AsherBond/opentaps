@@ -24,7 +24,7 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilDate;
 import com.opensourcestrategies.crmsfa.security.CrmsfaSecurity;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 security = request.getAttribute("security");
 userLogin = request.getAttribute("userLogin");

@@ -48,8 +48,9 @@ import org.ofbiz.entity.*;
 import org.ofbiz.base.util.*;
 import org.ofbiz.webapp.pseudotag.*;
 import org.ofbiz.workeffort.workeffort.*;
+import org.opentaps.common.util.UtilCommon;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 facilityId = parameters.get("facilityId");
 fixedAssetId = parameters.get("fixedAssetId");

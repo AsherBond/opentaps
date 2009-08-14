@@ -78,7 +78,7 @@ globalContext.put("include", loader.loadClass("org.opentaps.common.template.free
 globalContext.put("paginateTransform", loader.loadClass("org.opentaps.common.webapp.transform.PaginateTransform").newInstance());
 
 //TODO: oandreyev. This should not be here
-globalContext.put("timeZone", UtilHttp.getTimeZone(request));
+globalContext.put("timeZone", UtilCommon.getTimeZone(request));
 
 // Add the current state of all foldable screen areas for the user and the current screen/application combination
 foldedStates = new HashMap();

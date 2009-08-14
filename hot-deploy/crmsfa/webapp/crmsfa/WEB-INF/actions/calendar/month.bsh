@@ -50,8 +50,9 @@ import org.ofbiz.webapp.pseudotag.*;
 import org.ofbiz.workeffort.workeffort.*;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import org.opentaps.common.util.UtilCommon;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 startParam = parameters.get("start");
 

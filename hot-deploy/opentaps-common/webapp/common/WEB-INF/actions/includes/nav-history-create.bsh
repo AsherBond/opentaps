@@ -76,7 +76,7 @@ if (UtilConfig.getPropertyBoolean(application, "opentaps.history.show", true)) {
             // Delete any identical previous history entries
             delegator.removeByAnd("ViewHistory", UtilMisc.toMap("digest", digest));
 
-            entry.set("expireAt", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DATE, UtilConfig.getPropertyInt(application, "opentaps.history.expire", 90), UtilHttp.getTimeZone(request), locale));
+            entry.set("expireAt", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DATE, UtilConfig.getPropertyInt(application, "opentaps.history.expire", 90), UtilCommon.getTimeZone(request), locale));
             entry.set("viewHistoryId", delegator.getNextSeqId("viewHistoryId"));
             entry.create();
         }

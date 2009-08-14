@@ -19,8 +19,9 @@ import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
 import org.opentaps.common.order.OrderEvents;
 import org.opentaps.common.party.PartyContactHelper;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 /*
  * Purpose is to generate data for the set shipment forms and determine the

@@ -27,7 +27,7 @@ import com.opensourcestrategies.financials.payroll.PayrollHelper;
 import com.opensourcestrategies.financials.util.UtilFinancial;
 import org.opentaps.common.util.UtilDate;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 organizationPartyId = UtilCommon.getOrganizationPartyId(request);
 if (organizationPartyId == null) {

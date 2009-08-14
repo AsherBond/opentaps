@@ -26,7 +26,7 @@
  import org.opentaps.common.reporting.UtilReports;
  
  locale = UtilHttp.getLocale(request);
- timeZone = UtilHttp.getTimeZone(request);
+ timeZone = UtilCommon.getTimeZone(request);
  
  organizationPartyId = UtilCommon.getOrganizationPartyId(request);
  if (organizationPartyId == null) {

@@ -32,7 +32,7 @@ import java.text.ParseException;
 import org.opentaps.common.util.UtilDate;
 
 locale = UtilHttp.getLocale(request);
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 dateFormat = UtilDate.getDateFormat(locale);
 
 boolean isInternalMessageSender = false;

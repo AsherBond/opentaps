@@ -63,7 +63,7 @@ findProductByPattern(pattern) {
     return EntityUtil.getFieldListFromEntityList(products, "productId", true);
 }
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 // Initial values for the variables passed to the FTL script
 resultList = FastList.newInstance();

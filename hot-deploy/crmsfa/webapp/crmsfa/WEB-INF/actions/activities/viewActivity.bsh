@@ -33,7 +33,7 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.workeffort.WorkEffortHelper;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 // find the work effort and the association IDs, used by both viewActivity and updateTaskForm/updateEventForm
 

@@ -37,7 +37,7 @@ import org.opentaps.common.util.UtilDate;
 invoiceTypeId = context.get("invoiceTypeId");
 
 // get TimeZone
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 // set the find form title here because of limitations with uiLabelMap, along with other variables
 uiLabelMap = org.opentaps.common.util.UtilMessage.getUiLabels(locale);

@@ -22,7 +22,7 @@ import org.opentaps.common.util.UtilAccountingTags;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 locale = UtilHttp.getLocale(request);
 
 organizationPartyId = session.getAttribute("organizationPartyId");

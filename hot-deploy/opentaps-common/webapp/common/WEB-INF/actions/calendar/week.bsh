@@ -52,7 +52,7 @@ import org.ofbiz.workeffort.workeffort.*;
 import java.sql.Timestamp;
 import org.opentaps.common.util.UtilCommon;
 
-timeZone = UtilHttp.getTimeZone(request);
+timeZone = UtilCommon.getTimeZone(request);
 
 String currentDay = UtilCommon.getParameter(context, "currentDay");
 String startParam = UtilCommon.getParameter(context, "start");
