@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastList;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -442,7 +443,7 @@ public abstract class EntityLookupService {
     protected <T extends EntityInterface> List<T> findListWithFilters(Class<T> entityName, List<EntityCondition> conds, List<String> filters) {
         for (String filter : filters) {
             if (provider.parameterIsPresent(filter)) {
-                conds.add(EntityCondition.makeCondition(EntityFunction.UPPER(filter), EntityOperator.LIKE, EntityFunction.UPPER("%" + provider.getParameter(filter) + "%")));
+                conds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(filter), EntityOperator.LIKE, EntityFunction.UPPER("%" + provider.getParameter(filter) + "%")));
             }
         }
 
