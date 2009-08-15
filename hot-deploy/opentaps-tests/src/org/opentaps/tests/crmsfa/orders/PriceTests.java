@@ -63,14 +63,14 @@ public class PriceTests extends OpentapsTestCase {
         callCtxt.put("userLogin", DemoSalesManager);
         Map<String, Object> privilegedCustResult = runAndAssertServiceSuccess("calculateProductPrice", callCtxt);
 
-        Double price = (Double) privilegedCustResult.get("price");
-        Double expectedPrice = (Double) privilegedCustResult.get("listPrice") * 0.75;
-        assertEquals(expectedPrice.doubleValue(), price.doubleValue(), 0);
+        BigDecimal price = (BigDecimal) privilegedCustResult.get("price");
+        BigDecimal expectedPrice = ((BigDecimal) privilegedCustResult.get("listPrice")).multiply(BigDecimal.valueOf(0.75));
+        assertEquals("", expectedPrice, price);
     }
 
     /**
      * Calculates price adjusted to price rule for GZ-1000 and compare it with expected price.
-     * Sames as <code>testPartyClassPricing</code> but tests the domain repository method.
+     * Same as <code>testPartyClassPricing</code> but tests the domain repository method.
      * @throws GeneralException if an error occurs
      */
     public void testPartyClassPricingDomain() throws GeneralException {
@@ -89,7 +89,7 @@ public class PriceTests extends OpentapsTestCase {
         Map<String, Object> privilegedCustResult = runAndAssertServiceSuccess("calculateProductPrice", callCtxt);
 
         BigDecimal price = repository.getUnitPrice(product, new BigDecimal("1.0"), "USD", "DemoPrivilegedCust");
-        BigDecimal expectedPrice = BigDecimal.valueOf((Double) privilegedCustResult.get("listPrice")).multiply(new BigDecimal("0.75"));
+        BigDecimal expectedPrice = ((BigDecimal) privilegedCustResult.get("listPrice")).multiply(new BigDecimal("0.75"));
 
         assertEquals("Domain method to get unit price for party returned unexpected price.", expectedPrice, price);
     }

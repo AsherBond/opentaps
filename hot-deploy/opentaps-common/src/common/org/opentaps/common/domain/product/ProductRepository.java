@@ -15,6 +15,10 @@
  */
 package org.opentaps.common.domain.product;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
@@ -30,10 +34,6 @@ import org.opentaps.foundation.entity.Entity;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.foundation.repository.ofbiz.Repository;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
 
 /** {@inheritDoc} */
 public class ProductRepository extends Repository implements ProductRepositoryInterface {
@@ -60,24 +60,19 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
     }
 
     /** {@inheritDoc} */
-    @SuppressWarnings("unchecked")
     public BigDecimal getUnitPrice(Product product, BigDecimal quantity, String currencyUomId, String partyId) throws RepositoryException {
-        Double quantityDbl = null;
-        if (quantity != null) {
-            quantityDbl = quantity.doubleValue();
-        }
 
         try {
-            Map results = getDispatcher().runSync("calculateProductPrice", UtilMisc.toMap(
-                "userLogin", getUser().getOfbizUserLogin(),
-                "product", Repository.genericValueFromEntity(product),
-                "partyId", partyId,
-                "quantity", quantityDbl,
-                "currencyUomId", currencyUomId), -1, false);
+            Map<String, ?> results = getDispatcher().runSync("calculateProductPrice", UtilMisc.toMap(
+                    "userLogin", getUser().getOfbizUserLogin(),
+                    "product", Repository.genericValueFromEntity(product),
+                    "partyId", partyId,
+                    "quantity", quantity,
+                    "currencyUomId", currencyUomId), -1, false);
             if (ServiceUtil.isError(results)) {
                 throw new RepositoryException(ServiceUtil.getErrorMessage(results));
             }
-            return BigDecimal.valueOf((Double) results.get("price"));
+            return (BigDecimal) results.get("price");
         } catch (GenericServiceException e) {
             throw new RepositoryException(e);
         }
@@ -88,10 +83,10 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
     public BigDecimal getStandardCost(Product product, String currencyUomId) throws RepositoryException {
         try {
             Map results = getDispatcher().runSync("getProductCost", UtilMisc.toMap(
-                "userLogin", getUser().getOfbizUserLogin(),
-                "productId", product.getProductId(),
-                "currencyUomId", currencyUomId,
-                "costComponentTypePrefix", "EST_STD"));
+                    "userLogin", getUser().getOfbizUserLogin(),
+                    "productId", product.getProductId(),
+                    "currencyUomId", currencyUomId,
+                    "costComponentTypePrefix", "EST_STD"));
             if (ServiceUtil.isError(results)) {
                 throw new RepositoryException(ServiceUtil.getErrorMessage(results));
             }
@@ -104,9 +99,9 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
     /** {@inheritDoc} */
     public List<Product> getVariants(Product product) throws RepositoryException {
         EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                        EntityCondition.makeCondition(ProductAssoc.Fields.productId.name(), product.getProductId()),
-                        EntityCondition.makeCondition(ProductAssoc.Fields.productAssocTypeId.name(), "PRODUCT_VARIANT"),
-                        EntityUtil.getFilterByDateExpr());
+                EntityCondition.makeCondition(ProductAssoc.Fields.productId.name(), product.getProductId()),
+                EntityCondition.makeCondition(ProductAssoc.Fields.productAssocTypeId.name(), "PRODUCT_VARIANT"),
+                EntityUtil.getFilterByDateExpr());
 
         List<ProductAssoc> variants = findList(ProductAssoc.class, conditions);
         return findList(Product.class, EntityCondition.makeCondition(Product.Fields.productId.name(), EntityOperator.IN, Entity.getDistinctFieldValues(variants, ProductAssoc.Fields.productIdTo)));

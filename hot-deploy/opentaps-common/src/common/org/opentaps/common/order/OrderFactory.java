@@ -17,12 +17,14 @@
 package org.opentaps.common.order;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastMap;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -30,7 +32,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.order.shoppingcart.CartItemModifyException;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
@@ -44,7 +45,6 @@ import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.foundation.repository.RepositoryException;
-import java.sql.Timestamp;
 
 /**
  * A simple helper for the storeOrder service.
@@ -687,12 +687,12 @@ public abstract class OrderFactory {
 
         Map<String, Object> callResults = dispatcher.runSync("calculateProductPrice", callCtxt);
 
-        Double defaultPrice = (Double) callResults.get("defaultPrice");
-        Double listPrice = (Double) callResults.get("listPrice");
-        Double price = (Double) callResults.get("price");
-        results.put("defaultPrice", defaultPrice);
-        results.put("listPrice", listPrice);
-        results.put("price", price);
+        BigDecimal defaultPrice = (BigDecimal) callResults.get("defaultPrice");
+        BigDecimal listPrice = (BigDecimal) callResults.get("listPrice");
+        BigDecimal price = (BigDecimal) callResults.get("price");
+        results.put("defaultPrice", Double.valueOf(defaultPrice.doubleValue()));
+        results.put("listPrice", Double.valueOf(listPrice.doubleValue()));
+        results.put("price", Double.valueOf(price.doubleValue()));
         return results;
     }
 

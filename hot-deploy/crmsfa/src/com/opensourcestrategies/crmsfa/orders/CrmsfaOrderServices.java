@@ -18,12 +18,23 @@
 package com.opensourcestrategies.crmsfa.orders;
 
 import java.math.BigDecimal;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
 
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.GeneralException;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilFormatOut;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.common.email.NotificationServices;
@@ -569,10 +580,10 @@ public class CrmsfaOrderServices {
                 return UtilMessage.createAndLogServiceError("OpentapsError_MissingOrderPaymentMethod", locale, module);
             }
 
-            // get the price of the producct
-            Map results = dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "currencyUomId", currencyUomId));
+            // get the price of the product
+            Map<String, Object> results = dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "currencyUomId", currencyUomId));
             if (ServiceUtil.isError(results)) return results;
-            Double price = (Double) results.get("price");
+            BigDecimal price = (BigDecimal) results.get("price");
             if (price == null || price.doubleValue() <= 0) {
                 return UtilMessage.createAndLogServiceError("OpentapsError_ProductPriceNotFound", UtilMisc.toMap("productId", productId, "currencyUomId", currencyUomId), locale, module);
             }
