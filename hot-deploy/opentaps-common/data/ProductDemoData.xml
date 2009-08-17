@@ -35,18 +35,18 @@
     <!-- Define a supply class product for purchasing. -->
     <Product productId="SUPPLY-001" productTypeId="SUPPLIES" productName="Pencil" internalName="Pencil" description="Office pencil (demo supply)." 
         taxable="N" chargeShipping="N" autoCreateKeywords="N" isVirtual="N" isVariant="N" createdDate="2007-01-01 00:00:00.000"  createdByUserLogin="admin"/>
-    <SupplierProduct partyId="DemoSupplier" productId="SUPPLY-001" minimumOrderQuantity="0" lastPrice="1.50" currencyUomId="USD" supplierProductId="SUPPLY-001-0" availableFromDate="2007-01-01 00:00:00.000"/>
-    <SupplierProduct partyId="DemoSupplier" productId="SUPPLY-001" minimumOrderQuantity="5" lastPrice="1.25" currencyUomId="USD" supplierProductId="SUPPLY-001-5" availableFromDate="2007-01-01 00:00:00.000"/>
-    <SupplierProduct partyId="DemoSupplier" productId="SUPPLY-001" minimumOrderQuantity="25" lastPrice="1.00" currencyUomId="USD" supplierProductId="SUPPLY-001-25" availableFromDate="2007-01-01 00:00:00.000"/>
-    <SupplierProduct partyId="BigSupplier" productId="SUPPLY-001" minimumOrderQuantity="500" lastPrice="0.75" currencyUomId="USD" supplierProductId="BKSUPPLY-001" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="SUPPLY-001" minimumOrderQuantity="0" lastPrice="1.50" currencyUomId="USD" supplierProductId="SUPPLY-001-0" supplierPrefOrderId="10_MAIN_SUPPL" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="SUPPLY-001" minimumOrderQuantity="5" lastPrice="1.25" currencyUomId="USD" supplierProductId="SUPPLY-001-5" supplierPrefOrderId="10_MAIN_SUPPL" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="SUPPLY-001" minimumOrderQuantity="25" lastPrice="1.00" currencyUomId="USD" supplierProductId="SUPPLY-001-25" supplierPrefOrderId="10_MAIN_SUPPL" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="BigSupplier" productId="SUPPLY-001" minimumOrderQuantity="500" lastPrice="0.75" currencyUomId="USD" supplierProductId="BKSUPPLY-001" supplierPrefOrderId="10_MAIN_SUPPL" availableFromDate="2007-01-01 00:00:00.000"/>
 
     <!-- Define a fixed asset class product for purchasing. -->
     <Product productId="ASSET-001" productTypeId="FIXED_ASSET" productName="Office Computer" internalName="Office Computer" description="Office Computer (demo fixed asset)." 
         taxable="N" chargeShipping="N" autoCreateKeywords="N" isVirtual="N" isVariant="N" createdDate="2007-01-01 00:00:00.000"  createdByUserLogin="admin"/>
-    <SupplierProduct partyId="DemoSupplier" productId="ASSET-001" minimumOrderQuantity="0" lastPrice="1000.00" currencyUomId="USD" supplierProductId="ASSET-001-0" availableFromDate="2007-01-01 00:00:00.000"/>
-    <SupplierProduct partyId="DemoSupplier" productId="ASSET-001" minimumOrderQuantity="5" lastPrice="950.00" currencyUomId="USD" supplierProductId="ASSET-001-5" availableFromDate="2007-01-01 00:00:00.000"/>
-    <SupplierProduct partyId="DemoSupplier" productId="ASSET-001" minimumOrderQuantity="25" lastPrice="900.00" currencyUomId="USD" supplierProductId="ASSET-001-25" availableFromDate="2007-01-01 00:00:00.000"/>
-    <SupplierProduct partyId="BigSupplier" productId="ASSET-001" minimumOrderQuantity="500" lastPrice="750.00" currencyUomId="USD" supplierProductId="BKASSET-001" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="ASSET-001" minimumOrderQuantity="0" lastPrice="1000.00" currencyUomId="USD" supplierProductId="ASSET-001-0" supplierPrefOrderId="10_MAIN_SUPPL" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="ASSET-001" minimumOrderQuantity="5" lastPrice="950.00" currencyUomId="USD" supplierProductId="ASSET-001-5" supplierPrefOrderId="10_MAIN_SUPPL" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="DemoSupplier" productId="ASSET-001" minimumOrderQuantity="25" lastPrice="900.00" currencyUomId="USD" supplierProductId="ASSET-001-25" supplierPrefOrderId="10_MAIN_SUPPL" availableFromDate="2007-01-01 00:00:00.000"/>
+    <SupplierProduct partyId="BigSupplier" productId="ASSET-001" minimumOrderQuantity="500" lastPrice="750.00" currencyUomId="USD" supplierProductId="BKASSET-001" supplierPrefOrderId="10_MAIN_SUPPL" availableFromDate="2007-01-01 00:00:00.000"/>
 
     <!-- An example of a service -->
     <Product productId="service1" productTypeId="SERVICE" internalName="Exemplary Service" productName="Exemplary Service" description="Exemplary Service"/>

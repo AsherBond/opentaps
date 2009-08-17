@@ -67,9 +67,6 @@ r13032 Upgraded lucene from 2.2 to 2.4 needed for hibernate search.
 applications/party/script/org/ofbiz/party/contact/PartyContactMechServices.xml
 - fix the createPartyContactMech service to return the contact mech id if it reuses an existing contact mech
 
-applications/product/script/org/ofbiz/product/cost/CostServices.xml
-- the getProductCost is now also looking at supplier product prices, but when ordering the results it orders by both supplierPrefOrderId and lastPrice.
-Removed the order by supplierPrefOrderId.
 
 applications/accounting/ofbiz-component.xml
 - commented out the services, secas and entities related to ofbiz BI (SalesInvoiceItemFact)
