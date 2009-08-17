@@ -67,7 +67,7 @@
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_RPT_VIEW"/>
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="OFBTOOLS_VIEW"/>
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ACCOUNTING_ADMIN"/>
-    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ACCTG_FX_ENTRY"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ACCTG_FX_UPDATE"/>
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="PAY_INFO_ADMIN"/> <!-- required to create and update payments in OFBIZ -->
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_INVIEW"/>
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="FINANCIALS_AP_INCRTE"/>
@@ -105,6 +105,8 @@
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ORDERMGR_UPDATE"/>     <!-- Needed for invoicing performed services -->
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="PRCH_ORD_APPRV"/>     <!-- Needed for invoicing performed services -->
     <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="PARTYMGR_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ACCTG_ATX_ADMIN"/>
+    <SecurityGroupPermission groupId="FINANCIALS_ADMIN" permissionId="ACCTG_PREF_ADMIN"/>
 
     <!-- Special AR, AP, Transactions roles.  ACCOUNTING_ADMIN is required for now due to coarse nature OFBIZ permissions but will be removed once we have financials screens for invoices, etc.
     OFBTOOLS_VIEW is required to access any OFBIZ backend app including ACCOUNTING.  Not sure if we want to require this for Financials as well or not but including for now to work with Accounting -->
