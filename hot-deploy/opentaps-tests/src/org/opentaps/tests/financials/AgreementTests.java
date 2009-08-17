@@ -16,6 +16,7 @@
 
 package org.opentaps.tests.financials;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -25,7 +26,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import javolution.util.FastList;
-
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -308,21 +308,21 @@ public class AgreementTests extends OpentapsTestCase {
         // create sales invoice from Company to specified party with one invoice item for $50
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         String invoiceId1 = fa.createInvoice(partyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId1, "INV_FPROD_ITEM", "WG-1111", 1.0, 50.0);
+        fa.createInvoiceItem(invoiceId1, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("50.0"));
 
         // set invoice status to READY is successful
         fa.updateInvoiceStatus(invoiceId1, "INVOICE_READY");
 
         // create a second sales invoice from Company to accountlimit100 with one invoice item for $49
         String invoiceId2 = fa.createInvoice(partyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId2, "INV_FPROD_ITEM", "WG-1111", 1.0, 49.0);
+        fa.createInvoiceItem(invoiceId2, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("49.0"));
 
         // set invoice status to READY is successful
         fa.updateInvoiceStatus(invoiceId2, "INVOICE_READY");
 
         // create a third sales invoice from Company to accountlimit100 with one invoice item for $5
         String invoiceId3 = fa.createInvoice(partyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId3, "INV_FPROD_ITEM", "WG-1111", 1.0, 5.0);
+        fa.createInvoiceItem(invoiceId3, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("5.0"));
 
         // set invoice status to READY should fail.  (The message is "Cannot mark invoice as ready. Customer credit limit exceeded.")
         Map<String, Object> callCtxt = new HashMap<String, Object>();
@@ -333,17 +333,17 @@ public class AgreementTests extends OpentapsTestCase {
         runAndAssertServiceError("setInvoiceStatus", callCtxt);
 
         // create payment of type CUSTOMER_PAYMENT from accountlimit100 to Company of $5 and apply to the first sales invoice, set its status to RECEIVED
-        fa.createPaymentAndApplication(5.0, partyId, organizationPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD", null, invoiceId1, "PMNT_RECEIVED");
+        fa.createPaymentAndApplication(new BigDecimal("5.0"), partyId, organizationPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD", null, invoiceId1, "PMNT_RECEIVED");
 
         // set the third invoice status to READY again and this time it should succeed because the payment has brought the balance down
         fa.updateInvoiceStatus(invoiceId3, "INVOICE_READY");
 
         // receive a payment of type CUSTOMER_DEPOSIT from accountlimit100 to Company of $100 and set its status to RECEIVED, but do not apply it to any invoice
-        fa.createPayment(100.0, partyId, "CUSTOMER_DEPOSIT", "CREDIT_CARD", "PMNT_RECEIVED");
+        fa.createPayment(new BigDecimal("100.0"), partyId, "CUSTOMER_DEPOSIT", "CREDIT_CARD", "PMNT_RECEIVED");
 
         // create a fourth sales invoice to accountlimit100 with one item for $100
         String invoiceId4 = fa.createInvoice(partyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId4, "INV_FPROD_ITEM", "WG-1111", 1.0, 100.0);
+        fa.createInvoiceItem(invoiceId4, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("100.0"));
 
         // set it to READY and it should succeed because there is a payment already
         fa.updateInvoiceStatus(invoiceId4, "INVOICE_READY");

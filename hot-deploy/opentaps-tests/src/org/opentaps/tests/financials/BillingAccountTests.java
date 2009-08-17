@@ -15,6 +15,9 @@
  */
 package org.opentaps.tests.financials;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 import com.opensourcestrategies.financials.accounts.BillingAccountWorker;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.GeneralException;
@@ -22,11 +25,8 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 
-import java.math.BigDecimal;
-import java.util.Map;
-
 /**
- * Test cases for billing and credit accounts
+ * Test cases for billing and credit accounts.
  */
 public class BillingAccountTests extends FinancialsTestCase  {
 
@@ -43,7 +43,7 @@ public class BillingAccountTests extends FinancialsTestCase  {
 
         // create a credit memo for $2000
         String creditInvoiceId = fa.createInvoice(customerPartyId, "CUST_RTN_INVOICE", UtilDateTime.nowTimestamp(), "Test Billing Account", "testCreditMemoBillingAccountPayInvoice", "Test Billing Account");
-        fa.createInvoiceItem(creditInvoiceId, "CRT_ADD_FEATURE_ADJ", 1.0, 2000.0);
+        fa.createInvoiceItem(creditInvoiceId, "CRT_ADD_FEATURE_ADJ", new BigDecimal("1.0"), new BigDecimal("2000.0"));
         fa.updateInvoiceStatus(creditInvoiceId, "INVOICE_READY");
 
         // convert to billing account
@@ -57,7 +57,7 @@ public class BillingAccountTests extends FinancialsTestCase  {
 
         // create a sales invoice for $1000
         String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), "Test Billing Account", "testCreditMemoBillingAccountPayInvoice", "Test Billing Account");
-        fa.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", 1.0, 1000.0);
+        fa.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", new BigDecimal("1.0"), new BigDecimal("1000.0"));
         fa.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
         // pay the invoice with our billing account

@@ -71,7 +71,7 @@ public class FinancialAsserts extends OpentapsTestCase {
 
 
     /**
-     * Same as below, with tags = null and checkBalanceSheet = true
+     * Same as below, with tags = null and checkBalanceSheet = true.
      * @param asOfDate the date to get the balance for
      * @return the financial balance <code>Map</code> of glAccountId => balance
      */
@@ -81,10 +81,10 @@ public class FinancialAsserts extends OpentapsTestCase {
 
 
     /**
-     * Same as below, with checkBalanceSheet = true
-     * @param asOfDate
-     * @param tags
-     * @return
+     * Same as below, with checkBalanceSheet = true.
+     * @param asOfDate the date to get the balance for
+     * @param tags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
+     * @returnthe financial balance <code>Map</code> of glAccountId => balance
      */
     public Map<String, Number> getFinancialBalances(Timestamp asOfDate, Map tags) {
         return getFinancialBalances(asOfDate, tags, true);
@@ -324,8 +324,8 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param quantity to add on the invoice
      * @param amount price of the invoice item
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, double quantity, double amount) {
-        createInvoiceItem(invoiceId, invoiceItemTypeId, null, new Double(quantity), new Double(amount), null);
+    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, BigDecimal quantity, BigDecimal amount) {
+        createInvoiceItem(invoiceId, invoiceItemTypeId, null, quantity, amount, null);
     }
 
     /**
@@ -337,8 +337,8 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param amount price of the invoice item
      * @param description the invoice item description
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, double quantity, double amount, String description) {
-        createInvoiceItem(invoiceId, invoiceItemTypeId, null, new Double(quantity), new Double(amount), description);
+    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, BigDecimal quantity, BigDecimal amount, String description) {
+        createInvoiceItem(invoiceId, invoiceItemTypeId, null, quantity, amount, description);
     }
 
     /**
@@ -350,20 +350,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param quantity to add on the invoice
      * @param amount price of the invoice item
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, double quantity, double amount) {
-        createInvoiceItem(invoiceId, invoiceItemTypeId, productId, new Double(quantity), new Double(amount), null);
-    }
-
-    /**
-     * Adds an Invoice Item to an Invoice.
-     *
-     * @param invoiceId of the invoice to add to
-     * @param invoiceItemTypeId is the type of the invoice item
-     * @param productId the invoice item product
-     * @param quantity to add on the invoice
-     * @param amount price of the invoice item
-     */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, Double quantity, Double amount) {
+    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount) {
         createInvoiceItem(invoiceId, invoiceItemTypeId, productId, quantity, amount, null);
     }
 
@@ -377,36 +364,21 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param amount price of the invoice item
      * @param description the invoice item description
      */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, double quantity, double amount, String description) {
-        createInvoiceItem(invoiceId, invoiceItemTypeId, productId, new Double(quantity), new Double(amount), description);
+    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description) {
+        createInvoiceItem(invoiceId, invoiceItemTypeId, productId, quantity, amount, description, null);
     }
 
     /**
-     * Adds an Invoice Item to an Invoice.
-     *
+     * Creates an invoice item with optional accountingTags.
      * @param invoiceId of the invoice to add to
      * @param invoiceItemTypeId is the type of the invoice item
      * @param productId the invoice item product
      * @param quantity to add on the invoice
      * @param amount price of the invoice item
      * @param description the invoice item description
+     * @param accountingTags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
      */
-    @SuppressWarnings("unchecked")
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, Double quantity, Double amount, String description) {
-        createInvoiceItem(invoiceId, invoiceItemTypeId, productId, quantity, amount, description, null);
-    }
-
-    /**
-     * Creates an invoice item with optional accountingTags
-     * @param invoiceId
-     * @param invoiceItemTypeId
-     * @param productId
-     * @param quantity
-     * @param amount
-     * @param description
-     * @param accountingTags
-     */
-    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, Double quantity, Double amount, String description, Map accountingTags) {
+    public void createInvoiceItem(String invoiceId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description, Map accountingTags) {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceId", invoiceId);
         input.put("invoiceItemTypeId", invoiceItemTypeId);
@@ -422,18 +394,18 @@ public class FinancialAsserts extends OpentapsTestCase {
         runAndAssertServiceSuccess("createInvoiceItem", input);
     }
 
-    
+
     /**
-     * Update an invoice item with optional accountingTags
-     * @param invoiceId
-     * @param invoiceItemTypeId
-     * @param productId
-     * @param quantity
-     * @param amount
-     * @param description
-     * @param accountingTags
+     * Update an invoice item with optional accountingTags.
+     * @param invoiceId of the invoice to update
+     * @param invoiceItemTypeId is the type of the invoice item
+     * @param productId the invoice item product
+     * @param quantity of the invoice item product
+     * @param amount price of the invoice item
+     * @param description the invoice item description
+     * @param accountingTags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
      */
-    public void updateInvoiceItem(String invoiceId, String invoiceItemSeqId, String invoiceItemTypeId, String productId, Double quantity, Double amount, String description, Map accountingTags) {
+    public void updateInvoiceItem(String invoiceId, String invoiceItemSeqId, String invoiceItemTypeId, String productId, BigDecimal quantity, BigDecimal amount, String description, Map accountingTags) {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         input.put("invoiceId", invoiceId);
         input.put("invoiceItemSeqId", invoiceItemSeqId);
@@ -449,7 +421,7 @@ public class FinancialAsserts extends OpentapsTestCase {
         }
         runAndAssertServiceSuccess("updateInvoiceItem", input);
     }
-    
+
     /**
      * Updates Invoice status.
      *
@@ -467,7 +439,6 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param invoiceStatus the new status
      * @param invoiceDate is the invoiceDate to use. If none is given, set date to now.
      */
-    @SuppressWarnings("unchecked")
     public void updateInvoiceStatus(String invoiceId, String invoiceStatus, Timestamp invoiceDate) {
         // set invoice status
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
@@ -491,7 +462,7 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param paymentMethodTypeId the Payment method type, optional
      * @return the created payment ID
      */
-    public String createPayment(double amount, String partyIdFrom, String paymentTypeId, String paymentMethodTypeId) {
+    public String createPayment(BigDecimal amount, String partyIdFrom, String paymentTypeId, String paymentMethodTypeId) {
         return createPaymentAndApplication(amount, partyIdFrom, organizationPartyId, paymentTypeId, paymentMethodTypeId, null, null, null);
     }
 
@@ -505,11 +476,22 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param endStatus is the status to update the payment after creation
      * @return the created payment ID
      */
-    public String createPayment(double amount, String partyIdFrom, String paymentTypeId, String paymentMethodTypeId, String endStatus) {
+    public String createPayment(BigDecimal amount, String partyIdFrom, String paymentTypeId, String paymentMethodTypeId, String endStatus) {
         return createPaymentAndApplication(amount, partyIdFrom, organizationPartyId, paymentTypeId, paymentMethodTypeId, null, null, endStatus);
     }
 
-    public String createPayment(double amount, String partyIdFrom, String paymentTypeId, String paymentMethodTypeId, String endStatus, Map accountingTags) {
+    /**
+     * Creates a Payment.
+     *
+     * @param amount the Payment and PaymentApplication amount
+     * @param partyIdFrom the Payment party from
+     * @param paymentTypeId the Payment type
+     * @param paymentMethodTypeId the Payment method type, optional
+     * @param endStatus is the status to update the payment after creation
+     * @param accountingTags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
+     * @return the created payment ID
+     */
+    public String createPayment(BigDecimal amount, String partyIdFrom, String paymentTypeId, String paymentMethodTypeId, String endStatus, Map accountingTags) {
         return createPaymentAndApplication(amount, partyIdFrom, organizationPartyId, paymentTypeId, paymentMethodTypeId, null, null, endStatus, accountingTags);
     }
 
@@ -526,27 +508,27 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param endStatus is the status to update the payment after creation
      * @return the created payment ID
      */
-    @SuppressWarnings("unchecked")
-    public String createPaymentAndApplication(double amount, String partyIdFrom, String partyIdTo, String paymentTypeId, String paymentMethodTypeId, String paymentMethodId, String invoiceId, String endStatus) {
+    public String createPaymentAndApplication(BigDecimal amount, String partyIdFrom, String partyIdTo, String paymentTypeId, String paymentMethodTypeId, String paymentMethodId, String invoiceId, String endStatus) {
         return createPaymentAndApplication(amount, partyIdFrom, partyIdTo, paymentTypeId, paymentMethodTypeId, paymentMethodId, invoiceId, endStatus, null);
     }
 
     /**
      * Creates a Payment and PaymentApplication, with accountingTags for the Payment.
-     * @param amount
-     * @param partyIdFrom
-     * @param partyIdTo
-     * @param paymentTypeId
-     * @param paymentMethodTypeId
-     * @param paymentMethodId
-     * @param invoiceId
-     * @param endStatus
-     * @param accountingTags
-     * @return
+     *
+     * @param amount the Payment and PaymentApplication amount
+     * @param partyIdFrom the Payment party from
+     * @param partyIdTo the Payment party to, if <code>null</code> uses the current organization
+     * @param paymentTypeId the Payment type
+     * @param paymentMethodTypeId the Payment method type, optional
+     * @param paymentMethodId the Payment method, optional
+     * @param invoiceId the Invoice to apply the Payment to, if <code>null</code> no PaymentApplication is created
+     * @param endStatus is the status to update the payment after creation
+     * @param accountingTags optional accounting tag to use when getting the balances, as a Map of tag1 -> value1, tag2 -> value2, ...
+     * @return the created payment ID
      */
-    public String createPaymentAndApplication(double amount, String partyIdFrom, String partyIdTo, String paymentTypeId, String paymentMethodTypeId, String paymentMethodId, String invoiceId, String endStatus, Map accountingTags) {
+    public String createPaymentAndApplication(BigDecimal amount, String partyIdFrom, String partyIdTo, String paymentTypeId, String paymentMethodTypeId, String paymentMethodId, String invoiceId, String endStatus, Map accountingTags) {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
-        input.put("amount", new Double(amount));
+        input.put("amount", amount);
         input.put("currencyUomId", "USD");
         input.put("partyIdFrom", partyIdFrom);
         if (UtilValidate.isEmpty(partyIdTo)) {
@@ -572,7 +554,7 @@ public class FinancialAsserts extends OpentapsTestCase {
             input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
             input.put("paymentId", paymentId);
             input.put("invoiceId", invoiceId);
-            input.put("amountApplied", new Double(amount));
+            input.put("amountApplied", amount);
             runAndAssertServiceSuccess("createPaymentApplication", input);
         }
 
@@ -589,7 +571,6 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @param paymentId the Payment to update
      * @param paymentStatus the Payment status to set
      */
-    @SuppressWarnings("unchecked")
     public void updatePaymentStatus(String paymentId, String paymentStatus) {
         // set invoice status
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", userLogin);
@@ -671,7 +652,6 @@ public class FinancialAsserts extends OpentapsTestCase {
      * @return the created Invoice ID
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public String createInvoiceFromTemplate(String templateInvoiceId, String partyId) throws GenericEntityException {
         GenericValue invoiceTemplate = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", templateInvoiceId));
         assertNotNull("Failed to find invoice template with ID [" + templateInvoiceId + "]", invoiceTemplate);

@@ -15,6 +15,8 @@
  */
 package org.opentaps.domain.billing.invoice;
 
+import java.math.BigDecimal;
+
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.foundation.service.ServiceInterface;
 
@@ -44,157 +46,157 @@ public interface InvoiceItemServiceInterface extends ServiceInterface {
 
     /**
      * Sets the required input parameter for service.
-     * @param invoiceId input paramater
+     * @param invoiceId input parameter
      */
     public void setInvoiceId(String invoiceId);
 
     /**
      * Sets the required input parameter for service.
-     * @param invoiceItemTypeId input paramater
+     * @param invoiceItemTypeId input parameter
      */
     public void setInvoiceItemTypeId(String invoiceItemTypeId);
 
     /**
      * Sets the required input parameter for service.
-     * @param overrideGlAccountId input paramater
+     * @param overrideGlAccountId input parameter
      */
     public void setOverrideGlAccountId(String overrideGlAccountId);
 
     /**
      * Sets the required input parameter for service.
-     * @param inventoryItemId input paramater
+     * @param inventoryItemId input parameter
      */
     public void setInventoryItemId(String inventoryItemId);
 
     /**
      * Sets the required input parameter for service.
-     * @param productId input paramater
+     * @param productId input parameter
      */
     public void setProductId(String productId);
 
     /**
      * Sets the required input parameter for service.
-     * @param productFeatureId input paramater
+     * @param productFeatureId input parameter
      */
     public void setProductFeatureId(String productFeatureId);
 
     /**
      * Sets the required input parameter for service.
-     * @param parentInvoiceId input paramater
+     * @param parentInvoiceId input parameter
      */
     public void setParentInvoiceId(String parentInvoiceId);
 
     /**
      * Sets the required input parameter for service.
-     * @param parentInvoiceItemSeqId input paramater
+     * @param parentInvoiceItemSeqId input parameter
      */
     public void setParentInvoiceItemSeqId(String parentInvoiceItemSeqId);
 
     /**
      * Sets the required input parameter for service.
-     * @param uomId input paramater
+     * @param uomId input parameter
      */
     public void setUomId(String uomId);
 
     /**
      * Sets the required input parameter for service.
-     * @param taxableFlag input paramater
+     * @param taxableFlag input parameter
      */
     public void setTaxableFlag(String taxableFlag);
 
     /**
      * Sets the required input parameter for service.
-     * @param quantity input paramater
+     * @param quantity input parameter
      */
-    public void setQuantity(Double quantity);
+    public void setQuantity(BigDecimal quantity);
 
     /**
      * Sets the required input parameter for service.
-     * @param amount input paramater
+     * @param amount input parameter
      */
-    public void setAmount(Double amount);
+    public void setAmount(BigDecimal amount);
 
     /**
      * Sets the required input parameter for service.
-     * @param description input paramater
+     * @param description input parameter
      */
     public void setDescription(String description);
 
     /**
      * Sets the required input parameter for service.
-     * @param taxAuthPartyId input paramater
+     * @param taxAuthPartyId input parameter
      */
     public void setTaxAuthPartyId(String taxAuthPartyId);
 
     /**
      * Sets the required input parameter for service.
-     * @param taxAuthGeoId input paramater
+     * @param taxAuthGeoId input parameter
      */
     public void setTaxAuthGeoId(String taxAuthGeoId);
 
     /**
      * Sets the required input parameter for service.
-     * @param taxAuthorityRateSeqId input paramater
+     * @param taxAuthorityRateSeqId input parameter
      */
     public void setTaxAuthorityRateSeqId(String taxAuthorityRateSeqId);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId1 input paramater
+     * @param acctgTagEnumId1 input parameter
      */
     public void setAcctgTagEnumId1(String acctgTagEnumId1);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId2 input paramater
+     * @param acctgTagEnumId2 input parameter
      */
     public void setAcctgTagEnumId2(String acctgTagEnumId2);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId3 input paramater
+     * @param acctgTagEnumId3 input parameter
      */
     public void setAcctgTagEnumId3(String acctgTagEnumId3);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId4 input paramater
+     * @param acctgTagEnumId4 input parameter
      */
     public void setAcctgTagEnumId4(String acctgTagEnumId4);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId5 input paramater
+     * @param acctgTagEnumId5 input parameter
      */
     public void setAcctgTagEnumId5(String acctgTagEnumId5);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId6 input paramater
+     * @param acctgTagEnumId6 input parameter
      */
     public void setAcctgTagEnumId6(String acctgTagEnumId6);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId7 input paramater
+     * @param acctgTagEnumId7 input parameter
      */
     public void setAcctgTagEnumId7(String acctgTagEnumId7);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId8 input paramater
+     * @param acctgTagEnumId8 input parameter
      */
     public void setAcctgTagEnumId8(String acctgTagEnumId8);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId9 input paramater
+     * @param acctgTagEnumId9 input parameter
      */
     public void setAcctgTagEnumId9(String acctgTagEnumId9);
 
     /**
      * Sets the required input parameter for service.
-     * @param acctgTagEnumId10 input paramater
+     * @param acctgTagEnumId10 input parameter
      */
     public void setAcctgTagEnumId10(String acctgTagEnumId10);
 

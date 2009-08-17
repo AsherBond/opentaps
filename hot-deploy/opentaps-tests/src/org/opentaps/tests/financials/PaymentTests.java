@@ -53,7 +53,7 @@ public class PaymentTests extends FinancialsTestCase {
         // create a new customer party
         String customerPartyId = createPartyFromTemplate("DemoCustomer", "Cash", "Payer");
         // create a CUSTOMER_PAYMENT from any party to Company
-        final double amount = 1.23;
+        BigDecimal amount = new BigDecimal("1.23");
         String paymentId = fa.createPayment(amount, customerPartyId, "CUSTOMER_PAYMENT", "CASH");
         Payment payment = repository.getPaymentById(paymentId);
 
@@ -80,7 +80,7 @@ public class PaymentTests extends FinancialsTestCase {
         // create a new customer party
         String supplierPartyId = createPartyFromTemplate("DemoSupplier", "COCHECKING", "Supplier");
         // create a VENDOR_PAYMENT to any party from Company
-        final double amount = 9.87;
+        BigDecimal amount = new BigDecimal("9.87");
         String paymentId = fa.createPaymentAndApplication(amount, organizationPartyId, supplierPartyId, "VENDOR_PAYMENT", null, "COCHECKING", null, null);
         Payment payment = repository.getPaymentById(paymentId);
 
@@ -115,7 +115,7 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Number> beforeBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
 
         // Create payment of type CUSTOMER_PAYMENT from any party to Company with paymentMethodType = CASH for $1.23
-        final double amount = 1.23;
+        BigDecimal amount = new BigDecimal("1.23");
         String paymentId = fa.createPayment(amount, partyId, "CUSTOMER_PAYMENT", "CASH");
 
         // Set payment to RECEIVED
@@ -128,14 +128,14 @@ public class PaymentTests extends FinancialsTestCase {
                 beforeBalances,
                 afterBalances,
                 UtilMisc.toMap(
-                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "UNDEPOSITED_RECEIPTS", delegator), BigDecimal.valueOf(amount),
-                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "ACCOUNTS_RECEIVABLE", delegator), BigDecimal.valueOf(-amount)
+                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "UNDEPOSITED_RECEIPTS", delegator), amount,
+                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "ACCOUNTS_RECEIVABLE", delegator), amount.negate()
                 )
         );
 
         // verify that we get a negative accounts receivable balance for this customer
         BigDecimal customerBalance = AccountsHelper.getBalanceForCustomerPartyId(partyId, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator);
-        assertEquals("Accounts receivable balance for [" + partyId + "] is correct", customerBalance.setScale(DECIMALS, ROUNDING), new BigDecimal(amount).negate().setScale(DECIMALS, ROUNDING));
+        assertEquals("Accounts receivable balance for [" + partyId + "] is correct", customerBalance.setScale(DECIMALS, ROUNDING), amount.negate().setScale(DECIMALS, ROUNDING));
 
         // Set payment to CONFIRMED
         fa.updatePaymentStatus(paymentId, "PMNT_CONFIRMED");
@@ -155,7 +155,7 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Number> beforeBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
 
         // Create payment of type CUSTOMER_DEPOSIT from any party to Company with paymentMethodType = PERSONAL_CHECK for $4.56
-        final double amount = 4.56;
+        BigDecimal amount = new BigDecimal("4.56");
         String paymentId = fa.createPayment(amount, "DemoCustomer", "CUSTOMER_DEPOSIT", "PERSONAL_CHECK");
 
         // Set payment to RECEIVED
@@ -168,8 +168,8 @@ public class PaymentTests extends FinancialsTestCase {
                 beforeBalances,
                 afterBalances,
                 UtilMisc.toMap(
-                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "UNDEPOSITED_RECEIPTS", delegator), BigDecimal.valueOf(amount),
-                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "CUSTOMER_DEPOSIT", delegator), BigDecimal.valueOf(-amount)
+                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "UNDEPOSITED_RECEIPTS", delegator), amount,
+                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "CUSTOMER_DEPOSIT", delegator), amount.negate()
                 )
         );
 
@@ -209,7 +209,7 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Number> beforeBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
 
         //Create payment of type CUSTOMER_PAYMENT from any party to Company with paymentMethod = credit card from above for $7.89
-        final double amount = 7.89;
+        BigDecimal amount = new BigDecimal("7.89");
         String paymentId = fa.createPaymentAndApplication(amount, customerId, organizationPartyId, "CUSTOMER_PAYMENT", null, paymentMethodId, null, null);
 
         // Set payment to RECEIVED
@@ -225,8 +225,8 @@ public class PaymentTests extends FinancialsTestCase {
                 beforeBalances,
                 afterBalances,
                 UtilMisc.toMap(
-                        crediCardGlAccount.getString("glAccountId"), BigDecimal.valueOf(amount),
-                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "ACCOUNTS_RECEIVABLE", delegator), BigDecimal.valueOf(-amount)
+                        crediCardGlAccount.getString("glAccountId"), amount,
+                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "ACCOUNTS_RECEIVABLE", delegator), amount.negate()
                 )
         );
 
@@ -260,7 +260,7 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Number> beforeBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
 
         // Create payment of type VENDOR_PAYMENT from Company to DemoSupplier with paymentMethod = COCHECKING for $9.87
-        final double amount = 9.87;
+        BigDecimal amount = new BigDecimal("9.87");
         String paymentId = fa.createPaymentAndApplication(amount, organizationPartyId, "DemoSupplier", "VENDOR_PAYMENT", null, "COCHECKING", null, null);
 
         // Set payment to SENT
@@ -277,8 +277,8 @@ public class PaymentTests extends FinancialsTestCase {
                 beforeBalances,
                 afterBalances,
                 UtilMisc.toMap(
-                        paymentMethod.getString("glAccountId"), BigDecimal.valueOf(-amount),
-                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "ACCOUNTS_PAYABLE", delegator), BigDecimal.valueOf(amount)
+                        paymentMethod.getString("glAccountId"), amount.negate(),
+                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "ACCOUNTS_PAYABLE", delegator), amount
                 )
         );
 
@@ -299,7 +299,7 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Number> beforeBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
 
         // Create payment of type VENDOR_PREPAY from Company to DemoSupplier with paymentMethod = COAMEX for $6.54
-        final double amount = 6.54;
+        BigDecimal amount = new BigDecimal("6.54");
         String paymentId = fa.createPaymentAndApplication(amount, organizationPartyId, "DemoSupplier", "VENDOR_PREPAY", null, "COAMEX", null, null);
 
         // Set payment to SENT
@@ -315,8 +315,8 @@ public class PaymentTests extends FinancialsTestCase {
                 beforeBalances,
                 afterBalances,
                 UtilMisc.toMap(
-                        paymentMethod.getString("glAccountId"), BigDecimal.valueOf(-amount),
-                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "PREPAID_EXPENSES", delegator), BigDecimal.valueOf(amount)
+                        paymentMethod.getString("glAccountId"), amount.negate(),
+                        UtilFinancial.getOrgGlAccountId(organizationPartyId, "PREPAID_EXPENSES", delegator), amount
                 )
         );
 
@@ -339,14 +339,14 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Number> beforeBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
 
         // Create payment of type SALES_TAX_PAYMENT from Company to CA_BOE with paymentMethod = COMMKT for $3.21
-        final double amount = 3.21;
+        BigDecimal amount = new BigDecimal("3.21");
         String paymentId = fa.createPaymentAndApplication(amount, organizationPartyId, "CA_BOE", "SALES_TAX_PAYMENT", null, "COMMKT", null, null);
 
         // Create PaymentApplication with taxAuthGeoId=CA for this payment for the amount of 3.21
         Map<String, Object> ctxt = FastMap.newInstance();
         ctxt.put("userLogin", demofinadmin);
         ctxt.put("paymentId", paymentId);
-        ctxt.put("amountApplied", Double.valueOf(amount));
+        ctxt.put("amountApplied", amount);
         ctxt.put("taxAuthGeoId", "CA");
         runAndAssertServiceSuccess("createPaymentApplication", ctxt);
 
@@ -380,8 +380,8 @@ public class PaymentTests extends FinancialsTestCase {
                 beforeBalances,
                 afterBalances,
                 UtilMisc.toMap(
-                        taxAuthGlAccount.getString("glAccountId"), BigDecimal.valueOf(amount),
-                        paymentMethod.getString("glAccountId"), BigDecimal.valueOf(-amount)
+                        taxAuthGlAccount.getString("glAccountId"), amount,
+                        paymentMethod.getString("glAccountId"), amount.negate()
                 )
         );
 
@@ -402,13 +402,13 @@ public class PaymentTests extends FinancialsTestCase {
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), "Test createPaymentApplication", "testCreatePaymentApplication1", "Test createPaymentApplication");
 
         // create a an invoice item of total amount 40.0
-        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", 4.0, 10.0);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", new BigDecimal("4.0"), new BigDecimal("10.0"));
 
         // set to Ready
         financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
         // create a payment of amount 20.0
-        String paymentId = financialAsserts.createPayment(20.0, customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
+        String paymentId = financialAsserts.createPayment(new BigDecimal("20.0"), customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
 
         // try to apply 30.0 from this payment
         // this should fail as the payment amount was only 20.0
@@ -490,7 +490,7 @@ public class PaymentTests extends FinancialsTestCase {
 
 
         // create a payment of amount 100.0
-        String payment2Id = financialAsserts.createPayment(100.0, customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
+        String payment2Id = financialAsserts.createPayment(new BigDecimal("100.0"), customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
 
         // try to apply 30.0 from this payment
         // this should fail as the invoice outstanding amount is only 20.0
@@ -537,13 +537,13 @@ public class PaymentTests extends FinancialsTestCase {
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), "Test createPaymentApplication", "testCreatePaymentApplication1", "Test createPaymentApplication");
 
         // create a an invoice item of total amount 40.0
-        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", 4.0, 10.0);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", new BigDecimal("4.0"), new BigDecimal("10.0"));
 
         // set to Ready
         financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
         // create a payment of amount 20.0, the first status is NOT_PAID
-        String paymentId = financialAsserts.createPayment(20.0, customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
+        String paymentId = financialAsserts.createPayment(new BigDecimal("20.0"), customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
         financialAsserts.assertPaymentStatus(paymentId, "PMNT_NOT_PAID");
 
         // apply 10.0 from this payment
@@ -620,7 +620,7 @@ public class PaymentTests extends FinancialsTestCase {
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), "Test createPaymentApplication", "testCreatePaymentApplication1", "Test createPaymentApplication");
 
         // create a an invoice item of total amount 40.0
-        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", 4.0, 10.0);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", new BigDecimal("4.0"), new BigDecimal("10.0"));
 
         // set to Ready
         financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
@@ -629,7 +629,7 @@ public class PaymentTests extends FinancialsTestCase {
         BigDecimal customerBalance1 = AccountsHelper.getBalanceForCustomerPartyId(customerPartyId, organizationPartyId, "ACTUAL",  UtilDateTime.nowTimestamp(), delegator);
 
         // create a payment of amount 20.0, apply it and mark as RECEIVED
-        String paymentId = financialAsserts.createPayment(20.0, customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
+        String paymentId = financialAsserts.createPayment(new BigDecimal("20.0"), customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
@@ -646,7 +646,7 @@ public class PaymentTests extends FinancialsTestCase {
 
         // create a second payment of amount 20.0, apply it
         pause("Workaround pause for MySQL duplicate timestamps");
-        paymentId = financialAsserts.createPayment(20.0, customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
+        paymentId = financialAsserts.createPayment(new BigDecimal("20.0"), customerPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
@@ -768,13 +768,13 @@ public class PaymentTests extends FinancialsTestCase {
         BigDecimal customerBalance1 = AccountsHelper.getBalanceForCustomerPartyId(customerPartyId, organizationPartyId, "ACTUAL",  UtilDateTime.nowTimestamp(), delegator);
 
         // 4. create a payment of type CUSTOMER_DEPOSIT from customer of payment method type PERSONAL_CHECK for $100, and set the payment to RECEIVED
-        final double amount = 100.0;
+        BigDecimal amount = new BigDecimal("100.0");
         String paymentId = fa.createPayment(amount, customerPartyId, "CUSTOMER_DEPOSIT", "PERSONAL_CHECK");
         fa.updatePaymentStatus(paymentId, "PMNT_RECEIVED");
 
         // 5. create a sales invoice for customer of $100
         String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), "testCustomerDepositAndInvoicing");
-        fa.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", 1.0, amount);
+        fa.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", new BigDecimal("1.0"), amount);
         // 6. set invoice to READY
         fa.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
@@ -800,9 +800,9 @@ public class PaymentTests extends FinancialsTestCase {
                 beforeBalances,
                 afterBalances,
                 UtilMisc.toMap(
-                           UtilFinancial.getOrgGlAccountId(organizationPartyId, "UNDEPOSITED_RECEIPTS", delegator), BigDecimal.valueOf(amount),
-                           UtilFinancial.getOrgGlAccountId(organizationPartyId, "ACCOUNTS_RECEIVABLE", delegator), BigDecimal.valueOf(0),
-                           UtilFinancial.getOrgGlAccountId(organizationPartyId, "CUSTOMER_DEPOSIT", delegator), BigDecimal.valueOf(0)
+                           UtilFinancial.getOrgGlAccountId(organizationPartyId, "UNDEPOSITED_RECEIPTS", delegator), amount,
+                           UtilFinancial.getOrgGlAccountId(organizationPartyId, "ACCOUNTS_RECEIVABLE", delegator), BigDecimal.ZERO,
+                           UtilFinancial.getOrgGlAccountId(organizationPartyId, "CUSTOMER_DEPOSIT", delegator), BigDecimal.ZERO
                        )
         );
     }
@@ -829,16 +829,16 @@ public class PaymentTests extends FinancialsTestCase {
         
         // create sales invoice #1 for $100 from organization to subaccount party. Set the invoice to ready.
         String invoiceId1 = fa.createInvoice(subAccountPartyId1, "SALES_INVOICE", UtilDateTime.nowTimestamp(), "testParentPaymentForSubAccountInvoice");
-        fa.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-8544", 2, 50);
+        fa.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-8544", new BigDecimal("2.0"), new BigDecimal("50.0"));
         fa.updateInvoiceStatus(invoiceId1, "INVOICE_READY");
 
         // create sales invoice #2 for $150 from organization to subaccount party. Set the invoice to ready.
         String invoiceId2 = fa.createInvoice(subAccountPartyId2, "SALES_INVOICE", UtilDateTime.nowTimestamp(), "testParentPaymentForSubAccountInvoice");
-        fa.createInvoiceItem(invoiceId2, "INV_PROD_ITEM", "GZ-8544", 2, 75);
+        fa.createInvoiceItem(invoiceId2, "INV_PROD_ITEM", "GZ-8544", new BigDecimal("2.0"), new BigDecimal("75.0"));
         fa.updateInvoiceStatus(invoiceId2, "INVOICE_READY");
 
         // Create a customer payment for $200 from Parent account party to organization.
-        String paymentId1 = fa.createPayment(200.0, accountPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
+        String paymentId1 = fa.createPayment(new BigDecimal("200.0"), accountPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD");
 
         // apply the payment to the invoice 1 and invoice 2 by creating a PaymentApplication
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
@@ -863,7 +863,7 @@ public class PaymentTests extends FinancialsTestCase {
         fa.assertInvoiceStatus(invoiceId2, "INVOICE_READY");
 
         // Receive a payment for $50 from sub account 2 and apply it to invoice 2
-        String paymentId2 = fa.createPayment(50.0, subAccountPartyId2, "CUSTOMER_PAYMENT", "PERSONAL_CHECK");
+        String paymentId2 = fa.createPayment(new BigDecimal("50.0"), subAccountPartyId2, "CUSTOMER_PAYMENT", "PERSONAL_CHECK");
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId2);
         input.put("invoiceId", invoiceId2);

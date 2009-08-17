@@ -622,29 +622,29 @@ public class FinancialsTests extends FinancialsTestCase {
     public void testInvoiceTransactionPostingDate() throws GeneralException {
     	// create a customer
     	String customerPartyId = createPartyFromTemplate("DemoAccount1", "account for testing invoice posting transaction date");
-    	
+
     	// create a sales invoice to the customer 30 days in the future
     	FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
     	Timestamp invoiceDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale);
     	String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", invoiceDate, null, null, null);
-    	financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", 2.0, 15.0);
-    	
+    	financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("2.0"), new BigDecimal("15.0"));
+
     	// set invoice to READY
     	financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
-    	
+
     	// check that the accounting transaction's transactionDate is the same as the invoice's invoiceDate
     	LedgerRepositoryInterface ledgerRepository = ledgerDomain.getLedgerRepository();
     	List<AccountingTransaction> invoiceAcctgTransList = ledgerRepository.findList(AccountingTransaction.class, ledgerRepository.map(org.opentaps.domain.base.entities.AcctgTrans.Fields.invoiceId, invoiceId));
     	assertNotNull("An accounting transaction was not found for invoice [" + invoiceId + "]", invoiceAcctgTransList);
     	AccountingTransaction acctgTrans = invoiceAcctgTransList.get(0);
-    	
+
     	// note: it is important to get the actual invoiceDate stored in the Invoice entity, not the invoiceDate from above
     	// for example, mysql might store 2009-06-12 12:46:30.309 as 2009-06-12 12:46:30.0, so your comparison won't equal
     	InvoiceRepositoryInterface repository = billingDomain.getInvoiceRepository();
     	Invoice invoice = repository.getInvoiceById(invoiceId);
     	assertEquals("Transaction date and invoice date do not equal", acctgTrans.getTransactionDate(), invoice.getInvoiceDate());
     }
-    
+
     /**
      * Test to verify that payments are posted to the effectiveDate of the payment
      * @throws GeneralException
@@ -653,7 +653,7 @@ public class FinancialsTests extends FinancialsTestCase {
     	String customerPartyId = createPartyFromTemplate("DemoAccount1", "account for testing payment posting transaction date");
     	FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
     	Timestamp paymentDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale);
-    	String paymentId = financialAsserts.createPayment(1.0, customerPartyId, "CUSTOMER_PAYMENT", "CASH");
+    	String paymentId = financialAsserts.createPayment(new BigDecimal("1.0"), customerPartyId, "CUSTOMER_PAYMENT", "CASH");
 
     	PaymentRepositoryInterface paymentRepository = billingDomain.getPaymentRepository();
     	Payment payment = paymentRepository.getPaymentById(paymentId);
@@ -671,7 +671,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
     	assertEquals("Transaction date and invoice date do not equal", acctgTrans.getTransactionDate(), payment.getEffectiveDate());
     }
-    
+
     /**
      * Tests basic methods of Invoice class for sales invoice.
      * @exception GeneralException if an error occurs
@@ -685,7 +685,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // create invoice
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", 2.0, 15.0);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("2.0"), new BigDecimal("15.0"));
 
         // Check the Invoice.isReceivable() is true
         Invoice invoice = repository.getInvoiceById(invoiceId);
@@ -712,7 +712,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // create a PURCHASE_INVOICE from another party to Company
         String invoiceId = financialAsserts.createInvoice(supplierPartyId, "PURCHASE_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        financialAsserts.createInvoiceItem(invoiceId, "PINV_FPROD_ITEM", "GZ-1000", 100.0, 4.56);
+        financialAsserts.createInvoiceItem(invoiceId, "PINV_FPROD_ITEM", "GZ-1000", new BigDecimal("100.0"), new BigDecimal("4.56"));
 
         // Check the Invoice.isReceivable() is false
         Invoice invoice = repository.getInvoiceById(invoiceId);
@@ -754,10 +754,10 @@ public class FinancialsTests extends FinancialsTestCase {
         // create invoice and set it to ready
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
 
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", 2.0, 15.0);
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", "GZ-1000", 1.0, -10.0);
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1001", 1.0, 45.0);
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, null,  12.95);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("2.0"), new BigDecimal("15.0"));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", "GZ-1000", new BigDecimal("1.0"), new BigDecimal("-10.0"));
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1001", new BigDecimal("1.0"), new BigDecimal("45.0"));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, null, new BigDecimal("12.95"));
 
         // Check the invoice current status
         Invoice invoice = repository.getInvoiceById(invoiceId);
@@ -776,7 +776,7 @@ public class FinancialsTests extends FinancialsTestCase {
         assertMapDifferenceCorrect(initialBalances, halfBalances, accountMap);
 
         // create payment and set it to received
-        String paymentId = financialAsserts.createPaymentAndApplication(77.95, customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_NOT_PAID");
+        String paymentId = financialAsserts.createPaymentAndApplication(new BigDecimal("77.95"), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_NOT_PAID");
         financialAsserts.updatePaymentStatus(paymentId, "PMNT_RECEIVED");
 
         invoice = repository.getInvoiceById(invoiceId);
@@ -828,10 +828,10 @@ public class FinancialsTests extends FinancialsTestCase {
         // create invoice and set it to ready
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
 
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", 2.0, 15.0);
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", "GZ-1000", 1.0, -10.0);
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1001", 1.0, 45.0);
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, null,  12.95);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("2.0"), new BigDecimal("15.0"));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", "GZ-1000", new BigDecimal("1.0"), new BigDecimal("-10.0"));
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1001", new BigDecimal("1.0"), new BigDecimal("45.0"));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, null, new BigDecimal("12.95"));
 
         // Update the Invoice status
         financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
@@ -847,7 +847,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
 
         // create payment and set it to received
-        String paymentId = financialAsserts.createPaymentAndApplication(77.95, customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_NOT_PAID");
+        String paymentId = financialAsserts.createPaymentAndApplication(new BigDecimal("77.95"), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_NOT_PAID");
         financialAsserts.updatePaymentStatus(paymentId, "PMNT_RECEIVED");
 
 
@@ -927,10 +927,10 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // create invoice and set it to ready
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", 2.0, 15.0);
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", "GZ-1000", 1.0, -10.0);
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1001", 1.0, 45.0);
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, null,  12.95);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("2.0"), new BigDecimal("15.0"));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", "GZ-1000", new BigDecimal("1.0"), new BigDecimal("-10.0"));
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1001", new BigDecimal("1.0"), new BigDecimal("45.0"));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, null,  new BigDecimal("12.95"));
         financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
         now = UtilDateTime.nowTimestamp();
@@ -996,9 +996,9 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // create invoice
         String invoiceId = financialAsserts.createInvoice(supplierPartyId, "PURCHASE_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        financialAsserts.createInvoiceItem(invoiceId, "PINV_FPROD_ITEM", "GZ-1000", 100.0, 4.56);
-        financialAsserts.createInvoiceItem(invoiceId, "PITM_SHIP_CHARGES", 1.0, 13.95);
-        financialAsserts.createInvoiceItem(invoiceId, "PINV_SUPLPRD_ITEM", 1.0, 56.78);
+        financialAsserts.createInvoiceItem(invoiceId, "PINV_FPROD_ITEM", "GZ-1000", new BigDecimal("100.0"), new BigDecimal("4.56"));
+        financialAsserts.createInvoiceItem(invoiceId, "PITM_SHIP_CHARGES", new BigDecimal("1.0"), new BigDecimal("13.95"));
+        financialAsserts.createInvoiceItem(invoiceId, "PINV_SUPLPRD_ITEM", new BigDecimal("1.0"), new BigDecimal("56.78"));
 
         // Check the invoice current status
         Invoice invoice = repository.getInvoiceById(invoiceId);
@@ -1027,7 +1027,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
 
         // create payment and set it to sent
-        String paymentId = financialAsserts.createPaymentAndApplication(526.73, organizationPartyId, supplierPartyId, "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", invoiceId, "PMNT_NOT_PAID");
+        String paymentId = financialAsserts.createPaymentAndApplication(new BigDecimal("526.73"), organizationPartyId, supplierPartyId, "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", invoiceId, "PMNT_NOT_PAID");
         financialAsserts.updatePaymentStatus(paymentId, "PMNT_SENT");
 
         invoice = repository.getInvoiceById(invoiceId);
@@ -1111,7 +1111,7 @@ public class FinancialsTests extends FinancialsTestCase {
         String customer2PartyId = createPartyFromTemplate("DemoCustCompany", "Account2 for testFinanceCharges");
 
         String invoiceId1 = fa.createInvoice(customer1PartyId, "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -60, timeZone, locale));
-        fa.createInvoiceItem(invoiceId1, "INV_FPROD_ITEM", "WG-1111", 1.0, 100.0);
+        fa.createInvoiceItem(invoiceId1, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("100.0"));
 
         // set invoice status to READY is successful
         fa.updateInvoiceStatus(invoiceId1, "INVOICE_READY");
@@ -1122,7 +1122,7 @@ public class FinancialsTests extends FinancialsTestCase {
          * Set invoice to ready.
          */
         String invoiceId2 = fa.createInvoice(customer2PartyId, "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -45, timeZone, locale));
-        fa.createInvoiceItem(invoiceId2, "INV_FPROD_ITEM", "WG-1111", 2.0, 250.0);
+        fa.createInvoiceItem(invoiceId2, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("2.0"), new BigDecimal("250.0"));
 
         // set invoice status to READY is successful
         fa.updateInvoiceStatus(invoiceId2, "INVOICE_READY");
@@ -1133,7 +1133,7 @@ public class FinancialsTests extends FinancialsTestCase {
          * Set invoice to ready.
          */
         String invoiceId3 = fa.createInvoice(customer1PartyId, "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -20, timeZone, locale));
-        fa.createInvoiceItem(invoiceId3, "INV_FPROD_ITEM", "WG-1111", 1.0, 250.0);
+        fa.createInvoiceItem(invoiceId3, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("250.0"));
 
         // set invoice status to READY is successful
         fa.updateInvoiceStatus(invoiceId3, "INVOICE_READY");
@@ -1144,7 +1144,7 @@ public class FinancialsTests extends FinancialsTestCase {
          * Set invoice to ready
          */
         String invoiceId4 = fa.createInvoice("DemoPrivilegedCust", "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -60, timeZone, locale));
-        fa.createInvoiceItem(invoiceId4, "INV_FPROD_ITEM", "WG-1111", 2.0, 567.89);
+        fa.createInvoiceItem(invoiceId4, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("2.0"), new BigDecimal("567.89"));
 
         // set invoice status to READY is successful
         fa.updateInvoiceStatus(invoiceId4, "INVOICE_READY");
@@ -1377,7 +1377,7 @@ public class FinancialsTests extends FinancialsTestCase {
          * Run AccountsHelper.calculateFinanceCharges 30 days further in the
          * future (asOfDateTime parameter)
          */
-        financialAsserts.createPaymentAndApplication(250.0, "DemoPrivilegedCust", organizationPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD", null, invoiceId4, "PMNT_RECEIVED");
+        financialAsserts.createPaymentAndApplication(new BigDecimal("250.0"), "DemoPrivilegedCust", organizationPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD", null, invoiceId4, "PMNT_RECEIVED");
 
         financeCharges = AccountsHelper.calculateFinanceCharges(delegator, organizationPartyId, null, null, new BigDecimal("8.0"),
                 UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale), 30, timeZone, locale);
@@ -1425,8 +1425,8 @@ public class FinancialsTests extends FinancialsTestCase {
          * and (b) 1.0 "Shipping and handling" for $9.95
          */
         String invoiceId = fa.createInvoice(companyPartyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", 2.0, 50.0);
-        fa.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", 1.0, 9.95);
+        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("2.0"), new BigDecimal("50.0"));
+        fa.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", new BigDecimal("1.0"), new BigDecimal("9.95"));
 
         /*
          * 2.  Get the AccountsHelper customer receivable
@@ -1558,14 +1558,14 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // create the purchase invoice
         String invoiceId = fa.createInvoice(supplierPartyId, "PURCHASE_INVOICE");
-        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", 1.0, 10.0);
+        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("10.0"));
         fa.updateInvoiceStatus(invoiceId, "INVOICE_READY");
         InvoiceRepositoryInterface repository = dd.getBillingDomain().getInvoiceRepository();
 
         Map initialBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
         BigDecimal vendorBalance1 = AccountsHelper.getBalanceForVendorPartyId(supplierPartyId, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator);
 
-        fa.createPaymentAndApplication(8.0, organizationPartyId, supplierPartyId, "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", invoiceId, "PMNT_SENT");
+        fa.createPaymentAndApplication(new BigDecimal("8.0"), organizationPartyId, supplierPartyId, "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", invoiceId, "PMNT_SENT");
         Invoice invoice = repository.getInvoiceById(invoiceId);
         assertEquals("Invoice is still ready", invoice.getStatusId(), "INVOICE_READY");
         assertEquals("Invoice outstanding amt is $2", invoice.getOpenAmount(), new BigDecimal("2.0"));
@@ -1616,7 +1616,7 @@ public class FinancialsTests extends FinancialsTestCase {
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         String customerPartyId = createPartyFromTemplate("DemoCustomer", "Customer for testInvoiceAdjustmentWithPayment");
         String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", 1.0, 10.0);
+        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("10.0"));
         fa.updateInvoiceStatus(invoiceId, "INVOICE_READY");
         InvoiceRepository repository = new InvoiceRepository(delegator);
 
@@ -1624,7 +1624,7 @@ public class FinancialsTests extends FinancialsTestCase {
         BigDecimal custBalance1 = AccountsHelper.getBalanceForCustomerPartyId(customerPartyId, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator);
 
         // company check payment from customer of $6
-        fa.createPaymentAndApplication(6.0, customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_RECEIVED");
+        fa.createPaymentAndApplication(new BigDecimal("6.0"), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_RECEIVED");
         Invoice invoice = repository.getInvoiceById(invoiceId);
         assertEquals("Invoice is still ready", invoice.getStatusId(), "INVOICE_READY");
         assertEquals("Invoice outstanding amt is $4", invoice.getOpenAmount(), new BigDecimal("4.0"));
@@ -1635,7 +1635,7 @@ public class FinancialsTests extends FinancialsTestCase {
         assertNotNull(invoiceAdjustmentId);
 
         // another customer payment for the remaining $2, which should pay off the invoice
-        fa.createPaymentAndApplication(2.0, customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "CASH", null, invoiceId, "PMNT_RECEIVED");
+        fa.createPaymentAndApplication(new BigDecimal("2.0"), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "CASH", null, invoiceId, "PMNT_RECEIVED");
         invoice = repository.getInvoiceById(invoiceId);
         assertEquals("Invoice is paid", "INVOICE_PAID", invoice.getStatusId());
         assertEquals("Invoice outstanding amt is $0", BigDecimal.ZERO, invoice.getOpenAmount());
@@ -1675,7 +1675,7 @@ public class FinancialsTests extends FinancialsTestCase {
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         String customerPartyId = createPartyFromTemplate("DemoCustCompany", "Customer for testAdjustmentToCancelledInvoice");
         String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", 1.0, 10.0);
+        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("10.0"));
 
         // post an adjustment of $2 of type EARLY_PAY_DISCT to the invoice
         Map results = runAndAssertServiceSuccess("createInvoiceAdjustment", UtilMisc.toMap("userLogin", demofinadmin, "invoiceId", invoiceId, "invoiceAdjustmentTypeId", "EARLY_PAY_DISCT", "adjustmentAmount", new BigDecimal("2.0")));
@@ -1725,7 +1725,7 @@ public class FinancialsTests extends FinancialsTestCase {
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         String customerPartyId = createPartyFromTemplate("DemoCustCompany", "Customer for testAdjustPostVoidForInvoice");
         String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", 1.0, 10.0);
+        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("10.0"));
 
         // post an adjustment of $2 of type CASH_DISCOUNT to the invoice
         Map results = runAndAssertServiceSuccess("createInvoiceAdjustment", UtilMisc.toMap("userLogin", demofinadmin, "invoiceId", invoiceId, "invoiceAdjustmentTypeId", "CASH_DISCOUNT", "adjustmentAmount", new BigDecimal("-2.0")));
@@ -1859,67 +1859,67 @@ public class FinancialsTests extends FinancialsTestCase {
          * (a) Create sales invoice #1 from Company to Customer A for $100, invoice date 91 days before current date, due date 30 days after invoice date
          */
         String invoiceId1 = fa.createInvoice(customerId.get(0), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -91, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -91 + 30, timeZone, locale), null, null, "invoiceId1");
-        fa.createInvoiceItem(invoiceId1, "INV_FPROD_ITEM", "WG-1111", 1.0, 100.0);
+        fa.createInvoiceItem(invoiceId1, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("100.0"));
 
         /*
          * (b) Create sales invoice #2 from Company to Customer A for $50, invoice date 25 days before current date, due date 30 days after invoice date
          */
         String invoiceId2 = fa.createInvoice(customerId.get(0), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -25, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -25 + 30, timeZone, locale), null, null, "invoiceId2");
-        fa.createInvoiceItem(invoiceId2, "INV_FPROD_ITEM", "WG-1111", 1.0, 50.0);
+        fa.createInvoiceItem(invoiceId2, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("50.0"));
 
         /*
          * (c) Create sales invoice #3 from Company to Customer B for $150, invoice date 55 days before current date, due date 60 days after invoice date
          */
         String invoiceId3 = fa.createInvoice(customerId.get(1), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -55, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -55 + 60, timeZone, locale), null, null, "invoiceId3");
-        fa.createInvoiceItem(invoiceId3, "INV_FPROD_ITEM", "WG-1111", 1.0, 150.0);
+        fa.createInvoiceItem(invoiceId3, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("150.0"));
 
         /*
          * (d) Create sales invoice #4 from Company to Customer C for $170, invoice date 120 days before current date, due date 30 days after invoice date
          */
         String invoiceId4 = fa.createInvoice(customerId.get(2), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -120, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -120 + 30, timeZone, locale), null, null, "invoiceId4");
-        fa.createInvoiceItem(invoiceId4, "INV_FPROD_ITEM", "WG-1111", 1.0, 170.0);
+        fa.createInvoiceItem(invoiceId4, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("170.0"));
 
         /*
          * (e) Create sales invoice #5 from Company to Customer B for $210, invoice date 15 days before current date, due date 7 days after invoice date
          */
         String invoiceId5 = fa.createInvoice(customerId.get(1), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -15, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -15 + 7, timeZone, locale), null, null, "invoiceId5");
-        fa.createInvoiceItem(invoiceId5, "INV_FPROD_ITEM", "WG-1111", 1.0, 210.0);
+        fa.createInvoiceItem(invoiceId5, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("210.0"));
 
         /*
          * (f) Create sales invoice #6 from Company to Customer A for $500, invoice date 36 days before current date, due date 30 days after invoice date
          */
         String invoiceId6 = fa.createInvoice(customerId.get(0), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -36, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -36 + 30, timeZone, locale), null, null, "invoiceId6");
-        fa.createInvoiceItem(invoiceId6, "INV_FPROD_ITEM", "WG-1111", 1.0, 500.0);
+        fa.createInvoiceItem(invoiceId6, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("500.0"));
 
         /*
          * (g) Create sales invoice #7 from Company to Customer C for $228, invoice date 42 days before current date, due date 45 days after invoice date
          */
         String invoiceId7 = fa.createInvoice(customerId.get(2), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -42, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -42 + 45, timeZone, locale), null, null, "invoiceId7");
-        fa.createInvoiceItem(invoiceId7, "INV_FPROD_ITEM", "WG-1111", 1.0, 228.0);
+        fa.createInvoiceItem(invoiceId7, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("228.0"));
 
         /*
          * (h) Create sales invoice #8 from Company to Customer B for $65, invoice date 15 days before current date, due date 30 days after invoice date
          */
         String invoiceId8 = fa.createInvoice(customerId.get(1), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -15, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -15 + 30, timeZone, locale), null, null, "invoiceId8");
-        fa.createInvoiceItem(invoiceId8, "INV_FPROD_ITEM", "WG-1111", 1.0, 65.0);
+        fa.createInvoiceItem(invoiceId8, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("65.0"));
 
         /*
          * (i) Create sales invoice #9 from Company to Customer A for $156, invoice date 6 days before current date, due date 15 days after invoice date
          */
         String invoiceId9 = fa.createInvoice(customerId.get(0), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -6, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -6 + 15, timeZone, locale), null, null, "invoiceId9");
-        fa.createInvoiceItem(invoiceId9, "INV_FPROD_ITEM", "WG-1111", 1.0, 156.0);
+        fa.createInvoiceItem(invoiceId9, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("156.0"));
 
         /*
          * (j) Create sales invoice #10 from Company to Customer C for $550, invoice date 33 days before current date, due date 15 days after invoice date
          */
         String invoiceId10 = fa.createInvoice(customerId.get(2), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -33, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -33 + 15, timeZone, locale), null, null, "invoiceId10");
-        fa.createInvoiceItem(invoiceId10, "INV_FPROD_ITEM", "WG-1111", 1.0, 550.0);
+        fa.createInvoiceItem(invoiceId10, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("550.0"));
 
         /*
          * (k) Create sales invoice #11 from Company to Customer B for $90, invoice date 62 days before current date, due date 90 days after invoice date
          */
         String invoiceId11 = fa.createInvoice(customerId.get(1), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -62, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -62 + 90, timeZone, locale), null, null, "invoiceId11");
-        fa.createInvoiceItem(invoiceId11, "INV_FPROD_ITEM", "WG-1111", 1.0, 90.0);
+        fa.createInvoiceItem(invoiceId11, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("90.0"));
 
         /*
          * 3.  Cancel invoice #2
@@ -1956,18 +1956,18 @@ public class FinancialsTests extends FinancialsTestCase {
         /*
          * 7.  Receive a payment of $65 for invoice #8
          */
-        fa.createPaymentAndApplication(65.0, customerId.get(1), organizationPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD", null, invoiceId8, "PMNT_RECEIVED");
+        fa.createPaymentAndApplication(new BigDecimal("65.0"), customerId.get(1), organizationPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD", null, invoiceId8, "PMNT_RECEIVED");
 
         /*
          * 8.  Receive a payment of $65 for invoice #11
          */
-        fa.createPaymentAndApplication(65.0, customerId.get(1), organizationPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD", null, invoiceId11, "PMNT_RECEIVED");
+        fa.createPaymentAndApplication(new BigDecimal("65.0"), customerId.get(1), organizationPartyId, "CUSTOMER_PAYMENT", "CREDIT_CARD", null, invoiceId11, "PMNT_RECEIVED");
 
         /*
          * 9.  Create sales invoice #12 for Company to Customer A for $1000, invoice date now and due 30 days after invoicing, but do not set this invoice to READY
          */
         String invoiceId12 = fa.createInvoice(customerId.get(0), "SALES_INVOICE", UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale), null, null, "invoiceId12");
-        fa.createInvoiceItem(invoiceId12, "INV_FPROD_ITEM", "WG-1111", 1.0, 1000.0);
+        fa.createInvoiceItem(invoiceId12, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("1000.0"));
 
         /*
          * 10. Run AccountsHelper.getBalancesForAllCustomers and verify the following:
@@ -2077,49 +2077,49 @@ public class FinancialsTests extends FinancialsTestCase {
          * (a) Invoice #13 from Company to Customer D for $200, invoice date today, due in 30 days after invoice date
          */
         String invoice13 = fa.createInvoice(customerId.get(3), "SALES_INVOICE", UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale), null, null, "invoiceId13");
-        fa.createInvoiceItem(invoice13, "INV_FPROD_ITEM", "WG-1111", 2.0, 100.0);
+        fa.createInvoiceItem(invoice13, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("2.0"), new BigDecimal("100.0"));
 
         /*
          * (b) Invoice #14 from Company to Customer D for $300, invoice date today, due in 60 days after invoice date
          */
         String invoice14 = fa.createInvoice(customerId.get(3), "SALES_INVOICE", UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 60, timeZone, locale), null, null, "invoice14");
-        fa.createInvoiceItem(invoice14, "INV_FPROD_ITEM", "WG-1111", 3.0, 100.0);
+        fa.createInvoiceItem(invoice14, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("3.0"), new BigDecimal("100.0"));
 
         /*
          * (c) Invoice #15 from Company to Customer E for $155, invoice date 58 days before today, due in 50 days after invoice date
          */
         String invoice15 = fa.createInvoice(customerId.get(4), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -58, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -58 + 50, timeZone, locale), null, null, "invoice15");
-        fa.createInvoiceItem(invoice15, "INV_FPROD_ITEM", "WG-1111", 1.0, 155.0);
+        fa.createInvoiceItem(invoice15, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("155.0"));
 
         /*
          * (d) Invoice #16 from Company to Customer E for $266, invoice date 72 days before today, due in 30 days after invoice date
          */
         String invoice16 = fa.createInvoice(customerId.get(4), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -72, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -72 + 30, timeZone, locale), null, null, "invoice16");
-        fa.createInvoiceItem(invoice16, "INV_FPROD_ITEM", "WG-1111", 1.0, 266.0);
+        fa.createInvoiceItem(invoice16, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("266.0"));
 
         /*
          * (e) Invoice #17 from Company to Customer E for $377, invoice date 115 days before today, due in 30 days after invoice date
          */
         String invoice17 = fa.createInvoice(customerId.get(4), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -115, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -115 + 30, timeZone, locale), null, null, "invoice17");
-        fa.createInvoiceItem(invoice17, "INV_FPROD_ITEM", "WG-1111", 1.0, 377.0);
+        fa.createInvoiceItem(invoice17, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("377.0"));
 
         /*
          * (f) Invoice #18 from Company to Customer E for $488, invoice date 135 days before today, due in 30 days after invoice date
          */
         String invoice18 = fa.createInvoice(customerId.get(4), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -135, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -135 + 30, timeZone, locale), null, null, "invoice18");
-        fa.createInvoiceItem(invoice18, "INV_FPROD_ITEM", "WG-1111", 1.0, 488.0);
+        fa.createInvoiceItem(invoice18, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("488.0"));
 
         /*
          * (g) Invoice #19 from Company to Customer E for $599, invoice date 160 days before today, due in 30 days after invoice date
          */
         String invoice19 = fa.createInvoice(customerId.get(4), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -160, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -160 + 30, timeZone, locale), null, null, "invoice19");
-        fa.createInvoiceItem(invoice19, "INV_FPROD_ITEM", "WG-1111", 1.0, 599.0);
+        fa.createInvoiceItem(invoice19, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("599.0"));
 
         /*
          * (h) Invoice #20 from Company to Customer E for $44, invoice date 20 days before today, no due date (null)
          */
         String invoice20 = fa.createInvoice(customerId.get(4), "SALES_INVOICE", UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -20, timeZone, locale), null, null, null, "invoice20");
-        fa.createInvoiceItem(invoice20, "INV_FPROD_ITEM", "WG-1111", 1.0, 44.0);
+        fa.createInvoiceItem(invoice20, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("44.0"));
 
 
         /*
@@ -2221,11 +2221,11 @@ public class FinancialsTests extends FinancialsTestCase {
     public void testSetInvoiceReadyAndCheckIfPaidToInvoiceReady() throws GeneralException {
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         String customerPartyId = createPartyFromTemplate("DemoCustCompany", "Customer for testSetInvoiceReadyAndCheckIfPaidToInvoiceReady");
-        double invoiceAmount = 10.0;
+        BigDecimal invoiceAmount = new BigDecimal("10.0");
 
         // create the invoice
         String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", 1.0, invoiceAmount);
+        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), invoiceAmount);
 
         // get initial balances
         Map initialBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
@@ -2239,7 +2239,7 @@ public class FinancialsTests extends FinancialsTestCase {
         BigDecimal finalCustomerBalance = AccountsHelper.getBalanceForCustomerPartyId(customerPartyId, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator);
 
         // check customer outstanding balance is right
-        assertEquals("Customer balance has increased by the right amount", (finalCustomerBalance.subtract(initialCustomerBalance)).setScale(DECIMALS, ROUNDING), new BigDecimal(invoiceAmount));
+        assertEquals("Customer balance has increased by the right amount", (finalCustomerBalance.subtract(initialCustomerBalance)).setScale(DECIMALS, ROUNDING), invoiceAmount);
 
         // check AR has increased by $10
         Map expectedBalanceChanges = UtilMisc.toMap("ACCOUNTS_RECEIVABLE", "10.0");
@@ -2260,11 +2260,11 @@ public class FinancialsTests extends FinancialsTestCase {
     public void testSetInvoiceReadyAndCheckIfPaidForCancelledInvoice() throws GeneralException {
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         String customerPartyId = createPartyFromTemplate("DemoCustCompany", "Customer for testSetInvoiceReadyAndCheckIfPaidForCancelledInvoice");
-        double invoiceAmount = 10.0;
+        BigDecimal invoiceAmount = new BigDecimal("10.0");
 
         // create the invoice
         String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", 1.0, invoiceAmount);
+        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), invoiceAmount);
 
         // get initial balances
         Map initialBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
@@ -2301,11 +2301,11 @@ public class FinancialsTests extends FinancialsTestCase {
     public void testSetInvoiceReadyAndCheckIfPaidForInvoiceWithPayments() throws GeneralException {
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         String customerPartyId = createPartyFromTemplate("DemoCustCompany", "Customer for testSetInvoiceReadyAndCheckIfPaidForInvoiceWithPayments");
-        double invoiceAmount = 10.0;
+        BigDecimal invoiceAmount = new BigDecimal("10.0");
 
         // create the invoice
         String invoiceId = fa.createInvoice(customerPartyId, "SALES_INVOICE");
-        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", 1.0, invoiceAmount);
+        fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), invoiceAmount);
 
         // get initial balances
         Map initialBalances = fa.getFinancialBalances(UtilDateTime.nowTimestamp());
@@ -2431,7 +2431,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // 1 creating invoice item with productId but without invoiceItemTypeId, description, price gets the right values
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        financialAsserts.createInvoiceItem(invoiceId, null, productId1, 1.0, null);
+        financialAsserts.createInvoiceItem(invoiceId, null, productId1, new BigDecimal("1.0"), null);
 
         Invoice invoice = invoiceRepository.getInvoiceById(invoiceId);
         GenericValue product1 = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId1));
@@ -2456,21 +2456,21 @@ public class FinancialsTests extends FinancialsTestCase {
 
 
         // 2 you can also create invoice item with override invoiceItemTypeId, description, price
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, 1.0, 45.0, "testUpdateInvoiceItem description");
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, new BigDecimal("1.0"), new BigDecimal("45.0"), "testUpdateInvoiceItem description");
         invoiceItem = EntityUtil.getOnly(delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoice.getInvoiceId(), "invoiceItemTypeId", "ITM_SHIPPING_CHARGES")));
         assertEquals("invoiceItemTypeId is wrong.", "ITM_SHIPPING_CHARGES", invoiceItem.getString("invoiceItemTypeId"));
         assertEquals("description is wrong.", "testUpdateInvoiceItem description", invoiceItem.getString("description"));
         assertEquals("amount is wrong.", new BigDecimal("45.0"), invoiceItem.getBigDecimal("amount").setScale(DECIMALS, ROUNDING));
 
         // 3 updating invoice item causes the right values to be filled in
-        financialAsserts.updateInvoiceItem(invoiceId, invoiceItem.getString("invoiceItemSeqId"), null, productId2, 2.0, null, null, null);
+        financialAsserts.updateInvoiceItem(invoiceId, invoiceItem.getString("invoiceItemSeqId"), null, productId2, new BigDecimal("2.0"), null, null, null);
         invoiceItem = EntityUtil.getOnly(delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoice.getInvoiceId(), "productId", productId2)));
         assertEquals("invoiceItemTypeId is wrong.", invoiceItemTypeId2, invoiceItem.getString("invoiceItemTypeId"));
         assertEquals("description is wrong.", description2, invoiceItem.getString("description"));
         assertEquals("amount is wrong.", amount2, invoiceItem.getBigDecimal("amount").setScale(DECIMALS, ROUNDING));
 
         // 4 you can update invoice item afterwards with override values
-        financialAsserts.updateInvoiceItem(invoiceId, invoiceItem.getString("invoiceItemSeqId"), "INV_FPROD_ITEM", productId2, 2.0, 51.99, "testUpdateInvoiceItem description", null);
+        financialAsserts.updateInvoiceItem(invoiceId, invoiceItem.getString("invoiceItemSeqId"), "INV_FPROD_ITEM", productId2, new BigDecimal("2.0"), new BigDecimal("51.99"), "testUpdateInvoiceItem description", null);
         invoiceItem = EntityUtil.getOnly(delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoice.getInvoiceId(), "productId", productId2)));
         assertEquals("invoiceItemTypeId is wrong.", "INV_FPROD_ITEM", invoiceItem.getString("invoiceItemTypeId"));
         assertEquals("description is wrong.", "testUpdateInvoiceItem description", invoiceItem.getString("description"));
@@ -2487,7 +2487,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // 5 create a PURCHASE_INVOICE from Company to supplierParty
         String purchaseInvoiceId = financialAsserts.createInvoice("DemoSupplier", "PURCHASE_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        financialAsserts.createInvoiceItem(purchaseInvoiceId, null, supplierProductId1, 500.0, null);
+        financialAsserts.createInvoiceItem(purchaseInvoiceId, null, supplierProductId1, new BigDecimal("500.0"), null);
 
         Invoice purchaseInvoice = repository.getInvoiceById(purchaseInvoiceId);
         String purchaseInvoiceItemTypeId1 = repository.getInvoiceItemTypeIdForProduct(purchaseInvoice, domainsDirectory.getProductDomain().getProductRepository().getProductById(supplierProductId1));
@@ -2505,21 +2505,21 @@ public class FinancialsTests extends FinancialsTestCase {
 
 
         // 6 you can also create invoice item with override invoiceItemTypeId, description, price
-        financialAsserts.createInvoiceItem(purchaseInvoiceId, "ITM_SHIPPING_CHARGES", null, 1.0, 45.0, "testUpdateInvoiceItem description");
+        financialAsserts.createInvoiceItem(purchaseInvoiceId, "ITM_SHIPPING_CHARGES", null, new BigDecimal("1.0"), new BigDecimal("45.0"), "testUpdateInvoiceItem description");
         invoiceItem = EntityUtil.getOnly(delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", purchaseInvoice.getInvoiceId(), "invoiceItemTypeId", "ITM_SHIPPING_CHARGES")));
         assertEquals("invoiceItemTypeId is wrong.", "ITM_SHIPPING_CHARGES", invoiceItem.getString("invoiceItemTypeId"));
         assertEquals("description is wrong.", "testUpdateInvoiceItem description", invoiceItem.getString("description"));
         assertEquals("amount is wrong.", new BigDecimal("45.0"), invoiceItem.getBigDecimal("amount").setScale(DECIMALS, ROUNDING));
 
         // 7 updating invoice item causes the right values to be filled in
-        financialAsserts.updateInvoiceItem(purchaseInvoiceId, invoiceItem.getString("invoiceItemSeqId"), null, supplierProductId2, 500.0, null, null, null);
+        financialAsserts.updateInvoiceItem(purchaseInvoiceId, invoiceItem.getString("invoiceItemSeqId"), null, supplierProductId2, new BigDecimal("500.0"), null, null, null);
         invoiceItem = EntityUtil.getOnly(delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", purchaseInvoice.getInvoiceId(), "productId", supplierProductId2)));
         assertEquals("invoiceItemTypeId is wrong.", purchaseInvoiceItemTypeId2, invoiceItem.getString("invoiceItemTypeId"));
         assertEquals("description is wrong.", purchaseDescription2, invoiceItem.getString("description"));
         assertEquals("amount is wrong.", purchaseAmount2, invoiceItem.getBigDecimal("amount").setScale(DECIMALS, ROUNDING));
 
         // 8 you can update invoice item afterwards with override values
-        financialAsserts.updateInvoiceItem(purchaseInvoiceId, invoiceItem.getString("invoiceItemSeqId"), "PINV_FPROD_ITEM", supplierProductId2, 2.0, 199.99, "testUpdateInvoiceItem description", null);
+        financialAsserts.updateInvoiceItem(purchaseInvoiceId, invoiceItem.getString("invoiceItemSeqId"), "PINV_FPROD_ITEM", supplierProductId2, new BigDecimal("2.0"), new BigDecimal("199.99"), "testUpdateInvoiceItem description", null);
         invoiceItem = EntityUtil.getOnly(delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", purchaseInvoice.getInvoiceId(), "productId", supplierProductId2)));
         assertEquals("invoiceItemTypeId is wrong.", "PINV_FPROD_ITEM", invoiceItem.getString("invoiceItemTypeId"));
         assertEquals("description is wrong.", "testUpdateInvoiceItem description", invoiceItem.getString("description"));
@@ -2550,7 +2550,7 @@ public class FinancialsTests extends FinancialsTestCase {
         // create a SALES_INVOICE from Company to test party for $100 and set it to READY
         FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", 1.0, 100.0);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("1.0"), new BigDecimal("100.0"));
         financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
         // run captureAccountBalancesSnapshot
         inputParams = UtilMisc.toMap("userLogin", demofinadmin);
@@ -2560,11 +2560,11 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("There is a new account balance history record for Company and " + customerPartyId, 1, list.size());
         AccountBalanceHistory accountBalanceHistory = list.get(0);
         assertEquals("There is a new account balance history record for Company and " + customerPartyId + " for 100.0", 100.0, accountBalanceHistory.getTotalBalance().doubleValue());
-        
+
         pause("mysql timestamp pause");
-        
+
         // create a CUSTOMER_PAYMENT from Company to test party for $50 and set it to RECEIVED
-        String paymentId = financialAsserts.createPaymentAndApplication(50.0, customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_NOT_PAID");
+        String paymentId = financialAsserts.createPaymentAndApplication(new BigDecimal("50.0"), customerPartyId, organizationPartyId, "CUSTOMER_PAYMENT", "COMPANY_CHECK", null, invoiceId, "PMNT_NOT_PAID");
         financialAsserts.updatePaymentStatus(paymentId, "PMNT_RECEIVED");
         // run captureAccountBalancesSnapshot
         inputParams = UtilMisc.toMap("userLogin", demofinadmin);
@@ -2602,7 +2602,7 @@ public class FinancialsTests extends FinancialsTestCase {
         FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
         Timestamp invoiceDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale);
         String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", invoiceDate, null, null, null);
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", 2.0, 15.0);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("2.0"), new BigDecimal("15.0"));
 
         //verify that the correct list (three rec) of invoice adjustment types are returned for Company
         Organization organizationCompany = organizationRepository.getOrganizationById(organizationPartyId);

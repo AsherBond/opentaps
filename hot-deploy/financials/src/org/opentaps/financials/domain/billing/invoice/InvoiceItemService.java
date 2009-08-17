@@ -18,7 +18,6 @@ package org.opentaps.financials.domain.billing.invoice;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
@@ -36,7 +35,6 @@ import org.opentaps.domain.product.ProductRepositoryInterface;
 import org.opentaps.domain.purchasing.PurchasingRepositoryInterface;
 import org.opentaps.foundation.entity.EntityNotFoundException;
 import org.opentaps.foundation.repository.RepositoryException;
-import org.opentaps.foundation.repository.ofbiz.Repository;
 import org.opentaps.foundation.service.Service;
 import org.opentaps.foundation.service.ServiceException;
 
@@ -61,8 +59,8 @@ public class InvoiceItemService extends Service implements InvoiceItemServiceInt
     private String parentInvoiceItemSeqId;
     private String uomId;
     private String taxableFlag;
-    private Double quantity;
-    private Double amount;
+    private BigDecimal quantity;
+    private BigDecimal amount;
     private String description;
     private String taxAuthPartyId;
     private String taxAuthGeoId;
@@ -158,7 +156,7 @@ public class InvoiceItemService extends Service implements InvoiceItemServiceInt
     }
 
     /** {@inheritDoc} */
-    public void setAmount(Double amount) {
+    public void setAmount(BigDecimal amount) {
         this.amount = amount;
         parametersAlreadySet.add("amount");
     }
@@ -224,7 +222,7 @@ public class InvoiceItemService extends Service implements InvoiceItemServiceInt
     }
 
     /** {@inheritDoc} */
-    public void setQuantity(Double quantity) {
+    public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
         parametersAlreadySet.add("quantity");
     }
@@ -456,10 +454,10 @@ public class InvoiceItemService extends Service implements InvoiceItemServiceInt
                     // set amount
                     if (quantity != null) {
                         BigDecimal price = productRepository.getUnitPrice(product, BigDecimal.valueOf(quantity.doubleValue()), invoice.getCurrencyUomId(), invoice.getPartyId());
-                        setAmount(price.doubleValue());
+                        setAmount(price);
                         Debug.logVerbose("Set unitPrice " + this.amount + " for Sale Invoice Item with party [" + invoice.getPartyId() + "], product [" + productId + "], quantity [" + quantity + "] and currency [" + invoice.getCurrencyUomId() + "]", MODULE);
                     } else {
-                        setAmount(productRepository.getUnitPrice(product, invoice.getCurrencyUomId()).doubleValue());
+                        setAmount(productRepository.getUnitPrice(product, invoice.getCurrencyUomId()));
                         Debug.logVerbose("Set unitPrice " + this.amount + " for Sale Invoice Item product [" + productId + "], and currency [" + invoice.getCurrencyUomId() + "]", MODULE);
                     }
                 }
@@ -488,7 +486,7 @@ public class InvoiceItemService extends Service implements InvoiceItemServiceInt
                     // default name
                     if (amount == null) {
                         // set amount
-                        setAmount(supplierProduct.getLastPrice().doubleValue());
+                        setAmount(supplierProduct.getLastPrice());
                     }
                 }
             }

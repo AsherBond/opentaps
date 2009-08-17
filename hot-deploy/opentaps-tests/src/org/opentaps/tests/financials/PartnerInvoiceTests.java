@@ -148,16 +148,16 @@ public class PartnerInvoiceTests extends FinancialsTestCase {
         invoiceIds.add(invoice);
 
         // add a basic product line item amount to each invoice and mark as ready (note quantity is null to see if anything crashes)
-        double amount = 100;
+        BigDecimal amount = new BigDecimal("100.0");
         for (String invoiceId : invoiceIds) {
-            fa.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-1000", null, new Double(amount), "Test Product Item for partner invoice.");
-            amount += 33.33;
+            fa.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-1000", null, amount, "Test Product Item for partner invoice.");
+            amount = amount.add(new BigDecimal("33.33"));
         }
 
         // add positive and negative adjustments that cancel out
         for (String invoiceId : invoiceIds) {
-            fa.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", null, null, new Double(12.14), "Test Product Item for partner invoice.");
-            fa.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", null, null, new Double(-12.14), "Test Product Item for partner invoice.");
+            fa.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", null, null, new BigDecimal("12.14"), "Test Product Item for partner invoice.");
+            fa.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", null, null, new BigDecimal("-12.14"), "Test Product Item for partner invoice.");
         }
 
         // set all invoices to ready

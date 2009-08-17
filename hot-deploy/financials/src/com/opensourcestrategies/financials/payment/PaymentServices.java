@@ -283,10 +283,9 @@ public final class PaymentServices {
 
         // get parameters
         String paymentId = (String) context.get("paymentId");
-        Double amountAppliedDbl = (Double) context.get("amountApplied");
-        BigDecimal amountApplied = BigDecimal.ZERO;
-        if (amountAppliedDbl != null) {
-            amountApplied = BigDecimal.valueOf(amountAppliedDbl);
+        BigDecimal amountApplied = (BigDecimal) context.get("amountApplied");
+        if (amountApplied == null) {
+            amountApplied = BigDecimal.ZERO;
         }
 
         // optional parameters
@@ -414,7 +413,7 @@ public final class PaymentServices {
 
         String invoiceId = (String) context.get("invoiceId");
         String paymentApplicationId = (String) context.get("paymentApplicationId");
-        Double amountApplied = (Double) context.get("amountApplied");
+        BigDecimal amountApplied = (BigDecimal) context.get("amountApplied");
 
         // check if we have an invoiceId
         if (UtilValidate.isNotEmpty(invoiceId)) {

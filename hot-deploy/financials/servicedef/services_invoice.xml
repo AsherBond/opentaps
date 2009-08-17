@@ -302,8 +302,8 @@
         <attribute name="parentInvoiceItemSeqId" type="String" mode="IN" optional="true"/>
         <attribute name="uomId" type="String" mode="IN" optional="true"/>
         <attribute name="taxableFlag" type="String" mode="IN" optional="true"/>
-        <attribute name="quantity" type="Double" mode="IN" optional="true"/>
-        <attribute name="amount" type="Double" mode="IN" optional="true"/>
+        <attribute name="quantity" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="amount" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="description" type="String" mode="IN" optional="true"/>
         <attribute name="taxAuthPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="taxAuthGeoId" type="String" mode="IN" optional="true"/>

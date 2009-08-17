@@ -89,34 +89,34 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         String invoiceId = financialAsserts.createInvoice("DemoCustCompany", "SALES_INVOICE", UtilDateTime.nowTimestamp(), "Complex Test Sales Invoice for Commission", "testcomm1", "Complex test of creating commission invoices.  This sales invoice should trigger the creation of commission invoices when set to ready.");
 
         // invoice two products from category A for less than 10 to ensure rep 3 earns 30% on these
-        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-7000", 7.0, 10.11, "Sales item which should be commissioned.");
-        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", 4.0, 11.10);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-7000", new BigDecimal("7.0"), new BigDecimal("10.11"), "Sales item which should be commissioned.");
+        financialAsserts.createInvoiceItem(invoiceId, "INV_PROD_ITEM", "GZ-8544", new BigDecimal("4.0"), new BigDecimal("11.10"));
 
         // invoice two products from category B whose combined quantity triggers 25% earnings
-        financialAsserts.createInvoiceItem(invoiceId, "INV_DPROD_ITEM", "GZ-2002", 2.0, 12.34);
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FDPROD_ITEM", "GZ-5005", 10.0, 15.01);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_DPROD_ITEM", "GZ-2002", new BigDecimal("2.0"), new BigDecimal("12.34"));
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FDPROD_ITEM", "GZ-5005", new BigDecimal("10.0"), new BigDecimal("15.01"));
 
         // discounts for the category B products that should also apply to the 25% discount
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", "GZ-2002", 2.0, -0.42);
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", "GZ-5005", 10.0, -2.55);
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", "GZ-2002", new BigDecimal("2.0"), new BigDecimal("-0.42"));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", "GZ-5005", new BigDecimal("10.0"), new BigDecimal("-2.55"));
         
         // invoice a product in category C for a quantity that triggers no earnings for rep 3
-        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", 3.0, 8.78);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("3.0"), new BigDecimal("8.78"));
 
         // discount for the last item that should trigger no commission for rep 3
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", "GZ-1000", 3.0, -1.12);
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", "GZ-1000", new BigDecimal("3.0"), new BigDecimal("-1.12"));
 
         // invoice a product outside the categories, of which only rep 1 should be commissioning
-        financialAsserts.createInvoiceItem(invoiceId, "INV_SPROD_ITEM", "WG-1111", 1.0, 3.19);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_SPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("3.19"));
 
         // whole order promotion, which gets processed only for rep 1
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", 1.0, -45.67);
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_PROMOTION_ADJ", new BigDecimal("1.0"), new BigDecimal("-45.67"));
 
         // create other adjustments and items that should not be invoiced
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_FEE", null, null, new Double(133.33), "Sales Item which should NOT be commissioned.");
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_MISC_CHARGE", null, null, new Double(0.15));
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_SALES_TAX", null, null, new Double(155.56));
-        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, null, new Double(77.99));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_FEE", null, null, new BigDecimal("133.33"), "Sales Item which should NOT be commissioned.");
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_MISC_CHARGE", null, null, new BigDecimal("0.15"));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_SALES_TAX", null, null, new BigDecimal("155.56"));
+        financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, null, new BigDecimal("77.99"));
 
         // DemoSalesRep1 and _2 must be named as commission agents on the order -> invoice to get a commission but _3 does not: 
         // he has an agreement to get commission on any order/invoice with this customer
@@ -171,9 +171,9 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         String commissionInvoiceId3 = commissionInvoice3.getString("invoiceId");
 
         // add a commission adjustment to all invoices
-        financialAsserts.createInvoiceItem(commissionInvoiceId1, "COMM_INV_ADJ", 1.0, -2.13, "Processing fee for this commission.");
-        financialAsserts.createInvoiceItem(commissionInvoiceId2, "COMM_INV_ADJ", 1.0, -2.13, "Processing fee for this commission.");
-        financialAsserts.createInvoiceItem(commissionInvoiceId3, "COMM_INV_ADJ", 1.0, -2.13, "Processing fee for this commission.");
+        financialAsserts.createInvoiceItem(commissionInvoiceId1, "COMM_INV_ADJ", new BigDecimal("1.0"), new BigDecimal("-2.13"), "Processing fee for this commission.");
+        financialAsserts.createInvoiceItem(commissionInvoiceId2, "COMM_INV_ADJ", new BigDecimal("1.0"), new BigDecimal("-2.13"), "Processing fee for this commission.");
+        financialAsserts.createInvoiceItem(commissionInvoiceId3, "COMM_INV_ADJ", new BigDecimal("1.0"), new BigDecimal("-2.13"), "Processing fee for this commission.");
 
         BigDecimal commissionTotal1 = InvoiceWorker.getInvoiceTotal(commissionInvoice1);
         BigDecimal commissionTotal2 = InvoiceWorker.getInvoiceTotal(commissionInvoice2);
@@ -207,17 +207,17 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         BigDecimal commissionBalance2 = finalCommBalance2.subtract(initialCommBalance2);
         BigDecimal commissionBalance3 = finalCommBalance3.subtract(initialCommBalance3);
 
-        assertEquals("Commission balance increases by $"+expectedTotal1+" for DemoSalesRep1 after commission invoice is set to ready", commissionBalance1, expectedTotal1);
-        assertEquals("Commission balance increases by $"+expectedTotal2+" for DemoSalesRep2 after commission invoice is set to ready", commissionBalance2, expectedTotal2);
-        assertEquals("Commission balance increases by $"+expectedTotal3+" for DemoSalesRep3 after commission invoice is set to ready", commissionBalance3, expectedTotal3);
+        assertEquals("Commission balance increases by $" + expectedTotal1 + " for DemoSalesRep1 after commission invoice is set to ready", commissionBalance1, expectedTotal1);
+        assertEquals("Commission balance increases by $" + expectedTotal2 + " for DemoSalesRep2 after commission invoice is set to ready", commissionBalance2, expectedTotal2);
+        assertEquals("Commission balance increases by $" + expectedTotal3 + " for DemoSalesRep3 after commission invoice is set to ready", commissionBalance3, expectedTotal3);
 
         // create a commission payment from the company checking account for each agent
         FinancialAsserts fa = new FinancialAsserts(this, "DemoSalesRep1", demofinadmin);
-        fa.createPaymentAndApplication(expectedTotal1.doubleValue(), organizationPartyId, organizationPartyId, "COMMISSION_PAYMENT", "COMPANY_CHECK", null, commissionInvoiceId1, "PMNT_SENT");
+        fa.createPaymentAndApplication(expectedTotal1, organizationPartyId, organizationPartyId, "COMMISSION_PAYMENT", "COMPANY_CHECK", null, commissionInvoiceId1, "PMNT_SENT");
         fa = new FinancialAsserts(this, "DemoSalesRep2", demofinadmin);
-        fa.createPaymentAndApplication(expectedTotal2.doubleValue(), organizationPartyId, organizationPartyId, "COMMISSION_PAYMENT", "COMPANY_CHECK", null, commissionInvoiceId2, "PMNT_SENT");
+        fa.createPaymentAndApplication(expectedTotal2, organizationPartyId, organizationPartyId, "COMMISSION_PAYMENT", "COMPANY_CHECK", null, commissionInvoiceId2, "PMNT_SENT");
         fa = new FinancialAsserts(this, "DemoSalesRep3", demofinadmin);
-        fa.createPaymentAndApplication(expectedTotal3.doubleValue(), organizationPartyId, organizationPartyId, "COMMISSION_PAYMENT", "COMPANY_CHECK", null, commissionInvoiceId3, "PMNT_SENT");
+        fa.createPaymentAndApplication(expectedTotal3, organizationPartyId, organizationPartyId, "COMMISSION_PAYMENT", "COMPANY_CHECK", null, commissionInvoiceId3, "PMNT_SENT");
 
         // verify change in sales commission (601300) and commission adjustment (601400) accounts
         // note that the sales commission will be the expectedTotal without the adjustments
@@ -275,15 +275,15 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
 
         // 1. Create a sales invoice from Company to DemoAccount1 for $100
         String invoiceId1 = financialAsserts.createInvoice("DemoAccount1", "SALES_INVOICE");//, UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, UtilDateTime.getDefaultTimeZone(), Locale.US));
-        financialAsserts.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-1001", 3.0, 10.00, "Item 1");
-        financialAsserts.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-1005", 1.0, 70.00, "Item 2");
+        financialAsserts.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-1001", new BigDecimal("3.0"), new BigDecimal("10.00"), "Item 1");
+        financialAsserts.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-1005", new BigDecimal("1.0"), new BigDecimal("70.00"), "Item 2");
         
         // 2. Mark invoice as READY
         financialAsserts.updateInvoiceStatus(invoiceId1, "INVOICE_READY");
 
         // 3. Create a sales invoice from Company to DemoAccount1 for $200
         String invoiceId2 = financialAsserts.createInvoice("DemoAccount1", "SALES_INVOICE");//, UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, UtilDateTime.getDefaultTimeZone(), Locale.US));
-        financialAsserts.createInvoiceItem(invoiceId2, "INV_PROD_ITEM", 2.0, 100.0, "Item 1");
+        financialAsserts.createInvoiceItem(invoiceId2, "INV_PROD_ITEM", new BigDecimal("2.0"), new BigDecimal("100.0"), "Item 1");
 
         // 4. Mark invoice as READY
         financialAsserts.updateInvoiceStatus(invoiceId2, "INVOICE_READY");
@@ -298,7 +298,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         assertEquals("Some commission invoices are created for DemoSalesRep4 by mistake", 0, count);
 
         // 6. Receive Payment from DemoAccount1 to Company for $100 and apply $50 of it to invoice from (1) and $30 of it to invoice from (2)
-        String paymentId1 = financialAsserts.createPayment(100.0, "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
+        String paymentId1 = financialAsserts.createPayment(new BigDecimal("100.0"), "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
         runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId1, "amountApplied", 50.0));
         runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId2, "amountApplied", 30.0));
 
@@ -331,14 +331,14 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         now = UtilDateTime.nowTimestamp();
 
         // 11. Receive second Payment from DemoAccount1 to Company for $30, apply $30 of it to invoice from (1)
-        String paymentId2 = financialAsserts.createPayment(30.0, "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
+        String paymentId2 = financialAsserts.createPayment(new BigDecimal("30.0"), "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
         runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId2, "invoiceId", invoiceId1, "amountApplied", 30.0));
 
         // 12. Set Payment to Cancelled
         financialAsserts.updatePaymentStatus(paymentId2, "PMNT_CANCELLED");
 
         // 13. Receive third Payment from DemoAccount1 to Company for $100, apply $50 of it to invoice from (1)
-        String paymentId3 = financialAsserts.createPayment(100.0, "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
+        String paymentId3 = financialAsserts.createPayment(new BigDecimal("100.0"), "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
         runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId3, "invoiceId", invoiceId1, "amountApplied", 50.0));
 
         // 14. Set Payment to Received, then set Payment to VOID

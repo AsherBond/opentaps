@@ -171,7 +171,7 @@ public class DataImportTests extends OpentapsTestCase {
             GenericValue dataImportCustomer = delegator.findByPrimaryKey("DataImportCustomer", UtilMisc.toMap("customerId", customerId));
             // 3a.  Create sales invoice and set it oready
             String invoiceId = fa.createInvoice(dataImportCustomer.getString("primaryPartyId"), "SALES_INVOICE", UtilDateTime.nowTimestamp());
-            fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", 1.0, 100.0);
+            fa.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "WG-1111", new BigDecimal("1.0"), new BigDecimal("100.0"));
             fa.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
             // 3b.  Verify that a sales commission invoice from primaryPartyId of customerId 9010 to Company is created for 10% of the value of sales invoice in 3a

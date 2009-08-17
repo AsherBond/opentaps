@@ -15,6 +15,7 @@
  */
 package org.opentaps.tests.financials;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Map;
 
@@ -86,33 +87,33 @@ public class AccountingTagTests extends FinancialsTestCase {
 
         // create invoices and payments for different
         String invoiceId1 = fa.createInvoice(supplierPartyId1, "PURCHASE_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        fa.createInvoiceItem(invoiceId1, "PINV_FPROD_ITEM", "GZ-1000", 100.0, 4.56, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_TRAINING"));
-        fa.createInvoiceItem(invoiceId1, "PITM_SHIP_CHARGES", null, 1.0,13.95, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_TRAINING"));
-        fa.createInvoiceItem(invoiceId1, "PINV_SUPLPRD_ITEM", null, 1.0, 56.78, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER", "acctgTagEnumId2", "DPT_CUST_SERVICE", "acctgTagEnumId3", "ACTI_MARKETING"));
+        fa.createInvoiceItem(invoiceId1, "PINV_FPROD_ITEM", "GZ-1000", new BigDecimal("100.0"), new BigDecimal("4.56"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_TRAINING"));
+        fa.createInvoiceItem(invoiceId1, "PITM_SHIP_CHARGES", null, new BigDecimal("1.0"), new BigDecimal("13.95"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_TRAINING"));
+        fa.createInvoiceItem(invoiceId1, "PINV_SUPLPRD_ITEM", null, new BigDecimal("1.0"), new BigDecimal("56.78"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER", "acctgTagEnumId2", "DPT_CUST_SERVICE", "acctgTagEnumId3", "ACTI_MARKETING"));
 
         fa.updateInvoiceStatus(invoiceId1, "INVOICE_READY");
 
         String invoiceId2 = fa.createInvoice(supplierPartyId1, "PURCHASE_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        fa.createInvoiceItem(invoiceId2, "PINV_SUPLPRD_ITEM", null, 1.0, 5000.0, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER", "acctgTagEnumId2", "DPT_CORPORATE", "acctgTagEnumId3", "ACTI_RESEARCH"));
+        fa.createInvoiceItem(invoiceId2, "PINV_SUPLPRD_ITEM", null, new BigDecimal("1.0"), new BigDecimal("5000.0"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER", "acctgTagEnumId2", "DPT_CORPORATE", "acctgTagEnumId3", "ACTI_RESEARCH"));
         fa.updateInvoiceStatus(invoiceId2, "INVOICE_READY");
 
         // this is the trick way to create the Payment and apply it to both invoices -- first createPaymentAndApplication but with a null invoiceId, then apply it to the 2 invoices
-        String paymentId1 = fa.createPaymentAndApplication(5526.73, organizationPartyId, supplierPartyId1,  "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", null, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"));
+        String paymentId1 = fa.createPaymentAndApplication(new BigDecimal("5526.73"), organizationPartyId, supplierPartyId1,  "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", null, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"));
         runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("paymentId", paymentId1, "invoiceId", invoiceId1, "amountApplied", new Double(526.73), "userLogin", demofinadmin));
         runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("paymentId", paymentId1, "invoiceId", invoiceId2, "amountApplied", new Double(5000.00), "userLogin", demofinadmin));
         fa.updatePaymentStatus(paymentId1, "PMNT_SENT");
 
         String invoiceId3 = fa.createInvoice(supplierPartyId2, "PURCHASE_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
-        fa.createInvoiceItem(invoiceId3, "PINV_SPROD_ITEM", null, 1.0, 5000.0, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_MANUFACTURING", "acctgTagEnumId3", "ACTI_PRODUCT"));
-        fa.createInvoiceItem(invoiceId3, "PINV_SPROD_ITEM", null, 1.0, 5000.0, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_WAREHOUSE", "acctgTagEnumId3", "ACTI_PRODUCT"));
-        fa.createInvoiceItem(invoiceId3, "PINV_SPROD_ITEM", null, 1.0, 5000.0, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_ACCOUNTING", "acctgTagEnumId3", "ACTI_TRAINING"));
-        fa.createInvoiceItem(invoiceId3, "PINV_SPROD_ITEM", null, 1.0, 10000.0, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE", "acctgTagEnumId2", "DPT_CORPORATE", "acctgTagEnumId3", "ACTI_TRAINING"));
+        fa.createInvoiceItem(invoiceId3, "PINV_SPROD_ITEM", null, new BigDecimal("1.0"), new BigDecimal("5000.0"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_MANUFACTURING", "acctgTagEnumId3", "ACTI_PRODUCT"));
+        fa.createInvoiceItem(invoiceId3, "PINV_SPROD_ITEM", null, new BigDecimal("1.0"), new BigDecimal("5000.0"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_WAREHOUSE", "acctgTagEnumId3", "ACTI_PRODUCT"));
+        fa.createInvoiceItem(invoiceId3, "PINV_SPROD_ITEM", null, new BigDecimal("1.0"), new BigDecimal("5000.0"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_ACCOUNTING", "acctgTagEnumId3", "ACTI_TRAINING"));
+        fa.createInvoiceItem(invoiceId3, "PINV_SPROD_ITEM", null, new BigDecimal("1.0"), new BigDecimal("10000.0"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE", "acctgTagEnumId2", "DPT_CORPORATE", "acctgTagEnumId3", "ACTI_TRAINING"));
         fa.updateInvoiceStatus(invoiceId3, "INVOICE_READY");
 
-        String paymentId2 = fa.createPaymentAndApplication(10000, organizationPartyId, supplierPartyId1,  "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", invoiceId3, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV"));
+        String paymentId2 = fa.createPaymentAndApplication(new BigDecimal("10000.0"), organizationPartyId, supplierPartyId1,  "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", invoiceId3, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV"));
         fa.updatePaymentStatus(paymentId2, "PMNT_SENT");
 
-        String paymentId3 = fa.createPaymentAndApplication(5000, organizationPartyId, supplierPartyId1,  "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", invoiceId3, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"));
+        String paymentId3 = fa.createPaymentAndApplication(new BigDecimal("5000.0"), organizationPartyId, supplierPartyId1,  "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", invoiceId3, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"));
         fa.updatePaymentStatus(paymentId3, "PMNT_SENT");
 
         // get the final accounting balances for different tag combinations.  Note that we can only check balance sheet consistency for the CONSUMER and GOV tags,

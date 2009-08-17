@@ -825,19 +825,19 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         // PINV_SHIP_CHARGES 22.77 with tags DIV_GOV, DPT_CORPORATE
         // PINV_SHIP_CHARGES 29.86 with tags DIV_SMALL_BIZ, DPT_SALES,
         // ACTI_MARKETING
-        fa.createInvoiceItem(invoiceId, "PINV_SHIP_CHARGES", null, 1.0, 15.86, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
-        fa.createInvoiceItem(invoiceId, "PINV_SHIP_CHARGES", null, 1.0, 22.77, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_CORPORATE"));
-        fa.createInvoiceItem(invoiceId, "PINV_SHIP_CHARGES", null, 1.0, 29.86, null, UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
+        fa.createInvoiceItem(invoiceId, "PINV_SHIP_CHARGES", null, new BigDecimal("1.0"), new BigDecimal("15.86"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
+        fa.createInvoiceItem(invoiceId, "PINV_SHIP_CHARGES", null, new BigDecimal("1.0"), new BigDecimal("22.77"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_CORPORATE"));
+        fa.createInvoiceItem(invoiceId, "PINV_SHIP_CHARGES", null, new BigDecimal("1.0"), new BigDecimal("29.86"), null, UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
         // Set invoice to READY
         fa.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
         // Create a payment of $338.63 from Company with payment method
         // COCHECKING to supplier with tag DIV_GOV
-        String paymentId1 = fa.createPaymentAndApplication(338.63, organizationPartyId, supplierPartyId, "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", null, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV"));
+        String paymentId1 = fa.createPaymentAndApplication(new BigDecimal("338.63"), organizationPartyId, supplierPartyId, "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", null, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV"));
         fa.updatePaymentStatus(paymentId1, "PMNT_SENT");
         // Create a payment of $300 from Company with payment method COCHECKING
         // to supplier with tag DIV_SMALL_BIZ
-        String paymentId2 = fa.createPaymentAndApplication(300.0, organizationPartyId, supplierPartyId, "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", null, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ"));
+        String paymentId2 = fa.createPaymentAndApplication(new BigDecimal("300.0"), organizationPartyId, supplierPartyId, "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", null, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ"));
         fa.updatePaymentStatus(paymentId2, "PMNT_SENT");
 
         // also turn off the check balances flag (the last false) for final balances
