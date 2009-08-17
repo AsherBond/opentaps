@@ -227,6 +227,10 @@ under the License.
                 <include name="**/build.xml"/>
             </fileset>
         </subant>
+        <subant inheritall="false" failonerror="true">
+            <filelist dir="." files="hot-deploy/opentaps-common/build-aspects.xml"/>
+        </subant>
+
         <antcall target="clean-svninfo"></antcall>
 
         <echo message="[build] ========== Done Building (Compile) =========="/>

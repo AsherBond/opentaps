@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2008 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -24,38 +24,39 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.entity.GenericEntity;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.eca.EntityEcaHandler;
 import org.ofbiz.service.GenericDispatcher;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 
 public class IndexForDelegatorAspects {
 
-    public static final String MODULE = IndexForDelegatorAspects.class.getName();
+    private static final String MODULE = IndexForDelegatorAspects.class.getName();
     // hibernate search configuration file
     private static Properties entitySearchProperties;
     // the user to run opentaps.createIndexForGenericEntity service
     private static String runAsUser = "system";
 
     /**
-     * @Expression execution(* org.ofbiz.entity.GenericDelegator.evalEcaRules(..)) && args(event, currentOperation, value, eventMap, noEventMapFound, isError)
+     * @Expression execution(* org.ofbiz.entity.GenericDelegator$EntityEcaRuleRunner.evalRules(..)) && args(event, currentOperation, value, isError)
      */
-    void pointcut(String event, String currentOperation, GenericEntity value, Map eventMap, boolean noEventMapFound, boolean isError) {}
+    void pointcut(String event, String currentOperation, GenericEntity value, boolean isError) { }
 
     /**
-     * @After pointcut(event, currentOperation, value, eventMap, noEventMapFound, isError)
+     * @After pointcut(event, currentOperation, value, isError)
     */
-    public void createIndexForEca(String event, String currentOperation, GenericEntity value, Map eventMap, boolean noEventMapFound, boolean isError) {
+    public void createIndexForEca(String event, String currentOperation, GenericEntity value, boolean isError) {
         if (entitySearchProperties == null) {
             // if entitySearchProperties not initial, then initial.
             entitySearchProperties = UtilProperties.getProperties("entitysearch.properties");
         }
         // if event = return and operation = create|store|remove
-        if ("return".equals(event) && ("create".equals(currentOperation) || "store".equals(currentOperation) || "remove".equals(currentOperation))) {
+        if (EntityEcaHandler.EV_RETURN.equals(event) && (EntityEcaHandler.OP_CREATE.equals(currentOperation) || EntityEcaHandler.OP_STORE.equals(currentOperation) || EntityEcaHandler.OP_REMOVE.equals(currentOperation))) {
             // if entitySearchProperties contain the entityName then create index for it
             if (entitySearchProperties.containsKey(value.getEntityName())) {
                 if (entitySearchProperties.getProperty(value.getEntityName()).equals("index")) {
                     // call service to create index
-                    Map inputParams = UtilMisc.toMap("value", value);
+                    Map<String, Object> inputParams = UtilMisc.<String, Object>toMap("value", value);
                     try {
                         GenericValue userLoginToRunAs = value.getDelegator().findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", runAsUser));
                         if (userLoginToRunAs != null) {
