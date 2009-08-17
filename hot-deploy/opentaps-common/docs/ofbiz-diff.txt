@@ -71,6 +71,9 @@ applications/product/script/org/ofbiz/product/cost/CostServices.xml
 - the getProductCost is now also looking at supplier product prices, but when ordering the results it orders by both supplierPrefOrderId and lastPrice.
 Removed the order by supplierPrefOrderId.
 
+applications/accounting/ofbiz-component.xml
+- commented out the services, secas and entities related to ofbiz BI (SalesInvoiceItemFact)
+
 Other API Changes
 -----------------
 
