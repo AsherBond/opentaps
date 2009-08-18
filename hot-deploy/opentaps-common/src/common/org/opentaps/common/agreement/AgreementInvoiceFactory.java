@@ -188,7 +188,7 @@ public class AgreementInvoiceFactory {
      */
     public static Map<String, Collection<Map<String, Object>>> createInvoiceItemsForAgreement(DispatchContext dctx, Map<String, Object> context, GenericValue agreement, Collection<GenericValue> invoices) throws GeneralException {
         GenericDelegator delegator = dctx.getDelegator();
-        Map<String, Collection<Map<String, Object>>> invoiceItems = new FastMap();
+        Map<String, Collection<Map<String, Object>>> invoiceItems = new FastMap<String, Collection<Map<String, Object>>>();
         Collection<GenericValue> terms = delegator.findByAnd("AgreementAndItemAndTerm", UtilMisc.toMap("agreementId", agreement.get("agreementId")));
         for (GenericValue term : terms) {
             Collection<Map<String, Object>> termInvoiceItems = processAgreementTerm(dctx, context, agreement, term, invoices);
@@ -406,7 +406,7 @@ public class AgreementInvoiceFactory {
             input.put("invoiceItemTypeId", invoiceItemTypeId);
             input.put("productId", invoiceItem.get("productId"));
             input.put("amount", commissionAmount);
-            input.put("quantity", 1.0);
+            input.put("quantity", new BigDecimal("1.0"));
             input.put("description", description);
 
             items.add(input);
