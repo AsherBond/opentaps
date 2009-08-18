@@ -39,24 +39,4 @@ under the License.
     <!-- org.ofbiz.product.facility -->
     <!-- ========================================================= -->
 
-    <entity entity-name="OldFacilityRole" table-name="FACILITY_ROLE"
-            package-name="org.ofbiz.product.facility"
-            title="Facility Role Entity">
-      <field name="facilityId" type="id-ne"></field>
-      <field name="partyId" type="id-ne"></field>
-      <field name="roleTypeId" type="id-ne"></field>
-      <prim-key field="facilityId"/>
-      <prim-key field="partyId"/>
-      <prim-key field="roleTypeId"/>
-      <relation type="one" fk-name="FACILITY_RLE_FAC" rel-entity-name="Facility">
-        <key-map field-name="facilityId"/>
-      </relation>
-      <relation type="one" fk-name="FACILITY_RLE_PRTY" rel-entity-name="Party">
-        <key-map field-name="partyId"/>
-      </relation>
-      <relation type="one-nofk" fk-name="FACILITY_RLE_ROLE"  rel-entity-name="RoleType">
-        <key-map field-name="roleTypeId"/>
-      </relation>
-    </entity>
-
 </entitymodel>
