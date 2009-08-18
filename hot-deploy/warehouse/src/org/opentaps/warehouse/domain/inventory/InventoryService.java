@@ -68,13 +68,13 @@ public class InventoryService extends Service implements InventoryServiceInterfa
     }
 
     /** {@inheritDoc} */
-    public Double getQuantityOnHandTotal() {
-        return this.quantityOnHandTotal.doubleValue();
+    public BigDecimal getQuantityOnHandTotal() {
+        return this.quantityOnHandTotal;
     }
 
     /** {@inheritDoc} */
-    public Double getAvailableToPromiseTotal() {
-        return this.availableToPromiseTotal.doubleValue();
+    public BigDecimal getAvailableToPromiseTotal() {
+        return this.availableToPromiseTotal;
     }
 
     /** {@inheritDoc} */

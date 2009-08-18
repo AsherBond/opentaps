@@ -15,6 +15,8 @@
  */
 package org.opentaps.domain.inventory;
 
+import java.math.BigDecimal;
+
 import org.opentaps.foundation.service.ServiceException;
 import org.opentaps.foundation.service.ServiceInterface;
 
@@ -38,15 +40,15 @@ public interface InventoryServiceInterface extends ServiceInterface {
 
     /**
      * Gets the quantity on hand total from {@link #getProductInventoryAvailable}.
-     * @return a <code>Double</code> value
+     * @return a <code>BigDecimal</code> value
      */
-    public Double getQuantityOnHandTotal();
+    public BigDecimal getQuantityOnHandTotal();
 
     /**
      * Gets the quantity available to promise total from {@link #getProductInventoryAvailable}.
-     * @return a <code>Double</code> value
+     * @return a <code>BigDecimal</code> value
      */
-    public Double getAvailableToPromiseTotal();
+    public BigDecimal getAvailableToPromiseTotal();
 
     /**
      * Sets the inventory item ID, required parameter for {@link #prepareInventoryTransfer}.

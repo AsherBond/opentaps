@@ -212,12 +212,12 @@ under the License.
         <attribute name="orderId" type="String" mode="IN" optional="false"/>
         <attribute name="orderItemSeqId" type="String" mode="IN" optional="false"/>
         <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
-        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="quantity" type="BigDecimal" mode="IN" optional="false"/>
         <attribute name="reservedDatetime" type="Timestamp" mode="IN" optional="true"/>
         <attribute name="requireInventory" type="String" mode="IN" optional="false"/>
         <attribute name="reserveOrderEnumId" type="String" mode="IN" optional="true"/>
         <attribute name="sequenceId" type="Long" mode="IN" optional="true"/>
-        <attribute name="quantityNotReserved" type="Double" mode="OUT" optional="false"/>
+        <attribute name="quantityNotReserved" type="BigDecimal" mode="OUT" optional="false"/>
     </service>
 
     <service name="reReserveProductInventory" engine="pojo" 
@@ -228,7 +228,7 @@ under the License.
         <attribute name="inventoryItemId" mode="IN" type="String"/>
         <attribute name="shipGroupSeqId" mode="IN" type="String"/>
         <attribute name="facilityId" mode="IN" type="String"/>
-        <attribute name="quantity" mode="IN" type="Double"/>
+        <attribute name="quantity" mode="IN" type="BigDecimal"/>
     </service>
 
     <service name="loadCartFromOrder" engine="java" auth="true"

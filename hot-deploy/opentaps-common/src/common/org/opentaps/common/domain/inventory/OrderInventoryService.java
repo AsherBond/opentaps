@@ -218,7 +218,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                 setOrderId(res.getOrderId());
                 setOrderItemSeqId(res.getOrderItemSeqId());
                 setProductId(item.getProductId());
-                setQuantity(res.getQuantity().doubleValue());
+                setQuantity(res.getQuantity());
                 setReservedDatetime(res.getReservedDatetime());
                 setReserveOrderEnumId(res.getReserveOrderEnumId());
                 setRequireInventory("N");
@@ -263,8 +263,8 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
     }
 
     /** {@inheritDoc} */
-    public void setQuantity(Double quantity) {
-        this.quantity = BigDecimal.valueOf(quantity);
+    public void setQuantity(BigDecimal quantity) {
+        this.quantity = quantity;
     }
 
     /** {@inheritDoc} */
@@ -288,8 +288,8 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
     }
 
     /** {@inheritDoc} */
-    public Double getQuantityNotReserved() {
-        return quantityNotReserved.doubleValue();
+    public BigDecimal getQuantityNotReserved() {
+        return quantityNotReserved;
     }
 
     /** {@inheritDoc} */
@@ -371,7 +371,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                     reserveOisgirMap.put("reserveOrderEnumId", reserveOrderEnumId);
                     reserveOisgirMap.put("reservedDatetime", reservedDatetime);
                     reserveOisgirMap.put("promisedDatetime", promisedDatetime);
-                    reserveOisgirMap.put("quantity", Double.valueOf("1"));
+                    reserveOisgirMap.put("quantity", BigDecimal.ONE);
                     if (UtilValidate.isNotEmpty(sequenceId)) {
                         reserveOisgirMap.put("sequenceId", sequenceId);
                     }
@@ -722,7 +722,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                 setProductId(inventory.getProductId());
                 setFacilityId(toFacilityId);
                 setShipGroupSeqId(reservItem.getShipGroupSeqId());
-                setQuantity(quantityFromNewFacility.doubleValue());
+                setQuantity(quantityFromNewFacility);
                 setReservedDatetime(reservItem.getReservedDatetime());
                 setRequireInventory("N");
                 setReserveOrderEnumId(reservItem.getReserveOrderEnumId());
@@ -732,7 +732,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                 if (quantityFromOldFacility != null) {
                     // renew reservation for remaining quantity from original facility
                     setFacilityId(inventory.getFacilityId());
-                    setQuantity(quantityFromOldFacility.doubleValue());
+                    setQuantity(quantityFromOldFacility);
                     reserveProductInventory();
                 }
 

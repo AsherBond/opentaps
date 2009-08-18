@@ -15,6 +15,7 @@
  */
 package org.opentaps.domain.inventory;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import org.opentaps.foundation.service.ServiceException;
@@ -106,7 +107,7 @@ public interface OrderInventoryServiceInterface extends ServiceInterface {
      *
      * @param quantity Quantity that is subject to reservation
      */
-    public void setQuantity(Double quantity);
+    public void setQuantity(BigDecimal quantity);
 
     /**
      * Service <code>reserveProductInventory/reserveProductInventoryByFacility</code><br/>
@@ -148,7 +149,7 @@ public interface OrderInventoryServiceInterface extends ServiceInterface {
      *    If requireInventory is Y the quantity not reserved is returned, if N then a negative
      *    availableToPromise will be used to track quantity ordered beyond what is in stock.
      */
-    public Double getQuantityNotReserved();
+    public BigDecimal getQuantityNotReserved();
 
     /**
      * Service <code>reserveProductInventoryByFacility</code><br/>
