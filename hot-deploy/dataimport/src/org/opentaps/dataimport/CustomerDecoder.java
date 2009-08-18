@@ -15,6 +15,11 @@
  */
 package org.opentaps.dataimport;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
+
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -27,18 +32,13 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.service.LocalDispatcher;
 import org.opentaps.common.util.UtilCommon;
 
-import java.math.BigDecimal;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-
 /**
  * maps DataImportCustomer into a set of opentaps entities that describes the Customer
  * TODO: break this up big method into several logical steps, each implemented in class methods.
  * This will allow for much easier re-use for custom imports.
  */
 public class CustomerDecoder implements ImportDecoder {
-    public static final String module = CustomerDecoder.class.getName();
+    private static final String MODULE = CustomerDecoder.class.getName();
     protected String initialResponsiblePartyId;
     protected String initialResponsibleRoleTypeId;
     protected String organizationPartyId;
@@ -69,23 +69,23 @@ public class CustomerDecoder implements ImportDecoder {
 
         // first validate the existence of the accounts
         GenericValue glAccountOrganization = null;
-        if (! UtilValidate.isEmpty(arGlAccountId)) {
+        if (UtilValidate.isNotEmpty(arGlAccountId)) {
             glAccountOrganization = delegator.findByPrimaryKey("GlAccountOrganization", UtilMisc.toMap("glAccountId", arGlAccountId, "organizationPartyId", organizationPartyId));
             if (glAccountOrganization == null) {
-                throw new GeneralException("Cannot import: organization ["+organizationPartyId+"] does not have Accounts Receivable General Ledger account ["+arGlAccountId+"] defined in GlAccountOrganization.");
+                throw new GeneralException("Cannot import: organization [" + organizationPartyId + "] does not have Accounts Receivable General Ledger account [" + arGlAccountId + "] defined in GlAccountOrganization.");
             }
         }
-        if (! UtilValidate.isEmpty(offsettingGlAccountId)) {
+        if (UtilValidate.isNotEmpty(offsettingGlAccountId)) {
             glAccountOrganization = delegator.findByPrimaryKey("GlAccountOrganization", UtilMisc.toMap("glAccountId", offsettingGlAccountId, "organizationPartyId", organizationPartyId));
             if (glAccountOrganization == null) {
-                throw new GeneralException("Cannot import: organization ["+organizationPartyId+"] does not have offsetting General Ledger account ["+offsettingGlAccountId+"] defined in GlAccountOrganization.");
+                throw new GeneralException("Cannot import: organization [" + organizationPartyId + "] does not have offsetting General Ledger account [" + offsettingGlAccountId + "] defined in GlAccountOrganization.");
             }
         }
 
         // next ensure the role of the initial responsible party
         this.initialResponsibleRoleTypeId = PartyHelper.getFirstValidTeamMemberRoleTypeId(initialResponsiblePartyId, delegator);
         if (initialResponsibleRoleTypeId == null) {
-            throw new GeneralException("Cannot import customers: No internal CRM role found for party ["+initialResponsiblePartyId +"]");
+            throw new GeneralException("Cannot import customers: No internal CRM role found for party [" + initialResponsiblePartyId + "]");
         }
     }
 
@@ -114,7 +114,7 @@ public class CustomerDecoder implements ImportDecoder {
             toBeStored.add(delegator.makeValue("PartyRelationship", partyRelationship));
             primaryPartyId = personPartyId;
             primaryPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(person);
-            Debug.logInfo("Creating Person ["+personPartyId+"] for Customer ["+entry.get("customerId")+"].", module);
+            Debug.logInfo("Creating Person [" + personPartyId + "] for Customer [" + entry.get("customerId") + "].", MODULE);
         }
         if ((entry.get("companyName") != null) && !("".equals(entry.getString("companyName")))) {
             companyPartyId = delegator.getNextSeqId("Party");
@@ -133,11 +133,11 @@ public class CustomerDecoder implements ImportDecoder {
 
             primaryPartyId = companyPartyId;
             primaryPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(partyGroup);
-            Debug.logInfo("Creating PartyGroup ["+companyPartyId+"] for Customer ["+entry.get("customerId")+"].", module);
+            Debug.logInfo("Creating PartyGroup [" + companyPartyId + "] for Customer [" + entry.get("customerId") + "].", MODULE);
         }
 
         if (primaryPartyId == null) {
-            Debug.logWarning("No person or company associated with customer [" + entry.get("customerId") + "]", module);
+            Debug.logWarning("No person or company associated with customer [" + entry.get("customerId") + "]", MODULE);
             return null;
         }
 
@@ -215,10 +215,12 @@ public class CustomerDecoder implements ImportDecoder {
             GenericValue secondaryNumber = UtilImport.makeTelecomNumber(contactMech, entry.getString("secondaryPhoneCountryCode"), entry.getString("secondaryPhoneAreaCode"), entry.getString("secondaryPhoneNumber"), delegator);
             toBeStored.add(contactMech);
             toBeStored.add(secondaryNumber);
-            if (personPartyId != null)
+            if (personPartyId != null) {
                 toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", contactMech.get("contactMechId"), "partyId", personPartyId, "fromDate", importTimestamp, "extension", entry.getString("secondaryPhoneExtension"))));
-            if (companyPartyId != null)
+            }
+            if (companyPartyId != null) {
                 toBeStored.add(delegator.makeValue("PartyContactMech", UtilMisc.toMap("contactMechId", contactMech.get("contactMechId"), "partyId", companyPartyId, "fromDate", importTimestamp, "extension", entry.getString("secondaryPhoneExtension"))));
+            }
         }
 
         if (!UtilValidate.isEmpty(entry.getString("faxNumber"))) {
@@ -320,7 +322,7 @@ public class CustomerDecoder implements ImportDecoder {
                 // productPriceCond
                 toBeStored.add(delegator.makeValue("ProductPriceCond", UtilMisc.toMap("productPriceRuleId", productPriceRuleId, "productPriceCondSeqId", UtilFormatOut.formatPaddedNumber(1, 2), "inputParamEnumId", "PRIP_PARTY_ID", "operatorEnumId", "PRC_EQ", "condValue", companyPartyId)));
                 // productPriceAction
-                toBeStored.add(delegator.makeValue("ProductPriceAction", UtilMisc.toMap("productPriceRuleId", productPriceRuleId, "productPriceActionSeqId", UtilFormatOut.formatPaddedNumber(1, 2), "productPriceActionTypeId", "PRICE_POL", "amount", new Double(discount.doubleValue()))));
+                toBeStored.add(delegator.makeValue("ProductPriceAction", UtilMisc.toMap("productPriceRuleId", productPriceRuleId, "productPriceActionSeqId", UtilFormatOut.formatPaddedNumber(1, 2), "productPriceActionTypeId", "PRICE_POL", "amount", discount)));
             }
         }
 
@@ -338,10 +340,10 @@ public class CustomerDecoder implements ImportDecoder {
                     if (partyClassificationGroup != null) {
                         toBeStored.add(delegator.makeValue("PartyClassification", UtilMisc.toMap("partyId", companyPartyId, "partyClassificationGroupId", partyClassificationGroup.getString("partyClassificationGroupId"), "fromDate", importTimestamp)));
                     } else {
-                        Debug.logInfo("No partyClassificationGroups exist for partyClassificationId" + partyClassificationTypeId + ", ignoring for customerId " + entry.getString("customerId"), module);
+                        Debug.logInfo("No partyClassificationGroups exist for partyClassificationId" + partyClassificationTypeId + ", ignoring for customerId " + entry.getString("customerId"), MODULE);
                     }
                 } else {
-                    Debug.logInfo("partyClassificationTypeId" + partyClassificationTypeId + "does not exist, ignoring for customerId " + entry.getString("customerId"), module);
+                    Debug.logInfo("partyClassificationTypeId" + partyClassificationTypeId + "does not exist, ignoring for customerId " + entry.getString("customerId"), MODULE);
                 }
             }
         }
@@ -368,7 +370,7 @@ public class CustomerDecoder implements ImportDecoder {
         if (!UtilValidate.isEmpty(entry.getString("creditCardNumber"))) {
             // we need a person with a first and last name, otherwise the import data is malformed
             if (personPartyId == null && UtilValidate.isEmpty(entry.getString("firstName")) && UtilValidate.isEmpty(entry.getString("lastName"))) {
-                Debug.logWarning("Failed to import Credit Card for Party ["+primaryPartyId+"]:  First and Last name missing for customer ["+entry.get("customerId")+"].", module);
+                Debug.logWarning("Failed to import Credit Card for Party ["+primaryPartyId+"]:  First and Last name missing for customer ["+entry.get("customerId")+"].", MODULE);
             } else {
                 // associate this with primaryPartyId as a PaymentMethod of CREDIT_CARD type
                 GenericValue paymentMethod = delegator.makeValue("PaymentMethod", UtilMisc.toMap("paymentMethodId", delegator.getNextSeqId("PaymentMethod"), "paymentMethodTypeId", "CREDIT_CARD", "partyId", primaryPartyId, "fromDate", importTimestamp));
@@ -379,7 +381,7 @@ public class CustomerDecoder implements ImportDecoder {
                 String cardType = UtilValidate.getCardType(cardNumber);
                 String expireDate = UtilImport.decodeExpireDate(entry.getString("creditCardExpDate"));
                 if (expireDate == null) {
-                    Debug.logWarning("Failed to decode creditCardExpDate ["+entry.getString("creditCardExpDate")+"] into form MM/YYYY for customer ["+entry.get("customerId")+"].", module);
+                    Debug.logWarning("Failed to decode creditCardExpDate ["+entry.getString("creditCardExpDate")+"] into form MM/YYYY for customer ["+entry.get("customerId")+"].", MODULE);
                 } else {
                     Map input = UtilMisc.toMap("paymentMethodId", paymentMethod.get("paymentMethodId"), "cardNumber", cardNumber, "cardType", cardType, "expireDate", expireDate);
                     input.put("firstNameOnCard", entry.get("firstName"));
@@ -391,7 +393,7 @@ public class CustomerDecoder implements ImportDecoder {
             }
         }
 
-        toBeStored.addAll(createBalances(primaryPartyId, entry.getDouble("outstandingBalance"), importTimestamp, baseCurrencyUomId, delegator));
+        toBeStored.addAll(createBalances(primaryPartyId, entry.getBigDecimal("outstandingBalance"), importTimestamp, baseCurrencyUomId, delegator));
         toBeStored.addAll(createSalesAgreement(entry, primaryPartyId, primaryPartyName, importTimestamp, delegator));
 
         // save the primary party Id
@@ -405,8 +407,10 @@ public class CustomerDecoder implements ImportDecoder {
      * Checks if we can create a balance.  The balance from the entry must be non zero and the
      * AR and offsetting accounts must exist.
      */
-    public boolean canCreateBalance(Double balance) {
-        if (balance == null || balance == 0.0) return false;
+    public boolean canCreateBalance(BigDecimal balance) {
+        if (balance == null || balance.signum() == 0) {
+            return false;
+        }
         return (! UtilValidate.isEmpty(arGlAccountId)) && (! UtilValidate.isEmpty(offsettingGlAccountId));
     }
 
@@ -414,10 +418,10 @@ public class CustomerDecoder implements ImportDecoder {
      * Creates AR balances if a balance exists and the accounts are specified.
      * @return List containing the balance entities or an empty list if no balances are to be created.
      */
-    public List<GenericValue> createBalances(String partyId, Double balance, Timestamp importTimestamp, String currencyUomId, GenericDelegator delegator) {
+    public List<GenericValue> createBalances(String partyId, BigDecimal balance, Timestamp importTimestamp, String currencyUomId, GenericDelegator delegator) {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
         if (! canCreateBalance(balance)) return toBeStored;
-        
+
         // create an AcctgTrans, DR arGlAccountId, CR offsettingGlAccountId for the amount of outstandingBalance
         Map<String, Object> input = UtilMisc.toMap("acctgTransTypeId", "INTERNAL_ACCTG_TRANS", "glFiscalTypeId", "ACTUAL",
                                    "transactionDate", importTimestamp, "partyId", partyId);
@@ -458,14 +462,16 @@ public class CustomerDecoder implements ImportDecoder {
      * payment days term, or both.
      */
     public boolean canCreateSalesAgreement(GenericValue entry) {
-        Double creditLimit = entry.getDouble("creditLimit");
+        BigDecimal creditLimit = entry.getBigDecimal("creditLimit");
         Long netPaymentDays = entry.getLong("netPaymentDays");
 
         // make the logic simpler by normalizing null to 0
-        if (creditLimit == null) creditLimit = 0.0;
+        if (creditLimit == null) {
+            creditLimit = BigDecimal.ZERO;
+        }
         if (netPaymentDays == null) netPaymentDays = 0L;
-        
-        return (creditLimit > 0.0 || netPaymentDays > 0);
+
+        return (creditLimit.signum() > 0 || netPaymentDays > 0);
     }
 
     /**
@@ -502,14 +508,14 @@ public class CustomerDecoder implements ImportDecoder {
     public List<GenericValue> createSalesAgreementTerms(GenericValue entry, String agreementId, GenericDelegator delegator) throws GenericEntityException {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
 
-        Double creditLimit = entry.getDouble("creditLimit");
+        BigDecimal creditLimit = entry.getBigDecimal("creditLimit");
         Long netPaymentDays = entry.getLong("netPaymentDays");
         String customerCurrencyUomId = entry.getString("currencyUomId");
         int seqId = 1;
 
         toBeStored.addAll(createAgreementCreditLimitTerm(agreementId, customerCurrencyUomId, seqId++, delegator, creditLimit));
         toBeStored.addAll(createAgreementNetPaymentDaysTerm(agreementId, customerCurrencyUomId, seqId++, delegator, netPaymentDays));
-        
+
         return toBeStored;
     }
 
@@ -517,7 +523,7 @@ public class CustomerDecoder implements ImportDecoder {
      * Simplifies the creation of a term/item combination.  Specify the agreement type, term type, term value, term days and currency.
      * You might want to use one of the more specific methods such as createAgreementCreditLimitTerm() to minimize errors.
      */
-    public List<GenericValue> createAgreementTerm(String agreementId, String agreementTypeId, String termTypeId, Double termValue, Long termDays, String currencyUomId, int seqId, GenericDelegator delegator) {
+    public List<GenericValue> createAgreementTerm(String agreementId, String agreementTypeId, String termTypeId, BigDecimal termValue, Long termDays, String currencyUomId, int seqId, GenericDelegator delegator) {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
 
         GenericValue item = delegator.makeValue("AgreementItem");
@@ -543,21 +549,21 @@ public class CustomerDecoder implements ImportDecoder {
      * Helper function to generate a credit limit term.  Only creates term if the credit limit is positive.
      * Used by createSalesAgreementTerms().
      */
-    public List<GenericValue> createAgreementCreditLimitTerm(String agreementId, String customerCurrencyUomId, int seqId, GenericDelegator delegator, Double creditLimit) {
+    public List<GenericValue> createAgreementCreditLimitTerm(String agreementId, String customerCurrencyUomId, int seqId, GenericDelegator delegator, BigDecimal creditLimit) {
         // get currency for customer record or from opentaps.properties
         // TODO why not just throw an illegal argument exception and have the importer fix the data?
         if (UtilValidate.isEmpty(customerCurrencyUomId)) {
             customerCurrencyUomId = UtilProperties.getPropertyValue("opentaps", "defaultCurrencyUomId");
-            Debug.logWarning("No currency specified for credit limit of agreement [" + agreementId + "], using [" + customerCurrencyUomId + "] from opentaps.properties", module);
+            Debug.logWarning("No currency specified for credit limit of agreement [" + agreementId + "], using [" + customerCurrencyUomId + "] from opentaps.properties", MODULE);
         }
-        if (creditLimit != null && creditLimit > 0.0) {
+        if (creditLimit != null && creditLimit.signum() > 0) {
             return createAgreementTerm(agreementId, "AGREEMENT_CREDIT", "CREDIT_LIMIT", creditLimit, null, customerCurrencyUomId, seqId, delegator);
         }
         return new FastList<GenericValue>();
     }
 
     /**
-     * Helper function to generate a net payment days term.  Only creates term if therre are a positive number of days.  
+     * Helper function to generate a net payment days term.  Only creates term if therre are a positive number of days.
      * Used by createSalesAgreementTerms().
      */
     public List<GenericValue> createAgreementNetPaymentDaysTerm(String agreementId, String customerCurrencyUomId, int seqId, GenericDelegator delegator, Long netPaymentDays) {
@@ -575,9 +581,9 @@ public class CustomerDecoder implements ImportDecoder {
      * TODO: This term isn't really used anywhere.
      * TODO: In validating discount rate, throw illegal argument if it's not valid
      */
-    public List<GenericValue> createAgreementDiscountTerm(String agreementId, String customerCurrencyUomId, int seqId, GenericDelegator delegator, Double discountRate, Long discountDays) {
+    public List<GenericValue> createAgreementDiscountTerm(String agreementId, String customerCurrencyUomId, int seqId, GenericDelegator delegator, BigDecimal discountRate, Long discountDays) {
         List<GenericValue> toBeStored = new FastList<GenericValue>();
-        if (discountRate != null && discountRate > 0.0) {
+        if (discountRate != null && discountRate.signum() > 0) {
             return createAgreementTerm(agreementId, "AGREEMENT_PAYMENT", "FIN_PAYMENT_DISC", discountRate, discountDays, customerCurrencyUomId, seqId, delegator);
         }
         return toBeStored;

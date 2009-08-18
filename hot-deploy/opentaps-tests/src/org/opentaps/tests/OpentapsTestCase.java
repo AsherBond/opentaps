@@ -770,7 +770,7 @@ public class OpentapsTestCase extends TestCase {
      * @param tree a <code>BomTree</code> value
      * @param expectedComponents the <code>Map</code> of expected components Id => quantities
      */
-    protected void assertBomTreeCorrect(BomTree tree, Map<String, Double> expectedComponents) {
+    protected void assertBomTreeCorrect(BomTree tree, Map<String, BigDecimal> expectedComponents) {
         Map<String, BomNode> treeQty = new HashMap<String, BomNode>();
         tree.sumQuantities(treeQty);
         for (String productId : expectedComponents.keySet()) {
@@ -838,7 +838,7 @@ public class OpentapsTestCase extends TestCase {
      * @return the created routing work effort ID
      */
     protected String createTestAssemblingRouting(String name, String assembleProductId) {
-        return createTestAssemblingRouting(name, assembleProductId, new Double(300000), new Double(600000));
+        return createTestAssemblingRouting(name, assembleProductId, new BigDecimal("300000"), new BigDecimal("600000"));
     }
 
     /**
@@ -851,7 +851,7 @@ public class OpentapsTestCase extends TestCase {
      * @param estimatedSetupMillis for the task setup
      * @return the created routing work effort ID
      */
-    protected String createTestAssemblingRouting(String name, String assembleProductId, Double estimatedMilliSeconds, Double estimatedSetupMillis) {
+    protected String createTestAssemblingRouting(String name, String assembleProductId, BigDecimal estimatedMilliSeconds, BigDecimal estimatedSetupMillis) {
         return createTestAssemblingRouting(name, assembleProductId, estimatedMilliSeconds, estimatedSetupMillis, null, null);
     }
 
@@ -868,7 +868,7 @@ public class OpentapsTestCase extends TestCase {
      * @return the created routing work effort ID
      */
     @SuppressWarnings("unchecked")
-    protected String createTestAssemblingRouting(String name, String assembleProductId, Double estimatedMilliSeconds, Double estimatedSetupMillis, Double minQuantity, Double maxQuantity) {
+    protected String createTestAssemblingRouting(String name, String assembleProductId, BigDecimal estimatedMilliSeconds, BigDecimal estimatedSetupMillis, BigDecimal minQuantity, BigDecimal maxQuantity) {
         // create a product routing definition for test purposes
         Map<String, Object> productRoutingContext = UtilMisc.<String, Object>toMap("userLogin", admin);
         productRoutingContext.put("workEffortTypeId", "ROUTING");
@@ -880,7 +880,7 @@ public class OpentapsTestCase extends TestCase {
             workEffortName = workEffortName.substring(0, 100);
         }
         productRoutingContext.put("workEffortName", workEffortName);
-        productRoutingContext.put("quantityToProduce", new Double(0.0));
+        productRoutingContext.put("quantityToProduce", BigDecimal.ZERO);
         Map<String, Object> createProductRoutingResult = runAndAssertServiceSuccess("createWorkEffort", productRoutingContext);
         final String productRoutingId = (String) createProductRoutingResult.get("workEffortId");
 
@@ -991,9 +991,9 @@ public class OpentapsTestCase extends TestCase {
      * Creates a <code>SupplierProduct</code> record for productId as "Main Supplier" with from date of now.
      * @param productId the product ID
      * @param supplierPartyId the supplier party ID
-     * @param lastPrice a <code>double</code> value
+     * @param lastPrice a <code>BigDecimal</code> value
      * @param currencyUomId a <code>String</code> value
-     * @param minimumOrderQuantity a <code>double</code> value
+     * @param minimumOrderQuantity a <code>BigDecimal</code> value
      * @param userLogin a <code>GenericValue</code> value
      * @exception GenericServiceException if an error occurs
      */
@@ -1048,7 +1048,7 @@ public class OpentapsTestCase extends TestCase {
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
     protected Map<String, Object> receiveInventoryProduct(GenericValue product, BigDecimal quantity, String inventoryItemTypeId, GenericValue userLogin) {
-        return receiveInventoryProduct(product, quantity, inventoryItemTypeId, new BigDecimal(0.1), userLogin);
+        return receiveInventoryProduct(product, quantity, inventoryItemTypeId, new BigDecimal("0.1"), userLogin);
     }
 
     /**
@@ -1081,7 +1081,7 @@ public class OpentapsTestCase extends TestCase {
         callCtxt.put("facilityId", facilityId);
         callCtxt.put("currencyUomId", "USD");
         callCtxt.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        callCtxt.put("quantityRejected", new BigDecimal(0.0));
+        callCtxt.put("quantityRejected", BigDecimal.ZERO);
         callCtxt.put("inventoryItemTypeId", inventoryItemTypeId);
         callCtxt.put("unitCost", unitCost);
         callCtxt.put("quantityAccepted", quantity);
@@ -1107,7 +1107,7 @@ public class OpentapsTestCase extends TestCase {
         callCtxt.put("facilityId", facilityId);
         callCtxt.put("currencyUomId", "USD");
         callCtxt.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        callCtxt.put("quantityRejected", new BigDecimal(0.0));
+        callCtxt.put("quantityRejected", BigDecimal.ZERO);
         callCtxt.put("inventoryItemTypeId", inventoryItemTypeId);
         callCtxt.put("unitCost", unitCost);
         callCtxt.put("quantityAccepted", quantity);
@@ -1153,9 +1153,9 @@ public class OpentapsTestCase extends TestCase {
      * @param productStoreId
      * @return the quantity pending
      */
-    protected Double getPendingRequirements(GenericValue product, String productStoreId) {
+    protected BigDecimal getPendingRequirements(GenericValue product, String productStoreId) {
         // calculate the sum of pending requirements in the chosen productstore for the given product
-        Double pendingRequirements;
+        BigDecimal pendingRequirements;
         try {
             pendingRequirements = UtilProduct.countOpenRequirements((String) product.get("productId"), productStoreId, delegator);
         } catch (GenericEntityException e) {
@@ -1175,22 +1175,22 @@ public class OpentapsTestCase extends TestCase {
      * @param initialAtp the initial ATP
      * @param productStoreId the product store, used to find the related facilities in which the requirements are expected
      */
-    protected void checkRequirements(GenericValue product, BigDecimal orderedQty, Double initialRequirement, Double initialAtp, String productStoreId) {
-        Double finalRequirement = getPendingRequirements(product, productStoreId);
+    protected void checkRequirements(GenericValue product, BigDecimal orderedQty, BigDecimal initialRequirement, BigDecimal initialAtp, String productStoreId) {
+        BigDecimal finalRequirement = getPendingRequirements(product, productStoreId);
         String requirementMethodEnumId = (String) product.get("requirementMethodEnumId");
         // product with auto requirement set get a requirement created for each item ordered
         if ("PRODRQM_AUTO".equals(requirementMethodEnumId)) {
-            assertEquals("Requirements for product [" + product.get("productId") + "]", orderedQty, (finalRequirement - initialRequirement));
+            assertEquals("Requirements for product [" + product.get("productId") + "]", orderedQty, (finalRequirement.subtract(initialRequirement)));
         } else if ("PRODRQM_ATP".equals(requirementMethodEnumId)) { // product with ATP requirement method get requirements created according to the rule defined in ProductFacility
             try {
                 GenericValue productStore =  delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
                 String facilityId = productStore.getString("inventoryFacilityId");
                 GenericValue productFacility = delegator.findByPrimaryKey("ProductFacility", UtilMisc.toMap("facilityId", facilityId, "productId", product.get("productId")));
                 assertTrue("Product [" + product.get("productId") + "] has ProductFacility rule", productFacility != null && productFacility.get("minimumStock") != null);
-                Double minimumStock = productFacility.getDouble("minimumStock");
-                Double stock = initialRequirement + initialAtp;
-                if ((stock - orderedQty.doubleValue()) <  minimumStock) {
-                    assertEquals("Requirements for product [" + product.get("productId") + "]", minimumStock - (stock - orderedQty.doubleValue()), (finalRequirement - initialRequirement));
+                BigDecimal minimumStock = productFacility.getBigDecimal("minimumStock");
+                BigDecimal stock = initialRequirement.add(initialAtp);
+                if (stock.subtract(orderedQty).compareTo(minimumStock) < 0) {
+                    assertEquals("Requirements for product [" + product.get("productId") + "]", minimumStock.subtract(stock.subtract(orderedQty)), (finalRequirement.subtract(initialRequirement)));
                 } else {
                     assertEquals("Requirements for product [" + product.get("productId") + "]", initialRequirement, finalRequirement);
                 }
@@ -1328,12 +1328,12 @@ public class OpentapsTestCase extends TestCase {
      */
     protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, String customerPartyId, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
         // to store ATP, QOH and requirements before and after the order
-        Map<GenericValue, Double> productAtpInitial, productQohInitial, productAtpFinal, productQohFinal, productRequirementInitial;
-        productAtpInitial = new HashMap<GenericValue, Double>();
-        productQohInitial = new HashMap<GenericValue, Double>();
-        productAtpFinal = new HashMap<GenericValue, Double>();
-        productQohFinal = new HashMap<GenericValue, Double>();
-        productRequirementInitial = new HashMap<GenericValue, Double>();
+        Map<GenericValue, BigDecimal> productAtpInitial, productQohInitial, productAtpFinal, productQohFinal, productRequirementInitial;
+        productAtpInitial = new HashMap<GenericValue, BigDecimal>();
+        productQohInitial = new HashMap<GenericValue, BigDecimal>();
+        productAtpFinal = new HashMap<GenericValue, BigDecimal>();
+        productQohFinal = new HashMap<GenericValue, BigDecimal>();
+        productRequirementInitial = new HashMap<GenericValue, BigDecimal>();
         // store service call results
         Map<String, Object> callResults;
 
@@ -1376,8 +1376,8 @@ public class OpentapsTestCase extends TestCase {
             GenericValue product = iter.next();
             // get initial products availability
             callResults = getProductAvailability(product.getString("productId"));
-            productAtpInitial.put(product, (Double) callResults.get("availableToPromiseTotal"));
-            productQohInitial.put(product, (Double) callResults.get("quantityOnHandTotal"));
+            productAtpInitial.put(product, (BigDecimal) callResults.get("availableToPromiseTotal"));
+            productQohInitial.put(product, (BigDecimal) callResults.get("quantityOnHandTotal"));
             Debug.logInfo("Initial availability of [" + product.get("productId") + "] : ATP=" + productAtpInitial.get(product) + " QOH=" + productQohInitial.get(product), MODULE);
             // get initial requirements
             productRequirementInitial.put(product, getPendingRequirements(product, productStoreId));
@@ -1425,13 +1425,13 @@ public class OpentapsTestCase extends TestCase {
             }
             // get final products availability
             callResults = getProductAvailability(product.getString("productId"));
-            productAtpFinal.put(product, (Double) callResults.get("availableToPromiseTotal"));
-            productQohFinal.put(product, (Double) callResults.get("quantityOnHandTotal"));
+            productAtpFinal.put(product, (BigDecimal) callResults.get("availableToPromiseTotal"));
+            productQohFinal.put(product, (BigDecimal) callResults.get("quantityOnHandTotal"));
             Debug.logInfo("Final availability of [" + product.get("productId") + "] : ATP=" + productAtpFinal.get(product) + " QOH=" + productQohFinal.get(product), MODULE);
             // check QOH are unchanged
             assertEquals("QOH of " + product.get("productId"), productQohFinal.get(product), productQohInitial.get(product));
             // check ATP have declined by the ordered qty
-            Double expectedAtp = productAtpInitial.get(product).doubleValue() - order.get(product).doubleValue();
+            BigDecimal expectedAtp = productAtpInitial.get(product).subtract(order.get(product));
             assertEquals("ATP of " + product.get("productId"), productAtpFinal.get(product), expectedAtp);
             // check requirements have been created as needed
             checkRequirements(product, order.get(product), productRequirementInitial.get(product), productAtpInitial.get(product), productStoreId);
@@ -1618,7 +1618,7 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin
      * @throws GeneralException
      */
-    protected void cancelOrderItem(String orderId, String orderItemSeqId, String shipGroupSeqId, Double quantityToCancel, GenericValue userLogin) throws GeneralException {
+    protected void cancelOrderItem(String orderId, String orderItemSeqId, String shipGroupSeqId, BigDecimal quantityToCancel, GenericValue userLogin) throws GeneralException {
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("userLogin", userLogin);
         callCtxt.put("orderId", orderId);
@@ -1702,7 +1702,7 @@ public class OpentapsTestCase extends TestCase {
                     quantitiesAccepted.put(strRowNumber, quantitiesToReceive.get(orderItemSeqId));
                 } else {
                     // receive full quantity of the order item
-                    Double acceptedQuantity = orderItem.getDouble("quantity");
+                    BigDecimal acceptedQuantity = orderItem.getBigDecimal("quantity");
                     quantitiesAccepted.put(strRowNumber, acceptedQuantity == null ? "0.0" : acceptedQuantity.toString());
                 }
 
@@ -1804,7 +1804,7 @@ public class OpentapsTestCase extends TestCase {
                 String productId = orderItem.getString("productId");
                 productIds.put(strRowNumber, productId);
 
-                Double acceptedQuantity = orderItem.getDouble("quantity");
+                BigDecimal acceptedQuantity = orderItem.getBigDecimal("quantity");
                 quantitiesAccepted.put(strRowNumber, acceptedQuantity == null ? "0.0" : acceptedQuantity.toString());
 
                 quantitiesRejected.put(strRowNumber, "0.0");
@@ -1850,8 +1850,8 @@ public class OpentapsTestCase extends TestCase {
     protected void assertProductAvailability(GenericValue product, BigDecimal atp, BigDecimal qoh) {
         Map<String, Object> availability = getProductAvailability(product.getString("productId"));
         assertNotNull("Product [" + product.getString("productId") + "] availability", availability);
-        assertEquals("Product [" + product.getString("productId") + "] ATP", (Double) availability.get("availableToPromiseTotal"), atp);
-        assertEquals("Product [" + product.getString("productId") + "] QOH", (Double) availability.get("quantityOnHandTotal"), qoh);
+        assertEquals("Product [" + product.getString("productId") + "] ATP", (BigDecimal) availability.get("availableToPromiseTotal"), atp);
+        assertEquals("Product [" + product.getString("productId") + "] QOH", (BigDecimal) availability.get("quantityOnHandTotal"), qoh);
     }
 
     /**
@@ -1860,10 +1860,10 @@ public class OpentapsTestCase extends TestCase {
      * @param product
      * @param atp
      */
-    protected void assertProductATP(GenericValue product, Double atp) {
+    protected void assertProductATP(GenericValue product, BigDecimal atp) {
         Map<String, Object> availability = getProductAvailability(product.getString("productId"));
         assertNotNull("Product [" + product.getString("productId") + "] availability", availability);
-        assertEquals("Product [" + product.getString("productId") + "] ATP", (Double) availability.get("availableToPromiseTotal"), atp);
+        assertEquals("Product [" + product.getString("productId") + "] ATP", (BigDecimal) availability.get("availableToPromiseTotal"), atp);
     }
 
     /**
@@ -1872,10 +1872,10 @@ public class OpentapsTestCase extends TestCase {
      * @param product
      * @param qoh
      */
-    protected void assertProductQOH(GenericValue product, Double qoh) {
+    protected void assertProductQOH(GenericValue product, BigDecimal qoh) {
         Map<String, Object> availability = getProductAvailability(product.getString("productId"));
         assertNotNull("Product [" + product.getString("productId") + "] availability", availability);
-        assertEquals("Product [" + product.getString("productId") + "] QOH", (Double) availability.get("quantityOnHandTotal"), qoh);
+        assertEquals("Product [" + product.getString("productId") + "] QOH", (BigDecimal) availability.get("quantityOnHandTotal"), qoh);
     }
 
     /**
@@ -2164,7 +2164,7 @@ public class OpentapsTestCase extends TestCase {
         for (GenericValue glAccountOrganization : glAccountOrganizations) {
             GenericValue copy = delegator.makeValue(glAccountOrganization.getEntityName(), glAccountOrganization);
             copy.setString("organizationPartyId", newPartyId);
-            copy.set("postedBalance", new Double(0.0));
+            copy.set("postedBalance", BigDecimal.ZERO);
             copies.add(copy);
         }
         // copy all the others

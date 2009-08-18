@@ -87,7 +87,7 @@ public class MrpTestCase extends OpentapsTestCase {
         String productId = product.getString("productId");
 
         // create default price as this product should be used in order later
-        assignDefaultPrice(product, new BigDecimal(100.0), userLogin);
+        assignDefaultPrice(product, new BigDecimal("100.0"), userLogin);
 
         // 2. create a ProductFacility entry for this product with [minimumStock, reorderQuantity, daysToShip] (MRP needs this information to schedule proposed requirements)
         Map productFacilityContext = UtilMisc.toMap("userLogin", userLogin, "productId", productId, "facilityId", facilityId, "minimumStock", minimumStock, "reorderQuantity", reorderQuantity, "daysToShip", daysToShip);

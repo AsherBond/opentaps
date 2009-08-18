@@ -88,8 +88,8 @@ public class OrderPickingTests  extends OrderTestCase {
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
         // create a sales order of 5 x productA and 8 x productB, approve order
         Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
-        orderItems.put(productA, new BigDecimal(5.0));
-        orderItems.put(productB, new BigDecimal(8.0));
+        orderItems.put(productA, new BigDecimal("5.0"));
+        orderItems.put(productB, new BigDecimal("8.0"));
         User = demoCsr;
         // record each store findOrdersToPickMove initial number
         Map results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -107,7 +107,7 @@ public class OrderPickingTests  extends OrderTestCase {
         assertEquals("quantity of order ready to pick should not have increased in Facility [" + facilityId + "] for order [" + order.getOrderId() + "]", webStoreReadyToPickInitNumber, webStoreReadyToPickCurrentNumber);
 
         // receive inventory for the first product
-        receiveInventoryProduct(productA, new BigDecimal(5.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(productA, new BigDecimal("5.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
 
         // at this point, there is some inventory for this order but allowOrderSplit = N, so it should not appear on the picklist.
         results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -115,7 +115,7 @@ public class OrderPickingTests  extends OrderTestCase {
         assertEquals("quantity of order ready to pick should not have increased in Facility [" + facilityId + "] for order [" + order.getOrderId() + "]", webStoreReadyToPickInitNumber, webStoreReadyToPickCurrentNumber);
 
         // receive inventory for the second product
-        receiveInventoryProduct(productB, new BigDecimal(8.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(productB, new BigDecimal("8.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
 
         // at this point, there is all the needed inventory for this order, so it should appear on the picklist.
         results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -165,8 +165,8 @@ public class OrderPickingTests  extends OrderTestCase {
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
         // create a sales order of 5 x productA and 8 x productB, approve order
         Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
-        orderItems.put(productA, new BigDecimal(5.0));
-        orderItems.put(productB, new BigDecimal(8.0));
+        orderItems.put(productA, new BigDecimal("5.0"));
+        orderItems.put(productB, new BigDecimal("8.0"));
         User = demoCsr;
         // record each store findOrdersToPickMove initial number
         Map results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -179,8 +179,8 @@ public class OrderPickingTests  extends OrderTestCase {
         Debug.logInfo("testMultiFacilityOrder() create orderId: " + salesOrder.getOrderId(), MODULE);
 
         // receive inventory
-        receiveInventoryProduct(productA, new BigDecimal(5.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
-        receiveInventoryProduct(productB, new BigDecimal(8.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(productA, new BigDecimal("5.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
+        receiveInventoryProduct(productB, new BigDecimal("8.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
 
         // at this point, there is all the needed inventory for this order, so it should appear on the picklist.
         results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -246,8 +246,8 @@ public class OrderPickingTests  extends OrderTestCase {
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
         // create a sales order of 5 x productA and 8 x productB, approve order
         Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
-        orderItems.put(productA, new BigDecimal(5.0));
-        orderItems.put(productB, new BigDecimal(8.0));
+        orderItems.put(productA, new BigDecimal("5.0"));
+        orderItems.put(productB, new BigDecimal("8.0"));
         User = demoCsr;
         // record each store findOrdersToPickMove initial number
         Map results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -298,8 +298,8 @@ public class OrderPickingTests  extends OrderTestCase {
         inventoryAsserts.assertInventoryChange(productBId, BigDecimal.ZERO, new BigDecimal(-8.0), originalInventoryB);
 
         // receive part of the inventory
-        receiveInventoryProduct(productA, new BigDecimal(2.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
-        receiveInventoryProduct(productB, new BigDecimal(3.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(productA, new BigDecimal("2.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
+        receiveInventoryProduct(productB, new BigDecimal("3.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
         // check inventory
         inventoryAsserts.assertInventoryChange(productAId, new BigDecimal(2.0), new BigDecimal(-3.0), originalInventoryA);
         inventoryAsserts.assertInventoryChange(productBId, new BigDecimal(3.0), new BigDecimal(-5.0), originalInventoryB);
@@ -352,7 +352,7 @@ public class OrderPickingTests  extends OrderTestCase {
         assertOrderNotReadyToShip(order, facilityId);
 
         // receive some more inventory
-        receiveInventoryProduct(productB, new BigDecimal(3.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(productB, new BigDecimal("3.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
         // check inventory
         inventoryAsserts.assertInventoryChange(productAId, BigDecimal.ZERO, new BigDecimal(-3.0), originalInventoryA);
         inventoryAsserts.assertInventoryChange(productBId, new BigDecimal(3.0), new BigDecimal(-2.0), originalInventoryB);
@@ -387,8 +387,8 @@ public class OrderPickingTests  extends OrderTestCase {
         inventoryAsserts.assertInventoryChange(productBId, BigDecimal.ZERO, new BigDecimal(-2.0), originalInventoryB);
 
         // receive the last items in inventory
-        receiveInventoryProduct(productA, new BigDecimal(3.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
-        receiveInventoryProduct(productB, new BigDecimal(2.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(productA, new BigDecimal("3.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
+        receiveInventoryProduct(productB, new BigDecimal("2.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
         // check inventory
         inventoryAsserts.assertInventoryChange(productAId, new BigDecimal(3.0), BigDecimal.ZERO, originalInventoryA);
         inventoryAsserts.assertInventoryChange(productBId, new BigDecimal(2.0), BigDecimal.ZERO, originalInventoryB);
@@ -433,8 +433,8 @@ public class OrderPickingTests  extends OrderTestCase {
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
         // create a sales order of 5 x productA and 8 x productB, approve order
         Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
-        orderItems.put(productA, new BigDecimal(5.0));
-        orderItems.put(productB, new BigDecimal(8.0));
+        orderItems.put(productA, new BigDecimal("5.0"));
+        orderItems.put(productB, new BigDecimal("8.0"));
         User = demoCsr;
         // record each store findOrdersToPickMove initial number
         Map results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -474,7 +474,7 @@ public class OrderPickingTests  extends OrderTestCase {
         assertEquals("quantity of order ready to pick should not have increased in Facility [" + facilityId + "] for order [" + order.getOrderId() + "]", webStoreReadyToPickInitNumber, webStoreReadyToPickCurrentNumber);
 
         // receive inventory for the first product
-        receiveInventoryProduct(productA, new BigDecimal(5.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(productA, new BigDecimal("5.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
 
         // at this point, there is inventory for the first ship group so it should appear
         results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -482,7 +482,7 @@ public class OrderPickingTests  extends OrderTestCase {
         assertEquals("quantity of order ready to pick should have increased by 1 in Facility [" + facilityId + "] for order [" + order.getOrderId() + "]", new Long(webStoreReadyToPickInitNumber + 1), webStoreReadyToPickCurrentNumber);
 
         // receive inventory for the second product
-        receiveInventoryProduct(productB, new BigDecimal(8.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(productB, new BigDecimal("8.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
 
         // at this point, there is all the needed inventory for this order, so both ship groups should appear on the picklist.
         results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -557,8 +557,8 @@ public class OrderPickingTests  extends OrderTestCase {
         GenericValue customer = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId));
         // create a sales order of 5 x productA and 8 x productB, approve order
         Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
-        orderItems.put(productA, new BigDecimal(5.0));
-        orderItems.put(productB, new BigDecimal(8.0));
+        orderItems.put(productA, new BigDecimal("5.0"));
+        orderItems.put(productB, new BigDecimal("8.0"));
         User = demoCsr;
         // record each store findOrdersToPickMove initial number
         Map results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -590,11 +590,11 @@ public class OrderPickingTests  extends OrderTestCase {
         );
 
         // receive in Web Store 5 x productA and 3 x productB
-        receiveInventoryProduct(productA, new BigDecimal(5.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
-        receiveInventoryProduct(productB, new BigDecimal(3.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(productA, new BigDecimal("5.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
+        receiveInventoryProduct(productB, new BigDecimal("3.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
 
         // receive in My Retail Store 5 x ProductB
-        receiveInventoryProduct(productB, new BigDecimal(5.0), "NON_SERIAL_INV_ITEM", new BigDecimal(10.0), facilityId1, demowarehouse1);
+        receiveInventoryProduct(productB, new BigDecimal("5.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId1, demowarehouse1);
 
         // check the order appears as ready to ship on both warehouse
         // the process is the same as what the BSH on the ready to ship page does:

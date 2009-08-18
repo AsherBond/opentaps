@@ -77,8 +77,8 @@ public class MultiShipGroupTests extends OrderTestCase {
         // create an order with offline payment
         Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
         GenericValue testProduct = createTestProduct("testTwoShipGroupLifeCycle test product", demowarehouse1);
-        assignDefaultPrice(testProduct, new BigDecimal(15.99), admin);
-        orderItems.put(testProduct, new BigDecimal(10.0));
+        assignDefaultPrice(testProduct, new BigDecimal("15.99"), admin);
+        orderItems.put(testProduct, new BigDecimal("10.0"));
         User = DemoSalesManager;
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
         String orderId = orderFactory.getOrderId();
@@ -147,7 +147,7 @@ public class MultiShipGroupTests extends OrderTestCase {
         Debug.logInfo("testTwoShipGroupLifeCycle created payments [" + paymentId1 + "] and [" + paymentId2 + "]", MODULE);
 
         // receive the product to ensure enough available
-        receiveInventoryProduct(testProduct, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(12.55), demowarehouse1);
+        receiveInventoryProduct(testProduct, new BigDecimal("10.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("12.55"), demowarehouse1);
 
         // ship the whole thing, which has the same effect as packing each ship group separately
         Map results = runAndAssertServiceSuccess("testShipOrder", UtilMisc.toMap("orderId", orderId, "facilityId", facilityId, "userLogin", demowarehouse1));

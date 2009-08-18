@@ -497,12 +497,17 @@ public final class UtilProduct {
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static Double countOpenRequirements(String productId, String productStoreId, GenericDelegator delegator) throws GenericEntityException {
+    public static BigDecimal countOpenRequirements(String productId, String productStoreId, GenericDelegator delegator) throws GenericEntityException {
         List openRequirements = getOpenRequirements(productId, productStoreId, delegator);
-        Double count = new Double(0.0);
+        BigDecimal count = BigDecimal.ZERO;
         for (Iterator iter = openRequirements.iterator(); iter.hasNext();) {
             GenericValue requirement = (GenericValue) iter.next();
-            count += (requirement.get("quantity") == null ? 0.0 : requirement.getDouble("quantity"));
+            BigDecimal qty = requirement.getBigDecimal("quantity");
+            if (qty == null) {
+                qty = BigDecimal.ZERO;
+            }
+
+            count = count.add(qty);
         }
         return count;
     }

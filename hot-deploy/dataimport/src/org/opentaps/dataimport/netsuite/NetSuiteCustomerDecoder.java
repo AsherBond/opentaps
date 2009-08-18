@@ -15,6 +15,11 @@
  */
 package org.opentaps.dataimport.netsuite;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
+
 import javolution.util.FastList;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -27,10 +32,6 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.dataimport.CustomerDecoder;
 import org.opentaps.domain.party.PhoneNumber;
-
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Transforms NetSuiteCustomer rows into opentaps model.
@@ -165,7 +166,7 @@ public class NetSuiteCustomerDecoder extends CustomerDecoder {
         supplemental.put("currencyUomId", currencyUomId);
 
         // create the AR balances
-        toBeStored.addAll(createBalances(partyId, entry.getDouble("openbalance"), importTimestamp, currencyUomId, delegator));
+        toBeStored.addAll(createBalances(partyId, entry.getBigDecimal("openbalance"), importTimestamp, currencyUomId, delegator));
 
         // make the customer tax exempt in the customer's state using resalenumber as the tax ID
         // TODO: make the geo lookup more robust, such as the one in the address decoder (state might be in Canada or Australia for instance)
@@ -280,7 +281,7 @@ public class NetSuiteCustomerDecoder extends CustomerDecoder {
         String customerCurrencyUomId = getCurrencyUomId(entry);
 
         // create a credit limit, if it exists
-        Double creditLimit = entry.getDouble("creditlimit");
+        BigDecimal creditLimit = entry.getBigDecimal("creditlimit");
         toBeStored.addAll(createAgreementCreditLimitTerm(agreementId, customerCurrencyUomId, seqId++, delegator, creditLimit));
 
         // if we have payment terms for the customer, convert the discount terms and the net payment days term
@@ -292,7 +293,7 @@ public class NetSuiteCustomerDecoder extends CustomerDecoder {
             }
             Long netPaymentDays = paymentTerms.getLong("daysUntilDue");
             Long discountDays = paymentTerms.getLong("discountDays");
-            Double discountRate = paymentTerms.getDouble("percentageDiscount");
+            BigDecimal discountRate = paymentTerms.getBigDecimal("percentageDiscount");
 
             // use the same seqId for both, that way the two terms are part of the same agreement item
             toBeStored.addAll(createAgreementNetPaymentDaysTerm(agreementId, customerCurrencyUomId, seqId, delegator, netPaymentDays));

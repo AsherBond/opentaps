@@ -266,7 +266,6 @@ public abstract class OrderFactory {
      * Gets the list of associated OPP.
      * @return the <code>List</code> of <code>GenericValue</code> representing this order <code>OrderPaymentPreference</code>, or <code>null</code> if the order was not created or an error occurs
      */
-    @SuppressWarnings("unchecked")
     public List<GenericValue> getOrderPaymentPreferences() {
         if (orderId == null) {
             return null;
@@ -524,9 +523,7 @@ public abstract class OrderFactory {
         orderItemShipGroupAssocs.add(oisga);
 
         // put in taxInfoMap
-        Debug.logInfo("product : [" + product + "], quantity : [" + quantity + "], orderItemSeqId : [" +orderItemSeqId + "]", MODULE);
-        Debug.logInfo("price : [" + prices.get("price"), MODULE);
-        taxInfoMap.get(shipGroupSeqId).addProductInfo(product, new BigDecimal(quantity.doubleValue() * prices.get("price").doubleValue()), prices.get("price"), orderItemSeqId);
+        taxInfoMap.get(shipGroupSeqId).addProductInfo(product, quantity.multiply(prices.get("price")), prices.get("price"), orderItemSeqId);
 
         Debug.logInfo("Added [" + product.get("productId") + "] x " + quantity +  " at price " + prices.get("price") + " with shipGroupSeqId " + shipGroupSeqId + " and orderItemSeqId " + orderItemSeqId, MODULE);
     }
@@ -547,16 +544,15 @@ public abstract class OrderFactory {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private boolean cancelProduct(GenericValue product, BigDecimal quantity, String orderItemTypeId) {
         try {
             // find a fitting OrderItem
             List<GenericValue> orderItems = delegator.findByAnd("OrderItem", UtilMisc.toMap("orderId", orderId, "productId", product.get("productId"), "orderItemTypeId", orderItemTypeId));
             for (GenericValue orderItem : orderItems) {
-                BigDecimal orderedQuantity = (BigDecimal) orderItem.get("quantity");
-                String orderItemSeqId = (String) orderItem.get("orderItemSeqId");
+                BigDecimal orderedQuantity = orderItem.getBigDecimal("quantity");
+                String orderItemSeqId = orderItem.getString("orderItemSeqId");
                 Debug.logInfo("Found orderItem [" + orderItemSeqId + "] qty " + orderedQuantity + " canceled " + orderItem.get("cancelQuantity") + " want to cancel " + quantity, MODULE);
-                if (orderedQuantity.doubleValue() >= quantity.doubleValue()) {
+                if (orderedQuantity.compareTo(quantity) >= 0) {
                     Map<String, Object> callCtxt = new HashMap<String, Object>();
                     callCtxt.put("userLogin", userLogin);
                     callCtxt.put("orderId", orderId);
@@ -640,7 +636,7 @@ public abstract class OrderFactory {
      * @throws GenericServiceException if an error occurs
      */
     protected Map<String, BigDecimal> getProductPrices(GenericValue product) throws GenericServiceException {
-        return getProductPrices(product, new BigDecimal(1.0), null, null);
+        return getProductPrices(product, new BigDecimal("1.0"), null, null);
     }
 
 
@@ -670,9 +666,10 @@ public abstract class OrderFactory {
                 Boolean validPriceFound = (Boolean) priceResult.get("validPriceFound");
                 if (validPriceFound.booleanValue()) {
                     //if have any matched price, then use it as price
-                    results.put("defaultPrice", (BigDecimal) priceResult.get("defaultPrice"));
-                    results.put("listPrice", (BigDecimal) priceResult.get("listPrice"));
-                    results.put("price", (BigDecimal) priceResult.get("price"));
+                    BigDecimal price = (BigDecimal) priceResult.get("price");
+                    results.put("defaultPrice", price);
+                    results.put("listPrice", price);
+                    results.put("price", price);
                     return results;
                 }
             }
@@ -687,9 +684,13 @@ public abstract class OrderFactory {
         callCtxt.put("termUomId", termUomId);
 
         Map<String, Object> callResults = dispatcher.runSync("calculateProductPrice", callCtxt);
-        results.put("defaultPrice", (BigDecimal) callResults.get("defaultPrice"));
-        results.put("listPrice", (BigDecimal) callResults.get("listPrice"));
-        results.put("price", (BigDecimal) callResults.get("price"));
+
+        BigDecimal defaultPrice = (BigDecimal) callResults.get("defaultPrice");
+        BigDecimal listPrice = (BigDecimal) callResults.get("listPrice");
+        BigDecimal price = (BigDecimal) callResults.get("price");
+        results.put("defaultPrice", defaultPrice);
+        results.put("listPrice", listPrice);
+        results.put("price", price);
         return results;
     }
 
@@ -785,7 +786,6 @@ public abstract class OrderFactory {
      * Process the payments attached to an order.
      * @throws GenericServiceException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void processPayments() throws GenericServiceException {
         if (orderId == null) {
             throw new GenericServiceException("Order payments can't be processed until the order is stored");

@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -24,7 +24,6 @@ import java.util.Map;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -64,7 +63,7 @@ public class TestObjectGenerator {
 
     /**
      * Public constructor.
-     * 
+     *
      * @throws GenericEntityException
      */
     public TestObjectGenerator(GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException {
@@ -84,7 +83,7 @@ public class TestObjectGenerator {
      * <p>
      * Typical example:<br>
      * &nbsp;<code>list.get(getRandomIndex(list.size()));</code>
-     * 
+     *
      * @param highBound Array/list size.
      * @return Random integer within given range.
      */
@@ -95,7 +94,7 @@ public class TestObjectGenerator {
     /**
      * Returns random <code>Timestamp</code> within range from <code>fromDate</code> to <code>thruDate</code>.
      * or current time if <code>fromDate</code> isn't provided.
-     * 
+     *
      * @param fromDate Begin of interval
      * @param thruDate End of interval
      * @return Random <code>Timestamp</code>
@@ -112,7 +111,7 @@ public class TestObjectGenerator {
 
     /**
      * Returns random name from predefined list of English names.
-     * 
+     *
      * @return Name
      */
     public String getFirstName() {
@@ -122,7 +121,7 @@ public class TestObjectGenerator {
     /**
      * Returns random name from predefined list of English names. Method obtains a name
      * calling getFirstName so far.
-     * 
+     *
      * @return Name
      */
     public String getLastName() {
@@ -131,7 +130,7 @@ public class TestObjectGenerator {
 
     /**
      * Returns random company name that is combined from different elements of PARTICLES & CORPTYPES arrays.
-     * 
+     *
      * @return Random company name.
      */
     public String getCompanyName() {
@@ -141,9 +140,9 @@ public class TestObjectGenerator {
     /**
      * Method constructs and returns an address. Be aware that postal code, country, state are from
      * TestGeoData entity and they represent real objects. Street address is completely made-up.
-     * 
+     *
      * @return <code>Map</code> with address elements. This <code>Map</code> could be added to <code>crmsfa.createAccount</code> context.
-     * @throws GenericServiceException 
+     * @throws GenericServiceException
      */
     public Map getAddress() throws GenericServiceException {
         if (UtilValidate.isEmpty(postalCodesCache)) {
@@ -173,7 +172,7 @@ public class TestObjectGenerator {
 
     /**
      * Generates random US based phone number.
-     * 
+     *
      * @return Returns <code>Map</code> with country code(always 1), and randomly generated area code & phone number.<br>
      * This <code>Map</code> could be added to <code>crmsfa.createAccount</code> context
      */
@@ -187,7 +186,7 @@ public class TestObjectGenerator {
 
     /**
      * Returns random email address in <code>EMAIL_SUFFIX</code> domain.
-     *  
+     *
      * @return Email
      */
     public String getEmail() {
@@ -195,7 +194,7 @@ public class TestObjectGenerator {
     }
 
     /**
-     * Creates a number of parties at current time. 
+     * Creates a number of parties at current time.
      * @see org.opentaps.tests.analytics.tests.TestObjectGenerator#getAccounts(int count, Timestamp fromDate, Timestamp thruDate)
      */
     public List<String> getAccounts(int count) throws GenericServiceException, GenericEntityException {
@@ -204,12 +203,12 @@ public class TestObjectGenerator {
 
     /**
      * Method creates <code>count</code> randomly generated parties with <code>createdDate</code>
-     * within range from <code>fromDate</code> to <code>thruDate</code>. 
-     * 
+     * within range from <code>fromDate</code> to <code>thruDate</code>.
+     *
      * @param count Requested quantity of parties to create.
-     * @param fromDate Begin of time range. May be <code>null</code> but in this case all accounts will 
+     * @param fromDate Begin of time range. May be <code>null</code> but in this case all accounts will
      * be created at current time.
-     * @param thruDate End of time range. May be <code>null</code>. In this case it takes on a value 
+     * @param thruDate End of time range. May be <code>null</code>. In this case it takes on a value
      * equals to current time.
      * @return List of <code>party ID</code>
      * @throws GenericServiceException
@@ -262,7 +261,7 @@ public class TestObjectGenerator {
     };
 
     /**
-     * Creates a number of parties at current time. 
+     * Creates a number of parties at current time.
      * @see org.opentaps.tests.analytics.tests.TestObjectGenerator#getContacts(int count, Timestamp fromDate, Timestamp thruDate)
      */
     public List<String> getContacts(int count) throws GenericServiceException, GenericEntityException {
@@ -271,12 +270,12 @@ public class TestObjectGenerator {
 
     /**
      * Method creates <code>count</code> randomly generated parties with <code>createdDate</code>
-     * within range from <code>fromDate</code> to <code>thruDate</code>. 
-     * 
+     * within range from <code>fromDate</code> to <code>thruDate</code>.
+     *
      * @param count Requested quantity of parties to create.
-     * @param fromDate Begin of time range. May be <code>null</code> but in this case all contacts will 
+     * @param fromDate Begin of time range. May be <code>null</code> but in this case all contacts will
      * be created at current time.
-     * @param thruDate End of time range. May be <code>null</code>. In this case it takes on a value 
+     * @param thruDate End of time range. May be <code>null</code>. In this case it takes on a value
      * equals to current time.
      * @return List of <code>party ID</code>
      * @throws GenericServiceException
@@ -288,7 +287,7 @@ public class TestObjectGenerator {
             Debug.logInfo("*** Generating contact "+c+" out of "+count, module);
 
             Map<String, Object> callCtxt = FastMap.newInstance();
-            // since each get__Name() gets a new random value, we have to store it to use it for the company name and the address 
+            // since each get__Name() gets a new random value, we have to store it to use it for the company name and the address
             String firstName =  getFirstName();
             String lastName = getLastName();
             callCtxt.put("userLogin", demoSalesManager);
@@ -318,7 +317,7 @@ public class TestObjectGenerator {
     };
 
     /**
-     * Creates a number of orders at current time. 
+     * Creates a number of orders at current time.
      * @see org.opentaps.tests.analytics.tests.TestObjectGenerator#getOrders(int count, String organizationPartyId, Timestamp fromDate, Timestamp thruDate)
      */
     public List<String> getOrders(int count, String organizationPartyId) throws GenericEntityException, GenericServiceException {
@@ -326,15 +325,15 @@ public class TestObjectGenerator {
     }
 
     /**
-     * Creates <code>count</code> of orders and approve it. All these orders will be in time range from 
+     * Creates <code>count</code> of orders and approve it. All these orders will be in time range from
      * <code>fromDate</code> to <code>thruDate</code> and between <code>organizationPartyId</code> and
      * an random account which is created by calling <code>getAccounts</code> method.
-     * 
+     *
      * @param count Requested quantity of orders to create.
      * @param organizationPartyId Organization
-     * @param fromDate Begin of time range. May be <code>null</code> but in this case all orders will 
+     * @param fromDate Begin of time range. May be <code>null</code> but in this case all orders will
      * be created at current time.
-     * @param thruDate End of time range. May be <code>null</code>. In this case it takes on a value 
+     * @param thruDate End of time range. May be <code>null</code>. In this case it takes on a value
      * equals to current time.
      * @return List of <code>party ID</code>
      * @throws GenericServiceException
@@ -368,8 +367,9 @@ public class TestObjectGenerator {
 
             SalesOrderFactory orderFactory = new SalesOrderFactory(delegator, dispatcher, demoSalesManager, organizationPartyId, selectedPartyId, productStoreId);
             int productPerOrder = getRandomIndex(10) + 1;
-            for (int i = 0; i < productPerOrder; i++)
-                orderFactory.addProduct(products.get(getRandomIndex(products.size())), new BigDecimal(new Double((int)(5 * Math.random())).doubleValue()));
+            for (int i = 0; i < productPerOrder; i++) {
+                orderFactory.addProduct(products.get(getRandomIndex(products.size())), new BigDecimal((int) (5 * Math.random())));
+            }
 
             orderFactory.storeOrder(orderDate);
             orderFactory.approveOrder();
@@ -382,7 +382,7 @@ public class TestObjectGenerator {
 
     /**
      * Creates <code>count</code> of randomly generated product categories.
-     * 
+     *
      * @param count How many categories to create
      * @param fromDate Categories creation date
      * @return List of product category identifiers.
@@ -419,8 +419,8 @@ public class TestObjectGenerator {
 
     /**
      * Creates <code>count</code> of randomly generated products with random default price
-     * in range from $1 to $200. 
-     * 
+     * in range from $1 to $200.
+     *
      * @param count How many products to create
      * @param inCategories Put new products under one of the specified categories
      * @param fromDate Products creation date
@@ -459,7 +459,7 @@ public class TestObjectGenerator {
                 }
 
             }
-            
+
             if (UtilValidate.isNotEmpty(inCategories)) {
                 //
                 int i = 0;
@@ -471,13 +471,13 @@ public class TestObjectGenerator {
                         Map<String, Object> context = FastMap.newInstance();
                         context.putAll(
                                 UtilMisc.toMap(
-                                        "userLogin", admin, 
-                                        "productCategoryId", productCategoryId, 
-                                        "productId", productIds.get(i), 
+                                        "userLogin", admin,
+                                        "productCategoryId", productCategoryId,
+                                        "productId", productIds.get(i),
                                         "fromDate", fromDate
                                 )
                         );
-                        
+
                         dispatcher.runAsync("addProductToCategory", context);
                     }
 

@@ -116,7 +116,7 @@ public class MrpTests extends MrpTestCase {
         String productId = product.getString("productId");
 
         // create default price as this product should be used in order later
-        assignDefaultPrice(product, new BigDecimal(100.0), admin);
+        assignDefaultPrice(product, new BigDecimal("100.0"), admin);
 
         // 2. create a ProductFacility entry for this product with [minimumStock : 10.0; reorderQuantity : 5; daysToShip: 1] (MRP needs this information to schedule proposed requirements)
         Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new Double(10.0), "reorderQuantity", new Double(5.0), "daysToShip", new Long(1));
@@ -126,14 +126,14 @@ public class MrpTests extends MrpTestCase {
         Map initialInventory = inventoryAsserts.getInventory(productId);
 
         // 4. receive 20.0 units of the product as non-serialized inventory
-        receiveInventoryProduct(product, new BigDecimal(20.0), "NON_SERIAL_INV_ITEM", new BigDecimal(99.0), demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("20.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("99.0"), demowarehouse1);
 
         // 5. check product inventory changed by +20.0 relative to initial inventory (QOH = +20.0, ATP = +20.0)
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("20.0"), initialInventory);
 
         // 6. create sales order of 14x product
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(14.0));
+        order.put(product, new BigDecimal("14.0"));
         User = DemoSalesManager;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
         String orderId = salesOrder.getOrderId();
@@ -201,10 +201,10 @@ public class MrpTests extends MrpTestCase {
         String rawMaterialTestProduct2Id = (String) rawMaterialTestProduct2.get("productId");
 
         // 4. create a ProductAssoc entity between finishedGoodTestProduct and rawMaterialTestProduct1 with [productAssocTypeId : 'MANUF_COMPONENT'; quantity : 2.0]
-        createBOMProductAssoc(finishedGoodTestProductId, rawMaterialTestProduct1Id, new Long(10), new BigDecimal(2.0), admin);
+        createBOMProductAssoc(finishedGoodTestProductId, rawMaterialTestProduct1Id, new Long(10), new BigDecimal("2.0"), admin);
 
         // 5. create a ProductAssoc entity between finishedGoodTestProduct and rawMaterialTestProduct2 with [productAssocTypeId : 'MANUF_COMPONENT'; quantity : 3.0]
-        createBOMProductAssoc(finishedGoodTestProductId, rawMaterialTestProduct2Id, new Long(20), new BigDecimal(3.0), admin);
+        createBOMProductAssoc(finishedGoodTestProductId, rawMaterialTestProduct2Id, new Long(20), new BigDecimal("3.0"), admin);
 
         // 6. create a product routing definition for test purposes
         createTestAssemblingRouting("test Mrp Manufactured Product with BOM", finishedGoodTestProductId);
@@ -219,14 +219,14 @@ public class MrpTests extends MrpTestCase {
         Map rawMaterialTestProduct2InitialInventoryWSW = webStoreWarehouseInvAsserts.getInventory(rawMaterialTestProduct2Id);
 
         // 10. receive 20.0 units of the rawMaterialTestProduct1 as non-serialized inventory (WebStoreWarehouse)
-        receiveInventoryProduct(rawMaterialTestProduct1, new BigDecimal(20.0), "NON_SERIAL_INV_ITEM", new BigDecimal(1.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(rawMaterialTestProduct1, new BigDecimal("20.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("1.0"), facilityId, demowarehouse1);
 
         // 11. check rawMaterialTestProduct1 inventory changed by +20.0 relative to initial inventory [QOH = +20.0, ATP = +20.0] (WebStoreWarehouse)
         webStoreWarehouseInvAsserts.assertInventoryChange(rawMaterialTestProduct1Id, new BigDecimal("20.0"), new BigDecimal("20.0"), rawMaterialTestProduct1InitialInventoryWSW);
 
         // 12. create sales order of 14x finishedGoodTestProduct
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(finishedGoodTestProduct, new BigDecimal(14.0));
+        order.put(finishedGoodTestProduct, new BigDecimal("14.0"));
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
         String orderId = salesOrder.getOrderId();
         Debug.logInfo("testMrpManufacturedProductWithBom created order [" + salesOrder.getOrderId() + "]", MODULE);
@@ -281,7 +281,7 @@ public class MrpTests extends MrpTestCase {
         // 1. create test product
         GenericValue product = createTestProduct("testMrpProposedInventoryTransfer Test Product", demopurch1);
         String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(100.0), admin);
+        assignDefaultPrice(product, new BigDecimal("100.0"), admin);
 
         // 2. create a ProductFacility entry (Demo3PL) entry for this product with [minimumStock : 15.0; reorderQuantity : 7; daysToShip: 1] (MRP needs this information to schedule proposed requirements)
         Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", thirdPartyFacilityId, "minimumStock", new Double(15.0), "reorderQuantity", new Double(7.0), "daysToShip", new Long(1));
@@ -291,7 +291,7 @@ public class MrpTests extends MrpTestCase {
         Map initialInventoryTPW = thirdPartyWarehouseInvAsserts.getInventory(productId);
 
         // 4. receive 20.0 units of the product as non-serialized inventory (Demo3PL)
-        receiveInventoryProduct(product, new BigDecimal(20.0), "NON_SERIAL_INV_ITEM", new BigDecimal(1.0), thirdPartyFacilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("20.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("1.0"), thirdPartyFacilityId, demowarehouse1);
 
         // 5. check product inventory changed by +20.0 relative to initial inventory [QOH = +20.0, ATP = +20.0] (Demo3PL)
         thirdPartyWarehouseInvAsserts.assertInventoryChange(productId, new BigDecimal("20.0"), new BigDecimal("20.0"), initialInventoryTPW);
@@ -306,7 +306,7 @@ public class MrpTests extends MrpTestCase {
 
         // 8. create sales order of 14x product
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(14.0));
+        order.put(product, new BigDecimal("14.0"));
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
         Debug.logInfo("testMrpProposedInventoryTransfer created order [" + salesOrder.getOrderId() + "]", MODULE);
 
@@ -374,15 +374,15 @@ public class MrpTests extends MrpTestCase {
         // 1. Create a product with a price of $10 and a SupplierProduct to purchase it from DemoSupplier for $5
         GenericValue testProduct = createTestProduct("testMrpPendInvTransAndPurchOrder Test Product", demopurch1);
         String productId = testProduct.getString("productId");
-        assignDefaultPrice(testProduct, new BigDecimal(10.0), admin);
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(5.0), "USD", new BigDecimal(1.0), admin);
+        assignDefaultPrice(testProduct, new BigDecimal("10.0"), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("1.0"), admin);
 
         // 2. Create a ProductFacility for this product in WebStoreWarehouse of minimumStock = 0, reorderQuantity = 25
         Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new Double(0.0), "reorderQuantity", new Double(25.0), "daysToShip", new Long(1));
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. Receive 100 units of this product at $5 into MyRetailWarehouse warehouse
-        Map<String, Object> result = receiveInventoryProduct(testProduct, new BigDecimal(100.0), "NON_SERIAL_INV_ITEM", new BigDecimal(1.0), retailStoreFacilityId, demowarehouse1);
+        Map<String, Object> result = receiveInventoryProduct(testProduct, new BigDecimal("100.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("1.0"), retailStoreFacilityId, demowarehouse1);
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // 4. Create an inventory transfer from Demo3PL to WebStoreWarehouse for 50 units of this product
@@ -394,13 +394,13 @@ public class MrpTests extends MrpTestCase {
         // 5. Create 3 sales order for 15 units, 12, 23 of this product
         User = DemoSalesManager;
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(testProduct, new BigDecimal(15.0));
+        order.put(testProduct, new BigDecimal("15.0"));
         SalesOrderFactory salesOrder1 = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
         pause("Workaround MYSQL Timestamps");
-        order.put(testProduct, new BigDecimal(12.0));
+        order.put(testProduct, new BigDecimal("12.0"));
         SalesOrderFactory salesOrder2 = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
         pause("Workaround MYSQL Timestamps");
-        order.put(testProduct, new BigDecimal(23.0));
+        order.put(testProduct, new BigDecimal("23.0"));
         SalesOrderFactory salesOrder3 = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
         pause("Workaround MYSQL Timestamps");
 
@@ -432,7 +432,7 @@ public class MrpTests extends MrpTestCase {
 
         // 12. Create a purchase order for 40 units of the product from DemoSupplier
         User = demopurch1;
-        order.put(testProduct, new BigDecimal(40.0));
+        order.put(testProduct, new BigDecimal("40.0"));
         PurchaseOrderFactory purchaseOrder = testCreatesPurchaseOrder(order, DemoSupplier, facilityContactMechId);
 
         // 13. Approve the purchase order
@@ -460,20 +460,20 @@ public class MrpTests extends MrpTestCase {
         // 1. Create a product with a price of $10 and a SupplierProduct to purchase it from DemoSupplier for $5
         GenericValue testProduct = createTestProduct("testMrpBackupInventoryWarehouse1 Test Product", demopurch1);
         String productId = testProduct.getString("productId");
-        assignDefaultPrice(testProduct, new BigDecimal(10.0), admin);
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(5.0), "USD", new BigDecimal(1.0), admin);
+        assignDefaultPrice(testProduct, new BigDecimal("10.0"), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("1.0"), admin);
 
         // 2. Create a ProductFacility for this product in WebStoreWarehouse of minimumStock = 0, reorderQuantity = 1
         Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new Double(0.0), "reorderQuantity", new Double(1.0), "daysToShip", new Long(1));
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. Receive 50 units of this product at $5 into MyRetailWarehouse warehouse
-        receiveInventoryProduct(testProduct, new BigDecimal(50.0), "NON_SERIAL_INV_ITEM", new BigDecimal(1.0), thirdPartyFacilityId, demowarehouse1);
+        receiveInventoryProduct(testProduct, new BigDecimal("50.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("1.0"), thirdPartyFacilityId, demowarehouse1);
 
         // 4. Create sales order for 25 units of this product
         User = DemoSalesManager;
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(testProduct, new BigDecimal(25.0));
+        order.put(testProduct, new BigDecimal("25.0"));
         SalesOrderFactory salesOrder1 = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // 6. Approve the sales orders
@@ -498,20 +498,20 @@ public class MrpTests extends MrpTestCase {
         // 1. Create a product with a price of $10 and a SupplierProduct to purchase it from DemoSupplier for $5
         GenericValue testProduct = createTestProduct("testMrpBackupInventoryWarehouse2 Test Product", demopurch1);
         String productId = testProduct.getString("productId");
-        assignDefaultPrice(testProduct, new BigDecimal(10.0), admin);
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(5.0), "USD", new BigDecimal(1.0), admin);
+        assignDefaultPrice(testProduct, new BigDecimal("10.0"), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("1.0"), admin);
 
         // 2. Create a ProductFacility for this product in WebStoreWarehouse of minimumStock = 0, reorderQuantity = 1
         Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new Double(0.0), "reorderQuantity", new Double(1.0), "daysToShip", new Long(1));
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. Receive 10 units of this product at $5 into MyRetailWarehouse warehouse
-        receiveInventoryProduct(testProduct, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(1.0), thirdPartyFacilityId, demowarehouse1);
+        receiveInventoryProduct(testProduct, new BigDecimal("10.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("1.0"), thirdPartyFacilityId, demowarehouse1);
 
         // 4. Create sales order for 25 units of this product
         User = DemoSalesManager;
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(testProduct, new BigDecimal(25.0));
+        order.put(testProduct, new BigDecimal("25.0"));
         SalesOrderFactory salesOrder1 = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // 6. Approve the sales orders
@@ -541,7 +541,7 @@ public class MrpTests extends MrpTestCase {
         // 1. Create a 3-tier BOM with top level, mid level, and bottom level product
         GenericValue topLevelProduct = createTestProduct("testMrpMultiLevelProduct Top Level Product", demopurch1);
         String topLevelProductId = topLevelProduct.getString("productId");
-        assignDefaultPrice(topLevelProduct, new BigDecimal(10.0), admin);
+        assignDefaultPrice(topLevelProduct, new BigDecimal("10.0"), admin);
 
         GenericValue midLevelProduct = createTestProduct("testMrpMultiLevelProduct Mid Level Product", demopurch1);
         String midLevelProductId = midLevelProduct.getString("productId");
@@ -555,15 +555,15 @@ public class MrpTests extends MrpTestCase {
         createProductFacility(bottomLevelProductId, facilityId, new BigDecimal(0.0), new BigDecimal(1.0), admin);
 
         // bottom level product can be purchased for $0.25
-        createMainSupplierForProduct(bottomLevelProductId, "DemoSupplier", new BigDecimal(0.25), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(bottomLevelProductId, "DemoSupplier", new BigDecimal("0.25"), "USD", new BigDecimal("0.0"), admin);
 
         // create BOM from top level to mid level to bottom level product
-        createBOMProductAssoc(topLevelProductId, midLevelProductId, new Long(10), new BigDecimal(2.0), admin);
-        createBOMProductAssoc(midLevelProductId, bottomLevelProductId, new Long(10), new BigDecimal(5.0), admin);
+        createBOMProductAssoc(topLevelProductId, midLevelProductId, new Long(10), new BigDecimal("2.0"), admin);
+        createBOMProductAssoc(midLevelProductId, bottomLevelProductId, new Long(10), new BigDecimal("5.0"), admin);
 
         // create sales order
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(topLevelProduct, new BigDecimal(10.0));
+        order.put(topLevelProduct, new BigDecimal("10.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -597,17 +597,17 @@ public class MrpTests extends MrpTestCase {
         // create a product
         GenericValue product = createTestProduct("testMrpWithBasicSalesForecast Product", demopurch1);
         String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(10.0), admin);
+        assignDefaultPrice(product, new BigDecimal("10.0"), admin);
 
         // set a facility minimum stock for it
         createProductFacility(productId, facilityId, new BigDecimal(0.0), new BigDecimal(1.0), admin);
 
         // associate it with a supplier
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(5.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("0.0"), admin);
 
         // create a sales order
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(10.0));
+        order.put(product, new BigDecimal("10.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -649,17 +649,17 @@ public class MrpTests extends MrpTestCase {
         // create a product
         GenericValue product = createTestProduct("testMrpWithTransferPlanAndTransferRequirements Product", demopurch1);
         String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(10.0), admin);
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(5.0), "USD", new BigDecimal(0.0), admin);
+        assignDefaultPrice(product, new BigDecimal("10.0"), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("0.0"), admin);
 
         // set a facility minimum stock for it in both facilities, so MRP will generate requirements in both facilities
         createProductFacility(productId, facilityId, new BigDecimal(0.0), new BigDecimal(1.0), admin);
         createProductFacility(productId, thirdPartyFacilityId, new BigDecimal(0.0), new BigDecimal(1.0), admin);
 
         // receive 300 into the backup warehouse
-        receiveInventoryProduct(product, new BigDecimal(300), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), thirdPartyFacilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("300.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), thirdPartyFacilityId, demowarehouse1);
         // receive 50 into the primary (shipping) warehouse, so we can see the interaction of existing inventory with MRP and transfers
-        receiveInventoryProduct(product, new BigDecimal(50), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("500.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), facilityId, demowarehouse1);
 
         // create transfer plans
         createTransferPlan(thirdPartyFacilityId, facilityId, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -30, timeZone, locale));
@@ -723,8 +723,8 @@ public class MrpTests extends MrpTestCase {
         // create a product
         GenericValue product = createTestProduct("test Mrp With Transfer Requirement From Specified Warehouse Product", demopurch1);
         String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(10.0), admin);
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(5.0), "USD", new BigDecimal(0.0), admin);
+        assignDefaultPrice(product, new BigDecimal("10.0"), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("0.0"), admin);
 
         // set a facility minimum stock for it in both facilities, so MRP will generate requirements in both facilities
         // set its replenishment method in WebStoreWarehouse to "Transfer from specified warehouse" from retail store facility
@@ -732,12 +732,12 @@ public class MrpTests extends MrpTestCase {
         createProductFacility(productId, thirdPartyFacilityId, new BigDecimal(0.0), new BigDecimal(1.0), admin);
 
         // receive 10 into WebStoreWarehouse and 100 into retail store
-        receiveInventoryProduct(product, new BigDecimal(10), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), facilityId, demowarehouse1);
-        receiveInventoryProduct(product, new BigDecimal(100), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), retailStoreFacilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("10.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), facilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("100.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), retailStoreFacilityId, demowarehouse1);
 
         // create a sales order for 20
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(20.0));
+        order.put(product, new BigDecimal("20.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -758,8 +758,8 @@ public class MrpTests extends MrpTestCase {
         // create a product
         GenericValue product = createTestProduct("test Mrp With No Transfer Product", demopurch1);
         String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(10.0), admin);
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(5.0), "USD", new BigDecimal(0.0), admin);
+        assignDefaultPrice(product, new BigDecimal("10.0"), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("0.0"), admin);
 
         // set a facility minimum stock for it in both facilities, so MRP will generate requirements in both facilities
         // set its replenishment method in WebStoreWarehouse to "No transfer"
@@ -767,12 +767,12 @@ public class MrpTests extends MrpTestCase {
         createProductFacility(productId, thirdPartyFacilityId, new BigDecimal(0.0), new BigDecimal(1.0), admin);
 
         // receive 10 into WebStoreWarehouse and 100 into retail store
-        receiveInventoryProduct(product, new BigDecimal(10), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), facilityId, demowarehouse1);
-        receiveInventoryProduct(product, new BigDecimal(100), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), retailStoreFacilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("10.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), facilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("100.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), retailStoreFacilityId, demowarehouse1);
 
         // create a sales order for 20
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(20.0));
+        order.put(product, new BigDecimal("20.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -795,8 +795,8 @@ public class MrpTests extends MrpTestCase {
         // create a product
         GenericValue product = createTestProduct("test Mrp With Transfer Requirement From Backup Warehouse With No Inventory Product", demopurch1);
         String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(10.0), admin);
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(5.0), "USD", new BigDecimal(0.0), admin);
+        assignDefaultPrice(product, new BigDecimal("10.0"), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("0.0"), admin);
 
         // set a facility minimum stock for it in both facilities, so MRP will generate requirements in both facilities
         // set its replenishment method in WebStoreWarehouse to "Always transfer from backup warehouse"
@@ -804,11 +804,11 @@ public class MrpTests extends MrpTestCase {
         createProductFacility(productId, thirdPartyFacilityId, new BigDecimal(0.0), new BigDecimal(1.0), admin);
 
         // receive 10 into WebStoreWarehouse
-        receiveInventoryProduct(product, new BigDecimal(10), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("10.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), facilityId, demowarehouse1);
 
         // create a sales order for 20
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(20.0));
+        order.put(product, new BigDecimal("20.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -830,8 +830,8 @@ public class MrpTests extends MrpTestCase {
         // create a product
         GenericValue product = createTestProduct("test Mrp With Transfer Requirement From Backup Warehouse With No Inventory Product", demopurch1);
         String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(10.0), admin);
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(5.0), "USD", new BigDecimal(0.0), admin);
+        assignDefaultPrice(product, new BigDecimal("10.0"), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("0.0"), admin);
 
         // set a facility minimum stock for it in both facilities, so MRP will generate requirements in both facilities
         // set its replenishment method in WebStoreWarehouse to "Always transfer from specified warehouse" which is Retail Store facility
@@ -839,11 +839,11 @@ public class MrpTests extends MrpTestCase {
         createProductFacility(productId, thirdPartyFacilityId, new BigDecimal(0.0), new BigDecimal(1.0), admin);
 
         // receive 10 into WebStoreWarehouse
-        receiveInventoryProduct(product, new BigDecimal(10), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), facilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("10.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), facilityId, demowarehouse1);
 
         // create a sales order for 20
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(20.0));
+        order.put(product, new BigDecimal("20.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -864,7 +864,7 @@ public class MrpTests extends MrpTestCase {
         // create a manufactured product
         final GenericValue product = createTestProduct("test Mrp With Pending Internal Requirements Product", demopurch1);
         final String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(10.0), admin);
+        assignDefaultPrice(product, new BigDecimal("10.0"), admin);
 
         // set a facility minimum stock for it so MRP will generate requirements
         createProductFacility(productId, facilityId, new BigDecimal(0.0), new BigDecimal(1.0), admin);
@@ -882,20 +882,20 @@ public class MrpTests extends MrpTestCase {
 
         // create a sales order for 1
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(1.0));
+        order.put(product, new BigDecimal("1.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // create a sales order for 10
         order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(10.0));
+        order.put(product, new BigDecimal("10.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // create a sales order for 100, for next month
         Timestamp order3Date = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.MONTH, 1);
         order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(100.0));
+        order.put(product, new BigDecimal("100.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId, order3Date);
 
@@ -904,7 +904,7 @@ public class MrpTests extends MrpTestCase {
         // when MRP is run with defaultOffsetYears = 1
         Timestamp order4Date = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.YEAR, 2);
         order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(1000.0));
+        order.put(product, new BigDecimal("1000.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId, order4Date);
 
@@ -959,7 +959,7 @@ public class MrpTests extends MrpTestCase {
         // create a manufactured product
         final GenericValue product = createTestProduct("test Mrp With Approved Pending Internal Requirements For Components Product", demopurch1);
         final String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(10.0), admin);
+        assignDefaultPrice(product, new BigDecimal("10.0"), admin);
 
         // create its component
         final GenericValue productComp1 = createTestProduct("test Mrp With Approved Pending Internal Requirements For Components Product - Component 1", demopurch1);
@@ -969,10 +969,10 @@ public class MrpTests extends MrpTestCase {
         createBOMProductAssoc(productId, productComp1Id, new Long("10"), new BigDecimal("7.0"), admin);
         createBOMProductAssoc(productId, productComp2Id, new Long("10"), new BigDecimal("3.0"), admin);
         // add supplier for the components, so the Mrp will generate PRODUCT_REQUIREMENT
-        assignDefaultPrice(productComp1, new BigDecimal(7.5), admin);
-        createMainSupplierForProduct(productComp1Id, "DemoSupplier", new BigDecimal(7.0), "USD", new BigDecimal(1.0), admin);
-        assignDefaultPrice(productComp2, new BigDecimal(3.5), admin);
-        createMainSupplierForProduct(productComp2Id, "DemoSupplier", new BigDecimal(3.0), "USD", new BigDecimal(1.0), admin);
+        assignDefaultPrice(productComp1, new BigDecimal("7.5"), admin);
+        createMainSupplierForProduct(productComp1Id, "DemoSupplier", new BigDecimal("7.0"), "USD", new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productComp2, new BigDecimal("3.5"), admin);
+        createMainSupplierForProduct(productComp2Id, "DemoSupplier", new BigDecimal("3.0"), "USD", new BigDecimal("1.0"), admin);
 
         // creates an Assembly routing with one task for product
         createTestAssemblingRouting("test Mrp With Pending Internal Requirements", productId);
@@ -984,7 +984,7 @@ public class MrpTests extends MrpTestCase {
 
         // create a sales order for 10
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(10.0));
+        order.put(product, new BigDecimal("10.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -1053,9 +1053,9 @@ public class MrpTests extends MrpTestCase {
         GenericValue mat2 = createMrpProduct("mrp test raw material #2 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new Double(0.0), new Double(7.0), new Long(3), admin);
         String mat2Id = (String) mat2.get("productId");
         // create a ProductAssoc entity between finishedGoodTestProduct and mat1 with [productAssocTypeId : 'MANUF_COMPONENT'; quantity : 2.0]
-        createBOMProductAssoc(productId, mat1Id, null, new Long(10), new BigDecimal(2.0), admin);
+        createBOMProductAssoc(productId, mat1Id, null, new Long(10), new BigDecimal("2.0"), admin);
         // create a ProductAssoc entity between finishedGoodTestProduct and mat2 with [productAssocTypeId : 'MANUF_COMPONENT'; quantity : 3.0]
-        createBOMProductAssoc(productId, mat2Id, null, new Long(20), new BigDecimal(3.0), admin);
+        createBOMProductAssoc(productId, mat2Id, null, new Long(20), new BigDecimal("3.0"), admin);
 
         // create raw material test product #3 (mat3) with [minimumStock : 0.0; reorderQuantity : 2; daysToShip: 2]
         GenericValue mat3 = createMrpProduct("mrp test raw material #3 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new Double(0.0), new Double(2.0), new Long(2), admin);
@@ -1064,9 +1064,9 @@ public class MrpTests extends MrpTestCase {
         GenericValue mat4 = createMrpProduct("mrp test raw material #4 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new Double(0.0), new Double(5.0), new Long(1), admin);
         String mat4Id = (String) mat4.get("productId");
         // create a ProductAssoc entity between finishedGoodTestProduct and mat3 with [productAssocTypeId : 'MANUF_COMPONENT'; quantity : 5.0]
-        createBOMProductAssoc(productId, mat3Id, "ROUT01", new Long(10), new BigDecimal(5.0), admin);
+        createBOMProductAssoc(productId, mat3Id, "ROUT01", new Long(10), new BigDecimal("5.0"), admin);
         // create a ProductAssoc entity between finishedGoodTestProduct and mat4 with [productAssocTypeId : 'MANUF_COMPONENT'; quantity : 2.0]
-        createBOMProductAssoc(productId, mat4Id, "ROUT01", new Long(20), new BigDecimal(2.0), admin);
+        createBOMProductAssoc(productId, mat4Id, "ROUT01", new Long(20), new BigDecimal("2.0"), admin);
 
         Debug.logInfo("productId : " + productId + ", mat1Id : " + mat1Id  + ", mat2Id : " + mat2Id  + ", mat3Id : " + mat3Id  + ", mat4Id : " + mat4Id, MODULE);
         // create a product routing definition for test purposes
@@ -1074,7 +1074,7 @@ public class MrpTests extends MrpTestCase {
 
         // create a sales order for 10 of the test product
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(10.0));
+        order.put(product, new BigDecimal("10.0"));
         User = DemoSalesManager;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
         String orderId = salesOrder.getOrderId();
@@ -1124,15 +1124,15 @@ public class MrpTests extends MrpTestCase {
         webStoreWarehouseInvAsserts.getInventory(rawMaterialId2);
 
         // 4. associate raw materials and finished product
-        createBOMProductAssoc(mftProductId, rawMaterialId1, 1L, new BigDecimal(2.0), admin);
-        createBOMProductAssoc(mftProductId, rawMaterialId2, 2L, new BigDecimal(1.0), admin);
+        createBOMProductAssoc(mftProductId, rawMaterialId1, 1L, new BigDecimal("2.0"), admin);
+        createBOMProductAssoc(mftProductId, rawMaterialId2, 2L, new BigDecimal("1.0"), admin);
 
         // 5. create a WorkEffortGoodStandard entity for mfrProduct, minQuantity 10.0 & maxQuantity 15.0
-        createTestAssemblingRouting("Assembling manufactured product for MrpNoRoutingForQuantity tests", mftProductId, 300000.0, 600000.0, 10.0 /*min qty*/, 15.0/*max qty*/);
+        createTestAssemblingRouting("Assembling manufactured product for MrpNoRoutingForQuantity tests", mftProductId, new BigDecimal("300000.0"), new BigDecimal("600000.0"), new BigDecimal("10.0") /*min qty*/, new BigDecimal("15.0")/*max qty*/);
 
         // 6. create sales order of 7x mfrProduct
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(mfrProduct, new BigDecimal(7.0));
+        order.put(mfrProduct, new BigDecimal("7.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -1173,18 +1173,18 @@ public class MrpTests extends MrpTestCase {
         webStoreWarehouseInvAsserts.getInventory(testPartId1);
 
         // create BOM so that 10 of testpart1 is required to manufacture a test product
-        createBOMProductAssoc(testProductId, testPartId1, 1L, new BigDecimal(10.0), admin);
+        createBOMProductAssoc(testProductId, testPartId1, 1L, new BigDecimal("10.0"), admin);
 
         // create a routing for test product with minimum quantity 10 and max quantity 100
-        createTestAssemblingRouting("Assembling manufactured product for testMrpQuantityAboveMaximumQuantity tests, low range", testProductId, 300000.0, 600000.0, 10.0 /*min qty*/, 100.0/*max qty*/);
+        createTestAssemblingRouting("Assembling manufactured product for testMrpQuantityAboveMaximumQuantity tests, low range", testProductId, new BigDecimal("300000.0"), new BigDecimal("600000.0"), new BigDecimal("10.0") /*min qty*/, new BigDecimal("100.0")/*max qty*/);
 
         // create a routing for test product with minimum quantity 101 and max quantity 500
-        createTestAssemblingRouting("Assembling manufactured product for MrpNoRoutingForQuantity tests, high range.", testProductId, 300000.0, 600000.0, 101.0 /*min qty*/, 500.0/*max qty*/);
+        createTestAssemblingRouting("Assembling manufactured product for MrpNoRoutingForQuantity tests, high range.", testProductId, new BigDecimal("300000.0"), new BigDecimal("600000.0"), new BigDecimal("101.0") /*min qty*/, new BigDecimal("500.0")/*max qty*/);
 
         // create a sales order for 705 test product
         // this has a subtle test to make sure that the last requirement is created at the minimum quantity of 10, not the remnant quantity of 5
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(testProduct, new BigDecimal(705.0));
+        order.put(testProduct, new BigDecimal("705.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -1230,20 +1230,20 @@ public class MrpTests extends MrpTestCase {
         webStoreWarehouseInvAsserts.getInventory(rawMaterialId2);
 
         // 4. create BOM that imply manufacturing 1 mftProduct from 2 rawMaterial2
-        createBOMProductAssoc(mftProductId, rawMaterialId1, 1L, new BigDecimal(2.0), admin);
+        createBOMProductAssoc(mftProductId, rawMaterialId1, 1L, new BigDecimal("2.0"), admin);
 
         // 5. create a WorkEffortGoodStandard entity for mftProduct, minQuantity 10.0 & maxQuantity 15.0
-        createTestAssemblingRouting("Assembling manufactured product for MrpNoRoutingForQuantity tests", mftProductId, 300000.0, 600000.0, 10.0 /*min qty*/, 15.0/*max qty*/);
+        createTestAssemblingRouting("Assembling manufactured product for MrpNoRoutingForQuantity tests", mftProductId, new BigDecimal("300000.0"), new BigDecimal("600000.0"), new BigDecimal("10.0") /*min qty*/, new BigDecimal("15.0")/*max qty*/);
 
         // 6. create a WorkEffortGoodStandard entity for mftProduct, minQuantity 15.0 & maxQuantity 20.0
-        String alternateRoutingId = createTestAssemblingRouting("Assembling manufactured product for MrpNoRoutingForQuantity tests", mftProductId, 300000.0, 600000.0, 15.0 /*min qty*/, 20.0/*max qty*/);
+        String alternateRoutingId = createTestAssemblingRouting("Assembling manufactured product for MrpNoRoutingForQuantity tests", mftProductId, new BigDecimal("300000.0"), new BigDecimal("600000.0"), new BigDecimal("15.0") /*min qty*/, new BigDecimal("20.0")/*max qty*/);
 
         // 7. create BOM that imply manufacturing 1 mftProduct from 3 rawMaterial2
-        createBOMProductAssoc(mftProductId, rawMaterialId2, alternateRoutingId, 1L, new BigDecimal(3.0), admin);
+        createBOMProductAssoc(mftProductId, rawMaterialId2, alternateRoutingId, 1L, new BigDecimal("3.0"), admin);
 
         // 8. create sales order of 17x mftProduct
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(mftProduct, new BigDecimal(17.0));
+        order.put(mftProduct, new BigDecimal("17.0"));
         User = DemoSalesManager;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, productStoreId);
         String orderId = salesOrder.getOrderId();
@@ -1300,16 +1300,16 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("receiveInventoryProduct", ctxt);
 
         // 4. create BOM that imply manufacturing 1 mftProduct from 1 rawMaterial
-        createBOMProductAssoc(mftProductId, rawMaterialId, 1L, new BigDecimal(1.0), admin);
+        createBOMProductAssoc(mftProductId, rawMaterialId, 1L, new BigDecimal("1.0"), admin);
 
         // 5. create a WorkEffortGoodStandard entity for mftProduct, minQuantity 100.0
         createTestAssemblingRouting(
                 "Assembling manufactured product for testMrpApplyMinimalQuantityIrrespectiveOfMinimumStock tests",
-                mftProductId, 300000.0, 600000.0, 100.0 /*min qty*/, 150.0/*max qty*/);
+                mftProductId, new BigDecimal("300000.0"), new BigDecimal("600000.0"), new BigDecimal("100.0") /*min qty*/, new BigDecimal("150.0")/*max qty*/);
 
         // 6. prepare Manufacturing Order Receipt for 10 mftProduct
         Map<GenericValue, BigDecimal> order = FastMap.newInstance();
-        order.put(mftProduct, new BigDecimal(5.0));
+        order.put(mftProduct, new BigDecimal("5.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
@@ -1373,7 +1373,7 @@ public class MrpTests extends MrpTestCase {
         // create a manufactured test product
         final GenericValue product = createTestProduct("test Mrp With Updated Production Run", demopurch1);
         final String productId = product.getString("productId");
-        assignDefaultPrice(product, new BigDecimal(10.0), admin);
+        assignDefaultPrice(product, new BigDecimal("10.0"), admin);
 
         // create its component
         final GenericValue productComp1 = createTestProduct("test Mrp With Updated Production Run - Component 1", demopurch1);
@@ -1383,10 +1383,10 @@ public class MrpTests extends MrpTestCase {
         createBOMProductAssoc(productId, productComp1Id, new Long("10"), new BigDecimal("7.0"), admin);
         createBOMProductAssoc(productId, productComp2Id, new Long("10"), new BigDecimal("3.0"), admin);
         // add supplier for the components, so the Mrp will generate PRODUCT_REQUIREMENT
-        assignDefaultPrice(productComp1, new BigDecimal(7.5), admin);
-        createMainSupplierForProduct(productComp1Id, "DemoSupplier", new BigDecimal(7.0), "USD", new BigDecimal(1.0), admin);
-        assignDefaultPrice(productComp2, new BigDecimal(3.5), admin);
-        createMainSupplierForProduct(productComp2Id, "DemoSupplier", new BigDecimal(3.0), "USD", new BigDecimal(1.0), admin);
+        assignDefaultPrice(productComp1, new BigDecimal("7.5"), admin);
+        createMainSupplierForProduct(productComp1Id, "DemoSupplier", new BigDecimal("7.0"), "USD", new BigDecimal("1.0"), admin);
+        assignDefaultPrice(productComp2, new BigDecimal("3.5"), admin);
+        createMainSupplierForProduct(productComp2Id, "DemoSupplier", new BigDecimal("3.0"), "USD", new BigDecimal("1.0"), admin);
 
         // creates an Assembly routing with one task for product
         createTestAssemblingRouting("test Mrp With Pending Internal Requirements", productId);
@@ -1398,7 +1398,7 @@ public class MrpTests extends MrpTestCase {
 
         // create a sales order of 10
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(product, new BigDecimal(10.0));
+        order.put(product, new BigDecimal("10.0"));
         User = DemoSalesManager;
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 

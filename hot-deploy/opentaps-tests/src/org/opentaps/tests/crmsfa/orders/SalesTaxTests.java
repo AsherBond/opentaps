@@ -169,8 +169,8 @@ public class SalesTaxTests extends OrderTestCase {
          * 1.  Create a sales order for productStoreId=9000, partyId=ca1, address=ca1address1
          */
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
-        order.put(Product1, new BigDecimal(1.0));
-        order.put(Product2, new BigDecimal(4.0));
+        order.put(Product1, new BigDecimal("1.0"));
+        order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
         SalesOrderFactory salesOrder1 = testCreatesSalesOrder(order, ca1, productStoreId, "EXT_OFFLINE", "ca1address1");
 
@@ -184,8 +184,8 @@ public class SalesTaxTests extends OrderTestCase {
          * 3.  Create a sales order for productStoreId=9000, partyId=ca1, address=ca1address2
          */
         order = new HashMap<GenericValue, BigDecimal>();
-        order.put(Product1, new BigDecimal(1.0));
-        order.put(Product2, new BigDecimal(4.0));
+        order.put(Product1, new BigDecimal("1.0"));
+        order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
         SalesOrderFactory salesOrder3 = testCreatesSalesOrder(order, ca1, productStoreId, "EXT_OFFLINE", "ca1address2");
 
@@ -199,8 +199,8 @@ public class SalesTaxTests extends OrderTestCase {
          * 5.  Create a sales order for productStoreId=9000, partyId=ca2, address=ca2address1
          */
         order = new HashMap<GenericValue, BigDecimal>();
-        order.put(Product1, new BigDecimal(1.0));
-        order.put(Product2, new BigDecimal(4.0));
+        order.put(Product1, new BigDecimal("1.0"));
+        order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
         SalesOrderFactory salesOrder5 = testCreatesSalesOrder(order, ca2, productStoreId, "EXT_OFFLINE", "ca2address1");
 
@@ -214,8 +214,8 @@ public class SalesTaxTests extends OrderTestCase {
          * 7.  Create a sales order for productStoreId=9000, partyId=ca2, address=ca2address2
          */
         order = new HashMap<GenericValue, BigDecimal>();
-        order.put(Product1, new BigDecimal(1.0));
-        order.put(Product2, new BigDecimal(4.0));
+        order.put(Product1, new BigDecimal("1.0"));
+        order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
         SalesOrderFactory salesOrder7 = testCreatesSalesOrder(order, ca2, productStoreId, "EXT_OFFLINE", "ca2address2");
 
@@ -229,8 +229,8 @@ public class SalesTaxTests extends OrderTestCase {
          * 9.  Create a sales order for productStoreId=9000, partyId=ca1, address=ca1address1
          */
         order = new HashMap<GenericValue, BigDecimal>();
-        order.put(Product1, new BigDecimal(1.0));
-        order.put(Product2, new BigDecimal(4.0));
+        order.put(Product1, new BigDecimal("1.0"));
+        order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
         SalesOrderFactory salesOrder9 = testCreatesSalesOrder(order, ca1, productStoreId, "EXT_OFFLINE", "ca1address1");
 
@@ -314,16 +314,16 @@ public class SalesTaxTests extends OrderTestCase {
         // Create two test products
         GenericValue testProduct1 = createTestProduct("testTaxesAfterOrderUpdate Product 1", admin);
         String productId1 = testProduct1.getString("productId");
-        assignDefaultPrice(testProduct1, new BigDecimal(10.0), admin);
+        assignDefaultPrice(testProduct1, new BigDecimal("10.0"), admin);
 
         GenericValue testProduct2 = createTestProduct("testTaxesAfterOrderUpdate Product 2", admin);
         String productId2 = testProduct2.getString("productId");
-        assignDefaultPrice(testProduct2, new BigDecimal(75.0), admin);
+        assignDefaultPrice(testProduct2, new BigDecimal("75.0"), admin);
 
         // create an order of 5 product1 and 3 product2
         Map<GenericValue, BigDecimal> orderItems = new HashMap<GenericValue, BigDecimal>();
-        orderItems.put(testProduct1, new BigDecimal(5.0));
-        orderItems.put(testProduct2, new BigDecimal(3.0));
+        orderItems.put(testProduct1, new BigDecimal("5.0"));
+        orderItems.put(testProduct2, new BigDecimal("3.0"));
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, ca1, productStoreId, "EXT_OFFLINE", "ca1address1");
         String orderId = salesOrder.getOrderId();
@@ -466,7 +466,7 @@ public class SalesTaxTests extends OrderTestCase {
         // add 10 new order items of another test product
         GenericValue testProduct3 = createTestProduct("testTaxesAfterOrderUpdate Product 3", admin);
         String productId3 = testProduct3.getString("productId");
-        assignDefaultPrice(testProduct3, new BigDecimal(15.66), admin);
+        assignDefaultPrice(testProduct3, new BigDecimal("15.66"), admin);
 
         callCtxt = new HashMap<String, Object>();
         callCtxt.put("userLogin", admin);

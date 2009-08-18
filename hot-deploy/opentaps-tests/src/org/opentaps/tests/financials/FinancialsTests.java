@@ -2354,14 +2354,14 @@ public class FinancialsTests extends FinancialsTestCase {
         String productId = testProduct.getString("productId");
 
         // set its supplier product record for DemoSupplier to $10
-        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal(10.0), "USD", new BigDecimal(1.0), admin);
+        createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("10.0"), "USD", new BigDecimal("1.0"), admin);
 
         // set its standard cost (EST_STD_MAT_COST) to $35
         runAndAssertServiceSuccess("createCostComponent", UtilMisc.<String, Object>toMap("userLogin", admin, "productId", productId, "costComponentTypeId", "EST_STD_MAT_COST", "cost", 35.0, "costUomId", "USD"));
 
         // Create a purchase order for 75 of this product from DemoSupplier
         Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
-        orderSpec.put(testProduct, new BigDecimal(75.0));
+        orderSpec.put(testProduct, new BigDecimal("75.0"));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderSpec, delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", "DemoSupplier")), facilityContactMechId);
         String orderId = pof.getOrderId();
         GenericValue pOrder = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap("orderId", orderId));

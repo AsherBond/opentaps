@@ -1,4 +1,23 @@
+/*
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the Honest Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * Honest Public License for more details.
+ *
+ * You should have received a copy of the Honest Public License
+ * along with this program; if not, write to Funambol,
+ * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
+ */
+
 package org.opentaps.common.agreement;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
@@ -20,9 +39,6 @@ import org.opentaps.domain.billing.invoice.InvoiceRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 
-import java.math.BigDecimal;
-import java.util.*;
-
 /**
  * Factory class that generates invoices from an agreement.
  *
@@ -33,7 +49,7 @@ import java.util.*;
  */
 public class AgreementInvoiceFactory {
 
-    public static final String module = AgreementInvoiceFactory.class.getName();
+    private static final String MODULE = AgreementInvoiceFactory.class.getName();
     private static int decimals = UtilNumber.getBigDecimalScale("invoice.decimals");
     private static int rounding = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
 
@@ -63,11 +79,10 @@ public class AgreementInvoiceFactory {
      * @param isDisbursement If set to true, then the invoice will be from the agent to the organization.  If false, then the other way around.
      * @param group Whether to group the invoice items by productId and invoiceItemTypeId.  The parentInvoiceId and parentInvoiceItemTypeId will be discarded.
      */
-    public static Map createInvoiceFromAgreement(DispatchContext dctx, Map context, GenericValue agreement, Collection<GenericValue> invoices, String invoiceTypeId, String agentRoleTypeId, String currencyUomId, boolean isDisbursement, boolean group) throws GeneralException {
+    public static Map createInvoiceFromAgreement(DispatchContext dctx, Map<String, Object> context, GenericValue agreement, Collection<GenericValue> invoices, String invoiceTypeId, String agentRoleTypeId, String currencyUomId, boolean isDisbursement, boolean group) throws GeneralException {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
-        Locale locale = UtilCommon.getLocale(context);
         DomainsLoader dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
 
         // this is always true whether the agreement is for disbursement invoices or receipts
@@ -75,7 +90,7 @@ public class AgreementInvoiceFactory {
         String organizationPartyId = agreement.getString("partyIdFrom");
 
         // create the commission invoice items based on these terms
-        Map<String, Collection<Map<String,Object>>> invoiceItems = AgreementInvoiceFactory.createInvoiceItemsForAgreement(dctx, context, agreement, invoices);
+        Map<String, Collection<Map<String, Object>>> invoiceItems = AgreementInvoiceFactory.createInvoiceItemsForAgreement(dctx, context, agreement, invoices);
 
         // pro-rate the item amounts according to actual payment amount against an invoice
         String paymentApplicationId = (String) context.get("paymentApplicationId");
@@ -85,7 +100,7 @@ public class AgreementInvoiceFactory {
             BigDecimal appliedAmount = application.getBigDecimal("amountApplied");
             for (Collection<Map<String, Object>> invoiceItemGroup : invoiceItems.values()) {
                 for (Map<String, Object> invoiceItem : invoiceItemGroup) {
-                    invoiceItem.put("amount", appliedAmount.divide(paymentInvoiceTotal, decimals, rounding).multiply(BigDecimal.valueOf((Double)invoiceItem.get("amount"))).doubleValue());
+                    invoiceItem.put("amount", appliedAmount.divide(paymentInvoiceTotal, decimals, rounding).multiply((BigDecimal) invoiceItem.get("amount")));
                     String description = (String) invoiceItem.get("description");
                     invoiceItem.put("description", description);
                 }
@@ -99,7 +114,7 @@ public class AgreementInvoiceFactory {
                 for (GenericValue invoice : invoices) {
                     invoiceIds.add(invoice.getString("invoiceId"));
                 }
-                Debug.logInfo("No commission invoice items created from agreement ["+agreement.get("agreementId")+"] for invoices " + invoiceIds, module);
+                Debug.logInfo("No commission invoice items created from agreement [" + agreement.get("agreementId") + "] for invoices " + invoiceIds, MODULE);
             }
             return ServiceUtil.returnSuccess();
         }
@@ -110,13 +125,13 @@ public class AgreementInvoiceFactory {
             }
         }
         if (total.signum() != 1) {
-            Debug.logInfo("Not creating invoice for agent ["+agentPartyId+"] from agreement ["+agreement+"] because total is zero.  Invoices are: "+invoices, module);
+            Debug.logInfo("Not creating invoice for agent [" + agentPartyId + "] from agreement [" + agreement + "] because total is zero.  Invoices are: " + invoices, MODULE);
             return ServiceUtil.returnSuccess();
         }
 
         // create the invoice header
         ModelService createInvoiceService = dctx.getModelService("createInvoice");
-        Map input = createInvoiceService.makeValid(context, "IN");
+        Map<String, Object> input = createInvoiceService.makeValid(context, "IN");
         input.put("invoiceId", delegator.getNextSeqId("Invoice"));
         input.put("invoiceTypeId", invoiceTypeId);
         input.put("partyIdFrom", isDisbursement ? agentPartyId : organizationPartyId);
@@ -124,34 +139,44 @@ public class AgreementInvoiceFactory {
         input.put("currencyUomId", currencyUomId);
         input.put("roleTypeId", isDisbursement ? agentRoleTypeId : "INTERNAL_ORGANIZATIO");
         input.put("statusId", "INVOICE_IN_PROCESS");
-        if (context.get("invoiceDate") == null) input.put("invoiceDate", UtilDateTime.nowTimestamp());
-        Map result = dispatcher.runSync("createInvoice", input);
-        if (ServiceUtil.isError(result)) return result;
+        if (context.get("invoiceDate") == null) {
+            input.put("invoiceDate", UtilDateTime.nowTimestamp());
+        }
+        Map<String, Object> result = dispatcher.runSync("createInvoice", input);
+        if (ServiceUtil.isError(result)) {
+            return result;
+        }
         String invoiceId = (String) result.get("invoiceId");
 
         // create the invoice items depending, using separate methods depending on whether we're grouping or not
         if (group) {
-            Map results = AgreementInvoiceFactory.createGroupedInvoiceItems(agreement, invoiceItems, invoiceId, userLogin, dctx);
-            if (ServiceUtil.isError(results)) return results;
+            Map<String, Object> results = AgreementInvoiceFactory.createGroupedInvoiceItems(agreement, invoiceItems, invoiceId, userLogin, dctx);
+            if (ServiceUtil.isError(results)) {
+                return results;
+            }
         } else {
-            Map results = AgreementInvoiceFactory.createCollatedInvoiceItems(agreement, invoiceItems, invoiceId, userLogin, dctx, context);
-            if (ServiceUtil.isError(results)) return results;
+            Map<String, Object> results = AgreementInvoiceFactory.createCollatedInvoiceItems(agreement, invoiceItems, invoiceId, userLogin, dctx, context);
+            if (ServiceUtil.isError(results)) {
+                return results;
+            }
         }
 
         // record what we commissioned
         createAgreementBilling(agreement, paymentApplicationId, invoiceId, invoiceItems, dl);
 
-        Map results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("invoiceId", invoiceId);
         return results;
     }
 
     // helper method to add up one of the invoice items
     private static BigDecimal getItemAmount(Map<String, Object> invoiceItem) {
-        Double amount = (Double) invoiceItem.get("amount");
-        Double quantity = (Double) invoiceItem.get("quantity");
-        if (quantity == null) quantity = 1.0; // just in case
-        BigDecimal itemAmount = (new BigDecimal(amount.doubleValue())).multiply(new BigDecimal(quantity.doubleValue()));
+        BigDecimal amount = (BigDecimal) invoiceItem.get("amount");
+        BigDecimal quantity = (BigDecimal) invoiceItem.get("quantity");
+        if (quantity == null) {
+            quantity = BigDecimal.ONE; // just in case
+        }
+        BigDecimal itemAmount = amount.multiply(quantity);
         return itemAmount.setScale(decimals, rounding);
     }
 
@@ -161,12 +186,12 @@ public class AgreementInvoiceFactory {
      * for ordering, grouping and tracking via InvoiceItem.parentInvoiceId or InvoiceItemAssoc.  They are grouped by
      * their agreementTermId in a map.
      */
-    public static Map<String, Collection<Map<String,Object>>> createInvoiceItemsForAgreement(DispatchContext dctx, Map context, GenericValue agreement, Collection<GenericValue> invoices) throws GeneralException {
+    public static Map<String, Collection<Map<String, Object>>> createInvoiceItemsForAgreement(DispatchContext dctx, Map<String, Object> context, GenericValue agreement, Collection<GenericValue> invoices) throws GeneralException {
         GenericDelegator delegator = dctx.getDelegator();
-        Map<String, Collection<Map<String,Object>>> invoiceItems = new FastMap();
+        Map<String, Collection<Map<String, Object>>> invoiceItems = new FastMap();
         Collection<GenericValue> terms = delegator.findByAnd("AgreementAndItemAndTerm", UtilMisc.toMap("agreementId", agreement.get("agreementId")));
         for (GenericValue term : terms) {
-            Collection<Map<String,Object>> termInvoiceItems = processAgreementTerm(dctx, context, agreement, term, invoices);
+            Collection<Map<String, Object>> termInvoiceItems = processAgreementTerm(dctx, context, agreement, term, invoices);
             invoiceItems.put(term.getString("agreementTermId"), termInvoiceItems);
         }
         return invoiceItems;
@@ -177,21 +202,23 @@ public class AgreementInvoiceFactory {
      * term items of type COMM_RATES, which applies a flat commission to the invoice item types defined in
      * AgreementInvoiceItemType.
      */
-    private static Collection<Map<String,Object>> processAgreementTerm(DispatchContext dctx, Map context, GenericValue agreement, GenericValue term, Collection<GenericValue> invoices) throws GeneralException {
-        List<Map<String,Object>> items = FastList.newInstance();
+    private static Collection<Map<String, Object>> processAgreementTerm(DispatchContext dctx, Map<String, Object> context, GenericValue agreement, GenericValue term, Collection<GenericValue> invoices) throws GeneralException {
+        List<Map<String, Object>> items = FastList.newInstance();
         Locale locale = UtilCommon.getLocale(context);
 
-        if (! "COMM_RATES".equals(term.get("agreementItemTypeId"))) return items;
+        if (!"COMM_RATES".equals(term.get("agreementItemTypeId"))) {
+            return items;
+        }
 
         for (GenericValue invoice : invoices) {
             if ("FLAT_COMMISSION".equals(term.get("termTypeId"))) {
-                items.addAll( processFlatCommission(agreement, term, invoice, locale) );
+                items.addAll(processFlatCommission(agreement, term, invoice, locale));
             } else if ("PROD_CAT_COMMISSION".equals(term.get("termTypeId"))) {
-                items.addAll( processProductCategoryCommission(agreement, term, invoice, locale, true) );
+                items.addAll(processProductCategoryCommission(agreement, term, invoice, locale, true));
             } else if ("PROD_GRP_COMMISSION".equals(term.get("termTypeId"))) {
-                items.addAll( processProductCategoryCommission(agreement, term, invoice, locale, false) );
+                items.addAll(processProductCategoryCommission(agreement, term, invoice, locale, false));
             } else {
-                Debug.logWarning("Agreement term type ["+term.get("termTypeId")+"] not supported yet.", module);
+                Debug.logWarning("Agreement term type [" + term.get("termTypeId") + "] not supported yet.", MODULE);
             }
         }
         return items;
@@ -201,7 +228,7 @@ public class AgreementInvoiceFactory {
      * Flat commission is simply the commission rate times each invoice line item as identified by AgreementInvoiceItemType.
      * Note that the termValue of the AgreementTerm should be in whole number percents.  E.g., a value of 7 means 7%.
      */
-    private static Collection<Map<String,Object>> processFlatCommission(GenericValue agreement, GenericValue term, GenericValue invoice, Locale locale) throws GenericEntityException {
+    private static Collection<Map<String, Object>> processFlatCommission(GenericValue agreement, GenericValue term, GenericValue invoice, Locale locale) throws GenericEntityException {
         return createCommissionInvoiceItems(agreement, term, invoice.getRelated("InvoiceItem"), locale);
     }
 
@@ -223,54 +250,66 @@ public class AgreementInvoiceFactory {
      * Note that if an order is split across multiple invoices, this algorithm might apply the wrong rates from the perspective
      * of the whole order.  This issue is unavoidable unless the quantity is computed across invoices.
      */
-    private static Collection<Map<String,Object>> processProductCategoryCommission(GenericValue agreement, GenericValue term, GenericValue invoice, Locale locale, boolean separateProducts) throws GenericEntityException {
-        Collection<Map<String,Object>> noItems = FastList.newInstance();
+    private static Collection<Map<String, Object>> processProductCategoryCommission(GenericValue agreement, GenericValue term, GenericValue invoice, Locale locale, boolean separateProducts) throws GenericEntityException {
+        Collection<Map<String, Object>> noItems = FastList.newInstance();
         if (term.get("productCategoryId") == null) {
-            Debug.logWarning("Cannot process product category commission for Term ["+term.get("agreementTermId")+"] of Agreement ["+term.get("agreementId")+"] because the product category was not specified.", module);
+            Debug.logWarning("Cannot process product category commission for Term [" + term.get("agreementTermId") + "] of Agreement [" + term.get("agreementId") + "] because the product category was not specified.", MODULE);
             return noItems;
         }
 
         GenericValue productCategory = term.getRelatedOne("ProductCategory");
         if (productCategory == null) {
-            Debug.logWarning("Cannot process product category commission for Term ["+term.get("agreementTermId")+"] of Agreement ["+term.get("agreementId")+"] because the specified product category ["+term.get("productCategoryId")+"] does not exist.", module);
+            Debug.logWarning("Cannot process product category commission for Term [" + term.get("agreementTermId") + "] of Agreement [" + term.get("agreementId") + "] because the specified product category [" + term.get("productCategoryId") + "] does not exist.", MODULE);
             return noItems;
         }
 
-        List<GenericValue> members = EntityUtil.filterByDate( productCategory.getRelated("ProductCategoryMember") );
-        if (members.size() == 0) return noItems;
+        List<GenericValue> members = EntityUtil.filterByDate(productCategory.getRelated("ProductCategoryMember"));
+        if (members.size() == 0) {
+            return noItems;
+        }
 
         // build a set of productIds that are in this category
-        Set productIds = FastSet.newInstance();
+        Set<String> productIds = FastSet.newInstance();
         for (GenericValue member : members) {
-            productIds.add(member.get("productId"));
+            productIds.add(member.getString("productId"));
         }
 
         // initialize the quantity range to "unspecified"
-        double minQuantity = -1;
-        double maxQuantity = -1;
+        BigDecimal minQuantity = new BigDecimal("-1.0");
+        BigDecimal maxQuantity = new BigDecimal("-1.0");
 
         // set the quantity range if defined
-        if (term.get("minQuantity") != null) minQuantity = term.getDouble("minQuantity");
-        if (term.get("maxQuantity") != null) maxQuantity = term.getDouble("maxQuantity");
+        if (term.get("minQuantity") != null) {
+            minQuantity = term.getBigDecimal("minQuantity");
+        }
+        if (term.get("maxQuantity") != null) {
+            maxQuantity = term.getBigDecimal("maxQuantity");
+        }
 
         List<GenericValue> invoiceItems = invoice.getRelated("InvoiceItem");
 
-        double quantityTotal = 0; // counts group products
-        Map<String, Double> productQuantities = FastMap.newInstance(); // counts individual products
+        BigDecimal quantityTotal = BigDecimal.ZERO; // counts group products
+        Map<String, BigDecimal> productQuantities = FastMap.newInstance(); // counts individual products
 
         // count the products indirectly by using PRODUCT_INVOICE_ITEM_TYPES
         for (GenericValue invoiceItem : invoiceItems) {
-            if (! PRODUCT_INVOICE_ITEM_TYPES.contains(invoiceItem.getString("invoiceItemTypeId"))) continue;
-            if (UtilValidate.isEmpty(invoiceItem.get("productId")) || (! productIds.contains(invoiceItem.get("productId")))) continue;
+            if (!PRODUCT_INVOICE_ITEM_TYPES.contains(invoiceItem.getString("invoiceItemTypeId"))) {
+                continue;
+            }
+            if (UtilValidate.isEmpty(invoiceItem.get("productId")) || (!productIds.contains(invoiceItem.get("productId")))) {
+                continue;
+            }
 
-            double quantity = invoiceItem.getDouble("quantity");
+            BigDecimal quantity = invoiceItem.getBigDecimal("quantity");
             if (separateProducts) {
                 String productId = invoiceItem.getString("productId");
-                Double lastQuantity = (Double) productQuantities.get(productId);
-                if (lastQuantity != null) quantity += lastQuantity;
+                BigDecimal lastQuantity = productQuantities.get(productId);
+                if (lastQuantity != null) {
+                    quantity = quantity.add(lastQuantity);
+                }
                 productQuantities.put(productId, quantity);
             } else {
-                quantityTotal += quantity;
+                quantityTotal = quantityTotal.add(quantity);
             }
         }
 
@@ -279,24 +318,34 @@ public class AgreementInvoiceFactory {
             // validate range of each product separately, remove the productIds that dont't qualify
             Set<String> removeProducts = FastSet.newInstance();
             for (String productId : productQuantities.keySet()) {
-                double quantity = productQuantities.get(productId);
-                if ((minQuantity != -1) && (quantity < minQuantity)) removeProducts.add(productId);
-                if ((maxQuantity != -1) && (quantity > maxQuantity)) removeProducts.add(productId);
+                BigDecimal quantity = productQuantities.get(productId);
+                if (!minQuantity.equals(new BigDecimal("-1.0")) && quantity.compareTo(minQuantity) < 0) {
+                    removeProducts.add(productId);
+                }
+                if (!maxQuantity.equals(new BigDecimal("-1.0")) && quantity.compareTo(maxQuantity) > 0) {
+                    removeProducts.add(productId);
+                }
             }
 
             // remove the invoice items whose products don't qualify
-            for (Iterator iter = invoiceItems.iterator(); iter.hasNext(); ) {
-                GenericValue invoiceItem = (GenericValue) iter.next();
+            for (Iterator<GenericValue> iter = invoiceItems.iterator(); iter.hasNext();) {
+                GenericValue invoiceItem = iter.next();
                 String productId = invoiceItem.getString("productId");
-                if (productId == null) continue; // skip the whole order adjustments
+                if (productId == null) {
+                    continue; // skip the whole order adjustments
+                }
                 if (removeProducts.contains(productId)) {
                     iter.remove();
                 }
             }
         } else {
             // validate range for all products counted together
-            if ((minQuantity != -1) && (quantityTotal < minQuantity)) return noItems;
-            if ((maxQuantity != -1) && (quantityTotal > maxQuantity)) return noItems;
+            if (!minQuantity.equals(new BigDecimal("-1.0")) && quantityTotal.compareTo(minQuantity) < 0) {
+                return noItems;
+            }
+            if (!maxQuantity.equals(new BigDecimal("-1.0")) && quantityTotal.compareTo(maxQuantity) > 0) {
+                return noItems;
+            }
         }
 
         return createCommissionInvoiceItems(agreement, term, invoiceItems, productIds, locale);
@@ -308,18 +357,20 @@ public class AgreementInvoiceFactory {
      * Note that the termValue of the AgreementTerm should be in whole number percents.  E.g., a value of 7 means 7%.
      * TODO: Implement InvoiceItemAssoc lookup to check any unfulfilled amounts, but this is advanced behavior
      */
-    private static Collection<Map<String,Object>> createCommissionInvoiceItems(GenericValue agreement, GenericValue term, List<GenericValue> invoiceItems, Set productIds, Locale locale) throws GenericEntityException {
+    private static Collection<Map<String, Object>> createCommissionInvoiceItems(GenericValue agreement, GenericValue term, List<GenericValue> invoiceItems, Set productIds, Locale locale) throws GenericEntityException {
         Map<String, GenericValue> typeMap = getTypesToProcess(agreement);
         BigDecimal commissionRate = term.getBigDecimal("termValue").multiply(new BigDecimal("0.01"));
 
         // process each invoice item
-        Collection<Map<String,Object>> items = new ArrayList();
-        for (Iterator iter = invoiceItems.iterator(); iter.hasNext(); ) {
-            GenericValue invoiceItem = (GenericValue) iter.next();
+        Collection<Map<String, Object>> items = new ArrayList<Map<String, Object>>();
+        for (Iterator<GenericValue> iter = invoiceItems.iterator(); iter.hasNext();) {
+            GenericValue invoiceItem = iter.next();
 
             // skip those not defined in AgreementInvoiceItemType
             GenericValue type = typeMap.get(invoiceItem.getString("invoiceItemTypeId"));
-            if (type == null) continue;
+            if (type == null) {
+                continue;
+            }
 
             // filter by product if given the product contstraint list
             if (productIds != null) {
@@ -329,12 +380,16 @@ public class AgreementInvoiceFactory {
                     iter.remove();
                     continue;
                 }
-                if (!productIds.contains(invoiceItem.get("productId"))) continue;
+                if (!productIds.contains(invoiceItem.get("productId"))) {
+                    continue;
+                }
             }
 
             BigDecimal amount = invoiceItem.getBigDecimal("amount");
             BigDecimal quantity = invoiceItem.getBigDecimal("quantity");
-            if (quantity == null) quantity = BigDecimal.ONE;
+            if (quantity == null) {
+                quantity = BigDecimal.ONE;
+            }
 
             amount = amount.multiply(quantity);
             BigDecimal commissionAmount = amount.multiply(commissionRate).setScale(decimals, rounding);
@@ -350,7 +405,7 @@ public class AgreementInvoiceFactory {
             input.put("parentInvoiceItemSeqId", invoiceItem.get("invoiceItemSeqId"));
             input.put("invoiceItemTypeId", invoiceItemTypeId);
             input.put("productId", invoiceItem.get("productId"));
-            input.put("amount", commissionAmount.doubleValue());
+            input.put("amount", commissionAmount);
             input.put("quantity", 1.0);
             input.put("description", description);
 
@@ -361,7 +416,7 @@ public class AgreementInvoiceFactory {
     }
 
     // As above, but don't check product constraint
-    private static Collection<Map<String,Object>> createCommissionInvoiceItems(GenericValue agreement, GenericValue term, List invoiceItems, Locale locale) throws GenericEntityException {
+    private static Collection<Map<String, Object>> createCommissionInvoiceItems(GenericValue agreement, GenericValue term, List<GenericValue> invoiceItems, Locale locale) throws GenericEntityException {
         return createCommissionInvoiceItems(agreement, term, invoiceItems, null, locale);
     }
 
@@ -370,7 +425,7 @@ public class AgreementInvoiceFactory {
      * The ordering is based on AgreementInvoiceItemTypeMap.sequenceNum and other things.
      * TODO: ordering is not implemented yet
      */
-    public static Map createCollatedInvoiceItems(GenericValue agreement, Map<String, Collection<Map<String,Object>>> items, String invoiceId, GenericValue userLogin, DispatchContext dctx, Map context) throws GeneralException {
+    public static Map createCollatedInvoiceItems(GenericValue agreement, Map<String, Collection<Map<String, Object>>> items, String invoiceId, GenericValue userLogin, DispatchContext dctx, Map context) throws GeneralException {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         int sequence = 1;
         for (String agreementTermId : items.keySet()) {
@@ -379,14 +434,16 @@ public class AgreementInvoiceFactory {
                 // have to create the item seq id here because it is not returned by service
                 String invoiceItemSeqId = UtilFormatOut.formatPaddedNumber(sequence++, 5);
 
-                Map input = new FastMap(item);
+                Map<String, Object> input = new FastMap<String, Object>(item);
                 input.put("invoiceId", invoiceId);
                 input.put("invoiceItemSeqId", invoiceItemSeqId);
                 input.put("userLogin", userLogin);
 
                 // create the invoice item
-                Map results = dispatcher.runSync("createInvoiceItem", input);
-                if (ServiceUtil.isError(results)) return results;
+                Map<String, Object> results = dispatcher.runSync("createInvoiceItem", input);
+                if (ServiceUtil.isError(results)) {
+                    return results;
+                }
                 createInvoiceItemAssoc(agreement, invoiceId, item, invoiceItemSeqId);
             }
         }
@@ -399,16 +456,16 @@ public class AgreementInvoiceFactory {
      * The amounts and quantities are merged such that there is 1 quantity of the merged amount.
      * TODO: no actual ordering yet (but they are grouped)
      */
-    public static Map createGroupedInvoiceItems(GenericValue agreement, Map<String, Collection<Map<String,Object>>> items, String invoiceId, GenericValue userLogin, DispatchContext dctx) throws GeneralException {
+    public static Map createGroupedInvoiceItems(GenericValue agreement, Map<String, Collection<Map<String, Object>>> items, String invoiceId, GenericValue userLogin, DispatchContext dctx) throws GeneralException {
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
         // group the items
-        Map<String,Map<String,Object>> groups = FastMap.newInstance();
-        Map<String, List<Map<String,Object>>> assocs = FastMap.newInstance();
+        Map<String, Map<String, Object>> groups = FastMap.newInstance();
+        Map<String, List<Map<String, Object>>> assocs = FastMap.newInstance();
         for (String agreementTermId : items.keySet()) {
             for (Map<String, Object> item : items.get(agreementTermId)) {
                 String key = item.get("invoiceItemTypeId") + (item.get("productId") == null ? "" : (String) item.get("productId"));
-                Map<String,Object> group = groups.get(key);
+                Map<String, Object> group = groups.get(key);
                 if (group == null) {
                     group = FastMap.newInstance();
                     group.putAll(item);
@@ -417,22 +474,22 @@ public class AgreementInvoiceFactory {
                     groups.put(key, group);
 
                     // TODO: interesting bug will happen if you try doing assocs.put(key, Arrays.asList(item)) or with UtilMisc.  Why is it?  A java bug?
-                    List<Map<String,Object>> assocItems = FastList.newInstance();
+                    List<Map<String, Object>> assocItems = FastList.newInstance();
                     assocItems.add(item);
                     assocs.put(key, assocItems);
                 } else {
-                    BigDecimal quantity = UtilCommon.asBigDecimal((Double) item.get("quantity"));
-                    BigDecimal amount = UtilCommon.asBigDecimal((Double) item.get("amount"));
+                    BigDecimal quantity = (BigDecimal) item.get("quantity");
+                    BigDecimal amount = (BigDecimal) item.get("amount");
                     BigDecimal total = quantity.multiply(amount).setScale(decimals, rounding);
 
-                    BigDecimal gquantity = UtilCommon.asBigDecimal((Double) group.get("quantity"));
-                    BigDecimal gamount = UtilCommon.asBigDecimal((Double) group.get("amount"));
+                    BigDecimal gquantity = (BigDecimal) group.get("quantity");
+                    BigDecimal gamount = (BigDecimal) group.get("amount");
                     BigDecimal gtotal = gquantity.multiply(gamount).setScale(decimals, rounding);
 
                     group.put("quantity", 1.0);
-                    group.put("amount", gtotal.add(total).doubleValue());
+                    group.put("amount", gtotal.add(total));
 
-                    List<Map<String,Object>> assocItems = assocs.get(key);
+                    List<Map<String, Object>> assocItems = assocs.get(key);
                     assocItems.add(item);
                 }
             }
@@ -444,15 +501,17 @@ public class AgreementInvoiceFactory {
             // have to create the item seq id here because it is not returned by service
             String invoiceItemSeqId = UtilFormatOut.formatPaddedNumber(sequence++, 5);
 
-            Map<String,Object> item = groups.get(key);
+            Map<String, Object> item = groups.get(key);
             item.put("invoiceId", invoiceId);
             item.put("invoiceItemSeqId", invoiceItemSeqId);
             item.put("userLogin", userLogin);
-            Map results = dispatcher.runSync("createInvoiceItem", item);
-            if (ServiceUtil.isError(results)) return results;
+            Map<String, Object> results = dispatcher.runSync("createInvoiceItem", item);
+            if (ServiceUtil.isError(results)) {
+                return results;
+            }
 
             // create associations for each group
-            for (Map<String,Object> assocItem : assocs.get(key)) {
+            for (Map<String, Object> assocItem : assocs.get(key)) {
                 createInvoiceItemAssoc(agreement, invoiceId, assocItem, invoiceItemSeqId);
             }
         }
@@ -470,7 +529,7 @@ public class AgreementInvoiceFactory {
             typeMap.put(type.getString("invoiceItemTypeIdFrom"), type);
         }
         if (typeMap.size() == 0) {
-            Debug.logWarning("Found no invoice item types that correspond to agreement type "+agreement.get("agreementTypeId")+".  Please make sure AgreementInvoiceItemType entity has seed data loaded.", module);
+            Debug.logWarning("Found no invoice item types that correspond to agreement type " + agreement.get("agreementTypeId") + ".  Please make sure AgreementInvoiceItemType entity has seed data loaded.", MODULE);
         }
         return typeMap;
     }
@@ -478,8 +537,8 @@ public class AgreementInvoiceFactory {
     private static void createInvoiceItemAssoc(GenericValue agreement, String invoiceId, Map<String, Object> item, String invoiceItemSeqId) throws GenericEntityException {
         GenericDelegator delegator = agreement.getDelegator();
 
-        BigDecimal amount = UtilCommon.asBigDecimal((Double) item.get("amount"));
-        amount = amount.multiply(UtilCommon.asBigDecimal((Double) item.get("quantity")));
+        BigDecimal amount = (BigDecimal) item.get("amount");
+        amount = amount.multiply((BigDecimal) item.get("quantity"));
         amount = amount.setScale(decimals, rounding);
 
         GenericValue assoc = delegator.makeValue("InvoiceItemAssoc");
@@ -494,7 +553,7 @@ public class AgreementInvoiceFactory {
     }
 
     // creates agreement term billing records for each invoice that commission was earned on
-    private static void createAgreementBilling(GenericValue agreement, String paymentApplicationId, String invoiceId, Map<String, Collection<Map<String,Object>>> invoiceItems, DomainsLoader dl) throws GeneralException {
+    private static void createAgreementBilling(GenericValue agreement, String paymentApplicationId, String invoiceId, Map<String, Collection<Map<String, Object>>> invoiceItems, DomainsLoader dl) throws GeneralException {
         InvoiceRepositoryInterface invoiceRepository = dl.loadDomainsDirectory().getBillingDomain().getInvoiceRepository();
         GenericDelegator delegator = agreement.getDelegator();
 
@@ -504,7 +563,9 @@ public class AgreementInvoiceFactory {
             for (Map<String, Object> invoiceItem : invoiceItemGroup) {
                 String parentInvoiceId = (String) invoiceItem.get("parentInvoiceId");
                 BigDecimal total = commissionsEarned.get(parentInvoiceId);
-                if (total == null) total = BigDecimal.ZERO;
+                if (total == null) {
+                    total = BigDecimal.ZERO;
+                }
                 total = total.add(getItemAmount(invoiceItem));
                 commissionsEarned.put(parentInvoiceId, total);
             }
@@ -513,7 +574,9 @@ public class AgreementInvoiceFactory {
         // make records for parent invoices with positive commission earned
         for (String parentInvoiceId : commissionsEarned.keySet()) {
             BigDecimal commissionEarned = commissionsEarned.get(parentInvoiceId);
-            if (commissionEarned.signum() <= 0) continue;
+            if (commissionEarned.signum() <= 0) {
+                continue;
+            }
 
             Invoice parentInvoice = invoiceRepository.getInvoiceById(parentInvoiceId);
 
