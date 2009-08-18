@@ -104,3 +104,8 @@ r13023 getEstimatedShipDate is now also a field of the OISG entity, the method n
 If the ship group may split, the calculated date is the earliest of the estimatedShipDate set on the OISG and the promisedDatetime of the related OrderItemShipGrpInvRes.
 Else it is the latest of those values.
 TODO: see when this value get set and with which value, else we can use it to cache the result of this method or just ignore it and leave it to null.
+
+applications/product/entitydef/entitymodel_old.xml
+r13098 remove OldFacilityRole from ofbiz product entitydef
+related to this change:
+r13098 re-added FacilityRole Entity define in opentaps common.
