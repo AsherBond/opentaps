@@ -16,6 +16,9 @@
 
 package com.opensourcestrategies.crmsfa.commission;
 
+import java.math.BigDecimal;
+import java.util.*;
+
 import javolution.util.FastList;
 import javolution.util.FastSet;
 import org.ofbiz.base.util.Debug;
@@ -24,51 +27,43 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.agreement.AgreementInvoiceFactory;
 import org.opentaps.common.agreement.UtilAgreement;
 
-import java.math.BigDecimal;
-import java.util.*;
-
 /**
- * CommissionServices - Services for commissions
+ * CommissionServices - Services for commissions.
  *
- * @author     <a href="mailto:leon@opentaps.org">Leon Torres</a> 
+ * @author     <a href="mailto:leon@opentaps.org">Leon Torres</a>
  */
-public class CommissionServices {
+public final class CommissionServices {
 
-    public static String module = CommissionServices.class.getName();
+    private CommissionServices() { }
 
-    private static BigDecimal ZERO = new BigDecimal("0");
-    private static int decimals = UtilNumber.getBigDecimalScale("invoice.decimals");
-    private static int rounding = UtilNumber.getBigDecimalRoundingMode("invoice.rounding");
-    public static final String resource = "FinancialsUiLabels";
+    private static String MODULE = CommissionServices.class.getName();
 
     /*
      * The values of the agreement are captured all in one view entity:  AgreementAndItemAndTerm.
      * If an agent gets a commission for all orders, then term is COMM_ORDER_ROLE with roleTypeId COMMISSION_AGENT.
-     * If an agent gets commission on orders with a customer, then term is COMM_PARTY_APPL with partyId DemoCustCompany 
+     * If an agent gets commission on orders with a customer, then term is COMM_PARTY_APPL with partyId DemoCustCompany
      */
-    public static Map createCommissionInvoices(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createCommissionInvoices(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
-        Security security = dctx.getSecurity();
 
         String parentInvoiceId = (String) context.get("invoiceId");
-        List invoiceIds = FastList.newInstance();
-        Map results = ServiceUtil.returnSuccess();
+        List<String> invoiceIds = FastList.newInstance();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         try {
             GenericValue parentInvoice = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", parentInvoiceId));
 
-            // At the moment, we only support sales invoices.  This service should not cause an error if an unsupported invoice 
+            // At the moment, we only support sales invoices.  This service should not cause an error if an unsupported invoice
             // is supplied because SECAs that implement this service may not be able to check the type.
             if (!"SALES_INVOICE".equals(parentInvoice.get("invoiceTypeId"))) {
-                Debug.logInfo("Invoice ["+parentInvoiceId+"] is not a sales invoice and will not be commissioned.", module);
+                Debug.logInfo("Invoice [" + parentInvoiceId + "] is not a sales invoice and will not be commissioned.", MODULE);
                 results.put("invoiceIds", invoiceIds);
                 return results;
             }
@@ -78,54 +73,57 @@ public class CommissionServices {
             // get any agents with InvoiceRole
             List<GenericValue> agents = parentInvoice.getRelatedByAnd("InvoiceRole", UtilMisc.toMap("roleTypeId", "COMMISSION_AGENT"));
             for (GenericValue agent : agents) {
-                agentIds.add( agent.getString("partyId") );
+                agentIds.add(agent.getString("partyId"));
             }
 
             // get any agents that can earn commission for this party
-            agentIds.addAll( UtilAgreement.getCommissionAgentIdsForCustomer(parentInvoice.getString("partyIdFrom"), parentInvoice.getString("partyId"), delegator) );
+            agentIds.addAll(UtilAgreement.getCommissionAgentIdsForCustomer(parentInvoice.getString("partyIdFrom"), parentInvoice.getString("partyId"), delegator));
 
             // create a commission invoice for each commission agent associated with the invoice
             for (String agentId : agentIds) {
-                List agentInvoiceIds = createCommissionInvoicesForAgent(dctx, context, parentInvoice, agentId);
+                List<String> agentInvoiceIds = createCommissionInvoicesForAgent(dctx, context, parentInvoice, agentId);
                 invoiceIds.addAll(agentInvoiceIds);
             }
 
             results.put("invoiceIds", invoiceIds);
             return results;
         } catch (GeneralException e) {
-            Debug.logError(e, module);
+            Debug.logError(e, MODULE);
             return ServiceUtil.returnError(e.getMessage());
         }
     }
 
-    private static List createCommissionInvoicesForAgent(DispatchContext dctx, Map context, GenericValue parentInvoice, String agentPartyId) throws GeneralException {
+    private static List<String> createCommissionInvoicesForAgent(DispatchContext dctx, Map<String, Object> context, GenericValue parentInvoice, String agentPartyId) throws GeneralException {
         GenericDelegator delegator = dctx.getDelegator();
         String organizationPartyId = parentInvoice.getString("partyIdFrom");
-        List invoiceIds = FastList.newInstance();
+        List<String> invoiceIds = FastList.newInstance();
 
         // process each unexpired agreement separately
-        List conditions = UtilMisc.toList(
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
-                new EntityExpr("partyIdTo", EntityOperator.EQUALS, agentPartyId),
-                new EntityExpr("roleTypeIdTo", EntityOperator.EQUALS, "COMMISSION_AGENT"),
-                new EntityExpr("agreementTypeId", EntityOperator.EQUALS, "COMMISSION_AGREEMENT"),
-                EntityUtil.getFilterByDateExpr()
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "INTERNAL_ORGANIZATIO"),
+                EntityCondition.makeCondition("partyIdTo", EntityOperator.EQUALS, agentPartyId),
+                EntityCondition.makeCondition("roleTypeIdTo", EntityOperator.EQUALS, "COMMISSION_AGENT"),
+                EntityCondition.makeCondition("agreementTypeId", EntityOperator.EQUALS, "COMMISSION_AGREEMENT"),
+                EntityUtil.getFilterByDateExpr(),
+                EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "AGR_ACTIVE")
                 );
-        conditions.add(new EntityExpr("statusId", EntityOperator.EQUALS, "AGR_ACTIVE"));
-        List agreements = delegator.findByAnd("Agreement", conditions, UtilMisc.toList("fromDate ASC"));
-        if (agreements.size() == 0) return invoiceIds;
-        for (Iterator iter = agreements.iterator(); iter.hasNext(); ) {
-            GenericValue agreement = (GenericValue) iter.next();
-            if (UtilAgreement.isInvoiceCoveredByAgreement(parentInvoice, agreement) && ! UtilAgreement.isCommissionEarnedOnPayment(agreement)) {
-                Map results = AgreementInvoiceFactory.createInvoiceFromAgreement(dctx, context, agreement, Arrays.asList(parentInvoice),
+        List<GenericValue> agreements = delegator.findList("Agreement", conditions, null, UtilMisc.toList("fromDate ASC"), null, false);
+        if (agreements.size() == 0) {
+            return invoiceIds;
+        }
+        for (GenericValue agreement : agreements) {
+            if (UtilAgreement.isInvoiceCoveredByAgreement(parentInvoice, agreement) && !UtilAgreement.isCommissionEarnedOnPayment(agreement)) {
+                Map<String, Object> results = AgreementInvoiceFactory.createInvoiceFromAgreement(dctx, context, agreement, Arrays.asList(parentInvoice),
                         "COMMISSION_INVOICE", "COMMISSION_AGENT", parentInvoice.getString("currencyUomId"), true, false);
                 if (ServiceUtil.isError(results)) {
-                    Debug.logWarning("Failed to create commission invoice line item for agent ["+agentPartyId+"] from agreement ["+agreement.get("agreementId")+"]: " + ServiceUtil.getErrorMessage(results), module);
+                    Debug.logWarning("Failed to create commission invoice line item for agent [" + agentPartyId + "] from agreement [" + agreement.get("agreementId") + "]: " + ServiceUtil.getErrorMessage(results), MODULE);
                     continue;
                 }
                 String invoiceId = (String) results.get("invoiceId");
-                if (invoiceId != null) invoiceIds.add( invoiceId );
+                if (invoiceId != null) {
+                    invoiceIds.add(invoiceId);
+                }
             }
         }
         return invoiceIds;
