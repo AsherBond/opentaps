@@ -60,9 +60,9 @@
     </eca>
 
 	<!-- move from ofbiz applications/order/servicedef/secas.xml, we move it here because it missing action node -->
-    <eca service="receiveInventoryProduct" event="commit">
+    <!--eca service="receiveInventoryProduct" event="commit">
         <condition field-name="facilityId" operator="is-not-empty"/>
         <condition field-name="orderId" operator="is-not-empty"/>
         <action service="updatePoOnReceiveInventory" mode="sync"/>
-    </eca>
+    </eca-->
 </service-eca>
