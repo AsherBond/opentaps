@@ -364,7 +364,7 @@ public final class UtilCOGS {
         for (Iterator<GenericValue> it = items.iterator(); it.hasNext();) {
             GenericValue item = it.next();
             if ((item.get("unitCost") != null) && (item.get("quantityOnHandTotal") != null)) {
-                BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, item.getString("currencyUomId")));
+                BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, item.getString("currencyUomId"));
                 // this precision is probably OK since we're multiplying
                 total = total.add(item.getBigDecimal("unitCost").multiply(item.getBigDecimal("quantityOnHandTotal")).multiply(conversionFactor)).setScale(decimals, rounding);
             }

@@ -99,7 +99,7 @@ public final class LedgerServices {
     public static final String PURCHNV_SUPPLIES_ITEM_TYPE = "PINV_SUPLPRD_ITEM";   // supplies on purchase invoices
 
     // TODO: replace code that uses epsilon with BigDecimal and also set BigDecimal config in some common class/properties file
-    private static final double epsilon = 0.000001;   // smallest allowable rounding error in accounting transactions
+    private static final BigDecimal EPSILON = new BigDecimal("0.000001");   // smallest allowable rounding error in accounting transactions
 
     private static BigDecimal ZERO = new BigDecimal("0");
     private static int decimals = -1;
@@ -219,13 +219,13 @@ public final class LedgerServices {
 
             // create a list of AcctgTransEntries based on processInvoiceItems
             int itemSeqId = 1;
-            List<GenericValue> acctgTransEntries = new ArrayList();
-            List acctgTransEntryMaps = (List) tmpResult.get("acctgTransEntries");
-            for (Iterator iter = acctgTransEntryMaps.iterator(); iter.hasNext();) {
-                Map input = (Map) iter.next();
+            List<GenericValue> acctgTransEntries = new ArrayList<GenericValue>();
+            List<Map> acctgTransEntryMaps = (List<Map>) tmpResult.get("acctgTransEntries");
+            for (Iterator<Map> iter = acctgTransEntryMaps.iterator(); iter.hasNext();) {
+                Map input = iter.next();
 
                 // skip those with amount 0
-                if (((Double) input.get("amount")).doubleValue() == 0.0) {
+                if (((BigDecimal) input.get("amount")).signum() == 0) {
                     continue;
                 }
 
@@ -383,7 +383,7 @@ public final class LedgerServices {
         Debug.logInfo("Posting to GL for party " + organizationPartyId + " and offsetting account " + offsettingGlAccountId, MODULE);
 
         // get the conversion factor for converting the invoice's amounts to the currencyUomId of the organization
-        BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId")));
+        BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId"));
 
         // loop variables
         List acctgTransEntries = new ArrayList();    // a List of AcctgTransEntry entities to be posted to
@@ -396,8 +396,8 @@ public final class LedgerServices {
             GenericValue invoiceItem = (GenericValue) invoiceItemIterator.next();
 
             // default null quantities to 1.0
-            if (invoiceItem.getDouble("quantity") == null) {
-                invoiceItem.set("quantity", new Double(1.0));
+            if (invoiceItem.get("quantity") == null) {
+                invoiceItem.set("quantity", BigDecimal.ONE);
             }
 
             BigDecimal amount = invoiceItem.getBigDecimal("amount");
@@ -469,12 +469,12 @@ public final class LedgerServices {
 
             if (Debug.verboseOn()) {
                 Debug.logVerbose("invoiceItem " + invoiceItem.getString("invoiceId") + ", " + invoiceItem.getString("invoiceItemSeqId") + ": gl account = "
-                        + invoiceItemPostingGlAccountId + ", amount = " + invoiceItem.getDouble("amount") + ", quantity = "
-                        + invoiceItem.getDouble("quantity") + ", default debit/credit flag = " + defaultDebitCreditFlag, MODULE);
+                        + invoiceItemPostingGlAccountId + ", amount = " + invoiceItem.getBigDecimal("amount") + ", quantity = "
+                        + invoiceItem.getBigDecimal("quantity") + ", default debit/credit flag = " + defaultDebitCreditFlag, MODULE);
             }
             postingTotal = (BigDecimal) tmpResult.get("postingTotal");
         }
-        return UtilMisc.toMap("offsettingGlAccountId", offsettingGlAccountId, "acctgTransEntries", acctgTransEntries, "postingTotal", new Double(postingTotal.doubleValue()));
+        return UtilMisc.toMap("offsettingGlAccountId", offsettingGlAccountId, "acctgTransEntries", acctgTransEntries, "postingTotal", postingTotal);
     }
 
     /**
@@ -580,15 +580,15 @@ public final class LedgerServices {
                 Product product = productRepository.getProductById(productId);
                 BigDecimal stdCost = product.getStandardCost(organization.getPartyAcctgPreference().getBaseCurrencyUomId()).multiply(quantity).setScale(decimals, rounding);
 
-                acctgTransEntry.put("amount", new Double(stdCost.doubleValue()));
+                acctgTransEntry.put("amount", stdCost);
                 varianceAmount = postingAmount.subtract(stdCost);
             // otherwise, if the invoice item is related to an order, then calculate a variance against the order item
             } else if (orderItemBillings.size() > 0) {
-                acctgTransEntry.put("amount", new Double(orderAmount.doubleValue()));
+                acctgTransEntry.put("amount", orderAmount);
                 varianceAmount = postingAmount.subtract(orderAmount);
             } else {
                 // this is the default, no variance and make the transaction with postingAmount
-                acctgTransEntry.put("amount", new Double(postingAmount.doubleValue()));
+                acctgTransEntry.put("amount", postingAmount);
             }
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
@@ -608,7 +608,7 @@ public final class LedgerServices {
             // and debit the variance account
             acctgTransEntry = new HashMap<String, Object>(acctgTransEntry);
             acctgTransEntry.put("glAccountId", varianceGlAccountId);
-            acctgTransEntry.put("amount", new Double(varianceAmount.doubleValue()));
+            acctgTransEntry.put("amount", varianceAmount);
             UtilAccountingTags.putAllAccountingTags(invoiceItem, acctgTransEntry);   // use the same accounting tags on the variance transaction entry as on the main invoice item
             acctgTransEntries.add(acctgTransEntry);
         }
@@ -683,7 +683,7 @@ public final class LedgerServices {
 
         // amount to be posted. NOTE: this conversion is rounded AFTER (conversion*amount*quantity)
         BigDecimal postingAmount = amount.multiply(conversionFactor).multiply(quantity).setScale(decimals, rounding);
-        acctgTransEntry.put("amount", new Double(postingAmount.doubleValue()));
+        acctgTransEntry.put("amount", postingAmount);
 
         // if there is a taxAuthPartyId on the invoice item, then this invoice item is a tax transaction.
         if (invoiceItem.getString("taxAuthPartyId") != null) {
@@ -778,7 +778,7 @@ public final class LedgerServices {
 
         // amount to be posted. NOTE: this conversion is rounded AFTER (conversion*amount*quantity)
         BigDecimal postingAmount = amount.multiply(conversionFactor).multiply(quantity).setScale(decimals, rounding);
-        acctgTransEntry.put("amount", new Double(postingAmount.doubleValue()));
+        acctgTransEntry.put("amount", postingAmount);
         UtilAccountingTags.putAllAccountingTags(invoiceItem, acctgTransEntry);   // for all invoice items, put all the accounting tags from InvoiceItem to AcctgTransEntry
 
         // update loop variables
@@ -841,7 +841,7 @@ public final class LedgerServices {
             }
 
             // figure out the parties involved and the payment gl account
-            Map results = dispatcher.runSync("getPaymentAccountAndParties", UtilMisc.toMap("paymentId", paymentId), -1, false);
+            Map<String, Object> results = dispatcher.runSync("getPaymentAccountAndParties", UtilMisc.toMap("paymentId", paymentId), -1, false);
             if (results.get(ModelService.RESPONSE_MESSAGE).equals(ModelService.RESPOND_ERROR)) {
                 return results;
             }
@@ -850,52 +850,52 @@ public final class LedgerServices {
             String paymentGlAccountId = (String) results.get("glAccountId");
 
             // determine the amount of the payment involved
-            double conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, payment.getString("currencyUomId"));
-            if ((payment.getDouble("amount") == null) || (payment.getDouble("amount").doubleValue() == 0)) {
-                Debug.logWarning("Payment [" + paymentId + "] has an amount of [" + payment.getDouble("amount") + "], not posting", MODULE);
+            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, payment.getString("currencyUomId"));
+            if ((payment.get("amount") == null) || (payment.getBigDecimal("amount").signum() == 0)) {
+                Debug.logWarning("Payment [" + paymentId + "] has an amount of [" + payment.getBigDecimal("amount") + "], not posting", MODULE);
                 return ServiceUtil.returnSuccess();
             }
-            double transactionAmount = conversionFactor * payment.getDouble("amount").doubleValue();
+            BigDecimal transactionAmount = conversionFactor.multiply(payment.getBigDecimal("amount"));
 
-            // These Maps hold glAccountId (String) -> amount (Double) pairs are designed to track how much of the payment goes to each gl account.
-            Map paymentGlAccountAmounts = UtilMisc.toMap(paymentGlAccountId, new Double(transactionAmount));
-            Map offsettingGlAccountAmounts = new HashMap();
+            // These Maps hold glAccountId (String) -> amount (BigDecimal) pairs are designed to track how much of the payment goes to each gl account.
+            Map<String, BigDecimal> paymentGlAccountAmounts = UtilMisc.toMap(paymentGlAccountId, transactionAmount);
+            Map<String, BigDecimal> offsettingGlAccountAmounts = new HashMap<String, BigDecimal>();
 
             // TODO: Use BigDecimal for this.
             // Loop through all PaymentApplications and see if each one implies a specific offsetting GL account either because it is
             // specifically named or because it is part of a tax payment and if so, use the amount of that application
-            double unassignedAmount = transactionAmount;
+            BigDecimal unassignedAmount = transactionAmount;
 
-            List paymentApplications = payment.getRelated("PaymentApplication");
-            for (Iterator pAi = paymentApplications.iterator(); pAi.hasNext();) {
-                GenericValue appl = (GenericValue) pAi.next();
+            List<GenericValue> paymentApplications = payment.getRelated("PaymentApplication");
+            for (Iterator<GenericValue> pAi = paymentApplications.iterator(); pAi.hasNext();) {
+                GenericValue appl = pAi.next();
 
-                if (appl.getDouble("amountApplied") == null) {
+                if (appl.get("amountApplied") == null) {
                         Debug.logWarning("Payment Application " + appl + " has a null amount, skipping", MODULE);
                         continue;
                 }
-                double applAmount = appl.getDouble("amountApplied").doubleValue() * conversionFactor;
+                BigDecimal applAmount = appl.getBigDecimal("amountApplied").multiply(conversionFactor);
 
                 if (appl.getString("overrideGlAccountId") != null) {
-                    offsettingGlAccountAmounts.put(appl.getString("overrideGlAccountId"), new Double(applAmount));
-                    unassignedAmount -= applAmount;
+                    offsettingGlAccountAmounts.put(appl.getString("overrideGlAccountId"), applAmount);
+                    unassignedAmount = unassignedAmount.subtract(applAmount);
                 } else if (appl.getString("taxAuthGeoId") != null) {
                         GenericValue taxAuthGlAccount = delegator.findByPrimaryKeyCache("TaxAuthorityGlAccount",
                                         UtilMisc.toMap("organizationPartyId", organizationPartyId, "taxAuthPartyId", transactionPartyId, "taxAuthGeoId", appl.getString("taxAuthGeoId")));
-                        offsettingGlAccountAmounts.put(taxAuthGlAccount.getString("glAccountId"), new Double(applAmount));
-                        unassignedAmount -= applAmount;
+                        offsettingGlAccountAmounts.put(taxAuthGlAccount.getString("glAccountId"), applAmount);
+                        unassignedAmount = unassignedAmount.subtract(applAmount);
                 }
             }
 
             // now put the residual into the offsettingGlAccountId
-            if (unassignedAmount > 0) {
+            if (unassignedAmount.signum() > 0) {
                 String offsettingGlAccountId = getOffsettingPaymentGlAccount(dispatcher, payment, organizationPartyId, userLogin);
-                offsettingGlAccountAmounts.put(offsettingGlAccountId, new Double(unassignedAmount));
+                offsettingGlAccountAmounts.put(offsettingGlAccountId, unassignedAmount);
             }
 
             // determine which to credit and debit
-            Map creditGlAccountAmounts = null;
-            Map debitGlAccountAmounts = null;
+            Map<String, BigDecimal> creditGlAccountAmounts = null;
+            Map<String, BigDecimal> debitGlAccountAmounts = null;
             if (UtilAccounting.isDisbursement(payment)) {
                 creditGlAccountAmounts = paymentGlAccountAmounts;
                 debitGlAccountAmounts = offsettingGlAccountAmounts;
@@ -913,11 +913,11 @@ public final class LedgerServices {
                 return ServiceUtil.returnError("No debit GL accounts found for payment posting");
             }
 
-            List acctgTransEntries = makePaymentEntries(payment, creditGlAccountAmounts, debitGlAccountAmounts,
+            List<GenericValue> acctgTransEntries = makePaymentEntries(payment, creditGlAccountAmounts, debitGlAccountAmounts,
                     organizationPartyId, transactionPartyId, delegator);
 
             // Post transaction
-            Map tmpMap = UtilMisc.toMap("acctgTransEntries", acctgTransEntries,
+            Map<String, Object> tmpMap = UtilMisc.<String, Object>toMap("acctgTransEntries", acctgTransEntries,
                     "glFiscalTypeId", "ACTUAL", "acctgTransTypeId", "PAYMENT_ACCTG_TRANS",
                     "paymentId", paymentId, "userLogin", userLogin);
             // set the transaction date to the effective date of the payment
@@ -987,7 +987,7 @@ public final class LedgerServices {
             if (UtilValidate.isEmpty(baseCurrency)) {
                 return ServiceUtil.returnError("No account preference or base currency found for organization [" + paycheckReader.getOrganizationPartyId() + "]");
             }
-            BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, paycheckReader.getOrganizationPartyId(), baseCurrency));
+            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, paycheckReader.getOrganizationPartyId(), baseCurrency);
 
             tmpResult = postPaycheckEntry(acctgTransId, paycheckReader.getSalaryExpenseGlAccountId(), "D", paycheckReader.getOrganizationPartyId(), paycheckReader.getEmployeePartyId(), "EMPLOYEE",
                     paycheckReader.getEmployeePartyId(), paycheckReader.getGrossAmount().multiply(conversionFactor).setScale(decimals, rounding), baseCurrency, dispatcher, userLogin);
@@ -1058,21 +1058,21 @@ public final class LedgerServices {
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static Map postPaycheckEntry(String acctgTransId, String glAccountId, String debitCreditFlag, String organizationPartyId, String postingPartyId, String postingRoleTypeId,
+    private static Map<String, Object> postPaycheckEntry(String acctgTransId, String glAccountId, String debitCreditFlag, String organizationPartyId, String postingPartyId, String postingRoleTypeId,
                                          String employeePartyId, BigDecimal amount, String currencyUomId, LocalDispatcher dispatcher, GenericValue userLogin) throws GenericServiceException, GenericEntityException {
 
         // make sure the party has this role
-        Map tmpResult = dispatcher.runSync("ensurePartyRole", UtilMisc.toMap("partyId", postingPartyId, "roleTypeId", postingRoleTypeId, "userLogin", userLogin), 60, false);
+        Map<String, Object> tmpResult = dispatcher.runSync("ensurePartyRole", UtilMisc.toMap("partyId", postingPartyId, "roleTypeId", postingRoleTypeId, "userLogin", userLogin), 60, false);
         if (ServiceUtil.isError(tmpResult)) { return tmpResult; }
 
         // create the ledger entries
-        Map svcParams = UtilMisc.toMap("acctgTransId", acctgTransId, "acctgTransEntryTypeId", "_NA_", "organizationPartyId", organizationPartyId,
+        Map<String, Object> svcParams = UtilMisc.toMap("acctgTransId", acctgTransId, "acctgTransEntryTypeId", "_NA_", "organizationPartyId", organizationPartyId,
                            "currencyUomId", currencyUomId, "userLogin", userLogin);
         svcParams.put("partyId", postingPartyId);
         svcParams.put("glAccountId", glAccountId);
         svcParams.put("debitCreditFlag", debitCreditFlag);
         svcParams.put("roleTypeId", postingRoleTypeId);
-        svcParams.put("amount", new Double(amount.doubleValue()));
+        svcParams.put("amount", amount);
         tmpResult = dispatcher.runSync("createAcctgTransEntry", svcParams, 60, false); // use same transaction
         if (ServiceUtil.isError(tmpResult)) { return tmpResult; }
 
@@ -1327,7 +1327,7 @@ public final class LedgerServices {
             input.put("partyId", transactionPartyId);
             input.put("roleTypeId", transactionPartyRoleTypeId);
             input.put("debitCreditFlag", invoiceOffsetDebitCreditFlag); // want opposite flag
-            input.put("amount", paymentApplication.getDouble("amountApplied"));
+            input.put("amount", paymentApplication.getBigDecimal("amountApplied"));
             input.put("acctgTransEntryTypeId", "_NA_");
             input.put("description", "Matching GL accounts for invoice " + invoiceId + " and payment " + paymentId);
             GenericValue paymentEntry = delegator.makeValue("AcctgTransEntry", input);
@@ -1340,7 +1340,7 @@ public final class LedgerServices {
             input.put("partyId", transactionPartyId);
             input.put("roleTypeId", transactionPartyRoleTypeId);
             input.put("debitCreditFlag", paymentOffsetDebitCreditFlag); // want opposite flag
-            input.put("amount", paymentApplication.getDouble("amountApplied"));
+            input.put("amount", paymentApplication.getBigDecimal("amountApplied"));
             input.put("acctgTransEntryTypeId", "_NA_");
             input.put("description", "Matching GL accounts for invoice " + invoiceId + " and payment " + paymentId);
             GenericValue invoiceEntry = delegator.makeValue("AcctgTransEntry", input);
@@ -1413,7 +1413,7 @@ public final class LedgerServices {
             // get the inventory item unit cost
             BigDecimal unitCost = inventoryItem.getBigDecimal("unitCost");
             // get the currency conversion factor
-            BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId")));
+            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId"));
             // validate the unitCost and compute transaction amount
             if (unitCost == null) {
                 return ServiceUtil.returnError("Could not determine unitCost of product [" + productId + "] for inventory variance [" + physicalInventoryId + "] and inventory item [" + inventoryItemId + "]");
@@ -1459,7 +1459,7 @@ public final class LedgerServices {
             // ===========================================================
             // Transaction to credit the variance expense GL acct
             tmpMap = UtilMisc.toMap("glAccountId", varExpGlAcctId, "debitCreditFlag", "C",
-                "amount", new Double(transactionAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(0),
+                "amount", transactionAmount, "acctgTransEntrySeqId", Integer.toString(0),
                 "organizationPartyId", ownerPartyId, "acctgTransEntryTypeId", "_NA_");
             tmpMap.put("productId", productId);
             GenericValue varExpGlAcctTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -1468,7 +1468,7 @@ public final class LedgerServices {
 
             // Transaction to debit the inventory GL acct
             tmpMap = UtilMisc.toMap("glAccountId", invGlAcctId, "debitCreditFlag", "D",
-                "amount", new Double(transactionAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(1),
+                "amount", transactionAmount, "acctgTransEntrySeqId", Integer.toString(1),
                 "organizationPartyId", ownerPartyId, "acctgTransEntryTypeId", "_NA_");
             tmpMap.put("productId", productId);
             GenericValue invGlAcctTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -1486,7 +1486,7 @@ public final class LedgerServices {
                 //       primary transaction.
                 // Transaction to credit the variance expense GL acct
                 tmpMap = UtilMisc.toMap("glAccountId", varExpGlAcctId, "debitCreditFlag", "C",
-                    "amount", new Double(inventoryAdjAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(0),
+                    "amount", inventoryAdjAmount, "acctgTransEntrySeqId", Integer.toString(0),
                     "organizationPartyId", ownerPartyId, "acctgTransEntryTypeId", "_NA_");
                 tmpMap.put("productId", productId);
                 GenericValue varExpGlAcctAdjTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -1496,7 +1496,7 @@ public final class LedgerServices {
 
                 // Transaction to debit the inventory GL acct
                 tmpMap = UtilMisc.toMap("glAccountId", invGlAcctAdjId, "debitCreditFlag", "D",
-                    "amount", new Double(inventoryAdjAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(1),
+                    "amount", inventoryAdjAmount, "acctgTransEntrySeqId", Integer.toString(1),
                     "organizationPartyId", ownerPartyId, "acctgTransEntryTypeId", "_NA_");
                 tmpMap.put("productId", productId);
                 GenericValue invGlAcctAdjTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -1565,7 +1565,7 @@ public final class LedgerServices {
                 // get the inventory item unit cost
                 BigDecimal unitCost = inventoryItem.getBigDecimal("unitCost");
                 // get the currency conversion factor
-                BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId")));
+                BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId"));
                 // validate the unitCost and compute transaction amount
                 if (unitCost == null) {
                     Debug.logWarning("Could not determine unitCost of product [" + productId + "] for item issuance [" + itemIssuance.getString("itemIssuanceId") + "] and inventory item [" + inventoryItem + "], assuming 0", MODULE);
@@ -1581,7 +1581,7 @@ public final class LedgerServices {
                 // Transaction to credit the inventory account
                 input = UtilMisc.toMap("glAccountId", invGlAcctId, "organizationPartyId", ownerPartyId, "partyId", partyIdTo);
                 input.put("productId", productId);
-                input.put("amount", new Double(transactionAmount.doubleValue()));
+                input.put("amount", transactionAmount);
                 input.put("acctgTransEntryTypeId", "_NA_");
                 input.put("debitCreditFlag", "C");
                 input.put("acctgTransEntrySeqId", Integer.toString(0));
@@ -1594,7 +1594,7 @@ public final class LedgerServices {
                 // Transaction to debit the cogs account
                 input = UtilMisc.toMap("glAccountId", invGlAcctCogsId, "organizationPartyId", ownerPartyId, "partyId", partyIdTo);
                 input.put("productId", productId);
-                input.put("amount", new Double(transactionAmount.doubleValue()));
+                input.put("amount", transactionAmount);
                 input.put("acctgTransEntryTypeId", "_NA_");
                 input.put("debitCreditFlag", "D");
                 input.put("acctgTransEntrySeqId", Integer.toString(1));
@@ -1625,7 +1625,7 @@ public final class LedgerServices {
                     String invGlAcctAdjCogsId = UtilAccounting.getProductOrgGlAccountId(productId, "COGS_ADJ_AVG_COST", ownerPartyId, delegator);
                     // Transaction to credit the adj inventory GL acct
                     input = UtilMisc.toMap("glAccountId", invGlAcctAdjId, "debitCreditFlag", "C",
-                        "amount", new Double(inventoryAdjAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(0),
+                        "amount", inventoryAdjAmount, "acctgTransEntrySeqId", Integer.toString(0),
                         "organizationPartyId", ownerPartyId, "acctgTransEntryTypeId", "_NA_");
                     input.put("productId", productId);
                     input.put("partyId", partyIdTo);
@@ -1637,7 +1637,7 @@ public final class LedgerServices {
 
                     // Transaction to debit the adj cogs GL acct
                     input = UtilMisc.toMap("glAccountId", invGlAcctAdjCogsId, "debitCreditFlag", "D",
-                        "amount", new Double(inventoryAdjAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(1),
+                        "amount", inventoryAdjAmount, "acctgTransEntrySeqId", Integer.toString(1),
                         "organizationPartyId", ownerPartyId, "acctgTransEntryTypeId", "_NA_");
                     input.put("productId", productId);
                     input.put("partyId", partyIdTo);
@@ -1715,7 +1715,7 @@ public final class LedgerServices {
             }
 
             // get the currency conversion factor
-            BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, inventoryItem.getString("currencyUomId")));
+            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, inventoryItem.getString("currencyUomId"));
 
             // Use the shipment to get the origin party and determine if this is actually a return, in which case the offsetting account is COGS
             String originPartyId = null;
@@ -1751,7 +1751,7 @@ public final class LedgerServices {
             // Transaction to credit the uninvoiced receipts account
             Map input = UtilMisc.toMap("glAccountId", uninvoicedGlAccountId, "organizationPartyId", organizationPartyId, "partyId", originPartyId);
             input.put("productId", productId);
-            input.put("amount", new Double(transactionAmount.doubleValue()));
+            input.put("amount", transactionAmount);
             input.put("acctgTransEntryTypeId", "_NA_");
             input.put("debitCreditFlag", "C");
             input.put("acctgTransEntrySeqId", Integer.toString(0));
@@ -1763,7 +1763,7 @@ public final class LedgerServices {
             // Transaction to debit the inventory GL acct
             input = UtilMisc.toMap("glAccountId", inventoryGlAccount, "organizationPartyId", organizationPartyId, "partyId", originPartyId);
             input.put("productId", productId);
-            input.put("amount", new Double(transactionAmount.doubleValue()));
+            input.put("amount", transactionAmount);
             input.put("acctgTransEntryTypeId", "_NA_");
             input.put("debitCreditFlag", "D");
             input.put("acctgTransEntrySeqId", Integer.toString(1));
@@ -1845,14 +1845,14 @@ public final class LedgerServices {
 
             // Create transactions for the destination owner if it is an internal organization that we're doing GL Accounting for
             if (destinationOwnerIsInternalOrg) {
-                BigDecimal destinationConversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, destinationOwnerPartyId, inventoryItem.getString("currencyUomId")));
+                BigDecimal destinationConversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, destinationOwnerPartyId, inventoryItem.getString("currencyUomId"));
                 BigDecimal destinationTransactionAmount = unitCost.multiply(destinationConversionFactor).multiply(quantity).setScale(decimals, rounding);
                 String destinationInvGlAcctId = UtilAccounting.getProductOrgGlAccountId(productId, "INVENTORY_ACCOUNT", destinationOwnerPartyId, delegator);
                 String destinationInvXferGlAcctId = UtilAccounting.getProductOrgGlAccountId(productId, "INVENTORY_XFER_IN", destinationOwnerPartyId, delegator);
 
                 // Transaction to credit the inventory xfer in GL acct
                 tmpMap = UtilMisc.toMap("glAccountId", destinationInvXferGlAcctId, "debitCreditFlag", "C",
-                        "amount", new Double(destinationTransactionAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(0),
+                        "amount", destinationTransactionAmount, "acctgTransEntrySeqId", Integer.toString(0),
                         "organizationPartyId", destinationOwnerPartyId, "acctgTransEntryTypeId", "_NA_");
                 tmpMap.put("productId", productId);
                 GenericValue creditAcctTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -1862,7 +1862,7 @@ public final class LedgerServices {
 
                 // Transaction to debit the inventory GL acct
                 tmpMap = UtilMisc.toMap("glAccountId", destinationInvGlAcctId, "debitCreditFlag", "D",
-                        "amount", new Double(destinationTransactionAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(1),
+                        "amount", destinationTransactionAmount, "acctgTransEntrySeqId", Integer.toString(1),
                         "organizationPartyId", destinationOwnerPartyId, "acctgTransEntryTypeId", "_NA_");
                 tmpMap.put("productId", productId);
                 GenericValue debitAcctTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -1875,14 +1875,14 @@ public final class LedgerServices {
 
             // Create transactions for the origin owner if it is an internal organization that we're doing GL Accounting for
             if (originOwnerIsInternalOrg) {
-                BigDecimal originConversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, originOwnerPartyId, inventoryItem.getString("currencyUomId")));
+                BigDecimal originConversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, originOwnerPartyId, inventoryItem.getString("currencyUomId"));
                 BigDecimal originTransactionAmount = unitCost.multiply(originConversionFactor).multiply(quantity).setScale(decimals, rounding);
                 String originInvGlAcctId = UtilAccounting.getProductOrgGlAccountId(productId, "INVENTORY_ACCOUNT", originOwnerPartyId, delegator);
                 String originInvXferGlAcctId = UtilAccounting.getProductOrgGlAccountId(productId, "INVENTORY_XFER_OUT", originOwnerPartyId, delegator);
 
                 // Transaction to credit the inventory GL acct
                 tmpMap = UtilMisc.toMap("glAccountId", originInvGlAcctId, "debitCreditFlag", "C",
-                        "amount", new Double(originTransactionAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(0),
+                        "amount", originTransactionAmount, "acctgTransEntrySeqId", Integer.toString(0),
                         "organizationPartyId", originOwnerPartyId, "acctgTransEntryTypeId", "_NA_");
                 tmpMap.put("productId", productId);
                 GenericValue creditAcctTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -1892,7 +1892,7 @@ public final class LedgerServices {
 
                 // Transaction to debit the inventory xfer out GL acct
                 tmpMap = UtilMisc.toMap("glAccountId", originInvXferGlAcctId, "debitCreditFlag", "D",
-                        "amount", new Double(originTransactionAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(1),
+                        "amount", originTransactionAmount, "acctgTransEntrySeqId", Integer.toString(1),
                         "organizationPartyId", originOwnerPartyId, "acctgTransEntryTypeId", "_NA_");
                 tmpMap.put("productId", productId);
                 GenericValue debitAcctTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -1919,7 +1919,7 @@ public final class LedgerServices {
                     String invGlAcctAdjId = UtilAccounting.getProductOrgGlAccountId(productId, "INV_ADJ_AVG_COST", originOwnerPartyId, delegator);
                     // Transaction to credit the adj inventory GL acct
                     tmpMap = UtilMisc.toMap("glAccountId", invGlAcctAdjId, "debitCreditFlag", "C",
-                            "amount", new Double(inventoryAdjAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(0),
+                            "amount", inventoryAdjAmount, "acctgTransEntrySeqId", Integer.toString(0),
                             "organizationPartyId", originOwnerPartyId, "acctgTransEntryTypeId", "_NA_");
                     tmpMap.put("productId", productId);
                     creditAcctTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -1929,7 +1929,7 @@ public final class LedgerServices {
 
                     // Transaction to debit the adj cogs GL acct
                     tmpMap = UtilMisc.toMap("glAccountId", originInvXferGlAcctId, "debitCreditFlag", "D",
-                            "amount", new Double(inventoryAdjAmount.doubleValue()), "acctgTransEntrySeqId", Integer.toString(1),
+                            "amount", inventoryAdjAmount, "acctgTransEntrySeqId", Integer.toString(1),
                             "organizationPartyId", originOwnerPartyId, "acctgTransEntryTypeId", "_NA_");
                     tmpMap.put("productId", productId);
                     debitAcctTrans = delegator.makeValue("AcctgTransEntry", tmpMap);
@@ -2036,7 +2036,7 @@ public final class LedgerServices {
 
             // determine and convert transaction amount (quantity is always 1.0 for serialized inventory items)
             BigDecimal amount = inventoryItem.getBigDecimal("unitCost");
-            BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId")));
+            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId"));
             amount = amount.multiply(conversionFactor).setScale(decimals, rounding);
 
             // transaction list
@@ -2045,7 +2045,7 @@ public final class LedgerServices {
             // Credit transaction
             Map input = UtilMisc.toMap("glAccountId", creditGlAccountId, "organizationPartyId", ownerPartyId);
             input.put("productId", productId);
-            input.put("amount", new Double(amount.doubleValue()));
+            input.put("amount", amount);
             input.put("acctgTransEntryTypeId", "_NA_");
             input.put("debitCreditFlag", "C");
             input.put("acctgTransEntrySeqId", Integer.toString(0));
@@ -2057,7 +2057,7 @@ public final class LedgerServices {
             // Debit transaction
             input = UtilMisc.toMap("glAccountId", debitGlAccountId, "organizationPartyId", ownerPartyId);
             input.put("productId", productId);
-            input.put("amount", new Double(amount.doubleValue()));
+            input.put("amount", amount);
             input.put("acctgTransEntryTypeId", "_NA_");
             input.put("debitCreditFlag", "D");
             input.put("acctgTransEntrySeqId", Integer.toString(1));
@@ -2174,7 +2174,7 @@ public final class LedgerServices {
             // Credit transaction
             Map acctgTransEntry = UtilMisc.toMap("glAccountId", glAccountId, "organizationPartyId", ownerPartyId);
             acctgTransEntry.put("productId", inventoryItem.getString("productId"));
-            acctgTransEntry.put("amount", adjustmentAmount.doubleValue());
+            acctgTransEntry.put("amount", adjustmentAmount);
             acctgTransEntry.put("acctgTransEntryTypeId", "_NA_");
             acctgTransEntry.put("debitCreditFlag", "C");
             acctgTransEntry.put("acctgTransEntrySeqId", Integer.toString(0));
@@ -2185,7 +2185,7 @@ public final class LedgerServices {
             // Debit transaction
             acctgTransEntry = UtilMisc.toMap("glAccountId", glAccountId, "organizationPartyId", ownerPartyId);
             acctgTransEntry.put("productId", inventoryItem.getString("productId"));
-            acctgTransEntry.put("amount", adjustmentAmount.doubleValue());
+            acctgTransEntry.put("amount", adjustmentAmount);
             acctgTransEntry.put("acctgTransEntryTypeId", "_NA_");
             acctgTransEntry.put("debitCreditFlag", "D");
             acctgTransEntry.put("acctgTransEntrySeqId", Integer.toString(1));
@@ -2309,7 +2309,7 @@ public final class LedgerServices {
             // Credit transaction
             Map acctgTransEntry = UtilMisc.toMap("glAccountId", creditGlAccountId, "organizationPartyId", ownerPartyId);
             acctgTransEntry.put("productId", inventoryItem.getString("productId"));
-            acctgTransEntry.put("amount", adjustmentAmount.doubleValue());
+            acctgTransEntry.put("amount", adjustmentAmount);
             acctgTransEntry.put("acctgTransEntryTypeId", "_NA_");
             acctgTransEntry.put("debitCreditFlag", "C");
             acctgTransEntry.put("acctgTransEntrySeqId", Integer.toString(0));
@@ -2427,7 +2427,7 @@ public final class LedgerServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map postInventoryToWorkEffortAssignToGl(DispatchContext dctx, Map context) {
+    public static Map<String, Object> postInventoryToWorkEffortAssignToGl(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -2457,7 +2457,7 @@ public final class LedgerServices {
             OpentapsProductionRun productionRunReader = new OpentapsProductionRun(productionRun.getString("workEffortId"), dispatcher);
 
             // convert the intentory item's unit cost into the owner's currency
-            BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId")));
+            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId"));
             unitCost = unitCost.multiply(conversionFactor).setScale(decimals, rounding);
             BigDecimal transactionAmount = unitCost.multiply(quantityIssued).setScale(decimals, rounding);
 
@@ -2693,7 +2693,7 @@ public final class LedgerServices {
                         String creditAccountId = UtilAccounting.getDefaultAccountId(creditAccountTypeId, ownerPartyId, delegator);
                         String debitAccountId = UtilAccounting.getDefaultAccountId(debitAccountTypeId, ownerPartyId, delegator);
                         // get the currency conversion factor
-                        BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, costComponent.getString("costUomId")));
+                        BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, costComponent.getString("costUomId"));
                         // convert the cost into the owner's currency
                         BigDecimal transactionAmount = cost.multiply(conversionFactor).setScale(decimals, rounding);
 
@@ -2784,7 +2784,7 @@ public final class LedgerServices {
                 String productId = domainInventoryItem.getProductId();
 
                 // get the currency conversion factor
-                BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId")));
+                BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId"));
 
                 if ((unitCost != null) && (unitCost.compareTo(ZERO) != 0) && (inventoryItem.get("quantityOnHandTotal") != null)) {
                     String creditAccountId = UtilAccounting.getProductOrgGlAccountId(productId, "WIP_INVENTORY", ownerPartyId, delegator);
@@ -2795,7 +2795,7 @@ public final class LedgerServices {
 
                     // Transaction to credit the inventory account
                     input = UtilMisc.toMap("glAccountId", creditAccountId, "organizationPartyId", ownerPartyId);
-                    input.put("amount", new Double(transactionAmount.doubleValue()));
+                    input.put("amount", transactionAmount);
                     input.put("acctgTransEntryTypeId", "_NA_");
                     input.put("debitCreditFlag", "C");
                     input.put("productId", productId);
@@ -2805,7 +2805,7 @@ public final class LedgerServices {
 
                     // Transaction to debit the Wip account
                     input = UtilMisc.toMap("glAccountId", debitAccountId, "organizationPartyId", ownerPartyId);
-                    input.put("amount", new Double(transactionAmount.doubleValue()));
+                    input.put("amount", transactionAmount);
                     input.put("acctgTransEntryTypeId", "_NA_");
                     input.put("debitCreditFlag", "D");
                     input.put("productId", productId);
@@ -2868,11 +2868,11 @@ public final class LedgerServices {
             String profitLossGlAccountId =  UtilAccounting.getProductOrgGlAccountId(null, "PROFIT_LOSS_ACCOUNT", organizationPartyId, delegator);
 
             // figure out the profit and loss since the last closed time period
-            double netIncome = 0.0;
+            BigDecimal netIncome = BigDecimal.ZERO;
             Map tmpResult = dispatcher.runSync("getActualNetIncomeSinceLastClosing", UtilMisc.toMap("organizationPartyId", organizationPartyId, "periodTypeId", periodTypeId,
                         "thruDate", UtilDateTime.toTimestamp(timePeriod.getDate("thruDate")), "userLogin", userLogin));
             if (tmpResult.get("netIncome") != null) {
-                netIncome = ((BigDecimal) tmpResult.get("netIncome")).doubleValue();
+                netIncome = ((BigDecimal) tmpResult.get("netIncome"));
             } else {
                return ServiceUtil.returnError("Cannot calculate a net income for" + organizationPartyId + " and time period id " + customTimePeriodId);
             }
@@ -2886,14 +2886,14 @@ public final class LedgerServices {
                 Debug.logInfo("No posted net income.  Will be posting [" + netIncome + "] to retained earnings account [" + retainedEarningsGlAccountId + "] and [" + profitLossGlAccountId + "]", MODULE);
                 // no earnings and net income have been posted to this period, we'll have to create acctg transaction entries
                 GenericValue retainedEarningsTransaction = delegator.makeValue("AcctgTransEntry", UtilMisc.toMap("glAccountId", retainedEarningsGlAccountId, "debitCreditFlag", "C",
-                      "amount", new Double(netIncome), "acctgTransEntrySeqId", Integer.toString(0), "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_"));
+                      "amount", netIncome, "acctgTransEntrySeqId", Integer.toString(0), "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_"));
                 GenericValue netIncomeTransaction = delegator.makeValue("AcctgTransEntry", UtilMisc.toMap("glAccountId", profitLossGlAccountId, "debitCreditFlag", "D",
-                      "amount", new Double(netIncome), "acctgTransEntrySeqId", Integer.toString(1), "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_"));
+                      "amount", netIncome, "acctgTransEntrySeqId", Integer.toString(1), "organizationPartyId", organizationPartyId, "acctgTransEntryTypeId", "_NA_"));
 
                 // this is subtle - the transactionDate must be right before the thruDate, or the transaction will actually overlap into the next time period.  We subtract 1 second (1000 milliseconds) to move it before
                 tmpResult = dispatcher.runSync("createAcctgTransAndEntries", UtilMisc.toMap("acctgTransEntries", UtilMisc.toList(retainedEarningsTransaction, netIncomeTransaction),
                       "glFiscalTypeId", "ACTUAL", "transactionDate", new Timestamp(timePeriod.getDate("thruDate").getTime() - 1000), "acctgTransTypeId", "PERIOD_CLOSING", "userLogin", userLogin));
-            } else if (Math.abs(UtilAccounting.getNetBalance(postedNetIncome, MODULE).doubleValue() - netIncome) < epsilon) {
+            } else if (UtilAccounting.getNetBalance(postedNetIncome, MODULE).subtract(netIncome).abs().compareTo(EPSILON) < 0) {
                 // this is ok too - send a message to the user
                 Debug.logInfo("Net income and earnings already posted.  Not posting again", MODULE);
             } else {
@@ -3327,7 +3327,7 @@ public final class LedgerServices {
             String companyCurrencyId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
 
             // get the invoice transaction amount
-            BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId"), invoice.getTimestamp("invoiceDate")));
+            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, invoice.getString("currencyUomId"), invoice.getTimestamp("invoiceDate"));
             BigDecimal invoiceAmount = InvoiceWorker.getInvoiceTotal(invoice).multiply(conversionFactor).setScale(decimals, rounding);
 
             // get the invoice payment applications transaction amount
@@ -3337,7 +3337,7 @@ public final class LedgerServices {
             while (paymentApplicationIt.hasNext()) {
                 GenericValue paymentApplication = (GenericValue) paymentApplicationIt.next();
                 GenericValue payment = paymentApplication.getRelatedOne("Payment");
-                conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, payment.getString("currencyUomId"), payment.getTimestamp("effectiveDate")));
+                conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, organizationPartyId, payment.getString("currencyUomId"), payment.getTimestamp("effectiveDate"));
                 BigDecimal amount = paymentApplication.getBigDecimal("amountApplied");
                 paymentAmount = paymentAmount.add(amount.multiply(conversionFactor)).setScale(decimals, rounding);
             }

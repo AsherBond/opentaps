@@ -1884,7 +1884,7 @@ return results;
                 }
                 if (!orgCurrencyUomId.equals(invoiceCurrencyUomId)) {
                     // TODO need a unit test for conversion
-                    BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, invoice.getString("partyIdFrom"), invoiceCurrencyUomId));
+                    BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, invoice.getString("partyIdFrom"), invoiceCurrencyUomId);
                     convertedInvoiceTotal = invoiceTotal.multiply(conversionFactor);
                 } else {
                     convertedInvoiceTotal = invoiceTotal;

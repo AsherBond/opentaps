@@ -234,7 +234,7 @@ public final class UtilFinancial {
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
-    public static double determineUomConversionFactor(GenericDelegator delegator, LocalDispatcher dispatcher, String organizationPartyId, String currencyUomId) throws GenericEntityException, GenericServiceException {
+    public static BigDecimal determineUomConversionFactor(GenericDelegator delegator, LocalDispatcher dispatcher, String organizationPartyId, String currencyUomId) throws GenericEntityException, GenericServiceException {
         return determineUomConversionFactor(delegator, dispatcher, organizationPartyId, currencyUomId, UtilDateTime.nowTimestamp());
     }
 
@@ -249,11 +249,10 @@ public final class UtilFinancial {
      * @exception GenericEntityException if an error occurs
      * @exception GenericServiceException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public static double determineUomConversionFactor(GenericDelegator delegator, LocalDispatcher dispatcher, String organizationPartyId, String currencyUomId, Timestamp asOfDate) throws GenericEntityException, GenericServiceException {
+    public static BigDecimal determineUomConversionFactor(GenericDelegator delegator, LocalDispatcher dispatcher, String organizationPartyId, String currencyUomId, Timestamp asOfDate) throws GenericEntityException, GenericServiceException {
         try {
             // default conversion factor
-            double conversionFactor = 1.0;
+            BigDecimal conversionFactor = BigDecimal.ONE;
             // if currencyUomId is null, return default
             if (currencyUomId == null) {
                 return conversionFactor;
@@ -280,11 +279,10 @@ public final class UtilFinancial {
             }
 
             // this does a currency conversion, based on currencyUomId and the party's accounting preferences.  conversionFactor will be used for postings
-            Map tmpResult = dispatcher.runSync("convertUom", UtilMisc.toMap("originalValue", new Double(conversionFactor),
-                    "uomId", currencyUomId, "uomIdTo", baseCurrencyUomId, "asOfDate", asOfDate));
+            Map<String, Object> tmpResult = dispatcher.runSync("convertUom", UtilMisc.toMap("originalValue", conversionFactor, "uomId", currencyUomId, "uomIdTo", baseCurrencyUomId, "asOfDate", asOfDate));
 
             if (((String) tmpResult.get(ModelService.RESPONSE_MESSAGE)).equals(ModelService.RESPOND_SUCCESS)) {
-                conversionFactor = ((Double) tmpResult.get("convertedValue")).doubleValue();
+                conversionFactor = (BigDecimal) tmpResult.get("convertedValue");
             } else {
                 String msg = "Currency conversion failed: No currencyUomId defined in PartyAcctgPreference entity for organizationPartyId " + organizationPartyId;
                 Debug.logError(msg, MODULE);

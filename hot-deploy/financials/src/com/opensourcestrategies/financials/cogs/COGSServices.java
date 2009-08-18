@@ -232,7 +232,7 @@ public final class COGSServices {
             }
 
             // convert the inventory item's unit cost into the owner's currency
-            BigDecimal conversionFactor = new BigDecimal(UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId")));
+            BigDecimal conversionFactor = UtilFinancial.determineUomConversionFactor(delegator, dispatcher, ownerPartyId, inventoryItem.getString("currencyUomId"));
             unitCost = unitCost.multiply(conversionFactor).setScale(decimals, rounding);
 
             // Get owner's party COGS method.  If method is COGS_AVG_COST, also compute the inventory adjustment amount = (prodAvgCost - unitCost) * quantityIssued
