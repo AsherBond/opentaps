@@ -103,8 +103,8 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         GenericValue testProduct = createTestProduct("testPurchaseOrderParties Test Product", demopurch1);
 
         // create a purchase order for the customer and product
-        Map<GenericValue, Double> orderSpec = new HashMap<GenericValue, Double>();
-        orderSpec.put(testProduct, 1.0);
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
+        orderSpec.put(testProduct, new BigDecimal(1.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderSpec, supplier, facilityContactMechId);
         OrderRepositoryInterface repository = getOrderRepository(admin);
         Order order = repository.getOrderById(pof.getOrderId());
@@ -142,12 +142,12 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         GenericValue product5 = createTestProduct("testCompletePurchaseOrder Test Product 5", demopurch1);
 
         // 2. Create a PO.
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(product1, 14.0);
-        order.put(product2, 9.0);
-        order.put(product3, 20.0);
-        order.put(product4, 15.0);
-        order.put(product5, 25.0);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(product1, new BigDecimal(14.0));
+        order.put(product2, new BigDecimal(9.0));
+        order.put(product3, new BigDecimal(20.0));
+        order.put(product4, new BigDecimal(15.0));
+        order.put(product5, new BigDecimal(25.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(order, euroSupplier, facilityContactMechId);
         String orderId = pof.getOrderId();
         Debug.logInfo("testCompletePurchaseOrder created order [" + pof.getOrderId() + "]", MODULE);
@@ -207,19 +207,19 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         GenericValue product4 = createTestProduct("testCompletePurchaseOrderWithCancelledItemAfterCreation Test Product 4", demopurch1);
         GenericValue product5 = createTestProduct("testCompletePurchaseOrderWithCancelledItemAfterCreation Test Product 5", demopurch1);
 
-        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), 20.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), 115.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), 15.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product5.getString("productId"), euroSupplier.getString("partyId"), 1030.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(20.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(115.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(15.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product5.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(1030.0), "USD", new BigDecimal(0.0), admin);
 
         // 1. Create a PO.
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(product1, 14.0);
-        order.put(product2, 9.0);
-        order.put(product3, 20.0);
-        order.put(product4, 15.0);
-        order.put(product5, 25.0);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(product1, new BigDecimal(14.0));
+        order.put(product2, new BigDecimal(9.0));
+        order.put(product3, new BigDecimal(20.0));
+        order.put(product4, new BigDecimal(15.0));
+        order.put(product5, new BigDecimal(25.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(order, euroSupplier, facilityContactMechId);
         String orderId = pof.getOrderId();
         Debug.logInfo("testCompletePurchaseOrderWithCancelledItemAfterCreation created order [" + pof.getOrderId() + "]", MODULE);
@@ -229,7 +229,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         assertEquals(String.format("Wrong status for order [%1$s]", orderId), "ORDER_CREATED", pOrder.getString("statusId"));
 
         // 3. Cancel One item
-        pof.cancelProduct(product2, 9.0);
+        pof.cancelProduct(product2, new BigDecimal(9.0));
 
         // 4. Verify PO status is created
         pOrder = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap("orderId", orderId));
@@ -286,16 +286,16 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         GenericValue product1 = createTestProduct("testCompletePurchaseOrderWithCancelledItemAfterApproving Test Product 1", demopurch1);
         GenericValue product2 = createTestProduct("testCompletePurchaseOrderWithCancelledItemAfterApproving Test Product 2", demopurch1);
         GenericValue product3 = createTestProduct("testCompletePurchaseOrderWithCancelledItemAfterApproving Test Product 3", demopurch1);
-        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), 20.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), 115.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(20.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(115.0), "USD", new BigDecimal(0.0), admin);
 
 
         // 1. Create a PO.
-        Map<GenericValue, Double> orderedProducts = new HashMap<GenericValue, Double>();
-        orderedProducts.put(product1, 10.0);
-        orderedProducts.put(product2, 15.0);
-        orderedProducts.put(product3, 25.0);
+        Map<GenericValue, BigDecimal> orderedProducts = new HashMap<GenericValue, BigDecimal>();
+        orderedProducts.put(product1, new BigDecimal(10.0));
+        orderedProducts.put(product2, new BigDecimal(15.0));
+        orderedProducts.put(product3, new BigDecimal(25.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderedProducts, euroSupplier, facilityContactMechId);
         String orderId = pof.getOrderId();
         Debug.logInfo("testCompletePurchaseOrderWithCancelledItemAfterApproving created order [" + pof.getOrderId() + "]", MODULE);
@@ -317,7 +317,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         assertEquals(String.format("Wrong status for order [%1$s]", orderId), "ORDER_APPROVED", pOrder.getString("statusId"));
 
         // 6. Cancel One item
-        pof.cancelProduct(product1, 10.0);
+        pof.cancelProduct(product1, new BigDecimal(10.0));
 
         // 7. Verify PO status is approve
         pOrder = delegator.findByPrimaryKeyCache("OrderHeader", UtilMisc.toMap("orderId", orderId));
@@ -357,19 +357,19 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         GenericValue product3 = createTestProduct("testCancelPurchaseOrderAfterCreation Test Product 3", demopurch1);
         GenericValue product4 = createTestProduct("testCancelPurchaseOrderAfterCreation Test Product 4", demopurch1);
         GenericValue product5 = createTestProduct("testCancelPurchaseOrderAfterCreation Test Product 5", demopurch1);
-        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), 20.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), 115.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), 15.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product5.getString("productId"), euroSupplier.getString("partyId"), 1030.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(20.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(115.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(15.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product5.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(1030.0), "USD", new BigDecimal(0.0), admin);
 
         // 1. Create a PO.
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(product1, 14.0);
-        order.put(product2, 9.0);
-        order.put(product3, 20.0);
-        order.put(product4, 15.0);
-        order.put(product5, 25.0);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(product1, new BigDecimal(14.0));
+        order.put(product2, new BigDecimal(9.0));
+        order.put(product3, new BigDecimal(20.0));
+        order.put(product4, new BigDecimal(15.0));
+        order.put(product5, new BigDecimal(25.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(order, euroSupplier, facilityContactMechId);
         String orderId = pof.getOrderId();
         Debug.logInfo("testCancelPurchaseOrderAfterCreation created order [" + pof.getOrderId() + "]", MODULE);
@@ -408,19 +408,19 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         GenericValue product3 = createTestProduct("testCancelPurchaseOrderAfterApproving Test Product 3", demopurch1);
         GenericValue product4 = createTestProduct("testCancelPurchaseOrderAfterApproving Test Product 4", demopurch1);
         GenericValue product5 = createTestProduct("testCancelPurchaseOrderAfterApproving Test Product 5", demopurch1);
-        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), 20.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), 115.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), 15.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product5.getString("productId"), euroSupplier.getString("partyId"), 1030.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(20.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(115.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(15.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product5.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(1030.0), "USD", new BigDecimal(0.0), admin);
 
         // 1. Create a PO.
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(product1, 14.0);
-        order.put(product2, 9.0);
-        order.put(product3, 20.0);
-        order.put(product4, 15.0);
-        order.put(product5, 25.0);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(product1, new BigDecimal(14.0));
+        order.put(product2, new BigDecimal(9.0));
+        order.put(product3, new BigDecimal(20.0));
+        order.put(product4, new BigDecimal(15.0));
+        order.put(product5, new BigDecimal(25.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(order, euroSupplier, facilityContactMechId);
         String orderId = pof.getOrderId();
 
@@ -477,19 +477,19 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         GenericValue product3 = createTestProduct("testCancelPurchaseOrderAfterReceiving Test Product 3", demopurch1);
         GenericValue product4 = createTestProduct("testCancelPurchaseOrderAfterReceiving Test Product 4", demopurch1);
         GenericValue product5 = createTestProduct("testCancelPurchaseOrderAfterReceiving Test Product 5", demopurch1);
-        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), 20.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), 115.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), 15.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product5.getString("productId"), euroSupplier.getString("partyId"), 1030.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(20.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(115.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(15.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product5.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(1030.0), "USD", new BigDecimal(0.0), admin);
 
         // 1. Create a PO.
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(product1, 14.0);
-        order.put(product2, 9.0);
-        order.put(product3, 20.0);
-        order.put(product4, 15.0);
-        order.put(product5, 25.0);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(product1, new BigDecimal(14.0));
+        order.put(product2, new BigDecimal(9.0));
+        order.put(product3, new BigDecimal(20.0));
+        order.put(product4, new BigDecimal(15.0));
+        order.put(product5, new BigDecimal(25.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(order, euroSupplier, facilityContactMechId);
         String orderId = pof.getOrderId();
 
@@ -563,10 +563,10 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         GenericValue product2 = createTestProduct("testReceiveAndClosePurchaseOrder Test Product 2", demopurch1);
         GenericValue product3 = createTestProduct("testReceiveAndClosePurchaseOrder Test Product 3", demopurch1);
         GenericValue product4 = createTestProduct("testReceiveAndClosePurchaseOrder Test Product 4", demopurch1);
-        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), 20.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), 115.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), 15.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(product1.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product2.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(20.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product3.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(115.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(product4.getString("productId"), euroSupplier.getString("partyId"), new BigDecimal(15.0), "USD", new BigDecimal(0.0), admin);
 
         // Get the initial ATP and QOH quantities for P1, P2, P3, P4
         Map<String, Object> availability1 = getProductAvailability(product1.getString("productId"));
@@ -582,11 +582,11 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         Double qohInitProduct3 = (Double) availability3.get("quantityOnHandTotal");
         Double qohInitProduct4 = (Double) availability4.get("quantityOnHandTotal");
         // Create PO for 10 P1, 20 P2, 30 P3, 40 P4
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(product1, 10.0);
-        order.put(product2, 20.0);
-        order.put(product3, 30.0);
-        order.put(product4, 40.0);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(product1, new BigDecimal(10.0));
+        order.put(product2, new BigDecimal(20.0));
+        order.put(product3, new BigDecimal(30.0));
+        order.put(product4, new BigDecimal(40.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(order, euroSupplier, facilityContactMechId);
         String orderId = pof.getOrderId();
         // Approve PO
@@ -780,14 +780,14 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         // ACTI_MARKETING
         GenericValue product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", "SUPPLY-001"));
         assertTrue("Test product not null", product != null);
-        createMainSupplierForProduct(product.getString("productId"), demoSupplier.getString("partyId"), 1.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(product.getString("productId"), demoSupplier.getString("partyId"), new BigDecimal(1.0), "USD", new BigDecimal(0.0), admin);
         PurchaseOrderFactory pof = new PurchaseOrderFactory(delegator, dispatcher, User, (String) demoSupplier.get("partyId"), getOrganizationPartyId(), facilityContactMechId);
         pof.setCurrencyUomId("USD");
         pof.addPaymentMethod("EXT_OFFLINE", null);
         pof.addShippingGroup("UPS", "NEXT_DAY");
-        pof.addProduct(product, 100.0, pof.getFirstShipGroup(), UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
-        pof.addProduct(product, 200.0, pof.getFirstShipGroup(), UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_CORPORATE"));
-        pof.addProduct(product, 300.0, pof.getFirstShipGroup(), UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
+        pof.addProduct(product, new BigDecimal(100.0), pof.getFirstShipGroup(), UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
+        pof.addProduct(product, new BigDecimal(200.0), pof.getFirstShipGroup(), UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_CORPORATE"));
+        pof.addProduct(product, new BigDecimal(300.0), pof.getFirstShipGroup(), UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
         String orderId = pof.storeOrder();
 
         // Approve PO
@@ -944,13 +944,13 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         // create physical and supplies product
         GenericValue physicalProduct = createTestProduct("Physical product for testing PO item quantities" + UtilDateTime.nowTimestamp(), admin);
         GenericValue suppliesProduct = createTestProduct("Supplies product for testing PO item quantities" + UtilDateTime.nowTimestamp(), "SUPPLIES", admin);
-        createMainSupplierForProduct(physicalProduct.getString("productId"), demoSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
-        createMainSupplierForProduct(suppliesProduct.getString("productId"), demoSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(physicalProduct.getString("productId"), demoSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct(suppliesProduct.getString("productId"), demoSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
 
         // create and approve PO for 10x of both products
-        Map<GenericValue, Double> orderSpec = new HashMap<GenericValue, Double>();
-        orderSpec.put(physicalProduct, 10.0);
-        orderSpec.put(suppliesProduct, 10.0);
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
+        orderSpec.put(physicalProduct, new BigDecimal(10.0));
+        orderSpec.put(suppliesProduct, new BigDecimal(10.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderSpec, demoSupplier, facilityContactMechId);
         pof.approveOrder();
 
@@ -976,7 +976,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         updateOrderItem(orderId, physicalOrderItemSeqId, "20.0", "20.0", "Item after new quantity and price updated", admin);
 
         // add a shipping charge to the PO
-        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", orderId, "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new Double(25.99), "description", "example of shipping adjustment at order level", "userLogin", admin));
+        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", orderId, "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new BigDecimal(25.99), "description", "example of shipping adjustment at order level", "userLogin", admin));
 
         // receive 5 of the physical item
         GenericValue pOrder = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
@@ -1031,15 +1031,15 @@ public class PurchasingOrderTests extends OpentapsTestCase {
      */
     public void testCancelledPurchaseOrderItemQuantities() throws Exception {
         GenericValue cancelProduct = createTestProduct("Physical product for testing PO item quantities after cancellation", admin);
-        createMainSupplierForProduct(cancelProduct.getString("productId"), demoSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(cancelProduct.getString("productId"), demoSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
 
-        Map<GenericValue, Double> orderSpec = new HashMap<GenericValue, Double>();
-        orderSpec.put(cancelProduct, 10.0);
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
+        orderSpec.put(cancelProduct, new BigDecimal(10.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderSpec, demoSupplier, facilityContactMechId);
         String orderId = pof.getOrderId();
 
         // cancel the cancel product
-        pof.cancelProduct(cancelProduct, 10.0);
+        pof.cancelProduct(cancelProduct, new BigDecimal(10.0));
 
         OrderRepositoryInterface repository = getOrderRepository(admin);
         Order order = repository.getOrderById(pof.getOrderId());
@@ -1061,15 +1061,15 @@ public class PurchasingOrderTests extends OpentapsTestCase {
      */
     public void testOrderUninvoicedAdjustment() throws GeneralException {
         GenericValue testProduct = createTestProduct("This product is not important -- the test is for the order level adjustment", admin);
-        createMainSupplierForProduct(testProduct.getString("productId"), demoSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(testProduct.getString("productId"), demoSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
 
-        Map<GenericValue, Double> orderSpec = new HashMap<GenericValue, Double>();
-        orderSpec.put(testProduct, 10.0);
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
+        orderSpec.put(testProduct, new BigDecimal(10.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderSpec, demoSupplier, facilityContactMechId);
 
         String orderId = pof.getOrderId();
 
-        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", orderId, "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new Double(25.99), "description", "example of shipping adjustment at order level", "userLogin", admin));
+        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", orderId, "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new BigDecimal(25.99), "description", "example of shipping adjustment at order level", "userLogin", admin));
 
         OrderRepositoryInterface repository = getOrderRepository(admin);
         Order order = repository.getOrderById(pof.getOrderId());
@@ -1112,11 +1112,11 @@ public class PurchasingOrderTests extends OpentapsTestCase {
     public void testBasicModifyPurchaseOrderItemQuantityOnly() throws Exception {
         // create a test product with price $10
         GenericValue testProduct = createTestProduct("product for modify PO item quantity only", admin);
-        createMainSupplierForProduct(testProduct.getString("productId"), demoSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(testProduct.getString("productId"), demoSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
 
         // order 10x of the test product
-        Map orderSpec = new HashMap();
-        orderSpec.put(testProduct, 10.0);
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap();
+        orderSpec.put(testProduct, new BigDecimal(10.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderSpec, demoSupplier, facilityContactMechId);
         pof.approveOrder();
         String orderId = pof.getOrderId();
@@ -1143,11 +1143,11 @@ public class PurchasingOrderTests extends OpentapsTestCase {
     public void testBasicModifyPurchaseOrderItemQuantityAndPrice() throws Exception {
         // create a test product with price $10
         GenericValue testProduct = createTestProduct("product for modify PO item price and quantities", admin);
-        createMainSupplierForProduct(testProduct.getString("productId"), demoSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(testProduct.getString("productId"), demoSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
 
         // order 10x of the test product
-        Map orderSpec = new HashMap();
-        orderSpec.put(testProduct, 10.0);
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap();
+        orderSpec.put(testProduct, new BigDecimal(10.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderSpec, demoSupplier, facilityContactMechId);
         pof.approveOrder();
         String orderId = pof.getOrderId();
@@ -1192,11 +1192,11 @@ public class PurchasingOrderTests extends OpentapsTestCase {
     public void testModifyPartiallyReceivedPOWithShippingCharges() throws GeneralException {
         // create a test product
         GenericValue testProduct = createTestProduct("product for testing modifying partially received PO with shipping charges" + UtilDateTime.nowTimestamp(), admin);
-        createMainSupplierForProduct(testProduct.getString("productId"), demoSupplier.getString("partyId"), 10.0, "USD", 0.0, admin);
+        createMainSupplierForProduct(testProduct.getString("productId"), demoSupplier.getString("partyId"), new BigDecimal(10.0), "USD", new BigDecimal(0.0), admin);
 
         // create a PO
-        Map<GenericValue, Double> orderSpec = new HashMap<GenericValue, Double>();
-        orderSpec.put(testProduct, 10.0);
+        Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
+        orderSpec.put(testProduct, new BigDecimal(10.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderSpec, demoSupplier, facilityContactMechId);
         pof.approveOrder();
 
@@ -1204,7 +1204,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         GenericValue pOrder = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
 
         // add a shipping charge to the PO
-        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", orderId, "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new Double(25.99), "description", "example of shipping adjustment at order level", "userLogin", admin));
+        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", orderId, "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new BigDecimal(25.99), "description", "example of shipping adjustment at order level", "userLogin", admin));
         // receive 5 of the physical item
 
         Map inputParameters = createTestInputParametersForReceiveInventoryAgainstPurchaseOrder(pOrder, UtilMisc.toMap("00001", "5.0"), false, admin);
@@ -1222,19 +1222,19 @@ public class PurchasingOrderTests extends OpentapsTestCase {
 
         // create a product of type SUPPLY
         GenericValue product1 = createTestProduct("testPurchasingAndInvoicingSupplies Product 1", "SUPPLIES", demopurch1);
-        createMainSupplierForProduct(product1.getString("productId"), demoSupplierPartyId, 1.0, "USD", 0.0, demopurch1);
+        createMainSupplierForProduct(product1.getString("productId"), demoSupplierPartyId, new BigDecimal(1.0), "USD", new BigDecimal(0.0), demopurch1);
 
         // create a 2nd product Of type SUPPLY
         GenericValue product2 = createTestProduct("testPurchasingAndInvoicingSupplies Product 2", "SUPPLIES", demopurch1);
-        createMainSupplierForProduct(product2.getString("productId"), demoSupplierPartyId, 50.0, "USD", 0.0, demopurch1);
+        createMainSupplierForProduct(product2.getString("productId"), demoSupplierPartyId, new BigDecimal(50.0), "USD", new BigDecimal(0.0), demopurch1);
         // set the EXPENSE GlAccountType of the second product to "631200"
         // (janitorial and other contract services)
         delegator.create("ProductGlAccount", UtilMisc.toMap("productId", product2.getString("productId"), "organizationPartyId", organizationPartyId, "glAccountTypeId", "EXPENSE", "glAccountId", EXPENSE_GL_ACCOUNT_ID));
 
         // create a purchase order for the two products
-        Map<GenericValue, Double> orderParams = new HashMap<GenericValue, Double>();
-        orderParams.put(product1, 100.0);
-        orderParams.put(product2, 20.0);
+        Map<GenericValue, BigDecimal> orderParams = new HashMap<GenericValue, BigDecimal>();
+        orderParams.put(product1, new BigDecimal(100.0));
+        orderParams.put(product2, new BigDecimal(20.0));
         PurchaseOrderFactory pof = testCreatesPurchaseOrder(orderParams, demoSupplier, facilityContactMechId);
         String orderId = pof.getOrderId();
 
@@ -1350,9 +1350,9 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         Map<String, String> tags1 = UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING");
         Map<String, String> tags2 = UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_CORPORATE");
         Map<String, String> tags3 = UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING");
-        pof.addProduct(product1, 100.0, pof.getFirstShipGroup(), tags1);
-        pof.addProduct(product2, 200.0, pof.getFirstShipGroup(), tags2);
-        pof.addProduct(product3, 300.0, pof.getFirstShipGroup(), tags3);
+        pof.addProduct(product1, new BigDecimal(100.0), pof.getFirstShipGroup(), tags1);
+        pof.addProduct(product2, new BigDecimal(200.0), pof.getFirstShipGroup(), tags2);
+        pof.addProduct(product3, new BigDecimal(300.0), pof.getFirstShipGroup(), tags3);
         String orderId = pof.storeOrder();
         pof.approveOrder();
 

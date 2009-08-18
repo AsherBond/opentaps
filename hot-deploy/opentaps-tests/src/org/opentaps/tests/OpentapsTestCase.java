@@ -793,7 +793,7 @@ public class OpentapsTestCase extends TestCase {
      * @param quantity the quantity of component in the BOM
      * @param userLogin the user running the services
      */
-    protected void createBOMProductAssoc(String productId, String productToId, Long sequenceNum, Double quantity, GenericValue userLogin) {
+    protected void createBOMProductAssoc(String productId, String productToId, Long sequenceNum, BigDecimal quantity, GenericValue userLogin) {
         createBOMProductAssoc(productId, productToId, null, sequenceNum, quantity, userLogin);
     }
 
@@ -807,7 +807,7 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin the user running the services
      */
     @SuppressWarnings("unchecked")
-    protected void createBOMProductAssoc(String productId, String productToId, String routingId, Long sequenceNum, Double quantity, GenericValue userLogin) {
+    protected void createBOMProductAssoc(String productId, String productToId, String routingId, Long sequenceNum, BigDecimal quantity, GenericValue userLogin) {
         Map prodAssoc = UtilMisc.toMap("userLogin", userLogin);
         prodAssoc.put("productId", productId);
         prodAssoc.put("productIdTo", productToId);
@@ -998,7 +998,7 @@ public class OpentapsTestCase extends TestCase {
      * @exception GenericServiceException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    protected void createMainSupplierForProduct(String productId, String supplierPartyId, double lastPrice, String currencyUomId, double minimumOrderQuantity, GenericValue userLogin) throws GenericServiceException {
+    protected void createMainSupplierForProduct(String productId, String supplierPartyId, BigDecimal lastPrice, String currencyUomId, BigDecimal minimumOrderQuantity, GenericValue userLogin) throws GenericServiceException {
         Map productSupplierContext = UtilMisc.toMap("userLogin", userLogin, "productId", productId, "partyId", supplierPartyId, "availableFromDate", UtilDateTime.nowTimestamp());
         productSupplierContext.put("supplierPrefOrderId", "10_MAIN_SUPPL");
         productSupplierContext.put("lastPrice", lastPrice);
@@ -1014,7 +1014,7 @@ public class OpentapsTestCase extends TestCase {
      * @param defaultPrice default price
      * @param userLogin user that will call the service
      */
-    protected void assignDefaultPrice(GenericValue product, Double defaultPrice, GenericValue userLogin) {
+    protected void assignDefaultPrice(GenericValue product, BigDecimal defaultPrice, GenericValue userLogin) {
         assignDefaultPrice(product, defaultPrice, "_NA_", userLogin);
     }
 
@@ -1025,7 +1025,7 @@ public class OpentapsTestCase extends TestCase {
      * @param productStoreGroupId product store group
      * @param userLogin user that will call the service
      */
-    protected void assignDefaultPrice(GenericValue product, Double defaultPrice, String productStoreGroupId, GenericValue userLogin) {
+    protected void assignDefaultPrice(GenericValue product, BigDecimal defaultPrice, String productStoreGroupId, GenericValue userLogin) {
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("userLogin", userLogin);
         callCtxt.put("productId", product.getString("productId"));
@@ -1047,8 +1047,8 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin user that will call the service
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
-    protected Map<String, Object> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, GenericValue userLogin) {
-        return receiveInventoryProduct(product, quantity, inventoryItemTypeId, 0.1, userLogin);
+    protected Map<String, Object> receiveInventoryProduct(GenericValue product, BigDecimal quantity, String inventoryItemTypeId, GenericValue userLogin) {
+        return receiveInventoryProduct(product, quantity, inventoryItemTypeId, new BigDecimal(0.1), userLogin);
     }
 
     /**
@@ -1060,7 +1060,7 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin user that will call the service
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
-    protected Map<String, Object> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, Double unitCost, GenericValue userLogin) {
+    protected Map<String, Object> receiveInventoryProduct(GenericValue product, BigDecimal quantity, String inventoryItemTypeId, BigDecimal unitCost, GenericValue userLogin) {
         return receiveInventoryProduct(product, quantity, inventoryItemTypeId, unitCost, getFacilityId(), userLogin);
     }
 
@@ -1075,13 +1075,13 @@ public class OpentapsTestCase extends TestCase {
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
     @SuppressWarnings("unchecked")
-    protected Map<String, Object> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, Double unitCost, String facilityId, GenericValue userLogin) {
+    protected Map<String, Object> receiveInventoryProduct(GenericValue product, BigDecimal quantity, String inventoryItemTypeId, BigDecimal unitCost, String facilityId, GenericValue userLogin) {
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("productId", product.getString("productId"));
         callCtxt.put("facilityId", facilityId);
         callCtxt.put("currencyUomId", "USD");
         callCtxt.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        callCtxt.put("quantityRejected", new Double(0.0));
+        callCtxt.put("quantityRejected", new BigDecimal(0.0));
         callCtxt.put("inventoryItemTypeId", inventoryItemTypeId);
         callCtxt.put("unitCost", unitCost);
         callCtxt.put("quantityAccepted", quantity);
@@ -1101,13 +1101,13 @@ public class OpentapsTestCase extends TestCase {
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
     @SuppressWarnings("unchecked")
-    protected Map<String, Object> receiveInventoryProduct(GenericValue product, Double quantity, String inventoryItemTypeId, Double unitCost, String facilityId, Map<String, String> tags, GenericValue userLogin) {
+    protected Map<String, Object> receiveInventoryProduct(GenericValue product, BigDecimal quantity, String inventoryItemTypeId, BigDecimal unitCost, String facilityId, Map<String, String> tags, GenericValue userLogin) {
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("productId", product.getString("productId"));
         callCtxt.put("facilityId", facilityId);
         callCtxt.put("currencyUomId", "USD");
         callCtxt.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        callCtxt.put("quantityRejected", new Double(0.0));
+        callCtxt.put("quantityRejected", new BigDecimal(0.0));
         callCtxt.put("inventoryItemTypeId", inventoryItemTypeId);
         callCtxt.put("unitCost", unitCost);
         callCtxt.put("quantityAccepted", quantity);
@@ -1175,7 +1175,7 @@ public class OpentapsTestCase extends TestCase {
      * @param initialAtp the initial ATP
      * @param productStoreId the product store, used to find the related facilities in which the requirements are expected
      */
-    protected void checkRequirements(GenericValue product, Double orderedQty, Double initialRequirement, Double initialAtp, String productStoreId) {
+    protected void checkRequirements(GenericValue product, BigDecimal orderedQty, Double initialRequirement, Double initialAtp, String productStoreId) {
         Double finalRequirement = getPendingRequirements(product, productStoreId);
         String requirementMethodEnumId = (String) product.get("requirementMethodEnumId");
         // product with auto requirement set get a requirement created for each item ordered
@@ -1189,8 +1189,8 @@ public class OpentapsTestCase extends TestCase {
                 assertTrue("Product [" + product.get("productId") + "] has ProductFacility rule", productFacility != null && productFacility.get("minimumStock") != null);
                 Double minimumStock = productFacility.getDouble("minimumStock");
                 Double stock = initialRequirement + initialAtp;
-                if ((stock - orderedQty) <  minimumStock) {
-                    assertEquals("Requirements for product [" + product.get("productId") + "]", minimumStock - (stock - orderedQty), (finalRequirement - initialRequirement));
+                if ((stock - orderedQty.doubleValue()) <  minimumStock) {
+                    assertEquals("Requirements for product [" + product.get("productId") + "]", minimumStock - (stock - orderedQty.doubleValue()), (finalRequirement - initialRequirement));
                 } else {
                     assertEquals("Requirements for product [" + product.get("productId") + "]", initialRequirement, finalRequirement);
                 }
@@ -1214,7 +1214,7 @@ public class OpentapsTestCase extends TestCase {
      * @param productStoreId
      * @return the SalesOrderFactory object
      */
-    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, Double> order, GenericValue customer, String productStoreId) {
+    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, GenericValue customer, String productStoreId) {
         return testCreatesSalesOrder(order, customer, productStoreId, null);
     }
 
@@ -1228,7 +1228,7 @@ public class OpentapsTestCase extends TestCase {
      * @param shipByDate
      * @return the SalesOrderFactory object
      */
-    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, Double> order, GenericValue customer, String productStoreId, Timestamp shipByDate) {
+    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, GenericValue customer, String productStoreId, Timestamp shipByDate) {
         return testCreatesSalesOrder(order, customer, productStoreId, shipByDate, "EXT_OFFLINE", null, null);
     }
 
@@ -1243,7 +1243,7 @@ public class OpentapsTestCase extends TestCase {
      * @param shippingAddressId the Id of the contactMech that should be used as shipping address, optional
      * @return the SalesOrderFactory object
      */
-    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, Double> order, GenericValue customer, String productStoreId, String paymentMethodTypeId, String shippingAddressId) {
+    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, GenericValue customer, String productStoreId, String paymentMethodTypeId, String shippingAddressId) {
         return testCreatesSalesOrder(order, customer, productStoreId, null, paymentMethodTypeId, null, shippingAddressId);
     }
 
@@ -1259,7 +1259,7 @@ public class OpentapsTestCase extends TestCase {
      * @param shippingAddressId the Id of the contactMech that should be used as shipping address, optional
      * @return the SalesOrderFactory object
      */
-    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, Double> order, GenericValue customer, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String shippingAddressId) {
+    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, GenericValue customer, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String shippingAddressId) {
         return testCreatesSalesOrder(order, customer, productStoreId, shipByDate, paymentMethodTypeId, null, shippingAddressId);
     }
 
@@ -1275,7 +1275,7 @@ public class OpentapsTestCase extends TestCase {
      * @param shippingAddressId the Id of the contactMech that should be used as shipping address, optional
      * @return the <code>SalesOrderFactory</code> object
      */
-    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, Double> order, GenericValue customer, String productStoreId, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
+    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, GenericValue customer, String productStoreId, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
         return testCreatesSalesOrder(order, customer.getString("partyId"), productStoreId, null, paymentMethodTypeId, paymentMethodId, shippingAddressId);
     }
 
@@ -1292,7 +1292,7 @@ public class OpentapsTestCase extends TestCase {
      * @param shippingAddressId the Id of the contactMech that should be used as shipping address, optional
      * @return the <code>SalesOrderFactory</code> object
      */
-    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, Double> order, GenericValue customer, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
+    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, GenericValue customer, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
         return testCreatesSalesOrder(order, customer.getString("partyId"), productStoreId, shipByDate, paymentMethodTypeId, paymentMethodId, shippingAddressId);
     }
 
@@ -1309,7 +1309,7 @@ public class OpentapsTestCase extends TestCase {
      * @param shippingAddressId the Id of the contactMech that should be used as shipping address, optional
      * @return the <code>SalesOrderFactory</code> object
      */
-    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, Double> order, String customerPartyId, String productStoreId, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
+    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, String customerPartyId, String productStoreId, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
         return testCreatesSalesOrder(order, customerPartyId, productStoreId, null, paymentMethodTypeId, paymentMethodId, shippingAddressId);
     }
 
@@ -1326,7 +1326,7 @@ public class OpentapsTestCase extends TestCase {
      * @param shippingAddressId the Id of the contactMech that should be used as shipping address, optional
      * @return the <code>SalesOrderFactory</code> object
      */
-    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, Double> order, String customerPartyId, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
+    protected SalesOrderFactory testCreatesSalesOrder(Map<GenericValue, BigDecimal> order, String customerPartyId, String productStoreId, Timestamp shipByDate, String paymentMethodTypeId, String paymentMethodId, String shippingAddressId) {
         // to store ATP, QOH and requirements before and after the order
         Map<GenericValue, Double> productAtpInitial, productQohInitial, productAtpFinal, productQohFinal, productRequirementInitial;
         productAtpInitial = new HashMap<GenericValue, Double>();
@@ -1431,7 +1431,7 @@ public class OpentapsTestCase extends TestCase {
             // check QOH are unchanged
             assertEquals("QOH of " + product.get("productId"), productQohFinal.get(product), productQohInitial.get(product));
             // check ATP have declined by the ordered qty
-            Double expectedAtp = productAtpInitial.get(product) - order.get(product);
+            Double expectedAtp = productAtpInitial.get(product).doubleValue() - order.get(product).doubleValue();
             assertEquals("ATP of " + product.get("productId"), productAtpFinal.get(product), expectedAtp);
             // check requirements have been created as needed
             checkRequirements(product, order.get(product), productRequirementInitial.get(product), productAtpInitial.get(product), productStoreId);
@@ -1450,7 +1450,7 @@ public class OpentapsTestCase extends TestCase {
      * @param toFacilityContactMechId the Id of the contactMech that should be used as shipping address
      * @return the PurchaseOrderFactory object
      */
-    protected PurchaseOrderFactory testCreatesPurchaseOrder(Map<GenericValue, Double> order, GenericValue supplier, String toFacilityContactMechId) {
+    protected PurchaseOrderFactory testCreatesPurchaseOrder(Map<GenericValue, BigDecimal> order, GenericValue supplier, String toFacilityContactMechId) {
         return testCreatesPurchaseOrder(order, supplier, toFacilityContactMechId, "EXT_OFFLINE", null);
     }
 
@@ -1465,7 +1465,7 @@ public class OpentapsTestCase extends TestCase {
      * @param shippingAddressId the Id of the contactMech that should be used as shipping address, optional
      * @return the PurchaseOrderFactory object
      */
-    protected PurchaseOrderFactory testCreatesPurchaseOrder(Map<GenericValue, Double> order, GenericValue supplier, String toFacilityContactMechId, String paymentMethodTypeId) {
+    protected PurchaseOrderFactory testCreatesPurchaseOrder(Map<GenericValue, BigDecimal> order, GenericValue supplier, String toFacilityContactMechId, String paymentMethodTypeId) {
         return testCreatesPurchaseOrder(order, supplier, toFacilityContactMechId, paymentMethodTypeId, null);
     }
 
@@ -1480,7 +1480,7 @@ public class OpentapsTestCase extends TestCase {
      * @param paymentMethodId optional, defaults to null
      * @return the PurchaseOrderFactory object
      */
-    protected PurchaseOrderFactory testCreatesPurchaseOrder(Map<GenericValue, Double> order, GenericValue supplier, String toFacilityContactMechId,
+    protected PurchaseOrderFactory testCreatesPurchaseOrder(Map<GenericValue, BigDecimal> order, GenericValue supplier, String toFacilityContactMechId,
             String paymentMethodTypeId, String paymentMethodId) {
 
 
@@ -1847,7 +1847,7 @@ public class OpentapsTestCase extends TestCase {
      * @param atp
      * @param qoh
      */
-    protected void assertProductAvailability(GenericValue product, Double atp, Double qoh) {
+    protected void assertProductAvailability(GenericValue product, BigDecimal atp, BigDecimal qoh) {
         Map<String, Object> availability = getProductAvailability(product.getString("productId"));
         assertNotNull("Product [" + product.getString("productId") + "] availability", availability);
         assertEquals("Product [" + product.getString("productId") + "] ATP", (Double) availability.get("availableToPromiseTotal"), atp);

@@ -317,7 +317,7 @@ public final class UtilCOGS {
                 if (ServiceUtil.isError(serviceResults)) {
                     throw new GenericServiceException(ServiceUtil.getErrorMessage(serviceResults));
                 }
-                BigDecimal facilityQuantity = BigDecimal.valueOf(((Double) serviceResults.get("quantityOnHandTotal")).doubleValue());
+                BigDecimal facilityQuantity = (BigDecimal) serviceResults.get("quantityOnHandTotal");
                 quantity = quantity.add(facilityQuantity).setScale(decimals, rounding); // TODO: quantity sum needs its own decimals and rounding
             }
         } else {

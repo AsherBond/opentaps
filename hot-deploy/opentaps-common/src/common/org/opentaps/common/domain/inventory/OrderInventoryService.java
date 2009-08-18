@@ -409,7 +409,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                         reserveOisgirMap.put("inventoryItemId", inventoryItem.getInventoryItemId());
                         reserveOisgirMap.put("reserveOrderEnumId", reserveOrderEnumId);
                         reserveOisgirMap.put("reservedDatetime", reservedDatetime);
-                        reserveOisgirMap.put("quantity", deductAmount.doubleValue());
+                        reserveOisgirMap.put("quantity", deductAmount);
                         reserveOisgirMap.put("promisedDatetime", promisedDatetime);
                         if (UtilValidate.isNotEmpty(sequenceId)) {
                             reserveOisgirMap.put("sequenceId", sequenceId);
@@ -591,8 +591,8 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                         context.put("shipGroupSeqId", shipGroupSeqId);
                         context.put("inventoryItemId", lastNonSerInventoryItem.getInventoryItemId());
                         context.put("reserveOrderEnumId", reserveOrderEnumId);
-                        context.put("quantity", toReserve.doubleValue());
-                        context.put("quantityNotAvailable", toReserve.doubleValue());
+                        context.put("quantity", toReserve);
+                        context.put("quantityNotAvailable", toReserve);
                         context.put("reservedDatetime", reservedDatetime);
                         context.put("promisedDatetime", promisedDatetime);
                         context.put("sequenceId", sequenceId);
@@ -641,8 +641,8 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                     context.put("shipGroupSeqId", shipGroupSeqId);
                     context.put("inventoryItemId", newNonSerInventoryItem.getInventoryItemId());
                     context.put("reserveOrderEnumId", reserveOrderEnumId);
-                    context.put("quantity", quantityNotReserved.doubleValue());
-                    context.put("quantityNotAvailable", quantityNotReserved.doubleValue());
+                    context.put("quantity", quantityNotReserved);
+                    context.put("quantityNotAvailable", quantityNotReserved);
                     context.put("reservedDatetime", reservedDatetime);
                     context.put("promisedDatetime", promisedDatetime);
                     context.put("sequenceId", sequenceId);

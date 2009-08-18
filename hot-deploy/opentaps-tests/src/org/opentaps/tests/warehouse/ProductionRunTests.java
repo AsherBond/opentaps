@@ -1652,16 +1652,16 @@ public class ProductionRunTests extends ProductionRunTestCase {
         GenericValue mat1 = createTestProduct("Material 1 for testTraceProducedInventory", "RAW_MATERIAL", admin);
         GenericValue mat2 = createTestProduct("Material 1 for testTraceProducedInventory", "RAW_MATERIAL", admin);
         GenericValue manufacturedProduct = createTestProduct("Product for manufacturing within framework of for testTraceProducedInventory", admin);
-        assignDefaultPrice(manufacturedProduct, 120.0, admin);
+        assignDefaultPrice(manufacturedProduct, new BigDecimal(120.0), admin);
         pause("Workaround pause for MySQL");
 
         // 1. Receive 2 of material 1. This should be inventoryItemId1.
-        Map<String, Object> results = receiveInventoryProduct(mat1, 2.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(mat1, new BigDecimal(2.0), "NON_SERIAL_INV_ITEM", new BigDecimal(99.0), demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
         pause("Workaround pause for MySQL");
 
         // 2. Receive 2 of material 2. This should be inventoryItemId2.
-        results = receiveInventoryProduct(mat2, 2.0, "NON_SERIAL_INV_ITEM", 15.0, demowarehouse1);
+        results = receiveInventoryProduct(mat2, new BigDecimal(2.0), "NON_SERIAL_INV_ITEM", new BigDecimal(15.0), demowarehouse1);
         String inventoryItemId2 = (String) results.get("inventoryItemId");
         pause("Workaround pause for MySQL");
 
@@ -1675,9 +1675,9 @@ public class ProductionRunTests extends ProductionRunTestCase {
                 )
         );
 
-        createMainSupplierForProduct((String) mat1.get("productId"), "DemoSupplier", 50.0, "USD", 0.0, admin);
+        createMainSupplierForProduct((String) mat1.get("productId"), "DemoSupplier", new BigDecimal(50.0), "USD", new BigDecimal(0.0), admin);
         pause("Workaround pause for MySQL");
-        createMainSupplierForProduct((String) mat2.get("productId"), "DemoSupplier", 13.0, "USD", 0.0, admin);
+        createMainSupplierForProduct((String) mat2.get("productId"), "DemoSupplier", new BigDecimal(13.0), "USD", new BigDecimal(0.0), admin);
         pause("Workaround pause for MySQL");
 
         delegator.create("ProductFacility",
@@ -1772,7 +1772,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // Create a test product
         final GenericValue product = createTestProduct("test Multiple BOM Simulation Product", demowarehouse1);
         final String productId = product.getString("productId");
-        assignDefaultPrice(product, 10.0, admin);
+        assignDefaultPrice(product, new BigDecimal(10.0), admin);
 
         // Create a default routing, using createTestAssemblingRouting
         createTestAssemblingRouting("Default BOM Simulation for product [" + productId + "]", productId);
@@ -1782,8 +1782,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         final String productComp1Id = productComp1.getString("productId");
         final GenericValue productComp2 = createTestProduct("test Default Material for [" + productId + "] - Component 2", demowarehouse1);
         final String productComp2Id = productComp2.getString("productId");
-        createBOMProductAssoc(productId, productComp1Id, new Long("10"), new Double("7.0"), admin);
-        createBOMProductAssoc(productId, productComp2Id, new Long("11"), new Double("3.0"), admin);
+        createBOMProductAssoc(productId, productComp1Id, new Long("10"), new BigDecimal("7.0"), admin);
+        createBOMProductAssoc(productId, productComp2Id, new Long("11"), new BigDecimal("3.0"), admin);
 
         // Create an alternative routing, using createBOMProductAssoc
         final String alternateRoutingId = createTestAssemblingRouting("Alternate BOM for product [" + productId + "]", productId);
@@ -1794,9 +1794,9 @@ public class ProductionRunTests extends ProductionRunTestCase {
         final GenericValue productComp5 = createTestProduct("test Alternate Material for [" + productId + "] - Component 5", demowarehouse1);
         final String productComp5Id = productComp5.getString("productId");
 
-        createBOMProductAssoc(productId, productComp3Id, alternateRoutingId, new Long("10"), new Double("1.0"), admin);
-        createBOMProductAssoc(productId, productComp4Id, alternateRoutingId, new Long("11"), new Double("2.0"), admin);
-        createBOMProductAssoc(productId, productComp5Id, alternateRoutingId, new Long("12"), new Double("5.0"), admin);
+        createBOMProductAssoc(productId, productComp3Id, alternateRoutingId, new Long("10"), new BigDecimal("1.0"), admin);
+        createBOMProductAssoc(productId, productComp4Id, alternateRoutingId, new Long("11"), new BigDecimal("2.0"), admin);
+        createBOMProductAssoc(productId, productComp5Id, alternateRoutingId, new Long("12"), new BigDecimal("5.0"), admin);
 
         // Run a BOM simulation for the default BOM (calling getBOMTree service)
         Map<String, Object> result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "userLogin", demowarehouse1));
@@ -1825,7 +1825,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // Create a test product
         final GenericValue product = createTestProduct("test Multiple BOM Production Product", demowarehouse1);
         final String productId = product.getString("productId");
-        assignDefaultPrice(product, 10.0, admin);
+        assignDefaultPrice(product, new BigDecimal(10.0), admin);
 
         // Create a default routing, using createTestAssemblingRouting
         createTestAssemblingRouting("Default BOM for product [" + productId + "]", productId);
@@ -1835,8 +1835,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         final String productComp1Id = productComp1.getString("productId");
         final GenericValue productComp2 = createTestProduct("test Default Material for [" + productId + "] - Component 2", demowarehouse1);
         final String productComp2Id = productComp2.getString("productId");
-        createBOMProductAssoc(productId, productComp1Id, new Long("10"), new Double("7.0"), admin);
-        createBOMProductAssoc(productId, productComp2Id, new Long("11"), new Double("3.0"), admin);
+        createBOMProductAssoc(productId, productComp1Id, new Long("10"), new BigDecimal("7.0"), admin);
+        createBOMProductAssoc(productId, productComp2Id, new Long("11"), new BigDecimal("3.0"), admin);
 
         // Create an alternative routing, using createBOMProductAssoc
         final String alternateRoutingId = createTestAssemblingRouting("Alternate BOM for product [" + productId + "]", productId);
@@ -1849,9 +1849,9 @@ public class ProductionRunTests extends ProductionRunTestCase {
         final GenericValue productComp5 = createTestProduct("test Alternate Material for [" + productId + "] - Component 5", demowarehouse1);
         final String productComp5Id = productComp5.getString("productId");
 
-        createBOMProductAssoc(productId, productComp3Id, alternateRoutingId, new Long("10"), new Double("1.0"), admin);
-        createBOMProductAssoc(productId, productComp4Id, alternateRoutingId, new Long("11"), new Double("2.0"), admin);
-        createBOMProductAssoc(productId, productComp5Id, alternateRoutingId, new Long("12"), new Double("5.0"), admin);
+        createBOMProductAssoc(productId, productComp3Id, alternateRoutingId, new Long("10"), new BigDecimal("1.0"), admin);
+        createBOMProductAssoc(productId, productComp4Id, alternateRoutingId, new Long("11"), new BigDecimal("2.0"), admin);
+        createBOMProductAssoc(productId, productComp5Id, alternateRoutingId, new Long("12"), new BigDecimal("5.0"), admin);
 
         // note the initial inventory quantities
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demowarehouse1);
@@ -1917,7 +1917,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // Create a test product
         final GenericValue product = createTestProduct("test Complex Multiple BOM Product", demowarehouse1);
         final String productId = product.getString("productId");
-        assignDefaultPrice(product, 10.0, admin);
+        assignDefaultPrice(product, new BigDecimal(10.0), admin);
 
         // Create a default routing, using createTestAssemblingRouting
         createTestAssemblingRouting("Default BOM for product [" + productId + "]", productId);
@@ -1935,23 +1935,23 @@ public class ProductionRunTests extends ProductionRunTestCase {
         final String productComp1Id = productComp1.getString("productId");
         final GenericValue productComp2 = createTestProduct("test Default Material for [" + productId + "] - Component 2", demowarehouse1);
         final String productComp2Id = productComp2.getString("productId");
-        createBOMProductAssoc(productId, productComp1Id, new Long("10"), 7.0, admin);
-        createBOMProductAssoc(productId, productComp2Id, new Long("11"), 3.0, admin);
+        createBOMProductAssoc(productId, productComp1Id, new Long("10"), new BigDecimal(7.0), admin);
+        createBOMProductAssoc(productId, productComp2Id, new Long("11"), new BigDecimal(3.0), admin);
 
         // Create default BOMs for both components
         final GenericValue productComp11 = createTestProduct("test Default Material for [" + productComp1Id + "] - Component 1/1", demowarehouse1);
         final String productComp11Id = productComp11.getString("productId");
         final GenericValue productComp12 = createTestProduct("test Default Material for [" + productComp1Id + "] - Component 1/2", demowarehouse1);
         final String productComp12Id = productComp12.getString("productId");
-        createBOMProductAssoc(productComp1Id, productComp11Id, new Long("10"), 1.0, admin);
-        createBOMProductAssoc(productComp1Id, productComp12Id, new Long("11"), 2.0, admin);
+        createBOMProductAssoc(productComp1Id, productComp11Id, new Long("10"), new BigDecimal(1.0), admin);
+        createBOMProductAssoc(productComp1Id, productComp12Id, new Long("11"), new BigDecimal(2.0), admin);
 
         final GenericValue productComp21 = createTestProduct("test Default Material for [" + productComp2Id + "] - Component 2/1", demowarehouse1);
         final String productComp21Id = productComp21.getString("productId");
         final GenericValue productComp22 = createTestProduct("test Default Material for [" + productComp2Id + "] - Component 2/2", demowarehouse1);
         final String productComp22Id = productComp22.getString("productId");
-        createBOMProductAssoc(productComp2Id, productComp21Id, new Long("10"), 3.0, admin);
-        createBOMProductAssoc(productComp2Id, productComp22Id, new Long("11"), 4.0, admin);
+        createBOMProductAssoc(productComp2Id, productComp21Id, new Long("10"), new BigDecimal(3.0), admin);
+        createBOMProductAssoc(productComp2Id, productComp22Id, new Long("11"), new BigDecimal(4.0), admin);
 
         // Run a BOM simulation for the default BOM (calling getBOMTree service)
         Map<String, Object> result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "userLogin", demowarehouse1));
@@ -1979,9 +1979,9 @@ public class ProductionRunTests extends ProductionRunTestCase {
         final GenericValue productComp3 = createTestProduct("test Alternate Material for [" + productId + "] - Component 3", demowarehouse1);
         final String productComp3Id = productComp3.getString("productId");
 
-        createBOMProductAssoc(productId, productComp1Id, alternateRoutingId, new Long("10"), 8.0, admin);
-        createBOMProductAssoc(productId, productComp2Id, alternateRoutingId, new Long("11"), 9.0, admin);
-        createBOMProductAssoc(productId, productComp3Id, alternateRoutingId, new Long("12"), 5.0, admin);
+        createBOMProductAssoc(productId, productComp1Id, alternateRoutingId, new Long("10"), new BigDecimal(8.0), admin);
+        createBOMProductAssoc(productId, productComp2Id, alternateRoutingId, new Long("11"), new BigDecimal(9.0), admin);
+        createBOMProductAssoc(productId, productComp3Id, alternateRoutingId, new Long("12"), new BigDecimal(5.0), admin);
 
         // Create an alternative routing for productComp2, should not be used when using the alternate BOM for product
         final String alternateComp2RoutingId = createTestAssemblingRouting("Alternate BOM for product [" + productComp2Id + "]", productComp2Id);
@@ -1991,16 +1991,16 @@ public class ProductionRunTests extends ProductionRunTestCase {
         final String productComp23Id = productComp23.getString("productId");
         final GenericValue productComp24 = createTestProduct("test Alternate Material for [" + productComp2Id + "] - Component 2/4", demowarehouse1);
         final String productComp24Id = productComp24.getString("productId");
-        createBOMProductAssoc(productComp2Id, productComp23Id, alternateComp2RoutingId, new Long("10"), 11.0, admin);
-        createBOMProductAssoc(productComp2Id, productComp24Id, alternateComp2RoutingId, new Long("11"), 33.0, admin);
+        createBOMProductAssoc(productComp2Id, productComp23Id, alternateComp2RoutingId, new Long("10"), new BigDecimal(11.0), admin);
+        createBOMProductAssoc(productComp2Id, productComp24Id, alternateComp2RoutingId, new Long("11"), new BigDecimal(33.0), admin);
 
         // Create an alternative BOM for component 1, link to the manufactured product alternate routing
         final GenericValue productComp13 = createTestProduct("test Alternate Material for [" + productComp1Id + "] - Component 1/3", demowarehouse1);
         final String productComp13Id = productComp13.getString("productId");
         final GenericValue productComp14 = createTestProduct("test Alternate Material for [" + productComp1Id + "] - Component 1/4", demowarehouse1);
         final String productComp14Id = productComp14.getString("productId");
-        createBOMProductAssoc(productComp1Id, productComp13Id, alternateRoutingId, new Long("10"), 12.0, admin);
-        createBOMProductAssoc(productComp1Id, productComp14Id, alternateRoutingId, new Long("11"), 15.0, admin);
+        createBOMProductAssoc(productComp1Id, productComp13Id, alternateRoutingId, new Long("10"), new BigDecimal(12.0), admin);
+        createBOMProductAssoc(productComp1Id, productComp14Id, alternateRoutingId, new Long("11"), new BigDecimal(15.0), admin);
 
         // Run a BOM simulation for the alternate BOM (calling getBOMTree service)
         result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "routingId", alternateRoutingId, "userLogin", demowarehouse1));
@@ -2193,7 +2193,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // Create a test product
         final GenericValue product = createTestProduct("test Multiple BOM Disassemble Product", demowarehouse1);
         final String productId = product.getString("productId");
-        assignDefaultPrice(product, 10.0, admin);
+        assignDefaultPrice(product, new BigDecimal(10.0), admin);
 
         // Create a default routing, using createTestAssemblingRouting
         createTestAssemblingRouting("Default BOM for product [" + productId + "]", productId);
@@ -2203,8 +2203,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         final String productComp1Id = productComp1.getString("productId");
         final GenericValue productComp2 = createTestProduct("test Default Material for [" + productId + "] - Component 2", demowarehouse1);
         final String productComp2Id = productComp2.getString("productId");
-        createBOMProductAssoc(productId, productComp1Id, new Long("10"), new Double("7.0"), admin);
-        createBOMProductAssoc(productId, productComp2Id, new Long("11"), new Double("3.0"), admin);
+        createBOMProductAssoc(productId, productComp1Id, new Long("10"), new BigDecimal("7.0"), admin);
+        createBOMProductAssoc(productId, productComp2Id, new Long("11"), new BigDecimal("3.0"), admin);
 
         // Create an alternative routing, using createBOMProductAssoc
         final String alternateRoutingId = createTestAssemblingRouting("Alternate BOM for product [" + productId + "]", productId);
@@ -2215,9 +2215,9 @@ public class ProductionRunTests extends ProductionRunTestCase {
         final GenericValue productComp5 = createTestProduct("test Alternate Material for [" + productId + "] - Component 5", demowarehouse1);
         final String productComp5Id = productComp5.getString("productId");
 
-        createBOMProductAssoc(productId, productComp3Id, alternateRoutingId, new Long("10"), new Double("1.0"), admin);
-        createBOMProductAssoc(productId, productComp4Id, alternateRoutingId, new Long("11"), new Double("2.0"), admin);
-        createBOMProductAssoc(productId, productComp5Id, alternateRoutingId, new Long("12"), new Double("5.0"), admin);
+        createBOMProductAssoc(productId, productComp3Id, alternateRoutingId, new Long("10"), new BigDecimal("1.0"), admin);
+        createBOMProductAssoc(productId, productComp4Id, alternateRoutingId, new Long("11"), new BigDecimal("2.0"), admin);
+        createBOMProductAssoc(productId, productComp5Id, alternateRoutingId, new Long("12"), new BigDecimal("5.0"), admin);
 
         // receive 13 x Product so we can disassemble them
         receiveMaterial(productId, 13, 100.0);
@@ -2329,8 +2329,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         inventoryAsserts.assertInventoriesChange("GZ-1004", new BigDecimal("6.0").negate(), new BigDecimal("0.0"), origProductInventories);
 
         // create order for 2 produced marketing packages
-        Map<GenericValue, Double> orderItems = FastMap.newInstance();
-        orderItems.put(delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", "GZ-BASKET")), 2.0);
+        Map<GenericValue, BigDecimal> orderItems = FastMap.newInstance();
+        orderItems.put(delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", "GZ-BASKET")), new BigDecimal(2.0));
         User = admin;
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", "DemoAccount1")), "9000");
         String orderId = orderFactory.getOrderId();

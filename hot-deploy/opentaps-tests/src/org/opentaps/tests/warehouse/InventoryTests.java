@@ -1196,11 +1196,11 @@ public class InventoryTests extends FinancialsTestCase {
     @SuppressWarnings("unchecked")
     public void testOrderReservationOnNonSerializedInventoryTransfer() throws GeneralException {
 
-        final double inventoryQty = 5.0;
+        final BigDecimal inventoryQty = new BigDecimal(5.0);
 
         // 1. Create test product
         final GenericValue product = createTestProduct("Order Reservation On Non Serialized Inventory Transfer Test Product", demowarehouse1);
-        assignDefaultPrice(product, 20.0, admin);
+        assignDefaultPrice(product, new BigDecimal(20.0), admin);
 
         // 2. Receive 5.0 units of the product as non serialized inventory
         Map receivedInventoryMap = receiveInventoryProduct(product, inventoryQty, "NON_SERIAL_INV_ITEM", demowarehouse1);
@@ -1217,7 +1217,7 @@ public class InventoryTests extends FinancialsTestCase {
         runAndAssertServiceSuccess("createInventoryTransfer", input);
 
         // 4. Create a sales order for 5.0 of the test product
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
         order.put(product, inventoryQty);
         User = admin;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, PRODUCT_STORE, "EXT_OFFLINE", "DemoAddress2");
@@ -1229,7 +1229,7 @@ public class InventoryTests extends FinancialsTestCase {
         }
 
         // 6. Verify that the ATP of the test product is -5, the QOH is 5.0
-        assertProductAvailability(product, -inventoryQty, inventoryQty);
+        assertProductAvailability(product, inventoryQty.multiply(new BigDecimal(-1)), inventoryQty);
     }
 
     /**
@@ -1245,21 +1245,21 @@ public class InventoryTests extends FinancialsTestCase {
      */
     public void testOrderReservationOnSerializedInventoryTransfer() throws GeneralException {
 
-        final double inventoryQty = 5.0;
-        final double transferQty = 3.0;
+        final BigDecimal inventoryQty = new BigDecimal(5.0);
+        final BigDecimal transferQty = new BigDecimal(3.0);
 
         // 1. Create test product
         final GenericValue product = createTestProduct("Order Reservation On Serialized Inventory Transfer Test Product", demowarehouse1);
         final String productId = product.getString("productId");
-        assignDefaultPrice(product, 20.0, admin);
+        assignDefaultPrice(product, new BigDecimal(20.0), admin);
 
         // 2. Receive 5.0 units of the product as serialized inventory
         receiveInventoryProduct(product, inventoryQty, "SERIALIZED_INV_ITEM", demowarehouse1);
         List<String> receivedInventoryItems = EntityUtil.getFieldListFromEntityList(delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId)), "inventoryItemId", true);
-        assertEquals("There should be 5 inventory items received", (int) inventoryQty, receivedInventoryItems.size());
+        assertEquals("There should be 5 inventory items received", inventoryQty, receivedInventoryItems.size());
 
         // 3. Transfer 3.0 of the received inventory item from WebStoreWarehouse to MyRetailStore
-        for (String inventoryItemId : receivedInventoryItems.subList(0, (int) transferQty)) {
+        for (String inventoryItemId : receivedInventoryItems.subList(0, transferQty.intValue())) {
             Map<String, Object> input = new HashMap<String, Object>();
             input.put("userLogin", demowarehouse1);
             input.put("facilityId", FROM_FACILITY);
@@ -1274,7 +1274,7 @@ public class InventoryTests extends FinancialsTestCase {
         assertEquals("There should be 3 inventory items in transfer", 3, transferedInventoryItems.size());
 
         // 4. Create a sales order for 5.0 of the test product
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
         order.put(product, inventoryQty);
         User = admin;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, PRODUCT_STORE, "EXT_OFFLINE", "DemoAddress2");
@@ -1298,13 +1298,13 @@ public class InventoryTests extends FinancialsTestCase {
                 assertNotNull("Could not find the InventoryItem", inventoryItem);
                 assertEquals("The the reserved inventoryItem should be non serialized", inventoryItem.get("inventoryItemTypeId"), "NON_SERIAL_INV_ITEM");
                 assertEquals("The QOH for the reserved inventoryItem should be 0", inventoryItem.get("quantityOnHandTotal"), 0.0);
-                assertEquals("The ATP for the reserved inventoryItem is incorrect", inventoryItem.get("availableToPromiseTotal"), -transferQty);
+                assertEquals("The ATP for the reserved inventoryItem is incorrect", inventoryItem.get("availableToPromiseTotal"), transferQty.multiply(new BigDecimal(-1)));
             }
         }
-        assertEquals("The number of reservation on the initially received serialized items is incorrect", reservationOnReceivedItems, (int) (inventoryQty - transferQty));
+        assertEquals("The number of reservation on the initially received serialized items is incorrect", reservationOnReceivedItems, (inventoryQty.divide(transferQty)));
 
         // 6. Verify that the ATP of the test product is -3, the QOH is 5.0
-        assertProductAvailability(product, -transferQty, inventoryQty);
+        assertProductAvailability(product, transferQty.multiply(new BigDecimal(-1)), inventoryQty);
     }
 
     /**
@@ -1322,11 +1322,11 @@ public class InventoryTests extends FinancialsTestCase {
     @SuppressWarnings("unchecked")
     public void testOrderReservationOnCanceledInventoryTransfer() throws GeneralException {
 
-        final double inventoryQty = 5.0;
+        final BigDecimal inventoryQty = new BigDecimal(5.0);
 
         // 1. Create test product
         final GenericValue product = createTestProduct("Order Reservation On Canceled Inventory Transfer Test Product", demowarehouse1);
-        assignDefaultPrice(product, 20.0, admin);
+        assignDefaultPrice(product, new BigDecimal(20.0), admin);
 
         // 2. Receive 5.0 units of the product as non serialized inventory
         Map receivedInventoryMap = receiveInventoryProduct(product, inventoryQty, "NON_SERIAL_INV_ITEM", demowarehouse1);
@@ -1352,8 +1352,8 @@ public class InventoryTests extends FinancialsTestCase {
         runAndAssertServiceSuccess("cancelInventoryTransfer", input);
 
         // 5. Create a sales order for 6.0 of the test product
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(product, inventoryQty + 1);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(product, inventoryQty.add(new BigDecimal(1)));
         User = admin;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, PRODUCT_STORE, "EXT_OFFLINE", "DemoAddress2");
 
@@ -1368,7 +1368,7 @@ public class InventoryTests extends FinancialsTestCase {
         assertEquals("The inventory item QOH is incorrect", inventoryQty, inventoryItem.get("quantityOnHandTotal"));
 
         // 7. Verify that the ATP of the test product is -1.0, the QOH is 5.0
-        assertProductAvailability(product, -1.0, inventoryQty);
+        assertProductAvailability(product,new BigDecimal(-1), inventoryQty);
     }
 
     /**
@@ -1398,8 +1398,8 @@ public class InventoryTests extends FinancialsTestCase {
         assertEquals("Unexpected standardCost for product PROD_COST", prodCostProduct.getStandardCost("USD"), expectedProdCostStdCost);
 
         // 2. Receive 3 items of MAT_B_COST with a unit cost of 95$
-        final double inventoryQty = 3.0;
-        final double unitCost = 95.0;
+        final BigDecimal inventoryQty = new BigDecimal(3.0);
+        final BigDecimal unitCost = new BigDecimal(95.0);
         Map result = receiveInventoryProduct(Repository.genericValueFromEntity(getDelegator(), matBProduct), inventoryQty, "NON_SERIAL_INV_ITEM", unitCost, demowarehouse1);
 
         // 3. Check the standard cost for the inventory item is the same as the product standard cost
@@ -1420,12 +1420,12 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct = createTestProduct("Product for testInventoryItemIssuanceTracing", admin);
 
         // receives 1 test product
-        Map<String, Object> result = receiveInventoryProduct(testProduct, 1.0, "NON_SERIAL_INV_ITEM", demowarehouse1);
+        Map<String, Object> result = receiveInventoryProduct(testProduct, new BigDecimal(1.0), "NON_SERIAL_INV_ITEM", demowarehouse1);
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // creates and approves sales order
-        Map<GenericValue, Double> order = FastMap.newInstance();
-        order.put(testProduct, 1.0);
+        Map<GenericValue, BigDecimal> order = FastMap.newInstance();
+        order.put(testProduct, new BigDecimal(1.0));
         User = admin;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, PRODUCT_STORE, "EXT_OFFLINE", "DemoAddress2");
         salesOrder.approveOrder();
@@ -1476,7 +1476,7 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct = createTestProduct("Product for testInventoryFullTransferTracing", admin);
 
         // receives 10 test products
-        Map<String, Object> result = receiveInventoryProduct(testProduct, 10.0, "NON_SERIAL_INV_ITEM", 5.0, demowarehouse1);
+        Map<String, Object> result = receiveInventoryProduct(testProduct, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), demowarehouse1);
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // transfers 10 of them
@@ -1545,7 +1545,7 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct = createTestProduct("Product for testInventoryTransferTracing", admin);
 
         // receives 10 test products
-        Map<String, Object> result = receiveInventoryProduct(testProduct, 10.0, "NON_SERIAL_INV_ITEM", 5.0, demowarehouse1);
+        Map<String, Object> result = receiveInventoryProduct(testProduct, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(5.0), demowarehouse1);
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // transfers 5 of them
@@ -1616,16 +1616,16 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct4 = createTestProduct("Product 4 for testLotTracing", admin);
 
         // 1. Receive test product to inventory items 1, 2, 3 and 4
-        Map<String, Object> results = receiveInventoryProduct(testProduct1, 10.0, "NON_SERIAL_INV_ITEM", 15.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(testProduct1, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(15.0), demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
 
-        results = receiveInventoryProduct(testProduct2, 10.0, "NON_SERIAL_INV_ITEM", 25.0, demowarehouse1);
+        results = receiveInventoryProduct(testProduct2, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(25.0), demowarehouse1);
         String inventoryItemId2 = (String) results.get("inventoryItemId");
 
-        receiveInventoryProduct(testProduct3, 10.0, "NON_SERIAL_INV_ITEM", 35.0, demowarehouse1);
+        receiveInventoryProduct(testProduct3, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(35.0), demowarehouse1);
         pause("Workaround pause for MySQL");
 
-        receiveInventoryProduct(testProduct4, 10.0, "NON_SERIAL_INV_ITEM", 45.0, demowarehouse1);
+        receiveInventoryProduct(testProduct4, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(45.0), demowarehouse1);
         pause("Workaround pause for MySQL");
 
         // 2. Create a lot, assign the lot id to inventory items 1 and 2
@@ -1656,10 +1656,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // 2. Issue inventory items 2, 3 and 4 to an order
         pause("Workaround pause for MySQL");
-        Map<GenericValue, Double> order = FastMap.newInstance();
-        order.put(testProduct2, 10.0);
-        order.put(testProduct3, 5.0);
-        order.put(testProduct4, 5.0);
+        Map<GenericValue, BigDecimal> order = FastMap.newInstance();
+        order.put(testProduct2, new BigDecimal(10.0));
+        order.put(testProduct3, new BigDecimal(5.0));
+        order.put(testProduct4, new BigDecimal(5.0));
         User = admin;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, PRODUCT_STORE, "EXT_OFFLINE", "DemoAddress2");
         salesOrder.approveOrder();
@@ -1731,17 +1731,17 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue testProduct3 = createTestProduct("Product 3 for testTraceComplexInventoryUsage", admin);
 
         // 1. Receive 20 of product 1. This should be inventoryItemId1.
-        Map<String, Object> results = receiveInventoryProduct(testProduct1, 20.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        Map<String, Object> results = receiveInventoryProduct(testProduct1, new BigDecimal(20.0), "NON_SERIAL_INV_ITEM", new BigDecimal(99.0), demowarehouse1);
         String inventoryItemId1 = (String) results.get("inventoryItemId");
         pause("Workaround pause for MySQL");
 
         // 2. Receive 20 of product 2. This should be inventoryItemId2.
-        results = receiveInventoryProduct(testProduct2, 20.0, "NON_SERIAL_INV_ITEM", 15.0, demowarehouse1);
+        results = receiveInventoryProduct(testProduct2, new BigDecimal(20.0), "NON_SERIAL_INV_ITEM", new BigDecimal(15.0), demowarehouse1);
         String inventoryItemId2 = (String) results.get("inventoryItemId");
         pause("Workaround pause for MySQL");
 
         // 3. Receive 10 of product 3. This should be inventoryItemId3.
-        results = receiveInventoryProduct(testProduct3, 10.0, "NON_SERIAL_INV_ITEM", 19.0, demowarehouse1);
+        results = receiveInventoryProduct(testProduct3, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(19.0), demowarehouse1);
         String inventoryItemId3 = (String) results.get("inventoryItemId");
         pause("Workaround pause for MySQL");
 
@@ -1763,9 +1763,9 @@ public class InventoryTests extends FinancialsTestCase {
         String inventoryItemId4 = EntityUtil.getFirst(ii).getString("inventoryItemId");
 
         // 5. Issued 10 testProduct1 & 10 testProduct3 to an order.
-        Map<GenericValue, Double> order = FastMap.newInstance();
-        order.put(testProduct1, 10.0);
-        order.put(testProduct3, 10.0);
+        Map<GenericValue, BigDecimal> order = FastMap.newInstance();
+        order.put(testProduct1, new BigDecimal(10.0));
+        order.put(testProduct3, new BigDecimal(10.0));
         User = admin;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, PRODUCT_STORE, "EXT_OFFLINE", "DemoAddress2");
         salesOrder.approveOrder();
@@ -1778,7 +1778,7 @@ public class InventoryTests extends FinancialsTestCase {
         // and its content doesn't important in context of this unit tests.
         //
         GenericValue manufacturedProduct = createTestProduct("Product for manufacturing within framework of for testTraceComplexInventoryUsage", admin);
-        assignDefaultPrice(manufacturedProduct, Double.valueOf(300.0), admin);
+        assignDefaultPrice(manufacturedProduct, new BigDecimal(300.0), admin);
         delegator.create("ProductFacility",
                 UtilMisc.toMap(
                         "productId", manufacturedProduct.get("productId"),
@@ -1790,11 +1790,11 @@ public class InventoryTests extends FinancialsTestCase {
         );
 
         GenericValue testProduct5 = createTestProduct("Product 5 for testTraceComplexInventoryUsage", "RAW_MATERIAL", admin);
-        results = receiveInventoryProduct(testProduct5, 10.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        results = receiveInventoryProduct(testProduct5, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(99.0), demowarehouse1);
         pause("Workaround pause for MySQL");
         String inventoryItemId5 = (String) results.get("inventoryItemId");
-        createMainSupplierForProduct((String) testProduct5.get("productId"), "DemoSupplier", 50.0, "USD", 0.0, admin);
-        createMainSupplierForProduct((String) testProduct2.get("productId"), "DemoSupplier", 50.0, "USD", 0.0, admin);
+        createMainSupplierForProduct((String) testProduct5.get("productId"), "DemoSupplier", new BigDecimal(50.0), "USD", new BigDecimal(0.0), admin);
+        createMainSupplierForProduct((String) testProduct2.get("productId"), "DemoSupplier", new BigDecimal(50.0), "USD", new BigDecimal(0.0), admin);
         delegator.create("ProductFacility",
                 UtilMisc.toMap(
                         "productId", testProduct2.get("productId"),
@@ -1893,8 +1893,8 @@ public class InventoryTests extends FinancialsTestCase {
 
         // 7. Issue 1 inventory item 6 & 10 inventory item 1 to an order.
         order = FastMap.newInstance();
-        order.put(manufacturedProduct, 1.0);
-        order.put(testProduct1, 10.0);
+        order.put(manufacturedProduct, new BigDecimal(1.0));
+        order.put(testProduct1, new BigDecimal(10.0));
         User = admin;
         salesOrder = testCreatesSalesOrder(order, DemoCustomer, PRODUCT_STORE, "EXT_OFFLINE", "DemoAddress2");
         salesOrder.approveOrder();
@@ -1972,7 +1972,7 @@ public class InventoryTests extends FinancialsTestCase {
         // Create a test product
         final GenericValue product = createTestProduct("test Auto Taken Apart Purchasing Package Product", "PURCH_PKG_AUTO", new Long(0), demowarehouse1);
         final String productId = product.getString("productId");
-        assignDefaultPrice(product, 10.0, admin);
+        assignDefaultPrice(product, new BigDecimal(10.0), admin);
 
         // Create a default routing, using createTestAssemblingRouting
         createTestAssemblingRouting("Default BOM for product [" + productId + "]", productId);
@@ -1982,8 +1982,8 @@ public class InventoryTests extends FinancialsTestCase {
         final String productComp1Id = productComp1.getString("productId");
         final GenericValue productComp2 = createTestProduct("test Default Material for [" + productId + "] - Component 2", demowarehouse1);
         final String productComp2Id = productComp2.getString("productId");
-        createBOMProductAssoc(productId, productComp1Id, new Long("10"), new Double("7.0"), admin);
-        createBOMProductAssoc(productId, productComp2Id, new Long("11"), new Double("3.0"), admin);
+        createBOMProductAssoc(productId, productComp1Id, new Long("10"), new BigDecimal("7.0"), admin);
+        createBOMProductAssoc(productId, productComp2Id, new Long("11"), new BigDecimal("3.0"), admin);
 
         // get initial inventory
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demowarehouse1);

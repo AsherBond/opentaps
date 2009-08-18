@@ -48,7 +48,7 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
         Map<String, Object> params = UtilMisc.<String, Object>toMap("productId", productId,
                                     "partyId", supplierPartyId,
                                     "currencyUomId", currencyUomId,
-                                    "quantity", quantityToPurchase.doubleValue());
+                                    "quantity", quantityToPurchase);
         try {
             Map<String, Object> result = getDispatcher().runSync("getSuppliersForProduct", params);
             List<GenericValue> productSuppliers = (List<GenericValue>) result.get("supplierProducts");
@@ -72,8 +72,8 @@ public class PurchasingRepository extends Repository implements PurchasingReposi
         supplierProductMap.put("supplierProductId", supplierProduct.getSupplierProductId());
         // contruct parameters for call service
         supplierProductMap.put("partyId", supplierProduct.getPartyId());
-        supplierProductMap.put("minimumOrderQuantity",  new Double(supplierProduct.getMinimumOrderQuantity().doubleValue()));
-        supplierProductMap.put("lastPrice",  new Double(supplierProduct.getLastPrice().doubleValue()));
+        supplierProductMap.put("minimumOrderQuantity",  supplierProduct.getMinimumOrderQuantity());
+        supplierProductMap.put("lastPrice",  supplierProduct.getLastPrice());
         supplierProductMap.put("currencyUomId",  supplierProduct.getCurrencyUomId());
         supplierProductMap.put("availableFromDate",  supplierProduct.getAvailableFromDate());
         supplierProductMap.put("comments",  supplierProduct.getComments());

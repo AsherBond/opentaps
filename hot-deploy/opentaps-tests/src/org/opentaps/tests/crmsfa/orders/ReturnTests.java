@@ -99,14 +99,14 @@ public class ReturnTests extends ReturnTestCase {
         String productId = testProduct.getString("productId");
 
         // create default price as this product should be used in order later
-        assignDefaultPrice(testProduct, 100.0, admin);
+        assignDefaultPrice(testProduct, new BigDecimal(100.0), admin);
 
         // 2. Receive 10 units
-        receiveInventoryProduct(testProduct, 10.0, "NON_SERIAL_INV_ITEM", 99.0, demowarehouse1);
+        receiveInventoryProduct(testProduct, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(99.0), demowarehouse1);
 
         // 3. sales order of 5 units to DemoCustomer with payment method 9015
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(testProduct, 5.0);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(testProduct, new BigDecimal(5.0));
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, productStoreId, "CREDIT_CARD", "9015", null);
         String orderId = salesOrder.getOrderId();
@@ -127,7 +127,7 @@ public class ReturnTests extends ReturnTestCase {
         runAndAssertServiceSuccess("testShipOrder", UtilMisc.toMap("orderId", orderId, "facilityId", facilityId, "userLogin", demowarehouse1));
 
         // 5. verify ATP / QOH is 5.0
-        assertProductAvailability(testProduct, 5.0, 5.0);
+        assertProductAvailability(testProduct, new BigDecimal(5.0), new BigDecimal(5.0));
 
         // needed later to check that no extra payment is created
         long initial_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID");
@@ -163,7 +163,7 @@ public class ReturnTests extends ReturnTestCase {
         assertReturnItemsStatusEquals(returnId, "RETURN_COMPLETED");
 
         // 9b. Verify that the inventory of the item has increased by 2.0
-        assertProductAvailability(testProduct, 7.0, 7.0);
+        assertProductAvailability(testProduct, new BigDecimal(7.0), new BigDecimal(7.0));
         // check the InventoryItem entity
         List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "status_id", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
         assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
@@ -215,14 +215,14 @@ public class ReturnTests extends ReturnTestCase {
         String productId = testProduct.getString("productId");
 
         // create default price as this product should be used in order later
-        assignDefaultPrice(testProduct, 200.0, admin);
+        assignDefaultPrice(testProduct, new BigDecimal(200.0), admin);
 
         // 2. Receive 10 units
-        receiveInventoryProduct(testProduct, 10.0, "NON_SERIAL_INV_ITEM", 199.0, demowarehouse1);
+        receiveInventoryProduct(testProduct, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(199.0), demowarehouse1);
 
         // 3. sales order of 5 units to DemoCustomer with payment method 9015
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(testProduct, 5.0);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(testProduct, new BigDecimal(5.0));
         User = DemoCSR;
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, productStoreId, "CREDIT_CARD", "9015", null);
         String orderId = salesOrder.getOrderId();
@@ -243,7 +243,7 @@ public class ReturnTests extends ReturnTestCase {
         runAndAssertServiceSuccess("testShipOrder", UtilMisc.toMap("orderId", orderId, "facilityId", facilityId, "userLogin", demowarehouse1));
 
         // 5. verify ATP / QOH is 5.0
-        assertProductAvailability(testProduct, 5.0, 5.0);
+        assertProductAvailability(testProduct, new BigDecimal(5.0), new BigDecimal(5.0));
 
         // 6. create a return for 2.0 items
         results = runAndAssertServiceSuccess("crmsfa.createReturnFromOrder", UtilMisc.toMap("orderId", orderId, "userLogin", User));
@@ -278,7 +278,7 @@ public class ReturnTests extends ReturnTestCase {
         assertReturnStatusEquals(returnId, "RETURN_RECEIVED");
 
         // 9b. Inventory of the item has increased by 2.0
-        assertProductAvailability(testProduct, 7.0, 7.0);
+        assertProductAvailability(testProduct, new BigDecimal(7.0), new BigDecimal(7.0));
         // check the InventoryItem entity
         List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "status_id", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
         assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
@@ -318,14 +318,14 @@ public class ReturnTests extends ReturnTestCase {
         String productId = testProduct.getString("productId");
 
         // create default price as this product should be used in order later
-        assignDefaultPrice(testProduct, 300.0, admin);
+        assignDefaultPrice(testProduct, new BigDecimal(300.0), admin);
 
         // 2. Receive 10 units
-        receiveInventoryProduct(testProduct, 10.0, "NON_SERIAL_INV_ITEM", 299.0, demowarehouse1);
+        receiveInventoryProduct(testProduct, new BigDecimal(10.0), "NON_SERIAL_INV_ITEM", new BigDecimal(299.0), demowarehouse1);
 
         // 3. sales order of 5 units to DemoCustomer with payment type EXT_OFFLINE
-        Map<GenericValue, Double> order = new HashMap<GenericValue, Double>();
-        order.put(testProduct, 5.0);
+        Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
+        order.put(testProduct, new BigDecimal(5.0));
         User = DemoCSR;
         // 3b. note, this method approves the order
         SalesOrderFactory salesOrder = testCreatesSalesOrder(order, DemoCustomer, productStoreId, "EXT_OFFLINE", null);
@@ -336,7 +336,7 @@ public class ReturnTests extends ReturnTestCase {
         runAndAssertServiceSuccess("testShipOrder", UtilMisc.toMap("orderId", orderId, "facilityId", facilityId, "userLogin", demowarehouse1));
 
         // 5. verify ATP / QOH is 5.0
-        assertProductAvailability(testProduct, 5.0, 5.0);
+        assertProductAvailability(testProduct, new BigDecimal(5.0), new BigDecimal(5.0));
 
         // 6. create a return for 2.0 items
         Map results = runAndAssertServiceSuccess("crmsfa.createReturnFromOrder", UtilMisc.toMap("orderId", orderId, "userLogin", User));
@@ -368,7 +368,7 @@ public class ReturnTests extends ReturnTestCase {
         assertReturnStatusEquals(returnId, "RETURN_RECEIVED");
 
         // 9b. Verify that the inventory of the item has increased by 2.0
-        assertProductAvailability(testProduct, 7.0, 7.0);
+        assertProductAvailability(testProduct, new BigDecimal(7.0), new BigDecimal(7.0));
         // check the InventoryItem entity
         List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "status_id", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
         assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());

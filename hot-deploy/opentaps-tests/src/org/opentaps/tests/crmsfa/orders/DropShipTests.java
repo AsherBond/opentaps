@@ -126,8 +126,8 @@ public class DropShipTests extends OrderTestCase {
         sof.addShippingGroup("UPS", "NEXT_DAY", postalAddress.getString("contactMechId"), dropShip2SupplierPartyId);
 
         try {
-            sof.addProduct(dropShip1, 1.0, "00001");
-            sof.addProduct(dropShip2, 2.0, "00002");
+            sof.addProduct(dropShip1, new BigDecimal(1.0), "00001");
+            sof.addProduct(dropShip2, new BigDecimal(2.0), "00002");
         } catch (GenericServiceException e) {
             fail("GenericServiceException:" + e.toString());
         }

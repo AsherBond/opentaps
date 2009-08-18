@@ -118,7 +118,7 @@ public class OpentapsProposedOrder extends ProposedOrder {
         parameters.put("statusId", "REQ_PROPOSED");
         parameters.put("requiredByDate", requiredByDate);
         parameters.put("requirementStartDate", requirementStartDate);
-        parameters.put("quantity", quantity.doubleValue());
+        parameters.put("quantity", quantity);
         // if product is built, create a manufacturing requirement, else a product requirement (order)
         if (isBuilt) {
             parameters.put("facilityId", manufacturingFacilityId);

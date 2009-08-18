@@ -406,7 +406,7 @@ public abstract class OrderFactory {
      * @param termUomId the rental term
      * @throws GenericServiceException if an error occurs
      */
-    public void addRentalProduct(GenericValue product, double quantity, String termUomId) throws GenericServiceException {
+    public void addRentalProduct(GenericValue product, BigDecimal quantity, String termUomId) throws GenericServiceException {
         addRentalProduct(product, quantity, getFirstShipGroup(), termUomId);
     }
 
@@ -419,9 +419,9 @@ public abstract class OrderFactory {
      * @throws GenericServiceException if an error occurs
      */
 
-    public void addRentalProduct(GenericValue product, double quantity, String shipGroupSeqId, String termUomId) throws GenericServiceException {
+    public void addRentalProduct(GenericValue product, BigDecimal quantity, String shipGroupSeqId, String termUomId) throws GenericServiceException {
         // get the product prices
-        Map<String, Double> prices = getProductPrices(product, quantity, "RECURRING_CHARGE", termUomId);
+        Map<String, BigDecimal> prices = getProductPrices(product, quantity, "RECURRING_CHARGE", termUomId);
 
         // do not use the ofbiz RENTAL_ORDER_ITEM type: it only works for room rentals and requires workeffort and fixedasset
         addProduct(product, "RENTAL", quantity, shipGroupSeqId, prices);
@@ -433,7 +433,7 @@ public abstract class OrderFactory {
      * @param quantity the quantity of the product to add
      * @throws GenericServiceException if an error occurs
      */
-    public void addProduct(GenericValue product, double quantity) throws GenericServiceException {
+    public void addProduct(GenericValue product, BigDecimal quantity) throws GenericServiceException {
         addProduct(product, quantity, getFirstShipGroup());
     }
 
@@ -444,7 +444,7 @@ public abstract class OrderFactory {
      * @param shipGroupSeqId the ship group for which to add the product
      * @throws GenericServiceException if an error occurs
      */
-    public void addProduct(GenericValue product, double quantity, String shipGroupSeqId) throws GenericServiceException {
+    public void addProduct(GenericValue product, BigDecimal quantity, String shipGroupSeqId) throws GenericServiceException {
         addProduct(product, quantity, shipGroupSeqId, null);
     }
 
@@ -456,9 +456,9 @@ public abstract class OrderFactory {
      * @param accountingTags the accounting tags for which to add the product
      * @throws GenericServiceException if an error occurs
      */
-    public void addProduct(GenericValue product, double quantity, String shipGroupSeqId, Map accountingTags) throws GenericServiceException {
+    public void addProduct(GenericValue product, BigDecimal quantity, String shipGroupSeqId, Map accountingTags) throws GenericServiceException {
         // get the product prices
-        Map<String, Double> prices = getProductPrices(product, quantity, null, null);
+        Map<String, BigDecimal> prices = getProductPrices(product, quantity, null, null);
 
         // the correct order item type is related to the product type
         try {
@@ -479,7 +479,7 @@ public abstract class OrderFactory {
      * @param prices the price <code>Map</code> which must have the keys: "price", "listPrice"
      * @throws GenericServiceException if an error occurs
      */
-    public void addProduct(GenericValue product, String orderItemTypeId, double quantity, String shipGroupSeqId, Map<String, Double> prices) throws GenericServiceException {
+    public void addProduct(GenericValue product, String orderItemTypeId, BigDecimal quantity, String shipGroupSeqId, Map<String, BigDecimal> prices) throws GenericServiceException {
         addProduct(product, orderItemTypeId, quantity, shipGroupSeqId, prices, null);
     }
 
@@ -494,7 +494,7 @@ public abstract class OrderFactory {
      * @param accountingTags the accountingTag <code>Map</code>
      * @throws GenericServiceException if an error occurs
      */
-    public void addProduct(GenericValue product, String orderItemTypeId, double quantity, String shipGroupSeqId, Map<String, Double> prices, Map accountingTags) throws GenericServiceException {
+    public void addProduct(GenericValue product, String orderItemTypeId, BigDecimal quantity, String shipGroupSeqId, Map<String, BigDecimal> prices, Map accountingTags) throws GenericServiceException {
         // get the order item sequence
         orderItemSeq++;
         String orderItemSeqId = sequencify(orderItemSeq);
@@ -524,7 +524,9 @@ public abstract class OrderFactory {
         orderItemShipGroupAssocs.add(oisga);
 
         // put in taxInfoMap
-        taxInfoMap.get(shipGroupSeqId).addProductInfo(product, new BigDecimal(quantity * prices.get("price")), new BigDecimal(prices.get("price")), orderItemSeqId);
+        Debug.logInfo("product : [" + product + "], quantity : [" + quantity + "], orderItemSeqId : [" +orderItemSeqId + "]", MODULE);
+        Debug.logInfo("price : [" + prices.get("price"), MODULE);
+        taxInfoMap.get(shipGroupSeqId).addProductInfo(product, new BigDecimal(quantity.doubleValue() * prices.get("price").doubleValue()), prices.get("price"), orderItemSeqId);
 
         Debug.logInfo("Added [" + product.get("productId") + "] x " + quantity +  " at price " + prices.get("price") + " with shipGroupSeqId " + shipGroupSeqId + " and orderItemSeqId " + orderItemSeqId, MODULE);
     }
@@ -536,7 +538,7 @@ public abstract class OrderFactory {
      * @param quantity the quantity of the product to add
      * @return <code>true</code> on success, else <code>false</code>
      */
-    public boolean cancelProduct(GenericValue product, Double quantity) {
+    public boolean cancelProduct(GenericValue product, BigDecimal quantity) {
         try {
             String orderItemTypeId = getOrderItemTypeForProduct(product);
             return cancelProduct(product, quantity, orderItemTypeId);
@@ -546,15 +548,15 @@ public abstract class OrderFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private boolean cancelProduct(GenericValue product, Double quantity, String orderItemTypeId) {
+    private boolean cancelProduct(GenericValue product, BigDecimal quantity, String orderItemTypeId) {
         try {
             // find a fitting OrderItem
             List<GenericValue> orderItems = delegator.findByAnd("OrderItem", UtilMisc.toMap("orderId", orderId, "productId", product.get("productId"), "orderItemTypeId", orderItemTypeId));
             for (GenericValue orderItem : orderItems) {
-                Double orderedQuantity = (Double) orderItem.get("quantity");
+                BigDecimal orderedQuantity = (BigDecimal) orderItem.get("quantity");
                 String orderItemSeqId = (String) orderItem.get("orderItemSeqId");
                 Debug.logInfo("Found orderItem [" + orderItemSeqId + "] qty " + orderedQuantity + " canceled " + orderItem.get("cancelQuantity") + " want to cancel " + quantity, MODULE);
-                if (orderedQuantity >= quantity) {
+                if (orderedQuantity.doubleValue() >= quantity.doubleValue()) {
                     Map<String, Object> callCtxt = new HashMap<String, Object>();
                     callCtxt.put("userLogin", userLogin);
                     callCtxt.put("orderId", orderId);
@@ -597,7 +599,7 @@ public abstract class OrderFactory {
      * @param quantity the quantity of the product to add
      * @return <code>true</code> on success, else <code>false</code>
      */
-    public boolean appendProduct(GenericValue product, Double quantity) {
+    public boolean appendProduct(GenericValue product, BigDecimal quantity) {
         return appendProduct(product, quantity, "00001");
     }
 
@@ -609,10 +611,10 @@ public abstract class OrderFactory {
      * @param shipGroupSeqId the ship group for which to add the product
      * @return <code>true</code> on success, else <code>false</code>
      */
-    public boolean appendProduct(GenericValue product, Double quantity, String shipGroupSeqId) {
+    public boolean appendProduct(GenericValue product, BigDecimal quantity, String shipGroupSeqId) {
         try {
             // get unit price
-            Map<String, Double> prices = getProductPrices(product, quantity, null, null);
+            Map<String, BigDecimal> prices = getProductPrices(product, quantity, null, null);
 
             Map<String, Object> callCtxt = new HashMap<String, Object>();
             callCtxt.put("userLogin", userLogin);
@@ -637,8 +639,8 @@ public abstract class OrderFactory {
      * @return a <code>Map</code> containing the defaultPrice, listPrice and price of the product
      * @throws GenericServiceException if an error occurs
      */
-    protected Map<String, Double> getProductPrices(GenericValue product) throws GenericServiceException {
-        return getProductPrices(product, 1.0, null, null);
+    protected Map<String, BigDecimal> getProductPrices(GenericValue product) throws GenericServiceException {
+        return getProductPrices(product, new BigDecimal(1.0), null, null);
     }
 
 
@@ -652,8 +654,8 @@ public abstract class OrderFactory {
      * @throws GenericServiceException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    protected Map<String, Double> getProductPrices(GenericValue product, Double quantity, String productPricePurposeId, String termUomId) throws GenericServiceException {
-        Map<String, Double> results = new HashMap<String, Double>();
+    protected Map<String, BigDecimal> getProductPrices(GenericValue product, BigDecimal quantity, String productPricePurposeId, String termUomId) throws GenericServiceException {
+        Map<String, BigDecimal> results = new HashMap<String, BigDecimal>();
         if (orderType.equals("PURCHASE_ORDER")) {
             // if it is purchase order, then call calculatePurchasePrice service to get supplier product price.
             Map priceContext = FastMap.newInstance();
@@ -668,10 +670,9 @@ public abstract class OrderFactory {
                 Boolean validPriceFound = (Boolean) priceResult.get("validPriceFound");
                 if (validPriceFound.booleanValue()) {
                     //if have any matched price, then use it as price
-                    Double price = (Double) priceResult.get("price");
-                    results.put("defaultPrice", price);
-                    results.put("listPrice", price);
-                    results.put("price", price);
+                    results.put("defaultPrice", (BigDecimal) priceResult.get("defaultPrice"));
+                    results.put("listPrice", (BigDecimal) priceResult.get("listPrice"));
+                    results.put("price", (BigDecimal) priceResult.get("price"));
                     return results;
                 }
             }
@@ -686,13 +687,9 @@ public abstract class OrderFactory {
         callCtxt.put("termUomId", termUomId);
 
         Map<String, Object> callResults = dispatcher.runSync("calculateProductPrice", callCtxt);
-
-        BigDecimal defaultPrice = (BigDecimal) callResults.get("defaultPrice");
-        BigDecimal listPrice = (BigDecimal) callResults.get("listPrice");
-        BigDecimal price = (BigDecimal) callResults.get("price");
-        results.put("defaultPrice", Double.valueOf(defaultPrice.doubleValue()));
-        results.put("listPrice", Double.valueOf(listPrice.doubleValue()));
-        results.put("price", Double.valueOf(price.doubleValue()));
+        results.put("defaultPrice", (BigDecimal) callResults.get("defaultPrice"));
+        results.put("listPrice", (BigDecimal) callResults.get("listPrice"));
+        results.put("price", (BigDecimal) callResults.get("price"));
         return results;
     }
 

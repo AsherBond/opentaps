@@ -16,6 +16,7 @@
 
 package org.opentaps.tests.analytics.tests;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
@@ -368,7 +369,7 @@ public class TestObjectGenerator {
             SalesOrderFactory orderFactory = new SalesOrderFactory(delegator, dispatcher, demoSalesManager, organizationPartyId, selectedPartyId, productStoreId);
             int productPerOrder = getRandomIndex(10) + 1;
             for (int i = 0; i < productPerOrder; i++)
-                orderFactory.addProduct(products.get(getRandomIndex(products.size())), new Double((int)(5 * Math.random())).doubleValue());
+                orderFactory.addProduct(products.get(getRandomIndex(products.size())), new BigDecimal(new Double((int)(5 * Math.random())).doubleValue()));
 
             orderFactory.storeOrder(orderDate);
             orderFactory.approveOrder();

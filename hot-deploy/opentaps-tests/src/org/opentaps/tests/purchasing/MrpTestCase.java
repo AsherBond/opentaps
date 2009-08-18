@@ -87,7 +87,7 @@ public class MrpTestCase extends OpentapsTestCase {
         String productId = product.getString("productId");
 
         // create default price as this product should be used in order later
-        assignDefaultPrice(product, 100.0, userLogin);
+        assignDefaultPrice(product, new BigDecimal(100.0), userLogin);
 
         // 2. create a ProductFacility entry for this product with [minimumStock, reorderQuantity, daysToShip] (MRP needs this information to schedule proposed requirements)
         Map productFacilityContext = UtilMisc.toMap("userLogin", userLogin, "productId", productId, "facilityId", facilityId, "minimumStock", minimumStock, "reorderQuantity", reorderQuantity, "daysToShip", daysToShip);
@@ -104,7 +104,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @param reorderQuantity the quantity to reorder
      * @param userLogin a <code>UserLogin</code>
      */
-    protected void createProductFacility(String productId, String facilityId, Double minimumStock, Double reorderQuantity, GenericValue userLogin) {
+    protected void createProductFacility(String productId, String facilityId, BigDecimal minimumStock, BigDecimal reorderQuantity, GenericValue userLogin) {
         createProductFacility(productId, facilityId, minimumStock, reorderQuantity, null, null, userLogin);
     }
 
@@ -117,7 +117,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @param replenishMethod the method to use when replenishing
      * @param userLogin a <code>UserLogin</code>
      */
-    protected void createProductFacility(String productId, String facilityId, Double minimumStock, Double reorderQuantity, String replenishMethod, GenericValue userLogin) {
+    protected void createProductFacility(String productId, String facilityId, BigDecimal minimumStock, BigDecimal reorderQuantity, String replenishMethod, GenericValue userLogin) {
         createProductFacility(productId, facilityId, minimumStock, reorderQuantity, null, replenishMethod, userLogin);
     }
 
@@ -132,7 +132,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @param userLogin a <code>UserLogin</code>
      */
     @SuppressWarnings("unchecked")
-    protected void createProductFacility(String productId, String facilityId, Double minimumStock, Double reorderQuantity, String replenishFromFacilityId, String replenishMethod, GenericValue userLogin) {
+    protected void createProductFacility(String productId, String facilityId, BigDecimal minimumStock, BigDecimal reorderQuantity, String replenishFromFacilityId, String replenishMethod, GenericValue userLogin) {
         Map productFacilityContext = UtilMisc.toMap("userLogin", userLogin, "productId", productId, "facilityId", facilityId, "minimumStock", minimumStock, "reorderQuantity", reorderQuantity, "daysToShip", new Long(1), "replenishFromFacilityId", replenishFromFacilityId, "replenishMethodEnumId", replenishMethod);
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
     }

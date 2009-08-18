@@ -1517,7 +1517,7 @@ public final class OpentapsMrpServices {
                     if (ServiceUtil.isError(tmpResult) || (tmpResult.get("availableToPromiseTotal") == null)) {
                         return BigDecimal.ZERO;  // not necessary to log -- service engine will log errors
                     }
-                    double backupFacilityAtp = ((Double) tmpResult.get("availableToPromiseTotal")).doubleValue();
+                    double backupFacilityAtp = ((BigDecimal) tmpResult.get("availableToPromiseTotal")).doubleValue();
                     transferQuantity = Math.min(transferQuantity, backupFacilityAtp);
 
                     if (transferQuantity <= 0) {

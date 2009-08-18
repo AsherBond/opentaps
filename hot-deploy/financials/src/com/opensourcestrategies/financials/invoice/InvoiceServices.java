@@ -299,8 +299,8 @@ public final class InvoiceServices {
             createInvoiceItemServiceMap.put("parentInvoiceId", parentInvoiceId);
             createInvoiceItemServiceMap.put("description", description);
             createInvoiceItemServiceMap.put("invoiceItemTypeId", "INV_INTRST_CHRG");
-            createInvoiceItemServiceMap.put("amount", new Double(amount.doubleValue()));
-            createInvoiceItemServiceMap.put("quantity", new Double(1));
+            createInvoiceItemServiceMap.put("amount", amount);
+            createInvoiceItemServiceMap.put("quantity", new BigDecimal(1));
             createInvoiceItemServiceMap.put("userLogin", userLogin);
 
             // Create a single InvoiceItem for the finance charge
@@ -954,7 +954,7 @@ public final class InvoiceServices {
             if (billingAccountId == null) {
                 Map input = UtilMisc.toMap("userLogin", userLogin, "fromDate", now, "roleTypeId", "BILL_TO_CUSTOMER", "partyId", invoice.get("partyIdFrom"));
                 input.put("accountCurrencyUomId", invoice.get("currencyUomId"));
-                input.put("accountLimit", new Double(0.0));
+                input.put("accountLimit", new BigDecimal(0.0));
                 input.put("description", UtilMessage.expandLabel("FinancialsCreditForInvoice", UtilMisc.toMap("invoiceId", invoiceId), locale));
                 Map results = dispatcher.runSync("createBillingAccount", input);
                 if (ServiceUtil.isError(results)) {
@@ -981,7 +981,7 @@ public final class InvoiceServices {
             input.put("currencyUomId", invoice.getString("currencyUomId"));
             input.put("paymentMethodTypeId", "EXT_BILLACT");
             input.put("statusId", "PMNT_NOT_PAID");
-            input.put("amount", new Double(amount.doubleValue()));
+            input.put("amount", amount);
             Map results = dispatcher.runSync("createPayment", input);
             if (ServiceUtil.isError(results)) {
                 return results;
@@ -989,14 +989,14 @@ public final class InvoiceServices {
             String paymentId = (String) results.get("paymentId");
 
             // make application to invoie for invoice total
-            input = UtilMisc.toMap("userLogin", userLogin, "invoiceId", invoiceId, "paymentId", paymentId, "amountApplied", new Double(amount.doubleValue()));
+            input = UtilMisc.toMap("userLogin", userLogin, "invoiceId", invoiceId, "paymentId", paymentId, "amountApplied", amount);
             results = dispatcher.runSync("createPaymentApplication", input);
             if (ServiceUtil.isError(results)) {
                 return results;
             }
 
             // make application to billing account for input amount
-            input = UtilMisc.toMap("userLogin", userLogin, "billingAccountId", billingAccountId, "paymentId", paymentId, "amountApplied", new Double(amount.doubleValue()));
+            input = UtilMisc.toMap("userLogin", userLogin, "billingAccountId", billingAccountId, "paymentId", paymentId, "amountApplied", amount);
             results = dispatcher.runSync("createPaymentApplication", input);
             if (ServiceUtil.isError(results)) {
                 return results;
@@ -1618,13 +1618,10 @@ public final class InvoiceServices {
                 amountToBill = amountToBill.add(taxToBill).setScale(decimals, rounding);
             }
 
-            // change the amount object for convenience
-            Double amount = new Double(amountToBill.doubleValue());
-
             // pay off the customer sales invoice with a special third party payment method type
             Map paymentParams = UtilMisc.toMap("paymentTypeId", "CUSTOMER_PAYMENT", "paymentMethodTypeId", "EXT_BILL_3RDPTY", "partyIdFrom", invoice.get("partyId"), "partyIdTo", invoice.get("partyIdFrom"), "effectiveDate", UtilDateTime.nowTimestamp());
             paymentParams.put("statusId", "PMNT_RECEIVED");
-            paymentParams.put("amount", amount);
+            paymentParams.put("amount", amountToBill);
             paymentParams.put("currencyUomId", invoice.getString("currencyUomId"));
             paymentParams.put("userLogin", userLogin);
             Map results = dispatcher.runSync("createPayment", paymentParams);
@@ -1634,7 +1631,7 @@ public final class InvoiceServices {
             String paymentId = (String) results.get("paymentId");
 
             // apply it to our invoice
-            paymentParams = UtilMisc.toMap("userLogin", userLogin, "invoiceId", invoiceId, "paymentId", paymentId, "amountApplied", amount);
+            paymentParams = UtilMisc.toMap("userLogin", userLogin, "invoiceId", invoiceId, "paymentId", paymentId, "amountApplied", amountToBill);
             results = dispatcher.runSync("createPaymentApplication", paymentParams);
             if (ServiceUtil.isError(results)) {
                 return results;
@@ -1750,7 +1747,7 @@ public final class InvoiceServices {
             // Create an invoice item for the adjustment amount, if necessary
             if (adjustmentAmount != null && adjustmentAmount.doubleValue() != 0) {
                 Map createInvoiceItemContext = UtilMisc.toMap("invoiceId", codInvoiceId, "invoiceItemTypeId", "ITM_BILL_FRM_COD_ADJ", "userLogin", userLogin);
-                createInvoiceItemContext.put("amount", new Double(0 - Math.abs(adjustmentAmount.doubleValue())));
+                createInvoiceItemContext.put("amount", new BigDecimal(adjustmentAmount).negate());
                 Map createInvoiceItemResult = dispatcher.runSync("createInvoiceItem", createInvoiceItemContext);
                 if (ServiceUtil.isError(createInvoiceItemResult)) {
                     return createInvoiceItemResult;
@@ -1791,7 +1788,7 @@ public final class InvoiceServices {
                 }
 
                 // Create an invoice item for the COD invoice to the carrier
-                Map createInvoiceItemContext = UtilMisc.toMap("invoiceId", codInvoiceId, "invoiceItemTypeId", "ITM_BILL_FRM_COD", "amount", amount, "userLogin", userLogin);
+                Map createInvoiceItemContext = UtilMisc.toMap("invoiceId", codInvoiceId, "invoiceItemTypeId", "ITM_BILL_FRM_COD", "amount", new BigDecimal(amount), "userLogin", userLogin);
                 createInvoiceItemContext.put("description", trackingCode);
                 Map createInvoiceItemResult = dispatcher.runSync("createInvoiceItem", createInvoiceItemContext);
                 if (ServiceUtil.isError(createInvoiceItemResult)) {
@@ -1802,7 +1799,7 @@ public final class InvoiceServices {
                 Map paymentContext = UtilMisc.toMap("paymentMethodTypeId", "EXT_BILL_3RDPTY_COD", "statusId", "PMNT_RECEIVED", "currencyUomId", currencyUomId, "userLogin", userLogin);
                 paymentContext.put("paymentTypeId", "CUSTOMER_PAYMENT");
                 paymentContext.put("paymentRefNum", paymentRefNum);
-                paymentContext.put("amount", amount);
+                paymentContext.put("amount", new BigDecimal(amount));
                 paymentContext.put("partyIdTo", organizationPartyId);
                 paymentContext.put("partyIdFrom", invoice.get("partyId"));
                 Map createPaymentResult = dispatcher.runSync("createPayment", paymentContext);
@@ -1811,7 +1808,7 @@ public final class InvoiceServices {
                 }
                 String paymentId = (String) createPaymentResult.get("paymentId");
 
-                Map paymentApplicationContext = UtilMisc.toMap("paymentId", paymentId, "invoiceId", invoiceId, "amountApplied", amount, "userLogin", userLogin);
+                Map paymentApplicationContext = UtilMisc.toMap("paymentId", paymentId, "invoiceId", invoiceId, "amountApplied", new BigDecimal(amount), "userLogin", userLogin);
                 Map createPaymentApplicationResult = dispatcher.runSync("createPaymentApplication", paymentApplicationContext);
                 if (ServiceUtil.isError(createPaymentApplicationResult)) {
                     return createPaymentApplicationResult;
@@ -2695,8 +2692,8 @@ return results;
                     createInvoiceItemContext.put("invoiceItemSeqId", invoiceItemSeqId);
                     createInvoiceItemContext.put("invoiceItemTypeId", getInvoiceItemType(delegator, (orderItem == null ? null : orderItem.getString("orderItemTypeId")), (product == null ? null : product.getString("productTypeId")), invoiceType, "INV_FPROD_ITEM"));
                     createInvoiceItemContext.put("description", orderItem.get("itemDescription"));
-                    createInvoiceItemContext.put("quantity", new Double(billingQuantity.doubleValue()));
-                    createInvoiceItemContext.put("amount", new Double(billingAmount.doubleValue()));
+                    createInvoiceItemContext.put("quantity", billingQuantity);
+                    createInvoiceItemContext.put("amount", billingAmount);
                     createInvoiceItemContext.put("productId", orderItem.get("productId"));
                     createInvoiceItemContext.put("productFeatureId", orderItem.get("productFeatureId"));
                     createInvoiceItemContext.put("overrideGlAccountId", orderItem.get("overrideGlAccountId"));
@@ -2740,8 +2737,8 @@ return results;
                     createOrderItemBillingContext.put("orderId", orderItem.get("orderId"));
                     createOrderItemBillingContext.put("orderItemSeqId", orderItem.get("orderItemSeqId"));
                     createOrderItemBillingContext.put("itemIssuanceId", itemIssuanceId);
-                    createOrderItemBillingContext.put("quantity", new Double(billingQuantity.doubleValue()));
-                    createOrderItemBillingContext.put("amount", new Double(billingAmount.doubleValue()));
+                    createOrderItemBillingContext.put("quantity", billingQuantity);
+                    createOrderItemBillingContext.put("amount", billingAmount);
                     createOrderItemBillingContext.put("userLogin", userLogin);
                     if ((shipmentReceipt != null) && (shipmentReceipt.getString("receiptId") != null)) {
                         createOrderItemBillingContext.put("shipmentReceiptId", shipmentReceipt.getString("receiptId"));
@@ -2853,7 +2850,7 @@ return results;
                             createOrderAdjustmentBillingContext.put("orderAdjustmentId", adj.getString("orderAdjustmentId"));
                             createOrderAdjustmentBillingContext.put("invoiceId", invoiceId);
                             createOrderAdjustmentBillingContext.put("invoiceItemSeqId", invoiceItemSeqId);
-                            createOrderAdjustmentBillingContext.put("amount", new Double(amount.doubleValue()));
+                            createOrderAdjustmentBillingContext.put("amount", amount);
                             createOrderAdjustmentBillingContext.put("userLogin", userLogin);
 
                             Map createOrderAdjustmentBillingResult = dispatcher.runSync("createOrderAdjustmentBilling", createOrderAdjustmentBillingContext);
@@ -3025,7 +3022,7 @@ return results;
                             appl.put("paymentId", payment.get("paymentId"));
                             appl.put("invoiceId", invoiceId);
                             appl.put("billingAccountId", billingAccountId);
-                            appl.put("amountApplied", new Double(notApplied.doubleValue()));
+                            appl.put("amountApplied", notApplied);
                             appl.put("userLogin", userLogin);
                             Map createPayApplResult = dispatcher.runSync("createPaymentApplication", appl);
                             if (ServiceUtil.isError(createPayApplResult)) {
@@ -3142,7 +3139,7 @@ return results;
                 createOrderAdjustmentBillingContext.put("orderAdjustmentId", adj.getString("orderAdjustmentId"));
                 createOrderAdjustmentBillingContext.put("invoiceId", invoiceId);
                 createOrderAdjustmentBillingContext.put("invoiceItemSeqId", invoiceItemSeqId);
-                createOrderAdjustmentBillingContext.put("amount", new Double(amount.doubleValue()));
+                createOrderAdjustmentBillingContext.put("amount", amount);
                 createOrderAdjustmentBillingContext.put("userLogin", userLogin);
 
                 try {
@@ -3170,8 +3167,8 @@ return results;
                 createInvoiceItemContext.put("invoiceItemSeqId", invoiceItemSeqId);
                 createInvoiceItemContext.put("invoiceItemTypeId", getInvoiceItemType(delegator, adj.getString("orderAdjustmentTypeId"), null, invoiceTypeId, "INVOICE_ADJ"));
                 createInvoiceItemContext.put("description", adj.get("description"));
-                createInvoiceItemContext.put("quantity", new Double(1));
-                createInvoiceItemContext.put("amount", new Double(amount.doubleValue()));
+                createInvoiceItemContext.put("quantity", new BigDecimal(1));
+                createInvoiceItemContext.put("amount", amount);
                 createInvoiceItemContext.put("overrideGlAccountId", adj.get("overrideGlAccountId"));
                 //createInvoiceItemContext.put("productId", orderItem.get("productId"));
                 //createInvoiceItemContext.put("productFeatureId", orderItem.get("productFeatureId"));
@@ -3197,7 +3194,7 @@ return results;
                 createOrderAdjustmentBillingContext.put("orderAdjustmentId", adj.getString("orderAdjustmentId"));
                 createOrderAdjustmentBillingContext.put("invoiceId", invoiceId);
                 createOrderAdjustmentBillingContext.put("invoiceItemSeqId", invoiceItemSeqId);
-                createOrderAdjustmentBillingContext.put("amount", new Double(amount.doubleValue()));
+                createOrderAdjustmentBillingContext.put("amount", amount);
                 createOrderAdjustmentBillingContext.put("userLogin", userLogin);
 
                 try {

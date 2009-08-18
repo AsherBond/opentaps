@@ -15,6 +15,7 @@
  */
 package org.opentaps.tests.warehouse;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -282,32 +283,32 @@ public class ProductionRunTestCase extends FinancialsTestCase {
         // The BOM quantity is the same as that defined for GZ-MANUFACTURED and MAT-MANUFACTRED-*
         GenericValue productComp1 = createTestProduct(name + " Component Material 1", demowarehouse1);
         String productComp1Id = productComp1.getString("productId");
-        createBOMProductAssoc(finishedProductId, productComp1Id, new Long("10"), new Double("2.0"), admin);
+        createBOMProductAssoc(finishedProductId, productComp1Id, new Long("10"), new BigDecimal("2.0"), admin);
         productIds.add(productComp1Id);
 
         GenericValue productComp2 = createTestProduct(name + " Component Material 2", demowarehouse1);
         String productComp2Id = productComp2.getString("productId");
-        createBOMProductAssoc(finishedProductId, productComp2Id, new Long("11"), new Double("3.0"), admin);
+        createBOMProductAssoc(finishedProductId, productComp2Id, new Long("11"), new BigDecimal("3.0"), admin);
         productIds.add(productComp2Id);
 
         GenericValue productComp3 = createTestProduct(name + " Component Material 3", demowarehouse1);
         String productComp3Id = productComp3.getString("productId");
-        createBOMProductAssoc(finishedProductId, productComp3Id, new Long("12"), new Double("4.0"), admin);
+        createBOMProductAssoc(finishedProductId, productComp3Id, new Long("12"), new BigDecimal("4.0"), admin);
         productIds.add(productComp3Id);
 
         GenericValue productComp4 = createTestProduct(name + " Component Material 4", demowarehouse1);
         String productComp4Id = productComp4.getString("productId");
-        createBOMProductAssoc(finishedProductId, productComp4Id, new Long("13"), new Double("1.0"), admin);
+        createBOMProductAssoc(finishedProductId, productComp4Id, new Long("13"), new BigDecimal("1.0"), admin);
         productIds.add(productComp4Id);
 
         GenericValue productComp5 = createTestProduct(name + " Component Material 5", demowarehouse1);
         String productComp5Id = productComp5.getString("productId");
-        createBOMProductAssoc(finishedProductId, productComp5Id, new Long("14"), new Double("6.0"), admin);
+        createBOMProductAssoc(finishedProductId, productComp5Id, new Long("14"), new BigDecimal("6.0"), admin);
         productIds.add(productComp5Id);
 
         GenericValue productComp6 = createTestProduct(name + " Component Material 6", demowarehouse1);
         String productComp6Id = productComp6.getString("productId");
-        createBOMProductAssoc(finishedProductId, productComp6Id, new Long("15"), new Double("5.0"), admin);
+        createBOMProductAssoc(finishedProductId, productComp6Id, new Long("15"), new BigDecimal("5.0"), admin);
         productIds.add(productComp6Id);
 
 
