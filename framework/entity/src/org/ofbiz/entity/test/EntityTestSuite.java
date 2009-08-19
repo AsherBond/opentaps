@@ -399,9 +399,9 @@ public class EntityTestSuite extends EntityTestCase {
      * This test will use the large number of unique items from above and test the EntityListIterator looping through the list
      */
     public void testEntityListIterator() throws Exception {
-        boolean transBegin = false;
+        boolean beganTransaction = false;
         try {
-            transBegin = TransactionUtil.begin();
+            beganTransaction = TransactionUtil.begin();
             EntityListIterator iterator = delegator.find("Testing", EntityCondition.makeCondition("testingId", EntityOperator.LIKE, "T2-%"), null, null, null, null);
             assertTrue("Test if EntityListIterator was created: ", iterator != null);
 
@@ -414,11 +414,12 @@ public class EntityTestSuite extends EntityTestCase {
             }
             assertTrue("Test if EntitlyListIterator iterates exactly " + TEST_COUNT + " times: " , i == TEST_COUNT);
             iterator.close();
-            TransactionUtil.commit(transBegin);
         } catch (GenericEntityException e) {
+            TransactionUtil.rollback(beganTransaction, "GenericEntityException occurred while iterating with EntityListIterator", e);
             assertTrue("GenericEntityException:" + e.toString(), false);
             return;
         } finally {
+            TransactionUtil.commit(beganTransaction);
             List<GenericValue> entitiesToRemove = delegator.findList("Testing", EntityCondition.makeCondition("testingId", EntityOperator.LIKE, "T2-%"), null, null, null, false);
             delegator.removeAll(entitiesToRemove);
         }
