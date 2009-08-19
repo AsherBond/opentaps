@@ -23,8 +23,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javolution.util.FastList;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Transaction;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericEntityException;
 import org.opentaps.domain.base.entities.AccountBalanceHistory;
 import org.opentaps.domain.billing.financials.AccountBalanceHistoryServiceInterface;
@@ -52,25 +57,36 @@ public class AccountBalanceHistoryService extends Service implements AccountBala
 
     /** {@inheritDoc} */
     public void captureAccountBalancesSnapshot() throws ServiceException {
+        Transaction tx = null;
         try {
             OrganizationRepositoryInterface organizationRepositoryInterface = domains.getOrganizationDomain().getOrganizationRepository();
             session = getInfrastructure().getSession();
             List<Organization> allValidOrganizations = organizationRepositoryInterface.getAllValidOrganizations();
+            List<Map> allBalances = FastList.newInstance();
             asOfDatetime = UtilDateTime.nowTimestamp();
             for (Organization organization : allValidOrganizations) {
                 // use AccountsHelper.getBalancesForAllCustomers to get Balances For Customers
-                Map<String, BigDecimal> balances = AccountsHelper.getBalancesForAllCustomers(organization.getPartyId(), "ACTUAL", asOfDatetime, getInfrastructure().getDelegator());
-                createSnapshotForBalance(organization.getPartyId(), "CUSTOMERS", balances);
+                Map<String, BigDecimal> balancesForAllCustomers = AccountsHelper.getBalancesForAllCustomers(organization.getPartyId(), "ACTUAL", asOfDatetime, getInfrastructure().getDelegator());
+                allBalances.add(UtilMisc.toMap("organizationPartyId", organization.getPartyId(), "balanceTypeEnumId", "CUSTOMERS", "balances", balancesForAllCustomers));
 
                 // use AccountsHelper.getBalancesForAllVendors to get Balances For Suppliers
-                balances = AccountsHelper.getBalancesForAllVendors(organization.getPartyId(), "ACTUAL", asOfDatetime, getInfrastructure().getDelegator());
-                createSnapshotForBalance(organization.getPartyId(), "SUPPLIERS", balances);
+                Map<String, BigDecimal> balancesForAllVendors = AccountsHelper.getBalancesForAllVendors(organization.getPartyId(), "ACTUAL", asOfDatetime, getInfrastructure().getDelegator());
+                allBalances.add(UtilMisc.toMap("organizationPartyId", organization.getPartyId(), "balanceTypeEnumId", "SUPPLIERS", "balances", balancesForAllVendors));
 
                 // use AccountsHelper.getBalancesForAllCommissions  to get Balances For Commissions
-                balances = AccountsHelper.getBalancesForAllCommissions(organization.getPartyId(), "ACTUAL", asOfDatetime, getInfrastructure().getDelegator());
-                createSnapshotForBalance(organization.getPartyId(), "COMMISSIONS", balances);
+                Map<String, BigDecimal> balancesForAllCommissions = AccountsHelper.getBalancesForAllCommissions(organization.getPartyId(), "ACTUAL", asOfDatetime, getInfrastructure().getDelegator());
+                allBalances.add(UtilMisc.toMap("organizationPartyId", organization.getPartyId(), "balanceTypeEnumId", "COMMISSIONS", "balances", balancesForAllCommissions));
+            }
+            //store balance to database
+            tx = session.beginTransaction();
+            for (Map balancesMap : allBalances) {
+                String organizationPartyId = (String) balancesMap.get("organizationPartyId");
+                String balanceTypeEnumId = (String) balancesMap.get("balanceTypeEnumId");
+                Map<String, BigDecimal> balances = (Map<String, BigDecimal>) balancesMap.get("balances");
+                createSnapshotForBalance(organizationPartyId, balanceTypeEnumId, balances);
             }
             session.flush();
+            tx.commit();
         } catch (RepositoryException e) {
             Debug.logError(e, MODULE);
             throw new ServiceException(e);
@@ -80,10 +96,16 @@ public class AccountBalanceHistoryService extends Service implements AccountBala
         } catch (InfrastructureException e) {
             Debug.logError(e, MODULE);
             throw new ServiceException(e);
+        } catch (HibernateException e) {
+            if (tx != null && tx.isActive()) {
+                tx.rollback();
+            }
+            throw new ServiceException(e.getMessage());
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
-//        finally {
-//            session.close();
-//        }
     }
 
     /**

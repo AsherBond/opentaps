@@ -385,7 +385,7 @@
 
     
     <service name="captureAccountBalancesSnapshot" engine="pojo"
-        location="org.opentaps.financials.domain.billing.financials.AccountBalanceHistoryService" invoke="captureAccountBalancesSnapshot" auth="true">
+        location="org.opentaps.financials.domain.billing.financials.AccountBalanceHistoryService" invoke="captureAccountBalancesSnapshot" auth="true" use-transaction="false">
         <description>create snapshot for customer/vendor/commission balances </description>
     </service>
 
