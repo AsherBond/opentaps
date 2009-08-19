@@ -85,8 +85,8 @@ public final class BomServices {
         String fromDateStr = (String) context.get("fromDate");
         String bomType = (String) context.get("bomType");
         Integer type = (Integer) context.get("type");
-        Double quantity = (Double) context.get("quantity");
-        Double amount = (Double) context.get("amount");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
+        BigDecimal amount = (BigDecimal) context.get("amount");
         String routingId = (String) context.get("routingId");
 
         if (type == null) {
@@ -112,10 +112,10 @@ public final class BomServices {
         }
         if (tree != null) {
             if (quantity != null) {
-                tree.setRootQuantity(BigDecimal.valueOf(quantity));
+                tree.setRootQuantity(quantity);
             }
             if (amount != null) {
-                tree.setRootAmount(BigDecimal.valueOf(amount));
+                tree.setRootAmount(amount);
             }
         }
 
@@ -140,17 +140,17 @@ public final class BomServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String productId = (String) context.get("productId");
-        Double quantity = (Double) context.get("quantity");
-        Double amount = (Double) context.get("amount");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
+        BigDecimal amount = (BigDecimal) context.get("amount");
         String fromDateStr = (String) context.get("fromDate");
         Boolean excludeWIPs = (Boolean) context.get("excludeWIPs");
         String routingId = (String) context.get("routingId");
 
         if (quantity == null) {
-            quantity = new Double(1);
+            quantity = new BigDecimal("1");
         }
         if (amount == null) {
-            amount = new Double(0);
+            amount = new BigDecimal("0");
         }
 
         Date fromDate = null;
@@ -222,8 +222,8 @@ public final class BomServices {
         List<BomNode> components = new ArrayList<BomNode>();
         try {
             tree = new BomTree(productId, "MANUF_COMPONENT", fromDate, BomTree.EXPLOSION_SINGLE_LEVEL, bomRoutingId, delegator, dispatcher, userLogin);
-            tree.setRootQuantity(BigDecimal.valueOf(quantity));
-            tree.setRootAmount(BigDecimal.valueOf(amount));
+            tree.setRootQuantity(quantity);
+            tree.setRootAmount(amount);
             Debug.logInfo("Debugging BomTree for product [" + productId + "] and routing [" + routingId + "]", MODULE);
             tree.debug();
             tree.print(components, excludeWIPs.booleanValue());

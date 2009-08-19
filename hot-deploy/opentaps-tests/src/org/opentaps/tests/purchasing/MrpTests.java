@@ -1291,11 +1291,11 @@ public class MrpTests extends MrpTestCase {
         ctxt.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
         ctxt.put("productId", mftProductId);
         ctxt.put("facilityId", facilityId);
-        ctxt.put("unitCost", Double.valueOf(12.0));
+        ctxt.put("unitCost", new BigDecimal("12.0"));
         ctxt.put("currencyUomId", "USD");
         ctxt.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        ctxt.put("quantityAccepted", Double.valueOf(9.0));
-        ctxt.put("quantityRejected", Double.valueOf(0));
+        ctxt.put("quantityAccepted", new BigDecimal("9.0"));
+        ctxt.put("quantityRejected", new BigDecimal("0"));
         ctxt.put("userLogin", demowarehouse1);
         runAndAssertServiceSuccess("receiveInventoryProduct", ctxt);
 

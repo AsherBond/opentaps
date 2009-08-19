@@ -1129,7 +1129,7 @@ public final class OpentapsMrpServices {
                             // -----------------------------------------------------
                             // The components are also loaded thru the configurator
                             BigDecimal positiveEventQuantity = (eventQuantity.signum() > 0 ? eventQuantity : eventQuantity.negate());
-                            serviceResponse = dispatcher.runSync("getManufacturingComponents", UtilMisc.<String, Object>toMap("productId", product.getString("productId"), "quantity", positiveEventQuantity.doubleValue(), "excludeWIPs", Boolean.FALSE, "userLogin", userLogin));
+                            serviceResponse = dispatcher.runSync("getManufacturingComponents", UtilMisc.<String, Object>toMap("productId", product.getString("productId"), "quantity", positiveEventQuantity, "excludeWIPs", Boolean.FALSE, "userLogin", userLogin));
 
                             // Lack of workEffortId signify some routings for the product and
                             // with min/max quantity exist but don't match requested quantity.
@@ -1201,7 +1201,7 @@ public final class OpentapsMrpServices {
 
                                 // -----------------------------------------------------
                                 // The components are also loaded thru the configurator
-                                serviceResponse = dispatcher.runSync("getManufacturingComponents", UtilMisc.<String, Object>toMap("productId", product.getString("productId"), "quantity", proposedOrder.getQuantity().doubleValue(), "excludeWIPs", Boolean.FALSE, "userLogin", userLogin));
+                                serviceResponse = dispatcher.runSync("getManufacturingComponents", UtilMisc.<String, Object>toMap("productId", product.getString("productId"), "quantity", proposedOrder.getQuantity(), "excludeWIPs", Boolean.FALSE, "userLogin", userLogin));
                                 components = (List) serviceResponse.get("components");
                                 String routingId = (String) serviceResponse.get("workEffortId");
                                 if (routingId != null) {
