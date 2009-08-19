@@ -83,6 +83,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
     private String requireInventory;
     private String reserveOrderEnumId;
     private Long sequenceId;
+    private String priority;
     private String facilityId;
     private String containerId;
     private BigDecimal quantityNotReserved;
@@ -295,6 +296,11 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
     /** {@inheritDoc} */
     public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
+    }
+    
+    /** {@inheritDoc} */
+    public void setPriority(String priority) {
+        this.priority = priority;
     }
 
     /**
@@ -596,6 +602,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                         context.put("reservedDatetime", reservedDatetime);
                         context.put("promisedDatetime", promisedDatetime);
                         context.put("sequenceId", sequenceId);
+                        context.put("priority", priority);
                         runSync("reserveOrderItemInventory", context);
 
                         quantityNotReserved = quantityNotReserved.subtract(toReserve);
@@ -646,6 +653,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
                     context.put("reservedDatetime", reservedDatetime);
                     context.put("promisedDatetime", promisedDatetime);
                     context.put("sequenceId", sequenceId);
+                    context.put("priority", priority);
                     runSync("reserveOrderItemInventory", context);
 
                 }

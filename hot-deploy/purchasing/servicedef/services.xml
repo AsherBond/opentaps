@@ -85,8 +85,8 @@
         <attribute name="supplierProductName" type="String" mode="IN" optional="true"/>
         <attribute name="availableFromDate" type="Timestamp" mode="IN" optional="false"/>
         <attribute name="availableThruDate" type="Timestamp" mode="IN" optional="true    "/>
-        <attribute name="minimumOrderQuantity" type="Double" mode="IN" optional="false"/>
-        <attribute name="lastPrice" type="Double" mode="IN" optional="false"/>
+        <attribute name="minimumOrderQuantity" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="lastPrice" type="BigDecimal" mode="IN" optional="false"/>
         <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
         <attribute name="glAccountTypeId" type="String" mode="IN" optional="false"/>
     </service>
@@ -173,7 +173,7 @@
         <attribute name="orderStatusId" type="String" mode="OUT" optional="true"/>
         <attribute name="orderTypeId" type="String" mode="OUT" optional="true"/>
         <attribute name="needsInventoryIssuance" type="String" mode="OUT" optional="true"/>
-        <attribute name="grandTotal" type="Double" mode="OUT" optional="true"/>
+        <attribute name="grandTotal" type="BigDecimal" mode="OUT" optional="true"/>
     </service>
 
 </services>

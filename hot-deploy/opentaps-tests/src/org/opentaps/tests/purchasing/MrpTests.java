@@ -1012,7 +1012,7 @@ public class MrpTests extends MrpTestCase {
         assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 30.0);
 
         // modify the Pending Internal Requirement's quantity to 100
-        runAndAssertServiceSuccess("updateRequirement", UtilMisc.<String, Object>toMap("userLogin", demopurch1, "requirementId", req1Id, "quantity", 100.0));
+        runAndAssertServiceSuccess("updateRequirement", UtilMisc.<String, Object>toMap("userLogin", demopurch1, "requirementId", req1Id, "quantity", new BigDecimal("100.0")));
 
         // run the MRP again and check the component requirements are still generated according to the new quantity
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
@@ -1439,7 +1439,7 @@ public class MrpTests extends MrpTestCase {
         // issue inventory required, and produce 2
         runAndAssertServiceSuccess("issueProductionRunTask", UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId));
         // produce 2 unit of product
-        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", workEffortId, "productId", productId, "quantity", 2.0));
+        runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", workEffortId, "productId", productId, "quantity", new BigDecimal("2.0")));
 
         // run MRP, and check:
         runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);

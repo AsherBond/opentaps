@@ -708,7 +708,7 @@ public class BomNode {
                 serviceContext.put("workEffortName", "SP_" + shipmentId + "_" + serviceContext.get("productId"));
             }
 
-            serviceContext.put("pRQuantity", getQuantity().doubleValue());
+            serviceContext.put("pRQuantity", getQuantity());
             if (UtilValidate.isNotEmpty(maxEndDate)) {
                 serviceContext.put("startDate", maxEndDate);
             } else {

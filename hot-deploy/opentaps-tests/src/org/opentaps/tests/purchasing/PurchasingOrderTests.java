@@ -573,14 +573,14 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         Map<String, Object> availability2 = getProductAvailability(product2.getString("productId"));
         Map<String, Object> availability3 = getProductAvailability(product3.getString("productId"));
         Map<String, Object> availability4 = getProductAvailability(product4.getString("productId"));
-        Double atpInitProduct1 = (Double) availability1.get("availableToPromiseTotal");
-        Double atpInitProduct2 = (Double) availability2.get("availableToPromiseTotal");
-        Double atpInitProduct3 = (Double) availability3.get("availableToPromiseTotal");
-        Double atpInitProduct4 = (Double) availability4.get("availableToPromiseTotal");
-        Double qohInitProduct1 = (Double) availability1.get("quantityOnHandTotal");
-        Double qohInitProduct2 = (Double) availability2.get("quantityOnHandTotal");
-        Double qohInitProduct3 = (Double) availability3.get("quantityOnHandTotal");
-        Double qohInitProduct4 = (Double) availability4.get("quantityOnHandTotal");
+        BigDecimal atpInitProduct1 = (BigDecimal) availability1.get("availableToPromiseTotal");
+        BigDecimal atpInitProduct2 = (BigDecimal) availability2.get("availableToPromiseTotal");
+        BigDecimal atpInitProduct3 = (BigDecimal) availability3.get("availableToPromiseTotal");
+        BigDecimal atpInitProduct4 = (BigDecimal) availability4.get("availableToPromiseTotal");
+        BigDecimal qohInitProduct1 = (BigDecimal) availability1.get("quantityOnHandTotal");
+        BigDecimal qohInitProduct2 = (BigDecimal) availability2.get("quantityOnHandTotal");
+        BigDecimal qohInitProduct3 = (BigDecimal) availability3.get("quantityOnHandTotal");
+        BigDecimal qohInitProduct4 = (BigDecimal) availability4.get("quantityOnHandTotal");
         // Create PO for 10 P1, 20 P2, 30 P3, 40 P4
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
         order.put(product1, new BigDecimal("10.0"));
@@ -707,27 +707,27 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         availability2 = getProductAvailability(product2.getString("productId"));
         availability3 = getProductAvailability(product3.getString("productId"));
         availability4 = getProductAvailability(product4.getString("productId"));
-        Double atpProduct1 = (Double) availability1.get("availableToPromiseTotal");
-        Double atpProduct2 = (Double) availability2.get("availableToPromiseTotal");
-        Double atpProduct3 = (Double) availability3.get("availableToPromiseTotal");
-        Double atpProduct4 = (Double) availability4.get("availableToPromiseTotal");
-        Double qohProduct1 = (Double) availability1.get("quantityOnHandTotal");
-        Double qohProduct2 = (Double) availability2.get("quantityOnHandTotal");
-        Double qohProduct3 = (Double) availability3.get("quantityOnHandTotal");
-        Double qohProduct4 = (Double) availability4.get("quantityOnHandTotal");
+        BigDecimal atpProduct1 = (BigDecimal) availability1.get("availableToPromiseTotal");
+        BigDecimal atpProduct2 = (BigDecimal) availability2.get("availableToPromiseTotal");
+        BigDecimal atpProduct3 = (BigDecimal) availability3.get("availableToPromiseTotal");
+        BigDecimal atpProduct4 = (BigDecimal) availability4.get("availableToPromiseTotal");
+        BigDecimal qohProduct1 = (BigDecimal) availability1.get("quantityOnHandTotal");
+        BigDecimal qohProduct2 = (BigDecimal) availability2.get("quantityOnHandTotal");
+        BigDecimal qohProduct3 = (BigDecimal) availability3.get("quantityOnHandTotal");
+        BigDecimal qohProduct4 = (BigDecimal) availability4.get("quantityOnHandTotal");
 
         // Verify that ATP and QOH for P1 have increased by 10
-        assertEquals("ATP for " + product1.getString("productId") + " should have increased by 10", 10.0, atpProduct1 - atpInitProduct1);
-        assertEquals("QOH for " + product1.getString("productId") + " should have increased by 10", 10.0, qohProduct1 - qohInitProduct1);
+        assertEquals("ATP for " + product1.getString("productId") + " should have increased by 10", 10.0, atpProduct1.subtract(atpInitProduct1));
+        assertEquals("QOH for " + product1.getString("productId") + " should have increased by 10", 10.0, qohProduct1.subtract(qohInitProduct1));
         // Verify that ATP and QOH for P2 have increased by 20
-        assertEquals("ATP for " + product2.getString("productId") + " should have increased by 20", 20.0, atpProduct2 - atpInitProduct2);
-        assertEquals("QOH for " + product2.getString("productId") + " should have increased by 20", 20.0, qohProduct2 - qohInitProduct2);
+        assertEquals("ATP for " + product2.getString("productId") + " should have increased by 20", 20.0, atpProduct2.subtract(atpInitProduct2));
+        assertEquals("QOH for " + product2.getString("productId") + " should have increased by 20", 20.0, qohProduct2.subtract(qohInitProduct2));
         // Verify that ATP and QOH for P3 have not changed
-        assertEquals("ATP for " + product3.getString("productId") + " should have not changed", 0, atpProduct3 - atpInitProduct3);
-        assertEquals("QOH for " + product3.getString("productId") + " should have not changed", 0, qohProduct3 - qohInitProduct3);
+        assertEquals("ATP for " + product3.getString("productId") + " should have not changed", 0, atpProduct3.subtract(atpInitProduct3));
+        assertEquals("QOH for " + product3.getString("productId") + " should have not changed", 0, qohProduct3.subtract(qohInitProduct3));
         // Verify that ATP and QOH for P4 have increased by 20
-        assertEquals("ATP for " + product4.getString("productId") + " should have increased by 10", 20.0, atpProduct4 - atpInitProduct4);
-        assertEquals("QOH for " + product4.getString("productId") + " should have increased by 10", 20.0, qohProduct4 - qohInitProduct4);
+        assertEquals("ATP for " + product4.getString("productId") + " should have increased by 10", 20.0, atpProduct4.subtract(atpInitProduct4));
+        assertEquals("QOH for " + product4.getString("productId") + " should have increased by 10", 20.0, qohProduct4.subtract(qohInitProduct4));
 
     }
 

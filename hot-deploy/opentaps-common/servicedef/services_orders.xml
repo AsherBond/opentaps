@@ -218,6 +218,7 @@ under the License.
         <attribute name="reserveOrderEnumId" type="String" mode="IN" optional="true"/>
         <attribute name="sequenceId" type="Long" mode="IN" optional="true"/>
         <attribute name="quantityNotReserved" type="BigDecimal" mode="OUT" optional="false"/>
+        <attribute name="priority" type="String" mode="IN"  optional="true"/>        
     </service>
 
     <service name="reReserveProductInventory" engine="pojo" 

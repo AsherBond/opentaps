@@ -179,4 +179,12 @@ public interface OrderInventoryServiceInterface extends ServiceInterface {
      * @exception ServiceException if an error occurs
      */
     public void disassemblePurchasingPackage() throws ServiceException;
+    
+    /**
+     * Service <code>reserveProductInventoryByFacility</code><br/>
+     * Attribute <code>priority</code>, optional.
+     *
+     * @param priority
+     */
+    public void setPriority(String priority);
 }

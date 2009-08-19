@@ -148,7 +148,7 @@ under the License.
             location="org.opentaps.purchasing.mrp.OpentapsMrpServices" invoke="createInventoryTransferFromRequirement" auth="true">
         <description>Creates an Inventory Transfer from a requirement.</description>
         <attribute mode="IN" name="requirementId" optional="false" type="String"/>
-        <attribute mode="IN" name="quantity" optional="true" type="Double"/>
+        <attribute mode="IN" name="quantity" optional="true" type="BigDecimal"/>
         <attribute mode="OUT" name="inventoryTransferIds" optional="true" type="List"/>
     </service>
 

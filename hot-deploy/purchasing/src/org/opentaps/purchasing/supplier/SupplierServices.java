@@ -27,6 +27,8 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.purchasing.security.PurchasingSecurity;
 
+import com.ibm.icu.math.BigDecimal;
+
 import java.sql.Timestamp;
 import java.util.Locale;
 import java.util.Map;
@@ -207,8 +209,8 @@ public class SupplierServices {
         String supplierProductName = (String) context.get("supplierProductName");
         Timestamp availableFromDate = (Timestamp) context.get("availableFromDate");
         Timestamp availableThruDate = (Timestamp) context.get("availableThruDate");
-        Double minimumOrderQuantity = (Double) context.get("minimumOrderQuantity");
-        Double lastPrice = (Double) context.get("lastPrice");
+        BigDecimal minimumOrderQuantity = (BigDecimal) context.get("minimumOrderQuantity");
+        BigDecimal lastPrice = (BigDecimal) context.get("lastPrice");
         String glAccountTypeId = (String) context.get("glAccountTypeId");
         String currencyUomId = (String) context.get("currencyUomId");
 

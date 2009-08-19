@@ -1554,7 +1554,7 @@ public final class OpentapsMrpServices {
                     // the inventory transfer is created from the backup facility to our MRP facility.  The quantity is the lower of remaining quantity to transfer and the maxTransferQuantity
                     // the transfer is scheduled to take place right before required event time stamp (see above)
                     Map inventoryTransferParams = UtilMisc.toMap("facilityIdFrom", backupFacilityId, "facilityIdTo", facilityId,
-                            "productId", productId, "sendDate", transferTimestamp, "transferQuantity", new Double(transferQuantity), "userLogin", userLogin);
+                            "productId", productId, "sendDate", transferTimestamp, "transferQuantity", new BigDecimal(transferQuantity), "userLogin", userLogin);
                     tmpResult = dispatcher.runSync("createInventoryTransferForFacilityProduct", inventoryTransferParams);
                     if (ServiceUtil.isError(tmpResult)) { return BigDecimal.ZERO; }  // not necessary to log -- service engine will log errors
                     // if the service returns a failure then it probably didn't transfer the inventory so keep on going
@@ -1563,9 +1563,8 @@ public final class OpentapsMrpServices {
                         continue; // so we can try again with the next warehouse
                     }
 
-                    Double quantityThisTransferDb = (Double) tmpResult.get("quantityTransferred");
+                    BigDecimal quantityThisTransfer = (BigDecimal) tmpResult.get("quantityTransferred");
                     List inventoryTransferIds = (List) tmpResult.get("inventoryTransferIds");
-                    BigDecimal quantityThisTransfer = BigDecimal.valueOf(quantityThisTransferDb);
                     quantityToTransfer = quantityToTransfer.subtract(quantityThisTransfer).setScale(decimals + 1, defaultRoundingMode);
                     quantityTransferred = quantityTransferred.add(quantityThisTransfer).setScale(decimals + 1, defaultRoundingMode);
 
@@ -1605,7 +1604,7 @@ public final class OpentapsMrpServices {
         Locale locale = UtilCommon.getLocale(context);
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String requirementId = (String) context.get("requirementId");
-        Double quantity = (Double) context.get("quantity");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
 
         GenericValue requirement = null;
         try {
@@ -1625,7 +1624,7 @@ public final class OpentapsMrpServices {
 
         // get quantity from the requirement it if was overridden by the service parameter
         if (quantity == null) {
-            quantity = requirement.getDouble("quantity");
+            quantity = requirement.getBigDecimal("quantity");
         }
 
         // get the transfer parameters from the requirement
@@ -1769,7 +1768,7 @@ public final class OpentapsMrpServices {
                     serviceContext.put("routingId", routingId);
                     serviceContext.put("productId", productId);
                     serviceContext.put("facilityId", facilityId);
-                    serviceContext.put("quantity", totalToProduce.doubleValue());
+                    serviceContext.put("quantity", totalToProduce);
                     serviceContext.put("startDate", startDate);
                     String description;
                     // if there is only one requirement, use the same name as if it was created by createProductionRunFromRequirement

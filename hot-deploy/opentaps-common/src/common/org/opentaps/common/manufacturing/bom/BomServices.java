@@ -242,7 +242,7 @@ public final class BomServices {
         for (BomNode node : components) {
             Map componentMap = new HashMap();
             componentMap.put("product", node.getProduct());
-            componentMap.put("quantity", node.getQuantity().doubleValue());
+            componentMap.put("quantity", node.getQuantity());
             componentsMap.add(componentMap);
         }
         result.put("componentsMap", componentsMap);

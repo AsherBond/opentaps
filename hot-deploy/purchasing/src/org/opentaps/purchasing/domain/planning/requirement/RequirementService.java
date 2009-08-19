@@ -124,7 +124,7 @@ public class RequirementService extends Service implements RequirementServiceInt
                 Debug.logInfo("Updating the quantity of Requirement [" + requirementId + "] from [" + requirement.getQuantity() + "] to [" + quantity + "]" , MODULE);
                 Map<String, Object> input = createInputMap();
                 input.put("requirementId", requirementId);
-                input.put("quantity", quantity.doubleValue());
+                input.put("quantity", quantity);
                 runSync("updateRequirement", input);
             }
             // change the supplier, only for a PRODUCT_REQUIREMENT (purchasing requirement)
