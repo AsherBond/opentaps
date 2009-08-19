@@ -129,11 +129,11 @@ public class InventoryTests extends FinancialsTestCase {
         input.put("inventoryItemTypeId", NonSerializedTestSpecs.inventoryItemTypeId);
         input.put("productId", productId);
         input.put("facilityId", facilityId);
-        input.put("unitCost", NonSerializedTestSpecs.itemCost.doubleValue());
+        input.put("unitCost", NonSerializedTestSpecs.itemCost);
         input.put("currencyUomId", NonSerializedTestSpecs.currencyUomId);
         input.put("datetimeReceived", now);
-        input.put("quantityAccepted", NonSerializedTestSpecs.quantity.doubleValue());
-        input.put("quantityRejected", new Double(0));
+        input.put("quantityAccepted", NonSerializedTestSpecs.quantity);
+        input.put("quantityRejected", new BigDecimal("0"));
         input.put("userLogin", demowarehouse1);
         Map output = runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
@@ -191,8 +191,8 @@ public class InventoryTests extends FinancialsTestCase {
         template.put("facilityId", facilityId);
         template.put("currencyUomId", SerializedTestSpecs.currencyUomId);
         template.put("datetimeReceived", now);
-        template.put("quantityRejected", new Double(0));
-        template.put("quantityAccepted", SerializedTestSpecs.quantity.doubleValue());
+        template.put("quantityRejected", new BigDecimal("0"));
+        template.put("quantityAccepted", SerializedTestSpecs.quantity);
         template.put("userLogin", demowarehouse1);
 
         Map<String, Object> input = null;
@@ -259,10 +259,10 @@ public class InventoryTests extends FinancialsTestCase {
         input.put("facilityId", FROM_FACILITY);
         input.put("productId", productId);
         input.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        input.put("quantityAccepted", 5.0);
-        input.put("quantityRejected", 0.0);
+        input.put("quantityAccepted", new BigDecimal("5.0"));
+        input.put("quantityRejected", new BigDecimal("0.0"));
         input.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        input.put("unitCost", 10.00);
+        input.put("unitCost", new BigDecimal("10.00"));
         Map result = runAndAssertServiceSuccess("receiveInventoryProduct", input);
         String inventoryItemId = (String) result.get("inventoryItemId");
 
@@ -350,10 +350,10 @@ public class InventoryTests extends FinancialsTestCase {
         input.put("facilityId", FROM_FACILITY);
         input.put("productId", productId1);
         input.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        input.put("quantityAccepted", 5.0);
-        input.put("quantityRejected", 0.0);
+        input.put("quantityAccepted", new BigDecimal("5.0"));
+        input.put("quantityRejected", new BigDecimal("0.0"));
         input.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        input.put("unitCost", 10.00);
+        input.put("unitCost", new BigDecimal("10.00"));
         // tags
         Map<String, String> tags = new HashMap<String, String>();
         tags.put("acctgTagEnumId1", "DIV_GOV");
@@ -470,10 +470,10 @@ public class InventoryTests extends FinancialsTestCase {
         input.put("facilityId", FROM_FACILITY);
         input.put("productId", productId);
         input.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        input.put("quantityAccepted", receiveQty);
-        input.put("quantityRejected", 0.0);
+        input.put("quantityAccepted", new BigDecimal(receiveQty));
+        input.put("quantityRejected", new BigDecimal("0.0"));
         input.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        input.put("unitCost", unitCost);
+        input.put("unitCost", new BigDecimal(unitCost));
         Map result = runAndAssertServiceSuccess("receiveInventoryProduct", input);
         String inventoryItemId = (String) result.get("inventoryItemId");
 
@@ -562,10 +562,10 @@ public class InventoryTests extends FinancialsTestCase {
         template.put("facilityId", FROM_FACILITY);
         template.put("productId", productId);
         template.put("inventoryItemTypeId", "SERIALIZED_INV_ITEM");
-        template.put("quantityAccepted", 1.0);
-        template.put("quantityRejected", 0.0);
+        template.put("quantityAccepted", new BigDecimal("1.0"));
+        template.put("quantityRejected", new BigDecimal("0.0"));
         template.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        template.put("unitCost", 10.00);
+        template.put("unitCost", new BigDecimal("10.00"));
         List<String> inventoryItemIdList = new FastList();
         for (int idx = 1; idx <= 5; idx++) {
             Map input = template;
@@ -665,10 +665,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Receive 10.0 non-serialized units at $9.87 per unit into WebStoreWarehouse
         Map receiveContext = UtilMisc.toMap("userLogin", demowarehouse1, "facilityId", FROM_FACILITY, "productId", productId, "inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        receiveContext.put("quantityAccepted", 10.0);
-        receiveContext.put("quantityRejected", 0.0);
+        receiveContext.put("quantityAccepted", new BigDecimal("10.0"));
+        receiveContext.put("quantityRejected", new BigDecimal("0.0"));
         receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        receiveContext.put("unitCost", new BigDecimal("9.87").doubleValue());
+        receiveContext.put("unitCost", new BigDecimal("9.87"));
         Map receiveResult = runAndAssertServiceSuccess("receiveInventoryProduct", receiveContext);
         String receiveInventoryItemId = (String) receiveResult.get("inventoryItemId");
 
@@ -730,10 +730,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Receive 10.0 non-serialized units at $10.0 per unit into WebStoreWarehouse
         Map receiveContext = UtilMisc.toMap("userLogin", demowarehouse1, "facilityId", FROM_FACILITY, "productId", productId1, "inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        receiveContext.put("quantityAccepted", 10.0);
-        receiveContext.put("quantityRejected", 0.0);
+        receiveContext.put("quantityAccepted", new BigDecimal("10.0"));
+        receiveContext.put("quantityRejected", new BigDecimal("0.0"));
         receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        receiveContext.put("unitCost", new BigDecimal("10.00").doubleValue());
+        receiveContext.put("unitCost", new BigDecimal("10.00"));
         // tags
         Map<String, String> tags = new HashMap<String, String>();
         tags.put("acctgTagEnumId1", "DIV_GOV");
@@ -802,10 +802,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Receive 1.0 serialized units at $123.45 into WebStoreWarehouse
         Map receiveContext = UtilMisc.toMap("userLogin", demowarehouse1, "facilityId", FROM_FACILITY, "productId", productId, "inventoryItemTypeId", "SERIALIZED_INV_ITEM");
-        receiveContext.put("quantityAccepted", 1.0);
-        receiveContext.put("quantityRejected", 0.0);
+        receiveContext.put("quantityAccepted", new BigDecimal("1.0"));
+        receiveContext.put("quantityRejected", new BigDecimal("0.0"));
         receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        receiveContext.put("unitCost", new BigDecimal("123.45").doubleValue());
+        receiveContext.put("unitCost", new BigDecimal("123.45"));
         Map receiveResult = runAndAssertServiceSuccess("receiveInventoryProduct", receiveContext);
         String receiveInventoryItemId = (String) receiveResult.get("inventoryItemId");
 
@@ -850,8 +850,8 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Receive inventory of a product into WebStoreWarehouse, with no unit cost specified
         Map receiveContext = UtilMisc.toMap("userLogin", demowarehouse1, "facilityId", FROM_FACILITY, "productId", productId, "inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        receiveContext.put("quantityAccepted", 1.0);
-        receiveContext.put("quantityRejected", 0.0);
+        receiveContext.put("quantityAccepted", new BigDecimal("1.0"));
+        receiveContext.put("quantityRejected", new BigDecimal("0.0"));
         receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
         Map receiveResult = runAndAssertServiceSuccess("receiveInventoryProduct", receiveContext);
         String receiveInventoryItemId = (String) receiveResult.get("inventoryItemId");
@@ -877,10 +877,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Receive inventory of a product into WebStoreWarehouse, with a unit cost of $1.00 specified
         Map receiveContext = UtilMisc.toMap("userLogin", demowarehouse1, "facilityId", FROM_FACILITY, "productId", productId, "inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        receiveContext.put("quantityAccepted", 1.0);
-        receiveContext.put("quantityRejected", 0.0);
+        receiveContext.put("quantityAccepted", new BigDecimal("1.0"));
+        receiveContext.put("quantityRejected", new BigDecimal("0.0"));
         receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        receiveContext.put("unitCost", new BigDecimal("1.00").doubleValue());
+        receiveContext.put("unitCost", new BigDecimal("1.00"));
         Map receiveResult = runAndAssertServiceSuccess("receiveInventoryProduct", receiveContext);
         String receiveInventoryItemId = (String) receiveResult.get("inventoryItemId");
 
@@ -905,10 +905,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Receive inventory of a product into WebStoreWarehouse, with a unit cost of $1.00 specified
         Map receiveContext = UtilMisc.toMap("userLogin", demowarehouse1, "facilityId", FROM_FACILITY, "productId", productId, "inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        receiveContext.put("quantityAccepted", 1.0);
-        receiveContext.put("quantityRejected", 0.0);
+        receiveContext.put("quantityAccepted", new BigDecimal("1.0"));
+        receiveContext.put("quantityRejected", new BigDecimal("0.0"));
         receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        receiveContext.put("unitCost", new BigDecimal("1.00").doubleValue());
+        receiveContext.put("unitCost", new BigDecimal("1.00"));
         Map receiveResult = runAndAssertServiceSuccess("receiveInventoryProduct", receiveContext);
         String receiveInventoryItemId = (String) receiveResult.get("inventoryItemId");
 
@@ -960,10 +960,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Receive 5 units of a product into WebStoreWarehouse, with a unit cost of $10 and initial tags
         Map receiveContext = UtilMisc.toMap("userLogin", demowarehouse1, "facilityId", FROM_FACILITY, "productId", productId, "inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        receiveContext.put("quantityAccepted", 5.0);
-        receiveContext.put("quantityRejected", 0.0);
+        receiveContext.put("quantityAccepted", new BigDecimal("5.0"));
+        receiveContext.put("quantityRejected", new BigDecimal("0.0"));
         receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        receiveContext.put("unitCost", new BigDecimal("10.0").doubleValue());
+        receiveContext.put("unitCost", new BigDecimal("10.0"));
         // tags
         Map<String, String> tags = new HashMap<String, String>();
         tags.put("acctgTagEnumId1", "DIV_GOV");
@@ -1071,10 +1071,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Receive 5 units of a product into WebStoreWarehouse, with a unit cost of $4.56 specified
         Map receiveContext = UtilMisc.toMap("userLogin", demowarehouse1, "facilityId", FROM_FACILITY, "productId", productId, "inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        receiveContext.put("quantityAccepted", 5.0);
-        receiveContext.put("quantityRejected", 0.0);
+        receiveContext.put("quantityAccepted", new BigDecimal("5.0"));
+        receiveContext.put("quantityRejected", new BigDecimal("0.0"));
         receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        receiveContext.put("unitCost", new BigDecimal("4.56").doubleValue());
+        receiveContext.put("unitCost", new BigDecimal("4.56"));
         Map receiveResult = runAndAssertServiceSuccess("receiveInventoryProduct", receiveContext);
         String receiveInventoryItemId = (String) receiveResult.get("inventoryItemId");
 
@@ -1135,10 +1135,10 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Receive 5 units of a product into WebStoreWarehouse, with a unit cost of $4.56 specified
         Map receiveContext = UtilMisc.toMap("userLogin", demowarehouse1, "facilityId", FROM_FACILITY, "productId", productId1, "inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        receiveContext.put("quantityAccepted", 5.0);
-        receiveContext.put("quantityRejected", 0.0);
+        receiveContext.put("quantityAccepted", new BigDecimal("5.0"));
+        receiveContext.put("quantityRejected", new BigDecimal("0.0"));
         receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        receiveContext.put("unitCost", new BigDecimal("4.56").doubleValue());
+        receiveContext.put("unitCost", new BigDecimal("4.56"));
         // tags
         Map<String, String> tags = new HashMap<String, String>();
         tags.put("acctgTagEnumId1", "DIV_GOV");
@@ -1995,11 +1995,11 @@ public class InventoryTests extends FinancialsTestCase {
         input.put("inventoryItemTypeId", NonSerializedTestSpecs.inventoryItemTypeId);
         input.put("productId", productId);
         input.put("facilityId", facilityId);
-        input.put("unitCost", new Double(10.0));
+        input.put("unitCost", new BigDecimal("10.0"));
         input.put("currencyUomId", NonSerializedTestSpecs.currencyUomId);
         input.put("datetimeReceived", now);
-        input.put("quantityAccepted", new Double(10.0));
-        input.put("quantityRejected", new Double(0));
+        input.put("quantityAccepted", new BigDecimal("10.0"));
+        input.put("quantityRejected", new BigDecimal("0"));
         input.put("userLogin", demowarehouse1);
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
         // check inventory

@@ -941,15 +941,15 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
         input.put("productId", "MAT_A_COST");
         input.put("facilityId", facilityId);
-        input.put("quantityAccepted", new Double("2.0"));
-        input.put("quantityRejected", new Double("0.0"));
+        input.put("quantityAccepted", new BigDecimal("2.0"));
+        input.put("quantityRejected", new BigDecimal("0.0"));
         input.put("currencyUomId", "USD");
-        input.put("unitCost", new Double("5.0"));
+        input.put("unitCost", new BigDecimal("5.0"));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         pause("product average calculation");
 
-        input.put("unitCost", new Double("13.0"));
+        input.put("unitCost", new BigDecimal("13.0"));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         // Check MAT_A_COST productAverageCost is now of 9.0
@@ -961,13 +961,13 @@ public class ProductionRunTests extends ProductionRunTestCase {
         pause("product average calculation");
 
         input.put("productId", "MAT_B_COST");
-        input.put("quantityAccepted", new Double("3.0"));
-        input.put("unitCost", new Double("3.0"));
+        input.put("quantityAccepted", new BigDecimal("3.0"));
+        input.put("unitCost", new BigDecimal("3.0"));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         pause("product average calculation");
 
-        input.put("unitCost", new Double("11.0"));
+        input.put("unitCost", new BigDecimal("11.0"));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         // Check MAT_B_COST productAverageCost is now of 7.0
@@ -1799,13 +1799,13 @@ public class ProductionRunTests extends ProductionRunTestCase {
         createBOMProductAssoc(productId, productComp5Id, alternateRoutingId, new Long("12"), new BigDecimal("5.0"), admin);
 
         // Run a BOM simulation for the default BOM (calling getBOMTree service)
-        Map<String, Object> result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "userLogin", demowarehouse1));
+        Map<String, Object> result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", new BigDecimal("1.0"), "userLogin", demowarehouse1));
         BomTree tree = (BomTree) result.get("tree");
         // check the result correspond the to the default BOM components
         assertBomTreeCorrect(tree, UtilMisc.toMap(productId, new BigDecimal("1.0"), productComp1Id, new BigDecimal("7.0"), productComp2Id, new BigDecimal("3.0")));
 
         // Run a BOM simulation for the alternative BOM (calling getBOMTree service)
-        result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "routingId", alternateRoutingId, "userLogin", demowarehouse1));
+        result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", new BigDecimal("1.0"), "routingId", alternateRoutingId, "userLogin", demowarehouse1));
         tree = (BomTree) result.get("tree");
         // check the result correspond the to the alternative BOM components
         assertBomTreeCorrect(tree, UtilMisc.toMap(productId, new BigDecimal("1.0"), productComp3Id, new BigDecimal("1.0"), productComp4Id, new BigDecimal("2.0"), productComp5Id, new BigDecimal("5.0")));
@@ -2003,7 +2003,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         createBOMProductAssoc(productComp1Id, productComp14Id, alternateRoutingId, new Long("11"), new BigDecimal("15.0"), admin);
 
         // Run a BOM simulation for the alternate BOM (calling getBOMTree service)
-        result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "routingId", alternateRoutingId, "userLogin", demowarehouse1));
+        result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", new BigDecimal("1.0"), "routingId", alternateRoutingId, "userLogin", demowarehouse1));
         tree = (BomTree) result.get("tree");
         // check the result correspond the to the alternate BOM components
         expectedBom = UtilMisc.toMap(productId, 1.0, productComp1Id, 8.0, productComp13Id, 96.0, productComp14Id, 120.0);

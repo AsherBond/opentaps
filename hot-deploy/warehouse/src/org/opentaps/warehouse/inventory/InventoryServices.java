@@ -38,6 +38,7 @@
 
 package org.opentaps.warehouse.inventory;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -286,23 +287,23 @@ public final class InventoryServices {
                 }
                 try {
                     if (UtilValidate.isNotEmpty((String) quantitiesAccepted.get(rowNumber))) {
-                        context.put("quantityAccepted", new Double(UtilCommon.parseLocalizedNumber(locale, (String) quantitiesAccepted.get(rowNumber))));
+                        context.put("quantityAccepted", new BigDecimal(UtilCommon.parseLocalizedNumber(locale, (String) quantitiesAccepted.get(rowNumber))));
                     }
                     if (UtilValidate.isNotEmpty((String) quantitiesAccepted.get(rowNumber))) {
-                        context.put("quantity", new Double(UtilCommon.parseLocalizedNumber(locale, (String) quantitiesAccepted.get(rowNumber))));
+                        context.put("quantity", new BigDecimal(UtilCommon.parseLocalizedNumber(locale, (String) quantitiesAccepted.get(rowNumber))));
                     }
                     if (UtilValidate.isNotEmpty((String) quantitiesRejected.get(rowNumber))) {
-                        context.put("quantityRejected", new Double(UtilCommon.parseLocalizedNumber(locale, (String) quantitiesRejected.get(rowNumber))));
+                        context.put("quantityRejected", new BigDecimal(UtilCommon.parseLocalizedNumber(locale, (String) quantitiesRejected.get(rowNumber))));
                     }
                     if (UtilValidate.isNotEmpty((String) unitCosts.get(rowNumber))) {
-                        context.put("unitCost", new Double(UtilCommon.parseLocalizedNumber(locale, (String) unitCosts.get(rowNumber))));
+                        context.put("unitCost", new BigDecimal(UtilCommon.parseLocalizedNumber(locale, (String) unitCosts.get(rowNumber))));
                     }
                 } catch (ParseException e) {
                     Debug.logError(e, MODULE);
                     return ServiceUtil.returnError(e.getMessage());
                 }
 
-                if (UtilValidate.isEmpty(context.get("quantityAccepted")) || ((Double) context.get("quantityAccepted")).doubleValue() <= 0) {
+                if (UtilValidate.isEmpty(context.get("quantityAccepted")) || ((BigDecimal) context.get("quantityAccepted")).doubleValue() <= 0) {
                     continue;
                 }
 

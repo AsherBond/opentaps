@@ -418,10 +418,10 @@ public class ProductionRunTestCase extends FinancialsTestCase {
         input.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
         input.put("productId", productId);
         input.put("facilityId", facilityId);
-        input.put("quantityAccepted", new Double(quantity));
-        input.put("quantityRejected", new Double(0.0));
+        input.put("quantityAccepted", new BigDecimal(quantity));
+        input.put("quantityRejected", new BigDecimal("0.0"));
         input.put("currencyUomId", "USD");
-        input.put("unitCost", unitCost);
+        input.put("unitCost", new BigDecimal(unitCost));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
     }
 

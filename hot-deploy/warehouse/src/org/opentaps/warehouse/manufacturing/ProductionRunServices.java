@@ -1266,7 +1266,7 @@ public final class ProductionRunServices {
         List<BomNode> components = null;
         Map<String, Object> serviceContext = new HashMap<String, Object>();
         serviceContext.put("productId", productId); // the product that we want to manufacture or disassemble
-        serviceContext.put("quantity", pRQuantity); // the quantity that we want to manufacture
+        serviceContext.put("quantity", pRQuantityBd); // the quantity that we want to manufacture
         serviceContext.put("userLogin", userLogin);
         if (disassemble && UtilValidate.isNotEmpty(routingId) && "DEF_DISASMBL_TMP".equals(routing.get("workEffortId"))) {
             // if it is a disassembly, and a routing was given, getProductRoutingDisassemble might have returned
