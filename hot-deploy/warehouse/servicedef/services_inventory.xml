@@ -91,21 +91,21 @@ under the License.
         <description>Adjust both ATP and QOH by the same given amount.</description>
         <attribute name="inventoryItemId" type="String" mode="IN" optional="false" />
         <attribute name="varianceReasonId" type="String" mode="IN" optional="false" />
-        <attribute name="varianceQty" type="Double" mode="IN" optional="true" />
+        <attribute name="varianceQty" type="BigDecimal" mode="IN" optional="true" />
     </service>
 
     <service name="getProductInventoryAvailable" engine="pojo" location="org.opentaps.warehouse.domain.inventory.InventoryService" invoke="getProductInventoryAvailable" auth="false" use-transaction="false">
         <description>Get Inventory Availability for a Product</description>
         <attribute name="productId" type="String" mode="IN" optional="false"/>
-        <attribute name="quantityOnHandTotal" type="Double" mode="OUT" optional="false"/>
-        <attribute name="availableToPromiseTotal" type="Double" mode="OUT" optional="false"/>
+        <attribute name="quantityOnHandTotal" type="BigDecimal" mode="OUT" optional="false"/>
+        <attribute name="availableToPromiseTotal" type="BigDecimal" mode="OUT" optional="false"/>
         <attribute name="useCache" type="Boolean" mode="IN" optional="true"/>
     </service>
 
     <service name="prepareInventoryTransfer" engine="pojo" location="org.opentaps.warehouse.domain.inventory.InventoryService" invoke="prepareInventoryTransfer" auth="true">
         <description>Service to prepare an inventory transfer, returns the inventory item id of the destination inventory item.</description>
         <attribute name="inventoryItemId" type="String" mode="INOUT" optional="false"/>
-        <attribute name="xferQty" type="Double" mode="IN" optional="false"/>
+        <attribute name="xferQty" type="BigDecimal" mode="IN" optional="false"/>
     </service>
 
     <service name="cancelInventoryTransfer" engine="pojo"

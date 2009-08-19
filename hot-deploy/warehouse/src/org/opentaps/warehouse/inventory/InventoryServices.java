@@ -366,8 +366,8 @@ public final class InventoryServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         // ignoring 0 and empty variance quantity
-        Double varianceQty = (Double) context.get("varianceQty");
-        if (varianceQty == null || varianceQty == 0.0) {
+        BigDecimal varianceQty = (BigDecimal) context.get("varianceQty");
+        if (varianceQty == null || varianceQty.compareTo(BigDecimal.ZERO) == 0) {
             return ServiceUtil.returnSuccess();
         }
 

@@ -131,12 +131,11 @@ public final class ProductionRunServices {
         String facilityIdTo = (String) context.get("facilityIdTo");
         String productId = (String) context.get("productId");
         Timestamp sendDate = (Timestamp) context.get("sendDate");
-        Double transferQuantityDouble = (Double) context.get("transferQuantity");
-        double transferQuantity = transferQuantityDouble.doubleValue();
-        double quantityTransferred = 0.0;
+        BigDecimal transferQuantity = (BigDecimal) context.get("transferQuantity");
+        BigDecimal quantityTransferred = new BigDecimal("0.0");
         List<String> inventoryTransferIds = new LinkedList<String>();
 
-        if (transferQuantity < 0) {
+        if (transferQuantity.compareTo(BigDecimal.ZERO) > 0) {
             return UtilMessage.createAndLogServiceFailure("Request to transfer quantity [" + transferQuantity + "] of [" + productId + "] from [" + facilityIdFrom + "] to [" + facilityIdTo + "] cannot be completed because you cannot transfer a quantity less than zero", MODULE);
         }
 
@@ -156,9 +155,9 @@ public final class ProductionRunServices {
             Iterator<GenericValue> inventoryItemIt = inventoryItemList.iterator();
             while (inventoryItemIt.hasNext()) {
                 GenericValue inventoryItem = inventoryItemIt.next();
-                double availableToPromiseTotal = inventoryItem.getDouble("availableToPromiseTotal").doubleValue();
-                double xferQty = 0.0;
-                if (availableToPromiseTotal >= transferQuantity) {
+                BigDecimal availableToPromiseTotal = inventoryItem.getBigDecimal("availableToPromiseTotal");
+                BigDecimal xferQty = new BigDecimal("0.0");
+                if (availableToPromiseTotal.compareTo(transferQuantity) >= 0) {
                     xferQty = transferQuantity;
                 } else {
                     xferQty = availableToPromiseTotal;
@@ -167,7 +166,7 @@ public final class ProductionRunServices {
                     Map tmpInputMap = UtilMisc.toMap("inventoryItemId", inventoryItem.getString("inventoryItemId"),
                             "facilityId", facilityIdFrom,
                             "facilityIdTo", facilityIdTo,
-                            "xferQty", new Double(xferQty),
+                            "xferQty", xferQty,
                             "sendDate", sendDate);
                     tmpInputMap.put("statusId", "IXF_REQUESTED");
                     tmpInputMap.put("userLogin", userLogin);
@@ -177,21 +176,21 @@ public final class ProductionRunServices {
                 } catch (GenericServiceException e) {
                     return UtilMessage.createAndLogServiceError("Problem running the createInventoryTransferForFacilityProduct service: " + e.getMessage(), MODULE);
                 }
-                transferQuantity = transferQuantity - xferQty;
-                quantityTransferred += xferQty;
-                if (transferQuantity == 0) {
+                transferQuantity = transferQuantity.subtract(xferQty);
+                quantityTransferred = quantityTransferred.add(xferQty);
+                if (transferQuantity.compareTo(BigDecimal.ZERO) == 0) {
                     break;
                 }
             }
-            if (transferQuantity > 0) {
-                return UtilMessage.createAndLogServiceFailure("Quantity [" + transferQuantityDouble + "] was requested to be transferred from [" + facilityIdFrom + "] but [" + transferQuantity + "] could not be matched against actual inventory", MODULE);
+            if (transferQuantity .compareTo(BigDecimal.ZERO) > 0) {
+                return UtilMessage.createAndLogServiceFailure("Quantity [" + transferQuantity + "] was requested to be transferred from [" + facilityIdFrom + "] but [" + transferQuantity + "] could not be matched against actual inventory", MODULE);
             }
         } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
             return UtilMessage.createAndLogServiceError("Problem running the autoCreateInventoryTransfers service" + e.getMessage(), MODULE);
         }
         Map result = ServiceUtil.returnSuccess();
-        result.put("quantityTransferred", new Double(quantityTransferred));
+        result.put("quantityTransferred", quantityTransferred);
         result.put("inventoryTransferIds", inventoryTransferIds);
         return result;
     }
@@ -290,18 +289,18 @@ public final class ProductionRunServices {
                     }
                     transferQuantityTotal += transferQuantity;
                 }
-                Double netRequiredQuantity = new Double(totalQuantity.doubleValue() - existingAtp - transferQuantityTotal);   // quantity required after considering ATP and planned inventory transfers
+                BigDecimal netRequiredQuantity = new BigDecimal(totalQuantity.doubleValue() - existingAtp - transferQuantityTotal);   // quantity required after considering ATP and planned inventory transfers
                 products.put(productId, netRequiredQuantity);
             }
 
             productsIt = products.keySet().iterator();
             while (productsIt.hasNext()) {
                 String productId = (String) productsIt.next();
-                double netRequiredQuantity = ((Double) products.get(productId)).doubleValue();
-                if (netRequiredQuantity > 0) {
+                BigDecimal netRequiredQuantity = ((BigDecimal) products.get(productId));
+                if (netRequiredQuantity.compareTo(BigDecimal.ZERO) > 0) {
                     dispatcher.runSync("createInventoryTransferForFacilityProduct",
                             UtilMisc.toMap("productId", productId, "facilityIdFrom", warehouseFacilityId,
-                            "facilityIdTo", productionFacilityId, "transferQuantity", new Double(netRequiredQuantity),
+                            "facilityIdTo", productionFacilityId, "transferQuantity", netRequiredQuantity,
                             "userLogin", userLogin));
 
                 }
@@ -1200,11 +1199,8 @@ public final class ProductionRunServices {
         // Mandatory input fields
         String productId = (String) context.get("productId");
         Timestamp startDate = (Timestamp) context.get("startDate");
-        Double pRQuantity = (Double) context.get("pRQuantity");
-        BigDecimal pRQuantityBd = null;
-        if (pRQuantity != null) {
-            pRQuantityBd = BigDecimal.valueOf(pRQuantity);
-        }
+        BigDecimal pRQuantity = (BigDecimal) context.get("pRQuantity");
+
 
 
         String facilityId = (String) context.get("facilityId");
@@ -1266,7 +1262,7 @@ public final class ProductionRunServices {
         List<BomNode> components = null;
         Map<String, Object> serviceContext = new HashMap<String, Object>();
         serviceContext.put("productId", productId); // the product that we want to manufacture or disassemble
-        serviceContext.put("quantity", pRQuantityBd); // the quantity that we want to manufacture
+        serviceContext.put("quantity", pRQuantity); // the quantity that we want to manufacture
         serviceContext.put("userLogin", userLogin);
         if (disassemble && UtilValidate.isNotEmpty(routingId) && "DEF_DISASMBL_TMP".equals(routing.get("workEffortId"))) {
             // if it is a disassembly, and a routing was given, getProductRoutingDisassemble might have returned
@@ -1396,7 +1392,7 @@ public final class ProductionRunServices {
                     Debug.logError(e.getMessage(), MODULE);
                 }
                 // Calculate the estimatedCompletionDate
-                long totalTime = ProductionRun.getEstimatedTaskTime(routingTask, pRQuantityBd, dispatcher);
+                long totalTime = ProductionRun.getEstimatedTaskTime(routingTask, pRQuantity, dispatcher);
                 Timestamp endDate = TechDataServices.addForward(TechDataServices.getTechDataCalendar(routingTask), startDate, totalTime);
 
                 serviceContext.clear();
@@ -1553,7 +1549,7 @@ public final class ProductionRunServices {
         String workEffortId = (String) context.get("workEffortId");
         Timestamp applicableDate = (Timestamp) context.get("applicableDate");
         boolean ignoreDefaultRouting = "Y".equals(context.get("ignoreDefaultRouting"));
-        Double quantity = (Double) context.get("quantity");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
 
         // if applicableDate is not given defaults to Now
         if (applicableDate == null) {
@@ -1608,7 +1604,7 @@ public final class ProductionRunServices {
         }
     }
 
-    private static String getProductRouting(String productId, String workEffortId, Timestamp applicableDate, Double quantity, boolean ignoreDefRouting, GenericDelegator delegator) throws GenericEntityException {
+    private static String getProductRouting(String productId, String workEffortId, Timestamp applicableDate, BigDecimal quantity, boolean ignoreDefRouting, GenericDelegator delegator) throws GenericEntityException {
         // find active routings for the productId and workEffortId (optional)
         List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(
                                         EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId),
@@ -1655,8 +1651,8 @@ public final class ProductionRunServices {
                 // there are routings that have mixQuantity or maxQuantity on value
                 List<GenericValue> matchedRoutings = FastList.newInstance();
                 for (GenericValue routing : routingsWithQuantities) {
-                    Double minQuantity = routing.getDouble("minQuantity");
-                    Double maxQuantity = routing.getDouble("maxQuantity");
+                    BigDecimal minQuantity = routing.getBigDecimal("minQuantity");
+                    BigDecimal maxQuantity = routing.getBigDecimal("maxQuantity");
                     if (minQuantity != null && maxQuantity != null) {
                         if (quantity.compareTo(minQuantity) >= 0 && quantity.compareTo(maxQuantity) <= 0) {
                             matchedRoutings.add(routing);
@@ -2314,7 +2310,7 @@ public final class ProductionRunServices {
 
                 Map<String, Object> serviceContext = FastMap.newInstance();
                 serviceContext.put("productId", orderItem.getString("productId"));
-                serviceContext.put("pRQuantity", qtyToProduce);
+                serviceContext.put("pRQuantity", new BigDecimal(qtyToProduce));
                 serviceContext.put("startDate", UtilDateTime.nowTimestamp());
                 serviceContext.put("facilityId", facilityId);
                 serviceContext.put("userLogin", userLogin);
@@ -2388,7 +2384,7 @@ public final class ProductionRunServices {
         Locale locale = UtilCommon.getLocale(context);
 
         String inventoryItemId = (String) context.get("inventoryItemId");
-        Double quantity = (Double) context.get("quantity");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
 
         List<String> inventoryItemIds = FastList.newInstance();
 
@@ -2399,7 +2395,7 @@ public final class ProductionRunServices {
             }
 
             if (quantity == null) {
-                quantity = inventoryItem.getDouble("quantityOnHandTotal");
+                quantity = inventoryItem.getBigDecimal("quantityOnHandTotal");
             }
 
             // use reverse assembly to decompose inventory item into its parts
@@ -2408,7 +2404,7 @@ public final class ProductionRunServices {
             ctxt.put("userLogin", systemUser);
             ctxt.put("disassemble", Boolean.TRUE);
             ctxt.put("productId", inventoryItem.getString("productId"));
-            ctxt.put("quantity", Double.valueOf(quantity));
+            ctxt.put("quantity", quantity);
             ctxt.put("startDate", now);
             ctxt.put("facilityId", inventoryItem.getString("facilityId"));
             ctxt.put("routingId", "DEF_DISASMBL_TMP");
@@ -2454,7 +2450,7 @@ public final class ProductionRunServices {
                 ctxt.put("userLogin", userLogin);
                 ctxt.put("workEffortId", productionRunId);
                 ctxt.put("productId", productInfo.getString("productId"));
-                ctxt.put("quantity", productInfo.getDouble("estimatedQuantity"));
+                ctxt.put("quantity", productInfo.getBigDecimal("estimatedQuantity"));
                 results = dispatcher.runSync("opentaps.productionRunProduce", ctxt, -1, false);
                 List<String> inventories = (List<String>) results.get("inventoryItemIds");
                 if (UtilValidate.isNotEmpty(inventories)) {

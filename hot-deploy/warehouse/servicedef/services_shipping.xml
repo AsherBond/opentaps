@@ -48,7 +48,7 @@ under the License.
         <attribute name="packingSession" type="org.opentaps.warehouse.shipment.packing.PackingSession" mode="IN" optional="false"/>
         <attribute name="handlingInstructions" type="String" mode="IN" optional="true"/>
         <attribute name="pickerPartyId" type="String" mode="IN" optional="true"/>
-        <attribute name="additionalShippingCharge" type="Double" mode="IN" optional="true"/>
+        <attribute name="additionalShippingCharge" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="additionalShippingChargeDescription" type="String" mode="IN" optional="true"/>
         <attribute name="forceComplete" type="Boolean" mode="IN" optional="true"/>
         <attribute name="packageWeights" type="Map" string-map-prefix="packageWeight_" mode="IN" optional="true"/>
@@ -126,7 +126,7 @@ under the License.
         <attribute name="carrierPartyId" type="String" mode="IN" optional="false"/>
         <attribute name="carrierRoleTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
-        <attribute name="additionalShippingCharge" type="Double" mode="OUT" optional="true"/>
+        <attribute name="additionalShippingCharge" type="BigDecimal" mode="OUT" optional="true"/>
     </service>
 
     <service name="warehouse.printPicklist" engine="java" 
