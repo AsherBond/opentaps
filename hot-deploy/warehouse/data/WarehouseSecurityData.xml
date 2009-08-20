@@ -120,6 +120,19 @@
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ORDERMGR_VIEW"/>
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="CATALOG_VIEW"/>
 
+    <!-- Permissions for manage work effort -->
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WORKEFFORTMGR_ROLE_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WORKEFFORTMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WORKEFFORTMGR_ROLE_UPDATE"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WORKEFFORTMGR_ROLE_DELETE"/>
+    
+    <!-- Permissions for manage account atx -->
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ACCTG_ATX_ADMIN"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ACCTG_ATX_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ACCTG_ATX_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ACCTG_ATX_UPDATE"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ACCTG_ATX_DELETE"/>    
+    
     <!-- Shipping only access permission -->
     <SecurityGroup groupId="WRHS_SHIPPER" description="Warehouse application shipping only permissions"/>
     <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="ORDERMGR_UPDATE"/>
