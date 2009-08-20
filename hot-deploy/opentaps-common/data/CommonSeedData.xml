@@ -231,4 +231,6 @@ under the License.
     <KeyboardShortcutHandler actionTypeId="KB_URL" description="Redirects to the target URL" handler="opentaps.addUrlShortcut" />
     <KeyboardShortcutHandler actionTypeId="KB_FOCUS" description="Set focus on the target DOM element" handler="opentaps.addFocusShortcut" />
 
+	<!-- it use in InventoryTests.testNonSerializedInventoryVarianceWithAccountingTags -->
+    <Enumeration description="Transit" enumCode="VAR_TRANSIT" enumId="VAR_TRANSIT" sequenceId="09" enumTypeId="IID_REASON"/>
 </entity-engine-xml>
