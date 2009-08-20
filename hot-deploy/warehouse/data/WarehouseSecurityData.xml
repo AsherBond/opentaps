@@ -59,6 +59,8 @@
     <SecurityGroupPermission groupId="WRHS_USER" permissionId="FACILITY_ADMIN"/>
     <SecurityGroupPermission groupId="WRHS_USER" permissionId="ORDERMGR_UPDATE"/>
     <SecurityGroupPermission groupId="WRHS_USER" permissionId="MANUFACTURING_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_USER" permissionId="ACCTG_ATX_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_USER" permissionId="ACCTG_PREF_VIEW"/>
 
     <!-- Needed to delete production run tasks -->
     <SecurityGroupPermission groupId="WRHS_USER" permissionId="WORKEFFORTMGR_DELETE"/>
@@ -74,6 +76,8 @@
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ACCOUNTING_ADMIN"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="FINANCIALS_AP_INUPDT"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="CATALOG_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ACCTG_ATX_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ACCTG_PREF_VIEW"/>
 
     <!-- Warehouse manager can perform any action in the Warehouse -->
     <SecurityGroup groupId="WRHS_MANAGER" description="Warehouse Manager with permissions to perform any action in the Warehouse"/>
@@ -97,6 +101,8 @@
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_MFG_CREATE"/>
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_CONFIG"/>
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_CONFIG_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ACCTG_ATX_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ACCTG_PREF_VIEW"/>
 
     <!-- For now, grant admin access to OFBiz facility and manufacturing services -->
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="FACILITY_ADMIN"/>
@@ -125,6 +131,8 @@
     <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_SHIP_PACK"/>
     <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_SHIP_SCHED"/>
     <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="WRHS_INVOICE_VIEW"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="ACCTG_ATX_CREATE"/>
+    <SecurityGroupPermission groupId="WRHS_SHIPPER" permissionId="ACCTG_PREF_VIEW"/>
     
     <!-- Warehouse team role and related security permissions.  Customize to say whatever you need -->
     <FacilityTeamRoleSecurity securityGroupId="WRHS_MANAGER" roleDescription="Warehouse Manager" sequenceNum="01"/>
