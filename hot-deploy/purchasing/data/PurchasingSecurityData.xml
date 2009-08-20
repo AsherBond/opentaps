@@ -68,6 +68,12 @@
     <!-- Purchasing manager can approve purchase order in the Purchasing -->
     <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="PRCH_ORD_APPRV"/>
     
+    <!-- Purchasing manager can manage work effort in the Purchasing -->
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="WORKEFFORTMGR_ROLE_VIEW"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="WORKEFFORTMGR_ROLE_CREATE"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="WORKEFFORTMGR_ROLE_UPDATE"/>
+    <SecurityGroupPermission groupId="PRCH_MANAGER" permissionId="WORKEFFORTMGR_ROLE_DELETE"/>
+    
     <!-- PRCH_CLERK is a group which have create/update/view supplier and create/view/admin order rights -->
     <SecurityGroup groupId="PRCH_CLERK" description="Purchasing Clerk with permissions to create purchasing orders"/>
     <SecurityGroupPermission groupId="PRCH_CLERK" permissionId="PRCH_VIEW"/>
