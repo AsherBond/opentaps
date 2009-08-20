@@ -90,7 +90,7 @@ public class ProductRepository extends Repository implements ProductRepositoryIn
             if (ServiceUtil.isError(results)) {
                 throw new RepositoryException(ServiceUtil.getErrorMessage(results));
             }
-            return BigDecimal.valueOf((Double) results.get("productCost"));
+            return (BigDecimal) results.get("productCost");
         } catch (GenericServiceException e) {
             throw new RepositoryException(e);
         }

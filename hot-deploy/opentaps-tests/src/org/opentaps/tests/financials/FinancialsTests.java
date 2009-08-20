@@ -2357,7 +2357,7 @@ public class FinancialsTests extends FinancialsTestCase {
         createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("10.0"), "USD", new BigDecimal("1.0"), admin);
 
         // set its standard cost (EST_STD_MAT_COST) to $35
-        runAndAssertServiceSuccess("createCostComponent", UtilMisc.<String, Object>toMap("userLogin", admin, "productId", productId, "costComponentTypeId", "EST_STD_MAT_COST", "cost", 35.0, "costUomId", "USD"));
+        runAndAssertServiceSuccess("createCostComponent", UtilMisc.<String, Object>toMap("userLogin", admin, "productId", productId, "costComponentTypeId", "EST_STD_MAT_COST", "cost", new BigDecimal("35.0"), "costUomId", "USD"));
 
         // Create a purchase order for 75 of this product from DemoSupplier
         Map<GenericValue, BigDecimal> orderSpec = new HashMap<GenericValue, BigDecimal>();
@@ -2387,7 +2387,7 @@ public class FinancialsTests extends FinancialsTestCase {
         runAndAssertServiceSuccess("updateInvoiceItem", input);
 
         // add a second invoice item of "PITM_SHIP_CHARGES" for $58.39
-        input = UtilMisc.<String, Object>toMap("userLogin", admin, "invoiceId", invoice.getInvoiceId(), "invoiceItemTypeId", "PITM_SHIP_CHARGES", "amount", 58.39);
+        input = UtilMisc.<String, Object>toMap("userLogin", admin, "invoiceId", invoice.getInvoiceId(), "invoiceItemTypeId", "PITM_SHIP_CHARGES", "amount", new BigDecimal("58.39"));
         runAndAssertServiceSuccess("createInvoiceItem", input);
 
         // set the invoice as ready
@@ -2559,7 +2559,7 @@ public class FinancialsTests extends FinancialsTestCase {
         list = query.list();
         assertEquals("There is a new account balance history record for Company and " + customerPartyId, 1, list.size());
         AccountBalanceHistory accountBalanceHistory = list.get(0);
-        assertEquals("There is a new account balance history record for Company and " + customerPartyId + " for 100.0", 100.0, accountBalanceHistory.getTotalBalance());
+        assertEquals("There is a new account balance history record for Company and " + customerPartyId + " for 100.0", new BigDecimal("100.0"), accountBalanceHistory.getTotalBalance());
 
         pause("mysql timestamp pause");
 
@@ -2573,7 +2573,7 @@ public class FinancialsTests extends FinancialsTestCase {
         list = query.list();
         assertEquals("There are two account balance history records for Company and " + customerPartyId, 2, list.size());
         accountBalanceHistory = list.get(0);
-        assertEquals("There is a new account balance history record for Company and " + customerPartyId + " for 50.0", 50.0, accountBalanceHistory.getTotalBalance());
+        assertEquals("There is a new account balance history record for Company and " + customerPartyId + " for 50.0", new BigDecimal("50.0"), accountBalanceHistory.getTotalBalance());
     }
 
     /**
