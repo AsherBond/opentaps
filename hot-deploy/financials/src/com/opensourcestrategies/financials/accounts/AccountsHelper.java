@@ -626,7 +626,7 @@ public class AccountsHelper {
      * @param locale
      * @param timeZone
      * @return
-     *     Returns data that are used to create JasperReport data source. </br>
+     *     Returns data that are used to create JasperReport data source. <br/>
      *     Also, partyData contains report parameters after this method called.
      * @throws RepositoryException
      * @throws GenericEntityException
@@ -657,19 +657,19 @@ public class AccountsHelper {
                 Set<String> allInvoiceIds = FastSet.newInstance();
 
                 // amounts we need to calculate for the party
-                Double totalOpen = 0.0;
-                Double current = 0.0;
-                Double over1N = 0.0;
-                Double over2N = 0.0;
-                Double over3N = 0.0;
-                Double over4N = 0.0;
+                BigDecimal totalOpen = BigDecimal.ZERO;
+                BigDecimal current = BigDecimal.ZERO;
+                BigDecimal over1N = BigDecimal.ZERO;
+                BigDecimal over2N = BigDecimal.ZERO;
+                BigDecimal over3N = BigDecimal.ZERO;
+                BigDecimal over4N = BigDecimal.ZERO;
 
                 // get all sales invoices in ready or sent state grouped by date bucket from the as of date time
                 List<Integer> periodList = Arrays.asList(statementPeriod, 2 * statementPeriod, 3 * statementPeriod, 4 * statementPeriod, 999);
                 Map<Integer, Invoice> dateBuckets = AccountsHelper.getUnpaidInvoicesForCustomer(organizationPartyId, partyId, periodList, asOfDate, UtilMisc.toList("INVOICE_READY", "INVOICE_SENT"), delegator, timeZone, locale, useAgingDate);
 
                 // iterate through the date buckets and add up the total open amount while keeping track of bucket sums
-                for (Integer bucket : (Set<Integer>) dateBuckets.keySet()) {
+                for (Integer bucket : dateBuckets.keySet()) {
                     List<Invoice> invoices = (List<Invoice>) dateBuckets.get(bucket);
                     for (Invoice invoice : invoices) {
                         Map<String, Object> invoiceRow = createInvoiceRow(invoice, true, partyId, useAgingDate);
@@ -677,13 +677,13 @@ public class AccountsHelper {
                         openInvoiceIds.add((String) invoice.get("invoiceId"));
 
                         // compute sums (note that these are brackets, they don't include amounts from other brackets)
-                        Double openAmount = (Double) invoiceRow.get("open_amount");
-                        if (bucket == statementPeriod) { current += openAmount; }
-                        else if (bucket == 2 * statementPeriod) { over1N += openAmount; }
-                        else if (bucket == 3 * statementPeriod) { over2N += openAmount; }
-                        else if (bucket == 4 * statementPeriod) { over3N += openAmount; }
-                        else if (bucket == 999)                 { over4N += openAmount; }
-                        totalOpen += openAmount;
+                        BigDecimal openAmount = (BigDecimal) invoiceRow.get("open_amount");
+                        if (bucket == statementPeriod) { current = current.add(openAmount); }
+                        else if (bucket == 2 * statementPeriod) { over1N = over1N.add(openAmount); }
+                        else if (bucket == 3 * statementPeriod) { over2N = over2N.add(openAmount); }
+                        else if (bucket == 4 * statementPeriod) { over3N = over3N.add(openAmount); }
+                        else if (bucket == 999)                 { over4N = over4N.add(openAmount); }
+                        totalOpen = totalOpen.add(openAmount);
                     }
                 }
 
@@ -737,15 +737,15 @@ public class AccountsHelper {
                 }
 
                 // save the per party data (for the overages, we only show them if they're non zero)
-                partyData.put(partyId + "total_open", new Double(totalOpen));
-                if (current > 0.0) { partyData.put(partyId + "current", new Double(current)); }
-                if (over1N > 0.0) { partyData.put(partyId + "over_1N", new Double(over1N)); }
-                if (over2N > 0.0) { partyData.put(partyId + "over_2N", new Double(over2N)); }
-                if (over3N > 0.0) { partyData.put(partyId + "over_3N", new Double(over3N)); }
-                if (over4N > 0.0) { partyData.put(partyId + "over_4N", new Double(over4N)); }
+                partyData.put(partyId + "total_open", totalOpen);
+                if (current.signum() > 0) { partyData.put(partyId + "current", current); }
+                if (over1N.signum() > 0) { partyData.put(partyId + "over_1N", over1N); }
+                if (over2N.signum() > 0) { partyData.put(partyId + "over_2N", over2N); }
+                if (over3N.signum() > 0) { partyData.put(partyId + "over_3N", over3N); }
+                if (over4N.signum() > 0) { partyData.put(partyId + "over_4N", over4N); }
 
                 // print is past due if any of the over brackets have some amount
-                partyData.put(partyId + "is_past_due", (over1N + over2N + over3N + over4N > 0.0 ? Boolean.TRUE : Boolean.FALSE));
+                partyData.put(partyId + "is_past_due", (over1N.add(over2N).add(over3N).add(over4N).signum() > 0 ? Boolean.TRUE : Boolean.FALSE));
 
                 // append the sorted list of statement lines to our report
                 report.addAll(partyReport.values());
@@ -765,7 +765,7 @@ public class AccountsHelper {
         row.put("invoice_id", payment.get("invoiceId"));
         row.put("party_id", partyId);
         row.put("transaction_date", payment.get("effectiveDate"));
-        row.put("invoice_total", payment.getDouble("amountApplied"));
+        row.put("invoice_total", payment.getBigDecimal("amountApplied"));
         return row;
     }
 
@@ -782,12 +782,10 @@ public class AccountsHelper {
         Timestamp dueDate = invoice.getDueDate();
         if (dueDate != null) { row.put("due_date", dueDate); }
         // TODO: this isn't robust in the case of closed invoices because the payments we list might not completely cover a very old invoice paid bit by bit
-        BigDecimal total = invoice.getInvoiceTotal();
-        row.put("invoice_total", new Double(total.doubleValue()));
+        row.put("invoice_total", invoice.getInvoiceTotal());
         if (open) {
-            BigDecimal openAmount = invoice.getOpenAmount();
             row.put("invoice_id_2", invoice.getInvoiceId()); // only print open invoice ID on the receipt part
-            row.put("open_amount", new Double(openAmount.doubleValue()));
+            row.put("open_amount", invoice.getOpenAmount());
             // only show age date if it's greater than 0
             Integer ageDate = useAgingDate ? invoice.getDaysAged() : invoice.getDaysOutstanding();
             if (ageDate > 0) {

@@ -290,6 +290,17 @@ public class OpentapsTestCase extends TestCase {
     }
 
     /**
+     * Asserts two BigDecimal are equal more or less an accepted delta.
+     * @param message the assert message
+     * @param value the actual value
+     * @param expected the expected value that the actual value should be equal to
+     * @param delta accepted delta
+     */
+    public void assertEquals(String message, BigDecimal value, BigDecimal expected, BigDecimal delta) {
+        assertEquals(message, value.doubleValue(), expected.doubleValue(), delta.doubleValue());
+    }
+
+    /**
      * Round the two BigDecimals according to decimals and rounding, then check if they are equal.
      * @param message the assert message
      * @param value the actual value

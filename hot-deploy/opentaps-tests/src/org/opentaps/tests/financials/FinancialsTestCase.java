@@ -15,6 +15,7 @@
  */
 package org.opentaps.tests.financials;
 
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -24,9 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
@@ -34,7 +35,6 @@ import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.domain.base.entities.AcctgTrans;
 import org.opentaps.domain.base.entities.AcctgTransEntry;
@@ -43,8 +43,6 @@ import org.opentaps.foundation.entity.hibernate.Query;
 import org.opentaps.foundation.entity.hibernate.Session;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.tests.OpentapsTestCase;
-
-import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * Test case superclass for all financials tests.  This defines asserts which are useful for testing
@@ -88,7 +86,7 @@ public class FinancialsTestCase extends OpentapsTestCase {
         organizationAcctgPref.set("costingMethodId", standardCostingMethod);
         organizationAcctgPref.store();
     }
-    
+
     /**
      * Special assertion to check that two sets of transactions are equivalent.  If either set is empty, this fails.
      * The comparison checks that all transaction headers have the same acctgTransTypeId, partyId and roleTypeId.
@@ -112,7 +110,7 @@ public class FinancialsTestCase extends OpentapsTestCase {
         // if we're passed in string Ids, convert them to GenericValues, otherwise build the set of transaction Ids
         if (transactions1.iterator().next() instanceof String) {
             transIds1.addAll(transactions1);
-            transactions1 = delegator.findByAnd("AcctgTrans", UtilMisc.toList(new EntityExpr("acctgTransId", EntityOperator.IN, transactions1)));
+            transactions1 = delegator.findByAnd("AcctgTrans", UtilMisc.toList(EntityCondition.makeCondition("acctgTransId", EntityOperator.IN, transactions1)));
             assertNotEmpty("Cannot assert transaction equivalence, first transaction set is empty.", transactions1);
         } else {
             for (GenericValue trans : (List<GenericValue>) transactions1) {
@@ -121,7 +119,7 @@ public class FinancialsTestCase extends OpentapsTestCase {
         }
         if (transactions2.iterator().next() instanceof String) {
             transIds2.addAll(transactions2);
-            transactions2 = delegator.findByAnd("AcctgTrans", UtilMisc.toList(new EntityExpr("acctgTransId", EntityOperator.IN, transactions2)));
+            transactions2 = delegator.findByAnd("AcctgTrans", UtilMisc.toList(EntityCondition.makeCondition("acctgTransId", EntityOperator.IN, transactions2)));
             assertNotEmpty("Cannot assert transaction equivalence, second transaction set is empty", transactions2);
         } else {
             for (GenericValue trans : (List<GenericValue>) transactions2) {
@@ -144,41 +142,41 @@ public class FinancialsTestCase extends OpentapsTestCase {
         // compare the *sum* of transaction entries grouped by transEntryFieldsToCompare
         List fieldsToSelect = new ArrayList(transEntryFieldsToCompare);
         fieldsToSelect.add("amount");
-        List<GenericValue> sums1 = delegator.findByCondition("AcctgTransEntryEquivalenceSum", new EntityExpr("acctgTransId", EntityOperator.IN, transIds1), fieldsToSelect, null);
-        List<GenericValue> sums2 = delegator.findByCondition("AcctgTransEntryEquivalenceSum", new EntityExpr("acctgTransId", EntityOperator.IN, transIds2), fieldsToSelect, null);
+        List<GenericValue> sums1 = delegator.findByCondition("AcctgTransEntryEquivalenceSum", EntityCondition.makeCondition("acctgTransId", EntityOperator.IN, transIds1), fieldsToSelect, null);
+        List<GenericValue> sums2 = delegator.findByCondition("AcctgTransEntryEquivalenceSum", EntityCondition.makeCondition("acctgTransId", EntityOperator.IN, transIds2), fieldsToSelect, null);
         assertTrue("No transaction entries found for transactions " + transIds1, sums1.size() > 0);
         assertTrue("No transaction entries found for transactions " + transIds2, sums2.size() > 0);
 
         // also add up the debits and credits separately for each set, so we can make sure they are the same for both sets
-        double debits1 = 0.0;
-        double debits2 = 0.0;
-        double credits1 = 0.0;
-        double credits2 = 0.0;
+        BigDecimal debits1 = new BigDecimal("0.0");
+        BigDecimal debits2 = new BigDecimal("0.0");
+        BigDecimal credits1 = new BigDecimal("0.0");
+        BigDecimal credits2 = new BigDecimal("0.0");
         boolean sum2done = false;
 
         for (GenericValue sum1 : sums1) {
-            double amount1 = sum1.getDouble("amount").doubleValue();
+            BigDecimal amount1 = sum1.getBigDecimal("amount");
 
             for (GenericValue sum2 : sums2) {
-                double amount2 = sum2.getDouble("amount").doubleValue();
+                BigDecimal amount2 = sum2.getBigDecimal("amount");
                 if (fieldsEqual(sum1, sum2, transEntryFieldsToCompare)) {
                     Debug.logInfo("Vector sum1 [" + amount1 + "] and sum2 [" + amount2 + "] for group " + sum1.getFields(transEntryFieldsToCompare), MODULE);
                     String message = "Transaction set " + transIds1 + " has sum [" + amount1 + "] but set " + transIds2 + " has sum [" + amount2 + "] for group " + sum1.getFields(transEntryFieldsToCompare) + ".";
                     assertEquals(message, amount1, amount2);
                 }
                 if (!sum2done && "D".equals(sum2.get("debitCreditFlag"))) {
-                    debits2 += amount2;
+                    debits2 = debits2.add(amount2);
                 }
                 if (!sum2done && "C".equals(sum2.get("debitCreditFlag"))) {
-                    credits2 += amount2;
+                    credits2 = credits2.add(amount2);
                 }
             }
             sum2done = true;
             if ("D".equals(sum1.get("debitCreditFlag"))) {
-                debits1 += amount1;
+                debits1 = debits1.add(amount1);
             }
             if ("C".equals(sum1.get("debitCreditFlag"))) {
-                credits1 += amount1;
+                credits1 = credits1.add(amount1);
             }
         }
 
@@ -207,7 +205,7 @@ public class FinancialsTestCase extends OpentapsTestCase {
         // if we're passed in string Ids, convert them to GenericValues, otherwise build the set of transaction Ids
         if (transactions1.iterator().next() instanceof String) {
             transIds1.addAll(transactions1);
-            transactions1 = delegator.findByAnd("AcctgTrans", UtilMisc.toList(new EntityExpr("acctgTransId", EntityOperator.IN, transactions1)));
+            transactions1 = delegator.findByAnd("AcctgTrans", UtilMisc.toList(EntityCondition.makeCondition("acctgTransId", EntityOperator.IN, transactions1)));
             assertNotEmpty("Cannot assert transaction equivalence, first transaction set is empty.", transactions1);
         } else {
             for (GenericValue trans : (List<GenericValue>) transactions1) {
@@ -216,7 +214,7 @@ public class FinancialsTestCase extends OpentapsTestCase {
         }
         if (transactions2.iterator().next() instanceof String) {
             transIds2.addAll(transactions2);
-            transactions2 = delegator.findByAnd("AcctgTrans", UtilMisc.toList(new EntityExpr("acctgTransId", EntityOperator.IN, transactions2)));
+            transactions2 = delegator.findByAnd("AcctgTrans", UtilMisc.toList(EntityCondition.makeCondition("acctgTransId", EntityOperator.IN, transactions2)));
             assertNotEmpty("Cannot assert transaction equivalence, second transaction set is empty", transactions2);
         } else {
             for (GenericValue trans : (List<GenericValue>) transactions2) {
@@ -238,41 +236,41 @@ public class FinancialsTestCase extends OpentapsTestCase {
         // compare the *sum* of transaction entries grouped by transEntryFieldsToCompare
         List fieldsToSelect = new ArrayList(transEntryFieldsToCompare);
         fieldsToSelect.add("amount");
-        List<GenericValue> sums1 = delegator.findByCondition("AcctgTransEntryEquivalenceSum", new EntityExpr("acctgTransId", EntityOperator.IN, transIds1), fieldsToSelect, null);
-        List<GenericValue> sums2 = delegator.findByCondition("AcctgTransEntryEquivalenceSum", new EntityExpr("acctgTransId", EntityOperator.IN, transIds2), fieldsToSelect, null);
+        List<GenericValue> sums1 = delegator.findByCondition("AcctgTransEntryEquivalenceSum", EntityCondition.makeCondition("acctgTransId", EntityOperator.IN, transIds1), fieldsToSelect, null);
+        List<GenericValue> sums2 = delegator.findByCondition("AcctgTransEntryEquivalenceSum", EntityCondition.makeCondition("acctgTransId", EntityOperator.IN, transIds2), fieldsToSelect, null);
         assertTrue("No transaction entries found for transactions " + transIds1, sums1.size() > 0);
         assertTrue("No transaction entries found for transactions " + transIds2, sums2.size() > 0);
 
         // also add up the debits and credits separately for each set, so we can make sure they are the same for both sets
-        double debits1 = 0.0;
-        double debits2 = 0.0;
-        double credits1 = 0.0;
-        double credits2 = 0.0;
+        BigDecimal debits1 = new BigDecimal("0.0");
+        BigDecimal debits2 = new BigDecimal("0.0");
+        BigDecimal credits1 = new BigDecimal("0.0");
+        BigDecimal credits2 = new BigDecimal("0.0");
         boolean sum2done = false;
 
         for (GenericValue sum1 : sums1) {
-            double amount1 = sum1.getDouble("amount").doubleValue();
+            BigDecimal amount1 = sum1.getBigDecimal("amount");
 
             for (GenericValue sum2 : sums2) {
-                double amount2 = sum2.getDouble("amount").doubleValue();
+                BigDecimal amount2 = sum2.getBigDecimal("amount");
                 if (fieldsEqual(sum1, sum2, transEntryFieldsToCompare)) {
                     Debug.logInfo("Vector sum1 [" + amount1 + "] and sum2 [" + amount2 + "] for group " + sum1.getFields(transEntryFieldsToCompare), MODULE);
                     String message = "Transaction set " + transIds1 + " has sum [" + amount1 + "] but set " + transIds2 + " has sum [" + amount2 + "] for group " + sum1.getFields(transEntryFieldsToCompare) + ".";
                     assertEquals(message, amount1, amount2);
                 }
                 if (!sum2done && "D".equals(sum2.get("debitCreditFlag"))) {
-                    debits2 += amount2;
+                    debits2 = debits2.add(amount2);
                 }
                 if (!sum2done && "C".equals(sum2.get("debitCreditFlag"))) {
-                    credits2 += amount2;
+                    credits2 = credits2.add(amount2);
                 }
             }
             sum2done = true;
             if ("D".equals(sum1.get("debitCreditFlag"))) {
-                debits1 += amount1;
+                debits1 = debits1.add(amount1);
             }
             if ("C".equals(sum1.get("debitCreditFlag"))) {
-                credits1 += amount1;
+                credits1 = credits1.add(amount1);
             }
         }
 
@@ -311,7 +309,6 @@ public class FinancialsTestCase extends OpentapsTestCase {
      * @param rounding for rounding
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void assertAllTrialBalancesEqual(String organizationPartyId, int decimals, RoundingMode rounding) throws Exception {
         // not using the UtilFinancial.areTrialBalancesEqual method here because this will give better junit logging error of which one failed
         assertPostedBalancesEqual(organizationPartyId, decimals, rounding);
@@ -335,8 +332,8 @@ public class FinancialsTestCase extends OpentapsTestCase {
      */
     @SuppressWarnings("unchecked")
     public Set<String> getAcctgTransSinceDate(List conditions, Timestamp since, GenericDelegator delegator) throws GenericEntityException {
-        conditions.add(new EntityExpr("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, since));
-        conditions.add(new EntityExpr("acctgTransTypeId", EntityOperator.NOT_EQUAL, TEST_TRANSACTIONS));
+        conditions.add(EntityCondition.makeCondition("transactionDate", EntityOperator.GREATER_THAN_EQUAL_TO, since));
+        conditions.add(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.NOT_EQUAL, TEST_TRANSACTIONS));
         List<GenericValue> matches = delegator.findByAnd("AcctgTransAndEntries", conditions);
         Set<String> acctgTransIds = FastSet.newInstance();
         for (GenericValue match : matches) {

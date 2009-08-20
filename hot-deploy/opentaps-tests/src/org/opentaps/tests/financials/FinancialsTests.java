@@ -35,7 +35,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.order.PurchaseOrderFactory;
@@ -276,7 +276,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // get the transaction with the assistance of our start timestamp.  Note that this requires the DEMOPAYCHECK1 not to have an effectiveDate of its own
         // or it would be posted with transactionDate = payment.effectiveDate
-        Set transactions = getAcctgTransSinceDate(UtilMisc.toList(new EntityExpr("paymentId", EntityOperator.EQUALS, paycheck.get("paymentId"))), start, delegator);
+        Set transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paycheck.get("paymentId"))), start, delegator);
         assertNotEmpty("Paycheck transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
@@ -306,7 +306,7 @@ public class FinancialsTests extends FinancialsTestCase {
         BigDecimal expectedAvgCost = null;
         BigDecimal calculatedAvgCost = null;
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, "WebStoreWarehouse", organizationPartyId, demowarehouse1);
-        final Double acceptedDelta = new Double("0.009");
+        final BigDecimal acceptedDelta = new BigDecimal("0.009");
 
         // common parameters for receiveInventoryProduct service
         Map<String, Object> commonParameters = new HashMap<String, Object>();
@@ -314,7 +314,7 @@ public class FinancialsTests extends FinancialsTestCase {
         commonParameters.put("facilityId", "WebStoreWarehouse");
         commonParameters.put("currencyUomId", "USD");
         commonParameters.put("datetimeReceived", startTime);
-        commonParameters.put("quantityRejected", new Double(0));
+        commonParameters.put("quantityRejected", BigDecimal.ZERO);
         commonParameters.put("userLogin", demowarehouse1);
 
         /*
@@ -322,14 +322,14 @@ public class FinancialsTests extends FinancialsTestCase {
          */
         Map<String, Object> input = new HashMap<String, Object>();
         input.putAll(commonParameters);
-        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "NON_SERIAL_INV_ITEM", "unitCost", new Double("15"), "quantityAccepted", new Double("10")));
+        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "NON_SERIAL_INV_ITEM", "unitCost", new BigDecimal("15"), "quantityAccepted", new BigDecimal("10")));
         Map output = runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("15");
-        assertEquals("After receipt 10 products [" + productId + "] at $15 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After receipt 10 products [" + productId + "] at $15 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
 
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
@@ -343,14 +343,14 @@ public class FinancialsTests extends FinancialsTestCase {
          */
         input = new HashMap<String, Object>();
         input.putAll(commonParameters);
-        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "NON_SERIAL_INV_ITEM", "unitCost", new Double("20"), "quantityAccepted", new Double("10")));
+        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "NON_SERIAL_INV_ITEM", "unitCost", new BigDecimal("20"), "quantityAccepted", new BigDecimal("10")));
         output = runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("17.5");
-        assertEquals("After receipt 10 products [" + productId + "] at $20 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After receipt 10 products [" + productId + "] at $20 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
 
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
@@ -363,14 +363,14 @@ public class FinancialsTests extends FinancialsTestCase {
          */
         input = new HashMap<String, Object>();
         input.putAll(commonParameters);
-        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new Double("10"), "quantityAccepted", new Double("1")));
+        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new BigDecimal("10"), "quantityAccepted", new BigDecimal("1")));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("17.142");
-        assertEquals("After receipt 1 serialized product [" + productId + "] at $10 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After receipt 1 serialized product [" + productId + "] at $10 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
 
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
@@ -381,14 +381,14 @@ public class FinancialsTests extends FinancialsTestCase {
          */
         input = new HashMap<String, Object>();
         input.putAll(commonParameters);
-        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new Double("12"), "quantityAccepted", new Double("1")));
+        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new BigDecimal("12"), "quantityAccepted", new BigDecimal("1")));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("16.909");
-        assertEquals("After receipt 1 serialized product [" + productId + "] at $12 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After receipt 1 serialized product [" + productId + "] at $12 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
 
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
@@ -398,14 +398,14 @@ public class FinancialsTests extends FinancialsTestCase {
          * Create variance -5 products from inventory item at $15, average cost = 16.909091  [10 x 15$ + 10 x 20$ + 1 x 10$ + 1 x 12$ - 5 x avg] doesn't change the average cost
          */
         BigDecimal varianceQuantity = new BigDecimal("-5");
-        input = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemIdVar, "quantityOnHandVar", varianceQuantity.doubleValue(), "availableToPromiseVar", varianceQuantity.doubleValue(),  "varianceReasonId", "VAR_DAMAGED");
+        input = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemIdVar, "quantityOnHandVar", varianceQuantity, "availableToPromiseVar", varianceQuantity,  "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("16.909");
-        assertEquals("After creating variance for -5 products [" + productId + "] calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After creating variance for -5 products [" + productId + "] calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
 
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
@@ -415,14 +415,14 @@ public class FinancialsTests extends FinancialsTestCase {
          * Create variance -3 products from inventory item at $15, average cost = 16.909091  [10 x 15$ + 10 x 20$ + 1 x 10$ + 1 x 12$ - 8 x avg] doesn't change the average cost
          */
         varianceQuantity = new BigDecimal("-3");
-        input = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemIdVar, "quantityOnHandVar", varianceQuantity.doubleValue(), "availableToPromiseVar", varianceQuantity.doubleValue(),  "varianceReasonId", "VAR_DAMAGED");
+        input = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemIdVar, "quantityOnHandVar", varianceQuantity, "availableToPromiseVar", varianceQuantity,  "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("16.909");
-        assertEquals("After creating variance for -3 products [" + productId + "] calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After creating variance for -3 products [" + productId + "] calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
 
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
@@ -433,14 +433,14 @@ public class FinancialsTests extends FinancialsTestCase {
          */
         input = new HashMap<String, Object>();
         input.putAll(commonParameters);
-        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "NON_SERIAL_INV_ITEM", "unitCost", new Double("11"), "quantityAccepted", new Double("3")));
+        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "NON_SERIAL_INV_ITEM", "unitCost", new BigDecimal("11"), "quantityAccepted", new BigDecimal("3")));
         runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("15.866");
-        assertEquals("After receipt 3 products [" + productId + "] at $11 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After receipt 3 products [" + productId + "] at $11 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
 
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
@@ -451,14 +451,14 @@ public class FinancialsTests extends FinancialsTestCase {
          */
         input = new HashMap<String, Object>();
         input.putAll(commonParameters);
-        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new Double("22"), "quantityAccepted", new Double("1")));
+        input.putAll(UtilMisc.toMap("inventoryItemTypeId", "SERIALIZED_INV_ITEM", "unitCost", new BigDecimal("22"), "quantityAccepted", new BigDecimal("1")));
         output = runAndAssertServiceSuccess("receiveInventoryProduct", input);
 
         calculatedAvgCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("16.207");
-        assertEquals("After receipt 1 serialized product [" + productId + "] at $22 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After receipt 1 serialized product [" + productId + "] at $22 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
         String inventoryItemIdForRevalue2 = (String) output.get("inventoryItemId");
@@ -473,7 +473,7 @@ public class FinancialsTests extends FinancialsTestCase {
         input.put("productId", productId);
         input.put("ownerPartyId", organizationPartyId);
         input.put("userLogin", demowarehouse1);
-        input.put("unitCost", new Double("10.0"));
+        input.put("unitCost", new BigDecimal("10.0"));
         input.put("currencyUomId", "USD");
         input.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
         runAndAssertServiceSuccess("updateInventoryItem", input);
@@ -482,7 +482,7 @@ public class FinancialsTests extends FinancialsTestCase {
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("10.651");
-        assertEquals("After revalue 10 products [" + productId + "] at $20 to $10 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After revalue 10 products [" + productId + "] at $20 to $10 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
         pause("allow distinct product average cost timestamps");
@@ -495,7 +495,7 @@ public class FinancialsTests extends FinancialsTestCase {
         input.put("productId", productId);
         input.put("ownerPartyId", organizationPartyId);
         input.put("userLogin", demowarehouse1);
-        input.put("unitCost", new Double("10.0"));
+        input.put("unitCost", new BigDecimal("10.0"));
         input.put("currencyUomId", "USD");
         input.put("inventoryItemTypeId", "SERIALIZED_INV_ITEM");
         runAndAssertServiceSuccess("updateInventoryItem", input);
@@ -504,7 +504,7 @@ public class FinancialsTests extends FinancialsTestCase {
         assertNotNull("The product [" + productId + "] average cost cannot be null", calculatedAvgCost);
         calculatedAvgCost = calculatedAvgCost.setScale(DECIMALS, ROUNDING);
         expectedAvgCost = new BigDecimal("9.984");
-        assertEquals("After revalue 1 serialized product [" + productId + "] at $22 to $10 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost.doubleValue(), calculatedAvgCost.doubleValue(), acceptedDelta);
+        assertEquals("After revalue 1 serialized product [" + productId + "] at $22 to $10 calculated average cost doesn't equal expected one with inadmissible error.", expectedAvgCost, calculatedAvgCost, acceptedDelta);
         inventoryAsserts.assertInventoryValuesEqual(productId);
     }
 
@@ -526,22 +526,22 @@ public class FinancialsTests extends FinancialsTestCase {
         String productId = (String) product.get("productId");
 
         //  track two values: total quantity and total value of the product.  Initially, both should be zero
-        Double totalQuantity = 0d;
-        Double totalValue = 0d;
+        BigDecimal totalQuantity = BigDecimal.ZERO;
+        BigDecimal totalValue = BigDecimal.ZERO;
         // common parameters for receiveInventoryProduct service
         Map<String, Object> commonParameters = new HashMap<String, Object>();
         commonParameters.put("productId", productId);
         commonParameters.put("facilityId", "WebStoreWarehouse");
         commonParameters.put("currencyUomId", "USD");
-        commonParameters.put("quantityRejected", new Double(0));
+        commonParameters.put("quantityRejected", BigDecimal.ZERO);
         commonParameters.put("userLogin", demowarehouse1);
 
         // for i = 1 to 1000
         for (int i = 1; i < 1000; i++) {
             //    q (quantity) = i, uc (unit cost) = i mod 1000
             //    receive q of product at unit cost = uc
-            Double q = new Double(i);
-            Double uc = new Double(i % 1000);
+            BigDecimal q = new BigDecimal(i);
+            BigDecimal uc = new BigDecimal(i % 1000);
             Map<String, Object> input = new HashMap<String, Object>();
             input.putAll(commonParameters);
             input.putAll(UtilMisc.toMap("inventoryItemTypeId", "NON_SERIAL_INV_ITEM"
@@ -549,12 +549,12 @@ public class FinancialsTests extends FinancialsTestCase {
                     , "datetimeReceived", UtilDateTime.nowTimestamp()));
             runAndAssertServiceSuccess("receiveInventoryProduct", input);
             // update total quantity (add q) and total value (add q*uc)
-            totalQuantity += q;
-            totalValue += q * uc;
+            totalQuantity = totalQuantity.add(q);
+            totalValue = totalValue.add(q.multiply(uc));
             // Verify that the average cost of the product from UtilCOGS.getProductAverageCost is equal to (total value)/(total quantity) to within 5 decimal places
             BigDecimal productAverageCost = UtilCOGS.getProductAverageCost(productId, organizationPartyId, demowarehouse1, delegator, dispatcher);
-            BigDecimal expectedAvgCost = new BigDecimal(totalValue / totalQuantity).setScale(DECIMALS, 5);
-            assertEquals("Product [" + productId + "] average cost should be " + expectedAvgCost.doubleValue() + ".", expectedAvgCost.doubleValue(), productAverageCost.setScale(DECIMALS, 5).doubleValue());
+            BigDecimal expectedAvgCost = totalValue.divide(totalQuantity, DECIMALS, BigDecimal.ROUND_HALF_DOWN);
+            assertEquals("Product [" + productId + "] average cost should be " + expectedAvgCost + ".", expectedAvgCost, productAverageCost.setScale(DECIMALS, BigDecimal.ROUND_HALF_DOWN));
         }
 
     }
@@ -581,19 +581,19 @@ public class FinancialsTests extends FinancialsTestCase {
         commonParameters.put("productId", productId);
         commonParameters.put("facilityId", "WebStoreWarehouse");
         commonParameters.put("currencyUomId", "USD");
-        commonParameters.put("quantityRejected", new Double(0));
+        commonParameters.put("quantityRejected", BigDecimal.ZERO);
         commonParameters.put("userLogin", demowarehouse1);
         Map<String, Object> input = new HashMap<String, Object>();
         input.putAll(commonParameters);
         input.putAll(UtilMisc.toMap("inventoryItemTypeId", "NON_SERIAL_INV_ITEM"
-                , "unitCost", new Double(0.1), "quantityAccepted" , new Double(1)
+                , "unitCost", new BigDecimal("0.1"), "quantityAccepted" , new BigDecimal("1.0")
                 , "datetimeReceived", UtilDateTime.nowTimestamp()));
         Map output = runAndAssertServiceSuccess("receiveInventoryProduct", input);
         String inventoryItemId = (String) output.get("inventoryItemId");
         //  track the previous inventory item unit cost
         List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.toMap("inventoryItemId", inventoryItemId));
         GenericValue firstInventoryItem = inventoryItems.get(0);
-        double previousUnitCost = firstInventoryItem.getBigDecimal("unitCost").doubleValue();
+        BigDecimal previousUnitCost = firstInventoryItem.getBigDecimal("unitCost");
         Debug.logInfo("previousUnitCost : " + previousUnitCost, MODULE);
         pause("allow distinct product average cost timestamps");
 
@@ -610,66 +610,66 @@ public class FinancialsTests extends FinancialsTestCase {
             // Verify that the  previous inventory item unit cost is the same as the one retrieved from InventoryItem
             InventoryItem item = inventoryRepository.getInventoryItemById(firstInventoryItem.getString("inventoryItemId"));
             InventoryItemValueHistory inventoryItemValueHistory = inventoryRepository.getLastInventoryItemValueHistoryByInventoryItem(item);
-            double inventoryItemValueHistoryUnitCost = inventoryItemValueHistory.getUnitCost().doubleValue();
+            BigDecimal inventoryItemValueHistoryUnitCost = inventoryItemValueHistory.getUnitCost();
             assertEquals("Product [" + productId + "]  previous inventory item unit cost should be " + previousUnitCost + ".", previousUnitCost, inventoryItemValueHistoryUnitCost);
         }
     }
 
     /**
-     * Test that the transactionDate of accounting transaction will be the invoice's invoiceDate, not the current timestamp
-     * @throws GeneralException
+     * Test that the transactionDate of accounting transaction will be the invoice's invoiceDate, not the current timestamp.
+     * @throws GeneralException if an error occurs
      */
     public void testInvoiceTransactionPostingDate() throws GeneralException {
-    	// create a customer
-    	String customerPartyId = createPartyFromTemplate("DemoAccount1", "account for testing invoice posting transaction date");
+        // create a customer
+        String customerPartyId = createPartyFromTemplate("DemoAccount1", "account for testing invoice posting transaction date");
 
-    	// create a sales invoice to the customer 30 days in the future
-    	FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
-    	Timestamp invoiceDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale);
-    	String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", invoiceDate, null, null, null);
-    	financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("2.0"), new BigDecimal("15.0"));
+        // create a sales invoice to the customer 30 days in the future
+        FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
+        Timestamp invoiceDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale);
+        String invoiceId = financialAsserts.createInvoice(customerPartyId, "SALES_INVOICE", invoiceDate, null, null, null);
+        financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("2.0"), new BigDecimal("15.0"));
 
-    	// set invoice to READY
-    	financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
+        // set invoice to READY
+        financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
-    	// check that the accounting transaction's transactionDate is the same as the invoice's invoiceDate
-    	LedgerRepositoryInterface ledgerRepository = ledgerDomain.getLedgerRepository();
-    	List<AccountingTransaction> invoiceAcctgTransList = ledgerRepository.findList(AccountingTransaction.class, ledgerRepository.map(org.opentaps.domain.base.entities.AcctgTrans.Fields.invoiceId, invoiceId));
-    	assertNotNull("An accounting transaction was not found for invoice [" + invoiceId + "]", invoiceAcctgTransList);
-    	AccountingTransaction acctgTrans = invoiceAcctgTransList.get(0);
+        // check that the accounting transaction's transactionDate is the same as the invoice's invoiceDate
+        LedgerRepositoryInterface ledgerRepository = ledgerDomain.getLedgerRepository();
+        List<AccountingTransaction> invoiceAcctgTransList = ledgerRepository.findList(AccountingTransaction.class, ledgerRepository.map(org.opentaps.domain.base.entities.AcctgTrans.Fields.invoiceId, invoiceId));
+        assertNotNull("An accounting transaction was not found for invoice [" + invoiceId + "]", invoiceAcctgTransList);
+        AccountingTransaction acctgTrans = invoiceAcctgTransList.get(0);
 
-    	// note: it is important to get the actual invoiceDate stored in the Invoice entity, not the invoiceDate from above
-    	// for example, mysql might store 2009-06-12 12:46:30.309 as 2009-06-12 12:46:30.0, so your comparison won't equal
-    	InvoiceRepositoryInterface repository = billingDomain.getInvoiceRepository();
-    	Invoice invoice = repository.getInvoiceById(invoiceId);
-    	assertEquals("Transaction date and invoice date do not equal", acctgTrans.getTransactionDate(), invoice.getInvoiceDate());
+        // note: it is important to get the actual invoiceDate stored in the Invoice entity, not the invoiceDate from above
+        // for example, mysql might store 2009-06-12 12:46:30.309 as 2009-06-12 12:46:30.0, so your comparison won't equal
+        InvoiceRepositoryInterface repository = billingDomain.getInvoiceRepository();
+        Invoice invoice = repository.getInvoiceById(invoiceId);
+        assertEquals("Transaction date and invoice date do not equal", acctgTrans.getTransactionDate(), invoice.getInvoiceDate());
     }
 
     /**
-     * Test to verify that payments are posted to the effectiveDate of the payment
-     * @throws GeneralException
+     * Test to verify that payments are posted to the effectiveDate of the payment.
+     * @throws GeneralException if an error occurs
      */
     public void testPaymentTransactionPostingDate() throws GeneralException {
-    	String customerPartyId = createPartyFromTemplate("DemoAccount1", "account for testing payment posting transaction date");
-    	FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
-    	Timestamp paymentDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale);
-    	String paymentId = financialAsserts.createPayment(new BigDecimal("1.0"), customerPartyId, "CUSTOMER_PAYMENT", "CASH");
+        String customerPartyId = createPartyFromTemplate("DemoAccount1", "account for testing payment posting transaction date");
+        FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
+        Timestamp paymentDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, timeZone, locale);
+        String paymentId = financialAsserts.createPayment(new BigDecimal("1.0"), customerPartyId, "CUSTOMER_PAYMENT", "CASH");
 
-    	PaymentRepositoryInterface paymentRepository = billingDomain.getPaymentRepository();
-    	Payment payment = paymentRepository.getPaymentById(paymentId);
-    	payment.setEffectiveDate(paymentDate);
-    	paymentRepository.createOrUpdate(payment);
+        PaymentRepositoryInterface paymentRepository = billingDomain.getPaymentRepository();
+        Payment payment = paymentRepository.getPaymentById(paymentId);
+        payment.setEffectiveDate(paymentDate);
+        paymentRepository.createOrUpdate(payment);
 
-    	financialAsserts.updatePaymentStatus(paymentId, "PMNT_RECEIVED");
+        financialAsserts.updatePaymentStatus(paymentId, "PMNT_RECEIVED");
 
-    	LedgerRepositoryInterface ledgerRepository = ledgerDomain.getLedgerRepository();
-    	List<AccountingTransaction> paymentAcctgTransList = ledgerRepository.findList(AccountingTransaction.class, ledgerRepository.map(org.opentaps.domain.base.entities.AcctgTrans.Fields.paymentId, paymentId));
-    	assertNotNull("An accounting transaction was not found for payment [" + paymentId + "]", paymentAcctgTransList);
-    	AccountingTransaction acctgTrans = paymentAcctgTransList.get(0);
+        LedgerRepositoryInterface ledgerRepository = ledgerDomain.getLedgerRepository();
+        List<AccountingTransaction> paymentAcctgTransList = ledgerRepository.findList(AccountingTransaction.class, ledgerRepository.map(org.opentaps.domain.base.entities.AcctgTrans.Fields.paymentId, paymentId));
+        assertNotNull("An accounting transaction was not found for payment [" + paymentId + "]", paymentAcctgTransList);
+        AccountingTransaction acctgTrans = paymentAcctgTransList.get(0);
 
-    	payment = paymentRepository.getPaymentById(paymentId);
+        payment = paymentRepository.getPaymentById(paymentId);
 
-    	assertEquals("Transaction date and invoice date do not equal", acctgTrans.getTransactionDate(), payment.getEffectiveDate());
+        assertEquals("Transaction date and invoice date do not equal", acctgTrans.getTransactionDate(), payment.getEffectiveDate());
     }
 
     /**
@@ -788,7 +788,7 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Balance for " + customerPartyId + " has not decreased by 77.95", balance3.add(new BigDecimal("77.95")), balance2);
 
         // get the transactions for the payment with the assistance of our start timestamp
-        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(new EntityExpr("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
         assertNotEmpty(paymentId + " transaction not created.", transactions);
 
         // assert transaction equivalence with the reference PMT_CUST_TEST-1 transaction
@@ -860,7 +860,7 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Balance for " + customerPartyId + " has not decrease by 77.95", balance3.add(new BigDecimal("77.95")), balance2);
 
         // get the transactions for payment with the assistance of our start timestamp
-        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(new EntityExpr("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
         assertNotEmpty(paymentId + " transaction not created.", transactions);
 
         // assert transaction equivalence with the reference payment transaction
@@ -889,7 +889,7 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Balance for " + customerPartyId + " has not increased by 77.95", balance3, balance4.subtract(new BigDecimal("77.95")));
 
         // get the transactions for payment with the assistance of our start timestamp
-        transactions = getAcctgTransSinceDate(UtilMisc.toList(new EntityExpr("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
+        transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
         assertNotEmpty(paymentId + " payment void transactions not created.", transactions);
 
         // assert transaction equivalence with the reference PMT_CUST_TEST-2R transaction
@@ -952,9 +952,9 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Balance for " + customerPartyId + " has not decrease by 77.95", balance3.subtract(balance2), new BigDecimal("-77.95"));
 
         // get the transactions for INV_SALES_TEST-3 with the assistance of our start timestamp
-        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(new EntityExpr("invoiceId", EntityOperator.EQUALS, invoiceId),
-                new EntityExpr("acctgTransTypeId", EntityOperator.EQUALS, "WRITEOFF"),
-                new EntityExpr("glFiscalTypeId", EntityOperator.NOT_EQUAL, "REFERENCE")), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, invoiceId),
+                EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "WRITEOFF"),
+                EntityCondition.makeCondition("glFiscalTypeId", EntityOperator.NOT_EQUAL, "REFERENCE")), start, delegator);
         assertNotEmpty(invoiceId + " invoice write off transactions not created.", transactions);
 
         // assert transaction equivalence with the reference INV_SALES_TEST-3WO transaction
@@ -1013,7 +1013,7 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Balance for " + supplierPartyId + " has not increase by 526.73", balance1, balance2.subtract(new BigDecimal("526.73")));
 
         // get the transactions for INV_PURCH_TEST-1 with the assistance of our start timestamp
-        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(new EntityExpr("invoiceId", EntityOperator.EQUALS, invoiceId)), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, invoiceId)), start, delegator);
         assertNotEmpty(invoiceId + " transaction not created.", transactions);
 
         // assert transaction equivalence with the reference INV_PURCH_TEST-1 transaction
@@ -1039,7 +1039,7 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Balance for " + supplierPartyId + " has not decrease by 526.73", balance2, balance3.add(new BigDecimal("526.73")));
 
         // get the transactions for PMT_VEND_TEST-1 with the assistance of our start timestamp
-        transactions = getAcctgTransSinceDate(UtilMisc.toList(new EntityExpr("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
+        transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
         assertNotEmpty(paymentId + " transaction not created.", transactions);
 
         // assert transaction equivalence with the reference PMT_VEND_TEST-1 transaction
@@ -1245,7 +1245,7 @@ public class FinancialsTests extends FinancialsTestCase {
         input.put("userLogin", demofinadmin);
         input.put("partyIdFrom", invoice2.get("partyIdFrom"));
         input.put("partyIdTo", invoice2.get("partyId"));
-        input.put("amount", new Double((financeCharge.get("interestAmount")).doubleValue()));
+        input.put("amount", financeCharge.get("interestAmount"));
         input.put("currencyUomId", invoice2.get("currencyUomId"));
         input.put("invoiceDate", now);
         input.put("dueDate", invoice2.get("dueDate"));
@@ -1258,7 +1258,7 @@ public class FinancialsTests extends FinancialsTestCase {
         input.put("userLogin", demofinadmin);
         input.put("partyIdFrom", invoice4.get("partyIdFrom"));
         input.put("partyIdTo", invoice4.get("partyId"));
-        input.put("amount", new Double((financeCharge.get("interestAmount")).doubleValue()));
+        input.put("amount", financeCharge.get("interestAmount"));
         input.put("currencyUomId", invoice4.get("currencyUomId"));
         input.put("invoiceDate", now);
         input.put("dueDate", invoice4.get("dueDate"));
@@ -1977,17 +1977,17 @@ public class FinancialsTests extends FinancialsTestCase {
         /*
          * (a) balance of Customer A is $256
          */
-        assertEquals("balance of Customer " + customerId.get(0) + " is " + balances.get(customerId.get(0)) + " and not $256", balances.get(customerId.get(0)).doubleValue(), new Double("256.00"));
+        assertEquals("balance of Customer " + customerId.get(0) + " is " + balances.get(customerId.get(0)) + " and not $256", balances.get(customerId.get(0)), new BigDecimal("256.00"));
 
         /*
          * (b) balance of Customer B is $385
          */
-        assertEquals("balance of Customer " + customerId.get(1) + " is " + balances.get(customerId.get(1)) + " and not $385", balances.get(customerId.get(1)).doubleValue(), new Double("385.00"));
+        assertEquals("balance of Customer " + customerId.get(1) + " is " + balances.get(customerId.get(1)) + " and not $385", balances.get(customerId.get(1)), new BigDecimal("385.00"));
 
         /*
          * (c) balance of Customer C is $398
          */
-        assertEquals("balance of Customer " + customerId.get(2) + " is " + balances.get(customerId.get(0)) + " and not $398", balances.get(customerId.get(2)).doubleValue(), new Double("398.00"));
+        assertEquals("balance of Customer " + customerId.get(2) + " is " + balances.get(customerId.get(0)) + " and not $398", balances.get(customerId.get(2)), new BigDecimal("398.00"));
 
         /*
          * 11.  Run AccountsHelper.getUnpaidInvoicesForCustomers and verify:
@@ -2145,27 +2145,27 @@ public class FinancialsTests extends FinancialsTestCase {
         /*
          * (a) Customer A: isPastDue = true, current = $156, 30 - 60 days =  0, 60 - 90 days = $100, 90 - 120 days = 0, over 120 days = 0, total open amount = $256
          */
-        verifyCustomerStatement(customerId.get(0), partyData, true, 156.0, 0.0, 100.0, 0.0, 0.0, 256.0);
+        verifyCustomerStatement(customerId.get(0), partyData, true, new BigDecimal("156.0"), new BigDecimal("0.0"), new BigDecimal("100.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("256.0"));
 
         /*
          * (b) Customer B: isPastDue = false, current = $385, 30 - 60 days =  0, 60 - 90 days = 0, 90 - 120 days = 0, over 120 days = 0, total open amount = $385
          */
-        verifyCustomerStatement(customerId.get(1), partyData, false, 385.0, 0.0, 0.0, 0.0, 0.0, 385.0);
+        verifyCustomerStatement(customerId.get(1), partyData, false, new BigDecimal("385.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("385.0"));
 
         /*
          * (c) Customer C: isPastDue = true, current = $228, 30 - 60 days =  0, 60 - 90 days = 0,  90 - 120 days = $170, over 120 days = 0, total open amount = $398
          */
-        verifyCustomerStatement(customerId.get(2), partyData, true, 228.0, 0.0, 0.0, 170.0, 0.0, 398.0);
+        verifyCustomerStatement(customerId.get(2), partyData, true, new BigDecimal("228.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("170.0"), new BigDecimal("0.0"), new BigDecimal("398.0"));
 
         /*
          * (d) Customer D: isPastDue = false, current = $500, 30 - 60 days =  0, 60 - 90 days = 0,  90 - 120 days = 0, over 120 days = 0, total open amount = $500
          */
-        verifyCustomerStatement(customerId.get(3), partyData, false, 500.0, 0.0, 0.0, 0.0, 0.0, 500.0);
+        verifyCustomerStatement(customerId.get(3), partyData, false, new BigDecimal("500.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("500.0"));
 
         /*
          * (e) Customer E: isPastDue = true, current = $199, 30 - 60 days = 266, 60 - 90 days = 377, 90 - 120 days = 488, over 120 days = 599, total open amount = $1929
          */
-        verifyCustomerStatement(customerId.get(4), partyData, true, 199.0, 266.0, 377.0, 488.0, 599.0, 1929.0);
+        verifyCustomerStatement(customerId.get(4), partyData, true, new BigDecimal("199.0"), new BigDecimal("266.0"), new BigDecimal("377.0"), new BigDecimal("488.0"), new BigDecimal("599.0"), new BigDecimal("1929.0"));
 
         /*
          * 16.  Get customer statement (AccountsHelper.customerStatement) with useAgingDate=false and verify
@@ -2177,39 +2177,39 @@ public class FinancialsTests extends FinancialsTestCase {
         /*
          *       (a) Customer A: isPastDue = true, current = $156, 30 - 60 days =  0, 60 - 90 days = 0, 90 - 120 days = $100, over 120 days = 0, total open amount = $256
          */
-        verifyCustomerStatement(customerId.get(0), partyData, true, 156.0, 0.0, 0.0, 100.0, 0.0, 256.0);
+        verifyCustomerStatement(customerId.get(0), partyData, true, new BigDecimal("156.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("100.0"), new BigDecimal("0.0"), new BigDecimal("256.0"));
 
         /*
          *       (b) Customer B: isPastDue = true, current = $210, 30 - 60 days =  150, 60 - 90 days = 25, 90 - 120 days = 0, over 120 days = 0, total open amount = $385
          */
-        verifyCustomerStatement(customerId.get(1), partyData, true, 210.0, 150.0, 25.0, 0.0, 0.0, 385.0);
+        verifyCustomerStatement(customerId.get(1), partyData, true, new BigDecimal("210.0"), new BigDecimal("150.0"), new BigDecimal("25.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("385.0"));
 
         /*
          *       (c) Customer C: isPastDue = true, current = 0, 30 - 60 days =  228, 60 - 90 days = 0,  90 - 120 days = 0, over 120 days = $170, total open amount = $398
          *       Note that invoice #4 from above is in the over 120 day bucket because it is dated 120 days before current timestamp, but aging calculation start at beginning of today
          */
-        verifyCustomerStatement(customerId.get(2), partyData, true, 0.0, 228.0, 0.0, 0.0, 170.0, 398.0);
+        verifyCustomerStatement(customerId.get(2), partyData, true, new BigDecimal("0.0"), new BigDecimal("228.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("170.0"), new BigDecimal("398.0"));
 
         /*
          *       (d) Customer D: isPastDue = false, current = $500, 30 - 60 days =  0, 60 - 90 days = 0,  90 - 120 days = 0, over 120 days = 0, total open amount = $500
          */
-        verifyCustomerStatement(customerId.get(3), partyData, false, 500.0, 0.0, 0.0, 0.0, 0.0, 500.0);
+        verifyCustomerStatement(customerId.get(3), partyData, false, new BigDecimal("500.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("500.0"));
 
         /*
          *       (e) Customer E: isPastDue = true, current = $44, 30 - 60 days = 155, 60 - 90 days = 266, 90 - 120 days = 377, over 120 days = 1087, total open amount = $1929
          */
-        verifyCustomerStatement(customerId.get(4), partyData, true, 44.0, 155.0, 266.0, 377.0, 1087.0, 1929.0);
+        verifyCustomerStatement(customerId.get(4), partyData, true, new BigDecimal("44.0"), new BigDecimal("155.0"), new BigDecimal("266.0"), new BigDecimal("377.0"), new BigDecimal("1087.0"), new BigDecimal("1929.0"));
 
     }
 
-    private void verifyCustomerStatement(String partyId, Map<String, Object> partyData, boolean isPastDue, Double current, Double over30, Double over60, Double over90, Double over120, Double totalOpen) {
+    private void verifyCustomerStatement(String partyId, Map<String, Object> partyData, boolean isPastDue, BigDecimal current, BigDecimal over30, BigDecimal over60, BigDecimal over90, BigDecimal over120, BigDecimal totalOpen) {
         assertEquals("Customer " + partyId + " should have past due invoices but isPastDue flag incorrect.", Boolean.valueOf(isPastDue), partyData.get(partyId + "is_past_due"));
-        assertEquals("Current value for customer " + partyId + " is incorect.", current, (Double) partyData.get(String.format("%1$scurrent", partyId)));
-        assertEquals("Over 30 days past due amount is wrong.", over30, (Double) partyData.get(String.format("%1$sover_1N", partyId)));
-        assertEquals("Over 60 days past due amount is wrong.", over60, (Double) partyData.get(String.format("%1$sover_2N", partyId)));
-        assertEquals("Over 90 days past due amount is wrong.", over90, (Double) partyData.get(String.format("%1$sover_3N", partyId)));
-        assertEquals("Over 120 days past due amount is wrong.", over120, (Double) partyData.get(String.format("%1$sover_4N", partyId)));
-        assertEquals("Total open amount is wrong.", totalOpen, (Double) partyData.get(String.format("%1$stotal_open", partyId)));
+        assertEquals("Current value for customer " + partyId + " is incorrect.", current, (BigDecimal) partyData.get(String.format("%1$scurrent", partyId)));
+        assertEquals("Over 30 days past due amount is wrong.", over30, (BigDecimal) partyData.get(String.format("%1$sover_1N", partyId)));
+        assertEquals("Over 60 days past due amount is wrong.", over60, (BigDecimal) partyData.get(String.format("%1$sover_2N", partyId)));
+        assertEquals("Over 90 days past due amount is wrong.", over90, (BigDecimal) partyData.get(String.format("%1$sover_3N", partyId)));
+        assertEquals("Over 120 days past due amount is wrong.", over120, (BigDecimal) partyData.get(String.format("%1$sover_4N", partyId)));
+        assertEquals("Total open amount is wrong.", totalOpen, (BigDecimal) partyData.get(String.format("%1$stotal_open", partyId)));
     }
 
     /**
@@ -2439,15 +2439,15 @@ public class FinancialsTests extends FinancialsTestCase {
         String description1 = product1.getString("productName");
         String uomId = invoice.getCurrencyUomId();
         Map results = dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product1, "currencyUomId", uomId));
-        Double price1 = (Double) results.get("price");
-        BigDecimal amount1 = new BigDecimal(price1).setScale(DECIMALS, ROUNDING);
+        BigDecimal price1 = (BigDecimal) results.get("price");
+        BigDecimal amount1 = price1.setScale(DECIMALS, ROUNDING);
 
         GenericValue product2 = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId2));
         String invoiceItemTypeId2 = repository.getInvoiceItemTypeIdForProduct(invoice, domainsDirectory.getProductDomain().getProductRepository().getProductById("GZ-1001"));
         String description2 = product2.getString("productName");
         results = dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product2, "currencyUomId", uomId));
-        Double price2 = (Double) results.get("price");
-        BigDecimal amount2 = new BigDecimal(price2).setScale(DECIMALS, ROUNDING);
+        BigDecimal price2 = (BigDecimal) results.get("price");
+        BigDecimal amount2 = price2.setScale(DECIMALS, ROUNDING);
 
         GenericValue invoiceItem = EntityUtil.getOnly(delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoice.getInvoiceId(), "productId", productId1)));
         assertEquals("invoiceItemTypeId is wrong.", invoiceItemTypeId1, invoiceItem.getString("invoiceItemTypeId"));
@@ -2559,7 +2559,7 @@ public class FinancialsTests extends FinancialsTestCase {
         list = query.list();
         assertEquals("There is a new account balance history record for Company and " + customerPartyId, 1, list.size());
         AccountBalanceHistory accountBalanceHistory = list.get(0);
-        assertEquals("There is a new account balance history record for Company and " + customerPartyId + " for 100.0", 100.0, accountBalanceHistory.getTotalBalance().doubleValue());
+        assertEquals("There is a new account balance history record for Company and " + customerPartyId + " for 100.0", 100.0, accountBalanceHistory.getTotalBalance());
 
         pause("mysql timestamp pause");
 
@@ -2573,7 +2573,7 @@ public class FinancialsTests extends FinancialsTestCase {
         list = query.list();
         assertEquals("There are two account balance history records for Company and " + customerPartyId, 2, list.size());
         accountBalanceHistory = list.get(0);
-        assertEquals("There is a new account balance history record for Company and " + customerPartyId + " for 50.0", 50.0, accountBalanceHistory.getTotalBalance().doubleValue());
+        assertEquals("There is a new account balance history record for Company and " + customerPartyId + " for 50.0", 50.0, accountBalanceHistory.getTotalBalance());
     }
 
     /**
@@ -2595,7 +2595,6 @@ public class FinancialsTests extends FinancialsTestCase {
      * This test verifies that we can get correct InvoiceAdjustmentType by InvoiceRepository.getInvoiceAdjustmentTypes method.
      * @exception Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testGetInvoiceAdjustmentTypes() throws Exception {
         // create a sales invoice
         String customerPartyId = createPartyFromTemplate("DemoAccount1", "test for InvoiceRepository.getInvoiceAdjustmentTypes");
