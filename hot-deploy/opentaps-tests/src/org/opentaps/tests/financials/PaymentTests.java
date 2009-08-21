@@ -18,13 +18,13 @@ package org.opentaps.tests.financials;
 import java.math.BigDecimal;
 import java.util.Map;
 
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
+import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastMap;
-
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
 import org.opentaps.domain.base.entities.PaymentMethod;
 import org.opentaps.domain.billing.payment.Payment;
@@ -34,9 +34,6 @@ import org.opentaps.domain.organization.OrganizationRepositoryInterface;
 import org.opentaps.foundation.infrastructure.Infrastructure;
 import org.opentaps.foundation.infrastructure.User;
 import org.opentaps.tests.analytics.tests.TestObjectGenerator;
-
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
-import com.opensourcestrategies.financials.util.UtilFinancial;
 
 /**
  * Unit tests for Payments and PaymentApplications.
@@ -416,12 +413,12 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 30.0);
+        input.put("amountApplied", new BigDecimal("30.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceError("createPaymentApplication", input);
 
         // now apply 10.0, this should succeed
-        input.put("amountApplied", 10.0);
+        input.put("amountApplied", new BigDecimal("10.0"));
         Map result = runAndAssertServiceSuccess("createPaymentApplication", input);
         // get the application id
         String paymentApplicationId = (String) result.get("paymentApplicationId");
@@ -431,20 +428,20 @@ public class PaymentTests extends FinancialsTestCase {
         // this verifies that we cannot update an application with amountApplied > payment amount
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
-        input.put("amountApplied", 25.0);
+        input.put("amountApplied", new BigDecimal("25.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceError("updatePaymentApplication", input);
 
         // try to update the payment application applied amount to 0.0
         // this should fail
         // this verifies that we cannot update an application with amountApplied = 0.0
-        input.put("amountApplied", 0.0);
+        input.put("amountApplied", new BigDecimal("0.0"));
         runAndAssertServiceError("updatePaymentApplication", input);
 
         // try to update the payment application applied amount to -1.0
         // this should fail
         // this verifies that we cannot update an application with amountApplied < 0.0
-        input.put("amountApplied", -1.0);
+        input.put("amountApplied", new BigDecimal("-1.0"));
         runAndAssertServiceError("updatePaymentApplication", input);
 
         // try to create another application of the same payment to the same invoice with amount 15.0
@@ -453,24 +450,24 @@ public class PaymentTests extends FinancialsTestCase {
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 15.0);
+        input.put("amountApplied", new BigDecimal("15.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceError("createPaymentApplication", input);
 
         // try to create another application amount 0.0
         // this should fail
         // this verifies that we cannot create an application with amountApplied = 0.0
-        input.put("amountApplied", 0.0);
+        input.put("amountApplied", new BigDecimal("0.0"));
         runAndAssertServiceError("createPaymentApplication", input);
 
         // try to create another application amount -1.0
         // this should fail
         // this verifies that we cannot create an application with amountApplied < 0.0
-        input.put("amountApplied", -1.0);
+        input.put("amountApplied", new BigDecimal("-1.0"));
         runAndAssertServiceError("createPaymentApplication", input);
 
         // now apply 10.0, this should succeed
-        input.put("amountApplied", 10.0);
+        input.put("amountApplied", new BigDecimal("10.0"));
         result = runAndAssertServiceSuccess("createPaymentApplication", input);
         // get the new application id
         paymentApplicationId = (String) result.get("paymentApplicationId");
@@ -480,7 +477,7 @@ public class PaymentTests extends FinancialsTestCase {
         // this verifies that we cannot update an application with amountApplied > payment not applied amount
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
-        input.put("amountApplied", 12.0);
+        input.put("amountApplied", new BigDecimal("12.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceError("updatePaymentApplication", input);
 
@@ -498,12 +495,12 @@ public class PaymentTests extends FinancialsTestCase {
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", payment2Id);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 30.0);
+        input.put("amountApplied", new BigDecimal("30.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceError("createPaymentApplication", input);   // fails here
 
         // now apply 20.0, this should succeed
-        input.put("amountApplied", 20.0);
+        input.put("amountApplied", new BigDecimal("20.0"));
         result = runAndAssertServiceSuccess("createPaymentApplication", input);
         // get the application id
         paymentApplicationId = (String) result.get("paymentApplicationId");
@@ -513,7 +510,7 @@ public class PaymentTests extends FinancialsTestCase {
         // this verifies that we cannot update an application with amountApplied > invoice outstanding amount
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
-        input.put("amountApplied", 22.0);
+        input.put("amountApplied", new BigDecimal("22.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceError("updatePaymentApplication", input);
 
@@ -550,7 +547,7 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 10.0);
+        input.put("amountApplied", new BigDecimal("10.0"));
         Map result = runAndAssertServiceSuccess("createPaymentApplication", input);
         // get application id
         String paymentApplicationId = (String) result.get("paymentApplicationId");
@@ -567,7 +564,7 @@ public class PaymentTests extends FinancialsTestCase {
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 10.0);
+        input.put("amountApplied", new BigDecimal("10.0"));
         result = runAndAssertServiceSuccess("createPaymentApplication", input);
         // get the new application id
         paymentApplicationId = (String) result.get("paymentApplicationId");
@@ -577,7 +574,7 @@ public class PaymentTests extends FinancialsTestCase {
         input.put("paymentApplicationId", paymentApplicationId);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 20.0);
+        input.put("amountApplied", new BigDecimal("20.0"));
         runAndAssertServiceSuccess("updatePaymentApplication", input);
 
         // verify that we can now mark the payment as CONFIRMED
@@ -591,13 +588,13 @@ public class PaymentTests extends FinancialsTestCase {
         // same for an update
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
-        input.put("amountApplied", 10.0);
+        input.put("amountApplied", new BigDecimal("10.0"));
         runAndAssertServiceError("updatePaymentApplication", input);
         // and finally for creating another payment application
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 5.0);
+        input.put("amountApplied", new BigDecimal("5.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceError("createPaymentApplication", input);
 
@@ -633,7 +630,7 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 20.0);
+        input.put("amountApplied", new BigDecimal("20.0"));
 
         pause("Workaround pause for MySQL duplicate timestamps");
         Map result = runAndAssertServiceSuccess("createPaymentApplication", input);
@@ -650,7 +647,7 @@ public class PaymentTests extends FinancialsTestCase {
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 20.0);
+        input.put("amountApplied", new BigDecimal("20.0"));
         result = runAndAssertServiceSuccess("createPaymentApplication", input);
         paymentApplicationId = (String) result.get("paymentApplicationId");
 
@@ -680,7 +677,7 @@ public class PaymentTests extends FinancialsTestCase {
         pause("Workaround pause for MySQL duplicate timestamps");
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
-        input.put("amountApplied", 18.0);
+        input.put("amountApplied", new BigDecimal("18.0"));
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         runAndAssertServiceSuccess("updatePaymentApplication", input);
@@ -696,7 +693,7 @@ public class PaymentTests extends FinancialsTestCase {
         pause("Workaround pause for MySQL duplicate timestamps");
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentApplicationId", paymentApplicationId);
-        input.put("amountApplied", 20.0);
+        input.put("amountApplied", new BigDecimal("20.0"));
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
         runAndAssertServiceSuccess("updatePaymentApplication", input);
@@ -727,7 +724,7 @@ public class PaymentTests extends FinancialsTestCase {
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId);
         input.put("invoiceId", invoiceId);
-        input.put("amountApplied", 20.0);
+        input.put("amountApplied", new BigDecimal("20.0"));
         result = runAndAssertServiceSuccess("createPaymentApplication", input);
 
         // customer balance should still be unchanged
@@ -755,7 +752,6 @@ public class PaymentTests extends FinancialsTestCase {
      * 11. verify the following gl account balance changes: UNDEPOSITED_RECEIPTS +100, ACCOUNTS_RECEIVABLE 0, CUSTOMER_DEPOSIT 0
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testCustomerDepositAndInvoicing() throws GeneralException {
         // 1. get GL account balances
         FinancialAsserts fa = new FinancialAsserts(this, organizationPartyId, demofinadmin);
@@ -826,7 +822,7 @@ public class PaymentTests extends FinancialsTestCase {
         // so we don't test it here
         setParentPartyId(subAccountPartyId1, accountPartyId);
         setParentPartyId(subAccountPartyId2, accountPartyId);
-        
+
         // create sales invoice #1 for $100 from organization to subaccount party. Set the invoice to ready.
         String invoiceId1 = fa.createInvoice(subAccountPartyId1, "SALES_INVOICE", UtilDateTime.nowTimestamp(), "testParentPaymentForSubAccountInvoice");
         fa.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-8544", new BigDecimal("2.0"), new BigDecimal("50.0"));
@@ -844,14 +840,14 @@ public class PaymentTests extends FinancialsTestCase {
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId1);
         input.put("invoiceId", invoiceId1);
-        input.put("amountApplied", 100.0);
+        input.put("amountApplied", new BigDecimal("100.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceSuccess("createPaymentApplication", input);
 
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId1);
         input.put("invoiceId", invoiceId2);
-        input.put("amountApplied", 100.0);
+        input.put("amountApplied", new BigDecimal("100.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceSuccess("createPaymentApplication", input);
 
@@ -867,7 +863,7 @@ public class PaymentTests extends FinancialsTestCase {
         input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
         input.put("paymentId", paymentId2);
         input.put("invoiceId", invoiceId2);
-        input.put("amountApplied", 50.0);
+        input.put("amountApplied", new BigDecimal("50.0"));
         input.put("checkForOverApplication", Boolean.TRUE);
         runAndAssertServiceSuccess("createPaymentApplication", input);
 
@@ -876,12 +872,12 @@ public class PaymentTests extends FinancialsTestCase {
 
         // check that invoice 2 is PAID
         fa.assertInvoiceStatus(invoiceId2, "INVOICE_PAID");
-        
+
         // at this point the parent account should have a balance of -200 and each sub account should have a balance of 100
         assertEquals("Parent Account balance is correct", AccountsHelper.getBalanceForCustomerPartyId(accountPartyId, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator), new BigDecimal(-200.00));
         assertEquals("Sub account 1 balance is correct", AccountsHelper.getBalanceForCustomerPartyId(subAccountPartyId1, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator), new BigDecimal(100.00));
         assertEquals("Sub account 2 balance is correct", AccountsHelper.getBalanceForCustomerPartyId(subAccountPartyId2, organizationPartyId, "ACTUAL", UtilDateTime.nowTimestamp(), delegator), new BigDecimal(100.00));
-   
+
         // now set the two payments to CONFIRMED, which should cause the parent/child balances to be netted
         fa.updatePaymentStatus(paymentId1, "PMNT_CONFIRMED");
         fa.updatePaymentStatus(paymentId2, "PMNT_CONFIRMED");

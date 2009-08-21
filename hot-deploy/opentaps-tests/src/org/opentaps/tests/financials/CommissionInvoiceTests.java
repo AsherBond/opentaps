@@ -305,8 +305,8 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
 
         // 6. Receive Payment from DemoAccount1 to Company for $100 and apply $50 of it to invoice from (1) and $30 of it to invoice from (2)
         String paymentId1 = financialAsserts.createPayment(new BigDecimal("100.0"), "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId1, "amountApplied", 50.0));
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId2, "amountApplied", 30.0));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId1, "amountApplied", new BigDecimal("50.0")));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId1, "invoiceId", invoiceId2, "amountApplied", new BigDecimal("30.0")));
 
         // 7. Set Payment to RECEIVED
         financialAsserts.updatePaymentStatus(paymentId1, "PMNT_RECEIVED");
@@ -338,14 +338,14 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
 
         // 11. Receive second Payment from DemoAccount1 to Company for $30, apply $30 of it to invoice from (1)
         String paymentId2 = financialAsserts.createPayment(new BigDecimal("30.0"), "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId2, "invoiceId", invoiceId1, "amountApplied", 30.0));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId2, "invoiceId", invoiceId1, "amountApplied", new BigDecimal("30.0")));
 
         // 12. Set Payment to Cancelled
         financialAsserts.updatePaymentStatus(paymentId2, "PMNT_CANCELLED");
 
         // 13. Receive third Payment from DemoAccount1 to Company for $100, apply $50 of it to invoice from (1)
         String paymentId3 = financialAsserts.createPayment(new BigDecimal("100.0"), "DemoAccount1", "CUSTOMER_PAYMENT", "COMPANY_CHECK");
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId3, "invoiceId", invoiceId1, "amountApplied", 50.0));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.<String, Object>toMap("userLogin", demofinadmin, "paymentId", paymentId3, "invoiceId", invoiceId1, "amountApplied", new BigDecimal("50.0")));
 
         // 14. Set Payment to Received, then set Payment to VOID
         financialAsserts.updatePaymentStatus(paymentId3, "PMNT_RECEIVED");

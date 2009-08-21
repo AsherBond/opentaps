@@ -423,7 +423,7 @@ public final class PaymentServices {
                 if (paymentApplication != null) {
                     // check if the amountApplied has changed
                     Debug.logInfo("Updating PaymentApplication [" + paymentApplicationId + "] for Invoice [" + invoiceId + "] with amountApplied=" + amountApplied, MODULE);
-                    if (amountApplied != paymentApplication.get("amountApplied")) {
+                    if (amountApplied.compareTo(paymentApplication.getBigDecimal("amountApplied")) != 0) {
                         GenericValue invoice = delegator.findByPrimaryKey("Invoice", UtilMisc.toMap("invoiceId", invoiceId));
                         if (invoice != null) {
                             // reset invoice status to READY
