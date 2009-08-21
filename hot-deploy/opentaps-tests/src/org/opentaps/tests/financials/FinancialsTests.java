@@ -2380,7 +2380,7 @@ public class FinancialsTests extends FinancialsTestCase {
 
         // set the amount of the product on the invoice to $11.25
         GenericValue invoiceItem = EntityUtil.getOnly(delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoice.getInvoiceId(), "productId", productId, "invoiceItemTypeId", "PINV_FPROD_ITEM")));
-        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", admin, "invoiceId", invoice.getInvoiceId(), "productId", productId, "invoiceItemTypeId", "PINV_FPROD_ITEM", "amount", 11.25);
+        Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", admin, "invoiceId", invoice.getInvoiceId(), "productId", productId, "invoiceItemTypeId", "PINV_FPROD_ITEM", "amount", new BigDecimal("11.25"));
         input.put("invoiceItemSeqId", invoiceItem.get("invoiceItemSeqId"));
         input.put("quantity", invoiceItem.get("quantity"));
         runAndAssertServiceSuccess("updateInvoiceItem", input);

@@ -260,7 +260,7 @@ public final class InvoiceServices {
         String description = (String) context.get("description");
         String currencyUomId = (String) context.get("currencyUomId");
         String parentInvoiceId = (String) context.get("parentInvoiceId");
-        BigDecimal amount = new BigDecimal(((Double) context.get("amount")).doubleValue()).setScale(decimals, rounding);
+        BigDecimal amount = (BigDecimal) context.get("amount");
         Timestamp dueDate = (Timestamp) context.get("dueDate");
         Timestamp invoiceDate = (Timestamp) context.get("invoiceDate");
         if (invoiceDate == null) {
@@ -567,7 +567,7 @@ public final class InvoiceServices {
                     paymentContext.put("partyIdTo", partyId);
                     paymentContext.put("partyIdFrom", organizationPartyId);
                     paymentContext.put("paymentRefNum", currentCheckNumberStr);
-                    paymentContext.put("amount", new Double(partyAmount.doubleValue()));
+                    paymentContext.put("amount", partyAmount);
                     UtilAccountingTags.addTagParameters(context, paymentContext, "acctgTagEnumId", "acctgTagEnumId");
 
                     // Create the payment
@@ -588,7 +588,7 @@ public final class InvoiceServices {
 
                         paymentApplicationContext.put("paymentId", paymentId);
                         paymentApplicationContext.put("invoiceId", invoiceId);
-                        paymentApplicationContext.put("amountApplied", new Double(amountApplied.doubleValue()));
+                        paymentApplicationContext.put("amountApplied", amountApplied);
 
                         // Create the payment application
                         Map createPaymentApplicationResult = dispatcher.runSync("createPaymentApplication", paymentApplicationContext);
@@ -1734,10 +1734,10 @@ public final class InvoiceServices {
             String codInvoiceId = (String) createInvoiceResult.get("invoiceId");
             result.put("invoiceId", codInvoiceId);
 
-            Double adjustmentAmount = null;
-            if (UtilValidate.isNotEmpty((String) context.get("adjustmentAmount"))) {
+            BigDecimal adjustmentAmount = null;
+            if (UtilValidate.isNotEmpty(context.get("adjustmentAmount"))) {
                 try {
-                    adjustmentAmount = Double.valueOf((String) context.get("adjustmentAmount"));
+                    adjustmentAmount = new BigDecimal((String) context.get("adjustmentAmount"));
                 } catch (Exception e) {
                     Debug.logError(e, MODULE);
                     return ServiceUtil.returnError(e.getMessage());
@@ -1747,7 +1747,7 @@ public final class InvoiceServices {
             // Create an invoice item for the adjustment amount, if necessary
             if (adjustmentAmount != null && adjustmentAmount.doubleValue() != 0) {
                 Map createInvoiceItemContext = UtilMisc.toMap("invoiceId", codInvoiceId, "invoiceItemTypeId", "ITM_BILL_FRM_COD_ADJ", "userLogin", userLogin);
-                createInvoiceItemContext.put("amount", new BigDecimal(adjustmentAmount).negate());
+                createInvoiceItemContext.put("amount", adjustmentAmount.negate());
                 Map createInvoiceItemResult = dispatcher.runSync("createInvoiceItem", createInvoiceItemContext);
                 if (ServiceUtil.isError(createInvoiceItemResult)) {
                     return createInvoiceItemResult;

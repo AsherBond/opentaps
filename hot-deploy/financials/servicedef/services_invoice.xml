@@ -26,7 +26,7 @@
         <description>Create an invoice reflecting finance charges, of type INTEREST_INVOICE, with one InvoiceItem of type INV_INTRST_CHRG.</description>
         <attribute name="partyIdFrom" type="String" mode="IN" optional="false"/>
         <attribute name="partyIdTo" type="String" mode="IN" optional="false"/>
-        <attribute name="amount" type="Double" mode="IN" optional="false"/>
+        <attribute name="amount" type="BigDecimal" mode="IN" optional="false"/>
         <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
         <attribute name="invoiceDate" type="Timestamp" mode="IN" optional="true"/>
         <attribute name="dueDate" type="Date" mode="IN" optional="true"/>
