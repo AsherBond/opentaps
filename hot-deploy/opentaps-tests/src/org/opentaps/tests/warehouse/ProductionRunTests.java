@@ -401,8 +401,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input.put("productionRunId", productionRunId);
         input.put("productionRunTaskId", taskId);
         input.put("partyId", demowarehouse1.get("partyId"));
-        input.put("addSetupTime", 1000000.0);
-        input.put("addTaskTime", 800000.0);
+        input.put("addSetupTime", new BigDecimal("1000000.0"));
+        input.put("addTaskTime", new BigDecimal("800000.0"));
         runAndAssertServiceSuccess("updateProductionRunTask", input);
 
         // complete the task, which should trigger production run completed
@@ -2231,7 +2231,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         String taskId = startOnlyTask(prunId);
         // issue 5 product
-        runAndAssertServiceSuccess("issueProductionRunTaskComponent", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", productId, "quantity", 5.0));
+        runAndAssertServiceSuccess("issueProductionRunTaskComponent", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", productId, "quantity", new BigDecimal("5.0")));
         // make sure WEGS is completed
         List wegsList = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", taskId, "productId", productId, "workEffortGoodStdTypeId", "PRUNT_PROD_NEEDED"));
         assertTrue("WEGS for material requirement of 5 [" + productId + "] exists.", wegsList.size() == 1);
@@ -2259,7 +2259,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         taskId = startOnlyTask(prunId);
         // issue 8 product
-        runAndAssertServiceSuccess("issueProductionRunTaskComponent", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", productId, "quantity", 8.0));
+        runAndAssertServiceSuccess("issueProductionRunTaskComponent", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", productId, "quantity", new BigDecimal("8.0")));
         // make sure WEGS is completed
         wegsList = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", taskId, "productId", productId, "workEffortGoodStdTypeId", "PRUNT_PROD_NEEDED"));
         assertTrue("WEGS for material requirement of 8 [" + productId + "] exists.", wegsList.size() == 1);

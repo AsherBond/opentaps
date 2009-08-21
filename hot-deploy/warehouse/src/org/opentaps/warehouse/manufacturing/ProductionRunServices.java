@@ -953,7 +953,7 @@ public final class ProductionRunServices {
 
         String workEffortId = (String) context.get("workEffortId");
         String productId = (String) context.get("productId");
-        BigDecimal quantity = (BigDecimal) context.get("quantity");
+        BigDecimal quantity = context.get("quantity") == null ? BigDecimal.ZERO : (BigDecimal) context.get("quantity");
         try {
             // make sure the task is started
             GenericValue task = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));

@@ -1856,7 +1856,7 @@ public final class InvoiceServices {
             input.put("userLogin", userLogin);
             Map results = dispatcher.runSync("checkInvoicePaymentApplications", input);
             if (ServiceUtil.isError(results)) {
-return results;
+                return results;
             }
 
             // get the invoice total in the currency of the invoice
@@ -2817,8 +2817,8 @@ return results;
                             createInvoiceItemAdjContext.put("invoiceId", invoiceId);
                             createInvoiceItemAdjContext.put("invoiceItemSeqId", invoiceItemSeqId);
                             createInvoiceItemAdjContext.put("invoiceItemTypeId", getInvoiceItemType(delegator, adj.getString("orderAdjustmentTypeId"), null, invoiceType, "INVOICE_ITM_ADJ"));
-                            createInvoiceItemAdjContext.put("quantity", new Double(1));
-                            createInvoiceItemAdjContext.put("amount", new Double(amount.doubleValue()));
+                            createInvoiceItemAdjContext.put("quantity", BigDecimal.ONE);
+                            createInvoiceItemAdjContext.put("amount", amount);
                             createInvoiceItemAdjContext.put("productId", orderItem.get("productId"));
                             createInvoiceItemAdjContext.put("productFeatureId", orderItem.get("productFeatureId"));
                             createInvoiceItemAdjContext.put("overrideGlAccountId", adj.get("overrideGlAccountId"));

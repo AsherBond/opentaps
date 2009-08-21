@@ -27,6 +27,8 @@ import java.util.Set;
 import com.opensourcestrategies.financials.util.UtilFinancial;
 import javolution.util.FastList;
 import javolution.util.FastMap;
+
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -66,7 +68,7 @@ final class SerializedTestSpecs {
 };
 
 public class InventoryTests extends FinancialsTestCase {
-
+    private static final String MODULE = InventoryTests.class.getName();
     /** UserLogin for running the tests. */
     public GenericValue demowarehouse1;
     public GenericValue admin;
@@ -813,7 +815,7 @@ public class InventoryTests extends FinancialsTestCase {
         Map originalInventory = inventoryAsserts.getInventory(productId);
         Map<String, Number> originalBalances = financialAsserts.getFinancialBalances(UtilDateTime.nowTimestamp());
         Number originalInventoryAccountBalance = originalBalances.get(inventoryGlAccountId) != null ? originalBalances.get(inventoryGlAccountId) : BigDecimal.ZERO;
-
+        Debug.logInfo("inventoryItemId : " + receiveInventoryItemId, MODULE);
         // Use updateInventoryItem to set the inventory item's status to "Defective"
         Map updateInvItemContext = UtilMisc.toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "statusId", "INV_DEFECTIVE");
         runAndAssertServiceSuccess("updateInventoryItem", updateInvItemContext);
@@ -922,7 +924,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Update the InventoryItem with a real unitCost
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 5.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", new BigDecimal("5.00")));
 
         // Should now be three InventoryItemValueHistory records - the third with a unitCost of $5.00
         invItemValHist = delegator.findByAnd("InventoryItemValueHistory", UtilMisc.toMap("inventoryItemId", receiveInventoryItemId, "unitCost", new BigDecimal("5.00")), UtilMisc.toList("dateTime DESC"));
@@ -930,7 +932,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Update the InventoryItem with the same unitCost
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 5.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", new BigDecimal("5.00")));
 
         // Should still be three InventoryItemValueHistory records
         invItemValHist = delegator.findByAnd("InventoryItemValueHistory", UtilMisc.toMap("inventoryItemId", receiveInventoryItemId), UtilMisc.toList("dateTime DESC"));
@@ -1867,8 +1869,8 @@ public class InventoryTests extends FinancialsTestCase {
         input.put("productionRunId", productionRunId);
         input.put("productionRunTaskId", taskId);
         input.put("partyId", demowarehouse1.get("partyId"));
-        input.put("addSetupTime", 1000000.0);
-        input.put("addTaskTime", 800000.0);
+        input.put("addSetupTime", new BigDecimal("1000000.0"));
+        input.put("addTaskTime", new BigDecimal("800000.0"));
         runAndAssertServiceSuccess("updateProductionRunTask", input);
 
         input = UtilMisc.toMap("userLogin", demowarehouse1);

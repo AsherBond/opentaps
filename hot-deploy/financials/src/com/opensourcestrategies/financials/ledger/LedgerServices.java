@@ -3474,7 +3474,7 @@ public final class LedgerServices {
                 String productId = inventoryItem.getString("productId");
 
                 transEntries = FastList.newInstance();
-                double transactionAmount = ((Double) savedPart.get("quantity")) * inventoryItem.getDouble("unitCost");
+                BigDecimal transactionAmount = ((BigDecimal) savedPart.get("quantity")).multiply(inventoryItem.getBigDecimal("unitCost"));
                 // Create an accounting transaction entry to debit RAWMAT_INVENTORY account
                 // of the organization for the savedPart.quantity * inventoryItem.unitCost
                 String debitAccountId = UtilAccounting.getProductOrgGlAccountId(productId, "RAWMAT_INVENTORY", ownerPartyId, delegator);
@@ -3506,8 +3506,8 @@ public final class LedgerServices {
                     if (prodAvgCost == null) {
                     Debug.logWarning("Unable to find a product average cost for product [" + productId + "] in organization [" + ownerPartyId + "], no adjustment will be made in inventory variance", MODULE);
                     } else {
-                        BigDecimal quantity = BigDecimal.valueOf((Double) savedPart.get("quantity"));
-                        transactionAmount = prodAvgCost.subtract(unitCost).multiply(quantity).setScale(decimals, rounding).doubleValue();
+                        BigDecimal quantity = (BigDecimal) savedPart.get("quantity");
+                        transactionAmount = prodAvgCost.subtract(unitCost).multiply(quantity).setScale(decimals, rounding);
 
                         // Create and accounting transaction entry to debit
                         // RAWMAT_INVENTORY account of the organization for the

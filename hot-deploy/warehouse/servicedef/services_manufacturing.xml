@@ -159,7 +159,7 @@ under the License.
         <description>Reduce the estimated quantity of a production run task component.</description>
         <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
         <attribute name="productId" type="String" mode="IN" optional="false"/>
-        <attribute name="quantity" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="quantity" type="BigDecimal" mode="IN" optional="true"/>
     </service>
 
     <service name="getProductRoutingDisassemble" engine="java"
