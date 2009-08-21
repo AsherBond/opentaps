@@ -106,7 +106,7 @@ public class EncumbranceTests extends FinancialsTestCase {
         pof3.addProduct(physicalProduct, "PRODUCT_ORDER_ITEM", new BigDecimal("7.0"), "00001", UtilMisc.toMap("price", new BigDecimal("300.0")), UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"));
         pof3.storeOrder();
         // Add a shipping charge order adjustment of $19.95
-        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", pof3.getOrderId(), "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new Double(19.95), "userLogin", demopurch1));
+        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", pof3.getOrderId(), "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new BigDecimal("19.95"), "userLogin", demopurch1));
         // Approve PO #3
         pof3.approveOrder();
         // Fully receive PO #3
@@ -157,7 +157,7 @@ public class EncumbranceTests extends FinancialsTestCase {
         // Update supplies item to 2000 at $0.75 each
         updateOrderItem(orderId5, supplyOrderItemSeqId, "2000.0", "0.75", "Item after new quantity and price updated",  demopurch1);
         // Add shipping charge of $19.95
-        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", orderId5, "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", Double.valueOf(19.95), "userLogin", demopurch1));
+        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", orderId5, "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new BigDecimal("19.95"), "userLogin", demopurch1));
         // Receive 1000 of the physical item, but do not close the PO -- keep it open
         GenericValue orderHeader5 = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId5));
         ctxt = createTestInputParametersForReceiveInventoryAgainstPurchaseOrder(orderHeader5, UtilMisc.toMap(physicalOrderItemSeqId, "1000.0"), false, demopurch1);
@@ -177,7 +177,7 @@ public class EncumbranceTests extends FinancialsTestCase {
         orderItems = delegator.findByAnd("OrderItem", UtilMisc.toMap("orderId", orderId6, "productId", physicalProductId));
         cancelOrderItem(orderId6, (String) (EntityUtil.getFirst(orderItems).get("orderItemSeqId")), "00001", new BigDecimal("2000.0"), demopurch1);
         // Add shipping charges of $838.43
-        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", pof6.getOrderId(), "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", Double.valueOf(838.43), "userLogin", demopurch1));
+        runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", pof6.getOrderId(), "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new BigDecimal("838.43"), "userLogin", demopurch1));
         // Put PO #6 on hold
         runAndAssertServiceSuccess("changeOrderStatus", UtilMisc.toMap("orderId", orderId6, "statusId", "ORDER_HOLD", "userLogin", demopurch1));
 
@@ -262,23 +262,23 @@ public class EncumbranceTests extends FinancialsTestCase {
         // for all fund tags, verify value is $51788.43
         BigDecimal encumberedValue = null;
         encumberedValue = encumbranceMethods.getTotalEncumberedValue(organizationPartyId, null, moment);
-        assertEquals("Wrong encumbered value for all accounting tags", BigDecimal.valueOf(51788.43), encumberedValue);
+        assertEquals("Wrong encumbered value for all accounting tags", new BigDecimal("51788.43"), encumberedValue);
 
         // for all tag=CONSUMER, verify value is $33000
         encumberedValue = encumbranceMethods.getTotalEncumberedValue(organizationPartyId, UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"), moment);
-        assertEquals("Wrong encumbered value for CUSTOMER tag", BigDecimal.valueOf(33000.0), encumberedValue);
+        assertEquals("Wrong encumbered value for CUSTOMER tag", new BigDecimal("33000.0"), encumberedValue);
 
         // for all tag=ENTERPRISE, verify value is $5200
         encumberedValue = encumbranceMethods.getTotalEncumberedValue(organizationPartyId, UtilMisc.toMap("acctgTagEnumId1", "DIV_ENTERPRISE"), moment);
-        assertEquals("Wrong encumbered value for ENTERPRISE tag", BigDecimal.valueOf(5200.0), encumberedValue);
+        assertEquals("Wrong encumbered value for ENTERPRISE tag", new BigDecimal("5200.0"), encumberedValue);
 
         // for all tag=GOVERNMENT, verify value is $12000
         encumberedValue = encumbranceMethods.getTotalEncumberedValue(organizationPartyId, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV"), moment);
-        assertEquals("Wrong encumbered value for GOVERNMENT tag", BigDecimal.valueOf(12000.0), encumberedValue);
+        assertEquals("Wrong encumbered value for GOVERNMENT tag", new BigDecimal("12000.0"), encumberedValue);
 
         // for all tag=SMALL_BUSINESS, verify value is $750
         encumberedValue = encumbranceMethods.getTotalEncumberedValue(organizationPartyId, UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ"), moment);
-        assertEquals("Wrong encumbered value for SMALL_BUSINESS tag", BigDecimal.valueOf(750.0), encumberedValue);
+        assertEquals("Wrong encumbered value for SMALL_BUSINESS tag", new BigDecimal("750.0"), encumberedValue);
 
         // for all tag=EDUCATION, verify value is 0
         encumberedValue = encumbranceMethods.getTotalEncumberedValue(organizationPartyId, UtilMisc.toMap("acctgTagEnumId1", "DIV_EDU"), moment);
@@ -286,7 +286,7 @@ public class EncumbranceTests extends FinancialsTestCase {
 
         // for all tag=untagged, verify value is $838.43
         encumberedValue = encumbranceMethods.getTotalEncumberedValue(organizationPartyId, UtilMisc.toMap("acctgTagEnumId1", "NULL_TAG"), moment);
-        assertEquals("Wrong encumbered value for untagged case", BigDecimal.valueOf(838.43), encumberedValue);
+        assertEquals("Wrong encumbered value for untagged case", new BigDecimal("838.43"), encumberedValue);
 
     }
 
@@ -379,10 +379,10 @@ public class EncumbranceTests extends FinancialsTestCase {
         input.put("facilityId", "WebStoreWarehouse");
         input.put("productId", physicalProductId);
         input.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        input.put("quantityAccepted", 2000.0);
-        input.put("quantityRejected", 0.0);
+        input.put("quantityAccepted", new BigDecimal("2000.0"));
+        input.put("quantityRejected", new BigDecimal("0.0"));
         input.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        input.put("unitCost", 50.00);
+        input.put("unitCost", new BigDecimal("50.00"));
         input.put("ownerPartyId", organizationPartyId); // this is important -- the inventory must be owned by the organization of the test to show up as COGS
         input.put("acctgTagEnumId1", "DIV_ENTERPRISE");
         input.put("acctgTagEnumId2", "DPT_CORPORATE"); // adding another tag, it should not appear in the report
@@ -392,10 +392,10 @@ public class EncumbranceTests extends FinancialsTestCase {
         input.put("facilityId", "WebStoreWarehouse");
         input.put("productId", physicalProductId2);
         input.put("inventoryItemTypeId", "NON_SERIAL_INV_ITEM");
-        input.put("quantityAccepted", 5000.0);
-        input.put("quantityRejected", 0.0);
+        input.put("quantityAccepted", new BigDecimal("5000.0"));
+        input.put("quantityRejected", new BigDecimal("0.0"));
         input.put("datetimeReceived", UtilDateTime.nowTimestamp());
-        input.put("unitCost", 10.00);
+        input.put("unitCost", new BigDecimal("10.00"));
         input.put("ownerPartyId", organizationPartyId);
         input.put("acctgTagEnumId1", "DIV_CONSUMER");
         input.put("acctgTagEnumId2", "DPT_MANUFACTURING"); // adding another tag, it should not appear in the report

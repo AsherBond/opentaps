@@ -64,7 +64,7 @@ public class BillingAccountTests extends FinancialsTestCase  {
         Map<String, Object> input = new FastMap<String, Object>();
         input.put("billingAccountId", billingAccountId);
         input.put("invoiceId", invoiceId);
-        input.put("captureAmount", new Double(1000.0));
+        input.put("captureAmount", new BigDecimal("1000.0"));
         input.put("userLogin", demofinadmin);
         results = runAndAssertServiceSuccess("captureBillingAccountPayment", input);
         // String paymentId = (String) results.get("paymentId");
