@@ -79,6 +79,11 @@
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ACCTG_ATX_CREATE"/>
     <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ACCTG_PREF_VIEW"/>
 
+    <!-- Permissions for manage work effort -->
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="WORKEFFORTMGR_ROLE_ADMIN"/>
+
+    <SecurityGroupPermission groupId="WRHS_ADMIN" permissionId="ASSETMAINT_ADMIN"/>
+    
     <!-- Warehouse manager can perform any action in the Warehouse -->
     <SecurityGroup groupId="WRHS_MANAGER" description="Warehouse Manager with permissions to perform any action in the Warehouse"/>
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WRHS_VIEW"/>
@@ -120,12 +125,6 @@
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ORDERMGR_VIEW"/>
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="CATALOG_VIEW"/>
 
-    <!-- Permissions for manage work effort -->
-    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WORKEFFORTMGR_ROLE_VIEW"/>
-    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WORKEFFORTMGR_ROLE_CREATE"/>
-    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WORKEFFORTMGR_ROLE_UPDATE"/>
-    <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="WORKEFFORTMGR_ROLE_DELETE"/>
-    
     <!-- Permissions for manage account atx -->
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ACCTG_ATX_ADMIN"/>
     <SecurityGroupPermission groupId="WRHS_MANAGER" permissionId="ACCTG_ATX_VIEW"/>
