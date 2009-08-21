@@ -486,7 +486,7 @@ public class AgreementInvoiceFactory {
                     BigDecimal gamount = (BigDecimal) group.get("amount");
                     BigDecimal gtotal = gquantity.multiply(gamount).setScale(decimals, rounding);
 
-                    group.put("quantity", 1.0);
+                    group.put("quantity", new BigDecimal("1.0"));
                     group.put("amount", gtotal.add(total));
 
                     List<Map<String, Object>> assocItems = assocs.get(key);
