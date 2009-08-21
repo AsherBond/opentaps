@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -126,6 +127,7 @@ public class FinancialsTestCase extends OpentapsTestCase {
                 transIds2.add(trans.get("acctgTransId"));
             }
         }
+
         Debug.logInfo("Comparing transaction set1 " + transIds1 + " vs set2 " + transIds2, MODULE);
 
         // make sure all headers match
@@ -221,6 +223,7 @@ public class FinancialsTestCase extends OpentapsTestCase {
                 transIds2.add(trans.get("acctgTransId"));
             }
         }
+
         Debug.logInfo("Comparing transaction set1 " + transIds1 + " vs set2 " + transIds2, MODULE);
 
         // make sure all headers match

@@ -31,8 +31,6 @@ consistent with most standard financial reporting.
     <AcctgTransType acctgTransTypeId="AMORTIZATION" description="Amorization" hasTable="N" parentTypeId="INTERNAL_ACCTG_TRANS"/>
     <AcctgTransType acctgTransTypeId="DEPRECIATION" description="Depreciation" hasTable="Y" parentTypeId="INTERNAL_ACCTG_TRANS"/>
     <AcctgTransType acctgTransTypeId="CAPITALIZATION" description="Capitalization" hasTable="N" parentTypeId="INTERNAL_ACCTG_TRANS"/>
-    <AcctgTransType acctgTransTypeId="ITEM_VARIANCE_ACCTG_" description="Item Variance" hasTable="Y" parentTypeId="INTERNAL_ACCTG_TRANS"/>
-    <AcctgTransType acctgTransTypeId="OTHER_INTERNAL_ACCTG" description="Other Internal" hasTable="N" parentTypeId="INTERNAL_ACCTG_TRANS"/>
     <AcctgTransType acctgTransTypeId="PERIOD_CLOSING" description="Period Closing" hasTable="N" parentTypeId="INTERNAL_ACCTG_TRANS"/>
 
     <AcctgTransType acctgTransTypeId="EXTERNAL_ACCTG_TRANS" description="External" hasTable="Y" parentTypeId=""/>
@@ -42,12 +40,7 @@ consistent with most standard financial reporting.
     <AcctgTransType acctgTransTypeId="CREDIT_MEMO" description="Credit Memo" hasTable="N" parentTypeId="OBLIGATION_ACCTG_TRA"/>
     <AcctgTransType acctgTransTypeId="NOTE" description="Note" hasTable="N" parentTypeId="OBLIGATION_ACCTG_TRA"/>
     <AcctgTransType acctgTransTypeId="OTHER_OBLIGATION" description="Other Obligation" hasTable="N" parentTypeId="OBLIGATION_ACCTG_TRA"/>
-    <AcctgTransType acctgTransTypeId="SALES_ACCTG_TRANS" description="Sales" hasTable="Y" parentTypeId="OBLIGATION_ACCTG_TRA"/>
     <AcctgTransType acctgTransTypeId="TAX_DUE" description="Tax Due" hasTable="N" parentTypeId="OBLIGATION_ACCTG_TRA"/>
-
-    <AcctgTransType acctgTransTypeId="PAYMENT_ACCTG_TRANS" description="Payment" hasTable="Y" parentTypeId="EXTERNAL_ACCTG_TRANS"/>
-    <AcctgTransType acctgTransTypeId="DISBURSEMENT_ACCTG_T" description="Disbursement" hasTable="N" parentTypeId="PAYMENT_ACCTG_TRANS"/>
-    <AcctgTransType acctgTransTypeId="RECEIPT_ACCTG_TRANS" description="Receipt" hasTable="N" parentTypeId="PAYMENT_ACCTG_TRANS"/>
 
     <AcctgTransType acctgTransTypeId="INVENTORY_RETURN" description="Inventory from Return" hasTable="N" parentTypeId="EXTERNAL_ACCTG_TRANS"/>
 

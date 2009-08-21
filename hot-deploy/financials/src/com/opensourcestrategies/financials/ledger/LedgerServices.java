@@ -1506,7 +1506,7 @@ public final class LedgerServices {
             }
             // Perform the transaction
             tmpMap = UtilMisc.toMap("acctgTransEntries", transEntries,
-                    "glFiscalTypeId", "ACTUAL", "acctgTransTypeId", "ITEM_VARIANCE_ACCTG_",
+                    "glFiscalTypeId", "ACTUAL", "acctgTransTypeId", "ITEM_VARIANCE",
                     "transactionDate", UtilDateTime.nowTimestamp(),
                     "userLogin", userLogin);
             tmpMap.put("inventoryItemId", inventoryItemId);
@@ -2489,7 +2489,7 @@ public final class LedgerServices {
             Map input = UtilMisc.toMap("transactionDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin);
             input.put("acctgTransEntries", transEntries);
             input.put("glFiscalTypeId", "ACTUAL");
-            input.put("acctgTransTypeId", "MANUFACTURING_ATX");
+            input.put("acctgTransTypeId", "MANUFACTURING");
             input.put("workEffortId", workEffortId);
             input.put("inventoryItemId", inventoryItemId);
             return dispatcher.runSync("createAcctgTransAndEntries", input);
@@ -2722,7 +2722,7 @@ public final class LedgerServices {
             input = UtilMisc.toMap("transactionDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin);
             input.put("acctgTransEntries", transEntries);
             input.put("glFiscalTypeId", "ACTUAL");
-            input.put("acctgTransTypeId", "MANUFACTURING_ATX");
+            input.put("acctgTransTypeId", "MANUFACTURING");
             input.put("workEffortId", workEffortId);
 
             Map servResult = dispatcher.runSync("createAcctgTransAndEntries", input);
@@ -2821,7 +2821,7 @@ public final class LedgerServices {
             input = UtilMisc.toMap("transactionDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin);
             input.put("acctgTransEntries", transEntries);
             input.put("glFiscalTypeId", "ACTUAL");
-            input.put("acctgTransTypeId", "MANUFACTURING_ATX");
+            input.put("acctgTransTypeId", "MANUFACTURING");
             input.put("workEffortId", workEffortId);
 
             Map servResult = dispatcher.runSync("createAcctgTransAndEntries", input);
@@ -3542,7 +3542,7 @@ public final class LedgerServices {
                 input = UtilMisc.toMap("transactionDate", transactionDate, "userLogin", userLogin);
                 input.put("acctgTransEntries", transEntries);
                 input.put("glFiscalTypeId", "ACTUAL");
-                input.put("acctgTransTypeId", "MANUFACTURING_ATX");
+                input.put("acctgTransTypeId", "MANUFACTURING");
                 input.put("workEffortId", workEffortId);
                 input.put("inventoryItemId", inventoryItemId);
                 Map output = dispatcher.runSync("createAcctgTransAndEntries", input);
@@ -3608,7 +3608,7 @@ public final class LedgerServices {
             input = UtilMisc.toMap("transactionDate", transactionDate, "userLogin", userLogin);
             input.put("acctgTransEntries", transEntries);
             input.put("glFiscalTypeId", "ACTUAL");
-            input.put("acctgTransTypeId", "MANUFACTURING_ATX");
+            input.put("acctgTransTypeId", "MANUFACTURING");
             input.put("workEffortId", productionRunId);
             Map output = dispatcher.runSync("createAcctgTransAndEntries", input);
             if (ServiceUtil.isError(output) || ServiceUtil.isFailure(output)) {

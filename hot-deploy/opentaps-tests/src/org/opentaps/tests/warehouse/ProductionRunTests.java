@@ -110,7 +110,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         List<String> inventoryItemIds = (List<String>) results.get("inventoryItemIds");
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING"), start, delegator);
         assertNotEmpty("Production run transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
@@ -223,7 +223,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         List<String> inventoryItemIds = (List<String>) results.get("inventoryItemIds");
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING"), start, delegator);
         assertNotEmpty("Production run transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
@@ -349,7 +349,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         inventoryAsserts.assertInventoryChange("MAT_B_COST", new BigDecimal("6.0"), origMatBCostInventory);
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING"), start, delegator);
         assertNotEmpty("Production run transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
@@ -490,7 +490,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         List<String> inventoryItemIds = (List<String>) results.get("inventoryItemIds");
 
         // get the transactions since starting
-        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING_ATX"), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(EntityCondition.makeCondition("acctgTransTypeId", EntityOperator.EQUALS, "MANUFACTURING"), start, delegator);
         assertNotEmpty("Production run transaction not created.", transactions);
 
         // assert transaction equivalence with the reference transaction
