@@ -36,6 +36,7 @@ import org.ofbiz.service.GenericServiceException;
 import org.opentaps.common.domain.party.PartyRepository;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
 import org.opentaps.domain.base.entities.AcctgTagEnumType;
 import org.opentaps.domain.base.entities.AgreementTermTypesByDocumentType;
 import org.opentaps.domain.base.entities.CustomTimePeriod;
@@ -116,7 +117,7 @@ public class OrganizationRepository extends PartyRepository implements Organizat
         EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
                   EntityCondition.makeCondition(CustomTimePeriod.Fields.organizationPartyId.name(), organizationPartyId),
                   EntityCondition.makeCondition(CustomTimePeriod.Fields.periodTypeId.name(), EntityOperator.IN, fiscalPeriodTypes),
-                  EntityUtil.getFilterByDateExpr(asOfDate),
+                  EntityUtil.getFilterByDateExpr(UtilDate.timestampToSqlDate(asOfDate)),
                   EntityCondition.makeCondition(EntityOperator.OR,
                            EntityCondition.makeCondition(CustomTimePeriod.Fields.isClosed.name(), null),
                            EntityCondition.makeCondition(CustomTimePeriod.Fields.isClosed.name(), "N")));
