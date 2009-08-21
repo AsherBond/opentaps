@@ -112,3 +112,4 @@ r13098 re-added FacilityRole Entity define in opentaps common.
 
 applications/manufacturing/src/org/ofbiz/manufacturing/routing/RoutingServices.java
 r13123 change return parameters estimatedSetupMillis/estimatedMilliSeconds to fix service define (Double -> BigDecimal)
+TODO: it should patch back to ofbiz
