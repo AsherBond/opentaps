@@ -67,12 +67,8 @@ r13032 Upgraded lucene from 2.2 to 2.4 needed for hibernate search.
 applications/party/script/org/ofbiz/party/contact/PartyContactMechServices.xml
 - fix the createPartyContactMech service to return the contact mech id if it reuses an existing contact mech
 
-
 applications/accounting/ofbiz-component.xml
 - commented out the services, secas and entities related to ofbiz BI (SalesInvoiceItemFact)
-
-applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceServices.java
-- fix updatePaymentApplication, it only worked if the payment was fully applied
 
 applications/accounting/data/AccountingTypeData.xml
 - The following AcctgTransType were removed from Ofbiz as they already exist in opentaps with slightly different acctgTransTypeId:

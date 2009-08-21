@@ -72,6 +72,17 @@ under the License.
         <attribute name="invoiceProcessing" type="String" mode="IN" optional="true"/>
         <override name="paymentId" optional="false"/>        
     </service>
+    <service name="updatePaymentApplicationDef" default-entity-name="PaymentApplication" engine="java"
+        location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="updatePaymentApplicationDef">
+        <description>
+            Apply a payment to a Invoice or other payment or Billing account or Taxauthority,
+            If no ammountApplied is supplied the system will calculate and use the maximum possible value.
+        </description>
+        <auto-attributes mode="IN" include="pk" optional="true"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+        <attribute name="invoiceProcessing" type="String" mode="IN" optional="true"/>
+        <override name="paymentId" optional="false"/>
+    </service>
 
     <service name="opentaps.partiallyReconcilePayment" engine="java"
         location="com.opensourcestrategies.financials.payment.PaymentServices" invoke="partiallyReconcilePayment">
