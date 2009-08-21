@@ -106,7 +106,6 @@ public class FinancialsTests extends FinancialsTestCase {
     @Override
     public void tearDown() throws Exception {
         demowarehouse1 = null;
-        organizationAcctgPref.store();
         super.tearDown();
     }
 

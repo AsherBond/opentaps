@@ -55,7 +55,6 @@ public class FinancialsTestCase extends OpentapsTestCase {
     public static final List<String> transEntryFieldsToCompare = Arrays.asList(new String[] {"partyId", "roleTypeId", "productId", "glAccountId", "organizationPartyId", "currencyUomId", "debitCreditFlag"});
     private static final String TEST_TRANSACTIONS = "TEST_ACCTG_TRANS";
     public String organizationPartyId = "Company";
-    public GenericValue organizationAcctgPref;
     public String defaultCostingMethodId;
 
     protected GenericValue demofinadmin = null;
@@ -68,7 +67,7 @@ public class FinancialsTestCase extends OpentapsTestCase {
         invoiceRepository = billingDomain.getInvoiceRepository();
 
         // save the default organization costing method
-        organizationAcctgPref = delegator.findByPrimaryKey("PartyAcctgPreference", UtilMisc.toMap("partyId", organizationPartyId));
+        GenericValue organizationAcctgPref = delegator.findByPrimaryKey("PartyAcctgPreference", UtilMisc.toMap("partyId", organizationPartyId));
         defaultCostingMethodId = organizationAcctgPref.getString("costingMethodId");
     }
 
@@ -83,6 +82,7 @@ public class FinancialsTestCase extends OpentapsTestCase {
     }
 
     public void setStandardCostingMethod(String standardCostingMethod) throws GeneralException {
+        GenericValue organizationAcctgPref = delegator.findByPrimaryKey("PartyAcctgPreference", UtilMisc.toMap("partyId", organizationPartyId));
         organizationAcctgPref.set("costingMethodId", standardCostingMethod);
         organizationAcctgPref.store();
     }
