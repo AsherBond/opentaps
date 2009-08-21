@@ -809,13 +809,19 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         List<GenericValue> invoiceItems = delegator.findByAnd("InvoiceItem", UtilMisc.toMap("invoiceId", invoiceId));
         for (GenericValue invoiceItem : invoiceItems) {
             if (invoiceItem.getBigDecimal("quantity").doubleValue() == 100.0) {
-                assertEquals("the invoiceItem create for Order should have same tags as orderItem", invoiceItem, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
+                Map tags = UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING");
+                Debug.logInfo("invoiceItem type : " + invoiceItem.getClass().getCanonicalName() + ", tags type : " + tags.getClass().getCanonicalName(), MODULE);
+                assertEquals("the invoiceItem create for Order should have same tags as orderItem", invoiceItem, tags);
             }
             if (invoiceItem.getBigDecimal("quantity").doubleValue() == 200.0) {
-                assertEquals("the invoiceItem create for Order should have same tags as orderItem", invoiceItem, UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_CORPORATE"));
+                Map tags = UtilMisc.toMap("acctgTagEnumId1", "DIV_GOV", "acctgTagEnumId2", "DPT_CORPORATE");
+                Debug.logInfo("invoiceItem type : " + invoiceItem.getClass().getCanonicalName() + ", tags type : " + tags.getClass().getCanonicalName(), MODULE);
+                assertEquals("the invoiceItem create for Order should have same tags as orderItem", invoiceItem, tags);
             }
             if (invoiceItem.getBigDecimal("quantity").doubleValue() == 300.0) {
-                assertEquals("the invoiceItem create for Order should have same tags as orderItem", invoiceItem, UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING"));
+                Map tags = UtilMisc.toMap("acctgTagEnumId1", "DIV_SMALL_BIZ", "acctgTagEnumId2", "DPT_SALES", "acctgTagEnumId3", "ACTI_MARKETING");
+                Debug.logInfo("invoiceItem type : " + invoiceItem.getClass().getCanonicalName() + ", tags type : " + tags.getClass().getCanonicalName(), MODULE);
+                assertEquals("the invoiceItem create for Order should have same tags as orderItem", invoiceItem, tags);
             }
         }
 

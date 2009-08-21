@@ -119,7 +119,7 @@ public class MrpTests extends MrpTestCase {
         assignDefaultPrice(product, new BigDecimal("100.0"), admin);
 
         // 2. create a ProductFacility entry for this product with [minimumStock : 10.0; reorderQuantity : 5; daysToShip: 1] (MRP needs this information to schedule proposed requirements)
-        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new Double(10.0), "reorderQuantity", new Double(5.0), "daysToShip", new Long(1));
+        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new BigDecimal("10.0"), "reorderQuantity", new BigDecimal("5.0"), "daysToShip", new Long(1));
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. get initial inventory (QOH = 0.0, ATP = 0.0)
@@ -147,8 +147,8 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // 9. verify that the proposed purchase order requirement was allocated to the correct sales order with an allocated quantity of 5.0
-        String requirementId = assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 5.0);
-        assertRequirementAssignedToOrder(orderId, requirementId, 5.0);
+        String requirementId = assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("5.0"));
+        assertRequirementAssignedToOrder(orderId, requirementId, new BigDecimal("5.0"));
 
         // 10. approve the proposed purchase order requirement
         Map approveRequirementContext = UtilMisc.toMap("userLogin", demopurch1, "requirementId", requirementId);
@@ -189,15 +189,15 @@ public class MrpTests extends MrpTestCase {
         InventoryAsserts webStoreWarehouseInvAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demopurch1);
 
         // 1. create finished good test product (finishedGoodTestProduct) with [minimumStock : 10.0; reorderQuantity : 5; daysToShip: 1]
-        GenericValue finishedGoodTestProduct = createMrpProduct("mrp finished good test product", "FINISHED_GOOD", new Long(0), facilityId, new Double(10.0), new Double(5.0), new Long(1), admin);
+        GenericValue finishedGoodTestProduct = createMrpProduct("mrp finished good test product", "FINISHED_GOOD", new Long(0), facilityId, new BigDecimal(10.0), new BigDecimal(5.0), new Long(1), admin);
         String finishedGoodTestProductId = (String) finishedGoodTestProduct.get("productId");
 
         // 2. create raw material test product #1 (rawMaterialTestProduct1) with [minimumStock : 25.0; reorderQuantity : 15; daysToShip: 2]
-        GenericValue rawMaterialTestProduct1 = createMrpProduct("mrp test raw material test product #1", "RAW_MATERIAL", new Long(1), facilityId, new Double(25.0), new Double(15.0), new Long(2), admin);
+        GenericValue rawMaterialTestProduct1 = createMrpProduct("mrp test raw material test product #1", "RAW_MATERIAL", new Long(1), facilityId, new BigDecimal(25.0), new BigDecimal(15.0), new Long(2), admin);
         String rawMaterialTestProduct1Id = (String) rawMaterialTestProduct1.get("productId");
 
         // 3. create raw material test product #2 (rawMaterialTestProduct2) with [minimumStock : 12.0; reorderQuantity : 7; daysToShip: 3]
-        GenericValue rawMaterialTestProduct2 = createMrpProduct("mrp test raw material test product #2", "RAW_MATERIAL", new Long(1), facilityId, new Double(12.0), new Double(7.0), new Long(1), admin);
+        GenericValue rawMaterialTestProduct2 = createMrpProduct("mrp test raw material test product #2", "RAW_MATERIAL", new Long(1), facilityId, new BigDecimal(12.0), new BigDecimal(7.0), new Long(1), admin);
         String rawMaterialTestProduct2Id = (String) rawMaterialTestProduct2.get("productId");
 
         // 4. create a ProductAssoc entity between finishedGoodTestProduct and rawMaterialTestProduct1 with [productAssocTypeId : 'MANUF_COMPONENT'; quantity : 2.0]
@@ -239,16 +239,16 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // 15. verify that a proposed manufacturing receipt (mrp inventory event) of 24 units of finishedGoodTestProduct was created by the MRP run
-        String requirementId = assertRequirementExists(finishedGoodTestProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 24.0);
+        String requirementId = assertRequirementExists(finishedGoodTestProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("24.0"));
 
         // 16. verify that the proposed manufacturing receipt requirement was allocated to the correct sales order with an allocated quantity of 14.0
-        assertRequirementAssignedToOrder(orderId, requirementId, 14.0);
+        assertRequirementAssignedToOrder(orderId, requirementId, new BigDecimal("14.0"));
 
         // 17. verify that a proposed purchase order receipt (mrp inventory event) of 53 units of rawMaterialTestProduct1 was created by the MRP run
-        assertRequirementExists(rawMaterialTestProduct1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 53.0);
+        assertRequirementExists(rawMaterialTestProduct1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("53.0"));
 
         // 18. verify that a proposed purchase order (mrp inventory event) of 84 units of rawMaterialTestProduct2 was created by the MRP run
-        assertRequirementExists(rawMaterialTestProduct2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 84.0);
+        assertRequirementExists(rawMaterialTestProduct2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("84.0"));
     }
 
     /**
@@ -284,7 +284,7 @@ public class MrpTests extends MrpTestCase {
         assignDefaultPrice(product, new BigDecimal("100.0"), admin);
 
         // 2. create a ProductFacility entry (Demo3PL) entry for this product with [minimumStock : 15.0; reorderQuantity : 7; daysToShip: 1] (MRP needs this information to schedule proposed requirements)
-        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", thirdPartyFacilityId, "minimumStock", new Double(15.0), "reorderQuantity", new Double(7.0), "daysToShip", new Long(1));
+        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", thirdPartyFacilityId, "minimumStock", new BigDecimal("15.0"), "reorderQuantity", new BigDecimal("7.0"), "daysToShip", new Long(1));
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. get initial inventory [QOH = 0.0, ATP = 0.0] (Demo3PL)
@@ -298,7 +298,7 @@ public class MrpTests extends MrpTestCase {
 
         // 6. create another ProductFacility entry (WebStoreWarehouse) entry for this product with [minimumStock : 0.0; reorderQuantity : 5.0; daysToShip: 1]
         //     (MRP needs this information to schedule proposed requirements)
-        productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new Double(0.0), "reorderQuantity", new Double(5.0), "daysToShip", new Long(1));
+        productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new BigDecimal("0.0"), "reorderQuantity", new BigDecimal("5.0"), "daysToShip", new Long(1));
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 7. get initial inventory [QOH = 0.0, ATP = 0.0] (Demo3PL)
@@ -318,7 +318,7 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // 11. verify that a proposed inventory transfer of 14 units of test product was created by the MRP run
-        String inventoryTransferId = assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, 14.0);
+        String inventoryTransferId = assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, new BigDecimal("14.0"));
 
         // 12. cancel the proposed inventory transfer requirement
         runAndAssertServiceSuccess("cancelInventoryTransfer", UtilMisc.toMap("inventoryTransferId", inventoryTransferId, "userLogin", demopurch1));
@@ -332,7 +332,7 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // 14. verify that after running MRP again a new proposed inventory transfer is created
-        assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, 14.0);
+        assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, new BigDecimal("14.0"));
 
         // 15. run the MRP for Demo3PL
         runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", thirdPartyFacilityId);
@@ -340,7 +340,7 @@ public class MrpTests extends MrpTestCase {
 
         // 16. verify that a proposed purchase order (mrp inventory event) of 9 units of test product was created by the MRP run for Demo3PL
         // stock dropped from 20 -> 6, below minimum stock 15
-        assertRequirementExists(productId, thirdPartyFacilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 9.0);
+        assertRequirementExists(productId, thirdPartyFacilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("9.0"));
     }
 
     /**
@@ -378,7 +378,7 @@ public class MrpTests extends MrpTestCase {
         createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("1.0"), admin);
 
         // 2. Create a ProductFacility for this product in WebStoreWarehouse of minimumStock = 0, reorderQuantity = 25
-        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new Double(0.0), "reorderQuantity", new Double(25.0), "daysToShip", new Long(1));
+        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new BigDecimal("0.0"), "reorderQuantity", new BigDecimal("25.0"), "daysToShip", new Long(1));
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. Receive 100 units of this product at $5 into MyRetailWarehouse warehouse
@@ -386,7 +386,7 @@ public class MrpTests extends MrpTestCase {
         String inventoryItemId = (String) result.get("inventoryItemId");
 
         // 4. Create an inventory transfer from Demo3PL to WebStoreWarehouse for 50 units of this product
-        Map transferContext = UtilMisc.toMap("facilityId", retailStoreFacilityId, "facilityIdTo", facilityId, "inventoryItemId", inventoryItemId, "xferQty", new Double(50.0), "statusId", "IXF_REQUESTED", "userLogin", demowarehouse1);
+        Map transferContext = UtilMisc.toMap("facilityId", retailStoreFacilityId, "facilityIdTo", facilityId, "inventoryItemId", inventoryItemId, "xferQty", new BigDecimal("50.0"), "statusId", "IXF_REQUESTED", "userLogin", demowarehouse1);
         transferContext.put("sendDate", UtilDateTime.nowTimestamp());  // critical - otherwise MRP will ignore this inventory transfer
         result = runAndAssertServiceSuccess("createInventoryTransfer", transferContext);
         String inventoryTransferId = (String) result.get("inventoryTransferId");
@@ -424,11 +424,11 @@ public class MrpTests extends MrpTestCase {
         // 11. Verify a Requirement of type PRODUCT_REQUIREMENT for 50 units of the product is created in the Proposed state, that
         //      it has DemoSupplier associated as SUPPLIER in RequirementRole, that it has OrderRequirementCommitment associated with
         //      all three sales orders for quantities 15, 12, and 23
-        String requirementId = assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 50.0);
+        String requirementId = assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("50.0"));
         assertRequirementAssignedToSupplier("DemoSupplier", requirementId);
-        assertRequirementAssignedToOrder(salesOrder1.getOrderId(), requirementId, 15.0);
-        assertRequirementAssignedToOrder(salesOrder2.getOrderId(), requirementId, 12.0);
-        assertRequirementAssignedToOrder(salesOrder3.getOrderId(), requirementId, 23.0);
+        assertRequirementAssignedToOrder(salesOrder1.getOrderId(), requirementId, new BigDecimal("15.0"));
+        assertRequirementAssignedToOrder(salesOrder2.getOrderId(), requirementId, new BigDecimal("12.0"));
+        assertRequirementAssignedToOrder(salesOrder3.getOrderId(), requirementId, new BigDecimal("23.0"));
 
         // 12. Create a purchase order for 40 units of the product from DemoSupplier
         User = demopurch1;
@@ -444,9 +444,9 @@ public class MrpTests extends MrpTestCase {
         // 15. Verify a Requirement of type PRODUCT_REQUIREMENT for 25 units (reorderQuantity) of the product is created in the
         //      Proposed state, that it has DemoSupplier associated as SUPPLIER in RequirementRole, that it has OrderRequirementCommitment
         //      associated with the third sales order for quantity 10
-        requirementId = assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 25.0);
+        requirementId = assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("25.0"));
         assertRequirementAssignedToSupplier("DemoSupplier", requirementId);
-        assertRequirementAssignedToOrder(salesOrder3.getOrderId(), requirementId, 10.0);
+        assertRequirementAssignedToOrder(salesOrder3.getOrderId(), requirementId, new BigDecimal("10.0"));
     }
 
 
@@ -464,7 +464,7 @@ public class MrpTests extends MrpTestCase {
         createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("1.0"), admin);
 
         // 2. Create a ProductFacility for this product in WebStoreWarehouse of minimumStock = 0, reorderQuantity = 1
-        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new Double(0.0), "reorderQuantity", new Double(1.0), "daysToShip", new Long(1));
+        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new BigDecimal("0.0"), "reorderQuantity", new BigDecimal("1.0"), "daysToShip", new Long(1));
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. Receive 50 units of this product at $5 into MyRetailWarehouse warehouse
@@ -484,7 +484,7 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // 8. Verify that 25 units are to be transferred from Demo3PL to WebStoreWarehouse
-        assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, 25.0);
+        assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, new BigDecimal("25.0"));
     }
 
 
@@ -502,7 +502,7 @@ public class MrpTests extends MrpTestCase {
         createMainSupplierForProduct(productId, "DemoSupplier", new BigDecimal("5.0"), "USD", new BigDecimal("1.0"), admin);
 
         // 2. Create a ProductFacility for this product in WebStoreWarehouse of minimumStock = 0, reorderQuantity = 1
-        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new Double(0.0), "reorderQuantity", new Double(1.0), "daysToShip", new Long(1));
+        Map productFacilityContext = UtilMisc.toMap("userLogin", admin, "productId", productId, "facilityId", facilityId, "minimumStock", new BigDecimal("0.0"), "reorderQuantity", new BigDecimal("1.0"), "daysToShip", new Long(1));
         runAndAssertServiceSuccess("createProductFacility", productFacilityContext);
 
         // 3. Receive 10 units of this product at $5 into MyRetailWarehouse warehouse
@@ -522,10 +522,10 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // 8. Verify that 10 units are to be transferred from Demo3PL to WebStoreWarehouse
-        assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, 10.0);
+        assertInventoryTransferRequested(thirdPartyFacilityId, facilityId, productId, new BigDecimal("10.0"));
 
         // 9. Verify that a requirement for 15 units were created
-        assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 15.0);
+        assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("15.0"));
     }
 
     /**
@@ -572,10 +572,10 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // Validate requirements created
-        assertRequirementExists(topLevelProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 10.0);
+        assertRequirementExists(topLevelProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("10.0"));
         // if mid level product had been of type "WIP", then no requirement would have been created for it
-        assertRequirementExists(midLevelProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 20.0);
-        assertRequirementExists(bottomLevelProductId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 100.0);
+        assertRequirementExists(midLevelProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("20.0"));
+        assertRequirementExists(bottomLevelProductId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("100.0"));
 
     }
 
@@ -618,17 +618,17 @@ public class MrpTests extends MrpTestCase {
         createSalesForecastItem(productId, facilityId, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 10, timeZone, locale), new BigDecimal("20.0"));
 
         // run MRP.  default years offset is 1 year when running MRP from the screens
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(75.00));
+        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new BigDecimal("75.00"));
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // cutoff date between the 2 requirements created
         Timestamp cutoffDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 11, timeZone, locale);
 
         // a requirement of 15 should have been created in 10 days, ie before the cutoff date
-        assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 15.0, null, cutoffDate);
+        assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("15.0"), null, cutoffDate);
 
         // a requirement of 10 should have been created a year into the future (the default expectecd ship date for sales orders), or after the cutoff date
-        assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 10.0, cutoffDate, null);
+        assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("10.0"), cutoffDate, null);
 
     }
 
@@ -673,7 +673,7 @@ public class MrpTests extends MrpTestCase {
         Timestamp testRequirementDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 10, timeZone, locale);
         requirementValue.put("requirementStartDate", testRequirementDate);
         requirementValue.put("requiredByDate", testRequirementDate);
-        requirementValue.put("quantity", new Double(100.0));
+        requirementValue.put("quantity", new BigDecimal("100.0"));
         delegator.create("Requirement", requirementValue);
 
         // create staggered sales forecasts which will cause requirements to be created in MRP
@@ -684,16 +684,16 @@ public class MrpTests extends MrpTestCase {
         createSalesForecastItem(productId, facilityId, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 70, timeZone, locale), new BigDecimal("180.0"));
 
         // run MRP for both facilities, WebStoreWarehouse should run first
-        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(60.00), "createTransferRequirements", Boolean.TRUE);
+        Map runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new BigDecimal("60.00"), "createTransferRequirements", Boolean.TRUE);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // these requirements are transfer requirements from thirdPartyFacilityId to main facilityId
         // 30 days from now, there should be a transfer requirement for (200+120)*0.6 - 100 - 50 = 42
-        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "TRANSFER_REQUIREMENT", "REQ_PROPOSED", 42, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 29, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 31, timeZone, locale));
+        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "TRANSFER_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("42"), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 29, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 31, timeZone, locale));
         // 60 days from now, transfer requirement should be created for (250+110)*0.6 = 216
-        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "TRANSFER_REQUIREMENT", "REQ_PROPOSED", 216, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 59, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 61, timeZone, locale));
+        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "TRANSFER_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("216"), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 59, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 61, timeZone, locale));
         // the last transfer requirement for 180*0.6 = 108 should happen when the sales forecast is created, or 70 days later, because there are no more transfer plans after 60 days
-        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "TRANSFER_REQUIREMENT", "REQ_PROPOSED", 108, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 69, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 71, timeZone, locale));
+        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "TRANSFER_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("108"), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 69, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 71, timeZone, locale));
 
         // approve the transfer requirements
         List<GenericValue> requirements = delegator.findByAnd("Requirement", UtilMisc.toMap("productId", productId, "requirementTypeId", "TRANSFER_REQUIREMENT", "statusId", "REQ_PROPOSED", "facilityId", thirdPartyFacilityId, "facilityIdTo", facilityId));
@@ -702,15 +702,15 @@ public class MrpTests extends MrpTestCase {
         }
 
         // now run MRP again, and it should create purchasing requirements in the backup warehouse
-        runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", thirdPartyFacilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(60.00), "createTransferRequirements", Boolean.TRUE);
+        runMrpContext = UtilMisc.toMap("userLogin", demopurch1, "facilityId", thirdPartyFacilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new BigDecimal("60.00"), "createTransferRequirements", Boolean.TRUE);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify that purchasing requirements are created
         // by day 30, inventory in backup facility is 300 - 100 (approved transfer requirement) - 42 = 158
         // by day 60, inventory in backup facility is 158 - 216 = -58, so 58 will be needed
-        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 58, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 59, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 61, timeZone, locale));
+        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("58"), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 59, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 61, timeZone, locale));
         // the transfer of 108 on day 70 causes 108 to be needed in the backup facility
-        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 108, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 69, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 71, timeZone, locale));
+        assertRequirementsTotalQuantityCorrect(productId, thirdPartyFacilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("108"), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 69, timeZone, locale), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 71, timeZone, locale));
 
     }
 
@@ -746,7 +746,7 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify that a transfer requirement for 10 has been created from retail store facility to WebStoreWarehouse
-        assertTransfertRequirementExists(productId, retailStoreFacilityId, facilityId, 10.0);
+        assertTransfertRequirementExists(productId, retailStoreFacilityId, facilityId, new BigDecimal("10.0"));
     }
 
     /**
@@ -783,7 +783,7 @@ public class MrpTests extends MrpTestCase {
         // verify that no transfer requirement has been created in the WebStoreWarehouse for the product
         assertNoTransfertRequirementExists(productId, null, facilityId);
         // verify that a product (purchasing) requirement for 10 has been created in the WebStoreWarehouse
-        assertPurchasingRequirementExists(productId, facilityId, 10.0);
+        assertPurchasingRequirementExists(productId, facilityId, new BigDecimal("10.0"));
     }
 
     /**
@@ -817,7 +817,7 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify that a transfer requirement for 10 has been created from thirdPartyFacilityId to facilityId(WebStoreWarehouse)
-        assertTransfertRequirementExists(productId, thirdPartyFacilityId, facilityId, 10.0);
+        assertTransfertRequirementExists(productId, thirdPartyFacilityId, facilityId, new BigDecimal("10.0"));
     }
 
 
@@ -852,7 +852,7 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify that a transfer requirement for 10 has been created from retail store facility to facilityId(WebStoreWarehouse)
-        assertTransfertRequirementExists(productId, retailStoreFacilityId, facilityId, 10.0);
+        assertTransfertRequirementExists(productId, retailStoreFacilityId, facilityId, new BigDecimal("10.0"));
     }
 
     /**
@@ -909,26 +909,26 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId, order4Date);
 
         // run the MRP
-        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", true);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new BigDecimal("0.0"), "createPendingManufacturingRequirements", true);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify the proposed pending internal requirements
-        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 1111.0, null, null);
+        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("1111.0"), null, null);
         // check for requirements individually note that first two order creates a 11 requirement
-        String req1Id = assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 11.0);
-        assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 100.0);
-        assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 1000.0);
+        String req1Id = assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("11.0"));
+        assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("100.0"));
+        assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("1000.0"));
 
         // approve the first requirement
         runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("userLogin", demopurch1, "requirementId", req1Id));
 
         // run the MRP again and check this requirement is not re proposed
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
-        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_APPROVED", 11.0, null, null);
-        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 1100.0, null, null);
-        assertNoRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 11.0);
-        String req2Id = assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 100.0);
-        assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 1000.0);
+        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_APPROVED", new BigDecimal("11.0"), null, null);
+        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("1100.0"), null, null);
+        assertNoRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("11.0"));
+        String req2Id = assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("100.0"));
+        assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("1000.0"));
 
         // approve the second
         runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("userLogin", demopurch1, "requirementId", req2Id));
@@ -945,9 +945,9 @@ public class MrpTests extends MrpTestCase {
         // run the MRP again and check there is only 1 requirement
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
         // check the previous requirements are marked closed
-        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_CLOSED", 111.0, null, null);
+        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_CLOSED", new BigDecimal("111.0"), null, null);
         // check the last requirement is still there (it may be split because of the timing of the production runs / mrp events)
-        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 1000.0, null, null);
+        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("1000.0"), null, null);
     }
 
     /**
@@ -989,51 +989,51 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // run the MRP
-        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", true);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new BigDecimal("0.0"), "createPendingManufacturingRequirements", true);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // verify the proposed pending internal requirements
-        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 10.0, null, null);
+        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("10.0"), null, null);
         // check for requirements individually note that first two order creates a 11 requirement
-        String req1Id = assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 10.0);
-        assertRequirementExistsWithQuantity(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 70.0);
-        assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 30.0);
+        String req1Id = assertRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("10.0"));
+        assertRequirementExistsWithQuantity(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("70.0"));
+        assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("30.0"));
 
         // approve the requirement for the manufactured product
         runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("userLogin", demopurch1, "requirementId", req1Id));
 
         // run the MRP again and check the component requirements are still generated
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
-        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_APPROVED", 10.0, null, null);
-        assertNoRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 10.0);
-        assertRequirementsTotalQuantityCorrect(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 70.0, null, null);
-        assertRequirementsTotalQuantityCorrect(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 30.0, null, null);
-        assertRequirementExistsWithQuantity(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 70.0);
-        assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 30.0);
+        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_APPROVED", new BigDecimal("10.0"), null, null);
+        assertNoRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("10.0"));
+        assertRequirementsTotalQuantityCorrect(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("70.0"), null, null);
+        assertRequirementsTotalQuantityCorrect(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("30.0"), null, null);
+        assertRequirementExistsWithQuantity(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("70.0"));
+        assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("30.0"));
 
         // modify the Pending Internal Requirement's quantity to 100
         runAndAssertServiceSuccess("updateRequirement", UtilMisc.<String, Object>toMap("userLogin", demopurch1, "requirementId", req1Id, "quantity", new BigDecimal("100.0")));
 
         // run the MRP again and check the component requirements are still generated according to the new quantity
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
-        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_APPROVED", 100.0, null, null);
-        assertNoRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 10.0);
-        assertRequirementsTotalQuantityCorrect(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 700.0, null, null);
-        assertRequirementsTotalQuantityCorrect(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 300.0, null, null);
-        String req2Id = assertRequirementExistsWithQuantity(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 700.0);
-        assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 300.0);
+        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_APPROVED", new BigDecimal("100.0"), null, null);
+        assertNoRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("10.0"));
+        assertRequirementsTotalQuantityCorrect(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("700.0"), null, null);
+        assertRequirementsTotalQuantityCorrect(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("300.0"), null, null);
+        String req2Id = assertRequirementExistsWithQuantity(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("700.0"));
+        assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("300.0"));
 
         // approve one of the component requirements
         runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("userLogin", demopurch1, "requirementId", req2Id));
 
         // run the MRP again and check the component requirements are still generated according to the new quantity
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
-        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_APPROVED", 100.0, null, null);
-        assertNoRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 10.0);
-        assertRequirementsTotalQuantityCorrect(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_APPROVED", 700.0, null, null);
-        assertRequirementsTotalQuantityCorrect(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 300.0, null, null);
-        assertRequirementExistsWithQuantity(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_APPROVED", 700.0);
-        assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 300.0);
+        assertRequirementsTotalQuantityCorrect(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_APPROVED", new BigDecimal("100.0"), null, null);
+        assertNoRequirementExistsWithQuantity(productId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("10.0"));
+        assertRequirementsTotalQuantityCorrect(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_APPROVED", new BigDecimal("700.0"), null, null);
+        assertRequirementsTotalQuantityCorrect(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("300.0"), null, null);
+        assertRequirementExistsWithQuantity(productComp1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_APPROVED", new BigDecimal("700.0"));
+        assertRequirementExistsWithQuantity(productComp2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("300.0"));
 
     }
 
@@ -1043,14 +1043,14 @@ public class MrpTests extends MrpTestCase {
      */
     public void testMrpForProductWithMultipleBOM() throws GeneralException {
         // create a test product with a default BOM and an alternate BOM with a specific routing ID
-        GenericValue product = createMrpProduct("mrp finished good for testMrpForProductWithMultipleBOM", "FINISHED_GOOD", new Long(0), facilityId, new Double(0.0), new Double(5.0), new Long(1), admin);
+        GenericValue product = createMrpProduct("mrp finished good for testMrpForProductWithMultipleBOM", "FINISHED_GOOD", new Long(0), facilityId, new BigDecimal(0.0), new BigDecimal(5.0), new Long(1), admin);
         String productId = (String) product.get("productId");
 
         // create raw material test product #1 (mat1) with [minimumStock : 0.0; reorderQuantity : 15; daysToShip: 2]
-        GenericValue mat1 = createMrpProduct("mrp test raw material #1 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new Double(0.0), new Double(15.0), new Long(2), admin);
+        GenericValue mat1 = createMrpProduct("mrp test raw material #1 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new BigDecimal(0.0), new BigDecimal(15.0), new Long(2), admin);
         String mat1Id = (String) mat1.get("productId");
         // create raw material test product #2 (mat2) with [minimumStock : 0.0; reorderQuantity : 7; daysToShip: 3]
-        GenericValue mat2 = createMrpProduct("mrp test raw material #2 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new Double(0.0), new Double(7.0), new Long(3), admin);
+        GenericValue mat2 = createMrpProduct("mrp test raw material #2 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new BigDecimal(0.0), new BigDecimal(7.0), new Long(3), admin);
         String mat2Id = (String) mat2.get("productId");
         // create a ProductAssoc entity between finishedGoodTestProduct and mat1 with [productAssocTypeId : 'MANUF_COMPONENT'; quantity : 2.0]
         createBOMProductAssoc(productId, mat1Id, null, new Long(10), new BigDecimal("2.0"), admin);
@@ -1058,10 +1058,10 @@ public class MrpTests extends MrpTestCase {
         createBOMProductAssoc(productId, mat2Id, null, new Long(20), new BigDecimal("3.0"), admin);
 
         // create raw material test product #3 (mat3) with [minimumStock : 0.0; reorderQuantity : 2; daysToShip: 2]
-        GenericValue mat3 = createMrpProduct("mrp test raw material #3 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new Double(0.0), new Double(2.0), new Long(2), admin);
+        GenericValue mat3 = createMrpProduct("mrp test raw material #3 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new BigDecimal(0.0), new BigDecimal(2.0), new Long(2), admin);
         String mat3Id = (String) mat3.get("productId");
         // create raw material test product #4 (mat4) with [minimumStock : 0.0; reorderQuantity : 5; daysToShip: 1]
-        GenericValue mat4 = createMrpProduct("mrp test raw material #4 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new Double(0.0), new Double(5.0), new Long(1), admin);
+        GenericValue mat4 = createMrpProduct("mrp test raw material #4 for testMrpForProductWithMultipleBOM", "RAW_MATERIAL", new Long(1), facilityId, new BigDecimal(0.0), new BigDecimal(5.0), new Long(1), admin);
         String mat4Id = (String) mat4.get("productId");
         // create a ProductAssoc entity between finishedGoodTestProduct and mat3 with [productAssocTypeId : 'MANUF_COMPONENT'; quantity : 5.0]
         createBOMProductAssoc(productId, mat3Id, "ROUT01", new Long(10), new BigDecimal("5.0"), admin);
@@ -1090,13 +1090,13 @@ public class MrpTests extends MrpTestCase {
         // 1.  manufacturing requirements created for the test product
         // 2.  Purchasing requirements created for the components of the default BOM
         // 3.  No requirements created for components of the alternate BOM
-        String requirementId = assertRequirementExists(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 10.0);
-        assertRequirementAssignedToOrder(orderId, requirementId, 10.0);
+        String requirementId = assertRequirementExists(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("10.0"));
+        assertRequirementAssignedToOrder(orderId, requirementId, new BigDecimal("10.0"));
 
-        assertRequirementExists(mat1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 20.0);
-        assertRequirementExists(mat2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 30.0);
-        assertNoRequirementExistsWithQuantity(mat3Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 50.0);
-        assertNoRequirementExistsWithQuantity(mat4Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 20.0);
+        assertRequirementExists(mat1Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("20.0"));
+        assertRequirementExists(mat2Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("30.0"));
+        assertNoRequirementExistsWithQuantity(mat3Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("50.0"));
+        assertNoRequirementExistsWithQuantity(mat4Id, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("20.0"));
     }
 
     /**
@@ -1109,17 +1109,17 @@ public class MrpTests extends MrpTestCase {
         InventoryAsserts webStoreWarehouseInvAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demopurch1);
 
         // 1. create test mfrProduct with minimumStock 0
-        GenericValue mfrProduct = createMrpProduct("Manufactured Product for MrpNoRoutingForQuantity tests", "FINISHED_GOOD", 0L, facilityId, 0.0, 1.0, 1L, admin);
+        GenericValue mfrProduct = createMrpProduct("Manufactured Product for MrpNoRoutingForQuantity tests", "FINISHED_GOOD", 0L, facilityId, new BigDecimal("0.0"), new BigDecimal("1.0"), 1L, admin);
         String mftProductId = mfrProduct.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(mftProductId);
 
         // 2. create raw material test rawMaterial1 with minimumStock 0
-        GenericValue rawMaterial1 = createMrpProduct("Raw material 1 for product [" + mftProductId + "]", "RAW_MATERIAL", 1L, facilityId, 0.0, 1.0, 1L, admin);
+        GenericValue rawMaterial1 = createMrpProduct("Raw material 1 for product [" + mftProductId + "]", "RAW_MATERIAL", 1L, facilityId, new BigDecimal("0.0"), new BigDecimal("1.0"), 1L, admin);
         String rawMaterialId1 = rawMaterial1.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(rawMaterialId1);
 
         // 3. create raw material test rawMaterial2 with minimumStock 0
-        GenericValue rawMaterial2 = createMrpProduct("Raw material 2 for product [" + mftProductId + "]", "RAW_MATERIAL", 1L, facilityId, 0.0, 1.0, 1L, admin);
+        GenericValue rawMaterial2 = createMrpProduct("Raw material 2 for product [" + mftProductId + "]", "RAW_MATERIAL", 1L, facilityId, new BigDecimal("0.0"), new BigDecimal("1.0"), 1L, admin);
         String rawMaterialId2 = rawMaterial2.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(rawMaterialId2);
 
@@ -1147,11 +1147,11 @@ public class MrpTests extends MrpTestCase {
 
         // 8. verify there are requirements for mfrProduct, rawMaterial1 & rawMaterial2
         // mfrProduct pending internal requirement is at the minimum quantity of 10
-        assertRequirementExists(mftProductId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", 10.0);
+        assertRequirementExists(mftProductId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED", new BigDecimal("10.0"));
         // rawMaterial1 product requirement is 20
-        assertRequirementExists(rawMaterialId1, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 20.0);
+        assertRequirementExists(rawMaterialId1, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("20.0"));
         // rawMaterial2 product requirement is 10
-        assertRequirementExists(rawMaterialId2, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 10.0);
+        assertRequirementExists(rawMaterialId2, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("10.0"));
     }
 
     /**
@@ -1163,12 +1163,12 @@ public class MrpTests extends MrpTestCase {
         InventoryAsserts webStoreWarehouseInvAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demopurch1);
 
         // create a test product with minimum stock 0
-        GenericValue testProduct = createMrpProduct("Manufactured Product for testMrpQuantityAboveMaximumQuantity tests", "FINISHED_GOOD", 0L, facilityId, 0.0, 1.0, 1L, admin);
+        GenericValue testProduct = createMrpProduct("Manufactured Product for testMrpQuantityAboveMaximumQuantity tests", "FINISHED_GOOD", 0L, facilityId, new BigDecimal("0.0"), new BigDecimal("1.0"), 1L, admin);
         String testProductId = testProduct.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(testProductId);
 
         // create test part 1
-        GenericValue testPart1 = createMrpProduct("Raw material for product [" + testProductId + "]", "RAW_MATERIAL", 1L, facilityId, 0.0, 1.0, 1L, admin);
+        GenericValue testPart1 = createMrpProduct("Raw material for product [" + testProductId + "]", "RAW_MATERIAL", 1L, facilityId, new BigDecimal("0.0"), new BigDecimal("1.0"), 1L, admin);
         String testPartId1 = testPart1.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(testPartId1);
 
@@ -1200,10 +1200,10 @@ public class MrpTests extends MrpTestCase {
         //  2 Pending Internal Requirement for testproduct with quantity 100 each
         //  1 Pending Internal Requirement for testproduct with quantity 10
         assertRequirementExists(testProductId, facilityId, "PENDING_INTERNAL_REQ", "REQ_PROPOSED",
-                Arrays.asList(Double.valueOf(500.0), Double.valueOf(100.0), Double.valueOf(100.0), Double.valueOf(10.0)));
+                Arrays.asList(new BigDecimal("500.0"), new BigDecimal("100.0"), new BigDecimal("100.0"), new BigDecimal("10.0")));
 
         //  1 Product Requirement for testpart1 with quantity 7100
-        assertPurchasingRequirementExists(testPartId1, facilityId, 7100.0);
+        assertPurchasingRequirementExists(testPartId1, facilityId, new BigDecimal("7100.0"));
     }
 
     /**
@@ -1215,17 +1215,17 @@ public class MrpTests extends MrpTestCase {
         InventoryAsserts webStoreWarehouseInvAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demopurch1);
 
         // 1. create test mftProduct with minimumStock 1.0
-        GenericValue mftProduct = createMrpProduct("Manufactured Product for MrpSelectRoutingForQuantity tests", "FINISHED_GOOD", 0L, facilityId, 0.0, 1.0, 7L, admin);
+        GenericValue mftProduct = createMrpProduct("Manufactured Product for MrpSelectRoutingForQuantity tests", "FINISHED_GOOD", 0L, facilityId, new BigDecimal("0.0"), new BigDecimal("1.0"), 7L, admin);
         String mftProductId = mftProduct.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(mftProductId);
 
         // 2. create raw material test rawMaterial1 with minimumStock 1.0
-        GenericValue rawMaterial1 = createMrpProduct("Raw material 1 for product [" + mftProductId + "]", "RAW_MATERIAL", 1L, facilityId, 0.0, 1.0, 1L, admin);
+        GenericValue rawMaterial1 = createMrpProduct("Raw material 1 for product [" + mftProductId + "]", "RAW_MATERIAL", 1L, facilityId, new BigDecimal("0.0"), new BigDecimal("1.0"), 1L, admin);
         String rawMaterialId1 = rawMaterial1.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(rawMaterialId1);
 
         // 3. create raw material test rawMaterial2 with minimumStock 1.0
-        GenericValue rawMaterial2 = createMrpProduct("Raw material 2 for product [" + mftProductId + "]", "RAW_MATERIAL", 1L, facilityId, 0.0, 1.0, 1L, admin);
+        GenericValue rawMaterial2 = createMrpProduct("Raw material 2 for product [" + mftProductId + "]", "RAW_MATERIAL", 1L, facilityId, new BigDecimal("0.0"), new BigDecimal("1.0"), 1L, admin);
         String rawMaterialId2 = rawMaterial2.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(rawMaterialId2);
 
@@ -1257,9 +1257,9 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // 10. verify purchasing requirements count, mftProduct 17, rawMaterial2 51, no requirements for rawMaterial1
-        String requirementId1 = assertRequirementExists(mftProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 17.0);
-        assertRequirementAssignedToOrder(orderId, requirementId1, 17.0);
-        assertRequirementExists(rawMaterialId2, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", 51.0);
+        String requirementId1 = assertRequirementExists(mftProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("17.0"));
+        assertRequirementAssignedToOrder(orderId, requirementId1, new BigDecimal("17.0"));
+        assertRequirementExists(rawMaterialId2, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("51.0"));
         assertNoRequirementExists(rawMaterialId1, facilityId, "PRODUCT_REQUIREMENT", "REQ_PROPOSED");
     }
 
@@ -1275,14 +1275,14 @@ public class MrpTests extends MrpTestCase {
         // 1. create test mftProduct with minimumStock 7.0
         GenericValue mftProduct = createMrpProduct(
                 "Manufactured Product for testMrpApplyMinimalQuantityIrrespectiveOfMinimumStock tests",
-                "FINISHED_GOOD", 0L, facilityId, 7.0 /*minimalStock*/, 1.0, 7L, admin);
+                "FINISHED_GOOD", 0L, facilityId, new BigDecimal("7.0") /*minimalStock*/, new BigDecimal("1.0"), 7L, admin);
         String mftProductId = mftProduct.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(mftProductId);
 
         // 2. create raw material test rawMaterial
         GenericValue rawMaterial = createMrpProduct(
                 "Raw material for product [" + mftProductId + "]",
-                "RAW_MATERIAL", 1L, facilityId, 0.0, 1.0, 1L, admin);
+                "RAW_MATERIAL", 1L, facilityId, new BigDecimal("0.0"), new BigDecimal("1.0"), 1L, admin);
         String rawMaterialId = rawMaterial.getString("productId");
         webStoreWarehouseInvAsserts.getInventory(rawMaterialId);
 
@@ -1345,7 +1345,7 @@ public class MrpTests extends MrpTestCase {
         Timestamp reqDate = UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 1, timeZone, locale);
         requirement.put("requirementStartDate", reqDate);
         requirement.put("requiredByDate", reqDate);
-        requirement.put("quantity", new Double(10.0));
+        requirement.put("quantity", new BigDecimal("10.0"));
         delegator.create("Requirement", requirement);
 
         // 8. create sales forecast
@@ -1356,13 +1356,13 @@ public class MrpTests extends MrpTestCase {
             UtilMisc.toMap(
                     "userLogin", demopurch1,
                     "facilityId", facilityId,
-                    "percentageOfSalesForecast", new Double(35.00),
+                    "percentageOfSalesForecast", new BigDecimal("35.00"),
                     "createTransferRequirements", Boolean.TRUE
             );
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
 
         // 10. verify internal requirements count, should be one requirement for 100 mftProduct
-        assertRequirementExists(mftProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 100.0);
+        assertRequirementExists(mftProductId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("100.0"));
     }
 
     /**
@@ -1403,20 +1403,20 @@ public class MrpTests extends MrpTestCase {
         testCreatesSalesOrder(order, DemoCustomer, productStoreId);
 
         // run MRP, this should create a proposed Production run of 10
-        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);
+        Map<String, Object> runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new BigDecimal("0.0"), "createPendingManufacturingRequirements", false);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
-        String req1Id = assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 10.0);
+        String req1Id = assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("10.0"));
         // create the production run
         runAndAssertServiceSuccess("approveRequirement", UtilMisc.toMap("userLogin", demopurch1, "requirementId", req1Id));
 
         // update the production run to produce 6
         GenericValue prun = EntityUtil.getOnly(delegator.findByAnd("WorkEffortAndGoods", UtilMisc.toMap("productId", productId, "currentStatusId", "PRUN_CREATED")));
         String workEffortId = prun.getString("workEffortId");
-        runAndAssertServiceSuccess("updateProductionRun", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "productionRunId", workEffortId, "quantity", 6.0, "estimatedStartDate", prun.getTimestamp("estimatedStartDate")));
+        runAndAssertServiceSuccess("updateProductionRun", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "productionRunId", workEffortId, "quantity", new BigDecimal("6.0"), "estimatedStartDate", prun.getTimestamp("estimatedStartDate")));
         // get the updated production run
         prun = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
         // check the quantity to produce was updated
-        assertEquals("Production run [" + workEffortId + "] quantity to produce was not updated", 6.0, prun.getDouble("quantityToProduce"));
+        assertEquals("Production run [" + workEffortId + "] quantity to produce was not updated", new BigDecimal("6.0"), prun.getBigDecimal("quantityToProduce"));
         // start the production run (because the MRP Wegs are 1 year in the future we need to start it to set the start date right)
         runAndAssertServiceSuccess("changeProductionRunStatus", UtilMisc.toMap("userLogin", demowarehouse1, "productionRunId", workEffortId, "statusId", "PRUN_DOC_PRINTED"));
         // start the previous production run, and produce 2
@@ -1429,12 +1429,12 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("changeProductionRunTaskStatus", UtilMisc.toMap("userLogin", demowarehouse1, "productionRunId", workEffortId, "workEffortId", taskId));
 
         // run MRP, and check:
-        runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);
+        runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new BigDecimal("0.0"), "createPendingManufacturingRequirements", false);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
         // - it proposes a  Production run of 4
-        assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 4.0);
+        assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("4.0"));
         // - there is a receipt of 6 in the inventory event from the previous production run
-        GenericValue event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.<String, Object>toMap("productId", productId, "inventoryEventPlanTypeId", "MANUF_ORDER_RECP", "eventQuantity", 6.0)));
+        GenericValue event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.<String, Object>toMap("productId", productId, "inventoryEventPlanTypeId", "MANUF_ORDER_RECP", "eventQuantity", new BigDecimal("6.0"))));
         assertNotNull("No MANUF_ORDER_RECP x 6.0 found for product [" + productId + "].", event);
         // issue inventory required, and produce 2
         runAndAssertServiceSuccess("issueProductionRunTask", UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId));
@@ -1442,15 +1442,15 @@ public class MrpTests extends MrpTestCase {
         runAndAssertServiceSuccess("opentaps.productionRunProduce", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "workEffortId", workEffortId, "productId", productId, "quantity", new BigDecimal("2.0")));
 
         // run MRP, and check:
-        runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new Double(0.0), "createPendingManufacturingRequirements", false);
+        runMrpContext = UtilMisc.<String, Object>toMap("userLogin", demopurch1, "facilityId", facilityId, "defaultYearsOffset", new Integer(1), "percentageOfSalesForecast", new BigDecimal("0.0"), "createPendingManufacturingRequirements", false);
         runAndAssertServiceSuccess("opentaps.runMrp", runMrpContext);
         // - it proposes a  Production run of 4
-        assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", 4.0);
+        assertRequirementExistsWithQuantity(productId, facilityId, "INTERNAL_REQUIREMENT", "REQ_PROPOSED", new BigDecimal("4.0"));
         // - there is an INITIAL_QOH inventory event of 2
-        event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.<String, Object>toMap("productId", productId, "inventoryEventPlanTypeId", "INITIAL_QOH", "eventQuantity", 2.0)));
+        event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.<String, Object>toMap("productId", productId, "inventoryEventPlanTypeId", "INITIAL_QOH", "eventQuantity", new BigDecimal("2.0"))));
         assertNotNull("No INITIAL_QOH x 2.0 found for product [" + productId + "].", event);
         // - there is a receipt of 4 in the inventory event from the previous production run
-        event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.<String, Object>toMap("productId", productId, "inventoryEventPlanTypeId", "MANUF_ORDER_RECP", "eventQuantity", 4.0)));
+        event = EntityUtil.getOnly(delegator.findByAnd("MrpInventoryEvent", UtilMisc.<String, Object>toMap("productId", productId, "inventoryEventPlanTypeId", "MANUF_ORDER_RECP", "eventQuantity", new BigDecimal("4.0"))));
         assertNotNull("No MANUF_ORDER_RECP x 4.0 found for product [" + productId + "].", event);
     }
 

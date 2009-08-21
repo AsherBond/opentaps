@@ -285,9 +285,9 @@ public abstract class UtilCommon {
      * @param milliseconds number of milliseconds before ts for which to return
      * @return a <code>Timestamp</code>, <code>null</code> if ts is <code>null</code>
      */
-    public static Timestamp beforeMillisecs(Timestamp ts, Double milliseconds) {
+    public static Timestamp beforeMillisecs(Timestamp ts, BigDecimal milliseconds) {
         if (milliseconds == null) {
-            milliseconds = new Double(0);
+            milliseconds = new BigDecimal("0");
         }
         return beforeMillisecs(ts, milliseconds.longValue());
     }

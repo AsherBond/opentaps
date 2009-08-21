@@ -53,12 +53,12 @@ under the License.
         <attribute name="mrpName" type="String" mode="IN" optional="true"/>
         <attribute name="reInitializeInventoryEvents" type="Boolean" mode="IN" optional="true"/>
         <attribute name="defaultYearsOffset" type="Integer" mode="IN" optional="true"/>
-        <attribute name="receiptEventBuffer" type="Double" mode="IN" optional="true"/>
+        <attribute name="receiptEventBuffer" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="receiptBufferTimeUomId" type="String" mode="IN" optional="true"/>
         <attribute name="requirementQuantityDecimals" type="Integer" mode="IN" optional="true"/>
         <attribute name="interimRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
         <attribute name="finalRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
-        <attribute name="percentageOfSalesForecast" type="Double" mode="IN" optional="true"/>
+        <attribute name="percentageOfSalesForecast" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="createTransferRequirements" type="String" mode="IN" optional="true"/>
         <attribute name="createPendingManufacturingRequirements" type="String" mode="IN" optional="true"/>
         <attribute name="msgResult" type="List" mode="OUT" optional="true"/>
@@ -87,12 +87,12 @@ under the License.
         <attribute name="mrpName" type="String" mode="IN" optional="true"/>
         <attribute name="reInitializeInventoryEvents" type="Boolean" mode="IN" optional="true"/>
         <attribute name="defaultYearsOffset" type="Integer" mode="IN" optional="true"/>
-        <attribute name="receiptEventBuffer" type="Double" mode="IN" optional="true"/>
+        <attribute name="receiptEventBuffer" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="receiptBufferTimeUomId" type="String" mode="IN" optional="true"/>
         <attribute name="requirementQuantityDecimals" type="Integer" mode="IN" optional="true"/>
         <attribute name="interimRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
         <attribute name="finalRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
-        <attribute name="percentageOfSalesForecast" type="Double" mode="IN" optional="true"/>
+        <attribute name="percentageOfSalesForecast" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="createTransferRequirements" type="Boolean" mode="IN" optional="true"/>
         <attribute name="createPendingManufacturingRequirements" type="Boolean" mode="IN" optional="true"/>
         <attribute name="msgResult" type="List" mode="OUT" optional="true"/>
@@ -112,13 +112,13 @@ under the License.
         <attribute name="mrpName" type="String" mode="IN" optional="true"/>
         <attribute name="reInitializeInventoryEvents" type="Boolean" mode="IN" optional="true"/>
         <attribute name="defaultYearsOffset" type="Integer" mode="IN" optional="true"/>
-        <attribute name="receiptEventBuffer" type="Double" mode="IN" optional="true"/>
+        <attribute name="receiptEventBuffer" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="receiptBufferTimeUomId" type="String" mode="IN" optional="true"/>
         <attribute name="mrpConfiguration" type="org.opentaps.purchasing.mrp.MrpConfiguration" mode="IN" optional="true"/>
         <attribute name="requirementQuantityDecimals" type="Integer" mode="IN" optional="true"/>
         <attribute name="interimRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
         <attribute name="finalRequirementRoundingMode" type="java.math.RoundingMode" mode="IN" optional="true"/>
-        <attribute name="percentageOfSalesForecast" type="Double" mode="IN" optional="true"/>
+        <attribute name="percentageOfSalesForecast" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="createTransferRequirements" type="Boolean" mode="IN" optional="true"/>
         <attribute name="createPendingManufacturingRequirements" type="Boolean" mode="IN" optional="true"/>
         <attribute name="msgResult" type="List" mode="OUT" optional="true"/>
@@ -139,8 +139,8 @@ under the License.
         <attribute name="reInitialize" type="Boolean" mode="IN" optional="false"/>
         <attribute name="now" type="java.sql.Timestamp" mode="IN" optional="true"/>
         <attribute name="defaultYearsOffset" type="Integer" mode="IN" optional="true"/>
-        <attribute name="receiptEventBufferMilliseconds" type="Double" mode="IN" optional="true"/>
-        <attribute name="percentageOfSalesForecast" type="Double" mode="IN" optional="true"/>
+        <attribute name="receiptEventBufferMilliseconds" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="percentageOfSalesForecast" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="mrpRunProductIds" type="List" mode="OUT" optional="true"/>
     </service>
 

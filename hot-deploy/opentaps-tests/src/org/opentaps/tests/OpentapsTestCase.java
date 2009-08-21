@@ -334,7 +334,7 @@ public class OpentapsTestCase extends TestCase {
      * @param actual a <code>GenericValue</code> value
      * @param expected the <code>Map</code> of expected values
      */
-    public void assertEquals(String message, GenericValue actual, Map<String, Object> expected) {
+    public void assertEquals(String message, GenericValue actual, Map<String, String> expected) {
         Debug.logInfo("Comparing maps :\nactual = " + actual + "\nexpected = " + expected, MODULE);
 
         for (Object key : expected.keySet()) {
@@ -347,13 +347,13 @@ public class OpentapsTestCase extends TestCase {
             }
         }
     }
-
+    
     /**
      * Asserts that an entity has the expected accounting tags.
      * @param value the entity to test the tags for value
      * @param expected the expected tags
      */
-    public void assertAccountingTagsEqual(GenericValue value, Map<String, String> expected) {
+    public void assertAccountingTagsEqual(GenericValue value, Map expected) {
         Map<String, String> foundTags = new HashMap<String, String>();
         UtilAccountingTags.putAllAccountingTags(value, foundTags);
         for (String tag : foundTags.keySet()) {
@@ -380,7 +380,7 @@ public class OpentapsTestCase extends TestCase {
      * @param expected the expected tags
      * @exception Exception if an error occurs
      */
-    public void assertAccountingTagsEqual(EntityInterface value, Map<String, String> expected) throws Exception {
+    public void assertAccountingTagsEqual(EntityInterface value, Map expected) throws Exception {
         assertAccountingTagsEqual(Repository.genericValueFromEntity(delegator, value), expected);
     }
 
@@ -2392,4 +2392,5 @@ public class OpentapsTestCase extends TestCase {
         SimpleDateFormat sdf = new SimpleDateFormat(formatString);
         return new java.sql.Timestamp(sdf.parse(dateString).getTime());
     }
+
 }

@@ -255,7 +255,7 @@ public final class COGSServices {
 
             // Create the cost component with the average cost adjustment
             String baseCurrencyUomId = UtilCommon.getOrgBaseCurrency(ownerPartyId, delegator);
-            Map serviceParams = UtilMisc.toMap("workEffortId", workEffortId, "cost", new Double(inventoryAdjAmount.doubleValue()),
+            Map serviceParams = UtilMisc.toMap("workEffortId", workEffortId, "cost", inventoryAdjAmount,
                     "costComponentTypeId", "ACTUAL_MAT_COST", "costUomId", baseCurrencyUomId,
                     "userLogin", userLogin);
 

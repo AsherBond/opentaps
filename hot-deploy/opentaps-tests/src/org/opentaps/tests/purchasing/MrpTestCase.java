@@ -81,7 +81,7 @@ public class MrpTestCase extends OpentapsTestCase {
     }
 
     @SuppressWarnings("unchecked")
-    protected GenericValue createMrpProduct(String internalName, String productTypeId, Long billOfMaterialLevel, String facilityId, Double minimumStock, Double reorderQuantity, Long daysToShip, GenericValue userLogin) {
+    protected GenericValue createMrpProduct(String internalName, String productTypeId, Long billOfMaterialLevel, String facilityId, BigDecimal minimumStock, BigDecimal reorderQuantity, Long daysToShip, GenericValue userLogin) {
         // 1. create test product
         GenericValue product = createTestProduct(internalName, productTypeId, billOfMaterialLevel, userLogin);
         String productId = product.getString("productId");
@@ -146,7 +146,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @exception GenericEntityException if an error occurs
      */
     protected void assertNoRequirementExists(String productId, String facilityId, String requirementTypeId, String statusId) throws GenericEntityException {
-        assertNull("No requirements for [" + productId + "] in facility [" + facilityId + "] should exist in status [" + statusId + "]", assertRequirementExists(productId, facilityId, requirementTypeId, statusId, -1));
+        assertNull("No requirements for [" + productId + "] in facility [" + facilityId + "] should exist in status [" + statusId + "]", assertRequirementExists(productId, facilityId, requirementTypeId, statusId, new BigDecimal("-1")));
     }
 
     /**
@@ -160,7 +160,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @return the requirement ID or <code>null</code> if we test that no requirement should exist
      * @throws GenericEntityException
      */
-    protected String assertPurchasingRequirementExists(String productId, String facilityId, double quantity) throws GenericEntityException {
+    protected String assertPurchasingRequirementExists(String productId, String facilityId, BigDecimal quantity) throws GenericEntityException {
         return assertRequirementExists(productId, facilityId, "PRODUCT_REQUIREMENT", null, quantity, null, null, null);
     }
 
@@ -173,7 +173,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @throws GenericEntityException if an error occurs
      */
     protected void assertNoTransfertRequirementExists(String productId, String fromFacilityId, String toFacilityId) throws GenericEntityException {
-        assertRequirementExists(productId, fromFacilityId, "TRANSFER_REQUIREMENT", null, -1.0, null, null, toFacilityId);
+        assertRequirementExists(productId, fromFacilityId, "TRANSFER_REQUIREMENT", null, new BigDecimal("-1.0"), null, null, toFacilityId);
     }
 
     /**
@@ -188,7 +188,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @return the requirement ID or <code>null</code> if we test that no requirement should exist
      * @throws GenericEntityException if an error occurs
      */
-    protected String assertTransfertRequirementExists(String productId, String fromFacilityId, String toFacilityId, double quantity) throws GenericEntityException {
+    protected String assertTransfertRequirementExists(String productId, String fromFacilityId, String toFacilityId, BigDecimal quantity) throws GenericEntityException {
         return assertRequirementExists(productId, fromFacilityId, "TRANSFER_REQUIREMENT", null, quantity, null, null, toFacilityId);
     }
 
@@ -205,7 +205,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @return the requirement ID or <code>null</code> if we test that no requirement should exist
      * @throws GenericEntityException if an error occurs
      */
-    protected String assertRequirementExists(String productId, String facilityId, String requirementTypeId, String statusId, double quantity) throws GenericEntityException {
+    protected String assertRequirementExists(String productId, String facilityId, String requirementTypeId, String statusId, BigDecimal quantity) throws GenericEntityException {
         return assertRequirementExists(productId, facilityId, requirementTypeId, statusId, quantity, null, null, null);
     }
 
@@ -224,7 +224,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @return the requirement ID or <code>null</code> if we test that no requirement should exist
      * @throws GenericEntityException if an error occurs
      */
-    protected String assertRequirementExists(String productId, String facilityId, String requirementTypeId, String statusId, double quantity, Timestamp afterStartDate, Timestamp beforeStartDate) throws GenericEntityException {
+    protected String assertRequirementExists(String productId, String facilityId, String requirementTypeId, String statusId, BigDecimal quantity, Timestamp afterStartDate, Timestamp beforeStartDate) throws GenericEntityException {
         return assertRequirementExists(productId, facilityId, requirementTypeId, statusId, quantity, afterStartDate, beforeStartDate, null);
     }
 
@@ -245,11 +245,11 @@ public class MrpTestCase extends OpentapsTestCase {
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    protected String assertRequirementExists(String productId, String facilityId, String requirementTypeId, String statusId, double quantity, Timestamp afterStartDate, Timestamp beforeStartDate, String toFacilityId) throws GenericEntityException {
+    protected String assertRequirementExists(String productId, String facilityId, String requirementTypeId, String statusId, BigDecimal quantity, Timestamp afterStartDate, Timestamp beforeStartDate, String toFacilityId) throws GenericEntityException {
         List requirements = getRequirements(productId, facilityId, requirementTypeId, statusId, afterStartDate, beforeStartDate, toFacilityId);
 
         // if quantity < 0 then the assert will check that no requirements exist
-        if (quantity < 0) {
+        if (quantity.compareTo(BigDecimal.ZERO) < 0) {
             assertTrue("No requirements for [" + productId + "] in facility [" + facilityId + "] should exist in status [" + statusId + "] between [" + afterStartDate + "] and [" + beforeStartDate + "] and there is [" + requirements.size() + "]", UtilValidate.isEmpty(requirements));
             return null;
         } else {
@@ -257,7 +257,7 @@ public class MrpTestCase extends OpentapsTestCase {
             Debug.logInfo("Requirements found " + requirements, MODULE);
             assertEquals("One new requirement was created for product [" + productId + "]", 1, requirements.size());
             GenericValue newProposedRequirement = (GenericValue) requirements.get(0);
-            assertEquals("Correct quantity was created for in requirement [" + newProposedRequirement.getString("requirementId") + "] for product [" + productId + "] in status [" + statusId + "] between [" + afterStartDate + "] and [" + beforeStartDate + "]", quantity, newProposedRequirement.getDouble("quantity").doubleValue());
+            assertEquals("Correct quantity was created for in requirement [" + newProposedRequirement.getString("requirementId") + "] for product [" + productId + "] in status [" + statusId + "] between [" + afterStartDate + "] and [" + beforeStartDate + "]", quantity, newProposedRequirement.getBigDecimal("quantity"));
 
             return newProposedRequirement.getString("requirementId");
         }
@@ -274,13 +274,13 @@ public class MrpTestCase extends OpentapsTestCase {
      * @param quantities list of the product quantities
      * @throws GenericEntityException
      */
-    protected void assertRequirementExists(String productId, String facilityId, String requirementTypeId, String statusId, List<Double> quantities) throws GenericEntityException {
+    protected void assertRequirementExists(String productId, String facilityId, String requirementTypeId, String statusId, List<BigDecimal> quantities) throws GenericEntityException {
         List<GenericValue> requirements = getRequirements(productId, facilityId, requirementTypeId, statusId, null, null, null);
 
         Debug.logInfo("Requirements found " + requirements, MODULE);
         assertEquals("New requirements were created for product [" + productId + "]", quantities.size(), requirements.size());
         for (GenericValue req : requirements) {
-            assertFalse("Requirement for product [" + productId + "] in status [" + statusId + "] for quantity [" + req.getDouble("quantity").toString() + "] is wrong and should not be here", !quantities.contains(req.getDouble("quantity")));
+            assertFalse("Requirement for product [" + productId + "] in status [" + statusId + "] for quantity [" + req.getBigDecimal("quantity").toString() + "] is wrong and should not be here", !quantities.contains(req.getBigDecimal("quantity")));
         }
     } 
 
@@ -296,7 +296,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    protected void assertNoRequirementExistsWithQuantity(String productId, String facilityId, String requirementTypeId, String statusId, double quantity) throws GenericEntityException {
+    protected void assertNoRequirementExistsWithQuantity(String productId, String facilityId, String requirementTypeId, String statusId, BigDecimal quantity) throws GenericEntityException {
         List conditions = UtilMisc.toList(
                         new EntityExpr("requirementTypeId", EntityOperator.EQUALS, requirementTypeId),
                         new EntityExpr("productId", EntityOperator.EQUALS, productId),
@@ -320,7 +320,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    protected String assertRequirementExistsWithQuantity(String productId, String facilityId, String requirementTypeId, String statusId, double quantity) throws GenericEntityException {
+    protected String assertRequirementExistsWithQuantity(String productId, String facilityId, String requirementTypeId, String statusId, BigDecimal quantity) throws GenericEntityException {
         List conditions = UtilMisc.toList(
                         new EntityExpr("requirementTypeId", EntityOperator.EQUALS, requirementTypeId),
                         new EntityExpr("productId", EntityOperator.EQUALS, productId),
@@ -345,12 +345,12 @@ public class MrpTestCase extends OpentapsTestCase {
      * @throws GenericEntityException
      */
     @SuppressWarnings("unchecked")
-    protected void assertRequirementsTotalQuantityCorrect(String productId, String facilityId, String requirementTypeId, String statusId, double quantity,
+    protected void assertRequirementsTotalQuantityCorrect(String productId, String facilityId, String requirementTypeId, String statusId, BigDecimal quantity,
                                              Timestamp afterStartDate, Timestamp beforeStartDate) throws GenericEntityException {
         List requirements = getRequirements(productId, facilityId, requirementTypeId, statusId, afterStartDate, beforeStartDate, null);
 
         // if quantity < 0 then the assert will check that no requirements exist
-        if (quantity < 0) {
+        if (quantity.compareTo(BigDecimal.ZERO) < 0) {
             assertTrue("No requirements for [" + productId + "] in facility [" + facilityId + "] should exist in status [" + statusId + "] between [" + afterStartDate + "] and [" + beforeStartDate + "] and there is [" + requirements.size() + "]", UtilValidate.isEmpty(requirements));
         } else {
             // now need to check all the Requirements to see if their quantity add up
@@ -364,7 +364,7 @@ public class MrpTestCase extends OpentapsTestCase {
             }
 
             requirementsQuantity.setScale(2, RoundingMode.HALF_UP); // this is kind of ugly but then what other rounding scenarios do we need?
-            assertEquals("Correct total quantity of requirements for [" + productId + "] in facility [" + facilityId + "] in status [" + statusId + "] for product [" + productId + "] between [" + afterStartDate + "] and [" + beforeStartDate + "]", new BigDecimal(quantity), requirementsQuantity);
+            assertEquals("Correct total quantity of requirements for [" + productId + "] in facility [" + facilityId + "] in status [" + statusId + "] for product [" + productId + "] between [" + afterStartDate + "] and [" + beforeStartDate + "]", quantity, requirementsQuantity);
         }
     }
 
@@ -407,14 +407,14 @@ public class MrpTestCase extends OpentapsTestCase {
      * Check the correct quantity was allocated to orderId from requirementId.
      * @param orderId a <code>String</code> value
      * @param requirementId a <code>String</code> value
-     * @param quantity a <code>double</code> value
+     * @param quantity a <code>BigDecimal</code> value
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    protected void assertRequirementAssignedToOrder(String orderId, String requirementId, double quantity) throws GenericEntityException {
+    protected void assertRequirementAssignedToOrder(String orderId, String requirementId, BigDecimal quantity) throws GenericEntityException {
         List conditions = UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
                 new EntityExpr("requirementId", EntityOperator.EQUALS, requirementId),
-                new EntityExpr("quantity", EntityOperator.EQUALS, new Double(quantity)));
+                new EntityExpr("quantity", EntityOperator.EQUALS, quantity));
             List orderRequirementCommitements = delegator.findByCondition("OrderRequirementCommitment", new EntityConditionList(conditions, EntityOperator.AND), null, null);
             long orderRequirementAllocationCount = orderRequirementCommitements.size();
             assertEquals(String.format("Wrong number of proposed purchased order receipt (mrp inventory event) of requirement [%1$s] against order [%2$s]", requirementId, orderId), 1, orderRequirementAllocationCount);
@@ -446,7 +446,7 @@ public class MrpTestCase extends OpentapsTestCase {
      * @exception GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    protected String assertInventoryTransferRequested(String facilityIdFrom, String facilityIdTo, String productId, double quantity) throws GenericEntityException {
+    protected String assertInventoryTransferRequested(String facilityIdFrom, String facilityIdTo, String productId, BigDecimal quantity) throws GenericEntityException {
         List invTransCond = UtilMisc.toList(new EntityExpr("transferStatusId", EntityOperator.EQUALS, "IXF_REQUESTED"),
                             new EntityExpr("facilityId", EntityOperator.EQUALS, facilityIdFrom),
                             new EntityExpr("facilityIdTo", EntityOperator.EQUALS, facilityIdTo),

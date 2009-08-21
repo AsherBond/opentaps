@@ -120,7 +120,7 @@ public final class OpentapsMrpServices {
 
         // allow calling service to set a now to synchronize multiple runs, or default to current time if none is supplied
         Timestamp now = (Timestamp) context.get("now");
-        Double receiptEventBufferMilliseconds = (Double) context.get("receiptEventBufferMilliseconds");
+        BigDecimal receiptEventBufferMilliseconds = (BigDecimal) context.get("receiptEventBufferMilliseconds");
         if (now == null) {
             now = UtilDateTime.nowTimestamp();
         }
@@ -134,7 +134,7 @@ public final class OpentapsMrpServices {
         String productStoreId = (String) context.get("productStoreId");
         String productStoreGroupId = (String) context.get("productStoreGroupId");
         String mrpTargetProductId = (String) context.get("productId");
-        Double percentageOfSalesForecastDbl = (Double) context.get("percentageOfSalesForecast");
+        BigDecimal percentageOfSalesForecast = (BigDecimal) context.get("percentageOfSalesForecast");
 
         try {
 
@@ -442,8 +442,7 @@ public final class OpentapsMrpServices {
 
 
             // Use a percentage of salesforecast from the SalesForecastItem entity.
-            if (percentageOfSalesForecastDbl != null) {
-                BigDecimal percentageOfSalesForecast = BigDecimal.valueOf(percentageOfSalesForecastDbl);
+            if (percentageOfSalesForecast != null) {
                 if (percentageOfSalesForecast.signum() != 0) {
                     // find sales forecast items which are after current timestamp
                     searchConditions = UtilMisc.toList(EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
@@ -548,7 +547,7 @@ public final class OpentapsMrpServices {
      * @exception GenericServiceException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static void initInventoryEventPlanForApprovedRequirements(String facilityId, List mrpRunProductIds, Timestamp now, Double receiptEventBufferMilliseconds, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
+    private static void initInventoryEventPlanForApprovedRequirements(String facilityId, List mrpRunProductIds, Timestamp now, BigDecimal receiptEventBufferMilliseconds, GenericValue userLogin, GenericDelegator delegator, LocalDispatcher dispatcher) throws GenericEntityException, GenericServiceException {
         Map parameters = null;
 
         // first create inventory event plans for approved requirements from this facility
@@ -970,14 +969,14 @@ public final class OpentapsMrpServices {
         String productStoreId = (String) context.get("productStoreId");
         String productStoreGroupId = (String) context.get("productStoreGroupId");
         String mrpTargetProductId = (String) context.get("productId");
-        Double receiptEventBuffer = (Double) context.get("receiptEventBuffer");
+        BigDecimal receiptEventBuffer = (BigDecimal) context.get("receiptEventBuffer");
         String receiptBufferTimeUomId = (String) context.get("receiptBufferTimeUomId");
         Boolean reinitializeInventoryEvents = (Boolean) context.get("reInitializeInventoryEvents");
         MrpConfiguration mrpConfiguration = (MrpConfiguration) context.get("mrpConfiguration");
         Integer requirementQuantityDecimals = (Integer) context.get("requirementQuantityDecimals");
         RoundingMode interimRequirementRoundingMode = (RoundingMode) context.get("interimRequirementRoundingMode");
         RoundingMode finalRequirementRoundingMode = (RoundingMode) context.get("finalRequirementRoundingMode");
-        Double percentageOfSalesForecast = (Double) context.get("percentageOfSalesForecast");
+        BigDecimal percentageOfSalesForecast = (BigDecimal) context.get("percentageOfSalesForecast");
         Boolean createTransferRequirements = (Boolean) context.get("createTransferRequirements");
         Boolean createPendingManufacturingRequirements = (Boolean) context.get("createPendingManufacturingRequirements");
 
@@ -1029,7 +1028,7 @@ public final class OpentapsMrpServices {
             ListIterator iteratorListInventoryEventForMRP = null;
             GenericValue inventoryEventForMRP = null;
 
-            Double receiptEventBufferMilliseconds = null;
+            BigDecimal receiptEventBufferMilliseconds = null;
             Map serviceResponse = null;
 
             // convert the inventory receipt event buffer to milliseconds
@@ -1038,7 +1037,7 @@ public final class OpentapsMrpServices {
                 if ((ServiceUtil.isError(serviceResponse)) || (ServiceUtil.isFailure(serviceResponse) || (serviceResponse.get("convertedValue") == null))) {
                     return serviceResponse;
                 }
-                receiptEventBufferMilliseconds = (Double) serviceResponse.get("convertedValue");
+                receiptEventBufferMilliseconds = (BigDecimal) serviceResponse.get("convertedValue");
             }
 
             // IMPORTANT: MRP is VERY timestamp sensitive, so it's important to synch all the now on all operations
@@ -1432,7 +1431,7 @@ public final class OpentapsMrpServices {
      * @exception GenericServiceException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    private static BigDecimal transferInventoryForMrp(String productId, String facilityId, BigDecimal maxTransferQuantity, Timestamp eventDate, Double receiptEventBufferMilliseconds, BigDecimal initialQoh, Timestamp now, Boolean createTransferRequirements, LocalDispatcher dispatcher, Locale locale, GenericValue userLogin) throws GenericEntityException, GenericServiceException {
+    private static BigDecimal transferInventoryForMrp(String productId, String facilityId, BigDecimal maxTransferQuantity, Timestamp eventDate, BigDecimal receiptEventBufferMilliseconds, BigDecimal initialQoh, Timestamp now, Boolean createTransferRequirements, LocalDispatcher dispatcher, Locale locale, GenericValue userLogin) throws GenericEntityException, GenericServiceException {
 
         GenericDelegator delegator = dispatcher.getDelegator();
 
@@ -1540,7 +1539,7 @@ public final class OpentapsMrpServices {
                     requirementValues.put("description", "Automatically generated by MRP");
                     requirementValues.put("requirementStartDate", transferTimestamp);
                     requirementValues.put("requiredByDate", transferTimestamp);
-                    requirementValues.put("quantity", new Double(transferQuantity));
+                    requirementValues.put("quantity", new BigDecimal(transferQuantity));
                     delegator.create("Requirement", requirementValues);
 
                     transferFromEventDescription = UtilMessage.expandLabel("PurchMrpTransferRequirementFromToAt", locale, UtilMisc.toMap("requirementId", requirementId, "fromFacilityName", fromFacility.getString("facilityName"), "toFacilityName", toFacility.getString("facilityName"), "transferTime", transferTimestamp));
@@ -1754,7 +1753,7 @@ public final class OpentapsMrpServices {
                     // get the earliest start date from the aggregated requirements
                     Timestamp startDate = null;
                     for (GenericValue requirement : requirementList) {
-                        totalToProduce = totalToProduce.add(BigDecimal.valueOf(requirement.getDouble("quantity")));
+                        totalToProduce = totalToProduce.add(requirement.getBigDecimal("quantity"));
                         requirementIdsToProduce.add(requirement.getString("requirementId"));
                         if (startDate == null) {
                             startDate = requirement.getTimestamp("requirementStartDate");

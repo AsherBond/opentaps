@@ -66,7 +66,7 @@ public interface InventoryServiceInterface extends ServiceInterface {
      * Sets the transfer quantity, required parameter for {@link #prepareInventoryTransfer}.
      * @param xferQty a <code>Double</code> value
      */
-    public void setXferQty(Double xferQty);
+    public void setXferQty(BigDecimal xferQty);
 
     /**
      * Sets the inventory transfer identifier to cancel.

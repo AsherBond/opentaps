@@ -98,9 +98,9 @@ public final class UtilCOGS {
             String baseCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
             Map<String, Object> results = dispatcher.runSync("calculateProductCosts", UtilMisc.toMap("productId", productId, "currencyUomId", baseCurrencyUomId, "costComponentTypePrefix", "EST_STD", "userLogin", userLogin), -1, false); //  This service does not require a transaction
             if (!ServiceUtil.isError(results)) {
-                Double totalCost = (Double) results.get("totalCost");
-                if ((totalCost != null) && (totalCost.doubleValue() != 0.0)) {
-                    cost = new BigDecimal(totalCost.doubleValue());
+                BigDecimal totalCost = (BigDecimal) results.get("totalCost");
+                if ((totalCost != null) && (!totalCost.equals(BigDecimal.ZERO))) {
+                    cost = totalCost;
                 }
             }
 
