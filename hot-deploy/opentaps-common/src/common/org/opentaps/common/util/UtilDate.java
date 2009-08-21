@@ -506,4 +506,14 @@ public abstract class UtilDate {
             return isDateTime(value, "yyyy-MM-dd HH:mm:ss.S", Locale.getDefault());
         }
     }
+
+    /**
+     * Converts an SQL <code>Timestamp</code> to an SQL <code>Date</code>.
+     *
+     * @param ts a <code>Timestamp</code> value
+     * @return a <code>java.sql.Date</code> value
+     */
+    public static java.sql.Date timestampToSqlDate(Timestamp ts) {
+        return new java.sql.Date(UtilDateTime.getDayStart(ts).getTime());
+    }
 }
