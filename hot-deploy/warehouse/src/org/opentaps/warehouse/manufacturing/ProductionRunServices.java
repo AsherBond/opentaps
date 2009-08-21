@@ -141,7 +141,7 @@ public final class ProductionRunServices {
 
         try {
             EntityCondition inventoryItemConds = EntityCondition.makeCondition(
-                    EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.GREATER_THAN, new Double(0.0)),
+                    EntityCondition.makeCondition("availableToPromiseTotal", EntityOperator.GREATER_THAN, new BigDecimal("0.0")),
                     EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityIdFrom),
                     EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
             //The last parameter is very important -- it is the sequence of inventory items to be used.  See service definition for details.
@@ -237,16 +237,16 @@ public final class ProductionRunServices {
             Iterator<GenericValue> iteratorResult = resultList.iterator();
             while (iteratorResult.hasNext()) {
                 GenericValue genericResult = iteratorResult.next();
-                Double estimatedQuantity = genericResult.getDouble("estimatedQuantity");
+                BigDecimal estimatedQuantity = genericResult.getBigDecimal("estimatedQuantity");
                 if (estimatedQuantity == null) {
-                    estimatedQuantity = new Double(0);
+                    estimatedQuantity = new BigDecimal("0");
                 }
                 String productId =  genericResult.getString("productId");
                 if (!products.containsKey(productId)) {
-                    products.put(productId, new Double(0.0));
+                    products.put(productId, new BigDecimal("0.0"));
                 }
-                Double totalQuantity = (Double) products.get(productId);
-                totalQuantity = new Double(totalQuantity.doubleValue() + estimatedQuantity.doubleValue());
+                BigDecimal totalQuantity = (BigDecimal) products.get(productId);
+                totalQuantity = totalQuantity.add(estimatedQuantity);
                 products.put(productId, totalQuantity);
             }
             Iterator productsIt = products.keySet().iterator();
@@ -330,7 +330,7 @@ public final class ProductionRunServices {
 
         String productId = (String) context.get("productId");
         Timestamp startDate = (Timestamp) context.get("startDate");
-        Double quantityDbl = (Double) context.get("quantity");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
         String facilityId = (String) context.get("facilityId");
         String workEffortName = (String) context.get("workEffortName");
         String description = (String) context.get("description");
@@ -338,9 +338,8 @@ public final class ProductionRunServices {
         String workEffortId = null;
 
         // default quantity to produce to 1.0
-        BigDecimal quantity = BigDecimal.ONE;
-        if (quantityDbl != null) {
-            quantity = BigDecimal.valueOf(quantityDbl);
+        if (quantity == null) {
+            quantity = BigDecimal.ONE;
         }
 
         try {
@@ -477,17 +476,17 @@ public final class ProductionRunServices {
                 GenericValue templateProduct = iter.next();
                 String templateWorkEffortId = templateProduct.getString("workEffortId");
                 String templateProductId = templateProduct.getString("productId");
-                double templateQuantity = (templateProduct.get("estimatedQuantity") == null ? 1.0 : templateProduct.getDouble("estimatedQuantity").doubleValue());
+                BigDecimal templateQuantity = (templateProduct.get("estimatedQuantity") == null ? new BigDecimal("1.0") : templateProduct.getBigDecimal("estimatedQuantity"));
 
                 // get the supplier for this product (used later for requirement)
-                results = dispatcher.runSync("getSuppliersForProduct", UtilMisc.toMap("productId", templateProductId, "quantity", new Double(templateQuantity)));
+                results = dispatcher.runSync("getSuppliersForProduct", UtilMisc.toMap("productId", templateProductId, "quantity", templateProduct));
                 if (ServiceUtil.isError(results)) {
                     return UtilMessage.createAndLogServiceError(results, "WarehouseError_CannotCreateProductionRun", locale, MODULE);
                 }
                 List supplierProducts = (List) results.get("supplierProducts");
                 if (supplierProducts == null || supplierProducts.size() == 0) {
                     String errorMsg = UtilMessage.expandLabel("WarehouseError_CannotCreateProductionRun", locale);
-                    errorMsg += " " + UtilMessage.expandLabel("OpentapsError_NoSuppliersForProductAndQty", locale, UtilMisc.toMap("productId", templateProductId, "quantity", new Double(templateQuantity)));
+                    errorMsg += " " + UtilMessage.expandLabel("OpentapsError_NoSuppliersForProductAndQty", locale, UtilMisc.toMap("productId", templateProductId, "quantity", templateProduct));
                     return ServiceUtil.returnError(errorMsg);
                 }
                 GenericValue supplierProduct = EntityUtil.getFirst(supplierProducts);
@@ -530,7 +529,7 @@ public final class ProductionRunServices {
 
     @SuppressWarnings("unchecked")
     private static Map createOutsourcedTaskInstance(DispatchContext dctx, Map<String, Object> context,
-            GenericValue outsourcedTask, double templateQuantity, GenericValue productionRun, GenericValue supplierProduct)
+            GenericValue outsourcedTask, BigDecimal templateQuantity, GenericValue productionRun, GenericValue supplierProduct)
             throws GenericEntityException, GenericServiceException {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -542,8 +541,8 @@ public final class ProductionRunServices {
         String productId = supplierProduct.getString("productId");
 
         // The WorkEffortGoodStandard.estimatedQuantity is task.quantityToProduce * template.estimatedQuantity?default(1)
-        Double quantityToProduce = outsourcedTask.getDouble("quantityToProduce"); // guaranteed not null
-        Double quantityTotal = new Double(quantityToProduce.doubleValue() * templateQuantity);
+        BigDecimal quantityToProduce = outsourcedTask.getBigDecimal("quantityToProduce"); // guaranteed not null
+        BigDecimal quantityTotal = quantityToProduce.multiply(templateQuantity);
 
         input = FastMap.newInstance();
         input.put("workEffortId", outsourcedTask.get("workEffortId"));
@@ -626,17 +625,17 @@ public final class ProductionRunServices {
             for (Iterator<GenericValue> iter = templateProducts.iterator(); iter.hasNext();) {
                 GenericValue templateProduct = iter.next();
                 String templateProductId = templateProduct.getString("productId");
-                double templateQuantity = (templateProduct.get("estimatedQuantity") == null ? 1.0 : templateProduct.getDouble("estimatedQuantity").doubleValue());
+                BigDecimal templateQuantity = (templateProduct.get("estimatedQuantity") == null ? BigDecimal.ONE : templateProduct.getBigDecimal("estimatedQuantity"));
 
                 // get the supplier for this product (used later for requirement)
-                Map results = dispatcher.runSync("getSuppliersForProduct", UtilMisc.toMap("productId", templateProductId, "quantity", new Double(templateQuantity)));
+                Map results = dispatcher.runSync("getSuppliersForProduct", UtilMisc.toMap("productId", templateProductId, "quantity", templateQuantity));
                 if (ServiceUtil.isError(results)) {
                     return UtilMessage.createAndLogServiceError(results, "WarehouseError_CannotAddRoutingTask", locale, MODULE);
                 }
                 List supplierProducts = (List) results.get("supplierProducts");
                 if (supplierProducts == null || supplierProducts.size() == 0) {
                     String errorMsg = UtilMessage.expandLabel("WarehouseError_CannotCreateProductionRun", locale);
-                    errorMsg += " " + UtilMessage.expandLabel("OpentapsError_NoSuppliersForProductAndQty", locale, UtilMisc.toMap("productId", templateProductId, "quantity", new Double(templateQuantity)));
+                    errorMsg += " " + UtilMessage.expandLabel("OpentapsError_NoSuppliersForProductAndQty", locale, UtilMisc.toMap("productId", templateProductId, "quantity", templateQuantity));
                     return ServiceUtil.returnError(errorMsg);
                 }
                 GenericValue supplierProduct = EntityUtil.getFirst(supplierProducts);
@@ -921,7 +920,7 @@ public final class ProductionRunServices {
             }
 
             // record the calculated cost for the outsourced task
-            Map serviceParams = UtilMisc.toMap("workEffortId", workEffort.getString("workEffortId"), "cost", new Double(cost.doubleValue()),
+            Map serviceParams = UtilMisc.toMap("workEffortId", workEffort.getString("workEffortId"), "cost", cost,
                     "costComponentTypeId", "ACTUAL_" + workEffortCostCalc.getString("costComponentTypeId"), "costUomId", costComponentCalc.getString("currencyUomId"),
                     "costComponentCalcId", costComponentCalc.getString("costComponentCalcId"), "userLogin", userLogin);
 
@@ -954,7 +953,7 @@ public final class ProductionRunServices {
 
         String workEffortId = (String) context.get("workEffortId");
         String productId = (String) context.get("productId");
-        Double quantity = (Double) context.get("quantity");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
         try {
             // make sure the task is started
             GenericValue task = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
@@ -969,7 +968,7 @@ public final class ProductionRunServices {
             // We can track this by creating a completed WEGS for estimated quantity 0.
             if (wegsList.size() == 0) {
                 GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard", input);
-                wegs.set("estimatedQuantity", new Double(0));
+                wegs.set("estimatedQuantity", new BigDecimal("0"));
                 wegs.set("fromDate", UtilDateTime.nowTimestamp());
                 wegs.set("statusId", "WEGS_COMPLETED");
                 wegs.create();
@@ -977,7 +976,7 @@ public final class ProductionRunServices {
             }
 
             // reduce each WEGS by the issued quantity until we have exhausted the requirements
-            double issued = quantity.doubleValue();
+            BigDecimal issued = quantity;
             for (GenericValue wegs : wegsList) {
                 if (wegs.get("estimatedQuantity") == null) {
                     Debug.logWarning("WorkEffortGoodStandard " + input + " has null estimatedQuantity, this will cause problems with production run.", MODULE);
@@ -989,18 +988,18 @@ public final class ProductionRunServices {
                         wegs.store();
                     }
                 } else {
-                    double requiredByWegs = wegs.getDouble("estimatedQuantity").doubleValue();
-                    if (requiredByWegs <= issued) {
+                    BigDecimal requiredByWegs = wegs.getBigDecimal("estimatedQuantity");
+                    if (requiredByWegs.compareTo(issued) <= 0 ) {
                         wegs.set("estimatedQuantity", new Double(0));
                         wegs.set("statusId", "WEGS_COMPLETED");
                         wegs.store();
                     } else {
-                        wegs.set("estimatedQuantity", new Double(requiredByWegs - issued));
+                        wegs.set("estimatedQuantity", requiredByWegs.subtract(issued));
                         wegs.store();
                     }
-                    issued -= requiredByWegs;
+                    issued = issued.subtract(requiredByWegs);
                 }
-                if (issued <= 0) {
+                if (issued.compareTo(BigDecimal.ZERO) <= 0) {
                     break;
                 }
             }
@@ -1024,7 +1023,7 @@ public final class ProductionRunServices {
         GenericDelegator delegator = ctx.getDelegator();
         String productionRunId = (String) context.get("productionRunId");
         String productId = (String) context.get("productId");
-        Double quantity = (Double) context.get("quantity");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
         try {
             GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard");
             wegs.set("workEffortId", productionRunId);
@@ -1084,7 +1083,7 @@ public final class ProductionRunServices {
         GenericDelegator delegator = ctx.getDelegator();
         String productionRunTaskId = (String) context.get("productionRunTaskId");
         String productId = (String) context.get("productId");
-        Double quantity = (Double) context.get("quantity");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
         try {
             GenericValue wegs = delegator.makeValue("WorkEffortGoodStandard");
             wegs.set("workEffortId", productionRunTaskId);
@@ -1155,9 +1154,9 @@ public final class ProductionRunServices {
             );
             List<GenericValue> wegsList = delegator.findByAnd("WorkEffortGoodStandard", conditions);
             for (GenericValue wegs : wegsList) {
-                Double quantity = wegs.getDouble("estimatedQuantity");
-                if (quantity != null && quantity.doubleValue() > 0) {
-                    productsRemoved.add(UtilMisc.toMap("productId", wegs.get("productId"), "quantity", wegs.getDouble("estimatedQuantity")));
+                BigDecimal quantity = wegs.getBigDecimal("estimatedQuantity");
+                if (quantity != null && quantity.compareTo(BigDecimal.ZERO) > 0) {
+                    productsRemoved.add(UtilMisc.toMap("productId", wegs.get("productId"), "quantity", wegs.getBigDecimal("estimatedQuantity")));
                 }
                 wegs.set("thruDate", now);
                 wegs.set("statusId", "WEGS_CANCELLED");
@@ -1336,14 +1335,14 @@ public final class ProductionRunServices {
         if (disassemble) {
             for (Iterator<BomNode> iter = components.iterator(); iter.hasNext();) {
                 BomNode node = iter.next();
-                productionList.add(UtilMisc.toMap("productId", node.getProduct().get("productId"), "quantity", node.getQuantity().doubleValue()));
+                productionList.add(UtilMisc.toMap("productId", node.getProduct().get("productId"), "quantity", node.getQuantity()));
             }
         } else {
             productionList.add(UtilMisc.<String, Object>toMap("productId", productId, "quantity", pRQuantity));
         }
         for (Map<String, Object> production : productionList) {
             String producedProductId = (String) production.get("productId");
-            Double producedQuantity = (Double) production.get("quantity");
+            BigDecimal producedQuantity = (BigDecimal) production.get("quantity");
             serviceContext.clear();
             serviceContext.put("workEffortId", productionRunId);
             serviceContext.put("productId", producedProductId);
@@ -1500,7 +1499,7 @@ public final class ProductionRunServices {
                             serviceContext.put("fromDate", productBom.get("fromDate"));
                             // Here we use the getQuantity method to get the quantity already
                             // computed by the getManufacturingComponents service
-                            serviceContext.put("estimatedQuantity", node.getQuantity().doubleValue());
+                            serviceContext.put("estimatedQuantity", node.getQuantity());
                             serviceContext.put("userLogin", userLogin);
                             resultService = null;
                             try {
@@ -1817,8 +1816,7 @@ public final class ProductionRunServices {
         // Mandatory input fields
         String productionRunId = (String) context.get("workEffortId");
         String productId = (String) context.get("productId");
-        Double quantityDbl = (Double) context.get("quantity");
-        BigDecimal quantity = (quantityDbl == null ? null : BigDecimal.valueOf(quantityDbl));
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
 
         // Optional input fields
         String inventoryItemTypeId = (String) context.get("inventoryItemTypeId");
@@ -1937,7 +1935,7 @@ public final class ProductionRunServices {
                     } else {
                         Map outputMap = dispatcher.runSync("getProductionRunCost", UtilMisc.toMap("userLogin", userLogin, "workEffortId", productionRunId));
                         BigDecimal totalCost = (BigDecimal) outputMap.get("totalCost");
-                        unitCost = totalCost.divide(BigDecimal.valueOf(quantity.doubleValue()), decimals, rounding);
+                        unitCost = totalCost.divide(quantity, decimals, rounding);
                         Debug.logInfo("productionRunProduceRefactored : unitCost using production run cost", MODULE);
                     }
                     Debug.logInfo("productionRunProduceRefactored : unitCost = " + unitCost, MODULE);
@@ -2046,7 +2044,7 @@ public final class ProductionRunServices {
             wegs.set("workEffortId", productionRunId);
             wegs.set("productId", productId);
             wegs.set("statusId", "WEGS_COMPLETED");
-            wegs.set("estimatedQuantity", quantity.doubleValue());
+            wegs.set("estimatedQuantity", quantity);
             wegs.set("fromDate", UtilDateTime.nowTimestamp());
             wegs.set("workEffortGoodStdTypeId", "PRUN_PROD_PRODUCED");
             wegs.create();
@@ -2092,7 +2090,7 @@ public final class ProductionRunServices {
                     for (GenericValue part : parts) {
                         savedPart = UtilMisc.toMap("workEffortId", workEffortId);
                         savedPart.put("inventoryItemId", part.getString("inventoryItemId"));
-                        savedPart.put("quantity", part.getDouble("quantity"));
+                        savedPart.put("quantity", part.getBigDecimal("quantity"));
                         savedParts.add(savedPart);
                     }
                 } else {
@@ -2147,11 +2145,11 @@ public final class ProductionRunServices {
                 if (UtilValidate.isEmpty(workEffortInventoryAssign)) {
                     Debug.logInfo("WorkEffortInventoryAssign for part [inventoryItemId," + inventoryItemId + "],[workEffortId," + workEffortId + "] doesn't exist.", MODULE);
                 } else {
-                    double partQuantity = (Double) savedPart.get("quantity");
-                    double workQuantity = workEffortInventoryAssign.getDouble("quantity");
-                    double quantity = workQuantity;
+                    BigDecimal partQuantity = (BigDecimal) savedPart.get("quantity");
+                    BigDecimal workQuantity = workEffortInventoryAssign.getBigDecimal("quantity");
+                    BigDecimal quantity = workQuantity;
 
-                    if (partQuantity < workQuantity) {
+                    if (partQuantity.compareTo(workQuantity) < 0) {
                         quantity = partQuantity;
                     }
 
@@ -2165,8 +2163,8 @@ public final class ProductionRunServices {
                         return output;
                     }
 
-                    if (partQuantity < workQuantity) {
-                        workEffortInventoryAssign.set("quantity", workQuantity - quantity);
+                    if (partQuantity.compareTo(workQuantity) < 0) {
+                        workEffortInventoryAssign.set("quantity", workQuantity.subtract(quantity));
                         workEffortInventoryAssign.store();
                     } else {
                         workEffortInventoryAssign.remove();
@@ -2290,9 +2288,9 @@ public final class ProductionRunServices {
         try {
             // first figure out how much of this product we already have in stock (ATP)
             Map<String, Object> tmpResults = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", orderItem.getString("productId"), "facilityId", facilityId, "userLogin", userLogin));
-            Double existingAtp = (Double) tmpResults.get("availableToPromiseTotal");
+            BigDecimal existingAtp = (BigDecimal) tmpResults.get("availableToPromiseTotal");
             if (existingAtp == null) {
-                existingAtp = 0.0;
+                existingAtp = new BigDecimal("0.0");
             }
 
             if (Debug.verboseOn()) {
@@ -2300,10 +2298,10 @@ public final class ProductionRunServices {
             }
 
             // we only need to produce more marketing packages if it is out of stock.  note that the ATP quantity already includes this order item
-            if (existingAtp.compareTo(0.0) < 0) {
+            if (existingAtp.compareTo(ZERO) < 0) {
                 // how much should we produce?  If there already is some inventory, then just produce enough to bring ATP back up to zero, which may be less than the quantity ordered.
                 // Otherwise, the ATP might be more negative due to previous orders, so just produce the quantity on this order
-                Double qtyToProduce = Math.min((0 - existingAtp), orderItem.getDouble("quantity"));
+                Double qtyToProduce = Math.min((0 - existingAtp.doubleValue()), orderItem.getDouble("quantity"));
                 if (Debug.verboseOn()) {
                     Debug.logVerbose("Order quantity = [" + orderItem.getDouble("quantity").doubleValue() + "] quantity to produce = [" + qtyToProduce + "]", MODULE);
                 }

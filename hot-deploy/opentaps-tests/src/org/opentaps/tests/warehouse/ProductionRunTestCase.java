@@ -103,7 +103,7 @@ public class ProductionRunTestCase extends FinancialsTestCase {
         Map input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("disassemble", Boolean.TRUE);
         input.put("productId", productId);
-        input.put("quantity", new Double(quantity));
+        input.put("quantity", new BigDecimal(quantity));
         input.put("startDate", UtilDateTime.nowTimestamp());
         input.put("facilityId", facilityId);
         input.put("workEffortName", name);
@@ -130,7 +130,7 @@ public class ProductionRunTestCase extends FinancialsTestCase {
         Map input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("disassemble", Boolean.TRUE);
         input.put("productId", productId);
-        input.put("quantity", new Double(quantity));
+        input.put("quantity", new BigDecimal(quantity));
         input.put("startDate", UtilDateTime.nowTimestamp());
         input.put("facilityId", facilityId);
         input.put("workEffortName", name);
@@ -204,7 +204,7 @@ public class ProductionRunTestCase extends FinancialsTestCase {
     protected String createProductionRun(String name, int quantity, String productId, String routingId) throws GenericServiceException {
         Map input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("productId", productId);
-        input.put("quantity", new Double(quantity));
+        input.put("quantity", new BigDecimal(quantity));
         input.put("startDate", UtilDateTime.nowTimestamp());
         input.put("facilityId", facilityId);
         input.put("workEffortName", name);
@@ -485,11 +485,11 @@ public class ProductionRunTestCase extends FinancialsTestCase {
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    protected void assertWorkEffortHasWegs(String workEffortId, String wegsTypeId, Map<String, Double> wegsQuantities) throws GenericEntityException {
+    protected void assertWorkEffortHasWegs(String workEffortId, String wegsTypeId, Map<String, BigDecimal> wegsQuantities) throws GenericEntityException {
         List<GenericValue> allWegs = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", workEffortId, "workEffortGoodStdTypeId", wegsTypeId));
         Set<String> productIds = wegsQuantities.keySet();
         for (String productId : productIds) {
-            Double qty = wegsQuantities.get(productId);
+            BigDecimal qty = wegsQuantities.get(productId);
             List<GenericValue> expectedWegs = delegator.findByAnd("WorkEffortGoodStandard", UtilMisc.toMap("workEffortId", workEffortId, "workEffortGoodStdTypeId", wegsTypeId, "productId", productId, "estimatedQuantity", qty));
             assertNotEmpty("Did not find expected WEGS for workEffort [" + workEffortId + "] product " + productId + " x " + qty + ", instead found WEGS: " + allWegs, expectedWegs);
         }

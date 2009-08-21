@@ -177,7 +177,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Map input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", taskId);
         input.put("productId", "MAT_A_COST");
-        input.put("quantity", new Double("3.0"));
+        input.put("quantity", new BigDecimal("3.0"));
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
         assertAllInventoryValuesEqual(inventoryAsserts);
 
@@ -191,14 +191,14 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", taskId);
         input.put("productId", "MAT_A_COST");
-        input.put("quantity", new Double("1.0"));
+        input.put("quantity", new BigDecimal("1.0"));
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
         assertAllInventoryValuesEqual(inventoryAsserts);
 
         input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", taskId);
         input.put("productId", "MAT_B_COST");
-        input.put("quantity", new Double("6.0"));
+        input.put("quantity", new BigDecimal("6.0"));
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
 
         // make sure both WEGS are completed
@@ -296,7 +296,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         Map input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", taskId);
         input.put("productId", "PROD_COST");
-        input.put("quantity", new Double("2.0"));
+        input.put("quantity", new BigDecimal("2.0"));
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
 
         pause("issued production run task component");
@@ -466,10 +466,10 @@ public class ProductionRunTests extends ProductionRunTestCase {
         assertAllInventoryValuesEqual(inventoryAsserts);
 
         // issue additional material, which is the key of this test
-        input = UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", "MAT_A_COST", "quantity", new Double(1.0), "reasonEnumId", "IID_DEFECT");
+        input = UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", "MAT_A_COST", "quantity", new BigDecimal(1.0), "reasonEnumId", "IID_DEFECT");
         input.put("description", "Additional material issuance for unit test.");
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
-        input = UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", "MAT_B_COST", "quantity", new Double(1.0), "reasonEnumId", "IID_DEFECT");
+        input = UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", "MAT_B_COST", "quantity", new BigDecimal(1.0), "reasonEnumId", "IID_DEFECT");
         input.put("description", "Additional material issuance for unit test.");
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
         assertAllInventoryValuesEqual(inventoryAsserts);
@@ -581,8 +581,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input.put("productionRunId", productionRunId);
         input.put("productionRunTaskId", taskId);
         input.put("partyId", demowarehouse1.get("partyId"));
-        input.put("addSetupTime", 1000000.0);
-        input.put("addTaskTime",  2600000.0);
+        input.put("addSetupTime", new BigDecimal("1000000.0"));
+        input.put("addTaskTime",  new BigDecimal("2600000.0"));
         runAndAssertServiceSuccess("updateProductionRunTask", input);
 
         // Complete the task, which should trigger production run completed
@@ -711,8 +711,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input.put("productionRunId", productionRunId);
         input.put("productionRunTaskId", taskId);
         input.put("partyId", demowarehouse1.get("partyId"));
-        input.put("addSetupTime", 1000000.0);
-        input.put("addTaskTime", 800000.0);
+        input.put("addSetupTime", new BigDecimal("1000000.0"));
+        input.put("addTaskTime", new BigDecimal("800000.0"));
         runAndAssertServiceSuccess("updateProductionRunTask", input);
 
         // complete the task, which should trigger production run completed
@@ -821,8 +821,8 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input.put("productionRunId", productionRunId);
         input.put("productionRunTaskId", taskId);
         input.put("partyId", demowarehouse1.get("partyId"));
-        input.put("addSetupTime", 2000000.0);
-        input.put("addTaskTime",  2500000.0);
+        input.put("addSetupTime", new BigDecimal("2000000.0"));
+        input.put("addTaskTime",  new BigDecimal("2500000.0"));
         runAndAssertServiceSuccess("updateProductionRunTask", input);
 
         // 6. Receive 5 PRUNTEST_PROD1
@@ -830,14 +830,14 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input.put("productionRunId", productionRunId);
         input.put("productionRunTaskId", taskId);
         input.put("partyId", demowarehouse1.get("partyId"));
-        input.put("addQuantityProduced",  5.0);
+        input.put("addQuantityProduced",  new BigDecimal("5.0"));
         runAndAssertServiceSuccess("updateProductionRunTask", input);
 
         // 7. Issue additional 3 PRUNTEST_COMP1 and 5 PRUNTEST_COMP2 to production run (see testIssueAdditionalMaterials above)
-        input = UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", "PRUNTEST_COMP1", "quantity", new Double("3.0"), "reasonEnumId", "IID_DEFECT");
+        input = UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", "PRUNTEST_COMP1", "quantity", new BigDecimal("3.0"), "reasonEnumId", "IID_DEFECT");
         input.put("description", "Additional material issuance for unit test.");
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
-        input = UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", "PRUNTEST_COMP2", "quantity", new Double("5.0"), "reasonEnumId", "IID_DEFECT");
+        input = UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId, "productId", "PRUNTEST_COMP2", "quantity", new BigDecimal("5.0"), "reasonEnumId", "IID_DEFECT");
         input.put("description", "Additional material issuance for unit test.");
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
         assertAllInventoryValuesEqual(inventoryAsserts);
@@ -847,7 +847,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input.put("productionRunId", productionRunId);
         input.put("productionRunTaskId", taskId);
         input.put("partyId", demowarehouse1.get("partyId"));
-        input.put("addTaskTime",  1500000.0);
+        input.put("addTaskTime",  new BigDecimal("1500000.0"));
         runAndAssertServiceSuccess("updateProductionRunTask", input);
 
         // 9. Receive 5 PRUNTEST_PROD1
@@ -855,7 +855,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input.put("productionRunId", productionRunId);
         input.put("productionRunTaskId", taskId);
         input.put("partyId", demowarehouse1.get("partyId"));
-        input.put("addQuantityProduced",  5.0);
+        input.put("addQuantityProduced",  new BigDecimal("5.0"));
         runAndAssertServiceSuccess("updateProductionRunTask", input);
 
         // 10. Complete production run
@@ -980,7 +980,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         String name = "Production run to test average cost adjustment to production run costs.";
         input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("productId", "PROD_COST");
-        input.put("quantity", new Double("2.0"));
+        input.put("quantity", new BigDecimal("2.0"));
         input.put("startDate", UtilDateTime.nowTimestamp());
         input.put("facilityId", facilityId);
         input.put("workEffortName", name);
@@ -1491,7 +1491,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("workEffortId", taskId);
         input.put("productId", productIds.get(1));
-        input.put("quantity", new Double("2.0"));
+        input.put("quantity", new BigDecimal("2.0"));
         runAndAssertServiceSuccess("issueProductionRunTaskComponent", input);
 
         // Get the RAWMAT_INVENTORY, WIP_INVENTORY, MFG_EXPENSE_INTERNAL, MFG_EXPENSE_REVPRUN gl account balances before production run is reverted
@@ -1670,7 +1670,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
                         "productId", manufacturedProduct.get("productId"),
                         "facilityId", "WebStoreWarehouse",
                         "minimumStock", Long.valueOf(0),
-                        "reorderQuantity", Double.valueOf(1.0),
+                        "reorderQuantity", new BigDecimal("1.0"),
                         "daysToShip", Long.valueOf(1)
                 )
         );
@@ -1685,7 +1685,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
                         "productId", mat1.get("productId"),
                         "facilityId", "WebStoreWarehouse",
                         "minimumStock", Long.valueOf(0),
-                        "reorderQuantity", Double.valueOf(1.0),
+                        "reorderQuantity", new BigDecimal("1.0"),
                         "daysToShip", Long.valueOf(1)
                 )
         );
@@ -1694,7 +1694,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
                         "productId", mat2.get("productId"),
                         "facilityId", "WebStoreWarehouse",
                         "minimumStock", Long.valueOf(0),
-                        "reorderQuantity", Double.valueOf(1.0),
+                        "reorderQuantity", new BigDecimal("1.0"),
                         "daysToShip", Long.valueOf(1)
                 )
         );
@@ -1704,7 +1704,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
                 "productIdTo", mat1.get("productId"),
                 "productAssocTypeId", "MANUF_COMPONENT",
                 "sequenceNum", Long.valueOf(1),
-                "quantity", Double.valueOf(1.0),
+                "quantity", new BigDecimal("1.0"),
                 "fromDate", UtilDateTime.nowTimestamp()
                 ));
         delegator.create("ProductAssoc", UtilMisc.toMap(
@@ -1712,7 +1712,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
                 "productIdTo", mat2.get("productId"),
                 "productAssocTypeId", "MANUF_COMPONENT",
                 "sequenceNum", Long.valueOf(2),
-                "quantity", Double.valueOf(1.0),
+                "quantity", new BigDecimal("1.0"),
                 "fromDate", UtilDateTime.nowTimestamp()
                 ));
         pause("Workaround pause for MySQL");
@@ -1954,11 +1954,11 @@ public class ProductionRunTests extends ProductionRunTestCase {
         createBOMProductAssoc(productComp2Id, productComp22Id, new Long("11"), new BigDecimal("4.0"), admin);
 
         // Run a BOM simulation for the default BOM (calling getBOMTree service)
-        Map<String, Object> result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", 1.0, "userLogin", demowarehouse1));
+        Map<String, Object> result = runAndAssertServiceSuccess("getBOMTree", UtilMisc.<String, Object>toMap("productId", productId, "type", BomTree.EXPLOSION, "bomType", "MANUF_COMPONENT", "quantity", BigDecimal.ONE, "userLogin", demowarehouse1));
         BomTree tree = (BomTree) result.get("tree");
         // check the result correspond the to the default BOM components
-        Map expectedBom = UtilMisc.toMap(productId, 1.0, productComp1Id, 7.0, productComp11Id, 7.0, productComp12Id, 14.0);
-        expectedBom.putAll(UtilMisc.toMap(productComp2Id, 3.0, productComp21Id, 9.0, productComp22Id, 12.0));
+        Map expectedBom = UtilMisc.toMap(productId, new BigDecimal("1.0"), productComp1Id, new BigDecimal("7.0"), productComp11Id, new BigDecimal("7.0"), productComp12Id, new BigDecimal("14.0"));
+        expectedBom.putAll(UtilMisc.toMap(productComp2Id, new BigDecimal("3.0"), productComp21Id, new BigDecimal("9.0"), productComp22Id, new BigDecimal("12.0")));
         assertBomTreeCorrect(tree, expectedBom);
 
         // an alternate BOM for product
@@ -2030,7 +2030,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         String taskId = startOnlyTask(prunIdComp);
         // check the WEGS for the materials to issue (5x7x1 x productComp11Id, 5x14x1 x productComp12Id)
-        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp11Id, 35.0, productComp12Id, 70.0));
+        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp11Id, new BigDecimal("35.0"), productComp12Id, new BigDecimal("70.0")));
         // receive the material components into the warehouse
         receiveMaterial(productComp11Id, 35, 2.5);
         receiveMaterial(productComp12Id, 70, 2.5);
@@ -2057,7 +2057,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         taskId = startOnlyTask(prunIdComp);
         // check the WEGS for the materials to issue (5x3x3 x productComp21Id, 5x3x4 x productComp22Id)
-        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp21Id, 45.0, productComp22Id, 60.0));
+        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp21Id, new BigDecimal("45.0"), productComp22Id, new BigDecimal("60.0")));
         // receive the material components into the warehouse
         receiveMaterial(productComp21Id, 45, 2.5);
         receiveMaterial(productComp22Id, 60, 2.5);
@@ -2082,7 +2082,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         taskId = startOnlyTask(prunId);
         // check the WEGS for the materials to issue (5x7 x productComp1Id, 5x3 x productComp2Id)
-        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp1Id, 35.0, productComp2Id, 15.0));
+        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp1Id, new BigDecimal("35.0"), productComp2Id, new BigDecimal("15.0")));
         // issue required quantities of components
         runAndAssertServiceSuccess("issueProductionRunTask", UtilMisc.toMap("userLogin", demowarehouse1, "workEffortId", taskId));
         // complete the task
@@ -2112,7 +2112,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         taskId = startOnlyTask(prunIdComp);
         // check the WEGS for the materials to issue (10x8x12 x productComp13Id, 10x8x15 x productComp14Id)
-        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp13Id, 960.0, productComp14Id, 1200.0));
+        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp13Id, new BigDecimal("960.0"), productComp14Id, new BigDecimal("1200.0")));
         // receive the material components into the warehouse (for the alternate BOM of this component)
         receiveMaterial(productComp13Id, 960, 2.5);
         receiveMaterial(productComp14Id, 1200, 2.5);
@@ -2139,7 +2139,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         taskId = startOnlyTask(prunIdComp);
         // check the WEGS for the materials to issue (10x9x3 x productComp21Id, 10x9x4 x productComp22Id)
-        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp21Id, 270.0, productComp22Id, 360.0));
+        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp21Id, new BigDecimal("270.0"), productComp22Id, new BigDecimal("360.0")));
         // receive the material components into the warehouse
         receiveMaterial(productComp21Id, 270, 2.5);
         receiveMaterial(productComp22Id, 360, 2.5);
@@ -2164,7 +2164,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
         // get the one and only task, and starts it
         taskId = startOnlyTask(prunId);
         // check the WEGS for the materials to issue (10x8 x productComp1Id, 10x9 x productComp2Id, 10x5 x productComp3Id)
-        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp1Id, 80.0, productComp2Id, 90.0, productComp3Id, 50.0));
+        assertWorkEffortHasWegs(taskId, "PRUNT_PROD_NEEDED", UtilMisc.toMap(productComp1Id, new BigDecimal("80.0"), productComp2Id, new BigDecimal("90.0"), productComp3Id, new BigDecimal("50.0")));
         // receive the material components into the warehouse
         receiveMaterial(productComp3Id, 50, 2.5);
         inventoryAsserts.assertInventoriesChange(productComp3Id,  new BigDecimal("50.0"),   origProductInventories);

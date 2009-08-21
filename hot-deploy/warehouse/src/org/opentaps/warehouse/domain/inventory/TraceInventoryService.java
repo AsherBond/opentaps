@@ -105,6 +105,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
             }
 
         } catch (Exception e) {
+            Debug.logError(e, MODULE);
             usageLog = null;
             addSuccessMessage(e.getMessage());
         }
@@ -302,7 +303,7 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
         GenericDelegator delegator = getInfrastructure().getDelegator();
 
         try {
-            EntityCondition dumbCondition = EntityCondition.makeCondition("'1'", EntityOperator.EQUALS, Long.valueOf(1));
+            EntityCondition dumbCondition = EntityCondition.makeCondition("inventoryItemTraceId", EntityOperator.NOT_EQUAL, "0");
 
             // remove all records
             delegator.removeByCondition("InventoryItemTraceDetail", dumbCondition);
@@ -350,7 +351,8 @@ public class TraceInventoryService extends Service implements TraceInventoryServ
 
                 // gets usage log
                 List<InventoryItemTraceDetail> results = invRpst.collectTraceEventsForward(traceDetail);
-
+                Debug.logInfo("Get InventoryItemId [" + item.getInventoryItemId() + "]" + " trace.size() : " + results.size() + ", 1st InventoryItemTraceId/InventoryItemTraceSeqId : "
+                        + (results.size() > 0 ? results.get(0).getInventoryItemTraceId() + "/" + results.get(0).getInventoryItemTraceSeqId() : ""), MODULE);
                 // sort usage log by log level
                 if (!GROUP_USAGE_LOGS) {
                     Collections.sort(results, traceLogComparator);

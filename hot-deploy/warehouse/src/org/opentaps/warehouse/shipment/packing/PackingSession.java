@@ -249,7 +249,7 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
     @Override public BigDecimal getCurrentReservedQuantity(String orderId, String orderItemSeqId, String shipGroupSeqId, String productId) {
         BigDecimal reserved = BigDecimal.ZERO;
         try {
-            List<GenericValue> reservations = getDelegator().findByAnd("OrderItemShipGrpInvResAndItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "shipGroupSeqId", shipGroupSeqId, "facilityId", facilityId, "inventoryProductId", productId));
+            List<GenericValue> reservations = getDelegator().findByAnd("OrderItemShipGrpInvResAndItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "shipGroupSeqId", shipGroupSeqId, "facilityId", facilityId, "productId", productId));
             for (GenericValue res : reservations) {
                 BigDecimal not = res.getBigDecimal("quantityNotAvailable");
                 BigDecimal qty = res.getBigDecimal("quantity");

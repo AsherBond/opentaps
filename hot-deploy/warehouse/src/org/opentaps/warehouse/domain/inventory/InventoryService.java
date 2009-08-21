@@ -190,8 +190,8 @@ public class InventoryService extends Service implements InventoryServiceInterfa
     }
 
     /** {@inheritDoc} */
-    public void setXferQty(Double xferQty) {
-        this.xferQty = BigDecimal.valueOf(xferQty);
+    public void setXferQty(BigDecimal xferQty) {
+        this.xferQty = xferQty;
     }
 
     /** {@inheritDoc} */

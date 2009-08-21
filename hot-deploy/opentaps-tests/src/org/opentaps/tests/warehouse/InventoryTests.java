@@ -201,7 +201,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         for (BigDecimal unitCost : SerializedTestSpecs.itemCosts) {
             input = template;
-            input.put("unitCost", unitCost.doubleValue());
+            input.put("unitCost", unitCost);
             Map output = runAndAssertServiceSuccess("receiveInventoryProduct", input);
             String inventoryItemId = (String) output.get("inventoryItemId");
             inventoryItems.add(UtilMisc.<String, Object>toMap("inventoryItemId", inventoryItemId, "unitCost", unitCost));
@@ -678,12 +678,12 @@ public class InventoryTests extends FinancialsTestCase {
         Number originalInventoryAccountBalance = originalBalances.get(inventoryGlAccountId) != null ? originalBalances.get(inventoryGlAccountId) : BigDecimal.ZERO;
 
         // Create an inventory variance for -1 of ATP and -1 of QOH as "Damaged"
-        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -1.0, "quantityOnHandVar", -1.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", new BigDecimal("-1.0"), "quantityOnHandVar", new BigDecimal("-1.0"), "varianceReasonId", "VAR_DAMAGED");
         Map varianceResult = runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
         String damagedPhysicalInventoryItemId = (String) varianceResult.get("physicalInventoryId");
 
         // Create an inventory variance for -2 of ATP and -2 of QOH as "Lost/Damaged in Transit"
-        varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_TRANSIT");
+        varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", new BigDecimal("-2.0"), "quantityOnHandVar", new BigDecimal("-2.0"), "varianceReasonId", "VAR_TRANSIT");
         varianceResult = runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
         String transitPhysicalInventoryItemId = (String) varianceResult.get("physicalInventoryId");
 
@@ -755,11 +755,11 @@ public class InventoryTests extends FinancialsTestCase {
         Number originalInventoryAccountBalance = originalBalances.get(inventoryGlAccountId) != null ? originalBalances.get(inventoryGlAccountId) : BigDecimal.ZERO;
 
         // Create an inventory variance for -1 of ATP and -1 of QOH as "Damaged"
-        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -1.0, "quantityOnHandVar", -1.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", new BigDecimal("-1.0"), "quantityOnHandVar", new BigDecimal("-1.0"), "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
 
         // Create an inventory variance for -2 of ATP and -2 of QOH as "Lost/Damaged in Transit"
-        varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_TRANSIT");
+        varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "availableToPromiseVar", new BigDecimal("-2.0"), "quantityOnHandVar", new BigDecimal("-2.0"), "varianceReasonId", "VAR_TRANSIT");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
 
         // check the accounting transactions from the variance are tagged
@@ -1014,7 +1014,7 @@ public class InventoryTests extends FinancialsTestCase {
         for (GenericValue entry : entries) {
             assertEquals("Transaction entry product ID should be the test product", productId, entry.get("productId"));
             assertEquals("Transaction entry GL account should be the INVENTORY_ACCOUNT", inventoryGlAccountId, entry.get("glAccountId"));
-            assertEquals("Transaction entry amount should be the same as the inventory amount", new BigDecimal("50.0"), BigDecimal.valueOf(entry.getDouble("amount")));
+            assertEquals("Transaction entry amount should be the same as the inventory amount", new BigDecimal("50.0"), entry.getBigDecimal("amount"));
             if ("D".equals(entry.getString("debitCreditFlag"))) {
                 // debit entry should be tagged with the original tags
                 assertAccountingTagsEqual(entry, tags);
@@ -1080,13 +1080,13 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Update the InventoryItem to unitCost $6.00 and then to $3.00
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 6.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", new BigDecimal("6.00")));
 
         // make sure accounting and inventory items values equals
         inventoryAsserts.assertInventoryValuesEqual(productId);
 
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 3.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", new BigDecimal("3.00")));
 
         // make sure accounting and inventory items values equals
         inventoryAsserts.assertInventoryValuesEqual(productId);
@@ -1149,7 +1149,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // Update the InventoryItem to unitCost $6.00 and then to $3.00
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 6.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", new BigDecimal("6.00")));
 
         // make sure accounting and inventory items values equals
         inventoryAsserts.assertInventoryValuesEqual(productId1);
@@ -1162,7 +1162,7 @@ public class InventoryTests extends FinancialsTestCase {
         }
 
         pause("Workaround pause for MySQL");
-        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", 3.00));
+        runAndAssertServiceSuccess("updateInventoryItem", UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", receiveInventoryItemId, "unitCost", new BigDecimal("3.00")));
 
         // make sure accounting and inventory items values equals
         inventoryAsserts.assertInventoryValuesEqual(productId1);
@@ -1292,8 +1292,8 @@ public class InventoryTests extends FinancialsTestCase {
                 reservationOnReceivedItems++;
             } else {
                 // this should be reserved on a new non serialized inventory item
-                assertEquals("The reserved quantity is incorrect", reservation.get("quantity"), transferQty);
-                assertEquals("The reserved quantity not available is incorrect", reservation.get("quantityNotAvailable"), transferQty);
+                assertEquals("The reserved quantity is incorrect", reservation.getBigDecimal("quantity"), transferQty);
+                assertEquals("The reserved quantity not available is incorrect", reservation.getBigDecimal("quantityNotAvailable"), transferQty);
                 GenericValue inventoryItem = delegator.findByPrimaryKey("InventoryItem", UtilMisc.toMap("inventoryItemId", reservation.getString("inventoryItemId")));
                 assertNotNull("Could not find the InventoryItem", inventoryItem);
                 assertEquals("The the reserved inventoryItem should be non serialized", inventoryItem.get("inventoryItemTypeId"), "NON_SERIAL_INV_ITEM");
@@ -1364,8 +1364,8 @@ public class InventoryTests extends FinancialsTestCase {
         GenericValue res = EntityUtil.getFirst(orderReservations);
         assertEquals("The inventory item in the canceled transfer should be reserved for the order", inventoryItemId, res.getString("inventoryItemId"));
         GenericValue inventoryItem = delegator.findByPrimaryKey("InventoryItem", UtilMisc.toMap("inventoryItemId", inventoryItemId));
-        assertEquals("The inventory item ATP is incorrect", -1.0, inventoryItem.get("availableToPromiseTotal"));
-        assertEquals("The inventory item QOH is incorrect", inventoryQty, inventoryItem.get("quantityOnHandTotal"));
+        assertEquals("The inventory item ATP is incorrect", new BigDecimal("-1.0"), inventoryItem.getBigDecimal("availableToPromiseTotal"));
+        assertEquals("The inventory item QOH is incorrect", inventoryQty, inventoryItem.getBigDecimal("quantityOnHandTotal"));
 
         // 7. Verify that the ATP of the test product is -1.0, the QOH is 5.0
         assertProductAvailability(product, new BigDecimal("-1.0"), inventoryQty);
@@ -1554,7 +1554,7 @@ public class InventoryTests extends FinancialsTestCase {
         callCtxt.put("facilityIdTo", TO_FACILTY);
         callCtxt.put("inventoryItemId", inventoryItemId);
         callCtxt.put("statusId", "IXF_SCHEDULED");
-        callCtxt.put("xferQty", 5.0);
+        callCtxt.put("xferQty", new BigDecimal("5.0"));
         result = runAndAssertServiceSuccess("createInventoryTransfer", callCtxt);
         String inventoryTransferId  = (String) result.get("inventoryTransferId");
 
@@ -1784,7 +1784,7 @@ public class InventoryTests extends FinancialsTestCase {
                         "productId", manufacturedProduct.get("productId"),
                         "facilityId", "WebStoreWarehouse",
                         "minimumStock", Long.valueOf(0),
-                        "reorderQuantity", Double.valueOf(1.0),
+                        "reorderQuantity", new BigDecimal("1.0"),
                         "daysToShip", Long.valueOf(1)
                 )
         );
@@ -1800,7 +1800,7 @@ public class InventoryTests extends FinancialsTestCase {
                         "productId", testProduct2.get("productId"),
                         "facilityId", "WebStoreWarehouse",
                         "minimumStock", Long.valueOf(0),
-                        "reorderQuantity", Double.valueOf(1.0),
+                        "reorderQuantity", new BigDecimal("1.0"),
                         "daysToShip", Long.valueOf(1)
                 )
         );
@@ -1809,7 +1809,7 @@ public class InventoryTests extends FinancialsTestCase {
                         "productId", testProduct5.get("productId"),
                         "facilityId", "WebStoreWarehouse",
                         "minimumStock", Long.valueOf(0),
-                        "reorderQuantity", Double.valueOf(1.0),
+                        "reorderQuantity", new BigDecimal("1.0"),
                         "daysToShip", Long.valueOf(1)
                 )
         );
@@ -1819,7 +1819,7 @@ public class InventoryTests extends FinancialsTestCase {
                 "productIdTo", testProduct2.get("productId"),
                 "productAssocTypeId", "MANUF_COMPONENT",
                 "sequenceNum", Long.valueOf(1),
-                "quantity", Double.valueOf(1.0),
+                "quantity", new BigDecimal("1.0"),
                 "fromDate", UtilDateTime.nowTimestamp()
                 ));
         delegator.create("ProductAssoc", UtilMisc.toMap(
@@ -1827,7 +1827,7 @@ public class InventoryTests extends FinancialsTestCase {
                 "productIdTo", testProduct5.get("productId"),
                 "productAssocTypeId", "MANUF_COMPONENT",
                 "sequenceNum", Long.valueOf(2),
-                "quantity", Double.valueOf(1.0),
+                "quantity", new BigDecimal("1.0"),
                 "fromDate", UtilDateTime.nowTimestamp()
                 ));
 
@@ -1835,7 +1835,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         Map input = UtilMisc.toMap("userLogin", demowarehouse1);
         input.put("productId", manufacturedProduct.get("productId"));
-        input.put("quantity", new Double(1));
+        input.put("quantity", new BigDecimal("1"));
         input.put("startDate", UtilDateTime.nowTimestamp());
         input.put("facilityId", facilityId);
         input.put("workEffortName", "testTraceComplexInventoryUsage Production Run");
