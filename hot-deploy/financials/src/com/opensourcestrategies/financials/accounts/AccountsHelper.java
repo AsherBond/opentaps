@@ -134,7 +134,7 @@ public class AccountsHelper {
      * @param   glFiscalTypeId
      * @param   asOfDateTime    Timestamp to sum up to. TODO: investigate the boundary conditions
      */
-    public static Map getBalancesHelper(List glAccountTypeIds, String organizationPartyId, String partyId, String roleTypeId, String glFiscalTypeId,
+    public static Map<String, BigDecimal> getBalancesHelper(List<String> glAccountTypeIds, String organizationPartyId, String partyId, String roleTypeId, String glFiscalTypeId,
             Timestamp asOfDateTime, GenericDelegator delegator) throws GenericEntityException {
 
         // Set up convenience boolean for testing receivables/payables TODO this is not robust, can break in future
@@ -147,37 +147,44 @@ public class AccountsHelper {
         List<GenericValue> creditBalances = getAcctgTransPartySums(organizationPartyId, glAccountTypeIds, glFiscalTypeId, "C", partyId, roleTypeId, asOfDateTime, delegator);
 
         // return map has key partyId to value balance
-        Map balances = FastMap.newInstance();
+        Map<String, BigDecimal> balances = FastMap.newInstance();
 
-        // go through debits and put either the (debitBalance) for receivables or (ZERO - debitBalance) for payables
+        // go through debits and put either the (debitBalance) for receivables or (-debitBalance) for payables
         for (Iterator<GenericValue> iter = debitBalances.iterator(); iter.hasNext();) {
             GenericValue balance = iter.next();
             BigDecimal balanceAmount = balance.getBigDecimal("amount").setScale(decimals, rounding);
             if (!isReceivable) {
-                balanceAmount = ZERO.subtract(balanceAmount);
+                balanceAmount = balanceAmount.negate();
             }
 
-            // TODO: to be safe this should do the same check balance in Map and add to ZERO as is done for credit balances below
-            balances.put(balance.get("partyId"), balanceAmount);
+            // see if a debitBalance exists, otherwise default to ZERO
+            BigDecimal debitBalance = balances.get(balance.getString("partyId"));
+            if (debitBalance == null) {
+                debitBalance = ZERO;
+            }
+
+            // add them together and put in balance map
+            balanceAmount = balanceAmount.add(debitBalance);
+            balances.put(balance.getString("partyId"), balanceAmount);
         }
 
-        // now go through credits and add to debitBalance (default ZERO) the following: (creditBalance) for payables or (ZERO - creditBalance) for receivables
+        // now go through credits and add to debitBalance (default ZERO) the following: (creditBalance) for payables or (-creditBalance) for receivables
         for (Iterator<GenericValue> iter = creditBalances.iterator(); iter.hasNext();) {
             GenericValue balance = iter.next();
             BigDecimal balanceAmount = balance.getBigDecimal("amount").setScale(decimals, rounding);
             if (isReceivable) {
-                balanceAmount = ZERO.subtract(balanceAmount);
+                balanceAmount = balanceAmount.negate();
             }
 
-            // see if a debitBalance exists, otherwise default to ZERO
-            BigDecimal creditBalance = (BigDecimal) balances.get(balance.get("partyId"));
+            // see if a creditBalance exists, otherwise default to ZERO
+            BigDecimal creditBalance = balances.get(balance.getString("partyId"));
             if (creditBalance == null) {
                 creditBalance = ZERO;
             }
 
             // add them together and put in balance map
             balanceAmount = balanceAmount.add(creditBalance);
-            balances.put(balance.get("partyId"), balanceAmount);
+            balances.put(balance.getString("partyId"), balanceAmount);
         }
 
         return balances;
