@@ -831,9 +831,9 @@ public class ProductionRunServices {
                 serviceContext.put("actualSetupMillis", theTask.get("estimatedSetupMillis"));
             }
             if (theTask.get("actualMilliSeconds") == null) {
-                Double autoMillis = null;
+                BigDecimal autoMillis = null;
                 if (theTask.get("estimatedMilliSeconds") != null) {
-                    autoMillis = new Double(quantityProduced.doubleValue() * theTask.getDouble("estimatedMilliSeconds"));
+                    autoMillis = quantityProduced.multiply(theTask.getBigDecimal("estimatedMilliSeconds"));
                 }
                 serviceContext.put("actualMilliSeconds", autoMillis);
             }
@@ -1295,8 +1295,8 @@ public class ProductionRunServices {
         String description = (String)context.get("description");
         Timestamp estimatedStartDate = (Timestamp)context.get("estimatedStartDate");
         Timestamp estimatedCompletionDate = (Timestamp)context.get("estimatedCompletionDate");
-        Double estimatedSetupMillis = (Double)context.get("estimatedSetupMillis");
-        Double estimatedMilliSeconds = (Double)context.get("estimatedMilliSeconds");
+        BigDecimal estimatedSetupMillis = (BigDecimal)context.get("estimatedSetupMillis");
+        BigDecimal estimatedMilliSeconds = (BigDecimal)context.get("estimatedMilliSeconds");
 
         // The production run is loaded
         ProductionRun productionRun = new ProductionRun(productionRunId, delegator, dispatcher);
@@ -1337,10 +1337,10 @@ public class ProductionRunServices {
             description = (String)routingTask.get("description");
         }
         if (estimatedSetupMillis == null) {
-            estimatedSetupMillis = (Double)routingTask.get("estimatedSetupMillis");
+            estimatedSetupMillis = (BigDecimal)routingTask.get("estimatedSetupMillis");
         }
         if (estimatedMilliSeconds == null) {
-            estimatedMilliSeconds = (Double)routingTask.get("estimatedMilliSeconds");
+            estimatedMilliSeconds = (BigDecimal)routingTask.get("estimatedMilliSeconds");
         }
         if (estimatedStartDate == null) {
             estimatedStartDate = productionRun.getEstimatedStartDate();
@@ -1876,8 +1876,8 @@ public class ProductionRunServices {
         Timestamp toDate = (Timestamp)context.get("toDate");
         BigDecimal addQuantityProduced = (BigDecimal)context.get("addQuantityProduced");
         BigDecimal addQuantityRejected = (BigDecimal)context.get("addQuantityRejected");
-        Double addSetupTime = (Double)context.get("addSetupTime");
-        Double addTaskTime = (Double)context.get("addTaskTime");
+        BigDecimal addSetupTime = (BigDecimal)context.get("addSetupTime");
+        BigDecimal addTaskTime = (BigDecimal)context.get("addTaskTime");
         String comments = (String)context.get("comments");
         Boolean issueRequiredComponents = (Boolean)context.get("issueRequiredComponents");
         Map componentsLocationMap = (Map)context.get("componentsLocationMap");
@@ -1898,10 +1898,10 @@ public class ProductionRunServices {
             addQuantityRejected = BigDecimal.ZERO;
         }
         if (addSetupTime == null) {
-            addSetupTime = new Double(0);
+            addSetupTime = BigDecimal.ZERO;
         }
         if (addTaskTime == null) {
-            addTaskTime = new Double(0);
+            addTaskTime =  BigDecimal.ZERO;
         }
         if (comments == null) {
             comments = "";
@@ -1931,13 +1931,13 @@ public class ProductionRunServices {
             return ServiceUtil.returnError(UtilProperties.getMessage(resource, "ManufacturingProductionRunTaskNotRunning", locale));
         }
 
-        Double actualMilliSeconds = theTask.getDouble("actualMilliSeconds");
+        BigDecimal actualMilliSeconds = theTask.getBigDecimal("actualMilliSeconds");
         if (actualMilliSeconds == null) {
-            actualMilliSeconds = new Double(0);
+            actualMilliSeconds = BigDecimal.ZERO;
         }
-        Double actualSetupMillis = theTask.getDouble("actualSetupMillis");
+        BigDecimal actualSetupMillis = theTask.getBigDecimal("actualSetupMillis");
         if (actualSetupMillis == null) {
-            actualSetupMillis = new Double(0);
+            actualSetupMillis = BigDecimal.ZERO;
         }
 
         BigDecimal quantityProduced = theTask.getBigDecimal("quantityProduced");
@@ -1948,8 +1948,8 @@ public class ProductionRunServices {
         if (quantityRejected == null) {
             quantityRejected = BigDecimal.ZERO;
         }
-        double totalMillis = actualMilliSeconds.doubleValue() + addTaskTime.doubleValue();
-        double totalSetupMillis = actualSetupMillis.doubleValue() + addSetupTime.doubleValue();
+        BigDecimal totalMillis = actualMilliSeconds.add(addTaskTime);
+        BigDecimal totalSetupMillis = actualSetupMillis.add(addSetupTime);
         BigDecimal totalQuantityProduced = quantityProduced.add(addQuantityProduced);
         BigDecimal totalQuantityRejected = quantityRejected.add(addQuantityRejected);
 
@@ -2018,8 +2018,8 @@ public class ProductionRunServices {
             Map serviceContext = new HashMap();
             serviceContext.clear();
             serviceContext.put("workEffortId", workEffortId);
-            serviceContext.put("actualMilliSeconds", new Double(totalMillis));
-            serviceContext.put("actualSetupMillis", new Double(totalSetupMillis));
+            serviceContext.put("actualMilliSeconds", totalMillis);
+            serviceContext.put("actualSetupMillis", totalSetupMillis);
             serviceContext.put("quantityProduced", totalQuantityProduced);
             serviceContext.put("quantityRejected", totalQuantityRejected);
             serviceContext.put("userLogin", userLogin);
