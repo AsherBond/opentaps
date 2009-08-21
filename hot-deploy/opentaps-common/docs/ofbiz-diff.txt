@@ -79,6 +79,9 @@ applications/accounting/data/AccountingTypeData.xml
  * MANUFACTURING_ATX    -> MANUFACTURING
  * OTHER_INTERNAL_ACCTG -> OTHER_INTERNAL
  * SALES_ACCTG_TRANS    -> SALES
+
+applications/accounting/servicedef/secas.xml
+- Removed the seca on createPaymentApplication that called createAcctgTransAndEntriesForPaymentApplication (new ofbiz service)
  
 
 Other API Changes
