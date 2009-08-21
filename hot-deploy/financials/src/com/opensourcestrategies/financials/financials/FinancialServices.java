@@ -51,6 +51,7 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilAccountingTags;
 import org.opentaps.common.util.UtilCommon;
+import org.opentaps.common.util.UtilDate;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.domain.DomainsDirectory;
 import org.opentaps.domain.DomainsLoader;
@@ -529,8 +530,8 @@ public final class FinancialServices {
                     EntityCondition.makeCondition("organizationPartyId", EntityOperator.EQUALS, organizationPartyId),
                     EntityCondition.makeCondition("isClosed", EntityOperator.NOT_EQUAL, "Y"),
                     EntityCondition.makeCondition(EntityOperator.OR,
-                            EntityCondition.makeCondition("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, lastClosedDate),
-                            EntityCondition.makeCondition("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, asOfDate)));
+                            EntityCondition.makeCondition("fromDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilDate.timestampToSqlDate(lastClosedDate)),
+                            EntityCondition.makeCondition("thruDate", EntityOperator.LESS_THAN_EQUAL_TO, UtilDate.timestampToSqlDate(asOfDate))));
             List timePeriods = delegator.findByCondition("CustomTimePeriod", conditions, UtilMisc.toList("customTimePeriodId"), UtilMisc.toList("customTimePeriodId"));
             if (timePeriods.size() > 0) {
                 isClosed = false;
