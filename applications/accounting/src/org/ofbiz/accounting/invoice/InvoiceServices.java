@@ -2644,11 +2644,7 @@ public class InvoiceServices {
 
                 // check if the payment for too much application if an existing
                 // application record is changed
-                if (paymentApplyAvailable.compareTo(ZERO) == 0) {
-                    newPaymentApplyAvailable = paymentApplyAvailable.add(paymentApplication.getBigDecimal("amountApplied")).subtract(amountApplied).setScale(decimals, rounding);
-                } else {
-                    newPaymentApplyAvailable = paymentApplyAvailable.add(paymentApplyAvailable).subtract(amountApplied).setScale(decimals, rounding);
-                }
+                newPaymentApplyAvailable = paymentApplyAvailable.add(paymentApplication.getBigDecimal("amountApplied")).subtract(amountApplied).setScale(decimals, rounding);
                 if (newPaymentApplyAvailable.compareTo(ZERO) < 0) {
                     errorMessageList.add(UtilProperties.getMessage(resource, "AccountingPaymentNotEnough", UtilMisc.<String, Object>toMap("paymentId",paymentId,"paymentApplyAvailable",paymentApplyAvailable.add(paymentApplication.getBigDecimal("amountApplied")),"amountApplied",amountApplied),locale));
                 }

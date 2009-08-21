@@ -71,6 +71,9 @@ applications/party/script/org/ofbiz/party/contact/PartyContactMechServices.xml
 applications/accounting/ofbiz-component.xml
 - commented out the services, secas and entities related to ofbiz BI (SalesInvoiceItemFact)
 
+applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceServices.java
+- fix updatePaymentApplication, it only worked if the payment was fully applied
+
 Other API Changes
 -----------------
 
