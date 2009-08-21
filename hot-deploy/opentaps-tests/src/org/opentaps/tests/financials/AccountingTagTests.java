@@ -99,8 +99,8 @@ public class AccountingTagTests extends FinancialsTestCase {
 
         // this is the trick way to create the Payment and apply it to both invoices -- first createPaymentAndApplication but with a null invoiceId, then apply it to the 2 invoices
         String paymentId1 = fa.createPaymentAndApplication(new BigDecimal("5526.73"), organizationPartyId, supplierPartyId1,  "VENDOR_PAYMENT", "COMPANY_CHECK", "COCHECKING", null, "PMNT_NOT_PAID", UtilMisc.toMap("acctgTagEnumId1", "DIV_CONSUMER"));
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("paymentId", paymentId1, "invoiceId", invoiceId1, "amountApplied", new Double(526.73), "userLogin", demofinadmin));
-        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("paymentId", paymentId1, "invoiceId", invoiceId2, "amountApplied", new Double(5000.00), "userLogin", demofinadmin));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("paymentId", paymentId1, "invoiceId", invoiceId1, "amountApplied", new BigDecimal("526.73"), "userLogin", demofinadmin));
+        runAndAssertServiceSuccess("createPaymentApplication", UtilMisc.toMap("paymentId", paymentId1, "invoiceId", invoiceId2, "amountApplied", new BigDecimal("5000.00"), "userLogin", demofinadmin));
         fa.updatePaymentStatus(paymentId1, "PMNT_SENT");
 
         String invoiceId3 = fa.createInvoice(supplierPartyId2, "PURCHASE_INVOICE", UtilDateTime.nowTimestamp(), null, null, null);
