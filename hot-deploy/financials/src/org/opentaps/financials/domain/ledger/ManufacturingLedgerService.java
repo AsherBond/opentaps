@@ -117,7 +117,7 @@ public class ManufacturingLedgerService extends Service implements Manufacturing
             GeneralLedgerAccount debitAccount = ledgerRepository.getDefaultLedgerAccount("MFG_EXPENSE_VARIANCE", ownerPartyId);
 
             AccountingTransaction acctgTrans = new AccountingTransaction();
-            acctgTrans.setAcctgTransTypeId("MANUFACTURING");
+            acctgTrans.setAcctgTransTypeId("MANUFACTURING_ATX");
             acctgTrans.setWorkEffortId(productionRun.getWorkEffortId());
             acctgTrans = ledgerRepository.createSimpleTransaction(acctgTrans, debitAccount, creditAccount, ownerPartyId, variance, null);
 

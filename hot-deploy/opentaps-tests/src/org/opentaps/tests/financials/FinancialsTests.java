@@ -789,16 +789,11 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Balance for " + customerPartyId + " has not decreased by 77.95", balance3.add(new BigDecimal("77.95")), balance2);
 
         // get the transactions for the payment with the assistance of our start timestamp
-        // note this produce two transactions, the one with the invoiceId should be the payment application transaction
-        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId), EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, null)), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
         assertNotEmpty(paymentId + " transaction not created.", transactions);
-        Set<String> transactionsB = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId), EntityCondition.makeCondition("invoiceId", EntityOperator.NOT_EQUAL, null)), start, delegator);
-        assertNotEmpty(paymentId + " application transaction not created.", transactionsB);
 
-        // assert transaction equivalence with the reference PMT_CUST_TEST-1 transactions
+        // assert transaction equivalence with the reference PMT_CUST_TEST-1 transaction
         assertTransactionEquivalenceIgnoreParty(transactions, UtilMisc.toList("PMT_CUST_TEST-1"));
-        // and for the payment application
-        assertTransactionEquivalenceIgnoreParty(transactionsB, UtilMisc.toList("PMT_CUST_TEST-1B"));
 
         Map finalBalances = financialAsserts.getFinancialBalances(UtilDateTime.nowTimestamp());
         expectedBalanceChanges = UtilMisc.toMap("ACCOUNTS_RECEIVABLE", "-77.95", "UNDEPOSITED_RECEIPTS", "77.95");
@@ -866,16 +861,11 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Balance for " + customerPartyId + " has not decrease by 77.95", balance3.add(new BigDecimal("77.95")), balance2);
 
         // get the transactions for payment with the assistance of our start timestamp
-        // note this produce two transactions, the one with the invoiceId should be the payment application transaction
-        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId), EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, null)), start, delegator);
+        Set<String> transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
         assertNotEmpty(paymentId + " transaction not created.", transactions);
-        Set<String> transactionsB = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId), EntityCondition.makeCondition("invoiceId", EntityOperator.NOT_EQUAL, null)), start, delegator);
-        assertNotEmpty(paymentId + " application transaction not created.", transactionsB);
 
-        // assert transaction equivalence with the reference payment transactions
+        // assert transaction equivalence with the reference payment transaction
         assertTransactionEquivalenceIgnoreParty(transactions, UtilMisc.toList("PMT_CUST_TEST-2"));
-        // and for the payment application
-        assertTransactionEquivalenceIgnoreParty(transactionsB, UtilMisc.toList("PMT_CUST_TEST-2B"));
 
         Map afterSettingPaymentReceivedBalances = financialAsserts.getFinancialBalances(UtilDateTime.nowTimestamp());
         expectedBalanceChanges = UtilMisc.toMap("ACCOUNTS_RECEIVABLE", "-77.95", "UNDEPOSITED_RECEIPTS", "77.95");
@@ -899,16 +889,12 @@ public class FinancialsTests extends FinancialsTestCase {
         BigDecimal balance4 = AccountsHelper.getBalanceForCustomerPartyId(customerPartyId, organizationPartyId, "ACTUAL", now, delegator);
         assertEquals("Balance for " + customerPartyId + " has not increased by 77.95", balance3, balance4.subtract(new BigDecimal("77.95")));
 
-        // note this produce two transactions, the one with the invoiceId should be the payment application transaction
-        transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId), EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, null)), start, delegator);
-        assertNotEmpty(paymentId + " transaction not created.", transactions);
-        transactionsB = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId), EntityCondition.makeCondition("invoiceId", EntityOperator.NOT_EQUAL, null)), start, delegator);
-        assertNotEmpty(paymentId + " application transaction not created.", transactionsB);
+        // get the transactions for payment with the assistance of our start timestamp
+        transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
+        assertNotEmpty(paymentId + " payment void transactions not created.", transactions);
 
-        // assert transaction equivalence with the reference PMT_CUST_TEST-2R transactions
+        // assert transaction equivalence with the reference PMT_CUST_TEST-2R transaction
         assertTransactionEquivalenceIgnoreParty(transactions, UtilMisc.toList("PMT_CUST_TEST-2R"));
-        // and for the payment application
-        assertTransactionEquivalenceIgnoreParty(transactionsB, UtilMisc.toList("PMT_CUST_TEST-2RB"));
 
         // verify that the balance for ACCOUNTS_RECEIVABLE has increased by 77.95, and the balance for UNDEPOSITED_RECEIPTS has decreased by 77.95
         Map finalBalances = financialAsserts.getFinancialBalances(UtilDateTime.nowTimestamp());
@@ -1054,15 +1040,11 @@ public class FinancialsTests extends FinancialsTestCase {
         assertEquals("Balance for " + supplierPartyId + " has not decrease by 526.73", balance2, balance3.add(new BigDecimal("526.73")));
 
         // get the transactions for PMT_VEND_TEST-1 with the assistance of our start timestamp
-        transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId), EntityCondition.makeCondition("invoiceId", EntityOperator.EQUALS, null)), start, delegator);
+        transactions = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId)), start, delegator);
         assertNotEmpty(paymentId + " transaction not created.", transactions);
-        Set<String> transactionsB = getAcctgTransSinceDate(UtilMisc.toList(EntityCondition.makeCondition("paymentId", EntityOperator.EQUALS, paymentId), EntityCondition.makeCondition("invoiceId", EntityOperator.NOT_EQUAL, null)), start, delegator);
-        assertNotEmpty(paymentId + " application transaction not created.", transactionsB);
 
         // assert transaction equivalence with the reference PMT_VEND_TEST-1 transaction
         assertTransactionEquivalenceIgnoreParty(transactions, UtilMisc.toList("PMT_VEND_TEST-1"));
-        // and for the payment application
-        assertTransactionEquivalenceIgnoreParty(transactionsB, UtilMisc.toList("PMT_VEND_TEST-1B"));
 
         Map finalBalances = financialAsserts.getFinancialBalances(UtilDateTime.nowTimestamp());
         expectedBalanceChanges = UtilMisc.toMap("ACCOUNTS_PAYABLE", "526.73");

@@ -26,6 +26,7 @@
     <AcctgTransType acctgTransTypeId="INVENTORY" parentTypeId="" hasTable="N" description="Inventory"/>
     <AcctgTransType acctgTransTypeId="SHIPMENT_OUT_ATX" parentTypeId="" hasTable="N" description="Outbound Shipment"/>
     <AcctgTransType acctgTransTypeId="SHIPMENT_RCPT_ATX" parentTypeId="" hasTable="N" description="Shipment Receipt"/>
+    <AcctgTransType acctgTransTypeId="MANUFACTURING_ATX" parentTypeId="" hasTable="N" description="Manufacturing"/>
     <AcctgTransType acctgTransTypeId="INVOICE_SALES_ATX" parentTypeId="" hasTable="N" description="Sales Invoice"/>
     <AcctgTransType acctgTransTypeId="INVOICE_PURCH_ATX" parentTypeId="" hasTable="N" description="Vendor Invoice"/>
     <AcctgTransType acctgTransTypeId="INVOICE_CREDIT_ATX" parentTypeId="" hasTable="N" description="Customer Credit"/>

@@ -98,14 +98,6 @@ Note: this only affects two services in WorkEffortServices.java : processWorkEff
 
 - The base users (admin, system, ...) and UserLogin seed data is no longer loaded by ofbiz, instead it is loaded as demo data. The needed data was added into CommonSecurityData.xml
 
-- The following AcctgTransType are now defined in Ofbiz with slightly different acctgTransTypeId:
- * DISBURSEMENT_ACCTG_T -> DISBURSEMENT
- * RECEIPT_ACCTG_TRANS  -> RECEIPT
- * ITEM_VARIANCE_ACCTG_ -> ITEM_VARIANCE
- * MANUFACTURING_ATX    -> MANUFACTURING
- * OTHER_INTERNAL_ACCTG -> OTHER_INTERNAL
- * SALES_ACCTG_TRANS    -> SALES
-- The PAYMENT_ACCTG_TRANS is now already defined in ofbiz, and there is a new type PAYMENT_APPL used by the service createAcctgTransAndEntriesForPaymentApplication
 
 Possible buisness logic changes
 -------------------------------

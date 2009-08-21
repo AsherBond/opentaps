@@ -25,9 +25,9 @@
     call changeProductionRunTaskStatus to completed
     call productionRunProduce to stock in the 2 items as non-serialized -->
 
-    <AcctgTrans acctgTransId="MFGTEST-3" acctgTransTypeId="MANUFACTURING" transactionDate="2007-09-28 10:12:29.28" isPosted="Y" postedDate="2007-09-28 10:12:31.255" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-2" acctgTransTypeId="MANUFACTURING" transactionDate="2007-09-28 10:11:55.593" isPosted="Y" postedDate="2007-09-28 10:11:56.672" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-1" acctgTransTypeId="MANUFACTURING" transactionDate="2007-09-28 10:08:48.033" isPosted="Y" postedDate="2007-09-28 10:08:51.217" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-3" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-09-28 10:12:29.28" isPosted="Y" postedDate="2007-09-28 10:12:31.255" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-2" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-09-28 10:11:55.593" isPosted="Y" postedDate="2007-09-28 10:11:56.672" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-1" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-09-28 10:08:48.033" isPosted="Y" postedDate="2007-09-28 10:08:51.217" glFiscalTypeId="REFERENCE"/>
 
     <AcctgTransEntry acctgTransId="MFGTEST-3" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" productId="PROD_COST" glAccountId="140000" organizationPartyId="Company" amount="328.0" currencyUomId="USD" debitCreditFlag="D"/>
     <AcctgTransEntry acctgTransId="MFGTEST-3" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" productId="PROD_COST" glAccountId="142000" organizationPartyId="Company" amount="328.0" currencyUomId="USD" debitCreditFlag="C"/>
@@ -45,10 +45,10 @@
     call changeProductionRunTaskStatus to completed
     call productionRunProduce to stock in MAT_A_COST and MAT_B_COST end products as non-serialized -->
 
-    <AcctgTrans acctgTransId="MFGTEST-4" acctgTransTypeId="MANUFACTURING" transactionDate="2007-11-06 15:12:50.0" isPosted="Y" postedDate="2007-11-06 15:12:51.0" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-5" acctgTransTypeId="MANUFACTURING" transactionDate="2007-11-06 15:12:57.0" isPosted="Y" postedDate="2007-11-06 15:12:57.0" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-6" acctgTransTypeId="MANUFACTURING" transactionDate="2007-11-06 15:13:03.0" isPosted="Y" postedDate="2007-11-06 15:13:04.0" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-7" acctgTransTypeId="MANUFACTURING" transactionDate="2007-11-06 15:13:05.0" isPosted="Y" postedDate="2007-11-06 15:13:05.0" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-4" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-11-06 15:12:50.0" isPosted="Y" postedDate="2007-11-06 15:12:51.0" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-5" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-11-06 15:12:57.0" isPosted="Y" postedDate="2007-11-06 15:12:57.0" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-6" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-11-06 15:13:03.0" isPosted="Y" postedDate="2007-11-06 15:13:04.0" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-7" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-11-06 15:13:05.0" isPosted="Y" postedDate="2007-11-06 15:13:05.0" glFiscalTypeId="REFERENCE"/>
 
     <AcctgTransEntry acctgTransId="MFGTEST-4" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" productId="PROD_COST" glAccountId="140000" organizationPartyId="Company" amount="328.0" currencyUomId="USD" debitCreditFlag="C"/>
     <AcctgTransEntry acctgTransId="MFGTEST-4" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" productId="MAT_A_COST" glAccountId="142000" organizationPartyId="Company" amount="36.0" currencyUomId="USD" debitCreditFlag="D"/>
@@ -68,10 +68,10 @@
     call productionRunProduce to stock the PROD_COST
     -->
 
-    <AcctgTrans acctgTransId="MFGTEST-8" acctgTransTypeId="MANUFACTURING" transactionDate="2007-11-06 16:56:53.0" isPosted="Y" postedDate="2007-11-06 16:56:54.0" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-9" acctgTransTypeId="MANUFACTURING" transactionDate="2007-11-06 16:56:54.0" isPosted="Y" postedDate="2007-11-06 16:56:55.0" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-10" acctgTransTypeId="MANUFACTURING" transactionDate="2007-11-06 16:59:23.0" isPosted="Y" postedDate="2007-11-06 16:59:24.0" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-11" acctgTransTypeId="MANUFACTURING" transactionDate="2007-11-06 16:59:28.0" isPosted="Y" postedDate="2007-11-06 16:59:28.0" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-8" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-11-06 16:56:53.0" isPosted="Y" postedDate="2007-11-06 16:56:54.0" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-9" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-11-06 16:56:54.0" isPosted="Y" postedDate="2007-11-06 16:56:55.0" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-10" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-11-06 16:59:23.0" isPosted="Y" postedDate="2007-11-06 16:59:24.0" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-11" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-11-06 16:59:28.0" isPosted="Y" postedDate="2007-11-06 16:59:28.0" glFiscalTypeId="REFERENCE"/>
 
     <AcctgTransEntry acctgTransId="MFGTEST-8" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" productId="MAT_A_COST" glAccountId="141000" organizationPartyId="Company" amount="18" currencyUomId="USD" debitCreditFlag="D"/>
     <AcctgTransEntry acctgTransId="MFGTEST-8" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" productId="PROD_COST" glAccountId="142000" organizationPartyId="Company" amount="18" currencyUomId="USD" debitCreditFlag="C"/>
@@ -85,9 +85,9 @@
     <AcctgTransEntry acctgTransId="MFGTEST-11" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" productId="PROD_COST" glAccountId="142000" organizationPartyId="Company" amount="389.0" currencyUomId="USD" debitCreditFlag="C"/>
     <AcctgTransEntry acctgTransId="MFGTEST-11" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" productId="PROD_COST" glAccountId="140000" organizationPartyId="Company" amount="389.0" currencyUomId="USD" debitCreditFlag="D"/>
 
-    <AcctgTrans acctgTransId="MFGTEST-14" acctgTransTypeId="MANUFACTURING" transactionDate="2007-09-28 10:12:29.28" isPosted="Y" postedDate="2007-09-28 10:12:31.255" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-13" acctgTransTypeId="MANUFACTURING" transactionDate="2007-09-28 10:11:55.593" isPosted="Y" postedDate="2007-09-28 10:11:56.672" glFiscalTypeId="REFERENCE"/>
-    <AcctgTrans acctgTransId="MFGTEST-12" acctgTransTypeId="MANUFACTURING" transactionDate="2007-09-28 10:08:48.033" isPosted="Y" postedDate="2007-09-28 10:08:51.217" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-14" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-09-28 10:12:29.28" isPosted="Y" postedDate="2007-09-28 10:12:31.255" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-13" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-09-28 10:11:55.593" isPosted="Y" postedDate="2007-09-28 10:11:56.672" glFiscalTypeId="REFERENCE"/>
+    <AcctgTrans acctgTransId="MFGTEST-12" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2007-09-28 10:08:48.033" isPosted="Y" postedDate="2007-09-28 10:08:51.217" glFiscalTypeId="REFERENCE"/>
 
     <AcctgTransEntry acctgTransId="MFGTEST-14" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" productId="PROD_COST" glAccountId="140000" organizationPartyId="Company" amount="328.0" currencyUomId="USD" debitCreditFlag="D"/>
     <AcctgTransEntry acctgTransId="MFGTEST-14" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" productId="PROD_COST" glAccountId="142000" organizationPartyId="Company" amount="328.0" currencyUomId="USD" debitCreditFlag="C"/>
@@ -107,12 +107,12 @@
     <AcctgTransEntry acctgTransId="MFGTEST-12" acctgTransEntrySeqId="00008" acctgTransEntryTypeId="_NA_" productId="MAT_A_COST" glAccountId="141000" organizationPartyId="Company" amount="8.0" currencyUomId="USD" debitCreditFlag="D"/>    
 
     <!-- Transactions and entries corresponding to producing 1 PROD_COST with issuance of 1 additional MAT_A_COST and 1 additional MAT_B_COST -->
-    <AcctgTrans acctgTransId="MFGTEST-20" acctgTransTypeId="MANUFACTURING" transactionDate="2008-04-22 16:20:20.458" isPosted="Y" postedDate="2008-04-22 16:20:20.819" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:20:20.822" lastUpdatedTxStamp="2008-04-22 16:20:20.363" createdStamp="2008-04-22 16:20:20.573" createdTxStamp="2008-04-22 16:20:20.363"/>
-    <AcctgTrans acctgTransId="MFGTEST-21" acctgTransTypeId="MANUFACTURING" transactionDate="2008-04-22 16:20:20.94" isPosted="Y" postedDate="2008-04-22 16:20:21.171" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:20:21.174" lastUpdatedTxStamp="2008-04-22 16:20:20.363" createdStamp="2008-04-22 16:20:20.948" createdTxStamp="2008-04-22 16:20:20.363"/>
-    <AcctgTrans acctgTransId="MFGTEST-22" acctgTransTypeId="MANUFACTURING" transactionDate="2008-04-22 16:20:39.156" isPosted="Y" postedDate="2008-04-22 16:20:39.481" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:20:39.485" lastUpdatedTxStamp="2008-04-22 16:20:39.009" createdStamp="2008-04-22 16:20:39.268" createdTxStamp="2008-04-22 16:20:39.009"/>
-    <AcctgTrans acctgTransId="MFGTEST-23" acctgTransTypeId="MANUFACTURING" transactionDate="2008-04-22 16:21:00.829" isPosted="Y" postedDate="2008-04-22 16:21:01.735" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:21:01.738" lastUpdatedTxStamp="2008-04-22 16:21:00.689" createdStamp="2008-04-22 16:21:01.444" createdTxStamp="2008-04-22 16:21:00.689"/>
-    <AcctgTrans acctgTransId="MFGTEST-24" acctgTransTypeId="MANUFACTURING" transactionDate="2008-04-22 16:21:07.656" isPosted="Y" postedDate="2008-04-22 16:21:07.804" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:21:07.807" lastUpdatedTxStamp="2008-04-22 16:21:07.372" createdStamp="2008-04-22 16:21:07.662" createdTxStamp="2008-04-22 16:21:07.372"/>
-    <AcctgTrans acctgTransId="MFGTEST-25" acctgTransTypeId="MANUFACTURING" transactionDate="2008-04-22 16:21:18.984" isPosted="Y" postedDate="2008-04-22 16:21:19.318" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:21:19.322" lastUpdatedTxStamp="2008-04-22 16:21:18.984" createdStamp="2008-04-22 16:21:19.089" createdTxStamp="2008-04-22 16:21:18.984"/>
+    <AcctgTrans acctgTransId="MFGTEST-20" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2008-04-22 16:20:20.458" isPosted="Y" postedDate="2008-04-22 16:20:20.819" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:20:20.822" lastUpdatedTxStamp="2008-04-22 16:20:20.363" createdStamp="2008-04-22 16:20:20.573" createdTxStamp="2008-04-22 16:20:20.363"/>
+    <AcctgTrans acctgTransId="MFGTEST-21" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2008-04-22 16:20:20.94" isPosted="Y" postedDate="2008-04-22 16:20:21.171" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:20:21.174" lastUpdatedTxStamp="2008-04-22 16:20:20.363" createdStamp="2008-04-22 16:20:20.948" createdTxStamp="2008-04-22 16:20:20.363"/>
+    <AcctgTrans acctgTransId="MFGTEST-22" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2008-04-22 16:20:39.156" isPosted="Y" postedDate="2008-04-22 16:20:39.481" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:20:39.485" lastUpdatedTxStamp="2008-04-22 16:20:39.009" createdStamp="2008-04-22 16:20:39.268" createdTxStamp="2008-04-22 16:20:39.009"/>
+    <AcctgTrans acctgTransId="MFGTEST-23" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2008-04-22 16:21:00.829" isPosted="Y" postedDate="2008-04-22 16:21:01.735" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:21:01.738" lastUpdatedTxStamp="2008-04-22 16:21:00.689" createdStamp="2008-04-22 16:21:01.444" createdTxStamp="2008-04-22 16:21:00.689"/>
+    <AcctgTrans acctgTransId="MFGTEST-24" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2008-04-22 16:21:07.656" isPosted="Y" postedDate="2008-04-22 16:21:07.804" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:21:07.807" lastUpdatedTxStamp="2008-04-22 16:21:07.372" createdStamp="2008-04-22 16:21:07.662" createdTxStamp="2008-04-22 16:21:07.372"/>
+    <AcctgTrans acctgTransId="MFGTEST-25" acctgTransTypeId="MANUFACTURING_ATX" transactionDate="2008-04-22 16:21:18.984" isPosted="Y" postedDate="2008-04-22 16:21:19.318" glFiscalTypeId="REFERENCE" createdByUserLogin="system" lastModifiedByUserLogin="system" lastUpdatedStamp="2008-04-22 16:21:19.322" lastUpdatedTxStamp="2008-04-22 16:21:18.984" createdStamp="2008-04-22 16:21:19.089" createdTxStamp="2008-04-22 16:21:18.984"/>
 
     <AcctgTransEntry acctgTransId="MFGTEST-20" acctgTransEntrySeqId="00001" acctgTransEntryTypeId="_NA_" productId="MAT_A_COST" glAccountId="141000" organizationPartyId="Company" amount="18.0" currencyUomId="USD" debitCreditFlag="C" reconcileStatusId="AES_NOT_RECONCILED" lastUpdatedStamp="2008-04-22 16:20:20.583" lastUpdatedTxStamp="2008-04-22 16:20:20.363" createdStamp="2008-04-22 16:20:20.583" createdTxStamp="2008-04-22 16:20:20.363"/>
     <AcctgTransEntry acctgTransId="MFGTEST-20" acctgTransEntrySeqId="00002" acctgTransEntryTypeId="_NA_" productId="PROD_COST" glAccountId="142000" organizationPartyId="Company" amount="18.0" currencyUomId="USD" debitCreditFlag="D" reconcileStatusId="AES_NOT_RECONCILED" lastUpdatedStamp="2008-04-22 16:20:20.589" lastUpdatedTxStamp="2008-04-22 16:20:20.363" createdStamp="2008-04-22 16:20:20.589" createdTxStamp="2008-04-22 16:20:20.363"/>
