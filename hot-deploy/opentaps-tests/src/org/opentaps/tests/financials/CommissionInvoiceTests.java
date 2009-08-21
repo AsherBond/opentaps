@@ -1,14 +1,14 @@
 /*
  * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * Honest Public License for more details.
- * 
+ *
  * You should have received a copy of the Honest Public License
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
@@ -21,16 +21,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import org.ofbiz.accounting.invoice.InvoiceWorker;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-
-import com.opensourcestrategies.financials.accounts.AccountsHelper;
 
 /**
  * Unit tests for creating and dealing with commission invoices.  They are based off the demo commissions
@@ -80,6 +78,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
      *
      * The sales invoice is made to DemoCustCompany for a set of products in
      * categories A, B and C, as well as outside.
+     * @exception GeneralException if an error occurs
      */
     public void testComplexCommissionInvoiceLifecycle() throws GeneralException {
         FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
@@ -99,7 +98,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         // discounts for the category B products that should also apply to the 25% discount
         financialAsserts.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", "GZ-2002", new BigDecimal("2.0"), new BigDecimal("-0.42"));
         financialAsserts.createInvoiceItem(invoiceId, "ITM_DISCOUNT_ADJ", "GZ-5005", new BigDecimal("10.0"), new BigDecimal("-2.55"));
-        
+
         // invoice a product in category C for a quantity that triggers no earnings for rep 3
         financialAsserts.createInvoiceItem(invoiceId, "INV_FPROD_ITEM", "GZ-1000", new BigDecimal("3.0"), new BigDecimal("8.78"));
 
@@ -118,7 +117,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         financialAsserts.createInvoiceItem(invoiceId, "ITM_SALES_TAX", null, null, new BigDecimal("155.56"));
         financialAsserts.createInvoiceItem(invoiceId, "ITM_SHIPPING_CHARGES", null, null, new BigDecimal("77.99"));
 
-        // DemoSalesRep1 and _2 must be named as commission agents on the order -> invoice to get a commission but _3 does not: 
+        // DemoSalesRep1 and _2 must be named as commission agents on the order -> invoice to get a commission but _3 does not:
         // he has an agreement to get commission on any order/invoice with this customer
         // note that this implies both rep 1 and 2 created the order, something that cannot really happen but is useful for testing
         Map<String, Object> input = UtilMisc.<String, Object>toMap("userLogin", demofinadmin);
@@ -137,33 +136,33 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         financialAsserts.updateInvoiceStatus(invoiceId, "INVOICE_READY");
 
         // get the commission invoices created
-        List conditions = Arrays.asList(
-                new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, "DemoSalesRep1"),
-                new EntityExpr("partyId", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("invoiceDate", EntityOperator.GREATER_THAN, start)
+        List<EntityCondition> conditions = Arrays.<EntityCondition>asList(
+                EntityCondition.makeCondition("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, "DemoSalesRep1"),
+                EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("invoiceDate", EntityOperator.GREATER_THAN, start)
         );
         List<GenericValue> commissionInvoices = delegator.findByAnd("Invoice", conditions);
         assertEquals("Incorrect number commission invoice created for DemoSalesRep1.", new BigDecimal(commissionInvoices.size()), new BigDecimal("1.0"));
         GenericValue commissionInvoice1 = commissionInvoices.get(0);
         String commissionInvoiceId1 = commissionInvoice1.getString("invoiceId");
 
-        conditions = Arrays.asList(
-                new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, "DemoSalesRep2"),
-                new EntityExpr("partyId", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("invoiceDate", EntityOperator.GREATER_THAN, start)
+        conditions = Arrays.<EntityCondition>asList(
+                EntityCondition.makeCondition("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, "DemoSalesRep2"),
+                EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("invoiceDate", EntityOperator.GREATER_THAN, start)
         );
         commissionInvoices = delegator.findByAnd("Invoice", conditions);
         assertEquals("Incorrect number commission invoice created for DemoSalesRep2.", new BigDecimal(commissionInvoices.size()), new BigDecimal("1.0"));
         GenericValue commissionInvoice2 = commissionInvoices.get(0);
         String commissionInvoiceId2 = commissionInvoice2.getString("invoiceId");
 
-        conditions = Arrays.asList(
-                new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, "DemoSalesRep3"),
-                new EntityExpr("partyId", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("invoiceDate", EntityOperator.GREATER_THAN, start)
+        conditions = Arrays.<EntityCondition>asList(
+                EntityCondition.makeCondition("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, "DemoSalesRep3"),
+                EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("invoiceDate", EntityOperator.GREATER_THAN, start)
         );
         commissionInvoices = delegator.findByAnd("Invoice", conditions);
         assertEquals("Incorrect number commission invoice created for DemoSalesRep3.", new BigDecimal(commissionInvoices.size()), new BigDecimal("1.0"));
@@ -229,22 +228,28 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         // verify that the agreement term billing report entity has the right values for the sales invoice
         // note that these amounts do not include manual adjustments as above, so the invoice expected totals are different
         List<String> fields = UtilMisc.toList("partyIdFrom", "agentPartyId", "amount", "origInvoiceId");
-        conditions = Arrays.asList(
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("origInvoiceId", EntityOperator.EQUALS, invoiceId)
+        conditions = Arrays.<EntityCondition>asList(
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("origInvoiceId", EntityOperator.EQUALS, invoiceId)
         );
-        List<GenericValue> report = delegator.findByCondition("AgreementBillingAndInvoiceSum", new EntityConditionList(conditions, EntityOperator.AND), fields, null);
+        List<GenericValue> report = delegator.findByCondition("AgreementBillingAndInvoiceSum", EntityCondition.makeCondition(conditions, EntityOperator.AND), fields, null);
         BigDecimal rep1Total = BigDecimal.ZERO;
         BigDecimal rep2Total = BigDecimal.ZERO;
         BigDecimal rep3Total = BigDecimal.ZERO;
         for (GenericValue line : report) {
-            if ("DemoSalesRep1".equals(line.get("agentPartyId"))) rep1Total = rep1Total.add(line.getBigDecimal("amount"));
-            if ("DemoSalesRep2".equals(line.get("agentPartyId"))) rep2Total = rep2Total.add(line.getBigDecimal("amount"));
-            if ("DemoSalesRep3".equals(line.get("agentPartyId"))) rep3Total = rep3Total.add(line.getBigDecimal("amount"));
+            if ("DemoSalesRep1".equals(line.get("agentPartyId"))) {
+                rep1Total = rep1Total.add(line.getBigDecimal("amount"));
+            }
+            if ("DemoSalesRep2".equals(line.get("agentPartyId"))) {
+                rep2Total = rep2Total.add(line.getBigDecimal("amount"));
+            }
+            if ("DemoSalesRep3".equals(line.get("agentPartyId"))) {
+                rep3Total = rep3Total.add(line.getBigDecimal("amount"));
+            }
         }
         assertEquals("Commission report for DemoSalesRep1 is as expected.", rep1Total, expectedTotal1.add(asBigDecimal("2.13")));
         assertEquals("Commission report for DemoSalesRep2 is as expected.", rep2Total, expectedTotal2.add(asBigDecimal("2.13")));
-        assertEquals("Commission report for DemoSalesRep3 is as expected.", rep3Total, expectedTotal3.add(asBigDecimal("2.13")));        
+        assertEquals("Commission report for DemoSalesRep3 is as expected.", rep3Total, expectedTotal3.add(asBigDecimal("2.13")));
     }
 
     /**
@@ -265,6 +270,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
      * 13.  Receive third Payment from DemoAccount1 to Company for $100, apply $50 of it to invoice from (1)
      * 14.  Set Payment to Received, then set Payment to VOID
      * 15.  Verify that no new commission invoice has been created for DemoSalesRep4 since (8) above.
+     * @exception GeneralException if an error occurs
      */
     public void testCommissionsEarnedAtPayment() throws GeneralException {
         FinancialAsserts financialAsserts = new FinancialAsserts(this, organizationPartyId, demofinadmin);
@@ -277,7 +283,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         String invoiceId1 = financialAsserts.createInvoice("DemoAccount1", "SALES_INVOICE");//, UtilDateTime.nowTimestamp(), UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, 30, UtilDateTime.getDefaultTimeZone(), Locale.US));
         financialAsserts.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-1001", new BigDecimal("3.0"), new BigDecimal("10.00"), "Item 1");
         financialAsserts.createInvoiceItem(invoiceId1, "INV_PROD_ITEM", "GZ-1005", new BigDecimal("1.0"), new BigDecimal("70.00"), "Item 2");
-        
+
         // 2. Mark invoice as READY
         financialAsserts.updateInvoiceStatus(invoiceId1, "INVOICE_READY");
 
@@ -289,12 +295,12 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         financialAsserts.updateInvoiceStatus(invoiceId2, "INVOICE_READY");
 
         // 5. Check that no commission invoice has been created for DemoSalesRep4
-        List<EntityExpr> conditions = Arrays.asList(
-                new EntityExpr("invoiceDate", EntityOperator.GREATER_THAN, now),
-                new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, agentPartyId)
+        List<EntityCondition> conditions = Arrays.<EntityCondition>asList(
+                EntityCondition.makeCondition("invoiceDate", EntityOperator.GREATER_THAN, now),
+                EntityCondition.makeCondition("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, agentPartyId)
         );
-        long count = delegator.findCountByCondition("Invoice", new EntityConditionList(conditions, EntityOperator.AND), null);
+        long count = delegator.findCountByCondition("Invoice", EntityCondition.makeCondition(conditions, EntityOperator.AND), null);
         assertEquals("Some commission invoices are created for DemoSalesRep4 by mistake", 0, count);
 
         // 6. Receive Payment from DemoAccount1 to Company for $100 and apply $50 of it to invoice from (1) and $30 of it to invoice from (2)
@@ -306,7 +312,7 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         financialAsserts.updatePaymentStatus(paymentId1, "PMNT_RECEIVED");
 
         // 8. Check that no commission invoice has been created for DemoSalesRep4
-        count = delegator.findCountByCondition("Invoice", new EntityConditionList(conditions, EntityOperator.AND), null);
+        count = delegator.findCountByCondition("Invoice", EntityCondition.makeCondition(conditions, EntityOperator.AND), null);
         assertEquals("Some commission invoices are created for DemoSalesRep4 by mistake", 0, count);
 
         // 9. Set Payment to CONFIRMED
@@ -314,12 +320,12 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
 
         // 10. Check that 1 commission invoice has been created from DemoSalesRep4 to Company for $2.50 (5% * $50) and
         //     1 commission invoice has been created from DemoSalesRep4 to Company for $1.50 (5% * $30)
-        conditions = Arrays.asList(
-                new EntityExpr("invoiceDate", EntityOperator.GREATER_THAN, now),
-                new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, agentPartyId)
+        conditions = Arrays.<EntityCondition>asList(
+                EntityCondition.makeCondition("invoiceDate", EntityOperator.GREATER_THAN, now),
+                EntityCondition.makeCondition("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, agentPartyId)
         );
-        List<GenericValue> invoices = delegator.findByCondition("Invoice", new EntityConditionList(conditions, EntityOperator.AND), null, null);
+        List<GenericValue> invoices = delegator.findByCondition("Invoice", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, null);
         assertEquals("Wrong count of comission invoices", 2, invoices.size());
 
         BigDecimal commInv1Total = InvoiceWorker.getInvoiceTotal(invoices.get(0));
@@ -346,23 +352,23 @@ public class CommissionInvoiceTests extends FinancialsTestCase {
         financialAsserts.updatePaymentStatus(paymentId3, "PMNT_VOID");
 
         // 15. Verify that no new commission invoice has been created for DemoSalesRep4 since (8) above.
-        conditions = Arrays.asList(
-                new EntityExpr("invoiceDate", EntityOperator.GREATER_THAN, now),
-                new EntityExpr("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, agentPartyId)
+        conditions = Arrays.<EntityCondition>asList(
+                EntityCondition.makeCondition("invoiceDate", EntityOperator.GREATER_THAN, now),
+                EntityCondition.makeCondition("invoiceTypeId", EntityOperator.EQUALS, "COMMISSION_INVOICE"),
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, agentPartyId)
         );
-        count = delegator.findCountByCondition("Invoice", new EntityConditionList(conditions, EntityOperator.AND), null);
+        count = delegator.findCountByCondition("Invoice", EntityCondition.makeCondition(conditions, EntityOperator.AND), null);
         assertEquals("No new commission invoices should be created from last ckeck.", 0, count);
 
         // verify that the agreement term billing report entity has the right values for the agent
         // note that these amounts do not include manual adjustments as above, so the invoice expected totals are different
         List<String> fields = UtilMisc.toList("partyIdFrom", "agentPartyId", "amount", "origInvoiceId");
-        conditions = Arrays.asList(
-                new EntityExpr("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
-                new EntityExpr("origInvoiceId", EntityOperator.IN, UtilMisc.toList(invoiceId1, invoiceId2)),
-                new EntityExpr("agentPartyId", EntityOperator.EQUALS, agentPartyId)
+        conditions = Arrays.<EntityCondition>asList(
+                EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, organizationPartyId),
+                EntityCondition.makeCondition("origInvoiceId", EntityOperator.IN, UtilMisc.toList(invoiceId1, invoiceId2)),
+                EntityCondition.makeCondition("agentPartyId", EntityOperator.EQUALS, agentPartyId)
         );
-        List<GenericValue> report = delegator.findByCondition("AgreementBillingAndInvoiceSum", new EntityConditionList(conditions, EntityOperator.AND), fields, null);
+        List<GenericValue> report = delegator.findByCondition("AgreementBillingAndInvoiceSum", EntityCondition.makeCondition(conditions, EntityOperator.AND), fields, null);
         BigDecimal agentTotal = BigDecimal.ZERO;
         for (GenericValue line : report) {
             agentTotal = agentTotal.add(line.getBigDecimal("amount"));
