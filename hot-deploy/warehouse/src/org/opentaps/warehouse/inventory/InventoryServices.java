@@ -287,16 +287,16 @@ public final class InventoryServices {
                 }
                 try {
                     if (UtilValidate.isNotEmpty((String) quantitiesAccepted.get(rowNumber))) {
-                        context.put("quantityAccepted", new BigDecimal(UtilCommon.parseLocalizedNumber(locale, (String) quantitiesAccepted.get(rowNumber))));
+                        context.put("quantityAccepted", UtilCommon.parseLocalizedNumber(locale, (String) quantitiesAccepted.get(rowNumber)));
                     }
                     if (UtilValidate.isNotEmpty((String) quantitiesAccepted.get(rowNumber))) {
-                        context.put("quantity", new BigDecimal(UtilCommon.parseLocalizedNumber(locale, (String) quantitiesAccepted.get(rowNumber))));
+                        context.put("quantity", UtilCommon.parseLocalizedNumber(locale, (String) quantitiesAccepted.get(rowNumber)));
                     }
                     if (UtilValidate.isNotEmpty((String) quantitiesRejected.get(rowNumber))) {
-                        context.put("quantityRejected", new BigDecimal(UtilCommon.parseLocalizedNumber(locale, (String) quantitiesRejected.get(rowNumber))));
+                        context.put("quantityRejected", UtilCommon.parseLocalizedNumber(locale, (String) quantitiesRejected.get(rowNumber)));
                     }
                     if (UtilValidate.isNotEmpty((String) unitCosts.get(rowNumber))) {
-                        context.put("unitCost", new BigDecimal(UtilCommon.parseLocalizedNumber(locale, (String) unitCosts.get(rowNumber))));
+                        context.put("unitCost", UtilCommon.parseLocalizedNumber(locale, (String) unitCosts.get(rowNumber)));
                     }
                 } catch (ParseException e) {
                     Debug.logError(e, MODULE);

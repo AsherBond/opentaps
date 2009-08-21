@@ -1167,16 +1167,17 @@ public abstract class UtilCommon {
     }
 
     /**
-     * Converts a localized number <code>String</code> to a <code>double</code> using the given <code>Locale</code>, defaulting to the system <code>Locale</code>.
+     * Converts a localized number <code>String</code> to a <code>BigDecimal</code> using the given <code>Locale</code>, defaulting to the system <code>Locale</code>.
      * @param locale the <code>Locale</code> to use for parsing the number, optional, defaults to the system <code>Locale</code>
-     * @param numberString a <code>String</code> to convert to a <code>double</code>
-     * @return the corresponding <code>double</code> value
+     * @param numberString a <code>String</code> to convert to a <code>BigDecimal</code>
+     * @return the corresponding <code>BigDecimal</code> value
      * @throws ParseException if an occurs during parsing
      */
-    public static double parseLocalizedNumber(Locale locale, String numberString) throws ParseException {
+    public static BigDecimal parseLocalizedNumber(Locale locale, String numberString) throws ParseException {
         locale = UtilMisc.ensureLocale(locale);
-        NumberFormat parser = DecimalFormat.getNumberInstance(locale);
-        return parser.parse(numberString).doubleValue();
+        NumberFormat parser = NumberFormat.getNumberInstance(locale);
+        Number n = parser.parse(numberString);
+        return new BigDecimal(n.toString());
     }
 
     /**

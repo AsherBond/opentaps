@@ -508,7 +508,7 @@ public final class InvoiceServices {
             }
 
             try {
-                invoiceAmount = invoiceAmount.add(new BigDecimal(UtilCommon.parseLocalizedNumber(locale, (String) amounts.get(rowNumber)))).setScale(decimals, rounding);
+                invoiceAmount = invoiceAmount.add(UtilCommon.parseLocalizedNumber(locale, (String) amounts.get(rowNumber))).setScale(decimals, rounding);
             } catch (ParseException e) {
                 return ServiceUtil.returnError(e.getMessage());
             }
@@ -1770,15 +1770,15 @@ public final class InvoiceServices {
                 String invoiceId = (String) invoiceIds.get(rowNumber);
                 String paymentRefNum = (String) paymentRefNums.get(rowNumber);
                 String trackingCode = (String) trackingCodes.get(rowNumber);
-                Double amount = null;
+                BigDecimal amount = null;
                 try {
-                    amount = new Double(UtilCommon.parseLocalizedNumber(locale, (String) amounts.get(rowNumber)));
+                    amount = UtilCommon.parseLocalizedNumber(locale, (String) amounts.get(rowNumber));
                 } catch (ParseException e) {
                     Debug.logError(e, MODULE);
                     return ServiceUtil.returnError(e.getMessage());
                 }
 
-                if (amount.doubleValue() <= 0) {
+                if (amount.signum() <= 0) {
                     continue;
                 }
 
@@ -1788,7 +1788,7 @@ public final class InvoiceServices {
                 }
 
                 // Create an invoice item for the COD invoice to the carrier
-                Map createInvoiceItemContext = UtilMisc.toMap("invoiceId", codInvoiceId, "invoiceItemTypeId", "ITM_BILL_FRM_COD", "amount", new BigDecimal(amount), "userLogin", userLogin);
+                Map createInvoiceItemContext = UtilMisc.toMap("invoiceId", codInvoiceId, "invoiceItemTypeId", "ITM_BILL_FRM_COD", "amount", amount, "userLogin", userLogin);
                 createInvoiceItemContext.put("description", trackingCode);
                 Map createInvoiceItemResult = dispatcher.runSync("createInvoiceItem", createInvoiceItemContext);
                 if (ServiceUtil.isError(createInvoiceItemResult)) {
@@ -1799,7 +1799,7 @@ public final class InvoiceServices {
                 Map paymentContext = UtilMisc.toMap("paymentMethodTypeId", "EXT_BILL_3RDPTY_COD", "statusId", "PMNT_RECEIVED", "currencyUomId", currencyUomId, "userLogin", userLogin);
                 paymentContext.put("paymentTypeId", "CUSTOMER_PAYMENT");
                 paymentContext.put("paymentRefNum", paymentRefNum);
-                paymentContext.put("amount", new BigDecimal(amount));
+                paymentContext.put("amount", amount);
                 paymentContext.put("partyIdTo", organizationPartyId);
                 paymentContext.put("partyIdFrom", invoice.get("partyId"));
                 Map createPaymentResult = dispatcher.runSync("createPayment", paymentContext);
@@ -1808,7 +1808,7 @@ public final class InvoiceServices {
                 }
                 String paymentId = (String) createPaymentResult.get("paymentId");
 
-                Map paymentApplicationContext = UtilMisc.toMap("paymentId", paymentId, "invoiceId", invoiceId, "amountApplied", new BigDecimal(amount), "userLogin", userLogin);
+                Map paymentApplicationContext = UtilMisc.toMap("paymentId", paymentId, "invoiceId", invoiceId, "amountApplied", amount, "userLogin", userLogin);
                 Map createPaymentApplicationResult = dispatcher.runSync("createPaymentApplication", paymentApplicationContext);
                 if (ServiceUtil.isError(createPaymentApplicationResult)) {
                     return createPaymentApplicationResult;
