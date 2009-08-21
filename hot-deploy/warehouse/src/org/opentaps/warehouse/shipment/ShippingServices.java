@@ -397,7 +397,7 @@ public final class ShippingServices {
                     return ServiceUtil.returnSuccess();
                 }
 
-                Map<String, Object> updateShipmentPackageContext = UtilMisc.<String, Object>toMap("shipmentId", shipmentId, "shipmentPackageSeqId", pkg.getString("shipmentPackageSeqId"), "insuredValue", new Double(packageValue.doubleValue()), "userLogin", userLogin, "locale", locale);
+                Map<String, Object> updateShipmentPackageContext = UtilMisc.<String, Object>toMap("shipmentId", shipmentId, "shipmentPackageSeqId", pkg.getString("shipmentPackageSeqId"), "insuredValue", packageValue, "userLogin", userLogin, "locale", locale);
                 Map<String, Object> updateShipmentPackageResult = dispatcher.runSync("updateShipmentPackage", updateShipmentPackageContext);
                 if (ServiceUtil.isError(updateShipmentPackageResult)) {
                     return updateShipmentPackageResult;
