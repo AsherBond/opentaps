@@ -74,6 +74,17 @@ applications/accounting/ofbiz-component.xml
 applications/accounting/src/org/ofbiz/accounting/invoice/InvoiceServices.java
 - fix updatePaymentApplication, it only worked if the payment was fully applied
 
+applications/accounting/data/AccountingTypeData.xml
+- The following AcctgTransType were removed from Ofbiz as they already exist in opentaps with slightly different acctgTransTypeId:
+ * (exists)             -> (removed)
+ * DISBURSEMENT_ACCTG_T -> DISBURSEMENT
+ * RECEIPT_ACCTG_TRANS  -> RECEIPT
+ * ITEM_VARIANCE_ACCTG_ -> ITEM_VARIANCE
+ * MANUFACTURING_ATX    -> MANUFACTURING
+ * OTHER_INTERNAL_ACCTG -> OTHER_INTERNAL
+ * SALES_ACCTG_TRANS    -> SALES
+ 
+
 Other API Changes
 -----------------
 
