@@ -977,10 +977,7 @@ public class PurchasingOrderTests extends OpentapsTestCase {
         }
 
         // update physical order item to 20x at $20 each
-        // NOTE right now this must precede adding shipping charge or it will
-        // get erased when ofbiz recalculates shipping
-        updateOrderItem(orderId, physicalOrderItemSeqId, "20.0", "20.0", "Item after new quantity and price updated", admin);
-
+        updatePurchaseOrderItem(orderId, physicalOrderItemSeqId, "20.0", "20.0", "Item after new quantity and price updated", admin);
         // add a shipping charge to the PO
         runAndAssertServiceSuccess("createOrderAdjustment", UtilMisc.toMap("orderId", orderId, "orderAdjustmentTypeId", "SHIPPING_CHARGES", "amount", new BigDecimal(25.99), "description", "example of shipping adjustment at order level", "userLogin", admin));
 
