@@ -1441,7 +1441,7 @@ public final class OpentapsMrpServices {
         //  * PF_RM_SPECIF:     transfer only from the specified backup warehouse if inventory is available
         //  * PF_RM_BACKUP_ALW:  always transfer from the backup warehouses, even if they have no inventory
         //  * PF_RM_SPECIF_ALW: always transfer from the specified backup warehouse, even if it has no inventory
-
+        Debug.logInfo("transferInventoryForMrp maxTransferQuantity : " + maxTransferQuantity, MODULE);
         // get the configured option
         String replenishMethod = "PF_RM_BACKUP";
         String specifiedFacilityId = null;
@@ -1549,7 +1549,7 @@ public final class OpentapsMrpServices {
                     quantityTransferred = new BigDecimal(transferQuantity).setScale(decimals + 1, defaultRoundingMode);
                 } else {
                     Debug.logInfo("Creating transfer requirement is not turned on.  Will be creating inventory transfers directly", MODULE);
-
+                    Debug.logInfo("facilityIdFrom [" + backupFacilityId + "] facilityIdTo [" + facilityId + "] productId [" + productId + "] sendDate [" + transferTimestamp + "] transferQuantity" + new BigDecimal(transferQuantity), MODULE);
                     // the inventory transfer is created from the backup facility to our MRP facility.  The quantity is the lower of remaining quantity to transfer and the maxTransferQuantity
                     // the transfer is scheduled to take place right before required event time stamp (see above)
                     Map inventoryTransferParams = UtilMisc.toMap("facilityIdFrom", backupFacilityId, "facilityIdTo", facilityId,
