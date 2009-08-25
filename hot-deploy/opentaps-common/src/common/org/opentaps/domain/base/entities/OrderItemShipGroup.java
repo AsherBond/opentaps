@@ -616,6 +616,7 @@ fieldMapColumns.put("OrderItemShipGroup", fields);
     /**
      * Auto generated value accessor.
      * @return <code>Timestamp</code>
+     * @throws RepositoryException 
      */
     public Timestamp getEstimatedShipDate() {
         return this.estimatedShipDate;
