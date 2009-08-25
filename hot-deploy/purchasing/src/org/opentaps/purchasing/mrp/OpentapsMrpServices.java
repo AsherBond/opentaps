@@ -1321,7 +1321,7 @@ public final class OpentapsMrpServices {
                                         "facilityId", facilityId
                                 );
                                 // TODO: Should this be shifted forward as well as it's a positive inventory event?
-                                // Debug.logInfo("about to create inventory event " + eventMap, MODULE);
+                                 Debug.logInfo("about to create inventory event " + eventMap + ", quantity " + proposedOrder.getQuantity() + ", requirementId " + requirementId, MODULE);
 
                                 // don't create event if requirement hasn't been created
                                 if (UtilValidate.isNotEmpty(requirementId)) {

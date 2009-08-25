@@ -248,5 +248,31 @@ under the License.
         <attribute name="inventoryItemIds" type="List" mode="OUT" optional="false"/>
     </service>
 
+    <service name="issueProductionRunTask" engine="simple"
+                location="com/opensourcestrategies/warehouse/manufacturing/ProductionRunServices.xml" invoke="issueProductionRunTask" auth="false">
+        <description>
+            Issues the Inventory for a Production Run Task.
+            Note that this skips the normal inventory reservation process.
+        </description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="reserveOrderEnumId" type="String" mode="IN" optional="true"/>
+        <!-- failIfItemsAreNotAvailable/failIfItemsAreNotOnHand are added in ofbiz 9.04, keep them just only for compatible ofbiz codes  -->
+        <attribute name="failIfItemsAreNotAvailable" type="String" mode="IN" optional="true"/>
+        <attribute name="failIfItemsAreNotOnHand" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="issueProductionRunTaskComponent" engine="simple"
+                location="com/opensourcestrategies/warehouse/manufacturing/ProductionRunServices.xml" invoke="issueProductionRunTaskComponent" auth="false">
+        <description>
+            Issues the Inventory for a Production Run Task Component. For more info see the issueProductionRunTask service.
+        </description>
+        <attribute name="workEffortId" type="String" mode="IN" optional="false"/>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="quantity" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="workEffort" type="GenericValue" mode="IN" optional="true"/>
+        <attribute name="workEffortGoodStandard" type="GenericValue" mode="IN" optional="true"/>
+        <attribute name="reserveOrderEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="reasonEnumId" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+    </service>    
 </services>
 

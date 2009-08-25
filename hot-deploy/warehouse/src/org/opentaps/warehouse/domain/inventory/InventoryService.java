@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -43,6 +44,8 @@ public class InventoryService extends Service implements InventoryServiceInterfa
     private static final String MODULE = InventoryService.class.getName();
 
     private String productId = null;
+    private String statusId = null;
+    private String facilityId = null;
 
     private BigDecimal quantityOnHandTotal = null;
     private BigDecimal availableToPromiseTotal = null;
@@ -64,6 +67,16 @@ public class InventoryService extends Service implements InventoryServiceInterfa
     }
 
     /** {@inheritDoc} */
+    public void setStatusId(String statusId) {
+        this.statusId = statusId;
+    }
+    
+    /** {@inheritDoc} */
+    public void setFacilityId(String facilityId) {
+        this.facilityId = facilityId;
+    }    
+    
+    /** {@inheritDoc} */
     public void setUseCache(Boolean useCache) {
     }
 
@@ -82,13 +95,23 @@ public class InventoryService extends Service implements InventoryServiceInterfa
         try {
             InventoryDomainInterface inventoryDomain = getDomainsDirectory().getInventoryDomain();
             InventoryRepositoryInterface inventoryRepository = inventoryDomain.getInventoryRepository();
-
+            Debug.logInfo("I'm running the opentaps getProductInventoryAvailable", MODULE);
             List<InventoryItem> items = inventoryRepository.getInventoryItemsForProductId(productId);
 
             availableToPromiseTotal = BigDecimal.ZERO;
             quantityOnHandTotal = BigDecimal.ZERO;
 
             for (InventoryItem item : items) {
+                //TODO: it is not a efficient method to filter inventory item by facilityId/statusId, we should add another method in inventoryRepository
+                // to get match result directly.
+                // filter other status item
+                if (statusId != null && !item.getStatusId().equals(statusId)) {
+                    continue;
+                }
+                // filter other facilityId item 
+                if (facilityId != null && !item.getFacilityId().equals(facilityId)) {
+                    continue;
+                }
                 availableToPromiseTotal = availableToPromiseTotal.add(item.getNetATP());
                 quantityOnHandTotal = quantityOnHandTotal.add(item.getNetQOH());
             }

@@ -31,6 +31,18 @@ public interface InventoryServiceInterface extends ServiceInterface {
      * @param productId a <code>String</code> value
      */
     public void setProductId(String productId);
+    
+    /**
+     * Sets the facility ID, required parameter for {@link #getInventoryAvailableByFacility}.
+     * @param facilityId a <code>String</code> value
+     */
+    public void setFacilityId(String facilityId);
+    
+    /**
+     * Sets the status ID, required parameter for {@link #getInventoryAvailableByFacility}.
+     * @param statusId a <code>String</code> value
+     */
+    public void setStatusId(String statusId);
 
     /**
      * Sets the use cache setting, optional parameter for {@link #getProductInventoryAvailable}, defaults to <code>false</code>.

@@ -102,6 +102,16 @@ under the License.
         <attribute name="useCache" type="Boolean" mode="IN" optional="true"/>
     </service>
 
+    <service name="getInventoryAvailableByFacility" engine="pojo" location="org.opentaps.warehouse.domain.inventory.InventoryService" invoke="getProductInventoryAvailable" auth="false" use-transaction="false">
+        <description>Get Inventory Availability for a Product constrained by a facilityId</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
+        <attribute name="facilityId" type="String" mode="IN" optional="false"/>
+        <attribute name="statusId" type="String" mode="IN" optional="true"/>
+        <attribute name="quantityOnHandTotal" type="BigDecimal" mode="OUT" optional="false"/>
+        <attribute name="availableToPromiseTotal" type="BigDecimal" mode="OUT" optional="false"/>
+        <attribute name="useCache" type="Boolean" mode="IN" optional="true"/>
+    </service>
+    
     <service name="prepareInventoryTransfer" engine="pojo" location="org.opentaps.warehouse.domain.inventory.InventoryService" invoke="prepareInventoryTransfer" auth="true">
         <description>Service to prepare an inventory transfer, returns the inventory item id of the destination inventory item.</description>
         <attribute name="inventoryItemId" type="String" mode="INOUT" optional="false"/>

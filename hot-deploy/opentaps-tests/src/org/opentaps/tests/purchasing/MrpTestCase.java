@@ -453,6 +453,12 @@ public class MrpTestCase extends OpentapsTestCase {
                             new EntityExpr("productId", EntityOperator.EQUALS, productId),
                             new EntityExpr("sendDate", EntityOperator.NOT_EQUAL, null),
                             new EntityExpr("quantityOnHandTotal", EntityOperator.EQUALS, quantity));
+        Debug.logInfo("assertInventoryTransferRequested facilityIdFrom : [" + facilityIdFrom
+                + "], facilityIdTo : [" + facilityIdTo + "]"
+                + "], productId : [" + productId + "]"
+                + "], sendDate : [not null]"
+                + "], quantityOnHandTotal : [" + quantity + "]"
+                , MODULE);
             List<GenericValue> invTransfers = delegator.findByAnd("InventoryTransferAndItem",  invTransCond);
             assertEquals(String.format("Wrong number of requested inbound inventory transfers of product [%1$s]", productId), 1, invTransfers.size());
             return EntityUtil.getFirst(invTransfers).getString("inventoryTransferId");

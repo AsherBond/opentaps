@@ -135,7 +135,7 @@ public final class ProductionRunServices {
         BigDecimal quantityTransferred = new BigDecimal("0.0");
         List<String> inventoryTransferIds = new LinkedList<String>();
 
-        if (transferQuantity.compareTo(BigDecimal.ZERO) > 0) {
+        if (transferQuantity.compareTo(BigDecimal.ZERO) < 0) {
             return UtilMessage.createAndLogServiceFailure("Request to transfer quantity [" + transferQuantity + "] of [" + productId + "] from [" + facilityIdFrom + "] to [" + facilityIdTo + "] cannot be completed because you cannot transfer a quantity less than zero", MODULE);
         }
 
