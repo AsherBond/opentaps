@@ -30,14 +30,14 @@
 
     <!-- Component 1 of test product 1 -->
     <Product productId="PRUNTEST_COMP1" productTypeId="RAW_MATERIAL" internalName="Demo Material A for Costing" description="Demo Material A for Standard Costing" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
-    <SupplierProduct partyId="DemoSupplier" productId="PRUNTEST_COMP1" minimumOrderQuantity="0" currencyUomId="USD" lastPrice="9.0" supplierProductId="PRUNTEST_COMP1" supplierProductName="Component 1 for Prun Test Product 1" availableFromDate="2008-01-01 12:00:00.0"/>
+    <SupplierProduct partyId="DemoSupplier" productId="PRUNTEST_COMP1" supplierPrefOrderId="10_MAIN_SUPPL" minimumOrderQuantity="0" currencyUomId="USD" lastPrice="9.0" supplierProductId="PRUNTEST_COMP1" supplierProductName="Component 1 for Prun Test Product 1" availableFromDate="2008-01-01 12:00:00.0"/>
     <ProductFacility productId="PRUNTEST_COMP1" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
     <CostComponent costComponentId="TESTPRUNCC1" costComponentTypeId="EST_STD_MAT_COST" productId="PRUNTEST_COMP1" fromDate="2008-01-01 12:00:00.0" costUomId="USD" cost="9"/>
     <ProductGlAccount organizationPartyId="Company" productId="PRUNTEST_COMP1" glAccountTypeId="INVENTORY_ACCOUNT" glAccountId="141000"/>
 
     <!-- Component 2 of test product 1 -->
     <Product productId="PRUNTEST_COMP2" productTypeId="RAW_MATERIAL" internalName="Demo Material A for Costing" description="Demo Material A for Standard Costing" isVirtual="N" isVariant="N" billOfMaterialLevel="1"/>
-    <SupplierProduct partyId="DemoSupplier" productId="PRUNTEST_COMP2" minimumOrderQuantity="0" currencyUomId="USD" lastPrice="7.0" supplierProductId="PRUNTEST_COMP2" supplierProductName="Component 2 for Prun Test Product 1" availableFromDate="2008-01-01 12:00:00.0"/>
+    <SupplierProduct partyId="DemoSupplier" productId="PRUNTEST_COMP2" supplierPrefOrderId="10_MAIN_SUPPL" minimumOrderQuantity="0" currencyUomId="USD" lastPrice="7.0" supplierProductId="PRUNTEST_COMP2" supplierProductName="Component 2 for Prun Test Product 1" availableFromDate="2008-01-01 12:00:00.0"/>
     <ProductFacility productId="PRUNTEST_COMP2" facilityId="WebStoreWarehouse" minimumStock="0" reorderQuantity="5" daysToShip="1"/>
     <CostComponent costComponentId="TESTPRUNCC2" costComponentTypeId="EST_STD_MAT_COST" productId="PRUNTEST_COMP2" fromDate="2008-01-01 12:00:00.0" costUomId="USD" cost="7"/>
     <ProductGlAccount organizationPartyId="Company" productId="PRUNTEST_COMP2" glAccountTypeId="INVENTORY_ACCOUNT" glAccountId="141000"/>
