@@ -71,30 +71,24 @@ public class OrderItemShipGroup extends org.opentaps.domain.base.entities.OrderI
      */
     public Timestamp getEstimatedShipDate() {
         if (estimatedShipDate == null) {
-            Timestamp result = super.getEstimatedShipDate();
-
+            Timestamp result = null;
             try {
-                for (OrderItemShipGrpInvRes res : getInventoryReservations()) {
-                    if (res.getPromisedDatetime() == null) {
-                        continue;
-                    }
-
-                    if (result == null) {
-                        result = res.getPromisedDatetime();
-                    } else if ("Y".equals(getMaySplit())) {
-                        if (res.getPromisedDatetime().before(result)) {
-                            result = res.getPromisedDatetime();
-                        }
-                    } else {
-                        if (res.getPromisedDatetime().after(result)) {
-                            result = res.getPromisedDatetime();
-                        }
-                    }
+            for (OrderItemShipGrpInvRes res : getInventoryReservations()) {
+                if (res.getPromisedDatetime() == null) {
+                    continue;
                 }
-            } catch (RepositoryException e) {
-                Debug.logError(e, MODULE);
-            }
 
+                if (result == null) {
+                    result = res.getPromisedDatetime();
+                } else if ("Y".equals(getMaySplit())) {
+                    if (res.getPromisedDatetime().before(result)) { result = res.getPromisedDatetime(); }
+                } else {
+                    if (res.getPromisedDatetime().after(result)) { result = res.getPromisedDatetime(); }
+                }
+            }
+        } catch (RepositoryException e) {
+            Debug.logError(e, MODULE);
+        }
             estimatedShipDate = result;
         }
         return estimatedShipDate;
