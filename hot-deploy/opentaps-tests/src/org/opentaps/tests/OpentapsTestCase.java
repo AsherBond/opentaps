@@ -1573,12 +1573,28 @@ public class OpentapsTestCase extends TestCase {
      * @throws GeneralException
      */
     protected void updateOrderItem(String orderId, String orderItemSeqId, String newQuantity, String newUnitPrice, String newDescription, GenericValue userLogin) throws GeneralException {
+        updateOrderItem(orderId, orderItemSeqId, 1, newQuantity, newUnitPrice, newDescription, userLogin);
+    }
+
+    /**
+     * Method to simulate the edit/add order item form's call to updateOrderItem service.
+     * @param orderId
+     * @param orderItemSeqId
+     * @param groupIdx the index of the shipping group to update, default to 1 (the first group)
+     * @param newQuantity
+     * @param newUnitPrice set to null if you don't want to change the price
+     * @param newDescription
+     * orderItemSeqIds should override price.
+     * @param userLogin
+     * @throws GeneralException
+     */
+    protected void updateOrderItem(String orderId, String orderItemSeqId, int groupIdx, String newQuantity, String newUnitPrice, String newDescription, GenericValue userLogin) throws GeneralException {
         // these parameters match the web form for update order item
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("userLogin", userLogin);
         callCtxt.put("orderId", orderId);
         callCtxt.put("itemDescriptionMap", UtilMisc.toMap(orderItemSeqId, newDescription));
-        callCtxt.put("itemQtyMap", UtilMisc.toMap(orderItemSeqId + ":" + orderItemSeqId, newQuantity));
+        callCtxt.put("itemQtyMap", UtilMisc.toMap(orderItemSeqId + ":" + groupIdx, newQuantity));
         callCtxt.put("itemPriceMap", UtilMisc.toMap(orderItemSeqId, newUnitPrice));
         if (newUnitPrice != null) {
             // this is a Map of orderItemSeqId checkboxes, so "Y" denotes update this price
@@ -1601,14 +1617,29 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin
      * @throws GeneralException is exception occur
      */
-    protected void updatePurchaseOrderItem(String orderId, String orderItemSeqId, String newQuantity, String newUnitPrice, String newDescription,
-                                   GenericValue userLogin) throws GeneralException {
+    protected void updatePurchaseOrderItem(String orderId, String orderItemSeqId, String newQuantity, String newUnitPrice, String newDescription, GenericValue userLogin) throws GeneralException {
+        updatePurchaseOrderItem(orderId, orderItemSeqId, 1, newQuantity, newUnitPrice, newDescription, userLogin);
+    }
+
+    /**
+     * Method to simulate the edit/add order item form's call to updateOrderItem service.
+     * @param orderId
+     * @param orderItemSeqId
+     * @param groupIdx the index of the shipping group to update, default to 1 (the first group)
+     * @param newQuantity
+     * @param newUnitPrice set to null if you don't want to change the price
+     * @param newDescription
+     * orderItemSeqIds should override price.
+     * @param userLogin
+     * @throws GeneralException is exception occur
+     */
+    protected void updatePurchaseOrderItem(String orderId, String orderItemSeqId, int groupIdx, String newQuantity, String newUnitPrice, String newDescription, GenericValue userLogin) throws GeneralException {
         // these parameters match the web form for update order item
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("userLogin", userLogin);
         callCtxt.put("orderId", orderId);
         callCtxt.put("itemDescriptionMap", UtilMisc.toMap(orderItemSeqId, newDescription));
-        callCtxt.put("itemQtyMap", UtilMisc.toMap(orderItemSeqId + ":" + orderItemSeqId, newQuantity));
+        callCtxt.put("itemQtyMap", UtilMisc.toMap(orderItemSeqId + ":" + groupIdx, newQuantity));
         callCtxt.put("itemPriceMap", UtilMisc.toMap(orderItemSeqId, newUnitPrice));
         if (newUnitPrice != null) {
             // this is a Map of orderItemSeqId checkboxes, so "Y" denotes update this price
