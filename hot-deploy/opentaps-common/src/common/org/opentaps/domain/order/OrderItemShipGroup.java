@@ -66,35 +66,6 @@ public class OrderItemShipGroup extends org.opentaps.domain.base.entities.OrderI
     }
 
     /**
-     * Gets the estimated ship date base on the estimated ship date of this ship group and the promisedDate of the related <code>OrderItemShipGrpInvRes</code>.
-     * @return the estimated ship date
-     */
-    public Timestamp getEstimatedShipDate() {
-        if (estimatedShipDate == null) {
-            Timestamp result = null;
-            try {
-            for (OrderItemShipGrpInvRes res : getInventoryReservations()) {
-                if (res.getPromisedDatetime() == null) {
-                    continue;
-                }
-
-                if (result == null) {
-                    result = res.getPromisedDatetime();
-                } else if ("Y".equals(getMaySplit())) {
-                    if (res.getPromisedDatetime().before(result)) { result = res.getPromisedDatetime(); }
-                } else {
-                    if (res.getPromisedDatetime().after(result)) { result = res.getPromisedDatetime(); }
-                }
-            }
-        } catch (RepositoryException e) {
-            Debug.logError(e, MODULE);
-        }
-            estimatedShipDate = result;
-        }
-        return estimatedShipDate;
-    }
-
-    /**
      * Gets the supplier <code>Party</code> for this order item ship group.
      * @return the supplier party domain object
      * @exception RepositoryException if an error occurs

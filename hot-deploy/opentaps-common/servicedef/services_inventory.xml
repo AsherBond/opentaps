@@ -119,4 +119,12 @@
         <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
     </service>
 
+    <service name="setOrderItemShipGroupEstimatedShipDate" engine="pojo" transaction-timeout="600" location="org.opentaps.common.domain.inventory.OrderInventoryService" invoke="setOrderItemShipGroupEstimatedShipDate" auth="true">
+        <description>set the OrderItemShipGroup estimatedShipDate according to the reservations promisedDatetime</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="orderItemSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="false"/>
+    </service>
+
 </services>

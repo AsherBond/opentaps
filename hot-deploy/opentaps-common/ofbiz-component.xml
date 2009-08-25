@@ -58,7 +58,7 @@
     <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_workeffort.xml"/>
     <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_custrequest.xml"/>
     <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_product.xml"/>
-
+    <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_reservation.xml"/>
     <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas_party.xml"/>
 
     <service-resource type="model" loader="main" location="servicedef/services_agreement.xml"/>

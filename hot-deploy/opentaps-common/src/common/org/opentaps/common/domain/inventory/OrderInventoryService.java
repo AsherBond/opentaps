@@ -297,7 +297,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
     public void setFacilityId(String facilityId) {
         this.facilityId = facilityId;
     }
-    
+
     /** {@inheritDoc} */
     public void setPriority(String priority) {
         this.priority = priority;
@@ -794,6 +794,34 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
               input.put("inventoryItemId", this.inventoryItemId);
               runSync("decomposeInventoryItem", input);
             }
+        } catch (GeneralException ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    /** {@inheritDoc} */
+    public void setOrderItemShipGroupEstimatedShipDate() throws ServiceException {
+        try {
+            InventoryDomainInterface inventoryDomain = getDomainsDirectory().getInventoryDomain();
+            InventoryRepositoryInterface inventoryRepository = inventoryDomain.getInventoryRepository();
+            // make sure the reservation exists
+            OrderItemShipGrpInvRes reservation = inventoryRepository.findOneNotNull(OrderItemShipGrpInvRes.class, inventoryRepository.map(OrderItemShipGrpInvRes.Fields.orderId, orderId,
+                                                                                                                                   OrderItemShipGrpInvRes.Fields.orderItemSeqId, orderItemSeqId,
+                                                                                                                                   OrderItemShipGrpInvRes.Fields.shipGroupSeqId, shipGroupSeqId,
+                                                                                                                                   OrderItemShipGrpInvRes.Fields.inventoryItemId, inventoryItemId));
+            // get the ship group to update
+            org.opentaps.domain.base.entities.OrderItemShipGroup shipGroup = reservation.getOrderItemShipGroup();
+
+            // calculate the ship group estimatedShipDate from all its reservations
+            Map<String, Object> input = createInputMap();
+            input.put("orderId", orderId);
+            input.put("shipGroupSeqId", shipGroupSeqId);
+            Map<String, Object> result = runSync("getOrderItemShipGroupEstimatedShipDate", input);
+            Timestamp estimatedShipDate = (Timestamp) result.get("estimatedShipDate");
+
+            // update the ship group estimatedShipDate
+            shipGroup.setEstimatedShipDate(estimatedShipDate);
+            inventoryRepository.update(shipGroup);
         } catch (GeneralException ex) {
             throw new ServiceException(ex);
         }
