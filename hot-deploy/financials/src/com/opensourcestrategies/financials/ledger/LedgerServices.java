@@ -2718,21 +2718,21 @@ public final class LedgerServices {
                     }
                 }
             }
-            // if transEntries is empty, then return directly, else createAcctgTransAndEntries will throw exception
-            if (UtilValidate.isNotEmpty(transEntries)) {
-                // Perform the transaction
-                input = UtilMisc.toMap("transactionDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin);
-                input.put("acctgTransEntries", transEntries);
-                input.put("glFiscalTypeId", "ACTUAL");
-                input.put("acctgTransTypeId", "MANUFACTURING_ATX");
-                input.put("workEffortId", workEffortId);
-    
-                Map servResult = dispatcher.runSync("createAcctgTransAndEntries", input);
-    
-                if (ServiceUtil.isError(servResult)) {
-                    return servResult;
-                }
+            // Perform the transaction
+            input = UtilMisc.toMap("transactionDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin);
+            input.put("acctgTransEntries", transEntries);
+            input.put("glFiscalTypeId", "ACTUAL");
+            input.put("acctgTransTypeId", "MANUFACTURING_ATX");
+            input.put("workEffortId", workEffortId);
+
+            Map servResult = dispatcher.runSync("createAcctgTransAndEntries", input);
+
+            if (ServiceUtil.isError(servResult)) {
+                return servResult;
             }
+
+            Map result = ServiceUtil.returnSuccess();
+            result.put("acctgTransId", servResult.get("acctgTransId"));
 
         } catch (GenericEntityException ex) {
             return ServiceUtil.returnError(ex.getMessage());
@@ -2818,20 +2818,21 @@ public final class LedgerServices {
                 }
             }
             // Perform the transaction
-            // if transEntries is empty, then return directly, else createAcctgTransAndEntries will throw exception
-            if (UtilValidate.isNotEmpty(transEntries)) {
-                input = UtilMisc.toMap("transactionDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin);
-                input.put("acctgTransEntries", transEntries);
-                input.put("glFiscalTypeId", "ACTUAL");
-                input.put("acctgTransTypeId", "MANUFACTURING_ATX");
-                input.put("workEffortId", workEffortId);
-    
-                Map servResult = dispatcher.runSync("createAcctgTransAndEntries", input);
-    
-                if (ServiceUtil.isError(servResult)) {
-                    return servResult;
-                }
+            input = UtilMisc.toMap("transactionDate", UtilDateTime.nowTimestamp(), "userLogin", userLogin);
+            input.put("acctgTransEntries", transEntries);
+            input.put("glFiscalTypeId", "ACTUAL");
+            input.put("acctgTransTypeId", "MANUFACTURING_ATX");
+            input.put("workEffortId", workEffortId);
+
+            Map servResult = dispatcher.runSync("createAcctgTransAndEntries", input);
+
+            if (ServiceUtil.isError(servResult)) {
+                return servResult;
             }
+
+            Map result = ServiceUtil.returnSuccess();
+            result.put("acctgTransId", servResult.get("acctgTransId"));
+
         } catch (GeneralException ex) {
             return ServiceUtil.returnError(ex.getMessage());
         }

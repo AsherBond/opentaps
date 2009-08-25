@@ -281,4 +281,21 @@
         <attribute name="customTimePeriodId" type="String" mode="IN" optional="false"/>
     </service>   
 
+    <service name="createAcctgTransAndEntries" engine="simple"
+        location="com/opensourcestrategies/financials/ledger/GeneralLedgerServices.xml" invoke="createAcctgTransAndEntries" default-entity-name="AcctgTrans">
+        <description>
+            Takes a list of AcctgTransEntry entries, verifies that the list of entries are valid (GL account and organizationParty exist),
+            and then creates an AcctgTrans entry and stores all the AcctgTransEntries with the acctgTransId.  Note that this does not actually
+            check that the debits and credits balance out.  The idea is that unbalanced transactions can be created here, but they will need
+            to be created before they are actually posted, and a later posting service will actually check that the transaction is balanced.
+        </description>
+        <required-permissions join-type="OR">
+            <check-permission permission="ACCOUNTING" action="_ATX_CREATE"/>
+        </required-permissions>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="acctgTransEntries" type="java.util.List" mode="IN" optional="false"/>
+        <attribute name="acctgTransId" type="String" mode="OUT"/>
+        <!-- TODO: make required-permissions tag work here rather than inside the simple XML -->
+    </service>
 </services>
