@@ -171,7 +171,8 @@ public class POJOJavaEngine extends GenericAsyncEngine {
             Service service = (Service) serviceClass.newInstance();     // force cast so we can use the setInfrastructure and setUser methods, instead of calling them by reflection
             service.setInfrastructure(new Infrastructure(dctx.getDispatcher()));  // the dispatcher is a ServiceDispatcher, but dctx.getDispatcher() gets a LocalDispatcher
             GenericValue userLogin = (GenericValue) context.get("userLogin");
-            service.setUser(new User(userLogin));
+            if (userLogin != null)
+                service.setUser(new User(userLogin));
             // now remove userLogin, so it won't be a parameter which we will try to find a set__ method
             context.remove("userLogin");
 
