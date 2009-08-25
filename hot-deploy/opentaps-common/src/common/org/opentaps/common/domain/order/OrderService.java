@@ -561,7 +561,7 @@ public class OrderService extends Service implements OrderServiceInterface {
                 input.put("shipGroupSeqId", "_NA_");
                 input.put("orderAdjustmentTypeId", "SALES_TAX");
                 input.put("description", "Existing tax was = " + totalExistingOrderTax + ", new tax amount = " + totalNewOrderTax + " (Tax adjustment due to order change)");
-                input.put("amount", orderTaxDifference.doubleValue());
+                input.put("amount", orderTaxDifference);
                 runSync("createOrderAdjustment", input);
             }
 
