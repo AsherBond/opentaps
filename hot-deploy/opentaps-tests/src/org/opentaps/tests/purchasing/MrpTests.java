@@ -662,7 +662,7 @@ public class MrpTests extends MrpTestCase {
         // receive 300 into the backup warehouse
         receiveInventoryProduct(product, new BigDecimal("300.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), thirdPartyFacilityId, demowarehouse1);
         // receive 50 into the primary (shipping) warehouse, so we can see the interaction of existing inventory with MRP and transfers
-        receiveInventoryProduct(product, new BigDecimal("500.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), facilityId, demowarehouse1);
+        receiveInventoryProduct(product, new BigDecimal("50.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("5.0"), facilityId, demowarehouse1);
 
         // create transfer plans
         createTransferPlan(thirdPartyFacilityId, facilityId, UtilDateTime.adjustTimestamp(UtilDateTime.nowTimestamp(), Calendar.DAY_OF_YEAR, -30, timeZone, locale));
