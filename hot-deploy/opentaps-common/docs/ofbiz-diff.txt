@@ -82,6 +82,9 @@ applications/accounting/data/AccountingTypeData.xml
 
 applications/accounting/servicedef/secas.xml
 - Removed the seca on createPaymentApplication that called createAcctgTransAndEntriesForPaymentApplication (new ofbiz service)
+
+applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
+- Fix so that the production run quantityToProduce field is also updated on store
  
 
 Other API Changes
