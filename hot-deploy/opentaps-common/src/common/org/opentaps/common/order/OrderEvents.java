@@ -1575,7 +1575,7 @@ public final class OrderEvents {
         // check for shippable items
         if (!orh.shippingApplies()) {
             Map responseResult = ServiceUtil.returnSuccess();
-            responseResult.put("shippingTotal", new Double(0.00));
+            responseResult.put("shippingTotal", BigDecimal.ZERO);
             return responseResult;
         }
 
@@ -1587,7 +1587,7 @@ public final class OrderEvents {
 
         GenericValue shipAddr = orh.getShippingAddress(shipGroupSeqId);
         if (shipAddr == null) {
-            return UtilMisc.toMap("shippingTotal", new Double(0));
+            return UtilMisc.toMap("shippingTotal", BigDecimal.ZERO);
         }
 
         String contactMechId = shipAddr.getString("contactMechId");
@@ -1626,7 +1626,7 @@ public final class OrderEvents {
         // check for shippable items
         if (!cart.shippingApplies()) {
             Map responseResult = ServiceUtil.returnSuccess();
-            responseResult.put("shippingTotal", new Double(0.00));
+            responseResult.put("shippingTotal", BigDecimal.ZERO);
             return responseResult;
         }
 
@@ -1701,7 +1701,7 @@ public final class OrderEvents {
         // no shippable items; we won't change any shipping at all
         if (shippableQuantity.signum() == 0) {
             Map result = ServiceUtil.returnSuccess();
-            result.put("shippingTotal", new Double(0));
+            result.put("shippingTotal", BigDecimal.ZERO);
             return result;
         }
 
@@ -1718,10 +1718,10 @@ public final class OrderEvents {
 
         // prepare the service invocation fields
         Map serviceFields = new HashMap();
-        serviceFields.put("initialEstimateAmt", shippingTotal.doubleValue());
-        serviceFields.put("shippableTotal", shippableTotal.doubleValue());
-        serviceFields.put("shippableQuantity", shippableQuantity.doubleValue());
-        serviceFields.put("shippableWeight", shippableWeight.doubleValue());
+        serviceFields.put("initialEstimateAmt", shippingTotal);
+        serviceFields.put("shippableTotal", shippableTotal);
+        serviceFields.put("shippableQuantity", shippableQuantity);
+        serviceFields.put("shippableWeight", shippableWeight);
         serviceFields.put("shippableItemInfo", itemInfo);
         serviceFields.put("productStoreId", productStoreId);
         serviceFields.put("carrierRoleTypeId", "CARRIER");
@@ -1741,7 +1741,7 @@ public final class OrderEvents {
         }
 
         // update the initial amount
-        serviceFields.put("initialEstimateAmt", shippingTotal.doubleValue());
+        serviceFields.put("initialEstimateAmt", shippingTotal);
 
         // call the generic estimate service
         try {
@@ -1763,7 +1763,7 @@ public final class OrderEvents {
 
         // return the totals
         Map responseResult = ServiceUtil.returnSuccess();
-        responseResult.put("shippingTotal", shippingTotal.doubleValue());
+        responseResult.put("shippingTotal", shippingTotal);
         return responseResult;
     }
 }

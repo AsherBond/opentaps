@@ -1713,7 +1713,7 @@ public final class OrderServices {
                     shippingTotal = BigDecimal.ZERO;
                     Debug.log("No valid order items found - " + shippingTotal, MODULE);
                 } else {
-                    shippingTotal = UtilValidate.isEmpty(shippingEstMap.get("shippingTotal")) ? BigDecimal.ZERO : BigDecimal.valueOf(((Double) shippingEstMap.get("shippingTotal")).doubleValue());
+                    shippingTotal = UtilValidate.isEmpty(shippingEstMap.get("shippingTotal")) ? BigDecimal.ZERO : (BigDecimal) shippingEstMap.get("shippingTotal");
                     shippingTotal = shippingTotal.setScale(decimals, rounding);
                 }
                 if (Debug.infoOn()) {
