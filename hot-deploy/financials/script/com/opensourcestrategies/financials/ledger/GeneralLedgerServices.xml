@@ -42,71 +42,71 @@ under the License.
     <!-- ========== GL Posting Services ========== -->
     <simple-method method-name="createAcctgTransAndEntries" short-description="Verifies and posts a set of AcctgTransEntries">
         <!-- retrieve ledger rounding properties -->
-        <property-to-field resource="arithmetic" property="ledger.decimals" field-name="ledgerDecimals"/>
-        <property-to-field resource="arithmetic" property="ledger.rounding" field-name="roundingMode"/>
+        <property-to-field resource="arithmetic" property="ledger.decimals" field="ledgerDecimals"/>
+        <property-to-field resource="arithmetic" property="ledger.rounding" field="roundingMode"/>
         <log level="info" message="Using ledger decimals [${ledgerDecimals}] and rounding [${roundingMode}]"/>        
 
         <!-- first loop through and make sure all the entries are valid  -->
-        <iterate list-name="parameters.acctgTransEntries" entry-name="acctgTransEntry">
+        <iterate list="parameters.acctgTransEntries" entry="acctgTransEntry">
             <log level="info" message="${acctgTransEntry}"/>
             <!-- the organization party must be an internal organization -->
-            <entity-one entity-name="PartyRole" value-name="partyRole" use-cache="true" auto-field-map="false">
-                <field-map field-name="partyId" env-name="acctgTransEntry.organizationPartyId"/>
+            <entity-one entity-name="PartyRole" value-field="partyRole" use-cache="true" auto-field-map="false">
+                <field-map field-name="partyId" from-field="acctgTransEntry.organizationPartyId"/>
                 <field-map field-name="roleTypeId" value="INTERNAL_ORGANIZATIO"/>
             </entity-one>
-            <if-empty field-name="partyRole">
+            <if-empty field="partyRole">
                 <add-error><fail-message message="${acctgTransEntry.organizationPartyId} for transaction ${acctgTransEntry.acctgTransId} entry ${acctgTransEntry.acctTransEntrySeqId} is not an internal organization "/></add-error>
                 <check-errors/>
             </if-empty>
             <!-- add up debits and credits -->
-            <if-compare field-name="acctgTransEntry.debitCreditFlag" operator="equals" value="D">
-                <calculate field-name="debitTotal" decimal-scale="${ledgerDecimals}" rounding-mode="${roundingMode}">
-                    <calcop operator="get" field-name="acctgTransEntry.amount"/>
-                    <calcop operator="get" field-name="debitTotal"/>
+            <if-compare field="acctgTransEntry.debitCreditFlag" operator="equals" value="D">
+                <calculate field="debitTotal" decimal-scale="${ledgerDecimals}" rounding-mode="${roundingMode}">
+                    <calcop operator="get" field="acctgTransEntry.amount"/>
+                    <calcop operator="get" field="debitTotal"/>
                 </calculate>
             </if-compare>
-            <if-compare field-name="acctgTransEntry.debitCreditFlag" operator="equals" value="C">
-                <calculate field-name="creditTotal" decimal-scale="${ledgerDecimals}" rounding-mode="${roundingMode}">
-                    <calcop operator="get" field-name="acctgTransEntry.amount"/>
-                    <calcop operator="get" field-name="creditTotal"/>
+            <if-compare field="acctgTransEntry.debitCreditFlag" operator="equals" value="C">
+                <calculate field="creditTotal" decimal-scale="${ledgerDecimals}" rounding-mode="${roundingMode}">
+                    <calcop operator="get" field="acctgTransEntry.amount"/>
+                    <calcop operator="get" field="creditTotal"/>
                 </calculate>
             </if-compare>
         </iterate>
-        <calculate field-name="debitCreditDifference" decimal-scale="${ledgerDecimals}" rounding-mode="${roundingMode}">
-            <calcop operator="get" field-name="debitTotal"/>
-            <calcop operator="negative" field-name="creditTotal"/>
+        <calculate field="debitCreditDifference" decimal-scale="${ledgerDecimals}" rounding-mode="${roundingMode}">
+            <calcop operator="get" field="debitTotal"/>
+            <calcop operator="negative" field="creditTotal"/>
         </calculate>
         <!-- <log level="info" message="In createAcctgTransAndEntries: debitTotal = [${debitTotal}] creditTotal=[${creditTotal}] debitCreditDifference=[${debitCreditDifference}]"/> -->
         <!-- if the debit and credit totals do not balance, return an error -->
-        <if-compare field-name="debitCreditDifference" operator="greater-equals" value="0.000001" type="Double">
+        <if-compare field="debitCreditDifference" operator="greater-equals" value="0.000001" type="Double">
             <add-error><fail-property resource="AccountingUiLabels" property="AccountingDebitCreditMustEqual"/></add-error>
         </if-compare>
-        <if-compare field-name="debitCreditDifference" operator="less-equals" value="-0.000001" type="Double">
+        <if-compare field="debitCreditDifference" operator="less-equals" value="-0.000001" type="Double">
             <add-error><fail-property resource="AccountingUiLabels" property="AccountingDebitCreditMustEqual"/></add-error>
         </if-compare>
         <check-errors/>
         
         <!-- now do the posting. First, create the AcctgTrans entity -->
-        <set-service-fields service-name="createAcctgTrans" map-name="parameters" to-map-name="createAcctgTransParams"/>
-        <if-empty field-name="createAcctgTransParams.transactionDate">
-            <now-timestamp-to-env env-name="createAcctgTransParams.transactionDate"/>
+        <set-service-fields service-name="createAcctgTrans" map="parameters" to-map="createAcctgTransParams"/>
+        <if-empty field="createAcctgTransParams.transactionDate">
+            <now-timestamp field="createAcctgTransParams.transactionDate"/>
         </if-empty>
         <call-service service-name="createAcctgTrans" in-map-name="createAcctgTransParams">
             <result-to-field result-name="acctgTransId"/>
         </call-service>
         
         <!-- Next, create the AcctgTransEntry entities one by one -->
-        <iterate list-name="parameters.acctgTransEntries" entry-name="acctgTransEntry">
+        <iterate list="parameters.acctgTransEntries" entry="acctgTransEntry">
             <!-- if any amount is negative, then get the absolute (positive) value of that amount, and flip the Debit/Credit flag  -->
-            <if-compare field-name="amount" map-name="acctgTransEntry" operator="less" value="0">
+            <if-compare field="acctgTransEntry.amount" operator="less" value="0">
                 <log level="verbose" message="${acctgTransEntry} is going to get inverted"/>
-                <calculate field-name="acctgTransEntry.amount">
-                    <calcop field-name="acctgTransEntry.amount" operator="negative"/>
+                <calculate field="acctgTransEntry.amount">
+                    <calcop field="acctgTransEntry.amount" operator="negative"/>
                 </calculate>
-                <if-compare field-name="acctgTransEntry.debitCreditFlag" operator="equals" value="D">
+                <if-compare field="acctgTransEntry.debitCreditFlag" operator="equals" value="D">
                     <set value="C" field="acctgTransEntry.debitCreditFlag"/>
                 <else>
-                    <if-compare field-name="acctgTransEntry.debitCreditFlag" operator="equals" value="C">
+                    <if-compare field="acctgTransEntry.debitCreditFlag" operator="equals" value="C">
                         <set value="D" field="acctgTransEntry.debitCreditFlag"/>
                     </if-compare>
                 </else>
@@ -114,14 +114,14 @@ under the License.
             </if-compare>
             
             <!-- now create the AcctgTransEntry using the acctgTransId we already have from above -->
-            <clear-field field-name="createAcctgTransEntryParams"/> <!-- VERY IMPORTANT: or values will carry from one entry to the other -->
-            <set-service-fields service-name="createAcctgTransEntry" map-name="acctgTransEntry" to-map-name="createAcctgTransEntryParams"/>
+            <clear-field field="createAcctgTransEntryParams"/> <!-- VERY IMPORTANT: or values will carry from one entry to the other -->
+            <set-service-fields service-name="createAcctgTransEntry" map="acctgTransEntry" to-map="createAcctgTransEntryParams"/>
             <set from-field="acctgTransId" field="createAcctgTransEntryParams.acctgTransId"/>
             <call-service service-name="createAcctgTransEntry" in-map-name="createAcctgTransEntryParams"/>
         </iterate>
         
         <!-- all done -->
-        <field-to-result field-name="acctgTransId"/>
+        <field-to-result field="acctgTransId"/>
     </simple-method>
 
 </simple-methods>
