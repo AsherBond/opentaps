@@ -19,7 +19,7 @@
         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/entity-eca.xsd">
 
     <!-- OrderItemShipGrpInvRes ECAs for updating the related OrderItemShipGroup estimatedShipDate -->
-    <eca entity="OrderItemShipGrpInvRes" operation="create-store-remove" event="return">
+    <eca entity="OrderItemShipGrpInvRes" operation="create-store" event="return">
         <action service="setOrderItemShipGroupEstimatedShipDate" mode="sync"/>
     </eca>
 
