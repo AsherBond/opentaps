@@ -280,7 +280,7 @@ public class MrpTestCase extends OpentapsTestCase {
         Debug.logInfo("Requirements found " + requirements, MODULE);
         assertEquals("New requirements were created for product [" + productId + "]", quantities.size(), requirements.size());
         for (GenericValue req : requirements) {
-            assertFalse("Requirement for product [" + productId + "] in status [" + statusId + "] for quantity [" + req.getBigDecimal("quantity").toString() + "] is wrong and should not be here", !quantities.contains(req.getBigDecimal("quantity")));
+            assertFalse("Requirement for product [" + productId + "] in status [" + statusId + "] for quantity [" + req.getBigDecimal("quantity").toString() + "] is wrong and should not be here", !assertNumberExistsInList(quantities, req.getBigDecimal("quantity")));
         }
     } 
 

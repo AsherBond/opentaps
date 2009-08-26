@@ -2424,4 +2424,19 @@ public class OpentapsTestCase extends TestCase {
         return new java.sql.Timestamp(sdf.parse(dateString).getTime());
     }
 
+    /**
+     * Method to check that specific BigDecimal number if exist in List
+     * 
+     * @param numbers a <code>List<BigDecimal></code> instance
+     * @param value a <code>BigDecimal</code> instance
+     * @return if exist the value in numbers
+     */
+    public static boolean assertNumberExistsInList(List<BigDecimal> numbers, BigDecimal value) {
+        for (BigDecimal number : numbers) {
+            if (number.compareTo(value) == 0) {
+                return true;
+            }
+        }
+        return false;
+    } 
 }
