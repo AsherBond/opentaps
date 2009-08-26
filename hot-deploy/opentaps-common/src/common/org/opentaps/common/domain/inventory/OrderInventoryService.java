@@ -802,16 +802,11 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
     /** {@inheritDoc} */
     public void setOrderItemShipGroupEstimatedShipDate() throws ServiceException {
         try {
-            InventoryDomainInterface inventoryDomain = getDomainsDirectory().getInventoryDomain();
-            InventoryRepositoryInterface inventoryRepository = inventoryDomain.getInventoryRepository();
-            // make sure the reservation exists
-            OrderItemShipGrpInvRes reservation = inventoryRepository.findOneNotNull(OrderItemShipGrpInvRes.class, inventoryRepository.map(OrderItemShipGrpInvRes.Fields.orderId, orderId,
-                                                                                                                                   OrderItemShipGrpInvRes.Fields.orderItemSeqId, orderItemSeqId,
-                                                                                                                                   OrderItemShipGrpInvRes.Fields.shipGroupSeqId, shipGroupSeqId,
-                                                                                                                                   OrderItemShipGrpInvRes.Fields.inventoryItemId, inventoryItemId));
-            // get the ship group to update
-            org.opentaps.domain.base.entities.OrderItemShipGroup shipGroup = reservation.getOrderItemShipGroup();
-
+            OrderDomainInterface orderDomain = getDomainsDirectory().getOrderDomain();
+            OrderRepositoryInterface orderRepository = orderDomain.getOrderRepository();
+            // get the ship group to update, this should fail it the ship group does not exists
+            Order order = orderRepository.getOrderById(orderId);
+            OrderItemShipGroup shipGroup = order.getOrderItemShipGroup(shipGroupSeqId);
             // calculate the ship group estimatedShipDate from all its reservations
             Map<String, Object> input = createInputMap();
             input.put("orderId", orderId);
@@ -821,7 +816,7 @@ public class OrderInventoryService extends Service implements OrderInventoryServ
 
             // update the ship group estimatedShipDate
             shipGroup.setEstimatedShipDate(estimatedShipDate);
-            inventoryRepository.update(shipGroup);
+            orderRepository.update(shipGroup);
         } catch (GeneralException ex) {
             throw new ServiceException(ex);
         }
