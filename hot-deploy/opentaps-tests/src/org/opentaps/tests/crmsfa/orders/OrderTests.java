@@ -209,7 +209,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("Initial Grand total: " + grandTotal, MODULE);
         // get initial atp
         Map<String, Object> callResults = getProductAvailability(additionalProduct.getProductId());
-        Double atp = (Double) callResults.get("availableToPromiseTotal");
+        BigDecimal atp = (BigDecimal) callResults.get("availableToPromiseTotal");
         Debug.logInfo("Initial ATP:" + atp, MODULE);
 
         // append item to order
@@ -221,11 +221,11 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("Final Grand total: " + grandTotal2, MODULE);
         // get final atp
         callResults = getProductAvailability(additionalProduct.getProductId());
-        Double atp2 = (Double) callResults.get("availableToPromiseTotal");
+        BigDecimal atp2 = (BigDecimal) callResults.get("availableToPromiseTotal");
         Debug.logInfo("Final ATP: " + atp2, MODULE);
 
         // check that the ATP has declined by 1
-        Double expectedATP = atp - 1.0;
+        BigDecimal expectedATP = atp.subtract(BigDecimal.ONE);
         assertEquals("ATP has declined by 1.0", atp2, expectedATP);
 
         // check that tax order adjustments have been created for the new items
@@ -411,7 +411,7 @@ public class OrderTests extends OrderTestCase {
         Map<String, GenericValue> productData = runAndAssertServiceSuccess("getProduct", UtilMisc.toMap("productId", productId, "userLogin", demowarehouse1));
         GenericValue product = productData.get("product");
         Map<String, Object> productAvailability = getProductAvailability(product.getString("productId"));
-        Double availableToPromis = (Double) productAvailability.get("availableToPromiseTotal");
+        BigDecimal availableToPromis = (BigDecimal) productAvailability.get("availableToPromiseTotal");
         assertEquals(String.format("Wrong ATP value of product [%1$s]", productId), 5, availableToPromis.longValue());
 
         // find first 5 inventory of the products
@@ -557,13 +557,13 @@ public class OrderTests extends OrderTestCase {
         assertInventoryItemQuantities("InventoryItem for product [" + productId + "]", inventoryItem.getString("inventoryItemId"), 0.0, 0.0);
 
         // verify that there is 1 SERIALIZED_INV_ITEM INV_PROMISED with QOH=1.0 and ATP=0.0
-        inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "inventoryItemTypeId", "SERIALIZED_INV_ITEM", "status_id", "INV_PROMISED"));
+        inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "inventoryItemTypeId", "SERIALIZED_INV_ITEM", "statusId", "INV_PROMISED"));
         assertEquals("Promised InventoryItem for product [" + productId + "]", 1, inventoryItems.size());
         inventoryItem = inventoryItems.get(0);
         assertInventoryItemQuantities("InventoryItem for product [" + productId + "]", inventoryItem.getString("inventoryItemId"), 0.0, 1.0);
 
         // verify that there are 4 SERIALIZED_INV_ITEM INV_AVAILABLE with QOH=1.0 and ATP=1.0
-        inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "inventoryItemTypeId", "SERIALIZED_INV_ITEM", "status_id", "INV_AVAILABLE"));
+        inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "inventoryItemTypeId", "SERIALIZED_INV_ITEM", "statusId", "INV_AVAILABLE"));
         assertEquals("Available InventoryItem for product [" + productId + "]", 4, inventoryItems.size());
         for (GenericValue item : inventoryItems) {
             assertInventoryItemQuantities("Available InventoryItem for product [" + productId + "]", item.getString("inventoryItemId"), 1.0, 1.0);
@@ -617,8 +617,8 @@ public class OrderTests extends OrderTestCase {
         Map<String, GenericValue> productData = runAndAssertServiceSuccess("getProduct", UtilMisc.toMap("productId", productId, "userLogin", demowarehouse1));
         GenericValue product = productData.get("product");
         Map<String, Object> productAvailability = getProductAvailability(product.getString("productId"));
-        Double quantityOnHand = (Double) productAvailability.get("quantityOnHandTotal");
-        Double availableToPromis = (Double) productAvailability.get("availableToPromiseTotal");
+        BigDecimal quantityOnHand = (BigDecimal) productAvailability.get("quantityOnHandTotal");
+        BigDecimal availableToPromis = (BigDecimal) productAvailability.get("availableToPromiseTotal");
         assertEquals(String.format("Wrong QOH value of product [%1$s]", productId), 3, quantityOnHand.longValue());
         assertEquals(String.format("Wrong ATP value of product [%1$s]", productId), 3, availableToPromis.longValue());
 
@@ -646,7 +646,7 @@ public class OrderTests extends OrderTestCase {
         }
 
         // for back ordered items an inventory item with ATP=-2.0, QOH=0 must exist.
-        long backOrderedInvItemCount = delegator.findCountByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "quantityOnHandTotal", new Double(0.0), "availableToPromiseTotal", new Double("-2.0")));
+        long backOrderedInvItemCount = delegator.findCountByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "quantityOnHandTotal", BigDecimal.ZERO, "availableToPromiseTotal", new BigDecimal("-2.0")));
         assertEquals(String.format("No valid record for backordered items of product %1$s", productId), 1, backOrderedInvItemCount);
     }
 
@@ -697,8 +697,8 @@ public class OrderTests extends OrderTestCase {
                 Arrays.asList(
                         EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
                         EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
-                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(2.0)),
-                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(5.0))
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new BigDecimal("2.0")),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new BigDecimal("5.0"))
                 ),
                 EntityOperator.AND
         );
@@ -781,7 +781,7 @@ public class OrderTests extends OrderTestCase {
         }
 
         // product1 ATP should have increased by 1
-        BigDecimal expected_ATP = product_ATP_initial.get(GZ1005).add(new BigDecimal(1.0));
+        BigDecimal expected_ATP = product_ATP_initial.get(GZ1005).add(new BigDecimal("1.0"));
         assertEquals("ATP of " + GZ1005.get("productId"), product_ATP_final.get(GZ1005), expected_ATP);
 
         // product2 ATP should have increased by 2
@@ -854,14 +854,14 @@ public class OrderTests extends OrderTestCase {
         // note: this only works if the item are in stock !
         // note2: promo items have status ITEM_CREATED instead of ITEM_APPROVED because we don't
         // manually approve those after the initial order, this is to spot them more easily
-        assertPromoItemExists(orderId, "GZ-1006", 1.0, "9018", "ITEM_CREATED");
-        assertPromoItemExists(orderId, "WG-1111", 1.0, "9000", "ITEM_CREATED");
+        assertPromoItemExists(orderId, "GZ-1006", new BigDecimal("1.0"), "9018", "ITEM_CREATED");
+        assertPromoItemExists(orderId, "WG-1111", new BigDecimal("1.0"), "9000", "ITEM_CREATED");
 
         // check items total quantities
-        assertNormalOrderItems(orderId, UtilMisc.toMap("GZ-1005", 1.0, "WG-1111", 10.0));
+        assertNormalOrderItems(orderId, UtilMisc.toMap("GZ-1005", new BigDecimal("1.0"), "WG-1111", new BigDecimal("10.0")));
         // verify if a variant of GZ-1006 and WG-1111 are still on the order
-        assertPromoItemExists(orderId, "GZ-1006", 1.0, "9018", "ITEM_CREATED");
-        assertPromoItemExists(orderId, "WG-1111", 1.0, "9000", "ITEM_CREATED");
+        assertPromoItemExists(orderId, "GZ-1006", new BigDecimal("1.0"), "9018", "ITEM_CREATED");
+        assertPromoItemExists(orderId, "WG-1111", new BigDecimal("1.0"), "9000", "ITEM_CREATED");
 
         // check order totals
         Debug.logInfo("testCancelSalesOrderWithPromoItems: step 1 order total [" + order.getTotal() + "], adjustments total [" + order.getOtherAdjustmentsAmount() + "], tax amount [" + order.getTaxAmount() + "], shipping [" + order.getShippingAmount() + "], items [" + order.getItemsSubTotal() + "]", MODULE);
@@ -889,9 +889,9 @@ public class OrderTests extends OrderTestCase {
         // 4. check order items 1x GZ-1005, 2x WG-1111, 1x WG-1111 (Promo) + 1x GZ-1006 (Promo)
         // note: promotions adjustments  do not follow the newly created items and stays associated to the previously canceled promo items instead.
         // check items total quantities
-        assertNormalOrderItems(orderId, UtilMisc.toMap("GZ-1005", 1.0, "WG-1111", 2.0));
-        assertPromoItemExists(orderId, "GZ-1006", 1.0, "9018", "ITEM_CREATED");
-        assertPromoItemExists(orderId, "WG-1111", 1.0, "9000", "ITEM_CREATED");
+        assertNormalOrderItems(orderId, UtilMisc.toMap("GZ-1005", new BigDecimal("1.0"), "WG-1111", new BigDecimal("2.0")));
+        assertPromoItemExists(orderId, "GZ-1006", new BigDecimal("1.0"), "9018", "ITEM_CREATED");
+        assertPromoItemExists(orderId, "WG-1111", new BigDecimal("1.0"), "9000", "ITEM_CREATED");
 
         // check new order totals
         order = repository.getOrderById(salesOrder.getOrderId());
@@ -919,8 +919,8 @@ public class OrderTests extends OrderTestCase {
 
         // 6. check order items 2x WG-1111 + 1x WG-1111 (Promo)
         // check items total quantities
-        assertNormalOrderItems(orderId, UtilMisc.toMap("WG-1111", 2.0));
-        assertPromoOrderItems(orderId, UtilMisc.toMap("WG-1111", 1.0));
+        assertNormalOrderItems(orderId, UtilMisc.toMap("WG-1111", new BigDecimal("2.0")));
+        assertPromoOrderItems(orderId, UtilMisc.toMap("WG-1111", new BigDecimal("1.0")));
 
         // check new order totals
         order = repository.getOrderById(salesOrder.getOrderId());
@@ -1044,7 +1044,7 @@ public class OrderTests extends OrderTestCase {
         Map commonInput = FastMap.newInstance();
         commonInput.put("orderId", salesOrder.getOrderId());
         commonInput.put("orderItemSeqId", "00001");
-        commonInput.put("quantity", new Double(1.0));
+        commonInput.put("quantity", new BigDecimal("1.0"));
         commonInput.put("userLogin", admin);
         commonInput.put("shipGroupSeqId", "00001");
         commonInput.put("productId", GZ1005.get("productId"));
@@ -1069,19 +1069,19 @@ public class OrderTests extends OrderTestCase {
         // reserve 5 more items (total 6), causing an error due to over reservation of 1
         input = UtilMisc.toMap("facilityId", facilityId, "requireInventory", "N");
         input.putAll(commonInput);
-        input.put("quantity", new Double(5));
+        input.put("quantity", new BigDecimal("5"));
         runAndAssertServiceError("reserveProductInventoryByFacility", input);
 
         // reserve 4 more
         input = UtilMisc.toMap("facilityId", facilityId, "requireInventory", "N");
         input.putAll(commonInput);
-        input.put("quantity", new Double(4));
+        input.put("quantity", new BigDecimal("4"));
         runAndAssertServiceSuccess("reserveProductInventoryByFacility", input);
 
         // ensure error on any more reservations
         input = UtilMisc.toMap("facilityId", facilityId, "requireInventory", "N");
         input.putAll(commonInput);
-        input.put("quantity", new Double(1));
+        input.put("quantity", new BigDecimal("1"));
         runAndAssertServiceError("reserveProductInventoryByFacility", input);
     }
 
@@ -1134,8 +1134,8 @@ public class OrderTests extends OrderTestCase {
                 Arrays.asList(
                         EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
                         EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
-                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(7.0)),
-                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(7.0))
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new BigDecimal("7.0")),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new BigDecimal("7.0"))
                 ),
                 EntityOperator.AND
         );
@@ -1181,10 +1181,10 @@ public class OrderTests extends OrderTestCase {
         // 7. check that the order item became backordered
         EntityCondition conditionList = EntityCondition.makeCondition(EntityOperator.AND,
                 EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
-                EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(1.0)),
+                EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, BigDecimal.ONE),
                 EntityCondition.makeCondition(EntityOperator.OR,
                                         EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, null),
-                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(0.0)))
+                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, BigDecimal.ZERO))
         );
         long backorderedInventoryItemsCount = delegator.findCountByCondition("OrderItemShipGrpInvRes", conditionList, null);
         assertEquals(String.format("Wrong number of backordered items of product [%1$s] against order [%2$s]", productId, orderId), 7, backorderedInventoryItemsCount);
@@ -1233,8 +1233,8 @@ public class OrderTests extends OrderTestCase {
                 Arrays.asList(
                         EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
                         EntityCondition.makeCondition("inventoryItemId", EntityOperator.EQUALS, inventoryItemId),
-                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(7.0)),
-                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(10.0))
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new BigDecimal("7.0")),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new BigDecimal("10.0"))
                 ),
                 EntityOperator.AND
         );
@@ -1260,7 +1260,7 @@ public class OrderTests extends OrderTestCase {
                         EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
                         EntityCondition.makeCondition("inventoryItemId", EntityOperator.IN, inventoryItemIds),
                         EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.NOT_EQUAL, null),
-                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.NOT_EQUAL, new Double(0.0))
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.NOT_EQUAL, BigDecimal.ZERO)
                 ),
                 EntityOperator.AND
         );
@@ -1306,10 +1306,10 @@ public class OrderTests extends OrderTestCase {
         // 6. check that the order item became backordered
         EntityCondition conditionList = EntityCondition.makeCondition(EntityOperator.AND,
                         EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
-                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(1.0)),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, BigDecimal.ONE),
                         EntityCondition.makeCondition(EntityOperator.OR,
                                         EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, null),
-                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(0.0)))
+                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, BigDecimal.ZERO))
         );
         long backorderedInventoryItemsCount = delegator.findCountByCondition("OrderItemShipGrpInvRes", conditionList, null);
         assertEquals(String.format("Wrong number of backordered items available of product [%1$s] against order [%2$s]", productId, orderId), 3, backorderedInventoryItemsCount);
@@ -1317,8 +1317,8 @@ public class OrderTests extends OrderTestCase {
         conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
                         EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
-                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(7.0)),
-                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(7.0))
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new BigDecimal("7.0")),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new BigDecimal("7.0"))
                 ),
                 EntityOperator.AND
         );
@@ -1334,10 +1334,10 @@ public class OrderTests extends OrderTestCase {
         // 9. check that the order item is no longer backordered
         conditionList = EntityCondition.makeCondition(EntityOperator.AND,
                           EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
-                          EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(1.0)),
+                          EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, BigDecimal.ONE),
                           EntityCondition.makeCondition(EntityOperator.OR,
                                         EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, null),
-                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(0.0)))
+                                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, BigDecimal.ZERO))
         );
         long nonBackorderedInventoryItemsCount = delegator.findCountByCondition("OrderItemShipGrpInvRes", conditionList, null);
         assertEquals(String.format("Wrong number of nonbackordered items of product [%1$s] against order [%2$s]", productId, orderId), 8, nonBackorderedInventoryItemsCount);
@@ -1345,8 +1345,8 @@ public class OrderTests extends OrderTestCase {
         conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
                         EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
-                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new Double(2.0)),
-                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new Double(2.0))
+                        EntityCondition.makeCondition("quantityNotAvailable", EntityOperator.EQUALS, new BigDecimal("2.0")),
+                        EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, new BigDecimal("2.0"))
                 ),
                 EntityOperator.AND
         );
@@ -1411,8 +1411,8 @@ public class OrderTests extends OrderTestCase {
             }
             String productId = invoiceItem.getString("productId");
             assertTrue("Invoice is only for service B", productId.equals(serviceB.get("productId")));
-            assertEquals("Invoice is for 2 of service B", 2.0, invoiceItem.getDouble("quantity"));
-            assertEquals("Service B is invoiced at $20 unit cost", 20.0, invoiceItem.getDouble("amount"));
+            assertEquals("Invoice is for 2 of service B", 2.0, invoiceItem.getBigDecimal("quantity"));
+            assertEquals("Service B is invoiced at $20 unit cost", 20.0, invoiceItem.getBigDecimal("amount"));
         }
 
         // ship the order and ensure header and items are completed
@@ -1492,13 +1492,13 @@ public class OrderTests extends OrderTestCase {
         input.put("orderId", orderId);
         input.put("orderItemSeqId", "00001");
         input.put("shipGroupSeqId", "00001");
-        input.put("cancelQuantity", new Double(25.0));
+        input.put("cancelQuantity", new BigDecimal("25.0"));
         runAndAssertServiceSuccess("cancelOrderItem", input);
 
         // 7.  Get the ATP/QOH inventory of the product
         Map<String, Object> productAvailability = getProductAvailability(testProduct.getString("productId"));
-        Double initatp = (Double) productAvailability.get("availableToPromiseTotal");
-        Double initqoh = (Double) productAvailability.get("quantityOnHandTotal");
+        BigDecimal initatp = (BigDecimal) productAvailability.get("availableToPromiseTotal");
+        BigDecimal initqoh = (BigDecimal) productAvailability.get("quantityOnHandTotal");
 
         // 8.  Try to split the order and put 70 of the product into a new ship group -- it should fail
         assertSplitOrderError(DemoCSR, orderId, "70.0");
@@ -1508,11 +1508,11 @@ public class OrderTests extends OrderTestCase {
 
         // 10.  Get ATP/QOH inventory of the product
         productAvailability = getProductAvailability(testProduct.getString("productId"));
-        Double finatp = (Double) productAvailability.get("availableToPromiseTotal");
-        Double finqoh = (Double) productAvailability.get("quantityOnHandTotal");
+        BigDecimal finatp = (BigDecimal) productAvailability.get("availableToPromiseTotal");
+        BigDecimal finqoh = (BigDecimal) productAvailability.get("quantityOnHandTotal");
 
         // 11.  Verify that there are 2 ship groups reservations with 30 and 20
-        assertShipGroupReservationsQuantities(orderId, UtilMisc.toList("00001", "00002"), UtilMisc.toList(30.0, 20.0));
+        assertShipGroupReservationsQuantities(orderId, UtilMisc.toList("00001", "00002"), UtilMisc.toList(new BigDecimal("30.0"), new BigDecimal("20.0")));
 
         // 12.  Verify that ATP/QOH of product have not changed from (7) and (10)
         assertEquals("ATP should not have changed during ship group splitting", initatp, finatp);
@@ -1558,19 +1558,19 @@ public class OrderTests extends OrderTestCase {
         SalesOrderFactory orderFactory = testCreatesSalesOrder(orderItems, DemoAccount1, productStoreId);
         String orderId = orderFactory.getOrderId();
         Debug.logInfo("testUpdateSplitShipment created order [" + orderId + "]", MODULE);
-        assertOrderItemQuantity(orderId, "00001", 100.0, null);
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("100.0"), null);
         assertShipGroupValid(orderId, "00001");
 
         // 5.  Split 20 units of the product into a new ship group
         assertSplitOrderSuccess(DemoCSR, orderId, "20.0");
-        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002"), UtilMisc.toList(80.0, 20.0));
-        assertOrderItemQuantity(orderId, "00001", 100.0, null);
+        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002"), UtilMisc.toList(new BigDecimal("80.0"), new BigDecimal("20.0")));
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("100.0"), null);
         assertShipGroupValid(orderId, "00002");
 
         // 6.  Update second shipment quantity to 50
-        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002"), UtilMisc.toList(80.0, 50.0));
-        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002"), UtilMisc.toList(80.0, 50.0));
-        assertOrderItemQuantity(orderId, "00001", 130.0, null);
+        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002"), UtilMisc.toList(new BigDecimal("80.0"), new BigDecimal("50.0")));
+        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002"), UtilMisc.toList(new BigDecimal("80.0"), new BigDecimal("50.0")));
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("130.0"), null);
         assertOrderItemsHaveShipGroupAssoc(orderId);
 
         // 7.  Split 20 units of the product from the first sg into a third ship group
@@ -1579,39 +1579,39 @@ public class OrderTests extends OrderTestCase {
         assertShipGroupValid(orderId, "00003");
 
         // 8.  Check the OrderItem quantity is now 130, and the OrderItemShipGroupAssoc have correct quantities
-        assertOrderItemQuantity(orderId, "00001", 130.0, null);
-        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002", "00003"), UtilMisc.toList(60.0, 50.0, 20.0));
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("130.0"), null);
+        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002", "00003"), UtilMisc.toList(new BigDecimal("60.0"), new BigDecimal("50.0"), new BigDecimal("20.0")));
         assertOrderItemsHaveShipGroupAssoc(orderId);
 
         // 9.  Cancel the third ship group
         Debug.logInfo("Cancelling third ship group ......", MODULE);
-        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002", "00003"), UtilMisc.toList(60.0, 50.0, 0.0));
+        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002", "00003"), UtilMisc.toList(new BigDecimal("60.0"), new BigDecimal("50.0"), new BigDecimal("0.0")));
         assertOrderItemsHaveShipGroupAssoc(orderId);
         assertShipGroupValid(orderId);
 
         // 10. Check the OrderItemShipGroupAssoc have correct quantities and cancelQuantities
-        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002", "00003"), UtilMisc.toList(60.0, 50.0, 20.0), UtilMisc.toList(0.0, 0.0, 20.0));
+        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002", "00003"), UtilMisc.toList(new BigDecimal("60.0"), new BigDecimal("50.0"), new BigDecimal("20.0")), UtilMisc.toList(new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("20.0")));
 
         // 11. Check the OrderItem quantity did not change, its cancelQuantity is 20, and status still approved
-        assertOrderItemQuantity(orderId, "00001", 130.0, 20.0);
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("130.0"), new BigDecimal("20.0"));
         assertOrderItemStatus("Order item should still be approved after cancelling third ship groups", orderId, "00001", "ITEM_APPROVED");
 
         // 12. Update the first ship group quantity to 200
-        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002"), UtilMisc.toList(200.0, 50.0));
+        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002"), UtilMisc.toList(new BigDecimal("200.0"), new BigDecimal("50.0")));
         assertOrderItemsHaveShipGroupAssoc(orderId);
 
         // 13. Check the OrderItem quantity is now 270, and its cancelQuantity is still 20
-        assertOrderItemQuantity(orderId, "00001", 270.0, 20.0);
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("270.0"), new BigDecimal("20.0"));
 
         // 14. Cancel the first and second ship groups
         Debug.logInfo("Cancelling last two ship groups ......", MODULE);
-        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002"), UtilMisc.toList(0.0, 0.0));
+        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001", "00002"), UtilMisc.toList(new BigDecimal("0.0"), new BigDecimal("0.0")));
         assertShipGroupValid(orderId);
 
         // 15. Check the OrderItem quantity is still 270, and its cancelQuantity is now 270, and the status is Canceled
-        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002", "00003"), UtilMisc.toList(200.0, 50.0, 20.0), UtilMisc.toList(200.0, 50.0, 20.0));
+        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002", "00003"), UtilMisc.toList(new BigDecimal("200.0"), new BigDecimal("50.0"), new BigDecimal("20.0")), UtilMisc.toList(new BigDecimal("200.0"), new BigDecimal("50.0"), new BigDecimal("20.0")));
         assertOrderItemsHaveShipGroupAssoc(orderId);
-        assertOrderItemQuantity(orderId, "00001", 270.0, 270.0);
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("270.0"), new BigDecimal("270.0"));
         assertOrderItemStatus("Order item should be cancelled after cancelling all ship groups", orderId, "00001", "ITEM_CANCELLED");
         assertOrderCancelled("Order should be cancelled after cancelling all items", orderId);
     }
@@ -1647,13 +1647,13 @@ public class OrderTests extends OrderTestCase {
         String orderId = orderFactory.getOrderId();
         orderFactory.approveOrder();
         Debug.logInfo("testCancelOrderWithPromoItems created order [" + orderId + "]", MODULE);
-        assertOrderItemQuantity(orderId, "00001", 1000.0, null);
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("1000.0"), null);
         assertShipGroupValid(orderId, "00001");
 
         // 5. Update shipment quantity to 100 (this should generate promo items)
-        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001"), UtilMisc.toList(100.0));
-        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001"), UtilMisc.toList(100.0));
-        assertOrderItemQuantity(orderId, "00001", 100.0, null);
+        assertUpdateOrderItemSuccess(DemoCSR, orderId, "00001", UtilMisc.toList("00001"), UtilMisc.toList(new BigDecimal("100.0")));
+        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001"), UtilMisc.toList(new BigDecimal("100.0")));
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("100.0"), null);
         assertOrderItemsHaveShipGroupAssoc(orderId);
 
         // 6. Cancel the ship group (manullay building the whole map to match what the web interface would send)
@@ -1669,7 +1669,7 @@ public class OrderTests extends OrderTestCase {
 
         // 7. Check the order ship group, status and quantities
         assertShipGroupValid(orderId);
-        assertOrderItemQuantity(orderId, "00001", 100.0, 100.0);
+        assertOrderItemQuantity(orderId, "00001", new BigDecimal("100.0"), new BigDecimal("100.0"));
         assertOrderItemStatus("Order item should be cancelled", orderId, "00001", "ITEM_CANCELLED");
         assertOrderCancelled("Order should be cancelled", orderId);
     }
@@ -1786,7 +1786,7 @@ public class OrderTests extends OrderTestCase {
 
         // verify the ATP went down by 2 for this product in my retail store warehouse
         results = runAndAssertServiceSuccess("getInventoryAvailableByFacility", UtilMisc.toMap("productId", testProduct.get("productId"), "facilityId", "MyRetailStore"));
-        Double atp = (Double) results.get("availableToPromiseTotal");
+        BigDecimal atp = (BigDecimal) results.get("availableToPromiseTotal");
         assertNotNull("ATP of product is not null", atp);
         assertEquals("ATP of product went down by expected amount in MyRetailStore", -2.0, atp);
 
@@ -1813,7 +1813,7 @@ public class OrderTests extends OrderTestCase {
         User = DemoCSR;
         testCreatesSalesOrder(order, partyId, productStoreId, "EXT_OFFLINE", null, contactMechId);
         results = runAndAssertServiceSuccess("getInventoryAvailableByFacility", UtilMisc.toMap("productId", testProduct.get("productId"), "facilityId", "MyRetailStore"));
-        atp = (Double) results.get("availableToPromiseTotal");
+        atp = (BigDecimal) results.get("availableToPromiseTotal");
         assertNotNull("ATP of product is not null", atp);
         assertEquals("ATP of product went down by expected amount in MyRetailStore", -4.0, atp);
     }
@@ -1849,7 +1849,7 @@ public class OrderTests extends OrderTestCase {
 
         // 6.  Receive a check and a credit card payment for $100 and the balance of the order from the customer and set both to received
         // this simulates the receive payments screen from order view
-        Map oppParams = UtilMisc.toMap("orderId", orderId, "maxAmount", new Double(100.0), "statusId", "PAYMENT_RECEIVED", "createdDate", UtilDateTime.nowTimestamp(), "createdByUserLogin", admin.get("userLoginId"));
+        Map oppParams = UtilMisc.toMap("orderId", orderId, "maxAmount", new BigDecimal("100.0"), "statusId", "PAYMENT_RECEIVED", "createdDate", UtilDateTime.nowTimestamp(), "createdByUserLogin", admin.get("userLoginId"));
         String paymentPref1 = delegator.getNextSeqId("OrderPaymentPreference");
         oppParams.put("orderPaymentPreferenceId", paymentPref1);
         oppParams.put("paymentMethodTypeId", "CREDIT_CARD");
@@ -1859,7 +1859,7 @@ public class OrderTests extends OrderTestCase {
         String paymentPref2 = delegator.getNextSeqId("OrderPaymentPreference");
         oppParams.put("orderPaymentPreferenceId", paymentPref2);
         oppParams.put("paymentMethodTypeId", "PERSONAL_CHECK");
-        oppParams.put("maxAmount", new Double(orderFactory.getGrandTotal().doubleValue() - 100));
+        oppParams.put("maxAmount", orderFactory.getGrandTotal().subtract(new BigDecimal("100")));
         delegator.create("OrderPaymentPreference", oppParams);
         runAndAssertServiceSuccess("createPaymentFromPreference", UtilMisc.toMap("orderPaymentPreferenceId", paymentPref2, "paymentFromId", customerPartyId, "paymentRefNum", customerPartyId + "-2", "comments", "Simulated manually received payment", "userLogin", admin));
 
@@ -2077,7 +2077,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("Initial ReservedQuantity: " + beforeReservedQuantity, MODULE);
 
         // call reReserveInventoryProduct to re-reserve the inventory for 5 of the order item in the RetailStore warehouse
-        reReserveInventory(orderFactory, inventoryItemId1, 5.0);
+        reReserveInventory(orderFactory, inventoryItemId1, new BigDecimal("5.0"));
 
         // verify that:
         //   inventoryItemId1 ATP = 7, QOH = 10
@@ -2100,7 +2100,7 @@ public class OrderTests extends OrderTestCase {
         context.put("orderId", orderFactory.getOrderId());
         context.put("orderItemSeqId", "00001");
         context.put("shipGroupSeqId", "00001");
-        context.put("cancelQuantity", Double.valueOf("8.0"));
+        context.put("cancelQuantity", new BigDecimal("8.0"));
         runAndAssertServiceSuccess("cancelOrderItem", context);
 
         // verify that:
@@ -2136,21 +2136,21 @@ public class OrderTests extends OrderTestCase {
         Order order = repository.getOrderById(orderFactory.getOrderId());
 
         // call reReserveInventoryProduct to re-reserve the inventory for 2 of the order item in the RetailStore warehouse
-        reReserveInventory(orderFactory, inventoryItemId1, 2.0);
+        reReserveInventory(orderFactory, inventoryItemId1, new BigDecimal("2.0"));
 
         // check the order reservations before transferring the item
 
         // Web Store 00001: 3 x product
-        Map<String, Map<String, Double>> expectedWebStoreItems = new HashMap<String, Map<String, Double>>();
-        Map<String, Double> expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(product.getString("productId"), 3.0);
+        Map<String, Map<String, BigDecimal>> expectedWebStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        Map<String, BigDecimal> expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(product.getString("productId"), new BigDecimal("3.0"));
         expectedWebStoreItems.put("00001", expectedProducts);
         assertShipGroupReservations(orderFactory.getOrderId(), facilityId, expectedWebStoreItems);
 
         // My Retail Store 00001: 2 x product
-        Map<String, Map<String, Double>> expectedRetailStoreItems = new HashMap<String, Map<String, Double>>();
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(product.getString("productId"), 2.0);
+        Map<String, Map<String, BigDecimal>> expectedRetailStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(product.getString("productId"), new BigDecimal("2.0"));
         expectedRetailStoreItems.put("00001", expectedProducts);
         assertShipGroupReservations(orderFactory.getOrderId(), facilityId1, expectedRetailStoreItems);
 
@@ -2179,16 +2179,16 @@ public class OrderTests extends OrderTestCase {
         // check the order reservations after transfer, the quantities reserved did not change
 
         // Web Store 00001: 3 x product
-        expectedWebStoreItems = new HashMap<String, Map<String, Double>>();
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(product.getString("productId"), 3.0);
+        expectedWebStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(product.getString("productId"), new BigDecimal("3.0"));
         expectedWebStoreItems.put("00001", expectedProducts);
         assertShipGroupReservations(orderFactory.getOrderId(), facilityId, expectedWebStoreItems);
 
         // My Retail Store 00001: 2 x product
-        expectedRetailStoreItems = new HashMap<String, Map<String, Double>>();
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(product.getString("productId"), 2.0);
+        expectedRetailStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(product.getString("productId"), new BigDecimal("2.0"));
         expectedRetailStoreItems.put("00001", expectedProducts);
         assertShipGroupReservations(orderFactory.getOrderId(), facilityId1, expectedRetailStoreItems);
 
@@ -2222,8 +2222,8 @@ public class OrderTests extends OrderTestCase {
                 "InventoryItem",
                 UtilMisc.toMap(
                         "productId", product.getString("productId"),
-                        "availableToPromiseTotal", Double.valueOf(-5.0),
-                        "quantityOnHandTotal", Double.valueOf(0.0),
+                        "availableToPromiseTotal", BigDecimal.valueOf(-5.0),
+                        "quantityOnHandTotal", BigDecimal.valueOf(0.0),
                         "facilityId", facilityId
                 )
         );
@@ -2232,7 +2232,7 @@ public class OrderTests extends OrderTestCase {
         String inventoryItemId1 = inventoryItem.getString("inventoryItemId");
 
         // reReserveInventoryProduct into RetailStore warehouse
-        reReserveInventory(orderFactory, inventoryItemId1, 5.0);
+        reReserveInventory(orderFactory, inventoryItemId1, new BigDecimal("5.0"));
 
         // verify current OrderItem.getReservedQuantity() equals OrderItem.getReservedQuantity() of before re-reserved to another facility.
         orderItem = repository.getOrderItem(order, "00001");
@@ -2248,8 +2248,8 @@ public class OrderTests extends OrderTestCase {
                 "InventoryItem",
                 UtilMisc.toMap(
                         "productId", product.getString("productId"),
-                        "availableToPromiseTotal", Double.valueOf(-5.0),
-                        "quantityOnHandTotal", Double.valueOf(0.0),
+                        "availableToPromiseTotal", BigDecimal.valueOf(-5.0),
+                        "quantityOnHandTotal", BigDecimal.valueOf(0.0),
                         "facilityId", facilityId1
                 )
         );
@@ -2263,7 +2263,7 @@ public class OrderTests extends OrderTestCase {
         context.put("orderId", orderFactory.getOrderId());
         context.put("orderItemSeqId", "00001");
         context.put("shipGroupSeqId", "00001");
-        context.put("cancelQuantity", Double.valueOf("5.0"));
+        context.put("cancelQuantity", new BigDecimal("5.0"));
         runAndAssertServiceSuccess("cancelOrderItem", context);
 
         // verify that inventoryItemId1 has ATP = 0, QOH = 0
@@ -2308,7 +2308,7 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("Initial ReservedQuantity: " + beforeReservedQuantity, MODULE);
 
         // call reReserveInventoryProduct to re-reserve the inventory for 5 of the order item in the RetailStore warehouse
-        reReserveInventory(orderFactory, inventoryItemId1, 5.0);
+        reReserveInventory(orderFactory, inventoryItemId1, new BigDecimal("5.0"));
 
         // verify that:
         //   inventoryItemId1 ATP = 5, QOH = 10
@@ -2377,7 +2377,7 @@ public class OrderTests extends OrderTestCase {
         //reReserveOrderItemInventory(order.getOrderId(), orderItemProductB.getOrderItemSeqId(), facilityId1, 5.0);
         List<org.opentaps.domain.base.entities.OrderItemShipGrpInvRes> orderItemReservations = inventoryRepository.getOrderItemShipGroupInventoryReservations(order.getOrderId(), orderItemProductB.getOrderItemSeqId(), null, "00001");
         assertEquals("Should have only one reservation of productC in the second ship group.", orderItemReservations.size(), 1);
-        reReserveOrderItemInventory(order.getOrderId(), orderItemProductB.getOrderItemSeqId(), orderItemReservations.get(0).getInventoryItemId(), shipGroupSeqId, facilityId1, 5.0);
+        reReserveOrderItemInventory(order.getOrderId(), orderItemProductB.getOrderItemSeqId(), orderItemReservations.get(0).getInventoryItemId(), shipGroupSeqId, facilityId1, new BigDecimal("5.0"));
         // split 7 x productC in a second ship group
         assertSplitOrderSuccess(admin, order.getOrderId(), "7.0", "00001", orderItemProductC.getOrderItemSeqId(), SECONDARY_SHIPPING_ADDRESS);
 
@@ -2385,32 +2385,32 @@ public class OrderTests extends OrderTestCase {
         // - find the reservation in the second ship group
         orderItemReservations = inventoryRepository.getOrderItemShipGroupInventoryReservations(order.getOrderId(), orderItemProductC.getOrderItemSeqId(), null, "00002");
         assertEquals("Should have only one reservation of productC in the second ship group.", orderItemReservations.size(), 1);
-        reReserveOrderItemInventory(order.getOrderId(), orderItemProductC.getOrderItemSeqId(), orderItemReservations.get(0).getString("inventoryItemId"), "00002", facilityId1, 3.0);
+        reReserveOrderItemInventory(order.getOrderId(), orderItemProductC.getOrderItemSeqId(), orderItemReservations.get(0).getString("inventoryItemId"), "00002", facilityId1, new BigDecimal("3.0"));
 
         // check the order reservations before receiving the items
 
         // Web Store 00001: 5 x productA, 3 x productB and 3 x productC
-        Map<String, Map<String, Double>> expectedWebStoreItems = new HashMap<String, Map<String, Double>>();
-        Map<String, Double> expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productA.getString("productId"), 5.0);
-        expectedProducts.put(productB.getString("productId"), 3.0);
-        expectedProducts.put(productC.getString("productId"), 3.0);
+        Map<String, Map<String, BigDecimal>> expectedWebStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        Map<String, BigDecimal> expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productA.getString("productId"), new BigDecimal("5.0"));
+        expectedProducts.put(productB.getString("productId"), new BigDecimal("3.0"));
+        expectedProducts.put(productC.getString("productId"), new BigDecimal("3.0"));
         expectedWebStoreItems.put("00001", expectedProducts);
         // Web Store 00002: 4 x productC
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productC.getString("productId"), 4.0);
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productC.getString("productId"), new BigDecimal("4.0"));
         expectedWebStoreItems.put("00002", expectedProducts);
 
         assertShipGroupReservations(order.getOrderId(), facilityId, expectedWebStoreItems);
 
         // My Retail Store 00001: 5 x productB
-        Map<String, Map<String, Double>> expectedRetailStoreItems = new HashMap<String, Map<String, Double>>();
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productB.getString("productId"), 5.0);
+        Map<String, Map<String, BigDecimal>> expectedRetailStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productB.getString("productId"), new BigDecimal("5.0"));
         expectedRetailStoreItems.put("00001", expectedProducts);
         // My Retail Store 00002: 3 x productC
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productC.getString("productId"), 3.0);
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productC.getString("productId"), new BigDecimal("3.0"));
         expectedRetailStoreItems.put("00002", expectedProducts);
 
         assertShipGroupReservations(order.getOrderId(), facilityId1, expectedRetailStoreItems);
@@ -2449,7 +2449,7 @@ public class OrderTests extends OrderTestCase {
      * @param quantity quantity of product
      * @throws GeneralException if an error occurs
      */
-    private void reReserveInventory(SalesOrderFactory orderFactory, String inventoryItemId, Double quantity) throws GeneralException {
+    private void reReserveInventory(SalesOrderFactory orderFactory, String inventoryItemId, BigDecimal quantity) throws GeneralException {
         reReserveOrderItemInventory(orderFactory.getOrderId(), "00001", inventoryItemId, "00001", facilityId1, quantity);
     }
 
@@ -2523,7 +2523,7 @@ public class OrderTests extends OrderTestCase {
                 reservations.get(0).getInventoryItemId(),
                 reservations.get(0).getShipGroupSeqId(),
                 facilityId1,
-                5.0
+                new BigDecimal("5.0")
         );
         // split 7 x productC in a second ship group
         assertSplitOrderSuccess(admin, order.getOrderId(), "7.0", "00001", orderItemProductC.getOrderItemSeqId(), SECONDARY_SHIPPING_ADDRESS);
@@ -2532,7 +2532,7 @@ public class OrderTests extends OrderTestCase {
         // - find the reservation in the second ship group
         List<org.opentaps.domain.base.entities.OrderItemShipGrpInvRes> res = inventoryRepository.getOrderItemShipGroupInventoryReservations(order.getOrderId(), orderItemProductC.getOrderItemSeqId(), null, "00002");
         assertEquals("Should have only one reservation of productC in the second ship group.", res.size(), 1);
-        reReserveOrderItemInventory(order.getOrderId(), orderItemProductC.getOrderItemSeqId(), res.get(0).getString("inventoryItemId"), "00002", facilityId1, 3.0);
+        reReserveOrderItemInventory(order.getOrderId(), orderItemProductC.getOrderItemSeqId(), res.get(0).getString("inventoryItemId"), "00002", facilityId1, new BigDecimal("3.0"));
 
         // check the order appears as ready to ship on both warehouse
         // the process is the same as what the BSH on the ready to ship page does:
@@ -2542,28 +2542,28 @@ public class OrderTests extends OrderTestCase {
         // - check the orderId / shipGroupSeqId / productId / quantity are correct
 
         // Web Store 00001: 5 x productA, 3 x productB and 3 x productC
-        Map<String, Map<String, Double>> expectedWebStoreItems = new HashMap<String, Map<String, Double>>();
-        Map<String, Double> expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productA.getString("productId"), 5.0);
-        expectedProducts.put(productB.getString("productId"), 3.0);
-        expectedProducts.put(productC.getString("productId"), 3.0);
+        Map<String, Map<String, BigDecimal>> expectedWebStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        Map<String, BigDecimal> expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productA.getString("productId"), new BigDecimal("5.0"));
+        expectedProducts.put(productB.getString("productId"), new BigDecimal("3.0"));
+        expectedProducts.put(productC.getString("productId"), new BigDecimal("3.0"));
         expectedWebStoreItems.put("00001", expectedProducts);
         // Web Store 00002: 4 x productC
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productC.getString("productId"), 4.0);
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productC.getString("productId"), new BigDecimal("4.0"));
         expectedWebStoreItems.put("00002", expectedProducts);
 
         assertShipGroupReservations(order.getOrderId(), facilityId, expectedWebStoreItems);
         assertOrderReadyToShip(order, facilityId, expectedWebStoreItems);
 
         // My Retail Store 00001: 5 x productB
-        Map<String, Map<String, Double>> expectedRetailStoreItems = new HashMap<String, Map<String, Double>>();
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productB.getString("productId"), 5.0);
+        Map<String, Map<String, BigDecimal>> expectedRetailStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productB.getString("productId"), new BigDecimal("5.0"));
         expectedRetailStoreItems.put("00001", expectedProducts);
         // My Retail Store 00002: 3 x productC
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productC.getString("productId"), 3.0);
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productC.getString("productId"), new BigDecimal("3.0"));
         expectedRetailStoreItems.put("00002", expectedProducts);
 
         assertShipGroupReservations(order.getOrderId(), facilityId1, expectedRetailStoreItems);
@@ -2994,8 +2994,8 @@ public class OrderTests extends OrderTestCase {
         ctxt.put("overridePriceMap", new HashMap());
         runAndAssertServiceSuccess("opentaps.updateOrderItems", ctxt);
 
-        assertNormalOrderItems(orderId, UtilMisc.toMap("WG-5569", 10.0, "WG-1111", 10.0));
-        assertPromoItemExists(orderId, "WG-1111", 1.0, "9000", "ITEM_CREATED");
+        assertNormalOrderItems(orderId, UtilMisc.toMap("WG-5569", new BigDecimal("10.0"), "WG-1111", new BigDecimal("10.0")));
+        assertPromoItemExists(orderId, "WG-1111", new BigDecimal("1.0"), "9000", "ITEM_CREATED");
 
         // Find the order items
         order = repository.getOrderById(salesOrder.getOrderId());
@@ -3039,8 +3039,8 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-83.99"));
 
         // 2. ship 1x WG-1111
-        Map<String, Map<String, Double>> itemsToPack = FastMap.newInstance();
-        itemsToPack.put("00001", UtilMisc.toMap(WG1111Item.getOrderItemSeqId(), 1.0));
+        Map<String, Map<String, BigDecimal>> itemsToPack = FastMap.newInstance();
+        itemsToPack.put("00001", UtilMisc.toMap(WG1111Item.getOrderItemSeqId(), new BigDecimal("1.0")));
         runAndAssertServiceSuccess("testShipOrderManual", UtilMisc.toMap("orderId", order.getOrderId(), "facilityId", facilityId, "items", itemsToPack, "userLogin", admin));
 
         // 3. cancel 8x WG-1111

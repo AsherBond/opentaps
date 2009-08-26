@@ -100,7 +100,7 @@ public class MultiShipGroupTests extends OrderTestCase {
         runAndAssertServiceSuccess("crmsfa.createShipGroup", input);
 
         // ensure the groups have the right addresses and quantities
-        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002"), UtilMisc.toList(5.0, 5.0));
+        assertShipGroupAssocsQuantities(orderId, UtilMisc.toList("00001", "00002"), UtilMisc.toList(new BigDecimal("5.0"), new BigDecimal("5.0")));
         assertShipGroupValidWithAddress(orderId, "00001", DEFAULT_SHIPPING_ADDRESS);
         assertShipGroupValidWithAddress(orderId, "00002", SECONDARY_SHIPPING_ADDRESS);
 

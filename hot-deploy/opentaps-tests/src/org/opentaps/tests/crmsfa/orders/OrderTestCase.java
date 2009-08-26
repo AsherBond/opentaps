@@ -34,8 +34,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.util.UtilCommon;
@@ -124,10 +123,10 @@ public class OrderTestCase extends OpentapsTestCase {
         }
         // checking order items status
         try {
-            EntityConditionList conditionList = new EntityConditionList(
+            EntityCondition conditionList = EntityCondition.makeCondition(
                 Arrays.asList(
-                        new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-                        new EntityExpr("statusId", EntityOperator.NOT_EQUAL, itemStatusId)
+                        EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, itemStatusId)
                         ),
                 EntityOperator.AND);
             long itemCount = delegator.findCountByCondition("OrderItemShipGrpInvResAndItem", conditionList, null);
@@ -163,7 +162,6 @@ public class OrderTestCase extends OpentapsTestCase {
      *  all items have a ship group assoc.
      * @param orderId the order id
      */
-    @SuppressWarnings("unchecked")
     public void assertOrderItemsHaveShipGroupAssoc(String orderId) {
         try {
             // order item -> assoc
@@ -189,7 +187,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param quantity the quantity
      * @param cancelQuantity the canceled quantity
      */
-    public void assertOrderItemQuantity(String orderId, Double quantity, Double cancelQuantity) {
+    public void assertOrderItemQuantity(String orderId, BigDecimal quantity, BigDecimal cancelQuantity) {
         assertOrderItemQuantity(orderId, "00001", quantity, cancelQuantity);
     }
 
@@ -200,13 +198,13 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param quantity the quantity
      * @param cancelQuantity the canceled quantity
      */
-    public void assertOrderItemQuantity(String orderId, String orderItemSeqId, Double quantity, Double cancelQuantity) {
+    public void assertOrderItemQuantity(String orderId, String orderItemSeqId, BigDecimal quantity, BigDecimal cancelQuantity) {
         try {
             GenericValue orderItem = delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
 
             assertNotNull("OrderItem [" + orderId + " : " + orderItemSeqId + "] not found", orderItem);
-            assertEquals("OrderItem [" + orderId + " : " + orderItemSeqId + "] quantity should be " + quantity, orderItem.getDouble("quantity"), quantity);
-            assertEquals("OrderItem [" + orderId + " : " + orderItemSeqId + "] cancelQuantity should be " + cancelQuantity, orderItem.getDouble("cancelQuantity"), cancelQuantity);
+            assertEquals("OrderItem [" + orderId + " : " + orderItemSeqId + "] quantity should be " + quantity, orderItem.getBigDecimal("quantity"), quantity);
+            assertEquals("OrderItem [" + orderId + " : " + orderItemSeqId + "] cancelQuantity should be " + cancelQuantity, orderItem.getBigDecimal("cancelQuantity"), cancelQuantity);
 
         } catch (GenericEntityException e) {
             fail("Exception while getting the OrderItem");
@@ -224,7 +222,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param quantities a <code>List</code> of quantity
      */
     @SuppressWarnings("unchecked")
-    protected void assertUpdateOrderItemSuccess(GenericValue userLogin, String orderId, String orderItemSeqId, List<String> shipGroupSeqIds, List<Double> quantities) {
+    protected void assertUpdateOrderItemSuccess(GenericValue userLogin, String orderId, String orderItemSeqId, List<String> shipGroupSeqIds, List<BigDecimal> quantities) {
         Map input = UtilMisc.toMap("userLogin", userLogin);
         input.put("orderId", orderId);
 
@@ -247,17 +245,16 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param expected a <code>Map</code> of {productId: quantity}
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    protected void assertPicklistItems(String picklistId, Map<String, Double> expected) throws GeneralException {
-        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(UtilMisc.toList(new EntityExpr("pPicklistId", EntityOperator.EQUALS, picklistId)), EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+    protected void assertPicklistItems(String picklistId, Map<String, BigDecimal> expected) throws GeneralException {
+        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", EntityCondition.makeCondition(UtilMisc.toList(EntityCondition.makeCondition("pPicklistId", EntityOperator.EQUALS, picklistId)), EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
 
-        Map<String, Double> found = new HashMap<String, Double>();
+        Map<String, BigDecimal> found = new HashMap<String, BigDecimal>();
         for (GenericValue item : picklistItems) {
-            Double qty = found.get(item.getString("oiProductId"));
+            BigDecimal qty = found.get(item.getString("oiProductId"));
             if (qty == null) {
-                qty = new Double(0);
+                qty = BigDecimal.ZERO;
             }
-            qty += item.getBigDecimal("piQuantity").doubleValue();
+            qty = qty.add(item.getBigDecimal("piQuantity"));
             found.put(item.getString("oiProductId"), qty);
         }
         assertEquals("Expected map did not match the found picklist items for picklist [" + picklistId + "]", expected, found);
@@ -268,19 +265,18 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param picklistId the picklist to check
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     protected void assertPicklistItemsIssued(String picklistId) throws GeneralException {
         List<GenericValue> picklistBins = delegator.findByAnd("PicklistBin", UtilMisc.toMap("picklistId", picklistId));
         List<String> picklistBinIds = EntityUtil.getFieldListFromEntityList(picklistBins, "picklistBinId", true);
-        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItem", new EntityConditionList(UtilMisc.toList(new EntityExpr("picklistBinId", EntityOperator.IN, picklistBinIds)), EntityOperator.AND), null, null);
+        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItem", EntityCondition.makeCondition(UtilMisc.toList(EntityCondition.makeCondition("picklistBinId", EntityOperator.IN, picklistBinIds)), EntityOperator.AND), null, null);
 
         for (GenericValue item : picklistItems) {
-            Double qty = item.getDouble("quantity");
+            BigDecimal qty = item.getBigDecimal("quantity");
             // check the related issuances
             List<GenericValue> issuedItems = item.getRelated("ItemIssuance");
-            Double issuedQty = 0.0;
+            BigDecimal issuedQty = BigDecimal.ZERO;
             for (GenericValue issue : issuedItems) {
-                issuedQty += issue.getDouble("quantity");
+                issuedQty = issuedQty.add(issue.getBigDecimal("quantity"));
             }
             assertEquals("Picklist item [" + item + "] was not fully issued.", qty, issuedQty);
         }
@@ -319,7 +315,6 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param orderId the order id
      * @param contactMechId the expected shipping address
      */
-    @SuppressWarnings("unchecked")
     protected void assertShipGroupValidWithAddress(String orderId, String contactMechId) {
         try {
             List<GenericValue> shipGroups = delegator.findByAnd("OrderItemShipGroup", UtilMisc.toMap("orderId", orderId));
@@ -521,7 +516,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param shipGroupIds list of ship group ids to check, will check that unlisted ship groups does not exist, must be ordered by ship group seq id
      * @param quantities list of quantities to check ordered by ship group id
      */
-    protected void assertShipGroupAssocsQuantities(String orderId, List<String> shipGroupIds, List<Double> quantities) {
+    protected void assertShipGroupAssocsQuantities(String orderId, List<String> shipGroupIds, List<BigDecimal> quantities) {
         assertShipGroupAssocsQuantities(orderId, shipGroupIds, quantities, null);
     }
 
@@ -533,8 +528,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param quantities list of quantities to check ordered by ship group id
      * @param cancelQuantities list of canceled quantities to check ordered by ship group id
      */
-    @SuppressWarnings("unchecked")
-    protected void assertShipGroupAssocsQuantities(String orderId, List<String> shipGroupIds, List<Double> quantities, List<Double> cancelQuantities) {
+    protected void assertShipGroupAssocsQuantities(String orderId, List<String> shipGroupIds, List<BigDecimal> quantities, List<BigDecimal> cancelQuantities) {
         try {
             List<GenericValue> shipGroups = delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", "00001"), UtilMisc.toList("shipGroupSeqId"));
 
@@ -552,12 +546,12 @@ public class OrderTestCase extends OpentapsTestCase {
                 String shipGroupSeqId = shipGroupIds.get(idx);
                 assertEquals("Ship group [" + shipGroupSeqId + "] shipGroupSeqId for order [" + orderId + "] is wrong", shipGroup.getString("shipGroupSeqId"), shipGroupIds.get(idx));
                 if (quantities != null) {
-                    assertEquals("Ship group [" + shipGroupSeqId + "] quantity for order [" + orderId + "] is wrong", shipGroup.getDouble("quantity"), quantities.get(idx));
+                    assertEquals("Ship group [" + shipGroupSeqId + "] quantity for order [" + orderId + "] is wrong", shipGroup.getBigDecimal("quantity"), quantities.get(idx));
                 }
                 if (cancelQuantities != null) {
-                    Double qty = shipGroup.getDouble("cancelQuantity");
+                    BigDecimal qty = shipGroup.getBigDecimal("cancelQuantity");
                     if (qty == null) {
-                        qty = new Double(0.0);
+                        qty = BigDecimal.ZERO;
                     }
                     assertEquals("Ship group [" + shipGroupSeqId + "] canceled quantity for order [" + orderId + "] is wrong", qty, cancelQuantities.get(idx));
                 }
@@ -585,33 +579,32 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param expected a <code>Map</code> of {shipGroupSeqId: {productId: quantity}}, or <code>null</code> to check that no reservation exists
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    protected void assertShipGroupReservations(String orderId, String facilityId, Map<String, Map<String, Double>> expected) throws GeneralException {
+    protected void assertShipGroupReservations(String orderId, String facilityId, Map<String, Map<String, BigDecimal>> expected) throws GeneralException {
         // find the reservations
         List<GenericValue> reservations = delegator.findByAnd("OrderItemShipGrpInvResAndItem", UtilMisc.toMap("orderId", orderId, "facilityId", facilityId));
         // build a Map of {shipGroupSeqId: {productId: quantity}}
-        Map<String, Map<String, Double>> found = new HashMap<String, Map<String, Double>>();
+        Map<String, Map<String, BigDecimal>> found = new HashMap<String, Map<String, BigDecimal>>();
         for (GenericValue item : reservations) {
-            Map<String, Double> productMap = found.get(item.getString("shipGroupSeqId"));
+            Map<String, BigDecimal> productMap = found.get(item.getString("shipGroupSeqId"));
             if (productMap == null) {
-                productMap = new HashMap<String, Double>();
+                productMap = new HashMap<String, BigDecimal>();
                 found.put(item.getString("shipGroupSeqId"), productMap);
             }
 
-            Double qty = productMap.get(item.getString("productId"));
+            BigDecimal qty = productMap.get(item.getString("productId"));
             if (qty == null) {
-                qty = new Double(0.0);
+                qty = BigDecimal.ZERO;
             }
-            Double qtyRes = item.getDouble("quantity");
-            Double qtyNaRes = item.getDouble("quantityNotAvailable");
+            BigDecimal qtyRes = item.getBigDecimal("quantity");
+            BigDecimal qtyNaRes = item.getBigDecimal("quantityNotAvailable");
             if (qtyNaRes == null) {
-                qtyNaRes = new Double(0.0);
+                qtyNaRes = BigDecimal.ZERO;
             }
-            if (qtyNaRes > qtyRes) {
+            if (qtyNaRes.compareTo(qtyRes) > 0) {
                 //fail("Found quantityNotAvailable > quantity in reservation: " + item);
             }
 
-            qty += qtyRes;
+            qty = qty.add(qtyRes);
             productMap.put(item.getString("productId"), qty);
         }
 
@@ -631,36 +624,35 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param expected a <code>Map</code> of {shipGroupSeqId: {productId: [quantity, quantityNotAvailable]}}, or <code>null</code> to check that no reservation exists
      * @exception GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    protected void assertShipGroupReservationsAndQuantities(String orderId, String facilityId, Map<String, Map<String, List<Double>>> expected) throws GeneralException {
+    protected void assertShipGroupReservationsAndQuantities(String orderId, String facilityId, Map<String, Map<String, List<BigDecimal>>> expected) throws GeneralException {
         // find the reservations
         List<GenericValue> reservations = delegator.findByAnd("OrderItemShipGrpInvResAndItem", UtilMisc.toMap("orderId", orderId, "facilityId", facilityId));
         // build a Map of {shipGroupSeqId: {productId: quantity}}
-        Map<String, Map<String, List<Double>>> found = new HashMap<String, Map<String, List<Double>>>();
+        Map<String, Map<String, List<BigDecimal>>> found = new HashMap<String, Map<String, List<BigDecimal>>>();
         for (GenericValue item : reservations) {
-            Map<String, List<Double>> productMap = found.get(item.getString("shipGroupSeqId"));
+            Map<String, List<BigDecimal>> productMap = found.get(item.getString("shipGroupSeqId"));
             if (productMap == null) {
-                productMap = new HashMap<String, List<Double>>();
+                productMap = new HashMap<String, List<BigDecimal>>();
                 found.put(item.getString("shipGroupSeqId"), productMap);
             }
 
-            List<Double> qties = productMap.get(item.getString("productId"));
+            List<BigDecimal> qties = productMap.get(item.getString("productId"));
             if (qties == null) {
-                qties = Arrays.asList(new Double(0), new Double(0));
+                qties = Arrays.asList(BigDecimal.ZERO, BigDecimal.ZERO);
                 productMap.put(item.getString("productId"), qties);
             }
-            Double qty = qties.get(0);
-            Double qtyNa = qties.get(1);
-            Double qtyRes = item.getDouble("quantity");
-            Double qtyNaRes = item.getDouble("quantityNotAvailable");
+            BigDecimal qty = qties.get(0);
+            BigDecimal qtyNa = qties.get(1);
+            BigDecimal qtyRes = item.getBigDecimal("quantity");
+            BigDecimal qtyNaRes = item.getBigDecimal("quantityNotAvailable");
             if (qtyNaRes == null) {
-                qtyNaRes = 0.0;
+                qtyNaRes = BigDecimal.ZERO;
             }
-            if (qtyNaRes > qtyRes) {
+            if (qtyNaRes.compareTo(qtyRes) > 0) {
                 //fail("Found quantityNotAvailable > quantity in reservation: " + item);
             }
-            qty += qtyRes;
-            qtyNa += qtyNaRes;
+            qty = qty.add(qtyRes);
+            qtyNa = qtyNa.add(qtyNaRes);
             productMap.put(item.getString("productId"), Arrays.asList(qty, qtyNa));
         }
 
@@ -690,7 +682,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param shipGroupIds list of ship group ids to check, will check that unlisted ship groups does not exist, must be ordered by ship group seq id
      * @param quantities list of quantities to check ordered by ship group id
      */
-    protected void assertShipGroupReservationsQuantities(String orderId, List<String> shipGroupIds, List<Double> quantities) {
+    protected void assertShipGroupReservationsQuantities(String orderId, List<String> shipGroupIds, List<BigDecimal> quantities) {
         assertShipGroupReservationsQuantities(orderId, shipGroupIds, quantities, null);
     }
 
@@ -702,8 +694,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param quantities list of quantities to check ordered by ship group id
      * @param quantitiesNotAvailable list of quantities not available to check ordered by ship group id
      */
-    @SuppressWarnings("unchecked")
-    protected void assertShipGroupReservationsQuantities(String orderId, List<String> shipGroupIds, List<Double> quantities, List<Double> quantitiesNotAvailable) {
+    protected void assertShipGroupReservationsQuantities(String orderId, List<String> shipGroupIds, List<BigDecimal> quantities, List<BigDecimal> quantitiesNotAvailable) {
         try {
             List<GenericValue> shipGroups = delegator.findByAnd("OrderItemShipGrpInvRes", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", "00001"), UtilMisc.toList("shipGroupSeqId"));
 
@@ -721,12 +712,12 @@ public class OrderTestCase extends OpentapsTestCase {
                 String shipGroupSeqId = shipGroupIds.get(idx);
                 assertEquals("Ship group [" + shipGroupSeqId + "] shipGroupSeqId for order [" + orderId + "] is wrong", shipGroup.getString("shipGroupSeqId"), shipGroupIds.get(idx));
                 if (quantities != null) {
-                    assertEquals("Ship group [" + shipGroupSeqId + "] quantity for order [" + orderId + "] is wrong", shipGroup.getDouble("quantity"), quantities.get(idx));
+                    assertEquals("Ship group [" + shipGroupSeqId + "] quantity for order [" + orderId + "] is wrong", shipGroup.getBigDecimal("quantity"), quantities.get(idx));
                 }
                 if (quantitiesNotAvailable != null) {
-                    Double qty = shipGroup.getDouble("quantityNotAvailable");
+                    BigDecimal qty = shipGroup.getBigDecimal("quantityNotAvailable");
                     if (qty == null) {
-                        qty = new Double(0.0);
+                        qty = BigDecimal.ZERO;
                     }
                     assertEquals("Ship group [" + shipGroupSeqId + "] quantity not available for order [" + orderId + "] is wrong", qty, quantitiesNotAvailable.get(idx));
                 }
@@ -743,32 +734,31 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param items a <code>Map</code> of productId: quantity
      * @param isPromo the promotion flag, ie: "Y", "N"
      */
-    @SuppressWarnings("unchecked")
-    protected void assertOrderItems(String orderId, Map<String, Double> items, String isPromo) {
+    protected void assertOrderItems(String orderId, Map<String, BigDecimal> items, String isPromo) {
         try {
             // get the OrderItems
             List<GenericValue> orderItems = delegator.findByAnd("OrderItem", UtilMisc.toMap("orderId", orderId, "isPromo", isPromo));
-            Map<String, Double> found = new HashMap<String, Double>();
+            Map<String, BigDecimal> found = new HashMap<String, BigDecimal>();
             // set found quantities from the expected items to 0
             for (String productId : items.keySet()) {
-                found.put(productId, 0.0);
+                found.put(productId, BigDecimal.ZERO);
             }
 
             for (GenericValue item : orderItems) {
-                Double foundQty = found.get(item.getString("productId"));
+                BigDecimal foundQty = found.get(item.getString("productId"));
                 if (foundQty == null) {
-                    foundQty = 0.0;
+                    foundQty = BigDecimal.ZERO;
                 }
-                Double qty = item.getDouble("quantity");
+                BigDecimal qty = item.getBigDecimal("quantity");
                 if (qty == null) {
-                    qty = 0.0;
+                    qty = BigDecimal.ZERO;
                 }
-                Double cancelQuantity = item.getDouble("cancelQuantity");
+                BigDecimal cancelQuantity = item.getBigDecimal("cancelQuantity");
                 if (cancelQuantity == null) {
-                    cancelQuantity = 0.0;
+                    cancelQuantity = BigDecimal.ZERO;
                 }
 
-                foundQty += qty - cancelQuantity;
+                foundQty = foundQty.add(qty).subtract(cancelQuantity);
                 found.put(item.getString("productId"), foundQty);
             }
 
@@ -776,12 +766,12 @@ public class OrderTestCase extends OpentapsTestCase {
             ids.addAll(items.keySet());
             ids.addAll(found.keySet());
             for (String productId : ids) {
-                Double expectedQty = items.get(productId);
+                BigDecimal expectedQty = items.get(productId);
                 if (expectedQty == null) {
-                    expectedQty = 0.0;
+                    expectedQty = BigDecimal.ZERO;
                 }
 
-                Double foundQty = found.get(productId);
+                BigDecimal foundQty = found.get(productId);
                 assertEquals("Order Items quantity did not match for order [" + orderId + "] product [" + productId + "]", foundQty, expectedQty);
             }
         } catch (GenericEntityException e) {
@@ -794,7 +784,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param orderId the order to check
      * @param items a <code>Map</code> of productId: quantity
      */
-    protected void assertNormalOrderItems(String orderId, Map<String, Double> items) {
+    protected void assertNormalOrderItems(String orderId, Map<String, BigDecimal> items) {
         assertOrderItems(orderId, items, "N");
     }
 
@@ -803,7 +793,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param orderId the order to check
      * @param items a <code>Map</code> of productId: quantity
      */
-    protected void assertPromoOrderItems(String orderId, Map<String, Double> items) {
+    protected void assertPromoOrderItems(String orderId, Map<String, BigDecimal> items) {
         assertOrderItems(orderId, items, "Y");
     }
 
@@ -818,39 +808,38 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param itemStatus the item status id
      * @return the order item is if found (orderItemSeqId)
      */
-    @SuppressWarnings("unchecked")
-    protected String assertOrderItemExists(String orderId, String productId, Double quantity, String isPromo, String itemStatus) {
+    protected String assertOrderItemExists(String orderId, String productId, BigDecimal quantity, String isPromo, String itemStatus) {
         try {
-        	
-        	List<GenericValue> orderItems = null;
-        	
-        	// basic conditions for all queries
-        	List<EntityExpr> orderItemConditions = UtilMisc.toList(new EntityExpr("orderId", EntityOperator.EQUALS, orderId),
-        			new EntityExpr("quantity", EntityOperator.EQUALS, quantity),
-        			new EntityExpr("statusId", EntityOperator.EQUALS, itemStatus),
-        			new EntityExpr("isPromo", EntityOperator.EQUALS, isPromo));
-        	
-        	// check if the product is virtual
-        	GenericValue product = delegator.findByPrimaryKeyCache("Product", UtilMisc.toMap("productId", productId));
-        	assertNotNull("Product [" + productId + "] not found", product);
-        	
-        	if ("Y".equals(product.getString("isVirtual"))) {
-        	    // if so, then look for any order item which is a variant
-        		List<GenericValue> relatedProducts = product.getRelatedByAndCache("MainProductAssoc", UtilMisc.toMap("productAssocTypeId", "PRODUCT_VARIANT"));
-        		if (UtilValidate.isNotEmpty(relatedProducts)) {
-        			// note that we can also filter by fromDate/thruDate, but it's not necessary, since even if the product is no longer a variant,
-        			// it might have been a variant at order time
-        			List<String> relatedProductIds = EntityUtil.getFieldListFromEntityList(relatedProducts, "productIdTo", true);
-        			assertNotNull("No variants productIds found for virtual product [" + productId + "]", relatedProductIds);
-        			orderItemConditions.add(new EntityExpr("productId", EntityOperator.IN, relatedProductIds));
-        		}        	
+
+            List<GenericValue> orderItems = null;
+
+            // basic conditions for all queries
+            List<EntityCondition> orderItemConditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+                                                                                         EntityCondition.makeCondition("quantity", EntityOperator.EQUALS, quantity),
+                                                                                         EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, itemStatus),
+                                                                                         EntityCondition.makeCondition("isPromo", EntityOperator.EQUALS, isPromo));
+
+            // check if the product is virtual
+            GenericValue product = delegator.findByPrimaryKeyCache("Product", UtilMisc.toMap("productId", productId));
+            assertNotNull("Product [" + productId + "] not found", product);
+
+            if ("Y".equals(product.getString("isVirtual"))) {
+                // if so, then look for any order item which is a variant
+                List<GenericValue> relatedProducts = product.getRelatedByAndCache("MainProductAssoc", UtilMisc.toMap("productAssocTypeId", "PRODUCT_VARIANT"));
+                if (UtilValidate.isNotEmpty(relatedProducts)) {
+                    // note that we can also filter by fromDate/thruDate, but it's not necessary, since even if the product is no longer a variant,
+                    // it might have been a variant at order time
+                    List<String> relatedProductIds = EntityUtil.getFieldListFromEntityList(relatedProducts, "productIdTo", true);
+                    assertNotNull("No variants productIds found for virtual product [" + productId + "]", relatedProductIds);
+                    orderItemConditions.add(EntityCondition.makeCondition("productId", EntityOperator.IN, relatedProductIds));
+                }
             } else {
-            	// if not, just look for the product
-        		orderItemConditions.add(new EntityExpr("productId", EntityOperator.EQUALS, productId));
+                // if not, just look for the product
+                orderItemConditions.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
             }
 
-        	Debug.logInfo("About to find order items for condition [" + orderItemConditions + "]", MODULE);
-    		orderItems = delegator.findByAnd("OrderItem", orderItemConditions);
+            Debug.logInfo("About to find order items for condition [" + orderItemConditions + "]", MODULE);
+            orderItems = delegator.findByAnd("OrderItem", orderItemConditions);
 
             // get the OrderItems
             assertEquals("OrderItem not found or more than one found for productId [" + productId + "] in order [" + orderId + "] quantity=" + quantity + " isPromo=" + isPromo + " statusId=" + itemStatus, 1, orderItems.size());
@@ -873,8 +862,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param productPromoId the product promo id
      * @param itemStatus the item status id
      */
-    @SuppressWarnings("unchecked")
-    protected void assertPromoItemExists(String orderId, String productId, Double quantity, String productPromoId, String itemStatus) {
+    protected void assertPromoItemExists(String orderId, String productId, BigDecimal quantity, String productPromoId, String itemStatus) {
         try {
             // get the OrderItem as promo item;
             String orderItemSeqId = assertOrderItemExists(orderId, productId, quantity, "Y", itemStatus);
@@ -904,7 +892,7 @@ public class OrderTestCase extends OpentapsTestCase {
         if (orderIsReadyConditionList.size() == 0) {
             return;
         }
-        EntityConditionList orderIsReadyConditions = new EntityConditionList(orderIsReadyConditionList, EntityOperator.OR);
+        EntityCondition orderIsReadyConditions = EntityCondition.makeCondition(orderIsReadyConditionList, EntityOperator.OR);
         //  result in any duplicate rows
         List<String> fieldsToSelect = Arrays.asList("orderId", "shipGroupSeqId", "productId", "quantity", "facilityId", "orderDate");
         List<String> orderBy = Arrays.asList("orderId", "shipGroupSeqId", "productId", "quantity", "facilityId", "orderDate");
@@ -932,7 +920,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @exception GeneralException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    protected void assertOrderReadyToShip(Order order, String facilityId, Map<String, Map<String, Double>> expected) throws GeneralException {
+    protected void assertOrderReadyToShip(Order order, String facilityId, Map<String, Map<String, BigDecimal>> expected) throws GeneralException {
         // - shippinghelper.findAllOrdersReadyToShip() => should contain the corresponding OdrItShpGrpHdrInvResAndInvItem entities
         ShippingHelper shippinghelper  = new ShippingHelper(delegator, facilityId);
         List orderIsReadyConditionList = shippinghelper.getOrderIsReadyConditionList();
@@ -940,7 +928,7 @@ public class OrderTestCase extends OpentapsTestCase {
         if (orderIsReadyConditionList.size() == 0) {
             fail("Did not find any OdrItShpGrpHdrInvResAndInvItem at all, was looking at order [" + order.getOrderId() + "] and facility [" + facilityId + "].");
         }
-        EntityConditionList orderIsReadyConditions = new EntityConditionList(orderIsReadyConditionList, EntityOperator.OR);
+        EntityCondition orderIsReadyConditions = EntityCondition.makeCondition(orderIsReadyConditionList, EntityOperator.OR);
         //  result in any duplicate rows
         List<String> fieldsToSelect = Arrays.asList("orderId", "shipGroupSeqId", "productId", "quantity", "facilityId", "orderDate");
         List<String> orderBy = Arrays.asList("orderId", "shipGroupSeqId", "productId", "quantity", "facilityId", "orderDate");
@@ -950,19 +938,19 @@ public class OrderTestCase extends OpentapsTestCase {
         Debug.logInfo("assertOrderReadyToShip: found " + odrItShpGrpHdrInvResAndInvItems, MODULE);
         if (expected != null) {
             // build a Map of {shipGroupSeqId: {productId: quantity}}
-            Map<String, Map<String, Double>> found = new HashMap<String, Map<String, Double>>();
+            Map<String, Map<String, BigDecimal>> found = new HashMap<String, Map<String, BigDecimal>>();
             for (GenericValue item : odrItShpGrpHdrInvResAndInvItems) {
-                Map<String, Double> productMap = found.get(item.getString("shipGroupSeqId"));
+                Map<String, BigDecimal> productMap = found.get(item.getString("shipGroupSeqId"));
                 if (productMap == null) {
-                    productMap = new HashMap<String, Double>();
+                    productMap = new HashMap<String, BigDecimal>();
                     found.put(item.getString("shipGroupSeqId"), productMap);
                 }
 
-                Double qty = productMap.get(item.getString("productId"));
+                BigDecimal qty = productMap.get(item.getString("productId"));
                 if (qty == null) {
-                    qty = new Double(0.0);
+                    qty = new BigDecimal(0.0);
                 }
-                qty += item.getDouble("quantity");
+                qty = qty.add(item.getBigDecimal("quantity"));
                 productMap.put(item.getString("productId"), qty);
             }
             // check the found quantities match the expected quantities
@@ -1090,7 +1078,7 @@ public class OrderTestCase extends OpentapsTestCase {
      * @param quantity the quantity to re-reserve
      * @exception GeneralException if an error occurs
      */
-    protected void reReserveOrderItemInventory(String orderId, String orderItemSeqId, String inventoryItemId, String shipGroupSeqId, String facilityId, Double quantity) throws GeneralException {
+    protected void reReserveOrderItemInventory(String orderId, String orderItemSeqId, String inventoryItemId, String shipGroupSeqId, String facilityId, BigDecimal quantity) throws GeneralException {
         Map<String, Object> context = FastMap.newInstance();
         context.put("userLogin", delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "demowarehouse1")));
         context.put("orderId", orderId);

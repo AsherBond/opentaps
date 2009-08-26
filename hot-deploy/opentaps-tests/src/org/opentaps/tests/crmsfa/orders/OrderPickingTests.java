@@ -28,8 +28,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.opentaps.common.order.SalesOrderFactory;
@@ -127,8 +126,8 @@ public class OrderPickingTests  extends OrderTestCase {
         String picklistId  = (String) results.get("picklistId");
 
         // check the picklist contains items for productA and productB and with correct quantity
-        List conditions = UtilMisc.toList(new EntityExpr("pPicklistId", EntityOperator.EQUALS, picklistId));
-        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("pPicklistId", EntityOperator.EQUALS, picklistId));
+        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
         boolean have5ProductA = false;
         boolean have8ProductB = false;
 
@@ -136,13 +135,13 @@ public class OrderPickingTests  extends OrderTestCase {
             if (item.getString("pbPrimaryOrderId").equals(order.getOrderId())
                     && item.getString("pFacilityId").equals(facilityId)
                     && item.getString("oiProductId").equals(productA.getString("productId"))
-                    && item.getBigDecimal("piQuantity").doubleValue() == 5.0) {
+                && item.getBigDecimal("piQuantity").compareTo(new BigDecimal("5.0")) == 0) {
                         have5ProductA = true;
             }
             if (item.getString("pbPrimaryOrderId").equals(order.getOrderId())
                     && item.getString("pFacilityId").equals(facilityId)
                     && item.getString("oiProductId").equals(productB.getString("productId"))
-                    && item.getBigDecimal("piQuantity").doubleValue() == 8.0) {
+                && item.getBigDecimal("piQuantity").compareTo(new BigDecimal("8.0")) == 0) {
                 have8ProductB = true;
             }
          }
@@ -192,8 +191,8 @@ public class OrderPickingTests  extends OrderTestCase {
         String picklistId  = (String) results.get("picklistId");
 
         // check the picklist contains items for productA and productB and with correct quantity
-        List conditions = UtilMisc.toList(new EntityExpr("pPicklistId", EntityOperator.EQUALS, picklistId));
-        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("pPicklistId", EntityOperator.EQUALS, picklistId));
+        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
         boolean have5ProductA = false;
         boolean have8ProductB = false;
 
@@ -287,10 +286,10 @@ public class OrderPickingTests  extends OrderTestCase {
         // check the order reservations before receiving the items
 
         // Web Store 00001: 5 x productA, 8 x productB
-        Map<String, Map<String, List<Double>>> expectedWebStoreItems = new HashMap<String, Map<String, List<Double>>>();
-        Map<String, List<Double>> expectedProducts = new HashMap<String, List<Double>>();
-        expectedProducts.put(productAId, Arrays.asList(5.0, 5.0));
-        expectedProducts.put(productBId, Arrays.asList(8.0, 8.0));
+        Map<String, Map<String, List<BigDecimal>>> expectedWebStoreItems = new HashMap<String, Map<String, List<BigDecimal>>>();
+        Map<String, List<BigDecimal>> expectedProducts = new HashMap<String, List<BigDecimal>>();
+        expectedProducts.put(productAId, Arrays.asList(new BigDecimal("5.0"), new BigDecimal("5.0")));
+        expectedProducts.put(productBId, Arrays.asList(new BigDecimal("8.0"), new BigDecimal("8.0")));
         expectedWebStoreItems.put("00001", expectedProducts);
         assertShipGroupReservationsAndQuantities(order.getOrderId(), facilityId, expectedWebStoreItems);
         // check inventories ATP changed due to the reservations
@@ -317,7 +316,7 @@ public class OrderPickingTests  extends OrderTestCase {
         String picklistId  = (String) results.get("picklistId");
 
         // check the picklist contains items with correct quantities
-        assertPicklistItems(picklistId, UtilMisc.toMap(productAId, 2.0, productBId, 3.0));
+        assertPicklistItems(picklistId, UtilMisc.toMap(productAId, new BigDecimal("2.0"), productBId, new BigDecimal("3.0")));
 
         // at this point the order should not appear as ready to ship, as it is on an active picklist
         assertOrderNotReadyToShip(order, facilityId);
@@ -338,10 +337,10 @@ public class OrderPickingTests  extends OrderTestCase {
 
         // check the reservations
         // Web Store 00001: 3 x productA, 5 x productB
-        expectedWebStoreItems = new HashMap<String, Map<String, List<Double>>>();
-        expectedProducts = new HashMap<String, List<Double>>();
-        expectedProducts.put(productAId, Arrays.asList(3.0, 3.0));
-        expectedProducts.put(productBId, Arrays.asList(5.0, 5.0));
+        expectedWebStoreItems = new HashMap<String, Map<String, List<BigDecimal>>>();
+        expectedProducts = new HashMap<String, List<BigDecimal>>();
+        expectedProducts.put(productAId, Arrays.asList(new BigDecimal("3.0"), new BigDecimal("3.0")));
+        expectedProducts.put(productBId, Arrays.asList(new BigDecimal("5.0"), new BigDecimal("5.0")));
         expectedWebStoreItems.put("00001", expectedProducts);
         assertShipGroupReservationsAndQuantities(order.getOrderId(), facilityId, expectedWebStoreItems);
         // check inventory after packing
@@ -362,7 +361,7 @@ public class OrderPickingTests  extends OrderTestCase {
         String picklistId2  = (String) results.get("picklistId");
 
         // check the picklist only contains an item for productB and with correct quantity
-        assertPicklistItems(picklistId2, UtilMisc.toMap(productBId, 3.0));
+        assertPicklistItems(picklistId2, UtilMisc.toMap(productBId, new BigDecimal("3.0")));
 
         // set the picklist as picked
         runAndAssertServiceSuccess("updatePicklist", UtilMisc.toMap("picklistId", picklistId2, "statusId", "PICKLIST_PICKED", "userLogin", admin));
@@ -376,29 +375,29 @@ public class OrderPickingTests  extends OrderTestCase {
         assertPicklistItemsIssued(picklistId2);
 
         // Web Store 00001: 3 x productA, 2 x productB
-        expectedWebStoreItems = new HashMap<String, Map<String, List<Double>>>();
-        expectedProducts = new HashMap<String, List<Double>>();
-        expectedProducts.put(productAId, Arrays.asList(3.0, 3.0));
-        expectedProducts.put(productBId, Arrays.asList(2.0, 2.0));
+        expectedWebStoreItems = new HashMap<String, Map<String, List<BigDecimal>>>();
+        expectedProducts = new HashMap<String, List<BigDecimal>>();
+        expectedProducts.put(productAId, Arrays.asList(new BigDecimal("3.0"), new BigDecimal("3.0")));
+        expectedProducts.put(productBId, Arrays.asList(new BigDecimal("2.0"), new BigDecimal("2.0")));
         expectedWebStoreItems.put("00001", expectedProducts);
         assertShipGroupReservationsAndQuantities(order.getOrderId(), facilityId, expectedWebStoreItems);
         // check inventory
-        inventoryAsserts.assertInventoryChange(productAId, BigDecimal.ZERO, new BigDecimal(-3.0), originalInventoryA);
-        inventoryAsserts.assertInventoryChange(productBId, BigDecimal.ZERO, new BigDecimal(-2.0), originalInventoryB);
+        inventoryAsserts.assertInventoryChange(productAId, BigDecimal.ZERO, new BigDecimal("-3.0"), originalInventoryA);
+        inventoryAsserts.assertInventoryChange(productBId, BigDecimal.ZERO, new BigDecimal("-2.0"), originalInventoryB);
 
         // receive the last items in inventory
         receiveInventoryProduct(productA, new BigDecimal("3.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
         receiveInventoryProduct(productB, new BigDecimal("2.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
         // check inventory
-        inventoryAsserts.assertInventoryChange(productAId, new BigDecimal(3.0), BigDecimal.ZERO, originalInventoryA);
-        inventoryAsserts.assertInventoryChange(productBId, new BigDecimal(2.0), BigDecimal.ZERO, originalInventoryB);
+        inventoryAsserts.assertInventoryChange(productAId, new BigDecimal("3.0"), BigDecimal.ZERO, originalInventoryA);
+        inventoryAsserts.assertInventoryChange(productBId, new BigDecimal("2.0"), BigDecimal.ZERO, originalInventoryB);
 
         // create the last picklist
         results = runAndAssertServiceSuccess("createPicklistFromOrders", UtilMisc.toMap("orderIdList", UtilMisc.toList(order.getOrderId()), "facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
         String picklistId3  = (String) results.get("picklistId");
 
         // check the picklist contains items correct quantities
-        assertPicklistItems(picklistId3, UtilMisc.toMap(productAId, 3.0, productBId, 2.0));
+        assertPicklistItems(picklistId3, UtilMisc.toMap(productAId, new BigDecimal("3.0"), productBId, new BigDecimal("2.0")));
 
         // pack the partial order
         toPackItems = new HashMap<String, Map<String, Double>>();
@@ -519,8 +518,8 @@ public class OrderPickingTests  extends OrderTestCase {
         String picklistId  = (String) results.get("picklistId");
 
         // check the picklist contains items for productA and productB and with correct quantity
-        List conditions = UtilMisc.toList(new EntityExpr("pPicklistId", EntityOperator.EQUALS, picklistId));
-        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+        List<EntityCondition> conditions = UtilMisc.<EntityCondition>toList(EntityCondition.makeCondition("pPicklistId", EntityOperator.EQUALS, picklistId));
+        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
         boolean have5ProductA = false;
         boolean have8ProductB = false;
 
@@ -586,7 +585,7 @@ public class OrderPickingTests  extends OrderTestCase {
                 reservations.get(0).getInventoryItemId(),
                 reservations.get(0).getShipGroupSeqId(),
                 facilityId1,
-                5.0
+                new BigDecimal("5.0")
         );
 
         // receive in Web Store 5 x productA and 3 x productB
@@ -604,18 +603,18 @@ public class OrderPickingTests  extends OrderTestCase {
         // - check the orderId / shipGroupSeqId / productId / quantity are correct:
         // Web Store 00001: 5 x productA and 3 x productB
         // My Retail Store 00001: 5 x productB
-        Map<String, Map<String, Double>> expectedWebStoreItems = new HashMap<String, Map<String, Double>>();
-        Map<String, Double> expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productA.getString("productId"), 5.0);
-        expectedProducts.put(productB.getString("productId"), 3.0);
+        Map<String, Map<String, BigDecimal>> expectedWebStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        Map<String, BigDecimal> expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productA.getString("productId"), new BigDecimal("5.0"));
+        expectedProducts.put(productB.getString("productId"), new BigDecimal("3.0"));
         expectedWebStoreItems.put("00001", expectedProducts);
 
         assertShipGroupReservations(order.getOrderId(), facilityId, expectedWebStoreItems);
         assertOrderReadyToShip(order, facilityId, expectedWebStoreItems);
 
-        Map<String, Map<String, Double>> expectedRetailStoreItems = new HashMap<String, Map<String, Double>>();
-        expectedProducts = new HashMap<String, Double>();
-        expectedProducts.put(productB.getString("productId"), 5.0);
+        Map<String, Map<String, BigDecimal>> expectedRetailStoreItems = new HashMap<String, Map<String, BigDecimal>>();
+        expectedProducts = new HashMap<String, BigDecimal>();
+        expectedProducts.put(productB.getString("productId"), new BigDecimal("5.0"));
         expectedRetailStoreItems.put("00001", expectedProducts);
 
         assertShipGroupReservations(order.getOrderId(), facilityId1, expectedRetailStoreItems);
@@ -645,8 +644,8 @@ public class OrderPickingTests  extends OrderTestCase {
         results = runAndAssertServiceSuccess("createPicklistFromOrders", UtilMisc.toMap("orderIdList", orderIdList, "facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
         String picklistIdForWebStore  = (String) results.get("picklistId");
         List conditions = new ArrayList();
-        conditions.add(new EntityExpr("pPicklistId", EntityOperator.EQUALS, picklistIdForWebStore));
-        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+        conditions.add(EntityCondition.makeCondition("pPicklistId", EntityOperator.EQUALS, picklistIdForWebStore));
+        List<GenericValue> picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
         boolean have5ProductAForWebStore = false;
         boolean have3ProductBForWebStore = false;
 
@@ -670,8 +669,8 @@ public class OrderPickingTests  extends OrderTestCase {
         results = runAndAssertServiceSuccess("createPicklistFromOrders", UtilMisc.toMap("orderIdList", orderIdList, "facilityId", facilityId1, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
         String picklistIdForMyRetail  = (String) results.get("picklistId");
         conditions = new ArrayList();
-        conditions.add(new EntityExpr("pPicklistId", EntityOperator.EQUALS, picklistIdForMyRetail));
-        picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
+        conditions.add(EntityCondition.makeCondition("pPicklistId", EntityOperator.EQUALS, picklistIdForMyRetail));
+        picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", EntityCondition.makeCondition(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
         boolean have5ProductBForMyRetail = false;
 
         for (GenericValue item : picklistItems) {
