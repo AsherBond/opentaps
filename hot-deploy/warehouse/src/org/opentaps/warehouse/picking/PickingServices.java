@@ -59,6 +59,7 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.warehouse.security.WarehouseSecurity;
 import org.opentaps.common.util.UtilCommon;
+import java.math.BigDecimal;
 
 /**
  * Services for Warehouse application Picking section.
@@ -336,9 +337,9 @@ public final class PickingServices {
 
                             // check all OISGIRs and if quantityNotAvailable is not empty and > 0 for any, don't pick order
                             // and make sure the inventoryItem is in the specified facility
-                            Double quantityNotAvailable = (Double) oisgir.get("quantityNotAvailable");
-                            Double quantity = (Double) oisgir.get("quantity");
-                            boolean hasQtyNotAvailable = (quantityNotAvailable != null && quantityNotAvailable > 0);
+                            BigDecimal quantityNotAvailable = oisgir.getBigDecimal("quantityNotAvailable");
+                            BigDecimal quantity = oisgir.getBigDecimal("quantity");
+                            boolean hasQtyNotAvailable = (quantityNotAvailable != null && quantityNotAvailable.signum() > 0);
                             boolean maySplit = "Y".equals(oisg.getString("maySplit"));
                             if (!facilityId.equals(inventoryItem.getString("facilityId"))) {
                                 Debug.logInfo("Item reservation reservation (" + printOisgir(oisgir) + ") facility id does not match, ignoring this item.", MODULE);
@@ -350,7 +351,7 @@ public final class PickingServices {
                             } else {
                                 Debug.logInfo("Found item to pick: " + printOisgir(oisgir), MODULE);
                                 // see if there is stock to pick.  Items without stock (back ordered items) are not added to picklists.
-                                if (!hasQtyNotAvailable || (quantity > quantityNotAvailable && maySplit)) {
+                                if (!hasQtyNotAvailable || (quantity.compareTo(quantityNotAvailable) > 0 && maySplit)) {
                                     Debug.logInfo("Item has stock; flagging order (" + orderId + ") as OK", MODULE);
                                     hasStockToPick = true;
                                 } else {
