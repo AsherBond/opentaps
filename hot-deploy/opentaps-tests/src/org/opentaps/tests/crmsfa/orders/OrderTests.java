@@ -676,7 +676,7 @@ public class OrderTests extends OrderTestCase {
         String inventoryItemId = (String) inventory.get("inventoryItemId");
 
         // create a physical inventory variance for -2.0 QOH and -2.0 ATP with reason "Damaged"
-        Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", -2.0, "quantityOnHandVar", -2.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> callCtxt = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", new BigDecimal("-2.0"), "quantityOnHandVar", new BigDecimal("-2.0"), "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", callCtxt);
 
         // check availability for the product. Expected QOH/ATP = 3
