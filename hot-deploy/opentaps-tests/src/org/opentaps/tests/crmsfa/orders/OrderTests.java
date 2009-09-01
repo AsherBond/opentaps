@@ -1122,7 +1122,7 @@ public class OrderTests extends OrderTestCase {
         inventoryAsserts.assertInventoryChange(productId, new BigDecimal("10.0"), new BigDecimal("3.0"), initialInventory);
 
         // 7. Use createPhysicalInventoryVariance to change ATP and QOH of the inventoryItem from +3 by -7 and from +10 by 0
-        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", -10.0, "quantityOnHandVar", -10.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", new BigDecimal("-10.0"), "quantityOnHandVar", new BigDecimal("-10.0"), "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
 
         // 8. check product QOH changed by +3.0 and ATP changed by -7.0 relative to initial inventory (QOH = 0.0, ATP = -7.0)
@@ -1247,7 +1247,7 @@ public class OrderTests extends OrderTestCase {
         inventoryItemIds.add(inventoryItemId);
 
         // 8. use createPhysicalInventoryVariance service to increase ATP and QOH of newly received item by +5 and +5
-        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", +5.0, "quantityOnHandVar", +5.0, "varianceReasonId", "VAR_DAMAGED");
+        Map<String, Object> varianceContext = UtilMisc.<String, Object>toMap("userLogin", demowarehouse1, "inventoryItemId", inventoryItemId, "availableToPromiseVar", new BigDecimal("5.0"), "quantityOnHandVar", new BigDecimal("5.0"), "varianceReasonId", "VAR_DAMAGED");
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", varianceContext);
 
         // 9. check product QOH changed by +13.0 and ATP changed by +3.0 relative to initial inventory (QOH = +13.0, ATP = +3.0)
@@ -1483,7 +1483,7 @@ public class OrderTests extends OrderTestCase {
         Map input = UtilMisc.toMap("userLogin", admin);
         input.put("orderId", orderId);
         input.put("shipGroupSeqId", "00001");
-        input.put("itemShipList", UtilMisc.toList(UtilMisc.<String, Object>toMap("orderItemSeqId", "00001", "inventoryItemId", inventoryItemId, "qtyShipped", 25.0)));
+        input.put("itemShipList", UtilMisc.toList(UtilMisc.<String, Object>toMap("orderItemSeqId", "00001", "inventoryItemId", inventoryItemId, "qtyShipped", new BigDecimal("25.0"))));
         input.put("originFacilityId", facilityId);
         runAndAssertServiceSuccess("quickShipOrderByItem", input);
 
