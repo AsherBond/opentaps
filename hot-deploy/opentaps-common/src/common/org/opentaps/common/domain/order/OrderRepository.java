@@ -202,9 +202,9 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
 
     /** {@inheritDoc} */
     public List<OrderAdjustment> getRelatedNonItemOrderAdjustments(Order order) throws RepositoryException {
-        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.OR,
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("orderId", order.getOrderId()),
-            EntityCondition.makeCondition(EntityOperator.AND,
+            EntityCondition.makeCondition(EntityOperator.OR,
                EntityCondition.makeCondition("orderItemSeqId", null),
                EntityCondition.makeCondition("orderItemSeqId", DataModelConstants.SEQ_ID_NA),
                EntityCondition.makeCondition("orderItemSeqId", ""))
@@ -224,9 +224,9 @@ public class OrderRepository extends Repository implements OrderRepositoryInterf
 
     /** {@inheritDoc} */
     public List<OrderStatus> getRelatedOrderStatuses(Order order) throws RepositoryException {
-        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.OR,
+        EntityConditionList<EntityCondition> conditions = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("orderId", order.getOrderId()),
-            EntityCondition.makeCondition(EntityOperator.AND,
+            EntityCondition.makeCondition(EntityOperator.OR,
                 EntityCondition.makeCondition("orderItemSeqId", null),
                 EntityCondition.makeCondition("orderItemSeqId", DataModelConstants.SEQ_ID_NA),
                 EntityCondition.makeCondition("orderItemSeqId", ""))
