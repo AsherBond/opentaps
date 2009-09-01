@@ -58,20 +58,20 @@ r12972 re-added CustRequestRole/InventoryEventPlanned/InventoryEventPlannedType/
 ofbiz remove contentPurposeEnumId from entity PartyContent, also add partyContentTypeId as part of primary key.
 I re-add contentPurposeEnumId in r12982, and going to refactor relate codes. 
 
-Accounting related:
- * commented out secas_ledger.xml from applications/accounting/ofbiz-component.xml
-
 applications/content/lib/lucene-core-2.4.0.jar
 r13032 Upgraded lucene from 2.2 to 2.4 needed for hibernate search.
 
+applications/accounting/ofbiz-component.xml
+r13042 commented out secas_ledger.xml
+
 applications/party/script/org/ofbiz/party/contact/PartyContactMechServices.xml
-- fix the createPartyContactMech service to return the contact mech id if it reuses an existing contact mech
+r13048 fix the createPartyContactMech service to return the contact mech id if it reuses an existing contact mech
 
 applications/accounting/ofbiz-component.xml
-- commented out the services, secas and entities related to ofbiz BI (SalesInvoiceItemFact)
+r13085 commented out the services, secas and entities related to ofbiz BI (SalesInvoiceItemFact)
 
 applications/accounting/data/AccountingTypeData.xml
-- The following AcctgTransType were removed from Ofbiz as they already exist in opentaps with slightly different acctgTransTypeId:
+r13145 The following AcctgTransType were removed from Ofbiz as they already exist in opentaps with slightly different acctgTransTypeId:
  * (exists)             -> (removed)
  * DISBURSEMENT_ACCTG_T -> DISBURSEMENT
  * RECEIPT_ACCTG_TRANS  -> RECEIPT
@@ -81,10 +81,10 @@ applications/accounting/data/AccountingTypeData.xml
  * SALES_ACCTG_TRANS    -> SALES
 
 applications/accounting/servicedef/secas.xml
-- Removed the seca on createPaymentApplication that called createAcctgTransAndEntriesForPaymentApplication (new ofbiz service)
+r13147 Removed the seca on createPaymentApplication that called createAcctgTransAndEntriesForPaymentApplication (new ofbiz service)
 
 applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.java
-- Fix so that the production run quantityToProduce field is also updated on store
+r13173 Fix so that the production run quantityToProduce field is also updated on store
  
 
 Other API Changes
