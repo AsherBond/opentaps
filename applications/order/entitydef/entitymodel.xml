@@ -1047,6 +1047,18 @@ under the License.
         <index-field name="needsNsfRetry"/>
       </index>
     </entity>
+    <entity entity-name="OrderProductPromoCode" package-name="org.ofbiz.order.order" title="Order Product Promo Code Entity">
+        <field name="orderId" type="id-ne"></field>
+        <field name="productPromoCodeId" type="id-ne"></field>
+        <prim-key field="orderId"/>
+        <prim-key field="productPromoCodeId"/>
+        <relation type="one" fk-name="ORDER_PPCD_ORD" rel-entity-name="OrderHeader">
+            <key-map field-name="orderId"/>
+        </relation>
+        <relation type="one" fk-name="ORDER_PPCD_PPC" rel-entity-name="ProductPromoCode">
+            <key-map field-name="productPromoCodeId"/>
+        </relation>
+    </entity>
     <entity entity-name="OrderRole"
             package-name="org.ofbiz.order.order"
             never-cache="true"
