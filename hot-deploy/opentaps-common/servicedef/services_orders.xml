@@ -107,14 +107,14 @@ under the License.
         <attribute name="shipGroupSeqId" type="String" mode="IN" optional="false"/>
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="prodCatalogId" type="String" mode="IN" optional="true"/>
-        <attribute name="listPrice" type="Double" mode="IN" optional="true"/>
-        <attribute name="unitPrice" type="Double" mode="IN" optional="false"/>
+        <attribute name="listPrice" type="BigDecimal" mode="IN" optional="true"/>
+        <attribute name="unitPrice" type="BigDecimal" mode="IN" optional="false"/>
         <attribute name="isSalePrice" type="Boolean" mode="IN" optional="true"/>
-        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
+        <attribute name="quantity" type="BigDecimal" mode="IN" optional="false"/>
         <attribute name="surveyResponseId" type="String" mode="IN" optional="true"/>
         <attribute name="comments" type="String" mode="IN" optional="true"/>
         <attribute name="correspondingPoId" type="String" mode="IN" optional="true"/>
-        <attribute name="amount" type="Double" mode="IN" optional="true"/>
+        <attribute name="amount" type="BigDecimal" mode="IN" optional="true"/>
     </service>
 
     <service name="appendOrderItem" engine="java" auth="true"
@@ -126,8 +126,8 @@ under the License.
         <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="prodCatalogId" type="String" mode="IN" optional="true"/>
         <attribute name="basePrice" type="BigDecimal" mode="IN" optional="true"/>
-        <attribute name="quantity" type="Double" mode="IN" optional="false"/>
-        <attribute name="amount" type="Double" mode="IN" optional="true"/>
+        <attribute name="quantity" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="amount" type="BigDecimal" mode="IN" optional="true"/>
         <attribute name="overridePrice" type="String" mode="IN" optional="true"/>
         <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
     </service>

@@ -191,7 +191,7 @@ public class OrderTests extends OrderTestCase {
         input.put("userLogin", admin);
         input.put("orderId", salesOrder.getOrderId());
         input.put("productId", "043000285213");
-        input.put("quantity", 1.0);
+        input.put("quantity", new BigDecimal("1.0"));
         input.put("shipGroupSeqId", "00001");
         input.put("prodCatalogId", productStoreId);
         runAndAssertServiceSuccess("opentaps.appendOrderItem", input);

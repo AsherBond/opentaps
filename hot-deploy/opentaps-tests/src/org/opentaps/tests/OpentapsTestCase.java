@@ -1200,11 +1200,12 @@ public class OpentapsTestCase extends TestCase {
                 assertTrue("Product [" + product.get("productId") + "] has ProductFacility rule", productFacility != null && productFacility.get("minimumStock") != null);
                 BigDecimal minimumStock = productFacility.getBigDecimal("minimumStock");
                 BigDecimal stock = initialRequirement.add(initialAtp);
-                if (stock.subtract(orderedQty).compareTo(minimumStock) < 0) {
-                    assertEquals("Requirements for product [" + product.get("productId") + "]", minimumStock.subtract(stock.subtract(orderedQty)), (finalRequirement.subtract(initialRequirement)));
-                } else {
-                    assertEquals("Requirements for product [" + product.get("productId") + "]", initialRequirement, finalRequirement);
-                }
+                // the requirement created is for the minimum of (quantity ordered | quantity to make ATP go up to minimumStock)
+                // so this is not always the quantity to make ATP go up to minimumStock
+                BigDecimal shortfall = minimumStock.subtract(stock.subtract(orderedQty));
+                BigDecimal required = shortfall.min(orderedQty);
+                Debug.logInfo("checkRequirements for product [" + product.get("productId") + "], minimumStock = " + minimumStock + ", orderedQty = " + orderedQty + ", stock = " + stock + ", ====> shortfall = " + shortfall + " -------- makes required = " + required, MODULE);
+                assertEquals("Requirements for product [" + product.get("productId") + "]", required, (finalRequirement.subtract(initialRequirement)));
             } catch (GenericEntityException e) {
                 assertTrue("GenericEntityException:" + e.toString(), false);
             }

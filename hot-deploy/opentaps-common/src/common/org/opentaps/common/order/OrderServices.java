@@ -532,8 +532,8 @@ public final class OrderServices {
 
         String orderId = (String) context.get("orderId");
         String productId = (String) context.get("productId");
-        Double quantity = (Double) context.get("quantity");
-        Double unitPrice = (Double) context.get("unitPrice");
+        BigDecimal quantity = (BigDecimal) context.get("quantity");
+        BigDecimal unitPrice = (BigDecimal) context.get("unitPrice");
         String shipGroupSeqId = (String) context.get("shipGroupSeqId");
         String surveyResponseId = (String) context.get("surveyResponseId");
         String comments = (String) context.get("comments");
@@ -579,15 +579,15 @@ public final class OrderServices {
             orderItem.setOrderId(orderId);
             orderItem.setOrderItemTypeId(UtilOrder.getOrderItemTypeId(product.getString("productTypeId"), orderHeader.getString("orderTypeId"), delegator));
             orderItem.setProductId(productId);
-            orderItem.setQuantity(BigDecimal.valueOf(quantity));
-            Double amount = (Double) context.get("amount");
+            orderItem.setQuantity(quantity);
+            BigDecimal amount = (BigDecimal) context.get("amount");
             if (amount != null) {
-                orderItem.setSelectedAmount(BigDecimal.valueOf(amount));
+                orderItem.setSelectedAmount(amount);
             }
-            orderItem.setUnitPrice(BigDecimal.valueOf(unitPrice));
-            Double listPrice = (Double) context.get("listPrice");
+            orderItem.setUnitPrice(unitPrice);
+            BigDecimal listPrice = (BigDecimal) context.get("listPrice");
             if (listPrice != null) {
-                orderItem.setUnitListPrice(BigDecimal.valueOf(listPrice));
+                orderItem.setUnitListPrice(listPrice);
             }
             orderItem.setIsModifiedPrice("N");   // I think this means the price has not been changed
             orderItem.setItemDescription(ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher));
@@ -630,8 +630,8 @@ public final class OrderServices {
             Map serviceParams = UtilMisc.toMap("productStoreId", orh.getProductStoreId(),
                     "shippingAddress", orh.getShippingAddress(shipGroupSeqId),
                     "itemProductList", UtilMisc.toList(product),
-                    "itemAmountList", UtilMisc.toList(new BigDecimal(quantity.doubleValue() * unitPrice.doubleValue())),
-                    "itemPriceList", UtilMisc.toList(new BigDecimal(unitPrice.doubleValue())),
+                    "itemAmountList", UtilMisc.toList(quantity.multiply(unitPrice)),
+                    "itemPriceList", UtilMisc.toList(unitPrice),
                     "userLogin", userLogin);
             if (orh.getBillFromParty() != null) {
                 serviceParams.put("payToPartyId", orh.getBillFromParty().getString("partyId"));
@@ -639,7 +639,7 @@ public final class OrderServices {
             if (orh.getBillToParty() != null) {
                 serviceParams.put("billToPartyId", orh.getBillToParty().getString("partyId"));
             }
-            serviceParams.put("itemShippingList", UtilMisc.toList(new BigDecimal(0.0)));   // since we're not changing shipping, just pass a zero
+            serviceParams.put("itemShippingList", UtilMisc.toList(BigDecimal.ZERO));   // since we're not changing shipping, just pass a zero
             serviceParams.put("orderShippingAmount", orh.getShippingTotal()); // yes, I know, this will break on the current ofbiz svn, but maybe they'll fix it for us before we upgrade :)
             tmpResult = dispatcher.runSync("calcTax", serviceParams);
             if (ServiceUtil.isFailure(tmpResult)) {
@@ -1284,7 +1284,6 @@ public final class OrderServices {
      * @param context a <code>Map</code> value
      * @return the service result <code>Map</code>
      */
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> cancelOrderItemBilling(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
@@ -1293,7 +1292,7 @@ public final class OrderServices {
 
         try {
 
-            delegator.storeByCondition("OrderItemBilling", UtilMisc.toMap("quantity", Double.valueOf("0.0")), EntityCondition.makeCondition("invoiceId", invoiceId));
+            delegator.storeByCondition("OrderItemBilling", UtilMisc.toMap("quantity", BigDecimal.ZERO), EntityCondition.makeCondition("invoiceId", invoiceId));
 
         } catch (GenericEntityException e) {
             return UtilMessage.createAndLogServiceError(e, locale, MODULE);
@@ -1513,11 +1512,11 @@ public final class OrderServices {
                 }
 
                 if (assoc != null) {
-                    Double cancelQty = assoc.getDouble("cancelQuantity");
+                    BigDecimal cancelQty = assoc.getBigDecimal("cancelQuantity");
                     Debug.logInfo("found existing assoc: " + assoc, MODULE);
                     if (cancelQty != null) {
-                        Double newQuantity = valueObj.getDouble("quantity");
-                        newQuantity += cancelQty;
+                        BigDecimal newQuantity = valueObj.getBigDecimal("quantity");
+                        newQuantity = newQuantity.add(cancelQty);
                         Debug.logInfo("set new quantity = " + newQuantity, MODULE);
                         valueObj.set("quantity", newQuantity);
                         valueObj.set("cancelQuantity", cancelQty);
@@ -1895,10 +1894,10 @@ public final class OrderServices {
                 BigDecimal cancelQty = orderItemShipGroupAssoc.getCancelQuantity();
                 BigDecimal newQuantity = orderItemShipGroupAssoc.getOrderItem().getQuantity();
                 if (cancelQty != null) {
-                    newQuantity = BigDecimal.valueOf(cancelQty.doubleValue() + newQuantity.doubleValue());
+                    newQuantity = cancelQty.add(newQuantity);
                 }
                 // set orderItemShipGroupAssoc.getQuantity() = orderItemShipGroupAssoc.getOrderItem().getQuantity() + orderItemShipGroupAssoc.getCancelQuantity()
-                if (orderItemShipGroupAssoc.getQuantity().doubleValue() != newQuantity.doubleValue()) {
+                if (orderItemShipGroupAssoc.getQuantity().compareTo(newQuantity) != 0) {
                     orderItemShipGroupAssoc.setQuantity(newQuantity);
                     update = true;
                 }
