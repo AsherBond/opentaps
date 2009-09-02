@@ -89,6 +89,9 @@ r13173 Fix so that the production run quantityToProduce field is also updated on
 applications/order/entitydef/entitymodel.xml
 - Added missing entity OrderProductPromoCode, it is an Ofbiz bug as some code was ported to 09.04 that uses it but not the entity definition. Notified in JIRA 2527 https://issues.apache.org/jira/browse/OFBIZ-2527
 
+applications/order/servicedef/secas.xml
+- Removed ofbiz new seca that auto invoice services when approved, this conflicts with the perform service -> invoice performed services workflow in opentaps.
+
 
 Other API Changes
 -----------------
