@@ -157,7 +157,9 @@ public class PaymentGatewayServices {
         }
 
         // round this before moving on just in case a funny number made it this far
-        transAmount = transAmount.setScale(decimals, rounding);
+        if (transAmount != null) {
+            transAmount = transAmount.setScale(decimals, rounding);
+        }
 
         // if our transaction amount exists and is zero, there's nothing to process, so return
         if ((transAmount != null) && (transAmount.compareTo(BigDecimal.ZERO) <= 0)) {
