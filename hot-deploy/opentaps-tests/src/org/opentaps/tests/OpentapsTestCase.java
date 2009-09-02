@@ -347,7 +347,49 @@ public class OpentapsTestCase extends TestCase {
             }
         }
     }
-    
+
+    /**
+     * Asserts that the values in a Map are equal to the given Map.
+     * This uses <code>assertEquals</code> to compare the Map values as the default implementation uses <code>equals</code> which does not always work on <code>BigDecimal</code>.
+     * @param message the assert message
+     * @param actual a <code>Map</code> of values
+     * @param expected the <code>Map</code> of expected values
+     * @param ignoreExtraActualValues if set to <code>true</code>, does not fail if some values in the actual Map are not in the expected Map
+     */
+    public void assertEquals(String message, Map actual, Map expected, boolean ignoreExtraActualValues) {
+        Debug.logInfo("Comparing maps :\nactual = " + actual + "\nexpected = " + expected, MODULE);
+
+        for (Object key : expected.keySet()) {
+            Object expectedObj = expected.get(key);
+            Object actualObj = actual.get(key);
+            if (expectedObj == null) {
+                assertNull(message + " for key value [" + key + "]", actualObj);
+            } else {
+                if (actualObj instanceof Map || expectedObj instanceof Map) {
+                    assertEquals(message + " for key value [" + key + "]", (Map) expectedObj, (Map) actualObj, ignoreExtraActualValues);
+                } else if (actualObj instanceof Number || expectedObj instanceof Number) {
+                    assertEquals(message + " for key value [" + key + "]", (Number) expectedObj, (Number) actualObj);
+                } else {
+                    assertEquals(message + " for key value [" + key + "]", expectedObj, actualObj);
+                }
+            }
+        }
+        if (!ignoreExtraActualValues) {
+            assertTrue("Some keys were found in the actual Map [" + actual.keySet() + "] that were not expected [" + expected.keySet() + "].", expected.keySet().containsAll(actual.keySet()));
+        }
+    }
+
+    /**
+     * Asserts that the values in a Map are equal to the given Map.
+     * This uses <code>assertEquals</code> to compare the Map values as the default implementation uses <code>equals</code> which does not always work on <code>BigDecimal</code>.
+     * @param message the assert message
+     * @param actual a <code>Map</code> of values
+     * @param expected the <code>Map</code> of expected values
+     */
+    public void assertEquals(String message, Map actual, Map expected) {
+        assertEquals(message, actual, expected, false);
+    }
+
     /**
      * Asserts that an entity has the expected accounting tags.
      * @param value the entity to test the tags for value
