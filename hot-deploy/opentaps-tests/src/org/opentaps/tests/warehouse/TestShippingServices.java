@@ -128,7 +128,7 @@ public final class TestShippingServices {
 
         String orderId = (String) context.get("orderId");
         String facilityId = (String) context.get("facilityId");
-        Map<String, Map<String, Double>> items = (Map<String, Map<String, Double>>) context.get("items");
+        Map<String, Map<String, BigDecimal>> items = (Map<String, Map<String, BigDecimal>>) context.get("items");
 
         try {
             List<String> shipmentIds = new FastList<String>();
@@ -146,17 +146,17 @@ public final class TestShippingServices {
                 packingSessions.add(packing);
                 packageSeqId = 1;
 
-                Map<String, Double> itemMap = items.get(shipGroupSeqId);
+                Map<String, BigDecimal> itemMap = items.get(shipGroupSeqId);
                 for (String orderItemSeqId : itemMap.keySet()) {
-                    Double quantity = itemMap.get(orderItemSeqId);
-                    if (quantity <= 0.0) {
+                    BigDecimal quantity = itemMap.get(orderItemSeqId);
+                    if (quantity.signum() <= 0) {
                         continue;
                     }
 
                     Debug.logInfo("Packing item [" + orderId + "/" + shipGroupSeqId + "/" + orderItemSeqId + "] x " + quantity, MODULE);
                     GenericValue orderItem = delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
                     String productId = orderItem.getString("productId");
-                    packing.addOrIncreaseLine(orderId, orderItemSeqId, shipGroupSeqId, productId, BigDecimal.valueOf(quantity), packageSeqId++, BigDecimal.ZERO, false);
+                    packing.addOrIncreaseLine(orderId, orderItemSeqId, shipGroupSeqId, productId, quantity, packageSeqId++, BigDecimal.ZERO, false);
                 }
             }
 
