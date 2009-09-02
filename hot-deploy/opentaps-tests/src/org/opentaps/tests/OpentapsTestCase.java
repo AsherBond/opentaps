@@ -343,7 +343,7 @@ public class OpentapsTestCase extends TestCase {
      * @param expected the <code>Map</code> of expected values
      */
     public void assertEquals(String message, GenericValue actual, Map<String, String> expected) {
-        Debug.logInfo("Comparing maps :\nactual = " + actual + "\nexpected = " + expected, MODULE);
+        Debug.logInfo("Comparing GenericValue to map :\nactual = " + actual + "\nexpected = " + expected, MODULE);
 
         for (Object key : expected.keySet()) {
             Object expectedObj = expected.get(key);
@@ -395,7 +395,7 @@ public class OpentapsTestCase extends TestCase {
      * @param expected the <code>Map</code> of expected values
      */
     public void assertEquals(String message, Map actual, Map expected) {
-        assertEquals(message, actual, expected, false);
+        assertEquals(message, actual, expected, true);
     }
 
     /**
