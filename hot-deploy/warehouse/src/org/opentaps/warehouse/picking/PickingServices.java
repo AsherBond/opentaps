@@ -41,7 +41,6 @@ package org.opentaps.warehouse.picking;
 import java.sql.Timestamp;
 import java.util.*;
 
-import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -160,7 +159,7 @@ public final class PickingServices {
             }
 
             String statusId = picklist.getString("statusId");
-            if (StringUtils.isEmpty(statusId) || !PICKLIST_STATUS_ID_PICKED.equals(statusId)) {
+            if (UtilValidate.isEmpty(statusId) || !PICKLIST_STATUS_ID_PICKED.equals(statusId)) {
                 String errorMessage = UtilProperties.getMessage(resource, "WarehouseErrorInvalidPicklistStatus", context, locale);
                 Debug.logError(errorMessage, MODULE);
                 return ServiceUtil.returnError(errorMessage);
@@ -204,7 +203,7 @@ public final class PickingServices {
      * @throws GenericEntityException if an error occurs
      */
     @SuppressWarnings("unchecked")
-    public static Map findOrdersToPickMove(DispatchContext dctx, Map context) throws GenericEntityException {
+    public static Map<String, Object> findOrdersToPickMove(DispatchContext dctx, Map<String, Object> context) throws GenericEntityException {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -216,6 +215,12 @@ public final class PickingServices {
         String isRushOrder = (String) context.get("isRushOrder");
         Long maxNumberOfOrders = (Long) context.get("maxNumberOfOrders");
         List<GenericValue> orderHeaderList = (List<GenericValue>) context.get("orderHeaderList");
+
+        // control grouping of the OUT map pickMoveInfoList
+        // TODO: current implementation always group by shipment method (see pickMoveByShipmentMethodInfoList)
+        String groupByShippingMethod = (String) context.get("groupByShippingMethod");
+        String groupByNoOfOrderItems = (String) context.get("groupByNoOfOrderItems");
+        String groupByWarehouseArea = (String) context.get("groupByWarehouseArea");
 
         // check permission
         WarehouseSecurity warehouseSecurity = new WarehouseSecurity(security, userLogin, facilityId);
@@ -465,6 +470,8 @@ public final class PickingServices {
         }
 
         Map results = ServiceUtil.returnSuccess();
+        results.put("pickMoveInfoList", pickMoveByShipmentMethodInfoList);
+        // TODO: deprecated, use pickMoveInfoList and group according to user inputs
         results.put("pickMoveByShipmentMethodInfoList", pickMoveByShipmentMethodInfoList);
         results.put("rushOrderInfo", rushOrderInfo);
         results.put("nReturnedOrders", numberSoFar);
