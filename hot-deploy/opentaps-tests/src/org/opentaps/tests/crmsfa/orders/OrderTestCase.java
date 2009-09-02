@@ -116,7 +116,7 @@ public class OrderTestCase extends OpentapsTestCase {
         try {
             GenericValue orderHeader = delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", orderId));
             if (!statusId.equals(orderHeader.getString("statusId"))) {
-                TestCase.fail(message + " Order [" + orderId + "] status not " + statusId);
+                TestCase.fail(message + " Order [" + orderId + "] status not " + statusId + ", was " + orderHeader.getString("statusId"));
             }
         } catch (GenericEntityException e) {
             TestCase.fail(message + " GenericEntityException:" + e.toString());
