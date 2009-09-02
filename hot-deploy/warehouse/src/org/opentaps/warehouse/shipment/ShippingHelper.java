@@ -16,6 +16,7 @@
 
 package org.opentaps.warehouse.shipment;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -66,7 +67,7 @@ public class ShippingHelper {
      */
     public List<GenericValue> getOISGIRlist()
         throws GenericEntityException {
-        EntityCondition conditions = EntityCondition.makeCondition(
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
             EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
             EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "ORDER_APPROVED"),
             EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"));
@@ -81,7 +82,7 @@ public class ShippingHelper {
      */
     public List<GenericValue> getActivePicklists()
         throws GenericEntityException {
-        EntityCondition conditions = EntityCondition.makeCondition(
+        EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
                    EntityCondition.makeCondition("facilityId", EntityOperator.EQUALS, facilityId),
                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_CANCELLED"),
                    EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PICKLIST_PICKED"),
@@ -98,10 +99,9 @@ public class ShippingHelper {
      *
      * @return <code>Map</code> orderId -> {shipGroupSeqId -> {readyQty, shortfall, maySplit}}
      */
-    @SuppressWarnings("unchecked")
-    public Map getShipFalls() {
-        Map shortfalls = new HashMap();
-        List oisgirsAgainstFacility = null;
+    public Map<String, Map<String, Map<String, Object>>> getShipFalls() {
+        Map<String, Map<String, Map<String, Object>>> shortfalls = new HashMap<String, Map<String, Map<String, Object>>>();
+        List<GenericValue> oisgirsAgainstFacility = null;
         try {
             oisgirsAgainstFacility = getOISGIRlist();
         } catch (GenericEntityException ex) {
@@ -109,30 +109,30 @@ public class ShippingHelper {
             return shortfalls;
         }
 
-        Iterator oafit = oisgirsAgainstFacility.iterator();
+        Iterator<GenericValue> oafit = oisgirsAgainstFacility.iterator();
         while (oafit.hasNext()) {
-            GenericValue oisgir = (GenericValue) oafit.next();
+            GenericValue oisgir = oafit.next();
             String orderId = oisgir.getString("orderId");
             String shipGroupSeqId = oisgir.getString("shipGroupSeqId");
-            Map orderMap = shortfalls.containsKey(orderId) ? (Map) shortfalls.get(orderId) : new HashMap();
+            Map<String, Map<String, Object>> orderMap = shortfalls.containsKey(orderId) ? (Map<String, Map<String, Object>>) shortfalls.get(orderId) : new HashMap<String, Map<String, Object>>();
             shortfalls.put(orderId, orderMap);
-            Map shipGroupMap = orderMap.containsKey(shipGroupSeqId) ? (Map) orderMap.get(shipGroupSeqId) : new HashMap();
+            Map<String, Object> shipGroupMap = orderMap.containsKey(shipGroupSeqId) ? (Map<String, Object>) orderMap.get(shipGroupSeqId) : new HashMap<String, Object>();
             orderMap.put(shipGroupSeqId, shipGroupMap);
             shipGroupMap.put("maySplit", oisgir.get("maySplit"));
             shipGroupMap.put("contactMechId", oisgir.getString("contactMechId"));
-            Double shortfall = new Double(0);
-            Double oisgirShortfall = new Double(0);
+            BigDecimal shortfall = BigDecimal.ZERO;
+            BigDecimal oisgirShortfall = BigDecimal.ZERO;
             if (shipGroupMap.containsKey("shortfall")) {
-                shortfall = (Double) shipGroupMap.get("shortfall");
+                shortfall = (BigDecimal) shipGroupMap.get("shortfall");
             }
             if (UtilValidate.isNotEmpty(oisgir.get("quantityNotAvailable"))) {
-                oisgirShortfall = oisgir.getDouble("quantityNotAvailable");
-                shortfall += oisgirShortfall;
+                oisgirShortfall = oisgir.getBigDecimal("quantityNotAvailable");
+                shortfall = shortfall.add(oisgirShortfall);
             }
             shipGroupMap.put("shortfall", shortfall);
-            Double readyQty = oisgir.getDouble("quantity") - oisgirShortfall;
+            BigDecimal readyQty = oisgir.getBigDecimal("quantity").subtract(oisgirShortfall);
             if (shipGroupMap.containsKey("readyQty")) {
-                readyQty += (Double) shipGroupMap.get("readyQty");
+                readyQty = readyQty.add((BigDecimal) shipGroupMap.get("readyQty"));
             }
             shipGroupMap.put("readyQty", readyQty);
         }
@@ -146,38 +146,37 @@ public class ShippingHelper {
      *
      * @return List of conditions
      */
-    @SuppressWarnings("unchecked")
-    public List getOrderIsReadyConditionList() {
-        List orderIsReadyConditionList = new ArrayList();
-        Map shortfalls = getShipFalls();
-        List onActivePicklists = null;
+    public List<EntityCondition> getOrderIsReadyConditionList() {
+        List<EntityCondition> orderIsReadyConditionList = new ArrayList<EntityCondition>();
+        Map<String, Map<String, Map<String, Object>>> shortfalls = getShipFalls();
+        List<GenericValue> onActivePicklists = null;
         try {
             onActivePicklists = getActivePicklists();
         } catch (GenericEntityException ex) {
             Debug.logError("Problem getting Active Picklists list " + ex.toString(), MODULE);
-            onActivePicklists = new ArrayList();
+            onActivePicklists = new ArrayList<GenericValue>();
         }
 
-        Iterator sfit = shortfalls.keySet().iterator();
+        Iterator<String> sfit = shortfalls.keySet().iterator();
         while (sfit.hasNext()) {
-            String orderId = (String) sfit.next();
-            Map orderMap = (Map) shortfalls.get(orderId);
-            Iterator sgit = orderMap.keySet().iterator();
+            String orderId = sfit.next();
+            Map<String, Map<String, Object>> orderMap = shortfalls.get(orderId);
+            Iterator<String> sgit = orderMap.keySet().iterator();
             while (sgit.hasNext()) {
-                String shipGroupSeqId = (String) sgit.next();
-                Map shipGroupMap = (Map) orderMap.get(shipGroupSeqId);
+                String shipGroupSeqId = sgit.next();
+                Map<String, Object> shipGroupMap = orderMap.get(shipGroupSeqId);
                 String maySplit = (String) shipGroupMap.get("maySplit");
-                Double shortfall = (Double) shipGroupMap.get("shortfall");
-                Double readyQty = (Double) shipGroupMap.get("readyQty");
+                BigDecimal shortfall = (BigDecimal) shipGroupMap.get("shortfall");
+                BigDecimal readyQty = (BigDecimal) shipGroupMap.get("readyQty");
                 String contactMechId = (String) shipGroupMap.get("contactMechId");
 
                 // Orders are ready if either: maySplit and readyQty > 0,
                 // OR !maySplit and shortfall == 0
                 // Split into two checks to ease maintenance later
                 Boolean orderIsReady = false;
-                if (maySplit.equals("Y") && readyQty > 0) {
+                if (maySplit.equals("Y") && readyQty.signum() > 0) {
                     orderIsReady = true;
-                } else if (maySplit.equals("N") && shortfall == 0) {
+                } else if (maySplit.equals("N") && shortfall.signum() == 0) {
                     orderIsReady = true;
                 }
                 if ("_NA_".equals(contactMechId)) {
@@ -192,7 +191,7 @@ public class ShippingHelper {
                 if (orderIsReady && !onActivePicklist) {
                     // Create an EntityCondition for this order/shipGroup
                     Debug.logInfo("Adding condition for [" + orderId + "/" + shipGroupSeqId + "]", MODULE);
-                    EntityCondition osgCondition = EntityCondition.makeCondition(
+                    EntityCondition osgCondition = EntityCondition.makeCondition(EntityOperator.AND,
                         EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
                         EntityCondition.makeCondition("shipGroupSeqId", EntityOperator.EQUALS, shipGroupSeqId));
                     orderIsReadyConditionList.add(osgCondition);
@@ -237,10 +236,9 @@ public class ShippingHelper {
      * @throws GenericEntityException if a database exception occurred
      * @return List of orders ready to ship
      */
-    @SuppressWarnings("unchecked")
     public List<GenericValue> findOrdersReadyToShip(int viewIndex, int viewSize) throws GenericEntityException {
         List<GenericValue> orders = new ArrayList<GenericValue>();
-        List orderIsReadyConditionList = getOrderIsReadyConditionList();
+        List<EntityCondition> orderIsReadyConditionList = getOrderIsReadyConditionList();
 
         if (orderIsReadyConditionList.size() > 0) {
             Debug.logInfo("Found orderIsReadyConditionList: " + orderIsReadyConditionList, MODULE);
