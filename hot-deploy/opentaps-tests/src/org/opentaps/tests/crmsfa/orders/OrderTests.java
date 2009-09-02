@@ -3027,13 +3027,13 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] item WG1111 (promo) sub total incorrect.", WG1111ItemPromo.getSubTotal(), BigDecimal.ZERO);
         assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("839.94"));
         // Tax amount should be 5.75% of this total:
-        //  1 + 4.75 % of 359.94 = 3.599 + 17.097 -> 20.696 rounded to 20.70
-        //  1 + 4.75 % of 480.00 = 4.800 + 22.800 -> 27.600 rounded to 27.60
-        //= 1 + 4.75 % of 839.94 = 8.399 + 39.897 -> 48.296 rounded to 48.30
-        assertEquals("Order [" + orderId + "] item WG1111 taxes incorrect.", WG1111Item.getTaxAmount(), new BigDecimal("20.70"));
-        assertEquals("Order [" + orderId + "] item WG5569 taxes incorrect.", WG5569Item.getTaxAmount(), new BigDecimal("27.60"));
+        //  1 + 4.75 + 0.1 % of 359.94 = 3.599 + 17.097 + 0.360 -> 21.056 rounded to 21.06
+        //  1 + 4.75 + 0.1 % of 480.00 = 4.800 + 22.800 + 0.480 -> 28.080 rounded to 28.08
+        //= 1 + 4.75 + 0.1 % of 839.94 = 8.399 + 39.897 + 0.840 -> 49.14 | minus 0.1% of 83.99 -> 0.08 ==> 49.06
+        assertEquals("Order [" + orderId + "] item WG1111 taxes incorrect.", WG1111Item.getTaxAmount(), new BigDecimal("21.06"));
+        assertEquals("Order [" + orderId + "] item WG5569 taxes incorrect.", WG5569Item.getTaxAmount(), new BigDecimal("28.08"));
         assertEquals("Order [" + orderId + "] item WG1111 (promo) taxes incorrect.", WG1111ItemPromo.getTaxAmount(), BigDecimal.ZERO);
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("48.30"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("49.06"));
         // Order global promotion should be:
         //  10% off order total = 10 % of (839.94) = 83.99
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-83.99"));
@@ -3049,7 +3049,7 @@ public class OrderTests extends OrderTestCase {
         ctxt.put("orderId", orderId);
         ctxt.put("orderItemSeqId", WG1111Item.getOrderItemSeqId());
         ctxt.put("shipGroupSeqId", "00001");
-        ctxt.put("cancelQuantity", 8.0);
+        ctxt.put("cancelQuantity", new BigDecimal("8.0"));
         runAndAssertServiceSuccess("cancelOrderItem", ctxt);
 
         // Find the order items
@@ -3083,13 +3083,13 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] item WG1111 (promo) sub total incorrect.", WG1111ItemPromo.getSubTotal(), BigDecimal.ZERO);
         assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("599.98"));
         // Tax amount should be 5.75% of this total:
-        //  1 + 4.75 % of 119.98 = 1.200 + 5.699  -> 6.899  rounded to 6.90
-        //  1 + 4.75 % of 480.00 = 4.800 + 22.800 -> 27.600 rounded to 27.60
-        //= 1 + 4.75 % of 599.98 = 6.000 + 28.499 -> 34.499 rounded to 34.50
-        assertEquals("Order [" + orderId + "] item WG1111 taxes incorrect.", WG1111Item.getTaxAmount(), new BigDecimal("6.90"));
-        assertEquals("Order [" + orderId + "] item WG5569 taxes incorrect.", WG5569Item.getTaxAmount(), new BigDecimal("27.60"));
+        //  1 + 4.75 + 0.1 % of 119.98 = 1.200 + 5.699 + 0.120  -> 7.019 rounded to 7.02
+        //  1 + 4.75 + 0.1 % of 480.00 = 4.800 + 22.800 + 0.480 -> 28.08 rounded to 28.08
+        //= 1 + 4.75 + 0.1 % of 599.98 = 6.000 + 28.499 + 0.600 -> 35.10 | minus 0.1% of 60.0 -> 0.06 ==> 35.04
+        assertEquals("Order [" + orderId + "] item WG1111 taxes incorrect.", WG1111Item.getTaxAmount(), new BigDecimal("7.02"));
+        assertEquals("Order [" + orderId + "] item WG5569 taxes incorrect.", WG5569Item.getTaxAmount(), new BigDecimal("28.08"));
         assertEquals("Order [" + orderId + "] item WG1111 (promo) taxes incorrect.", WG1111ItemPromo.getTaxAmount(), BigDecimal.ZERO);
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("34.50"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("35.04"));
         // Order global promotion should be:
         //  10% off order total = 10 % of (599.98) = 60.00
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-60.00"));
@@ -3100,7 +3100,7 @@ public class OrderTests extends OrderTestCase {
         ctxt.put("orderId", orderId);
         ctxt.put("orderItemSeqId", WG1111Item.getOrderItemSeqId());
         ctxt.put("shipGroupSeqId", "00001");
-        ctxt.put("cancelQuantity", 1.0);
+        ctxt.put("cancelQuantity", new BigDecimal("1.0"));
         runAndAssertServiceSuccess("cancelOrderItem", ctxt);
 
         // Find the order items
@@ -3133,13 +3133,13 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] item WG1111 (promo) sub total incorrect.", WG1111ItemPromo.getSubTotal(), BigDecimal.ZERO);
         assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("539.99"));
         // Tax amount should be 5.75% of this total:
-        //  1 + 4.75 % of 59.99  = 0.600 + 2.850  -> 3.45   rounded to 3.45
-        //  1 + 4.75 % of 480.00 = 4.800 + 22.800 -> 27.600 rounded to 27.60
-        //= 1 + 4.75 % of 539.99 = 5.400 + 25.650 -> 31.05  rounded to 31.05
-        assertEquals("Order [" + orderId + "] item WG1111 taxes incorrect.", WG1111Item.getTaxAmount(), new BigDecimal("3.45"));
-        assertEquals("Order [" + orderId + "] item WG5569 taxes incorrect.", WG5569Item.getTaxAmount(), new BigDecimal("27.60"));
+        //  1 + 4.75 + 0.1 % of 59.99  = 0.600 + 2.850 + 0.06  -> 3.51   rounded to 3.51
+        //  1 + 4.75 + 0.1 % of 480.00 = 4.800 + 22.800 + 0.48 -> 28.08  rounded to 28.08
+        //= 1 + 4.75 + 0.1 % of 539.99 = 5.400 + 25.650 + 0.54 -> 31.59 | minus 0.1% of 54.0 -> 0.05 ==> 31.54 rounded to 31.54
+        assertEquals("Order [" + orderId + "] item WG1111 taxes incorrect.", WG1111Item.getTaxAmount(), new BigDecimal("3.51"));
+        assertEquals("Order [" + orderId + "] item WG5569 taxes incorrect.", WG5569Item.getTaxAmount(), new BigDecimal("28.08"));
         assertEquals("Order [" + orderId + "] item WG1111 (promo) taxes incorrect.", WG1111ItemPromo.getTaxAmount(), BigDecimal.ZERO);
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("31.05"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("31.54"));
         // Order global promotion should be:
         //  10% off order total = 10 % of (539.99) = 54.00
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-54.00"));
@@ -3150,7 +3150,7 @@ public class OrderTests extends OrderTestCase {
         ctxt.put("orderId", orderId);
         ctxt.put("orderItemSeqId", WG5569Item.getOrderItemSeqId());
         ctxt.put("shipGroupSeqId", "00001");
-        ctxt.put("cancelQuantity", 10.0);
+        ctxt.put("cancelQuantity", new BigDecimal("10.0"));
         runAndAssertServiceSuccess("cancelOrderItem", ctxt);
 
         // Find the order items
@@ -3184,9 +3184,10 @@ public class OrderTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] item WG1111 sub total incorrect.", WG1111Item.getSubTotal(), new BigDecimal("59.99"));
         assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("59.99"));
         // Tax amount should be 5.75% of this total:
-        //  1 + 4.75 % of 119.98 = 0.600 + 2.850 -> 3.45 rounded to 3.45
-        assertEquals("Order [" + orderId + "] item WG1111 taxes incorrect.", WG1111Item.getTaxAmount(), new BigDecimal("3.45"));
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("3.45"));
+        //  1 + 4.75 + 0.1 % of 119.98 = 0.600 + 2.850 + 0.06 -> 3.51 rounded to 3.51
+        //  | minus 0.1% of 6.00 -> 0.01 ==> 3.5
+        assertEquals("Order [" + orderId + "] item WG1111 taxes incorrect.", WG1111Item.getTaxAmount(), new BigDecimal("3.51"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("3.50"));
         // Order global promotion should be:
         //  10% off order total = 10 % of (59.99) = 6.00 rounded to 6.00
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-6.00"));
