@@ -108,13 +108,13 @@ public class DropShipTests extends OrderTestCase {
 
         // get the drop ship supplier for each of the products
         String dropShip1SupplierPartyId = null;
-        Map getSuppliersForProductResult = runAndAssertServiceSuccess("getSuppliersForProduct", UtilMisc.toMap("productId", dropShip1.getString("productId"), "quantity", new Double(1.0), "canDropShip", "Y", "currencyUomId", currencyUomId));
+        Map getSuppliersForProductResult = runAndAssertServiceSuccess("getSuppliersForProduct", UtilMisc.toMap("productId", dropShip1.getString("productId"), "quantity", new BigDecimal("1.0"), "canDropShip", "Y", "currencyUomId", currencyUomId));
         List supplierProducts = (List) getSuppliersForProductResult.get("supplierProducts");
         if (! UtilValidate.isEmpty(supplierProducts)) dropShip1SupplierPartyId = EntityUtil.getFirst(supplierProducts).getString("partyId");
         assertNotNull("No supplier found for product dropShip1", dropShip1SupplierPartyId);
 
         String dropShip2SupplierPartyId = null;
-        getSuppliersForProductResult = runAndAssertServiceSuccess("getSuppliersForProduct", UtilMisc.toMap("productId", dropShip2.getString("productId"), "quantity", new Double(2.0), "canDropShip", "Y", "currencyUomId", currencyUomId));
+        getSuppliersForProductResult = runAndAssertServiceSuccess("getSuppliersForProduct", UtilMisc.toMap("productId", dropShip2.getString("productId"), "quantity", new BigDecimal("2.0"), "canDropShip", "Y", "currencyUomId", currencyUomId));
         supplierProducts = (List) getSuppliersForProductResult.get("supplierProducts");
         if (! UtilValidate.isEmpty(supplierProducts)) dropShip2SupplierPartyId = EntityUtil.getFirst(supplierProducts).getString("partyId");
         assertNotNull("No supplier found for product dropShip2", dropShip2SupplierPartyId);
