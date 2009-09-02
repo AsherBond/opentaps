@@ -1898,7 +1898,8 @@ public class OrderServices {
                 if (itemCancelQuantity == null) {
                     itemCancelQuantity = BigDecimal.ZERO;
                 }
-                BigDecimal itemQuantity = orderItem.getBigDecimal("quantity").subtract(itemCancelQuantity);
+                BigDecimal originalItemQuantity = orderItem.getBigDecimal("quantity");
+                BigDecimal itemQuantity = originalItemQuantity.subtract(itemCancelQuantity);
                 if (availableQuantity == null) availableQuantity = BigDecimal.ZERO;
                 if (itemQuantity == null) itemQuantity = BigDecimal.ZERO;
 
@@ -1913,7 +1914,8 @@ public class OrderServices {
                     if (availableQuantity.compareTo(BigDecimal.ZERO) == 0) {
                         continue;  //OrderItemShipGroupAssoc already cancelled
                     }
-                    orderItem.set("cancelQuantity", itemCancelQuantity.add(thisCancelQty));
+                    BigDecimal orderItemQtyCancelled = itemCancelQuantity.add(thisCancelQty);
+                    orderItem.set("cancelQuantity", orderItemQtyCancelled);
                     orderItemShipGroupAssoc.set("cancelQuantity", aisgaCancelQuantity.add(thisCancelQty));
 
                     try {
@@ -1955,7 +1957,7 @@ public class OrderServices {
                         }
                     }
 
-                    if (thisCancelQty.compareTo(itemQuantity) >= 0) {
+                    if (orderItemQtyCancelled.compareTo(originalItemQuantity) >= 0) {
                         // all items are cancelled -- mark the item as cancelled
                         Map statusCtx = UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItem.getString("orderItemSeqId"), "statusId", "ITEM_CANCELLED", "userLogin", userLogin);
                         try {
@@ -1965,6 +1967,31 @@ public class OrderServices {
                             return ServiceUtil.returnError(UtilProperties.getMessage(resource_error,"OrderUnableToCancelOrderLine", UtilMisc.toMap("itemMsgInfo",itemMsgInfo), locale));
                         }
                     } else {
+                        // check if the item is completed, happens when some items are billed and the remaining is canceled
+                        try {
+                            List<GenericValue> billings = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
+                            BigDecimal billedQty = BigDecimal.ZERO;
+                            for (GenericValue billing : billings) {
+                                BigDecimal thisBilledQty = billing.getBigDecimal("quantity");
+                                if (thisBilledQty != null) {
+                                    billedQty = billedQty.add(thisBilledQty);
+                                }
+                            }
+                            if (billedQty.signum() > 0 && orderItemQtyCancelled.add(billedQty).compareTo(originalItemQuantity) >= 0) {
+                                Map statusCtx = UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItem.getString("orderItemSeqId"), "statusId", "ITEM_COMPLETED", "userLogin", userLogin);
+                                try {
+                                    dispatcher.runSyncIgnore("changeOrderItemStatus", statusCtx);
+                                } catch (GenericServiceException e) {
+                                    Debug.logError(e, module);
+                                    return ServiceUtil.returnError(UtilProperties.getMessage(resource_error, "OrderUnableToSetCancelQuantity", UtilMisc.toMap("itemMsgInfo", itemMsgInfo), locale));
+                                }
+                            }
+                        } catch (GeneralException e) {
+                            Debug.logError(e, module);
+                            return ServiceUtil.returnError(UtilProperties.getMessage(resource_error,"OrderUnableToSetCancelQuantity", UtilMisc.toMap("itemMsgInfo",itemMsgInfo), locale));
+                        }
+
+
                         // reverse the inventory reservation
                         Map invCtx = UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItem.getString("orderItemSeqId"), "shipGroupSeqId",
                                 shipGroupSeqId, "cancelQuantity", thisCancelQty, "userLogin", userLogin);
