@@ -154,6 +154,7 @@
         <member-entity entity-alias="II" entity-name="InventoryItem"/>
         <alias-all entity-alias="OISG">
             <exclude field="statusId"/>
+            <exclude field="facilityId"/>
         </alias-all>            
         <alias-all entity-alias="OH"/>
         <alias-all entity-alias="OISGIR"/>
