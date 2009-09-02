@@ -1252,7 +1252,7 @@ public class FinancialsTests extends FinancialsTestCase {
         input.put("dueDate", invoice2.get("dueDate"));
         input.put("description", invoice2.get("description"));
         input.put("parentInvoiceId", invoice2.get("invoiceId"));
-        Map<String, String> output = runAndAssertServiceSuccess("financials.createInterestInvoice", input);
+        Map<String, Object> output = runAndAssertServiceSuccess("financials.createInterestInvoice", input);
 
         financeCharge = financeCharges.get(invoice4);
         input = new HashMap<String, Object>();
@@ -1267,7 +1267,7 @@ public class FinancialsTests extends FinancialsTestCase {
         input.put("parentInvoiceId", invoice4.get("invoiceId"));
         output = runAndAssertServiceSuccess("financials.createInterestInvoice", input);
 
-        String invoiceId4Interest = output.get("invoiceId");
+        String invoiceId4Interest = (String) output.get("invoiceId");
 
         /*
          * Verify that INTRSTINC_RECEIVABLE and INTEREST_INCOME

@@ -483,8 +483,7 @@ public class OpentapsTestCase extends TestCase {
      * @param input the service input <code>Map</code>
      * @return the <code>Map</code> returned by the service
      */
-    @SuppressWarnings("unchecked")
-    public Map runAndAssertServiceSuccess(String serviceName, Map input) {
+    public Map<String, Object> runAndAssertServiceSuccess(String serviceName, Map<String, ?> input) {
         return runAndAssertServiceSuccess(serviceName, input, 0, true);
     }
 
@@ -499,11 +498,10 @@ public class OpentapsTestCase extends TestCase {
      * @param requireNewTransaction specifies if new transaction is required
      * @return the <code>Map</code> returned by the service
      */
-    @SuppressWarnings("unchecked")
-    public Map runAndAssertServiceSuccess(String serviceName, Map input, int transactionTimeOut, boolean requireNewTransaction) {
+    public Map<String, Object> runAndAssertServiceSuccess(String serviceName, Map<String, ?> input, int transactionTimeOut, boolean requireNewTransaction) {
         Debug.logInfo("runAndAssertServiceSuccess: [" + serviceName + "] with input: " + input, MODULE);
         try {
-            Map results = new HashMap();
+            Map<String, Object> results = new HashMap<String, Object>();
             if ((requireNewTransaction) && (transactionTimeOut <= 0)) {
                 // if a new transaction is required and transaction time out is 0 or less, than run it in the default mode of the service engine:
                 // inside new transaction and with default services XML timeout
@@ -867,9 +865,8 @@ public class OpentapsTestCase extends TestCase {
      * @param quantity the quantity of component in the BOM
      * @param userLogin the user running the services
      */
-    @SuppressWarnings("unchecked")
     protected void createBOMProductAssoc(String productId, String productToId, String routingId, Long sequenceNum, BigDecimal quantity, GenericValue userLogin) {
-        Map prodAssoc = UtilMisc.toMap("userLogin", userLogin);
+        Map<String, Object> prodAssoc = UtilMisc.<String, Object>toMap("userLogin", userLogin);
         prodAssoc.put("productId", productId);
         prodAssoc.put("productIdTo", productToId);
         prodAssoc.put("productAssocTypeId", "MANUF_COMPONENT");
@@ -887,7 +884,7 @@ public class OpentapsTestCase extends TestCase {
         runAndAssertServiceSuccess("createProductAssoc", prodAssoc);
 
         // VERY IMPORTANT: Otherwise the MRP won't work
-        runAndAssertServiceSuccess("initLowLevelCode", UtilMisc.toMap("userLogin", userLogin));
+        runAndAssertServiceSuccess("initLowLevelCode", UtilMisc.<String, Object>toMap("userLogin", userLogin));
     }
 
     /**
@@ -928,7 +925,6 @@ public class OpentapsTestCase extends TestCase {
      * @param maxQuantity max quantity of product
      * @return the created routing work effort ID
      */
-    @SuppressWarnings("unchecked")
     protected String createTestAssemblingRouting(String name, String assembleProductId, BigDecimal estimatedMilliSeconds, BigDecimal estimatedSetupMillis, BigDecimal minQuantity, BigDecimal maxQuantity) {
         // create a product routing definition for test purposes
         Map<String, Object> productRoutingContext = UtilMisc.<String, Object>toMap("userLogin", admin);
@@ -1024,7 +1020,6 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin user that will call the service
      * @return the created Product GenericValue
      */
-    @SuppressWarnings("unchecked")
     protected GenericValue createTestProduct(String internalName, String productTypeId, Long billOfMaterialLevel, GenericValue userLogin) {
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("productTypeId", productTypeId);
@@ -1135,7 +1130,6 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin user that will call the service
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
-    @SuppressWarnings("unchecked")
     protected Map<String, Object> receiveInventoryProduct(GenericValue product, BigDecimal quantity, String inventoryItemTypeId, BigDecimal unitCost, String facilityId, GenericValue userLogin) {
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("productId", product.getString("productId"));
@@ -1161,7 +1155,6 @@ public class OpentapsTestCase extends TestCase {
      * @param userLogin user that will call the service
      * @return the result <code>Map</code> from the <code>receiveInventoryProduct</code> service
      */
-    @SuppressWarnings("unchecked")
     protected Map<String, Object> receiveInventoryProduct(GenericValue product, BigDecimal quantity, String inventoryItemTypeId, BigDecimal unitCost, String facilityId, Map<String, String> tags, GenericValue userLogin) {
         Map<String, Object> callCtxt = new HashMap<String, Object>();
         callCtxt.put("productId", product.getString("productId"));
@@ -2476,8 +2469,8 @@ public class OpentapsTestCase extends TestCase {
     }
 
     /**
-     * Method to check that specific BigDecimal number if exist in List
-     * 
+     * Method to check that specific BigDecimal number if exist in List.
+     *
      * @param numbers a <code>List<BigDecimal></code> instance
      * @param value a <code>BigDecimal</code> instance
      * @return if exist the value in numbers
@@ -2489,5 +2482,5 @@ public class OpentapsTestCase extends TestCase {
             }
         }
         return false;
-    } 
+    }
 }

@@ -75,10 +75,9 @@ public class InventoryAsserts extends OpentapsTestCase {
      * @param atpChange the expected QTP change
      * @param originalInventories the <code>Map</code> containing a result from <code>getInventories</code> used as a point of comparison
      */
-    @SuppressWarnings("unchecked")
-    public void assertInventoriesChange(String productId, BigDecimal qohChange, BigDecimal atpChange, Map<String, Map> originalInventories) {
-        Map currentInventory = getInventory(productId);
-        Map expectedDifference = UtilMisc.toMap("quantityOnHandTotal", qohChange, "availableToPromiseTotal", atpChange);
+    public void assertInventoriesChange(String productId, BigDecimal qohChange, BigDecimal atpChange, Map<String, Map<String, Object>> originalInventories) {
+        Map<String, Object> currentInventory = getInventory(productId);
+        Map<String, BigDecimal> expectedDifference = UtilMisc.toMap("quantityOnHandTotal", qohChange, "availableToPromiseTotal", atpChange);
         assertNotNull("No reference inventory for product [" + productId + "]", originalInventories.get(productId));
         assertMapDifferenceCorrect("Inventory change for product [" + productId + "].", originalInventories.get(productId), currentInventory, expectedDifference);
     }
@@ -90,8 +89,7 @@ public class InventoryAsserts extends OpentapsTestCase {
      * @param atpChanges the <code>List</code> of expected QTP change
      * @param originalInventories the <code>Map</code> containing a result from <code>getInventories</code> used as a point of comparison
      */
-    @SuppressWarnings("unchecked")
-    public void assertInventoriesChange(List<String> productIds, List<BigDecimal> qohChanges, List<BigDecimal> atpChanges, Map<String, Map> originalInventories) {
+    public void assertInventoriesChange(List<String> productIds, List<BigDecimal> qohChanges, List<BigDecimal> atpChanges, Map<String, Map<String, Object>> originalInventories) {
         for (int i = 0; i < productIds.size(); i++) {
             String productId = productIds.get(i);
             BigDecimal qohChange = qohChanges.get(i);
@@ -106,8 +104,7 @@ public class InventoryAsserts extends OpentapsTestCase {
      * @param quantityChanges the <code>List</code> of expected QOH and ATP change
      * @param originalInventories the <code>Map</code> containing a result from <code>getInventories</code> used as a point of comparison
      */
-    @SuppressWarnings("unchecked")
-    public void assertInventoriesChange(List<String> productIds, List<BigDecimal> quantityChanges, Map<String, Map> originalInventories) {
+    public void assertInventoriesChange(List<String> productIds, List<BigDecimal> quantityChanges, Map<String, Map<String, Object>> originalInventories) {
         for (int i = 0; i < productIds.size(); i++) {
             String productId = productIds.get(i);
             BigDecimal quantityChange = quantityChanges.get(i);
@@ -121,8 +118,7 @@ public class InventoryAsserts extends OpentapsTestCase {
      * @param quantityChange the expected QOH and ATP change, which is the same for all given products
      * @param originalInventories the <code>Map</code> containing a result from <code>getInventories</code> used as a point of comparison
      */
-    @SuppressWarnings("unchecked")
-    public void assertInventoriesChange(List<String> productIds, BigDecimal quantityChange, Map<String, Map> originalInventories) {
+    public void assertInventoriesChange(List<String> productIds, BigDecimal quantityChange, Map<String, Map<String, Object>> originalInventories) {
         for (String productId : productIds) {
             assertInventoriesChange(productId, quantityChange, originalInventories);
         }
@@ -134,10 +130,9 @@ public class InventoryAsserts extends OpentapsTestCase {
      * @param quantityChange the expected QOH and ATP change
      * @param originalInventories the <code>Map</code> containing a result from <code>getInventories</code> used as a point of comparison
      */
-    @SuppressWarnings("unchecked")
-    public void assertInventoriesChange(String productId, BigDecimal quantityChange, Map<String, Map> originalInventories) {
-        Map currentInventory = getInventory(productId);
-        Map expectedDifference = UtilMisc.toMap("quantityOnHandTotal", quantityChange, "availableToPromiseTotal", quantityChange);
+    public void assertInventoriesChange(String productId, BigDecimal quantityChange, Map<String, Map<String, Object>> originalInventories) {
+        Map<String, Object> currentInventory = getInventory(productId);
+        Map<String, BigDecimal> expectedDifference = UtilMisc.toMap("quantityOnHandTotal", quantityChange, "availableToPromiseTotal", quantityChange);
         assertNotNull("No reference inventory for product [" + productId + "]", originalInventories.get(productId));
         assertMapDifferenceCorrect("Inventory change for product [" + productId + "].", originalInventories.get(productId), currentInventory, expectedDifference);
     }
@@ -149,10 +144,9 @@ public class InventoryAsserts extends OpentapsTestCase {
      * @param atpChange the expected QTP change
      * @param originalInventory the <code>Map</code> containing a result from <code>getInventory</code> used as a point of comparison
      */
-    @SuppressWarnings("unchecked")
-    public void assertInventoryChange(String productId, BigDecimal qohChange, BigDecimal atpChange, Map originalInventory) {
-        Map currentInventory = getInventory(productId);
-        Map expectedDifference = UtilMisc.toMap("quantityOnHandTotal", qohChange, "availableToPromiseTotal", atpChange);
+    public void assertInventoryChange(String productId, BigDecimal qohChange, BigDecimal atpChange, Map<String, Object> originalInventory) {
+        Map<String, Object> currentInventory = getInventory(productId);
+        Map<String, BigDecimal> expectedDifference = UtilMisc.toMap("quantityOnHandTotal", qohChange, "availableToPromiseTotal", atpChange);
         assertMapDifferenceCorrect("Inventory change for product [" + productId + "].", originalInventory, currentInventory, expectedDifference);
     }
 
@@ -162,10 +156,9 @@ public class InventoryAsserts extends OpentapsTestCase {
      * @param quantityChange the expected QOH and ATP change
      * @param originalInventory the <code>Map</code> containing a result from <code>getInventory</code> used as a point of comparison
      */
-    @SuppressWarnings("unchecked")
-    public void assertInventoryChange(String productId, BigDecimal quantityChange, Map originalInventory) {
-        Map currentInventory = getInventory(productId);
-        Map expectedDifference = UtilMisc.toMap("quantityOnHandTotal", quantityChange, "availableToPromiseTotal", quantityChange);
+    public void assertInventoryChange(String productId, BigDecimal quantityChange, Map<String, Object> originalInventory) {
+        Map<String, Object> currentInventory = getInventory(productId);
+        Map<String, BigDecimal> expectedDifference = UtilMisc.toMap("quantityOnHandTotal", quantityChange, "availableToPromiseTotal", quantityChange);
         assertMapDifferenceCorrect("Inventory change for product [" + productId + "].", originalInventory, currentInventory, expectedDifference);
     }
 
@@ -206,10 +199,9 @@ public class InventoryAsserts extends OpentapsTestCase {
      * @param productId the product ID to get inventory for
      * @return the <code>Map</code> result of the <code>getInventoryAvailableByFacility</code> service
      */
-    @SuppressWarnings("unchecked")
-    public Map getInventory(String productId) {
-        Map input = UtilMisc.toMap("userLogin", userLogin, "facilityId", facilityId, "productId", productId, "useCache", new Boolean(false));
-        Map output = null;
+    public Map<String, Object> getInventory(String productId) {
+        Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin, "facilityId", facilityId, "productId", productId, "useCache", new Boolean(false));
+        Map<String, Object> output = null;
         try {
             TransactionUtil.begin();
             output = runAndAssertServiceSuccess("getInventoryAvailableByFacility", input);
@@ -225,9 +217,8 @@ public class InventoryAsserts extends OpentapsTestCase {
      * @param productIds the <code>List</code> of product ID to get inventory for
      * @return a <code>Map</code> of productId => result of <code>getInventory</code>
      */
-    @SuppressWarnings("unchecked")
-    public Map<String, Map> getInventories(List<String> productIds) {
-        Map output = new HashMap<String, Map>();
+    public Map<String, Map<String, Object>> getInventories(List<String> productIds) {
+        Map<String, Map<String, Object>> output = new HashMap<String, Map<String, Object>>();
         for (String productId : productIds) {
             output.put(productId, getInventory(productId));
         }

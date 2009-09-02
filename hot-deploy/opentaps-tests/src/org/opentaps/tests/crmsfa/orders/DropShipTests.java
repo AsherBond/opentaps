@@ -35,7 +35,7 @@ import org.opentaps.tests.warehouse.InventoryAsserts;
 
 public class DropShipTests extends OrderTestCase {
 
-    public static final String module = OrderTests.class.getName();
+    private static final String MODULE = OrderTests.class.getName();
 
     private GenericValue demoCustomer;
     private GenericValue demoCSR;
@@ -87,13 +87,14 @@ public class DropShipTests extends OrderTestCase {
     }
 
     /**
-     * Verify drop shipping is handled correctly: purchase orders are created, invoices and payments are created, and no inventory changes hands
+     * Verify drop shipping is handled correctly: purchase orders are created, invoices and payments are created, and no inventory changes hands.
+     * @exception GeneralException if an error occurs
      */
     public void testDropShipOrdering() throws GeneralException {
 
         InventoryAsserts invAss = new InventoryAsserts(this, facilityId, organizationPartyId, User);
-        Map initialDropShip1Inventory = invAss.getInventory(dropShip1.getString("productId"));
-        Map initialDropShip2Inventory = invAss.getInventory(dropShip2.getString("productId"));
+        Map<String, Object> initialDropShip1Inventory = invAss.getInventory(dropShip1.getString("productId"));
+        Map<String, Object> initialDropShip2Inventory = invAss.getInventory(dropShip2.getString("productId"));
 
         // Create a sales order for 1 dropShip1 and 2 dropShip2 for demoCustomer using credit card paymentMethodId 9015
         SalesOrderFactory sof = null;
@@ -108,15 +109,19 @@ public class DropShipTests extends OrderTestCase {
 
         // get the drop ship supplier for each of the products
         String dropShip1SupplierPartyId = null;
-        Map getSuppliersForProductResult = runAndAssertServiceSuccess("getSuppliersForProduct", UtilMisc.toMap("productId", dropShip1.getString("productId"), "quantity", new BigDecimal("1.0"), "canDropShip", "Y", "currencyUomId", currencyUomId));
-        List supplierProducts = (List) getSuppliersForProductResult.get("supplierProducts");
-        if (! UtilValidate.isEmpty(supplierProducts)) dropShip1SupplierPartyId = EntityUtil.getFirst(supplierProducts).getString("partyId");
+        Map<String, Object> getSuppliersForProductResult = runAndAssertServiceSuccess("getSuppliersForProduct", UtilMisc.<String, Object>toMap("productId", dropShip1.getString("productId"), "quantity", new BigDecimal("1.0"), "canDropShip", "Y", "currencyUomId", currencyUomId));
+        List<GenericValue> supplierProducts = (List<GenericValue>) getSuppliersForProductResult.get("supplierProducts");
+        if (UtilValidate.isNotEmpty(supplierProducts)) {
+            dropShip1SupplierPartyId = EntityUtil.getFirst(supplierProducts).getString("partyId");
+        }
         assertNotNull("No supplier found for product dropShip1", dropShip1SupplierPartyId);
 
         String dropShip2SupplierPartyId = null;
-        getSuppliersForProductResult = runAndAssertServiceSuccess("getSuppliersForProduct", UtilMisc.toMap("productId", dropShip2.getString("productId"), "quantity", new BigDecimal("2.0"), "canDropShip", "Y", "currencyUomId", currencyUomId));
-        supplierProducts = (List) getSuppliersForProductResult.get("supplierProducts");
-        if (! UtilValidate.isEmpty(supplierProducts)) dropShip2SupplierPartyId = EntityUtil.getFirst(supplierProducts).getString("partyId");
+        getSuppliersForProductResult = runAndAssertServiceSuccess("getSuppliersForProduct", UtilMisc.<String, Object>toMap("productId", dropShip2.getString("productId"), "quantity", new BigDecimal("2.0"), "canDropShip", "Y", "currencyUomId", currencyUomId));
+        supplierProducts = (List<GenericValue>) getSuppliersForProductResult.get("supplierProducts");
+        if (UtilValidate.isNotEmpty(supplierProducts)) {
+            dropShip2SupplierPartyId = EntityUtil.getFirst(supplierProducts).getString("partyId");
+        }
         assertNotNull("No supplier found for product dropShip2", dropShip2SupplierPartyId);
 
         sof.addPaymentMethod("CREDIT_CARD", paymentMethod.getString("paymentMethodId"));
@@ -141,7 +146,7 @@ public class DropShipTests extends OrderTestCase {
         } catch (GenericServiceException e) {
             fail("GenericServiceException:" + e.toString());
         }
-        Debug.logInfo("testDropShipOrdering created sales order ID " + orderId, module);
+        Debug.logInfo("testDropShipOrdering created sales order ID " + orderId, MODULE);
 
         // Verify that dropShip1 and dropShip2 are each linked to a different purchase order item
         GenericValue orderItem1Assoc = EntityUtil.getFirst(delegator.findByAnd("OrderItemAssoc", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", "00001", "orderItemAssocTypeId", "DROP_SHIPMENT")));
@@ -150,7 +155,7 @@ public class DropShipTests extends OrderTestCase {
         assertNotNull("dropShip2 orderItem (orderItemSeqId 00002) for order ID " + orderId + " is not linked to a purchase order item", orderItem2Assoc);
         String dropShip1PurchaseOrderId = orderItem1Assoc.getString("toOrderId");
         String dropShip2PurchaseOrderId = orderItem2Assoc.getString("toOrderId");
-        if (! dropShip1SupplierPartyId.equalsIgnoreCase(dropShip2SupplierPartyId)) {
+        if (!dropShip1SupplierPartyId.equalsIgnoreCase(dropShip2SupplierPartyId)) {
             assertNotSame("dropShip1 orderItem (orderItemSeqId 00001) for order ID " + orderId + " is linked to the same purchase order (" + dropShip1PurchaseOrderId + ") as dropShip2 orderItem (00002)", dropShip1PurchaseOrderId, dropShip2PurchaseOrderId);
         }
 
@@ -162,7 +167,7 @@ public class DropShipTests extends OrderTestCase {
         // Sleep to get the service captureOrderPayments in PaymentGatewayServices and
         // the service processCaptureSplitPayment fired by captureOrderPayments finished
         try {
-            Thread.sleep (1000 * 60 * 3);
+            Thread.sleep(1000 * 60 * 3);
         } catch (InterruptedException e) {
             fail("InterruptedException: " + e.toString());
         }
@@ -188,10 +193,10 @@ public class DropShipTests extends OrderTestCase {
         // Verify that a sales invoice and received customer payment for dropShip1 is created, and this sales invoice is paid
         // Verify that a sales invoice and received customer payment for dropShip2 is created, and this sales invoice is paid
 
-        List dropShip1OrderItemBillingList = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", "00001"));
+        List<GenericValue> dropShip1OrderItemBillingList = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", "00001"));
         assertEquals("There is only one invoice corresponding to orderId " + orderId, 1, dropShip1OrderItemBillingList.size());
         GenericValue dropShip1OrderItemBilling = EntityUtil.getFirst(dropShip1OrderItemBillingList);
-        List salesInvoice1List = dropShip1OrderItemBilling.getRelated("Invoice");
+        List<GenericValue> salesInvoice1List = dropShip1OrderItemBilling.getRelated("Invoice");
         assertEquals("There is only one invoice corresponding to orderId " + orderId, 1, salesInvoice1List.size());
         GenericValue salesInvoice1 = EntityUtil.getFirst(salesInvoice1List);
 
@@ -200,10 +205,10 @@ public class DropShipTests extends OrderTestCase {
         assertEquals("Invoice partyId should be DemoCustomer", "DemoCustomer", salesInvoice1.getString("partyId"));
         assertEquals("Invoice statusId should be INVOICE_PAID", "INVOICE_PAID", salesInvoice1.getString("statusId"));
 
-        List paymentApplication1List = delegator.findByAnd("PaymentApplication", UtilMisc.toMap("invoiceId", salesInvoice1.getString("invoiceId")));
+        List<GenericValue> paymentApplication1List = delegator.findByAnd("PaymentApplication", UtilMisc.toMap("invoiceId", salesInvoice1.getString("invoiceId")));
         assertEquals("There is only one payment corresponding to invoiceId " + salesInvoice1.getString("invoiceId"), 1, paymentApplication1List.size());
         GenericValue paymentApplication1 = EntityUtil.getFirst(paymentApplication1List);
-        List payment1List = paymentApplication1.getRelated("Payment");
+        List<GenericValue> payment1List = paymentApplication1.getRelated("Payment");
         assertEquals("There is only one payment corresponding to invoiceId " + salesInvoice1.getString("invoiceId"), 1, payment1List.size());
         GenericValue payment1 = EntityUtil.getFirst(payment1List);
 
@@ -211,10 +216,10 @@ public class DropShipTests extends OrderTestCase {
         assertEquals("Payment partyIdFrom should be DemoCustomer", "DemoCustomer", payment1.getString("partyIdFrom"));
         assertEquals("Payment partyIdTo should be Company", "Company", payment1.getString("partyIdTo"));
 
-        List dropShip2OrderItemBillingList = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", "00002"));
+        List<GenericValue> dropShip2OrderItemBillingList = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", "00002"));
         assertEquals("There is only one invoice corresponding to orderId " + orderId, 1, dropShip2OrderItemBillingList.size());
         GenericValue dropShip2OrderItemBilling = EntityUtil.getFirst(dropShip2OrderItemBillingList);
-        List salesInvoice2List = dropShip2OrderItemBilling.getRelated("Invoice");
+        List<GenericValue> salesInvoice2List = dropShip2OrderItemBilling.getRelated("Invoice");
         assertEquals("There is only one invoice corresponding to orderId " + orderId, 1, salesInvoice2List.size());
         GenericValue salesInvoice2 = EntityUtil.getFirst(salesInvoice2List);
 
@@ -223,10 +228,10 @@ public class DropShipTests extends OrderTestCase {
         assertEquals("Invoice partyId should be DemoCustomer", "DemoCustomer", salesInvoice2.getString("partyId"));
         assertEquals("Invoice statusId should be INVOICE_PAID", "INVOICE_PAID", salesInvoice2.getString("statusId"));
 
-        List paymentApplication2List = delegator.findByAnd("PaymentApplication", UtilMisc.toMap("invoiceId", salesInvoice2.getString("invoiceId")));
+        List<GenericValue> paymentApplication2List = delegator.findByAnd("PaymentApplication", UtilMisc.toMap("invoiceId", salesInvoice2.getString("invoiceId")));
         assertEquals("There is only one payment corresponding to invoiceId " + salesInvoice2.getString("invoiceId"), 1, paymentApplication2List.size());
         GenericValue paymentApplication2 = EntityUtil.getFirst(paymentApplication2List);
-        List payment2List = paymentApplication2.getRelated("Payment");
+        List<GenericValue> payment2List = paymentApplication2.getRelated("Payment");
         assertEquals("There is only one payment corresponding to invoiceId " + salesInvoice2.getString("invoiceId"), 1, payment2List.size());
         GenericValue payment2 = EntityUtil.getFirst(payment2List);
 
@@ -237,10 +242,10 @@ public class DropShipTests extends OrderTestCase {
         assertEquals("Payment amount should be grand total of the sales order", sof.getGrandTotal(), payment1.getDouble("amount") + payment2.getDouble("amount"));
 
         // Verify that a purchase invoice for dropShip1 from DemoSupplier is created in the "In Process" state
-        List dropShip1PurchaseOrderItemBillingList = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", dropShip1PurchaseOrderId, "orderItemSeqId", "00001"));
+        List<GenericValue> dropShip1PurchaseOrderItemBillingList = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", dropShip1PurchaseOrderId, "orderItemSeqId", "00001"));
         assertEquals("There is only one invoice corresponding to orderId " + dropShip1PurchaseOrderId, 1, dropShip1PurchaseOrderItemBillingList.size());
         GenericValue dropShip1PurchaseOrderItemBilling = EntityUtil.getFirst(dropShip1PurchaseOrderItemBillingList);
-        List dropShipInvoice1List = dropShip1PurchaseOrderItemBilling.getRelated("Invoice");
+        List<GenericValue> dropShipInvoice1List = dropShip1PurchaseOrderItemBilling.getRelated("Invoice");
         assertEquals("There is only one invoice corresponding to orderId " + dropShip1PurchaseOrderId, 1, dropShipInvoice1List.size());
         GenericValue dropShipInvoice1 = EntityUtil.getFirst(dropShipInvoice1List);
 
@@ -249,10 +254,10 @@ public class DropShipTests extends OrderTestCase {
         assertEquals("Invoice statusId should be INVOICE_IN_PROCESS", "INVOICE_IN_PROCESS", dropShipInvoice1.getString("statusId"));
 
         // Verify that a purchase invoice for dropShip2 from BigSupplier is created in the "In Process" state
-        List dropShip2PurchaseOrderItemBillingList = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", dropShip2PurchaseOrderId, "orderItemSeqId", "00001"));
+        List<GenericValue> dropShip2PurchaseOrderItemBillingList = delegator.findByAnd("OrderItemBilling", UtilMisc.toMap("orderId", dropShip2PurchaseOrderId, "orderItemSeqId", "00001"));
         assertEquals("There is only one invoice corresponding to orderId " + dropShip2PurchaseOrderId, 1, dropShip2PurchaseOrderItemBillingList.size());
         GenericValue dropShip2PurchaseOrderItemBilling = EntityUtil.getFirst(dropShip2PurchaseOrderItemBillingList);
-        List dropShipInvoice2List = dropShip2PurchaseOrderItemBilling.getRelated("Invoice");
+        List<GenericValue> dropShipInvoice2List = dropShip2PurchaseOrderItemBilling.getRelated("Invoice");
         assertEquals("There is only one invoice corresponding to orderId " + dropShip2PurchaseOrderId, 1, dropShipInvoice2List.size());
         GenericValue dropShipInvoice2 = EntityUtil.getFirst(dropShipInvoice2List);
 

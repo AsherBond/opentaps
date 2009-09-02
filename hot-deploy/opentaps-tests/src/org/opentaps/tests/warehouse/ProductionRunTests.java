@@ -1855,7 +1855,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
         // note the initial inventory quantities
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demowarehouse1);
-        Map<String, Map> origProductInventories = inventoryAsserts.getInventories(Arrays.asList(productId, productComp1Id, productComp2Id, productComp3Id, productComp4Id, productComp5Id));
+        Map<String, Map<String, Object>> origProductInventories = inventoryAsserts.getInventories(Arrays.asList(productId, productComp1Id, productComp2Id, productComp3Id, productComp4Id, productComp5Id));
 
         // Create a production run of 5 with default routing (not giving any routing ID)
         String prunId = createProductionRunAndConfirm("test Default BOM Prun", 5, productId);
@@ -2013,7 +2013,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
         // note the initial inventory quantities
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demowarehouse1);
-        Map<String, Map> origProductInventories = inventoryAsserts.getInventories(Arrays.asList(productId, productComp1Id, productComp2Id, productComp3Id, productComp11Id, productComp12Id, productComp13Id, productComp14Id, productComp21Id, productComp22Id, productComp23Id, productComp24Id));
+        Map<String, Map<String, Object>> origProductInventories = inventoryAsserts.getInventories(Arrays.asList(productId, productComp1Id, productComp2Id, productComp3Id, productComp11Id, productComp12Id, productComp13Id, productComp14Id, productComp21Id, productComp22Id, productComp23Id, productComp24Id));
 
         // Create a production run of 5 with default routing (not giving any routing ID)
         String prunId = createProductionRunAndConfirm("test Default BOM Prun", 5, productId);
@@ -2224,7 +2224,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
 
         // get initial inventory
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demowarehouse1);
-        Map<String, Map> origProductInventories = inventoryAsserts.getInventories(Arrays.asList(productId, productComp1Id, productComp2Id, productComp3Id, productComp4Id, productComp5Id));
+        Map<String, Map<String, Object>> origProductInventories = inventoryAsserts.getInventories(Arrays.asList(productId, productComp1Id, productComp2Id, productComp3Id, productComp4Id, productComp5Id));
 
         // Create a disassembly with default routing (not giving any routing ID) for 5 product
         String prunId = createDisassembly("test multiple BOM disassembly", 5, productId);
@@ -2288,7 +2288,7 @@ public class ProductionRunTests extends ProductionRunTestCase {
     public void testProduceMarketingPackage() throws Exception {
         // remember original inventory value for GZ-BRACKET, GZ-1000, GZ-1001 and GZ-1004
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demowarehouse1);
-        Map<String, Map> origProductInventories = inventoryAsserts.getInventories(Arrays.asList("GZ-BASKET", "GZ-1000", "GZ-1001", "GZ-1004"));
+        Map<String, Map<String, Object>> origProductInventories = inventoryAsserts.getInventories(Arrays.asList("GZ-BASKET", "GZ-1000", "GZ-1001", "GZ-1004"));
 
         // create production run of 2 GZ-BRACKET
         Map<String, Object> context = FastMap.newInstance();

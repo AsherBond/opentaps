@@ -311,9 +311,9 @@ public class FinancialAsserts extends OpentapsTestCase {
         input.put("invoiceMessage", invoiceMessage);
         input.put("referenceNumber", referenceNumber);
         input.put("description", description);
-        Map<String, String> output = runAndAssertServiceSuccess("createInvoice", input);
+        Map<String, Object> output = runAndAssertServiceSuccess("createInvoice", input);
 
-        return output.get("invoiceId");
+        return (String) output.get("invoiceId");
     }
 
     /**
@@ -547,8 +547,8 @@ public class FinancialAsserts extends OpentapsTestCase {
         if (accountingTags != null) {
             input.putAll(accountingTags);
         }
-        Map<String, String> output = runAndAssertServiceSuccess("financials.createPayment", input);
-        String paymentId = output.get("paymentId");
+        Map<String, Object> output = runAndAssertServiceSuccess("financials.createPayment", input);
+        String paymentId = (String) output.get("paymentId");
 
         if (UtilValidate.isNotEmpty(invoiceId)) {
             input = UtilMisc.<String, Object>toMap("userLogin", userLogin);

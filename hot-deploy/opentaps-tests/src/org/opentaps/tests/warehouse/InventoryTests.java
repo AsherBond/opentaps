@@ -1989,7 +1989,7 @@ public class InventoryTests extends FinancialsTestCase {
 
         // get initial inventory
         InventoryAsserts inventoryAsserts = new InventoryAsserts(this, facilityId, organizationPartyId, demowarehouse1);
-        Map<String, Map> origProductInventories = inventoryAsserts.getInventories(Arrays.asList(productId, productComp1Id, productComp2Id));
+        Map<String, Map<String, Object>> origProductInventories = inventoryAsserts.getInventories(Arrays.asList(productId, productComp1Id, productComp2Id));
 
         // receive 10 x Product inventory item
         Timestamp now = UtilDateTime.nowTimestamp();

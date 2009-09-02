@@ -263,8 +263,8 @@ public class SalesTaxTests extends OrderTestCase {
          */
         input = UtilMisc.toMap("userLogin", admin);
         input.put("orderId", salesOrder9.getOrderId());
-        Map<String, String> output = runAndAssertServiceSuccess("crmsfa.createReturnFromOrder", input);
-        String returnId = output.get("returnId");
+        Map<String, Object> output = runAndAssertServiceSuccess("crmsfa.createReturnFromOrder", input);
+        String returnId = (String) output.get("returnId");
 
         List<GenericValue> orderItems = delegator.findByAnd("OrderItem", UtilMisc.toMap("orderId", salesOrder9.getOrderId()));
         assertNotNull("There is no order item in the order " + salesOrder9.getOrderId() + ".", orderItems);

@@ -408,8 +408,8 @@ public class OrderTests extends OrderTestCase {
         Debug.logInfo("testSerializedInventoryReservation created order [" + orderId + "]", MODULE);
 
         // verify ATP = 5
-        Map<String, GenericValue> productData = runAndAssertServiceSuccess("getProduct", UtilMisc.toMap("productId", productId, "userLogin", demowarehouse1));
-        GenericValue product = productData.get("product");
+        Map<String, Object> productData = runAndAssertServiceSuccess("getProduct", UtilMisc.toMap("productId", productId, "userLogin", demowarehouse1));
+        GenericValue product = (GenericValue) productData.get("product");
         Map<String, Object> productAvailability = getProductAvailability(product.getString("productId"));
         BigDecimal availableToPromis = (BigDecimal) productAvailability.get("availableToPromiseTotal");
         assertEquals(String.format("Wrong ATP value of product [%1$s]", productId), 5, availableToPromis.longValue());
@@ -614,8 +614,8 @@ public class OrderTests extends OrderTestCase {
         List<String> availableInventoryIds = EntityUtil.getFieldListFromEntityList(availableInventories, "inventoryItemId", true);
 
         // check availability for the product. Expected QOH/ATP = 3
-        Map<String, GenericValue> productData = runAndAssertServiceSuccess("getProduct", UtilMisc.toMap("productId", productId, "userLogin", demowarehouse1));
-        GenericValue product = productData.get("product");
+        Map<String, Object> productData = runAndAssertServiceSuccess("getProduct", UtilMisc.toMap("productId", productId, "userLogin", demowarehouse1));
+        GenericValue product = (GenericValue) productData.get("product");
         Map<String, Object> productAvailability = getProductAvailability(product.getString("productId"));
         BigDecimal quantityOnHand = (BigDecimal) productAvailability.get("quantityOnHandTotal");
         BigDecimal availableToPromis = (BigDecimal) productAvailability.get("availableToPromiseTotal");
@@ -680,8 +680,8 @@ public class OrderTests extends OrderTestCase {
         runAndAssertServiceSuccess("createPhysicalInventoryAndVariance", callCtxt);
 
         // check availability for the product. Expected QOH/ATP = 3
-        Map<String, GenericValue> productData = runAndAssertServiceSuccess("getProduct", UtilMisc.toMap("productId", productId, "userLogin", demowarehouse1));
-        GenericValue product = productData.get("product");
+        Map<String, Object> productData = runAndAssertServiceSuccess("getProduct", UtilMisc.toMap("productId", productId, "userLogin", demowarehouse1));
+        GenericValue product = (GenericValue) productData.get("product");
         assertProductAvailability(product, new BigDecimal("3.0"), new BigDecimal("3.0"));
 
         // create and approve sales order for 5 products
