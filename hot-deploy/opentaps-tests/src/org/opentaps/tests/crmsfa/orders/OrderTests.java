@@ -974,14 +974,14 @@ public class OrderTests extends OrderTestCase {
 
         // there should now be two SALES_TAX OrderAdjustment from CA
         // checking the total tax amount, it should be 6.25% from CA_BOE of the total product prices
-        // which is 1.0 x 2799.99 + 4.0 x 48 = 2991.99
-        BigDecimal expectedTax = new BigDecimal("2991.99").multiply(new BigDecimal("6.25")).divide(PERCENT_SCALE, 3, BigDecimal.ROUND_CEILING);
+        // which is 1.0 x 2799.99 + 4.0 x 48 = 2991.99 -> 186.999375 ~ 187.000
+        BigDecimal expectedTax = new BigDecimal("2991.99").multiply(new BigDecimal("6.25")).divide(PERCENT_SCALE, SALES_TAX_CALC_DECIMALS, SALES_TAX_ROUNDING);
         checkSalesTax(orderId, "CA_BOE", 2, expectedTax);
 
         // and two SALES_TAX OrderAdjustment from _NA_ (one per product)
         // checking the total tax amount, it should be 1% from _NA_ of the total product prices
         // which is 1.0 x 2799.99 + 4.0 x 48 = 2991.99
-        expectedTax = new BigDecimal("2991.99").multiply(new BigDecimal("1.0")).divide(PERCENT_SCALE, 3, BigDecimal.ROUND_CEILING);
+        expectedTax = new BigDecimal("2991.99").multiply(new BigDecimal("1.0")).divide(PERCENT_SCALE, SALES_TAX_CALC_DECIMALS, SALES_TAX_ROUNDING);
         checkSalesTax(orderId, "_NA_", 2, expectedTax);
     }
 

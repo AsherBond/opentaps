@@ -39,6 +39,7 @@ import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
@@ -140,6 +141,13 @@ public class OpentapsTestCase extends TestCase {
     // if you need something different.
     public static final int DECIMALS = 2;
     public static final int ROUNDING = BigDecimal.ROUND_HALF_EVEN;
+
+    /** Configurable final number of decimals in sales tax calculation, see <code>applications/accounting/config/arithmetic.properties</code>, default is <code>2</code>. */
+    public static final int SALES_TAX_FINAL_DECIMALS = UtilNumber.getBigDecimalScale("salestax.final.decimals");
+    /** Configurable intermediate number of decimals in sales tax calculation, see <code>applications/accounting/config/arithmetic.properties</code>, default is <code>3</code>. */
+    public static final int SALES_TAX_CALC_DECIMALS = UtilNumber.getBigDecimalScale("salestax.calc.decimals");
+    /** Configurable rounding in sales tax calculation, see <code>applications/accounting/config/arithmetic.properties</code>, default is <code>ROUND_HALF_UP</code>. */
+    public static final int SALES_TAX_ROUNDING = UtilNumber.getBigDecimalRoundingMode("salestax.rounding");
 
     @Override
     public void setUp() throws Exception {
