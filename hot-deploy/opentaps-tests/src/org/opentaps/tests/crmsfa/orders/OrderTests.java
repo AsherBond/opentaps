@@ -870,9 +870,9 @@ public class OrderTests extends OrderTestCase {
         //  1 x GZ-1005 - 20% off = 2239.992
         //  = 2599.932 -> rounded to 2599.93
         assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("2599.93"));
-        // Tax amount should be 5.75% of this total:
-        //  5.75 % of 2599.932 = 149.49609 -> rounded to 149.50
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("149.50"));
+        // Tax amount should be 5.85% of this total, minus 0.1% of the 10% off global promotion amount (the UT_UTAH_TAXMAN 0.1% applies to promotions)
+        //  5.85 % of 2599.932 = 152.096022 -> rounded to 152.10 | minus 0.1% of 283.99 ~ -0.284 ==> 151.816 -> rounded to 151.82
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("151.82"));
         // Order global promotion should be:
         //  10% off order total = 10 % of (2239.992 + 10 x 59.99) = 283.989 -> 283.99
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-283.99"));
@@ -883,7 +883,7 @@ public class OrderTests extends OrderTestCase {
         callCtxt.put("orderId", orderId);
         callCtxt.put("orderItemSeqId", WG1111Item.getOrderItemSeqId());
         callCtxt.put("shipGroupSeqId", "00001");
-        callCtxt.put("cancelQuantity", 8.0);
+        callCtxt.put("cancelQuantity", new BigDecimal("8.0"));
         runAndAssertServiceSuccess("cancelOrderItem", callCtxt);
 
         // 4. check order items 1x GZ-1005, 2x WG-1111, 1x WG-1111 (Promo) + 1x GZ-1006 (Promo)
@@ -901,9 +901,9 @@ public class OrderTests extends OrderTestCase {
         //  1 x GZ-1005 - 20% off = 2239.992
         //  = 2359.972 rounded to 2359.97
         assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("2359.97"));
-        // Tax amount should be 5.75% of this total:
-        //  5.75 % of 2359.972 = 135.69839 -> rounded to 135.70
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("135.70"));
+        // Tax amount should be 5.85% of this total:
+        //  5.85 % of 2359.972 = 138.058362 -> rounded to 138.058 | minus 0.1% of 236.00 ~ -0.236 ==> 137.822 -> rounded to 137.82
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("137.82"));
         // Order global promotion should be:
         //  10% off order total = 10 % of (2239.992 + 2 x 59.99) = 235.9972 -> 236.00
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-236.00"));
@@ -914,7 +914,7 @@ public class OrderTests extends OrderTestCase {
         callCtxt.put("orderId", orderId);
         callCtxt.put("orderItemSeqId", GZ1005Item.getOrderItemSeqId());
         callCtxt.put("shipGroupSeqId", "00001");
-        callCtxt.put("cancelQuantity", 1.0);
+        callCtxt.put("cancelQuantity", new BigDecimal("1.0"));
         runAndAssertServiceSuccess("cancelOrderItem", callCtxt);
 
         // 6. check order items 2x WG-1111 + 1x WG-1111 (Promo)
@@ -928,9 +928,9 @@ public class OrderTests extends OrderTestCase {
         // Order items sub total should be:
         //  2 x WG-1111 = 119.98
         assertEquals("Order [" + orderId + "] items sub total incorrect.", order.getItemsSubTotal(), new BigDecimal("119.98"));
-        // Tax amount should be 5.75% of this total:
-        //  5.75 % of 119.98 = 6.89885 -> rounded to 6.90
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("6.90"));
+        // Tax amount should be 5.85% of this total:
+        //  5.85 % of 119.98 = 7.01883 -> rounded to 7.019 | minus 0.1% of 12.00 ~ -0.012 ==> 7.007 -> rounded to 7.01
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("7.01"));
         // Order global promotion should be:
         //  10% off order total = 10 % of (2 x 59.99) = 12.00
         assertEquals("Order [" + orderId + "] global adjustment incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-12.00"));
@@ -941,7 +941,7 @@ public class OrderTests extends OrderTestCase {
         callCtxt.put("orderId", orderId);
         callCtxt.put("orderItemSeqId", WG1111Item.getOrderItemSeqId());
         callCtxt.put("shipGroupSeqId", "00001");
-        callCtxt.put("cancelQuantity", 2.0);
+        callCtxt.put("cancelQuantity", new BigDecimal("2.0"));
         runAndAssertServiceSuccess("cancelOrderItem", callCtxt);
 
         // 8. check the whole order is now cancelled

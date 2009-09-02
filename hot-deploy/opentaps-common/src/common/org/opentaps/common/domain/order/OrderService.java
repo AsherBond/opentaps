@@ -479,6 +479,9 @@ public class OrderService extends Service implements OrderServiceInterface {
                 input.put("orderShippingAmount", order.getShippingAmount());
                 input.put("billToPartyId", order.getBillToPartyId());
                 input.put("shippingAddress", Repository.genericValueFromEntity(shippingAddress));
+                // for tax authorities that have taxPromotions="Y", sends the sum promotions and this deduct the tax at the global level
+                // note: this only includes the order level adjustments
+                input.put("orderPromotionsAmount", order.getOtherAdjustmentsAmount());
                 Map<String, Object> result = runSync("calcTax", input);
 
                 List<GenericValue> orderAdjustments = (List<GenericValue>) result.get("orderAdjustments");
