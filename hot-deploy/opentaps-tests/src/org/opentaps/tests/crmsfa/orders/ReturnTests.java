@@ -119,7 +119,7 @@ public class ReturnTests extends ReturnTestCase {
 
         // capture payment for the order
         BigDecimal orderAmount = UtilOrder.getOrderOpenAmount(delegator, orderId);
-        results = runAndAssertServiceSuccess("captureOrderPayments", UtilMisc.<String, Object>toMap("orderId", orderId, "captureAmount", orderAmount.doubleValue(), "userLogin", admin));
+        results = runAndAssertServiceSuccess("captureOrderPayments", UtilMisc.<String, Object>toMap("orderId", orderId, "captureAmount", orderAmount, "userLogin", admin));
         String captureResult = (String) results.get("processResult");
         assertEquals("Capture result", "COMPLETE", captureResult);
 
@@ -146,8 +146,8 @@ public class ReturnTests extends ReturnTestCase {
         callCtx.put("returnId", returnId);
         callCtx.put("orderItemSeqId", "00001");
         callCtx.put("productId", productId);
-        callCtx.put("returnPrice", 100.0);
-        callCtx.put("returnQuantity", 2.0);
+        callCtx.put("returnPrice", new BigDecimal("100.0"));
+        callCtx.put("returnQuantity", new BigDecimal("2.0"));
         callCtx.put("description", testProduct.get("description"));
 
         runAndAssertServiceSuccess("createReturnItem", callCtx);
@@ -187,8 +187,8 @@ public class ReturnTests extends ReturnTestCase {
         callCtx.put("returnId", returnId);
         callCtx.put("orderItemSeqId", "00001");
         callCtx.put("productId", productId);
-        callCtx.put("returnPrice", 100.0);
-        callCtx.put("returnQuantity", 5.0);
+        callCtx.put("returnPrice", new BigDecimal("100.0"));
+        callCtx.put("returnQuantity", new BigDecimal("5.0"));
         callCtx.put("description", testProduct.get("description"));
 
         Debug.logInfo("Expecting an exception", MODULE);
@@ -235,7 +235,7 @@ public class ReturnTests extends ReturnTestCase {
 
         // capture payment for the order
         BigDecimal orderAmount = UtilOrder.getOrderOpenAmount(delegator, orderId);
-        results = runAndAssertServiceSuccess("captureOrderPayments", UtilMisc.<String, Object>toMap("orderId", orderId, "captureAmount", orderAmount.doubleValue(), "userLogin", admin));
+        results = runAndAssertServiceSuccess("captureOrderPayments", UtilMisc.<String, Object>toMap("orderId", orderId, "captureAmount", orderAmount, "userLogin", admin));
         String captureResult = (String) results.get("processResult");
         assertEquals("Capture result", "COMPLETE", captureResult);
 
@@ -259,8 +259,8 @@ public class ReturnTests extends ReturnTestCase {
         callCtx.put("returnId", returnId);
         callCtx.put("orderItemSeqId", "00001");
         callCtx.put("productId", productId);
-        callCtx.put("returnPrice", 200.0);
-        callCtx.put("returnQuantity", 2.0);
+        callCtx.put("returnPrice", new BigDecimal("200.0"));
+        callCtx.put("returnQuantity", new BigDecimal("2.0"));
         callCtx.put("description", testProduct.get("description"));
 
         runAndAssertServiceSuccess("createReturnItem", callCtx);
@@ -352,8 +352,8 @@ public class ReturnTests extends ReturnTestCase {
         callCtx.put("returnId", returnId);
         callCtx.put("orderItemSeqId", "00001");
         callCtx.put("productId", productId);
-        callCtx.put("returnPrice", 300.0);
-        callCtx.put("returnQuantity", 2.0);
+        callCtx.put("returnPrice", new BigDecimal("300.0"));
+        callCtx.put("returnQuantity", new BigDecimal("2.0"));
         callCtx.put("description", testProduct.get("description"));
 
         runAndAssertServiceSuccess("createReturnItem", callCtx);

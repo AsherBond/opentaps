@@ -15,6 +15,7 @@
  */
 package com.opensourcestrategies.crmsfa.returns;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import org.ofbiz.base.util.Debug;
@@ -169,7 +170,7 @@ public final class ReturnServices {
                 input.put("description", UtilMessage.expandLabel("CrmNewBillingAccountDescription", locale, UtilMisc.toMap("returnId", returnId)));
                 input.put("partyId", returnHeader.get("fromPartyId"));
                 input.put("roleTypeId", "BILL_TO_CUSTOMER");
-                input.put("accountLimit", new Double(0.0));
+                input.put("accountLimit", BigDecimal.ZERO);
                 Map<String, Object> results = dispatcher.runSync("createBillingAccount", input);
                 if (ServiceUtil.isError(results)) {
                     return results;
@@ -223,7 +224,7 @@ public final class ReturnServices {
 
                     // Create ShipmentItems
                     for (GenericValue returnItem : returnItems) {
-                        serviceResult = dispatcher.runSync("createShipmentItem", UtilMisc.toMap("userLogin", userLogin, "locale", locale, "shipmentId", shipmentId, "productId", returnItem.getString("productId"), "quantity", returnItem.getDouble("returnQuantity")));
+                        serviceResult = dispatcher.runSync("createShipmentItem", UtilMisc.toMap("userLogin", userLogin, "locale", locale, "shipmentId", shipmentId, "productId", returnItem.getString("productId"), "quantity", returnItem.getBigDecimal("returnQuantity")));
                         if (ServiceUtil.isError(serviceResult)) {
                             return serviceResult;
                         }
@@ -242,7 +243,7 @@ public final class ReturnServices {
                     if (ServiceUtil.isError(serviceResult)) {
                         return serviceResult;
                     }
-                    Double unitCost = (Double) serviceResult.get("initialItemCost");
+                    BigDecimal unitCost = (BigDecimal) serviceResult.get("initialItemCost");
 
                     long serializedInvItems = delegator.findCountByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "facilityId", destinationFacility.get("facilityId"), "inventoryItemTypeId", "SERIALIZED_INV_ITEM"));
                     boolean nonSerialized = serializedInvItems == 0 && "NON_SERIAL_INV_ITEM".equals(destinationFacility.getString("defaultInventoryItemTypeId"));
@@ -253,14 +254,14 @@ public final class ReturnServices {
                     receiveContext.put("facilityId", destinationFacility.get("facilityId"));
                     receiveContext.put("shipmentId", shipmentId);
                     receiveContext.put("datetimeReceived", UtilDateTime.nowTimestamp());
-                    receiveContext.put("quantityRejected", new Double(0));
+                    receiveContext.put("quantityRejected", BigDecimal.ZERO);
                     receiveContext.put("comments", "Returned Item RA# " + returnId);
                     receiveContext.put("unitCost", unitCost);
 
                     if (nonSerialized) {
 
                         // Receive once for the full quantity
-                        receiveContext.put("quantityAccepted", returnItem.getDouble("returnQuantity"));
+                        receiveContext.put("quantityAccepted", returnItem.getBigDecimal("returnQuantity"));
                         serviceResult = dispatcher.runSync("receiveInventoryProduct", receiveContext);
                         if (ServiceUtil.isError(serviceResult)) {
                             return serviceResult;
@@ -268,8 +269,8 @@ public final class ReturnServices {
                     } else {
 
                         // Receive with quantity 1 until the full quantity is received
-                        receiveContext.put("quantityAccepted", new Double(1));
-                        for (int x = 0; x < returnItem.getDouble("returnQuantity").intValue(); x++) {
+                        receiveContext.put("quantityAccepted", BigDecimal.ONE);
+                        for (int x = 0; x < returnItem.getBigDecimal("returnQuantity").intValue(); x++) {
                             serviceResult = dispatcher.runSync("receiveInventoryProduct", receiveContext);
                             if (ServiceUtil.isError(serviceResult)) {
                                 return serviceResult;
