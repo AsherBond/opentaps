@@ -116,11 +116,11 @@ under the License.
     </eca>
 
     <!-- cancel order items -->
-    <eca service="cancelOrderItem" event="commit">
-        <action service="recreateOrderAdjustments" mode="sync"/>
-        <action service="resetGrandTotal" mode="sync"/>
-        <action service="sendOrderChangeNotification" mode="async" persist="true"/>
-    </eca>
+    <!-- <eca service="cancelOrderItem" event="commit"> -->
+    <!--     <action service="recreateOrderAdjustments" mode="sync"/> -->
+    <!--     <action service="resetGrandTotal" mode="sync"/> -->
+    <!--     <action service="sendOrderChangeNotification" mode="async" persist="true"/> -->
+    <!-- </eca> -->
 
     <!-- order grand total -->
     <!--
