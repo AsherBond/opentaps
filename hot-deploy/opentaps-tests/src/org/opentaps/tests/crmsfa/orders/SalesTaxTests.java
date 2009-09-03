@@ -40,17 +40,17 @@ public class SalesTaxTests extends OrderTestCase {
 
     private static final String MODULE = SalesTaxTests.class.getName();
 
-    GenericValue admin;
-    GenericValue DemoCSR;
-    GenericValue ca1;
-    GenericValue ca2;
-    GenericValue Product1;
-    GenericValue Product2;
-    static String organizationPartyId = "Company";
-    static final String productStoreId = "9000";
-    static final String productId1 = "GZ-1005";
-    static final String productId2 = "WG-5569";
-    static final String facilityId = "WebStoreWarehouse";
+    private GenericValue admin;
+    private GenericValue DemoCSR;
+    private GenericValue ca1;
+    private GenericValue ca2;
+    private GenericValue Product1;
+    private GenericValue Product2;
+    private static String organizationPartyId = "Company";
+    private static final String productStoreId = "9000";
+    private static final String productId1 = "GZ-1005";
+    private static final String productId2 = "WG-5569";
+    private static final String facilityId = "WebStoreWarehouse";
     private OrderSpecification specification;
 
     @Override
@@ -111,12 +111,10 @@ public class SalesTaxTests extends OrderTestCase {
             assertNotNull("There is no " + taxId + " order item adjustment in the order " + orderId + " for the order item " + orderItem.getString("orderItemSeqId") + ".", calatax);
 
             // expected tax amount, the percent divide has the same scaling as in the tax service
-            BigDecimal amount = specification.taxCalculationRounding(BigDecimal.valueOf(orderItem.getDouble("unitPrice")).multiply(BigDecimal.valueOf(orderItem.getDouble("quantity"))).multiply(percentage).divide(new BigDecimal("100"), 3, BigDecimal.ROUND_CEILING));
+            BigDecimal amount = specification.taxCalculationRounding(orderItem.getBigDecimal("unitPrice").multiply(orderItem.getBigDecimal("quantity")).multiply(percentage).divide(new BigDecimal("100"), 3, BigDecimal.ROUND_CEILING));
 
-            assertEquals("The tax calculation for order " + orderId + " and order item " + orderItem.getString("orderItemSeqId") + " is wrong.", calatax.getDouble("amount"), amount.doubleValue());
-
+            assertEquals("The tax calculation for order " + orderId + " and order item " + orderItem.getString("orderItemSeqId") + " is wrong.", calatax.getBigDecimal("amount"), amount);
         }
-
     }
 
     /**
@@ -128,19 +126,16 @@ public class SalesTaxTests extends OrderTestCase {
      * @param percentage the expected tax percentage
      * @throws GeneralException in an error occurs
      */
-    @SuppressWarnings("unchecked")
-    public void assertTaxReturn(String returnId, String taxId, double percentage) throws GeneralException {
+    public void assertTaxReturn(String returnId, String taxId, BigDecimal percentage) throws GeneralException {
 
         List<GenericValue> returnAdjustments = delegator.findByAnd("ReturnAdjustment", UtilMisc.toMap("returnId", returnId, "primaryGeoId", taxId));
         assertNotNull("There is no return adjustment in the return " + returnId + " for tax " + taxId + ".", returnAdjustments);
         for (GenericValue returnAdjustment : returnAdjustments) {
             GenericValue returnItem = delegator.findByPrimaryKey("ReturnItem", UtilMisc.toMap("returnId", returnId, "returnItemSeqId", returnAdjustment.getString("returnItemSeqId")));
 
-            BigDecimal amount =  (new BigDecimal((returnItem.getDouble("returnPrice") * returnItem.getDouble("returnQuantity")) * percentage / 100)).setScale(DECIMALS, ROUNDING);
-            assertEquals("The tax calculate for return " + returnId + " and return item " + returnItem.getString("returnItemSeqId") + " is wrong.", returnAdjustment.getDouble("amount"), amount.doubleValue());
-
+            BigDecimal amount = returnItem.getBigDecimal("returnPrice").multiply(returnItem.getBigDecimal("returnQuantity")).multiply(percentage).divide(new BigDecimal("100"), DECIMALS, ROUNDING);
+            assertEquals("The tax calculate for return " + returnId + " and return item " + returnItem.getString("returnItemSeqId") + " is wrong.", returnAdjustment.getBigDecimal("amount"), amount);
         }
-
     }
 
     /**
@@ -282,8 +277,8 @@ public class SalesTaxTests extends OrderTestCase {
             input.put("orderItemSeqId", orderItem.getString("orderItemSeqId"));
             input.put("description", orderItem.getString("itemDescription"));
             input.put("productId", orderItem.getString("productId"));
-            input.put("returnQuantity", orderItem.getDouble("quantity"));
-            input.put("returnPrice", orderItem.getDouble("unitPrice"));
+            input.put("returnQuantity", orderItem.getBigDecimal("quantity"));
+            input.put("returnPrice", orderItem.getBigDecimal("unitPrice"));
             input.put("returnReasonId", "RTN_NOT_WANT");
             input.put("returnTypeId", "RTN_REFUND");
             runAndAssertServiceSuccess("createReturnItemOrAdjustment", input);
@@ -296,8 +291,8 @@ public class SalesTaxTests extends OrderTestCase {
         /*
          * 12.  Verify that the return item from #11 has a ReturnAdjustment of sales tax of 6.25% of item for taxAuthGeoId=CA and 1% for taxAuthGeoId=CA-LA
          */
-        assertTaxReturn(returnId, "CA", 6.25);
-        assertTaxReturn(returnId, "CA-LA", 1);
+        assertTaxReturn(returnId, "CA", new BigDecimal("6.25"));
+        assertTaxReturn(returnId, "CA-LA", new BigDecimal("1.0"));
 
     }
 
@@ -309,7 +304,6 @@ public class SalesTaxTests extends OrderTestCase {
      *  - item tax totals are rounded HALF_UP to 2 decimals, this is according to the order specifications
      * @throws GeneralException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testTaxesAfterOrderUpdate() throws GeneralException {
         // Create two test products
         GenericValue testProduct1 = createTestProduct("testTaxesAfterOrderUpdate Product 1", admin);
@@ -366,14 +360,17 @@ public class SalesTaxTests extends OrderTestCase {
         // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
         //  20 % of 275.00 = 55.00
         assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("55.00"));
+        // 10% off promotion: 275.00 x 0.1 = 27.50
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-27.50"));
         // Tax amount should be:
         //      1 + 6.25 % of 50.00  = 0.500 + 3.125 = 3.625 ~ 3.63
         //  1 + 1 + 6.25 % of 225.00 = 2.250 + 2.250 + 14.063 = 18.563 ~ 18.56
         //  1 % of 55.00 = 0.55 (note: only the CA-LA CA_BOE tax authority taxes shipping)
-        // = 22.7375 ~ 22.74
+        //  1 % of -27.50 promotion = -0.275 ~ -0.27 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 22.4675 ~ 22.47
         assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("3.63"));
         assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("18.56"));
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("22.74"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("22.47"));
 
         // other item adjustments
         assertEquals("Order [" + orderId + "] item 1 other adjustments incorrect.", orderItem1.getOtherAdjustmentsAmount(), new BigDecimal("0.00"));
@@ -408,14 +405,17 @@ public class SalesTaxTests extends OrderTestCase {
         // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
         //  20 % of 811.84 = 162.368
         assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("162.37"));
+        // 10% off promotion: 811.84 x 0.1 = 81.18
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-81.18"));
         // Tax amount should be: [Note the rate applied rounding to CEILING instead of HALF-UP]
         //  1 + 1 + 6.25 % of 181.93 = 1.820 + 1.820 + 11.371 = 15.011 ~ 15.01
         //  1 + 1 + 6.25 % of 629.91 = 6.300 + 6.300 + 39.370 = 51.970 ~ 51.97
         //  1 % of 162.368 = 1.624 ~ 1.62 (note: only the CA-LA CA_BOE tax authority taxes shipping)
-        // = 68.60
+        //  1 % of -81.18 promotion = -0.8118 ~ -0.81 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 67.79
         assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("15.01"));
         assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("51.97"));
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("68.60"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("67.79"));
 
         // other item adjustments
         assertEquals("Order [" + orderId + "] item 1 other adjustments incorrect.", orderItem1.getOtherAdjustmentsAmount(), new BigDecimal("0.00"));
@@ -427,7 +427,7 @@ public class SalesTaxTests extends OrderTestCase {
         callCtxt.put("orderId", orderId);
         callCtxt.put("orderItemSeqId", orderItem2.getOrderItemSeqId());
         callCtxt.put("shipGroupSeqId", "00001");
-        callCtxt.put("cancelQuantity", 8.0);
+        callCtxt.put("cancelQuantity", new BigDecimal("8.0"));
         runAndAssertServiceSuccess("cancelOrderItem", callCtxt);
 
         // reload entities
@@ -447,6 +447,8 @@ public class SalesTaxTests extends OrderTestCase {
         // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
         //  20 % of 251.92 = 50.38
         assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("50.38"));
+        // 10% off promotion: 251.92 x 0.1 = 2.52
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-2.52"));
         // Tax amount should be:
         // Note the rate applied rounding to CEILING instead of HALF-UP here
         //  the second item tax would have been 5.77 otherwise, as the 6.25 % would give 4.374
@@ -454,10 +456,11 @@ public class SalesTaxTests extends OrderTestCase {
         //  1 + 1 + 6.25 % of 181.93 = 1.820 + 1.820 + 11.371 = 15.011 ~ 15.01
         //  1 + 1 + 6.25 % of 69.99  = 0.700 + 0.700 + 4.375  = 5.775 ~ 5.78
         //  1 % of 50.38 = 0.504 ~ 0.50 (note: only the CA-LA CA_BOE tax authority taxes shipping)
-        // = 21.28
+        //  1 % of -2.52 promotion = -0.0252 ~ -0.03 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 21.26
         assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("15.01"));
         assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("5.78"));
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("21.29"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("21.26"));
 
         // other item adjustments
         assertEquals("Order [" + orderId + "] item 1 other adjustments incorrect.", orderItem1.getOtherAdjustmentsAmount(), new BigDecimal("0.00"));
@@ -472,7 +475,7 @@ public class SalesTaxTests extends OrderTestCase {
         callCtxt.put("userLogin", admin);
         callCtxt.put("orderId", orderId);
         callCtxt.put("productId", productId3);
-        callCtxt.put("quantity", 10.0);
+        callCtxt.put("quantity", new BigDecimal("10.0"));
         callCtxt.put("shipGroupSeqId", "00001");
         callCtxt.put("prodCatalogId", productStoreId);
         callCtxt.put("recalcOrder", "Y");
@@ -511,16 +514,19 @@ public class SalesTaxTests extends OrderTestCase {
         // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
         //  20 % of 408.52 = 81.70
         assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("81.70"));
+        // 10% off promotion: 408.52 x 0.1 = 4.09
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-4.09"));
         // Tax amount should be:
         //  1 + 1 + 6.25 % of 181.93 = 1.820 + 1.820 + 11.371 = 15.011 ~ 15.01
         //  1 + 1 + 6.25 % of 69.99  = 0.700 + 0.700 + 4.375  = 5.775 ~ 5.78
         //  1 + 6.25 % of 156.60 = 11.354 ~ 11.35
         //  1 % of 81.70 = 0.82 (note: only the CA-LA CA_BOE tax authority taxes shipping)
-        // = 32.96
+        //  1 % of -4.09 promotion = -0.0409 ~ -0.04 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 32.92
         assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("15.01"));
         assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("5.78"));
         assertEquals("Order [" + orderId + "] item 3 taxes incorrect.", orderItem3.getTaxAmount(), new BigDecimal("11.35"));
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("32.96"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("32.92"));
 
         // update order with:
         // - product1 unit price below the 25 limit, and quantity to 5
@@ -572,15 +578,18 @@ public class SalesTaxTests extends OrderTestCase {
         // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
         //  20 % of 155.17 = 31.034
         assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("31.03"));
+        // 10% off promotion: 155.17 x 0.1 = 15.52
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-15.52"));
         // Tax amount should be:
         //  1 + 6.25 % of 79.40 = 0.794 + 4.963 = 5.757 ~ 5.76
         //  1 + 1 + 6.25 % of 75.77 = 0.758 + 0.758 + 4.736 = 6.252 ~ 6.25
         //  1 % of 31.03 = 0.31 (note: only the CA-LA CA_BOE tax authority taxes shipping)
-        // = 12.32
+        //  1 % of -15.52 promotion = -0.1552 ~ -0.16 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 12.16
         assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("5.76"));
         assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("0"));
         assertEquals("Order [" + orderId + "] item 3 taxes incorrect.", orderItem3.getTaxAmount(), new BigDecimal("6.25"));
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("12.32"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("12.16"));
 
     }
 }
