@@ -375,6 +375,8 @@ public class OpentapsTestCase extends TestCase {
             } else {
                 if (actualObj instanceof Map || expectedObj instanceof Map) {
                     assertEquals(message + " for key value [" + key + "]", (Map) expectedObj, (Map) actualObj, ignoreExtraActualValues);
+                } else if (actualObj instanceof List || expectedObj instanceof List) {
+                    assertEquals(message + " for key value [" + key + "]", (List) expectedObj, (List) actualObj, ignoreExtraActualValues);
                 } else if (actualObj instanceof Number || expectedObj instanceof Number) {
                     assertEquals(message + " for key value [" + key + "]", (Number) expectedObj, (Number) actualObj);
                 } else {
@@ -385,6 +387,37 @@ public class OpentapsTestCase extends TestCase {
         if (!ignoreExtraActualValues) {
             assertTrue("Some keys were found in the actual Map [" + actual.keySet() + "] that were not expected [" + expected.keySet() + "].", expected.keySet().containsAll(actual.keySet()));
         }
+    }
+
+    /**
+     * Asserts that the values in a List are equal to the given List.
+     * This uses <code>assertEquals</code> to compare the List values as the default implementation uses <code>equals</code> which does not always work on <code>BigDecimal</code>.
+     * @param message the assert message
+     * @param actual a <code>List</code> of values
+     * @param expected the <code>List</code> of expected values
+     * @param ignoreExtraActualValues if set to <code>true</code>, does not fail if some values in actual are not in expected
+     */
+    public void assertEquals(String message, List actual, List expected, boolean ignoreExtraActualValues) {
+        Debug.logInfo("Comparing lists :\nactual = " + actual + "\nexpected = " + expected, MODULE);
+
+        for (int i = 0; i < expected.size(); i++) {
+            Object expectedObj = expected.get(i);
+            Object actualObj = actual.get(i);
+            if (expectedObj == null) {
+                assertNull(message + " for index [" + i + "]", actualObj);
+            } else {
+                if (actualObj instanceof Map || expectedObj instanceof Map) {
+                    assertEquals(message + " for index [" + i + "]", (Map) expectedObj, (Map) actualObj, ignoreExtraActualValues);
+                } else if (actualObj instanceof List || expectedObj instanceof List) {
+                    assertEquals(message + " for index [" + i + "]", (List) expectedObj, (List) actualObj, ignoreExtraActualValues);
+                } else if (actualObj instanceof Number || expectedObj instanceof Number) {
+                    assertEquals(message + " for index [" + i + "]", (Number) expectedObj, (Number) actualObj);
+                } else {
+                    assertEquals(message + " for index [" + i + "]", expectedObj, actualObj);
+                }
+            }
+        }
+
     }
 
     /**

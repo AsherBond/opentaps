@@ -200,13 +200,13 @@ public class OrderPickingTests  extends OrderTestCase {
             if (item.getString("pbPrimaryOrderId").equals(order.getOrderId())
                     && item.getString("pFacilityId").equals(facilityId)
                     && item.getString("oiProductId").equals(productA.getString("productId"))
-                    && item.getBigDecimal("piQuantity").doubleValue() == 5.0) {
+                    && item.getBigDecimal("piQuantity").compareTo(new BigDecimal("5.0")) == 0) {
                         have5ProductA = true;
             }
             if (item.getString("pbPrimaryOrderId").equals(order.getOrderId())
                     && item.getString("pFacilityId").equals(facilityId)
                     && item.getString("oiProductId").equals(productB.getString("productId"))
-                    && item.getBigDecimal("piQuantity").doubleValue() == 8.0) {
+                    && item.getBigDecimal("piQuantity").compareTo(new BigDecimal("8.0")) == 0) {
                 have8ProductB = true;
             }
         }
@@ -293,15 +293,15 @@ public class OrderPickingTests  extends OrderTestCase {
         expectedWebStoreItems.put("00001", expectedProducts);
         assertShipGroupReservationsAndQuantities(order.getOrderId(), facilityId, expectedWebStoreItems);
         // check inventories ATP changed due to the reservations
-        inventoryAsserts.assertInventoryChange(productAId, BigDecimal.ZERO, new BigDecimal(-5.0), originalInventoryA);
-        inventoryAsserts.assertInventoryChange(productBId, BigDecimal.ZERO, new BigDecimal(-8.0), originalInventoryB);
+        inventoryAsserts.assertInventoryChange(productAId, BigDecimal.ZERO, new BigDecimal("-5.0"), originalInventoryA);
+        inventoryAsserts.assertInventoryChange(productBId, BigDecimal.ZERO, new BigDecimal("-8.0"), originalInventoryB);
 
         // receive part of the inventory
         receiveInventoryProduct(productA, new BigDecimal("2.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
         receiveInventoryProduct(productB, new BigDecimal("3.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
         // check inventory
-        inventoryAsserts.assertInventoryChange(productAId, new BigDecimal(2.0), new BigDecimal(-3.0), originalInventoryA);
-        inventoryAsserts.assertInventoryChange(productBId, new BigDecimal(3.0), new BigDecimal(-5.0), originalInventoryB);
+        inventoryAsserts.assertInventoryChange(productAId, new BigDecimal("2.0"), new BigDecimal("-3.0"), originalInventoryA);
+        inventoryAsserts.assertInventoryChange(productBId, new BigDecimal("3.0"), new BigDecimal("-5.0"), originalInventoryB);
 
         // at this point, there is some inventory for this order and allowOrderSplit = Y, so it should appear on the picklist.
         results = runAndAssertServiceSuccess("findOrdersToPickMove", UtilMisc.toMap("facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -328,8 +328,8 @@ public class OrderPickingTests  extends OrderTestCase {
         assertOrderReadyToShip(order, facilityId);
 
         // pack the partial order
-        Map<String, Map<String, Double>> toPackItems = new HashMap<String, Map<String, Double>>();
-        toPackItems.put("00001", UtilMisc.toMap(itemA.getOrderItemSeqId(), 2.0, itemB.getOrderItemSeqId(), 3.0));
+        Map<String, Map<String, BigDecimal>> toPackItems = new HashMap<String, Map<String, BigDecimal>>();
+        toPackItems.put("00001", UtilMisc.toMap(itemA.getOrderItemSeqId(), new BigDecimal("2.0"), itemB.getOrderItemSeqId(), new BigDecimal("3.0")));
         runAndAssertServiceSuccess("testShipOrderManual", UtilMisc.toMap("orderId", order.getOrderId(), "facilityId", facilityId, "items", toPackItems, "userLogin", admin));
 
         // check it packed all the picklist items
@@ -344,8 +344,8 @@ public class OrderPickingTests  extends OrderTestCase {
         expectedWebStoreItems.put("00001", expectedProducts);
         assertShipGroupReservationsAndQuantities(order.getOrderId(), facilityId, expectedWebStoreItems);
         // check inventory after packing
-        inventoryAsserts.assertInventoryChange(productAId, BigDecimal.ZERO, new BigDecimal(-3.0), originalInventoryA);
-        inventoryAsserts.assertInventoryChange(productBId, BigDecimal.ZERO, new BigDecimal(-5.0), originalInventoryB);
+        inventoryAsserts.assertInventoryChange(productAId, BigDecimal.ZERO, new BigDecimal("-3.0"), originalInventoryA);
+        inventoryAsserts.assertInventoryChange(productBId, BigDecimal.ZERO, new BigDecimal("-5.0"), originalInventoryB);
 
         // it is not anymore on ready to ship
         assertOrderNotReadyToShip(order, facilityId);
@@ -353,8 +353,8 @@ public class OrderPickingTests  extends OrderTestCase {
         // receive some more inventory
         receiveInventoryProduct(productB, new BigDecimal("3.0"), "NON_SERIAL_INV_ITEM", new BigDecimal("10.0"), facilityId, demowarehouse1);
         // check inventory
-        inventoryAsserts.assertInventoryChange(productAId, BigDecimal.ZERO, new BigDecimal(-3.0), originalInventoryA);
-        inventoryAsserts.assertInventoryChange(productBId, new BigDecimal(3.0), new BigDecimal(-2.0), originalInventoryB);
+        inventoryAsserts.assertInventoryChange(productAId, BigDecimal.ZERO, new BigDecimal("-3.0"), originalInventoryA);
+        inventoryAsserts.assertInventoryChange(productBId, new BigDecimal("3.0"), new BigDecimal("-2.0"), originalInventoryB);
 
         // create a second picklist
         results = runAndAssertServiceSuccess("createPicklistFromOrders", UtilMisc.toMap("orderIdList", UtilMisc.toList(order.getOrderId()), "facilityId", facilityId, "maxNumberOfOrders", new Long(1000), "userLogin", admin));
@@ -367,8 +367,8 @@ public class OrderPickingTests  extends OrderTestCase {
         runAndAssertServiceSuccess("updatePicklist", UtilMisc.toMap("picklistId", picklistId2, "statusId", "PICKLIST_PICKED", "userLogin", admin));
 
         // pack the partial order
-        toPackItems = new HashMap<String, Map<String, Double>>();
-        toPackItems.put("00001", UtilMisc.toMap(itemB.getOrderItemSeqId(), 3.0));
+        toPackItems = new HashMap<String, Map<String, BigDecimal>>();
+        toPackItems.put("00001", UtilMisc.toMap(itemB.getOrderItemSeqId(), new BigDecimal("3.0")));
         runAndAssertServiceSuccess("testShipOrderManual", UtilMisc.toMap("orderId", order.getOrderId(), "facilityId", facilityId, "items", toPackItems, "userLogin", admin));
 
         // check it packed all the picklist items
@@ -400,8 +400,8 @@ public class OrderPickingTests  extends OrderTestCase {
         assertPicklistItems(picklistId3, UtilMisc.toMap(productAId, new BigDecimal("3.0"), productBId, new BigDecimal("2.0")));
 
         // pack the partial order
-        toPackItems = new HashMap<String, Map<String, Double>>();
-        toPackItems.put("00001", UtilMisc.toMap(itemA.getOrderItemSeqId(), 3.0, itemB.getOrderItemSeqId(), 2.0));
+        toPackItems = new HashMap<String, Map<String, BigDecimal>>();
+        toPackItems.put("00001", UtilMisc.toMap(itemA.getOrderItemSeqId(), new BigDecimal("3.0"), itemB.getOrderItemSeqId(), new BigDecimal("2.0")));
         runAndAssertServiceSuccess("testShipOrderManual", UtilMisc.toMap("orderId", order.getOrderId(), "facilityId", facilityId, "items", toPackItems, "userLogin", admin));
 
         // check it packed all the picklist items
@@ -527,13 +527,13 @@ public class OrderPickingTests  extends OrderTestCase {
             if (item.getString("pbPrimaryOrderId").equals(order.getOrderId())
                     && item.getString("pFacilityId").equals(facilityId)
                     && item.getString("oiProductId").equals(productA.getString("productId"))
-                    && item.getBigDecimal("piQuantity").doubleValue() == 5.0) {
+                    && item.getBigDecimal("piQuantity").compareTo(new BigDecimal("5.0")) == 0) {
                         have5ProductA = true;
             }
             if (item.getString("pbPrimaryOrderId").equals(order.getOrderId())
                     && item.getString("pFacilityId").equals(facilityId)
                     && item.getString("oiProductId").equals(productB.getString("productId"))
-                    && item.getBigDecimal("piQuantity").doubleValue() == 8.0) {
+                    && item.getBigDecimal("piQuantity").compareTo(new BigDecimal("8.0")) == 0) {
                 have8ProductB = true;
             }
          }
@@ -653,13 +653,13 @@ public class OrderPickingTests  extends OrderTestCase {
             if (item.getString("pbPrimaryOrderId").equals(order.getOrderId())
                     && item.getString("pFacilityId").equals(facilityId)
                     && item.getString("oiProductId").equals(productA.getString("productId"))
-                    && item.getBigDecimal("piQuantity").doubleValue() == 5.0) {
+                    && item.getBigDecimal("piQuantity").compareTo(new BigDecimal("5.0")) == 0) {
                         have5ProductAForWebStore = true;
             }
             if (item.getString("pbPrimaryOrderId").equals(order.getOrderId())
                     && item.getString("pFacilityId").equals(facilityId)
                     && item.getString("oiProductId").equals(productB.getString("productId"))
-                    && item.getBigDecimal("piQuantity").doubleValue() == 3.0) {
+                    && item.getBigDecimal("piQuantity").compareTo(new BigDecimal("3.0")) == 0) {
                 have3ProductBForWebStore = true;
             }
          }
@@ -677,7 +677,7 @@ public class OrderPickingTests  extends OrderTestCase {
             if (item.getString("pbPrimaryOrderId").equals(order.getOrderId())
                     && item.getString("pFacilityId").equals(facilityId1)
                     && item.getString("oiProductId").equals(productB.getString("productId"))
-                    && item.getBigDecimal("piQuantity").doubleValue() == 5.0) {
+                    && item.getBigDecimal("piQuantity").compareTo(new BigDecimal("5.0")) == 0) {
                 have5ProductBForMyRetail = true;
             }
         }
@@ -707,13 +707,13 @@ public class OrderPickingTests  extends OrderTestCase {
             GenericValue orderShipment = (GenericValue) orderShipmentsIt.next();
             GenericValue orderItem = orderShipment.getRelatedOne("OrderItem");
             if (orderItem.getString("productId").equals(productA.getString("productId"))) {
-             // check a shipment was created, and contains the correct items: 5 x productA
-                assertEquals("Assert contains 5 x productA", 5.0, orderShipment.getBigDecimal("quantity").doubleValue());
+                // check a shipment was created, and contains the correct items: 5 x productA
+                assertEquals("Assert contains 5 x productA", new BigDecimal("5.0"), orderShipment.getBigDecimal("quantity"));
             }
             if (orderItem.getString("productId").equals(productB.getString("productId"))) {
                 // check a shipment was created, and contains the correct items: 5 x productA
-                   assertEquals("Assert contains 3 x productB", 3.0, orderShipment.getBigDecimal("quantity").doubleValue());
-               }
+                assertEquals("Assert contains 3 x productB", new BigDecimal("3.0"), orderShipment.getBigDecimal("quantity"));
+            }
         }
         List<GenericValue> billings1 = shipment1.getRelated("ShipmentItemBilling");
         assertEquals("the invoice should be created", 1, EntityUtil.getFieldListFromEntityList(billings1, "invoiceId", true).size());
@@ -739,7 +739,7 @@ public class OrderPickingTests  extends OrderTestCase {
             GenericValue orderItem = orderShipment.getRelatedOne("OrderItem");
             if (orderItem.getString("productId").equals(productB.getString("productId"))) {
                 // check a shipment was created, and contains the correct items: 5 x productA
-                assertEquals("Assert contains 5 x productB", 5.0, orderShipment.getBigDecimal("quantity").doubleValue());
+                assertEquals("Assert contains 5 x productB", new BigDecimal("5.0"), orderShipment.getBigDecimal("quantity"));
             }
         }
         List<GenericValue> billings2 = shipment2.getRelated("ShipmentItemBilling");

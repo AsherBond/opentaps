@@ -658,7 +658,7 @@ public class OrderTestCase extends OpentapsTestCase {
 
         if (expected != null) {
             // check the found quantities match the expected quantities
-            assertEquals("Expected map did not match the found OrderItemShipGrpInvResAndItem for order [" + orderId + "] and facility [" + facilityId + "].", expected, found);
+            assertEquals("Expected map did not match the found OrderItemShipGrpInvResAndItem for order [" + orderId + "] and facility [" + facilityId + "].", expected, found, false);
         } else {
             // if expected is null, check that there was no reservation found
             assertTrue("Expected no reservations for order [" + orderId + "] and facility [" + facilityId + "], but found: " + found, found.keySet().isEmpty());

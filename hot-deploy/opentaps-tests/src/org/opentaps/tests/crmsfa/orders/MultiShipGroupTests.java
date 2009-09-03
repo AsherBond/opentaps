@@ -133,10 +133,10 @@ public class MultiShipGroupTests extends OrderTestCase {
         input1.put("partyIdFrom", DemoAccount1.get("partyId"));
         input1.put("partyIdTo", organizationPartyId);
         input1.put("statusId", "PMNT_RECEIVED");
-        input1.put("amount", firstPayment.doubleValue());
+        input1.put("amount", firstPayment);
         input1.put("userLogin", DemoSalesManager);
         Map input2 = new FastMap(input1);
-        input2.put("amount", secondPayment.doubleValue());
+        input2.put("amount", secondPayment);
         Map result1 = runAndAssertServiceSuccess("createPayment", input1);
         Map result2 = runAndAssertServiceSuccess("createPayment", input2);
         String paymentId1 = (String) result1.get("paymentId");
