@@ -165,7 +165,7 @@ public class ReturnTests extends ReturnTestCase {
         // 9b. Verify that the inventory of the item has increased by 2.0
         assertProductAvailability(testProduct, new BigDecimal("7.0"), new BigDecimal("7.0"));
         // check the InventoryItem entity
-        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "status_id", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
+        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
         assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
 
         // 9c. Verify that a payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_SENT has been created
@@ -280,7 +280,7 @@ public class ReturnTests extends ReturnTestCase {
         // 9b. Inventory of the item has increased by 2.0
         assertProductAvailability(testProduct, new BigDecimal("7.0"), new BigDecimal("7.0"));
         // check the InventoryItem entity
-        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "status_id", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
+        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
         assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
 
         // 9c. A payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_NOT_PAID has been created
@@ -370,7 +370,7 @@ public class ReturnTests extends ReturnTestCase {
         // 9b. Verify that the inventory of the item has increased by 2.0
         assertProductAvailability(testProduct, new BigDecimal("7.0"), new BigDecimal("7.0"));
         // check the InventoryItem entity
-        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "status_id", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
+        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.<String, Object>toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
         assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
 
         // 9c. Verify that a payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_NOT_PAID has been created
@@ -473,7 +473,7 @@ public class ReturnTests extends ReturnTestCase {
         // 9b. Verify that the inventory of the item has increased by 2.0
         assertProductAvailability(testProduct, 7.0, 7.0);
         // check the InventoryItem entity
-        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "status_id", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
+        List<GenericValue> inventoryItems = delegator.findByAnd("InventoryItem", UtilMisc.toMap("productId", productId, "statusId", "INV_RETURNED", "quantityOnHandTotal", 2, "availableToPromiseTotal", 2));
         assertEquals("InventoryItem INV_RETURNED for product ["+productId+"]", 1, inventoryItems.size());
 
         // 9c. Verify that a payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_NOT_PAID has been created
