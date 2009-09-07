@@ -134,12 +134,19 @@ under the License.
 
     <service name="updateOrderItems" engine="java" auth="true"
             location="org.opentaps.common.order.OrderServices" invoke="updateApprovedOrderItemsLegacy">
-        <description>Update the quantities/prices for an existing order, copied from opentaps to customize how cancel quantities are handled.</description>
+        <description>Update the quantities/prices for an existing order, copied from ofbiz to customize how cancel quantities are handled.</description>
         <attribute name="orderId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="supplierPartyId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderTypeId" type="String" mode="IN" optional="true"/>
         <attribute name="itemDescriptionMap" type="Map" mode="IN" string-map-prefix="idm_" optional="true"/>
         <attribute name="itemQtyMap" type="Map" mode="IN" string-map-prefix="iqm_" optional="false"/>
         <attribute name="itemPriceMap" type="Map" mode="IN" string-map-prefix="ipm_" optional="false"/>
         <attribute name="overridePriceMap" type="Map" mode="IN" string-map-prefix="opm_" optional="false"/>
+        <attribute name="itemReasonMap" type="Map" mode="IN" string-map-prefix="irm_" optional="true"/>
+        <attribute name="itemCommentMap" type="Map" mode="IN" string-map-prefix="icm_" optional="true"/>
+        <attribute name="itemAttributesMap" type="Map" mode="IN" string-map-prefix="iam_" optional="true"/>
+        <attribute name="itemShipDateMap" type="Map" mode="IN" string-map-prefix="isdm_" optional="true"/>
+        <attribute name="itemDeliveryDateMap" type="Map" mode="IN" string-map-prefix="iddm_" optional="true"/>
         <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
     </service>
 

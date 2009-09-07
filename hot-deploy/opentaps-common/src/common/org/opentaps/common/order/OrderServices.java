@@ -35,6 +35,7 @@
 package org.opentaps.common.order;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -44,9 +45,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import javolution.util.FastSet;
 import org.ofbiz.accounting.util.UtilAccounting;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
@@ -68,6 +71,7 @@ import org.ofbiz.order.shoppingcart.CheckOutHelper;
 import org.ofbiz.order.shoppingcart.ItemNotFoundException;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
+import org.ofbiz.order.shoppingcart.product.ProductPromoWorker;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
@@ -895,16 +899,40 @@ public final class OrderServices {
      * @return the service result <code>Map</code>
      */
     @SuppressWarnings("unchecked")
-    public static Map updateApprovedOrderItemsLegacy(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updateApprovedOrderItemsLegacy(DispatchContext dctx, Map<String, Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericDelegator delegator = dctx.getDelegator();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
         String orderId = (String) context.get("orderId");
-        Map overridePriceMap = (Map) context.get("overridePriceMap");
-        Map itemDescriptionMap = (Map) context.get("itemDescriptionMap");
-        Map itemPriceMap = (Map) context.get("itemPriceMap");
-        Map itemQtyMap = (Map) context.get("itemQtyMap");
+        Map<String, String> overridePriceMap = (Map<String, String>) context.get("overridePriceMap");
+        Map<String, String> itemDescriptionMap = (Map<String, String>) context.get("itemDescriptionMap");
+        Map<String, String> itemPriceMap = (Map<String, String>) context.get("itemPriceMap");
+        Map<String, String> itemQtyMap = (Map<String, String>) context.get("itemQtyMap");
+
+        Map<String, String> itemReasonMap = (Map<String, String>) context.get("itemReasonMap");
+        Map<String, String> itemCommentMap = (Map<String, String>) context.get("itemCommentMap");
+        Map<String, String> itemAttributesMap = (Map<String, String>) context.get("itemAttributesMap");
+        Map<String, String> itemEstimatedShipDateMap  = (Map<String, String>) context.get("itemShipDateMap");
+        Map<String, String> itemEstimatedDeliveryDateMap = (Map<String, String>) context.get("itemDeliveryDateMap");
+
+        // those new inputs above could be null
+        if (itemReasonMap == null) {
+            itemReasonMap = new HashMap<String, String>();
+        }
+        if (itemCommentMap == null) {
+            itemCommentMap = new HashMap<String, String>();
+        }
+        if (itemAttributesMap == null) {
+            itemAttributesMap = new HashMap<String, String>();
+        }
+        if (itemEstimatedShipDateMap == null) {
+            itemEstimatedShipDateMap = new HashMap<String, String>();
+        }
+        if (itemEstimatedDeliveryDateMap == null) {
+            itemEstimatedDeliveryDateMap = new HashMap<String, String>();
+        }
+
 
         // obtain a shopping cart object for updating
         OpentapsShoppingCart cart = null;
@@ -915,6 +943,14 @@ public final class OrderServices {
         }
         if (cart == null) {
             return ServiceUtil.returnError("ERROR: Null shopping cart object returned!");
+        }
+
+        // go through the item attributes map once to get a list of key names
+        Set<String> attributeNames = FastSet.newInstance();
+        Set<String> keys = itemAttributesMap.keySet();
+        for (String key : keys) {
+            String[] attributeInfo = key.split(":");
+            attributeNames.add(attributeInfo[0]);
         }
 
         // go through the item map and obtain the totals per item
@@ -936,7 +972,7 @@ public final class OrderServices {
 
                 // set quantity
                 try {
-                    cartItem.setQuantity(qty, dispatcher, cart, true, false); // trigger external ops, don't reset ship groups (and update prices for both PO and SO items)
+                    cartItem.setQuantity(qty, dispatcher, cart, false, false); // do not trigger external ops (promotions), don't reset ship groups (and update prices for both PO and SO items)
                 } catch (CartItemModifyException e) {
                     Debug.logError(e, MODULE);
                     return ServiceUtil.returnError(e.getMessage());
@@ -946,10 +982,11 @@ public final class OrderServices {
                 if (cartItem.getIsModifiedPrice()) {
                     // set price
                     cartItem.setBasePrice(priceSave);
+                    Debug.logVerbose("Reset item base price as it was modified: [" + itemSeqId + "] " + priceSave, MODULE);
                 }
 
                 if (overridePriceMap.containsKey(itemSeqId)) {
-                    String priceStr = (String) itemPriceMap.get(itemSeqId);
+                    String priceStr = itemPriceMap.get(itemSeqId);
                     if (UtilValidate.isNotEmpty(priceStr)) {
                         BigDecimal price = BigDecimal.ZERO;
                         //parse the price
@@ -972,7 +1009,7 @@ public final class OrderServices {
 
                 // Update the item description
                 if (itemDescriptionMap != null && itemDescriptionMap.containsKey(itemSeqId)) {
-                    String description = (String) itemDescriptionMap.get(itemSeqId);
+                    String description = itemDescriptionMap.get(itemSeqId);
                     if (UtilValidate.isNotEmpty(description)) {
                         cartItem.setName(description);
                         Debug.log("Set item description: [" + itemSeqId + "] " + description, MODULE);
@@ -980,16 +1017,52 @@ public final class OrderServices {
                         return UtilMessage.createAndLogServiceError("Item description must not be empty", MODULE);
                     }
                 }
+
+                // update the order item attributes
+                if (itemAttributesMap != null) {
+                    String attrValue = null;
+                    for (String attrName : attributeNames) {
+                        attrValue = itemAttributesMap.get(attrName + ":" + itemSeqId);
+                        if (UtilValidate.isNotEmpty(attrName)) {
+                            cartItem.setOrderItemAttribute(attrName, attrValue);
+                            Debug.log("Set item attribute Name: [" + itemSeqId + "] " + attrName + " , Value:" + attrValue, MODULE);
+                        }
+                    }
+                }
+
             } else {
                 Debug.logInfo("Unable to locate shopping cart item for seqId #" + itemSeqId, MODULE);
             }
+        }
+
+        // Create Estimated Delivery dates
+        for (Map.Entry<String, String> entry : itemEstimatedDeliveryDateMap.entrySet()) {
+            String itemSeqId =  entry.getKey();
+            String estimatedDeliveryDate = entry.getValue();
+            if (UtilValidate.isNotEmpty(estimatedDeliveryDate)) {
+                Timestamp deliveryDate = Timestamp.valueOf(estimatedDeliveryDate);
+                ShoppingCartItem cartItem = cart.findCartItem(itemSeqId);
+                cartItem.setDesiredDeliveryDate(deliveryDate);
+            }
+        }
+
+        // Create Estimated ship dates
+        for (Map.Entry<String, String> entry : itemEstimatedShipDateMap.entrySet()) {
+            String itemSeqId =  entry.getKey();
+            String estimatedShipDate = entry.getValue();
+            if (UtilValidate.isNotEmpty(estimatedShipDate)) {
+                Timestamp shipDate = Timestamp.valueOf(estimatedShipDate);
+                ShoppingCartItem cartItem = cart.findCartItem(itemSeqId);
+                cartItem.setEstimatedShipDate(shipDate);
+            }
+
         }
 
         // update the group amounts
         Iterator gai = itemQtyMap.keySet().iterator();
         while (gai.hasNext()) {
             String key = (String) gai.next();
-            String quantityStr = (String) itemQtyMap.get(key);
+            String quantityStr = itemQtyMap.get(key);
             BigDecimal groupQty = BigDecimal.ZERO;
             try {
                 groupQty = new BigDecimal(quantityStr);
@@ -1012,9 +1085,12 @@ public final class OrderServices {
             }
         }
 
+        // run promotions to handle all changes in the cart
+        ProductPromoWorker.doPromotions(cart, dispatcher);
+
         // save all the updated information
         try {
-            saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId);
+            saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, UtilMisc.toMap("itemReasonMap", itemReasonMap, "itemCommentMap", itemCommentMap));
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
         }
@@ -1424,8 +1500,16 @@ public final class OrderServices {
     /*
      * Added accounting tags support.
      */
-    @SuppressWarnings("unchecked")
     private static void saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId) throws GeneralException {
+        saveUpdatedCartToOrder(dispatcher, delegator, cart, locale, userLogin, orderId, null);
+    }
+
+    /*
+     * Added accounting tags support.
+     * (TODO: changeMap unused)
+     */
+    @SuppressWarnings("unchecked")
+    private static void saveUpdatedCartToOrder(LocalDispatcher dispatcher, GenericDelegator delegator, OpentapsShoppingCart cart, Locale locale, GenericValue userLogin, String orderId, Map changeMap) throws GeneralException {
         // get/set the shipping estimates.  if it's a SALES ORDER, then return an error if there are no ship estimates
         int shipGroups = cart.getShipGroupSize();
         for (int gi = 0; gi < shipGroups; gi++) {
