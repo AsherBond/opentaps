@@ -2154,6 +2154,14 @@ public class OpentapsTestCase extends TestCase {
             }
         }
 
+        // copy the tax exemption
+        List<GenericValue> partyTaxAuthInfos = partyTemplate.getRelated("PartyTaxAuthInfo");
+        for (GenericValue partyTaxAuthInfoTemplate : partyTaxAuthInfos) {
+            GenericValue partyTaxAuthInfo = delegator.makeValue("PartyTaxAuthInfo", partyTaxAuthInfoTemplate);
+            partyTaxAuthInfo.put("partyId", partyId);
+            copies.add(partyTaxAuthInfo);
+        }
+
         delegator.storeAll(copies);
         return partyId;
     }
