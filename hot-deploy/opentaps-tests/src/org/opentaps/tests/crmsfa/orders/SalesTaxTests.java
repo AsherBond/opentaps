@@ -111,7 +111,7 @@ public class SalesTaxTests extends OrderTestCase {
             assertNotNull("There is no " + taxId + " order item adjustment in the order " + orderId + " for the order item " + orderItem.getString("orderItemSeqId") + ".", calatax);
 
             // expected tax amount, the percent divide has the same scaling as in the tax service
-            BigDecimal amount = specification.taxCalculationRounding(orderItem.getBigDecimal("unitPrice").multiply(orderItem.getBigDecimal("quantity")).multiply(percentage).divide(new BigDecimal("100"), 3, BigDecimal.ROUND_CEILING));
+            BigDecimal amount = specification.taxCalculationRounding(orderItem.getBigDecimal("unitPrice").multiply(orderItem.getBigDecimal("quantity")).multiply(percentage).divide(new BigDecimal("100"), 3, ROUNDING));
 
             assertEquals("The tax calculation for order " + orderId + " and order item " + orderItem.getString("orderItemSeqId") + " is wrong.", calatax.getBigDecimal("amount"), amount);
         }
@@ -142,16 +142,16 @@ public class SalesTaxTests extends OrderTestCase {
      * State and County Sales Tax Tests: these tests will verify state and county taxes
      * The particular product, payment, shipping methods don't really matter as much for this test.
      *
-     *
-     * 1.  Create a sales order for productStoreId=9000, partyId=ca1, address=ca1address1
+     * 0.  Copy ca1 / ca2
+     * 1.  Create a sales order for productStoreId=9000, partyId=customer1, address=customer1add1
      * 2.  Verify each order item from #1 has a tax of 6.25% of order item for taxAuthGeoId=CA and 1% of order item for taxAuthGeoId=CA-LA
-     * 3.  Create a sales order for productStoreId=9000, partyId=ca1, address=ca1address2
+     * 3.  Create a sales order for productStoreId=9000, partyId=customer1, address=customer1add2
      * 4.  Verify each order item from #3 has a tax of 6.25% of order item for taxAuthGeoId=CA and 0.125% of order item for taxAuthGeoId=CA-SOLANO
-     * 5.  Create a sales order for productStoreId=9000, partyId=ca2, address=ca2address1
+     * 5.  Create a sales order for productStoreId=9000, partyId=customer2, address=customer2add1
      * 6.  Verify each order item from #5 has a tax of 0 for taxAuthGeoId=CA and 0 for taxAuthGeoId=CA-LA
-     * 7.  Create a sales order for productStoreId=9000, partyId=ca2, address=ca2address2
+     * 7.  Create a sales order for productStoreId=9000, partyId=customer2, address=customer2add2
      * 8.  Verify each order item from #7 has a tax of 0 for taxAuthGeoId=CA and 0 for taxAuthGeoId=CA-SOLANO
-     * 9.  Create a sales order for productStoreId=9000, partyId=ca1, address=ca1address1
+     * 9.  Create a sales order for productStoreId=9000, partyId=customer1, address=customer1add1
      * 10.  Use testShipOrder to ship all 5 sales orders (#1, #3, #5, #7, #9)
      * 11.  Create a return for all items on sales order #9 and accept the return
      * 12.  Verify that the return item from #11 has a ReturnAdjustment of sales tax of 6.25% of item for taxAuthGeoId=CA and 1% for taxAuthGeoId=CA-LA
@@ -160,14 +160,34 @@ public class SalesTaxTests extends OrderTestCase {
     @SuppressWarnings("unchecked")
     public void testCATaxApplication() throws GeneralException {
 
+        // Copy user ca1
+        String customerPartyId1 = createPartyFromTemplate(ca1.getString("partyId"), "Copy of ca1 for testCATaxApplication");
+        GenericValue customer1 = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId1));
+
+        // get the postal addresses
+        GenericValue customer1add1 = EntityUtil.getOnly(delegator.findByAnd("PartyAndPostalAddress", UtilMisc.toMap("partyId", customerPartyId1, "postalCode", "90049")));
+        GenericValue customer1add2 = EntityUtil.getOnly(delegator.findByAnd("PartyAndPostalAddress", UtilMisc.toMap("partyId", customerPartyId1, "postalCode", "94590")));
+        assertNotNull("Could not find postal address for copy of ca1 with postal code 90049", customer1add1);
+        assertNotNull("Could not find postal address for copy of ca1 with postal code 94590", customer1add2);
+
+        // Copy user ca2
+        String customerPartyId2 = createPartyFromTemplate(ca2.getString("partyId"), "Copy of ca2 for testCATaxApplication");
+        GenericValue customer2 = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId2));
+
+        // get the postal addresses
+        GenericValue customer2add1 = EntityUtil.getOnly(delegator.findByAnd("PartyAndPostalAddress", UtilMisc.toMap("partyId", customerPartyId2, "postalCode", "90049")));
+        GenericValue customer2add2 = EntityUtil.getOnly(delegator.findByAnd("PartyAndPostalAddress", UtilMisc.toMap("partyId", customerPartyId2, "postalCode", "94590")));
+        assertNotNull("Could not find postal address for copy of ca2 with postal code 90049", customer2add1);
+        assertNotNull("Could not find postal address for copy of ca2 with postal code 94590", customer2add2);
+
         /*
-         * 1.  Create a sales order for productStoreId=9000, partyId=ca1, address=ca1address1
+         * 1.  Create a sales order for productStoreId=9000, partyId=customer1, address=customer1add1
          */
         Map<GenericValue, BigDecimal> order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
-        SalesOrderFactory salesOrder1 = testCreatesSalesOrder(order, ca1, productStoreId, "EXT_OFFLINE", "ca1address1");
+        SalesOrderFactory salesOrder1 = testCreatesSalesOrder(order, customer1, productStoreId, "EXT_OFFLINE", customer1add1.getString("contactMechId"));
 
         /*
          * 2.  Verify each order item from #1 has a tax of 6.25% of order total for taxAuthGeoId=CA and 1% of order item for taxAuthGeoId=CA-LA
@@ -176,13 +196,13 @@ public class SalesTaxTests extends OrderTestCase {
         assertTaxOrder(salesOrder1.getOrderId(), "CA-LA", new BigDecimal("1"));
 
         /*
-         * 3.  Create a sales order for productStoreId=9000, partyId=ca1, address=ca1address2
+         * 3.  Create a sales order for productStoreId=9000, partyId=customer1, address=customer1add2
          */
         order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
-        SalesOrderFactory salesOrder3 = testCreatesSalesOrder(order, ca1, productStoreId, "EXT_OFFLINE", "ca1address2");
+        SalesOrderFactory salesOrder3 = testCreatesSalesOrder(order, customer1, productStoreId, "EXT_OFFLINE", customer1add2.getString("contactMechId"));
 
         /*
          * 4.  Verify each order item from #3 has a tax of 6.25% of order total for taxAuthGeoId=CA and 0.125% of order item for taxAuthGeoId=CA-SOLANO
@@ -191,13 +211,13 @@ public class SalesTaxTests extends OrderTestCase {
         assertTaxOrder(salesOrder3.getOrderId(), "CA-SOLANO", new BigDecimal("0.125"));
 
         /*
-         * 5.  Create a sales order for productStoreId=9000, partyId=ca2, address=ca2address1
+         * 5.  Create a sales order for productStoreId=9000, partyId=customer2, address=customer2add1
          */
         order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
-        SalesOrderFactory salesOrder5 = testCreatesSalesOrder(order, ca2, productStoreId, "EXT_OFFLINE", "ca2address1");
+        SalesOrderFactory salesOrder5 = testCreatesSalesOrder(order, customer2, productStoreId, "EXT_OFFLINE", customer2add1.getString("contactMechId"));
 
         /*
          * 6.  Verify each order item from #5 has a tax of 0 for taxAuthGeoId=CA and 0 for taxAuthGeoId=CA-LA
@@ -206,13 +226,13 @@ public class SalesTaxTests extends OrderTestCase {
         assertTaxOrder(salesOrder5.getOrderId(), "CA-LA", BigDecimal.ZERO);
 
         /*
-         * 7.  Create a sales order for productStoreId=9000, partyId=ca2, address=ca2address2
+         * 7.  Create a sales order for productStoreId=9000, partyId=customer2, address=customer2add2
          */
         order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
-        SalesOrderFactory salesOrder7 = testCreatesSalesOrder(order, ca2, productStoreId, "EXT_OFFLINE", "ca2address2");
+        SalesOrderFactory salesOrder7 = testCreatesSalesOrder(order, customer2, productStoreId, "EXT_OFFLINE", customer2add2.getString("contactMechId"));
 
         /*
          * 8.  Verify each order item from #7 has a tax of 0 for taxAuthGeoId=CA and 0 for taxAuthGeoId=CA-SOLANO
@@ -221,13 +241,13 @@ public class SalesTaxTests extends OrderTestCase {
         assertTaxOrder(salesOrder7.getOrderId(), "CA-SOLANO", BigDecimal.ZERO);
 
         /*
-         * 9.  Create a sales order for productStoreId=9000, partyId=ca1, address=ca1address1
+         * 9.  Create a sales order for productStoreId=9000, partyId=customer1, address=customer1add1
          */
         order = new HashMap<GenericValue, BigDecimal>();
         order.put(Product1, new BigDecimal("1.0"));
         order.put(Product2, new BigDecimal("4.0"));
         User = DemoCSR;
-        SalesOrderFactory salesOrder9 = testCreatesSalesOrder(order, ca1, productStoreId, "EXT_OFFLINE", "ca1address1");
+        SalesOrderFactory salesOrder9 = testCreatesSalesOrder(order, customer1, productStoreId, "EXT_OFFLINE", customer1add1.getString("contactMechId"));
 
         /*
          * 10.  Use testShipOrder to ship all 5 sales orders (#1, #3, #5, #7, #9)
@@ -299,12 +319,20 @@ public class SalesTaxTests extends OrderTestCase {
     /**
      * Tests that the sales taxes are correct after updating and canceling order items.
      * Remainder on tax calculation:
-     *  - tax authority rate when applied to an item sub total rounds ROUND_CEILING to 3 decimals, this is hard coded in TaxAuthorityServices.getTaxAdjustments and may lead to confusion
+     *  - tax authority rate when applied to an item sub total rounds HALF_UP to 3 decimals, this is according to the order specifications
      *  - item taxes for each tax authority are rounded HALF_UP to 3 decimals, this is according to the order specifications
      *  - item tax totals are rounded HALF_UP to 2 decimals, this is according to the order specifications
      * @throws GeneralException if an error occurs
      */
     public void testTaxesAfterOrderUpdate() throws GeneralException {
+
+        // Copy user ca1
+        String customerPartyId1 = createPartyFromTemplate(ca1.getString("partyId"), "Copy of ca1 for testTaxesAfterOrderUpdate");
+        GenericValue customer1 = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", customerPartyId1));
+
+        // get the postal addresses
+        GenericValue customer1add1 = EntityUtil.getOnly(delegator.findByAnd("PartyAndPostalAddress", UtilMisc.toMap("partyId", customerPartyId1, "postalCodeGeoId", "USA-90049")));
+
         // Create two test products
         GenericValue testProduct1 = createTestProduct("testTaxesAfterOrderUpdate Product 1", admin);
         String productId1 = testProduct1.getString("productId");
@@ -319,7 +347,7 @@ public class SalesTaxTests extends OrderTestCase {
         orderItems.put(testProduct1, new BigDecimal("5.0"));
         orderItems.put(testProduct2, new BigDecimal("3.0"));
         User = DemoCSR;
-        SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, ca1, productStoreId, "EXT_OFFLINE", "ca1address1");
+        SalesOrderFactory salesOrder = testCreatesSalesOrder(orderItems, customer1, productStoreId, "EXT_OFFLINE", customer1add1.getString("contactMechId"));
         String orderId = salesOrder.getOrderId();
         Debug.logInfo("testTaxesAfterOrderUpdate created order [" + orderId + "]", MODULE);
         OrderRepositoryInterface repository = getOrderRepository(admin);
@@ -407,7 +435,7 @@ public class SalesTaxTests extends OrderTestCase {
         assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("162.37"));
         // 10% off promotion: 811.84 x 0.1 = 81.18
         assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-81.18"));
-        // Tax amount should be: [Note the rate applied rounding to CEILING instead of HALF-UP]
+        // Tax amount should be:
         //  1 + 1 + 6.25 % of 181.93 = 1.820 + 1.820 + 11.371 = 15.011 ~ 15.01
         //  1 + 1 + 6.25 % of 629.91 = 6.300 + 6.300 + 39.370 = 51.970 ~ 51.97
         //  1 % of 162.368 = 1.624 ~ 1.62 (note: only the CA-LA CA_BOE tax authority taxes shipping)
@@ -447,20 +475,17 @@ public class SalesTaxTests extends OrderTestCase {
         // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
         //  20 % of 251.92 = 50.38
         assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("50.38"));
-        // 10% off promotion: 251.92 x 0.1 = 2.52
-        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-2.52"));
+        // 10% off promotion: 251.92 x 0.1 = 25.19
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-25.19"));
         // Tax amount should be:
-        // Note the rate applied rounding to CEILING instead of HALF-UP here
-        //  the second item tax would have been 5.77 otherwise, as the 6.25 % would give 4.374
-        //
         //  1 + 1 + 6.25 % of 181.93 = 1.820 + 1.820 + 11.371 = 15.011 ~ 15.01
-        //  1 + 1 + 6.25 % of 69.99  = 0.700 + 0.700 + 4.375  = 5.775 ~ 5.78
+        //  1 + 1 + 6.25 % of 69.99  = 0.700 + 0.700 + 4.375  = 5.774 ~ 5.77
         //  1 % of 50.38 = 0.504 ~ 0.50 (note: only the CA-LA CA_BOE tax authority taxes shipping)
-        //  1 % of -2.52 promotion = -0.0252 ~ -0.03 (note: only the CA-LA CA_BOE tax authority taxes promotion)
-        // = 21.26
+        //  1 % of -25.19 promotion = -0.2519 ~ -0.25 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 21.03
         assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("15.01"));
-        assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("5.78"));
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("21.26"));
+        assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("5.77"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("21.03"));
 
         // other item adjustments
         assertEquals("Order [" + orderId + "] item 1 other adjustments incorrect.", orderItem1.getOtherAdjustmentsAmount(), new BigDecimal("0.00"));
@@ -514,19 +539,19 @@ public class SalesTaxTests extends OrderTestCase {
         // Shipping amount for the STANDARD _NA_ shipping method is 20% of the order
         //  20 % of 408.52 = 81.70
         assertEquals("Order [" + orderId + "] shipping amount incorrect.", order.getShippingAmount(), new BigDecimal("81.70"));
-        // 10% off promotion: 408.52 x 0.1 = 4.09
-        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-4.09"));
+        // 10% off promotion: 408.52 x 0.1 = 40.852
+        assertEquals("Order [" + orderId + "] 10 % off promotion incorrect.", order.getOtherAdjustmentsAmount(), new BigDecimal("-40.85"));
         // Tax amount should be:
         //  1 + 1 + 6.25 % of 181.93 = 1.820 + 1.820 + 11.371 = 15.011 ~ 15.01
-        //  1 + 1 + 6.25 % of 69.99  = 0.700 + 0.700 + 4.375  = 5.775 ~ 5.78
+        //  1 + 1 + 6.25 % of 69.99  = 0.700 + 0.700 + 4.375  = 5.774 ~ 5.77
         //  1 + 6.25 % of 156.60 = 11.354 ~ 11.35
         //  1 % of 81.70 = 0.82 (note: only the CA-LA CA_BOE tax authority taxes shipping)
-        //  1 % of -4.09 promotion = -0.0409 ~ -0.04 (note: only the CA-LA CA_BOE tax authority taxes promotion)
-        // = 32.92
+        //  1 % of -40.85 promotion = -0.409 ~ -0.41 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 32.54
         assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("15.01"));
-        assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("5.78"));
+        assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("5.77"));
         assertEquals("Order [" + orderId + "] item 3 taxes incorrect.", orderItem3.getTaxAmount(), new BigDecimal("11.35"));
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("32.92"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("32.54"));
 
         // update order with:
         // - product1 unit price below the 25 limit, and quantity to 5
@@ -584,12 +609,12 @@ public class SalesTaxTests extends OrderTestCase {
         //  1 + 6.25 % of 79.40 = 0.794 + 4.963 = 5.757 ~ 5.76
         //  1 + 1 + 6.25 % of 75.77 = 0.758 + 0.758 + 4.736 = 6.252 ~ 6.25
         //  1 % of 31.03 = 0.31 (note: only the CA-LA CA_BOE tax authority taxes shipping)
-        //  1 % of -15.52 promotion = -0.1552 ~ -0.16 (note: only the CA-LA CA_BOE tax authority taxes promotion)
-        // = 12.16
+        //  1 % of -15.52 promotion = -0.1552 ~ -0.15 (note: only the CA-LA CA_BOE tax authority taxes promotion)
+        // = 12.17
         assertEquals("Order [" + orderId + "] item 1 taxes incorrect.", orderItem1.getTaxAmount(), new BigDecimal("5.76"));
         assertEquals("Order [" + orderId + "] item 2 taxes incorrect.", orderItem2.getTaxAmount(), new BigDecimal("0"));
         assertEquals("Order [" + orderId + "] item 3 taxes incorrect.", orderItem3.getTaxAmount(), new BigDecimal("6.25"));
-        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("12.16"));
+        assertEquals("Order [" + orderId + "] tax incorrect.", order.getTaxAmount(), new BigDecimal("12.17"));
 
     }
 }
