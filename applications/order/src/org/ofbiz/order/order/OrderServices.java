@@ -1208,7 +1208,12 @@ public class OrderServices {
                                     reserveInput.put("shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId"));
                                     reserveInput.put("facilityId", shipGroupFacilityId);
                                     // use the quantity from the orderItemShipGroupAssoc, NOT the orderItem, these are reserved by item-group assoc
-                                    reserveInput.put("quantity", orderItemShipGroupAssoc.getBigDecimal("quantity"));
+                                    BigDecimal quantityToReserve = orderItemShipGroupAssoc.getBigDecimal("quantity");
+                                    BigDecimal cancelQuantity = orderItemShipGroupAssoc.getBigDecimal("cancelQuantity");
+                                    if (cancelQuantity != null) {
+                                        quantityToReserve = quantityToReserve.subtract(cancelQuantity);
+                                    }
+                                    reserveInput.put("quantity", quantityToReserve);
                                     reserveInput.put("userLogin", userLogin);
                                     Map reserveResult = dispatcher.runSync("reserveStoreInventory", reserveInput);
 
