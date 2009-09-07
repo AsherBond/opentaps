@@ -37,6 +37,7 @@
 package org.opentaps.common.order.shoppingcart;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -53,11 +54,14 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.order.shoppingcart.CartItemModifyException;
 import org.ofbiz.order.shoppingcart.ItemNotFoundException;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
+import org.ofbiz.product.config.ProductConfigWorker;
+import org.ofbiz.product.config.ProductConfigWrapper;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
@@ -405,6 +409,21 @@ public final class ShoppingCartServices {
             cart.setOrderPartyId(endUserParty.getString("partyId"));
         }
 
+        // load order attributes
+        List<GenericValue> orderAttributesList = null;
+        try {
+            orderAttributesList = delegator.findByAnd("OrderAttribute", UtilMisc.toMap("orderId", orderId));
+            if (UtilValidate.isNotEmpty(orderAttributesList)) {
+                for (GenericValue orderAttr : orderAttributesList) {
+                    String name = orderAttr.getString("attrName");
+                    String value = orderAttr.getString("attrValue");
+                    cart.setOrderAttribute(name, value);
+                }
+            }
+        } catch (GenericEntityException e) {
+            return UtilMessage.createAndLogServiceError(e, MODULE);
+        }
+
         // load the payment infos
         List<GenericValue> orderPaymentPrefs = null;
         try {
@@ -491,6 +510,12 @@ public final class ShoppingCartServices {
                     quantity = quantity.subtract(quantityCanceled);
                 }
             }
+
+            BigDecimal unitPrice = null;
+            if ("Y".equals(item.getString("isModifiedPrice"))) {
+                unitPrice = item.getBigDecimal("unitPrice");
+            }
+
             int itemIndex = -1;
             if (item.get("productId") == null) {
                 // non-product item
@@ -498,7 +523,7 @@ public final class ShoppingCartServices {
                 String desc = item.getString("itemDescription");
                 try {
                     // TODO: passing in null now for itemGroupNumber, but should reproduce from OrderItemGroup records
-                    itemIndex = cart.addNonProductItem(itemType, desc, null, null, quantity, null, null, null, dispatcher);
+                    itemIndex = cart.addNonProductItem(itemType, desc, null, unitPrice, quantity, null, null, null, dispatcher);
                 } catch (CartItemModifyException e) {
                     return UtilMessage.createAndLogServiceError(e, MODULE);
                     }
@@ -506,8 +531,60 @@ public final class ShoppingCartServices {
                 // product item
                 String prodCatalogId = item.getString("prodCatalogId");
                 String productId = item.getString("productId");
+
+                // prepare the rental data
+                Timestamp reservStart = null;
+                BigDecimal reservLength = null;
+                BigDecimal reservPersons = null;
+                String accommodationMapId = null;
+                String accommodationSpotId = null;
+
+                GenericValue workEffort = null;
+                String workEffortId = orh.getCurrentOrderItemWorkEffort(item);
+                if (workEffortId != null) {
+                    try {
+                        workEffort = delegator.findByPrimaryKey("WorkEffort", UtilMisc.toMap("workEffortId", workEffortId));
+                    } catch (GenericEntityException e) {
+                        Debug.logError(e, MODULE);
+                    }
+                }
+                if (workEffort != null && "ASSET_USAGE".equals(workEffort.getString("workEffortTypeId"))) {
+                    reservStart = workEffort.getTimestamp("estimatedStartDate");
+                    reservLength = OrderReadHelper.getWorkEffortRentalLength(workEffort);
+                    reservPersons = workEffort.getBigDecimal("reservPersons");
+                    accommodationMapId = workEffort.getString("accommodationMapId");
+                    accommodationSpotId = workEffort.getString("accommodationSpotId");
+                }
+                // end of rental data
+
+                // check for AGGREGATED products
+                ProductConfigWrapper configWrapper = null;
+                String configId = null;
                 try {
-                    itemIndex = cart.addItemToEnd(productId, amount, quantity, null, null, null, prodCatalogId, item.getString("orderItemTypeId"), dispatcher, null, null, skipInventoryChecks, skipProductChecks);
+                    GenericValue product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
+                    if ("AGGREGATED_CONF".equals(product.getString("productTypeId"))) {
+                        List<GenericValue> productAssocs = delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productAssocTypeId", "PRODUCT_CONF", "productIdTo", product.getString("productId")));
+                        productAssocs = EntityUtil.filterByDate(productAssocs);
+                        if (UtilValidate.isNotEmpty(productAssocs)) {
+                            productId = EntityUtil.getFirst(productAssocs).getString("productId");
+                            configId = product.getString("configId");
+                        }
+                    }
+                } catch (GenericEntityException e) {
+                    Debug.logError(e, MODULE);
+                }
+
+                if (UtilValidate.isNotEmpty(configId)) {
+                    configWrapper = ProductConfigWorker.loadProductConfigWrapper(delegator, dispatcher, configId, productId, productStoreId, prodCatalogId, website, currency, locale, userLogin);
+                }
+
+                try {
+                    Boolean triggerPriceRules = null;
+                    if (unitPrice != null) {
+                        triggerPriceRules = false;
+                    }
+
+                    itemIndex = cart.addItemToEnd(productId, amount, quantity, unitPrice, reservStart, reservLength, reservPersons, accommodationMapId, accommodationSpotId, /* features */ null, /* attributes */ null, prodCatalogId, configWrapper, item.getString("orderItemTypeId"), dispatcher, /* triggerExternalOps */ null, triggerPriceRules, skipInventoryChecks, skipProductChecks);
                 } catch (ItemNotFoundException e) {
                     return UtilMessage.createAndLogServiceError(e, MODULE);
                 } catch (CartItemModifyException e) {
@@ -531,12 +608,41 @@ public final class ShoppingCartServices {
             cartItem.setShipAfterDate(item.getTimestamp("shipAfterDate"));
             cartItem.setShoppingList(item.getString("shoppingListId"), item.getString("shoppingListItemSeqId"));
             cartItem.setIsModifiedPrice("Y".equals(item.getString("isModifiedPrice")));
-            if (cartItem.getIsModifiedPrice()) {
-                cartItem.setBasePrice(item.getBigDecimal("unitPrice"));
-            }
 
             // preserve the order item cancel quantity
             cart.setCancelQuantity(itemIndex, item.getBigDecimal("cancelQuantity"));
+
+            Debug.logInfo("loadCartFromOrder: item [" + cartItem.getOrderItemSeqId() + "] : (" + cartItem.getQuantity() + " - " + item.getBigDecimal("cancelQuantity") + ") x " + cartItem.getProductId() + " base price = " + cartItem.getBasePrice(), MODULE);
+
+            // load order item attributes
+            List<GenericValue> orderItemAttributesList = null;
+            try {
+                orderItemAttributesList = delegator.findByAnd("OrderItemAttribute", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
+                if (UtilValidate.isNotEmpty(orderAttributesList)) {
+                    for (GenericValue orderItemAttr : orderItemAttributesList) {
+                        String name = orderItemAttr.getString("attrName");
+                        String value = orderItemAttr.getString("attrValue");
+                        cartItem.setOrderItemAttribute(name, value);
+                    }
+                }
+            } catch (GenericEntityException e) {
+                return UtilMessage.createAndLogServiceError(e, MODULE);
+            }
+
+            // load order item contact mechs
+            List<GenericValue> orderItemContactMechList = null;
+            try {
+                orderItemContactMechList = delegator.findByAnd("OrderItemContactMech", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
+                if (UtilValidate.isNotEmpty(orderItemContactMechList)) {
+                    for (GenericValue orderItemContactMech : orderItemContactMechList) {
+                        String contactMechPurposeTypeId = orderItemContactMech.getString("contactMechPurposeTypeId");
+                        String contactMechId = orderItemContactMech.getString("contactMechId");
+                        cartItem.addContactMech(contactMechPurposeTypeId, contactMechId);
+                    }
+                }
+            } catch (GenericEntityException e) {
+                return UtilMessage.createAndLogServiceError(e, MODULE);
+            }
 
             // set the accounting tag as cart item attributes (similar to the order entry)
             for (int i = 1; i <= UtilAccountingTags.TAG_COUNT; i++) {
