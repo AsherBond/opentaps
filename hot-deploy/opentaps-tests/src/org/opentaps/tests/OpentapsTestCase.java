@@ -1279,7 +1279,7 @@ public class OpentapsTestCase extends TestCase {
                 // the requirement created is for the minimum of (quantity ordered | quantity to make ATP go up to minimumStock)
                 // so this is not always the quantity to make ATP go up to minimumStock
                 BigDecimal shortfall = minimumStock.subtract(stock.subtract(orderedQty));
-                BigDecimal required = shortfall.min(orderedQty);
+                BigDecimal required = shortfall.min(orderedQty).max(BigDecimal.ZERO); // do not allow negative requirements which make no sense
                 Debug.logInfo("checkRequirements for product [" + product.get("productId") + "], minimumStock = " + minimumStock + ", orderedQty = " + orderedQty + ", stock = " + stock + ", ====> shortfall = " + shortfall + " -------- makes required = " + required, MODULE);
                 assertEquals("Requirements for product [" + product.get("productId") + "]", required, (finalRequirement.subtract(initialRequirement)));
             } catch (GenericEntityException e) {
