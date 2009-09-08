@@ -81,11 +81,14 @@ public class ReturnTestCase extends OrderTestCase {
                                        "partyIdTo", toParty,
                                        "paymentTypeId", "CUSTOMER_REFUND",
                                        "statusId", "PMNT_SENT");
+            String amountMessage = "";
             if (amount != null) {
                 input.put("amount", new BigDecimal(amount));
+                amountMessage = " and amount = " + amount;
             }
             payments = delegator.findByAnd("Payment", input);
-            assertTrue("Should be at least one 'CUSTOMER_REFUND' Payment from " + fromParty + " to " + toParty + " for OrderPaymentPreference [" + paymentPreferenceId + "] with status PMNT_SENT", payments.size() > 0);
+
+            assertTrue("Should be at least one 'CUSTOMER_REFUND' Payment from " + fromParty + " to " + toParty + " for OrderPaymentPreference [" + paymentPreferenceId + "] with status PMNT_SENT" + amountMessage, payments.size() > 0);
         } catch (GenericEntityException e) {
             TestCase.fail("GenericEntityException: " + e.toString());
         }
@@ -210,11 +213,25 @@ public class ReturnTestCase extends OrderTestCase {
      * @param paymentService value to set
      */
     public void setProductStorePaymentService(String productStoreId, String paymentMethodTypeId, String paymentServiceTypeEnumId, String paymentService) {
+        setProductStorePaymentService(productStoreId, paymentMethodTypeId, paymentServiceTypeEnumId, paymentService, null);
+    }
+
+    /**
+     * Change the productStorePaymentSetting.
+     * @param productStoreId the product store ID
+     * @param paymentMethodTypeId the payment method type ID to set
+     * @param paymentServiceTypeEnumId the payment service type ID to set
+     * @param paymentService value to set
+     * @param customMethodId the custom method id, can be used in place of service name, else set to null
+     */
+    public void setProductStorePaymentService(String productStoreId, String paymentMethodTypeId, String paymentServiceTypeEnumId, String paymentService, String customMethodId) {
         try {
             GenericValue setting = delegator.findByPrimaryKey("ProductStorePaymentSetting", UtilMisc.toMap("productStoreId", productStoreId,
                                                                                                            "paymentMethodTypeId", paymentMethodTypeId,
                                                                                                            "paymentServiceTypeEnumId", paymentServiceTypeEnumId));
             setting.put("paymentService", paymentService);
+            setting.put("paymentCustomMethodId", customMethodId);
+            Debug.logInfo("setProductStorePaymentService " + productStoreId + " / " + paymentMethodTypeId + " / " + paymentServiceTypeEnumId + " -> serviceName = " + paymentService + ", customMethodId = " + customMethodId, MODULE);
             setting.store();
         } catch (GenericEntityException e) {
             Debug.logError(e, MODULE);
