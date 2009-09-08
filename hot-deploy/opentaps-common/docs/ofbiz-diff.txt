@@ -104,6 +104,9 @@ applications/order/servicedef/secas.xml
 applications/order/src/org/ofbiz/order/order/OrderServices.java
 - Small fix for reserveInventory not to try to reserve cancelled quantity
 
+applications/order/src/org/ofbiz/order/order/OrderReturnServices.java
+- Re added the code block that creates filler payments from the remaining amount
+
 Other API Changes
 -----------------
 

@@ -1144,6 +1144,48 @@ public class OrderReturnServices {
                         }
                     }
                 }
+
+                // OFBIZ-459:  Create a "filler" payment and return item response by hand for the remaining amount, note that this won't be applied to the invoice
+                if (amountLeftToRefund.compareTo(ZERO) == 1) {
+                    Debug.logInfo("Create a filler payment and return item response by hand for the remaining amount: " + amountLeftToRefund, module);
+                    try {
+                        Map input = UtilMisc.toMap("userLogin", userLogin, "amount", amountLeftToRefund, "statusId", "PMNT_NOT_PAID");
+                        input.put("partyIdTo", returnHeader.get("fromPartyId"));
+                        input.put("partyIdFrom", returnHeader.get("toPartyId"));
+                        input.put("paymentTypeId", "CUSTOMER_REFUND");
+                        if (UtilValidate.isNotEmpty(refundPaymentMethod)) {
+                            input.put("paymentMethodId", refundPaymentMethod.get("paymentMethodId"));
+                            input.put("paymentMethodTypeId", refundPaymentMethod.get("paymentMethodTypeId"));
+                        } else {
+                            Debug.logInfo("refundPaymentMethodId not configured in PartyAcctgPreference, not setting for remaining refund amount", module);
+                        }
+
+                        Map results = dispatcher.runSync("createPayment", input);
+                        if (ServiceUtil.isError(results)) {
+                            return results;
+                        }
+
+                        input = UtilMisc.toMap("userLogin", userLogin, "paymentId", results.get("paymentId"), "responseAmount", amountLeftToRefund);
+                        results = dispatcher.runSync("createReturnItemResponse", input);
+                        if (ServiceUtil.isError(results)) {
+                            return results;
+                        }
+
+                        String returnItemResponseId = (String) results.get("returnItemResponseId");
+                        // fill in returnItemResponse for the return items which were not completed automatically and tag them with a special status
+                        List<GenericValue> receivedReturnItems = returnHeader.getRelatedByAnd("ReturnItem", UtilMisc.toMap("statusId", "RETURN_RECEIVED"));
+                        for (GenericValue receivedReturnItem : receivedReturnItems) {
+                            receivedReturnItem.set("statusId", "RETURN_MAN_REFUND");
+                            receivedReturnItem.set("returnItemResponseId", returnItemResponseId);
+                            receivedReturnItem.store();
+                        }
+
+                    } catch (GenericServiceException e) {
+                        return ServiceUtil.returnError(e.getMessage());
+                    } catch (GenericEntityException e) {
+                        return ServiceUtil.returnError(e.getMessage());
+                    }
+                }
             }
         }
 
