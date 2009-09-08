@@ -3055,6 +3055,7 @@ public final class InvoiceServices {
 
             Map resp = ServiceUtil.returnSuccess();
             resp.put("invoiceId", invoiceId);
+            resp.put("invoiceTypeId", invoiceType);
             return resp;
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError("AccountingServiceOtherProblemCreatingInvoiceFromOrderItems", UtilMisc.toMap("reason", e.toString()), locale, MODULE);
