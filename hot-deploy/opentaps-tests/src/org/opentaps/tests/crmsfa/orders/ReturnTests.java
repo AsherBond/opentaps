@@ -169,8 +169,8 @@ public class ReturnTests extends ReturnTestCase {
         assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
 
         // 9c. Verify that a payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_SENT has been created
-        // The amount should be 2x 100 + 5.75% tax = 211.5
-        assertRefundExists(orderId, "Company", "DemoCustomer", "211.50");
+        // The amount should be 2x 100 + 5.76% tax = 211.7
+        assertRefundExists(orderId, "Company", "DemoCustomer", "211.70");
 
         // confirm that no extra filler payment was created
         long final_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID");
@@ -269,7 +269,8 @@ public class ReturnTests extends ReturnTestCase {
         setProductStorePaymentService(productStoreId, "CREDIT_CARD", "PRDS_PAY_REFUND", "testCCRefundFailure");
 
         // for 9c. count number of Payments now
-        long initial_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID", "423.00");
+        // The amount should be 2x 200 + 5.76% tax = 423.40
+        long initial_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID", "423.40");
 
         // 8. Accept the return
         runAndAssertServiceSuccess("crmsfa.acceptReturn", UtilMisc.toMap("userLogin", admin, "returnId", returnId));
@@ -284,9 +285,9 @@ public class ReturnTests extends ReturnTestCase {
         assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
 
         // 9c. A payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_NOT_PAID has been created
-        // The amount should be 2x 200 + 5.75% tax = 423.00
-        long final_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID", "423.00");
-        assertEquals("Should be one new Payment from Company to DemoCustomer as CUSTOMER_REFUND / PMNT_NOT_PAID and of amount 423.00", initial_payments + 1, final_payments);
+        // The amount should be 2x 200 + 5.76% tax = 423.00
+        long final_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID", "423.40");
+        assertEquals("Should be one new Payment from Company to DemoCustomer as CUSTOMER_REFUND / PMNT_NOT_PAID and of amount 423.40", initial_payments + 1, final_payments);
 
         // 9d. The status on the return item is RETURN_MAN_REFUND
         assertReturnItemsStatusEquals(returnId, "RETURN_MAN_REFUND");
@@ -359,7 +360,8 @@ public class ReturnTests extends ReturnTestCase {
         runAndAssertServiceSuccess("createReturnItem", callCtx);
 
         // for 9c. count number of Payments now
-        long initial_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID", "634.50");
+        // Amount is 2x300 + 5.76% (35.10) tax = 635.10
+        long initial_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID", "635.10");
 
         // 8. Accept the return
         runAndAssertServiceSuccess("crmsfa.acceptReturn", UtilMisc.toMap("userLogin", admin, "returnId", returnId));
@@ -374,8 +376,8 @@ public class ReturnTests extends ReturnTestCase {
         assertEquals("InventoryItem INV_RETURNED for product [" + productId + "]", 1, inventoryItems.size());
 
         // 9c. Verify that a payment of the type CUSTOMER_REFUND from Company to DemoCustomer for the amount of the return in the status of PMNT_NOT_PAID has been created
-        // Amount is 2x100 + 11.50 tax = 211.50
-        long final_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID", "634.50");
+        // Amount is 2x300 + 5.76% (35.10) tax = 635.10
+        long final_payments = countPayments("Company", "DemoCustomer", "CUSTOMER_REFUND", "PMNT_NOT_PAID", "635.10");
         assertEquals("Should be one new Payment from Company to DemoCustomer as CUSTOMER_REFUND / PMNT_NOT_PAID and of amount 634.50", initial_payments + 1, final_payments);
 
         // 9d. The status on the return item is RETURN_MAN_REFUND
