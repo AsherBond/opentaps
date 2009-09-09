@@ -28,6 +28,7 @@ import java.security.cert.X509Certificate;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -525,7 +526,10 @@ public class RequestHandler {
             } else if ("request-redirect-noparam".equals(nextRequestResponse.type)) {
                 if (Debug.verboseOn()) Debug.logVerbose("[RequestHandler.doRequest]: Response is a Request redirect with no parameters." + " sessionId=" + UtilHttp.getSessionId(request), module);
                 callRedirect(makeLink(request, response, nextRequestResponse.value), response, request);
-            } else if ("view".equals(nextRequestResponse.type)) {
+            } else if ("request-redirect-filterparam".equals(nextRequestResponse.type)) {
+                if (Debug.verboseOn()) Debug.logVerbose("[RequestHandler.doRequest]: Response is a Request redirect with filtered parameters." + " sessionId=" + UtilHttp.getSessionId(request), module);
+                callRedirect(makeLinkWithQueryString(request, response, "/" + nextRequestResponse.value, nextRequestResponse), response, request);
+             } else if ("view".equals(nextRequestResponse.type)) {
                 if (Debug.verboseOn()) Debug.logVerbose("[RequestHandler.doRequest]: Response is a view." + " sessionId=" + UtilHttp.getSessionId(request), module);
 
                 // check for an override view, only used if "success" = eventReturn

@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -448,6 +449,29 @@ public class ConfigXMLReader {
                 String from = redirectParameterElement.getAttribute("from");
                 if (UtilValidate.isEmpty(from)) from = redirectParameterElement.getAttribute("name");
                 this.redirectParameterMap.put(redirectParameterElement.getAttribute("name"), from);
+            }
+
+            // NB: the allow-params and allow-attributes list are now implemented both the same as redirect-parameter from above
+            //  the request handler will first look at the attribute map, then at the parameter map
+            // This should not have any impact in most cases.
+
+            // the allowed params list does the same as the redirect-parameter list above but is less flexible
+            // to be used only for backward compatibility
+            String allowedParams = responseElement.getAttribute("allowed-params");
+            if (allowedParams != null && allowedParams.length() > 0) {
+                String[] allowedParamsList = allowedParams.split(",");
+                for (String param : Arrays.asList(allowedParamsList)) {
+                    this.redirectParameterMap.put(param, param);
+                }
+            }
+            // although previously the allowed-attributes would only be transferred from the response attributes
+            // this is now considered equivalent to above
+            String allowedAttributes = responseElement.getAttribute("allowed-attributes");
+            if (allowedAttributes != null && allowedAttributes.length() > 0) {
+                String[] allowedAttributesList = allowedAttributes.split(",");
+                for (String param : Arrays.asList(allowedAttributesList)) {
+                    this.redirectParameterMap.put(param, param);
+                }
             }
         }
 
