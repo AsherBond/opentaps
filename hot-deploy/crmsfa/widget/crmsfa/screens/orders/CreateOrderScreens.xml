@@ -137,7 +137,7 @@ under the License.
                 <decorator-section name="order-entry-header-body">
                   <section>
                     <condition>
-                      <if-compare field-name="useGwt" operator="equals" value="false"/>
+                      <if-compare field="useGwt" operator="equals" value="false"/>
                     </condition>
                     <widgets>
                       <include-screen name="addOrderItemForm"/>
@@ -175,7 +175,7 @@ under the License.
     <screen name="orderItemListForm">
         <section>
             <actions>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/showcart.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/ShowCart.groovy"/>
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://crmsfa/webapp/crmsfa/orders/submenus/orderItemsMenu.ftl"/></html></platform-specific>
@@ -204,7 +204,7 @@ under the License.
     <screen name="crmsfaShipmentSetting">
         <section>
             <actions>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/showcart.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/ShowCart.groovy"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/shipsettings.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/crmsfaShipmentSetting.bsh"/>
             </actions>
@@ -230,7 +230,7 @@ under the License.
                 <set field="pageTitleLabel" value="OrderReviewOrder"/>
                 <set field="sectionHeaderUiLabel" value="OrderReviewOrder"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/setShoppingCart.bsh"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/checkoutreview.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/CheckoutReview.groovy"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/getOrderAdjustmentByType.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/getOrderAccountingTags.bsh"/>
             </actions>
@@ -371,7 +371,7 @@ under the License.
                 <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/cart/showPromotionDetails.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/cart/ShowPromotionDetails.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="order-entry-header-decorator">

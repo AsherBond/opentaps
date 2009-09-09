@@ -44,9 +44,9 @@ and has been modified by Open Source Strategies, Inc.
     <screen name="browseCatalog">
         <section>
             <actions>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/choosecatalog.bsh"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/keywordsearchoptions.bsh"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/sidedeepcategory.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ChooseCatalog.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/KeywordSearchOptions.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/SideDeepCategory.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -62,7 +62,7 @@ and has been modified by Open Source Strategies, Inc.
                 <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/keywordsearch.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/KeywordSearch.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="order-entry-header-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml">
@@ -82,9 +82,9 @@ and has been modified by Open Source Strategies, Inc.
     <screen name="advancedsearch">
         <section>
             <actions>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/advancedsearchoptions.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/AdvancedSearchOptions.groovy"/>
 
-                <entity-condition entity-name="PartyRoleAndPartyDetail" list-name="supplerPartyRoleAndPartyDetails">
+                <entity-condition entity-name="PartyRoleAndPartyDetail" list="supplerPartyRoleAndPartyDetails">
                     <condition-expr field-name="roleTypeId" value="SUPPLIER"/>
                     <order-by field-name="groupName"/>
                     <order-by field-name="lastName"/>
@@ -123,7 +123,7 @@ and has been modified by Open Source Strategies, Inc.
     <screen name="category">
         <section>
             <actions>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/category.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/Category.groovy"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
             </actions>
@@ -142,7 +142,7 @@ and has been modified by Open Source Strategies, Inc.
                             <include-screen name="breadcrumbs"/>
                             <section>
                                 <condition>
-                                    <not><if-empty field-name="productCategory"/></not>
+                                    <not><if-empty field="productCategory"/></not>
                                 </condition>
                                 <widgets>
                                     <include-screen name="${detailScreen}"/>
@@ -161,7 +161,7 @@ and has been modified by Open Source Strategies, Inc.
         <section>
             <actions>
                 <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/categorydetail.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/CategoryDetail.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -176,7 +176,7 @@ and has been modified by Open Source Strategies, Inc.
         <section>
             <actions>
                 <set field="configproductdetailScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#configproductdetail"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/product.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/Product.groovy"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/createOrderInitialization.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/listTrackingCodes.bsh"/>
             </actions>
@@ -194,7 +194,7 @@ and has been modified by Open Source Strategies, Inc.
                         <container style="subSectionBlock">
                             <section>
                                 <condition>
-                                    <not><if-empty field-name="product"/></not>
+                                    <not><if-empty field="product"/></not>
                                 </condition>
                                 <widgets>
                                     <include-screen name="${detailScreen}"/>
@@ -215,7 +215,7 @@ and has been modified by Open Source Strategies, Inc.
             <actions>
                 <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
                 <set field="showPriceDetails" value="Y"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/productdetail.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ProductDetail.groovy"/>
             </actions>
             <widgets>
                 <include-screen name="breadcrumbs"/>
@@ -229,8 +229,8 @@ and has been modified by Open Source Strategies, Inc.
         <section>
             <actions>
                 <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/productdetail.bsh"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/prepareconfigform.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ProductDetail.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/PrepareConfigForm.groovy"/>
             </actions>
             <widgets>
                 <include-screen name="breadcrumbs"/>
