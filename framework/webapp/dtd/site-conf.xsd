@@ -250,11 +250,14 @@ under the License.
                     <xs:enumeration value="request"/>
                     <xs:enumeration value="request-redirect"/>
                     <xs:enumeration value="request-redirect-noparam"/>
+                    <xs:enumeration value="request-redirect-filterparam"/>
                     <xs:enumeration value="url"/>
                 </xs:restriction>
             </xs:simpleType>
         </xs:attribute>
         <xs:attribute name="value" type="xs:string"/>
+        <xs:attribute name="allowed-params" type="xs:string"/>
+        <xs:attribute name="allowed-attributes" type="xs:string"/>
         <xs:attribute name="save-last-view" default="false">
             <xs:annotation><xs:documentation>Saves the last (previous) request's view for future use, generally with the view-last type of response.</xs:documentation></xs:annotation>
             <xs:simpleType>
