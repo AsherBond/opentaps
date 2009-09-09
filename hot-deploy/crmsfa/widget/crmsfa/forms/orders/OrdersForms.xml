@@ -80,7 +80,7 @@
             <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(orderDate, org.opentaps.common.util.UtilDate.getDateTimeFormat(locale), timeZone, locale)}"/>
         </field>
         <field name="orderId" title="${uiLabelMap.CrmOrderNameID}" widget-style="linktext"
-            use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))">
+            use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))"
             header-link="${listSortTarget}?ordersOrderBy=orderName&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
             <hyperlink also-hidden="false" target-type="plain" description="${orderName} (${orderId})" target="orderview?orderId=${orderId}"/>
         </field>

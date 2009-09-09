@@ -296,7 +296,7 @@
     <!-- helper screen to decide whether to show the writeEmail.ftl file and form or viewEmail -->
     <screen name="viewOrWriteEmailScreen">
         <section>
-            <condition><if-compare field-name="pendingEmail" operator="equals" value="true" type="Boolean"/></condition>
+            <condition><if-compare field="pendingEmail" operator="equals" value="true" type="Boolean"/></condition>
             <widgets>
                 <container style="subSectionBlock">
                     <include-screen name="writeEmailScreen"/>

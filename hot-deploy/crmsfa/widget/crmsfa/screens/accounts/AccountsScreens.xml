@@ -195,7 +195,7 @@
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <include-screen name="updatePartyPassword" location="component://crmsfa/widget/crmsfa/screens/common/PartyScreens.xml"/>
-                    </decorator-section>>
+                    </decorator-section>
                 </decorator-screen>
             </widgets>
         </section>
@@ -236,7 +236,7 @@
 
                         <!-- If the user can assign teams and there are no team members already, include the relevant form -->
                         <section>
-                            <condition><if-compare field-name="hasTeamMembers" operator="equals" value="false" type="Boolean"/></condition>
+                            <condition><if-compare field="hasTeamMembers" operator="equals" value="false" type="Boolean"/></condition>
                             <widgets>
                                 <container style="subSectionBlock">
                                     <container style="form">
@@ -262,7 +262,7 @@
                             <include-form name="ListContacts" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
                             <!-- If the user can update accounts, include this form -->
                             <section>
-                                <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
                                     <include-form name="assignContactToAccountForm" location="component://crmsfa/widget/crmsfa/forms/accounts/AccountsForms.xml"/>
                                 </widgets>
@@ -280,7 +280,7 @@
                                 <html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountOrdersMenu.ftl"/>
                             </html></platform-specific>
                             <section>
-                                <condition><if-compare field-name="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <condition><if-compare field="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
                                     <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
                                 </widgets>
@@ -322,7 +322,7 @@
                             <include-form name="ListTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
                             <!-- If the user can add team members, include the relevant form -->
                             <section>
-                                <condition><if-compare field-name="hasTeamAssignPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <condition><if-compare field="hasTeamAssignPermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
                                     <include-form name="addTeamMemberForm" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
                                 </widgets>

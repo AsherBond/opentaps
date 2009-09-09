@@ -311,7 +311,7 @@
                     <decorator-section name="section-body">
                         <section>
                             <!-- make sure the workEffort exists, or else a bad ID was passed -->
-                            <condition><not><if-empty field-name="workEffort"/></not></condition>
+                            <condition><not><if-empty field="workEffort"/></not></condition>
                             <widgets>
 
                                 <!-- show the work effort -->
@@ -331,8 +331,8 @@
                                 <!-- display all other kinds of comm events -->
                                 <section>
                                     <condition><and>
-                                            <not><if-empty field-name="isCrmEmail"/></not>
-                                            <if-compare field-name="isCrmEmail" operator="equals" value="false" type="Boolean"/>
+                                            <not><if-empty field="isCrmEmail"/></not>
+                                            <if-compare field="isCrmEmail" operator="equals" value="false" type="Boolean"/>
                                     </and></condition>
                                     <widgets><include-screen name="viewCommEvent"/></widgets>
                                 </section>
@@ -342,7 +342,7 @@
                                     <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.CrmActivityParticipants}</label></container></container>
                                     <include-form name="ListAssociatedParties" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
                                     <section>
-                                        <condition><if-compare field-name="hasUpdatePartiesPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                        <condition><if-compare field="hasUpdatePartiesPermission" operator="equals" value="true" type="Boolean"/></condition>
                                         <widgets>
                                             <include-form name="AddAssociatedParty" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
                                         </widgets>
@@ -366,7 +366,7 @@
     <!-- small form for input of start time for a scheduled activity -->
     <screen name="startActivityForm">
         <section>
-            <condition><if-compare field-name="isScheduled" operator="equals" value="true" type="Boolean"/></condition>
+            <condition><if-compare field="isScheduled" operator="equals" value="true" type="Boolean"/></condition>
             <widgets>
                 <include-form name="startActivityForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
             </widgets>
@@ -376,7 +376,7 @@
     <!-- small form for input of end time for a scheduled activity -->
     <screen name="endActivityForm">
         <section>
-            <condition><if-compare field-name="isStarted" operator="equals" value="true" type="Boolean"/></condition>
+            <condition><if-compare field="isStarted" operator="equals" value="true" type="Boolean"/></condition>
             <widgets>
                 <include-form name="endActivityForm" location="component://crmsfa/widget/crmsfa/forms/activities/ActivitiesForms.xml"/>
             </widgets>
@@ -386,7 +386,7 @@
     <!-- this screen displays a communication event -->
     <screen name="viewCommEvent">
         <section>
-            <condition><not><if-empty field-name="communicationEvent"/></not></condition>
+            <condition><not><if-empty field="communicationEvent"/></not></condition>
             <widgets>
                 <container style="subSectionBlock">
                     <container style="form">

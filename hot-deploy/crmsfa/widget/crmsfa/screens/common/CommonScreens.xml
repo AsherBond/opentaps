@@ -73,7 +73,7 @@
                     <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.CrmDataSources}</label></container></container>
                     <include-form name="listDataSources" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
                     <section>
-                        <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                        <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
                         <widgets><include-form name="addDataSourceForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/></widgets>
                     </section>
                 </container>
@@ -89,7 +89,7 @@
                     <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.CrmMarketingCampaigns}</label></container></container>
                     <include-form name="listMarketingCampaigns" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
                     <section>
-                        <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                        <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
                         <widgets><include-form name="addMarketingCampaignForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/></widgets>
                     </section>
                 </container>
