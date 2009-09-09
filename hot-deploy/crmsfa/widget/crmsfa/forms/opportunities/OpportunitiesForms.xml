@@ -68,11 +68,11 @@
         </field>
         <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" widget-area-style="fieldWidth200"
             header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;opportunitiesOrderBy=estimatedCloseDate&amp;${findParams}#ListOpportunities" header-link-style="orderByHeaderLink">
-            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(estimatedCloseDate, org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
+            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(estimatedCloseDate, org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
         </field>
         <!-- it has to be this way, because form-widget can't hide a column when no use-when condition causes it to show -->
         <field name="partyIdFrom" use-when="sectionName.equals(&quot;opportunities&quot;)" title="${uiLabelMap.CrmOpportunityFor}" widget-area-style="fieldWidth300">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.party.PartyHelper.createViewPageLink(partyIdFrom, delegator, externalLoginKey);}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.party.PartyHelper.createViewPageLink(partyIdFrom, delegator, externalLoginKey);}"/>
         </field>
     </form>   
 
@@ -224,7 +224,7 @@
 
         <field name="estimatedAmount" title="${uiLabelMap.CrmEstimatedAmount}" position="1"><display type="currency" currency="${opportunityAndParty.currencyUomId}"/></field>
         <field name="estimatedProbability" title="${uiLabelMap.CrmEstimatedProbability}" position="1">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(opportunityAndParty.get(&quot;estimatedProbability&quot;))}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(opportunityAndParty.get(&quot;estimatedProbability&quot;))}"/>
         </field>
         <field name="marketingCampaignId" title="${uiLabelMap.CrmMarketingCampaign}" position="1" widget-style="tabletext">
             <display-entity entity-name="MarketingCampaign" description="${campaignName}"/>
@@ -233,7 +233,7 @@
             <display-entity entity-name="DataSource"/>
         </field>
         <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" position="1">
-            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
+            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
         </field>
         <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
         <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><display/></field>
@@ -250,10 +250,10 @@
             </display-entity>
         </field>
         <field name="primaryEmail" title="${uiLabelMap.CrmPrimaryEmail}" widget-area-style="fieldWidth100">
-            <display description="${bsh:org.opentaps.common.party.PartyContactHelper.getElectronicAddressByPurpose(partyId, &quot;EMAIL_ADDRESS&quot;, &quot;PRIMARY_EMAIL&quot;, delegator);}"/>
+            <display description="${groovy:org.opentaps.common.party.PartyContactHelper.getElectronicAddressByPurpose(partyId, &quot;EMAIL_ADDRESS&quot;, &quot;PRIMARY_EMAIL&quot;, delegator);}"/>
         </field>
         <field name="primaryPhone" title="${uiLabelMap.CrmPrimaryPhone}" widget-area-style="fieldWidth100">
-            <display description="${bsh:org.opentaps.common.party.PartyContactHelper.getTelecomNumberByPurpose(partyId, &quot;PRIMARY_PHONE&quot;, delegator);}"/>
+            <display description="${groovy:org.opentaps.common.party.PartyContactHelper.getTelecomNumberByPurpose(partyId, &quot;PRIMARY_PHONE&quot;, delegator);}"/>
         </field>
         <!-- since this form is re-usable, define hasContactRemoveAbility when the Remove option should be visible -->
         <field name="Remove" title="" use-when="hasUpdatePermission==true" widget-style="buttontext">
@@ -285,10 +285,10 @@
             <display-entity entity-name="SalesOpportunityStage"/>
         </field>
         <field name="estimatedProbability" title="${uiLabelMap.CrmEstimatedProbability}" widget-area-style="fieldWidth200">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(estimatedProbability)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(estimatedProbability)}"/>
         </field>
         <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" widget-area-style="fieldWidth200">
-            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(estimatedCloseDate, org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
+            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(estimatedCloseDate, org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
         </field>
         <field name="estimatedAmount" title="${uiLabelMap.CrmOpportunityAmount}" widget-area-style="fieldWidth200">
             <display type="currency" currency="${currencyUomId}"/>
@@ -319,10 +319,10 @@
             <display type="currency" currency="${opportunityHistoryAndParty.currencyUomId}"/>
         </field>
         <field name="estimatedProbability" title="${uiLabelMap.CrmEstimatedProbability}">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(opportunityHistoryAndParty.get(&quot;estimatedProbability&quot;))}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(opportunityHistoryAndParty.get(&quot;estimatedProbability&quot;))}"/>
         </field>
         <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" widget-area-style="fieldWidth200">
-            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
+            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(opportunityAndParty.get(&quot;estimatedCloseDate&quot;), org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale)}"/>
         </field>
         <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><display/></field>
         <field name="changeNote" title="${uiLabelMap.CrmChangeNote}"><display/></field>
