@@ -309,8 +309,8 @@ under the License.
                 <section>
                     <condition>
                         <and>
-                            <not><if-empty field-name="hasPermission"/></not>
-                            <if-compare field-name="hasPermission" operator="equals" type="Boolean" value="true"/>
+                            <not><if-empty field="hasPermission"/></not>
+                            <if-compare field="hasPermission" operator="equals" type="Boolean" value="true"/>
                         </and>
                     </condition>
                     <widgets>
