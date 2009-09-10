@@ -765,7 +765,8 @@ public class GenericEntity extends Observable implements Map<String, Object>, Lo
         } catch (MissingResourceException e) {
             return fieldValue;
         }
-        if (resourceValue == null) {
+        // return field value if label isn't found in resources or it isn't human friendly string but entity ID
+        if (resourceValue == null || bundleKey.endsWith((String) resourceValue)) {
             return fieldValue;
         } else {
             return resourceValue;
