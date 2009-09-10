@@ -41,7 +41,7 @@
       <td><span class="tabletext"><@displayDate date=note.noteDateTime format="DATE_TIME"/></span></td>
       <td>
         <a style="display: block;" id="${getIndexedName('editNoteInfo', counter)}" name="${getIndexedName('editNoteInfo', counter)}" href="javascript:editNotes(${counter})">
-          <img src="<@ofbizContentUrl>/images/edit.gif</@ofbizContentUrl>" width="22" height="21" border="0" alt="Save"/>
+          <img src="/opentaps_images/edit.gif" width="22" height="21" border="0" alt="Save"/>
         </a>
         <a style="display: none;" id="${getIndexedName('saveNoteInfo', counter)}" name="${getIndexedName('saveNoteInfo', counter)}" href="javascript:saveNotes(${counter}, ${note.noteId})">
           <img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/save.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="Save"/>
