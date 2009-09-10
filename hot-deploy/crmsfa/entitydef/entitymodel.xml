@@ -641,7 +641,14 @@
     <!-- ======================================== -->
     <!-- com.opensourcestrategies.crmsfa.content  -->
     <!-- ======================================== -->
-
+    <!-- Extend the Content entity to provide a field to store the 
+        content classification -->
+    <extend-entity entity-name="Content">
+        <field name="classificationEnumId" type="id-ne"></field>
+        <relation title="Classification" fk-name="CNT_CLSFI_ENUM" rel-entity-name="Enumeration" type="one">
+            <key-map field-name="classificationEnumId" rel-field-name="enumId"/>
+         </relation>        
+    </extend-entity>
 
     <entity entity-name="SalesOpportunityContent"
             package-name="com.opensourcestrategies.crmsfa.content"
@@ -719,6 +726,9 @@
         <relation type="one-nofk" rel-entity-name="DataResource">
             <key-map field-name="dataResourceId"/>
         </relation>
+        <relation type="one-nofk" rel-entity-name="Enumeration">
+            <key-map field-name="classificationEnumId" rel-field-name="enumId"/>
+         </relation>        
     </view-entity>
 
    <entity entity-name="OrderHeaderContent"
@@ -740,14 +750,7 @@
     </entity>
 
     
-    <!-- Extend the Content entity to provide a field to store the 
-        content classification -->
-    <extend-entity entity-name="Content">
-        <field name="classificationEnumId" type="id-ne"></field>
-        <relation title="Classification" fk-name="CNT_CLSFI_ENUM" rel-entity-name="Enumeration" type="one">
-            <key-map field-name="classificationEnumId" rel-field-name="enumId"/>
-         </relation>        
-    </extend-entity> 
+ 
     
     <extend-entity entity-name="ContentAndRole">
         <relation type="one-nofk" rel-entity-name="Enumeration">
