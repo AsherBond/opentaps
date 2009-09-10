@@ -49,7 +49,9 @@
         <section>
             <actions>
                 <property-map resource="crmsfa" map-name="configProperties" global="true"/>
-
+                <!-- The default (global) java scripts -->
+                <set field="layoutSettings.javaScripts[]" value="/images/prototypejs/prototype.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/images/calendar_date_select.js" global="true"/>
                 <set field="opentapsApplicationName" value="crmsfa" global="true"/>
                 <set field="isLookup" value="false" global="true"/>
                 <set field="organizationPartyId" from-field="configProperties.organizationPartyId" global="true"/>
