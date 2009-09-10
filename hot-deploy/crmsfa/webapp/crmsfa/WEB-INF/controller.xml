@@ -402,7 +402,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createAccountNote">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createAccountNote"/>
-        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createAccountNoteForm"/>
     </request-map>
     <request-map uri="createContactNoteForm">
@@ -412,7 +414,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createContactNote">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createContactNote"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createContactNoteForm"/>
     </request-map>
     <request-map uri="createLeadNoteForm">
@@ -422,7 +426,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createLeadNote">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createLeadNote"/>
-        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createLeadNoteForm"/>
     </request-map>
     <request-map uri="createPartnerNoteForm">
@@ -432,7 +438,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createPartnerNote">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createPartnerNote"/>
-        <response name="success" type="request-redirect" value="viewPartner"/>
+        <response name="success" type="request-redirect" value="viewPartner">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createPartnerNoteForm"/>
     </request-map>
     <request-map uri="createCaseNoteForm">
@@ -442,7 +450,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createCaseNote">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createCaseNote"/>
-        <response name="success" type="request-redirect" value="viewCase"/>
+        <response name="success" type="request-redirect" value="viewCase">
+          <redirect-parameter name="custRequestId"/>
+        </response>
         <response name="error" type="view" value="createCaseNoteForm"/>
     </request-map>
 
