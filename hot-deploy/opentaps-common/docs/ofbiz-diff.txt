@@ -43,6 +43,12 @@ framework/entity/src/org/ofbiz/entity/GenericEntity.java
 framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
 - Remove backtrace from database type warnings
 
+framework/webapp/dtd/site-conf.xsd
+framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+- Port back request-redirect-filterparam
+- Revert ofbiz change in the redirected parameters, by default (if no allow-params / allow-attributes / redirect-parameter are specified, copy all paraeters and attributes instead of just the URL parameters)
+
 Applications changes
 --------------------
 

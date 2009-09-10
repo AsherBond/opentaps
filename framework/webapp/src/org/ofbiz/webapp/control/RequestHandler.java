@@ -859,7 +859,11 @@ public class RequestHandler {
      */
     public String makeQueryString(HttpServletRequest request, ConfigXMLReader.RequestResponse requestResponse) {
         if (requestResponse == null || requestResponse.redirectParameterMap.size() == 0) {
-            Map<String, Object> urlParams = UtilHttp.getUrlOnlyParameterMap(request);
+            Map<String, Object> urlParams = UtilHttp.getParameterMap(request);
+            if (urlParams == null || urlParams.size() == 0) {
+                return "";
+            }
+
             String queryString = UtilHttp.urlEncodeArgs(urlParams, false);
             return "?" + queryString;
         } else {
