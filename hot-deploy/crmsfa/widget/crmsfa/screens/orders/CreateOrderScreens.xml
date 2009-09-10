@@ -205,7 +205,7 @@ under the License.
         <section>
             <actions>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/ShowCart.groovy"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/shipsettings.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/ShipSettings.groovy"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/crmsfaShipmentSetting.bsh"/>
             </actions>
             <widgets>
@@ -312,7 +312,7 @@ under the License.
     <screen name="crmsfaQuickCheckout">
         <section>
             <actions>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/shipsettings.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/ShipSettings.groovy"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/crmsfaShipmentSetting.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/crmsfaPaymentSetting.bsh"/>
             </actions>
