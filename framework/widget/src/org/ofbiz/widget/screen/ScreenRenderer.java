@@ -25,16 +25,19 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.ext.jsp.TaglibFactory;
+import freemarker.ext.servlet.HttpRequestHashModel;
+import freemarker.ext.servlet.HttpSessionHashModel;
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilFormatOut;
@@ -54,11 +57,6 @@ import org.ofbiz.widget.cache.GenericWidgetOutput;
 import org.ofbiz.widget.cache.ScreenCache;
 import org.ofbiz.widget.cache.WidgetContextCacheKey;
 import org.xml.sax.SAXException;
-
-import freemarker.ext.beans.BeansWrapper;
-import freemarker.ext.jsp.TaglibFactory;
-import freemarker.ext.servlet.HttpRequestHashModel;
-import freemarker.ext.servlet.HttpSessionHashModel;
 
 /**
  * Widget Library - Screen model class
@@ -104,6 +102,7 @@ public class ScreenRenderer {
      */
     public String render(String resourceName, String screenName) throws GeneralException, IOException, SAXException, ParserConfigurationException {
         ModelScreen modelScreen = ScreenFactory.getScreenFromLocation(resourceName, screenName);
+        Debug.logInfo("render screen: " + screenName + ", resource: " + resourceName, module);
         if (modelScreen.useCache) {
             // if in the screen definition use-cache is set to true
             // then try to get an already built screen output from the cache:
@@ -118,7 +117,9 @@ public class ScreenRenderer {
             GenericWidgetOutput gwo = screenCache.get(screenCombinedName, wcck);
             if (gwo == null) {
                 Writer sw = new StringWriter();
+                screenStringRenderer.renderScreenBegin(writer, context);
                 modelScreen.renderScreenString(sw, context, screenStringRenderer);
+                screenStringRenderer.renderScreenEnd(writer, context);
                 gwo = new GenericWidgetOutput(sw.toString());
                 screenCache.put(screenCombinedName, wcck, gwo);
                 writer.append(gwo.toString());
@@ -126,7 +127,9 @@ public class ScreenRenderer {
                 writer.append(gwo.toString());
             }
         } else {
+            screenStringRenderer.renderScreenBegin(writer, context);
             modelScreen.renderScreenString(writer, context, screenStringRenderer);
+            screenStringRenderer.renderScreenEnd(writer, context);
         }
         return "";
     }

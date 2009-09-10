@@ -96,7 +96,7 @@ ${virtualJavaScript?if_exists}
 
     function popupDetail() {
         var defaultDetailImage = "${firstDetailImage?default(mainDetailImageUrl?default("_NONE_"))}";
-        if (defaultDetailImage == null || defaultDetailImage == "null") {
+        if (defaultDetailImage == null || defaultDetailImage == "null" || defaultDetailImage == "") {
             defaultDetailImage = "_NONE_";
         }
 
@@ -105,9 +105,12 @@ ${virtualJavaScript?if_exists}
         }
 
         if (detailImageUrl == "_NONE_") {
-            alert("No detail image available to display.");
+            hack = document.createElement('span');
+            hack.innerHTML="${uiLabelMap.CommonNoDetailImageAvailableToDisplay}";
+            alert(hack.innerHTML);
             return;
         }
+        detailImageUrl = detailImageUrl.replace(/\&\#47;/g, "/");
         popUp("<@ofbizUrl>detailImage?detail=" + detailImageUrl + "</@ofbizUrl>", 'detailImage', '400', '550');
     }
 
@@ -596,7 +599,7 @@ ${virtualJavaScript?if_exists}
     <div id="download-files">
       <div>${uiLabelMap.OrderDownloadFilesTitle}:</div>
       <#list downloadProductContentAndInfoList as downloadProductContentAndInfo>
-        <div>${downloadProductContentAndInfo.contentName}<#if downloadProductContentAndInfo.description?has_content> - ${downloadProductContentAndInfo.description}</#if></div>
+        <div>${downloadProductContentAndInfo.contentName?if_exists}<#if downloadProductContentAndInfo.description?has_content> - ${downloadProductContentAndInfo.description}</#if></div>
       </#list>
     </div>
   </#if>

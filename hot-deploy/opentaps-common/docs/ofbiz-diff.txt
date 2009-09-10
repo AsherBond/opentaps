@@ -1,6 +1,6 @@
 
 
-Based on revision https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@809573
+Based on revision https://svn.apache.org/repos/asf/ofbiz/branches/release09.04@813286
 
 
 Framework changes
