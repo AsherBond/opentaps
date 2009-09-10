@@ -62,7 +62,7 @@
         <attribute name="isIncorporated" type="String" mode="IN" optional="true"/>
         <attribute name="requires1099" type="String" mode="IN" optional="false"/>
     </service>
-    
+
     <service name="purchasing.approveAllOpenRequirements" engine="java" location="org.opentaps.purchasing.planning.PlanningServices" invoke="approveAllOpenRequirements" auth="true"
             transaction-timeout="7200">
         <description>Approve all requirements for all facilities of this organization.</description>
@@ -114,17 +114,17 @@
         <attribute name="newPartyId" type="String" mode="IN" optional="true"/>
         <attribute name="quantity" type="BigDecimal" mode="IN" optional="true"/>
     </service>
-    
+
     <service name="closeRequirement" engine="pojo" location="org.opentaps.purchasing.domain.planning.requirement.RequirementService" invoke="closeRequirement">
         <description>Change requirement status to closed.</description>
         <attribute mode="IN" type="String" name="requirementId"/>
     </service>
-    
+
     <service name="purchasing.cancelRequirement" engine="pojo" location="org.opentaps.purchasing.domain.planning.requirement.RequirementService" invoke="cancelRequirement" auth="true">
         <description>Change requirement status to rejected.</description>
         <attribute mode="IN" type="String" name="requirementId"/>
     </service>
-    
+
     <service name="updatePurchaseOrderItems" engine="java" auth="true"
             location="org.opentaps.common.order.OrderServices" invoke="updatePurchaseOrderItems">
         <description>Update the quantities/prices for an existing purchase order</description>
@@ -144,15 +144,15 @@
         <attribute name="tagsMap9" type="Map" mode="IN" string-map-prefix="tag9_" optional="true"/>
         <attribute name="tagsMap10" type="Map" mode="IN" string-map-prefix="tag10_" optional="true"/>
         <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
-    </service>    
+    </service>
 
     <!-- redefine this service in purchasing for add security permission "PURCH_ORD_APPRV" check -->
     <service name="changePurchasingOrderItemStatus" engine="java" auth="true"
     		location="org.ofbiz.order.order.OrderServices" invoke="setItemStatus">
-       <required-permissions join-type="AND">
-           <check-permission permission="PRCH_ORD_APPRV"/>
-       </required-permissions>    		
     	<description>Change the status of an existing order item.  If no orderItemSeqId is specified, the status of all order items will be changed.</description>
+        <required-permissions join-type="AND">
+           <check-permission permission="PRCH_ORD_APPRV"/>
+        </required-permissions>
     	<attribute name="orderId" type="String" mode="IN" optional="false"/>
     	<attribute name="orderItemSeqId" type="String" mode="IN" optional="true"/>
     	<attribute name="fromStatusId" type="String" mode="IN" optional="true"/>
@@ -160,13 +160,13 @@
         <attribute name="statusDateTime" type="Timestamp" mode="IN" optional="true"/>
     </service>
 
-    <!-- redefine this service in purchasing for add security permission "PURCH_ORD_APPRV" check -->    
+    <!-- redefine this service in purchasing for add security permission "PURCH_ORD_APPRV" check -->
     <service name="changePurchasingOrderStatus" engine="java" auth="true"
             location="org.ofbiz.order.order.OrderServices" invoke="setOrderStatus">
-       <required-permissions join-type="AND">
-           <check-permission permission="PRCH_ORD_APPRV"/>
-       </required-permissions>  
         <description>Change the status of an existing order</description>
+        <required-permissions join-type="AND">
+           <check-permission permission="PRCH_ORD_APPRV"/>
+        </required-permissions>
         <attribute name="orderId" type="String" mode="IN"/>
         <attribute name="statusId" type="String" mode="IN"/>
         <attribute name="oldStatusId" type="String" mode="OUT" optional="false"/>

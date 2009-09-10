@@ -44,9 +44,6 @@
         <attribute name="debitGlAccountId" mode="IN" type="String" optional="false"/>        
         <attribute name="creditGlAccountId" mode="IN" type="String" optional="false"/>        
         <attribute name="amount" mode="IN" type="Double" optional="false"/>
-        <override name="acctgTransTypeId" optional="false"/>
-        <override name="transactionDate" optional="false"/>
-        <override name="glFiscalTypeId" optional="false"/>
         <!-- debit tags -->
         <attribute name="debitTagEnumId1" type="String" mode="IN" optional="true"/>
         <attribute name="debitTagEnumId2" type="String" mode="IN" optional="true"/>
@@ -69,6 +66,10 @@
         <attribute name="creditTagEnumId8" type="String" mode="IN" optional="true"/>
         <attribute name="creditTagEnumId9" type="String" mode="IN" optional="true"/>
         <attribute name="creditTagEnumId10" type="String" mode="IN" optional="true"/>
+        <!-- override comes last -->
+        <override name="acctgTransTypeId" optional="false"/>
+        <override name="transactionDate" optional="false"/>
+        <override name="glFiscalTypeId" optional="false"/>
     </service>
 
     <service name="reverseAcctgTrans" engine="java" 
