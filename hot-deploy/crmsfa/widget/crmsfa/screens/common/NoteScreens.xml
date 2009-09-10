@@ -146,7 +146,9 @@
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/cases/CasesScreens.xml">
                     <decorator-section name="section-body">
+                      <container style="form">
                         <include-form name="createNoteForm" location="component://crmsfa/widget/crmsfa/forms/common/CommonForms.xml"/>
+                      </container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
