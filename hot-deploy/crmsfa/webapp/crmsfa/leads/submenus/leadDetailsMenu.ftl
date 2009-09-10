@@ -16,6 +16,7 @@
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 
 <#-- NOTE: the subMenuBar DIV has been compressed into one line due to layout issues temporarily until a good CSS fix is found -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if (security.hasEntityPermission("CRMSFA_LEAD", "_CREATE", session)) && (partySummary?exists)>
   <#assign create_option = "<a class='subMenuButton' href='duplicateLeadForm?partyId="+partySummary.partyId+"'>"+uiLabelMap.CrmDuplicateLead+"</a>"  />
@@ -33,7 +34,11 @@
 
   <#-- a lead can be qualified it has already been assigned -->
   <#if (partySummary.statusId?exists) && (partySummary.statusId == 'PTYLEAD_ASSIGNED')>
-    <#assign update_options = update_options + "<a class='subMenuButton' href='updateLeadStatus?partyId="+partySummary.partyId+"&statusId=PTYLEAD_QUALIFIED'>"+uiLabelMap.CrmQualifyLead+"</a>"  />
+    <form name="qualifyLeadForm" method="post" action="<@ofbizUrl>updateLeadStatus</@ofbizUrl>"/>
+      <@inputHidden name="partyId" value="${partySummary.partyId}"/>
+      <@inputHidden name="statusId" value="PTYLEAD_QUALIFIED"/>
+    </form>
+    <#assign update_options = update_options + "<a class='subMenuButton' href='javascript:document.qualifyLeadForm.submit()'>" + uiLabelMap.CrmQualifyLead + "</a>"  />
   </#if>
 
   <#-- a lead can only be converted if it has already been qualified -->
@@ -44,7 +49,10 @@
   <#assign update_options = update_options + "<a class='subMenuButton' href='updateLeadForm?partyId="+partySummary.partyId+"'>"+uiLabelMap.CommonEdit+"</a>" />
 
   <#if hasDeletePermission?exists>
-    <#assign update_options = update_options + "<a class='subMenuButtonDangerous' href='deleteLead?leadPartyId=" + partySummary.partyId + "'>" + uiLabelMap.CommonDelete + "</a>"  />
+    <form name="deleteLeadForm" method="post" action="<@ofbizUrl>deleteLead</@ofbizUrl>"/>
+      <@inputHidden name="leadPartyId" value="${partySummary.partyId}"/>
+    </form>
+    <#assign update_options = update_options + "<a class='subMenuButtonDangerous' href='javascript:document.deleteLeadForm.submit()'>" + uiLabelMap.CommonDelete + "</a>"  />
   </#if>
 
 </#if>
