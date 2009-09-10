@@ -312,7 +312,7 @@ public class OpentapsShippingEstimateWrapper implements Serializable {
         if (UtilValidate.isEmpty(storeCarrierShipMethod)) {
             return null;
         }
-        Double est = (Double) shippingEstimates.get(storeCarrierShipMethod);
+        BigDecimal est = (BigDecimal) shippingEstimates.get(storeCarrierShipMethod);
         if (UtilValidate.isEmpty(est)) {
             return null;
         }

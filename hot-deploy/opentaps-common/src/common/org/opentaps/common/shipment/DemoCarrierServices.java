@@ -15,17 +15,18 @@
  */
 package org.opentaps.common.shipment;
 
-import org.ofbiz.base.util.UtilMisc;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+
 import org.ofbiz.base.util.Base64;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Provides the shipment estimate service for the demo carrier.
@@ -50,10 +51,10 @@ public class DemoCarrierServices {
      */
     public static Map demoCarrierShipmentEstimate(DispatchContext dctx, Map context) {
         String shipmentMethodTypeId = (String) context.get("shipmentMethodTypeId");
-        Double shippableWeight = (Double) context.get("shippableWeight");
+        BigDecimal shippableWeight = (BigDecimal) context.get("shippableWeight");
 
-        Double weight = shippableWeight == null ? 1 : shippableWeight;
-        Double estimate = "GROUND".equals(shipmentMethodTypeId) ? weight : weight * 2;
+        BigDecimal weight = shippableWeight == null ? BigDecimal.ONE : shippableWeight;
+        BigDecimal estimate = "GROUND".equals(shipmentMethodTypeId) ? weight : weight.multiply(new BigDecimal("2"));
 
         Map results = ServiceUtil.returnSuccess();
         results.put("shippingEstimateAmount", estimate);
