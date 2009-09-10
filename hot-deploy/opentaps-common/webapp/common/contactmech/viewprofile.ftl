@@ -180,7 +180,7 @@
 
             <#if hasUpdatePermission?exists>
             <td>
-                  <a href="<@ofbizUrl>${editContactMechPage}?partyId=${partySummary.partyId}&contactMechId=${contactMech.contactMechId}&DONE_PAGE=${donePage}</@ofbizUrl>"><img src="/opentaps_images/edit.gif" width="22" height="21" border="0" alt="${uiLabelMap.CommonUpdate}"/></a>&nbsp;
+                  <a href="<@ofbizUrl>${editContactMechPage}?partyId=${partySummary.partyId}&contactMechId=${contactMech.contactMechId}&DONE_PAGE=${donePage}</@ofbizUrl>"><img src="<@ofbizContentUrl>/opentaps_images/edit.gif</@ofbizContentUrl>" width="22" height="21" border="0" alt="${uiLabelMap.CommonUpdate}"/></a>&nbsp;
                   <a href="<@ofbizUrl>deleteContactMech?partyId=${partySummary.partyId}&contactMechId=${contactMech.contactMechId}&donePage=${donePage}</@ofbizUrl>"><img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonExpire}"/></a>&nbsp;&nbsp;
             </td>
             </#if>
