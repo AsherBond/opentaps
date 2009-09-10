@@ -234,7 +234,7 @@
 
                                 <!-- If the user can reassign contacts, include the reassign form -->
                                 <section>
-                                    <condition><if-compare field-name="isReassignRendered" operator="equals" value="true" type="Boolean"/></condition>
+                                    <condition><if-compare field="isReassignRendered" operator="equals" value="true" type="Boolean"/></condition>
                                     <widgets>
                                         <include-form name="reassignToForm" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
                                     </widgets>
@@ -256,7 +256,7 @@
                             <include-form name="ListAccounts" location="component://crmsfa/widget/crmsfa/forms/accounts/AccountsForms.xml"/>
                             <!-- assign accounts to this contact -->
                             <section>
-                                <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
                                     <include-form name="assignAccountToContactForm" location="component://crmsfa/widget/crmsfa/forms/contacts/ContactsForms.xml"/>
                                 </widgets>
@@ -269,7 +269,7 @@
                                 <html-template location="component://crmsfa/webapp/crmsfa/accounts/submenus/viewAccountOrdersMenu.ftl"/>
                             </html></platform-specific>
                             <section>
-                                <condition><if-compare field-name="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <condition><if-compare field="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
                                     <include-form name="ListOrders" location="component://crmsfa/widget/crmsfa/forms/orders/OrdersForms.xml"/>
                                 </widgets>
