@@ -784,6 +784,7 @@ public class RequestHandler {
         } else {
             resp.setContentType(contentType);
         }
+        req.setAttribute("_CONTENT_TYPE_", contentType);
 
         if (Debug.verboseOn()) Debug.logVerbose("The ContentType for the " + view + " view is: " + contentType, module);
 

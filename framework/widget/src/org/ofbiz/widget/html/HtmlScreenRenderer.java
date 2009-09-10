@@ -72,8 +72,14 @@ public class HtmlScreenRenderer extends HtmlWidgetRenderer implements ScreenStri
     }
 
     public void renderScreenBegin(Appendable writer, Map<String, Object> context) throws IOException {
-        writer.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-        appendWhitespace(writer);
+        // this HtmlScreenRenderer is used for javascript files sometimes, test the content type first before inserting the doctype
+        String contentType = (String) context.get("_CONTENT_TYPE_");
+        if (UtilValidate.isEmpty(contentType) || "test/html".equals(contentType)) {
+            writer.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+            appendWhitespace(writer);
+        } else {
+            Debug.logInfo("Current screen renderer not an HTML document [" + contentType + "], skipping insertion of the Doctype", module);
+        }
     }
 
     public void renderScreenEnd(Appendable writer, Map<String, Object> context) throws IOException {

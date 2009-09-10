@@ -49,6 +49,10 @@ framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
 - Port back request-redirect-filterparam
 - Revert ofbiz change in the redirected parameters, by default (if no allow-params / allow-attributes / redirect-parameter are specified, copy all paraeters and attributes instead of just the URL parameters)
 
+framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
+framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
+- Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
+
 Applications changes
 --------------------
 
