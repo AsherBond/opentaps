@@ -17,22 +17,28 @@
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#assign dayLink = "<a class='subMenuButton' href='"+calendarTarget+"?calendarView=day'>" + uiLabelMap.CommonDay + "</a>">
-<#assign weekLink = "<a class='subMenuButton' href='"+calendarTarget+"?calendarView=week'>" + uiLabelMap.CommonWeek + "</a>">
-<#assign monthLink = "<a class='subMenuButton' href='"+calendarTarget+"?calendarView=month'>" + uiLabelMap.CommonMonth + "</a>">
+<#assign dayLink = "<a class='subMenuButton' href='"+calendarTarget+"?calendarView=day'>" + uiLabelMap.CommonDay + "</a>"/>
+<#assign weekLink = "<a class='subMenuButton' href='"+calendarTarget+"?calendarView=week'>" + uiLabelMap.CommonWeek + "</a>"/>
+<#assign monthLink = "<a class='subMenuButton' href='"+calendarTarget+"?calendarView=month'>" + uiLabelMap.CommonMonth + "</a>"/>
 
 <#-- default title -->
 <#assign title = uiLabelMap.CrmMyCalendar />
 
 <#-- show link to change between my calendar and team calendar -->
 <#if hasTeamCalviewPermission>
-  <#assign prefParams = "donePage=${calendarTarget}&amp;viewPrefTypeId=MY_OR_TEAM_CALENDAR&amp;calendarView=" + parameters.calendarView?default("day") />
-  <#if viewPreferences.get("MY_OR_TEAM_CALENDAR")?default("MY_VALUES") == "MY_VALUES">
-    <#assign prefChange = "<a class='subMenuButton' href='setViewPreference?viewPrefValue=TEAM_VALUES&amp;"+prefParams+"'>" + uiLabelMap.CrmTeamCalendar + "</a>" />
-  <#else> 
-    <#assign title = uiLabelMap.CrmTeamCalendar />
-    <#assign prefChange = "<a class='subMenuButton' href='setViewPreference?viewPrefValue=MY_VALUES&amp;"+prefParams+"'>" + uiLabelMap.CrmMyCalendar + "</a>" />
-  </#if>
+  <form name="setCalendarViewPref" method="post" action="<@ofbizUrl>setViewPreference</@ofbizUrl>">
+    <#if viewPreferences.get("MY_OR_TEAM_CALENDAR")?default("MY_VALUES") == "MY_VALUES">
+      <@inputHidden name="viewPrefValue" value="TEAM_VALUES" />
+      <#assign prefChange = "<a class='subMenuButton' href='javascript:document.setCalendarViewPref.submit()'>" + uiLabelMap.CrmTeamCalendar + "</a>" />
+    <#else> 
+      <#assign title = uiLabelMap.CrmTeamCalendar />
+      <@inputHidden name="viewPrefValue" value="MY_VALUES" />
+      <#assign prefChange = "<a class='subMenuButton' href='javascript:document.setCalendarViewPref.submit()'>" + uiLabelMap.CrmMyCalendar + "</a>" />
+    </#if>
+    <@inputHidden name="donePage" value=calendarTarget />
+    <@inputHidden name="viewPrefTypeId" value="MY_OR_TEAM_CALENDAR" />
+    <@inputHidden name="calendarView" value=parameters.calendarView?default("day") />
+  </form>
 </#if>
 
 <#assign headerContent>${prefChange?if_exists}${dayLink}${weekLink}${monthLink}</#assign>

@@ -25,23 +25,23 @@ along with this program; if not, write to Funambol,
     <simple-method method-name="createViewPreference" short-description="Create a ViewPreference">
         <log level="info" message="Use of crmsfa.createViewPreference is deprecated.  Please use opentaps.createViewPreference instead."/>
         <call-simple-method method-name="checkViewPreferenceSecurity"/>
-        <make-value value-name="newEntity" entity-name="ViewPreference"/>
+        <make-value value-field="newEntity" entity-name="ViewPreference"/>
         <set field="newEntity.viewPrefTypeId" from-field="parameters.viewPrefTypeId"/>
         <set field="newEntity.userLoginId" from-field="parameters.userLoginId"/>
-        <set-nonpk-fields map-name="parameters" value-name="newEntity"/>
-        <create-value value-name="newEntity"/>    
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>    
     </simple-method>
     <simple-method method-name="updateViewPreference" short-description="Update a ViewPreference">
         <log level="info" message="Use of crmsfa.updateViewPreference is deprecated.  Please use opentaps.updateViewPreference instead."/>
         <call-simple-method method-name="checkViewPreferenceSecurity"/>
-        <entity-one entity-name="ViewPreference" value-name="viewPreference"/>
-        <set-nonpk-fields map-name="parameters" value-name="viewPreference"/>
-        <store-value value-name="viewPreference"/>
+        <entity-one entity-name="ViewPreference" value-field="viewPreference"/>
+        <set-nonpk-fields map="parameters" value-field="viewPreference"/>
+        <store-value value-field="viewPreference"/>
     </simple-method>
     <simple-method method-name="checkViewPreferenceSecurity" short-description="Check whether a userLogin can create/modify a preference.">
         <if>
             <condition>
-                <if-compare-field field-name="parameters.userLoginId" operator="not-equals" to-field-name="userLogin.userLoginId"/>
+                <if-compare-field field="parameters.userLoginId" operator="not-equals" to-field="userLogin.userLoginId"/>
             </condition>
             <then>
                 <check-permission permission="PARTYMGR" action="_VPREF_UPDATE">

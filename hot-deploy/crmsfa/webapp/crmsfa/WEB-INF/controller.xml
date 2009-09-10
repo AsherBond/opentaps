@@ -239,7 +239,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <response name="myCases" type="request" value="myCases"/>
         <response name="myContacts" type="request" value="myContacts"/>
         <response name="myOpportunities" type="request" value="myOpportunities"/>
-        <response name="myHome" type="request" value="myHome"/>
+        <response name="myHome" type="request-redirect-noparam" value="myHome"/>
         <response name="myProfile" type="request" value="myProfile"/>
         <response name="pendingEmails" type="request-redirect-noparam" value="pendingEmails"/>
         <response name="shipmentSetting" type="request" value="shipmentSetting"/>
