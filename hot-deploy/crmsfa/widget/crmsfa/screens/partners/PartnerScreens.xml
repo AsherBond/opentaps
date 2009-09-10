@@ -154,7 +154,7 @@
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <include-screen name="updatePartyPassword" location="component://crmsfa/widget/crmsfa/screens/common/PartyScreens.xml"/>
-                    </decorator-section>>
+                    </decorator-section>
                 </decorator-screen>
             </widgets>
         </section>
