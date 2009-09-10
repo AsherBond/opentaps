@@ -626,7 +626,6 @@ public class PartyTests extends OpentapsTestCase {
      * Test the GWT account lookup.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testGwtAccountLookup() throws Exception {
         InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
 
@@ -809,7 +808,6 @@ public class PartyTests extends OpentapsTestCase {
      * Test the GWT partner lookup.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testGwtPartnerLookup() throws Exception {
         InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
         String testPartner = "demopartner1";
@@ -927,7 +925,6 @@ public class PartyTests extends OpentapsTestCase {
      * Test the GWT supplier lookup.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testGwtSupplierLookup() throws Exception {
         InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
         String testSupplier = "DemoSupplier";
@@ -1037,7 +1034,6 @@ public class PartyTests extends OpentapsTestCase {
      * Test the GWT lead lookup.
      * @throws Exception if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public void testGwtLeadLookup() throws Exception {
         InputProviderInterface provider = new TestInputProvider(admin, dispatcher);
         String testLead = "DemoLead1";

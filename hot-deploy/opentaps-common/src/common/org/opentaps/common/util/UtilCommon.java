@@ -27,7 +27,6 @@ import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,12 +43,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
@@ -1554,7 +1555,7 @@ public abstract class UtilCommon {
      * @param context a context <code>Map</code> value
      * @return a <code>Locale</code> value
      */
-    public static Locale getLocale(Map<String, Object> context) {
+    public static Locale getLocale(Map<String, ?> context) {
         return UtilMisc.ensureLocale(context.get("locale"));
     }
 
