@@ -39,6 +39,10 @@ framework/entity/fieldtype/fieldtypepostgres.xml
 framework/entity/fieldtype/fieldtypepostnew.xml
 r13031 add field types for pentaho integration
 
+framework/entity/src/org/ofbiz/entity/GenericEntity.java
+framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
+- Remove backtrace from database type warnings
+
 Applications changes
 --------------------
 
