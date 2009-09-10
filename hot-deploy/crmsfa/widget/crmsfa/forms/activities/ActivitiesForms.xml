@@ -105,10 +105,10 @@
         <field name="custRequestId" title="${uiLabelMap.CrmCase}">
             <lookup target-form-name="LookupCases" size="20" maxlength="20"/>
         </field>
-        <field name="estimatedStartDate" title="${uiLabelMap.CrmScheduledDateAndTime}" title-style="requiredField">
+        <field name="estimatedStartDate" title="${uiLabelMap.CrmScheduledDateAndTime}" title-style="requiredField" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}">
+        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="duration" title="${uiLabelMap.CrmDuration}">
@@ -166,10 +166,10 @@
                 <option description="Phone Call" key="WEPT_TASK_PHONE_CALL"/>
             </drop-down>
         </field>
-        <field name="estimatedStartDate" title="${uiLabelMap.CrmStartDateAndTime}" title-style="requiredField">
+        <field name="estimatedStartDate" title="${uiLabelMap.CrmStartDateAndTime}" title-style="requiredField" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}">
+        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="duration" title="${uiLabelMap.CrmDuration}">
@@ -230,10 +230,10 @@
         <field name="custRequestId" title="${uiLabelMap.CrmCase}">
             <lookup target-form-name="LookupCases" size="20" maxlength="20"/>
         </field>
-        <field name="estimatedStartDate" title="${uiLabelMap.CrmScheduledDateAndTime}" title-style="requiredField">
+        <field name="estimatedStartDate" title="${uiLabelMap.CrmScheduledDateAndTime}" title-style="requiredField" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}">
+        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="duration" title="${uiLabelMap.CrmDuration}">
@@ -302,10 +302,10 @@
                 <option description="Phone Call" key="WEPT_TASK_PHONE_CALL"/>
             </drop-down>
         </field>
-        <field name="estimatedStartDate" title="${uiLabelMap.CrmStartDateAndTime}" title-style="requiredField">
+        <field name="estimatedStartDate" title="${uiLabelMap.CrmStartDateAndTime}" title-style="requiredField" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}">
+        <field name="estimatedCompletionDate" title="${uiLabelMap.CrmEndDateAndTime}" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="duration" title="${uiLabelMap.CrmDuration}">
@@ -336,7 +336,7 @@
         <field name="workEffortId"><hidden value="${workEffort.workEffortId}"/></field>
         <field name="currentStatusId" use-when="workEffort.get(&quot;workEffortTypeId&quot;).equals(&quot;TASK&quot;)"><hidden value="TASK_STARTED"/></field>
         <field name="currentStatusId" use-when="workEffort.get(&quot;workEffortTypeId&quot;).equals(&quot;EVENT&quot;)"><hidden value="EVENT_STARTED"/></field>
-        <field name="actualStartDate" title="${uiLabelMap.CrmStartTime}" title-style="requiredField">
+        <field name="actualStartDate" title="${uiLabelMap.CrmStartTime}" title-style="requiredField" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="submitButton" title="${uiLabelMap.CrmStart}" widget-style="smallSubmit"><submit button-type="button"/></field>
@@ -346,7 +346,7 @@
         <field name="workEffortId"><hidden value="${workEffort.workEffortId}"/></field>
         <field name="currentStatusId" use-when="workEffort.get(&quot;workEffortTypeId&quot;).equals(&quot;TASK&quot;)"><hidden value="TASK_COMPLETED"/></field>
         <field name="currentStatusId" use-when="workEffort.get(&quot;workEffortTypeId&quot;).equals(&quot;EVENT&quot;)"><hidden value="EVENT_COMPLETED"/></field>
-        <field name="actualCompletionDate" title="${uiLabelMap.CrmFinishTime}" title-style="requiredField">
+        <field name="actualCompletionDate" title="${uiLabelMap.CrmFinishTime}" title-style="requiredField" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="submitButton" title="${uiLabelMap.CrmFinish}" widget-style="smallSubmit"><submit button-type="button"/></field>
@@ -383,7 +383,7 @@
         <field name="content" title="${uiLabelMap.CommonMessage}"> <!-- this is a field of CommunicationEvent -->
             <textarea/>
         </field>
-        <field name="actualStartDate" title="${uiLabelMap.CrmActivityStartDate}">
+        <field name="actualStartDate" title="${uiLabelMap.CrmActivityStartDate}" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="duration" title="${uiLabelMap.CrmDuration}">
