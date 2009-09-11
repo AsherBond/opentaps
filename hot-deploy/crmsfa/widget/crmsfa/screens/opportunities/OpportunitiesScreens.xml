@@ -194,7 +194,7 @@
                             <include-form name="ListQuotes" location="component://crmsfa/widget/crmsfa/forms/quotes/QuotesForms.xml"/>
                             <!-- If the user can update opportunities, include the relevant form -->
                             <section>
-                                <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
                                     <include-form name="addQuoteToOpportunityForm" location="component://crmsfa/widget/crmsfa/forms/quotes/QuotesForms.xml"/>
                                 </widgets>
@@ -228,7 +228,7 @@
     <!-- show the opportunity contacts, but only if not a lead opportunity -->
     <screen name="opportunityContacts">
         <section>
-            <condition><if-compare field-name="isAccountOpportunity" operator="equals" value="true" type="Boolean"/></condition>
+            <condition><if-compare field="isAccountOpportunity" operator="equals" value="true" type="Boolean"/></condition>
             <widgets>
                 <container style="subSectionBlock">
                     <container style="subSectionHeader"><container style="subSectionTitle"><label>${uiLabelMap.CrmContacts}</label></container></container>
@@ -238,7 +238,7 @@
 
                     <!-- If the user can update opportunities, include the relevant form -->
                     <section>
-                        <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                        <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
                         <widgets>
                             <include-form name="addContactToOpportunityForm" location="component://crmsfa/widget/crmsfa/forms/opportunities/OpportunitiesForms.xml"/>
                         </widgets>
