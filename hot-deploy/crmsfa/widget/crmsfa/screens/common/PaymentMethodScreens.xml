@@ -61,7 +61,7 @@
                 <set field="pageTitleLabel" value="AccountingEftAccount"/>
                 <set field="sectionHeaderUiLabel" value="AccountingEftAccount"/>
                 <set field="parameters.DONE_PAGE" value="viewAccount"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
@@ -83,7 +83,7 @@
                 <set field="pageTitleLabel" value="AccountingGiftCard"/>
                 <set field="sectionHeaderUiLabel" value="AccountingGiftCard"/>
                 <set field="parameters.DONE_PAGE" value="viewAccount"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
@@ -105,7 +105,7 @@
                 <set field="pageTitleLabel" value="AccountingCreditCard"/>
                 <set field="sectionHeaderUiLabel" value="AccountingCreditCard"/>
                 <set field="parameters.DONE_PAGE" value="viewAccount"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/accounts/AccountsScreens.xml">
@@ -127,7 +127,7 @@
                 <set field="pageTitleLabel" value="OpentapsEditTaxId"/>
                 <set field="sectionHeaderUiLabel" value="OpentapsEditTaxId"/>
                 <set field="parameters.DONE_PAGE" value="viewAccount"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                  
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                  
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/payment/editTaxAuthPartyInfo.bsh"/>                
             </actions>
             <widgets>
@@ -150,7 +150,7 @@
                 <set field="pageTitleLabel" value="OpentapsEditShippingAccount"/>
                 <set field="sectionHeaderUiLabel" value="OpentapsEditShippingAccount"/>
                 <set field="parameters.DONE_PAGE" value="viewAccount"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/payment/editShippingAccount.bsh"/>
             </actions>
             <widgets>
@@ -173,7 +173,7 @@
                 <set field="pageTitleLabel" value="AccountingEftAccount"/>
                 <set field="sectionHeaderUiLabel" value="AccountingEftAccount"/>
                 <set field="parameters.DONE_PAGE" value="viewContact"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
@@ -195,7 +195,7 @@
                 <set field="pageTitleLabel" value="AccountingGiftCard"/>
                 <set field="sectionHeaderUiLabel" value="AccountingGiftCard"/>
                 <set field="parameters.DONE_PAGE" value="viewContact"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
@@ -217,7 +217,7 @@
                 <set field="pageTitleLabel" value="AccountingCreditCard"/>
                 <set field="sectionHeaderUiLabel" value="AccountingCreditCard"/>
                 <set field="parameters.DONE_PAGE" value="viewContact"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://crmsfa/widget/crmsfa/screens/contacts/ContactsScreens.xml">
@@ -239,7 +239,7 @@
                 <set field="pageTitleLabel" value="OpentapsEditTaxId"/>
                 <set field="sectionHeaderUiLabel" value="OpentapsEditTaxId"/>
                 <set field="parameters.DONE_PAGE" value="viewContact"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                  
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                  
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/payment/editTaxAuthPartyInfo.bsh"/>                
             </actions>
             <widgets>
@@ -262,7 +262,7 @@
                 <set field="pageTitleLabel" value="OpentapsEditShippingAccount"/>
                 <set field="sectionHeaderUiLabel" value="OpentapsEditShippingAccount"/>
                 <set field="parameters.DONE_PAGE" value="viewContact"/>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/payment/editShippingAccount.bsh"/>
             </actions>
             <widgets>
