@@ -543,7 +543,7 @@ public class LeadsServices {
             // create a Lead or Contact using the input variables
             String serviceName = (partyIsLead ? "crmsfa.createLead" : "crmsfa.createContact");
             ModelService service = dctx.getModelService(serviceName);
-            Map<String, Object> input = service.makeValid(context, "IN");
+            Map input = service.makeValid(context, "IN");
             input.put("userLogin", userLogin);
             Map<String, Object> results = dispatcher.runSync(serviceName, input);
             if (ServiceUtil.isError(results)) return results;
@@ -599,7 +599,7 @@ public class LeadsServices {
             if (ServiceUtil.isError(results)) return results;
             String custRequestId = (String) results.get("custRequestId");
 
-            Map<String, Object> result = ServiceUtil.returnSuccess();
+            Map result = ServiceUtil.returnSuccess();
             result.put("partyId", partyId);
             result.put("surveyId", surveyId);
             result.put("surveyResponseId", surveyResponseId);
@@ -628,15 +628,15 @@ public class LeadsServices {
             String newPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, newPartyId, false);
             String leadPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, leadPartyId, false);
 
-            Map<String, Object> messageMap = UtilMisc.toMap("newPartyId", newPartyId, "newPartyName", newPartyName, "leadPartyId", leadPartyId, "leadPartyName", leadPartyName);
+            Map messageMap = UtilMisc.toMap("newPartyId", newPartyId, "newPartyName", newPartyName, "leadPartyId", leadPartyId, "leadPartyName", leadPartyName);
             String url = UtilProperties.getMessage(notificationResource, "crmsfa.url.lead", messageMap, locale);
             messageMap.put("url", url);
             String subject = UtilProperties.getMessage(notificationResource, "subject.lead", messageMap, locale);
 
-            Map<String, Object> bodyParameters = UtilMisc.toMap("eventType", "lead");
+            Map bodyParameters = UtilMisc.toMap("eventType", "lead");
             bodyParameters.putAll(messageMap);
 
-            Map<String, Object> sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", UtilMisc.toList(newPartyId), "eventType", "lead", "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
+            Map sendEmailsResult = dispatcher.runSync("crmsfa.sendCrmNotificationEmails", UtilMisc.toMap("notifyPartyIds", UtilMisc.toList(newPartyId), "eventType", "lead", "subject", subject, "bodyParameters", bodyParameters, "userLogin", userLogin));
             if (ServiceUtil.isError(sendEmailsResult)) {
                 return sendEmailsResult; 
             }
