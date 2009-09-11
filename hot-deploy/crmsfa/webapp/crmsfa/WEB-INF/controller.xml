@@ -227,10 +227,18 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="donePageRequestHelper">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="donePageRequestHelper"/>
-        <response name="viewContact" type="request" value="viewContact"/>
-        <response name="viewAccount" type="request" value="viewAccount"/>
-        <response name="viewLead" type="request" value="viewLead"/>
-        <response name="viewPartner" type="request" value="viewPartner"/>
+        <response name="viewContact" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="viewAccount" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="viewLead" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="viewPartner" type="request-redirect" value="viewPartner">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="viewActivity" type="request" value="viewActivity"/>
         <response name="myOrders" type="request" value="myOrders"/>
         <response name="viewCase" type="request" value="viewCase"/>
@@ -581,27 +589,27 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createGiftCard">
         <security https="true" auth="true"/>
         <event type="service" invoke="createGiftCard"/>
-        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
-        <response name="address" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="address" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
     <request-map uri="updateGiftCard">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateGiftCard"/>
-        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
-        <response name="address" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="address" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
     <request-map uri="createPartyTaxAuthInfo">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="crmsfa.createPartyTaxAuthInfo"/>
-        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
     <request-map uri="updatePartyTaxAuthInfo">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="crmsfa.updatePartyTaxAuthInfo"/>
-        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
     <request-map uri="deletePaymentMethod">
@@ -625,13 +633,17 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="processAuthorizeTransaction">
         <security https="true" auth="true"/>
         <event type="service" invoke="authOrderPaymentPreference"/>
-        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="AuthorizeTransaction"/>
     </request-map>
     <request-map uri="processCaptureTransaction">
         <security https="true" auth="true"/>
         <event type="service" invoke="captureOrderPayments"/>
-        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="CaptureTransaction"/>
     </request-map>
 
@@ -651,7 +663,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createContact">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createContact"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createContactForm"/>
     </request-map>
     <!-- AJAX request for quick creation of Parties -->
@@ -693,7 +707,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateContact">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateContact"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateContactForm"/>
     </request-map>
     <request-map uri="findContacts">
@@ -707,31 +723,41 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="deactivateContact">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.deactivateContact"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewContact"/>
     </request-map>
     <request-map uri="assignContactToParty">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.assignParty"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewContact"/>
     </request-map>
     <request-map uri="unassignPartyFromContact">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.unassignParty"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewContact"/>
     </request-map>
     <request-map uri="addContactMarketingCampaign">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addContactMarketingCampaign"/>
-        <response name="success" type="request-redirect" value="updateContactForm"/>
+        <response name="success" type="request-redirect" value="updateContactForm">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateContactForm"/>
     </request-map>
     <request-map uri="removeContactMarketingCampaign">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeContactMarketingCampaign"/>
-        <response name="success" type="request-redirect" value="updateContactForm"/>
+        <response name="success" type="request-redirect" value="updateContactForm">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateContactForm"/>
     </request-map>
 
@@ -860,7 +886,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createLead">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createLead"/>
-        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createLeadForm"/>
     </request-map>
     <!-- AJAX request for quick creation of Leads -->
@@ -877,14 +905,18 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateLead">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateLead"/>
-        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateLeadForm"/>
     </request-map>
     <!-- this is designed really just to update lead status for qualify lead, and then show view lead again -->
     <request-map uri="updateLeadStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="setPartyStatus"/>
-        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateLeadForm"/>
     </request-map>
     <!-- this will call setPartyStatus, then an ECA chain will handle the conversion step -->
@@ -895,49 +927,63 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="convertLead">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.convertLead"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewLead"/>
     </request-map>
     <request-map uri="reassignContactResponsibleParty">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.reassignContactResponsibleParty"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewContact"/>
     </request-map>
     <request-map uri="addLeadDataSource">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addLeadDataSource"/>
-        <response name="success" type="request-redirect" value="updateLeadForm"/>
+        <response name="success" type="request-redirect" value="updateLeadForm">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateLeadForm"/>
     </request-map>
     <request-map uri="removeLeadDataSource">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeLeadDataSource"/>
-        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewLead"/>
     </request-map>
     <request-map uri="addLeadMarketingCampaign">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addLeadMarketingCampaign"/>
-        <response name="success" type="request-redirect" value="updateLeadForm"/>
+        <response name="success" type="request-redirect" value="updateLeadForm">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateLeadForm"/>
     </request-map>
     <request-map uri="removeLeadMarketingCampaign">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeLeadMarketingCampaign"/>
-        <response name="success" type="request-redirect" value="updateLeadForm"/>
+        <response name="success" type="request-redirect" value="updateLeadForm">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateLeadForm"/>
     </request-map>
     <request-map uri="reassignLeadResponsibleParty">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.reassignLeadResponsibleParty"/>
-        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewLead"/>
     </request-map>
     <request-map uri="deleteLead">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.deleteLead"/>
-        <response name="success" type="request-redirect" value="leadsMain"/>
+        <response name="success" type="request-redirect-noparam" value="leadsMain"/>
         <response name="error" type="view" value="viewLead"/>
     </request-map>
 
@@ -969,7 +1015,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createOpportunity">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createOpportunity"/>
-        <response name="success" type="request-redirect" value="viewOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity">
+          <redirect-parameter name="salesOpportunityId"/>
+        </response>
         <response name="error" type="view" value="createOpportunityForm"/>
     </request-map>
     <request-map uri="updateOpportunityForm">
@@ -979,19 +1027,27 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateOpportunity">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateOpportunity"/>
-        <response name="success" type="request-redirect" value="viewOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity">
+          <redirect-parameter name="salesOpportunityId"/>
+        </response>
         <response name="error" type="view" value="updateOpportunityForm"/>
     </request-map>
     <request-map uri="addContactToOpportunity">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addContactToOpportunity"/>
-        <response name="success" type="request-redirect" value="viewOpportunity"/>
-        <response name="error" type="request-redirect" value="viewOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity">
+          <redirect-parameter name="salesOpportunityId"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewOpportunity">
+          <redirect-parameter name="salesOpportunityId"/>
+        </response>
     </request-map>
     <request-map uri="removeContactFromOpportunity">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeContactFromOpportunity"/>
-        <response name="success" type="request-redirect" value="viewOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity">
+          <redirect-parameter name="salesOpportunityId"/>
+        </response>
         <response name="error" type="view" value="viewOpportunity"/>
     </request-map>
 
@@ -1028,7 +1084,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createCase">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createCase"/>
-        <response name="success" type="request-redirect" value="viewCase"/>
+        <response name="success" type="request-redirect" value="viewCase">
+          <redirect-parameter name="custRequestId"/>
+        </response>
         <response name="error" type="view" value="createCaseForm"/>
     </request-map>
     <request-map uri="createCaseForActivityForm">
@@ -1038,7 +1096,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createCaseForActivity">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createCase"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="createCaseForm"/>
     </request-map>
     <request-map uri="updateCaseForm">
@@ -1048,13 +1108,17 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateCase">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateCase"/>
-        <response name="success" type="request-redirect" value="viewCase"/>
+        <response name="success" type="request-redirect" value="viewCase">
+          <redirect-parameter name="custRequestId"/>
+        </response>
         <response name="error" type="view" value="updateCaseForm"/>
     </request-map>
     <request-map uri="closeCase">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.closeCase"/>
-        <response name="success" type="request-redirect" value="viewCase"/>
+        <response name="success" type="request-redirect" value="viewCase">
+          <redirect-parameter name="custRequestId"/>
+        </response>
         <response name="error" type="view" value="viewCase"/>
     </request-map>
     <request-map uri="findCases">
@@ -1103,13 +1167,17 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createEvent">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createActivity"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="createEventForm"/>
     </request-map>
     <request-map uri="createTask">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createActivity"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="createTaskForm"/>
     </request-map>
     <request-map uri="updateEventForm">
@@ -1123,37 +1191,45 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateEvent">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateActivity"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="updateEventForm"/>
     </request-map>
     <request-map uri="updateTask">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateActivity"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="updateTaskForm"/>
     </request-map>
     <request-map uri="updateActivityAssociation">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateActivityAssociation"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="viewActivity"/>
     </request-map>
     <request-map uri="updateActivityWithoutAssoc">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateActivityWithoutAssoc"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="viewActivity"/>
     </request-map>
     <request-map uri="updateEmailActivity">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateActivityWithoutAssoc"/>
-        <response name="success" type="request-redirect" value="pendingEmails"/>
+        <response name="success" type="request-redirect-noparam" value="pendingEmails"/>
         <response name="error" type="view" value="viewActivity"/>
     </request-map>
     <request-map uri="updatePendingInboundEmailAssocs">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="crmsfa.updateActivityAssociation"/>
-        <response name="success" type="request-redirect" value="pendingEmails"/>
+        <response name="success" type="request-redirect-noparam" value="pendingEmails"/>
         <response name="error" type="view" value="viewActivity"/>
     </request-map>
     <request-map uri="deleteEmails">
@@ -1173,31 +1249,39 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="logTaskFormAndDial">
         <security auth="true" https="true"/>
         <event type="java" path="org.opentaps.common.event.AsteriskEvents" invoke="makeOutgoingCall"/>
-        <response name="success" type="request-redirect" value="logTaskForm"/>
-        <response name="error" type="request-redirect" value="logTaskForm"/>
+        <response name="success" type="request-redirect-noparam" value="logTaskForm"/>
+        <response name="error" type="request-redirect-noparam" value="logTaskForm"/>
     </request-map>
     <request-map uri="logTask">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.logTask"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="logTaskForm"/>
     </request-map>
     <request-map uri="addWorkEffortPartyAssignment">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addWorkEffortPartyAssignment"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="viewActivity"/>
     </request-map>
     <request-map uri="removeWorkEffortPartyAssignment">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeWorkEffortPartyAssignment"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="viewActivity"/>
     </request-map>
     <request-map uri="updateWorkEffortPartyAssignment">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateWorkEffortPartyAssignment"/>
-        <response name="success" type="request-redirect" value="viewActivity"/>
+        <response name="success" type="request-redirect" value="viewActivity">
+          <redirect-parameter name="workEffortId"/>
+        </response>
         <response name="error" type="view" value="viewActivity"/>
     </request-map>
 
@@ -1224,14 +1308,20 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="computeForecastParentPeriod">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.computeForecastParentPeriod"/>
-        <response name="success" type="request-redirect" value="viewForecast"/>
+        <response name="success" type="request-redirect" value="viewForecast">
+          <redirect-parameter name="salesForecastId"/>
+        </response>
         <response name="error" type="view" value="createForecastForm"/>
     </request-map>
     <request-map uri="updateForecast">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateForecast"/>
-        <response name="success" type="request-redirect" value="viewForecast"/>
-        <response name="error" type="request-redirect" value="viewForecast"/>
+        <response name="success" type="request-redirect" value="viewForecast">
+          <redirect-parameter name="salesForecastId"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewForecast">
+          <redirect-parameter name="salesForecastId"/>
+        </response>
     </request-map>
     <request-map uri="findForecasts">
         <security https="true" auth="true"/>
@@ -1254,14 +1344,22 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="removeQuoteFromOpportunity">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeQuoteFromOpportunity"/>
-        <response name="success" type="request-redirect" value="viewOpportunity"/>
-        <response name="error" type="request-redirect" value="viewOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity">
+          <redirect-parameter name="salesOpportunityId"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewOpportunity">
+          <redirect-parameter name="salesOpportunityId"/>
+        </response>
     </request-map>
     <request-map uri="addQuoteToOpportunity">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addQuoteToOpportunity"/>
-        <response name="success" type="request-redirect" value="viewOpportunity"/>
-        <response name="error" type="request-redirect" value="viewOpportunity"/>
+        <response name="success" type="request-redirect" value="viewOpportunity">
+          <redirect-parameter name="salesOpportunityId"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewOpportunity">
+          <redirect-parameter name="salesOpportunityId"/>
+        </response>
     </request-map>
     <request-map uri="createQuoteFromCart">
         <security https="true" auth="true"/>
@@ -1282,13 +1380,17 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateQuoteItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateQuoteItem"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="removeQuoteItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeQuoteItem"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="finalizeQuoteStatus">
@@ -1300,43 +1402,57 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="setQuoteStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="setQuoteStatus"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="setQuoteItemOption">
         <security https="true" auth="true"/>
         <event type="service" invoke="setQuoteItemOption"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="unsetQuoteItemOption">
         <security https="true" auth="true"/>
         <event type="service" invoke="unsetQuoteItemOption"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="addQuoteItemOption">
         <security https="true" auth="true"/>
         <event type="service" invoke="addQuoteItemOption"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="updateQuoteItemOption">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateQuoteItemOption"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="updateQuoteItemOptions">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="updateQuoteItemOption"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="removeQuoteItemOption">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeQuoteItemOption"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="finalizeQuote">
@@ -1346,13 +1462,17 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="finalizeQuoteItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateQuoteItem"/>
-        <response name="success" type="request-redirect-filterparam" value="finalizeQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="finalizeQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="finalizeQuote"/>
     </request-map>
     <request-map uri="setFinalizeQuoteItemOption">
         <security https="true" auth="true"/>
         <event type="service" invoke="setQuoteItemOption"/>
-        <response name="success" type="request-redirect-filterparam" value="finalizeQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="finalizeQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="finalizeQuote"/>
     </request-map>
     <request-map uri="AddQuoteNote">
@@ -1368,7 +1488,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="copyQuote">
         <security https="true" auth="true"/>
         <event type="service" invoke="copyQuote"/>
-        <response name="success" type="request-redirect-filterparam" value="EditQuote" allowed-attributes="quoteId" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="EditQuote" allowed-attributes="quoteId">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="view" value="EditQuote"/>
     </request-map>
 
@@ -1389,7 +1511,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <security https="true" auth="true"/>
         <event type="service" invoke="createMarketingCampaign"/>
         <response name="error" type="view" value="createMarketingCampaignForm"/>
-        <response name="success" type="request-redirect" value="viewMarketingCampaign"/>
+        <response name="success" type="request-redirect" value="viewMarketingCampaign">
+          <redirect-parameter name="marketingCampaignId"/>
+        </response>
     </request-map>
     <request-map uri="updateMarketingCampaignForm">
         <security https="true" auth="true"/>
@@ -1399,7 +1523,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <security https="true" auth="true"/>
         <event type="service" invoke="updateMarketingCampaign"/>
         <response name="error" type="view" value="updateMarketingCampaignForm"/>
-        <response name="success" type="request-redirect" value="viewMarketingCampaign"/>
+        <response name="success" type="request-redirect" value="viewMarketingCampaign">
+          <redirect-parameter name="marketingCampaignId"/>
+        </response>
     </request-map>
     <request-map uri="findMarketingCampaigns">
         <security https="true" auth="true"/>
@@ -1434,7 +1560,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createTrackingCode">
         <security https="true" auth="true"/>
         <event type="service" invoke="createTrackingCode"/>
-        <response name="success" type="request-redirect-filterparam" value="viewMarketingCampaign" allowed-params="marketingCampaignId"/>
+        <response name="success" type="request-redirect" value="viewMarketingCampaign">
+          <redirect-parameter name="marketingCampaignId"/>
+        </response>
         <response name="error" type="view" value="createTrackingCodeForm"/>
     </request-map>
     <request-map uri="trackingCodeReport">
@@ -1446,13 +1574,17 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="addContactListToMarketingCampaign">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addContactListToMarketingCampaign"/>
-        <response name="success" type="request-redirect-filterparam" value="viewMarketingCampaign" allowed-params="marketingCampaignId"/>
+        <response name="success" type="request-redirect" value="viewMarketingCampaign">
+          <redirect-parameter name="marketingCampaignId"/>
+        </response>
         <response name="error" type="view" value="viewMarketingCampaign"/>
     </request-map>
     <request-map uri="removeContactListFromMarketingCampaign">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeContactListFromMarketingCampaign"/>
-        <response name="success" type="request-redirect-filterparam" value="viewMarketingCampaign" allowed-params="marketingCampaignId"/>
+        <response name="success" type="request-redirect" value="viewMarketingCampaign">
+          <redirect-parameter name="marketingCampaignId"/>
+        </response>
         <response name="error" type="view" value="viewMarketingCampaign"/>
     </request-map>
 
@@ -1479,7 +1611,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <security https="true" auth="true"/>
         <event type="service" invoke="updateContactList"/>
         <response name="error" type="view" value="updateContactListForm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewContactList" allowed-params="contactListId"/>
+        <response name="success" type="request-redirect" value="viewContactList">
+          <redirect-parameter name="contactListId"/>
+        </response>
     </request-map>
     <request-map uri="findContactLists">
         <security https="true" auth="true"/>
@@ -1546,8 +1680,12 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="addNewCatalogRequestsToContactList">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addNewCatalogRequestsToContactList"/>
-        <response name="error" type="request-redirect" value="viewContactList"/>
-        <response name="success" type="request-redirect" value="viewContactList"/>
+        <response name="error" type="request-redirect" value="viewContactList">
+          <redirect-parameter name="contactListId"/>
+        </response>
+        <response name="success" type="request-redirect" value="viewContactList">
+          <redirect-parameter name="contactListId"/>
+        </response>
     </request-map>
 
     <!-- surveys -->
@@ -1582,7 +1720,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createTeam">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createTeam"/>
-        <response name="success" type="request-redirect" value="viewTeam"/>
+        <response name="success" type="request-redirect" value="viewTeam">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createTeamForm"/>
     </request-map>
     <request-map uri="updateTeamForm">
@@ -1592,7 +1732,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateTeam">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateTeam"/>
-        <response name="success" type="request-redirect" value="viewTeam"/>
+        <response name="success" type="request-redirect" value="viewTeam">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updateTeamForm"/>
     </request-map>
     <request-map uri="findTeams">
@@ -1608,43 +1750,65 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="addTeamMemberInviewTeam">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addTeamMember"/>
-        <response name="success" type="request-redirect" value="viewTeam"/>
-        <response name="error" type="request-redirect" value="viewTeam"/>
+        <response name="success" type="request-redirect" value="viewTeam">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewTeam">
+          <redirect-parameter name="partyId"/>
+        </response>
     </request-map>
     <request-map uri="addTeamMemberInviewAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addTeamMember"/>
-        <response name="success" type="request-redirect" value="viewAccount"/>
-        <response name="error" type="request-redirect" value="viewAccount"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
     </request-map>
     <request-map uri="removeTeamMemberInviewTeam">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeTeamMember"/>
-        <response name="success" type="request-redirect" value="viewTeam"/>
-        <response name="error" type="request-redirect" value="viewTeam"/>
+        <response name="success" type="request-redirect" value="viewTeam">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewTeam">
+          <redirect-parameter name="partyId"/>
+        </response>
     </request-map>
     <request-map uri="removeTeamMemberInviewAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeTeamMember"/>
-        <response name="success" type="request-redirect" value="viewAccount"/>
-        <response name="error" type="request-redirect" value="viewAccount"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
     </request-map>
     <request-map uri="setTeamMemberSecurityGroupInviewTeam">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.setTeamMemberSecurityGroup"/>
-        <response name="success" type="request-redirect" value="viewTeam"/>
+        <response name="success" type="request-redirect" value="viewTeam">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewTeam"/>
     </request-map>
     <request-map uri="setTeamMemberSecurityGroupInviewAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.setTeamMemberSecurityGroup"/>
-        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewAccount"/>
     </request-map>
     <request-map uri="assignTeamToAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.assignTeamToAccount"/>
-        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="viewAccount"/>
     </request-map>
 
@@ -1664,7 +1828,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createPartner">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createPartner"/>
-        <response name="success" type="request-redirect" value="viewPartner"/>
+        <response name="success" type="request-redirect" value="viewPartner">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="createPartnerForm"/>
     </request-map>
     <!-- AJAX request for quick creation of Leads -->
@@ -1681,7 +1847,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updatePartner">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updatePartner"/>
-        <response name="success" type="request-redirect" value="viewPartner"/>
+        <response name="success" type="request-redirect" value="viewPartner">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="view" value="updatePartnerForm"/>
     </request-map>
     <request-map uri="findPartners">
@@ -1726,37 +1894,49 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="initialAgreementItemsAndTerms">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processCreateAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processRemoveAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeAgreementItemAndTerms"/>
-        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processCreateAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="createAgreementTerm"/>
-        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="createAgreementTerm"/>
     </request-map>
     <request-map uri="processUpdateAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreementTerm"/>
-        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processRemoveAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteAgreementTerm"/>
-        <response name="success" type="request-redirect" value="viewPartnerAgreement"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
 
@@ -1833,8 +2013,8 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createContentForParty">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createContentForParty"/>
-        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
-        <response name="error" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
     <request-map uri="createContentForCase">
         <security https="true" auth="true"/>
@@ -1857,7 +2037,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createContentForOrder">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createContentForOrder"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview" >
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="request" value="orderview"/>
     </request-map>
     <request-map uri="updateContentForAccountForm">
@@ -1979,7 +2161,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createContentForQuote">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createContentForQuote"/>
-        <response name="success" type="request-redirect" value="ViewQuote"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="error" type="request" value="ViewQuote"/>
     </request-map>
     <request-map uri="updateContentForQuote">
@@ -2069,19 +2253,25 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="mergeAccounts">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.mergeCrmParties"/>
-        <response name="success" type="request-redirect" value="viewAccount"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="request-redirect" value="mergeAccountsForm"/>
     </request-map>
     <request-map uri="mergeContacts">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.mergeCrmParties"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="request-redirect" value="mergeContactsForm"/>
     </request-map>
     <request-map uri="mergeLeads">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.mergeCrmParties"/>
-        <response name="success" type="request-redirect" value="viewLead"/>
+        <response name="success" type="request-redirect" value="viewLead">
+          <redirect-parameter name="partyId"/>
+        </response>
         <response name="error" type="request-redirect" value="mergeLeadsForm"/>
     </request-map>
 
@@ -2166,7 +2356,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateOrderItems">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.updateOrderItems"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="editorderitems"/>
     </request-map>
     <request-map uri="countMatchingProducts">
@@ -2273,13 +2465,17 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="disburseChange">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.disburseChangeForOrder"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="receivepayment"/>
     </request-map>
     <request-map uri="receiveOfflinePaymentsAndDisburseChange">
         <security https="true" auth="true"/>
         <event type="java" path="com.opensourcestrategies.crmsfa.orders.CrmsfaOrderEvents" invoke="receiveOfflinePaymentsAndDisburseChange"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="receivepayment"/>
     </request-map>
     <request-map uri="createPartyCarrierAccount">
@@ -2317,7 +2513,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createShipGroup">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createShipGroup"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="newShipGroup"/>
     </request-map>
 
@@ -2325,7 +2523,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="addCreditCardToOrder">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addCreditCardToOrder"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="orderview"/>
     </request-map>
 
@@ -2386,15 +2586,15 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createCreditCard">
         <security https="true" auth="true"/>
         <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="createCreditCard"/>
-        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
-        <response name="address" type="request-redirect" value="donePageRequestHelper"/>
-        <response name="error" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="address" type="request" value="donePageRequestHelper"/>
+        <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
     <request-map uri="updateCreditCard">
         <security https="true" auth="true"/>
         <event type="simple" path="org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="updateCreditCard"/>
-        <response name="success" type="request-redirect" value="donePageRequestHelper"/>
-        <response name="address" type="request-redirect" value="donePageRequestHelper"/>
+        <response name="success" type="request" value="donePageRequestHelper"/>
+        <response name="address" type="request" value="donePageRequestHelper"/>
         <response name="error" type="request" value="donePageRequestHelper"/>
     </request-map>
     <request-map uri="ordersEditEftAccount">
@@ -2465,49 +2665,65 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createReturnFromOrder">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createReturnFromOrder"/>
-        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="success" type="request-redirect" value="viewReturn">
+          <redirect-parameter name="returnId"/>
+        </response>
         <response name="error" type="view" value="createReturnForm"/>
     </request-map>
     <request-map uri="updateReturnHeader">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateReturnHeader"/>
-        <response name="success" type="request-redirect-filterparam" value="viewReturn" allowed-params="returnId"/>
+        <response name="success" type="request-redirect" value="viewReturn">
+          <redirect-parameter name="returnId"/>
+        </response>
         <response name="error" type="view" value="viewReturn"/>
     </request-map>
     <request-map uri="createReturnItems">
         <security https="true" auth="true" direct-request="true"/>
         <event type="service-multi" invoke="createReturnItemOrAdjustment"/>
-        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="success" type="request-redirect" value="viewReturn">
+          <redirect-parameter name="returnId"/>
+        </response>
         <response name="error" type="view" value="viewReturn"/>
     </request-map>
     <request-map uri="updateReturnItems">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="updateReturnItemOrAdjustment"/>
-        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="success" type="request-redirect" value="viewReturn">
+          <redirect-parameter name="returnId"/>
+        </response>
         <response name="error" type="view" value="viewReturn"/>
     </request-map>
     <request-map uri="removeReturnItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeReturnItem"/>
-        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="success" type="request-redirect" value="viewReturn">
+          <redirect-parameter name="returnId"/>
+        </response>
         <response name="error" type="view" value="viewReturn"/>
     </request-map>
     <request-map uri="removeReturnAdjustment">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeReturnAdjustment"/>
-        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="success" type="request-redirect" value="viewReturn">
+          <redirect-parameter name="returnId"/>
+        </response>
         <response name="error" type="view" value="viewReturn"/>
     </request-map>
     <request-map uri="createAndConfirmReturnShipment">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.createAndConfirmReturnShipment"/>
-        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="success" type="request-redirect" value="viewReturn">
+          <redirect-parameter name="returnId"/>
+        </response>
         <response name="error" type="view" value="viewReturn"/>
     </request-map>
     <request-map uri="acceptReturn">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.acceptReturn"/>
-        <response name="success" type="request-redirect" value="viewReturn"/>
+        <response name="success" type="request-redirect" value="viewReturn">
+          <redirect-parameter name="returnId"/>
+        </response>
         <response name="error" type="view" value="viewReturn"/>
     </request-map>
 
@@ -2523,13 +2739,17 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateShoppingListItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateShoppingListItem"/>
-        <response name="success" type="request-redirect" value="viewShoppingList"/>
+        <response name="success" type="request-redirect" value="viewShoppingList">
+          <redirect-parameter name="shoppingListId"/>
+        </response>
         <response name="error" type="view" value="viewShoppingList"/>
     </request-map>
     <request-map uri="removeShoppingListItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeShoppingListItem"/>
-        <response name="success" type="request-redirect" value="viewShoppingList"/>
+        <response name="success" type="request-redirect" value="viewShoppingList">
+          <redirect-parameter name="shoppingListId"/>
+        </response>
         <response name="error" type="view" value="viewShoppingList"/>
     </request-map>
 
