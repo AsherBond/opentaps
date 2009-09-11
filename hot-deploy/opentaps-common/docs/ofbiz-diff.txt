@@ -48,9 +48,10 @@ framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
 framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
 - Port back request-redirect-filterparam
 
-framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
 framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
+framework/widget/src/org/ofbiz/widget/screen/ScreenWidgetViewHandler.java
 - Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
+- Fixed, reverted previous change in RequestHandler.java
 
 framework/entity/src/org/ofbiz/entity/GenericEntity.java
 r13280 Return field value if entity label for a primary key equals to this key. This fix broken labels in many screens
