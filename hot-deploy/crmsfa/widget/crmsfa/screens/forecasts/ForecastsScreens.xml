@@ -81,7 +81,7 @@
 
                         <!-- show create forecast form only if we have available periods -->
                         <section>
-                            <condition><not><if-empty field-name="availablePeriods"/></not></condition>
+                            <condition><not><if-empty field="availablePeriods"/></not></condition>
                             <widgets>
                                 <container style="subSectionBlock">
                                     <container style="form">
@@ -107,7 +107,7 @@
 
     <screen name="myTeamForecasts">
         <section>
-            <condition><not><if-empty field-name="teamForecasts"/></not></condition>
+            <condition><not><if-empty field="teamForecasts"/></not></condition>
             <widgets>
                 <container style="subSectionBlock">
                     <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmTeamForecastQuarters}</label></container>
@@ -191,7 +191,7 @@
 
                         <!-- show the child forecasts, but only if they exist -->
                         <section>
-                            <condition><not><if-empty field-name="forecasts"/></not></condition>
+                            <condition><not><if-empty field="forecasts"/></not></condition>
                             <widgets>
                                 <container style="subSectionBlock">
                                     <container style="subSectionHeader"><label style="subSectionTitle">${uiLabelMap.CrmForecastSubPeriods}</label></container>
@@ -202,7 +202,7 @@
 
                         <!-- put the update form here as well -->
                         <section>
-                            <condition><if-compare field-name="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
+                            <condition><if-compare field="hasUpdatePermission" operator="equals" value="true" type="Boolean"/></condition>
                             <widgets>
                                 <container style="subSectionBlock">
                                     <container style="form">
