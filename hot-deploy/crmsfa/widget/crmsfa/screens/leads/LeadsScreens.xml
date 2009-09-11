@@ -210,8 +210,8 @@
                 <set field="hasModulePermission" value="CRMSFA_LEAD"/>
                 <set field="hasOperationPermission" value="_UPDATE"/>
                 <set field="leadPartyId" from-field="parameters.partyId"/>
-                <entity-one entity-name="PartySummaryCRMView" value-name="leadPartySummary">
-                	<field-map env-name="parameters.partyId" field-name="partyId"/>
+                <entity-one entity-name="PartySummaryCRMView" value-field="leadPartySummary">
+                	<field-map from-field="parameters.partyId" field-name="partyId"/>
                 </entity-one>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/security/checkComplexSecurity.bsh"/>
             </actions>
@@ -264,7 +264,7 @@
 
                                 <!-- If the user can reassign accounts, include the relevant form -->
                                 <section>
-                                    <condition><if-compare field-name="hasReassignPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                    <condition><if-compare field="hasReassignPermission" operator="equals" value="true" type="Boolean"/></condition>
                                     <widgets>
                                         <include-form name="reassignToForm" location="component://crmsfa/widget/crmsfa/forms/leads/LeadsForms.xml"/>
                                     </widgets>
@@ -311,7 +311,7 @@
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
                         <include-screen name="updatePartyPassword" location="component://crmsfa/widget/crmsfa/screens/common/PartyScreens.xml"/>
-                    </decorator-section>>
+                    </decorator-section>
                 </decorator-screen>
             </widgets>
         </section>
@@ -348,7 +348,7 @@
     <!-- lead opportunities -->
     <screen name="leadOpportunities">
         <section>
-            <condition><if-compare field-name="isQualified" operator="equals" value="true" type="Boolean"/></condition>
+            <condition><if-compare field="isQualified" operator="equals" value="true" type="Boolean"/></condition>
             <widgets>
                 <container style="subSectionBlock">
                     <platform-specific><html>
