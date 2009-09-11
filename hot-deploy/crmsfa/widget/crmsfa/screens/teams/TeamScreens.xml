@@ -93,7 +93,7 @@
                             <include-form name="ListTeamMembers" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
                             <!-- If the user can add team members, include the relevant form -->
                             <section>
-                                <condition><if-compare field-name="hasTeamAssignPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <condition><if-compare field="hasTeamAssignPermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
                                     <include-form name="addTeamMemberForm" location="component://crmsfa/widget/crmsfa/forms/teams/TeamForms.xml"/>
                                 </widgets>

@@ -216,7 +216,7 @@
                 
                <!-- find the survey first -->
                <set field="surveyId" from-field="parameters.surveyId"/>
-               <entity-one entity-name="Survey" value-name="survey"/>
+               <entity-one entity-name="Survey" value-field="survey"/>
                <!-- now prepare the responses -->
                <script location="component://content/webapp/content/WEB-INF/actions/survey/ViewSurveyResponses.bsh"/>
            </actions>
