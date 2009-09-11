@@ -300,7 +300,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.createAccount"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId" allowed-attributes="partyId" />
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="createAccountForm"/>
     </request-map>
     <!-- AJAX request for quick creation of Leads -->
@@ -317,7 +319,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.updateAccount"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="updateAccountForm"/>
     </request-map>
     <request-map uri="findAccounts">
@@ -333,7 +337,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="deactivateAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.deactivateAccount"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="viewAccount"/>
     </request-map>
     <request-map uri="accountsEditContactMech">
@@ -343,37 +349,52 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="reassignAccountResponsibleParty">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.reassignAccountResponsibleParty"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="viewAccount"/>
     </request-map>
     <request-map uri="removeContactFromAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeContactFromAccount"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="viewAccount"/>
     </request-map>
     <request-map uri="addAccountDataSource">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addAccountDataSource"/>
-        <response name="success" type="request-redirect" value="updateAccountForm"/>
+        <response name="success" type="request-redirect" value="updateAccountForm">
+          <redirect-parameter name="dataSourceId" />
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="updateAccountForm"/>
     </request-map>
     <request-map uri="removeAccountDataSource">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeAccountDataSource"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="viewAccount"/>
     </request-map>
     <request-map uri="addAccountMarketingCampaign">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.addAccountMarketingCampaign"/>
-        <response name="success" type="request-redirect" value="updateAccountForm"/>
+        <response name="success" type="request-redirect" value="updateAccountForm">
+          <redirect-parameter name="dataSourceId" />
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="updateAccountForm"/>
     </request-map>
     <request-map uri="removeAccountMarketingCampaign">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.removeAccountMarketingCampaign"/>
-        <response name="success" type="request-redirect" value="updateAccountForm"/>
+        <response name="success" type="request-redirect" value="updateAccountForm">
+          <redirect-parameter name="dataSourceId" />
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="updateAccountForm"/>
     </request-map>
    <!-- the difference between these two is in the re-direct: the first one is used to add contact to account and return
@@ -381,13 +402,17 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="assignContactToAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.assignContactToAccount"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAccount" allowed-params="partyId"/>
+        <response name="success" type="request-redirect" value="viewAccount">
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="viewAccount"/>
     </request-map>
     <request-map uri="assignAccountToContact">
         <security https="true" auth="true"/>
         <event type="service" invoke="crmsfa.assignContactToAccount"/>
-        <response name="success" type="request-redirect" value="viewContact"/>
+        <response name="success" type="request-redirect" value="viewContact">
+          <redirect-parameter name="partyId" />
+        </response>
         <response name="error" type="view" value="viewContact"/>
     </request-map>
 

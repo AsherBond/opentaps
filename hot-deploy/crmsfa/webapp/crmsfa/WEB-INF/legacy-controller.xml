@@ -157,19 +157,25 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="changeOrderStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="changeOrderStatus"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="orderview"/>
     </request-map>
     <request-map uri="changeOrderItemStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="changeOrderItemStatus"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="orderview"/>
     </request-map>
     <request-map uri="cancelOrderItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="cancelOrderItem"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="orderview"/>
     </request-map>
     <request-map uri="createOrderAdjustment">
@@ -181,19 +187,25 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateOrderAdjustment">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateOrderAdjustment"/>
-        <response name="success" type="request-redirect-filterparam" value="editOrderItems" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="editOrderItems">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="editorderitems"/>
     </request-map>
     <request-map uri="deleteOrderAdjustment">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteOrderAdjustment"/>
-        <response name="success" type="request-redirect-filterparam" value="editOrderItems" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="editOrderItems">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="editorderitems"/>
     </request-map>
     <request-map uri="recalcTax">
         <security https="true" auth="true"/>
         <event type="service" invoke="recalcTaxTotal"/>
-        <response name="success" type="request-redirect-filterparam" value="editOrderItems" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="editOrderItems">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="editOrderItems"/>
     </request-map>
 
@@ -210,14 +222,18 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="allowordersplit">
         <security https="true" auth="true"/>
         <event type="service" invoke="setAllowOrderSplit"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="orderview"/>
     </request-map>
     <request-map uri="quickShipOrder">
         <security https="true" auth="true"/>
         <event type="service" invoke="quickShipEntireOrder"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
-        <response name="error" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId" />
+        </response>
+        <response name="error" type="request" value="orderview"/>
     </request-map>
     <request-map uri="updateOrderItems">
         <security https="true" auth="true"/>
@@ -245,7 +261,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateOrderNote">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateOrderNote"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="orderview"/>
     </request-map>
  
@@ -642,7 +660,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="emailorder">
         <security https="true" direct-request="false"/>
         <event type="service" path="async" invoke="sendOrderConfirmation"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-attributes="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="orderview"/>
     </request-map>
     <request-map uri="setOrderTerm">
@@ -877,19 +897,25 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createQuote">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createQuote"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-attributes="quoteId" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId" />
+        </response>
         <response name="error" type="view" value="EditQuote"/>
     </request-map>
     <request-map uri="updateQuote">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="updateQuote"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-attributes="quoteId" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId" />
+        </response>
         <response name="error" type="view" value="EditQuote"/>
     </request-map>
     <request-map uri="copyQuote">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="copyQuote"/>
-        <response name="success" type="request-redirect-filterparam" value="EditQuote" allowed-attributes="quoteId" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="EditQuote">
+          <redirect-parameter name="quoteId" />
+        </response>
         <response name="error" type="view" value="EditQuote"/>
     </request-map>
     
@@ -913,7 +939,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createQuoteItem">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createQuoteItem"/>
-        <response name="success" type="request-redirect-filterparam" value="ViewQuote" allowed-params="quoteId"/>
+        <response name="success" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId" />
+        </response>
         <response name="error" type="view" value="ViewQuote"/>
     </request-map>
     <request-map uri="updateQuoteItem">
@@ -1051,7 +1079,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateOrderItemShipGroup">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateOrderItemShipGroup"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="orderview"/>
     </request-map>
     
@@ -1070,7 +1100,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="updateOrderPaymentPreference">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateOrderPaymentPreference"/>
-        <response name="success" type="request-redirect-filterparam" value="orderview" allowed-params="orderId"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId" />
+        </response>
         <response name="error" type="view" value="orderview"/>
     </request-map>
  
