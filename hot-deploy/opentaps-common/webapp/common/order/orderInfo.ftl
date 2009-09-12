@@ -43,40 +43,64 @@ under the License.
   <#assign externalOrder = "(" + order.externalId + ")"/>
 </#if>
 
-<#-- we need check permission when it is a purchase order -->
+<#-- Approve Order action; we need check permission when it is a purchase order -->
 <#if (order.isCreated() || order.isProcessing() || order.isOnHold()) && (order.isSalesOrder() || security.hasEntityPermission("PRCH", "_ORD_APPRV", session))>
-  <#assign actionAction><@action url="changeOrderItemStatus?statusId=ITEM_APPROVED&amp;${paramString}" text="${uiLabelMap.OrderApproveOrder}"/></#assign>
-<#-- we need check permission when it is a purchase order -->
+  <#assign actionAction><@actionForm form="approveOrderAction" text="${uiLabelMap.OrderApproveOrder}"/></#assign>
+  <form name="approveOrderAction" method="post" action="<@ofbizUrl>changeOrderItemStatus</@ofbizUrl>">
+    <@inputHidden name="orderId" value=order.orderId />
+    <@inputHidden name="statusId" value="ITEM_APPROVED"/>
+  </form>
+<#-- Hold Order action; we need check permission when it is a purchase order -->
 <#elseif (order.isApproved() && (order.isSalesOrder() || security.hasEntityPermission("PRCH", "_ORD_APPRV", session)))>
-  <#assign actionAction><@action url="changeOrderStatus?statusId=ORDER_HOLD&amp;${paramString}" text="${uiLabelMap.OrderHold}"/></#assign>
+  <#assign actionAction><@actionForm form="holdOrderAction" text="${uiLabelMap.OrderHold}"/></#assign>
+  <form name="holdOrderAction" method="post" action="<@ofbizUrl>changeOrderStatus</@ofbizUrl>">
+    <@inputHidden name="orderId" value=order.orderId />
+    <@inputHidden name="statusId" value="ORDER_HOLD"/>
+  </form>
 </#if>
 
-<#-- we need check permission when it is a purchase order -->
+<#-- Complete Order action; we need check permission when it is a purchase order -->
 <#if order.isApproved() && !order.uncompleteItems?has_content && (order.isSalesOrder() || security.hasEntityPermission("PRCH", "_ORD_APPRV", session))>
-  <#assign completeOptionAction><@action url="changeOrderStatus?orderId=${order.orderId}&amp;statusId=ORDER_COMPLETED" text="${uiLabelMap.OrderCompleteOrder}"/></#assign>
+  <#assign completeOptionAction><@actionForm form="completeOrderAction" text="${uiLabelMap.OrderCompleteOrder}"/></#assign>
+  <form name="completeOrderAction" method="post" action="<@ofbizUrl>changeOrderStatus</@ofbizUrl>">
+    <@inputHidden name="orderId" value=order.orderId />
+    <@inputHidden name="statusId" value="ORDER_COMPLETED"/>
+  </form>
 </#if>
-<#assign pdfAction><@action url="order.pdf?orderId=${order.orderId}" text="${uiLabelMap.OpentapsContentType_ApplicationPDF}"/></#assign>
+<#-- Order PDF action -->
+<#assign pdfAction><@actionForm form="orderPdfAction" text="${uiLabelMap.OpentapsContentType_ApplicationPDF}"/></#assign>
+<form name="orderPdfAction" method="get" action="<@ofbizUrl>order.pdf</@ofbizUrl>">
+  <@inputHidden name="orderId" value=order.orderId />
+</form>
+<#-- Order Picklist PDF action -->
 <#if order.isPickable()>
-  <#assign picklistAction><@action url="shipGroups.pdf?orderId=${order.orderId}" text="${uiLabelMap.ProductPickList}"/></#assign>
+  <#assign picklistAction><@actionForm form="orderPicklistPdfAction" text="${uiLabelMap.ProductPickList}"/></#assign>
+  <form name="orderPicklistPdfAction" method="get" action="<@ofbizUrl>shipGroups.pdf</@ofbizUrl>">
+    <@inputHidden name="orderId" value=order.orderId />
+  </form>
 </#if>
-  <#assign emailOrderAction><@action url="writeOrderEmail?orderId=${order.orderId}" text="${uiLabelMap.CommonEmail}"/></#assign>
+<#-- Order Email action -->
+<#assign emailOrderAction><@actionForm form="orderEmailAction" text="${uiLabelMap.CommonEmail}"/></#assign>
+<form name="orderEmailAction" method="get" action="<@ofbizUrl>writeOrderEmail</@ofbizUrl>">
+  <@inputHidden name="orderId" value=order.orderId />
+</form>
 <#if actionAction?has_content || completeOptionAction?has_content>  
-  <#assign separatorLineAction><@action url="" text="${uiLabelMap.OpentapsDefaultActionSeparator}"/></#assign>
+  <#assign separatorLineAction><option value="">${uiLabelMap.OpentapsDefaultActionSeparator}</option></#assign>
 </#if>
 <div class="screenlet">
   <div class="subSectionHeader">
     <div class="subSectionTitle">${uiLabelMap.OrderOrder} #${order.orderId} ${externalOrder?if_exists} ${uiLabelMap.CommonInformation}</div>
     
-  <div class="subMenuBar">
-    <@selectAction name="myProfileContactMech" prompt="${uiLabelMap.CommonSelectOne}">
-      ${actionAction?if_exists}
-      ${completeOptionAction?if_exists}
-      ${separatorLineAction?if_exists}
-      ${picklistAction?if_exists}
-      ${pdfAction?if_exists}
-      ${emailOrderAction?if_exists}
-    </@selectAction>
-  </div>
+    <div class="subMenuBar">
+      <@selectActionForm name="orderActions" prompt="${uiLabelMap.CommonSelectOne}">
+        ${actionAction?if_exists}
+        ${completeOptionAction?if_exists}
+        ${separatorLineAction?if_exists}
+        ${picklistAction?if_exists}
+        ${pdfAction?if_exists}
+        ${emailOrderAction?if_exists}
+      </@selectActionForm>
+    </div>
     
     <div class="subMenuBar">${picklistLink?if_exists}${pdfLink?if_exists}${emailOrderLink?if_exists}${actionLink?if_exists}${completeOption?if_exists}</div>
   </div>
