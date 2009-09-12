@@ -38,9 +38,6 @@
 
 <project name="Warehouse - Opentaps Warehouse Component" default="jar" basedir=".">
 
-    <filelist id="commons-builds" dir=".."
-        files="opentaps-common/build.xml"/>
-
     <!-- ================================================================== -->
     <!-- Initialization of all property settings                            -->
     <!-- ================================================================== -->
@@ -65,13 +62,7 @@
         <property name="ofbiz.dir" value="../../"/> 
     </target>
 
-    <target name="buildCommons">
-        <subant>
-            <filelist refid="commons-builds"/>
-        </subant>
-    </target>
-
-    <target name="classpath" depends="buildCommons">
+    <target name="classpath">
         <path id="local.class.path">
             <fileset dir="${lib.dir}" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>

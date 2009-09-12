@@ -38,14 +38,6 @@
 
 <project name="opentaps-tests - Opentaps Testing Component" default="jar" basedir=".">
 
-    <filelist id="opentaps-builds" dir="..">
-        <file name="opentaps-common/build.xml"/>
-        <file name="crmsfa/build.xml"/>
-        <file name="financials/build.xml"/>
-        <file name="purchasing/build.xml"/>
-        <file name="warehouse/build.xml"/>
-    </filelist>
-
     <!-- ================================================================== -->
     <!-- Initialization of all property settings                            -->
     <!-- ================================================================== -->
@@ -65,13 +57,7 @@
         <property name="ofbiz.dir" value="../../"/> 
     </target>
 
-    <target name="buildOpentaps">
-        <subant>
-            <filelist refid="opentaps-builds"/>
-        </subant>
-    </target>
-
-    <target name="classpath" depends="buildOpentaps">
+    <target name="classpath">
         <path id="local.class.path">
             <fileset dir="${lib.dir}" includes="*.jar"/>
             <fileset dir="${ofbiz.dir}/framework/base/lib" includes="*.jar"/>

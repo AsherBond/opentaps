@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="hot-deploy components Build" default="build" basedir=".">
+
+  <!-- ================================================================== -->
+  <!-- Compile all components, ordered to satisfy dependencies            -->
+  <!-- ================================================================== -->
+
+  <target name="clean">
+    <subant target="clean">
+      <fileset dir="." casesensitive="no">
+        <exclude name="build.xml"/>
+        <include name="**/build.xml"/>
+      </fileset>
+    </subant>
+  </target>
+
+  <target name="build" depends="">
+    <subant inheritall="false">
+      <filelist dir="." files="opentaps-common/build.xml"/>
+      <filelist dir="." files="crmsfa/build.xml"/>
+      <filelist dir="." files="purchasing/build.xml"/>
+      <filelist dir="." files="financials/build.xml"/>
+      <filelist dir="." files="warehouse/build.xml"/>
+      <filelist dir="." files="dataimport/build.xml"/>
+      <filelist dir="." files="funambol/build.xml"/>
+      <filelist dir="." files="opentaps-tests/build.xml"/>
+    </subant>
+  </target>
+  
+
+  <!-- ================================================================== -->
+  <!-- GWT tasks, only some components use GWT                            -->
+  <!-- ================================================================== -->
+
+  <target name="clean-gwt" depends="">
+    <subant inheritall="false" target="clean-gwt">
+      <filelist dir="." files="opentaps-common/build.xml"/>
+      <filelist dir="." files="purchasing/build.xml"/>
+      <filelist dir="." files="crmsfa/build.xml"/>
+      <filelist dir="." files="financials/build.xml"/>
+      <filelist dir="." files="warehouse/build.xml"/>
+    </subant>
+  </target>
+
+  <target name="gwt-code">
+    <subant inheritall="false" target="gwt-code">
+      <filelist dir="." files="opentaps-common/build.xml"/>
+      <filelist dir="." files="crmsfa/build.xml"/>
+      <filelist dir="." files="purchasing/build.xml"/>
+      <filelist dir="." files="financials/build.xml"/>
+      <filelist dir="." files="warehouse/build.xml"/>
+      <!--filelist dir="." files="hot-deploy/analytics/build.xml"/-->
+    </subant>
+  </target>
+
+</project>

@@ -108,9 +108,7 @@ under the License.
 
     <target name="clean">
         <subant target="clean">
-            <fileset dir="${basedir}/hot-deploy" casesensitive="no">
-                <include name="**/build.xml"/>
-            </fileset>
+            <filelist dir="." files="hot-deploy/build.xml"/>
         </subant>
 
         <subant target="clean"  failonerror="${specialpurpose.present}" description="Use failonerror=false in case the specialpurpose directory is not there">
@@ -133,11 +131,7 @@ under the License.
 
     <target name="clean-gwt" depends="">
         <subant inheritall="false" target="clean-gwt">
-            <filelist dir="." files="hot-deploy/opentaps-common"/>
-            <filelist dir="." files="hot-deploy/purchasing/build.xml"/>
-            <filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
-            <filelist dir="." files="hot-deploy/financials/build.xml"/>
-            <filelist dir="." files="hot-deploy/warehouse/build.xml"/>
+            <filelist dir="." files="hot-deploy/build.xml"/>
         </subant>
     </target>
 
@@ -171,12 +165,7 @@ under the License.
     <target name="gwt-code">
         <echo message="[gwt code] ========== Start Building GWT Code (Compile) =========="/>
         <subant inheritall="false" target="gwt-code">
-            <filelist dir="." files="hot-deploy/opentaps-common/build.xml"/>
-            <filelist dir="." files="hot-deploy/crmsfa/build.xml"/>
-            <filelist dir="." files="hot-deploy/purchasing/build.xml"/>
-            <filelist dir="." files="hot-deploy/financials/build.xml"/>
-            <filelist dir="." files="hot-deploy/warehouse/build.xml"/>
-            <!--filelist dir="." files="hot-deploy/analytics/build.xml"/-->
+            <filelist dir="." files="hot-deploy/build.xml"/>
         </subant>
         <echo message="[gwt code] ========== Done Building GWT Code (Compile) =========="/>
     </target>
@@ -222,10 +211,7 @@ under the License.
             <filelist dir="." files="specialpurpose/build.xml"/>
         </subant>
         <subant inheritall="false">
-            <fileset dir="${basedir}/hot-deploy" casesensitive="no">
-                <exclude name="disabled/**"/>
-                <include name="**/build.xml"/>
-            </fileset>
+            <filelist dir="." files="hot-deploy/build.xml"/>
         </subant>
         <subant inheritall="false" failonerror="true">
             <filelist dir="." files="hot-deploy/opentaps-common/build-aspects.xml"/>
