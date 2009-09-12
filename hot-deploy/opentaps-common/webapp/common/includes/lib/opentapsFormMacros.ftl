@@ -1015,12 +1015,36 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 <#macro selectAction name prompt=uiLabelMap.OpentapsDefaultActionPrompt>
-    <select id="${name}" name="${name}" class="inputBox" onchange="opentaps.changeLocation(null, '${name}');">
-        <option value="">${prompt}</option>
-        <option value="">${uiLabelMap.OpentapsDefaultActionSeparator}</option>
-        <#nested>
-    </select>
+  <select id="${name}" name="${name}" class="inputBox" onchange="opentaps.changeLocation(null, '${name}');">
+    <option value="">${prompt}</option>
+    <option value="">${uiLabelMap.OpentapsDefaultActionSeparator}</option>
+    <#nested>
+  </select>
 </#macro>
+
+
+<#-- Macro selectActionForm implements drop-down based menu widget                 -->
+<#--  like selectAction but instead of changing the location, it will post the     -->
+<#--  given form                                                                   -->
+<#-- Should be used jointly with macro <@actionForm />                             -->
+<#-- Example:                                                                      -->
+<#--    <@selectActionForm name="ID">                                              -->
+<#--        <@actionForm form="someFormName" text="Label Text"/>                   -->
+<#--        etc ...                                                                -->
+<#--    </@selectActionForm>                                                       -->
+
+<#macro actionForm form text selected=false>
+  <option value="${form}" <#if selected>selected="selected"</#if>>${text}</option>
+</#macro>
+
+<#macro selectActionForm name prompt=uiLabelMap.OpentapsDefaultActionPrompt>
+  <select id="${name}" name="${name}" class="inputBox" onchange="opentaps.selectForm('${name}');">
+    <option value="">${prompt}</option>
+    <option value="">${uiLabelMap.OpentapsDefaultActionSeparator}</option>
+    <#nested>
+  </select>
+</#macro>
+
 
 <#macro paginate name list="" rememberOrderBy=true rememberPage=true renderExcelButton=true params...>
   <@paginateTransform name=name list=list rememberOrderBy=rememberOrderBy rememberPage=rememberPage renderExcelButton=renderExcelButton context=context params=params><#nested></@paginateTransform>

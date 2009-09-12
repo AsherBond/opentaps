@@ -656,6 +656,34 @@ opentaps.changeLocation = function (/*String*/ href, /*String*/ id) {
     }
 }
 
+opentaps.selectForm = function (/*String*/ id) {
+  var ctrl = document.getElementById(id);
+  if (ctrl && ctrl.value) {
+    opentaps.submitForm(ctrl.value, null);
+  }
+}
+
+opentaps.submitForm = function (/*String*/ formName, /*String*/ formId) {
+  if (formName && formName.length > 0) {
+    if (document.forms[formName]) {
+      document.forms[formName].submit();
+      return;
+    } else {
+      alert("Cannot find form to submit with name [" + formName + "]");
+    }
+  } else if (formId && formId.length > 0) {
+    var form = document.getElementById(formId);
+    if (form && form.action) {
+      form.submit();
+      return;
+    } else {
+      alert("Cannot find form to submit with id [" + formId + "]");
+    }
+  } else {
+    alert("submitForm: no formName or formId was given !");
+  }
+}
+
 // Change a tax party dropdown
 opentaps.changeTaxParty = function(geo, party) {
   var index = geo.selectedIndex;
