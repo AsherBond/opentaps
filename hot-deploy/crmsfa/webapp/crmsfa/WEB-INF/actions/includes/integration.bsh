@@ -14,14 +14,21 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.util.UtilConfig;
 
 // mapping for screens brought in from ofbiz - depending on their headerItems, we set the sections in our CRM application
 if (context.get("headerItem") != null) {
     headerItemSections = UtilProperties.getProperties("headerItemSections.properties");
     item = "headerItem." + context.get("headerItem");
-    context.put("sectionName", headerItemSections.get(item));
+    sectionName = headerItemSections.get(item);
+    if (UtilValidate.isEmpty(sectionName)) {
+        Debug.logError("No sectionName found for headerItem: [" + context.get("headerItem") + "]", "");
+    }
+
+    context.put("sectionName", sectionName);
     context.put("pageTitleLabel", headerItemSections.get(item + ".pageTitleLabel"));
     context.put("sectionHeaderUiLabel", headerItemSections.get(item + ".sectionHeaderUiLabel"));
     context.put("sectionDecoratorLocation", headerItemSections.get(item + ".sectionDecoratorLocation"));
