@@ -129,6 +129,9 @@ applications/order/src/org/ofbiz/order/order/OrderReturnServices.java
 applications/accounting/servicedef/services_paymentmethod.xml
 - Fix gift card number should be required, service has NPE if not given, see JIRA 2926
 
+applications/order/src/org/ofbiz/order/shoppingcart/CheckOutEvents.java
+- Revert Ofbiz change, only Purchase Order should require Terms. Avoid the terms screen to appear in the sales order checkout process.
+
 Other API Changes
 -----------------
 

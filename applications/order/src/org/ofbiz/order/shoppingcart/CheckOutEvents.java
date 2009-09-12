@@ -902,7 +902,7 @@ public class CheckOutEvents {
         boolean requireOptions = true;
         boolean requireShipGroups = false;
         boolean requirePayment = !cart.getOrderType().equals("PURCHASE_ORDER");
-        boolean requireTerm = true;
+        boolean requireTerm = cart.getOrderType().equals("PURCHASE_ORDER");
         boolean requireAdditionalParty = isAnonymousCheckout;
         boolean isSingleUsePayment = true;
         // these options are not available to anonymous shoppers (security)
