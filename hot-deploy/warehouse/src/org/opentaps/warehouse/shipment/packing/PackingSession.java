@@ -125,7 +125,7 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
         switch (checkCode) {
             case 0:
                 // not enough reserved
-                throw new GeneralException("Not enough inventory reservation available; cannot pack the item! [201]");
+                throw new GeneralException("Not enough inventory reservation available; cannot pack the item [" + orderItemSeqId + "], " + quantity + " x product [" + productId + "]");
             case 1:
                 // we're all good to go; quantity already updated
                 break;
@@ -578,7 +578,7 @@ public class PackingSession extends org.ofbiz.shipment.packing.PackingSession im
     }
 
     @SuppressWarnings("unchecked")
-    public Map getProductQuantities() {
+    public Map<String, BigDecimal> getProductQuantities() {
         Map<String, BigDecimal> productIds = new HashMap<String, BigDecimal>();
         Iterator<PackingSessionLine> lit = getLines().iterator();
         while (lit.hasNext()) {

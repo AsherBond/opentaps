@@ -219,9 +219,9 @@ under the License.
             <#list itemInfos as orderItem>
               <#assign inputQty = Static["org.opentaps.common.order.UtilOrder"].getQuantityToPack(orderItem, shipGroupSeqId, facilityId, packingSession)/>
               <#if orderItem.cancelQuantity?exists>
-                <#assign orderItemQuantity = orderItem.quantity - orderItem.cancelQuantity>
+                <#assign orderItemQuantity = orderItem.quantity - orderItem.cancelQuantity/>
               <#else>
-                <#assign orderItemQuantity = orderItem.quantity>
+                <#assign orderItemQuantity = orderItem.quantity/>
               </#if>
               <#if inputQty gt 0>
                   <tr>
@@ -246,6 +246,7 @@ under the License.
                       </select>
                     </td>
                     <input type="hidden" name="prd_${orderItem.orderItemSeqId}" value="${orderItem.productId?if_exists}">
+                    <input type="hidden" name="ite_${orderItem.orderItemSeqId}" value="${orderItem.orderItemSeqId}">
                   </tr>
               </#if>
             </#list>
