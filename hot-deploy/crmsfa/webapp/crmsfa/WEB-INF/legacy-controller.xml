@@ -254,7 +254,9 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="createordernote">
         <security https="true" auth="true"/>
         <event type="service" invoke="createOrderNote"/>
-        <response name="success" type="view" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="createnewnote"/>
     </request-map>
 

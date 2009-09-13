@@ -40,7 +40,8 @@ under the License.
   <@sectionHeader title=uiLabelMap.OrderAddNote />
     <table class="twoColumnForm">
     <#if security.hasEntityPermission("ORDERMGR", "_VIEW", session)>
-      <form method="post" action="<@ofbizUrl>createordernote/${donePage}</@ofbizUrl>" name="createnoteform">
+      <form method="post" action="<@ofbizUrl>createordernote</@ofbizUrl>" name="createnoteform">
+        <@inputHidden name="orderId" value=orderId />
         <@inputTextareaRow title=uiLabelMap.OrderNote name="note" cols=70 />
         <@inputIndicatorRow title=uiLabelMap.OrderInternalNote name="internalNote" />
         <@displayRow title="" text="<i>${uiLabelMap.OrderInternalNoteMessage}</i>" />
