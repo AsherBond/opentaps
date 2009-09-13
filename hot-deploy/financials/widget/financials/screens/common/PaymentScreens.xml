@@ -38,8 +38,8 @@
             <actions>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
                 <set field="paymentId" from-field="parameters.paymentId"/>
-                <entity-one entity-name="Payment" value-name="payment">
-                    <field-map field-name="paymentId" env-name="parameters.paymentId"/>
+                <entity-one entity-name="Payment" value-field="payment">
+                    <field-map field-name="paymentId" from-field="parameters.paymentId"/>
                 </entity-one>
                 <property-to-field field="defaultCurrencyUomId" resource="general" property="currency.uom.id.default" default="USD" />
                 <script location="component://financials/webapp/financials/WEB-INF/actions/includes/editPayment.bsh"/>
