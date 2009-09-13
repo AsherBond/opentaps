@@ -231,7 +231,7 @@ under the License.
                     <td align="right"><div class="tabletext">${orderItemQuantity}</td>
                     <td align="right"><div class="tabletext">${qohByProductId?default({})[orderItem.productId]?default(0)}</td>
                     <td align="right"><div class="tabletext">${shippedQuantity?default(0)}</td>
-                    <td align="right"><div class="tabletext">${packingSession.getPackedQuantity(orderId, orderItem.orderItemSeqId, shipGroupSeqId)}</td>
+                    <td align="right"><div class="tabletext">${packingSession.getPackedQuantity(orderId, orderItem.orderItemSeqId, shipGroupSeqId, orderItem.productId!)}</td>
                     <td>&nbsp;&nbsp;</td>
                     <td align="center">
                       <input type="text" class="inputBox" size="7" name="qty_${orderItem.orderItemSeqId}" value="${inputQty}">

@@ -166,10 +166,7 @@ if (UtilValidate.isNotEmpty(orderId)) {
                     productStoreId = productStore.get("productStoreId");
                     prorateShipping = productStore.get("prorateShipping");
                     shippableItemInfo = UtilOrder.getShippableItems(orderHeader, facilityId, shipGroupSeqId);
-                    shippableTotal = new Double(orh.getShippableTotalBd(shipGroupSeqId).doubleValue());
-                    shippableWeight = new Double(orh.getShippableWeightBd(shipGroupSeqId).doubleValue());
-                    shippableQuantity = new Double(orh.getShippableQuantityBd(shipGroupSeqId).doubleValue());
-                    orderShippingCharges = orh.getShippingTotalBd();
+                    orderShippingCharges = orh.getShippingTotal();
                     context.put("orderShippingCharges", orderShippingCharges);
                     context.put("productStoreId", productStoreId);
                     context.put("prorateShipping", prorateShipping);
