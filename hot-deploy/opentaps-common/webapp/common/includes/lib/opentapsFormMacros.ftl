@@ -1126,16 +1126,16 @@ For more information, please see documentation/opentapsFormMacros.html
         </#if>
         <#assign endIndex = beginIndex + currentResultSize - 1/>
         <#if totalResultSize?has_content && totalResultSize != -1>
-            <#assign paginationText = uiLabelMap.OpentapsPaginationWithTotal?interpret>
+            <#assign paginationText = "${StringUtil.wrapString(uiLabelMap.OpentapsPaginationWithTotal)}"?interpret>
         <#else>
-            <#assign paginationText = uiLabelMap.OpentapsPaginationWithoutTotal?interpret>
+            <#assign paginationText = "${StringUtil.wrapString(uiLabelMap.OpentapsPaginationWithoutTotal)}"?interpret>
         </#if>
         <div class="pagination">
             <#if beginIndex &gt; 1>
                 <span class="paginationPrevious"><a href="<@ofbizUrl>${requestName}?VIEW_INDEX=${beginIndex - viewSize}&amp;VIEW_SIZE=${viewSize}${extraParameters?html}</@ofbizUrl>">${uiLabelMap.CommonPrevious}</a></span>
             </#if>
             <span class="paginationText"><@paginationText/></span>
-            <#if endIndex < totalResultSize>
+            <#if endIndex &lt; totalResultSize>
                 <span class="paginationNext"><a href="<@ofbizUrl>${requestName}?VIEW_INDEX=${beginIndex + viewSize}&amp;VIEW_SIZE=${viewSize}${extraParameters?html}</@ofbizUrl>">${uiLabelMap.CommonNext}</a></span>
             </#if>
         </div>
