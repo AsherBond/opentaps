@@ -28,15 +28,15 @@
         <description>Get backOrderedOrders from ReservedItemOrderCount
           and backOrderedProducts from ReservedItemProductCount</description>
         <attribute name="facilityId" type="String" mode="IN" optional="false"/>
-        <attribute name="backOrderedOrders" type="Integer" mode="OUT" optional="true"/>
-        <attribute name="backOrderedProducts" type="Integer" mode="OUT" optional="true"/>
+        <attribute name="backOrderedOrders" type="Long" mode="OUT" optional="false"/>
+        <attribute name="backOrderedProducts" type="Long" mode="OUT" optional="false"/>
     </service>
 
     <service name="getPickedPicklists" engine="bsh"
             location="summary/pickedPicklistsService.bsh" invoke="">
         <description>Get Picked Picklists from PicklistItemAndOdrItmShipGrp</description>
         <attribute name="facilityId" type="String" mode="IN" optional="false"/>
-        <attribute name="pickedPicklistIds" type="List" mode="OUT" optional="true"/>
+        <attribute name="pickedPicklistIds" type="List" mode="OUT" optional="false"/>
     </service>
 
     <service name="populateWarehouseSummaryData" engine="bsh"

@@ -18,12 +18,17 @@
 
 import java.math.BigDecimal;
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.service.ServiceUtil;
 
-if ( !context.containsKey("facilityId") ) return;
+if ( !context.containsKey("facilityId") ) {
+    Debug.logError("backOrderedOrders.bsh: no facilityId set", "");
+    return;
+}
 
 // bshService.bsh
 delegator = dctx.getDelegator();
@@ -38,13 +43,20 @@ conditions = new EntityConditionList( UtilMisc.toList(
 ), EntityOperator.AND);
 fields = UtilMisc.toList("orderId");
 backOrderedOrders = EntityUtil.getFirst( delegator.findByCondition("ReservedItemOrderCount", conditions, fields, null) );
-orderCountDouble = (backOrderedOrders == null ? null : backOrderedOrders.getLong("orderId"));
-orderCount = (orderCountDouble == null ? 0 : Math.max(orderCountDouble.doubleValue(), 0));
+Debug.logInfo("backOrderedOrders = " + backOrderedOrders, "");
+orderCountLong = (backOrderedOrders == null ? null : backOrderedOrders.getLong("orderId"));
+orderCount = (orderCountLong == null ? 0 : Math.max(orderCountLong, 0));
 context.put("backOrderedOrders", orderCount);
 
 // Back ordered products
 fields = UtilMisc.toList("productId");
 backOrderedProducts = EntityUtil.getFirst( delegator.findByCondition("ReservedItemProductCount", conditions, fields, null) );
-productCountDouble = (backOrderedProducts == null ? null : backOrderedProducts.getLong("productId"));
-productCount = (productCountDouble == null ? 0 : Math.max(productCountDouble.doubleValue(), 0));
+Debug.logInfo("backOrderedProducts = " + backOrderedProducts, "");
+productCountLong = (backOrderedProducts == null ? null : backOrderedProducts.getLong("productId"));
+productCount = (productCountLong == null ? 0 : Math.max(productCountLong, 0));
 context.put("backOrderedProducts", productCount);
+
+result = ServiceUtil.returnSuccess();
+result.put("backOrderedProducts", productCount);
+result.put("backOrderedOrders", orderCount);
+return result;

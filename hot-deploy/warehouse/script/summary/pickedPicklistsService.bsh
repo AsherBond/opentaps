@@ -16,12 +16,17 @@
 
 // @author Fabien Carrion
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.service.ServiceUtil;
 
-if ( !context.containsKey("facilityId") ) return;
+if ( !context.containsKey("facilityId") ) {
+    Debug.logError("pickedPicklistsService.bsh: no facilityId set", "");
+    return;
+}
 
 // bshService.bsh
 delegator = dctx.getDelegator();
@@ -35,3 +40,7 @@ conditions.add(new EntityConditionList(UtilMisc.toList(new EntityExpr("oisgStatu
 picklistItems = delegator.findByCondition("PicklistItemAndOdrItmShipGrp", new EntityConditionList(conditions, EntityOperator.AND), null, UtilMisc.toList("piOrderId", "piShipGroupSeqId", "oiProductId"));
 picklistIds = EntityUtil.getFieldListFromEntityList(picklistItems, "pPicklistId", true);
 context.put("pickedPicklistIds", picklistIds);
+
+result = ServiceUtil.returnSuccess();
+result.put("pickedPicklistIds", picklistIds);
+return result;

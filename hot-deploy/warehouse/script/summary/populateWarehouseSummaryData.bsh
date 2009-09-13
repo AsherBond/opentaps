@@ -16,6 +16,7 @@
 
 // @author Fabien Carrion
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.*;
@@ -71,6 +72,7 @@ if (UtilValidate.isNotEmpty(facilities)) {
 
         // Back orders
         serviceResult = dispatcher.runSync("getBackOrderedCounts", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
+        Debug.logInfo("populateWarehouseSummaryData.bsh: result for getBackOrderedCounts: " + serviceResult, "");
         backOrderedOrders = serviceResult.get("backOrderedOrders");
         backOrderedProducts = serviceResult.get("backOrderedProducts");
         if (backOrderedOrders == null) {
