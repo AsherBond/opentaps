@@ -64,6 +64,5 @@
     </#list>
 </table>
 
-<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <@pagination viewIndex=viewIndex viewSize=viewSize currentResultSize=orders?size requestName="readyToShip" totalResultSize=ordersTotalSize/>
 
