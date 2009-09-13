@@ -50,10 +50,10 @@
         <field name="correspondingPoId" title="${uiLabelMap.OpentapsPONumber}">
             <text/>
         </field>
-        <field name="fromDate" title="${uiLabelMap.CommonFromDate}" position="1">
+        <field name="fromDate" title="${uiLabelMap.CommonFromDate}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="thruDate" title="${uiLabelMap.CommonThruDate}" position="2">
+        <field name="thruDate" title="${uiLabelMap.CommonThruDate}" position="2" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="createdBy" title="${uiLabelMap.CommonCreatedBy}">
@@ -77,7 +77,7 @@
         list-name="ordersListIt">
         <field name="orderDate" title="${uiLabelMap.OrderOrderDate}"
             header-link="${listSortTarget}?ordersOrderBy=orderDate&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
-            <display description="${bsh:org.ofbiz.base.util.UtilDateTime.timeStampToString(orderDate, org.opentaps.common.util.UtilDate.getDateTimeFormat(locale), timeZone, locale)}"/>
+            <display description="${groovy:org.ofbiz.base.util.UtilDateTime.timeStampToString(orderDate, org.opentaps.common.util.UtilDate.getDateTimeFormat(locale), timeZone, locale)}"/>
         </field>
         <field name="orderId" title="${uiLabelMap.CrmOrderNameID}" widget-style="linktext"
             use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))"
@@ -95,14 +95,14 @@
         </field>
         <field name="partyId" title="${uiLabelMap.CrmCustomer}"
             header-link="${listSortTarget}?ordersOrderBy=partyId&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
-            <display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/>
+            <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/>
         </field>
         <field name="statusId" title="${uiLabelMap.CommonStatus}"
             header-link="${listSortTarget}?ordersOrderBy=statusId&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
             <display-entity entity-name="StatusItem"/>
         </field>
         <field name="shipByDate" title="${uiLabelMap.OrderShipBeforeDate}">
-            <display description="${bsh:org.opentaps.common.order.UtilOrder.getEarliestShipByDate(delegator, orderId, timeZone, locale);}"/>
+            <display description="${groovy:org.opentaps.common.order.UtilOrder.getEarliestShipByDate(delegator, orderId, timeZone, locale);}"/>
         </field>
         <field name="grandTotal" title="${uiLabelMap.OrderAmount}"
             header-link="${listSortTarget}?ordersOrderBy=grandTotal&amp;${findParams}#ListOrders" header-link-style="orderByHeaderLink">
