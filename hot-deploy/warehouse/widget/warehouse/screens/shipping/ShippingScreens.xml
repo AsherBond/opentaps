@@ -319,9 +319,9 @@ under the License.
                 <service service-name="findOrdersToPickMove">
                     <field-map field-name="facilityId"/>
                 </service>
-                <entity-condition entity-name="Picklist" list-name="picklistActiveList">
+                <entity-condition entity-name="Picklist" list="picklistActiveList">
                     <condition-list combine="and">
-                        <condition-expr field-name="facilityId" operator="equals" env-name="parameters.facilityId"/>
+                        <condition-expr field-name="facilityId" operator="equals" from-field="parameters.facilityId"/>
                         <condition-expr field-name="statusId" operator="not-equals" value="PICKLIST_PICKED"/>
                         <condition-expr field-name="statusId" operator="not-equals" value="PICKLIST_PACKED"/>
                         <condition-expr field-name="statusId" operator="not-equals" value="PICKLIST_CANCELLED"/>
@@ -390,17 +390,17 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="WarehouseScheduleShipments"/>
                 <set field="sectionHeaderUiLabel" value="WarehouseScheduleShipments"/>  
-                <entity-condition entity-name="ShipmentRouteSegmentDetail" list-name="shipmentRouteSegments">
+                <entity-condition entity-name="ShipmentRouteSegmentDetail" list="shipmentRouteSegments">
                     <condition-list combine="and">
-                        <condition-expr field-name="originFacilityId" operator="equals" env-name="parameters.facilityId"/>
+                        <condition-expr field-name="originFacilityId" operator="equals" from-field="parameters.facilityId"/>
                         <condition-expr field-name="statusId" operator="equals" value="SHIPMENT_PACKED"/>
                         <condition-expr field-name="carrierServiceStatusId" operator="equals" value="SHRSCS_NOT_STARTED"/>
                     </condition-list>
                     <order-by field-name="shipmentId DESC"/>
                 </entity-condition>
-                <entity-one entity-name="Facility" value-name="facility"/>
-                <entity-one entity-name="Uom" value-name="defaultWeightUom" use-cache="true" auto-field-map="false">
-                    <field-map env-name="facility.defaultWeightUomId" field-name="uomId"/>
+                <entity-one entity-name="Facility" value-field="facility"/>
+                <entity-one entity-name="Uom" value-field="defaultWeightUom" use-cache="true" auto-field-map="false">
+                    <field-map from-field="facility.defaultWeightUomId" field-name="uomId"/>
                 </entity-one>
             </actions>
             <widgets>
@@ -460,8 +460,8 @@ under the License.
                 <section>
                     <condition>
                         <and>
-                            <not><if-empty field-name="hasPermission"/></not>
-                            <if-compare field-name="hasPermission" operator="equals" type="Boolean" value="true"/>
+                            <not><if-empty field="hasPermission"/></not>
+                            <if-compare field="hasPermission" operator="equals" type="Boolean" value="true"/>
                         </and>
                     </condition>
                     <widgets>
@@ -490,8 +490,8 @@ under the License.
                 <section>
                     <condition>
                         <and>
-                            <not><if-empty field-name="hasViewPermission"/></not>
-                            <if-compare field-name="hasViewPermission" operator="equals" type="Boolean" value="true"/>
+                            <not><if-empty field="hasViewPermission"/></not>
+                            <if-compare field="hasViewPermission" operator="equals" type="Boolean" value="true"/>
                         </and>
                     </condition>
                     <widgets>
