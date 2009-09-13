@@ -271,9 +271,9 @@ under the License.
                 <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/EditInventoryItem.bsh"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/setInventoryItemToHistory.bsh"/>
-                <entity-condition entity-name="OrderItemShipGrpInvRes" list-name="inventoryItemReservations">
+                <entity-condition entity-name="OrderItemShipGrpInvRes" list="inventoryItemReservations">
                     <condition-list combine="and">
-                        <condition-expr field-name="inventoryItemId" operator="equals" env-name="inventoryItemId"/>
+                        <condition-expr field-name="inventoryItemId" operator="equals" from-field="inventoryItemId"/>
                     </condition-list>
                     <order-by field-name="reservedDatetime"/>
                 </entity-condition>
@@ -290,7 +290,7 @@ under the License.
                         <include-form name="InventoryItemReservations" location="component://product/webapp/facility/inventory/InventoryForms.xml"/>
                         <section> 
                             <condition>
-                                <if-compare field-name="inventoryItem.inventoryItemTypeId" operator="equals" value="NON_SERIAL_INV_ITEM"/>
+                                <if-compare field="inventoryItem.inventoryItemTypeId" operator="equals" value="NON_SERIAL_INV_ITEM"/>
                             </condition>
                             <widgets>
                                 <container>
