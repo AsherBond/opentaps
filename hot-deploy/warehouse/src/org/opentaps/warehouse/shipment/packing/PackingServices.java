@@ -55,6 +55,7 @@ import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
+import java.math.BigDecimal;
 
 /**
  * Services for Warehouse application Shipping section.
@@ -103,10 +104,10 @@ public final class PackingServices {
         Boolean force = (Boolean) context.get("forceComplete");
         if (force == null || !force.booleanValue()) {
             List<String> errMsgs = FastList.newInstance();
-            Map<String, Double> productQuantities = session.getProductQuantities();
+            Map<String, BigDecimal> productQuantities = session.getProductQuantities();
             Set<String> keySet = productQuantities.keySet();
             for (String productId : keySet) {
-                Double quantity = productQuantities.get(productId);
+                BigDecimal quantity = productQuantities.get(productId);
                 Map<String, Object> serviceResult = null;
                 try {
                     serviceResult = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", productId, "facilityId", session.getFacilityId(), "userLogin", userLogin));
@@ -116,8 +117,8 @@ public final class PackingServices {
                 } catch (GenericServiceException e) {
                     return UtilMessage.createAndLogServiceError(e, MODULE);
                 }
-                Double quantityOnHandTotal = (Double) serviceResult.get("quantityOnHandTotal");
-                if ((UtilValidate.isNotEmpty(quantityOnHandTotal)) && quantityOnHandTotal.doubleValue() - quantity.doubleValue() < 0) {
+                BigDecimal quantityOnHandTotal = (BigDecimal) serviceResult.get("quantityOnHandTotal");
+                if ((UtilValidate.isNotEmpty(quantityOnHandTotal)) && quantityOnHandTotal.subtract(quantity).signum() < 0) {
                     errMsgs.add(UtilMessage.expandLabel("WarehouseErrorInventoryItemProductQOHUnderZero", locale, UtilMisc.toMap("productId", productId)));
                 }
             }
