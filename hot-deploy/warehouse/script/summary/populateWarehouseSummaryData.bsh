@@ -73,6 +73,13 @@ if (UtilValidate.isNotEmpty(facilities)) {
         serviceResult = dispatcher.runSync("getBackOrderedCounts", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
         backOrderedOrders = serviceResult.get("backOrderedOrders");
         backOrderedProducts = serviceResult.get("backOrderedProducts");
+        if (backOrderedOrders == null) {
+            backOrderedOrders = new Long(0);
+        }
+        if (backOrderedProducts == null) {
+            backOrderedProducts = new Long(0);
+        }
+
 
         // orders Ready to Ship
         shippinghelper = new ShippingHelper(delegator, facilityId);
@@ -175,17 +182,17 @@ if (UtilValidate.isNotEmpty(facilities)) {
         }
 
         fields = UtilMisc.toMap("facilityId", facilityId);
-        fields.putAll(UtilMisc.toMap("RequiredStockMoves", totalStockMoves));
-        fields.putAll(UtilMisc.toMap("RequestedInventoryTransfers", totalInventoryTransfers));
-        fields.putAll(UtilMisc.toMap("NumberBackOrders", backOrderedOrders));
-        fields.putAll(UtilMisc.toMap("NumberProductsBackOrdered", backOrderedProducts));
-        fields.putAll(UtilMisc.toMap("OrdersReadyShip", ordersTotalSize));
-        fields.putAll(UtilMisc.toMap("OpenPicklists", totalOpenPicklists));
-        fields.putAll(UtilMisc.toMap("PicklistsShipped", totalPickedPicklistIds));
-        fields.putAll(UtilMisc.toMap("NewProductRuns", totalCreatedProdRuns));
-        fields.putAll(UtilMisc.toMap("ScheduledProductionRuns", totalScheduledProdRuns));
-        fields.putAll(UtilMisc.toMap("ConfirmedProductionRuns", totalConfirmedProdRuns));
-        fields.putAll(UtilMisc.toMap("ActiveProductionRuns", totalRunningProdRuns));
+        fields.put("RequiredStockMoves", totalStockMoves);
+        fields.put("RequestedInventoryTransfers", totalInventoryTransfers);
+        fields.put("NumberBackOrders", backOrderedOrders);
+        fields.put("NumberProductsBackOrdered", backOrderedProducts);
+        fields.put("OrdersReadyShip", ordersTotalSize);
+        fields.put("OpenPicklists", totalOpenPicklists);
+        fields.put("PicklistsShipped", totalPickedPicklistIds);
+        fields.put("NewProductRuns", totalCreatedProdRuns);
+        fields.put("ScheduledProductionRuns", totalScheduledProdRuns);
+        fields.put("ConfirmedProductionRuns", totalConfirmedProdRuns);
+        fields.put("ActiveProductionRuns", totalRunningProdRuns);
 
         if ((entity = delegator.findByPrimaryKey("WarehouseSummaryData", UtilMisc.toMap("facilityId", facilityId))) == null) {
             entity = delegator.create("WarehouseSummaryData", fields);

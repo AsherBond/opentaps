@@ -14,7 +14,7 @@
                 <a href="<@ofbizUrl>stockMoves</@ofbizUrl>">${uiLabelMap.WarehouseStockMovesRequired}</a>: 
             </td>
             <td>
-                <#if totalStockMoves &gt; 0>
+                <#if (totalStockMoves!0) &gt; 0>
                     ${totalStockMoves}
                 <#else>
                     ${uiLabelMap.CommonNone}
@@ -29,7 +29,7 @@
                 <a href="<@ofbizUrl>FindFacilityTransfers?facilityId=${facilityId}</@ofbizUrl>">${uiLabelMap.WarehouseRequestedInventoryTransfers}</a>:
             </td>
             <td>
-                <#if totalInventoryTransfers &gt; 0>
+                <#if (totalInventoryTransfers!0) &gt; 0>
                     ${totalInventoryTransfers}
                 <#else>
                     ${uiLabelMap.CommonNone}
@@ -43,7 +43,7 @@
             <a href="<@ofbizUrl>backOrderedItems</@ofbizUrl>">${uiLabelMap.WarehouseBackOrderedOrderCount}</a>:
         </td>
         <td>
-            <#if backOrderedOrders &gt; 0>
+            <#if (backOrderedOrders!0) &gt; 0>
                 ${backOrderedOrders}
             <#else>
                 ${uiLabelMap.CommonNone}
@@ -55,7 +55,7 @@
             <a href="<@ofbizUrl>backOrderedItems</@ofbizUrl>">${uiLabelMap.WarehouseBackOrderedProductCount}</a>:
         </td>
         <td>
-            <#if backOrderedProducts &gt; 0>
+            <#if (backOrderedProducts!0) &gt; 0>
                 ${backOrderedProducts}
             <#else>
                 ${uiLabelMap.CommonNone}
@@ -75,7 +75,7 @@
                 <a href="<@ofbizUrl>readyToShip</@ofbizUrl>">${uiLabelMap.WarehouseOrdersReadyToShip}</a>:
             </td>
             <td>
-                ${totalReadyOrders}
+                ${totalReadyOrders!0}
             </td>
         </tr>
         <#list pickMoveByShipmentMethodInfoList?default([]) as pickMoveByShipmentMethodInfo>
@@ -91,7 +91,7 @@
                     <a href="<@ofbizUrl>openPicklists</@ofbizUrl>">${uiLabelMap.WarehouseOpenPicklists}</a>:
                 </td>
                 <td>
-                    ${totalOpenPicklists}
+                    ${totalOpenPicklists!0}
                 </td>
             </tr>
 
@@ -100,7 +100,7 @@
                 <a href="<@ofbizUrl>pickedPicklists</@ofbizUrl>">${uiLabelMap.WarehousePickedPicklists}</a>:
             </td>
             <td>
-                ${totalPickedPicklistIds}
+                ${totalPickedPicklistIds!0}
             </td>
         </tr>
 
@@ -116,7 +116,7 @@
             <a href="<@ofbizUrl>FindProductionRun?currentStatusId=PRUN_CREATED&workEffortTypeId=PROD_ORDER_HEADER</@ofbizUrl>">${uiLabelMap.WarehouseProductionRunsCreated}</a>:
         </td>
         <td>
-            ${totalCreatedProdRuns}
+            ${totalCreatedProdRuns!0}
         </td>
     </tr>
     <tr>
@@ -124,7 +124,7 @@
             <a href="<@ofbizUrl>FindProductionRun?currentStatusId=PRUN_SCHEDULED&workEffortTypeId=PROD_ORDER_HEADER</@ofbizUrl>">${uiLabelMap.WarehouseProductionRunsScheduled}</a>:
         </td>
         <td>
-            ${totalScheduledProdRuns}
+            ${totalScheduledProdRuns!0}
         </td>
     </tr>
     <tr>
@@ -132,7 +132,7 @@
             <a href="<@ofbizUrl>FindProductionRun?currentStatusId=PRUN_DOC_PRINTED&workEffortTypeId=PROD_ORDER_HEADER</@ofbizUrl>">${uiLabelMap.WarehouseProductionRunsConfirmed}</a>:
         </td>
         <td>
-            ${totalConfirmedProdRuns}
+            ${totalConfirmedProdRuns!0}
         </td>
     </tr>
     <tr>
@@ -140,7 +140,7 @@
             <a href="<@ofbizUrl>FindProductionRun?currentStatusId=PRUN_RUNNING&workEffortTypeId=PROD_ORDER_HEADER</@ofbizUrl>">${uiLabelMap.WarehouseProductionRunsRunning}</a>:
         </td>
         <td>
-            ${totalRunningProdRuns}
+            ${totalRunningProdRuns!0}
         </td>
     </tr>
     <tr>

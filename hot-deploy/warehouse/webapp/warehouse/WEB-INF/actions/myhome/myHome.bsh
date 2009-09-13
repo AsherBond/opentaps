@@ -17,6 +17,7 @@
 // @author Leon Torres (leon@opensourcestrategies.com)
 // @author Fabien Carrion
 
+import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilDateTime;
@@ -52,17 +53,26 @@ context.put("totalConfirmedProdRuns", 0);
 context.put("totalRunningProdRuns", 0);
 context.put("lastUpdatedStamp", "none");
 
-if (UtilValidate.isEmpty(facilityId)) return;
+if (UtilValidate.isEmpty(facilityId)) {
+    Debug.logError("myHome.bsh: no facilityId set", "");
+    return;
+}
 
 if (!UtilValidate.isEmpty(refresh)) {
     dispatcher.runSync("populateWarehouseSummaryData", UtilMisc.toMap("facilityId", facilityId, "userLogin", userLogin));
 }
 
 summaryDashboards = delegator.findByAnd("WarehouseSummaryData", UtilMisc.toMap("facilityId", facilityId));
-if (summaryDashboards == null) return;
+if (UtilValidate.isEmpty(summaryDashboards)) {
+    Debug.logError("myHome.bsh: no facility summaryDashboards found for the facility [" + facilityId + "]", "");
+    return;
+}
 
 summary = EntityUtil.getFirst(summaryDashboards);
-if (summary == null) return;
+if (summary == null) {
+    Debug.logError("myHome.bsh: no facility summary found for the facility [" + facilityId + "]", "");
+    return;
+}
 
 sdf = new SimpleDateFormat(UtilDate.getDateTimeFormat(UtilHttp.getLocale(request)));
 
