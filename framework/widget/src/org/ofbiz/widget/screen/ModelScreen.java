@@ -395,7 +395,7 @@ public class ModelScreen extends ModelWidget implements Serializable {
             throw e;
         } catch (RuntimeException e) {
             String errMsg = "Error rendering screen [" + this.sourceLocation + "#" + this.name + "]: " + e.toString();
-            Debug.logError(errMsg + ". Rolling back transaction.", module);
+            Debug.logError(e, errMsg + ". Rolling back transaction.", module);
             try {
                 // only rollback the transaction if we started one...
                 TransactionUtil.rollback(beganTransaction, errMsg, e);
@@ -406,7 +406,7 @@ public class ModelScreen extends ModelWidget implements Serializable {
             throw new ScreenRenderException(errMsg, e);
         } catch (Exception e) {
             String errMsg = "Error rendering screen [" + this.sourceLocation + "#" + this.name + "]: " + e.toString();
-            Debug.logError(errMsg + ". Rolling back transaction.", module);
+            Debug.logError(e, errMsg + ". Rolling back transaction.", module);
             try {
                 // only rollback the transaction if we started one...
                 TransactionUtil.rollback(beganTransaction, errMsg, e);
