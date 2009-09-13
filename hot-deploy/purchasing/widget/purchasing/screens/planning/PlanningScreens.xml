@@ -310,9 +310,9 @@ under the License.
                 <set field="pageTitleLabel" value="PageTitleEditRequirement"/>
                 <set field="sectionHeaderUiLabel" value="PageTitleEditRequirement"/>
                 <set field="requirementId" from-field="parameters.requirementId"/>
-                <entity-one entity-name="Requirement" value-name="requirement" auto-field-map="true"/>
-                <entity-and entity-name="OrderRequirementCommitment" list-name="orderRequirements">
-                    <field-map env-name="requirementId" field-name="requirementId"/>
+                <entity-one entity-name="Requirement" value-field="requirement" auto-field-map="true"/>
+                <entity-and entity-name="OrderRequirementCommitment" list="orderRequirements">
+                    <field-map from-field="requirementId" field-name="requirementId"/>
                 </entity-and>                
             </actions>
             <widgets>
@@ -339,8 +339,8 @@ under the License.
                 <set field="pageTitleLabel" value="PageTitleEditRequirementRole"/>
                 <set field="sectionHeaderUiLabel" value="PageTitleEditRequirementRole"/>
                 <set field="requirementId" from-field="parameters.requirementId"/>
-                <entity-one entity-name="Requirement" value-name="requirement" auto-field-map="true"/>
-                <entity-one entity-name="RequirementRole" value-name="requirementRole" auto-field-map="true"/>
+                <entity-one entity-name="Requirement" value-field="requirement" auto-field-map="true"/>
+                <entity-one entity-name="RequirementRole" value-field="requirementRole" auto-field-map="true"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">

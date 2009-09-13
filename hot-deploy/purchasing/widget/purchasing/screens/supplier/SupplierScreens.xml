@@ -81,7 +81,7 @@
                         <container style="subSectionBlock">
                             <container style="subSectionHeader">
                                 <label style="subSectionTitle">${uiLabelMap.PurchOpenOrders}</label>
-                                <section><condition><if-compare field-name="hasCreateOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <section><condition><if-compare field="hasCreateOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
                                     <widgets>
                                         <container style="subMenuBar">
                                             <link target="orderentry?partyId=${supplierPartyId}" text="${uiLabelMap.OpentapsCreateOrder}" style="subMenuButton"/>
@@ -90,7 +90,7 @@
                                 </section>
                             </container>
                             <section>
-                                <condition><if-compare field-name="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
+                                <condition><if-compare field="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/></condition>
                                 <widgets>
                                     <include-form name="ListOrders" location="component://purchasing/widget/purchasing/forms/supplier/SupplierForms.xml"/>
                                 </widgets>
@@ -107,7 +107,7 @@
                             </container>
                             <section>
                                 <condition>
-                                    <if-compare field-name="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/>
+                                    <if-compare field="hasViewOrderPermission" operator="equals" value="true" type="Boolean"/>
                                 </condition>
                                 <actions>
                                     <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/supplier/SupplierPurchAgreements.bsh"/>

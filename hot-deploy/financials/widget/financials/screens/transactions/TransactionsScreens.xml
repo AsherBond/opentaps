@@ -273,8 +273,8 @@
     <screen name="viewAcctgTransEntry">
         <section>
             <actions>
-                <entity-one entity-name="AcctgTrans" value-name="acctgTrans"/>
-                <entity-one entity-name="AcctgTransEntry" value-name="acctgTransEntry"/>
+                <entity-one entity-name="AcctgTrans" value-field="acctgTrans"/>
+                <entity-one entity-name="AcctgTransEntry" value-field="acctgTransEntry"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -283,7 +283,7 @@
                             <container style="screenlet-body">
                                 <!-- only include the options if acctgTrans.isPosted = N -->
                                 <section>
-                                    <condition><if-compare field-name="acctgTrans.isPosted" operator="equals" value="N"/></condition>
+                                    <condition><if-compare field="acctgTrans.isPosted" operator="equals" value="N"/></condition>
                                     <widgets>
                                         <platform-specific><html>
                                             <html-template location="component://financials/webapp/financials/transactions/acctgTransEntryOptions.ftl"/>
@@ -302,7 +302,7 @@
     <screen name="updateAcctgTransEntryForm">
         <section>
             <actions>
-                <entity-one entity-name="AcctgTransEntry" value-name="acctgTransEntry"/>
+                <entity-one entity-name="AcctgTransEntry" value-field="acctgTransEntry"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -350,7 +350,7 @@
             <actions>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
                 <set field="glAccountId" from-field="parameters.glAccountId"/>
-                <entity-and entity-name="GlAccountOrganization" list-name="glAccountOrgList">
+                <entity-and entity-name="GlAccountOrganization" list="glAccountOrgList">
                     <field-map field-name="organizationPartyId"/>
                     <order-by field-name="glAccountId"/>
                  </entity-and>
@@ -415,12 +415,12 @@
             <actions>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
                 <set field="glAccountId" from-field="parameters.glAccountId"/>
-                <entity-and entity-name="GlReconciliation" list-name="glReconciliations">
+                <entity-and entity-name="GlReconciliation" list="glReconciliations">
                     <field-map field-name="glAccountId"/>
                     <field-map field-name="organizationPartyId"/>
                     <order-by field-name="reconciledDate DESC"/>
                 </entity-and>
-                <entity-one entity-name="GlAccount" value-name="glAccount"/>
+                <entity-one entity-name="GlAccount" value-field="glAccount"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -445,7 +445,7 @@
                 <set field="glReconciliationId" from-field="parameters.glReconciliationId"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
                 <set field="glAccountId" from-field="parameters.glAccountId"/>
-                <entity-and entity-name="GlReconciliationAndAcctgTransEntry" list-name="glReconciliationEntries">
+                <entity-and entity-name="GlReconciliationAndAcctgTransEntry" list="glReconciliationEntries">
                     <field-map field-name="glReconciliationId"/>
                     <order-by field-name="transactionDate"/> 
                     <order-by field-name="acctgTransId"/>
@@ -473,7 +473,7 @@
     <screen name="exchangeRates">
         <section>
             <actions>
-                <entity-condition entity-name="UomConversionDated" list-name="conversions">
+                <entity-condition entity-name="UomConversionDated" list="conversions">
                     <order-by field-name="uomId"/>
                     <order-by field-name="uomIdTo"/>
                     <order-by field-name="fromDate"/>

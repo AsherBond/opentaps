@@ -230,8 +230,8 @@
         <section>
             <actions>
                 <set field="productionRunId" from-field="parameters.productionRunId"/>
-                <entity-one entity-name="WorkEffort" value-name="productionRun">
-                    <field-map field-name="workEffortId" env-name="productionRunId"/>
+                <entity-one entity-name="WorkEffort" value-field="productionRun">
+                    <field-map field-name="workEffortId" from-field="productionRunId"/>
                 </entity-one>
             </actions>
             <widgets>
@@ -251,15 +251,15 @@
     <screen name="ProductionRunAssocs">
         <section>
             <actions>
-                <entity-condition entity-name="WorkEffortAssoc" list-name="mandatoryWorkEfforts">
+                <entity-condition entity-name="WorkEffortAssoc" list="mandatoryWorkEfforts">
                     <condition-list>
-                        <condition-expr field-name="workEffortIdTo" env-name="productionRunId"/>
+                        <condition-expr field-name="workEffortIdTo" from-field="productionRunId"/>
                         <condition-expr field-name="workEffortAssocTypeId" value="WORK_EFF_PRECEDENCY"/>
                     </condition-list>
                 </entity-condition>
-                <entity-condition entity-name="WorkEffortAssoc" list-name="dependentWorkEfforts">
+                <entity-condition entity-name="WorkEffortAssoc" list="dependentWorkEfforts">
                     <condition-list>
-                        <condition-expr field-name="workEffortIdFrom" env-name="productionRunId"/>
+                        <condition-expr field-name="workEffortIdFrom" from-field="productionRunId"/>
                         <condition-expr field-name="workEffortAssocTypeId" value="WORK_EFF_PRECEDENCY"/>
                     </condition-list>
                 </entity-condition>
@@ -308,8 +308,8 @@
     <screen name="ProductionRunSerialNumbers">
         <section>
             <actions>
-                <entity-and entity-name="WorkEffortInventoryProduced" list-name="inventoryProduced">
-                    <field-map field-name="workEffortId" env-name="productionRunId"/>
+                <entity-and entity-name="WorkEffortInventoryProduced" list="inventoryProduced">
+                    <field-map field-name="workEffortId" from-field="productionRunId"/>
                     <order-by field-name="inventoryItemId"/>
                 </entity-and>
             </actions>

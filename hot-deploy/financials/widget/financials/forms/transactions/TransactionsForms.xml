@@ -23,7 +23,7 @@
         default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
         header-row-style="boxtop"
-        list-iterator-name="acctgTransListIt" paginate-target="transactions">
+        list-name="acctgTransListIt" paginate-target="transactions">
         <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionId}" widget-style="linktext">
             <hyperlink target="viewAcctgTrans?acctgTransId=${acctgTransId}" description="${acctgTransId}"/>
         </field>
@@ -43,7 +43,7 @@
         default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
         header-row-style="boxtop"
-        list-iterator-name="acctgTransListIt" paginate-target="transactions">
+        list-name="acctgTransListIt" paginate-target="transactions">
         <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionId}" widget-style="linktext">
             <hyperlink target="viewAcctgTrans?acctgTransId=${acctgTransId}" description="${acctgTransId}"/>
         </field>

@@ -127,7 +127,7 @@ under the License.
                 <decorator-section name="order-entry-header-body">
                   <section>
                     <condition>
-                      <if-compare field-name="useGwt" operator="equals" value="false"/>
+                      <if-compare field="useGwt" operator="equals" value="false"/>
                     </condition>
                     <widgets>
                       <container style="subSectionBlock">

@@ -101,7 +101,7 @@
             <widgets>
                 <section>
                     <condition>
-                        <not><if-empty field-name="paycheck"/></not>
+                        <not><if-empty field="paycheck"/></not>
                     </condition>
                     <widgets>
                         <platform-specific>

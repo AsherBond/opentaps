@@ -25,9 +25,9 @@
         </check-permission>
         <check-errors/>
 
-        <entity-one entity-name="InvoiceTerm" value-name="invoiceTerm" auto-field-map="true"/>
+        <entity-one entity-name="InvoiceTerm" value-field="invoiceTerm" auto-field-map="true"/>
         <check-errors/>
-        <remove-value value-name="invoiceTerm"/>
+        <remove-value value-field="invoiceTerm"/>
         <check-errors/>
     </simple-method>
 

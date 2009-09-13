@@ -382,7 +382,7 @@
             <actions>
                 <set field="pageTitleLabel" value="AccountingTaxSummary"/>
                 <set field="organizationPartyId" from-field="parameters.organizationPartyId"/> <!-- for the ftl -->
-                <entity-and entity-name="TaxAuthorityGlAccountBalance" list-name="balances">
+                <entity-and entity-name="TaxAuthorityGlAccountBalance" list="balances">
                     <field-map field-name="organizationPartyId"/>
                 </entity-and>
                 <script location="component://financials/webapp/financials/WEB-INF/actions/reports/setTaxSummaryToHistory.bsh"/>

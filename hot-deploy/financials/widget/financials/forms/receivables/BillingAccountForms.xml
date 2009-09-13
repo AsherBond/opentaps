@@ -80,7 +80,7 @@
         default-table-style="listTable">
 
         <field name="billingAccountId" title="${uiLabelMap.FinancialsCustomerBillingAccountID}" widget-style="tabletext">
-            <display value="${parameters.billingAccountId}"/>
+            <display description="${parameters.billingAccountId}"/>
         </field>
         <field name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}"><text/></field>
         <field name="captureAmount" title="${uiLabelMap.CommonAmount}">

@@ -138,7 +138,7 @@
             <actions>
                 <set field="targetNameToUse" value="createPaymentMethod"/>
                 <set field="paymentMethodTypeId" value="${parameters.paymentMethodTypeId}"/>
-                <entity-one entity-name="PartyAcctgPreference" value-name="partyAcctgPreference">
+                <entity-one entity-name="PartyAcctgPreference" value-field="partyAcctgPreference">
                     <field-map field-name="partyId" value="${parameters.organizationPartyId}"/>
                 </entity-one>
                 <set field="targetNameToUse" value="createPaymentMethod"/>
@@ -262,7 +262,7 @@
         <section>
             <actions>			
                 <set field="partyId" from-field="parameters.organizationPartyId"/>
-                <entity-one entity-name="PartyAcctgPreference" value-name="partyAcctgPreference"/>
+                <entity-one entity-name="PartyAcctgPreference" value-field="partyAcctgPreference"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">

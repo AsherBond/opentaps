@@ -60,7 +60,7 @@ under the License.
                 <set field="sectionHeaderUiLabel" value="ManufacturingEditProductBom"/>  
 
                 <set field="productId" from-field="parameters.productId"/>
-                <entity-one entity-name="Product" value-name="product"/>
+                <entity-one entity-name="Product" value-field="product"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/bom/EditProductBom.bsh"/>
             </actions>
             <widgets>
@@ -90,9 +90,9 @@ under the License.
                 <set field="productFeatureApplTypeId" value="STANDARD_FEATURE"/>
                 <property-to-field field="defaultCurrencyUomId" resource="general" property="currency.uom.id.default" default="USD"/>
 
-                <entity-and entity-name="ProductFeatureAndAppl" list-name="selectedFeatures">
-                    <field-map env-name="productId" field-name="productId"/>
-                    <field-map env-name="productFeatureApplTypeId" field-name="productFeatureApplTypeId"/>
+                <entity-and entity-name="ProductFeatureAndAppl" list="selectedFeatures">
+                    <field-map from-field="productId" field-name="productId"/>
+                    <field-map from-field="productFeatureApplTypeId" field-name="productFeatureApplTypeId"/>
                     <order-by field-name="sequenceNum"/>
                 </entity-and>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/bom/BomSimulation.bsh"/>
@@ -150,7 +150,7 @@ under the License.
 
                 <!-- Edit Routing -->
                 <set field="workEffortId" from-field="parameters.workEffortId"/>
-                <entity-one entity-name="WorkEffort" value-name="routing"/>
+                <entity-one entity-name="WorkEffort" value-field="routing"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -174,24 +174,24 @@ under the License.
 
                 <!-- Edit Routing -->
                 <set field="workEffortId" from-field="parameters.workEffortId"/>
-                <entity-one entity-name="WorkEffort" value-name="routing"/>
+                <entity-one entity-name="WorkEffort" value-field="routing"/>
 
                 <!-- Edit Routing Task Assoc -->
                 <set field="workEffortAssocTypeId" value="ROUTING_COMPONENT"/>
-                <entity-and entity-name="WorkEffortAssocView" list-name="allRoutingTasks">
-                    <field-map env-name="workEffortId" field-name="workEffortIdFrom"/>
-                    <field-map env-name="workEffortAssocTypeId" field-name="workEffortAssocTypeId"/>
+                <entity-and entity-name="WorkEffortAssocView" list="allRoutingTasks">
+                    <field-map from-field="workEffortId" field-name="workEffortIdFrom"/>
+                    <field-map from-field="workEffortAssocTypeId" field-name="workEffortAssocTypeId"/>
                     <order-by field-name="sequenceNum"/>
                     <order-by field-name="fromDate"/>
                 </entity-and>
 
                 <!-- Edit Routing Product Link -->
                 <set field="workEffortGoodStdTypeId" value="ROU_PROD_TEMPLATE"/>
-                <entity-and entity-name="WorkEffortGoodStandard" list-name="allRoutingProductLinks">
-                    <field-map env-name="workEffortId" field-name="workEffortId"/>
-                    <field-map env-name="workEffortGoodStdTypeId" field-name="workEffortGoodStdTypeId"/>
+                <entity-and entity-name="WorkEffortGoodStandard" list="allRoutingProductLinks">
+                    <field-map from-field="workEffortId" field-name="workEffortId"/>
+                    <field-map from-field="workEffortGoodStdTypeId" field-name="workEffortGoodStdTypeId"/>
                 </entity-and>
-                <entity-one entity-name="WorkEffortGoodStandard" value-name="routingProductLink" auto-field-map="true"/>
+                <entity-one entity-name="WorkEffortGoodStandard" value-field="routingProductLink" auto-field-map="true"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -253,7 +253,7 @@ under the License.
                 
                 <!-- Edit Routing Task -->
                 <set field="workEffortId" from-field="parameters.workEffortId"/>
-                <entity-one entity-name="WorkEffort" value-name="routingTask"/>
+                <entity-one entity-name="WorkEffort" value-field="routingTask"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -280,29 +280,29 @@ under the License.
                 
                 <!-- Edit Routing Task -->
                 <set field="workEffortId" from-field="parameters.workEffortId"/>
-                <entity-one entity-name="WorkEffort" value-name="routingTask"/>
+                <entity-one entity-name="WorkEffort" value-field="routingTask"/>
 
                 <!-- Edit Routing Task cost -->
-                <entity-one entity-name="WorkEffort" value-name="routingTask"/>
-                <entity-and entity-name="WorkEffortCostCalc" list-name="allCosts">
-                    <field-map field-name="workEffortId" env-name="workEffortId"/>
+                <entity-one entity-name="WorkEffort" value-field="routingTask"/>
+                <entity-and entity-name="WorkEffortCostCalc" list="allCosts">
+                    <field-map field-name="workEffortId" from-field="workEffortId"/>
                 </entity-and>
 
                 <!-- Deliverable Products -->
-                <entity-one entity-name="WorkEffort" value-name="routingTask"/>
-                <entity-and entity-name="WorkEffortGoodStandard" list-name="allProducts">
+                <entity-one entity-name="WorkEffort" value-field="routingTask"/>
+                <entity-and entity-name="WorkEffortGoodStandard" list="allProducts">
                     <field-map field-name="workEffortGoodStdTypeId" value="PRUNT_PROD_DELIV"/>
-                    <field-map env-name="workEffortId" field-name="workEffortId"/>
+                    <field-map from-field="workEffortId" field-name="workEffortId"/>
                 </entity-and>
-                <entity-and entity-name="WorkEffortGoodStandard" list-name="allRoutingProductLinks">
-                    <field-map env-name="workEffortId" field-name="workEffortId"/>
+                <entity-and entity-name="WorkEffortGoodStandard" list="allRoutingProductLinks">
+                    <field-map from-field="workEffortId" field-name="workEffortId"/>
                     <field-map field-name="workEffortGoodStdTypeId" value="PRUNT_PROD_DELIV"/>
                 </entity-and>
-                <entity-one entity-name="WorkEffortGoodStandard" value-name="routingProductLink" auto-field-map="true"/>
+                <entity-one entity-name="WorkEffortGoodStandard" value-field="routingProductLink" auto-field-map="true"/>
 
                 <!-- Fixed Assets -->
-                <entity-and entity-name="WorkEffortFixedAssetStd" list-name="allFixedAssets">
-                    <field-map field-name="workEffortId" env-name="workEffortId" />
+                <entity-and entity-name="WorkEffortFixedAssetStd" list="allFixedAssets">
+                    <field-map field-name="workEffortId" from-field="workEffortId" />
                 </entity-and>
 
             </actions>
