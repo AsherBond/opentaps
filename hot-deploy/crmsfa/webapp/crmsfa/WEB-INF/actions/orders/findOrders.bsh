@@ -152,6 +152,7 @@ listIt = delegator.findListIteratorByCondition("OrderHeaderItemAndRolesAndInvCom
 // ie, orderId, customer id, etc. etc.
 if (listIt != null) {
     orders.addAll(listIt.getCompleteList());
+    listIt.close();
     orderIds = EntityUtil.getFieldListFromEntityList(orders, "orderId", true);
     if (UtilValidate.isNotEmpty(orderIds)) {
         searchConditions.add(new EntityExpr("orderId", EntityOperator.NOT_IN, orderIds));
@@ -166,6 +167,7 @@ listIt = delegator.findListIteratorByCondition("OrderHeaderItemAndRolesAndInvPen
         UtilCommon.DISTINCT_READ_OPTIONS);
 if (listIt != null) {
     orders.addAll(listIt.getCompleteList());
+    listIt.close();
 }
 
 // now order the orders
