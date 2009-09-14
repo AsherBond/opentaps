@@ -91,9 +91,12 @@
                 </entity-options>
             </drop-down>  
         </field>
-         <field name="Update" widget-style="buttontext" ><submit button-type="text-link"/></field>        
+        <field name="Update" widget-style="buttontext" ><submit button-type="text-link"/></field>        
         <field name="Expire" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.FinancialsPaymentMethodExpire}" target="updatePaymentMethod?paymentMethodId=${paymentMethodId}&amp;expirePaymentMethod=expPM"/>
+            <hyperlink description="${uiLabelMap.FinancialsPaymentMethodExpire}" target="updatePaymentMethod">
+                <parameter param-name="paymentMethodId"/>
+                <parameter param-name="expirePaymentMethod" value="expPM"/>
+            </hyperlink>
         </field>
     </form>
     
