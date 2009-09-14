@@ -24,26 +24,35 @@ If you have come this far, payment should be a valid Payment Object.
 <#assign paymentStatusChangeAction = "">
 
 <#if hasCreatePermission>
-  <#assign paymentStatusChangeAction = "<a class='subMenuButton' href='editPayment?paymentTypeId=" + addPaymentTypeId + "'>" + uiLabelMap.CommonCreateNew + "</a>">
+  <#assign paymentStatusChangeAction><a class="subMenuButton" href="<@ofbizUrl>editPayment?paymentTypeId=${addPaymentTypeId}</@ofbizUrl>">${uiLabelMap.CommonCreateNew}</a></#assign>
 </#if>
-<#if payment.isNotPaid()>
-  <#assign paymentStatusChangeAction = paymentStatusChangeAction + "<a class='subMenuButton' href='editPayment?paymentId=" + payment.paymentId + "'>" + uiLabelMap.CommonEdit + "</a>">
-</#if>
-<#if isDisbursement && payment.isNotPaid()>
-  <#assign paymentStatusChangeAction = paymentStatusChangeAction + "<a class='subMenuButton' href='setPaymentStatus?paymentId=" + payment.paymentId + "&statusId=PMNT_SENT" + "'>" + uiLabelMap.FinancialsPaymentStatusToSent + "</a>">
-</#if>
-<#if !isDisbursement && payment.isNotPaid()>
-  <#assign paymentStatusChangeAction = paymentStatusChangeAction + "<a class='subMenuButton' href='setPaymentStatus?paymentId=" + payment.paymentId + "&statusId=PMNT_RECEIVED" + "'>" + uiLabelMap.FinancialsPaymentStatusToReceived + "</a>">
-</#if>
-<#if payment.isNotPaid()>
-  <#assign cancelAction><@inputConfirm href="setPaymentStatus?paymentId=${payment.paymentId}&statusId=PMNT_CANCELLED" title=uiLabelMap.FinancialsPaymentStatusToCanceled class="subMenuButtonDangerous"/></#assign>
-  <#assign paymentStatusChangeAction = paymentStatusChangeAction + cancelAction/>
-</#if>
-<#if (payment.isReceived() || payment.isSent())>
-  <#assign paymentStatusChangeAction = paymentStatusChangeAction + "<a class='subMenuButton' href='setPaymentStatus?paymentId=" + payment.paymentId + "&statusId=PMNT_CONFIRMED" + "'>" + uiLabelMap.FinancialsPaymentStatusToConfirmed + "</a>">
-  <#if !payment.lockboxBatchItemDetails?has_content>
-    <#assign voidAction><@inputConfirm href="voidPayment?paymentId=${payment.paymentId}" title=uiLabelMap.FinancialsPaymentVoidPayment class="subMenuButtonDangerous"/></#assign>
+<#if hasUpdatePermission>
+  <#if payment.isNotPaid()>
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<a class="subMenuButton" href="<@ofbizUrl>editPayment?paymentId=${payment.paymentId}</@ofbizUrl>">${uiLabelMap.CommonEdit}</a></#assign>
   </#if>
+  <#if isDisbursement && payment.isNotPaid()>
+    <@form name="paymentSentAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_SENT" />
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentSentAction" text=uiLabelMap.FinancialsPaymentStatusToSent class="subMenuButton" /></#assign>
+  </#if>
+  <#if !isDisbursement && payment.isNotPaid()>
+    <@form name="paymentReceivedAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_RECEIVED" />
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentReceivedAction" text=uiLabelMap.FinancialsPaymentStatusToReceived class="subMenuButton" /></#assign>
+  </#if>
+  <#if payment.isNotPaid()>
+    <@form name="paymentCancelledAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_CANCELLED" />
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLinkConfirm form="paymentCancelledAction" text=uiLabelMap.FinancialsPaymentStatusToCanceled class="subMenuButtonDangerous" /></#assign>
+  </#if>
+  <#if (payment.isReceived() || payment.isSent())>
+    <@form name="paymentConfirmedAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_CONFIRMED" />
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentConfirmedAction" text=uiLabelMap.FinancialsPaymentStatusToConfirmed class="subMenuButton" /></#assign>
+  </#if>
+</#if>
+<#if isDisbursement && ! payment.isCancelled() && ! payment.isVoided()>
+  <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<a href="<@ofbizUrl>/check.pdf?paymentId=${payment.paymentId}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.AccountingPrintAsCheck}</a></#assign>
+</#if>
+<#if hasUpdatePermission && (payment.isReceived() || payment.isSent()) && !payment.lockboxBatchItemDetails?has_content>
+  <@form name="paymentVoidAction" url="voidPayment" paymentId=payment.paymentId />
+  <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLinkConfirm form="paymentVoidAction" text=uiLabelMap.FinancialsPaymentVoidPayment class="subMenuButtonDangerous" /></#assign>
 </#if>
 
 <#-- entry form -->
@@ -51,7 +60,7 @@ If you have come this far, payment should be a valid Payment Object.
 <div class="screenlet">
   <div class="subSectionHeader">
     <div class="subSectionTitle">${uiLabelMap.AccountingPayment} <#if payment?has_content>#${payment.paymentId}</#if></div>
-    <div class="subMenuBar"><#if hasUpdatePermission>${paymentStatusChangeAction?if_exists}</#if><#if isDisbursement && ! payment.isCancelled() && ! payment.isVoided()><a href="<@ofbizUrl>/check.pdf?paymentId=${payment.paymentId}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.AccountingPrintAsCheck}</a></#if><#if hasUpdatePermission>${voidAction?if_exists}</#if></div>
+    <div class="subMenuBar">${paymentStatusChangeAction?if_exists}</div>
   </div>
 
   <div class="screenlet-body">

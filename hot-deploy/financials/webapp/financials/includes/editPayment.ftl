@@ -34,50 +34,54 @@
 <#if isDisbursement?exists>
 
 <#-- Prepare commands for Payment status change  -->
-<div class="screenlet-header">
-    <div style="float: right;">
-        <#if paymentValue?has_content>
-          <#if paymentValue.paymentId?has_content>
-            <a class="buttontext" href="<@ofbizUrl>editPayment?paymentTypeId=${paymentTypeId}</@ofbizUrl>">${uiLabelMap.CommonCreateNew}</a>
-          </#if> 
-          <a class="buttontext" href="<@ofbizUrl>viewPayment?paymentId=${paymentValue.paymentId}</@ofbizUrl>">${uiLabelMap.CommonView}</a>
-          <#if paymentValue.paymentId?has_content && isDisbursement && paymentValue.statusId.equals("PMNT_NOT_PAID")>
-            <a class="buttontext" href="<@ofbizUrl>setPaymentStatus?paymentId=${paymentValue.paymentId}&statusId=PMNT_SENT</@ofbizUrl>">${uiLabelMap.FinancialsPaymentStatusToSent}</a>
-          </#if>
-          <#if paymentValue.paymentId?has_content && !isDisbursement && paymentValue.statusId.equals("PMNT_NOT_PAID")>
-            <a class="buttontext" href="<@ofbizUrl>setPaymentStatus?paymentId=${paymentValue.paymentId}&statusId=PMNT_RECEIVED</@ofbizUrl>">${uiLabelMap.FinancialsPaymentStatusToReceived}</a>
-          </#if>
-          <#if paymentValue.paymentId?has_content && paymentValue.statusId.equals("PMNT_NOT_PAID")>
-            <a class="buttontext" href="<@ofbizUrl>setPaymentStatus?paymentId=${paymentValue.paymentId}&statusId=PMNT_CANCELLED</@ofbizUrl>">${uiLabelMap.FinancialsPaymentStatusToCanceled}</a>
-          </#if>
-          <#if paymentValue.paymentId?has_content && (paymentValue.statusId.equals("PMNT_RECEIVED") || paymentValue.statusId.equals("PMNT_SENT"))>
-            <a class="buttontext" href="<@ofbizUrl>setPaymentStatus?paymentId=${paymentValue.paymentId}&statusId=PMNT_CONFIRMED</@ofbizUrl>">${uiLabelMap.FinancialsPaymentStatusToConfirmed}</a>
-          </#if>
-        </#if>  
+<#assign paymentStatusChangeAction = "">
 
-    </div>    
-    <div class="boxhead">
-    <#if paymentValue?has_content>
-      ${uiLabelMap.AccountingPayment} #${paymentValue.paymentId}
-    <#else>
-      <#if isDisbursement>
-        ${uiLabelMap.FinancialsPayablesPayment}
-      <#else>  
-        ${uiLabelMap.FinancialsReceivablesPayment}
-      </#if>  
-    </#if>  
-    </div>
+<#if payment?has_content>
+  <#if hasCreatePermission>
+    <#assign paymentStatusChangeAction><a class="subMenuButton" href="<@ofbizUrl>editPayment?paymentTypeId=${paymentTypeId}</@ofbizUrl>">${uiLabelMap.CommonCreateNew}</a></#assign>
+  </#if>
+  <#if hasUpdatePermission>
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<a class="subMenuButton" href="<@ofbizUrl>viewPayment?paymentId=${payment.paymentId}</@ofbizUrl>">${uiLabelMap.CommonView}</a></#assign>
+    <#if isDisbursement && payment.isNotPaid()>
+      <@form name="paymentSentAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_SENT" />
+      <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentSentAction" text=uiLabelMap.FinancialsPaymentStatusToSent class="subMenuButton" /></#assign>
+    </#if>
+    <#if !isDisbursement && payment.isNotPaid()>
+      <@form name="paymentReceivedAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_RECEIVED" />
+      <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentReceivedAction" text=uiLabelMap.FinancialsPaymentStatusToReceived class="subMenuButton" /></#assign>
+    </#if>
+    <#if payment.isNotPaid()>
+      <@form name="paymentCancelledAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_CANCELLED" />
+      <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLinkConfirm form="paymentCancelledAction" text=uiLabelMap.FinancialsPaymentStatusToCanceled class="subMenuButtonDangerous" /></#assign>
+    </#if>
+    <#if (payment.isReceived() || payment.isSent())>
+      <@form name="paymentConfirmedAction" url="setPaymentStatus" paymentId=payment.paymentId statusId="PMNT_CONFIRMED" />
+      <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLink form="paymentConfirmedAction" text=uiLabelMap.FinancialsPaymentStatusToConfirmed class="subMenuButton" /></#assign>
+    </#if>
+  </#if>
+  <#if isDisbursement && ! payment.isCancelled() && ! payment.isVoided()>
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<a href="<@ofbizUrl>/check.pdf?paymentId=${payment.paymentId}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.AccountingPrintAsCheck}</a></#assign>
+  </#if>
+  <#if hasUpdatePermission && (payment.isReceived() || payment.isSent()) && !payment.lockboxBatchItemDetails?has_content>
+    <@form name="paymentVoidAction" url="voidPayment" paymentId=payment.paymentId />
+    <#assign paymentStatusChangeAction>${paymentStatusChangeAction}<@submitFormLinkConfirm form="paymentVoidAction" text=uiLabelMap.FinancialsPaymentVoidPayment class="subMenuButtonDangerous" /></#assign>
+  </#if>
+</#if>
+
+<div class="subSectionHeader">
+  <div class="subSectionTitle"><#if payment?has_content>${uiLabelMap.AccountingPayment} #${payment.paymentId}<#else><#if isDisbursement>${uiLabelMap.FinancialsPayablesPayment}<#else>${uiLabelMap.FinancialsReceivablesPayment}</#if></#if></div>
+  <div class="subMenuBar">${paymentStatusChangeAction?if_exists}</div>
 </div>
 
-<#if paymentValue?has_content && paymentValue.paymentId?has_content>
-  <#assign formName = "updatePayment">
+<#if payment?has_content>
+  <#assign formName = "updatePayment"/>
 <#else>
-  <#assign formName = "createPayment">
+  <#assign formName = "createPayment"/>
 </#if>
 <form method="post" action="<@ofbizUrl>${formName}</@ofbizUrl>" name="${formName}">
 
-<#if paymentValue?has_content && paymentValue.paymentId?has_content>
-  <@inputHidden name="paymentId" value="${paymentValue.paymentId}"/>
+<#if payment?has_content>
+  <@inputHidden name="paymentId" value="${payment.paymentId}"/>
 <#else>
   <@inputHidden name="statusId" value="PMNT_NOT_PAID"/>
 </#if>
@@ -203,5 +207,4 @@
 
 </table>
 </form>
-
 </#if> <#-- if isDisbursement exists -->

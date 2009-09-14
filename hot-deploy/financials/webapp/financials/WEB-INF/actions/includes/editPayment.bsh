@@ -15,16 +15,20 @@
  */
 
 import java.util.*;
- 
-import org.ofbiz.base.util.*;
-import org.ofbiz.entity.*;
-import org.ofbiz.entity.condition.*;
-import org.ofbiz.accounting.util.*;
-import org.ofbiz.entity.util.EntityUtil;
-import org.opentaps.common.util.*;
 
 import com.opensourcestrategies.financials.accounts.AccountsHelper;
 import com.opensourcestrategies.financials.util.UtilFinancial;
+import org.ofbiz.accounting.util.*;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.*;
+import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.util.EntityUtil;
+import org.opentaps.common.util.*;
+import org.opentaps.domain.DomainsLoader;
+import org.opentaps.domain.billing.payment.Payment;
+import org.opentaps.foundation.infrastructure.Infrastructure;
+import org.opentaps.foundation.infrastructure.User;
+import org.opentaps.foundation.repository.ofbiz.Repository;
 
 //Data Prep for Editing a Payment
 
@@ -40,23 +44,35 @@ if (paymentId == null) {
   paymentId = request.getParameter("paymentId");
 }
 
-GenericValue paymentValue;
+GenericValue paymentValue = null;
+Payment payment = null;
 // have paymentId, get the Payment so we can edit it
 if (UtilValidate.isNotEmpty(paymentId)) {
+    
+    dl = new DomainsLoader(new Infrastructure(dispatcher), new User(userLogin));
+    billingDomain = dl.loadDomainsDirectory().getBillingDomain();
+    paymentRepository = billingDomain.getPaymentRepository();
+
     // get Payment entity
-    paymentValue = delegator.findByPrimaryKey("Payment", UtilMisc.toMap("paymentId", paymentId));
-    // Payment found
-    if (paymentValue != null) {   
-        context.put("paymentValue", paymentValue);
-        isDisbursement = UtilAccounting.isDisbursement(paymentValue);
-        if (isDisbursement) {
-            paymentTypeId = "DISBURSEMENT";
-        }
-        context.put("paymentTypeId", paymentTypeId);
-    } else { // Payment not found, bad paymentId
+    try {
+        payment = paymentRepository.getPaymentById(paymentId);
+    } catch (FoundationException) {
+        // let the payment = null check deal with this
+    }
+    if (payment == null) {
         UtilMessage.addError(request, "FinancialsError_CannotFindPaymentId", UtilMisc.toMap("paymentId", paymentId));
         return "error";
     }
+    // for compatibility
+    paymentValue = Repository.genericValueFromEntity(delegator, payment);
+    context.put("payment", payment);
+    context.put("paymentValue", paymentValue);
+    isDisbursement = UtilAccounting.isDisbursement(paymentValue);
+    if (isDisbursement) {
+        paymentTypeId = "DISBURSEMENT";
+    }
+    context.put("paymentTypeId", paymentTypeId);
+
     currencyUomId = paymentValue.get("currencyUomId");
     if (currencyUomId == null) {
         Debug.logError("currencyUomId is Null" + paymentValue, "editPayment.bsh" );
@@ -195,3 +211,18 @@ if (UtilValidate.isNotEmpty(defaultBankSettlement)) {
         context.put("defaultPaymentMethodId", defaultPaymentMethod.get("paymentMethodId"));
     }
 }
+
+// update permission
+hasUpdatePermission = security.hasEntityPermission("FINANCIALS", "_AP_PUPDT", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PUPDT", userLogin);
+context.put("hasUpdatePermission", hasUpdatePermission);
+
+// apply permission
+hasApplyPermission = ( security.hasEntityPermission("FINANCIALS", "_AP_PAPPL", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PAPPL", userLogin) );
+if (hasApplyPermission && payment != null && (payment.isConfirmed())) {
+    hasApplyPermission = false;
+}
+context.put("hasApplyPermission", hasApplyPermission);
+
+// create permission
+hasCreatePermission = security.hasEntityPermission("FINANCIALS", "_AP_PCRTE", userLogin) || security.hasEntityPermission("FINANCIALS", "_AR_PCRTE", userLogin);
+context.put("hasCreatePermission", hasCreatePermission);
