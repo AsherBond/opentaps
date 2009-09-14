@@ -139,6 +139,9 @@ applications/content/build.xml
 applications/content/lib/uno/*.jar
 - Adding jars for jasper reports and openoffice (uno)
 
+applications/content/src/org/ofbiz/content/openoffice/OpenOfficeServices.java
+- Fix compilation errors, see JIRA 2940
+
 Other API Changes
 -----------------
 
