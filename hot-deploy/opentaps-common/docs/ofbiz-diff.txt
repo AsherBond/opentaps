@@ -134,6 +134,10 @@ applications/accounting/servicedef/services_paymentmethod.xml
 applications/order/src/org/ofbiz/order/shoppingcart/CheckOutEvents.java
 - Revert Ofbiz change, only Purchase Order should require Terms. Avoid the terms screen to appear in the sales order checkout process.
 
+applications/content/build.xml
+applications/content/lib/uno/*.jar
+- Adding jars for jasper reports and openoffice (uno)
+
 Other API Changes
 -----------------
 
