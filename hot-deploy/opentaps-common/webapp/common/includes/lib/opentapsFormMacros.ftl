@@ -1196,7 +1196,7 @@ For more information, please see documentation/opentapsFormMacros.html
 
         function init_${treeId}() {
 
-            var glAccountData = { identifier: 'glAccountId', label: 'name', items: ${glAccountTree.toJSONString()}};
+            var glAccountData = { identifier: 'glAccountId', label: 'name', items: ${StringUtil.wrapString(glAccountTree.toJSONString())}};
             var glAccountStore = new opentaps.GLAccountJsonStore({data:glAccountData});
 
             var glAccountTree = new ${className}({
@@ -1206,8 +1206,8 @@ For more information, please see documentation/opentapsFormMacros.html
                     labelAttr: "name",
                     typeAttr: "type",
                     defaultExpanded: ${isExpanded?string},
-                    currencyUomId: '${glAccountTree.getCurrencyUomId()}',
-                    organizationPartyId: '${glAccountTree.getOrganizationPartyId()}'
+                    currencyUomId: '${StringUtil.wrapString(glAccountTree.getCurrencyUomId())}',
+                    organizationPartyId: '${StringUtil.wrapString(glAccountTree.getOrganizationPartyId())}'
                     }, document.getElementById("${treeId}"));
         }
 
