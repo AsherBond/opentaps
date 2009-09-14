@@ -123,7 +123,7 @@
             <display-entity entity-name="AcctgTransType"/>
         </field>
         <field name="partyId" widget-area-style="linktext">
-            <display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
+            <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
         </field>
         <field name="invoiceId" widget-area-style="linktext">
             <hyperlink description="${acctgTrans.invoiceId}" target="viewInvoice?invoiceId=${acctgTrans.invoiceId}"/>
@@ -183,7 +183,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="transactionDate"><date-time default-value="${bsh:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
+        <field name="transactionDate"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
         <field name="partyId" title="${uiLabelMap.PartyPartyId}">
             <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
         </field>
@@ -211,7 +211,7 @@
             </display-entity>
         </field>
         <field name="partyId" widget-area-style="linktext">
-            <display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
+            <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
         </field>
     </form>
 
@@ -334,14 +334,14 @@
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true"
         target="updateInvoiceRecurrence?invoicesSize=${invoicesSize}&amp;invoicesIndex=${invoicesIndex}">
         <row-actions>
-            <set field="invoiceDate" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;invoice&quot;).get(&quot;invoiceDate&quot;)}"/>
-            <set field="invoiceTypeId" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;invoice&quot;).get(&quot;invoiceTypeId&quot;)}"/>
-            <set field="dueDate" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;invoice&quot;).get(&quot;dueDate&quot;)}"/>
-            <set field="recurrenceRuleId" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;recurrenceRuleId&quot;)}"/>
-            <set field="lastRecurrenceDate" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;lastRecurrenceDate&quot;)}"/>
-            <set field="nextRecurrenceDate" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;nextRecurrenceDate&quot;)}"/>
-            <set field="fromPartyName" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;fromPartyName&quot;)}"/>
-            <set field="toPartyName" value="${bsh:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;toPartyName&quot;)}"/>
+            <set field="invoiceDate" value="${groovy:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;invoice&quot;).get(&quot;invoiceDate&quot;)}"/>
+            <set field="invoiceTypeId" value="${groovy:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;invoice&quot;).get(&quot;invoiceTypeId&quot;)}"/>
+            <set field="dueDate" value="${groovy:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;invoice&quot;).get(&quot;dueDate&quot;)}"/>
+            <set field="recurrenceRuleId" value="${groovy:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;recurrenceRuleId&quot;)}"/>
+            <set field="lastRecurrenceDate" value="${groovy:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;lastRecurrenceDate&quot;)}"/>
+            <set field="nextRecurrenceDate" value="${groovy:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;nextRecurrenceDate&quot;)}"/>
+            <set field="fromPartyName" value="${groovy:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;fromPartyName&quot;)}"/>
+            <set field="toPartyName" value="${groovy:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;toPartyName&quot;)}"/>
         </row-actions>
         <field name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext">
             <hyperlink description="${invoiceId}" target="viewInvoice?invoiceId=${invoiceId}"/>
