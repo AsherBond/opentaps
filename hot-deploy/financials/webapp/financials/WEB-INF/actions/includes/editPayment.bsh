@@ -174,9 +174,14 @@ for (int i=0; i < allPaymentTypes.size(); i++) {
 context.put("paymentTypeList", paymentTypeList);
 
 if (UtilValidate.isEmpty(currencyUomId)) {
-    Debug.logInfo("currencyUomId is Null Getting From Preference" + currencyUomId, "editPayment.bsh" );
+    Debug.logInfo("currencyUomId is Null Getting From Preference", "editPayment.bsh" );
     // Get the base currency for the organization
-    context.put("orgCurrencyUomId", UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator));
+    orgCurrencyUomId = UtilCommon.getOrgBaseCurrency(organizationPartyId, delegator);
+    context.put("orgCurrencyUomId", orgCurrencyUomId);
+    // Default to it if no payment
+    if (UtilValidate.isEmpty(paymentId)) {
+        currencyUomId = orgCurrencyUomId;
+    }
 }
 context.put("currencyUomId",currencyUomId);
 currencyUoms = delegator.findByAndCache("Uom",UtilMisc.toMap("uomTypeId","CURRENCY_MEASURE"));
