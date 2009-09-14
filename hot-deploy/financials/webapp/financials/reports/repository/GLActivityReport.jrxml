@@ -22,12 +22,12 @@
 	<field name="groupName" class="java.lang.String"/>
 	<field name="internalName" class="java.lang.String"/>
 	<field name="debitCreditFlag" class="java.lang.String"/>
-	<field name="sumTotal" class="java.lang.Double"/>
-	<variable name="DebitGroupSum" class="java.lang.Double" resetType="Group" resetGroup="group_name" calculation="Sum">
-		<variableExpression><![CDATA[($F{debitCreditFlag}.equals( "D" ) ? $F{sumTotal} : new Double(0.0))]]></variableExpression>
+	<field name="sumTotal" class="java.math.BigDecimal"/>
+	<variable name="DebitGroupSum" class="java.math.BigDecimal" resetType="Group" resetGroup="group_name" calculation="Sum">
+		<variableExpression><![CDATA[($F{debitCreditFlag}.equals( "D" ) ? $F{sumTotal} : BigDecimal.ZERO)]]></variableExpression>
 	</variable>
-	<variable name="CreditGroupSum" class="java.lang.Double" resetType="Group" resetGroup="group_name" calculation="Sum">
-		<variableExpression><![CDATA[( $F{debitCreditFlag}.equals( "C" ) ? $F{sumTotal} : new Double(0.0) )]]></variableExpression>
+	<variable name="CreditGroupSum" class="java.math.BigDecimal" resetType="Group" resetGroup="group_name" calculation="Sum">
+		<variableExpression><![CDATA[($F{debitCreditFlag}.equals( "C" ) ? $F{sumTotal} : BigDecimal.ZERO)]]></variableExpression>
 	</variable>
 	<group name="group_name">
 		<groupExpression><![CDATA[$F{groupName}]]></groupExpression>
@@ -80,7 +80,7 @@
 					<textElement textAlignment="Right">
 						<font size="12"/>
 					</textElement>
-					<textFieldExpression class="java.math.BigDecimal"><![CDATA[java.math.BigDecimal.valueOf($V{CreditGroupSum}.doubleValue()-$V{DebitGroupSum}.doubleValue())]]></textFieldExpression>
+					<textFieldExpression class="java.math.BigDecimal"><![CDATA[$V{CreditGroupSum}.subtract($V{DebitGroupSum})]]></textFieldExpression>
 				</textField>
 				<textField isBlankWhenNull="true">
 					<reportElement key="textField-3" x="345" y="3" width="90" height="17"/>
@@ -288,7 +288,7 @@
 				<textElement textAlignment="Right">
 					<font fontName="Times-Roman" size="12"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{sumTotal}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{sumTotal}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
