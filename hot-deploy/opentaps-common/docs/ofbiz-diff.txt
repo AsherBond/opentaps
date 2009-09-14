@@ -57,6 +57,8 @@ framework/entity/src/org/ofbiz/entity/GenericEntity.java
 r13280 Return field value if entity label for a primary key equals to this key. This fix broken labels in many screens
 The reason: some common entity labels (example CommonEntityLabels.xml DataSource.description.*> are ID, not description.
 
+framework/webapp/lib
+- Updated itext-2.0.1.jar to iText-2.1.7.jar, necessary to work with our version of jasper report
 
 Applications changes
 --------------------
