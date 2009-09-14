@@ -36,7 +36,7 @@ under the License.
 
 <#if hasDIAdminPermissions?default(false)>
 
-<#assign dateFormat = Static["org.ofbiz.base.util.UtilDateTime"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale))/>
+<#assign dateFormat = StringUtil.wrapString(Static["org.ofbiz.base.util.UtilDateTime"].getJsDateTimeFormat(Static["org.ofbiz.base.util.UtilDateTime"].getDateFormat(locale)))/>
 
 <script type="text/javascript">
 /*<![CDATA[*/
