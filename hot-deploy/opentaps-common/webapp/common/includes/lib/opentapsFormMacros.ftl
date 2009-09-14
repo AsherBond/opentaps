@@ -1045,6 +1045,20 @@ For more information, please see documentation/opentapsFormMacros.html
   </select>
 </#macro>
 
+<#macro form name url id="" method="post" formParams...>
+  <form method="${method}" action="${url}" name="${name}">
+    <#if formParams?has_content>
+      <#list formParams?keys as param>
+        <@inputHidden name="${param}" value="${formParams[param]}" />
+      </#list>
+    </#if>
+    <#nested>
+  </form>
+</#macro>
+
+<#macro submitFormLink form text class="buttontext"><a class="${class}" href="javascript:opentaps.submitForm('${form}', null);">${text}</a></#macro>
+
+<#macro submitFormLinkConfirm form text class="buttonDangerous" confirmText=uiLabelMap.OpentapsAreYouSure><a class="${class}" href="javascript:opentaps.confirmAction('${confirmText}', null, '${form}');">${text}</a></#macro>
 
 <#macro paginate name list="" rememberOrderBy=true rememberPage=true renderExcelButton=true params...>
   <@paginateTransform name=name list=list rememberOrderBy=rememberOrderBy rememberPage=rememberPage renderExcelButton=renderExcelButton context=context params=params><#nested></@paginateTransform>
