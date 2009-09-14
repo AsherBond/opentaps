@@ -45,11 +45,10 @@ function submitViewBalance(form) {
 <p>There are currently no closed time periods.</p>
 </#if>
 
-<#if (openTimePeriodsSortedByThruDate?has_content) && (openTimePeriodsSortedByThruDate.size() > 0)>
+<#if (openTimePeriodsSortedByThruDate?has_content) && (openTimePeriodsSortedByThruDate.size() gt 0)>
 <#assign timePeriod = openTimePeriodsSortedByThruDate.get(0)>
-<a href="<@ofbizUrl>closeAllTimePeriods?organizationPartyId=${organizationPartyId}&customTimePeriodId=${timePeriod.customTimePeriodId}</@ofbizUrl>">
-Close time periods ending ${timePeriod.thruDate}
-</a>
+<@form name="closeAllTimePeriodsAction" url="closeAllTimePeriods" organizationPartyId=organizationPartyId customTimePeriodId=timePeriod.customTimePeriodId />
+<@submitFormLink form="closeAllTimePeriodsAction" text="Close time periods ending ${timePeriod.thruDate}" />
 </p>
 <#else>
 <p>There are no time periods which can be closed.</p>
