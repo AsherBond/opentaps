@@ -196,14 +196,16 @@
     <request-map uri="assessFinanceCharges">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="financials.createInterestInvoice"/>
-        <response name="success" type="request-redirect" value="assessFinanceChargesForm"/>
+        <response name="success" type="request-redirect-noparam" value="assessFinanceChargesForm"/>
         <response name="error" type="view" value="assessFinanceChargesForm"/>
     </request-map>
 
     <request-map uri="updateBillingAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateBillingAccount"/>        
-        <response name="success" type="request-redirect" value="viewCustomerBillAcct"/>
+        <response name="success" type="request-redirect" value="viewCustomerBillAcct">
+          <redirect-parameter name="billingAccountId"/>
+        </response>
         <response name="error" type="view" value="viewCustomerBillAcct"/>
     </request-map>
     <request-map uri="viewCustomerBillAcct">
@@ -221,7 +223,9 @@
     <request-map uri="payInvoiceWithBillingAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="captureBillingAccountPayment"/>
-        <response name="success" type="request-redirect" value="viewCustomerBillAcct"/>
+        <response name="success" type="request-redirect" value="viewCustomerBillAcct">
+          <redirect-parameter name="billingAccountId"/>
+        </response>
         <response name="error" type="view" value="payInvoiceWithBillingAccountForm"/>
     </request-map>
 
@@ -236,7 +240,9 @@
     <request-map uri="processCODReceipt">
         <security https="true" auth="true"/>
         <event type="service" invoke="processCODReceipt"/>
-        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="fail" type="view" value="CODReceipt"/>
         <response name="error" type="view" value="CODReceipt"/>
     </request-map>
@@ -247,13 +253,13 @@
     <request-map uri="getOrCreateCashDrawer">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.getOrCreateCashDrawer"/>
-        <response name="success" type="request-redirect" value="manageCashDrawers"/>
+        <response name="success" type="request-redirect-noparam" value="manageCashDrawers"/>
         <response name="error" type="view" value="manageCashDrawers"/>
     </request-map>
     <request-map uri="closeCashDrawer">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.closeCashDrawer"/>
-        <response name="success" type="request-redirect" value="manageCashDrawers"/>
+        <response name="success" type="request-redirect-noparam" value="manageCashDrawers"/>
         <response name="error" type="view" value="manageCashDrawers"/>
     </request-map>
 
@@ -265,7 +271,7 @@
     <request-map uri="uploadLockboxFile">
         <security https="true" auth="true"/>
         <event type="service" invoke="financials.uploadLockboxFile"/>
-        <response name="success" type="request-redirect" value="manageLockboxBatches"/>
+        <response name="success" type="request-redirect-noparam" value="manageLockboxBatches"/>
         <response name="error" type="view" value="manageLockboxBatches"/>
     </request-map>
     <request-map uri="viewLockboxBatch">
@@ -275,14 +281,20 @@
     <request-map uri="lockboxBatchItemDetailAction">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="financials.lockboxBatchItemDetailAction"/>
-        <response name="success" type="request-redirect-filterparam" value="viewLockboxBatch" allowed-params="lockboxBatchId"/>
+        <response name="success" type="request-redirect" value="viewLockboxBatch">
+          <redirect-parameter name="lockboxBatchId"/>
+        </response>
         <response name="error" type="view" value="viewLockboxBatch"/>
     </request-map>
     <request-map uri="processLockboxBatch">
         <security https="true" auth="true"/>
         <event type="service" invoke="financials.processLockboxBatch"/>
-        <response name="success" type="request-redirect-filterparam" value="viewLockboxBatch" allowed-params="lockboxBatchId"/>
-        <response name="error" type="request-redirect" value="viewLockboxBatch"/>
+        <response name="success" type="request-redirect" value="viewLockboxBatch">
+          <redirect-parameter name="lockboxBatchId"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewLockboxBatch">
+          <redirect-parameter name="lockboxBatchId"/>
+        </response>
     </request-map>
     <request-map uri="findLockboxBatches">
         <security auth="true" https="true"/>
@@ -305,7 +317,9 @@
     <request-map uri="changeSalesAgreementStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreement"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewSalesAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewSalesAgreement"/>
     </request-map>
     <request-map uri="editSalesAgreement">
@@ -321,43 +335,57 @@
     <request-map uri="processUpdateSalesAgreement">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreement"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewSalesAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="editSalesAgreement"/>
     </request-map>
     <request-map uri="initialSalesAgreementItemsAndTerms">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId" allowed-attributes="agreementId"/>
+        <response name="success" type="request-redirect" value="viewSalesAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewSalesAgreement"/>
     </request-map>
     <request-map uri="processCreateSalesAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewSalesAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewSalesAgreement"/>
     </request-map>
     <request-map uri="processRemoveSalesAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeAgreementItemAndTerms"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewSalesAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewSalesAgreement"/>
     </request-map>
     <request-map uri="processCreateSalesAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="createAgreementTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewSalesAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewSalesAgreement"/>
     </request-map>
     <request-map uri="processUpdateSalesAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreementTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewSalesAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewSalesAgreement"/>
     </request-map>
     <request-map uri="processRemoveSalesAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteAgreementTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewSalesAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewSalesAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewSalesAgreement"/>
     </request-map>
 
@@ -458,7 +486,9 @@
     <request-map uri="changeAgreementStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreement"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processCreateAgreement">
@@ -470,43 +500,57 @@
     <request-map uri="processUpdateAgreement">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreement"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="editAgreement"/>
     </request-map>
     <request-map uri="initialAgreementItemsAndTerms">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId" allowed-attributes="agreementId"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="createCommissionAgreement"/>
     </request-map>
     <request-map uri="processCreateAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processRemoveAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeAgreementItemAndTerms"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processCreateAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="createAgreementTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processUpdateAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreementTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processRemoveAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteAgreementTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
 
@@ -526,7 +570,9 @@
     <request-map uri="createPaycheck">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.createPaycheck"/>
-        <response name="success" type="request-redirect" value="viewPaycheck" />
+        <response name="success" type="request-redirect" value="viewPaycheck">
+          <redirect-parameter name="paymentId"/>
+        </response>
         <response name="error" type="view" value="createPaycheckForm" />
     </request-map>
     <request-map uri="viewPaycheck">
@@ -541,7 +587,9 @@
     <request-map uri="updatePaycheck">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.updatePaycheck"/>
-        <response name="success" type="request-redirect" value="viewPaycheck" />
+        <response name="success" type="request-redirect" value="viewPaycheck">
+          <redirect-parameter name="paymentId"/>
+        </response>
         <response name="error" type="view" value="viewPaycheck" />
     </request-map>    
     <request-map uri="viewPaycheck.pdf">
@@ -551,14 +599,18 @@
     <request-map uri="setPaycheckStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="setPaymentStatus"/>
-        <response name="success" type="request-redirect" value="viewPaycheck"/>
+        <response name="success" type="request-redirect" value="viewPaycheck">
+          <redirect-parameter name="paymentId"/>
+        </response>
         <response name="error" type="view" value="viewPaycheck"/>
     </request-map>    
     
     <request-map uri="updatePaycheckItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.updatePaycheckItem"/>
-        <response name="success" type="request-redirect" value="viewPaycheck" />
+        <response name="success" type="request-redirect" value="viewPaycheck">
+          <redirect-parameter name="paymentId"/>
+        </response>
         <response name="error" type="view" value="viewPaycheck" />
     </request-map>       
     
@@ -589,7 +641,9 @@
     <request-map uri="createPartnerInvoice">
         <security https="true" auth="true"/>
         <event type="service" invoke="createInvoice"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId" allowed-attributes="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="createPartnerInvoiceForm"/>
     </request-map>
     <request-map uri="invoicePartnersForm">
@@ -599,7 +653,9 @@
     <request-map uri="createPartnerSalesInvoice">
         <security https="true" auth="true"/>
         <event type="java" path="com.opensourcestrategies.financials.invoice.InvoiceEvents" invoke="createPartnerSalesInvoice"/>
-        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="invoicePartnersForm"/>
     </request-map>
 
@@ -623,7 +679,9 @@
     <request-map uri="changePartnerAgreementStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreement"/>
-        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processCreatePartnerAgreement">
@@ -635,43 +693,57 @@
     <request-map uri="processUpdatePartnerAgreement">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreement"/>
-        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="editPartnerAgreement"/>
     </request-map>
     <request-map uri="initialPartnerAgreementItemsAndTerms">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId" allowed-attributes="agreementId"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processCreatePartnerAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processRemovePartnerAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeAgreementItemAndTerms"/>
-        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processCreatePartnerAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="createAgreementTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processUpdatePartnerAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreementTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
     <request-map uri="processRemovePartnerAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteAgreementTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewPartnerAgreement" allowed-params="agreementId"/>
+        <response name="success" type="request-redirect" value="viewPartnerAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
         <response name="error" type="view" value="viewPartnerAgreement"/>
     </request-map>
 
@@ -861,7 +933,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareTrialBalanceReport"/>
         <response name="pdf" type="view" value="JRTrialBalancePDF"/>
         <response name="xls" type="view" value="JRTrialBalanceXLS"/>
-        <response name="error" type="request-redirect-filterparam" value="TrialBalance" allowed-params="none"/>
+        <response name="error" type="request-redirect-noparam" value="TrialBalance"/>
     </request-map>
     <request-map uri="JRTrialBalancePDF">
         <security https="true" auth="true"/>
@@ -878,7 +950,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareIncomeStatementReport"/>
         <response name="pdf" type="view" value="JRIncomeStatementPDF"/>
         <response name="xls" type="view" value="JRIncomeStatementXLS"/>
-        <response name="error" type="request-redirect-filterparam" value="IncomeStatement" allowed-params="none"/>
+        <response name="error" type="request-redirect-noparam" value="IncomeStatement"/>
     </request-map>
     <request-map uri="JRIncomeStatementPDF">
         <security https="true" auth="true"/>
@@ -895,7 +967,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeIncomeStatementReport"/>
         <response name="pdf" type="view" value="JRComparativeIncomeStatementPDF"/>
         <response name="xls" type="view" value="JRComparativeIncomeStatementXLS"/>
-        <response name="error" type="request-redirect-filterparam" value="ComparativeIncomeStatement" allowed-params="none"/>
+        <response name="error" type="request-redirect-noparam" value="ComparativeIncomeStatement"/>
     </request-map>
     <request-map uri="JRComparativeIncomeStatementPDF">
         <security https="true" auth="true"/>
@@ -912,7 +984,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareBalanceSheetReport"/>
         <response name="pdf" type="view" value="JRBalanceSheetPDF"/>
         <response name="xls" type="view" value="JRBalanceSheetXLS"/>
-        <response name="error" type="request-redirect-filterparam" value="BalanceSheet" allowed-params="none"/>
+        <response name="error" type="request-redirect-noparam" value="BalanceSheet"/>
     </request-map>
     <request-map uri="JRBalanceSheetPDF">
         <security https="true" auth="true"/>
@@ -929,7 +1001,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeBalanceReport"/>
         <response name="pdf" type="view" value="JRComparativeBalancePDF"/>
         <response name="xls" type="view" value="JRComparativeBalanceXLS"/>
-        <response name="error" type="request-redirect-filterparam" value="ComparativeBalance" allowed-params="none"/>
+        <response name="error" type="request-redirect-noparam" value="ComparativeBalance"/>
     </request-map>
     <request-map uri="JRComparativeBalancePDF">
         <security https="true" auth="true"/>
@@ -946,7 +1018,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareCashFlowStatementReport"/>
         <response name="pdf" type="view" value="JRCashFlowStatementPDF"/>
         <response name="xls" type="view" value="JRCashFlowStatementXLS"/>
-        <response name="error" type="request-redirect-filterparam" value="CashFlowStatement" allowed-params="none"/>
+        <response name="error" type="request-redirect-noparam" value="CashFlowStatement"/>
     </request-map>
     <request-map uri="JRCashFlowStatementPDF">
         <security https="true" auth="true"/>
@@ -963,7 +1035,7 @@
         <event type="java" path="com.opensourcestrategies.financials.reports.FinancialReports" invoke="prepareComparativeCashFlowStatementReport"/>
         <response name="pdf" type="view" value="JRComparativeCashFlowStatementPDF"/>
         <response name="xls" type="view" value="JRComparativeCashFlowStatementXLS"/>
-        <response name="error" type="request-redirect-filterparam" value="ComparativeCashFlowStatement" allowed-params="none"/>
+        <response name="error" type="request-redirect-noparam" value="ComparativeCashFlowStatement"/>
     </request-map>
     <request-map uri="JRComparativeCashFlowStatementPDF">
         <security https="true" auth="true"/>
@@ -993,7 +1065,9 @@
     <request-map uri="updateAcctgTrans">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAcctgTrans"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="viewAcctgTrans" />
     </request-map>
     <request-map uri="createAcctgTransForm">
@@ -1003,7 +1077,9 @@
     <request-map uri="createAcctgTrans">
         <security https="true" auth="true"/>
         <event type="service" invoke="createAcctgTrans"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId" allowed-attributes="acctgTransId"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="createAcctgTransForm" />
     </request-map>
     <request-map uri="viewAcctgTransEntry">
@@ -1018,13 +1094,17 @@
     <request-map uri="updateAcctgTransEntry">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAcctgTransEntryManual"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="viewAcctgTransEntry" />
     </request-map>
     <request-map uri="updateAcctgTransEntryInline">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="updateAcctgTransEntryManual"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="viewAcctgTrans" />
     </request-map>
     <request-map uri="createAcctgTransEntryForm">
@@ -1035,13 +1115,17 @@
     <request-map uri="createAcctgTransEntryInline">
         <security https="true" auth="true"/>
         <event type="service" invoke="createAcctgTransEntryManual"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="viewAcctgTrans" />
     </request-map>
     <request-map uri="createAcctgTransEntry">
         <security https="true" auth="true"/>
         <event type="service" invoke="createAcctgTransEntryManual"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="createAcctgTransEntryForm" />
     </request-map>
     <request-map uri="deleteAcctgTrans">
@@ -1053,7 +1137,9 @@
     <request-map uri="deleteAcctgTransEntry">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteAcctgTransEntry"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-params="acctgTransId"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="viewAcctgTransEntry"/>
     </request-map>
     <request-map uri="ListUnpostedAcctgTrans">
@@ -1063,13 +1149,15 @@
     <request-map uri="postAcctgTrans">
         <security https="true" auth="true"/>
         <event type="service" invoke="postAcctgTrans"/>
-        <response name="success" type="request-redirect" value="viewAcctgTrans"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="viewAcctgTrans"/>
     </request-map>    
     <request-map uri="closeAllTimePeriods">
         <security https="true" auth="true"/>
         <event type="service" invoke="closeAllTimePeriods"/>
-        <response name="success" type="request-redirect" value="organizationTimePeriods"/>
+        <response name="success" type="request-redirect-noparam" value="organizationTimePeriods"/>
         <response name="error" type="view" value="organizationTimePeriods"/>
     </request-map>   
 
@@ -1101,7 +1189,11 @@
      <request-map uri="postSettledPayment">
         <security https="true" auth="true" direct-request="false"/>  <!-- this request can only be called in the request chain and not from the browser -->
         <event type="service" invoke="postAcctgTrans"/>
-        <response name="success" type="request-redirect" value="reconcileAfterSettlement" />
+        <response name="success" type="request-redirect" value="reconcileAfterSettlement">
+          <redirect-parameter name="transactionDate_c_date"/>
+          <redirect-parameter name="creditGlAccountId"/>
+          <redirect-parameter name="debitGlAccountId"/>
+        </response>
         <response name="error" type="view" value="createQuickAcctgTransForm" />
     </request-map> 
     <request-map uri="reconcileAfterSettlement">
@@ -1112,14 +1204,18 @@
     <request-map uri="createQuickAcctgTrans">
         <security https="true" auth="true"/>
         <event type="service" invoke="createQuickAcctgTrans"/>
-        <response name="success" type="request-redirect-filterparam" value="viewAcctgTrans" allowed-attributes="acctgTransId" allowed-params="acctgTransId"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="createQuickAcctgTransForm" />
     </request-map>
     
     <request-map uri="reverseAcctgTrans">
         <security https="true" auth="true"/>
         <event type="service" invoke="reverseAcctgTrans"/>
-        <response name="success" type="request-redirect" value="viewAcctgTrans"/>
+        <response name="success" type="request-redirect" value="viewAcctgTrans">
+          <redirect-parameter name="acctgTransId"/>
+        </response>
         <response name="error" type="view" value="viewAcctgTrans"/>
     </request-map>
 
@@ -1131,7 +1227,7 @@
     <request-map uri="updateExchangeRate">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateFXConversion"/>
-        <response name="success" type="request-redirect" value="exchangeRates"/>
+        <response name="success" type="request-redirect-noparam" value="exchangeRates"/>
         <response name="error" type="view" value="exchangeRates"/>
     </request-map>
 
@@ -1223,7 +1319,7 @@
     <request-map uri="createGlAccountTypeDefault">
         <security https="true" auth="true"/>
         <event type="service" invoke="createGlAccountTypeDefault"/>
-        <response name="success" type="request-redirect" value="listGlAccountTypes"/>
+        <response name="success" type="request-redirect-noparam" value="listGlAccountTypes"/>
         <response name="error" type="view" value="listGlAccountTypes"/>
     </request-map>
     
@@ -1235,7 +1331,7 @@
     <request-map uri="updateGlAccountTypeDefault">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateGlAccountTypeDefault"/>
-        <response name="success" type="request-redirect" value="listGlAccountTypes"/>
+        <response name="success" type="request-redirect-noparam" value="listGlAccountTypes"/>
         <response name="error" type="view" value="updateGlAccountTypeDefaultScreen"/>
     </request-map>
     
@@ -1247,27 +1343,27 @@
     <request-map uri="createPaymentMethod">
         <security https="true" auth="true"/>
         <event type="service" invoke="financials.createPaymentMethod"/>
-        <response name="success" type="view" value="listPaymentMethods"/>
+        <response name="success" type="request-redirect-noparam" value="listPaymentMethods"/>
     </request-map>
 
     <request-map uri="updatePaymentMethod">
         <security https="true" auth="true"/>
         <event type="service" invoke="financials.updatePaymentMethod"/>
-        <response name="success" type="request-redirect" value="listPaymentMethods"/>
+        <response name="success" type="request-redirect-noparam" value="listPaymentMethods"/>
         <response name="error" type="view" value="listPaymentMethods"/>
     </request-map>
     
     <request-map uri="removeGlAccountFromOrganization">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeGlAccountFromOrganization"/>
-        <response name="success" type="request-redirect" value="listGlAccounts"/>
+        <response name="success" type="request-redirect-noparam" value="listGlAccounts"/>
         <response name="error" type="view" value="listGlAccounts"/>
     </request-map>
     
     <request-map uri="createCustomTimePeriod">
         <security https="true" auth="true"/>
         <event type="service" invoke="createCustomTimePeriod"/>
-        <response name="success" type="request-redirect" value="organizationTimePeriods"/>
+        <response name="success" type="request-redirect-noparam" value="organizationTimePeriods"/>
         <response name="error" type="view" value="organizationTimePeriods"/>
     </request-map>
     
@@ -1279,7 +1375,7 @@
     <request-map uri="updateGlAccount2">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateGlAccount2"/>
-        <response name="success" type="request-redirect" value="listGlAccounts"/>
+        <response name="success" type="request-redirect-noparam" value="listGlAccounts"/>
         <response name="error" type="view" value="updateGlAccountScreen"/>
     </request-map>
     
@@ -1291,7 +1387,7 @@
     <request-map uri="addExistingGlAccount">
         <security https="true" auth="true"/>
         <event type="service" invoke="addGlAccountToOrganization"/>
-        <response name="success" type="request-redirect" value="listGlAccounts"/>
+        <response name="success" type="request-redirect-noparam" value="listGlAccounts"/>
         <response name="error" type="view" value="addExistingGlAccountScreen"/>
     </request-map>
     
@@ -1303,7 +1399,7 @@
     <request-map uri="addNewGlAccount">
         <security https="true" auth="true" /> 
         <event type="service" invoke="addNewGlAccount" /> 
-        <response name="success" type="request-redirect" value="listGlAccounts" /> 
+        <response name="success" type="request-redirect-noparam" value="listGlAccounts"/>
         <response name="error" type="view" value="addNewGlAccountScreen" /> 
     </request-map>
     
@@ -1315,13 +1411,13 @@
     <request-map uri="addSubAccount">
         <security https="true" auth="true" /> 
         <event type="service" invoke="addNewGlAccount" /> 
-        <response name="success" type="request-redirect" value="listGlAccounts" />  
+        <response name="success" type="request-redirect-noparam" value="listGlAccounts"/>
         <response name="error" type="view" value="addSubAccountScreen" /> 
     </request-map>
     <request-map uri="updateExistingGlAccount">
         <security https="true" auth="true" /> 
-        <event type="service" invoke="updateExistingGlAccount" /> 
-        <response name="success" type="request-redirect" value="updateGlAccountScreen"/>
+        <event type="service" invoke="updateExistingGlAccount" />
+        <response name="success" type="request-redirect-noparam" value="listGlAccounts"/>
         <response name="error" type="view" value="updateGlAccountScreen" /> 
     </request-map>
     
@@ -1329,7 +1425,7 @@
     <request-map uri="updatePartyAcctgPreference">
         <security https="true" auth="true"/>
         <event type="service" invoke="financials.updatePartyAcctgPreference"/>
-        <response name="success" type="request-redirect" value="listPaymentMethods"/>
+        <response name="success" type="request-redirect-noparam" value="listPaymentMethods"/>
         <response name="error" type="view" value="listPaymentMethods"/>
     </request-map>
 
@@ -1395,19 +1491,25 @@
     <request-map uri="createPaymentApplication">
         <security https="true" auth="true"/>
         <event type="service" invoke="createPaymentApplication" /> 
-        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />
+        <response name="success" type="request-redirect" value="viewPayment">
+          <redirect-parameter name="paymentId"/>
+        </response>
         <response name="error" type="view" value="viewPayment"/>
     </request-map>
     <request-map uri="updatePaymentApplication">
         <security https="true" auth="true"/>
         <event type="service" invoke="updatePaymentApplication" /> 
-        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />
+        <response name="success" type="request-redirect" value="viewPayment">
+          <redirect-parameter name="paymentId"/>
+        </response>
         <response name="error" type="view" value="viewPayment"/>
     </request-map>
     <request-map uri="removePaymentApplication">
         <security https="true" auth="true"/>
         <event type="service" invoke="removePaymentApplication"/>
-        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />
+        <response name="success" type="request-redirect" value="viewPayment">
+          <redirect-parameter name="paymentId"/>
+        </response>
         <response name="error" type="view" value="viewPayment"/>
     </request-map>
     <request-map uri="editPayment">
@@ -1419,21 +1521,27 @@
     <request-map uri="createPayment">
         <security https="true" auth="true" /> 
         <event type="service" invoke="financials.createPayment" /> 
-        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />  
+        <response name="success" type="request-redirect" value="viewPayment">
+          <redirect-parameter name="paymentId"/>
+        </response>  
         <response name="error" type="view" value="editPayment" /> 
     </request-map>
 	
     <request-map uri="updatePayment">
         <security https="true" auth="true" /> 
         <event type="service" invoke="financials.updatePayment" /> 
-        <response name="success" type="request-redirect-filterparam" value="viewPayment" allowed-params="paymentId" allowed-attributes="paymentId" />  
+        <response name="success" type="request-redirect" value="viewPayment">
+          <redirect-parameter name="paymentId"/>
+        </response>  
         <response name="error" type="view" value="editPayment" /> 
     </request-map>
 			
     <request-map uri="setPaymentStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="setPaymentStatus"/>
-        <response name="success" type="request-redirect" value="viewPayment"/>
+        <response name="success" type="request-redirect" value="viewPayment">
+          <redirect-parameter name="paymentId"/>
+        </response>
         <response name="error" type="view" value="viewPayment"/>
     </request-map>
 
@@ -1446,7 +1554,9 @@
     <request-map uri="voidPayment">
         <security https="true" auth="true"/>
         <event type="service" invoke="voidPayment"/>
-        <response name="success" type="request-redirect" value="viewPayment"/>
+        <response name="success" type="request-redirect" value="viewPayment">
+          <redirect-parameter name="paymentId"/>
+        </response>
         <response name="error" type="view" value="viewPayment"/>
     </request-map>
 
@@ -1487,7 +1597,9 @@
     <request-map uri="invoicePerformedOrderItems">
         <security auth="true" https="true"/>
         <event type="service" invoke="opentaps.invoiceNonPhysicalOrderItems"/>
-        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="failure" type="view" value="receivablesMain"/>
         <response name="error" type="view" value="receivablesMain"/>
     </request-map>
@@ -1509,7 +1621,9 @@
     <request-map uri="createInvoiceActual">
         <security auth="true" https="true"/>
         <event type="service" invoke="createInvoice"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId" allowed-attributes="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="createInvoiceForm"/>
     </request-map>
     <request-map uri="updateInvoice">
@@ -1522,13 +1636,17 @@
     <request-map uri="updateInvoiceActual">
         <security auth="true" https="true"/>
         <event type="service" invoke="updateInvoiceAndBillingAddress"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="createInvoiceItem">
         <security auth="true" https="true"/>
         <event type="service" invoke="createInvoiceItem"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="updateInvoiceItemForm">
@@ -1538,44 +1656,58 @@
     <request-map uri="updateInvoiceItem">
         <security auth="true" https="true"/>
         <event type="service" invoke="updateInvoiceItem"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="updateInvoiceItemMulti">
         <security auth="true" https="true"/>
         <event type="service-multi" invoke="updateInvoiceItem"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="setInvoiceStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="setInvoiceStatus"/>
-        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>   
     <!-- special request to change invoice to READY and check if it shouldbe set to PAID as well -->
     <request-map uri="setInvoiceReady">
         <security https="true" auth="true"/>
         <event type="service" invoke="setInvoiceReadyAndCheckIfPaid"/>
-        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="setInvoiceProcessingStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.setInvoiceProcessingStatus"/>
-        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="voidInvoice">
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.voidInvoice"/>
-        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="removeInvoiceItem">
         <security auth="true" https="true"/>
         <event type="service" invoke="removeInvoiceItem"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="writeInvoiceEmail">
@@ -1614,25 +1746,33 @@
     <request-map uri="createInvoiceTerm">
         <security auth="true" https="true"/>
         <event type="service" path="" invoke="createInvoiceTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="updateInvoiceTerm">
         <security auth="true" https="true"/>
         <event type="service" path="" invoke="updateInvoiceTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="updateInvoiceTermMulti">
         <security auth="true" https="true"/>
         <event type="service-multi" path="" invoke="updateInvoiceTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="deleteInvoiceTerm">
         <security auth="true" https="true"/>
         <event type="service" path="" invoke="deleteInvoiceTerm"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="invoiceRecurrence">
@@ -1642,19 +1782,23 @@
     <request-map uri="updateInvoiceRecurrence">
         <security auth="true" https="true"/>
         <event type="service" path="" invoke="updateInvoiceRecurrence"/>
-        <response name="success" type="request-redirect" value="invoiceRecurrence"/>
+        <response name="success" type="request-redirect-noparam" value="invoiceRecurrence"/>
         <response name="error" type="view" value="invoiceRecurrence"/>
     </request-map>
      <request-map uri="convertToBillingAccount">
         <security auth="true" https="true"/>
         <event type="service" path="" invoke="convertToBillingAccount"/>
-        <response name="success" type="request-redirect" value="viewInvoice"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
     <request-map uri="createInvoiceAdjustmentViewInvoice">
         <security auth="true" https="true"/>
         <event type="service" path="" invoke="createInvoiceAdjustment"/>
-        <response name="success" type="request-redirect-filterparam" value="viewInvoice" allowed-params="invoiceId"/>
+        <response name="success" type="request-redirect" value="viewInvoice">
+          <redirect-parameter name="invoiceId"/>
+        </response>
         <response name="error" type="view" value="viewInvoice"/>
     </request-map>
 
@@ -1666,7 +1810,7 @@
     <request-map uri="setChartOfAccountsPref">
         <security auth="true" https="true"/>
         <event type="service" path="" invoke="opentaps.setViewPreference"/>
-        <response name="success" type="request-redirect" value="listGlAccounts"/>
+        <response name="success" type="request-redirect-noparam" value="listGlAccounts"/>
         <response name="error" type="view" value="listGlAccounts"/>
     </request-map>
 
