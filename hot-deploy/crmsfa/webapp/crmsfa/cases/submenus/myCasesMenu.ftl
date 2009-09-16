@@ -15,22 +15,19 @@
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-
-  <form name="setCaseViewPref" method="post" action="<@ofbizUrl>setViewPreference</@ofbizUrl>">
-  <@inputHidden name="donePage" value="myCases" />
-  <@inputHidden name="viewPrefTypeId" value="MY_OR_TEAM_CASES" />
+<#assign prefChangeAction = "">
 <#if viewPreferences.get("MY_OR_TEAM_CASES")?default("TEAM_VALUES") == "MY_VALUES">
   <#assign title = uiLabelMap.CrmMyCases />
-  <@inputHidden name="viewPrefValue" value="TEAM_VALUES" />
-  <#assign prefChange = "<a class='subMenuButton' href='javascript:document.setCaseViewPref.submit()'>" + uiLabelMap.CrmTeamCases + "</a>" />
+  <@form name="setTeamCasesViewPref" url="setViewPreference" donePage="myCases" viewPrefTypeId="MY_OR_TEAM_CASES" viewPrefValue="TEAM_VALUES" />
+  <#assign prefChangeAction><@submitFormLink form="setTeamCasesViewPref" text=uiLabelMap.CrmTeamCases class="subMenuButton" /></#assign>
 <#else> 
   <#assign title = uiLabelMap.CrmTeamCases />
-  <@inputHidden name="viewPrefValue" value="MY_VALUES" />
-  <#assign prefChange = "<a class='subMenuButton' href='javascript:document.setCaseViewPref.submit()'>" + uiLabelMap.CrmMyCases + "</a>" />
+  <@form name="setMyCasesViewPref" url="setViewPreference" donePage="myCases" viewPrefTypeId="MY_OR_TEAM_CASES" viewPrefValue="MY_VALUES" />
+  <#assign prefChangeAction><@submitFormLink form="setMyCasesViewPref" text=uiLabelMap.CrmMyCases class="subMenuButton" /></#assign>
 </#if>
   </form>
 
 <div class="subSectionHeader">
     <div class="subSectionTitle">${title?if_exists}</div>
-    <div class="subMenuBar">${prefChange?if_exists}</div>
+    <div class="subMenuBar">${prefChangeAction?if_exists}</div>
 </div>
