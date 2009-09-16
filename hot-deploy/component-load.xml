@@ -24,7 +24,6 @@ under the License.
 <component-loader xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/component-loader.xsd">
     <load-component component-location="opentaps-common"/>
-
     <load-component component-location="crmsfa"/>
     <load-component component-location="financials"/>
     <load-component component-location="purchasing"/>
@@ -32,7 +31,7 @@ under the License.
     <load-component component-location="dataimport"/>
     <load-component component-location="opentaps-tests"/>
     <load-component component-location="homeapps"/>
-    <!--    
+    <!--
     <load-component component-location="livecatalog"/>
     <load-component component-location="analytics"/>
     <load-component component-location="funambol"/>
