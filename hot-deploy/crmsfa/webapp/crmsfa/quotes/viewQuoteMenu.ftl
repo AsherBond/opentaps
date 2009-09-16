@@ -13,28 +13,38 @@
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
-
-<div class="subSectionHeader">
-  <div class="subSectionTitle"><#if quote?exists>${uiLabelMap.OrderQuote} ${uiLabelMap.OrderNbr}${quote.quoteId}</#if></div>
-  <div class="subMenuBar">
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<#assign quoteStatusChangeAction = "">
     <#if quote?exists>
       <#list validChanges as validChange>
         <#if "QUO_ORDERED" == validChange.statusIdTo>
-          <a href="<@ofbizUrl>loadCartFromQuote?quoteId=${quote.quoteId}&amp;finalizeMode=init</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderCreateOrder}</a>
+			<@form name="loadCartFromQuote${validChange_index}" url="loadCartFromQuote" quoteId="${quote.quoteId}" finalizeMode="init"/>
+  			<#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="loadCartFromQuote${validChange_index}" text=uiLabelMap.OrderCreateOrder class="buttontext" /></#assign>        
         <#else>
           <#if "QUO_FINALIZED" == validChange.statusIdTo>
-            <a href="<@ofbizUrl>finalizeQuote?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${validChange.transitionName}</a>
+			<@form name="finalizeQuote${validChange_index}" url="finalizeQuote" quoteId="${quote.quoteId}" />
+  			<#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="finalizeQuote${validChange_index}" text=validChange.transitionName class="buttontext" /></#assign>        
           <#else>
-            <a href="<@ofbizUrl>setQuoteStatus?quoteId=${quote.quoteId}&amp;statusId=${validChange.statusIdTo}</@ofbizUrl>" class="buttontext">${validChange.transitionName}</a>
+			<@form name="setQuoteStatus${validChange_index}" url="setQuoteStatus" quoteId="${quote.quoteId}" statusId="${validChange.statusIdTo}" />
+  			<#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="setQuoteStatus${validChange_index}" text=validChange.transitionName class="buttontext" /></#assign>        
           </#if>
         </#if>
       </#list>
       <#if canEditQuote>
-        <a href="<@ofbizUrl>EditQuote?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonEdit}</a>
+		<@form name="editQuote" url="EditQuote" quoteId="${quote.quoteId}" />
+		<#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="editQuote" text=uiLabelMap.CommonEdit class="buttontext" /></#assign>        
       </#if>
-      <a href="<@ofbizUrl>quote.pdf?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.AccountingInvoicePDF}</a>
-      <a href="<@ofbizUrl>writeQuoteEmail?quoteId=${quote.quoteId}&amp;emailType=PRDS_QUO_CONFIRM</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonEmail}</a>          
-      <a href="<@ofbizUrl>QuoteMiniCatalog.pdf?quoteId=${quote.quoteId}</@ofbizUrl>" class="buttontext">${uiLabelMap.OpentapsMiniCatalog}</a>
+
+      <@form name="toQuotePdf" url="quote.pdf" quoteId="${quote.quoteId}" />
+	  <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="toQuotePdf" text=uiLabelMap.AccountingInvoicePDF class="buttontext" /></#assign>        
+      <@form name="writeQuoteEmail" url="writeQuoteEmail" quoteId="${quote.quoteId}" emailType="PRDS_QUO_CONFIRM" />
+	  <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="writeQuoteEmail" text=uiLabelMap.CommonEmail class="buttontext" /></#assign>        
+      <@form name="toCatalogPdf" url="QuoteMiniCatalog.pdf" quoteId="${quote.quoteId}" />
+	  <#assign quoteStatusChangeAction>${quoteStatusChangeAction}<@submitFormLink form="toCatalogPdf" text=uiLabelMap.OpentapsMiniCatalog class="buttontext" /></#assign>        
     </#if>
+<div class="subSectionHeader">
+  <div class="subSectionTitle"><#if quote?exists>${uiLabelMap.OrderQuote} ${uiLabelMap.OrderNbr}${quote.quoteId}</#if></div>
+  <div class="subMenuBar">
+    ${quoteStatusChangeAction?if_exists}
   </div>
 </div>

@@ -39,6 +39,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,7 +66,6 @@ import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.util.ByteWrapper;
 import org.ofbiz.entity.util.EntityFindOptions;
 import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.entity.util.EntityUtil;
@@ -555,8 +555,7 @@ public final class EmailServices {
         String communicationEventId = (String) serviceResults.get("communicationEventId");
         parameters.put("communicationEventId", communicationEventId);
         File pdfFile = new File(UtilReports.OUT_PATH + reportName);
-        ByteWrapper uploadedFile = new ByteWrapper(getBytesFromFile(pdfFile));
-
+        ByteBuffer uploadedFile = ByteBuffer.wrap(getBytesFromFile(pdfFile));
         // Populate the context for the DataResource/Content/CommEventContentAssoc creation service
         input = new HashMap();
         input.put("userLogin", userLogin);
