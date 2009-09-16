@@ -14,15 +14,21 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
 <#-- Copyright (c) 2005-2006 Open Source Strategies, Inc. -->
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
-<#assign prefParams = "donePage=myCases&viewPrefTypeId=MY_OR_TEAM_CASES " />
+  <form name="setCaseViewPref" method="post" action="<@ofbizUrl>setViewPreference</@ofbizUrl>">
+  <@inputHidden name="donePage" value="myCases" />
+  <@inputHidden name="viewPrefTypeId" value="MY_OR_TEAM_CASES" />
 <#if viewPreferences.get("MY_OR_TEAM_CASES")?default("TEAM_VALUES") == "MY_VALUES">
   <#assign title = uiLabelMap.CrmMyCases />
-  <#assign prefChange = "<a class='subMenuButton' href='setViewPreference?viewPrefValue=TEAM_VALUES&"+prefParams+"'>" + uiLabelMap.CrmTeamCases + "</a>" />
+  <@inputHidden name="viewPrefValue" value="TEAM_VALUES" />
+  <#assign prefChange = "<a class='subMenuButton' href='javascript:document.setCaseViewPref.submit()'>" + uiLabelMap.CrmTeamCases + "</a>" />
 <#else> 
   <#assign title = uiLabelMap.CrmTeamCases />
-  <#assign prefChange = "<a class='subMenuButton' href='setViewPreference?viewPrefValue=MY_VALUES&"+prefParams+"'>" + uiLabelMap.CrmMyCases + "</a>" />
+  <@inputHidden name="viewPrefValue" value="MY_VALUES" />
+  <#assign prefChange = "<a class='subMenuButton' href='javascript:document.setCaseViewPref.submit()'>" + uiLabelMap.CrmMyCases + "</a>" />
 </#if>
+  </form>
 
 <div class="subSectionHeader">
     <div class="subSectionTitle">${title?if_exists}</div>
