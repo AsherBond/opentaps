@@ -61,6 +61,9 @@ framework/webapp/lib
 - Updated itext-2.0.1.jar to iText-2.1.7.jar, necessary to work with our version of jasper report
 - Added jasperreports-3.5.2.jar library, needed for compilation of content/report for example
 
+framework/webapp/src/org/ofbiz/webapp/event/ServiceEventHandler.java 
+r13357 Changed error message for secured URL parameters
+
 Applications changes
 --------------------
 
