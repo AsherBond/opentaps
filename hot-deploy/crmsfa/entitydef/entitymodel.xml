@@ -943,7 +943,9 @@
   <!-- ========================================================= -->
   <!-- com.opensourcestrategies.crmsfa.quotes                    -->
   <!-- ========================================================= -->
-
+    <extend-entity entity-name="QuoteItem">
+        <field name="description" type="description"></field>
+    </extend-entity>        
     <entity entity-name="QuoteItemOption"
             package-name="com.opensourcestrategies.crmsfa.quotes"
             title="Associate multiple option sets to a QuoteItem">
