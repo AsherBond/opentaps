@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<!-- This file has been modified by Open Source Strategies, Inc. -->
+
+<!-- It copy from old ofbiz for it missing in ofbiz 9.04. -->
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="createCustRequestRole" short-description="Create Customer RequestRole">
+        <set from-field="parameters.partyId" field="lookupPKMap.partyId"/>
+        <set from-field="parameters.roleTypeId" field="lookupPKMap.roleTypeId"/>
+        <find-by-primary-key entity-name="PartyRole" map-name="lookupPKMap" value-name="partyRole"/>
+        <if-empty map-name="partyRole" field-name="partyId">
+            <make-value value-name="partyRole" entity-name="PartyRole"/>
+            <set-pk-fields map-name="lookupPKMap" value-name="partyRole"/>
+            <create-value value-name="partyRole"/>
+        </if-empty>
+        <make-value value-name="newEntity" entity-name="CustRequestRole"/>
+        <set-pk-fields map-name="parameters" value-name="newEntity"/>
+        <create-value value-name="newEntity"/>
+    </simple-method>
+
+    <simple-method method-name="removeCustRequestRole" short-description="Remove Customer RequestRole">
+        <set from-field="parameters.custRequestId" field="lookupPKMap.custRequestId"/>
+        <set from-field="parameters.partyId" field="lookupPKMap.partyId"/>
+        <set from-field="parameters.roleTypeId" field="lookupPKMap.roleTypeId"/>
+        <find-by-primary-key entity-name="CustRequestRole" map-name="lookupPKMap" value-name="custRequestRole"/>
+        <remove-value value-name="custRequestRole"/>
+    </simple-method>
+    
+    <simple-method method-name="createCustRequestNote" short-description="Create Customer Request Note">
+        <make-value value-name="newEntity" entity-name="CustRequestNote"/>
+        <set from-field="parameters.custRequestId" field="newEntity.custRequestId"/>
+        <set from-field="parameters.note" field="newNoteMap.note"/>
+        <call-service service-name="createNote" in-map-name="newNoteMap">
+            <result-to-field result-name="noteId" map-name="newEntity"/>
+        </call-service>
+        <create-value value-name="newEntity"/>
+        <field-to-result field-name="newEntity.noteId" result-name="noteId"/>
+    </simple-method>
+</simple-methods>

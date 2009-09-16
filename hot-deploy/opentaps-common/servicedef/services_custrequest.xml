@@ -24,5 +24,13 @@
         <description>Marks a customer request as updated.</description>
         <attribute name="custRequestId" type="String" mode="IN" optional="false"/>
     </service>
-
+    
+    <!-- It copy from old ofbiz for it is changed in ofbiz 9.04. -->
+    <service name="createCustRequestNote" engine="simple"
+            location="com/opensourcestrategies/order/request/CustRequestServices.xml" invoke="createCustRequestNote" auth="true">
+        <description>Create a note for a CustRequest</description>
+        <attribute name="custRequestId" type="String" mode="IN" optional="false"/>
+        <attribute name="note" type="String" mode="IN" optional="false"/>
+        <attribute name="noteId" type="String" mode="OUT" optional="false"/>
+    </service>
 </services>

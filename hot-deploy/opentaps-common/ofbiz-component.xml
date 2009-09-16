@@ -26,6 +26,7 @@
     <classpath type="jar" location="lib/hibernate/*"/>
     <classpath type="dir" location="scripts"/>
     <classpath type="dir" location="config"/>
+    <classpath type="dir" location="script"/>
     <classpath type="dir" location="lib/DejaVu"/>
 
     <entity-resource type="data" reader-name="seed" loader="main" location="data/UomSeedData.xml"/>
@@ -74,7 +75,7 @@
     <service-resource type="model" loader="main" location="servicedef/services_custrequest.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_party.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_search.xml"/>
-    <service-resource type="model" loader="main" location="servicedef/services_orders.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_orders.xml"/> 
     <!--service-resource type="model" loader="main" location="servicedef/services_pricepromo.xml"/-->
 
     <!-- Uncomment this, or better still, copy it to your own ofbiz-component.xml if you want all postal addresses to be upper case automatically. -->
@@ -86,6 +87,7 @@
     <service-resource type="eca" loader="main" location="servicedef/secas_agreements.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas_party.xml"/>
     <!-- note that webapp/opentaps/ is not a bona fide application, just a storage location for common ftl and bsh files -->
+
 
     <webapp name="opentaps_images"
         title="Opentaps Commons Images"
@@ -117,5 +119,6 @@
         location="webapp/commongwt"
         mount-point="/commongwt"
         app-bar-display="false"/>
+
 
 </ofbiz-component>
