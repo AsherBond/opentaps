@@ -401,7 +401,7 @@
         paginate-target="NotSupportedYet" list-name="associatedParties">
         <field name="workEffortId"><hidden value="${parameters.workEffortId}"/></field>
         <field name="partyId" title="${uiLabelMap.CommonName}" widget-area-style="fieldWidth50pct">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.party.PartyHelper.createViewPageLink(partyId, delegator, externalLoginKey);}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.party.PartyHelper.createViewPageLink(partyId, delegator, externalLoginKey);}"/>
         </field>
         <field name="roleTypeId" title="${uiLabelMap.PartyRole}" widget-area-style="fieldWidth100">
             <display-entity entity-name="RoleType"/> 

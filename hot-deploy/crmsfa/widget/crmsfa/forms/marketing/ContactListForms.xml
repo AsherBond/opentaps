@@ -153,7 +153,7 @@
             <display-entity entity-name="ContactMechType"/>
         </field>
         <field name="" title="${uiLabelMap.CrmNumberOfMembers}">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactListId, delegator)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactListId, delegator)}"/>
         </field>
     </form>  
 
@@ -182,7 +182,7 @@
             <display-entity entity-name="ContactMechType"/>
         </field>
         <field name="" title="${uiLabelMap.CrmNumberOfMembers}">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactListId, delegator)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactListId, delegator)}"/>
         </field>
 
         <field name="remove" title="" widget-style="buttontext">
@@ -203,7 +203,7 @@
         <field name="partyId" title="${uiLabelMap.CommonName}" widget-style="linktext"
             header-link="${listSortTarget}?contactListId=${parameters.contactListId}&amp;contactListPartyOrderBy=name&amp;${findParams}#ListContactListParties" 
             header-link-style="orderByHeaderLink">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.party.PartyHelper.createViewPageLink(partyId, delegator, externalLoginKey);}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.party.PartyHelper.createViewPageLink(partyId, delegator, externalLoginKey);}"/>
         </field>
         <!-- for adding member -->
         <field name="statusId" use-when="isRemoveForm!=true"><hidden value="CLPT_ACCEPTED"/></field>
@@ -218,7 +218,7 @@
         <field name="infoString" title="${contactMechColumnName}"
             header-link="${listSortTarget}?contactListId=${parameters.contactListId}&amp;contactListPartyOrderBy=description&amp;${findParams}#ListContactListParties" 
             header-link-style="orderByHeaderLink">
-            <display description="${bsh:
+            <display description="${groovy:
                 if (&quot;EMAIL_ADDRESS&quot;.equals(contactMechTypeId)) return infoString; 
                 if (&quot;TELECOM_NUMBER&quot;.equals(contactMechTypeId)) return &quot;(&quot;+areaCode+&quot;) &quot;+contactNumber;
                 if (! &quot;POSTAL_ADDRESS&quot;.equals(contactMechTypeId)) return null;
@@ -269,7 +269,7 @@
             <hyperlink target="viewContactList?contactListId=${contactList.contactListId}" description="${contactList.contactListName} (${contactList.contactListId})"/>
         </field>
         <field name="numberOfMembers" title="${uiLabelMap.CrmNumberSorted}">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactList.get(&quot;contactListId&quot;), delegator)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactList.get(&quot;contactListId&quot;), delegator)}"/>
         </field>
         <field name="option1" title="" widget-style="buttontext">
             <hyperlink target="viewUSPSSortResult?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSSortResults}"/>

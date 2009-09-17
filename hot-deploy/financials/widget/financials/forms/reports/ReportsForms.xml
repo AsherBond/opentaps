@@ -31,7 +31,7 @@
           <field name="taxAuthGeoId" title=" ">
               <display-entity entity-name="Geo" description="${geoName} (${geoId})" key-field-name="geoId"/>
           </field>
-          <field name="taxAuthPartyId" title="${uiLabelMap.AccountingTaxAuthority}"><display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, taxAuthPartyId, false)} (${taxAuthPartyId})"/></field>
+          <field name="taxAuthPartyId" title="${uiLabelMap.AccountingTaxAuthority}"><display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, taxAuthPartyId, false)} (${taxAuthPartyId})"/></field>
           <field name="glAccountId">
               <display-entity entity-name="GlAccount" description="${accountCode}: ${accountName}">
                   <sub-hyperlink target="AccountActivitiesDetail?glAccountId=${glAccountId}" description="(${glAccountId})" link-style="buttontext"/> 

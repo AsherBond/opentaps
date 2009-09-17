@@ -61,8 +61,8 @@
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true"
         target="processCheckRun?paymentMethodId=${paymentMethodId}&amp;initialCheckNumber=${initialCheckNumber}&amp;organizationPartyId=${organizationPartyId}&amp;partyIdFrom=${partyIdFrom}&amp;dueDate=${dueDate}&amp;acctgTagEnumId1=${tag1}&amp;acctgTagEnumId2=${tag2}&amp;acctgTagEnumId3=${tag3}&amp;acctgTagEnumId4=${tag4}&amp;acctgTagEnumId5=${tag5}&amp;acctgTagEnumId6=${tag6}&amp;acctgTagEnumId7=${tag7}&amp;acctgTagEnumId8=${tag8}&amp;acctgTagEnumId9=${tag9}&amp;acctgTagEnumId10=${tag10}">
         <row-actions>
-            <set field="outstandingAmount" value="${bsh:invoiceData.get(invoiceId).get(&quot;outstandingAmount&quot;)}"/>
-            <set field="fromPartyName" value="${bsh:invoiceData.get(invoiceId).get(&quot;fromPartyName&quot;)}"/>
+            <set field="outstandingAmount" value="${groovy:invoiceData.get(invoiceId).get(&quot;outstandingAmount&quot;)}"/>
+            <set field="fromPartyName" value="${groovy:invoiceData.get(invoiceId).get(&quot;fromPartyName&quot;)}"/>
         </row-actions>
         <field name="invoiceIds" entry-name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext">
             <hyperlink description="${invoiceId}" target="viewInvoice?invoiceId=${invoiceId}"/>

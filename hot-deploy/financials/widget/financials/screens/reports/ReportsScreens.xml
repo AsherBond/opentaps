@@ -565,7 +565,7 @@
             <widgets>
                 <container style="screenlet">
                     <container style="screenlet-header">
-                        <label style="boxhead" text="${bsh:uiLabelMap.get(reportTitle)}"/>
+                        <label style="boxhead" text="${groovy:uiLabelMap.get(reportTitle)}"/>
                     </container>
                     <platform-specific><html>
                         <html-template location="component://financials/webapp/financials/includes/flowReportOptions.ftl"/>

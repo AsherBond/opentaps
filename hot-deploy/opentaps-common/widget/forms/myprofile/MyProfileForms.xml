@@ -32,10 +32,10 @@
         <field name="userLoginId"><display/></field>
         <field name="clientIpAddress"><display/></field>
         <field name="fromDate" title="${uiLabelMap.CommonFromDate}" red-when="never" use-when="fromDate!=void&amp;&amp;fromDate!=null">
-            <display description="${bsh:fromDate.toString().substring(0,19)}"/>
+            <display description="${groovy:fromDate.toString().substring(0,19)}"/>
         </field>
         <field name="thruDate" title="${uiLabelMap.CommonThruDate}" red-when="never" use-when="thruDate!=void&amp;&amp;thruDate!=null">
-            <display description="${bsh:thruDate.toString().substring(0,19)}"/>
+            <display description="${groovy:thruDate.toString().substring(0,19)}"/>
         </field>
     </form>
 

@@ -71,8 +71,8 @@
     	<field name="accountFromDate"><display/></field>    	
         <field name="accountThruDate"><display/></field>
         <!-- this is the correct way to get the value of a row from a list of form widget values.  each row is called "context" -->
-        <field name="originalBalance"><display description="${bsh:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountOriginalBalance(delegator, context.get(&quot;billingAccountId&quot;))}" type="currency" currency="${accountCurrencyUomId}"/></field>
-        <field name="availableBalance"><display description="${bsh:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, context.get(&quot;billingAccountId&quot;))}" type="currency" currency="${accountCurrencyUomId}"/></field>
+        <field name="originalBalance"><display description="${groovy:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountOriginalBalance(delegator, context.get(&quot;billingAccountId&quot;))}" type="currency" currency="${accountCurrencyUomId}"/></field>
+        <field name="availableBalance"><display description="${groovy:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, context.get(&quot;billingAccountId&quot;))}" type="currency" currency="${accountCurrencyUomId}"/></field>
     </form>
 
     <form name="payInvoiceWithBillingAccountForm" type="single" target="payInvoiceWithBillingAccount"
@@ -109,12 +109,12 @@
         </field>
 
         <field name="originalBalance" title="${uiLabelMap.FinancialsOriginalBalance}">
-            <display description="${bsh:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountOriginalBalance(delegator, billingAccountId)}"
+            <display description="${groovy:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountOriginalBalance(delegator, billingAccountId)}"
                     type="currency" currency="${billingAccount.accountCurrencyUomId}"/>
         </field>
         <field name="availableBalance" title="${uiLabelMap.AccountingBillingAvailableBalance}"
                tooltip="${uiLabelMap.AccountingBillingAvailableBalanceMessage}">
-            <display description="${bsh:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, billingAccountId)}"
+            <display description="${groovy:com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, billingAccountId)}"
                     type="currency" currency="${billingAccount.accountCurrencyUomId}"/>
         </field>
 

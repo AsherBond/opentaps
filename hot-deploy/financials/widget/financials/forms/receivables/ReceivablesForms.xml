@@ -56,14 +56,14 @@ under the License.
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true"
         target="assessFinanceCharges?partyId=${partyId}&amp;gracePeriod=${gracePeriod}&amp;interestRate=${interestRate}">
         <row-actions>
-            <set field="daysOutstanding" value="${bsh:invoiceData.get(invoiceId).get(&quot;daysOutstanding&quot;)}"/>
-            <set field="outstandingAmount" value="${bsh:invoiceData.get(invoiceId).get(&quot;outstandingAmount&quot;)}"/>
-            <set field="interestCharged" value="${bsh:invoiceData.get(invoiceId).get(&quot;interestCharged&quot;)}"/>
-            <set field="interestAmount" value="${bsh:invoiceData.get(invoiceId).get(&quot;interestAmount&quot;)}" type="BigDecimal"/>
-            <set field="amount" value="${bsh:interestAmount.signum()&gt;0?interestAmount:0}"/>
+            <set field="daysOutstanding" value="${groovy:invoiceData.get(invoiceId).get(&quot;daysOutstanding&quot;)}"/>
+            <set field="outstandingAmount" value="${groovy:invoiceData.get(invoiceId).get(&quot;outstandingAmount&quot;)}"/>
+            <set field="interestCharged" value="${groovy:invoiceData.get(invoiceId).get(&quot;interestCharged&quot;)}"/>
+            <set field="interestAmount" value="${groovy:invoiceData.get(invoiceId).get(&quot;interestAmount&quot;)}" type="BigDecimal"/>
+            <set field="amount" value="${groovy:interestAmount.signum()&gt;0?interestAmount:0}"/>
             <set field="description" value="${uiLabelMap.FinancialsFinanceChargeForInvoice} ${invoiceId}"/> 
-            <set field="toPartyName" value="${bsh:invoiceData.get(invoiceId).get(&quot;toPartyName&quot;)}"/>
-            <set field="_rowSubmit" value="${bsh:interestAmount.signum()&gt;0?&quot;Y&quot;:&quot;N&quot;}"/> 
+            <set field="toPartyName" value="${groovy:invoiceData.get(invoiceId).get(&quot;toPartyName&quot;)}"/>
+            <set field="_rowSubmit" value="${groovy:interestAmount.signum()&gt;0?&quot;Y&quot;:&quot;N&quot;}"/> 
         </row-actions>
         <field name="partyIdFrom"><hidden value="${partyIdFrom}"/></field>
         <field name="partyIdTo"><hidden value="${partyId}"/></field>

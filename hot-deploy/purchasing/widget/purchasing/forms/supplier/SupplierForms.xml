@@ -30,13 +30,13 @@
             <hyperlink also-hidden="false" target-type="plain" description="${orderName} (${orderId})" target="orderview?orderId=${orderId}"/>
         </field>
         <field name="partyId" title="${uiLabelMap.ProductSupplier}">
-            <display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/>
+            <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/>
         </field>
         <field name="statusId" title="${uiLabelMap.CommonStatus}">
             <display-entity entity-name="StatusItem"/>
         </field>
         <field name="shipByDate" title="${uiLabelMap.OrderShipBeforeDate}">
-            <display description="${bsh:org.opentaps.common.order.UtilOrder.getEarliestShipByDate(delegator, orderId, timeZone, locale);}"/>
+            <display description="${groovy:org.opentaps.common.order.UtilOrder.getEarliestShipByDate(delegator, orderId, timeZone, locale);}"/>
         </field>
         <field name="grandTotal" title="${uiLabelMap.OrderAmount}">
             <display type="currency" currency="${currencyUomId}"/>

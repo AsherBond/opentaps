@@ -96,10 +96,10 @@
             <display type="currency" currency="${currencyUomId}"/>
         </field>
         <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  widget-area-style="tabletextright">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
         </field>
         <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}"  widget-area-style="tabletextright">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
         </field>
     </form>   
 
@@ -129,10 +129,10 @@
             <display type="currency" currency="${currencyUomId}"/>
         </field>
         <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  widget-area-style="tabletextright">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
         </field>
         <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}"  widget-area-style="tabletextright">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
         </field>
     </form>   
 
@@ -165,13 +165,13 @@
             <display type="currency" currency="${forecast.currencyUomId}"/>
         </field>
         <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}"  position="2">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(forecast.getDouble(&quot;percentOfQuotaClosed&quot;))}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(forecast.getDouble(&quot;percentOfQuotaClosed&quot;))}"/>
         </field>
         <field name="forecastAmount" title="${uiLabelMap.CrmForecastForecastAmount}" position="1">
             <display type="currency" currency="${forecast.currencyUomId}"/>
         </field>
         <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}" position="2">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(forecast.getDouble(&quot;percentOfQuotaForecast&quot;))}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(forecast.getDouble(&quot;percentOfQuotaForecast&quot;))}"/>
         </field>
         <field name="bestCaseAmount" title="${uiLabelMap.CrmForecastBestCaseAmount}">
             <display type="currency" currency="${forecast.currencyUomId}"/>
@@ -200,10 +200,10 @@
             <display type="currency" currency="${currencyUomId}"/>
         </field>
         <field name="percentOfQuotaClosed" title="${uiLabelMap.CrmForecastPercentOfQuotaClosed}" widget-area-style="tabletextright">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaClosed)}"/>
         </field>
         <field name="percentOfQuotaForecast" title="${uiLabelMap.CrmForecastPercentOfQuotaForecast}" widget-area-style="tabletextright">
-            <display description="${bsh:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
+            <display description="${groovy:com.opensourcestrategies.crmsfa.util.UtilCommon.toPercent(percentOfQuotaForecast)}"/>
         </field>
         <field name="modifiedByUserLoginId">
             <display/>

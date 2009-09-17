@@ -34,7 +34,7 @@
             use-when="isLookup!=void&amp;&amp;isLookup!=null&amp;&amp;isLookup.equals(&quot;true&quot;)">
             <hyperlink also-hidden="false" target-type="plain" description="${quoteName} (${quoteId})" target="javascript:set_value('${quoteId}')"/>
         </field>
-        <field name="partyId" title="${uiLabelMap.CrmCustomer}"><display description="${bsh:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/></field> 
+        <field name="partyId" title="${uiLabelMap.CrmCustomer}"><display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/></field> 
         <field name="quoteTypeId" title="${uiLabelMap.CommonType}">
             <display-entity entity-name="QuoteType"/>
         </field>
