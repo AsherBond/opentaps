@@ -397,7 +397,7 @@ public class ServiceEventHandler implements EventHandler {
             if (urlOnlyParameterNames.contains(name)) {
                 String errMsg = "URL parameter [" + name + "] cannot be passed to secure (https) request-map with uri ["
                     + requestMap.uri + "] to call service ["
-                    + serviceName + "]. This is not allowed for security reasons."
+                    + serviceName + "]. This is not allowed for security reasons.";
                 Debug.logError("=============== " + errMsg + "; In session [" + session.getId() + "]; Note that this can be changed using the service.http.parameters.require.encrypted property in the url.properties file", module);
 
                 // the default here is true, so anything but N/n is true
