@@ -25,7 +25,7 @@
         <field name="firstNameLocal" title="${uiLabelMap.CrmFirstNameLocal}" position="1"><text size="30" maxlength="100"/></field>
         <field name="lastNameLocal" title="${uiLabelMap.CrmLastNameLocal}" position="2"><text size="30" maxlength="100"/></field>
         <field name="personalTitle" title="${uiLabelMap.CrmSalutation}" position="1"><text size="30" maxlength="100"/></field>
-        <field name="birthDate" title="${uiLabelMap.PartyBirthDate}" position="2"><date-time type="date"/></field>
+        <field name="birthDate" title="${uiLabelMap.PartyBirthDate}" position="2" encode-output="false"><date-time type="date"/></field>
         <field name="generalProfTitle" title="${uiLabelMap.CrmTitle}" position="1"><text size="30" maxlength="100"/></field>
         <field name="departmentName" title="${uiLabelMap.CrmDepartment}" position="2"><text size="30" maxlength="100"/></field>
         <field name="preferredCurrencyUomId" title="${uiLabelMap.CrmPreferredCurrency}" position="1">
@@ -86,7 +86,7 @@
         <field name="firstNameLocal" title="${uiLabelMap.CrmFirstNameLocal}" position="1"><text size="30" maxlength="100"/></field>
         <field name="lastNameLocal" title="${uiLabelMap.CrmLastNameLocal}" position="2"><text size="30" maxlength="100"/></field>
         <field name="personalTitle" title="${uiLabelMap.CrmSalutation}" position="1"><text size="30" maxlength="100"/></field>
-        <field name="birthDate" title="${uiLabelMap.PartyBirthDate}" position="2"><date-time type="date"/></field>
+        <field name="birthDate" title="${uiLabelMap.PartyBirthDate}" position="2" encode-output="false"><date-time type="date"/></field>
         <field name="generalProfTitle" title="${uiLabelMap.CrmTitle}" position="1"><text size="30" maxlength="100"/></field>
         <field name="departmentName" title="${uiLabelMap.CrmDepartment}" position="2"><text size="30" maxlength="100"/></field>
         <field name="preferredCurrencyUomId" title="${uiLabelMap.CrmPreferredCurrency}" position="1">

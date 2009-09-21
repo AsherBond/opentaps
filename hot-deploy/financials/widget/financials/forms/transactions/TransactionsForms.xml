@@ -183,7 +183,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="transactionDate"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
+        <field name="transactionDate" encode-output="false"><date-time default-value="${groovy:org.ofbiz.base.util.UtilDateTime.nowTimestamp()}"/></field>
         <field name="partyId" title="${uiLabelMap.PartyPartyId}">
             <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>
         </field>

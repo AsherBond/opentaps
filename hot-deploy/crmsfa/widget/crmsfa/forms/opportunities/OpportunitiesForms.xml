@@ -143,7 +143,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" position="1" title-style="requiredField"><date-time type="date"/></field>
+        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" position="1" title-style="requiredField" encode-output="false"><date-time type="date"/></field>
         <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
         <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><textarea/></field>
         <field name="submitButton" title="${uiLabelMap.CrmCreateOpportunity}" widget-style="smallSubmit"><submit button-type="button"/></field>
@@ -191,7 +191,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" position="1" title-style="requiredField"><date-time type="date"/></field>
+        <field name="estimatedCloseDate" title="${uiLabelMap.CrmEstimatedCloseDate}" position="1" title-style="requiredField" encode-output="false"><date-time type="date"/></field>
         <field name="description" title="${uiLabelMap.CommonDescription}"><textarea/></field>
         <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><textarea/></field>
         <field name="changeNote" title="${uiLabelMap.CrmChangeNote}" title-style="requiredField"><textarea/></field>

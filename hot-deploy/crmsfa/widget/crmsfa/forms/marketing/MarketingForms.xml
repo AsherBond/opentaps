@@ -42,10 +42,10 @@
 
         <field name="campaignName" title="${uiLabelMap.CommonName}"><text/></field>
         <field name="statusId" title="${uiLabelMap.CommonStatus}"><hidden value="MKTG_CAMP_PLANNED"/></field>
-        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="budgetedCost" title="${uiLabelMap.CrmMarketingBudgetedCost}" position="1"><text size="20" maxlength="20"/></field>
@@ -76,10 +76,10 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="budgetedCost" title="${uiLabelMap.CrmMarketingBudgetedCost}" position="1"><text size="20" maxlength="20"/></field>
@@ -168,10 +168,10 @@
                 <option key="EXTERNAL" description="External"/>
             </drop-down>
         </field>
-        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
         <field name="billableLifetime" title="${uiLabelMap.CrmBillableLifetime}" position="1" tooltip="${uiLabelMap.CrmBillableLifetimeTip}"><text size="6"/></field>
@@ -213,10 +213,10 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
 
@@ -233,10 +233,10 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1">
+        <field name="fromDate" title="${uiLabelMap.CommonFrom}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
-        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1">
+        <field name="thruDate" title="${uiLabelMap.CommonThru}" position="1" encode-output="false">
             <date-time type="timestamp" input-method="time-dropdown" clock="12"/>
         </field>
 
