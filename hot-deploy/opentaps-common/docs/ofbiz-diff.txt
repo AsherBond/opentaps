@@ -12,6 +12,7 @@ This list the changes made in the framework directory, from the 09.04 ofbiz rele
 framework/base/src/org/ofbiz/base/util/UtilFormatOut.java
 r12890 Added a formatCurrency method which does not require the maximumFractionDigits argument. It uses the default value for the locale. Added for backward compatibility.
 
+
 framework/entity/src/org/ofbiz/entity/GenericDelegator.java
 r12909 Removed depracation tags for the findXXX methods. Ofbiz deprecated them to be replaced with findOne, findList but the old methods are used in too many places to be refactored
 completely for now.
@@ -63,6 +64,9 @@ framework/webapp/lib
 
 framework/webapp/src/org/ofbiz/webapp/event/ServiceEventHandler.java 
 r13357 Changed error message for secured URL parameters
+
+framework/widget/templates/foScreenMacroLibrary.ftl
+- Fix for missing macros and new parameters
 
 Applications changes
 --------------------
