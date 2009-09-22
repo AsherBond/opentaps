@@ -232,7 +232,7 @@ public class IndexingService extends Service implements IndexingServiceInterface
 
             Debug.logInfo("createIndexForGenericEntity: got id [" + id + "] for entity: " + entityName, MODULE);
             if (id != null) {
-                Entity entity = (Entity) fullTextSession.load(cls, id);
+                Entity entity = (Entity) fullTextSession.get(cls, id);
                 Debug.logInfo("createIndexForGenericEntity: found entity [" + entity + "]", MODULE);
                 if (entity != null) {
                     Debug.logInfo("createIndexForGenericEntity: indexing entity [" + entity + "]", MODULE);
@@ -253,6 +253,7 @@ public class IndexingService extends Service implements IndexingServiceInterface
             }
 
         } catch (Exception e) {
+            
             Debug.logError(e, MODULE);
             // rollback the transaction
             if (tx != null) {
