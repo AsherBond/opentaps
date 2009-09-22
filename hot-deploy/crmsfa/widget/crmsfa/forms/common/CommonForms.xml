@@ -39,7 +39,7 @@
         <field name="noteDateTime"><display/></field>
     </form>   
 
-    <!-- parametrized data sources list -->
+    <!-- parameterized data sources list -->
     <form name="listDataSources" type="list" separate-columns="true" 
         default-title-style="tableheadtext" target=""
         default-widget-style="tabletext" default-tooltip-style="tabletext"
@@ -56,9 +56,10 @@
         -->
     </form>
 
-    <!-- parametrized add data source form -->
-    <form name="addDataSourceForm" type="single" target="${addDataSourceFormTarget}?partyId=${parameters.partyId}"
+    <!-- parameterized add data source form -->
+    <form name="addDataSourceForm" type="single" target="${addDataSourceFormTarget}"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <field name="dataSourceId" title="${uiLabelMap.CrmNewDataSource}">
             <drop-down allow-empty="false">
                 <entity-options entity-name="DataSource" description="${description}">
@@ -85,7 +86,7 @@
         </field>
     </form>
 
-    <!-- parametrized add marketing campaign form -->
+    <!-- parameterized add marketing campaign form -->
     <form name="addMarketingCampaignForm" type="single" target="${addMarketingCampaignFormTarget}?partyId=${parameters.partyId}"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="marketingCampaignId" title="${uiLabelMap.CrmNewMarketingCampaign}">
