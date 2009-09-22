@@ -78,17 +78,23 @@
         default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
         list-name="marketingCampaigns">
         <field name="campaignName" title="${uiLabelMap.CrmMarketingCampaign}" widget-style="linktext">
-            <hyperlink description="${campaignName} (${marketingCampaignId})" target="viewMarketingCampaign?marketingCampaignId=${marketingCampaignId}"/>
+            <hyperlink description="${campaignName} (${marketingCampaignId})" target="viewMarketingCampaign">
+                <parameter param-name="marketingCampaignId"/>
+            </hyperlink>
         </field>
         <field name="Remove" widget-style="buttontext" widget-area-style="tabletextright" title=" " 
             use-when="hasUpdatePermission!=void&amp;&amp;hasUpdatePermission==true">
-            <hyperlink description="${uiLabelMap.CommonRemove}" target="${removeMarketingCampaignFormTarget}?partyId=${parameters.partyId}&amp;marketingCampaignId=${marketingCampaignId}"/>
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="${removeMarketingCampaignFormTarget}">
+                <parameter param-name="partyId" value="${parameters.partyId}"/>
+                <parameter param-name="marketingCampaignId"/>
+            </hyperlink>
         </field>
     </form>
 
     <!-- parameterized add marketing campaign form -->
-    <form name="addMarketingCampaignForm" type="single" target="${addMarketingCampaignFormTarget}?partyId=${parameters.partyId}"
+    <form name="addMarketingCampaignForm" type="single" target="${addMarketingCampaignFormTarget}"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <field name="marketingCampaignId" title="${uiLabelMap.CrmNewMarketingCampaign}">
             <drop-down allow-empty="false">
                 <entity-options entity-name="MarketingCampaign" description="${campaignName}">
@@ -120,18 +126,23 @@
         <field name="partyId"><hidden value="${parameters.partyIdTo}"/></field>
         <field name="partyIdFrom" title="${fromPartyTitle}" title-style="requiredField">
             <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} ${firstName} ${lastName} (${partyId})" also-hidden="true">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="${viewTarget}?partyId=${parameters.partyIdFrom}"
-                    target-window="top"/>
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="${viewTarget}" target-window="top">
+                    <parameter param-name="partyId" value="${parameters.partyIdFrom}"/>
+                </sub-hyperlink>
             </display-entity>
         </field>
         <field name="partyIdTo" title="${toPartyTitle}" title-style="requiredField">
             <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} ${firstName} ${lastName} (${partyId})" also-hidden="true">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="${viewTarget}?partyId=${parameters.partyIdTo}"
-                    target-window="top"/>
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="${viewTarget}" target-window="top">
+                    <parameter param-name="partyId" value="${parameters.partyIdTo}"/>
+                </sub-hyperlink>
             </display-entity>
         </field>
         <field name="goBack" title="" widget-style="buttontext">
-            <hyperlink target="${mergeFormChangeTarget}?partyIdFrom=${parameters.partyIdFrom}&amp;partyIdTo=${parameters.partyIdTo}" description="${uiLabelMap.CommonChange}" also-hidden="false"/>
+            <hyperlink target="${mergeFormChangeTarget}" description="${uiLabelMap.CommonChange}" also-hidden="false">
+                <parameter param-name="partyIdFrom" value="${parameters.partyIdFrom}"/>
+                <parameter param-name="partyIdTo" value="${parameters.partyIdTo}"/>
+            </hyperlink>
         </field>
         <field name="submitButton" title="${uiLabelMap.CrmConfirmMerge}" widget-style="smallSubmit">
             <submit/>

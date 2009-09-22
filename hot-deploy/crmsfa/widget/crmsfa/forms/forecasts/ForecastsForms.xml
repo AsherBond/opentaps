@@ -47,10 +47,11 @@
     </form>
 
     <form name="createForecastForm" type="multi" title=""
-        target="createForecast?parentPeriodId=${parameters.customTimePeriodId}&amp;currencyUomId=${configProperties.defaultCurrencyUomId}&amp;organizationPartyId=${organizationPartyId}"
+        target="createForecast"
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext"
         default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
         list-name="periods">
+        <field name="parentPeriodId"><hidden value="${parameters.customTimePeriodId}"/></field>
         <field name="customTimePeriodId"><hidden/></field>
         <field name="salesForecastId"><hidden/></field>
         <!-- TODO: organization is from config file until we implement organization -->
@@ -74,7 +75,9 @@
         list-name="forecasts">
 
         <field name="customTimePeriodId" widget-style="linktext" title="${uiLabelMap.CrmForecast}" use-when="salesForecastId!=void">
-            <hyperlink description="${periodName} ${periodNum} ${uiLabelMap.CommonThru} ${thruDate} (${salesForecastId})" target="viewForecast?salesForecastId=${salesForecastId}"/>
+            <hyperlink description="${periodName} ${periodNum} ${uiLabelMap.CommonThru} ${thruDate} (${salesForecastId})" target="viewForecast">
+                <parameter param-name="salesForecastId" from-field="salesForecastId"/>
+            </hyperlink>
         </field>
         <!-- this is for the dummy sum row -->
         <field name="customTimePeriodId" widget-style="tableheadtext" title="${uiLabelMap.CrmForecast}" use-when="salesForecastId==void">
@@ -111,7 +114,9 @@
         list-name="teamForecasts">
 
         <field name="customTimePeriodId" widget-style="linktext" title="${uiLabelMap.CrmForecast}">
-            <hyperlink description="${periodName} ${periodNum} ${uiLabelMap.CommonThru} ${thruDate} (${salesForecastId})" target="viewForecast?salesForecastId=${salesForecastId}"/>
+            <hyperlink description="${periodName} ${periodNum} ${uiLabelMap.CommonThru} ${thruDate} (${salesForecastId})" target="viewForecast">
+                <parameter param-name="salesForecastId" from-field="salesForecastId"/>
+            </hyperlink>
         </field>
         <field name="internalPartyId" title="${uiLabelMap.CrmTeamMember}">
             <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId"/>
@@ -155,7 +160,9 @@
         </field>
         <field name="internalPartyId" title="${uiLabelMap.CrmTeamMember}" position="1">
             <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName} (${partyId})" key-field-name="partyId">
-                <sub-hyperlink description="${uiLabelMap.CrmViewForecasts}" link-style="buttontext" target="findForecasts?partyId=${forecast.internalPartyId}"/>
+                <sub-hyperlink description="${uiLabelMap.CrmViewForecasts}" link-style="buttontext" target="findForecasts">
+                    <parameter param-name="partyId" value="${forecast.internalPartyId}"/>
+                </sub-hyperlink>
             </display-entity>
         </field>
         <field name="quotaAmount" title="${uiLabelMap.CrmForecastQuotaAmount}" position="1">

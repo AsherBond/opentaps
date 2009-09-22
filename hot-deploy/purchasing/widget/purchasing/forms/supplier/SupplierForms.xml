@@ -27,7 +27,9 @@
             <display description="${orderDate}"/>
         </field>
         <field name="orderId" title="${uiLabelMap.OpentapsOrderNameID}" widget-style="buttontext">
-            <hyperlink also-hidden="false" target-type="plain" description="${orderName} (${orderId})" target="orderview?orderId=${orderId}"/>
+            <hyperlink also-hidden="false" target-type="plain" description="${orderName} (${orderId})" target="orderview">
+                <parameter param-name="orderId" from-field="orderId"/>
+            </hyperlink>
         </field>
         <field name="partyId" title="${uiLabelMap.ProductSupplier}">
             <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, partyId, false)} (${partyId})"/>

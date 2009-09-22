@@ -96,7 +96,9 @@
         <field name="thruDate" title="${uiLabelMap.CommonThruDate}"><display/></field>
         <field name="salesDiscontinuationDate" title="${uiLabelMap.ProductSalesThruDate}"><display/></field>
         <field name="searchVariants" title="" widget-style="buttontext" use-when="isVirtual!=null&amp;&amp;&quot;${isVirtual}&quot;.equals(&quot;Y&quot;)">
-            <hyperlink also-hidden="false" target-type="plain" description="${uiLabelMap.ProductVariants}" target="LookupVariantProduct?productId=${productId}"/>
+            <hyperlink also-hidden="false" target-type="plain" description="${uiLabelMap.ProductVariants}" target="LookupVariantProduct">
+                <parameter param-name="productId" from-field="productId"/>
+            </hyperlink>
         </field>
     </form>
 
@@ -127,7 +129,9 @@
         </field>
         <field name="lotId" widget-style="buttontext" title="${uiLabelMap.ProductLotId}" widget-area-style="fieldWidth3000"
             use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))">
-            <hyperlink description="${lotId}" target="lotDetail?lotId=${lotId}"/>
+            <hyperlink description="${lotId}" target="lotDetail">
+                <parameter param-name="lotId" from-field="lotId"/>
+            </hyperlink>
         </field>
         <field name="supplierPartyName" title="${uiLabelMap.ProductSupplier}" widget-area-style="fieldWidth200"><display/></field>
         <field name="creationDate" title="${uiLabelMap.ProductCreatedDate}" widget-area-style="fieldWidth200"><display/></field>

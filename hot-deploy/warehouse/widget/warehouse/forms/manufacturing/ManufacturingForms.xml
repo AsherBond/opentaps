@@ -43,7 +43,9 @@ under the License.
             paginate-target="${listSortTarget}" paginate-target-anchor="ListProductionRuns"
             paginate-size-field="productionRunsSize" paginate-index-field="productionRunsIndex">
         <field name="workEffortName" title="${uiLabelMap.ManufacturingProductionRunName}" widget-style="linktext">
-            <hyperlink target="ShowProductionRun?productionRunId=${workEffortId}" description="${workEffortName} (${workEffortId})" also-hidden="false"/>
+            <hyperlink target="ShowProductionRun" description="${workEffortName} (${workEffortId})" also-hidden="false">
+                <parameter param-name="productionRunId" from-field="workEffortId"/>
+            </hyperlink>
         </field>
         <field name="type" title="${uiLabelMap.CommonType}" use-when="&quot;WEPT_PRODUCTION_RUN&quot;.equals(workEffortPurposeTypeId)"><display description="${uiLabelMap.WarehouseAssembly}"/></field>
         <field name="type" title="${uiLabelMap.CommonType}" use-when="&quot;WEPT_DISASSEMBLY&quot;.equals(workEffortPurposeTypeId)"><display description="${uiLabelMap.WarehouseDisassembly}"/></field>

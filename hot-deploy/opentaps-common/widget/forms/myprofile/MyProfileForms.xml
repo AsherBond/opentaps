@@ -24,7 +24,9 @@
         default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
         paginate-target="myProfile"  list-name="visitListIt">
         <field name="visitId" title="${uiLabelMap.PartyVisitId}" widget-style="buttontext">
-            <hyperlink target="visitdetail?visitId=${visitId}" description="${visitId}"/>
+            <hyperlink target="visitdetail" description="${visitId}">
+                <parameter param-name="visitId" from-field="visitId"/>
+            </hyperlink>
         </field>
         <field name="partyId" title="${uiLabelMap.CommonUsername}">
             <display-entity entity-name="PartyNameView" key-field-name="partyId" description="${firstName} ${middleName} ${lastName} ${groupName}"/>

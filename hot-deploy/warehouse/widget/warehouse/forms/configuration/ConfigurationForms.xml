@@ -30,7 +30,10 @@
             <display-entity entity-name="SecurityGroup" key-field-name="groupId"/>
         </field>
         <field name=" " use-when="hasConfigPermission==true" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeFacilityTeamMember?partyId=${partyId}&amp;facilityId=${facilityId}"/>
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeFacilityTeamMember">
+                <parameter param-name="partyId" from-field="partyId"/>
+                <parameter param-name="facilityId" from-field="facilityId"/>
+            </hyperlink>
         </field>
    </form>
 

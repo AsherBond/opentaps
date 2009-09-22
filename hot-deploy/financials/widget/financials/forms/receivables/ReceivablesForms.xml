@@ -69,11 +69,15 @@ under the License.
         <field name="partyIdTo"><hidden value="${partyId}"/></field>
         <field name="currencyUomId"><hidden value="${currencyUomId}"/></field>
         <field name="parentInvoiceId" entry-name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext">
-            <hyperlink description="${invoiceId}" target="viewInvoice?invoiceId=${invoiceId}"/>
+            <hyperlink description="${invoiceId}" target="viewInvoice">
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
+            </hyperlink>
         </field>
         <field name="invoiceDate" title="${uiLabelMap.AccountingInvoiceDate}"><display also-hidden="false"/></field>
         <field name="toPartyName" title="${uiLabelMap.FinancialsCustomerParty}">
-            <hyperlink description="${toPartyName}" target="customerStatement?partyId=${partyId}" also-hidden="false"/>
+            <hyperlink description="${toPartyName}" target="customerStatement" also-hidden="false">
+                <parameter param-name="partyId" from-field="partyId"/>
+            </hyperlink>
         </field>
         <field name="daysOutstanding" title="${uiLabelMap.FinancialsDaysOutstanding}" widget-area-style="tabletextright"><display also-hidden="false"/></field>
         <field name="outstandingAmount" title="${uiLabelMap.FinancialsAmountOutstanding}" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}" also-hidden="false"/></field>

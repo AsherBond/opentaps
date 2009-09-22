@@ -52,11 +52,15 @@ under the License.
             </service>
         </row-actions>
         <field name="items" title="${uiLabelMap.ProductProductId}" widget-style="buttontext">
-            <hyperlink target="/catalog/control/EditProduct?productId=${productId}" target-type="inter-app" description="${productId}"/>     
+            <hyperlink target="/catalog/control/EditProduct" target-type="inter-app" description="${productId}">
+                <parameter param-name="productId" from-field="productId"/>
+            </hyperlink>     
         </field>
         <field name="productId" title="${uiLabelMap.CommonDescription}" widget-area-style="tabletext">
             <display-entity entity-name="Product" description="${internalName}">
-                <sub-hyperlink target="/catalog/control/EditProduct?productId=${productId}" target-type="inter-app" description="${uiLabelMap.ProductCatalog}" link-style="buttontext"/>
+                <sub-hyperlink target="/catalog/control/EditProduct" target-type="inter-app" description="${uiLabelMap.ProductCatalog}" link-style="buttontext">
+                    <parameter param-name="productId" from-field="productId"/>
+                </sub-hyperlink>
             </display-entity>
         </field>
         <field name="totalAvailableToPromise" title="${uiLabelMap.CommonTotal} ${uiLabelMap.ProductAtp}" widget-area-style="tabletextright" title-area-style="textright"><display description="${resultMap.totalAvailableToPromise}"/></field>
@@ -81,10 +85,14 @@ under the License.
         <field name="billToCustomerPartyId"><hidden value="${parameters.billToCustomerPartyId}"/></field>
         <field name="supplierPartyId"><hidden value="${parameters.partyId}"/></field>
         <field name="requirementId" widget-style="buttontext">
-            <hyperlink also-hidden="true" description="${requirementId}" target="EditRequirement?requirementId=${requirementId}"/>
+            <hyperlink also-hidden="true" description="${requirementId}" target="EditRequirement">
+                <parameter param-name="requirementId" from-field="requirementId"/>
+            </hyperlink>
         </field>
         <field name="productId" widget-style="buttontext">
-            <hyperlink also-hidden="true" target-type="inter-app" description="${productId}" target="/catalog/control/EditProductInventoryItems?productId=${productId}" target-window="top"/>
+            <hyperlink also-hidden="true" target-type="inter-app" description="${productId}" target="/catalog/control/EditProductInventoryItems" target-window="top">
+                <parameter param-name="productId" from-field="productId"/>
+            </hyperlink>
         </field>
         <field name="internalName" entry-name="productId">
             <display-entity entity-name="Product" key-field-name="productId" description="${internalName}"/>

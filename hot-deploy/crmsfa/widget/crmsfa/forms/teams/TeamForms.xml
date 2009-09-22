@@ -68,7 +68,9 @@
         paginate-target="${listSortTarget}" paginate-size-field="teamsSize" paginate-index-field="teamsIndex"
         list-name="teams">
         <field name="groupName" title="${uiLabelMap.CommonName}" widget-style="linktext">
-            <hyperlink description="${groupName} (${partyId})" target="viewTeam?partyId=${partyId}"/>
+            <hyperlink description="${groupName} (${partyId})" target="viewTeam">
+                <parameter param-name="partyId" from-field="partyId"/>
+            </hyperlink>
         </field>
         <field name="partyId" title="${uiLabelMap.CommonComments}">
             <display-entity entity-name="PartyGroup" key-field-name="partyId" description="${comments}"/>
@@ -76,10 +78,11 @@
     </form>   
 
     <form name="ListTeamMembers" type="list" separate-columns="false"
-        title="List Team Members"  default-title-style="tableheadtext" target="setTeamMemberSecurityGroupIn${listSortTarget}?partyId=${parameters.partyId}"
+        title="List Team Members"  default-title-style="tableheadtext" target="setTeamMemberSecurityGroupIn${listSortTarget}"
         default-widget-style="tabletext" default-tooltip-style="tabletext"
         default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
         paginate-target="" list-name="accountTeamMembers">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <!-- memberName is either a display field (when not a lookup form) or a hyperlink set_value field (when is a lookup form) -->
         <field name="memberName" title="${uiLabelMap.CommonName}" widget-area-style="fieldWidth300" use-when="(isLookup==void)||(isLookup==null)||((isLookup!=void)&amp;&amp;(isLookup!=null)&amp;&amp;(!isLookup.equals(&quot;true&quot;)))">
             <display description="${firstName} ${lastName} (${partyId})"/>
@@ -104,13 +107,18 @@
             <submit button-type="text-link"/>
         </field>
         <field name="Remove" title="" use-when="hasTeamRemovePermission==true" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeTeamMemberIn${listSortTarget}?partyId=${parameters.partyId}&amp;teamMemberPartyId=${partyId}&amp;accountTeamPartyId=${parameters.partyId}"/>
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeTeamMemberIn${listSortTarget}">
+                <parameter param-name="partyId" value="${parameters.partyId}"/>
+                <parameter param-name="teamMemberPartyId" from-field="partyId"/>
+                <parameter param-name="accountTeamPartyId" value="${parameters.partyId}"/>
+            </hyperlink>
         </field>
     </form>   
 
     <!-- form to add a team member: TODO maybe in ftl instead? -->
-    <form name="addTeamMemberForm" type="single" target="addTeamMemberIn${listSortTarget}?partyId=${parameters.partyId}"
+    <form name="addTeamMemberForm" type="single" target="addTeamMemberIn${listSortTarget}"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <field name="accountTeamPartyId"><hidden value="${parameters.partyId}"/></field>
         <field name="teamMemberPartyId" position="1" title="${uiLabelMap.CrmNewTeamMember}" widget-style="inputBox">
             <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>
@@ -126,8 +134,9 @@
     </form>
 
     <!-- form to assign a team to an account -->
-    <form name="assignTeamToAccountForm" type="single" target="assignTeamToAccount?partyId=${parameters.partyId}"
+    <form name="assignTeamToAccountForm" type="single" target="assignTeamToAccount"
         default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <field name="accountPartyId"><hidden value="${parameters.partyId}"/></field>
         <field name="teamPartyId" title="${uiLabelMap.CrmAssignTeam}" position="1">
             <drop-down allow-empty="false">

@@ -41,7 +41,9 @@
         default-title-style="boxhead" default-tooltip-style="tabletext" default-widget-style="tabletext" header-row-style="boxtop"
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true" >
         <field name="paymentId" widget-style="buttontext">
-            <hyperlink target="viewPayment?paymentId=${paymentId}" description="${paymentId}"/>
+            <hyperlink target="viewPayment" description="${paymentId}">
+                <parameter param-name="paymentId" from-field="paymentId"/>
+            </hyperlink>
         </field>
         <field name="paymentMethodId" title="${uiLabelMap.AccountingPaymentMethod}">
             <display-entity description="${description} (${paymentMethodId})" entity-name="PaymentMethod"/> 
@@ -65,7 +67,9 @@
             <set field="fromPartyName" value="${groovy:invoiceData.get(invoiceId).get(&quot;fromPartyName&quot;)}"/>
         </row-actions>
         <field name="invoiceIds" entry-name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext">
-            <hyperlink description="${invoiceId}" target="viewInvoice?invoiceId=${invoiceId}"/>
+            <hyperlink description="${invoiceId}" target="viewInvoice">
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
+            </hyperlink>
         </field>
         <field name="partyIdsFrom" entry-name="${partyIdFrom}"><hidden value="${partyIdFrom}"/></field>
         <field name="invoiceTypeIds" entry-name="${invoiceTypeId}"><hidden value="${invoiceTypeId}"/></field>
@@ -73,7 +77,9 @@
         <field name="invoiceDate" title="${uiLabelMap.AccountingInvoiceDate}"><display also-hidden="false"/></field>
         <field name="dueDate" title="${uiLabelMap.AccountingDueDate}"><display also-hidden="false"/></field>
         <field name="fromPartyName" title="${uiLabelMap.PartyParty}">
-            <hyperlink description="${fromPartyName}" target="customerStatement?partyId=${partyIdFrom}" also-hidden="false"/>
+            <hyperlink description="${fromPartyName}" target="customerStatement" also-hidden="false">
+                <parameter param-name="partyId" from-field="partyIdFrom"/>
+            </hyperlink>
         </field>
         <field name="currencyUomIds" entry-name="currencyUomId" title="${uiLabelMap.CommonCurrency}"><hidden/></field>
         <field name="outstandingAmount" title="${uiLabelMap.FinancialsAmountOutstanding}" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}" also-hidden="false"/></field>

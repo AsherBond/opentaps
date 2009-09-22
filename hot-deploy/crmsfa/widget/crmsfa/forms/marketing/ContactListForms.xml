@@ -29,15 +29,21 @@
         </field>
         <field name="calculate3605Postage" title="" widget-style="buttontext" 
             use-when="&quot;POSTAL_ADDRESS&quot;.equals(contactList.get(&quot;contactMechTypeId&quot;))">
-            <hyperlink description="${uiLabelMap.CrmCalculate3605Postage}" target="calculate3605Postage?contactListId=${contactList.contactListId}"/>
+            <hyperlink description="${uiLabelMap.CrmCalculate3605Postage}" target="calculate3605Postage">
+                <parameter param-name="contactListId" from-field="contactList.contactListId"/>
+            </hyperlink>
         </field>
         <field name="sortUSPSBusinessMail" title="" widget-style="buttontext"
             use-when="&quot;POSTAL_ADDRESS&quot;.equals(contactList.get(&quot;contactMechTypeId&quot;))">
-            <hyperlink description="${uiLabelMap.CrmSortUSPSBusinessMail}" target="sortUSPSBusinessMail?contactListId=${contactList.contactListId}"/>
+            <hyperlink description="${uiLabelMap.CrmSortUSPSBusinessMail}" target="sortUSPSBusinessMail">
+                <parameter param-name="contactListId" from-field="contactList.contactListId"/>
+            </hyperlink>
         </field>
         <field name="viewUSPSSortResult" title="" widget-style="buttontext" 
             use-when="&quot;POSTAL_ADDRESS&quot;.equals(contactList.get(&quot;contactMechTypeId&quot;))">
-            <hyperlink description="${uiLabelMap.CrmReportUSPSHeader}" target="viewUSPSSortResult?contactListId=${contactList.contactListId}"/>
+            <hyperlink description="${uiLabelMap.CrmReportUSPSHeader}" target="viewUSPSSortResult">
+                <parameter param-name="contactListId" from-field="contactList.contactListId"/>
+            </hyperlink>
         </field>
     </form>
 
@@ -147,7 +153,9 @@
         list-name="contactLists">
 
         <field name="contactListId" title="${uiLabelMap.CommonName}" widget-area-style="fieldWidth300" widget-style="linktext">
-            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList?contactListId=${contactListId}"/>
+            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList?contactListId=${contactListId}">
+                <parameter param-name="contactListId" from-field="contactListId"/>
+            </hyperlink>
         </field>
         <field name="contactMechTypeId" title="${uiLabelMap.CrmContactType}">
             <display-entity entity-name="ContactMechType"/>
@@ -166,14 +174,20 @@
         <field name="trackingCodeId" title="Tracking Code"><display/></field>
 
         <field name="parentContactListId" title="List" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId!=null">
-            <hyperlink description="${parentContactListName} (${parentContactListId})" target="viewContactList?contactListId=${parentContactListId}"/>
+            <hyperlink description="${parentContactListName} (${parentContactListId})" target="viewContactList">
+                <parameter param-name="contactListId" from-field="parentContactListId"/>
+            </hyperlink>
         </field>
         <field name="contactListId" title="Segment" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId!=null">
-            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList?contactListId=${contactListId}"/>
+            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList">
+                <parameter param-name="contactListId" from-field="contactListId"/>
+            </hyperlink>
         </field>
 
         <field name="parentContactListId" title="List" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId==null">
-            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList?contactListId=${contactListId}"/>
+            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList">
+                <parameter param-name="contactListId" from-field="contactListId"/>
+            </hyperlink>
         </field>
         <field name="contactListId" title="List" widget-area-style="fieldWidth300" widget-style="linktext" use-when="parentContactListId==null">
           <display description=" "/>
@@ -186,7 +200,10 @@
         </field>
 
         <field name="remove" title="" widget-style="buttontext">
-          <hyperlink target="removeContactListFromMarketingCampaign?marketingCampaignId=${marketingCampaignId}&amp;campaignListId=${campaignListId}" description="${uiLabelMap.CommonRemove}" />
+          <hyperlink target="removeContactListFromMarketingCampaign" description="${uiLabelMap.CommonRemove}">
+            <parameter param-name="marketingCampaignId" from-field="marketingCampaignId"/>
+            <parameter param-name="campaignListId" from-field="campaignListId"/>
+          </hyperlink>
         </field>
     </form> 
 
@@ -233,12 +250,20 @@
         <!-- convenience log a call shortcut -->
         <field name="logCall" title=" " use-when="isPhoneList==true&amp;&amp;isRemoveForm==true" widget-style="buttontext">
             <hyperlink description="${uiLabelMap.CrmLogCall}"
-                target="logTaskForm?partyId=${partyId}&amp;workEffortPurposeTypeId=WEPT_TASK_PHONE_CALL"/>
+                target="logTaskForm">
+                <parameter param-name="partyId" from-field="partyId"/>
+                <parameter param-name="workEffortPurposeTypeId" value="WEPT_TASK_PHONE_CALL"/>
+            </hyperlink>
         </field>
         <!-- convenience write email shortcut -->
         <field name="writeEmail" title=" " use-when="isEmailList==true&amp;&amp;isRemoveForm==true" widget-style="buttontext">
             <hyperlink description="${uiLabelMap.CrmWriteEmail}"
-                target="writeEmail?contactMechIdTo=${contactMechId}&amp;internalPartyId=${partyId}&amp;donePage=viewContactList&amp;contactListId=${contactListId}"/>
+                target="writeEmail">
+                <parameter param-name="contactMechIdTo" from-field="contactMechId"/>
+                <parameter param-name="internalPartyId" from-field="partyId"/>
+                <parameter param-name="donePage" value="viewContactList"/>
+                <parameter param-name="contactListId" from-field="contactListId"/>
+            </hyperlink>
         </field>
         <!-- above fields will misalign Select column for address, so force aligment with a dummy field -->
         <field name="dummyField" title=" " use-when="isAddressList==true||isRemoveForm==false">
@@ -247,7 +272,9 @@
 
         <!-- add a create order link for the removable party list -->
         <field name="createOrder" title=" " widget-style="buttontext" use-when="isRemoveForm==true">
-            <hyperlink description="${uiLabelMap.OpentapsCreateOrder}" target="newOrder?partyId=${partyId}"/>
+            <hyperlink description="${uiLabelMap.OpentapsCreateOrder}" target="newOrder">
+                <parameter param-name="partyId" from-field="partyId"/>
+            </hyperlink>
         </field>
         <!-- another dummy field to compensate for create order column -->
         <field name="dummyField2" title="  " use-when="isRemoveForm==false">
@@ -266,25 +293,37 @@
     <form name="viewUSPSHeader" type="single" default-map-name="contactList"
         default-title-style="tableheadtext" default-widget-style="tabletext">
         <field name="contactListId" title="${uiLabelMap.CrmContactList}" widget-style="linktext">
-            <hyperlink target="viewContactList?contactListId=${contactList.contactListId}" description="${contactList.contactListName} (${contactList.contactListId})"/>
+            <hyperlink target="viewContactList" description="${contactList.contactListName} (${contactList.contactListId})">
+                <parameter param-name="contactListId" from-field="contactList.contactListId"/>
+            </hyperlink>
         </field>
         <field name="numberOfMembers" title="${uiLabelMap.CrmNumberSorted}">
             <display description="${groovy:com.opensourcestrategies.crmsfa.marketing.MarketingHelper.countContactListMembers(contactList.get(&quot;contactListId&quot;), delegator)}"/>
         </field>
         <field name="option1" title="" widget-style="buttontext">
-            <hyperlink target="viewUSPSSortResult?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSSortResults}"/>
+            <hyperlink target="viewUSPSSortResult" description="${uiLabelMap.CrmReportUSPSSortResults}">
+                <parameter param-name="contactListId" from-field="contactList.contactListId"/>
+            </hyperlink>
         </field>
         <field name="option2" title="" widget-style="buttontext">
-            <hyperlink target="viewUSPSZip5?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSZip5}"/>
+            <hyperlink target="viewUSPSZip5" description="${uiLabelMap.CrmReportUSPSZip5}">
+                <parameter param-name="contactListId" from-field="contactList.contactListId"/>
+            </hyperlink>
         </field>
         <field name="option3" title="" widget-style="buttontext">
-            <hyperlink target="viewUSPSZip3?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSZip3}"/>
+            <hyperlink target="viewUSPSZip3" description="${uiLabelMap.CrmReportUSPSZip3}">
+                <parameter param-name="contactListId" from-field="contactList.contactListId"/>
+            </hyperlink>
         </field>
         <field name="option4" title="" widget-style="buttontext">
-            <hyperlink target="viewUSPSBMC?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSBMC}"/>
+            <hyperlink target="viewUSPSBMC" description="${uiLabelMap.CrmReportUSPSBMC}">
+                <parameter param-name="contactListId" from-field="contactList.contactListId"/>
+            </hyperlink>
         </field>
         <field name="option5" title="" widget-style="buttontext">
-            <hyperlink target="viewUSPSOther?contactListId=${contactList.contactListId}" description="${uiLabelMap.CrmReportUSPSOther}"/>
+            <hyperlink target="viewUSPSOther" description="${uiLabelMap.CrmReportUSPSOther}">
+                <parameter param-name="contactListId" from-field="contactList.contactListId"/>
+            </hyperlink>
         </field>
     </form>
 

@@ -18,8 +18,9 @@
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
 
     <!-- this form uses donePageRequestHelper to get back to donePage -->
-    <form name="addContentUrlForm" type="single" target="${formTarget}?donePage=${donePage}" title=""
+    <form name="addContentUrlForm" type="single" target="${formTarget}" title=""
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="donePage"><hidden value="${donePage}"/></field>
         <field name="classificationEnumId" title="${uiLabelMap.OpentapsContentClassification}">
             <drop-down allow-empty="false" no-current-selected-key="${defaultContentClassId}">
                 <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">
@@ -66,8 +67,9 @@
         <field name="submitButton" title="${uiLabelMap.CommonUpload}" widget-style="smallSubmit"  use-when="parameters.get(&quot;orderId&quot;)==null"><submit button-type="button"/></field>
     </form>
 
-    <form name="updateContentForm" type="single" target="${formTarget}?donePage=${donePage}" title="" default-map-name="contentInfo"
+    <form name="updateContentForm" type="single" target="${formTarget}" title="" default-map-name="contentInfo"
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
+        <field name="donePage"><hidden value="${donePage}"/></field>
         <field name="classificationEnumId" title="${uiLabelMap.OpentapsContentClassification}">
             <drop-down allow-empty="false" no-current-selected-key="${defaultContentClassId}">
                 <entity-options description="${description}" entity-name="Enumeration" key-field-name="enumId">

@@ -56,7 +56,9 @@
         <field name="opportunityName" widget-style="linktext" title="${uiLabelMap.CrmOpportunityName}" widget-area-style="fieldWidth50pct"
             header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;opportunitiesOrderBy=opportunityName&amp;${findParams}#ListOpportunities" header-link-style="orderByHeaderLink"
             use-when="!sectionName.equals(&quot;lookup&quot;)">
-            <hyperlink description="${opportunityName} (${salesOpportunityId})" target="viewOpportunity?salesOpportunityId=${salesOpportunityId}"/>
+            <hyperlink description="${opportunityName} (${salesOpportunityId})" target="viewOpportunity">
+                <parameter param-name="salesOpportunityId" from-field="salesOpportunityId"/>
+            </hyperlink>
         </field>
         <field name="opportunityStageId" title="${uiLabelMap.CrmStage}" position="1" widget-area-style="fieldWidth100"
             header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;opportunitiesOrderBy=opportunityStageId&amp;${findParams}#ListOpportunities" header-link-style="orderByHeaderLink">
@@ -205,13 +207,17 @@
         <field name="accountPartyId" widget-style="tabletext" title="${uiLabelMap.CrmAccountName}" widget-area-style="fieldWidth300" 
             use-when="opportunityAndParty!=null&amp;&amp;opportunityAndParty.get(&quot;accountPartyId&quot;)!=null">
             <display-entity entity-name="PartySummaryCRMView" description="${groupName}" key-field-name="partyId">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount?partyId=${opportunityAndParty.accountPartyId}"/>
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount">
+                    <parameter param-name="partyId" from-field="opportunityAndParty.accountPartyId"/>
+                </sub-hyperlink>
             </display-entity>
         </field>
         <field name="leadPartyId" widget-style="tabletext" title="${uiLabelMap.CrmLeadName}" widget-area-style="fieldWidth300" 
             use-when="opportunityAndParty!=null&amp;&amp;opportunityAndParty.get(&quot;leadPartyId&quot;)!=null">
             <display-entity entity-name="PartySummaryCRMView" description="${groupName} ${firstName} ${lastName}" key-field-name="partyId">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewLead?partyId=${opportunityAndParty.leadPartyId}"/>
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewLead">
+                    <parameter param-name="partyId" from-field="opportunityAndParty.leadPartyId"/>
+                </sub-hyperlink>
             </display-entity>
         </field>
 
@@ -246,7 +252,9 @@
         paginate-target="findContacts"  list-name="contacts">
         <field name="partyId" title="${uiLabelMap.CrmContactName}" widget-area-style="fieldWidth300" widget-style="tabletext">
             <display-entity entity-name="PartySummaryCRMView" description="${firstName} ${lastName} (${partyId})">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewContact?partyId=${partyId}"/>
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewContact">
+                    <parameter param-name="partyId" from-field="partyId"/>
+                </sub-hyperlink>
             </display-entity>
         </field>
         <field name="primaryEmail" title="${uiLabelMap.CrmPrimaryEmail}" widget-area-style="fieldWidth100">
@@ -258,7 +266,10 @@
         <!-- since this form is re-usable, define hasContactRemoveAbility when the Remove option should be visible -->
         <field name="Remove" title="" use-when="hasUpdatePermission==true" widget-style="buttontext">
             <hyperlink description="${uiLabelMap.CommonRemove}" 
-                target="removeContactFromOpportunity?contactPartyId=${partyId}&amp;salesOpportunityId=${parameters.salesOpportunityId}"/>
+                target="removeContactFromOpportunity">
+                <parameter param-name="contactPartyId" from-field="partyId"/>
+                <parameter param-name="salesOpportunityId" value="${parameters.salesOpportunityId}"/>
+            </hyperlink>
         </field>
     </form>   
 
@@ -278,8 +289,9 @@
         default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
         default-widget-style="tabletext" default-tooltip-style="tabletext">
         <field name="modifiedTimestamp" title="${uiLabelMap.CommonLastUpdated}" widget-style="linktext" widget-area-style="fieldWidth200">
-                <hyperlink description="${modifiedTimestamp}"
-                    target="viewOpportunityHistory?salesOpportunityHistoryId=${salesOpportunityHistoryId}"/>
+                <hyperlink description="${modifiedTimestamp}" target="viewOpportunityHistory">
+                    <parameter param-name="salesOpportunityHistoryId" from-field="salesOpportunityHistoryId"/>
+                </hyperlink>
         </field>
         <field name="opportunityStageId" title="${uiLabelMap.CrmStage}">
             <display-entity entity-name="SalesOpportunityStage"/>
@@ -327,8 +339,9 @@
         <field name="nextStep" title="${uiLabelMap.CrmNextStep}"><display/></field>
         <field name="changeNote" title="${uiLabelMap.CrmChangeNote}"><display/></field>
         <field name="submitButton" title=" " widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.CommonBack}"
-                target="viewOpportunity?salesOpportunityId=${opportunityHistoryAndParty.salesOpportunityId}"/>
+            <hyperlink description="${uiLabelMap.CommonBack}" target="viewOpportunity">
+                <parameter param-name="salesOpportunityId" from-field="opportunityHistoryAndParty.salesOpportunityId"/>
+            </hyperlink>
         </field>
     </form>
 

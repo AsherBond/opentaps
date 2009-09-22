@@ -41,13 +41,21 @@
         paginate-target="findInventoryItem" paginate-target-anchor="ListInventoryItems">
 
        <field name="inventoryItemId" widget-style="buttontext">
-           <hyperlink target="EditInventoryItem?inventoryItemId=${inventoryItemId}" description="${inventoryItemId}" />
+           <hyperlink target="EditInventoryItem" description="${inventoryItemId}">
+              <parameter param-name="inventoryItemId" from-field="inventoryItemId"/>
+           </hyperlink>
        </field>
         <field name="locationSeqId" title="${uiLabelMap.ProductLocation}" widget-style="buttontext">
-            <hyperlink target="findInventoryItem?locationSeqId=${locationSeqId}&amp;performFind=Y" description="${locationSeqId}"/>
+            <hyperlink target="findInventoryItem" description="${locationSeqId}">
+                <parameter param-name="locationSeqId" from-field="locationSeqId"/>
+                <parameter param-name="performFind" value="Y"/>
+            </hyperlink>
         </field>
         <field name="productId" title="${uiLabelMap.ProductProductId}"  widget-style="buttontext">
-            <hyperlink target="findInventoryItem?productId=${productId}&amp;performFind=Y" description="${productId}"/>
+            <hyperlink target="findInventoryItem" description="${productId}">
+                <parameter param-name="productId" from-field="productId"/>
+                <parameter param-name="performFind" value="Y"/>
+            </hyperlink>
         </field>
         <field name="internalName" title="${uiLabelMap.ProductInternalName}"><display/></field>
         <field name="serialNumber" title="${uiLabelMap.ProductSerialNumber}"><display/></field>

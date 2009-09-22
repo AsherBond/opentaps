@@ -41,7 +41,11 @@ under the License.
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true">
         <field name="paymentApplicationId"><hidden/></field>
         <field name="paymentId"><hidden/></field>
-        <field name="invoiceId" title="${uiLabelMap.AccountingInvoice}" widget-style="linktext"><hyperlink target="viewInvoice?invoiceId=${invoiceId}" description="${invoiceId}"/></field>
+        <field name="invoiceId" title="${uiLabelMap.AccountingInvoice}" widget-style="linktext">
+            <hyperlink target="viewInvoice" description="${invoiceId}">
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
+            </hyperlink>
+        </field>
         <field name="invoiceRefNum" title="${uiLabelMap.FinancialsPaymentRef}"><display/></field>
         <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
         <field name="invoiceDate" title="${uiLabelMap.AccountingInvoiceDate}"><display/></field>
@@ -77,7 +81,11 @@ under the License.
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true" >
         <field name="paymentApplicationId"><hidden/></field>
         <field name="paymentId"><hidden/></field>
-        <field name="invoiceId" title="${uiLabelMap.AccountingInvoice}" widget-style="linktext"><hyperlink target="viewInvoice?invoiceId=${invoiceId}" description="${invoiceId}"/></field>
+        <field name="invoiceId" title="${uiLabelMap.AccountingInvoice}" widget-style="linktext">
+            <hyperlink target="viewInvoice" description="${invoiceId}">
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
+            </hyperlink>
+        </field>
         <field name="invoiceRefNum" title="${uiLabelMap.FinancialsPaymentRef}"><display/></field>
         <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
         <field name="invoiceDate" title="${uiLabelMap.AccountingInvoiceDate}"><display description="" /></field>
@@ -85,7 +93,10 @@ under the License.
         <field name="amountApplied" title="${uiLabelMap.AccountingAmountApplied}" widget-style="inputBox" widget-area-style="tabletextright" title-area-style="tabletextright"><text size="15"/></field>
         <field name="updateButton" title="${uiLabelMap.CommonUpdate}" title-style="hidden" widget-style="buttontext"><submit button-type="text-link"/></field>
         <field name="removeButton" title="" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.CommonRemove}" target="removePaymentApplication?paymentApplicationId=${paymentApplicationId}&amp;paymentId=${paymentId}"/>
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removePaymentApplication">
+                <parameter param-name="paymentApplicationId" from-field="paymentApplicationId"/>
+                <parameter param-name="paymentId" from-field="paymentId"/>
+            </hyperlink>
         </field>
     </form>
     <form name="editPaymentApplicationsTax" default-entity-name="PaymentApplication" type="list" list-name="paymentApplications" target="updatePaymentApplication"
@@ -102,7 +113,10 @@ under the License.
         <field name="updateButton" title="${uiLabelMap.CommonUpdate}" widget-style="buttontext" title-style="hidden"><submit button-type="text-link"/></field>
         <field name="removeButton" title="" widget-style="buttontext">
             <hyperlink description="${uiLabelMap.CommonRemove}" 
-                target="removePaymentApplication?paymentApplicationId=${paymentApplicationId}&amp;paymentId=${paymentId}"/>
+                target="removePaymentApplication?paymentApplicationId=${paymentApplicationId}&amp;paymentId=${paymentId}">
+                <parameter param-name="paymentApplicationId" from-field="paymentApplicationId"/>
+                <parameter param-name="paymentId" from-field="paymentId"/>
+            </hyperlink>
         </field>
     </form>
     <form name="editPaymentApplicationsGl" default-entity-name="PaymentApplication" type="list" list-name="paymentApplicationsListGlAccounts" target="updatePaymentApplication"
@@ -122,7 +136,10 @@ under the License.
         <field name="amountApplied" title="${uiLabelMap.AccountingAmountApplied}" widget-style="inputBox" widget-area-style="tabletextright" title-area-style="tabletextright"><text size="15"/></field>
         <field name="updateButton" title="${uiLabelMap.CommonUpdate}" widget-style="buttontext" title-style="hidden"><submit button-type="text-link"/></field>
         <field name="removeButton" title="" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.CommonRemove}" target="removePaymentApplication?paymentApplicationId=${paymentApplicationId}&amp;paymentId=${paymentId}" also-hidden="false"/>
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removePaymentApplication" also-hidden="false">
+                <parameter param-name="paymentApplicationId" from-field="paymentApplicationId"/>
+                <parameter param-name="paymentId" from-field="paymentId"/>
+            </hyperlink>
         </field>
     </form>
 
@@ -131,7 +148,11 @@ under the License.
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1" separate-columns="true" >
         <field name="paymentId"><hidden/></field>
         <field name="checkForOverApplication"><hidden value="true"/></field>
-        <field name="invoiceId" title="${uiLabelMap.AccountingInvoice}" widget-style="linktext"><hyperlink target="viewInvoice?invoiceId=${invoiceId}" description="${invoiceId}"/></field>
+        <field name="invoiceId" title="${uiLabelMap.AccountingInvoice}" widget-style="linktext">
+            <hyperlink target="viewInvoice" description="${invoiceId}">
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
+            </hyperlink>
+        </field>
         <field name="invoiceRefNum" title="${uiLabelMap.FinancialsPaymentRef}"><display/></field>
         <field name="description" title="${uiLabelMap.CommonDescription}"><display/></field>
         <field name="invoiceDate" title="${uiLabelMap.AccountingInvoiceDate}"><display description="" /></field>
@@ -165,7 +186,9 @@ under the License.
             <set field="amountToApply" value="${groovy:org.ofbiz.accounting.payment.PaymentWorker.getPaymentNotAppliedBd(delegator,paymentId)}"/>
         </row-actions>
         <field name="paymentId" widget-style="linktext">
-            <hyperlink description="${paymentId}" target="viewPayment?paymentId=${paymentId}"/>
+            <hyperlink description="${paymentId}" target="viewPayment">
+                <parameter param-name="paymentId" from-field="paymentId"/>
+            </hyperlink>
         </field>
         <field name="paymentMethodTypeId" title="${uiLabelMap.AccountingPaymentMethod}">
             <display-entity entity-name="PaymentMethodType"/> 

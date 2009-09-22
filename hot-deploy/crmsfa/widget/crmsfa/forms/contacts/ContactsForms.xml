@@ -131,7 +131,8 @@
     </form>
 
     <!-- form to reassign the person responsible TODO: for now we just enter the partyIdTo -->
-    <form name="reassignToForm" type="single" target="reassignContactResponsibleParty?partyId=${parameters.partyId}">
+    <form name="reassignToForm" type="single" target="reassignContactResponsibleParty">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <field name="contactPartyId"><hidden value="${parameters.partyId}"/></field>
         <field name="newPartyId" title="${uiLabelMap.CrmReassignTo}" title-style="tableheadtext" widget-style="inputbox">
             <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>
@@ -151,7 +152,9 @@
         </field>
         <field name="name" widget-style="linktext" title="${uiLabelMap.CrmContactName}" widget-area-style="fieldWidth50pct"
             use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))">
-            <hyperlink description="${groupName} ${firstName} ${lastName} (${partyId})" target="viewContact?partyId=${partyId}"/>
+            <hyperlink description="${groupName} ${firstName} ${lastName} (${partyId})" target="viewContact">
+                <parameter param-name="partyId" from-field="partyId"/>
+            </hyperlink>
         </field>
         <field name="primaryPostalAddressId" title="${uiLabelMap.CommonCity}">
           <display description="${primaryCity} ${primaryStateProvinceGeoId}" />
@@ -164,7 +167,11 @@
         </field>
         <!-- since this form is re-usable, define hasContactRemoveAbility when the Remove option should be visible -->
         <field name="Remove" title="" use-when="hasContactRemoveAbility==true" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeContactFromAccount?partyId=${parameters.partyId}&amp;contactPartyId=${partyId}&amp;accountPartyId=${parameters.partyId}"/>
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeContactFromAccount">
+                <parameter param-name="partyId" value="${parameters.partyId}"/>
+                <parameter param-name="contactPartyId" from-field="partyId"/>
+                <parameter param-name="accountPartyId" value="${parameters.partyId}"/>
+            </hyperlink>
         </field>
     </form>   
 

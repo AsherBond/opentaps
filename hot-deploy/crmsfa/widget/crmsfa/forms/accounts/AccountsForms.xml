@@ -75,7 +75,9 @@
         </field>
         <field name="groupName" widget-style="linktext" title="${uiLabelMap.CrmAccountName}" widget-area-style="fieldWidth50pct"
             use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))">
-            <hyperlink description="${groupName} (${partyId})" target="viewAccount?partyId=${partyId}"/>
+            <hyperlink description="${groupName} (${partyId})" target="viewAccount">
+                <parameter param-name="partyId" from-field="partyId"/>
+            </hyperlink>
         </field>
         <field name="primaryPostalAddressId" title="${uiLabelMap.CommonCity}">
           <display description="${primaryCity} ${primaryStateProvinceGeoId}" />
@@ -89,7 +91,11 @@
         <!-- The hasAccountsRemoveAbility is defined in viewContact.bsh  "/viewContact" tells controller to take us back to viewContact after removing contact from account.  
         (Normally, the next step is viewAccount.)  The first partyId is for /viewContact to know which contact.   -->
         <field name="Remove" title="" use-when="hasAccountsRemoveAbility==true" widget-style="buttontext">
-            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeContactFromAccount/viewContact?partyId=${parameters.partyId}&amp;contactPartyId=${parameters.partyId}&amp;accountPartyId=${partyId}"/>
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeContactFromAccount/viewContact">
+                <parameter param-name="partyId" value="${parameters.partyId}"/>
+                <parameter param-name="contactPartyId" value="${parameters.partyId}"/>
+                <parameter param-name="accountPartyId" from-field="partyId"/>
+            </hyperlink>
         </field>
     </form>   
 

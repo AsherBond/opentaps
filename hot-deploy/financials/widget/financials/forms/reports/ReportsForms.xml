@@ -34,15 +34,22 @@
           <field name="taxAuthPartyId" title="${uiLabelMap.AccountingTaxAuthority}"><display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, taxAuthPartyId, false)} (${taxAuthPartyId})"/></field>
           <field name="glAccountId">
               <display-entity entity-name="GlAccount" description="${accountCode}: ${accountName}">
-                  <sub-hyperlink target="AccountActivitiesDetail?glAccountId=${glAccountId}" description="(${glAccountId})" link-style="buttontext"/> 
+                  <sub-hyperlink target="AccountActivitiesDetail" description="(${glAccountId})" link-style="buttontext">
+                    <parameter param-name="glAccountId" from-field="glAccountId"/>
+                  </sub-hyperlink> 
               </display-entity>
           </field>
           <field name="postedBalance" widget-area-style="tabletextright"><display type="currency" currency="${baseCurrencyUomId}"/></field>
           <field name=" " widget-area-style="tabletextright" widget-style="buttontext">
-              <hyperlink description="${uiLabelMap.CommonDetails}" target="TaxGlAccountDetails?glAccountId=${glAccountId}"/>
+              <hyperlink description="${uiLabelMap.CommonDetails}" target="TaxGlAccountDetails">
+                <parameter param-name="glAccountId" from-field="glAccountId"/>
+              </hyperlink>
           </field>
           <field name="  " widget-area-style="tabletextright" widget-style="buttontext">
-              <hyperlink description="${uiLabelMap.FinancialsPayTax}" target="editPayment?paymentTypeId=DISBURSEMENT&amp;partyId=${taxAuthPartyId}"/>
+              <hyperlink description="${uiLabelMap.FinancialsPayTax}" target="editPayment">
+                <parameter param-name="paymentTypeId" value="DISBURSEMENT"/>
+                <parameter param-name="partyId" from-field="taxAuthPartyId"/>
+              </hyperlink>
           </field>
      </form>
 

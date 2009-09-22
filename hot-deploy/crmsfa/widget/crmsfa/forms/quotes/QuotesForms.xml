@@ -28,7 +28,9 @@
         <field name="issueDate" title="${uiLabelMap.OrderOrderQuoteIssueDate}"><display type="date"/></field>
         <field name="quoteName" title="${uiLabelMap.OrderOrderQuoteName}" widget-style="linktext"
             use-when="isLookup==void||isLookup==null||!isLookup.equals(&quot;true&quot;)">
-            <hyperlink description="${quoteName} (${quoteId})" target="ViewQuote?quoteId=${quoteId}"/>
+            <hyperlink description="${quoteName} (${quoteId})" target="ViewQuote">
+                <parameter param-name="quoteId" from-field="quoteId"/>
+            </hyperlink>
         </field>
         <field name="quoteName" title="${uiLabelMap.OrderOrderQuoteName}" widget-style="linktext"
             use-when="isLookup!=void&amp;&amp;isLookup!=null&amp;&amp;isLookup.equals(&quot;true&quot;)">
@@ -43,7 +45,10 @@
         </field>
         <field name="removeOption" title="" widget-style="buttontext"
             use-when="parameters.get(&quot;salesOpportunityId&quot;)!=null&amp;&amp;hasUpdatePermission!=void&amp;&amp;hasUpdatePermission!=null&amp;&amp;hasUpdatePermission==true">
-            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeQuoteFromOpportunity?quoteId=${quoteId}&amp;salesOpportunityId=${parameters.salesOpportunityId}"/>
+            <hyperlink description="${uiLabelMap.CommonRemove}" target="removeQuoteFromOpportunity">
+                <parameter param-name="quoteId" from-field="quoteId"/>
+                <parameter param-name="salesOpportunityId" value="${parameters.salesOpportunityId}"/>
+            </hyperlink>
         </field>
     </form> 
 

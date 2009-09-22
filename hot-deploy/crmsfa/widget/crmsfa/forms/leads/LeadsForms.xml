@@ -189,7 +189,9 @@
         <field name="parentPartyId" title="${uiLabelMap.CrmParentParty}" position="2" title-style="requiredField" 
             use-when="partySummary.get(&quot;parentPartyId&quot;)!=void&amp;&amp;partySummary.get(&quot;parentPartyId&quot;)!=null">
             <display-entity entity-name="PartySummaryCRMView" key-field-name="partyId" description="${groupName} (${partyId})">
-                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount?partyId=${partySummary.parentPartyId}"/>
+                <sub-hyperlink description="${uiLabelMap.CommonView}" link-style="buttontext" target="viewAccount">
+                    <parameter param-name="partyId" from-field="partySummary.parentPartyId"/>
+                </sub-hyperlink>
             </display-entity>
         </field>
         <field name="firstName" title="${uiLabelMap.PartyFirstName}" position="1" title-style="requiredField"><display/></field>
@@ -234,7 +236,9 @@
             header-link="${listSortTarget}?partyId=${parameters.partyId}&amp;activeOrderBy=lastName&amp;${findParams}#ListLeads" 
             header-link-style="orderByHeaderLink"
             use-when="(isLookup==void) || (isLookup==null) || !(isLookup.equals(&quot;true&quot;))">
-            <hyperlink description="${firstName} ${lastName} (${partyId})" target="viewLead?partyId=${partyId}"/>
+            <hyperlink description="${firstName} ${lastName} (${partyId})" target="viewLead">
+                <parameter param-name="partyId" from-field="partyId"/>
+            </hyperlink>
         </field>
         <field name="name" widget-style="linktext" title="${uiLabelMap.CrmLeadName}" widget-area-style="fieldWidth300"
             use-when="(isLookup!=void)&amp;&amp;(isLookup!=null)&amp;&amp;(isLookup.equals(&quot;true&quot;))">
@@ -265,7 +269,8 @@
     </form>
 
     <!-- form to reassign the person responsible TODO: for now we just enter the partyIdTo -->
-    <form name="reassignToForm" type="single" target="reassignLeadResponsibleParty?partyId=${parameters.partyId}">
+    <form name="reassignToForm" type="single" target="reassignLeadResponsibleParty">
+        <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <field name="leadPartyId"><hidden value="${parameters.partyId}"/></field>
         <field name="newPartyId" title="${uiLabelMap.CrmReassignTo}" title-style="tableheadtext" widget-style="inputbox">
             <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>

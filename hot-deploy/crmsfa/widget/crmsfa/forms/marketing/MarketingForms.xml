@@ -123,7 +123,9 @@
 
         <field name="campaignName" title="${uiLabelMap.CommonName}" widget-style="linktext"
             header-link="${listSortTarget}?campaignsOrderBy=campaignName${findParams}#ListMarketingCampaigns" header-link-style="orderByHeaderLink">
-            <hyperlink description="${campaignName} (${marketingCampaignId})" target="viewMarketingCampaign?marketingCampaignId=${marketingCampaignId}"/>
+            <hyperlink description="${campaignName} (${marketingCampaignId})" target="viewMarketingCampaign">
+                <parameter param-name="marketingCampaignId" from-field="marketingCampaignId"/>
+            </hyperlink>
         </field>
         <field name="statusId" title="${uiLabelMap.CommonStatus}"
             header-link="${listSortTarget}?campaignsOrderBy=statusId${findParams}#ListMarketingCampaigns" header-link-style="orderByHeaderLink">
@@ -149,7 +151,9 @@
         paginate-target="listSurveys"  list-name="surveys">
 
         <field name="surveyName" widget-style="linktext" title="${uiLabelMap.CrmMarketingSurveys}" widget-area-style="fieldWidth300">
-            <hyperlink description="${surveyName} (${surveyId})" target="viewSurveyResponses?surveyId=${surveyId}"/>
+            <hyperlink description="${surveyName} (${surveyId})" target="viewSurveyResponses">
+                <parameter param-name="surveyId" from-field="surveyId"/>
+            </hyperlink>
         </field>
         <field name="description" widget-style="tabletext" title="${uiLabelMap.CommonDescription}">
             <display/>

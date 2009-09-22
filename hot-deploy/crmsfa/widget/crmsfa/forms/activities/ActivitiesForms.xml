@@ -35,7 +35,9 @@
         </field>
         <field name="workEffortName" title="${uiLabelMap.CrmActivity}" widget-style="linktext" widget-area-style="fieldWidth50pct"
             header-link="${listSortTarget}?${activityValueParams}&amp;pendingActivitiesOrderBy=workEffortName#ListPendingActivities" header-link-style="orderByHeaderLink">
-            <hyperlink description="${workEffortName} (${workEffortId})" target="viewActivity?workEffortId=${workEffortId}"/>
+            <hyperlink description="${workEffortName} (${workEffortId})" target="viewActivity">
+                <parameter param-name="workEffortId" from-field="workEffortId"/>
+            </hyperlink>
         </field>
         <field name="currentStatusId" title="${uiLabelMap.CommonStatus}"
             header-link="${listSortTarget}?${activityValueParams}&amp;activitiesOrderBy=currentStatusId#ListPendingActivities" header-link-style="orderByHeaderLink">
@@ -67,7 +69,9 @@
         </field>
         <field name="workEffortName" title="${uiLabelMap.CrmActivity}" widget-style="linktext" widget-area-style="fieldWidth50pct"
             header-link="${listSortTarget}?${activityValueParams}&amp;completedActivitiesOrderBy=workEffortName#ListCompletedActivities" header-link-style="orderByHeaderLink">
-            <hyperlink description="${workEffortName} (${workEffortId})" target="viewActivity?workEffortId=${workEffortId}"/>
+            <hyperlink description="${workEffortName} (${workEffortId})" target="viewActivity">
+                <parameter param-name="workEffortId" from-field="workEffortId"/>
+            </hyperlink>
         </field>
         <field name="currentStatusId" title="${uiLabelMap.CommonStatus}"
             header-link="${listSortTarget}?${activityValueParams}&amp;completedActivitiesOrderBy=currentStatusId#ListCompletedActivities" header-link-style="orderByHeaderLink">
@@ -414,7 +418,10 @@
         </field>        
         <field name="Remove" title="" widget-style="buttontext" use-when="hasUpdatePartiesPermission">
             <hyperlink description="${uiLabelMap.CommonRemove}" 
-                target="removeWorkEffortPartyAssignment?workEffortId=${workEffortId}&amp;partyId=${partyId}"/> 
+                target="removeWorkEffortPartyAssignment">
+                <parameter param-name="workEffortId" from-field="workEffortId"/>
+                <parameter param-name="partyId" from-field="partyId"/>
+            </hyperlink> 
         </field>
         <field name="availabilityStatusId" title="${uiLabelMap.CrmAvailability}" widget-area-style="fieldWidth100"
             use-when="!hasUpdatePartiesPermission">

@@ -32,7 +32,11 @@
             <display-entity entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})" key-field-name="glAccountId"/>
         </field>
         <field name="Update" widget-style="buttontext">            
-            <hyperlink description="${uiLabelMap.CommonEdit}" target="updateGlAccountTypeDefaultScreen?glAccountTypeId=${glAccountTypeId}&amp;glAccountId=${glAccountId}&amp;organizationPartyId=${organizationPartyId}"/>
+            <hyperlink description="${uiLabelMap.CommonEdit}" target="updateGlAccountTypeDefaultScreen">
+                <parameter param-name="glAccountTypeId" from-field="glAccountTypeId"/>
+                <parameter param-name="glAccountId" from-field="glAccountId"/>
+                <parameter param-name="organizationPartyId" from-field="organizationPartyId"/>
+            </hyperlink>
         </field>
     </form>
     

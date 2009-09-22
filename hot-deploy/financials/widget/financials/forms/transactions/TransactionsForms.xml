@@ -25,7 +25,9 @@
         header-row-style="boxtop"
         list-name="acctgTransListIt" paginate-target="transactions">
         <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionId}" widget-style="linktext">
-            <hyperlink target="viewAcctgTrans?acctgTransId=${acctgTransId}" description="${acctgTransId}"/>
+            <hyperlink target="viewAcctgTrans" description="${acctgTransId}">
+                <parameter param-name="acctgTransId" from-field="acctgTransId"/>
+            </hyperlink>
         </field>
         <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
             <display-entity entity-name="AcctgTransType" cache="true"/>
@@ -45,7 +47,9 @@
         header-row-style="boxtop"
         list-name="acctgTransListIt" paginate-target="transactions">
         <field name="acctgTransId" title="${uiLabelMap.FinancialsTransactionId}" widget-style="linktext">
-            <hyperlink target="viewAcctgTrans?acctgTransId=${acctgTransId}" description="${acctgTransId}"/>
+            <hyperlink target="viewAcctgTrans" description="${acctgTransId}">
+                <parameter param-name="acctgTransId" from-field="acctgTransId"/>
+            </hyperlink>
         </field>
         <field name="acctgTransTypeId" title="${uiLabelMap.FinancialsTransactionType}">
             <display-entity entity-name="AcctgTransType" cache="true"/>
@@ -57,7 +61,9 @@
         <field name="transactionDate" title="${uiLabelMap.FinancialsTransactionDate}"><display/></field>
         <field name="scheduledPostingDate" title="${uiLabelMap.FinancialsScheduledPostingDate}"><display/></field>
         <field name="Post" title="Post" widget-style="buttontext" use-when="isPosted!=void&amp;&amp;isPosted!=null&amp;&amp;isPosted.equals(&quot;N&quot;)">
-            <hyperlink target="postAcctgTrans?acctgTransId=${acctgTransId}" description="Post"/>
+            <hyperlink target="postAcctgTrans" description="Post">
+                <parameter param-name="acctgTransId" from-field="acctgTransId"/>
+            </hyperlink>
         </field>
     </form>
 
@@ -126,13 +132,19 @@
             <display description="${groovy:org.ofbiz.party.party.PartyHelper.getPartyName(delegator, acctgTrans.get(&quot;partyId&quot;), false)} (${acctgTrans.partyId})"/>
         </field>
         <field name="invoiceId" widget-area-style="linktext">
-            <hyperlink description="${acctgTrans.invoiceId}" target="viewInvoice?invoiceId=${acctgTrans.invoiceId}"/>
+            <hyperlink description="${acctgTrans.invoiceId}" target="viewInvoice">
+                <parameter param-name="invoiceId" from-field="acctgTrans.invoiceId"/>
+            </hyperlink>
         </field>
         <field name="inventoryItemId" widget-area-style="linktext">
-            <hyperlink description="${acctgTrans.inventoryItemId}" target="/facility/control/EditInventoryItem?inventoryItemId=${acctgTrans.inventoryItemId}" target-type="inter-app"/>
+            <hyperlink description="${acctgTrans.inventoryItemId}" target="/facility/control/EditInventoryItem" target-type="inter-app">
+                <parameter param-name="inventoryItemId" from-field="acctgTrans.inventoryItemId"/>
+            </hyperlink>
         </field>
         <field name="paymentId" widget-area-style="linktext">
-            <hyperlink description="${acctgTrans.paymentId}" target="viewPayment?paymentId=${acctgTrans.paymentId}"/>
+            <hyperlink description="${acctgTrans.paymentId}" target="viewPayment">
+                <parameter param-name="paymentId" from-field="acctgTrans.paymentId"/>
+            </hyperlink>
         </field>
     </form>
 
@@ -203,11 +215,15 @@
         default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext">
         <auto-fields-entity entity-name="AcctgTransEntry" default-field-type="display"/>
         <field name="acctgTransId" widget-style="linktext">
-            <hyperlink description="${acctgTransEntry.acctgTransId}" target="viewAcctgTrans?acctgTransId=${acctgTransEntry.acctgTransId}"/>
+            <hyperlink description="${acctgTransEntry.acctgTransId}" target="viewAcctgTrans">
+                <parameter param-name="acctgTransId" from-field="acctgTransEntry.acctgTransId"/>
+            </hyperlink>
         </field>
         <field name="glAccountId" title="${uiLabelMap.GlAccount}">
             <display-entity entity-name="GlAccount" description="${accountCode}: ${accountName} (${glAccountId})" key-field-name="glAccountId">
-                <sub-hyperlink target="AccountActivitiesDetail?glAccountId=${acctgTransEntry.glAccountId}" description="(${uiLabelMap.FinancialsActivities})" link-style="linktext" />
+                <sub-hyperlink target="AccountActivitiesDetail" description="(${uiLabelMap.FinancialsActivities})" link-style="linktext">
+                    <parameter param-name="glAccountId" from-field="acctgTransEntry.glAccountId"/>
+                </sub-hyperlink>
             </display-entity>
         </field>
         <field name="partyId" widget-area-style="linktext">
@@ -268,7 +284,10 @@
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
         header-row-style="boxtop">
         <field name="glReconciliationId">
-            <hyperlink also-hidden="false" description="${glReconciliationId}" target="viewGlReconciliation?glReconciliationId=${glReconciliationId}&amp;glAccountId=${glAccountId}"/>
+            <hyperlink also-hidden="false" description="${glReconciliationId}" target="viewGlReconciliation">
+                <parameter param-name="glReconciliationId" from-field="glReconciliationId"/>
+                <parameter param-name="glAccountId" from-field="glAccountId"/>
+            </hyperlink>
         </field>
         <field name="glReconciliationName"><display/></field>
         <field name="description"><display/></field>
@@ -287,7 +306,9 @@
             <display-entity entity-name="AcctgTransType"/>
         </field> 
         <field name="acctgTransId">
-            <hyperlink also-hidden="false" description="${acctgTransId}: ${acctgTransEntrySeqId}" target="viewAcctgTrans?acctgTransId=${acctgTransId}"/>
+            <hyperlink also-hidden="false" description="${acctgTransId}: ${acctgTransEntrySeqId}" target="viewAcctgTrans">
+                <parameter param-name="acctgTransId" from-field="acctgTransId"/>
+            </hyperlink>
         </field>
         <field name="debitCreditFlag" title="${uiLabelMap.FinancialsDebitCredit}"><display/></field>
         <field name="reconciledAmount" widget-area-style="tabletextright"><display type="currency" currency="${currencyUomId}"/></field>
@@ -301,7 +322,10 @@
         <field name="fromDate" title="${uiLabelMap.CommonFrom}"><display also-hidden="false"/></field>
         <field name="thruDate" title="${uiLabelMap.CommonThru}"><display also-hidden="false"/></field>
         <field name="update" title="${uiLabelMap.FinancialsEnterNewRate}" widget-style="buttontext"> 
-            <hyperlink description="${uiLabelMap.FinancialsEnterNewRate}" target="exchangeRates?uomId=${uomId}&amp;uomIdTo=${uomIdTo}"/>
+            <hyperlink description="${uiLabelMap.FinancialsEnterNewRate}" target="exchangeRates">
+                <parameter param-name="uomId" from-field="uomId"/>
+                <parameter param-name="uomIdTo" from-field="uomIdTo"/>
+            </hyperlink>
         </field>
     </form>
     
@@ -344,7 +368,9 @@
             <set field="toPartyName" value="${groovy:invoiceData.get(invoiceId+&quot;_&quot;+recurrenceInfoId).get(&quot;toPartyName&quot;)}"/>
         </row-actions>
         <field name="invoiceId" title="${uiLabelMap.AccountingInvoiceID}" widget-style="linktext">
-            <hyperlink description="${invoiceId}" target="viewInvoice?invoiceId=${invoiceId}"/>
+            <hyperlink description="${invoiceId}" target="viewInvoice">
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
+            </hyperlink>
         </field>
         <field name="recurrenceInfoId"><hidden value="${recurrenceInfoId}"/></field>
         <field name="invoiceTypeId" title="${uiLabelMap.CommonType}"><display-entity entity-name="InvoiceType" also-hidden="false"/></field>
