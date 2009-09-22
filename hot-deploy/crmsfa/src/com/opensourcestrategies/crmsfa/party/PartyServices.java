@@ -75,8 +75,7 @@ public final class PartyServices {
      * @param delegator a <code>GenericDelegator</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
-    private static void mergeTwoValues(String entityName, Map fromKeys, Map toKeys, GenericDelegator delegator) throws GenericEntityException {
+    private static void mergeTwoValues(String entityName, Map<String, String> fromKeys, Map<String, String> toKeys, GenericDelegator delegator) throws GenericEntityException {
         GenericValue from = delegator.findByPrimaryKey(entityName, fromKeys);
         GenericValue to = delegator.findByPrimaryKey(entityName, toKeys);
         if (from == null || to == null) {
@@ -109,9 +108,9 @@ public final class PartyServices {
             // ensure that merging parties are the same type (ACCOUNT, CONTACT, PROSPECT)
             String fromPartyType = PartyHelper.getFirstValidInternalPartyRoleTypeId(partyIdFrom, delegator);
             String toPartyType = PartyHelper.getFirstValidInternalPartyRoleTypeId(partyIdTo, delegator);
-                if ((fromPartyType == null) || !fromPartyType.equals(toPartyType)) {
-                    return UtilMessage.createAndLogServiceError("Cannot merge party [" + partyIdFrom + "] of type [" + fromPartyType + "] with party [" + partyIdTo + "] of type [" + toPartyType + "] because they are not the same type.", "CrmErrorMergePartiesFail", locale, MODULE);
-                }
+            if ((fromPartyType == null) || !fromPartyType.equals(toPartyType)) {
+                return UtilMessage.createAndLogServiceError("Cannot merge party [" + partyIdFrom + "] of type [" + fromPartyType + "] with party [" + partyIdTo + "] of type [" + toPartyType + "] because they are not the same type.", "CrmErrorMergePartiesFail", locale, MODULE);
+            }
             if (partyIdFrom.equals(partyIdTo)) {
                 return UtilMessage.createAndLogServiceError("Cannot merge party [" + partyIdFrom + "] to itself!", "CrmErrorMergeParties", locale, MODULE);
             }
@@ -138,8 +137,7 @@ public final class PartyServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map mergeCrmParties(DispatchContext dctx, Map context) {
+    public static Map<String, Object> mergeCrmParties(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -151,12 +149,12 @@ public final class PartyServices {
 
         try {
 
-            Map serviceResults = null;
+            Map<String, Object> serviceResults = null;
 
             if (!"N".equalsIgnoreCase(validate)) {
                 // validate again
                 serviceResults = dispatcher.runSync("crmsfa.validateMergeCrmParties",
-                                                    UtilMisc.toMap("userLogin", userLogin, "partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo));
+                        UtilMisc.toMap("userLogin", userLogin, "partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo));
                 if (ServiceUtil.isError(serviceResults)) {
                     return serviceResults;
                 }
@@ -168,29 +166,29 @@ public final class PartyServices {
             mergeTwoValues("PartyGroup", UtilMisc.toMap("partyId", partyIdFrom), UtilMisc.toMap("partyId", partyIdTo), delegator);
             mergeTwoValues("Party", UtilMisc.toMap("partyId", partyIdFrom), UtilMisc.toMap("partyId", partyIdTo), delegator);
 
-            List toRemove = new ArrayList();
+            List<GenericValue> toRemove = new ArrayList<GenericValue>();
 
             // Get a list of entities related to the Party entity, in descending order by relation
-            List relatedEntities = getRelatedEntities("Party", delegator);
+            List<ModelEntity> relatedEntities = getRelatedEntities("Party", delegator);
 
             // Go through the related entities in forward order - this makes sure that parent records are created before child records
-            Iterator reit = relatedEntities.iterator();
+            Iterator<ModelEntity> reit = relatedEntities.iterator();
             while (reit.hasNext()) {
-                ModelEntity modelEntity = (ModelEntity) reit.next();
+                ModelEntity modelEntity = reit.next();
 
                 // Examine each field of the entity
-                Iterator mefit = modelEntity.getFieldsIterator();
+                Iterator<ModelField> mefit = modelEntity.getFieldsIterator();
                 while (mefit.hasNext()) {
-                    ModelField modelField = (ModelField) mefit.next();
+                    ModelField modelField = mefit.next();
                     if (modelField.getName().matches(".*[pP]artyId.*")) {
 
                         // If the name of the field has something to do with a partyId, get all the existing records from that entity which have the
                         //  partyIdFrom in that particular field
-                        List existingRecords = delegator.findByAnd(modelEntity.getEntityName(), UtilMisc.toMap(modelField.getName(), partyIdFrom));
+                        List<GenericValue> existingRecords = delegator.findByAnd(modelEntity.getEntityName(), UtilMisc.toMap(modelField.getName(), partyIdFrom));
                         if (existingRecords.size() > 0) {
-                            Iterator eit = existingRecords.iterator();
+                            Iterator<GenericValue> eit = existingRecords.iterator();
                             while (eit.hasNext()) {
-                                GenericValue existingRecord = (GenericValue) eit.next();
+                                GenericValue existingRecord = eit.next();
                                 if (modelField.getIsPk()) {
 
                                     // If the partyId field is part of a primary key, create a new record with the partyIdTo in place of the partyIdFrom
@@ -218,9 +216,10 @@ public final class PartyServices {
 
             // Go through the list of records to remove in REVERSE order! Since they're still in descending order of relation to the Party
             //  entity, reversing makes sure that child records are removed before parent records, all the way back to the original Party record
-            ListIterator rit = toRemove.listIterator(toRemove.size());
+            ListIterator<GenericValue> rit = toRemove.listIterator(toRemove.size());
             while (rit.hasPrevious()) {
                 GenericValue existingRecord = (GenericValue) rit.previous();
+                Debug.logError(existingRecord.toString(), MODULE);
                 existingRecord.remove();
             }
 
@@ -241,7 +240,7 @@ public final class PartyServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map findCrmPartiesForMerge(DispatchContext dctx, Map context) {
+    public static Map<String, Object> findCrmPartiesForMerge(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);
 
@@ -250,18 +249,18 @@ public final class PartyServices {
             Map fullMerge = new HashMap();
 
             // Find parties that already have an entry in PartyMergeCandidates
-            List existingMergeCandidates = delegator.findAll("PartyMergeCandidates");
-            List existingMergeCandidateFromParties = EntityUtil.getFieldListFromEntityList(existingMergeCandidates, "partyIdFrom", true);
+            List<GenericValue> existingMergeCandidates = delegator.findAll("PartyMergeCandidates");
+            List<String> existingMergeCandidateFromParties = EntityUtil.getFieldListFromEntityList(existingMergeCandidates, "partyIdFrom", true);
 
             // Find parties with similar postal addresses
-            List postalAddressMergeCandidateConditions = new ArrayList();
-            postalAddressMergeCandidateConditions.add(new EntityExpr("address1", EntityOperator.NOT_EQUAL, null));
-            postalAddressMergeCandidateConditions.add(new EntityExpr("postalCode", EntityOperator.NOT_EQUAL, null));
-            postalAddressMergeCandidateConditions.add(new EntityExpr("countryGeoId", EntityOperator.NOT_EQUAL, null));
-            postalAddressMergeCandidateConditions.add(new EntityExpr("contactMechId", EntityOperator.NOT_EQUAL, null));
+            List<EntityExpr> postalAddressMergeCandidateConditions = new ArrayList<EntityExpr>();
+            postalAddressMergeCandidateConditions.add(EntityCondition.makeCondition("address1", EntityOperator.NOT_EQUAL, null));
+            postalAddressMergeCandidateConditions.add(EntityCondition.makeCondition("postalCode", EntityOperator.NOT_EQUAL, null));
+            postalAddressMergeCandidateConditions.add(EntityCondition.makeCondition("countryGeoId", EntityOperator.NOT_EQUAL, null));
+            postalAddressMergeCandidateConditions.add(EntityCondition.makeCondition("contactMechId", EntityOperator.NOT_EQUAL, null));
 
             TransactionUtil.begin();
-            EntityListIterator partyAndPostalAddresses = delegator.findListIteratorByCondition("PartyAndPostalAddress", new EntityConditionList(postalAddressMergeCandidateConditions, EntityOperator.AND), null, null);
+            EntityListIterator partyAndPostalAddresses = delegator.findListIteratorByCondition("PartyAndPostalAddress", EntityCondition.makeCondition(postalAddressMergeCandidateConditions, EntityOperator.AND), null, null);
             TransactionUtil.commit();
 
             // Iterate through the partyAndPostalAddress records, constructing a four-level-deep map with countryGeoId as the first level, postalCode as the second,
@@ -303,17 +302,17 @@ public final class PartyServices {
             partyAndPostalAddresses.close();
 
             // Iterate through the resolved postal address map, checking which of the groups of similar addresses have more than one party associated with them.
-            Iterator pit = postalAddressMerge.keySet().iterator();
+            Iterator<String> pit = postalAddressMerge.keySet().iterator();
             while (pit.hasNext()) {
-                String countryGeoId = (String) pit.next();
+                String countryGeoId = pit.next();
                 Map postalCodes = (Map) postalAddressMerge.get(countryGeoId);
-                Iterator pcit = postalCodes.keySet().iterator();
+                Iterator<String> pcit = postalCodes.keySet().iterator();
                 while (pcit.hasNext()) {
-                    String postalCode = (String) pcit.next();
+                    String postalCode = pcit.next();
                     Map addresses = (Map) postalCodes.get(postalCode);
-                    Iterator ait = addresses.keySet().iterator();
+                    Iterator<String> ait = addresses.keySet().iterator();
                     while (ait.hasNext()) {
-                        String address = (String) ait.next();
+                        String address = ait.next();
                         TreeMap parties = (TreeMap) addresses.get(address);
                         if (parties.size() > 1) {
 
@@ -334,20 +333,20 @@ public final class PartyServices {
             }
 
             // Find parties with similar email addresses
-            List emailAddressMergeCandidateConditions = new ArrayList();
-            emailAddressMergeCandidateConditions.add(new EntityExpr("contactMechTypeId", EntityOperator.EQUALS, "EMAIL_ADDRESS"));
-            emailAddressMergeCandidateConditions.add(new EntityExpr("infoString", EntityOperator.NOT_EQUAL, null));
+            List<EntityExpr> emailAddressMergeCandidateConditions = new ArrayList<EntityExpr>();
+            emailAddressMergeCandidateConditions.add(EntityCondition.makeCondition("contactMechTypeId", EntityOperator.EQUALS, "EMAIL_ADDRESS"));
+            emailAddressMergeCandidateConditions.add(EntityCondition.makeCondition("infoString", EntityOperator.NOT_EQUAL, null));
 
             TransactionUtil.begin();
-            EntityListIterator partyAndEmailAddresses = delegator.findListIteratorByCondition("PartyAndContactMech", new EntityConditionList(emailAddressMergeCandidateConditions, EntityOperator.AND), null, null);
+            EntityListIterator partyAndEmailAddresses = delegator.findListIteratorByCondition("PartyAndContactMech", EntityCondition.makeCondition(emailAddressMergeCandidateConditions, EntityOperator.AND), null, null);
             TransactionUtil.commit();
 
             // Iterate through the partyAndContactMech records, constructing an address->(map of partyId->genericValue)
             Map emailAddressMerge = new TreeMap();
             GenericValue partyAndEmailAddress = null;
             while ((partyAndEmailAddress = (GenericValue) partyAndEmailAddresses.next()) != null) {
-               String address = partyAndEmailAddress.getString("infoString").toUpperCase().replaceAll(" ", "");
-               if (UtilValidate.isNotEmpty(address)) {
+                String address = partyAndEmailAddress.getString("infoString").toUpperCase().replaceAll(" ", "");
+                if (UtilValidate.isNotEmpty(address)) {
                     String partyId = partyAndEmailAddress.getString("partyId");
 
                     // Ignore any parties that are already in some state of merge candidacy
@@ -366,9 +365,9 @@ public final class PartyServices {
             partyAndEmailAddresses.close();
 
             // Iterate through the resolved email address map, checking which of the groups of similar addresses have more than one party associated with them.
-            Iterator eit = emailAddressMerge.keySet().iterator();
+            Iterator<String> eit = emailAddressMerge.keySet().iterator();
             while (eit.hasNext()) {
-                String address = (String) eit.next();
+                String address = eit.next();
                 TreeMap parties = (TreeMap) emailAddressMerge.get(address);
                 if (parties.size() > 1) {
                     String toPartyId = (String) parties.firstKey();
@@ -379,11 +378,11 @@ public final class PartyServices {
             }
 
             // Iterate through the full set of groups of parties with similar contact info
-            Iterator fit = fullMerge.keySet().iterator();
+            Iterator<String> fit = fullMerge.keySet().iterator();
             while (fit.hasNext()) {
 
                 // Use the key as the toPartyId
-                String toPartyId = (String) fit.next();
+                String toPartyId = fit.next();
 
                 // Get the name of the toParty
                 String toPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, toPartyId, false);
@@ -415,11 +414,11 @@ public final class PartyServices {
                 Map partiesToMerge = (Map) partiesMergeMap.get("partiesToMerge");
 
                 // Iterate through them
-                Iterator pmit = partiesToMerge.keySet().iterator();
+                Iterator<String> pmit = partiesToMerge.keySet().iterator();
                 while (pmit.hasNext()) {
 
                     // Get the fromPartyId and name, and format the address
-                    String fromPartyId = (String) pmit.next();
+                    String fromPartyId = pmit.next();
                     String fromPartyName = org.ofbiz.party.party.PartyHelper.getPartyName(delegator, fromPartyId, false);
                     String fromPartyNameDisplay = fromPartyName + " (" + fromPartyId + ")";
                     GenericValue fromContactMech = (GenericValue) partiesToMerge.get(fromPartyId);
@@ -491,8 +490,7 @@ public final class PartyServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map autoMergeParties(DispatchContext dctx, Map context) {
+    public static Map<String, Object> autoMergeParties(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -505,12 +503,12 @@ public final class PartyServices {
         try {
 
             // Find parties that have an entry in PartyMergeCandidates without a processedTimestamp or a doNotMerge == Y
-            EntityConditionList orConditions = new EntityConditionList(UtilMisc.toList(new EntityExpr("doNotMerge", EntityOperator.NOT_EQUAL, "Y"), new EntityExpr("doNotMerge", EntityOperator.EQUALS, null)), EntityOperator.OR);
-            EntityConditionList andConditions = new EntityConditionList(UtilMisc.toList(orConditions, new EntityExpr("processedTimestamp", EntityOperator.EQUALS, null)), EntityOperator.AND);
-            List existingMergeCandidates = delegator.findByCondition("PartyMergeCandidates", andConditions, null, null);
+            EntityConditionList<EntityExpr> orConditions = EntityCondition.makeCondition(UtilMisc.toList(EntityCondition.makeCondition("doNotMerge", EntityOperator.NOT_EQUAL, "Y"), EntityCondition.makeCondition("doNotMerge", EntityOperator.EQUALS, null)), EntityOperator.OR);
+            EntityConditionList<EntityCondition> andConditions = EntityCondition.makeCondition(UtilMisc.toList(orConditions, EntityCondition.makeCondition("processedTimestamp", EntityOperator.EQUALS, null)), EntityOperator.AND);
+            List<GenericValue> existingMergeCandidates = delegator.findByCondition("PartyMergeCandidates", andConditions, null, null);
 
             if (existingMergeCandidates != null) {
-                Iterator emcit = existingMergeCandidates.iterator();
+                Iterator<GenericValue> emcit = existingMergeCandidates.iterator();
                 while (emcit.hasNext()) {
                     GenericValue partyMergeCandidate = (GenericValue) emcit.next();
 
@@ -527,7 +525,7 @@ public final class PartyServices {
                         // Call the party merge service inside a transaction
                         TransactionUtil.begin();
 
-                        Map mergeResult = dispatcher.runSync("crmsfa.mergeCrmParties", UtilMisc.toMap("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo, "validate", validate, "userLogin", userLogin));
+                        Map<String, Object> mergeResult = dispatcher.runSync("crmsfa.mergeCrmParties", UtilMisc.toMap("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo, "validate", validate, "userLogin", userLogin));
                         if (ServiceUtil.isError(mergeResult)) {
                             TransactionUtil.rollback();
                             UtilMessage.logServiceError("crmsfa.autoMergePartiesError", UtilMisc.toMap("partyIdFrom", partyIdFrom, "partyIdTo", partyIdTo), locale, MODULE);
@@ -556,7 +554,7 @@ public final class PartyServices {
             return UtilMessage.createAndLogServiceError(e, "CrmErrorAutoMergePartiesFail", locale, MODULE);
         }
 
-        Map results = ServiceUtil.returnSuccess();
+        Map<String, Object> results = ServiceUtil.returnSuccess();
         results.put("successfulMerges", new Integer(successfulMerges));
         return results;
     }
@@ -570,8 +568,7 @@ public final class PartyServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map setViewPreference(DispatchContext dctx, Map context) {
+    public static Map<String, Object> setViewPreference(DispatchContext dctx, Map<String, Object> context) {
         Debug.logInfo("Use of crmsfa.setViewPreference is deprecated.  Please use opentasp.setviewPreference instead.", MODULE);
         return org.opentaps.common.party.PartyServices.setViewPreference(dctx, context);
     }
@@ -584,8 +581,7 @@ public final class PartyServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map updatePartyPassword(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updatePartyPassword(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -617,7 +613,7 @@ public final class PartyServices {
             }
 
             // Call ofbiz service updatePassword as System (to bypass the service security checks)
-            Map srcResults = dispatcher.runSync("updatePassword", UtilMisc.toMap("userLogin", UtilCommon.getSystemUserLogin(delegator), "userLoginId", userLoginId, "newPassword", newPassword, "newPasswordVerify", confirmPassword, "passwordHint", passwordHint));
+            Map<String, Object> srcResults = dispatcher.runSync("updatePassword", UtilMisc.toMap("userLogin", UtilCommon.getSystemUserLogin(delegator), "userLoginId", userLoginId, "newPassword", newPassword, "newPasswordVerify", confirmPassword, "passwordHint", passwordHint));
 
             // Checks on the password are done in the updatePassword service, so we return the error message to the user
             // (this include checking password min length, is equal to verify, no password in hint, etc...)
@@ -639,8 +635,7 @@ public final class PartyServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map autoAssignParty(DispatchContext dctx, Map context) {
+    public static Map<String, Object> autoAssignParty(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
@@ -671,7 +666,7 @@ public final class PartyServices {
             // Create the CRM role unless it has it already
             if (UtilValidate.isEmpty(crmRoleTypeId)) {
                 crmRoleTypeId = "PERSON".equals(party.getString("partyTypeId")) ? "CONTACT" : "ACCOUNT";
-                Map createPartyRoleResult = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", crmRoleTypeId, "userLogin", userLogin));
+                Map<String, Object> createPartyRoleResult = dispatcher.runSync("createPartyRole", UtilMisc.toMap("partyId", partyId, "roleTypeId", crmRoleTypeId, "userLogin", userLogin));
                 if (ServiceUtil.isError(createPartyRoleResult)) {
                     return createPartyRoleResult;
                 }
@@ -702,13 +697,13 @@ public final class PartyServices {
 
             // Assign responsibility for the party to the AutoResponsibleParty from the seed data
             if (UtilValidate.isEmpty(relationships)) {
-                Map reassignServiceContext = UtilMisc.toMap("newPartyId", autoResponsiblePartyId, "userLogin", userLogin);
+                Map<String, Object> reassignServiceContext = UtilMisc.toMap("newPartyId", autoResponsiblePartyId, "userLogin", userLogin);
 
                 String subjectPartyIdKey = "PERSON".equals(party.getString("partyTypeId")) ? "contactPartyId" : "accountPartyId";
                 reassignServiceContext.put(subjectPartyIdKey, partyId);
 
                 String serviceName = "PERSON".equals(party.getString("partyTypeId")) ? "crmsfa.reassignContactResponsibleParty" : "crmsfa.reassignAccountResponsibleParty";
-                Map reassignServiceResult = dispatcher.runSync(serviceName, reassignServiceContext);
+                Map<String, Object> reassignServiceResult = dispatcher.runSync(serviceName, reassignServiceContext);
                 if (ServiceUtil.isError(reassignServiceResult)) {
                     return reassignServiceResult;
                 }
@@ -723,12 +718,11 @@ public final class PartyServices {
         return ServiceUtil.returnSuccess();
     }
 
-    @SuppressWarnings("unchecked")
-    private static List getRelatedEntities(String parentEntityName, GenericDelegator delegator) {
+    private static List<ModelEntity> getRelatedEntities(String parentEntityName, GenericDelegator delegator) {
         ModelEntity parentEntity = delegator.getModelEntity(parentEntityName);
 
         // Start the recursion
-        return getRelatedEntities(new ArrayList(), parentEntity, delegator);
+        return getRelatedEntities(new ArrayList<ModelEntity>(), parentEntity, delegator);
     }
 
     /**
@@ -738,8 +732,7 @@ public final class PartyServices {
      * @param delegator GenericDelegator
      * @return List of ModelEntity objects in descending order of relation from the original parent entity
      */
-    @SuppressWarnings("unchecked")
-    private static List getRelatedEntities(List relatedEntities, ModelEntity parentEntity, GenericDelegator delegator) {
+    private static List<ModelEntity> getRelatedEntities(List<ModelEntity> relatedEntities, ModelEntity parentEntity, GenericDelegator delegator) {
 
         // Do nothing if the parent entity has already been mapped
         if (relatedEntities.contains(parentEntity)) {
@@ -747,11 +740,11 @@ public final class PartyServices {
         }
 
         relatedEntities.add(parentEntity);
-        Iterator reit = parentEntity.getRelationsIterator();
+        Iterator<ModelRelation> reit = parentEntity.getRelationsIterator();
 
         // Recurse for each relation from the parent entity that doesn't refer to a view-entity
         while (reit.hasNext()) {
-            ModelRelation relation = (ModelRelation) reit.next();
+            ModelRelation relation = reit.next();
             String relatedEntityName = relation.getRelEntityName();
             ModelEntity relatedEntity = delegator.getModelEntity(relatedEntityName);
             if (!(relatedEntity instanceof ModelViewEntity)) {
@@ -773,7 +766,7 @@ public final class PartyServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map convertOfbizParties(DispatchContext dctx, Map context) {
+    public static Map<String, Object> convertOfbizParties(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = UtilCommon.getLocale(context);
@@ -792,9 +785,9 @@ public final class PartyServices {
                 return UtilMessage.createServiceError("OpentapsError_PermissionDenied", locale);
             }
 
-            EntityCondition conditions = new EntityConditionList(UtilMisc.toList(
-                    new EntityExpr("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
-                    new EntityExpr("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER")
+            EntityCondition conditions = EntityCondition.makeCondition(UtilMisc.toList(
+                    EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
+                    EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "BILL_TO_CUSTOMER")
             ), EntityOperator.AND);
             EntityListIterator orderRoles = delegator.findListIteratorByCondition("OrderHeaderAndRoles", conditions, null, null);
             GenericValue orderRole;
@@ -816,27 +809,27 @@ public final class PartyServices {
                 GenericValue role = delegator.findByPrimaryKey("PartyRole", input);
                 if (role != null) {
                     // see if there is anyone responsible for this party, and if not make the assignToPartyId responsible
-                    conditions = new EntityConditionList(UtilMisc.toList(
-                            new EntityExpr("partyIdFrom", EntityOperator.EQUALS, partyId),
-                            new EntityExpr("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeId),
-                            new EntityExpr("securityGroupId", EntityOperator.EQUALS, roleTypeId + "_OWNER"),
-                            new EntityExpr("partyRelationshipTypeId", EntityOperator.EQUALS, "RESPONSIBLE_FOR"),
+                    conditions = EntityCondition.makeCondition(UtilMisc.toList(
+                            EntityCondition.makeCondition("partyIdFrom", EntityOperator.EQUALS, partyId),
+                            EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, roleTypeId),
+                            EntityCondition.makeCondition("securityGroupId", EntityOperator.EQUALS, roleTypeId + "_OWNER"),
+                            EntityCondition.makeCondition("partyRelationshipTypeId", EntityOperator.EQUALS, "RESPONSIBLE_FOR"),
                             EntityUtil.getFilterByDateExpr()
                     ), EntityOperator.AND);
-                    List relations = delegator.findByCondition("PartyRelationship", conditions, null, null);
+                    List<GenericValue> relations = delegator.findByCondition("PartyRelationship", conditions, null, null);
                     if (relations.size() == 0) {
                         PartyHelper.createNewPartyToRelationship(assignToPartyId, partyId, roleTypeId, "RESPONSIBLE_FOR",
-                            roleTypeId + "_OWNER", PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
+                                roleTypeId + "_OWNER", PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
                     }
                 } else {
                     input.put("userLogin", userLogin);
-                    Map results = dispatcher.runSync("createPartyRole", input);
+                    Map<String, Object> results = dispatcher.runSync("createPartyRole", input);
                     if (ServiceUtil.isError(results)) {
                         return results;
                     }
 
                     PartyHelper.createNewPartyToRelationship(assignToPartyId, partyId, roleTypeId, "RESPONSIBLE_FOR",
-                        roleTypeId + "_OWNER", PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
+                            roleTypeId + "_OWNER", PartyHelper.TEAM_MEMBER_ROLES, true, userLogin, delegator, dispatcher);
                 }
 
                 // Update PartySupplementalData
@@ -859,7 +852,7 @@ public final class PartyServices {
      * @return a <code>Map</code> value
      */
     @SuppressWarnings("unchecked")
-    public static Map assignParty(DispatchContext dctx, Map context) {
+    public static Map<String, Object> assignParty(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -883,20 +876,20 @@ public final class PartyServices {
             // expire any active ASSIGNED_TO relationship from the contact party to the user login
             // this shouldn't be really necessary, but just in case
             List activeAssignedToRelationships = PartyHelper.findActiveAssignedToPartyRelationships(
-                                                                                                    delegator,
-                                                                                                    partyId,
-                                                                                                    roleTypeId,
-                                                                                                    assignToPartyId
-                                                                                                    );
+                    delegator,
+                    partyId,
+                    roleTypeId,
+                    assignToPartyId
+            );
             PartyHelper.expirePartyRelationships(activeAssignedToRelationships, UtilDateTime.nowTimestamp(), dispatcher, userLogin);
 
             // now create the new ASSIGNED_TO relationship by calling createPartyRelationship service
             String roleTypeIdTo = org.opentaps.common.party.PartyHelper.getFirstValidRoleTypeId(assignToPartyId, PartyHelper.TEAM_MEMBER_ROLES, delegator);
             Map input = UtilMisc.toMap(
-                                       "partyIdTo", assignToPartyId,
-                                       "roleTypeIdTo", roleTypeIdTo,
-                                       "partyIdFrom", partyId,
-                                       "roleTypeIdFrom", roleTypeId
+                    "partyIdTo", assignToPartyId,
+                    "roleTypeIdTo", roleTypeIdTo,
+                    "partyIdFrom", partyId,
+                    "roleTypeIdFrom", roleTypeId
             );
             input.put("partyRelationshipTypeId", "ASSIGNED_TO");
             input.put("securityGroupId", null);
@@ -919,8 +912,7 @@ public final class PartyServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map unassignParty(DispatchContext dctx, Map context) {
+    public static Map<String, Object> unassignParty(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
@@ -940,8 +932,8 @@ public final class PartyServices {
             if (!PartyHelper.isActive(partyId, delegator)) {
                 return UtilMessage.createServiceError("OpentapsError_PartyDeactivated", locale, UtilMisc.toMap("partyId", partyId));
             }
-            List relations = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdTo", unassignPartyId,
-                "partyIdFrom", partyId, "roleTypeIdFrom", roleTypeId, "partyRelationshipTypeId", "ASSIGNED_TO"));
+            List<GenericValue> relations = delegator.findByAnd("PartyRelationship", UtilMisc.toMap("partyIdTo", unassignPartyId,
+                    "partyIdFrom", partyId, "roleTypeIdFrom", roleTypeId, "partyRelationshipTypeId", "ASSIGNED_TO"));
             PartyHelper.expirePartyRelationships(relations, UtilDateTime.nowTimestamp(), dispatcher, userLogin);
         } catch (GeneralException e) {
             return UtilMessage.createAndLogServiceError(e, MODULE);
@@ -957,8 +949,7 @@ public final class PartyServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map createPartyTaxAuthInfo(DispatchContext dctx, Map context) {
+    public static Map<String, Object> createPartyTaxAuthInfo(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -1007,8 +998,7 @@ public final class PartyServices {
      * @param context a <code>Map</code> value
      * @return a <code>Map</code> value
      */
-    @SuppressWarnings("unchecked")
-    public static Map updatePartyTaxAuthInfo(DispatchContext dctx, Map context) {
+    public static Map<String, Object> updatePartyTaxAuthInfo(DispatchContext dctx, Map<String, ?> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Security security = dctx.getSecurity();
         Locale locale = UtilCommon.getLocale(context);
@@ -1028,7 +1018,7 @@ public final class PartyServices {
                 return UtilMessage.createServiceError("OpentapsError_PartyDeactivated", locale, UtilMisc.toMap("partyId", partyId));
             }
 
-            Map pk = UtilMisc.toMap("partyId", partyId, "taxAuthPartyId", taxAuthPartyId, "taxAuthGeoId", taxAuthGeoId, "fromDate", fromDate);
+            Map<String, Object> pk = UtilMisc.toMap("partyId", partyId, "taxAuthPartyId", taxAuthPartyId, "taxAuthGeoId", taxAuthGeoId, "fromDate", fromDate);
             GenericValue partyTaxAuthInfo = delegator.findByPrimaryKey("PartyTaxAuthInfo", pk);
             if (partyTaxAuthInfo == null) {
                 return UtilMessage.createAndLogServiceError("Could not find the PartyTaxAuthInfo with PK [" + pk + "]", MODULE);
