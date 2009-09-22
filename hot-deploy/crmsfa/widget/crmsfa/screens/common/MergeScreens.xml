@@ -23,7 +23,6 @@
     <screen name="mergeAccountsForm">
         <section>
             <actions>
-                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="pageTitleLabel" value="CrmMergeAccounts"/>
                 <set field="sectionHeaderUiLabel" value="CrmMergeAccounts"/>
                 <set field="mergeFormTarget" value="confirmMergeAccountsForm"/> <!-- URI target of the merge form -->
@@ -46,7 +45,6 @@
     <screen name="confirmMergeAccountsForm">
         <section>
             <actions>
-                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="pageTitleLabel" value="CrmConfirmMergeAccounts"/>
                 <set field="sectionHeaderUiLabel" value="CrmConfirmMergeAccounts"/>
                 <set field="mergeFormTarget" value="mergeAccounts"/> <!-- URI target of the confirm merge form -->
@@ -73,7 +71,6 @@
     <screen name="mergeContactsForm">
         <section>
             <actions>
-                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="pageTitleLabel" value="CrmMergeContacts"/>
                 <set field="sectionHeaderUiLabel" value="CrmMergeContacts"/>
                 <set field="mergeFormTarget" value="confirmMergeContactsForm"/> <!-- URI target of the merge form -->
@@ -96,7 +93,6 @@
     <screen name="confirmMergeContactsForm">
         <section>
             <actions>
-                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="pageTitleLabel" value="CrmConfirmMergeContacts"/>
                 <set field="sectionHeaderUiLabel" value="CrmConfirmMergeContacts"/>
                 <set field="mergeFormTarget" value="mergeContacts"/> <!-- URI target of the confirm merge form -->
@@ -120,11 +116,9 @@
         </section>
     </screen>
 
-
     <screen name="mergeLeadsForm">
         <section>
             <actions>
-                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="pageTitleLabel" value="CrmMergeLeads"/>
                 <set field="sectionHeaderUiLabel" value="CrmMergeLeads"/>
                 <set field="mergeFormTarget" value="confirmMergeLeadsForm"/> <!-- URI target of the merge form -->
@@ -147,7 +141,6 @@
     <screen name="confirmMergeLeadsForm">
         <section>
             <actions>
-                <property-map resource="CRMSFAUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="pageTitleLabel" value="CrmConfirmMergeLeads"/>
                 <set field="sectionHeaderUiLabel" value="CrmConfirmMergeLeads"/>
                 <set field="mergeFormTarget" value="mergeLeads"/> <!-- URI target of the confirm merge form -->
@@ -172,4 +165,3 @@
     </screen>
 
 </screens>
-
