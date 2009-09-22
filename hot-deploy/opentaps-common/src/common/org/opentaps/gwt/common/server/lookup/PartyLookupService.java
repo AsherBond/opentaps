@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -206,7 +207,15 @@ public class PartyLookupService extends EntityLookupAndSuggestService {
      * @return the list of <code>Lead</code>, or <code>null</code> if an error occurred
      */
     public List<PartyFromByRelnAndContactInfoAndPartyClassification> findLeads() {
-        return findParties(PartyFromByRelnAndContactInfoAndPartyClassification.class, LEAD_CONDITIONS);
+        return findParties(
+                PartyFromByRelnAndContactInfoAndPartyClassification.class,
+                EntityCondition.makeCondition(
+                        UtilMisc.toList(
+                                LEAD_CONDITIONS,
+                                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PTYLEAD_CONVERTED")
+                        )
+                )
+        );
     }
 
     /**
