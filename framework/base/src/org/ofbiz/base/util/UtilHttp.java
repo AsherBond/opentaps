@@ -1173,7 +1173,7 @@ public class UtilHttp {
      * @param prefix
      * @return Composite object from data or nulll if not supported or a parsing error occured.
      */
-    public static Object makeParamValueFromComposite(HttpServletRequest request, String prefix, Locale locale) {
+    public static String makeParamValueFromComposite(HttpServletRequest request, String prefix, Locale locale) {
         String compositeType = request.getParameter(makeCompositeParam(prefix, "compositeType"));
         if (compositeType == null || compositeType.length() == 0) return null;
 
@@ -1192,7 +1192,7 @@ public class UtilHttp {
             // key = suffix, value = parameter data
             data.put(suffix, value);
         }
-        if (Debug.verboseOn()) { Debug.logVerbose("Creating composite type with parameter data: " + data.toString(), module); }
+        Debug.logInfo("Creating composite type with parameter data: " + data.toString(), module);
 
         // handle recomposition of data into the compositeType
         if ("Timestamp".equals(compositeType)) {
@@ -1200,25 +1200,34 @@ public class UtilHttp {
             String hour = data.get("hour");
             String minutes = data.get("minutes");
             String ampm = data.get("ampm");
-            if (date == null || date.length() < 10) return null;
-            if (hour == null || hour.length() == 0) return null;
-            if (minutes == null || minutes.length() == 0) return null;
+            if (UtilValidate.isEmpty(date) || UtilValidate.isEmpty(hour) || UtilValidate.isEmpty(minutes)) return null;
             boolean isTwelveHour = ((ampm == null || ampm.length() == 0) ? false : true);
 
             // create the timestamp from the data
             try {
                 int h = Integer.parseInt(hour);
-                Timestamp timestamp = Timestamp.valueOf(date.substring(0, 10) + " 00:00:00.000");
-                Calendar cal = Calendar.getInstance(locale);
-                cal.setTime(timestamp);
+                String dateTime = date;
+                dateTime += " ";
                 if (isTwelveHour) {
                     boolean isAM = ("AM".equals(ampm) ? true : false);
                     if (isAM && h == 12) h = 0;
                     if (!isAM && h < 12) h += 12;
                 }
-                cal.set(Calendar.HOUR_OF_DAY, h);
-                cal.set(Calendar.MINUTE, Integer.parseInt(minutes));
-                return new Timestamp(cal.getTimeInMillis());
+                String hourOfDay = Integer.valueOf(h).toString();
+                dateTime += hourOfDay.length() == 1 ? ("0" + hourOfDay) : hourOfDay;
+                dateTime += ":";
+                if (minutes.length() == 1) {
+                    dateTime += "0";
+                }
+                dateTime += minutes;
+                String timeFormat = UtilDateTime.DATE_TIME_FORMAT;
+                if (timeFormat.indexOf("ss") > 0) {
+                    dateTime += ":00";
+                }
+                if (timeFormat.indexOf("S") > 0) {
+                    dateTime += ".000";
+                }
+                return dateTime;
             } catch (IllegalArgumentException e) {
                 Debug.logWarning("User input for composite timestamp was invalid: " + e.getMessage(), module);
                 return null;
