@@ -32,7 +32,7 @@
     <tr>
       <td class="titleCell"><span class="tableheadtext">${uiLabelMap.OpentapsUserLocale}</span></td>
       <td>
-        <select name="locale" class="selectBox">
+        <select name="newLocale" class="selectBox">
           <#list locales as thisLocale>
           <#if locale.toString() == thisLocale.toString()><#assign selected = "selected"><#else><#assign selected = ""></#if>
           <option ${selected} value="${thisLocale.toString()}">${thisLocale.getDisplayName(locale)}</option>
