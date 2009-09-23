@@ -124,7 +124,10 @@
                           <#if partyContactMechPurpose.thruDate?has_content>(${uiLabelMap.CommonExpire}: ${getLocalizedDate(partyContactMechPurpose.thruDate)}</#if>
                         &nbsp;</div>
                       </td>
-                      <td><div><a href="<@ofbizUrl>deletePartyContactMechPurpose?partyId=${partyId}&contactMechId=${contactMechId}&contactMechPurposeTypeId=${partyContactMechPurpose.contactMechPurposeTypeId}&fromDate=${partyContactMechPurpose.fromDate.toString()}&DONE_PAGE=${donePage}&useValues=true</@ofbizUrl>" class="buttontext">&nbsp;${uiLabelMap.CommonDelete}&nbsp;</a></div></td>
+                      <td><div>
+                        <@form name="deletePartyContactMechPurposeForm_${partyContactMechPurpose_index}" url="deletePartyContactMechPurpose" partyId="${partyId}" contactMechId="${contactMechId}" contactMechPurposeTypeId="${partyContactMechPurpose.contactMechPurposeTypeId}" fromDate="${partyContactMechPurpose.fromDate.toString()}" DONE_PAGE="${donePage}" useValues="true"/>
+                        <@submitFormLink form="deletePartyContactMechPurposeForm_${partyContactMechPurpose_index}" text="${uiLabelMap.CommonDelete}" class="buttontext"/>
+                        </div></td>
                     </tr>
                   </#list>
                 </#if>
