@@ -226,7 +226,9 @@
                   <a href="javascript:document.deleteContactMechForm${contactMechMap_index}.submit()"><img src="<@ofbizContentUrl>/images/dojo/src/widget/templates/buttons/delete.gif</@ofbizContentUrl>" width="18" height="18" border="0" alt="${uiLabelMap.CommonExpire}"/></a>&nbsp;&nbsp;
                </#if>
                <#if "POSTAL_ADDRESS" == contactMech.contactMechTypeId && contactMechMap.postalAddress?exists>
-                  <br/><br/><a href="<@ofbizUrl>createCatalogRequestForParty?partyId=${partySummary.partyId}&fromPartyId=${partySummary.partyId}&fulfillContactMechId=${contactMech.contactMechId}&custRequestTypeId=RF_CATALOG&donePage=${donePage}&custRequestDate=${getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp())}</@ofbizUrl>" class="buttontext">${uiLabelMap.CrmCreateCatalogRequest}</a>                          
+                  <br/><br/>
+                  <@form name="createCatalogRequestForPartyForm_${contactMechMap_index}" url="createCatalogRequestForParty" partyId="${partySummary.partyId}" fromPartyId="${partySummary.partyId}" fulfillContactMechId="${contactMech.contactMechId}" custRequestTypeId="RF_CATALOG" custRequestDate="${getLocalizedDate(Static['org.ofbiz.base.util.UtilDateTime'].nowTimestamp())}"/>
+                  <@submitFormLink form="createCatalogRequestForPartyForm_${contactMechMap_index}" text="${uiLabelMap.CrmCreateCatalogRequest}" class="buttontext"/>
                </#if>
             </td>
           </tr>
