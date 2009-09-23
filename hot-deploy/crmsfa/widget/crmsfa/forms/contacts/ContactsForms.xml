@@ -19,7 +19,7 @@
 
     <!-- create a contact form -->
     <form name="createContactForm" type="single" target="createContact" title="" 
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="firstName" title="${uiLabelMap.PartyFirstName}" position="1" title-style="requiredField"><text size="30" maxlength="100"/></field>
         <field name="lastName" title="${uiLabelMap.PartyLastName}" position="2" title-style="requiredField"><text size="30" maxlength="100"/></field>
         <field name="firstNameLocal" title="${uiLabelMap.CrmFirstNameLocal}" position="1"><text size="30" maxlength="100"/></field>
@@ -79,7 +79,7 @@
 
     <!-- update contact form -->
     <form name="updateContactForm" type="single" target="updateContact" title="" default-map-name="partySummary"
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="partyId"><hidden/></field>
         <field name="firstName" title="${uiLabelMap.PartyFirstName}" position="1" title-style="requiredField"><text size="30" maxlength="100"/></field>
         <field name="lastName" title="${uiLabelMap.PartyLastName}" position="2" title-style="requiredField"><text size="30" maxlength="100"/></field>
@@ -134,7 +134,7 @@
     <form name="reassignToForm" type="single" target="reassignContactResponsibleParty">
         <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <field name="contactPartyId"><hidden value="${parameters.partyId}"/></field>
-        <field name="newPartyId" title="${uiLabelMap.CrmReassignTo}" title-style="tableheadtext" widget-style="inputbox">
+        <field name="newPartyId" title="${uiLabelMap.CrmReassignTo}" title-style="tableheadtext" widget-style="inputBox">
             <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>
         </field>
         <field name="submitButton" title="${uiLabelMap.CrmReassign}" widget-style="smallSubmit"><submit button-type="button"/></field>

@@ -135,7 +135,7 @@
 
     <!-- form to assign a team to an account -->
     <form name="assignTeamToAccountForm" type="single" target="assignTeamToAccount"
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <field name="accountPartyId"><hidden value="${parameters.partyId}"/></field>
         <field name="teamPartyId" title="${uiLabelMap.CrmAssignTeam}" position="1">

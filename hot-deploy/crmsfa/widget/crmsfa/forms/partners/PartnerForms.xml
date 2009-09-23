@@ -19,7 +19,7 @@
 <forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-form.xsd">
 
     <form name="createPartnerForm" type="single" target="createPartner" title="" 
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="organizationPartyId"><hidden value="${configProperties.organizationPartyId}"/></field>
         <field name="groupName" title="${uiLabelMap.OpentapsPartnerName}" position="1" title-style="requiredField"><text size="30" maxlength="60"/></field>
         <!-- PartyGroup -->
@@ -96,7 +96,7 @@
     </form>
 
     <form name="updatePartnerForm" type="single" target="updatePartner" title="" default-map-name="partySummary"
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="partyId"><hidden/></field>
         <field name="groupName" title="${uiLabelMap.OpentapsPartnerName}" position="1" title-style="requiredField"><text size="30" maxlength="60"/></field>
         <field name="groupNameLocal" title="${uiLabelMap.CrmLocalName}" position="1"><text size="30" maxlength="100"/></field>

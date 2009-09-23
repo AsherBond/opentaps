@@ -60,7 +60,7 @@
 
     <!-- update case form TODO: this is vastly different from above -->
     <form name="updateCaseForm" type="single" target="updateCase" title="" default-map-name="case"
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="custRequestId"><hidden/></field>
         <field name="statusId" title="${uiLabelMap.CommonStatus}" position="1">
             <drop-down allow-empty="false">

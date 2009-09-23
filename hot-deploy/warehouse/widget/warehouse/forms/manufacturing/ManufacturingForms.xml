@@ -62,7 +62,7 @@ under the License.
     <!-- Disassembly -->
 
     <form name="createReverseAssemblyForm" target="createReverseAssembly" title="" type="single"
-            default-title-style="tableheadtext" default-widget-style="inputbox"
+            default-title-style="tableheadtext" default-widget-style="inputBox"
             default-tooltip-style="tabletext">
         <field name="productId" title="${uiLabelMap.WarehouseProductIDToDisassemble}" title-style="requiredField"><lookup target-form-name="LookupProduct" size="16"/></field>
         <field name="quantity" title="${uiLabelMap.ManufacturingQuantity}" title-style="requiredField"><text size="6"/></field>

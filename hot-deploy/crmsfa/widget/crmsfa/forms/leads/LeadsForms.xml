@@ -20,7 +20,7 @@
     <!-- create a lead form -->
     <!-- if a currentLead is set in the context, the form will fill out the form with its values -->
     <form name="createLeadForm" type="single" target="createLead" title="" default-map-name="currentLead" 
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="companyName" title="${uiLabelMap.CrmCompanyName}" position="1" title-style="requiredField"><text size="30" maxlength="100"/></field>
         <field name="parentPartyId" title="${uiLabelMap.CrmParentParty}" position="2">
             <lookup target-form-name="LookupAccounts" size="20" maxlength="20"/>
@@ -133,7 +133,7 @@
 
     <!-- update lead form -->
     <form name="updateLeadForm" type="single" target="updateLead" title="" default-map-name="partySummary"
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="partyId"><hidden/></field>
         <field name="companyName" title="${uiLabelMap.CrmCompanyName}" position="1" title-style="requiredField"><text size="30" maxlength="60"/></field>
         <field name="parentPartyId" title="${uiLabelMap.CrmParentParty}" position="2">
@@ -272,7 +272,7 @@
     <form name="reassignToForm" type="single" target="reassignLeadResponsibleParty">
         <field name="partyId"><hidden value="${parameters.partyId}"/></field>
         <field name="leadPartyId"><hidden value="${parameters.partyId}"/></field>
-        <field name="newPartyId" title="${uiLabelMap.CrmReassignTo}" title-style="tableheadtext" widget-style="inputbox">
+        <field name="newPartyId" title="${uiLabelMap.CrmReassignTo}" title-style="tableheadtext" widget-style="inputBox">
             <lookup target-form-name="LookupTeamMembers" size="20" maxlength="20"/>
         </field>
         <field name="submitButton" title="${uiLabelMap.CrmReassign}" widget-style="smallSubmit"><submit button-type="button"/></field>

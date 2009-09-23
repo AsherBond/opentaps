@@ -79,7 +79,7 @@
     </form>   
 
     <form name="createOpportunityForm" type="single" target="createOpportunity" title="" 
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="opportunityName" title="${uiLabelMap.CrmOpportunityName}" position="1" title-style="requiredField"><text size="30" maxlength="100"/></field>
         
         <!-- if the account party id is known, then display the account's name.  otherwise, give the user a lookup for the accountPartyId --> 
@@ -152,7 +152,7 @@
     </form>
 
     <form name="updateOpportunityForm" type="single" target="updateOpportunity" title="" default-map-name="opportunityAndParty"
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="salesOpportunityId"><hidden/></field>
         <field name="opportunityName" title="${uiLabelMap.CrmOpportunityName}" position="1" title-style="requiredField"><text size="30" maxlength="100"/></field>
         <field name="opportunityStageId" title="${uiLabelMap.CrmStage}" position="1" title-style="requiredField">

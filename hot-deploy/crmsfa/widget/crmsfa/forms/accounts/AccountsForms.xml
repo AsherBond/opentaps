@@ -19,7 +19,7 @@
 
     <!-- update account form -->
     <form name="updateAccountForm" type="single" target="updateAccount" title="" default-map-name="partySummary"
-        default-title-style="tableheadtext" default-widget-style="inputbox" default-tooltip-style="tabletext">
+        default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext">
         <field name="partyId"><hidden/></field>
         <field name="groupName" title="${uiLabelMap.CrmAccountName}" position="1" title-style="requiredField"><text size="30" maxlength="60"/></field>
         <field name="parentPartyId" title="${uiLabelMap.CrmParentParty}" position="2">
