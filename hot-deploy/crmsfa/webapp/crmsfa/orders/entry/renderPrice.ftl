@@ -48,18 +48,18 @@ under the License.
   </#if>
   <b>
   <#if price.isSale?exists && price.isSale>
-    <span class="salePrice">${uiLabelMap.EcommerceOnSale}!</span>
+    <span class="salePrice">${uiLabelMap.OrderOnSale}!</span>
     <#assign priceStyle = "salePrice">
   <#else>
     <#assign priceStyle = "regularPrice">
   </#if>
-  <#if (price.price?default(0) > 0 && product.requireAmount?default("N") == "N")>
-    ${uiLabelMap.EcommerceYourPrice}: <#if "Y" = product.isVirtual?if_exists> ${uiLabelMap.CommonFrom} </#if><span class="${priceStyle}"><@ofbizCurrency amount=price.price isoCode=price.currencyUsed/></span>
+  <#if (price.price?default(0) gt 0 && product.requireAmount?default("N") == "N")>
+    ${uiLabelMap.OrderYourPrice}: <#if "Y" = product.isVirtual?if_exists> ${uiLabelMap.CommonFrom} </#if><span class="${priceStyle}"><@ofbizCurrency amount=price.price isoCode=price.currencyUsed/></span>
   </#if>
   </b>
   <#if price.listPrice?exists && price.price?exists && price.price?double < price.listPrice?double>
     <#assign priceSaved = price.listPrice?double - price.price?double>
     <#assign percentSaved = (priceSaved?double / price.listPrice?double) * 100>
-    ${uiLabelMap.EcommerceSave}: <span class="basePrice"><@ofbizCurrency amount=priceSaved isoCode=price.currencyUsed/> (${percentSaved?int}%)</span>
+    ${uiLabelMap.OrderSave}: <span class="basePrice"><@ofbizCurrency amount=priceSaved isoCode=price.currencyUsed/> (${percentSaved?int}%)</span>
   </#if>
 </#macro>

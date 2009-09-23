@@ -41,8 +41,8 @@ under the License.
     <div class="screenlet-header">
         <div class="boxlink">
             <#if maySelectItems?default(false)>
-                <a href="javascript:document.addOrderToCartForm.add_all.value="true";document.addOrderToCartForm.submit()" class="lightbuttontext">${uiLabelMap.EcommerceAddAlltoCart}</a>
-                <a href="javascript:document.addOrderToCartForm.add_all.value="false";document.addOrderToCartForm.submit()" class="lightbuttontext">${uiLabelMap.EcommerceAddCheckedtoCart}</a>
+                <a href="javascript:document.addOrderToCartForm.add_all.value="true";document.addOrderToCartForm.submit()" class="lightbuttontext">${uiLabelMap.OrderAddAllToCart}</a>
+                <a href="javascript:document.addOrderToCartForm.add_all.value="false";document.addOrderToCartForm.submit()" class="lightbuttontext">${uiLabelMap.OrderAddCheckedToCart}</a>
             </#if>
         </div>
         <div class="boxhead">&nbsp;${uiLabelMap.OrderOrderItems}</div>
@@ -118,7 +118,7 @@ under the License.
                 <#if WorkOrderItemFulfillments?has_content>
                     <#list WorkOrderItemFulfillments as WorkOrderItemFulfillment>
                         <#assign workEffort = WorkOrderItemFulfillment.getRelatedOneCache("WorkEffort")?if_exists>
-                          <tr><td>&nbsp;</td><td>&nbsp;</td><td colspan="8"><div class="tabletext">${uiLabelMap.CommonFrom}: ${getLocalizedDate(workEffort.estimatedStartDate, "DATE")} ${uiLabelMap.CommonTo}: ${getLocalizedDate(workEffort.estimatedCompletionDate, "DATE")} ${uiLabelMap.EcommerceNbrPersons}: ${workEffort.reservPersons}</div></td></tr>
+                          <tr><td>&nbsp;</td><td>&nbsp;</td><td colspan="8"><div class="tabletext">${uiLabelMap.CommonFrom}: ${getLocalizedDate(workEffort.estimatedStartDate, "DATE")} ${uiLabelMap.CommonTo}: ${getLocalizedDate(workEffort.estimatedCompletionDate, "DATE")} ${uiLabelMap.OrderNbrPersons}: ${workEffort.reservPersons}</div></td></tr>
                         <#break><#-- need only the first one -->
                     </#list>
                 </#if>

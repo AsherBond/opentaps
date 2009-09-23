@@ -26,7 +26,7 @@
     <table width="100%" border="0" cellpadding="0">
       <tr align="left" valign="bottom">
         <td width="10%" align="left"><span class="tableheadtext"><b>${uiLabelMap.ProductItem}</b></span></td>
-        <td width="35%" align="left"><span class="tableheadtext"><b>${uiLabelMap.EcommerceProduct}</b></span></td>
+        <td width="35%" align="left"><span class="tableheadtext"><b>${uiLabelMap.ProductProduct}</b></span></td>
         <td width="10%" align="right"><span class="tableheadtext"><b>${uiLabelMap.ProductQuantity}</b></span></td>
         <td width="10%" align="right"><span class="tableheadtext"><b>${uiLabelMap.OrderOrderQuoteUnitPrice}</b></span></td>
         <td width="10%" align="right"><span class="tableheadtext"><b>${uiLabelMap.OrderAdjustments}</b></span></td>
