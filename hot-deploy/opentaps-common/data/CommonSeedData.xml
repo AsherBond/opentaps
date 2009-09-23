@@ -37,6 +37,13 @@ under the License.
 
 <!-- This file has been modified by Open Source Strategies, Inc. -->
 
+    <!-- set the opentaps logo in all themes -->
+    <VisualThemeResource visualThemeId="MULTIFLEX"      resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="FLAT_GREY"      resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="BLUELIGHT"      resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="SMOOTH_FEATHER" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="EC_DEFAULT"     resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
+
     <PaymentMethodType paymentMethodTypeId="EXT_OFFLINE" description="Check, Money Order, or On Credit"/> 
 
     <!-- Maybe we should have ITEM_HOLD and relationship to Hold to Approved -->
