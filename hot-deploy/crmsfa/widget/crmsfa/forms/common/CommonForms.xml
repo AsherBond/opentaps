@@ -151,7 +151,7 @@
 
     <form name="testDateTime" type="single" title="Test form" target="testDateTimeInput" 
         default-title-style="tableheadtext" default-widget-style="inputBox" default-tooltip-style="tabletext" >
-        <field name="sampleTimestamp" title="Timestamp" encode-output="false"><date-time default-value="${testTimestampValue}" input-method="jscalendar" type="date"/></field>
+        <field name="sampleTimestamp" title="Timestamp" encode-output="false"><date-time default-value="${testTimestampValue}" type="date"/></field>
         <field name="submitButton" title="Submit" widget-style="smallsubmit"><submit/></field>
     </form>   
 
