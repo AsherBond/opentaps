@@ -218,7 +218,7 @@
                <set field="surveyId" from-field="parameters.surveyId"/>
                <entity-one entity-name="Survey" value-field="survey"/>
                <!-- now prepare the responses -->
-               <script location="component://content/webapp/content/WEB-INF/actions/survey/ViewSurveyResponses.bsh"/>
+               <script location="component://content/webapp/content/WEB-INF/actions/survey/ViewSurveyResponses.groovy"/>
            </actions>
            <widgets>
            	    <decorator-screen name="main-section-decorator">
@@ -292,7 +292,7 @@
             <actions>
                 <set field="pageTitleLabel" value="CrmMarketingReports"/>
                 <set field="sectionHeaderUiLabel" value="CrmMarketingReports"/>
-                <script location="component://marketing/webapp/marketing/WEB-INF/actions/reports/MarketingCampaignReport.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/MarketingCampaignReport.bsh"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -314,7 +314,7 @@
             <actions>
                 <set field="pageTitleLabel" value="CrmMarketingReports"/>
                 <set field="sectionHeaderUiLabel" value="CrmMarketingReports"/>
-                <script location="component://marketing/webapp/marketing/WEB-INF/actions/reports/TrackingCodeReport.bsh"/>
+                <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/marketing/TrackingCodeReport.bsh"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
