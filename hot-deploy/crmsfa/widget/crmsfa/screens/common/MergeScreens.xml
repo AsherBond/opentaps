@@ -26,8 +26,8 @@
                 <set field="pageTitleLabel" value="CrmMergeAccounts"/>
                 <set field="sectionHeaderUiLabel" value="CrmMergeAccounts"/>
                 <set field="mergeFormTarget" value="confirmMergeAccountsForm"/> <!-- URI target of the merge form -->
-                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromAccount}" />
-                <set field="toPartyTitle" value="${uiLabelMap.CrmToAccount}" />
+                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromAccount"/>
+                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToAccount"/>
                 <set field="lookupTarget" value="LookupAccounts"/>
             </actions>
             <widgets>
@@ -49,8 +49,8 @@
                 <set field="sectionHeaderUiLabel" value="CrmConfirmMergeAccounts"/>
                 <set field="mergeFormTarget" value="mergeAccounts"/> <!-- URI target of the confirm merge form -->
                 <set field="mergeFormChangeTarget" value="mergeAccountsForm"/>  <!-- how to get back to the first merge form -->
-                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromAccount}" />
-                <set field="toPartyTitle" value="${uiLabelMap.CrmToAccount}" />
+                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromAccount"/>
+                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToAccount"/>
                 <set field="viewTarget" value="viewAccount"/>
             </actions>
             <widgets>
@@ -74,8 +74,8 @@
                 <set field="pageTitleLabel" value="CrmMergeContacts"/>
                 <set field="sectionHeaderUiLabel" value="CrmMergeContacts"/>
                 <set field="mergeFormTarget" value="confirmMergeContactsForm"/> <!-- URI target of the merge form -->
-                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromContact}" />
-                <set field="toPartyTitle" value="${uiLabelMap.CrmToContact}" />
+                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromContact"/>
+                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToContact"/>
                 <set field="lookupTarget" value="LookupContacts"/>
             </actions>
             <widgets>
@@ -97,8 +97,8 @@
                 <set field="sectionHeaderUiLabel" value="CrmConfirmMergeContacts"/>
                 <set field="mergeFormTarget" value="mergeContacts"/> <!-- URI target of the confirm merge form -->
                 <set field="mergeFormChangeTarget" value="mergeContactsForm"/>  <!-- how to get back to the first merge form -->
-                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromContact}" />
-                <set field="toPartyTitle" value="${uiLabelMap.CrmToContact}" />
+                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromContact"/>
+                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToContact"/>
                 <set field="viewTarget" value="viewContact"/>
             </actions>
             <widgets>
@@ -116,14 +116,15 @@
         </section>
     </screen>
 
+
     <screen name="mergeLeadsForm">
         <section>
             <actions>
                 <set field="pageTitleLabel" value="CrmMergeLeads"/>
                 <set field="sectionHeaderUiLabel" value="CrmMergeLeads"/>
                 <set field="mergeFormTarget" value="confirmMergeLeadsForm"/> <!-- URI target of the merge form -->
-                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromLead}" />
-                <set field="toPartyTitle" value="${uiLabelMap.CrmToLead}" />
+                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromLead"/>
+                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToLead"/>
                 <set field="lookupTarget" value="LookupLeads"/>
             </actions>
             <widgets>
@@ -145,8 +146,8 @@
                 <set field="sectionHeaderUiLabel" value="CrmConfirmMergeLeads"/>
                 <set field="mergeFormTarget" value="mergeLeads"/> <!-- URI target of the confirm merge form -->
                 <set field="mergeFormChangeTarget" value="mergeLeadsForm"/>  <!-- how to get back to the first merge form -->
-                <set field="fromPartyTitle" value="${uiLabelMap.CrmFromLead}" />
-                <set field="toPartyTitle" value="${uiLabelMap.CrmToLead}" />
+                <property-to-field field="fromPartyTitle" resource="CRMSFAUiLabels" property="CrmFromLead"/>
+                <property-to-field field="toPartyTitle" resource="CRMSFAUiLabels" property="CrmToLead"/>
                 <set field="viewTarget" value="viewLead"/>
             </actions>
             <widgets>
@@ -165,3 +166,4 @@
     </screen>
 
 </screens>
+
