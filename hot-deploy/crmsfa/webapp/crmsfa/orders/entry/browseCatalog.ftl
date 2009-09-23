@@ -40,9 +40,7 @@ under the License.
 <#-- Only show if there is more than 1 (one) catalog, no sense selecting when there is only one option... -->
 <div class="screenlet">
     <div class="screenlet-header">
-        <div class="boxhead">${uiLabelMap.OpentapsBrowseAndSearch}
-        <a href="javascript:document.advancedsearchform.submit()" class="submenubutton">${uiLabelMap.ProductAdvancedSearch}</a>
-        </div>
+        <div class="boxhead">${uiLabelMap.OpentapsBrowseAndSearch}<a href="javascript:document.advancedsearchform.submit()" class="buttontext">${uiLabelMap.ProductAdvancedSearch}</a></div>
     </div>
 
    <#-- the keyword search box -->
@@ -50,7 +48,7 @@ under the License.
        <form name="keywordsearchform" method="post" action="<@ofbizUrl>keywordsearch</@ofbizUrl>">
           <input type="hidden" name="VIEW_SIZE" value="10"/>
           <div class="tabletext">
-            <input type="text" class="inputBox" name="SEARCH_STRING" size="24" maxlength="50" value="${requestParameters.SEARCH_STRING?if_exists}"/>
+            <input type="text" class="inputBox" name="SEARCH_STRING" size="22" maxlength="50" value="${requestParameters.SEARCH_STRING?if_exists}"/>
           <#if 0 < otherSearchProdCatalogCategories?size>
             <div class="tabletext">
               <select name="SEARCH_CATEGORY_ID" size="1" class="selectBox">
