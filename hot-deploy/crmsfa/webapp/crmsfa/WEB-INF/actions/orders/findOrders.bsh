@@ -56,11 +56,11 @@ productStoreId = UtilCommon.getParameter(request, "productStoreId");
 // parameter map, so that we can pass "parameters" to it instead of "request", as it is done
 // now.
 
-if (UtilValidate.isEmpty(fromDate)) {
+if (UtilValidate.isNotEmpty(fromDate)) {
     context.put("fromDate", fromDate);
 }
 
-if (UtilValidate.isEmpty(thruDate)) {
+if (UtilValidate.isNotEmpty(thruDate)) {
     context.put("thruDate", thruDate);
 }
 
