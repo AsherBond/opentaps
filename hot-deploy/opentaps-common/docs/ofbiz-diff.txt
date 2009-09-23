@@ -42,31 +42,31 @@ r13031 add field types for pentaho integration
 
 framework/entity/src/org/ofbiz/entity/GenericEntity.java
 framework/entity/src/org/ofbiz/entity/condition/EntityExpr.java
-- Remove backtrace from database type warnings
+r13261 Remove backtrace from database type warnings
 
 framework/webapp/dtd/site-conf.xsd
 framework/webapp/src/org/ofbiz/webapp/control/ConfigXMLReader.java
 framework/webapp/src/org/ofbiz/webapp/control/RequestHandler.java
-- Port back request-redirect-filterparam
+r13252, r13253 Port back request-redirect-filterparam
 
 framework/widget/src/org/ofbiz/widget/html/HtmlScreenRenderer.java
 framework/widget/src/org/ofbiz/widget/screen/ScreenWidgetViewHandler.java
-- Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
-- Fixed, reverted previous change in RequestHandler.java
+r13276 Save the current content type in the context, and skip inserting an HTML DocType if the content type is not html. This is used for example for javascript files.
+r13298 Fixed, reverted previous change in RequestHandler.java
 
 framework/entity/src/org/ofbiz/entity/GenericEntity.java
 r13280 Return field value if entity label for a primary key equals to this key. This fix broken labels in many screens
 The reason: some common entity labels (example CommonEntityLabels.xml DataSource.description.*> are ID, not description.
 
 framework/webapp/lib
-- Updated itext-2.0.1.jar to iText-2.1.7.jar, necessary to work with our version of jasper report
-- Added jasperreports-3.5.2.jar library, needed for compilation of content/report for example
+r13338 Updated itext-2.0.1.jar to iText-2.1.7.jar, necessary to work with our version of jasper report
+r13342 Added jasperreports-3.5.2.jar library, needed for compilation of content/report for example
 
 framework/webapp/src/org/ofbiz/webapp/event/ServiceEventHandler.java 
 r13357 Changed error message for secured URL parameters
 
 framework/widget/templates/foScreenMacroLibrary.ftl
-- Fix for missing macros and new parameters
+r13376 Fix for missing macros and new parameters
 
 Applications changes
 --------------------
@@ -116,32 +116,32 @@ applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRun.
 r13173 Fix so that the production run quantityToProduce field is also updated on store
 
 applications/order/servicedef/secas.xml
-- Removed ofbiz new seca that auto invoice services when approved, this conflicts with the perform service -> invoice performed services workflow in opentaps.
+r13192 Removed ofbiz new seca that auto invoice services when approved, this conflicts with the perform service -> invoice performed services workflow in opentaps.
 
 applications/order/src/org/ofbiz/order/order/OrderServices.java
-- Small fix for cancelOrderItem, so that it sets an item as completed if part of it is billed and the remaining quantity is cancelled.
+r13199 Small fix for cancelOrderItem, so that it sets an item as completed if part of it is billed and the remaining quantity is cancelled.
 
 applications/accounting/src/org/ofbiz/accounting/payment/PaymentGatewayServices.java
-- Fix potential NPE if the OPP maxAmount is null
+r13205 Fix potential NPE if the OPP maxAmount is null
 
 applications/order/servicedef/secas.xml
-- Comment out SECAs on cancelOrderItem since those are redefined in hot-deploy/opentaps-common/servicedef/secas_orders.xml
+r13211 Comment out SECAs on cancelOrderItem since those are redefined in hot-deploy/opentaps-common/servicedef/secas_orders.xml
 
 applications/order/src/org/ofbiz/order/order/OrderServices.java
-- Small fix for reserveInventory not to try to reserve cancelled quantity
+r13222 Small fix for reserveInventory not to try to reserve cancelled quantity
 
 applications/order/src/org/ofbiz/order/order/OrderReturnServices.java
-- Re added the code block that creates filler payments from the remaining amount
+r13243 Re added the code block that creates filler payments from the remaining amount
 
 applications/accounting/servicedef/services_paymentmethod.xml
-- Fix gift card number should be required, service has NPE if not given, see JIRA 2926
+r13303 Fix gift card number should be required, service has NPE if not given, see JIRA 2926
 
 applications/order/src/org/ofbiz/order/shoppingcart/CheckOutEvents.java
-- Revert Ofbiz change, only Purchase Order should require Terms. Avoid the terms screen to appear in the sales order checkout process.
+r13310 Revert Ofbiz change, only Purchase Order should require Terms. Avoid the terms screen to appear in the sales order checkout process.
 
 applications/content/build.xml
 applications/content/lib/uno/*.jar
-- Adding jars for jasper reports and openoffice (uno)
+r13341 Adding jars for jasper reports and openoffice (uno)
 
 Other API Changes
 -----------------
