@@ -153,7 +153,7 @@
         list-name="contactLists">
 
         <field name="contactListId" title="${uiLabelMap.CommonName}" widget-area-style="fieldWidth300" widget-style="linktext">
-            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList?contactListId=${contactListId}">
+            <hyperlink description="${contactListName} (${contactListId})" target="viewContactList">
                 <parameter param-name="contactListId" from-field="contactListId"/>
             </hyperlink>
         </field>
