@@ -476,7 +476,7 @@ public final class PartyServices {
 
             if (partyContactMechPurpose != null) {
                 // exists already with valid date, show warning
-                String errMsg = UtilProperties.getMessage("PartyUiLabels", "contactmechservices.could_not_create_new_purpose_already_exists", locale);
+                String errMsg = UtilProperties.getMessage("PartyErrorUiLabels", "contactmechservices.could_not_create_new_purpose_already_exists", locale);
                 errMsg += ": " + partyContactMechPurpose.getPrimaryKey().toString();
                 return ServiceUtil.returnError(errMsg);
             }

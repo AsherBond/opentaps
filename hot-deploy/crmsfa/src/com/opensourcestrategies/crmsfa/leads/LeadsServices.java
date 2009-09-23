@@ -542,12 +542,24 @@ public class LeadsServices {
 
             // create a Lead or Contact using the input variables
             String serviceName = (partyIsLead ? "crmsfa.createLead" : "crmsfa.createContact");
+
             ModelService service = dctx.getModelService(serviceName);
-            Map input = service.makeValid(context, "IN");
+            Map<String, Object> input = service.makeValid(context, "IN");
             input.put("userLogin", userLogin);
+            // construct the name on the postal address from the company name/first name/last name from user 
+            String firstName = (String) context.get("firstName");
+            String lastName = (String) context.get("lastName");
+            if (UtilValidate.isNotEmpty(companyName)) {
+                input.put("generalToName", companyName);
+                input.put("generalAttnName", firstName + " " + lastName);
+            } else {
+                input.put("generalToName", firstName + " " + lastName);
+            }
+
             Map<String, Object> results = dispatcher.runSync(serviceName, input);
             if (ServiceUtil.isError(results)) return results;
             String partyId = (String) results.get("partyId");
+            String fulfillContactMechId = (String) results.get("generalAddressContactMechId");
 
             // create a PartyNote using comments field
             String comments = (String) context.get("comments");
@@ -557,24 +569,6 @@ public class LeadsServices {
                 results = dispatcher.runSync("createPartyNote", input);
                 if (ServiceUtil.isError(results)) return results;
             }
-
-            // create the basic contact info for the party
-            service = dctx.getModelService("crmsfa.createBasicContactInfoForParty");
-            input = service.makeValid(context, "IN");
-            // construct the name on the postal address from the company name/first name/last name from user 
-            String firstName = (String) context.get("firstName");
-            String lastName = (String) context.get("lastName");
-            if (companyName != null) {
-                input.put("generalToName", companyName);
-                input.put("generalAttnName", firstName + " " + lastName);
-            } else {
-                input.put("generalToName", firstName + " " + lastName);
-            }
-            input.put("userLogin", userLogin);
-            input.put("partyId", partyId);
-            results = dispatcher.runSync("crmsfa.createBasicContactInfoForParty", input);
-            if (ServiceUtil.isError(results)) return results;
-            String fulfillContactMechId = (String) results.get("generalAddressContactMechId");
 
             // create a survey response from the answers_ parameters
             service = dctx.getModelService("createSurveyResponse");
@@ -587,7 +581,7 @@ public class LeadsServices {
 
             // create a CustRequest of the given type for the party with address as the fulfillment location
             String custRequestTypeId = (String) context.get("custRequestTypeId");
-            input = UtilMisc.toMap("custRequestTypeId", custRequestTypeId);
+            input = UtilMisc.<String, Object>toMap("custRequestTypeId", custRequestTypeId);
             input.put("userLogin", userLogin);
             input.put("fromPartyId", partyId);
             input.put("statusId", "CRQ_SUBMITTED");
@@ -599,7 +593,7 @@ public class LeadsServices {
             if (ServiceUtil.isError(results)) return results;
             String custRequestId = (String) results.get("custRequestId");
 
-            Map result = ServiceUtil.returnSuccess();
+            Map<String, Object> result = ServiceUtil.returnSuccess();
             result.put("partyId", partyId);
             result.put("surveyId", surveyId);
             result.put("surveyResponseId", surveyResponseId);
