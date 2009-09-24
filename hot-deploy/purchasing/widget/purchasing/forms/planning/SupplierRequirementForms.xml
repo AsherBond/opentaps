@@ -50,7 +50,7 @@ under the License.
             </drop-down> 
         </field>               
         <field name="description" title="${uiLabelMap.CommonDescription}"><text-find/></field>
-        <field name="requiredByDate"><date-find type="date"/></field>
+        <field name="requiredByDate" encode-output="false"><date-find type="date"/></field>
         <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit">
             <submit button-type="button"/>
         </field>

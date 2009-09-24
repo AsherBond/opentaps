@@ -38,7 +38,7 @@ under the License.
         <field name="quantity" title="${uiLabelMap.OrderQuantity}">
             <text size="5" maxlength="10"/>
         </field>
-        <field name="itemDesiredDeliveryDate" title="${uiLabelMap.OrderDesiredDeliveryDate}">
+        <field name="itemDesiredDeliveryDate" title="${uiLabelMap.OrderDesiredDeliveryDate}" encode-output="false">
             <date-time/>
         </field>
         <field name="submitButton" title="${uiLabelMap.OrderAddToOrder}" widget-style="smallSubmit">

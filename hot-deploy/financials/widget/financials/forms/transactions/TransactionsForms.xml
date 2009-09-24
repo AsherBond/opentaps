@@ -159,7 +159,7 @@
                 </entity-options>
             </drop-down>
         </field>
-        <field name="transactionDate"><date-time/></field>
+        <field name="transactionDate" encode-output="false"><date-time/></field>
         <field name="partyId" title="${uiLabelMap.PartyPartyId}">
             <!-- TODO: need lookup controller and maybe screen/form -->
             <lookup target-form-name="LookupPartyName" size="20" maxlength="20"/>

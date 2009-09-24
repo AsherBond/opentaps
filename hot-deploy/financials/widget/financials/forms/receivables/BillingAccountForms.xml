@@ -44,8 +44,8 @@
         <field name="customerPartyId"><lookup target-form-name="LookupPartyName"/></field>
         <field name="accountLimit" tooltip="${uiLabelMap.FinancialsBillingAccountAccountLimitTip}"><text/></field>
         <field name="description"><text size="100"/></field>
-        <field name="fromDate"><date-time/></field>
-        <field name="thruDate"><date-time/></field>
+        <field name="fromDate" encode-output="false"><date-time/></field>
+        <field name="thruDate" encode-output="false"><date-time/></field>
 
         <field name="createButton" title="${uiLabelMap.CommonCreate}" widget-style="smallSubmit">
             <submit button-type="button"/>
@@ -101,8 +101,8 @@
             <display description="${billingAccount.customerName} (${billingAccount.customerPartyId})"/>
         </field>
        
-        <field name="fromDate" position="1"><date-time/></field>
-        <field name="thruDate" position="2"><date-time/></field>
+        <field name="fromDate" position="1" encode-output="false"><date-time/></field>
+        <field name="thruDate" position="2" encode-output="false"><date-time/></field>
 
         <field name="description">
             <textarea rows="2"/>
