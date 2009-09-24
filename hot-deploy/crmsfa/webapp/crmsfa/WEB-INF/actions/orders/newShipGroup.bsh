@@ -193,16 +193,20 @@ for (orderItem : orderItems) {
     }
     oi = orderItem.getAllFields();
     // get the qty can can be reassigned
-    orderedQty = orderItem.get("quantity");
+    BigDecimal orderedQty = orderItem.getBigDecimal("quantity");
     if (UtilValidate.isEmpty(orderedQty)) {
-        orderedQty = 0;
+        orderedQty = BigDecimal.ZERO;
     }
-    cancelledQty = orderItem.get("cancelQuantity");
+    BigDecimal cancelledQty = orderItem.getBigDecimal("cancelQuantity");
     if (UtilValidate.isEmpty(cancelledQty)) {
-        cancelledQty = 0;
+        cancelledQty = BigDecimal.ZERO;
     }
-    remainingQty = orderedQty - cancelledQty;
-    if (remainingQty == 0) {
+    print(orderedQty.getClass().getName());
+    print(cancelledQty.getClass().getName());
+    
+    remainingQty = orderedQty.subtract(cancelledQty);
+    // if remainingQty == 0
+    if (remainingQty.signum() == 0) {
         // skip that item as we cannot transfer any item from it
         continue;
     }
