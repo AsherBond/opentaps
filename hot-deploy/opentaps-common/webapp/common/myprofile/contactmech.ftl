@@ -117,7 +117,8 @@
                     <#else>
                     <#if postalAddress.countryGeoId?has_content><br/><@displayGeoName geoId=postalAddress.countryGeoId /></#if>
                     </#if>
-                    <a href="<@ofbizUrl>createCatalogRequestForParty?partyId=${partySummary.partyId}&fromPartyId=${partySummary.partyId}&fulfillContactMechId=${contactMech.contactMechId}&custRequestTypeId=RF_CATALOG&donePage=${donePage}&custRequestDate=${getLocalizedDate(Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp())}</@ofbizUrl>" class="buttontext">${uiLabelMap.OpentapsCreateCatalogRequest}</a>
+                    <@form name="createCatalogRequestForPartyForm_${contactMechMap_index}" url="createCatalogRequestForParty" partyId="${partySummary.partyId}" fromPartyId="${partySummary.partyId}" fulfillContactMechId="${contactMech.contactMechId}" custRequestTypeId="RF_CATALOG" donePage="${donePage}" statusId="CRQ_SUBMITTED" />
+                    <@submitFormLink form="createCatalogRequestForPartyForm_${contactMechMap_index}" text="${uiLabelMap.OpentapsCreateCatalogRequest}" class="buttontext"/>
                     </div>
                   </div>
               <#elseif "TELECOM_NUMBER" = contactMech.contactMechTypeId>

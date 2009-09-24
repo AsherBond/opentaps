@@ -227,7 +227,7 @@
                </#if>
                <#if "POSTAL_ADDRESS" == contactMech.contactMechTypeId && contactMechMap.postalAddress?exists>
                   <br/><br/>
-                  <@form name="createCatalogRequestForPartyForm_${contactMechMap_index}" url="createCatalogRequestForParty" partyId="${partySummary.partyId}" fromPartyId="${partySummary.partyId}" fulfillContactMechId="${contactMech.contactMechId}" custRequestTypeId="RF_CATALOG" custRequestDate="${getLocalizedDate(Static['org.ofbiz.base.util.UtilDateTime'].nowTimestamp())}"/>
+                  <@form name="createCatalogRequestForPartyForm_${contactMechMap_index}" url="createCatalogRequestForParty" partyId="${partySummary.partyId}" fromPartyId="${partySummary.partyId}" fulfillContactMechId="${contactMech.contactMechId}" custRequestTypeId="RF_CATALOG" statusId="CRQ_SUBMITTED"/>
                   <@submitFormLink form="createCatalogRequestForPartyForm_${contactMechMap_index}" text="${uiLabelMap.CrmCreateCatalogRequest}" class="buttontext"/>
                </#if>
             </td>
