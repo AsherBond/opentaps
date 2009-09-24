@@ -828,7 +828,9 @@ under the License.
     <request-map uri="updatePicklist">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="updatePicklist"/>
-        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="success" type="request-redirect" value="picklistDetails">
+             <redirect-parameter name="picklistId"/>
+        </response>
         <response name="error" type="view" value="picklistDetails"/>
     </request-map>
     <request-map uri="createPicklistRole">
@@ -840,19 +842,25 @@ under the License.
     <request-map uri="updatePicklistBin">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="updatePicklistBin"/>
-        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="success" type="request-redirect" value="picklistDetails">
+             <redirect-parameter name="picklistId"/>
+        </response>
         <response name="error" type="view" value="picklistDetails"/>
     </request-map>
     <request-map uri="deletePicklistBin">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="deletePicklistBin"/>
-        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="success" type="request-redirect" value="picklistDetails">
+             <redirect-parameter name="picklistId"/>
+        </response>
         <response name="error" type="view" value="picklistDetails"/>
     </request-map>
     <request-map uri="deletePicklistItem">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="deletePicklistItem"/>
-        <response name="success" type="request-redirect" value="picklistDetails"/>
+        <response name="success" type="request-redirect" value="picklistDetails">
+             <redirect-parameter name="picklistId"/>
+        </response>
         <response name="error" type="view" value="picklistDetails"/>
     </request-map>
     <request-map uri="PicklistReport.pdf">
