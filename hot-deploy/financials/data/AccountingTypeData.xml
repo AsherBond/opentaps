@@ -28,7 +28,7 @@ consistent with most standard financial reporting.
 
 <entity-engine-xml>
     <AcctgTransType acctgTransTypeId="INTERNAL_ACCTG_TRANS" description="Internal" hasTable="Y" parentTypeId=""/>
-    <AcctgTransType acctgTransTypeId="AMORTIZATION" description="Amorization" hasTable="N" parentTypeId="INTERNAL_ACCTG_TRANS"/>
+    <AcctgTransType acctgTransTypeId="AMORTIZATION" description="Amortization" hasTable="N" parentTypeId="INTERNAL_ACCTG_TRANS"/>
     <AcctgTransType acctgTransTypeId="DEPRECIATION" description="Depreciation" hasTable="Y" parentTypeId="INTERNAL_ACCTG_TRANS"/>
     <AcctgTransType acctgTransTypeId="CAPITALIZATION" description="Capitalization" hasTable="N" parentTypeId="INTERNAL_ACCTG_TRANS"/>
     <AcctgTransType acctgTransTypeId="ITEM_VARIANCE_ACCTG_" description="Item Variance" hasTable="Y" parentTypeId="INTERNAL_ACCTG_TRANS"/>
