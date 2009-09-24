@@ -832,7 +832,6 @@ public final class PartyServices {
         return ServiceUtil.returnSuccess();
     }
 
-    @SuppressWarnings("unchecked")
     public static Map<String, Object> updatePartyCarrierAccount(DispatchContext dctx, Map<String, Object> context) {
         GenericDelegator delegator = dctx.getDelegator();
         Locale locale = UtilCommon.getLocale(context);

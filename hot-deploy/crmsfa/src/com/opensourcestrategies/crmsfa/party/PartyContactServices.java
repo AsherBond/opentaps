@@ -40,18 +40,16 @@
  */
 package com.opensourcestrategies.crmsfa.party;
 
-import java.util.Map;
 import java.util.Locale;
+import java.util.Map;
 
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericDelegator;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.security.Security;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-import org.ofbiz.security.Security;
-
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 
@@ -61,25 +59,23 @@ import org.opentaps.common.util.UtilMessage;
  * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
  * @version    $Rev: 488 $
  */
-
 public class PartyContactServices {
 
-    public static final String module = PartyContactServices.class.getName();
+    public static final String MODULE = PartyContactServices.class.getName();
 
-    public static Map createBasicContactInfoForParty(DispatchContext dctx, Map context) {
-        GenericDelegator delegator = dctx.getDelegator();
+    public static Map<String, Object> createBasicContactInfoForParty(DispatchContext dctx, Map<String, ?> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Security security = dctx.getSecurity();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        Map serviceResults = null; // for collecting service results
-        Map results = ServiceUtil.returnSuccess();  // for returning the contact mech IDs when finished
+        Map<String, Object> serviceResults = null; // for collecting service results
+        Map<String, Object> results = ServiceUtil.returnSuccess();  // for returning the contact mech IDs when finished
 
         // security
         if (!security.hasEntityPermission("PARTYMGR", "_PCM_CREATE", userLogin)) {
-            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, module);
+            return UtilMessage.createAndLogServiceError("CrmErrorPermissionDenied", locale, MODULE);
         }
-        
+
         // input
         String partyId = (String) context.get("partyId");
         String primaryEmail = (String) context.get("primaryEmail");
@@ -103,7 +99,7 @@ public class PartyContactServices {
             // create primary email
             if ((primaryEmail != null) && !primaryEmail.equals("")) {
                 serviceResults = dispatcher.runSync("createPartyEmailAddress", UtilMisc.toMap("partyId", partyId, "userLogin", userLogin,
-                            "contactMechTypeId", "EMAIL_ADDRESS", "contactMechPurposeTypeId", "PRIMARY_EMAIL", "emailAddress", primaryEmail));
+                        "contactMechTypeId", "EMAIL_ADDRESS", "contactMechPurposeTypeId", "PRIMARY_EMAIL", "emailAddress", primaryEmail));
                 if (ServiceUtil.isError(serviceResults)) {
                     return serviceResults;
                 }
@@ -113,7 +109,7 @@ public class PartyContactServices {
             // create primary web url
             if ((primaryWebUrl != null) && !primaryWebUrl.equals("")) {
                 serviceResults = dispatcher.runSync("createPartyContactMech", UtilMisc.toMap("partyId", partyId, "userLogin", userLogin,
-                            "contactMechTypeId", "WEB_ADDRESS", "contactMechPurposeTypeId", "PRIMARY_WEB_URL", "infoString", primaryWebUrl));
+                        "contactMechTypeId", "WEB_ADDRESS", "contactMechPurposeTypeId", "PRIMARY_WEB_URL", "infoString", primaryWebUrl));
                 if (ServiceUtil.isError(serviceResults)) {
                     return serviceResults;
                 }
@@ -122,7 +118,7 @@ public class PartyContactServices {
 
             // create primary telecom number
             if (((primaryPhoneNumber != null) && !primaryPhoneNumber.equals(""))) {
-                Map input = UtilMisc.toMap("partyId", partyId, "userLogin", userLogin, "contactMechPurposeTypeId", "PRIMARY_PHONE");
+                Map<String, Object> input = UtilMisc.<String, Object>toMap("partyId", partyId, "userLogin", userLogin, "contactMechPurposeTypeId", "PRIMARY_PHONE");
                 input.put("countryCode", primaryPhoneCountryCode);
                 input.put("areaCode", primaryPhoneAreaCode);
                 input.put("contactNumber", primaryPhoneNumber);
@@ -137,7 +133,7 @@ public class PartyContactServices {
 
             // create general correspondence postal address
             if ((generalAddress1 != null) && !generalAddress1.equals("")) {
-                Map input = UtilMisc.toMap("partyId", partyId, "userLogin", userLogin, "contactMechPurposeTypeId", "GENERAL_LOCATION");
+                Map<String, Object> input = UtilMisc.<String, Object>toMap("partyId", partyId, "userLogin", userLogin, "contactMechPurposeTypeId", "GENERAL_LOCATION");
                 input.put("toName", generalToName);
                 input.put("attnName", generalAttnName);
                 input.put("address1", generalAddress1);
@@ -155,7 +151,7 @@ public class PartyContactServices {
                 results.put("generalAddressContactMechId", contactMechId);
 
                 // also make this address the SHIPPING_LOCATION
-                input = UtilMisc.toMap("partyId", partyId, "userLogin", userLogin, "contactMechId", contactMechId, "contactMechPurposeTypeId", "SHIPPING_LOCATION");
+                input = UtilMisc.<String, Object>toMap("partyId", partyId, "userLogin", userLogin, "contactMechId", contactMechId, "contactMechPurposeTypeId", "SHIPPING_LOCATION");
                 serviceResults = dispatcher.runSync("createPartyContactMechPurpose", input);
                 if (ServiceUtil.isError(serviceResults)) {
                     return serviceResults;
@@ -163,7 +159,7 @@ public class PartyContactServices {
             }
 
         } catch (GenericServiceException e) {
-            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateBasicContactInfoFail", locale, module);
+            return UtilMessage.createAndLogServiceError(e, "CrmErrorCreateBasicContactInfoFail", locale, MODULE);
         }
         return results;
     }
