@@ -26,6 +26,7 @@
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <auto-attributes include="pk" mode="OUT" optional="true"/>
         <attribute name="privateForm" type="String" mode="IN" optional="true"/>
+        <override name="mergeFormText" allow-html="safe"/>
     </service>
     <service name="updateMergeForm" engine="java" default-entity-name="MergeForm"
             location="org.opentaps.common.forms.MergeFormServices" invoke="updateMergeForm" auth="true">
@@ -33,6 +34,7 @@
         <auto-attributes include="pk" mode="INOUT" optional="false"/>
         <auto-attributes include="nonpk" mode="IN" optional="true"/>
         <attribute name="privateForm" type="String" mode="IN" optional="true"/>
+        <override name="mergeFormText" allow-html="safe"/>
     </service>
     <service name="deleteMergeForm" engine="java" default-entity-name="MergeForm"
             location="org.opentaps.common.forms.MergeFormServices" invoke="deleteMergeForm" auth="true">
