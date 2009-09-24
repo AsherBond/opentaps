@@ -128,7 +128,10 @@
                     <@displayCell text="${picklistItem.iiLotId?if_exists} ${picklistItem.iiSerialNumber?if_exists} "/>
                     <@displayCell text=picklistItem.piQuantity/>
                     <#if picklistIsOpen?exists>
-                      <@displayLinkCell text=uiLabelMap.CommonDelete href="deletePicklistItem?picklistBinId=${binId}&amp;orderId=${shipGroup.orderId}&amp;orderItemSeqId=${picklistItem.orderItemSeqId}&amp;shipGroupSeqId=${picklistItem.shipGroupSeqId}&amp;inventoryItemId=${picklistItem.inventoryItemId}&amp;facilityId=${picklistItem.facilityId?if_exists}" class="buttontext"/>
+                      <td>
+                      <#-- picklist item is repeated for each bin many times, so the form key needs to have bin and item index --> 
+                      <@form name="deletePicklistItemForm_${binId}_${picklistItem_index}" url="deletePicklistItem" picklistId="${picklistItem.pPicklistId}" picklistBinId="${binId}" orderId="${shipGroup.orderId}" orderItemSeqId="${picklistItem.orderItemSeqId}" shipGroupSeqId="${picklistItem.shipGroupSeqId}" inventoryItemId="${picklistItem.inventoryItemId}" facilityId="${picklistItem.facilityId?if_exists}"/>
+                      <@submitFormLink form="deletePicklistItemForm_${binId}_${picklistItem_index}" text=uiLabelMap.CommonDelete />
                     </#if>
                   </tr>
                 </#list>
