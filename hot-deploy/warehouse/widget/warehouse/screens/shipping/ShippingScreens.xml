@@ -101,10 +101,10 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="WarehouseViewShipment"/>
                 <set field="sectionHeaderUiLabel" value="WarehouseViewShipment"/>  
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.groovy"/>A
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/EditShipmentItems.bsh"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentPackages.bsh"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentRouteSegments.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentPackages.groovy"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentRouteSegments.groovy"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/setShipmentToHistory.bsh"/>
             </actions>
             <widgets>
@@ -113,9 +113,6 @@ under the License.
                         <container style="subSectionBlock">
                             <platform-specific>
                                 <html><html-template location="component://warehouse/webapp/warehouse/shipping/sectionheaders/ViewShipmentInformation.ftl"/></html>
-                            </platform-specific>
-                            <platform-specific>
-                                <html><html-template location="component://product/webapp/facility/shipment/ViewShipment.ftl"/></html>
                             </platform-specific>
                             <platform-specific>
                                 <html><html-template location="component://warehouse/webapp/warehouse/shipping/ViewShipmentInfo.ftl"/></html>
@@ -156,7 +153,7 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="OrderEditShipmentInfo"/>
                 <set field="sectionHeaderUiLabel" value="ProductEditShipment"/>  
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipment.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipment.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -180,7 +177,7 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="PageTitleEditShipmentItems"/>
                 <set field="sectionHeaderUiLabel" value="ProductEditShipment"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentItems.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentItems.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -202,7 +199,7 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="PageTitleEditShipmentPackages"/>
                 <set field="sectionHeaderUiLabel" value="ProductEditShipment"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentPackages.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentPackages.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -224,7 +221,7 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="PageTitleEditShipmentRouteSegments"/>
                 <set field="sectionHeaderUiLabel" value="ProductEditShipment"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentRouteSegments.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentRouteSegments.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -329,7 +326,7 @@ under the License.
                     <order-by field-name="picklistDate"/>
                 </entity-condition>
                 <property-to-field resource="warehouse" property="warehouse.shipping.labels.printing.defaultPrinterName" field="defaultPrinter" default=""/>
-                <script location="component://content/webapp/content/WEB-INF/actions/print/findPrinters.bsh"/>   
+                <script location="component://content/webapp/content/WEB-INF/actions/print/FindPrinters.groovy"/>   
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -452,7 +449,7 @@ under the License.
                 <set field="defaultFontFamily" value="DejaVuSans"/>
                 -->
                 <set field="shipmentId" from-field="parameters.shipmentId"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.groovy"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/PackingSlip.bsh"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
             </actions>
