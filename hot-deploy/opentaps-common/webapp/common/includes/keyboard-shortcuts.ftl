@@ -22,7 +22,7 @@
 /*<![CDATA[*/
 
   <#list keyboardShortcuts as kb>
-    ${kb.handler}('${kb.shortcut}', '${kb.actionTarget}');
+    ${kb.handler}('${StringUtil.wrapString(kb.shortcut)}', '${StringUtil.wrapString(kb.actionTarget)}');
   </#list>
 
     dojo.require("dijit.form.Button");
