@@ -14,8 +14,11 @@
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
 
+<@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl" />
+
 <#if hasTeamDeactivatePermission?exists>
-<#assign deactivateLink = "<a class='subMenuButtonDangerous' href='deactivateTeam?partyId=" + team.partyId + "'>" + uiLabelMap.CrmDeactivateTeam + "</a>">
+<@form name="deactivateTeamForm" url="deactivateTeam" partyId="${team.partyId}" />
+<#assign deactivateLink><@submitFormLinkConfirm form="deactivateTeamForm" class='subMenuButtonDangerous' text=uiLabelMap.CrmDeactivateTeam/></#assign>
 </#if>
 <#if hasTeamUpdatePermission?exists>
 <#assign updateLink = "<a class='subMenuButton' href='updateTeamForm?partyId=" + team.partyId + "'>" + uiLabelMap.CommonEdit + "</a>">
