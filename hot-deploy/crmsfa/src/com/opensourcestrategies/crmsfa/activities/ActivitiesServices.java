@@ -41,6 +41,7 @@
 package com.opensourcestrategies.crmsfa.activities;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -165,6 +166,10 @@ public final class ActivitiesServices {
             if (UtilValidate.isNotEmpty(toAddresses)) {
                 validToAddresses = StringUtil.join(UtilMisc.toList(toAddresses), ",");
                 input.put("toString", validToAddresses);
+            } else {
+                if (UtilValidate.isNotEmpty(toEmail)) {
+                    Debug.logError("No valid email addresses could be found from: [" + toEmail + "]", MODULE);
+                }
             }
 
             // Search for contactMechIdTo using the passed in To email addresses - use the first found
@@ -226,12 +231,12 @@ public final class ActivitiesServices {
 
             // Create the content etc. for each email attachment
             // multiPartMap is populated by the ServiceEventHandler with (we hope) the following keys for each uploaded file: uploadedFile_#; _uploadedFile_0_contentType; _uploadedFile_0_fileName
-            Map multiPartMap = (Map) context.get("multiPartMap");
+            Map<String, Object> multiPartMap = (Map<String, Object>) context.get("multiPartMap");
             int fileCounter = 1;
             if (UtilValidate.isNotEmpty(multiPartMap)) {
-                Iterator mpit = multiPartMap.keySet().iterator();
+                Iterator<String> mpit = multiPartMap.keySet().iterator();
                 while (mpit.hasNext()) {
-                    String key = (String) mpit.next();
+                    String key = mpit.next();
 
                     // Since the ServiceEventHandler adds all form inputs to the map, just deal with the ones matching the correct input name (eg. 'uploadedFile_0', 'uploadedFile_1', etc)
                     if (!key.startsWith("uploadedFile_")) {
@@ -243,7 +248,7 @@ public final class ActivitiesServices {
                         continue;
                     }
 
-                    ByteWrapper uploadedFile = (ByteWrapper) multiPartMap.get(key);
+                    ByteBuffer uploadedFile = (ByteBuffer) multiPartMap.get(key);
                     String uploadedFileName = (String) multiPartMap.get("_" + key + "_fileName");
                     String uploadedFileContentType = (String) multiPartMap.get("_" + key + "_contentType");
 
