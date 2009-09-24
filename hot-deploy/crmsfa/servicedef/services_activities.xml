@@ -51,7 +51,7 @@
         <attribute name="ccEmail" type="String" mode="IN" optional="true"/>
         <attribute name="bccEmail" type="String" mode="IN" optional="true"/>
         <attribute name="subject" type="String" mode="IN" optional="false"/>
-        <attribute name="content" type="String" mode="IN" optional="false"/>
+        <attribute name="content" type="String" mode="IN" optional="false" allow-html="safe"/>
         <attribute name="contentMimeTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="note" type="String" mode="IN" optional="true"/>
         <!-- TODO: this will become a date/time/duration trio of input -->
