@@ -201,8 +201,6 @@ for (orderItem : orderItems) {
     if (UtilValidate.isEmpty(cancelledQty)) {
         cancelledQty = BigDecimal.ZERO;
     }
-    print(orderedQty.getClass().getName());
-    print(cancelledQty.getClass().getName());
     
     remainingQty = orderedQty.subtract(cancelledQty);
     // if remainingQty == 0
