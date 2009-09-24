@@ -19,6 +19,7 @@ import org.ofbiz.base.util.*;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
+import org.opentaps.common.util.UtilCommon;
 
 userLogin = request.getAttribute("userLogin");
 
@@ -211,7 +212,7 @@ shipGroupSeqId = parameters.get("shipGroupSeqId");
 shipmentId = parameters.get("shipmentId");
 mergeFormId = parameters.get("mergeFormId");
 if (UtilValidate.isNotEmpty(mergeFormId)) {
-    mergedOutput = PartyHelper.mergePartyWithForm(delegator, mergeFormId, partyIdTo, orderId, shipGroupSeqId, shipmentId, UtilMisc.ensureLocale(UtilHttp.getLocale(request)), true);
+    mergedOutput = PartyHelper.mergePartyWithForm(delegator, mergeFormId, partyIdTo, orderId, shipGroupSeqId, shipmentId, UtilMisc.ensureLocale(UtilHttp.getLocale(request)), true, UtilCommon.getTimeZone(request));
     context.put("templateText", mergedOutput.get("mergeFormText"));
     if (UtilValidate.isEmpty(parameters.get("subject"))) parameters.put("subject", mergedOutput.get("subject"));
 }
