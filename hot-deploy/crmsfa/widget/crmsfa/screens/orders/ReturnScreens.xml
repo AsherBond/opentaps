@@ -120,7 +120,7 @@
                     <decorator-section name="topLeft">
                         <section>
                             <widgets>
-                                <include-screen name="CompanyLogo" location="component://order/widget/ordermgr/OrderPrintForms.xml"/>
+                                <include-screen name="CompanyLogo" location="component://order/widget/ordermgr/OrderPrintScreens.xml"/>
                             </widgets>
                         </section>
                     </decorator-section>
