@@ -79,7 +79,9 @@ if (UtilValidate.isNotEmpty(orderPartyId)) {
             while (bait.hasNext()) {
                 billingAccount = bait.next();
                 availableBalance = com.opensourcestrategies.financials.accounts.BillingAccountWorker.getBillingAccountAvailableBalance(delegator, billingAccount.get("billingAccountId"));
-                if (availableBalance < cartGrandTotal) {
+               
+                // cartGrandTotal < availableBalance
+                if (cartGrandTotal.compareTo(availableBalance) < 0) {
                     Debug.logInfo("crmsfaPaymentSetting.bsh: Billing account [" + billingAccount.get("billingAccountId") + "] was excluded from list of payments because its balance [" + availableBalance + "] is below the cart total of [" + cartGrandTotal + "]", "");
                     billingAccounts.remove(billingAccount);
                 }
