@@ -94,8 +94,8 @@
                 <set field="pageTitleLabel" value="OpentapsViewPurchaseOrder"/>
                 <set field="sectionHeaderUiLabel" value="OpentapsViewPurchaseOrder"/>
                 <set field="customerDetailLink" value="/partymgr/control/viewprofile?partyId=" global="true"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderview.bsh"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderviewwebsecure.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/OrderViewWebSecure.groovy"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/viewOrder.bsh"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/getOrderAccountingTags.bsh"/>
             </actions>
@@ -117,8 +117,8 @@
             <actions>
                 <set field="pageTitleLabel" value="OpentapsOrderEditOrder"/>
                 <set field="sectionHeaderUiLabel" value="OpentapsOrderEditOrder"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderview.bsh"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderviewwebsecure.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/OrderViewWebSecure.groovy"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/editOrder.bsh"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/orders/view/excludeCancelledItems.bsh"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/viewOrder.bsh"/>
@@ -142,7 +142,7 @@
             <actions>
                 <set field="pageTitleLabel" value="OpentapsCreateNote"/>
                 <set field="sectionHeaderUiLabel" value="OpentapsCreateNote"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/newnote.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/NewNote.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">

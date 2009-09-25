@@ -63,7 +63,7 @@ under the License.
             <actions>
                 <set field="stepTitleId" value="OrderOrderEntryOrderTerms"/>
                 <set field="stepLabelId" value="OrderOrderTerms"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/orderterms.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/OrderTerms.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="checkout-decorator">
@@ -82,7 +82,7 @@ under the License.
             <actions>
                 <set field="stepTitleId" value="OrderOrderEntryShipToSettings"/>
                 <set field="stepLabelId" value="FacilityShipping"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/shipsettings.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/ShipSettings.groovy"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/entry/shipsettings.bsh"/>                
             </actions>
             <widgets>
@@ -102,7 +102,7 @@ under the License.
             <actions>
                 <set field="stepTitleId" value="OrderOrderOptionSettings"/>
                 <set field="stepLabelId" value="CommonOptions"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/optionsettings.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/OptionSettings.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="checkout-decorator">
@@ -122,7 +122,7 @@ under the License.
                 <set field="stepTitleId" value="OrderOrderConfirmation"/>
                 <set field="stepLabelId" value="OrderReviewOrder"/>
 
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/checkoutreview.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/CheckoutReview.groovy"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/getOrderAccountingTags.bsh"/>
             </actions>
             <widgets>

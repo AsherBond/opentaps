@@ -81,7 +81,7 @@
             <actions>
                 <set field="pageTitleLabel" value="WarehouseViewProductionRun"/>  
                 <set field="sectionHeaderUiLabel" value="WarehouseViewProductionRun"/>  
-                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.bsh"/>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/setProductionRunToHistory.bsh"/>
             </actions>
             <widgets>
@@ -106,7 +106,7 @@
     <screen name="EditProductionRun">
         <section>
             <actions>
-                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewProductionRun.bsh"/>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ViewProductionRun.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -125,7 +125,7 @@
     <screen name="ProductionRunDeclaration">
         <section>
             <actions>
-                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.bsh"/>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy"/>
             </actions>
              <widgets>
                  <decorator-screen name="main-section-decorator">
@@ -153,7 +153,7 @@
     <screen name="ProductionRunRoutingTasks">
         <section>
             <actions>
-                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.bsh"/>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunDeclaration.groovy"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/getProductionTaskGoodStandards.bsh"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/manufacturing/setIssueComponentTask.bsh"/>                
             </actions>
@@ -173,7 +173,7 @@
     <screen name="ProductionRunMaterials">
         <section>
             <actions>
-                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunComponents.bsh"/>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunComponents.groovy"/>
             </actions>
             <widgets>
                 <container style="subSectionHeader">
@@ -208,7 +208,7 @@
     <screen name="ProductionRunFixedAssets">
         <section>
             <actions>
-                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunFixedAssets.bsh"/>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunFixedAssets.groovy"/>
             </actions>
             <widgets>
                 <container style="subSectionHeader">
@@ -288,7 +288,7 @@
     <screen name="ProductionRunCosts">
         <section>
             <actions>
-                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunCosts.bsh"/>
+                <script location="component://manufacturing/webapp/manufacturing/WEB-INF/actions/jobshopmgt/ProductionRunCosts.groovy"/>
             </actions>
             <widgets>
                 <container style="subSectionHeader">

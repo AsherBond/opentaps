@@ -198,7 +198,7 @@ under the License.
                 <set field="pageTitleLabel" value="WarehouseInventoryTransfer"/>  
                 <set field="sectionHeaderUiLabel" value="WarehouseInventoryTransfer"/>  
                 <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/facility/FindFacilityTransfers.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/FindFacilityTransfers.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -217,7 +217,7 @@ under the License.
                 <set field="pageTitleLabel" value="WarehouseInventoryTransfer"/>  
                 <set field="sectionHeaderUiLabel" value="WarehouseInventoryTransfer"/>  
                 <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/inventory/TransferInventoryItem.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/inventory/TransferInventoryItem.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -495,8 +495,8 @@ under the License.
                 <set field="defaultFontFamily" value="DejaVuSans"/>
                 -->
                 <set field="title" value="Order"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/companyHeader.bsh"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderview.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/CompanyHeader.groovy"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/inventory/fulfilledBackOrders.bsh"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
             </actions>

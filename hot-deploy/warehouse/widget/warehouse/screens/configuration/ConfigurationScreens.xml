@@ -54,7 +54,7 @@
         <section>
             <actions>
                 <set field="pageTitleLabel" value="WarehouseViewWarehouse"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/facility/ViewContactMechs.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/ViewContactMechs.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -92,7 +92,7 @@
             <actions>
                 <set field="pageTitleLabel" value="PartyEditContactInformation"/>  
                 <set field="sectionHeaderUiLabel" value="PartyEditContactInformation"/>  
-                <script location="component://product/webapp/facility/WEB-INF/actions/facility/EditContactMech.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/EditContactMech.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">

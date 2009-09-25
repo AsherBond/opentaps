@@ -164,7 +164,7 @@ under the License.
     <screen name="orderItemListForm">
         <section>
             <actions>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/showcart.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/ShowCart.groovy"/>
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://purchasing/webapp/purchasing/order/entry/viewOrderItems.ftl"/></html></platform-specific>
@@ -180,7 +180,7 @@ under the License.
         <section>
             <actions>
                 <set field="pageTitleLabel" value="OpentapsCreateOrder"/>  
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/checkinits.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/CheckInits.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator" location="component://purchasing/widget/purchasing/screens/order/OrderScreens.xml">
@@ -214,7 +214,7 @@ under the License.
         <section>
             <actions>
                 <set field="pageTitleLabel" value="OpentapsCreateOrder"/>  
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/checkinits.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/CheckInits.groovy"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/entry/initPurchaseOrder.bsh"/>
             </actions>
             <widgets>
@@ -256,7 +256,7 @@ under the License.
 
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/entry/orderterms.bsh"/>  
 
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/shipsettings.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/ShipSettings.groovy"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/entry/shipsettings.bsh"/>  
             </actions>
             <widgets>

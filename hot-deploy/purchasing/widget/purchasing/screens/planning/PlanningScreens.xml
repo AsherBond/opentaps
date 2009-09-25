@@ -73,7 +73,7 @@ under the License.
                 <!-- do not use the countFacilityInventoryByProduct.bsh script unless the issues mentioned in it are correctly addressed -->
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/includes/getOrgFacilities.bsh"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/planning/findInventory.bsh"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -133,7 +133,7 @@ under the License.
                 <set field="sectionHeaderUiLabel" value="PurchApprovedRequirements"/>  
                 <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer"/>
                 <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/requirement/ApprovedProductRequirementsByVendor.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/requirement/ApprovedProductRequirementsByVendor.groovy"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/planning/approvedRequirements.bsh"/> 
             </actions>
             <widgets>
@@ -191,7 +191,7 @@ under the License.
                 <set field="sectionHeaderUiLabel" value="PurchApprovedRequirements"/>  
                 <set field="viewIndex" from-field="parameters.VIEW_INDEX" type="Integer"/>
                 <set field="viewSize" from-field="parameters.VIEW_SIZE" type="Integer" default-value="50"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/requirement/ApprovedProductRequirementsByVendor.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/requirement/ApprovedProductRequirementsByVendor.groovy"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/planning/approvedRequirements.bsh"/> 
             </actions>
             <widgets>

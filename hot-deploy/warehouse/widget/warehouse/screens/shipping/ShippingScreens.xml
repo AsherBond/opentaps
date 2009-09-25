@@ -366,7 +366,7 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="WarehouseScheduleAShipment"/>
                 <set field="sectionHeaderUiLabel" value="WarehouseConfirmShipmentAndPrintLabels"/>  
-                <script location="component://content/webapp/content/WEB-INF/actions/print/findPrinters.bsh"/>
+                <script location="component://content/webapp/content/WEB-INF/actions/print/FindPrinters.groovy"/>
                 <property-to-field resource="warehouse" property="warehouse.shipping.labels.printing.defaultPrinterName" field="defaultPrinter" default=""/>
             </actions>
             <widgets>

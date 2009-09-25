@@ -42,7 +42,7 @@ under the License.
                 <set field="defaultFontFamily" value="DejaVuSans"/>
                 -->
                 <set field="title" value="Order"/>
-                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/orderview.bsh"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy"/>
                 <script location="component://purchasing/webapp/purchasing/WEB-INF/actions/order/orderviewGroupedItems.bsh"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
             </actions>

@@ -78,7 +78,7 @@ under the License.
 
                 <entity-one entity-name="PaymentGatewayResponse" value-field="paymentGatewayResponse" auto-field-map="true"/>
 
-                <script location="component://accounting/webapp/accounting/WEB-INF/actions/transaction/viewGatewayResponse.bsh"/>
+                <script location="component://accounting/webapp/accounting/WEB-INF/actions/transaction/ViewGatewayResponse.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -112,7 +112,7 @@ under the License.
                 </entity-one>
                 <set field="paymentMethodTypeId" from-field="opp.paymentMethodTypeId"/>
 
-                <script location="component://accounting/webapp/accounting/WEB-INF/actions/transaction/authorizeTransaction.bsh"/>
+                <script location="component://accounting/webapp/accounting/WEB-INF/actions/transaction/AuthorizeTransaction.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
@@ -143,7 +143,7 @@ under the License.
                 </entity-one>
                 <set field="paymentMethodTypeId" from-field="opp.paymentMethodTypeId"/>
                 
-                <script location="component://accounting/webapp/accounting/WEB-INF/actions/transaction/captureTransaction.bsh"/>
+                <script location="component://accounting/webapp/accounting/WEB-INF/actions/transaction/CaptureTransaction.groovy"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">

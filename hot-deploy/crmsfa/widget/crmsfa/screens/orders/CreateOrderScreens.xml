@@ -332,8 +332,8 @@ under the License.
     <screen name="ordersEditCreditCard">
         <section>
             <actions>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/HasPartyPermissions.bsh"/>                
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/HasPartyPermissions.groovy"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
             <widgets>
                 <decorator-screen name="order-entry-decorator">
@@ -349,8 +349,8 @@ under the License.
     <screen name="ordersEditEftAccount">
         <section>
             <actions>
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/HasPartyPermissions.bsh"/>                
-                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/editpaymentmethod.bsh"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/HasPartyPermissions.groovy"/>                
+                <script location="component://party/webapp/partymgr/WEB-INF/actions/party/EditPaymentMethod.groovy"/>                
             </actions>
             <widgets>
                 <decorator-screen name="order-entry-decorator">
