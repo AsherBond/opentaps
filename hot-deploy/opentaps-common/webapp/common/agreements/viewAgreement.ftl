@@ -17,6 +17,7 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <script type="text/javascript">
+/*<![CDATA[*/
 var isFullTextOpen = false;
 
 function showAgreementFullText() {
@@ -193,6 +194,7 @@ function onItemTypeChanged() {
     }
 }
 
+/*]]>*/
 </script>
 
 <#assign agreementId = agreementHeader.agreementId/>
@@ -527,7 +529,7 @@ function onItemTypeChanged() {
     <#if hasCreateAgreementPermission && listTermTypes?has_content && isEditable?is_boolean && isEditable == true>
     <div class="form">
         <#assign createTermTargetAction = createTermAction?default("processCreateAgreementTerm")/>
-        <form name="createAgreementTerm_${agreementItemSeqId}" action="<@ofbizUrl>${createTermTargetAction}</@ofbizUrl>">
+        <form name="createAgreementTerm_${agreementItemSeqId}" method="POST" action="<@ofbizUrl>${createTermTargetAction}</@ofbizUrl>">
             <@inputHidden name="agreementId" value=agreementId/>
             <@inputHidden name="agreementItemSeqId" value=agreementItemSeqId/>
             <div id="flexFormContainer_${agreementItemSeqId}">
@@ -562,7 +564,9 @@ function onItemTypeChanged() {
     </div>
 
     <script  type="text/javascript">
+      /*<![CDATA[*/
       onTermTypeChanged('${agreementItemSeqId?js_string}');
+      /*]]>*/
     </script>
 
     </#if>
@@ -575,7 +579,7 @@ function onItemTypeChanged() {
 <#if isEditable && allowItems?has_content>
 <div class="subSectionBlock">
         <#assign createItemTargetAction = createItemAction?default("processCreateAgreementItem")/>
-        <form name="createAgreementItem" action="<@ofbizUrl>${createItemTargetAction}</@ofbizUrl>">
+        <form name="createAgreementItem" method="POST" action="<@ofbizUrl>${createItemTargetAction}</@ofbizUrl>">
             <@inputHidden name="agreementId" value=parameters.agreementId/>
             <table class="twoColumnForm">
                 <tr>
@@ -607,7 +611,9 @@ function onItemTypeChanged() {
 </div>
 
 <script  type="text/javascript">
+/*<![CDATA[*/
 onItemTypeChanged();
+/*]]>*/
 </script>
 
 </#if>
