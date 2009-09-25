@@ -907,6 +907,18 @@ public final class PartyHelper {
     }
 
     /**
+     * As above, but does a lookup on PartySummaryCRMView for an input partyId.
+     * @param delegator a <code>GenericDelegator</code> value
+     * @param partyId a <code>String</code> value
+     * @return a <code>String</code> value
+     * @exception GenericEntityException if an error occurs
+     */
+    public static String getCrmsfaPartyName(String partyId, GenericDelegator delegator) throws GenericEntityException {
+        GenericValue party = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
+        return getCrmsfaPartyName(party);
+    }
+
+    /**
      * Get party name, if it is a Person, then return person name, else return party group name.
      *
      * @param partyObject a <code>Party</code> instance
