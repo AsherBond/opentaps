@@ -16,11 +16,11 @@
 package org.opentaps.warehouse.shipment;
 
 import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.ofbiz.base.util.UtilHttp;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.security.Security;
 import org.opentaps.common.util.UtilCommon;
@@ -54,9 +54,16 @@ public final class ShippingEvents {
 
         // ensure warehouse invoice view
         String facilityId = UtilCommon.getParameter(request, "facilityId");
+        if (UtilValidate.isEmpty(facilityId)) {
+            facilityId = (String) request.getSession().getAttribute("facilityId");
+        }
+        if (UtilValidate.isEmpty(facilityId)) {
+            return UtilMessage.createAndLogEventError(request, "Facility ID is not set in the request.", MODULE);
+        }
+
         WarehouseSecurity wsecurity = new WarehouseSecurity(security, userLogin, facilityId);
         if (!wsecurity.hasFacilityPermission("WRHS_INVOICE_VIEW")) {
-            return "error";
+            return UtilMessage.createAndLogEventError(request, "Permission WRHS_INVOICE_VIEW denied.", MODULE);
         }
 
         String invoiceId = UtilCommon.getParameter(request, "invoiceId");
@@ -69,7 +76,7 @@ public final class ShippingEvents {
 
             Invoice invoice = billingDomain.getInvoiceRepository().getInvoiceById(invoiceId);
             if (!invoice.isSalesInvoice()) {
-                return "error";
+                return UtilMessage.createAndLogEventError(request, "Invoice [" + invoiceId + "] is not a sales invoice.", MODULE);
             }
 
             Facility facility = inventoryDomain.getInventoryRepository().getFacilityById(facilityId);
