@@ -197,6 +197,8 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="WarehouseInventoryTransfer"/>  
                 <set field="sectionHeaderUiLabel" value="WarehouseInventoryTransfer"/>  
+                <set from-field="parameters.facilityId" field="facilityId"/>
+                <entity-one value-field="facility" entity-name="Facility" use-cache="true"></entity-one>
                 <set field="parameters.commonFacilityDecoratorLocation" value="component://warehouse/widget/warehouse/screens/common/IntegrationScreens.xml"/>
                 <script location="component://product/webapp/facility/WEB-INF/actions/facility/FindFacilityTransfers.groovy"/>
             </actions>
