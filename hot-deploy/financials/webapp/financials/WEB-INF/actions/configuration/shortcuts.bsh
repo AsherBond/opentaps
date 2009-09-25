@@ -21,7 +21,7 @@ shortcuts = FastList.newInstance();
 shortcuts.add( UtilMisc.toMap("uri", "listGlAccounts", "uiLabel", "AccountingChartOfAcctsMenu") );
 shortcuts.add( UtilMisc.toMap("uri", "listGlAccountTypes", "uiLabel", "FinancialsConfigureLedger") );
 shortcuts.add( UtilMisc.toMap("uri", "listPaymentMethods", "uiLabel", "FinancialsPaymentMethods") );
-shortcuts.add( UtilMisc.toMap("uri", "organizationTimePeriods", "uiLabel", "TimePeriod") );
+shortcuts.add( UtilMisc.toMap("uri", "organizationTimePeriods", "uiLabel", "AccountingTimePeriod") );
 shortcuts.add( UtilMisc.toMap("uri", "accountingTags", "uiLabel", "FinancialsAccountingTags") );
 shortcuts.add( UtilMisc.toMap("uri", "accountingTagsUsage", "uiLabel", "FinancialsAccountingTagUsage") );
 shortcuts.add( UtilMisc.toMap("uri", "configureOrganization", "uiLabel", "FinancialsViewConfiguration") );

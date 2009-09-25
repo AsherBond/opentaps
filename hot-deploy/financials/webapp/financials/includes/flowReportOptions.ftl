@@ -130,7 +130,7 @@ Make sure you call parseReportOptions.bsh so that this form can work.
   <table>
     <tr>
       <td><input type="radio" name="reportDateOption" value="byTimePeriod" onClick="javascript:selectReportDateOption(this)" ${byTimePeriodChecked?default("")}></input></td>
-      <td class="tableheadtext">${uiLabelMap.TimePeriod}</td>
+      <td class="tableheadtext">${uiLabelMap.AccountingTimePeriod}</td>
       <td class="tabletext">
         <select class="selectBox" name="customTimePeriodId" size="1">
           <@listCustomTimePeriods customTimePeriods=customTimePeriods defaultTimePeriodId=customTimePeriodId?default("")/>
