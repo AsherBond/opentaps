@@ -19,12 +19,12 @@
 <#if isEditable?default(false)>
   <#assign editTargetAction = editAction?default("editAgreement")/>
   <#assign changeStatusAction = changeStatusAction?default("changeAgreementStatus")/>
-  <#assign links>
-    <#list statusItems as validStatus>
-      <@displayLink href="changePartnerAgreementStatus?agreementId=${parameters.agreementId}&statusId=${validStatus.statusIdTo}" text=validStatus.get("transitionName") class="subMenuButton"/>
-    </#list>
-    <@displayLink href="editPartnerAgreement?agreementId=${parameters.agreementId}" text="${uiLabelMap.CommonEdit}" class="subMenuButton"/>
-  </#assign>
+  <#assign links = ""/>
+  <#list statusItems as validStatus>
+    <@form name="${validStatus.statusIdTo}Action" url="changePartnerAgreementStatus" agreementId=parameters.agreementId statusId=validStatus.statusIdTo />
+    <#assign links>${links}<@submitFormLink form="${validStatus.statusIdTo}Action" text=validStatus.get("transitionName") class="subMenuButton" /></#assign>
+  </#list>
+  <#assign links>${links}<@displayLink href="editPartnerAgreement?agreementId=${parameters.agreementId}" text=uiLabelMap.CommonEdit class="subMenuButton"/></#assign>
 </#if>
 
 <@sectionHeader title="${agreementTypeDescription?if_exists} ${uiLabelMap.OrderNbr}${parameters.agreementId}">
