@@ -158,7 +158,7 @@ public class PartnerServices {
         try {
             String roleTypeIdTo = PartyHelper.getFirstValidInternalPartyRoleTypeId(partyIdTo, dctx.getDelegator());
             if (roleTypeIdTo == null) {
-                return UtilMessage.createServiceError("CrmsfaError_MissingClientRole", locale, UtilMisc.toMap("partyId", partyIdTo));
+                return UtilMessage.createServiceError("CrmError_MissingClientRole", locale, UtilMisc.toMap("partyId", partyIdTo));
             }
 
             ModelService service = dctx.getModelService("opentaps.createAgreementAndRole");
