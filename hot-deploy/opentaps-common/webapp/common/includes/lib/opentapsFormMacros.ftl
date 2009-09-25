@@ -59,6 +59,7 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 <#macro displayLink href text class="linktext" target="" id="">
+<#compress>
   <#assign idText = id?has_content?string("id=\"" + id + "\"", "")/>
   <#if href?starts_with("/")>
     <a href="${href}<#if externalKeyParam?has_content>${StringUtil.wrapString(externalKeyParam)}</#if>" ${idText} class="${class}" target="${target}">${text}</a>
@@ -67,6 +68,7 @@ For more information, please see documentation/opentapsFormMacros.html
   <#else>
     <a href="<@ofbizUrl>${href}</@ofbizUrl>" ${idText} class="${class}" target="${target}">${text}</a>
   </#if>
+</#compress>
 </#macro>
 
 <#macro displayLinkCell href text class="linktext" blockClass="" target="" id="">
