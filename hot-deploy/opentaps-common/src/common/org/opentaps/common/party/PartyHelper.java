@@ -637,15 +637,14 @@ public final class PartyHelper {
             );
             List<GenericValue> crmRelationships = delegator.findByConditionCache("PartyFromSummaryByRelationship", conditions, Arrays.asList("partyId"), null);
             if (crmRelationships.size() > 0) {
-                uri.append("/crmsfa/control/");
                 if ("PROSPECT".equals(roleTypeId)) {
-                    uri.append("viewLead?");
+                    uri.append("/crmsfa/control/viewLead?");
                 } else if ("ACCOUNT".equals(roleTypeId)) {
-                    uri.append("viewAccount?");
+                    uri.append("/crmsfa/control/viewAccount?");
                 } else if ("CONTACT".equals(roleTypeId)) {
-                    uri.append("viewContact?");
+                    uri.append("/crmsfa/control/viewContact?");
                 } else if ("PARTNER".equals(roleTypeId)) {
-                    uri.append("viewPartner?");
+                    uri.append("/crmsfa/control/viewPartner?");
                 } else {
                     roleTypeId = null; // default to partymgr viewprofile
                 }
