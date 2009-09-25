@@ -36,12 +36,16 @@ import org.opentaps.foundation.infrastructure.InfrastructureException;
 import org.opentaps.foundation.repository.RepositoryException;
 import org.opentaps.warehouse.security.WarehouseSecurity;
 
-public class ShippingEvents {
-    public static final String module = ShippingEvents.class.getName();
+public final class ShippingEvents {
+
+    private static final String MODULE = ShippingEvents.class.getName();
 
     /**
-     * Before run invoice report from warehouse we should ensure invoice is sales invoice and put 
+     * Before run invoice report from warehouse we should ensure invoice is sales invoice and put
      * facility owner party as organization party.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
      */
     public static String checkInvoiceReportPreconditions(HttpServletRequest request, HttpServletResponse response) {
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
@@ -51,30 +55,32 @@ public class ShippingEvents {
         // ensure warehouse invoice view
         String facilityId = UtilCommon.getParameter(request, "facilityId");
         WarehouseSecurity wsecurity = new WarehouseSecurity(security, userLogin, facilityId);
-        if (!wsecurity.hasFacilityPermission("WRHS_INVOICE_VIEW")) 
+        if (!wsecurity.hasFacilityPermission("WRHS_INVOICE_VIEW")) {
             return "error";
+        }
 
-        String invoiceId = UtilCommon.getParameter(request, "invoiceId"); 
+        String invoiceId = UtilCommon.getParameter(request, "invoiceId");
 
         try {
             DomainsLoader dl = new DomainsLoader(request);
             DomainsDirectory directory = dl.loadDomainsDirectory();
             BillingDomainInterface billingDomain = directory.getBillingDomain();
-            InventoryDomainInterface inventoryDomain = directory.getInventoryDomain(); 
+            InventoryDomainInterface inventoryDomain = directory.getInventoryDomain();
 
             Invoice invoice = billingDomain.getInvoiceRepository().getInvoiceById(invoiceId);
-            if (!invoice.isSalesInvoice())
+            if (!invoice.isSalesInvoice()) {
                 return "error";
+            }
 
             Facility facility = inventoryDomain.getInventoryRepository().getFacilityById(facilityId);
             request.getSession().setAttribute("organizationPartyId", facility.getOwnerPartyId());
 
         } catch (EntityNotFoundException e) {
-            UtilMessage.createAndLogEventError(request, e, locale, module);
+            UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         } catch (RepositoryException e) {
-            UtilMessage.createAndLogEventError(request, e, locale, module);
+            UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         } catch (InfrastructureException e) {
-            UtilMessage.createAndLogEventError(request, e, locale, module);
+            UtilMessage.createAndLogEventError(request, e, locale, MODULE);
         }
 
         // all tests pass, so allow view
