@@ -255,8 +255,12 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
         <response name="viewMarketingCampaign" type="request" value="viewMarketingCampaign"/>
         <response name="crmsfaQuickCheckout" type="request" value="crmsfaQuickCheckout"/>
         <response name="createCatalogRequestForm" type="request" value="createCatalogRequestForm"/>
-        <response name="orderview" type="request" value="orderview"/>
-        <response name="ViewQuote" type="request" value="ViewQuote"/>
+        <response name="orderview" type="request-redirect" value="orderview">
+          <redirect-parameter name="orderId"/>
+        </response>
+        <response name="ViewQuote" type="request-redirect" value="ViewQuote">
+          <redirect-parameter name="quoteId"/>
+        </response>
         <response name="newShipGroup" type="request" value="newShipGroup"/>
         <!-- mostly for error redirects -->
         <response name="myProfileEditContactMech" type="request" value="myProfileEditContactMech"/>
