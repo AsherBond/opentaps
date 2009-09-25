@@ -1492,7 +1492,7 @@ Portions of this file came from the Apache OFBIZ Project and have been modified 
     <request-map uri="copyQuote">
         <security https="true" auth="true"/>
         <event type="service" invoke="copyQuote"/>
-        <response name="success" type="request-redirect" value="EditQuote" allowed-attributes="quoteId">
+        <response name="success" type="request-redirect" value="EditQuote">
           <redirect-parameter name="quoteId"/>
         </response>
         <response name="error" type="view" value="EditQuote"/>
