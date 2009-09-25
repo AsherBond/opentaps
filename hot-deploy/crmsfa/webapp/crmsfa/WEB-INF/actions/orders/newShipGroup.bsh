@@ -50,8 +50,7 @@ context.put("orderHeader", orderHeader);
 customerParty = orderReadHelper.getPlacingParty();
 customerPartyId = customerParty.getString("partyId");
 
-// set the customer link and info
-context.put("customerLink", PartyHelper.createViewPageLink(customerPartyId, delegator, externalLoginKey));   
+// set the customer info
 context.put("customerPartyId", customerPartyId);
 context.put("customerParty", customerParty);
 

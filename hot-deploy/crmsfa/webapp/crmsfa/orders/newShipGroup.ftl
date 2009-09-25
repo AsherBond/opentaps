@@ -259,13 +259,15 @@
 
       <table class="fourColumnForm" style="border:0">
         <#-- Customer name (for reference, and link to details page) -->
-        <#if customerLink?has_content>
-          <tr>
+        <tr>
+          <#if customerParty?has_content>
             <@displayTitleCell title=uiLabelMap.CrmCustomer />
-            <td>${customerLink}</td>
-            <td valign="left"><@display text=uiLabelMap.CrmOrderShippingInstructions class="tableheadtext"/></td>
-          </tr>
-        </#if>
+            <@displayPartyLinkCell partyId=customerParty.partyId />
+          <#else>
+            <td colspan="2">&nbsp;</td>
+          </#if>
+          <td valign="left"><@display text=uiLabelMap.CrmOrderShippingInstructions class="tableheadtext"/></td>
+        </tr>
         <#-- Shipping Address -->
         <tr>
           <@displayTitleCell title=uiLabelMap.OpentapsShippingAddress />
