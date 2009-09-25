@@ -18,16 +18,22 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if communicationEvent?exists>
-    <div class="subSectionHeader">
-      <div class="subMenuBar">
-        <a class="subMenuButton" href="<@ofbizUrl>writeEmail?workEffortId=${workEffort.workEffortId}&amp;communicationEventId=${communicationEvent.communicationEventId}&amp;action=reply</@ofbizUrl>">${uiLabelMap.PartyReply}</a>
-        <a class="subMenuButton" href="<@ofbizUrl>writeEmail?workEffortId=${workEffort.workEffortId}&amp;communicationEventId=${communicationEvent.communicationEventId}&amp;action=forward</@ofbizUrl>">${uiLabelMap.OpentapsEmailForward}</a>
-        <#if hasUpdatePermission == true>
-          <#if "TASK_COMPLETED" != workEffort.currentStatusId?default("")>
-            <a class="subMenuButton" href="<@ofbizUrl>updateEmailActivity?workEffortId=${workEffort.workEffortId}&amp;currentStatusId=TASK_COMPLETED</@ofbizUrl>">${uiLabelMap.OpentapsComplete}</a>
-          </#if>
-          <@inputConfirm class="subMenuButtonDangerous" title=uiLabelMap.CrmDeleteEmail href="deleteActivityEmail?communicationEventId=${communicationEvent.communicationEventId}&amp;workEffortId=${workEffort.workEffortId}&amp;delContentDataResource=Y&amp;donePage=${parameters.fromPage?if_exists}" />
+  
+  <@form name="replyEmailAction"    url="writeEmail" workEffortId=workEffort.workEffortId communicationEventId=communicationEvent.communicationEventId action="reply" method="get"/>
+  <@form name="forwardEmailAction"  url="writeEmail" workEffortId=workEffort.workEffortId communicationEventId=communicationEvent.communicationEventId action="forward" method="get"/>
+  <@form name="completeEmailAction" url="updateEmailActivity" workEffortId=workEffort.workEffortId currentStatusId="TASK_COMPLETED" />
+  <@form name="deleteEmailAction"   url="deleteActivityEmail" workEffortId=workEffort.workEffortId communicationEventId=communicationEvent.communicationEventId delContentDataResource="Y" donePage="${parameters.fromPage!}" />
+
+  <div class="subSectionHeader">
+    <div class="subMenuBar">
+      <@submitFormLink form="replyEmailAction" text=uiLabelMap.PartyReply class="subMenuButton" />
+      <@submitFormLink form="forwardEmailAction" text=uiLabelMap.OpentapsEmailForward class="subMenuButton" />
+      <#if hasUpdatePermission == true>
+        <#if "TASK_COMPLETED" != workEffort.currentStatusId?default("")>
+          <@submitFormLink form="completeEmailAction" text=uiLabelMap.OpentapsComplete class="subMenuButton" />
         </#if>
-      </div>
+        <@submitFormLinkConfirm form="deleteEmailAction" text=uiLabelMap.CrmDeleteEmail class="subMenuButtonDangerous" />
+      </#if>
     </div>
+  </div>
 </#if>
