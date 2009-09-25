@@ -56,13 +56,14 @@ public final class UtilAutoComplete {
     public static List<String> AC_PRODUCT_FIELDS = Arrays.asList("productId", "internalName");
     public static List<String> AC_PRODUCT_ORDER_BY = Arrays.asList("productId");
 
-    public static EntityCondition ac_accountRoleCondition, ac_contactRoleCondition, ac_prospectRoleCondition, ac_clientRoleCondition;
+    public static EntityCondition ac_accountRoleCondition, ac_contactRoleCondition, ac_prospectRoleCondition, ac_clientRoleCondition, ac_crmPartyRoleCondition;
     public static EntityCondition ac_accountOrProspectRoleCondition;
     static {
         ac_accountRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "ACCOUNT");
         ac_contactRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "CONTACT");
         ac_prospectRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.EQUALS, "PROSPECT");
         ac_clientRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT"));
+        ac_crmPartyRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER"));
         ac_accountOrProspectRoleCondition = EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, UtilMisc.toList("ACCOUNT", "PROSPECT"));
     }
 

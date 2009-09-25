@@ -505,6 +505,22 @@ For more information, please see documentation/opentapsFormMacros.html
   </tr>
 </#macro>
 
+<#-- auto complete any CRM Party (contact, accout, lead, partner) -->
+<#macro inputAutoCompleteCrmParty name id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <@inputAutoComplete name=name url=url id=id form=form lookup="LookupPartyName" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>
+</#macro>
+
+<#macro inputAutoCompleteCrmPartyCell name id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <td><@inputAutoCompleteCrmParty name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/></td>
+</#macro>
+
+<#macro inputAutoCompleteCrmPartyRow title name titleClass="tableheadtext" id="" url="getAutoCompleteCrmPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
+  <tr>
+    <td class="titleCell"><span class="${titleClass}">${title}</span></td>
+    <@inputAutoCompleteCrmPartyCell name=name id=id url=url styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange />
+  </tr>
+</#macro>
+
 <#-- auto complete Supplier -->
 <#macro inputAutoCompleteSupplier name id="" url="getAutoCompleteSupplierPartyIds" styleClass="inputAutoCompleteQuick" default="" index=-1 size=15 errorField="" tabIndex="" onChange="">
   <@inputAutoComplete name=name url=url id=id form=form lookup="LookupSupplier" styleClass=styleClass default=default index=index size=size errorField=errorField tabIndex=tabIndex onChange=onChange/>

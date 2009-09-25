@@ -159,6 +159,12 @@
         <response name="success" type="none"/>
         <response name="error" type="none"/>
     </request-map>
+    <request-map uri="getAutoCompleteCrmPartyIds">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompleteCrmPartyIds"/>
+        <response name="success" type="none"/>
+        <response name="error" type="none"/>
+    </request-map>
     <request-map uri="getAutoCompletePartyIds">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.autocomplete.AutoComplete" invoke="getAutoCompletePartyIds"/>

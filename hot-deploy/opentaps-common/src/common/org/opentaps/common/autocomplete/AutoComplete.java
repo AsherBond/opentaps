@@ -51,6 +51,20 @@ public final class AutoComplete {
     private static final String MODULE = AutoComplete.class.getName();
 
     /**
+     * Retrieves the auto complete CRM party (any client, lead or partner) IDs with a given keyword.
+     * @param request a <code>HttpServletRequest</code> value
+     * @param response a <code>HttpServletResponse</code> value
+     * @return a <code>String</code> value
+     */
+    public static String getAutoCompleteCrmPartyIds(HttpServletRequest request, HttpServletResponse response) {
+        // get active clients (but can be related to another user)
+        EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
+                                   EntityUtil.getFilterByDateExpr(),
+                                   ac_crmPartyRoleCondition);
+        return autocompletePartyIdsByCondition(condition, "PartyFromSummaryByRelationship", request, response);
+    }
+
+    /**
      * Retrieves the auto complete clients party IDs with a given keyword.
      * @param request a <code>HttpServletRequest</code> value
      * @param response a <code>HttpServletResponse</code> value
