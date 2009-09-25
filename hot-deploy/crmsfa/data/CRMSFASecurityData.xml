@@ -170,6 +170,8 @@
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_QUOTE_CREATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_QUOTE_UPDATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ORDER_VIEW"/>
+    <!-- this permission is required to view the packing slip for orders from CRM order view -->
+    <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="FACILITY_VIEW"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_ORDER_CREATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_RETURN_CREATE"/>
     <SecurityGroupPermission groupId="SALES_MANAGER" permissionId="CRMSFA_RETURN_ACCEPT"/>
@@ -267,6 +269,8 @@
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_QUOTE_CREATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_QUOTE_UPDATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ORDER_VIEW"/>
+    <!-- this permission is required to view the packing slip for orders from CRM order view -->
+    <SecurityGroupPermission groupId="SALES_REP" permissionId="FACILITY_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_ORDER_CREATE"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_INVOICE_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP" permissionId="CRMSFA_MKTG_VIEW"/>
@@ -332,6 +336,8 @@
     <!-- view only sales rep: should only be able to view orders and quotes -->
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_QUOTE_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_ORDER_VIEW"/>
+    <!-- this permission is required to view the packing slip for orders from CRM order view -->
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="FACILITY_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_INVOICE_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_MKTG_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_SURVEY_VIEW"/>
@@ -349,7 +355,7 @@
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_CME_UPDATE"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_CME_DELETE"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_SRC_CREATE"/>
-    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_NOTE"/>
+    <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="PARTYMGR_NOTE"/><!--
     <!-- only view the party's payment methods, not update them -->
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="CRMSFA_PAY_VIEW"/>
     <SecurityGroupPermission groupId="SALES_REP_LIMITED" permissionId="ORDERMGR_CRQ_CREATE"/>
@@ -446,6 +452,8 @@
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_QUOTES_VIEW"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_QUOTE_VIEW"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ORDER_VIEW"/>
+    <!-- this permission is required to view the packing slip for orders from CRM order view -->
+    <SecurityGroupPermission groupId="CSR" permissionId="FACILITY_VIEW"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_INVOICE_VIEW"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_QUOTE_CREATE"/>
     <SecurityGroupPermission groupId="CSR" permissionId="CRMSFA_ORDER_CREATE"/>
