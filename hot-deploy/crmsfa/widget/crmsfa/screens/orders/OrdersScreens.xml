@@ -301,7 +301,7 @@ under the License.
                 <set field="defaultFontFamily" value="DejaVuSans"/>
                 -->
                 <set field="shipmentId" from-field="parameters.shipmentId"/>
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.bsh"/>
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.groovy"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/PackingSlip.bsh"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/includes/macro-setup.bsh"/>
             </actions>
