@@ -146,6 +146,9 @@ applications/content/build.xml
 applications/content/lib/uno/*.jar
 r13341 Adding jars for jasper reports and openoffice (uno)
 
+applications/product/script/org/ofbiz/shipment/picklist/PicklistServices.xml
+- Fix UEL errors in services, see JIRA 2969
+
 Other API Changes
 -----------------
 
