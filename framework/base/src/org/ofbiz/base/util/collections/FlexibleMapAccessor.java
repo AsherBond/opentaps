@@ -161,7 +161,7 @@ public class FlexibleMapAccessor<T> implements Serializable {
         try {
             UelUtil.setValue(base, getExpression(base), value == null ? Object.class : value.getClass(), value);
         } catch (Exception e) {
-            Debug.logInfo("UEL exception while setting value: " + e + ", original = " + this.original, module);
+            Debug.logError("UEL exception while setting value: " + e + ", original = " + this.original, module);
         }
     }
 
