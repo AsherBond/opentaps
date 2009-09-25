@@ -205,7 +205,7 @@ function onItemTypeChanged() {
 
  <#-- Renders buttons for individual terms or empty cells -->
 <#macro RenderButtons agreementTermId="">
-  <#if agreementTermId?if_exists?has_content && isEditable?is_boolean && isEditable == true>
+  <#if agreementTermId?if_exists?has_content && isEditable>
     <td style="width: 70px; text-align: right"><@inputSubmit title="${uiLabelMap.CommonUpdate}"/></td>
     <td style="width: 70px; text-align: right"><@submitFormLinkConfirm form="${removeTermTargetAction}_${agreementId}_${agreementTermId}" text=uiLabelMap.CommonRemove class="buttonDangerous" /></td>
   <#else>
@@ -295,38 +295,27 @@ function onItemTypeChanged() {
     <div class="form">
         <table width="100%">
             <tr>
-                <@displayCell text="${uiLabelMap.CommonType}" blockClass="titleCell" class="tableheadtext"/>
-                <#if agreementType?has_content>
-                    <@displayCell text=agreementType.get("description", locale)/><#else><td>&nbsp;</td></#if>
+                <@displayTitleCell title="${uiLabelMap.CommonType}"/>
+                <#if agreementType?has_content><@displayCell text=agreementType.get("description", locale)/><#else><td>&nbsp;</td></#if>
                 <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
-                <@displayCell text="${uiLabelMap.CommonStatus}" blockClass="titleCell" class="tableheadtext"/>
-                <#if status?has_content>
-                    <@displayCell text=status.get("description", locale)/><#else><td>&nbsp;</td></#if>
+                <@displayTitleCell title="${uiLabelMap.CommonStatus}"/>
+                <#if status?has_content><@displayCell text=status.get("description", locale)/><#else><td>&nbsp;</td></#if>
                 <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
-                <@displayCell text="${uiLabelMap.AccountingFromParty}" blockClass="titleCell" class="tableheadtext"/>
-
-                <#if partyFromURL?has_content>
-                    <@displayLinkCell text="${partyNameFrom?if_exists} (${agreementHeader.partyIdFrom?if_exists})" href="${partyFromURL}"/>
-                <#else>
-                    <@displayCell text="${partyNameFrom?if_exists} (${agreementHeader.partyIdFrom?if_exists})"/>
-                </#if>
+                <@displayTitleCell title="${uiLabelMap.AccountingFromParty}" />
+                <@displayPartyLinkCell partyId=agreementHeader.partyIdFrom/>
 
                 <#if partyNameTo?has_content>
-                    <@displayCell text="${uiLabelMap.AccountingToParty}" blockClass="titleCell" class="tableheadtext"/>
+                    <@displayTitleCell title="${uiLabelMap.AccountingToParty}"/>
                 <#elseif agreementHeader.toPartyClassGroupId?has_content>
-                    <@displayCell text="${uiLabelMap.CommonTo}&nbsp;${uiLabelMap.PartyClassificationGroup}" blockClass="titleCell" class="tableheadtext"/>
+                    <@displayTitleCell title="${uiLabelMap.CommonTo}&nbsp;${uiLabelMap.PartyClassificationGroup}"/>
                 </#if>
                 <td>
                     <#if partyNameTo?has_content>
-                        <#if partyToURL?has_content>
-                            <@displayLink href="${partyToURL}" text="${partyNameTo?if_exists} (${agreementHeader.partyIdTo?if_exists})"/>
-                        <#else>
-                            <@display text="${agreementHeader.partyNameTo?if_exists} (${agreementHeader.partyIdTo?if_exists})"/>
-                        </#if>
+                      <@displayPartyLinkCell partyId=agreementHeader.partyIdTo/>
                     <#elseif agreementHeader.toPartyClassGroupId?has_content>
                         <#if partyClsGroup?has_content>
                             <@display text=partyClsGroup.get("description", locale)/>
@@ -335,13 +324,13 @@ function onItemTypeChanged() {
                 </td>
             </tr>
             <tr>
-                <@displayCell text="${uiLabelMap.CommonFromDate}" blockClass="titleCell" class="tableheadtext"/>
+                <@displayTitleCell title="${uiLabelMap.CommonFromDate}" />
                 <@displayDateCell date=agreementHeader.fromDate?if_exists format="DATE"/>
-                <@displayCell text="${uiLabelMap.CommonThruDate}" blockClass="titleCell" class="tableheadtext"/>
+                <@displayTitleCell title="${uiLabelMap.CommonThruDate}"/>
                 <@displayDateCell date=agreementHeader.thruDate?if_exists format="DATE"/>
             </tr>
             <tr>
-                <@displayCell text="${uiLabelMap.CommonDescription}" blockClass="titleCell" class="tableheadtext"/>
+                <@displayTitleCell title="${uiLabelMap.CommonDescription}"/>
                 <td colspan="3"><@display text=agreementHeader.description/></td>
             </tr>
             <tr><td colspan="4">&nbsp;</td></tr>
@@ -367,7 +356,7 @@ function onItemTypeChanged() {
         <table width="100%">
             <tr>
                 <td>
-                    <textarea rows="15" name="agreementFullText" class="inputBox" style="width: 100%;">${agreementHeader.textData?if_exists}</textarea>
+                    <textarea rows="15" name="agreementFullText" class="inputBox" style="width: 100%;" readonly="readonly">${agreementHeader.textData?if_exists}</textarea>
                 </td>
             </tr>
         </table>
@@ -391,7 +380,7 @@ function onItemTypeChanged() {
        <#assign agreementItemTitle = agreementItemTitle + " " + uiLabelMap.CommonIn + " " + item.get("currencyUomId")/>
     </#if>
     <@sectionHeader title=agreementItemTitle>
-      <#if isEditable?is_boolean && isEditable == true>
+      <#if isEditable>
         <#assign removeItemTargetAction = removeItemAction?default("processRemoveAgreementItem")/>
         <@form name="${removeItemTargetAction}Action" url=removeItemTargetAction agreementId=agreementId agreementItemSeqId=agreementItemSeqId />
         <div class="subMenuBar"><@submitFormLinkConfirm form="${removeItemTargetAction}Action" text=uiLabelMap.CommonRemove class="subMenuButtonDangerous" /></div>
@@ -414,12 +403,10 @@ function onItemTypeChanged() {
         <#assign updateTermTargetAction = updateTermAction?default("processUpdateAgreementTerm")/>
         <#assign removeTermTargetAction = removeTermAction?default("processRemoveAgreementTerm")/>
 
-        <#if isEditable?is_boolean && isEditable == true>
+        <#if isEditable>
           <#-- prepare delete forms -->
           <@form name="${removeTermTargetAction}_${term.agreementId}_${term.agreementTermId}" url=removeTermTargetAction agreementId=term.agreementId agreementTermId=term.agreementTermId />
           <form name="termRowForm_${term.agreementTermId}" method="POST" action="${updateTermTargetAction}">
-        <#else>
-          <#assign isEditable = false />
         </#if>
         <#assign validValues = Static["org.opentaps.common.agreement.UtilAgreement"].getValidFields(term.termTypeId)?default([])/>
         <#assign listSize = validValues.size()/>
@@ -456,38 +443,32 @@ function onItemTypeChanged() {
                                 syntatically this might be optimized just for English: perhaps someone can make it better -->
                   <#if (vvItem == "valueEnumId")>
                     ${enumTitle?if_exists}
-                    <@inputSelect name="${vvItem}" list=enumValues?default([]) key="enumId" default=term.valueEnumId ; option>
+                    <@inputSelect name="${vvItem}" list=enumValues?default([]) key="enumId" default=term.valueEnumId readonly=!isEditable ; option>
                       ${option.get("description", "OpentapsEntityLabels", locale)}
                     </@inputSelect>
                   <#elseif (vvItem == "partyId")>
                     ${uiLabelMap.get("OpentapsAgreementTermName_${vvItem}")}
-                    <input type="text" size="20" maxlength="20" name="partyId" class="inputBox" value="${term.partyId?if_exists}"/>
-                    <a href="javascript:call_fieldlookup2(document.termRowForm_${term.agreementTermId}.partyId,'LookupPartyName');"><img src="/images/fieldlookup.gif" alt="Lookup" border="0" height="16" width="16"></a>
+                    <@inputLookup name="partyId" default="${term.partyId?if_exists}" lookup="LookupPartyName" form="termRowForm_${term.agreementTermId}" size=20 maxlength=20 ignoreParameters=true readonly=!isEditable/>
                   <#elseif (vvItem == "productId")>
                     ${uiLabelMap.get("OpentapsAgreementTermName_${vvItem}")}
-                    <input type="text" size="20" maxlength="20" name="productId" class="inputBox" value="${term.productId?if_exists}"/>
-                    <a href="javascript:call_fieldlookup2(document.termRowForm_${term.agreementTermId}.productId,'LookupProduct');"><img src="/images/fieldlookup.gif" alt="Lookup" border="0" height="16" width="16"></a>
+                    <@inputLookup name="productId" default="${term.productId?if_exists}" lookup="LookupProduct" form="termRowForm_${term.agreementTermId}" size=20 maxlength=20 ignoreParameters=true readonly=!isEditable/>
                   <#elseif (vvItem == "productCategoryId")>
                     ${uiLabelMap.get("OpentapsAgreementTermName_${vvItem}")}
-                    <input type="text" size="20" maxlength="20" name="productCategoryId" class="inputBox" value="${term.productCategoryId?if_exists}"/>
-                    <a href="javascript:call_fieldlookup2(document.termRowForm_${term.agreementTermId}.productCategoryId,'LookupProductCategory');"><img src="/images/fieldlookup.gif" alt="Lookup" border="0" height="16" width="16"></a>
+                    <@inputLookup name="productCategoryId" default="${term.productCategoryId?if_exists}" lookup="LookupProductCategory" form="termRowForm_${term.agreementTermId}" size=20 maxlength=20 ignoreParameters=true readonly=!isEditable/>
                   <#else>
                     <#if (vvItem == "termValue") || (vvItem == "minQuantity") || (vvItem == "maxQuantity") || (vvItem == "roleTypeId")>
                       ${uiLabelMap.get("OpentapsAgreementTermName_${vvItem}")}
                     </#if>
-                    <input name="${vvItem}" type="text" size="${fieldSize}" class="inputBox" value="${term.get(vvItem)?if_exists}" />
+                    <@inputText name="${vvItem}" size="${fieldSize}" default="${term.get(vvItem)?if_exists}" ignoreParameters=true readonly=!isEditable/>
                     <#if vvItem == "termValue" && validValues?seq_contains("currencyUomId")>
                       <#assign currencyDefault = term.get("currencyUomId")?default(parameters.orgCurrencyUomId) />
                       <#if currencyDefault?length == 0>
                         <#assign currencyDefault = Static["org.opentaps.common.util.UtilConfig"].getPropertyValue(opentapsApplicationName?default("opentaps"), "defaultCurrencyUomId")?default("USA") />
                       </#if>
                       <#assign currencies = Static["org.opentaps.common.util.UtilCommon"].getCurrencies(delegator) />
-                      <select name="currencyUomId" class="inputBox">
-                        <#list currencies as option>
-                          <#if option.uomId == currencyDefault><#assign selected = "selected=\"selected\""/><#else/><#assign selected = ""/></#if>
-                          <option ${selected} value="${option.uomId}">${option.abbreviation}</option>
-                        </#list>
-                      </select>
+                      <@inputSelect name="currencyUomId" list=currencies?default([]) key="uomId" default=currencyDefault readonly=!isEditable ; option>
+                        ${option.abbreviation}
+                      </@inputSelect>
                     </#if>
                     <#if (vvItem == "termDays")>
                       ${uiLabelMap.get("OpentapsAgreementTermName_${vvItem}")}
@@ -531,7 +512,7 @@ function onItemTypeChanged() {
 
     <#--  Form to add new agreement term -->
     <#assign listTermTypes = Static["org.opentaps.common.agreement.UtilAgreement"].getTermsByItemType(agreementItemTypeId, agreementId, agreementItemSeqId, delegator)/>
-    <#if hasCreateAgreementPermission && listTermTypes?has_content && isEditable?is_boolean && isEditable == true>
+    <#if hasCreateAgreementPermission && listTermTypes?has_content && isEditable>
     <div class="form">
         <#assign createTermTargetAction = createTermAction?default("processCreateAgreementTerm")/>
         <form name="createAgreementTerm_${agreementItemSeqId}" method="POST" action="<@ofbizUrl>${createTermTargetAction}</@ofbizUrl>">
