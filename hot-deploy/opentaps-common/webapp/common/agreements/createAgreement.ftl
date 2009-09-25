@@ -35,21 +35,21 @@
         <#if roleTypeIdTo?has_content><@inputHidden name="roleTypeIdTo" value=roleTypeIdTo/></#if>
         <table width="100%">
             <tr>
-                <@displayCell text="${uiLabelMap.AccountingAgreementDate}" blockClass="titleCell" class="tableheadtext"/>
+                <@displayTitleCell title="${uiLabelMap.AccountingAgreementDate}"/>
                 <@inputDateTimeCell name="agreementDate" form="createAgreementForm" default=currentTime/>
                 <td colspan="2">&nbsp;</td>
             </tr>
             <tr>
                 <#if !partyIdTo?has_content>
-                    <@displayCell text="${uiLabelMap.AccountingPartyIdTo}" blockClass="titleCell" class="tableheadtext"/>
-                    <@inputLookupCell name="partyIdTo" lookup="LookupPartyName" form="createAgreementForm" size=20/>
+                    <@displayTitleCell title="${uiLabelMap.AccountingPartyIdTo}" titleClass="requiredField"/>
+                    <@inputAutoCompleteCrmPartyCell name="partyIdTo" size=20 />
                     <td colspan="2">&nbsp;</td>
                 <#else>
                     <td colspan="4">&nbsp;</td>
                 </#if>
             </tr>
             <tr>
-                <@displayCell text="${uiLabelMap.CommonFromDate}" blockClass="titleCell" class="tableheadtext"/>
+                <@displayTitleCell title="${uiLabelMap.CommonFromDate}"/>
                 <td>              
                     <@inputDateTime name="fromDate" form="createAgreementForm" default=currentTime/>
                     ${uiLabelMap.CommonThru}
@@ -58,12 +58,12 @@
                 <td cospan="2">&nbsp;</td>
             </tr>
             <tr>
-                <@displayCell text="${uiLabelMap.CommonDescription}" blockClass="titleCell" class="tableheadtext"/>
+                <@displayTitleCell title="${uiLabelMap.CommonDescription}"/>
                 <td colspan="2"><input name="description" type="text" maxlength="255" style="width:100%;" class="inputBox" value=""></td>
                 <td>&nbsp;</td>
             </tr>
             <tr valign="top">
-                <@displayCell text="${uiLabelMap.OpentapsTextData}" blockClass="titleCell" class="tableheadtext"/>
+                <@displayTitleCell title="${uiLabelMap.OpentapsTextData}"/>
                 <td colspan="2"><textarea rows="10" name="textData" class="inputBox" style="width: 100%;"></textarea></td>
                 <td>&nbsp;</td>
             </tr>
