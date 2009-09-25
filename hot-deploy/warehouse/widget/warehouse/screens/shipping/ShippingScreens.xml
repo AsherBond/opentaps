@@ -101,7 +101,7 @@ under the License.
             <actions>
                 <set field="pageTitleLabel" value="WarehouseViewShipment"/>
                 <set field="sectionHeaderUiLabel" value="WarehouseViewShipment"/>  
-                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.groovy"/>A
+                <script location="component://product/webapp/facility/WEB-INF/actions/shipment/ViewShipment.groovy"/>
                 <script location="component://warehouse/webapp/warehouse/WEB-INF/actions/shipping/EditShipmentItems.bsh"/>
                 <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentPackages.groovy"/>
                 <script location="component://product/webapp/facility/WEB-INF/actions/shipment/EditShipmentRouteSegments.groovy"/>
