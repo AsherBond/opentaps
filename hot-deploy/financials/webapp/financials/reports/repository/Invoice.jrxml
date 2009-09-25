@@ -40,7 +40,7 @@
 	<field name="productId" class="java.lang.String"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="quantity" class="java.math.BigDecimal"/>
-	<field name="amount" class="java.lang.Double"/>
+	<field name="amount" class="java.math.BigDecimal"/>
 	<variable name="INVOICE_STATUS_ID" class="java.lang.String">
 		<initialValueExpression><![CDATA[((Invoice)$P{invoice}).getStatusId()]]></initialValueExpression>
 	</variable>
@@ -426,7 +426,7 @@
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[$F{amount}]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{amount}]]></textFieldExpression>
 			</textField>
 			<textField pattern="¤#,##0.00;(¤#,##0.00)" isBlankWhenNull="true">
 				<reportElement key="textField-29" x="440" y="0" width="60" height="16"/>
@@ -437,7 +437,7 @@
 					<rightPen lineWidth="0.0" lineColor="#000000"/>
 				</box>
 				<textElement textAlignment="Right" verticalAlignment="Middle"/>
-				<textFieldExpression class="java.lang.Double"><![CDATA[Double.valueOf($F{quantity}.doubleValue()*$F{amount}.doubleValue())]]></textFieldExpression>
+				<textFieldExpression class="java.math.BigDecimal"><![CDATA[$F{quantity}.multiply($F{amount})]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
