@@ -118,9 +118,14 @@ In order to wrap an ofbiz screen in this application,
                                 <if-has-permission permission="CRMSFA" action="_QUOTES_VIEW"/>
                             </condition>
                             <widgets>
-                                <platform-specific>
-                                    <html><html-template location="component://order/webapp/ordermgr/quote/QuoteTabBar.ftl"/></html>
-                                </platform-specific>
+                                <section>
+                                    <condition>
+                                        <not><if-empty field-name="quote"/></not>
+                                    </condition>
+                                    <widgets>
+                                        <include-menu name="QuoteTabBar" location="component://order/widget/ordermgr/Menus.xml"/>
+                                    </widgets>
+                                </section>
                                 <container>
                                     <label style="head1">${quote.quoteName} (${quote.quoteId})</label>
                                 </container>
@@ -152,9 +157,14 @@ In order to wrap an ofbiz screen in this application,
                                 </and>
                             </condition>
                             <widgets>
-                                <platform-specific>
-                                    <html><html-template location="component://order/webapp/ordermgr/quote/QuoteTabBar.ftl"/></html>
-                                </platform-specific>
+                                <section>
+                                    <condition>
+                                        <not><if-empty field-name="quote"/></not>
+                                    </condition>
+                                    <widgets>
+                                        <include-menu name="QuoteTabBar" location="component://order/widget/ordermgr/Menus.xml"/>
+                                    </widgets>
+                                </section>
                                 <container>
                                     <label style="head1">${quote.quoteName} (${quote.quoteId})</label>
                                 </container>

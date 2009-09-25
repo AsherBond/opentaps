@@ -272,7 +272,7 @@
                                 <label style="boxhead" text="${uiLabelMap.FinancialsConfigureOrganization}"/>
                             </container>
                             <container style="screenlet-body">
-                                <include-form name="PartyAcctgPreference" location="component://accounting/webapp/accounting/admin/AdminForms.xml"/>
+                                <include-form name="PartyAcctgPreference" location="component://accounting/widget/GlSetupForms.xml"/>
                             </container>
                         </container>
                     </decorator-section>
