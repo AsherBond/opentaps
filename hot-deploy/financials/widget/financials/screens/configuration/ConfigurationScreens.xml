@@ -263,6 +263,11 @@
             <actions>			
                 <set field="partyId" from-field="parameters.organizationPartyId"/>
                 <entity-one entity-name="PartyAcctgPreference" value-field="partyAcctgPreference"/>
+                <set field="organizationPartyId" from-field="parameters.organizationPartyId"/>
+                <service service-name="getPartyAccountingPreferences" result-map="result">
+                    <field-map field-name="organizationPartyId"/>
+                </service>
+                <set field="agregatedPartyAcctgPreference" from-field="result.partyAccountingPreference"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-section-decorator">
