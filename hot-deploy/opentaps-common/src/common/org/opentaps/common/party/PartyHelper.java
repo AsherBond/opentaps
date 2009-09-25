@@ -674,6 +674,17 @@ public final class PartyHelper {
      * Retrieves the view url with partyId.
      * @param partyId the party id
      * @param delegator a <code>GenericDelegator</code> value
+     * @return the URL to the view page for the given party
+     * @throws GenericEntityException if an error occurs
+     */
+    public static String createViewPageURL(String partyId, GenericDelegator delegator) throws GenericEntityException {
+        return createViewPageURL(partyId, delegator, null);
+    }
+
+    /**
+     * Retrieves the view url with partyId.
+     * @param partyId the party id
+     * @param delegator a <code>GenericDelegator</code> value
      * @param externalLoginKey the <code>externalLoginKey</code> string to add in the link
      * @return the URL to the view page for the given party
      * @throws GenericEntityException if an error occurs

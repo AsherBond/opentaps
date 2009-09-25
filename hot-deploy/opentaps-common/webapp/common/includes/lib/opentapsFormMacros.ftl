@@ -61,7 +61,7 @@ For more information, please see documentation/opentapsFormMacros.html
 <#macro displayLink href text class="linktext" target="" id="">
   <#assign idText = id?has_content?string("id=\"" + id + "\"", "")/>
   <#if href?starts_with("/")>
-    <a href="${href}${externalKeyParam?if_exists}" ${idText} class="${class}" target="${target}">${text}</a>
+    <a href="${href}<#if externalKeyParam?has_content>${StringUtil.wrapString(externalKeyParam)}</#if>" ${idText} class="${class}" target="${target}">${text}</a>
   <#elseif href?starts_with("javascript:")>
     <a href="${href}" ${idText} class="${class}">${text}</a>
   <#else>
@@ -77,6 +77,32 @@ For more information, please see documentation/opentapsFormMacros.html
 <tr>
   <td class="titleCell"><span class="${titleClass}">${title}</span></td>
   <@displayLinkCell text=text href=href class=class blockClass=blockClass target=target id=id />
+</tr>
+</#macro>
+
+<#-- for linking to a party view page in CRMSFA or party manager -->
+
+<#macro displayPartyLink partyId text="" class="linktext" target="" id="">
+  <#assign idText = id?has_content?string("id=\"" + id + "\"", "")/>
+  <#assign href = Static["org.opentaps.common.party.PartyHelper"].createViewPageURL(partyId, delegator) />
+  <#if href?has_content>
+    <#assign href = StringUtil.wrapString(href) />
+  </#if>
+  <#assign name = text />
+  <#if !name?has_content>
+    <#assign name = Static["org.opentaps.common.party.PartyHelper"].getCrmsfaPartyName(partyId, delegator) />
+  </#if>
+  <@displayLink text=name href=href class=class target=target id=id />
+</#macro>
+
+<#macro displayPartyLinkCell partyId text="" class="linktext" blockClass="" target="" id="">
+  <td class="${blockClass}"><@displayPartyLink text=text partyId=partyId class=class target=target id=id /></td>
+</#macro>
+
+<#macro displayPartyLinkRow partyId title text="" class="linktext" blockClass="" titleClass="tableheadtext" target="" id="">
+<tr>
+  <td class="titleCell"><span class="${titleClass}">${title}</span></td>
+  <@displayPartyLinkCell text=text partyId=partyId class=class blockClass=blockClass target=target id=id />
 </tr>
 </#macro>
 
