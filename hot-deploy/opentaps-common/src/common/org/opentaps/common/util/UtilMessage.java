@@ -350,6 +350,20 @@ public final class UtilMessage {
      * Adds a <b>simple</b> error message to <b>toplevel</b> and logs it at level ERROR.
      * Returns "error" as a convenience.
      * @param request a <code>HttpServletRequest</code> value
+     * @param message the error message
+     * @param module a <code>String</code> value, normally the name of class where the error occurred
+     * @return the event error string which tell the framework that an error occurred, ie: "error"
+     */
+    public static String createAndLogEventError(HttpServletRequest request, String message, String module) {
+        Debug.log(Debug.ERROR, null, message, module, MODULE);
+        addToplevelOpentapsError(request, message);
+        return EVENT_ERROR;
+    }
+
+    /**
+     * Adds a <b>simple</b> error message to <b>toplevel</b> and logs it at level ERROR.
+     * Returns "error" as a convenience.
+     * @param request a <code>HttpServletRequest</code> value
      * @param label the label to expand
      * @param locale a <code>Locale</code> value
      * @param module a <code>String</code> value, normally the name of class where the error occurred
