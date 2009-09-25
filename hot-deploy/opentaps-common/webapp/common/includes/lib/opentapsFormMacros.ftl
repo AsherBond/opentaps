@@ -327,11 +327,11 @@ For more information, please see documentation/opentapsFormMacros.html
  </tr>
 </#macro>
 
-<#macro inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="">
+<#macro inputSelect name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false>
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
     <#if !required><option value="">${defaultOptionText}</option></#if>
     <#list list as option>
       <#if option.get(listKey) == defaultValue || listKey == defaultValue><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
@@ -343,12 +343,12 @@ For more information, please see documentation/opentapsFormMacros.html
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputSelectCell name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="">
+<#macro inputSelectCell name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false>
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
   <td>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
     <#if !required><option value="">${defaultOptionText}</option></#if>
     <#list list as option>
       <#if option.get(listKey) == defaultValue || listKey == defaultValue><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
@@ -361,14 +361,14 @@ For more information, please see documentation/opentapsFormMacros.html
   </td>
 </#macro>
 
-<#macro inputSelectRow title name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" titleClass="tableheadtext" onChange="" id="" ignoreParameters=false errorField="" tabIndex="">
+<#macro inputSelectRow title name list key="" displayField="" default="" index=-1 required=true defaultOptionText="" titleClass="tableheadtext" onChange="" id="" ignoreParameters=false errorField="" tabIndex="" readonly=false>
   <#if key == ""><#assign listKey = name><#else><#assign listKey = key></#if>
   <#if id == ""><#assign idVal = name><#else><#assign idVal = id></#if>
   <#assign defaultValue = getDefaultValue(name, default, index, ignoreParameters)>
   <tr>
   <td class="titleCell"><span class="${titleClass}">${title}</span></td>
   <td>
-  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>>
+  <select id="${getIndexedName(idVal, index)}" name="${getIndexedName(name, index)}" class="inputBox" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>disabled="disabled"</#if>>
     <#if !required><option value="">${defaultOptionText}</option></#if>
     <#list list as option>
       <#if option.get(listKey) == defaultValue || listKey == defaultValue><#assign selected = "selected=\"selected\""><#else><#assign selected = ""></#if>
@@ -432,21 +432,23 @@ For more information, please see documentation/opentapsFormMacros.html
 </#macro>
 
 
-<#macro inputLookup name lookup form default="" size=20 maxlength=20 index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="">
-  <#assign indexedName = getIndexedName(name, index)>
-  <input type="text" size="${size}" maxlength="${maxlength}" name="${indexedName}" class="inputBox" value="${getDefaultValue(name, default, index, ignoreParameters)}" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if>/>
-  <a href="javascript:call_fieldlookup2(document.${form}.${indexedName},'${lookup}');"><img src="/images/fieldlookup.gif" alt="Lookup" border="0" height="14" width="15"></a>
+<#macro inputLookup name lookup form default="" size=20 maxlength=20 index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="" readonly=false>
+  <#assign indexedName = getIndexedName(name, index)/>
+  <input type="text" size="${size}" maxlength="${maxlength}" name="${indexedName}" class="inputBox" value="${getDefaultValue(name, default, index, ignoreParameters)}" onChange="${onChange}" <#if tabIndex?has_content>tabindex="${tabIndex}"</#if> <#if readonly>readonly="readonly"</#if>/>
+  <#if !readonly>
+    <a href="javascript:call_fieldlookup2(document.${form}.${indexedName},'${lookup}');"><img src="/images/fieldlookup.gif" alt="Lookup" border="0" height="14" width="15"></a>
+  </#if>
   <#if errorField?has_content><@displayError name=errorField index=index /></#if>
 </#macro>
 
-<#macro inputLookupCell name lookup form default="" size=20 maxlength=20 index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="">
-<td nowrap="nowrap"><@inputLookup name=name lookup=lookup form=form default=default size=size maxlength=maxlength index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex /></td>
+<#macro inputLookupCell name lookup form default="" size=20 maxlength=20 index=-1 onChange="" ignoreParameters=false errorField="" tabIndex="" readonly=false>
+<td nowrap="nowrap"><@inputLookup name=name lookup=lookup form=form default=default size=size maxlength=maxlength index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex readonly=readonly/></td>
 </#macro>
 
-<#macro inputLookupRow name title lookup form size=20 maxlength=20 default="" titleClass="tableheadtext" onChange="" ignoreParameters=false errorField="" tabIndex="">
+<#macro inputLookupRow name title lookup form size=20 maxlength=20 default="" titleClass="tableheadtext" onChange="" ignoreParameters=false errorField="" tabIndex="" readonly=false>
   <tr>
     <td class="titleCell"><span class="${titleClass}">${title}</span></td>
-    <@inputLookupCell name=name lookup=lookup form=form default=default size=size maxlength=maxlength index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex />
+    <@inputLookupCell name=name lookup=lookup form=form default=default size=size maxlength=maxlength index=index onChange=onChange ignoreParameters=ignoreParameters errorField=errorField tabIndex=tabIndex readonly=readonly/>
   </tr>
 </#macro>
 
