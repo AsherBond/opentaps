@@ -15,6 +15,8 @@ import org.opentaps.common.util.UtilCommon;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -51,7 +53,7 @@ public class InventoryEvents {
             String productId = inventoryItem.getString("productId");
             if (UtilValidate.isEmpty(productId)) return false;
 
-            Double quantity = inventoryItem.getDouble("quantityOnHandTotal");
+            BigDecimal quantity = inventoryItem.getBigDecimal("quantityOnHandTotal");
             if (UtilValidate.isEmpty(quantity)) return false;
             
             Map serviceResult = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", productId, "facilityId", inventoryTransfer.getString("facilityId"), "userLogin", userLogin));
@@ -60,8 +62,8 @@ public class InventoryEvents {
                 Debug.logError(ServiceUtil.getErrorMessage(serviceResult), module);
                 return true;
             }
-            Double quantityOnHandTotal = (Double) serviceResult.get("quantityOnHandTotal");
-            if ((UtilValidate.isNotEmpty(quantityOnHandTotal)) && quantityOnHandTotal.doubleValue() - quantity.doubleValue() < 0) {
+            BigDecimal quantityOnHandTotal = (BigDecimal) serviceResult.get("quantityOnHandTotal");
+            if ((UtilValidate.isNotEmpty(quantityOnHandTotal)) && quantityOnHandTotal.compareTo(quantity) < 0 /* quantityOnHandTotal < quantity */) {
                 UtilMessage.addError(request, "WarehouseErrorInventoryItemProductQOHUnderZero", UtilMisc.toMap("productId", productId));
                 return true;
             }
