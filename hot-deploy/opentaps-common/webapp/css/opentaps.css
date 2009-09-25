@@ -211,7 +211,7 @@ div.sectionHeaderTitle span {
     padding-right: 6px;
     padding-bottom: 1px;
     font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
-    color: #AA0000;
+    color: #AA0000 !important;
     background-color: white;
     border: 1px solid #AAAAAA;
     white-space: nowrap;
@@ -226,9 +226,9 @@ div.sectionHeaderTitle span {
     text-decoration: none;
 }
 .buttonDangerous:hover {
-    color: white;
+    color: white !important;
     background-color: red;
-    text-decoration: none;
+    text-decoration: none !important;
 }
 .subMenuButtonText {
     font: bold 8pt Verdana, Arial, Helvetica, sans-serif;
