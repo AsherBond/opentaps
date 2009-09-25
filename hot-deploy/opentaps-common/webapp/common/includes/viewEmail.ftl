@@ -27,7 +27,7 @@
     <span class="formInputSpanBig">
       <#if roleList?has_content>
         <#list roleList as role>
-            ${Static["com.opensourcestrategies.crmsfa.party.PartyHelper"].createViewPageLink(role.partyId, delegator, externalLoginKey)}
+            <@displayPartyLink partyId=role.partyId />
             <#if role.contactMechId?exists && role.contactMechId?has_content>
                 <#assign infoString = role.getRelatedOne("ContactMech").get("infoString")/>
                 &lt;${infoString}&gt; <#-- This is the standard convention for email addresses -->
@@ -83,11 +83,11 @@
   <div class="formRow">
     <span class="formFullRowText">
     <#if (communicationEvent.contentMimeTypeId?has_content) && (communicationEvent.contentMimeTypeId == "text/plain")>
-    <textarea class="inputBox" cols="100" rows="20" readonly>${communicationEvent.content?if_exists}</textarea>
+    <textarea class="inputBox" cols="100" rows="20" readonly="readonly">${communicationEvent.content?if_exists}</textarea>
     <#else>
     <#-- wrap html emails around a little box -->
     <div style="white-space:normal">
-    ${communicationEvent.content?if_exists}
+    <#if communicationEvent.content?has_content>${StringUtil.wrapString(communicationEvent.content)}</#if>
     </div>
     </#if>
     </span>
