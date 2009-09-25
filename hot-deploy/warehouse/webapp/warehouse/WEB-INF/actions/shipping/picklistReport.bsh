@@ -19,6 +19,7 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.party.party.PartyHelper;
 import org.opentaps.common.order.UtilOrder;
+import org.opentaps.warehouse.security.WarehouseSecurity;
 
 facilityId = parameters.get("facilityId");
 if (UtilValidate.isEmpty(facilityId)) {
