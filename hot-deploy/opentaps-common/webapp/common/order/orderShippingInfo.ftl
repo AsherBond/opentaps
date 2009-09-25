@@ -41,6 +41,7 @@ under the License.
 
 <#if order.shipGroups?has_content>
   <script type="text/javascript">
+  /*<![CDATA[*/
     function showOrHideEditAddressButton(/*String*/ shipGroupSeqId) {
       // get the button
       var editAddressButton = document.getElementById('editContactMechButton_' + shipGroupSeqId);
@@ -96,6 +97,7 @@ under the License.
       location.href = url;
       return false;
     }
+  /*]]>*/
   </script>
   
   <div class="screenlet">
@@ -254,8 +256,9 @@ under the License.
               <div class="tabletext">
                 <#if shipGroup.maySplit?upper_case == "N">
                   ${uiLabelMap.FacilityWaitEntireOrderReady}
-                  <#if security.hasEntityPermission("ORDERMGR", "_UPDATE", session)>
-                    <#if !order.isCancelled() && !order.isCompleted()><a href="<@ofbizUrl>allowordersplit?shipGroupSeqId=${shipGroup.shipGroupSeqId}&amp;${paramString}</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderAllowSplit}</a></#if>
+                  <#if security.hasEntityPermission("ORDERMGR", "_UPDATE", session) && !order.isCancelled() && !order.isCompleted()>
+                    <@submitFormLink form="allowSplitOrderAction" text=uiLabelMap.OrderAllowSplit />
+                    <@form name="allowSplitOrderAction" url="allowordersplit" orderId=order.orderId shipGroupSeqId=shipGroup.shipGroupSeqId />
                   </#if>
                 <#else/>
                   ${uiLabelMap.FacilityShipAvailable}
