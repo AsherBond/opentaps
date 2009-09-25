@@ -414,7 +414,11 @@ under the License.
     <request-map uri="createPhysicalVariances">
         <security https="true" auth="true"/>
         <event type="service-multi" path="" invoke="adjustInventoryQuantity"/>
-        <response name="success" type="request-redirect" value="physicalInventory"/>
+        <response name="success" type="request-redirect" value="physicalInventory">
+             <redirect-parameter name="facilityId"/>
+             <redirect-parameter name="productId"/>
+             <redirect-parameter name="internalName"/>
+        </response>
         <response name="error" type="view" value="physicalInventory"/>
     </request-map>
 

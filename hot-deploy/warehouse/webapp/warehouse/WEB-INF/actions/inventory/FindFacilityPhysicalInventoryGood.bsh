@@ -44,10 +44,16 @@ conditions = UtilMisc.toList(
 if (UtilValidate.isNotEmpty(productId)) {
     productId = productId.trim();
     conditions.add( new EntityExpr("productId", EntityOperator.LIKE, productId + "%") );
+} else {
+	// so we don't pass a null to the paginate macro in the FTL
+	productId = "";
 }
 if (UtilValidate.isNotEmpty(internalName)) {
     internalName = internalName.trim();
     conditions.add( new EntityExpr("internalName", true, EntityOperator.LIKE, internalName + "%", true) );
+} else {
+	// so we don't pass a null to the paginate macro in the FTL
+	internalName = "";
 }
 
 // pass the parameters for the FTL
