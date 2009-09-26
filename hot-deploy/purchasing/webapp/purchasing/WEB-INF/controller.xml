@@ -711,13 +711,17 @@
     <request-map uri="processUpdateAgreement">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreement"/>
-        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+            <redirect-parameter name="agreementId"/>
+        </response> 
         <response name="error" type="view" value="editAgreement"/>
     </request-map>
     <request-map uri="changeAgreementStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreement"/>
-        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+            <redirect-parameter name="agreementId"/>
+        </response> 
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processCreateAgreement">
@@ -729,37 +733,49 @@
     <request-map uri="initialAgreementItemsAndTerms">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+            <redirect-parameter name="agreementId"/>
+        </response> 
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processCreateAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
-        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+            <redirect-parameter name="agreementId"/>
+        </response> 
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processRemoveAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeAgreementItemAndTerms"/>
-        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+            <redirect-parameter name="agreementId"/>
+        </response> 
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processCreateAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="createAgreementTerm"/>
-        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+            <redirect-parameter name="agreementId"/>
+        </response>        
         <response name="error" type="view" value="createAgreementTerm"/>
     </request-map>
     <request-map uri="processUpdateAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreementTerm"/>
-        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+            <redirect-parameter name="agreementId"/>
+        </response> 
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="processRemoveAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteAgreementTerm"/>
-        <response name="success" type="request-redirect" value="viewAgreement"/>
+        <response name="success" type="request-redirect" value="viewAgreement">
+            <redirect-parameter name="agreementId"/>
+        </response> 
         <response name="error" type="view" value="viewAgreement"/>
     </request-map>
     <request-map uri="createSupplierTaxAuthInfo">
