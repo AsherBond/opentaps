@@ -22,10 +22,10 @@ function updateShoppingListItemQuantity(/*String*/ shoppingListId, /*String*/ sh
     var quantityField = document.getElementById(fieldId);
     if (!quantityField) return;
     var qty = quantityField.value;
-    updateShoppingListItemQuantityForm.shoppingListId.value = shoppingListId;
-    updateShoppingListItemQuantityForm.shoppingListItemSeqId.value = shoppingListItemSeqId;
-    updateShoppingListItemQuantityForm.quantity.value = (qty ? qty : '0');
-    updateShoppingListItemQuantityForm.submit();
+    document.updateShoppingListItemQuantityForm.shoppingListId.value = shoppingListId;
+    document.updateShoppingListItemQuantityForm.shoppingListItemSeqId.value = shoppingListItemSeqId;
+    document.updateShoppingListItemQuantityForm.quantity.value = (qty ? qty : '0');
+    document.updateShoppingListItemQuantityForm.submit();
 }
 </script>
 
