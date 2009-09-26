@@ -22,7 +22,10 @@ function updateShoppingListItemQuantity(/*String*/ shoppingListId, /*String*/ sh
     var quantityField = document.getElementById(fieldId);
     if (!quantityField) return;
     var qty = quantityField.value;
-    window.location = 'updateShoppingListItem?shoppingListId='+shoppingListId + '&shoppingListItemSeqId=' + shoppingListItemSeqId + '&quantity=' + (qty ? qty : '0');
+    updateShoppingListItemQuantityForm.shoppingListId.value = shoppingListId;
+    updateShoppingListItemQuantityForm.shoppingListItemSeqId.value = shoppingListItemSeqId;
+    updateShoppingListItemQuantityForm.quantity.value = (qty ? qty : '0');
+    updateShoppingListItemQuantityForm.submit();
 }
 </script>
 
@@ -41,7 +44,7 @@ function updateShoppingListItemQuantity(/*String*/ shoppingListId, /*String*/ sh
         <@displayRow title=uiLabelMap.CommonDescription text=shoppingListDetails.description?if_exists/>
     </table>
 </div>
-
+<@form name="updateShoppingListItemQuantityForm" url="updateShoppingListItem" shoppingListId="" shoppingListItemSeqId="" quantity="" />
 <div class="subSectionBlock">
     <@sectionHeader title=uiLabelMap.EcommerceListItems/>
 
