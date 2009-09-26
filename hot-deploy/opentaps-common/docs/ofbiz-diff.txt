@@ -195,3 +195,6 @@ TODO: it should patch back to ofbiz
 applications/manufacturing/src/org/ofbiz/manufacturing/jobshopmgt/ProductionRunServices.java
 r13138 change return parameters estimatedSetupMillis/estimatedMilliSeconds to fix service define (Double -> BigDecimal)
 TODO: it should patch back to ofbiz
+
+applications/order/data/OrderTypeData.xml
+r13468 comment the quote status item and status valid change for the it conflict with our code
