@@ -13,7 +13,21 @@
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
 -->
+<script type="text/javascript">
 
+/*
+   Function prepares parameters and sends request for setQuoteItemOption.
+*/
+function setFinalizeQuoteItemOption(/*String*/ quoteId, /*String*/ quoteItemSeqId, /*String*/ quoteItemOptionSeqId) {
+	document.processingQuoteItemOptionForm.action = "setFinalizeQuoteItemOption";
+    document.processingQuoteItemOptionForm.quoteId.value = quoteId;
+    document.processingQuoteItemOptionForm.quoteItemSeqId.value = quoteItemSeqId;
+    document.processingQuoteItemOptionForm.quoteItemOptionSeqId.value = quoteItemOptionSeqId;
+    document.processingQuoteItemOptionForm.submit();
+}
+
+
+</script>
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#if quote?exists>
@@ -22,6 +36,8 @@
   <div class="screenlet-header">
     <div class="boxhead">${uiLabelMap.OrderOrderQuoteItems}</div>
   </div>
+  <!-- add for javascript function setFinalizeQuoteItemOption -->
+  <@form name="processingQuoteItemOptionForm" url="" quoteId="" quoteItemSeqId="" quoteItemOptionSeqId="" />
   <div class="screenlet-body">
     <table width="100%" border="0" cellpadding="0">
       <tr align="left" valign="bottom">
@@ -95,7 +111,7 @@
             <td align="right" valign="top"><div class="tabletext"><@ofbizCurrency amount=totalQuoteItemAdjustmentAmount isoCode=quote.currencyUomId/></div></td>
             <td align="right" valign="top"><div class="tabletext"><@ofbizCurrency amount=totalOptionAmount isoCode=quote.currencyUomId/></div></td>
             <#if canEditQuote>
-              <@displayLinkCell text=uiLabelMap.OpentapsChoose href="setFinalizeQuoteItemOption?quoteId=${option.quoteId}&amp;quoteItemSeqId=${option.quoteItemSeqId}&amp;quoteItemOptionSeqId=${option.quoteItemOptionSeqId}" class="buttontext"/>
+              <@displayLinkCell text=uiLabelMap.OpentapsChoose href="javascript:setFinalizeQuoteItemOption('${option.quoteId}','${option.quoteItemSeqId}','${option.quoteItemOptionSeqId}');" class="buttontext" />
             </#if>
           </tr>
         </#list>
@@ -150,7 +166,9 @@
         <tr><td colspan="4"></td><td colspan="2"><hr class="sepbar"/></td></tr>
         <tr>
           <td align="right" colspan="5"/>
-          <td align="right"><@displayLink text=uiLabelMap.OrderCreateOrder href="finalizeQuoteStatus?quoteId=${quote.quoteId}&amp;statusId=QUO_FINALIZED&amp;finalizeMode=init" class="buttontext"/></td>
+          <td align="right">
+          <@form name="finalizeQuoteStatusForm" url="finalizeQuoteStatus" quoteId="${quote.quoteId}" statusId="QUO_FINALIZED" finalizeMode="init"/>
+          <@submitFormLink form="finalizeQuoteStatusForm" text=uiLabelMap.OrderCreateOrder/> 
         </tr>
       </#if>
 
