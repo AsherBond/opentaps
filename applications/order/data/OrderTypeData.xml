@@ -239,6 +239,8 @@ under the License.
     <StatusValidChange condition="" statusId="REQ_APPROVED" statusIdTo="REQ_REJECTED" transitionName="Reject Requirement"/>
 
     <!-- Quote statuses -->
+    <!-- These lines conflict with opentaps codes, so comment them here -->
+    <!--
     <StatusType description="Quote Status" hasTable="N" parentTypeId="" statusTypeId="QUOTE_STATUS"/>
     <StatusItem description="Created" sequenceId="01" statusCode="CREATED" statusId="QUO_CREATED" statusTypeId="QUOTE_STATUS"/>
     <StatusItem description="Approved" sequenceId="02" statusCode="APPROVED" statusId="QUO_APPROVED" statusTypeId="QUOTE_STATUS"/>
@@ -248,7 +250,7 @@ under the License.
     <StatusValidChange condition="" statusId="QUO_CREATED" statusIdTo="QUO_REJECTED" transitionName="Reject Quote"/>
     <StatusValidChange condition="" statusId="QUO_APPROVED" statusIdTo="QUO_ORDERED" transitionName="Order Quote"/>
     <StatusValidChange condition="" statusId="QUO_APPROVED" statusIdTo="QUO_REJECTED" transitionName="Reject Quote"/>
-
+	-->
     <!-- Return Adjustment Types-->
     <ReturnAdjustmentType description="Return Promotion" hasTable="N" returnAdjustmentTypeId="RET_PROMOTION_ADJ" parentTypeId=""/>
     <ReturnAdjustmentType description="Return Replacement" hasTable="N" returnAdjustmentTypeId="RET_REPLACE_ADJ" parentTypeId=""/>
