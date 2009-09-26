@@ -71,9 +71,9 @@ function updateShoppingListItemQuantity(/*String*/ shoppingListId, /*String*/ sh
               <td>
                   <input id="quantity_${row_index}" name="quantity_${row_index}" type="text" size="5" class="inputBox" value="${row.quantity?default(0)}">
               </td>
+              <@form name="removeShoppingListItemForm_${row_index}" url="removeShoppingListItem" shoppingListId="${row.shoppingListId}" shoppingListItemSeqId="${row.shoppingListItemSeqId}"/>
               <td class="alignRight" style="width: 140px;">
                   <@displayLink text=uiLabelMap.CommonUpdate href="javascript: updateShoppingListItemQuantity('${row.shoppingListId}', '${row.shoppingListItemSeqId}', 'quantity_${row_index}');" class="buttontext"/>
-                  <@form name="removeShoppingListItemForm_${row_index}" url="removeShoppingListItem" shoppingListId="${row.shoppingListId}" shoppingListItemSeqId="${row.shoppingListItemSeqId}"/>
                   <@submitFormLinkConfirm form="removeShoppingListItemForm_${row_index}" text=uiLabelMap.CommonRemove/> 
               </td>
             </tr>
