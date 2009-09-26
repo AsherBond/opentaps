@@ -70,7 +70,8 @@ function updateShoppingListItemQuantity(/*String*/ shoppingListId, /*String*/ sh
               </td>
               <td class="alignRight" style="width: 140px;">
                   <@displayLink text=uiLabelMap.CommonUpdate href="javascript: updateShoppingListItemQuantity('${row.shoppingListId}', '${row.shoppingListItemSeqId}', 'quantity_${row_index}');" class="buttontext"/>
-                  <@inputConfirm title=uiLabelMap.CommonRemove href="removeShoppingListItem?shoppingListId=${row.shoppingListId}&shoppingListItemSeqId=${row.shoppingListItemSeqId}"/>
+                  <@form name="removeShoppingListItemForm_${row_index}" url="removeShoppingListItem" shoppingListId="${row.shoppingListId}" shoppingListItemSeqId="${row.shoppingListItemSeqId}"/>
+                  <@submitFormLinkConfirm form="removeShoppingListItemForm_${row_index}" text=uiLabelMap.CommonRemove/> 
               </td>
             </tr>
         </#list>
