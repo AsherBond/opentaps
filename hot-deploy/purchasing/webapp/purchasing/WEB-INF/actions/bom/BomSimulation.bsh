@@ -42,6 +42,7 @@ import java.util.Iterator;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.opentaps.common.manufacturing.bom.BomNode;
+import org.ofbiz.service.GenericServiceException;
 
 // populate options for the productAssocTypeId select, ie: MANUF_COMPONENT, ENGINEER_COMPONENT ...
 Collection assocTypes = delegator.findByAnd("ProductAssocType", UtilMisc.toMap("parentTypeId", "PRODUCT_COMPONENT"), UtilMisc.toList("productAssocTypeId", "description"));
@@ -66,12 +67,12 @@ if (tree != null) {
     context.put("tree", treeArray);
     Iterator treeQtyIt = treeQty.values().iterator();
     List productsData = new ArrayList();
-    Double grandTotalCost = 0;
+    BigDecimal grandTotalCost = new BigDecimal("0.0");
     while (treeQtyIt.hasNext()) {
         BomNode node = treeQtyIt.next();
-        Double unitCost = null;
-        Double totalCost = null;
-        Double qoh = null;
+        BigDecimal unitCost = null;
+        BigDecimal totalCost = null;
+        BigDecimal qoh = null;
         // The standard cost is retrieved
         try {
             Map outMap = null;
@@ -80,15 +81,15 @@ if (tree != null) {
                                                                              "currencyUomId", currencyUomId,
                                                                              "costComponentTypePrefix", "EST_STD",
                                                                              "userLogin", userLogin));
-                unitCost = (Double) outMap.get("productCost");
-                totalCost = unitCost * node.getQuantity();
-                grandTotalCost += totalCost;
+                unitCost = (BigDecimal) outMap.get("productCost");
+                totalCost = unitCost.multiply(node.getQuantity());
+                grandTotalCost = grandTotalCost.add(totalCost);
             }
             if (UtilValidate.isNotEmpty(facilityId)) {
                 outMap = dispatcher.runSync("getInventoryAvailableByFacility", UtilMisc.toMap("productId", node.getProduct().getString("productId"),
                                                                                               "facilityId", facilityId,
                                                                                               "userLogin", userLogin));
-                qoh = (Double) outMap.get("quantityOnHandTotal");
+                qoh = (BigDecimal) outMap.get("quantityOnHandTotal");
             }
         } catch (GenericServiceException gse) {}
         productsData.add(UtilMisc.toMap("node", node, "unitCost", unitCost, "totalCost", totalCost, "qoh", qoh));
