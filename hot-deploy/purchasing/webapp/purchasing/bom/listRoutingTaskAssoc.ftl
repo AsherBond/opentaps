@@ -35,7 +35,10 @@
         <@displayCell text=routingTask.thruDate />
         <@displayCell text=routingTask.workEffortToSetup />
         <@displayCell text=routingTask.workEffortToRun />
-        <@displayLinkCell text=uiLabelMap.CommonDelete href="RemoveRoutingTaskAssoc?workEffortId=${routingTask.workEffortIdFrom}&workEffortIdFrom=${routingTask.workEffortIdFrom}&workEffortIdTo=${routingTask.workEffortIdTo}&fromDate=${routingTask.fromDate}&workEffortAssocTypeId=${routingTask.workEffortAssocTypeId}" class="buttontext"/>
+        <@form name="removeRoutingTaskAssocForm_${routingTask_index}" url="RemoveRoutingTaskAssoc" workEffortId="${routingTask.workEffortIdFrom}" workEffortIdFrom="${routingTask.workEffortIdFrom}" workEffortIdTo="${routingTask.workEffortIdTo}" fromDate="${routingTask.fromDate}" workEffortAssocTypeId="${routingTask.workEffortAssocTypeId}"/>
+        <td>
+        <@submitFormLink form="removeRoutingTaskAssocForm_${routingTask_index}" text="${uiLabelMap.CommonDelete}" class="buttontext"/>
+        </td>
       </tr>
     </#list>
   </table>

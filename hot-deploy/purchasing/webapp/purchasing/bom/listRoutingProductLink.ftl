@@ -39,7 +39,10 @@
         <@displayCell text=productLink.maxQuantity />
         <@displayCell text=productLink.estimatedCost />
         <@displayLinkCell text=uiLabelMap.CommonEdit href="EditRoutingProductLink?workEffortId=${productLink.workEffortId}&productId=${productLink.productId}&fromDate=${productLink.fromDate}&workEffortGoodStdTypeId=${productLink.workEffortGoodStdTypeId}" class="buttontext"/>
-        <@displayLinkCell text=uiLabelMap.CommonDelete href="removeRoutingProductLink?workEffortId=${productLink.workEffortId}&productId=${productLink.productId}&fromDate=${productLink.fromDate}&workEffortGoodStdTypeId=${productLink.workEffortGoodStdTypeId}" class="buttontext"/>
+        <@form name="removeRoutingProductLinkForm_${productLink_index}" url="removeRoutingProductLink" workEffortId="${productLink.workEffortId}" productId="${productLink.productId}" fromDate="${productLink.fromDate}" workEffortGoodStdTypeId="${productLink.workEffortGoodStdTypeId}"/>
+        <td>
+        <@submitFormLink form="removeRoutingProductLinkForm_${productLink_index}" text="${uiLabelMap.CommonDelete}" class="buttontext"/>
+        </td>
       </tr>
     </#list>
   </table>
