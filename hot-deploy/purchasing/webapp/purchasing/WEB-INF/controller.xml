@@ -138,7 +138,9 @@
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.event.CommonEvents" invoke="donePageRequestHelper"/>
         <response name="myProfile" type="view" value="myProfile"/>
-        <response name="viewSupplier" type="request-redirect" value="viewSupplier"/>
+        <response name="viewSupplier" type="request-redirect" value="viewSupplier">
+          <redirect-parameter name="partyId"/>
+        </response>        
         <!-- mostly for error redirects -->
         <response name="myProfileEditContactMech" type="request" value="myProfileEditContactMech"/>
         <!-- default -->
