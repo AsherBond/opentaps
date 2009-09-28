@@ -35,7 +35,23 @@ under the License.
 <#-- This file has been modified by Open Source Strategies, Inc. -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
-
+<script type="text/javascript">
+  function cancelOrderItem(orderItemSeqId, shipGroupSeqId) {
+    document.cancelOrderItemForm.orderItemSeqId.value = orderItemSeqId;
+    document.cancelOrderItemForm.shipGroupSeqId.value = shipGroupSeqId;
+    document.cancelOrderItemForm.submit();
+  }
+  
+  function updateOrderAdjustment(form) {
+    form.action = "updateOrderAdjustment";
+    form.submit();
+  }
+  
+  function deleteOrderAdjustment(form) {
+    form.action = "deleteOrderAdjustment";
+    form.submit();
+  }  
+</script> 
 <#if order?has_content>
 
 <#macro sepBar span=8>
@@ -64,7 +80,9 @@ under the License.
 <#macro editAdjustmentLine adjustment>
   <#assign adjustmentAmount = adjustment.calculateAdjustment(order)/>
   <#if adjustmentAmount != 0>
-    <form name="updateOrderAdjustmentForm${adjustment.orderAdjustmentId}" method="post" action="<@ofbizUrl>updateOrderAdjustment?orderAdjustmentId=${adjustment.orderAdjustmentId}&amp;orderId=${order.orderId}</@ofbizUrl>">
+    <form name="updateOrderAdjustmentForm${adjustment.orderAdjustmentId}" method="post" action="<@ofbizUrl>updateOrderAdjustment</@ofbizUrl>">
+      <input type="hidden" name="orderAdjustmentId" value="${adjustment.orderAdjustmentId}"/>
+      <input type="hidden" name="orderId" value="${order.orderId}"/>
       <tr>
         <td align="right" colspan="3">
           <div class="tabletext"><b>${adjustment.type.get("description",locale)}</b> ${adjustment.comments?if_exists} :
@@ -74,8 +92,8 @@ under the License.
           <div class="tabletext"><input type="text" name="amount" size="10" value="<@ofbizAmount amount=adjustmentAmount/>" class="inputBox"/></div>
         </td>
         <td align="let" colspan="2">
-          <a href="javascript:document.updateOrderAdjustmentForm${adjustment.orderAdjustmentId}.submit();" class="buttontext">${uiLabelMap.CommonUpdate}</a>
-          <a href="<@ofbizUrl>deleteOrderAdjustment?orderAdjustmentId=${adjustment.orderAdjustmentId}&amp;orderId=${order.orderId}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonDelete}</a>
+          <a href="javascript:updateOrderAdjustment(document.updateOrderAdjustmentForm${adjustment.orderAdjustmentId});" class="buttontext">${uiLabelMap.CommonUpdate}</a>
+          <a href="javascript:deleteOrderAdjustment(document.updateOrderAdjustmentForm${adjustment.orderAdjustmentId});" class="buttontext">${uiLabelMap.CommonDelete}</a>
         </td>
       </tr>
     </form>
@@ -94,7 +112,8 @@ under the License.
   <@sectionHeader title=uiLabelMap.OrderOrderItems>
     <#if security.hasEntityPermission("ORDERMGR", "_UPDATE", session)>
       <#if order?has_content && !order.isCancelled() && !order.isCompleted()>
-        <div class="subMenuBar"><a href="<@ofbizUrl>cancelOrderItem?${paramString}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.OrderCancelAllItems}</a><a href="<@ofbizUrl>orderview?${paramString}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.OrderViewOrder}</a></div>
+        <@form name="cancelOrderItemForm" url="cancelOrderItem" orderId="${order.orderId}" orderItemSeqId="" shipGroupSeqId=""/>
+        <div class="subMenuBar"><a href="javascript:cancelOrderItem('');" class="subMenuButton">${uiLabelMap.OrderCancelAllItems}</a><a href="<@ofbizUrl>orderview?${paramString}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.OrderViewOrder}</a></div>
       </#if>
     </#if>
   </@sectionHeader>
@@ -103,7 +122,8 @@ under the License.
       <#if !order.items?has_content>
         <tr><td><font color="red">${uiLabelMap.checkhelper_sales_order_lines_lookup_failed}</font></td></tr>
       <#else>
-        <form name="updateItemInfo" method="post" action="<@ofbizUrl>updateOrderItems?${paramString}</@ofbizUrl>">
+        <form name="updateItemInfo" method="post" action="<@ofbizUrl>updateOrderItems</@ofbizUrl>">
+          <input type="hidden" name="orderId" value="${order.orderId}"/>
           <tr align="left" valign="bottom">
             <td width="60%" align="left"><div class="tableheadtext">${uiLabelMap.ProductProduct}</div></td>
             <td width="5%" align="right"><div class="tableheadtext">${uiLabelMap.OrderQuantity}</div></td>
@@ -174,7 +194,9 @@ under the License.
                 <td>&nbsp;</td>
                 <td align="right" valign="top" nowrap="nowrap">
                   <#if (!item.isCancelled() && !item.isCompleted()) && (security.hasEntityPermission("ORDERMGR", "_ADMIN", session) || (security.hasEntityPermission("ORDERMGR", "_UPDATE", session) && !order.isSent()))>
-                    <div class="tabletext"><a href="<@ofbizUrl>cancelOrderItem?orderItemSeqId=${item.orderItemSeqId}&amp;${paramString}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancelAll}</a></div>
+                    <div class="tabletext">
+                    <a href="javascript:cancelOrderItem('${item.orderItemSeqId}');" class="buttontext">
+                    ${uiLabelMap.CommonCancelAll}</a></div>
                   <#else>
                     &nbsp;
                   </#if>
@@ -234,7 +256,7 @@ under the License.
                     <td align="right" valign="top" nowrap="nowrap">
                       <#assign itemStatusOkay = !item.isCancelled() && !item.isCompleted()/>
                       <#if itemStatusOkay && (security.hasEntityPermission("ORDERMGR", "_ADMIN", session) || (security.hasEntityPermission("ORDERMGR", "_UPDATE", session) && !order.isSent()))>
-                        <div class="tabletext"><a href="<@ofbizUrl>cancelOrderItem?orderItemSeqId=${item.orderItemSeqId}&amp;shipGroupSeqId=${shipGroup.shipGroupSeqId}&amp;${paramString}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a></div>
+                        <div class="tabletext"><a href="javascript:cancelOrderItem('${item.orderItemSeqId}','${shipGroup.shipGroupSeqId}');" class="buttontext">${uiLabelMap.CommonCancel}</a></div>
                       <#else>
                         &nbsp;
                       </#if>
@@ -287,7 +309,8 @@ under the License.
       <#if security.hasEntityPermission("ORDERMGR", "_UPDATE", session) && !order.isCompleted() && !order.isCancelled() && !order.isRejected() >
         <@sepBarRow/>
         <@sepRow/>
-        <form name="addAdjustmentForm" method="post" action="<@ofbizUrl>createOrderAdjustment?${paramString}</@ofbizUrl>">
+        <form name="addAdjustmentForm" method="post" action="<@ofbizUrl>createOrderAdjustment</@ofbizUrl>">
+          <input type="hidden" name="orderId" value="${order.orderId}"/>
           <input type="hidden" name="comments" value="Added manually by [${userLogin.userLoginId}]"/>
           <tr>
             <td align="right" colspan="3">

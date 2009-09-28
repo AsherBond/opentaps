@@ -140,7 +140,7 @@
         <response name="myProfile" type="view" value="myProfile"/>
         <response name="viewSupplier" type="request-redirect" value="viewSupplier">
           <redirect-parameter name="partyId"/>
-        </response>        
+        </response>
         <!-- mostly for error redirects -->
         <response name="myProfileEditContactMech" type="request" value="myProfileEditContactMech"/>
         <!-- default -->

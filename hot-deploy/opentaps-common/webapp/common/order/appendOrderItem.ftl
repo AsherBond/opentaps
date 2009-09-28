@@ -54,7 +54,8 @@ under the License.
         <table width="100%" border="0" cellspacing="0" cellpadding="0" class="boxbottom">
           <tr>
             <td>
-              <form method="post" action="<@ofbizUrl>appendItemToOrder?${paramString}</@ofbizUrl>" name="appendItemForm" style="margin: 0;">
+              <form method="post" action="<@ofbizUrl>appendItemToOrder</@ofbizUrl>" name="appendItemForm" style="margin: 0;">
+                <@inputHidden name="orderId" value=order.orderId?if_exists />
                 <@inputHidden name="correspondingPoId" value=order.primaryPoNumber?if_exists />
                 <table border="0">
                   <tr>
