@@ -18,8 +18,6 @@ package org.opentaps.warehouse.domain.inventory;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
-
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -95,7 +93,6 @@ public class InventoryService extends Service implements InventoryServiceInterfa
         try {
             InventoryDomainInterface inventoryDomain = getDomainsDirectory().getInventoryDomain();
             InventoryRepositoryInterface inventoryRepository = inventoryDomain.getInventoryRepository();
-            Debug.logInfo("I'm running the opentaps getProductInventoryAvailable", MODULE);
             List<InventoryItem> items = inventoryRepository.getInventoryItemsForProductId(productId);
 
             availableToPromiseTotal = BigDecimal.ZERO;
