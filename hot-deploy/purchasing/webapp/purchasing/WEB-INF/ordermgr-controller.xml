@@ -158,25 +158,33 @@ under the License.
     <request-map uri="changeOrderStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="changePurchasingOrderStatus"/>
-        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
         <response name="error" type="view" value="orderview"/>
     </request-map>
     <request-map uri="changeOrderItemStatus">
         <security https="true" auth="true"/>
         <event type="service" invoke="changePurchasingOrderItemStatus"/>
-        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
         <response name="error" type="view" value="orderview"/>
     </request-map>
     <request-map uri="cancelOrderItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="cancelOrderItem"/>
-        <response name="success" type="view" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
         <response name="error" type="view" value="orderview"/>
     </request-map>
     <request-map uri="createOrderAdjustment">
         <security https="true" auth="true"/>
         <event type="service" invoke="createOrderAdjustment"/>
-        <response name="success" type="request" value="recalcTax"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
         <response name="error" type="view" value="editorderitems"/>
     </request-map>
     <request-map uri="updateOrderAdjustment">
@@ -230,14 +238,22 @@ under the License.
     <request-map uri="quickShipOrder">
         <security https="true" auth="true"/>
         <event type="service" invoke="quickShipEntireOrder"/>
-        <response name="success" type="request-redirect" value="orderview"/>
-        <response name="error" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
+        <response name="error" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
     </request-map>
     <request-map uri="quickDropShipOrder">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="quickDropShipOrder"/>
-        <response name="success" type="request-redirect" value="orderview"/>
-        <response name="error" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
+        <response name="error" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>
     </request-map>
     <request-map uri="completePurchaseOrder">
         <security https="true" auth="true"/>
@@ -264,7 +280,7 @@ under the License.
     <request-map uri="createordernote">
         <security https="true" auth="true"/>
         <event type="service" invoke="createOrderNote"/>
-        <response name="success" type="view" value="orderlist"/>
+        <response name="success" type="view" value="orderview"/>
         <response name="error" type="view" value="createnewnote"/>
     </request-map>
 
@@ -295,7 +311,9 @@ under the License.
     <request-map uri="updateOrderNote">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateOrderNote"/>
-        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
         <response name="error" type="view" value="orderview"/>
     </request-map>
     
@@ -1315,14 +1333,20 @@ under the License.
     <request-map uri="authOrderPayment">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="authOrderPaymentPreference"/>
-        <response name="success" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
     </request-map>
     
     <request-map uri="updateOrderPaymentPreference">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateOrderPaymentPreference"/>
-        <response name="success" type="request-redirect" value="orderview"/>
-        <response name="error" type="request-redirect" value="orderview"/>
+        <response name="success" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
+        <response name="error" type="request-redirect" value="orderview">
+            <redirect-parameter name="orderId"/>
+        </response>           
     </request-map>
     
     <!-- Lookup request mappings -->
