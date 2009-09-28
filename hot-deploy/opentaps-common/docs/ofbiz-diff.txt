@@ -198,3 +198,6 @@ TODO: it should patch back to ofbiz
 
 applications/order/data/OrderTypeData.xml
 r13468 comment the quote status item and status valid change for the it conflict with our code
+
+applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
+r13477 change productsSoldThruTImestamp to timpstamp when it is a string value 
