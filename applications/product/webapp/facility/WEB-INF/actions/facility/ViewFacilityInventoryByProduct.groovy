@@ -99,8 +99,8 @@ if (action) {
                                                          EntityCondition.makeCondition("isVirtual", EntityOperator.NOT_EQUAL, "Y"));
 
     whereConditionsList = [searchCondition, notVirtualCondition];
-    // add the discontinuation date condition
-    if (productsSoldThruTimestamp) {
+    // add the discontinuation date condition when productsSoldThruTimestamp is a timpstamp value
+    if (UtilValidate.isNotEmpty(productsSoldThruTimestamp) && productsSoldThruTimestamp instanceof Timestamp) {
         discontinuationDateCondition = EntityCondition.makeCondition(
                [
                 EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, null),
@@ -110,6 +110,18 @@ if (action) {
         whereConditionsList.add(discontinuationDateCondition);
         searchParameterString = searchParameterString + "&productsSoldThruTimestamp=" + productsSoldThruTimestamp;
     }
+
+    // add the discontinuation date condition when productsSoldThruTimestamp is a string value
+    if (UtilValidate.isNotEmpty(productsSoldThruTimestamp) && productsSoldThruTimestamp instanceof String) {
+        ts = UtilDateTime.stringToTimeStamp(productsSoldThruTimestamp, org.opentaps.common.util.UtilDate.getDateFormat(locale), timeZone, locale);
+        EntityCondition discontinuationDateCondition = new EntityConditionList(UtilMisc.toList(
+                new EntityExpr("salesDiscontinuationDate", EntityOperator.EQUALS, null),
+                new EntityExpr("salesDiscontinuationDate", EntityOperator.GREATER_THAN, ts)),
+            EntityOperator.OR);
+        whereConditionsList.add(discontinuationDateCondition);
+        searchParameterString = searchParameterString + "&productsSoldThruTimestamp=" + productsSoldThruTimestamp;
+    }
+
 
     // add search on internal name
     if (internalName) {
