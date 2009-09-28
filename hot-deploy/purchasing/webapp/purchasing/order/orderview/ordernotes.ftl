@@ -33,6 +33,13 @@ under the License.
 -->
 
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
+<script type="text/javascript">
+  function setInternalNote(noteId, internalNote) {
+    document.updateOrderNoteForm.noteId.value = noteId;
+    document.updateOrderNoteForm.internalNote.value = internalNote;
+    document.updateOrderNoteForm.submit();
+  }
+</script>        
 
 <#-- This file has been modified by Open Source Strategies, Inc. -->
         
@@ -55,6 +62,8 @@ under the License.
       </table>
     </td>
   </tr>
+<@form name="updateOrderNoteForm" url="updateOrderNote" orderId="${orderId}" noteId="" internalNote=""/>
+  
   <tr>
     <td width='100%'>
       <table width='100%' border='0' cellspacing='0' cellpadding='0' class='boxbottom'>
@@ -74,11 +83,11 @@ under the License.
                   <td align="right" valign="top" width="15%">
                     <#if note.internalNote?if_exists == "N">
 	                    <div class="tabletext">${uiLabelMap.OrderPrintableNote}</div>
-                      <a href="<@ofbizUrl>updateOrderNote?orderId=${orderId}&noteId=${note.noteId}&internalNote=Y</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderNotesPrivate}</a>
+                      <a href="javascript:setInternalNote('${note.noteId}','Y');" class="buttontext">${uiLabelMap.OrderNotesPrivate}</a>
                     </#if>    
                     <#if note.internalNote?if_exists == "Y">
 	                    <div class="tabletext">${uiLabelMap.OrderNotPrintableNote}</div>
-                      <a href="<@ofbizUrl>updateOrderNote?orderId=${orderId}&noteId=${note.noteId}&internalNote=N</@ofbizUrl>" class="buttontext">${uiLabelMap.OrderNotesPublic}</a>
+                      <a href="javascript:setInternalNote('${note.noteId}','N');" class="buttontext">${uiLabelMap.OrderNotesPublic}</a>
                     </#if>    
                   </td>
                 </tr>
