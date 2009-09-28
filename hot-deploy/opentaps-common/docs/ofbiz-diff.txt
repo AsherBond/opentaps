@@ -201,3 +201,6 @@ r13468 comment the quote status item and status valid change for the it conflict
 
 applications/product/webapp/facility/WEB-INF/actions/facility/ViewFacilityInventoryByProduct.groovy
 r13477 change productsSoldThruTImestamp to timpstamp when it is a string value 
+
+applications/order/webapp/ordermgr/WEB-INF/actions/order/OrderView.groovy
+r13479 fix view purchasing order NPE if facility is null
