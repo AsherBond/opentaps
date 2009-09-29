@@ -22,8 +22,7 @@
     <form name="listGlAccountTypes" type="list" target=""
         default-title-style="boxhead" default-widget-style="tabletext" default-tooltip-style="tabletext"
         default-table-style="listTable" even-row-style="viewManyTR2" odd-row-style="viewManyTR1"
-        header-row-style="boxtop" 
-        list-name="accountTypes">
+        header-row-style="boxtop" list-name="accountTypes">
 
         <field name="glAccountTypeId" title="${uiLabelMap.FinancialsGlAccountType}">
             <display-entity entity-name="GlAccountType" description="${description}" key-field-name="glAccountTypeId"/>
