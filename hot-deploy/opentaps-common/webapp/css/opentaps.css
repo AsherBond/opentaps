@@ -1075,6 +1075,7 @@ display: inline; /* IE Fix */
 list-style-image:none;
 list-style-position:outside;
 list-style-type:none;
+float: right;
 }
 
 .nav-pager ul li {
