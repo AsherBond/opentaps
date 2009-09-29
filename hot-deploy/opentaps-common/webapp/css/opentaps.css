@@ -699,6 +699,19 @@ div.orderEntryHeaderSubmitRow {
     background-color: white;
 }
 
+
+.flexAreaControlButton_closed, .flexAreaControlButton_open {
+    background-repeat: no-repeat;
+    padding: 0 5px 0 20px;
+    margin-left: 0px;
+    width: auto;
+    background-position: 5px 50%;
+    z-index:100;
+    background-color: white;
+    border: #999999 solid 1px;
+    cursor: pointer;
+}
+
 .flexAreaControlSimple_closed, .flexAreaControlSimple_open {
    background-repeat: no-repeat;
    padding-left: 20px;
@@ -715,10 +728,10 @@ div.orderEntryHeaderSubmitRow {
 }
 
 
-.flexAreaControl_closed, .flexAreaControlSimple_closed {
+.flexAreaControl_closed, .flexAreaControlSimple_closed, .flexAreaControlButton_closed {
     background-image: url('/opentaps_images/arrowSmallWhite_right.png');
 }
-.flexAreaControl_open, .flexAreaControlSimple_open {
+.flexAreaControl_open, .flexAreaControlSimple_open, .flexAreaControlButton_open {
     background-image: url('/opentaps_images/arrowSmallWhite_down.png');
 }
 
@@ -1125,4 +1138,59 @@ border: 1px solid #AAAAAA;
 
 .nav-pager select {
 margin: 0;
+}
+
+/*
+Catalog breadcrumbs
+*/
+
+.breadcrumbs { 
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+margin-top: 10px;
+}
+
+.breadcrumbs ul {
+display: inline; /* IE Fix */
+list-style: none;
+padding: 0 0 0 15px;
+}
+
+.breadcrumbs ul li {
+float: left;
+display: inline;
+padding: 0 0 0 10px;
+margin: 0 0 0 5px;
+background: transparent url(/opentaps_images/arrowSmallWhite_right.png) no-repeat 0 50%;
+}
+
+.breadcrumbs ul li .current {
+padding: 0 0 0 5px;
+}
+
+.breadcrumbs ul li a {
+border: none;
+}
+
+.breadcrumbs ul li a:hover {
+text-decoration: none;
+}
+
+/*
+Catalog pager
+*/
+
+.product-header { 
+float: left;
+}
+
+.productsummary, .productdetail, .product-prevnext  {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 10px;
+}
+.product-prevnext { 
+float: right;
+}
+.productsummary .productbuy {
+width: auto;
 }

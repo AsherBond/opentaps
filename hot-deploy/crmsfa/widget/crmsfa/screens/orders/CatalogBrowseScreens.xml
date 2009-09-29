@@ -115,7 +115,7 @@ and has been modified by Open Source Strategies, Inc.
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/SideDeepCategory.groovy"/>
             </actions>
             <widgets>
-                <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/catalog/breadcrumbs.ftl"/></html></platform-specific>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/order/catalog/breadcrumbs.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>
@@ -130,6 +130,7 @@ and has been modified by Open Source Strategies, Inc.
             <widgets>
                 <decorator-screen name="order-entry-header-decorator" location="component://crmsfa/widget/crmsfa/screens/orders/CreateOrderScreens.xml">
                     <decorator-section name="order-entry-header-body">
+                      <container style="screenlet">
                         <container style="subSectionBlock">
                             <container style="subSectionHeader">
                                 <label style="subSectionTitle">${uiLabelMap.ProductBrowseCategories}</label>
@@ -137,9 +138,9 @@ and has been modified by Open Source Strategies, Inc.
                                     <link style="subMenuButton" target="createOrderMainScreen" text="${uiLabelMap.CrmViewOrder}"/>
                                 </container>
                             </container>
+                            <include-screen name="breadcrumbs"/>
                         </container>
                         <container style="subSectionBlock">
-                            <include-screen name="breadcrumbs"/>
                             <section>
                                 <condition>
                                     <not><if-empty field="productCategory"/></not>
@@ -152,6 +153,7 @@ and has been modified by Open Source Strategies, Inc.
                                 </fail-widgets>
                             </section>
                         </container>
+                      </container>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -160,17 +162,28 @@ and has been modified by Open Source Strategies, Inc.
     <screen name="categorydetail">
         <section>
             <actions>
-                <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
+                <set field="productsummaryScreen" value="component://crmsfa/widget/crmsfa/screens/orders/CatalogBrowseScreens.xml#productsummary"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/CategoryDetail.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
-                    <html><html-template location="component://order/webapp/ordermgr/entry/catalog/categorydetail.ftl"/></html>
+                    <html><html-template location="component://opentaps-common/webapp/common/order/catalog/categorydetail.ftl"/></html>
                 </platform-specific>
             </widgets>
         </section>
     </screen>
 
+    <screen name="productsummary">
+        <section>
+            <actions>
+                <set field="showPriceDetails" value="Y"/>
+                <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ProductSummary.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/order/catalog/productsummary.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
 
     <screen name="product">
         <section>
@@ -190,6 +203,7 @@ and has been modified by Open Source Strategies, Inc.
                                     <link style="subMenuButton" target="createOrderMainScreen" text="${uiLabelMap.CrmViewOrder}"/>
                                 </container>
                             </container>
+                            <include-screen name="breadcrumbs"/>
                         </container>
                         <container style="subSectionBlock">
                             <section>
@@ -213,14 +227,13 @@ and has been modified by Open Source Strategies, Inc.
     <screen name="productdetail">
         <section>
             <actions>
-                <set field="productsummaryScreen" value="component://order/widget/ordermgr/OrderEntryCatalogScreens.xml#productsummary"/>
+                <set field="productsummaryScreen" value="component://crmsfa/widget/crmsfa/screens/orders/CatalogBrowseScreens.xml#productsummary"/>
                 <set field="showPriceDetails" value="Y"/>
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/catalog/ProductDetail.groovy"/>
             </actions>
             <widgets>
-                <include-screen name="breadcrumbs"/>
                 <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/catalog/editProduct.ftl"/></html></platform-specific>
-                <platform-specific><html><html-template location="component://order/webapp/ordermgr/entry/catalog/productdetail.ftl"/></html></platform-specific>
+                <platform-specific><html><html-template location="component://opentaps-common/webapp/common/order/catalog/productdetail.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>
