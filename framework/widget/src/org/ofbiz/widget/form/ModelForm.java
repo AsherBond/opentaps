@@ -1076,7 +1076,9 @@ public class ModelForm extends ModelWidget {
         // render list/tabular type forms
 
         // prepare the items iterator and compute the pagination parameters
-        this.preparePager(context);
+        if (paginate) {
+            this.preparePager(context);
+        }
 
         // render formatting wrapper open
         formStringRenderer.renderFormatListWrapperOpen(writer, context, this);
@@ -1334,11 +1336,9 @@ public class ModelForm extends ModelWidget {
         List items = null;
         if (obj instanceof Iterator) {
             iter = (Iterator) obj;
-            setPaginate(true);
         } else if (obj instanceof List) {
             items = (List) obj;
             iter = items.listIterator();
-            setPaginate(true);
         }
 
         // set low and high index
@@ -1401,11 +1401,9 @@ public class ModelForm extends ModelWidget {
         List items = null;
         if (obj instanceof Iterator) {
             iter = (Iterator) obj;
-            setPaginate(true);
         } else if (obj instanceof List) {
             items = (List) obj;
             iter = items.listIterator();
-            setPaginate(true);
         }
 
         // set low and high index
@@ -1418,7 +1416,7 @@ public class ModelForm extends ModelWidget {
         int highIndex = ((Integer) context.get("highIndex")).intValue();
 
         // we're passed a subset of the list, so use (0, viewSize) range
-        if (isOverridenListSize()) {
+        if (paginate && isOverridenListSize()) {
             lowIndex = 0;
             highIndex = ((Integer) context.get("viewSize")).intValue();
         }
@@ -1431,12 +1429,12 @@ public class ModelForm extends ModelWidget {
             Map<String, Object> previousItem = FastMap.newInstance();
             while ((item = this.safeNext(iter)) != null) {
                 itemIndex++;
-                if (itemIndex >= highIndex) {
+                if (paginate && itemIndex >= highIndex) {
                     break;
                 }
 
                 // TODO: this is a bad design, for EntityListIterators we should skip to the lowIndex and go from there, MUCH more efficient...
-                if (itemIndex < lowIndex) {
+                if (paginate && itemIndex < lowIndex) {
                     continue;
                 }
 
@@ -2496,9 +2494,9 @@ public class ModelForm extends ModelWidget {
             highIndex = (viewIndex + 1) * viewSize;
         } else {
             viewIndex = 0;
-            viewSize = defaultViewSize;
+            viewSize = listSize;
             lowIndex = 0;
-            highIndex = defaultViewSize;
+            highIndex = listSize;
         }
 
         context.put("listSize", Integer.valueOf(listSize));

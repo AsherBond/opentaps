@@ -71,6 +71,10 @@ r13376 Fix for missing macros and new parameters
 framework/base/src/org/ofbiz/base/util/UtilHttp.java
 - Port back change in makeParamValueFromComposite to return the String representing the parsed Timestamp instead of directly the Timestamp
 
+framework/widget/dtd/widget-form.xsd
+framework/widget/src/org/ofbiz/widget/form/ModelForm.java
+- Default form pagination back to false, and fix the ModelForm to actually the paginate = false
+
 Applications changes
 --------------------
 
