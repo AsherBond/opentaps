@@ -26,11 +26,21 @@
 </#if>
 
 <#assign printButton><a class="subMenuButton" href="<@ofbizUrl>PrintProductionRun.pdf?productionRunId=${productionRunId}</@ofbizUrl>">${uiLabelMap.CommonPrint}</a></#assign>
-<#assign scheduleButton><a class="subMenuButton" href="<@ofbizUrl>scheduleProductionRun?productionRunId=${productionRunId}&amp;statusId=PRUN_SCHEDULED</@ofbizUrl>">${uiLabelMap.ManufacturingSchedule}</a></#assign>
-<#assign confirmButton><a class="subMenuButton" href="<@ofbizUrl>changeProductionRunStatusToPrinted?productionRunId=${productionRunId}</@ofbizUrl>">${uiLabelMap.ManufacturingConfirmProductionRun}</a></#assign>
-<#assign cancelButton><@inputConfirm class="subMenuButtonDangerous" title=uiLabelMap.ManufacturingCancel href="cancelProductionRun?productionRunId=${productionRunId}"/></#assign>
-<#assign closeButton><@inputConfirm class="subMenuButtonDangerous" title=uiLabelMap.WarehouseCloseProductionRun href="changeProductionRunStatusToClosed?productionRunId=${productionRunId}"/></#assign>
-<#assign revertButton><@inputConfirm class="subMenuButtonDangerous" title=uiLabelMap.WarehouseManufacturingRevert href="revertProductionRun?productionRunId=${productionRunId}"/></#assign>
+
+<@form name="scheduleProductionRunForm" url="scheduleProductionRun" productionRunId="${productionRunId}" statusId="PRUN_SCHEDULED"/>
+<#assign scheduleButton><@submitFormLink form="scheduleProductionRunForm" text="${uiLabelMap.ManufacturingSchedule}"/></#assign>
+
+<@form name="confirmProductionRunForm" url="changeProductionRunStatusToPrinted" productionRunId="${productionRunId}" />
+<#assign confirmButton><@submitFormLink form="confirmProductionRunForm" text="${uiLabelMap.ManufacturingConfirmProductionRun}" /></#assign>
+
+<@form name="cancelProductionRunForm" url="cancelProductionRun" productionRunId="${productionRunId}" />
+<#assign cancelButton><@submitFormLinkConfirm form="cancelProductionRunForm" text="${uiLabelMap.ManufacturingCancel}"/></#assign>
+
+<@form name="closeProductionRunForm" url="changeProductionRunStatusToClosed" productionRunId="${productionRunId}" />
+<#assign closeButton><@submitFormLinkConfirm form="closeProductionRunForm" text=uiLabelMap.WarehouseCloseProductionRun /></#assign>
+
+<@form name="revertProductionRunForm" url="revertProductionRun" productionRunId="${productionRunId}" />
+<#assign revertButton><@submitFormLinkConfirm form="revertProducitonRunForm" text=uiLabelMap.WarehouseManufacturingRevert /></#assign>
 
 <#assign menuButtons = printButton />
 

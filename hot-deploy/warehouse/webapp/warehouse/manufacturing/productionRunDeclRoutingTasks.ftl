@@ -39,8 +39,9 @@
                 <@displayCell text=totalTime/>
                 <@displayCell text=productionRunRoutingTask.quantityProduced/>
                 <td class="tabletext" style="text-align:right">
-                  <#if "PRUN_OUTSRC_PURCH" != productionRunRoutingTask.workEffortGoodStdTypeId && startTaskId?default("") = productionRunRoutingTask.workEffortId>
-                    <p><@displayLink href="changeProductionRunTaskStatus?workEffortId=${productionRunRoutingTask.workEffortId}&amp;productionRunId=${productionRunRoutingTask.workEffortParentId}" text=uiLabelMap.ManufacturingStartProductionRunTask class="buttontext"/></p>
+                  <#if "PRUN_OUTSRC_PURCH" != productionRunRoutingTask.workEffortGoodStdTypeId && startTaskId?default("") = productionRunRoutingTask.workEffortId>`
+                    <@form name="changeProductionRunTaskStatusForm_${productionRunRoutingTask.workEffortParentId}_${productionRunRoutingTask.workEffortId}" url="changeProductionRunTaskStatus" workEffortId="${productionRunRoutingTask.workEffortId}" productionRunId="${productionRunRoutingTask.workEffortParentId}"/>
+                  <p><@submitFormLink form="changeProductionRunTaskStatusForm_${productionRunRoutingTask.workEffortParentId}_${productionRunRoutingTask.workEffortId}" text=uiLabelMap.ManufacturingStartProductionRunTask /></p>
                   </#if>
                   <#if "PRUN_OUTSRC_PURCH" != productionRunRoutingTask.workEffortGoodStdTypeId && "PRUN_RUNNING" == productionRunRoutingTask.currentStatusId>
                     <p><@displayLink href="ProductionRunDeclaration?actionForm=EditRoutingTask&amp;routingTaskId=${productionRunRoutingTask.workEffortId}&amp;productionRunId=${productionRunRoutingTask.workEffortParentId}" text=uiLabelMap.ManufacturingDeclareProductionRunTask class="buttontext"/></p>
