@@ -162,7 +162,7 @@ public final class FacilityServices {
 
             // create an accounting preference for the owner party in the given currency if none exists yet
             input = FastMap.newInstance();
-            input.put("userLogin", userLogin);
+            input.put("partyId", ownerPartyId);
             GenericValue pref = delegator.findByPrimaryKey("PartyAcctgPreference", UtilMisc.toMap("partyId", ownerPartyId));
             if (pref == null) {
                 input.put("baseCurrencyUomId", context.get("currencyUomId"));
