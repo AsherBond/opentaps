@@ -733,15 +733,19 @@ under the License.
         <member-entity entity-alias="CMEM" entity-name="ContactMech"/>
         <alias-all entity-alias="P"/>
         <alias-all entity-alias="PG">
+            <exclude field="partyId"/>
             <exclude field="annualRevenue"/>
             <exclude field="tickerSymbol"/>
             <exclude field="numEmployees"/>
             <exclude field="comments"/>
         </alias-all>
         <alias-all entity-alias="PER">
+            <exclude field="partyId"/>
             <exclude field="comments"/>
         </alias-all>
-        <alias-all entity-alias="PSD"/>
+        <alias-all entity-alias="PSD">
+            <exclude field="partyId"/>
+        </alias-all>
         <alias entity-alias="PMPA" name="primaryToName" field="toName"/>
         <alias entity-alias="PMPA" name="primaryAttnName" field="attnName"/>
         <alias entity-alias="PMPA" name="primaryAddress1" field="address1"/>
