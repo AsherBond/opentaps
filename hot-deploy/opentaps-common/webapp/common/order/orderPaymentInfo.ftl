@@ -82,7 +82,8 @@ under the License.
                 -->
                 </td><td>
                 <#if updatable && !opp.isSettled() && !opp.isReceived()>
-                  <a href="<@ofbizUrl>updateOrderPaymentPreference?orderId=${orderId}&amp;orderPaymentPreferenceId=${opp.orderPaymentPreferenceId}&amp;statusId=PAYMENT_CANCELLED&amp;checkOutPaymentId=${opp.paymentMethodTypeId?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>
+                  <@form name="cancelOrderPaymentPreference_${opp.orderPaymentPreferenceId}" url="updateOrderPaymentPreference" orderId=orderId orderPaymentPreferenceId=opp.orderPaymentPreferenceId statusId="PAYMENT_CANCELLED" checkOutPaymentId="${opp.paymentMethodTypeId?if_exists}" />
+                  <@submitFormLink text=uiLabelMap.CommonCancel form="cancelOrderPaymentPreference_${opp.orderPaymentPreferenceId}" />
                 </#if>
               </@infoRowNested>
             </#if>
@@ -147,7 +148,8 @@ under the License.
                   </#if>
                 </td><td>
                 <#if updatable && !opp.isSettled() && !opp.isReceived()>
-                  <a href="<@ofbizUrl>updateOrderPaymentPreference?orderId=${order.orderId}&orderPaymentPreferenceId=${opp.orderPaymentPreferenceId}&statusId=PAYMENT_CANCELLED&checkOutPaymentId=${opp.paymentMethod.paymentMethodTypeId?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>&nbsp;
+                  <@form name="cancelOrderPaymentPreference_${opp.orderPaymentPreferenceId}" url="updateOrderPaymentPreference" orderId=orderId orderPaymentPreferenceId=opp.orderPaymentPreferenceId statusId="PAYMENT_CANCELLED" checkOutPaymentId="${opp.paymentMethodTypeId?if_exists}" />
+                  <@submitFormLink text=uiLabelMap.CommonCancel form="cancelOrderPaymentPreference_${opp.orderPaymentPreferenceId}" />
                 </#if>
               </@infoRowNested>
             <#elseif opp.isElectronicFundTransferPayment()>
@@ -172,7 +174,8 @@ under the License.
                 </div>
                 </td><td>
                 <#if updatable && !opp.isSettled() && !opp.isReceived()>
-                  <a href="<@ofbizUrl>updateOrderPaymentPreference?orderId=${order.orderId}&orderPaymentPreferenceId=${opp.orderPaymentPreferenceId}&statusId=PAYMENT_CANCELLED&checkOutPaymentId=${opp.paymentMethod.paymentMethodTypeId?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>&nbsp;
+                  <@form name="cancelOrderPaymentPreference_${opp.orderPaymentPreferenceId}" url="updateOrderPaymentPreference" orderId=orderId orderPaymentPreferenceId=opp.orderPaymentPreferenceId statusId="PAYMENT_CANCELLED" checkOutPaymentId="${opp.paymentMethodTypeId?if_exists}" />
+                  <@submitFormLink text=uiLabelMap.CommonCancel form="cancelOrderPaymentPreference_${opp.orderPaymentPreferenceId}" />
                 </#if>
               </@infoRowNested>
             <#elseif opp.isGiftCardPayment()>
@@ -200,7 +203,8 @@ under the License.
                 </div>
                 </td><td>
                 <#if updatable && !opp.isSettled() && !opp.isReceived()>
-                  <a href="<@ofbizUrl>updateOrderPaymentPreference?orderId=${order.orderId}&orderPaymentPreferenceId=${opp.orderPaymentPreferenceId}&statusId=PAYMENT_CANCELLED&checkOutPaymentId=${opp.paymentMethod.paymentMethodTypeId?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>&nbsp;
+                  <@form name="cancelOrderPaymentPreference_${opp.orderPaymentPreferenceId}" url="updateOrderPaymentPreference" orderId=orderId orderPaymentPreferenceId=opp.orderPaymentPreferenceId statusId="PAYMENT_CANCELLED" checkOutPaymentId="${opp.paymentMethodTypeId?if_exists}" />
+                  <@submitFormLink text=uiLabelMap.CommonCancel form="cancelOrderPaymentPreference_${opp.orderPaymentPreferenceId}" />
                 </#if>
               </@infoRowNested>
             <#elseif opp.isPaypalPayment()>
