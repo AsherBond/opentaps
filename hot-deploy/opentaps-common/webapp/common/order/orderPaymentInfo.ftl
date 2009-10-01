@@ -172,7 +172,7 @@ under the License.
                 </div>
                 </td><td>
                 <#if updatable && !opp.isSettled() && !opp.isReceived()>
-                  <a href="<@ofbizUrl>updateOrderPaymentPreference?orderId=${order.orderId}&orderPaymentPreferenceId=${opp.orderPaymentPreferenceId}&statusId=PAYMENT_CANCELLED&checkOutPaymentId=${paymentMethod.paymentMethodTypeId?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>&nbsp;
+                  <a href="<@ofbizUrl>updateOrderPaymentPreference?orderId=${order.orderId}&orderPaymentPreferenceId=${opp.orderPaymentPreferenceId}&statusId=PAYMENT_CANCELLED&checkOutPaymentId=${opp.paymentMethod.paymentMethodTypeId?if_exists}</@ofbizUrl>" class="buttontext">${uiLabelMap.CommonCancel}</a>&nbsp;
                 </#if>
               </@infoRowNested>
             <#elseif opp.isGiftCardPayment()>
