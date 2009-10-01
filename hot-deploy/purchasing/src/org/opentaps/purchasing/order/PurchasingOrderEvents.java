@@ -216,9 +216,9 @@ public final class PurchasingOrderEvents {
         String searchString = UtilCommon.getParameter(request, "productId");
         EntityCondition where =  EntityCondition.makeCondition(EntityOperator.AND,
                                    EntityCondition.makeCondition(EntityOperator.OR,
-                                     EntityCondition.makeCondition(EntityFunction.UPPER("productId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
-                                     EntityCondition.makeCondition(EntityFunction.UPPER("supplierProductId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
-                                     EntityCondition.makeCondition(EntityFunction.UPPER("idValue"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%"))),
+                                     EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
+                                     EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("supplierProductId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
+                                     EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("idValue"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%"))),
                                    EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, cart.getOrderPartyId()),
                                    EntityUtil.getFilterByDateExpr("availableFromDate", "availableThruDate"));
         try {

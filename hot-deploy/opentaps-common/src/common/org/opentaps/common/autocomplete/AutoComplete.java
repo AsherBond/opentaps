@@ -219,7 +219,7 @@ public final class AutoComplete {
             EntityCondition orCondition = EntityCondition.makeCondition(EntityOperator.OR,
                     EntityCondition.makeCondition("glAccountId", EntityOperator.LIKE, "%" + keyword + "%"),
                     EntityCondition.makeCondition("accountCode", EntityOperator.LIKE, "%" + keyword + "%"),
-                    EntityCondition.makeCondition(EntityFunction.UPPER("accountName"), EntityOperator.LIKE, "%" + keyword + "%")
+                    EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("accountName"), EntityOperator.LIKE, "%" + keyword + "%")
                 );
             EntityCondition condition = EntityCondition.makeCondition(EntityOperator.AND,
                     orCondition,
@@ -276,7 +276,7 @@ public final class AutoComplete {
             EntityCondition keywordCondition = EntityCondition.makeCondition(EntityOperator.OR,
                     EntityCondition.makeCondition("productId", EntityOperator.LIKE, keyword + "%"),
                     EntityCondition.makeCondition("idValue", EntityOperator.LIKE, keyword + "%"),
-                    EntityCondition.makeCondition(EntityFunction.UPPER("internalName"), EntityOperator.LIKE, "%" + keyword + "%")
+                    EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("internalName"), EntityOperator.LIKE, "%" + keyword + "%")
                 );
 
             EntityCondition dateCondition = EntityCondition.makeCondition(EntityOperator.OR,

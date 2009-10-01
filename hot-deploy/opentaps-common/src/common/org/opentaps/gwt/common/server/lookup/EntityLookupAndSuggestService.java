@@ -25,6 +25,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.opentaps.foundation.entity.EntityInterface;
 import org.opentaps.gwt.common.client.lookup.UtilLookup;
 import org.opentaps.gwt.common.server.InputProviderInterface;
+import org.ofbiz.base.util.Debug;
 
 /**
  * The base service to perform entity lookups and / or suggest.
@@ -83,13 +84,14 @@ public abstract class EntityLookupAndSuggestService extends EntityLookupService 
      * @return the list of entities found, or <code>null</code> if an error occurred
      */
     protected <T extends EntityInterface> List<T> findSuggestMatchesAnyOf(Class<T> entity, String query, List<String> fields) {
+        Debug.logInfo("findSuggestMatchesAnyOf: entity=" + entity.getName() + ", query=" + query + ", fields=" + fields, "");
         if (query == null || fields.isEmpty()) {
             return findAll(entity);
         }
 
         List<EntityCondition> suggestConds = new ArrayList<EntityCondition>();
         for (String field : fields) {
-            suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER(field), EntityOperator.LIKE, EntityFunction.UPPER("%" + query + "%")));
+            suggestConds.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD(field), EntityOperator.LIKE, EntityFunction.UPPER("%" + query + "%")));
         }
         return findList(entity, EntityCondition.makeCondition(suggestConds, EntityOperator.OR));
     }
