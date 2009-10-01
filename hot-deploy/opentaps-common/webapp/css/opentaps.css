@@ -1194,3 +1194,7 @@ float: right;
 .productsummary .productbuy {
 width: auto;
 }
+
+.screenlet-title-bar { 
+display: none;
+}
