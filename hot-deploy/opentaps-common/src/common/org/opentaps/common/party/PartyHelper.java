@@ -78,7 +78,7 @@ public final class PartyHelper {
     private PartyHelper() { }
 
     private static final String MODULE = PartyHelper.class.getName();
-    public static List<String> CLIENT_PARTY_ROLES = Arrays.asList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER");
+    public static List<String> CRM_PARTY_ROLES = Arrays.asList("ACCOUNT", "CONTACT", "PROSPECT", "PARTNER", "SUPPLIER");
 
     /**
      * A helper method which finds the first valid roleTypeId for a partyId, using a List of possible roleTypeIds.
@@ -691,7 +691,7 @@ public final class PartyHelper {
      */
     public static String createViewPageURL(String partyId, GenericDelegator delegator, String externalLoginKey) throws GenericEntityException {
         GenericValue party = delegator.findByPrimaryKey("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
-        return createViewPageURL(party, CLIENT_PARTY_ROLES, externalLoginKey);
+        return createViewPageURL(party, CRM_PARTY_ROLES, externalLoginKey);
     }
 
     /**
@@ -709,7 +709,7 @@ public final class PartyHelper {
         GenericValue party = delegator.findByPrimaryKeyCache("PartySummaryCRMView", UtilMisc.toMap("partyId", partyId));
 
         // generate the contents of href=""
-        String uri = createViewPageURL(party, CLIENT_PARTY_ROLES, externalLoginKey);
+        String uri = createViewPageURL(party, CRM_PARTY_ROLES, externalLoginKey);
         // generate the display name
         StringBuffer name = new StringBuffer(getCrmsfaPartyName(party));
 
