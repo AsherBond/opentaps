@@ -166,6 +166,8 @@
                 <set field="pageTitleLabel" value="PurchViewAgreement"/>
                 <set field="sectionHeaderUiLabel" value="PurchViewAgreement"/>
                 <set field="screenMode" value="VIEW"/>
+                <set field="changeStatusAction" value="changePartnerAgreementStatus"/>
+                <set field="editAction" value="editPartnerAgreement"/>
                 <script location="component://crmsfa/webapp/crmsfa/WEB-INF/actions/partners/partnerAgreementPermissions.bsh"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementHelper.bsh"/>
                 <script location="component://opentaps-common/webapp/common/WEB-INF/actions/agreement/agreementItems.bsh"/>
@@ -175,7 +177,7 @@
                     <decorator-section name="section-body">
                         <container>
                             <platform-specific>
-                                <html><html-template location="component://crmsfa/webapp/crmsfa/partners/viewPartnerAgreementHeader.ftl"/></html>
+                                <html><html-template location="component://opentaps-common/webapp/common/agreements/viewCommonAgreementHeader.ftl"/></html>
                             </platform-specific>
                             <platform-specific>
                                 <html><html-template location="component://opentaps-common/webapp/common/agreements/viewAgreement.ftl"/></html>

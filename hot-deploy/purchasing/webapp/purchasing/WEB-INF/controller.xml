@@ -31,12 +31,12 @@
     <handler name="simple" type="request" class="org.ofbiz.webapp.event.SimpleEventHandler"/>
     <handler name="service" type="request" class="org.ofbiz.webapp.event.ServiceEventHandler"/>
     <handler name="service-multi" type="request" class="org.ofbiz.webapp.event.ServiceMultiEventHandler"/>
-    <handler name="bsf" type="request" class="org.ofbiz.webapp.event.BsfEventHandler"/>    
+    <handler name="bsf" type="request" class="org.ofbiz.webapp.event.BsfEventHandler"/>
 
     <!-- view handlers -->
     <handler name="screen" type="view" class="org.ofbiz.widget.screen.ScreenWidgetViewHandler"/>
     <handler name="screenfop" type="view" class="org.ofbiz.widget.screen.ScreenFopViewHandler"/>
-    <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>    
+    <handler name="jasperreports" type="view" class="org.opentaps.common.reporting.jasper.JasperReportsViewHandler"/>
 
     <preprocessor>
         <!-- Events to run on every request before security (chains exempt) -->
@@ -131,7 +131,7 @@
     <request-map uri="reportsMain">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="reportsMain"/>
-    </request-map>    
+    </request-map>
 
     <!-- call this request when you have a donePage that you want to go to after finishing a service -->
     <request-map uri="donePageRequestHelper">
@@ -335,13 +335,13 @@
         <event type="service-multi" invoke="approveRequirement"/>
         <response name="success" type="request-redirect-noparam" value="findRequirements"/>
         <response name="error" type="view" value="findRequirements"/>
-    </request-map>  
+    </request-map>
     <request-map uri="approveOpenRequirements">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="approveRequirement"/>
         <response name="success" type="request-redirect-noparam" value="openRequirements"/>
         <response name="error" type="view" value="openRequirements"/>
-    </request-map>          
+    </request-map>
     <request-map uri="openRequirements">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="openRequirements"/>
@@ -409,7 +409,7 @@
         <event type="service-multi" invoke="purchasing.cancelRequirement"/>
         <response name="success" type="request-redirect-noparam" value="findRequirements"/>
         <response name="error" type="view" value="findRequirements"/>
-    </request-map>    
+    </request-map>
     <request-map uri="cancelOpenRequirements">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="purchasing.cancelRequirement"/>
@@ -439,13 +439,13 @@
         <event type="service-multi" invoke="purchasing.updateRequirementSupplierAndQuantity"/>
         <response name="success" type="request-redirect-noparam" value="findRequirements"/>
         <response name="error" type="view" value="findRequirements"/>
-    </request-map> 
+    </request-map>
     <request-map uri="updateOpenRequirements">
         <security https="true" auth="true"/>
         <event type="service-multi" invoke="purchasing.updateRequirementSupplierAndQuantity"/>
         <response name="success" type="request-redirect-noparam" value="openRequirements"/>
         <response name="error" type="view" value="openRequirements"/>
-    </request-map>     
+    </request-map>
     <!-- Manufacturing Runs -->
     <request-map uri="runMRP">
         <security https="true" auth="true"/>
@@ -544,11 +544,11 @@
     <request-map uri="orderold.pdf">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="OrderPDF"/>
-    </request-map>    
+    </request-map>
     <request-map uri="OrderJR">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="OrderJR"/>
-    </request-map>    
+    </request-map>
     <request-map uri="findOrders">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="findOrders"/>
@@ -587,7 +587,7 @@
         <security https="true" auth="true"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="clearCart"/>
         <response name="success" type="view" value="createOrderMainScreen"/>
-    </request-map>    
+    </request-map>
     <request-map uri="appendItemToOrder">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="opentaps.appendOrderItem"/>
@@ -603,7 +603,7 @@
         <event type="service-multi" invoke="purchasing.updateOrderItemEstimatedDeliveryDate"/>
         <response name="success" type="request-redirect" value="editProductDeliveryDate"/>
         <response name="error" type="view" value="editProductDeliveryDate"/>
-    </request-map> 
+    </request-map>
 
     <!-- Opentaps versions of create order requests. -->
     <request-map uri="createOrderMainScreen">
@@ -715,7 +715,7 @@
         <event type="service" invoke="updateAgreement"/>
         <response name="success" type="request-redirect" value="viewAgreement">
             <redirect-parameter name="agreementId"/>
-        </response> 
+        </response>
         <response name="error" type="view" value="editAgreement"/>
     </request-map>
     <request-map uri="changeAgreementStatus">
@@ -723,8 +723,10 @@
         <event type="service" invoke="updateAgreement"/>
         <response name="success" type="request-redirect" value="viewAgreement">
             <redirect-parameter name="agreementId"/>
-        </response> 
-        <response name="error" type="view" value="viewAgreement"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
     </request-map>
     <request-map uri="processCreateAgreement">
         <security https="true" auth="true"/>
@@ -737,48 +739,60 @@
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
         <response name="success" type="request-redirect" value="viewAgreement">
             <redirect-parameter name="agreementId"/>
-        </response> 
-        <response name="error" type="view" value="viewAgreement"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
     </request-map>
     <request-map uri="processCreateAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="autoCreateAgreementItemsAndTerms"/>
         <response name="success" type="request-redirect" value="viewAgreement">
             <redirect-parameter name="agreementId"/>
-        </response> 
-        <response name="error" type="view" value="viewAgreement"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
     </request-map>
     <request-map uri="processRemoveAgreementItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="removeAgreementItemAndTerms"/>
         <response name="success" type="request-redirect" value="viewAgreement">
             <redirect-parameter name="agreementId"/>
-        </response> 
-        <response name="error" type="view" value="viewAgreement"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
     </request-map>
     <request-map uri="processCreateAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="createAgreementTerm"/>
         <response name="success" type="request-redirect" value="viewAgreement">
             <redirect-parameter name="agreementId"/>
-        </response>        
-        <response name="error" type="view" value="createAgreementTerm"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
     </request-map>
     <request-map uri="processUpdateAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateAgreementTerm"/>
         <response name="success" type="request-redirect" value="viewAgreement">
             <redirect-parameter name="agreementId"/>
-        </response> 
-        <response name="error" type="view" value="viewAgreement"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
     </request-map>
     <request-map uri="processRemoveAgreementTerm">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteAgreementTerm"/>
         <response name="success" type="request-redirect" value="viewAgreement">
             <redirect-parameter name="agreementId"/>
-        </response> 
-        <response name="error" type="view" value="viewAgreement"/>
+        </response>
+        <response name="error" type="request-redirect" value="viewAgreement">
+          <redirect-parameter name="agreementId"/>
+        </response>
     </request-map>
     <request-map uri="createSupplierTaxAuthInfo">
         <security https="true" auth="true"/>
@@ -802,11 +816,11 @@
         <response name="success" type="view" value="supplierMain"/>
         <response name="error" type="view" value="outsourceRoutingTaskForm"/>
     </request-map>
-    
+
     <request-map uri="purchasingQuickCheckout">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="purchasingQuickCheckout"/>
-    </request-map>    
+    </request-map>
     <request-map uri="ordersEditContactMech">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="ordersEditContactMech"/>
@@ -821,28 +835,28 @@
         <security https="true" auth="true"/>
         <event type="service" invoke="opentaps.preparePurchasingOrderEmail"/>
         <response name="success" type="request" value="writeEmail"/>
-    </request-map>   
+    </request-map>
     <!-- ========================= -->
     <!-- Pentaho Services Mappings -->
     <!-- ========================= -->
 
     <request-map uri="ViewAction">
         <security https="true" auth="true"/>
-        <event type="java" path="com.opensourcestrategies.pentaho.PentahoEvents" invoke="viewAction"/>        
+        <event type="java" path="com.opensourcestrategies.pentaho.PentahoEvents" invoke="viewAction"/>
         <response name="success" type="none"/>
         <response name="error" type="view" value="error"/>
     </request-map>
-    
-    
+
+
     <request-map uri="finalizeOrder">
         <security https="true" auth="true"/>
         <event type="java" path="org.opentaps.common.order.shoppingcart.OpentapsCheckOutEvents" invoke="finalizeOrderEntry"/>
         <response name="addparty" type="view" value="setAdditionalParty"/>
         <response name="customer" type="view" value="custsetting"/>
-        
+
         <!-- customized quick checkout -->
         <response name="term" type="view" value="purchasingQuickCheckout"/>
-        
+
         <response name="shipping" type="view" value="shipsetting"/>
         <response name="shippingAddress" type="view" value="EditShipAddress"/>
         <response name="options" type="view" value="optionsetting"/>

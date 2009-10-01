@@ -17,15 +17,17 @@
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 
 <#assign agreementId = parameters.agreementId/>
+<#if isEditable?default(false)>
+  <#assign editTargetAction = editAction?default("editAgreement")/>
+  <#assign changeStatusAction = changeStatusAction?default("changeAgreementStatus")/>
+  <#assign links = ""/>
+  <#list statusItems as validStatus>
+    <@form name="${validStatus.statusIdTo}Action" url="${changeStatusAction}" agreementId=agreementId statusId=validStatus.statusIdTo />
+    <#assign links>${links}<@submitFormLink form="${validStatus.statusIdTo}Action" text=validStatus.get("transitionName") class="subMenuButton" /></#assign>
+  </#list>
+  <#assign links>${links}<@displayLink href="${editTargetAction}?agreementId=${agreementId}" text=uiLabelMap.CommonEdit class="subMenuButton"/></#assign>
+</#if>
+
 <@sectionHeader title="${agreementTypeDescription?if_exists} ${uiLabelMap.OrderNbr}${agreementId}">
-    <div class="subMenuBar">
-        <#if isEditable?is_boolean && isEditable == true>
-            <#assign editTargetAction = editAction?default("editAgreement")/>
-            <#assign changeStatusAction = changeStatusAction?default("changeAgreementStatus")/>
-    		<#list statusItems as validStatus>
-    			<@displayLink href="${changeStatusAction}?agreementId=${agreementId}&statusId=${validStatus.statusIdTo}" text=validStatus.get("transitionName") class="subMenuButton"/>
-    		</#list>
-            <@displayLink href="${editTargetAction}?agreementId=${agreementId}" text="${uiLabelMap.CommonEdit}" class="subMenuButton"/>
-        </#if>
-    </div>
+  <div class="subMenuBar">${links?if_exists}</div>
 </@sectionHeader>
