@@ -82,6 +82,7 @@ under the License.
         <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
         <attribute name="effectiveDate" type="Timestamp" mode="IN" optional="true"/>
         <attribute name="paymentRefNum" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentId" mode="OUT" type="String"/>
     </service>
 
     <service name="captureBillingAccountPayments" engine="java"
