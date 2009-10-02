@@ -19,19 +19,23 @@
 <#if returnHeader?has_content>
 <#if returnHeader.statusId != "RETURN_CANCELLED">
 <#if canCancelReturn?exists>
-    <#assign cancelLink><@inputConfirm title=uiLabelMap.CommonCancel class="subMenuButtonDangerous" href="updateReturnHeader?returnId=${returnId}&statusId=RETURN_CANCELLED"/></#assign>
+    <@form name="cancelReturnAction" url="updateReturnHeader" returnId=returnId statusId="RETURN_CANCELLED"/>
+    <#assign cancelLink><@submitFormLinkConfirm form="cancelReturnAction" text=uiLabelMap.CommonCancel class="subMenuButtonDangerous"/></#assign>
 </#if>
 <#if canAcceptReturn?exists && returnItems.size() != 0>
-    <#assign acceptLink><a href="acceptReturn?returnId=${returnId}&shipmentId=${returnShipmentId?if_exists}" class="subMenuButton">${uiLabelMap.OpentapsAccept}</a></#assign>
+    <@form name="acceptReturnAction" url="acceptReturn" returnId=returnId shipmentId="${returnShipmentId!}"/>
+    <#assign acceptLink><@submitFormLink form="acceptReturnAction" text=uiLabelMap.OpentapsAccept class="subMenuButton"/></#assign>
 </#if>
 <#if returnItems.size() != 0>
     <#assign pdfLink><a href="return.pdf?returnId=${returnId}" class="subMenuButton">PDF</a></#assign>
 </#if>
 <#if canForceCompleteReturn?exists>
-    <#assign forceCompleteLink><@inputConfirm title=uiLabelMap.OpentapsForceComplete class="subMenuButtonDangerous" href="updateReturnHeader?returnId=${returnId}&statusId=RETURN_COMPLETED"/></#assign>
+    <@form name="forceCompleteReturnAction" url="updateReturnHeader" returnId=returnId statusId="RETURN_COMPLETED"/>
+    <#assign forceCompleteLink><@submitFormLinkConfirm form="forceCompleteReturnAction" text=uiLabelMap.OpentapsForceComplete class="subMenuButtonDangerous"/></#assign>
 </#if>
 <#if returnHeader.statusId == "RETURN_REQUESTED" && returnHeader.destinationFacilityId?has_content && returnHeader.carrierReturnServiceId?has_content && returnHeader.originContactMechId?has_content && returnHeader.originPhoneContactMechId?has_content && returnHeader.estimatedWeight?has_content && returnItems.size() != 0 && ! returnShipment?exists>
-    <#assign confirmLink><a href="createAndConfirmReturnShipment?returnId=${returnId}" class="subMenuButton">${uiLabelMap.CrmReturnSchedulePickup}</a></#assign>
+    <@form name="createAndConfirmReturnShipmentAction" url="createAndConfirmReturnShipment" returnId=returnId/>
+    <#assign confirmLink><@submitFormLink form="createAndConfirmReturnShipmentAction" text=uiLabelMap.CrmReturnSchedulePickup class="subMenuButton"/></#assign>
 </#if>
 </#if>
 <div class="subSectionBlock">
