@@ -55,13 +55,15 @@ under the License.
    <tr><td colspan="4">&nbsp;</td><td colspan="2"><hr class="sepbar"/></td></tr>
 </#macro>
 
-<#assign newOrderLink><a href='<@ofbizUrl>loadCartFromOrder?${paramString}&finalizeMode=init</@ofbizUrl>' class='subMenuButton'>${uiLabelMap.OrderCreateAsNewOrder}</a></#assign>
+<@form name="createReturnAction" url="createReturnFromOrder" orderId=order.orderId />
+
+<#assign newOrderLink><a href="<@ofbizUrl>loadCartFromOrder?${paramString}&finalizeMode=init</@ofbizUrl>" class="subMenuButton">${uiLabelMap.OrderCreateAsNewOrder}</a></#assign>
 <#if !order.isCompleted()>
-  <#assign cancelAllLink><a href='<@ofbizUrl>cancelOrderItem?${paramString}</@ofbizUrl>' class='subMenuButton'>${uiLabelMap.OrderCancelAllItems}</a></#assign>
-  <#assign editItemsLink><a href='<@ofbizUrl>editOrderItems?${paramString}</@ofbizUrl>' class='subMenuButton'>${uiLabelMap.OpentapsOrderEditAddItem}</a></#assign>
+  <#assign cancelAllLink><a href="<@ofbizUrl>cancelOrderItem?${paramString}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.OrderCancelAllItems}</a></#assign>
+  <#assign editItemsLink><a href="<@ofbizUrl>editOrderItems?${paramString}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.OpentapsOrderEditAddItem}</a></#assign>
 </#if>
 <#if order.returnableItemsMap?has_content && security.hasEntityPermission("CRMSFA", "_RETURN_CREATE", userLogin)>
-  <#assign createReturnLink><a href='<@ofbizUrl>createReturnFromOrder?orderId=${order.orderId}</@ofbizUrl>' class='subMenuButton'>${uiLabelMap.OrderCreateReturn}</a></#assign>
+  <#assign createReturnLink><@submitFormLink form="createReturnAction" class="subMenuButton" text=uiLabelMap.OrderCreateReturn/></#assign>
 </#if>
 
 <#assign itemLinks>
