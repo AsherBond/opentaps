@@ -49,4 +49,11 @@
         <attribute name="shipmentId" type="String" mode="IN" optional="true"/>
     </service>
 
+    <service name="getReturnableItems" engine="java"
+            location="com.opensourcestrategies.crmsfa.returns.OrderReturnServices" invoke="getReturnableItems">
+        <description>Get a map of returnable items orderItem => quantity available to return</description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="returnableItems" type="Map" mode="OUT" optional="false"/>
+    </service>
+
 </services>
