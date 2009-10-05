@@ -51,7 +51,7 @@
         <attribute name="customTimePeriodId" type="String" mode="IN" optional="false"/>
         <attribute name="organizationPartyId" type="String" mode="IN" optional="false"/>
         <attribute name="currencyUomId" type="String" mode="IN" optional="false"/>
-        <attribute name="quotaAmount" type="Double" mode="IN" optional="true"/>
+        <attribute name="quotaAmount" type="BigDecimal" mode="IN" optional="true"/>
         <!-- in case of update, these will get passed -->
         <attribute name="salesForecastId" type="String" mode="IN" optional="true"/>
         <attribute name="changeNote" type="String" mode="IN" optional="true"/>
@@ -76,7 +76,7 @@
             <check-permission permission="CRMSFA" action="_4C_UPDATE"/>
         </required-permissions>
         <attribute name="salesForecastId" type="String" mode="IN" optional="false"/>
-        <attribute name="quotaAmount" type="Double" mode="IN" optional="false"/>
+        <attribute name="quotaAmount" type="BigDecimal" mode="IN" optional="false"/>
         <attribute name="changeNote" type="String" mode="IN" optional="false"/>
     </service>
 

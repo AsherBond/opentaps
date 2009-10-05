@@ -40,18 +40,32 @@
  */
 package com.opensourcestrategies.crmsfa.forecasts;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import com.opensourcestrategies.crmsfa.opportunities.UtilOpportunity;
 import com.opensourcestrategies.crmsfa.party.PartyHelper;
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.entity.*;
-import org.ofbiz.entity.condition.*;
+import org.ofbiz.entity.GenericDelegator;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.security.Security;
-import org.ofbiz.service.*;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ModelService;
+import org.ofbiz.service.ServiceUtil;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilConfig;
 import org.opentaps.common.util.UtilMessage;
@@ -61,7 +75,6 @@ import org.opentaps.common.util.UtilMessage;
  *
  * @author     <a href="mailto:leon@opensourcestrategies.com">Leon Torres</a>
  * @author     <a href="mailto:sichen@opensourcestrategies.com">Si Chen</a>
- * @version    $Rev: 488 $
  */
 public final class ForecastsServices {
 
@@ -78,7 +91,7 @@ public final class ForecastsServices {
         Locale locale = UtilCommon.getLocale(context);
 
         String salesForecastId = (String) context.get("salesForecastId");
-        Double quotaAmount = (Double) context.get("quotaAmount");
+        BigDecimal quotaAmount = (BigDecimal) context.get("quotaAmount");
         try {
             GenericValue forecast = delegator.findByPrimaryKey("SalesForecast", UtilMisc.toMap("salesForecastId", salesForecastId));
             if (forecast == null) {
@@ -86,7 +99,7 @@ public final class ForecastsServices {
             }
 
             // compute the fields for the forecast (use the internalPartyId of the existing forecast)
-            Map computed = UtilForecast.computeForecastByOpportunities(quotaAmount, forecast.getString("organizationPartyId"),
+            Map<String, BigDecimal> computed = UtilForecast.computeForecastByOpportunities(quotaAmount, forecast.getString("organizationPartyId"),
                     forecast.getString("internalPartyId"),  forecast.getString("currencyUomId"), forecast.getString("customTimePeriodId"), delegator);
 
             // make the service input map from the context
@@ -105,9 +118,7 @@ public final class ForecastsServices {
             }
 
             // now recompute the parent forecast by calling our service for this with the parent as input
-            // TODO: normally we could use: GenericValue parent = forecast.getRelatedOne("ParentSalesForecast");
-            // TODO: but we can't yet untill we re-arrange the way forecasts are created (create all of them once quarter is selected, then compute values)
-            // TODO: so this is a complete hack:
+            // TODO: normally we could use: GenericValue parent = forecast.getRelatedOne("ParentSalesForecast"); but we can't yet untill we re-arrange the way forecasts are created (create all of them once quarter is selected, then compute values) so this is a complete hack:
             GenericValue period = forecast.getRelatedOne("CustomTimePeriod");
             List<GenericValue> parents = delegator.findByAnd("SalesForecastAndCustomTimePeriod", UtilMisc.toMap("customTimePeriodId", period.getString("parentPeriodId"),
                         "internalPartyId", forecast.getString("internalPartyId"), "organizationPartyId", forecast.getString("organizationPartyId"),
@@ -144,9 +155,9 @@ public final class ForecastsServices {
         String currencyUomId = (String) context.get("currencyUomId");
 
         // set the quota to 0.00 if the user didn't supply it, that way we get all forecasts for a set of periods rather than a few that had quotas defined
-        Double quotaAmount = (Double) context.get("quotaAmount");
+        BigDecimal quotaAmount = (BigDecimal) context.get("quotaAmount");
         if (quotaAmount == null) {
-            quotaAmount = new Double(0.00);
+            quotaAmount = BigDecimal.ZERO;
         }
 
         try {
@@ -169,8 +180,7 @@ public final class ForecastsServices {
             }
 
             // compute the fields for the forecast
-            Map computed = UtilForecast.computeForecastByOpportunities(quotaAmount, organizationPartyId, internalPartyId,
-                    currencyUomId, customTimePeriodId, delegator);
+            Map<String, BigDecimal> computed = UtilForecast.computeForecastByOpportunities(quotaAmount, organizationPartyId, internalPartyId, currencyUomId, customTimePeriodId, delegator);
 
             // make the service input map from the context
             ModelService service = dctx.getModelService(serviceName);
@@ -225,7 +235,7 @@ public final class ForecastsServices {
             }
 
             // compute the fields for the forecast
-            Map computed = UtilForecast.computeForecastByChildren(parentPeriodId, organizationPartyId, internalPartyId, currencyUomId, delegator);
+            Map<String, BigDecimal> computed = UtilForecast.computeForecastByChildren(parentPeriodId, organizationPartyId, internalPartyId, currencyUomId, delegator);
 
             // make the service input map from the context
             ModelService service = dctx.getModelService(serviceName);
@@ -262,7 +272,7 @@ public final class ForecastsServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         Locale locale = UtilCommon.getLocale(context);
-        ResourceBundleMapWrapper uiLabelMap = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("CRMSFAUiLabels", locale);
+        ResourceBundleMapWrapper uiLabelMap = UtilProperties.getResourceBundleMap("CRMSFAUiLabels", locale);
 
         String salesOpportunityId = (String) context.get("salesOpportunityId");
         String changeNote = (String) context.get("changeNote");
@@ -347,7 +357,7 @@ public final class ForecastsServices {
                 Map<String, Object> input = UtilMisc.toMap("userLogin", userLogin, "organizationPartyId", organizationPartyId, "currencyUomId", forecast.get("currencyUomId"));
                 input.put("customTimePeriodId", forecast.getString("customTimePeriodId"));
                 input.put("salesForecastId", forecast.getString("salesForecastId"));
-                input.put("quotaAmount", forecast.getDouble("quotaAmount"));
+                input.put("quotaAmount", forecast.getBigDecimal("quotaAmount"));
                 input.put("changeNote", changeNoteBuff.toString());
                 Map<String, Object> serviceResults = dispatcher.runSync("crmsfa.computeForecastPeriod", input);
                 if (ServiceUtil.isError(serviceResults)) {
