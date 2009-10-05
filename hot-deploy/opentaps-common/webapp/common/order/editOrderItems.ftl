@@ -37,8 +37,14 @@ under the License.
 <@import location="component://opentaps-common/webapp/common/includes/lib/opentapsFormMacros.ftl"/>
 <script type="text/javascript">
   function cancelOrderItem(orderItemSeqId, shipGroupSeqId) {
-    document.cancelOrderItemForm.orderItemSeqId.value = orderItemSeqId;
-    document.cancelOrderItemForm.shipGroupSeqId.value = shipGroupSeqId;
+    document.cancelOrderItemForm.orderItemSeqId.value = "";
+    document.cancelOrderItemForm.shipGroupSeqId.value = "";
+    if (orderItemSeqId) {
+      document.cancelOrderItemForm.orderItemSeqId.value = orderItemSeqId;
+    }
+    if (shipGroupSeqId) {
+      document.cancelOrderItemForm.shipGroupSeqId.value = shipGroupSeqId;
+    }
     document.cancelOrderItemForm.submit();
   }
   
