@@ -71,10 +71,11 @@ under the License.
           </div>
        </td>
        <#if (adjEditable)>
-       <td align='right'>
-           <@inputConfirm href="removeReturnAdjustment?returnAdjustmentId=${returnAdjustment.returnAdjustmentId}&returnId=${returnAdjustment.returnId}" title=uiLabelMap.CommonRemove /></td>
+         <td align='right'>
+           <@submitFormLinkConfirm form="removeReturnAdjustmentAction" text=uiLabelMap.CommonRemove returnAdjustmentId=returnAdjustment.returnAdjustmentId />
+         </td>
        <#else>
-       <td>&nbsp;</td>
+         <td>&nbsp;</td>
        </#if>
        <#assign rowCount = rowCount + 1>
        <#assign returnTotal = returnTotal + returnAdjustment.amount?default(0)>
@@ -107,6 +108,7 @@ under the License.
   <#assign returnTotal = 0.0>
   <#assign rowCount = 0>
   <@form name="removeReturnItemAction" url="removeReturnItem" returnId=returnId returnItemSeqId="" />
+  <@form name="removeReturnAdjustmentAction" url="removeReturnAdjustment" returnId=returnId returnAdjustmentId="" />
   <form method="post" action="<@ofbizUrl>updateReturnItems</@ofbizUrl>">
   <input type="hidden" name="_useRowSubmit" value="Y">      
   <#if returnItems?has_content>
