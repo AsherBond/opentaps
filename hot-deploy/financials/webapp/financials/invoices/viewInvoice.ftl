@@ -276,10 +276,10 @@ function notifyInvoiceItemsCount(n) {
                 <@inputHiddenRowSubmit submit=false index=item_index/>
                 <@displayLinkCell href="updateInvoiceItemForm?invoiceId=${item.invoiceId}&invoiceItemSeqId=${item.invoiceItemSeqId}" text=item.invoiceItemSeqId />
                 <@displayCell text=item.getInvoiceItemType().get("description", locale) />
-                <@inputLookupCell name="productId" default=item.productId?default("") lookup="LookupProduct" form="updateInvoiceItemMulti" size="10" index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
-                <@inputTextCell name="description" default=item.description?default(" ") size=60 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
-                <@inputTextCell name="quantity" default=item.quantity?default(" ") size=4 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
-                <@inputTextCell name="amount" default=item.amount?default(" ") size=6 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
+                <@inputLookupCell name="productId" default=item.productId! lookup="LookupProduct" form="updateInvoiceItemMulti" size="10" index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
+                <@inputTextCell name="description" default=item.description! size=60 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
+                <@inputTextCell name="quantity" default=item.quantity! size=4 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
+                <@inputTextCell name="amount" default=item.amount! size=6 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
                 <@displayCurrencyCell amount=rowTotal currencyUomId=item.uomId?default(invoice.currencyUomId) />
                 <@inputSubmitIndexedCell title="${uiLabelMap.CommonUpdate}" index=item_index/>
                 <td><@submitFormLinkConfirm form="removeInvoiceItemAction" text=uiLabelMap.CommonRemove invoiceItemSeqId=item.invoiceItemSeqId/></td>
