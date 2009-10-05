@@ -127,7 +127,7 @@ for (currentId: selected) {
 
     // Invoice total
     invoiceTotal = InvoiceWorker.getInvoiceTotal(invoice);
-    item{"invoiceTotal"} = new Double(invoiceTotal);    
+    item{"invoiceTotal"} = invoiceTotal;    
 
     // determine the payments and everything related to them
     if (isReceipt || isDisbursement) {
@@ -223,8 +223,8 @@ for (currentId: selected) {
         }
 
         // the payment total should add up to the list of payments above
-        paymentsTotal = InvoiceWorker.getInvoiceAppliedBd(delegator, currentId);
-        outstandingAmount = InvoiceWorker.getInvoiceTotalBd(delegator, currentId).subtract(paymentsTotal);
+        paymentsTotal = InvoiceWorker.getInvoiceApplied(delegator, currentId);
+        outstandingAmount = InvoiceWorker.getInvoiceTotal(delegator, currentId).subtract(paymentsTotal);
 
         item{"paymentList"} = paymentList;
         item{"adjustmentList"} = adjustmentList;
