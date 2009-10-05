@@ -75,30 +75,31 @@ under the License.
     <#if errorMessage?has_content>
         ${errorMessage}
     <#elseif orderId?has_content && shipGroupSeqId?has_content && !orderHeader?exists>
-        <#assign uiLabelWithVar=uiLabelMap.WarehouseErrorOrderIdAndShipGroupSeqIdNotFound?interpret><@uiLabelWithVar/>
+        <@expandLabel label="WarehouseErrorOrderIdAndShipGroupSeqIdNotFound" params={"orderId", orderId, "shipGroupSeqId", shipGroupSeqId} />
         <#assign totalAvailableToReceive = 0/>
     <#elseif orderId?has_content && !orderHeader?exists>
-        <#assign uiLabelWithVar=uiLabelMap.ProductErrorOrderIdNotFound?interpret><@uiLabelWithVar/>
+        <@expandLabel label="ProductErrorOrderIdNotFound" params={"orderId", orderId} />
         <#assign totalAvailableToReceive = 0/>
     <#elseif orderHeader?exists && orderHeader.orderTypeId != "PURCHASE_ORDER">
-        <#assign uiLabelWithVar=uiLabelMap.ProductErrorOrderNotPurchaseOrder?interpret><@uiLabelWithVar/>
+        <@expandlabel label="ProductErrorOrderNotPurchaseOrder" params={"orderId", orderId} />
         <#assign totalAvailableToReceive = 0/>
     <#elseif orderHeader?exists && orderHeader.statusId != "ORDER_APPROVED" && orderHeader.statusId != "ORDER_COMPLETED">
-        <#assign uiLabelWithVar=uiLabelMap.WarehouseErrorOrderNotApproved?interpret><@uiLabelWithVar/>
+        <@expandLabel label="WarehouseErrorOrderNotApproved" params={"orderId", orderId} />
         <#assign totalAvailableToReceive = 0/>
     <#elseif ProductReceiveInventoryAgainstPurchaseOrderProductNotFound?exists>
-        <#assign uiLabelWithVar=uiLabelMap.ProductReceiveInventoryAgainstPurchaseOrderProductNotFound?interpret><@uiLabelWithVar/>
-        <script type="text/javascript">window.onload=function(){alert('<@uiLabelWithVar/>')};</script>
+        <@expandLabel label="ProductReceiveInventoryAgainstPurchaseOrderProductNotFound" params={"productId", productId, "orderId", orderId} />
+        <script type="text/javascript">window.onload=function(){alert('<@expandLabel label="ProductReceiveInventoryAgainstPurchaseOrderProductNotFound" params={"productId", productId?default(""), "orderId", orderId} />')};</script>
     <#elseif ProductReceiveInventoryAgainstPurchaseOrderQuantityExceedsAvailableToReceive?exists>
-        <#assign uiLabelWithVar=uiLabelMap.ProductReceiveInventoryAgainstPurchaseOrderQuantityExceedsAvailableToReceive?interpret><@uiLabelWithVar/>
-        <script type="text/javascript">window.onload=function(){alert('<@uiLabelWithVar/>')};</script>
+        <@expandLabel label="ProductReceiveInventoryAgainstPurchaseOrderQuantityExceedsAvailableToReceive" params={"newQuantity", newQuantity?if_exists, "productId", productId?default("")} />
+        <script type="text/javascript">window.onload=function(){alert('<@expandLabel label="ProductReceiveInventoryAgainstPurchaseOrderQuantityExceedsAvailableToReceive" params={"newQuantity", newQuantity?if_exists, "productId", productId?default("")} />')};</script>
     </#if>
 </div>
 
 <#if ProductReceiveInventoryAgainstPurchaseOrderQuantityGoesToBackOrder?exists && ! ProductReceiveInventoryAgainstPurchaseOrderQuantityExceedsAvailableToReceive?exists && productId?exists>
     <div class="errorMessage" style="color:green;margin:5px 0px 5px 5px">
         <#assign uiLabelWithVar=uiLabelMap.ProductReceiveInventoryAgainstPurchaseOrderQuantityGoesToBackOrder?interpret><@uiLabelWithVar/>
-        <script type="text/javascript">window.onload=function(){alert('<@uiLabelWithVar/>')};</script>
+        <@expandLabel label="ProductReceiveInventoryAgainstPurchaseOrderQuantityGoesToBackOrder" params={"quantityToBackOrder", quantityToBackOrder?if_exists, "quantityToReceive", quantityToReceive?if_exists, "productId", productId?default("")}/>
+        <script type="text/javascript">window.onload=function(){alert('<@expandLabel label="ProductReceiveInventoryAgainstPurchaseOrderQuantityGoesToBackOrder" params={"quantityToBackOrder", quantityToBackOrder?if_exists, "quantityToReceive", quantityToReceive?if_exists, "productId", productId?default("")}/>')};</script>
     </div>
 </#if>
 
