@@ -164,6 +164,7 @@ function notifyInvoiceItemsCount(n) {
 <#if invoiceTerms?has_content || (hasUpdatePermission && termTypes?has_content)>
     <div class="subSectionBlock">
       <@sectionHeader title=uiLabelMap.FinancialsInvoiceTerms />
+        <@form name="deleteInvoiceTermAction" url="deleteInvoiceTerm" invoiceId=invoice.invoiceId invoiceTermId=""/>
         <table class="listTable">
           <tr class="listTableHeader">
             <#--td>${uiLabelMap.FinancialsInvoiceItemSeqId}</td-->
@@ -195,7 +196,7 @@ function notifyInvoiceItemsCount(n) {
                   <@inputTextCell name="termDays" default=invoiceTerm.termDays?if_exists size=5 index=invoiceTerm_index onChange="opentaps.markRowForSubmit(this.form, ${invoiceTerm_index})"/>
                   <@inputTextCell name="textValue" default=invoiceTerm.textValue?if_exists size=30 index=invoiceTerm_index onChange="opentaps.markRowForSubmit(this.form, ${invoiceTerm_index})"/>
                   <@inputSubmitIndexedCell title="${uiLabelMap.CommonUpdate}" index=invoiceTerm_index/>
-                  <@displayLinkCell href="deleteInvoiceTerm?invoiceId=${invoiceTerm.invoiceId}&invoiceTermId=${invoiceTerm.invoiceTermId}" class="buttontext" text="${uiLabelMap.CommonRemove}"/>
+                  <td><@submitFormLinkConfirm form="deleteInvoiceTermAction" text=uiLabelMap.CommonRemove invoiceTermId=invoiceTerm.invoiceTermId /></td>
                 <#else>
                   <@displayCell text=invoiceTerm.getTermType().get("description", "OpentapsEntityLabels", locale) style="white-space: nowrap" />
                   <@displayCell text=invoiceTerm.termValue?if_exists blockClass="tabletextright" />
