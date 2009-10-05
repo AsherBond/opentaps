@@ -46,27 +46,6 @@
         <field name="submitButton" title="${uiLabelMap.CrmForecastEnterQuotas}" widget-style="smallSubmit"><submit button-type="button"/></field>
     </form>
 
-    <form name="createForecastForm" type="multi" title=""
-        target="createForecast"
-        default-title-style="tableheadtext" default-widget-style="tabletext" default-tooltip-style="tabletext"
-        default-table-style="crmsfaListTable" header-row-style="crmsfaListTableHeader" even-row-style="rowWhite" odd-row-style="rowLightGray"
-        list-name="periods">
-        <field name="parentPeriodId"><hidden value="${parameters.customTimePeriodId}"/></field>
-        <field name="customTimePeriodId"><hidden/></field>
-        <field name="salesForecastId"><hidden/></field>
-        <!-- TODO: organization is from config file until we implement organization -->
-        <field name="organizationPartyId"><hidden value="${organizationPartyId}"/></field>
-        <!-- TODO: currency conversion from opportunity not implemented, so hardcode currencyUomId from config. when conversion is implemented, open this up -->
-        <field name="currencyUomId"><hidden value="${configProperties.defaultCurrencyUomId}"/></field>
-        <field name="periodName" title="${uiLabelMap.CrmPeriod}"><display description="${periodName} ${periodNum}"/></field>
-        <field name="fromDate" title="${uiLabelMap.CommonFromDate}" red-when="never"><display/></field>
-        <field name="thruDate" title="${uiLabelMap.CommonThruDate}" red-when="before-now"><display/></field>
-
-        <field name="quotaAmount" title="${uiLabelMap.CrmQuota}" widget-style="inputBox" use-when="com.opensourcestrategies.crmsfa.util.UtilCommon.isTimePeriodOpen(&quot;${customTimePeriodId}&quot;, delegator);"><text/></field>
-
-        <field name="submitButton" title="${uiLabelMap.CrmForecastEnterQuotas}" widget-style="smallSubmit"><submit button-type="button"/></field>
-    </form>
-
     <!-- present a list of forecasts -->
     <form name="ListForecasts" type="list" separate-columns="true" 
         title="Forecasts"  default-title-style="tableheadtext" target=""

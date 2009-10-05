@@ -161,7 +161,9 @@
             <widgets>
                 <decorator-screen name="main-section-decorator">
                     <decorator-section name="section-body">
-                        <include-form name="createForecastForm" location="component://crmsfa/widget/crmsfa/forms/forecasts/ForecastsForms.xml"/>
+                      <platform-specific>
+                        <html><html-template location="component://crmsfa/webapp/crmsfa/forecasts/createForecastForm.ftl"/></html>
+                      </platform-specific>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
