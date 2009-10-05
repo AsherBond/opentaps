@@ -24,7 +24,7 @@
       <#if parameters.hasFinancialsARInvoiceCreatePermission><li class="tabletext"><a href="<@ofbizUrl>createInvoiceForm?invoiceTypeId=SALES_INVOICE</@ofbizUrl>">${uiLabelMap.FinancialsCreateSalesInvoice}</a></li></#if>
       <li class="tabletext"><a href="<@ofbizUrl>findSalesInvoices</@ofbizUrl>">${uiLabelMap.FinancialsFindSalesInvoices}</a></li>
       <li class="tabletext">
-        <form action="<@ofbizUrl>invoicePerformedOrderItems</@ofbizUrl>" method="get" name="invoicePerformedOrderItems">
+        <form action="<@ofbizUrl>invoicePerformedOrderItems</@ofbizUrl>" method="post" name="invoicePerformedOrderItems">
           <a href="javascript:document.invoicePerformedOrderItems.submit()">${uiLabelMap.FinancialsInvoicePerformedOrderItemsForOrder}</a>
           <@inputLookup name="orderId" lookup="LookupSalesOrders?statusId=ORDER_APPROVED" form="invoicePerformedOrderItems"/>
         </form>
