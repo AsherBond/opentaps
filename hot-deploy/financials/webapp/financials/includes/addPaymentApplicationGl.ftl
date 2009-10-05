@@ -23,7 +23,7 @@
   <div class="form" style="border:0">
     <table class="twoColumnForm" style="border:0">
       <tr>
-        <@displayTitleCell title=uiLabelMap.AccountingGlAcc titleClass="requiredField" />
+        <@displayTitleCell title=uiLabelMap.AccountingGlAccount titleClass="requiredField" />
         <td><@inputAutoCompleteGlAccount name="overrideGlAccountId" id="overrideGlAccountId" /></td>
       </tr>
       <@inputTextRow title=uiLabelMap.CommonAmount size="10" name="amountApplied" titleClass="requiredField" />
