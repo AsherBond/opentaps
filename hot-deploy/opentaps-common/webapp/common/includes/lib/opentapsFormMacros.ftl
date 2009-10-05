@@ -1102,7 +1102,7 @@ For more information, please see documentation/opentapsFormMacros.html
   </form>
 </#macro>
 
-<#macro submitFormLink form text class="buttontext" formParams...>
+<#macro submitFormLink form text class="buttontext" id="" style="" formParams...>
 <#compress>
   <#assign extraParams = "null"/>
   <#if formParams?has_content>
@@ -1114,11 +1114,11 @@ For more information, please see documentation/opentapsFormMacros.html
       }
     </#assign>
   </#if>
-  <a class="${class}" href="javascript:opentaps.submitForm('${form}', null, ${extraParams});">${text}</a>
+  <a class="${class}" <#if style?has_content> style="${style}"</#if> <#if id?has_content> id="${id}"</#if> href="javascript:opentaps.submitForm('${form}', null, ${extraParams});">${text}</a>
 </#compress>
 </#macro>
 
-<#macro submitFormLinkConfirm form text class="buttonDangerous" confirmText=uiLabelMap.OpentapsAreYouSure formParams...>
+<#macro submitFormLinkConfirm form text class="buttonDangerous" id="" style="" confirmText=uiLabelMap.OpentapsAreYouSure formParams...>
 <#compress>
   <#assign extraParams = "null"/>
   <#if formParams?has_content>
@@ -1130,7 +1130,7 @@ For more information, please see documentation/opentapsFormMacros.html
       }
     </#assign>
   </#if>
-  <a class="${class}" href="javascript:opentaps.confirmAction('${confirmText}', null, '${form}', ${extraParams});">${text}</a>
+  <a class="${class}" <#if style?has_content> style="${style}"</#if> <#if id?has_content> id="${id}"</#if> href="javascript:opentaps.confirmAction('${confirmText}', null, '${form}', ${extraParams});">${text}</a>
 </#compress>
 </#macro>
 
