@@ -261,6 +261,7 @@ function notifyInvoiceItemsCount(n) {
 
           <#assign total = 0/>
           <#if hasUpdatePermission>
+            <@form name="removeInvoiceItemAction" url="removeInvoiceItem" invoiceId=invoice.invoiceId invoiceItemSeqId=""/>
             <form method="post" action="<@ofbizUrl>updateInvoiceItemMulti</@ofbizUrl>" name="updateInvoiceItemMulti">
               <@inputHidden name="invoiceId" value="${invoiceId}" />
               <@inputHiddenRowCount list=invoiceItems />
@@ -281,7 +282,7 @@ function notifyInvoiceItemsCount(n) {
                 <@inputTextCell name="amount" default=item.amount?default(" ") size=6 index=item_index onChange="opentaps.markRowForSubmit(this.form, ${item_index})" />
                 <@displayCurrencyCell amount=rowTotal currencyUomId=item.uomId?default(invoice.currencyUomId) />
                 <@inputSubmitIndexedCell title="${uiLabelMap.CommonUpdate}" index=item_index/>
-                <@displayLinkCell href="removeInvoiceItem?invoiceId=${item.invoiceId}&invoiceItemSeqId=${item.invoiceItemSeqId}" class="buttontext" text="${uiLabelMap.CommonRemove}"/>
+                <td><@submitFormLinkConfirm form="removeInvoiceItemAction" text=uiLabelMap.CommonRemove invoiceItemSeqId=item.invoiceItemSeqId/></td>
               <#else>
                 <@displayCell text=displayItemSeqId blockClass="tabletextright" />
                 <@displayCell text=item.getInvoiceItemType().get("description", locale) style="white-space: nowrap" />
