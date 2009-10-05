@@ -29,7 +29,7 @@ import org.ofbiz.party.contact.ContactHelper;
 import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.order.UtilOrder;
 import org.opentaps.domain.DomainsLoader;
-import com.opensourcestrategies.financials.invoice.InvoiceHelper;
+import org.opentaps.common.invoice.InvoiceHelper;
 import com.opensourcestrategies.financials.util.UtilFinancial;
 import com.opensourcestrategies.financials.financials.FinancialServices;
 
