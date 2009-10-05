@@ -106,6 +106,7 @@ under the License.
   <tr><td colspan="8"><hr class="sepbar"></td></tr>
   <#assign returnTotal = 0.0>
   <#assign rowCount = 0>
+  <@form name="removeReturnItemAction" url="removeReturnItem" returnId=returnId returnItemSeqId="" />
   <form method="post" action="<@ofbizUrl>updateReturnItems</@ofbizUrl>">
   <input type="hidden" name="_useRowSubmit" value="Y">      
   <#if returnItems?has_content>
@@ -208,7 +209,7 @@ under the License.
         </#if>
         <#if returnHeader.statusId == "RETURN_REQUESTED">
           <td align='right'>
-              <@inputConfirm href="removeReturnItem?returnId=${item.returnId}&returnItemSeqId=${item.returnItemSeqId}" title=uiLabelMap.CommonRemove />
+            <@submitFormLinkConfirm form="removeReturnItemAction" text=uiLabelMap.CommonRemove returnItemSeqId=item.returnItemSeqId />
           </td>
         <#else>
           <td>&nbsp;</td>
