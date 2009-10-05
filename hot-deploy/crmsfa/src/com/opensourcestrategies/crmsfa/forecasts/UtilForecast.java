@@ -149,7 +149,7 @@ public final class UtilForecast {
                 }
             }
             if (Debug.verboseOn()) {
-                Debug.logVerbose("Now for timePeriod [" + customTimePeriodId + "] after opportunity [" + opportunity.getString("opportunityId") + "] " + "closedAmouont = [" + closedAmount + "] bestCaseAmount = [" + bestCaseAmount + "] forecastAmount = [" + forecastAmount + "]" , MODULE);
+                Debug.logVerbose("Now for timePeriod [" + customTimePeriodId + "] after opportunity [" + opportunity.getString("salesOpportunityId") + "] " + "closedAmouont = [" + closedAmount + "] bestCaseAmount = [" + bestCaseAmount + "] forecastAmount = [" + forecastAmount + "]" , MODULE);
             }
         }
 
