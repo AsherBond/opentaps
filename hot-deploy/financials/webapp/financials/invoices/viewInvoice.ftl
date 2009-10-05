@@ -65,17 +65,23 @@ function notifyInvoiceItemsCount(n) {
 /*]]>*/
 </script>
 
-  <#assign stateChangeLinks><a href="setInvoiceReady?invoiceId=${invoice.invoiceId}" id="markAsReadyButton" class="subMenuButton" <#if invoiceItems.size() == 0>style="visibility:hidden"</#if>>${uiLabelMap.FinancialsPaymentStatusToReady}</a></#assign>
-  <#assign stateChangeLinks>${stateChangeLinks?default("")}<a href="setInvoiceStatus?statusId=INVOICE_CANCELLED&invoiceId=${invoice.invoiceId}" class="subMenuButton">${uiLabelMap.CommonCancel}</a></#assign>
+  <@form name="markInvoiceReadyAction" url="setInvoiceReady" invoiceId=invoice.invoiceId />
+  <@form name="cancelInvoiceReadyAction" url="setInvoiceStatus" invoiceId=invoice.invoiceId statusId="INVOICE_CANCELLED" />
+
+  <#assign stateChangeLinks><@submitFormLink form="markInvoiceReadyAction" text=uiLabelMap.FinancialsPaymentStatusToReady id="markAsReadyButton" class="subMenuButton" style=(invoiceItems.size() gt 0)?string("visibility:hidden", "")/></#assign>
+  <#assign stateChangeLinks>${stateChangeLinks!}<@submitFormLink form="cancelInvoiceReadyAction" text=uiLabelMap.CommonCancel class="subMenuButton"/></#assign>
 <#elseif (invoice.isReady() || invoice.isPaid()) && (hasWriteoffPermission)>
   <#if (invoice.isSalesInvoice() && invoice.isReady() && invoice.processingStatusId?default("") != "INVOICE_PRINTED")>
-    <#assign stateChangeLinks><a href="setInvoiceProcessingStatus?statusId=INVOICE_PRINTED&invoiceId=${invoice.invoiceId}" class="subMenuButton">${uiLabelMap.FinancialsPaymentStatusToPrinted}</a></#assign>
+    <@form name="markInvoicePrintedAction" url="setInvoiceProcessingStatus" invoiceId=invoice.invoiceId statusId="INVOICE_PRINTED" />
+    <#assign stateChangeLinks><@submitFormLink form="markInvoicePrintedAction" text=uiLabelMap.FinancialsPaymentStatusToPrinted class="subMenuButton"/></#assign>
   </#if>
-  <#assign stateChangeLinks>${stateChangeLinks?default("")}<@inputConfirm title=uiLabelMap.FinancialsWriteoff href="setInvoiceStatus?statusId=INVOICE_WRITEOFF&invoiceId=${invoice.invoiceId}" class="subMenuButtonDangerous"/></#assign>
+  <@form name="writeoffInvoiceAction" url="setInvoiceStatus" invoiceId=invoice.invoiceId statusId="INVOICE_WRITEOFF" />
+  <#assign stateChangeLinks>${stateChangeLinks?default("")}<@submitFormLinkConfirm form="writeoffInvoiceAction" text=uiLabelMap.FinancialsWriteoff class="subMenuButtonDangerous"/></#assign>
 </#if>
 
 <#if invoice.isReady()>
-  <#assign voidLink><@inputConfirm href="voidInvoice?invoiceId=${invoice.invoiceId}" title=uiLabelMap.FinancialsVoidInvoice class="subMenuButtonDangerous"/></#assign>
+  <@form name="voidInvoiceAction" url="voidInvoice" invoiceId=invoice.invoiceId />
+  <#assign voidLink><@submitFormLinkConfirm form="voidInvoiceAction" text=uiLabelMap.FinancialsVoidInvoice class="subMenuButtonDangerous"/></#assign>
   <#assign stateChangeLinks = stateChangeLinks?default("") + voidLink />
 </#if>
 
@@ -96,7 +102,8 @@ function notifyInvoiceItemsCount(n) {
 </#if>
 <#assign stateChangeLinks = stateChangeLinks?default("") + sampleInvoiceLink?default("") />
 <#if ! invoice.isCancelled() && ! invoice.isWrittenOff() && ! invoice.isVoided()>
-  <#assign stateChangeLinks>${stateChangeLinks?default("")}<a href="<@ofbizUrl>writeInvoiceEmail?invoiceId=${invoice.invoiceId}</@ofbizUrl>" class="subMenuButton">${uiLabelMap.CommonEmail}</a></#assign>
+  <@form name="writeInvoiceEmailAction" url="writeInvoiceEmail" invoiceId=invoice.invoiceId />
+  <#assign stateChangeLinks>${stateChangeLinks?default("")}<@submitFormLink form="writeInvoiceEmailAction" text=uiLabelMap.CommonEmail class="subMenuButton"/></#assign>
 </#if>
 
 <#-- invoice details -->
