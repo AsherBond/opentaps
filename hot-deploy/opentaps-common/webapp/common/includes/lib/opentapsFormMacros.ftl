@@ -1102,9 +1102,37 @@ For more information, please see documentation/opentapsFormMacros.html
   </form>
 </#macro>
 
-<#macro submitFormLink form text class="buttontext"><a class="${class}" href="javascript:opentaps.submitForm('${form}', null);">${text}</a></#macro>
+<#macro submitFormLink form text class="buttontext" formParams...>
+<#compress>
+  <#assign extraParams = "null"/>
+  <#if formParams?has_content>
+    <#assign extraParams>{
+      <#list formParams?keys as param>
+        '${param}':'${formParams[param]}'
+        <#if param_has_next>,</#if>
+      </#list>
+      }
+    </#assign>
+  </#if>
+  <a class="${class}" href="javascript:opentaps.submitForm('${form}', null, ${extraParams});">${text}</a>
+</#compress>
+</#macro>
 
-<#macro submitFormLinkConfirm form text class="buttonDangerous" confirmText=uiLabelMap.OpentapsAreYouSure><a class="${class}" href="javascript:opentaps.confirmAction('${confirmText}', null, '${form}');">${text}</a></#macro>
+<#macro submitFormLinkConfirm form text class="buttonDangerous" confirmText=uiLabelMap.OpentapsAreYouSure formParams...>
+<#compress>
+  <#assign extraParams = "null"/>
+  <#if formParams?has_content>
+    <#assign extraParams>{
+      <#list formParams?keys as param>
+        '${param}':'${formParams[param]}'
+        <#if param_has_next>,</#if>
+      </#list>
+      }
+    </#assign>
+  </#if>
+  <a class="${class}" href="javascript:opentaps.confirmAction('${confirmText}', null, '${form}', ${extraParams});">${text}</a>
+</#compress>
+</#macro>
 
 <#macro paginate name list="" rememberOrderBy=true rememberPage=true renderExcelButton=true params...>
   <@paginateTransform name=name list=list rememberOrderBy=rememberOrderBy rememberPage=rememberPage renderExcelButton=renderExcelButton context=context params=params><#nested></@paginateTransform>

@@ -631,15 +631,25 @@ opentaps.confirmLinkAction = function(confirmText, href) {
 // Confirm Popup for forms
 opentaps.confirmSubmitAction = function(confirmText, form) {
     var answer = confirm(confirmText);
-    if (answer && form) form.submit();
+    if (answer && form) {
+      form.submit();
+    }
 }
 
 // Function to execute either of the above depending on whether a href or form name is supplied (useful for macros)
-opentaps.confirmAction = function(confirmText, href, formName) {
+opentaps.confirmAction = function(confirmText, href, formName, /*Array*/ params) {
     if (href && href.length > 0) {
         opentaps.confirmLinkAction(confirmText, href);
     } else if (formName && formName.length > 0) {
         form = document.forms[formName];
+        if (form && params) {
+          for (k in params) {
+            var value = params[k];
+            // convert JS undefined / null into an empty script else we confuse the service
+            if (!value) value = "";
+            form[k].value = value;
+          }
+        }
         opentaps.confirmSubmitAction(confirmText, form);
     }
 }
@@ -663,24 +673,33 @@ opentaps.selectForm = function (/*String*/ id) {
   }
 }
 
-opentaps.submitForm = function (/*String*/ formName, /*String*/ formId) {
+opentaps.submitForm = function (/*String*/ formName, /*String*/ formId, /*Array*/ params) {
+  var form;
   if (formName && formName.length > 0) {
     if (document.forms[formName]) {
-      document.forms[formName].submit();
-      return;
+      form = document.forms[formName];
     } else {
       alert("Cannot find form to submit with name [" + formName + "]");
     }
   } else if (formId && formId.length > 0) {
     var form = document.getElementById(formId);
-    if (form && form.action) {
-      form.submit();
-      return;
-    } else {
-      alert("Cannot find form to submit with id [" + formId + "]");
-    }
   } else {
     alert("submitForm: no formName or formId was given !");
+  }
+
+  if (form && form.action) {
+    if (params) {
+      for (k in params) {
+        var value = params[k];
+        // convert JS undefined / null into an empty script else we confuse the service
+        if (!value) value = "";
+        form[k].value = value;
+        }
+    }
+    form.submit();
+    return;
+  } else {
+    alert("Cannot find form to submit with id [" + formId + "]");
   }
 }
 
