@@ -166,13 +166,13 @@ public class InvoiceRepository extends Repository implements InvoiceRepositoryIn
         } else {
             // for other invoice types, get invoice item types which have a GL account configured for them, either in InvoiceItemType.defaultGlAccountId or InvoiceItemTypeGlAccount entity.
             EntityCondition invoiceItemTypeCondition = EntityCondition.makeCondition(EntityOperator.AND,
-                   EntityCondition.makeCondition(EntityOperator.AND,
+                   EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.invoiceTypeId.name(), EntityOperator.EQUALS, invoiceTypeId),
+                   EntityCondition.makeCondition(EntityOperator.OR,
                         EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.defaultGlAccountId.name(), EntityOperator.NOT_EQUAL, null),
-                        EntityCondition.makeCondition(EntityOperator.OR,
+                        EntityCondition.makeCondition(EntityOperator.AND,
                                 EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.organizationPartyId.name(), EntityOperator.EQUALS, organizationPartyId),
                                 EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.orgGlAccountId.name(), EntityOperator.NOT_EQUAL, null)
-                                )),
-                EntityCondition.makeCondition(InvoiceItemTypeAndOrgGlAccount.Fields.invoiceTypeId.name(), EntityOperator.EQUALS, invoiceTypeId));
+                                )));
             List<InvoiceItemTypeAndOrgGlAccount> itemTypes = findListCache(InvoiceItemTypeAndOrgGlAccount.class, invoiceItemTypeCondition);
             typeIds = Entity.getDistinctFieldValues(String.class, itemTypes, InvoiceItemTypeAndOrgGlAccount.Fields.invoiceItemTypeId);
         }
