@@ -440,7 +440,7 @@ function notifyInvoiceItemsCount(n) {
   </#if>
 
   <#if hasAdjustmentPermission>
-    <form method="get" action="<@ofbizUrl>createInvoiceAdjustmentViewInvoice</@ofbizUrl>" name="createInvoiceAdjustment">
+    <form method="post" action="<@ofbizUrl>createInvoiceAdjustmentViewInvoice</@ofbizUrl>" name="createInvoiceAdjustment">
       <@inputHidden name="invoiceId" value="${invoice.invoiceId}"/>
       <@sectionHeader title=uiLabelMap.FinancialsNewInvoiceAdjustment headerClass="screenlet-header" titleClass="boxhead"/>
       <table class="twoColumnForm">
