@@ -209,20 +209,19 @@ public final class PurchasingOrderEvents {
      * @param response a <code>HttpServletResponse</code> value
      * @return a <code>String</code> value
      */
-    @SuppressWarnings("unchecked")
     public static String countMatchingProducts(HttpServletRequest request, HttpServletResponse response) {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
         ShoppingCart cart = purchasingGetOrInitializeCart(request);
         String searchString = UtilCommon.getParameter(request, "productId");
         EntityCondition where =  EntityCondition.makeCondition(EntityOperator.AND,
-                                   EntityCondition.makeCondition(EntityOperator.OR,
-                                     EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
-                                     EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("supplierProductId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
-                                     EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("idValue"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%"))),
-                                   EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, cart.getOrderPartyId()),
-                                   EntityUtil.getFilterByDateExpr("availableFromDate", "availableThruDate"));
+                EntityCondition.makeCondition(EntityOperator.OR,
+                        EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
+                        EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("supplierProductId"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%")),
+                        EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("idValue"), EntityOperator.LIKE, EntityFunction.UPPER(searchString + "%"))),
+                        EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, cart.getOrderPartyId()),
+                        EntityUtil.getFilterByDateExpr("availableFromDate", "availableThruDate"));
         try {
-            List matches = delegator.findByAnd("SupplierProductGoodIdentification", where);
+            List<GenericValue> matches = delegator.findByAnd("SupplierProductGoodIdentification", where);
             if (matches.size() == 0) {
                 UtilMessage.addFieldError(request, "productId", "OpentapsError_ProductNotFound", UtilMisc.toMap("productId", searchString));
                 return "error";
@@ -298,11 +297,11 @@ public final class PurchasingOrderEvents {
             String orderItemSeqId = item.getOrderItemSeqId();
 
             // get the work efforts from the requirement to work effort map (see opentaps.createProductionRun)
-            List workEffortAssocs = delegator.findByAnd("WorkRequirementFulfillment", UtilMisc.toMap("requirementId", requirementId));
-            for (Iterator assocIter = workEffortAssocs.iterator(); assocIter.hasNext();) {
-                GenericValue assoc = (GenericValue) assocIter.next();
+            List<GenericValue> workEffortAssocs = delegator.findByAnd("WorkRequirementFulfillment", UtilMisc.toMap("requirementId", requirementId));
+            for (Iterator<GenericValue> assocIter = workEffortAssocs.iterator(); assocIter.hasNext();) {
+                GenericValue assoc = assocIter.next();
                 String workEffortId = assoc.getString("workEffortId");
-                Map input = UtilMisc.toMap("orderId", cart.getOrderId(), "orderItemSeqId", orderItemSeqId, "workEffortId", workEffortId);
+                Map<String, Object> input = UtilMisc.<String, Object>toMap("orderId", cart.getOrderId(), "orderItemSeqId", orderItemSeqId, "workEffortId", workEffortId);
                 GenericValue fulfillment = delegator.findByPrimaryKey("WorkOrderItemFulfillment", input);
                 if (fulfillment == null) {
                     fulfillment = delegator.makeValue("WorkOrderItemFulfillment", input);
@@ -616,10 +615,10 @@ public final class PurchasingOrderEvents {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         OpentapsShoppingCartHelper cartHelper = new OpentapsShoppingCartHelper(delegator, dispatcher, cart);
         String controlDirective;
-        Map result;
+        Map<String, Object> result;
 
         // Convert the params to a map to pass in
-        Map paramMap = UtilHttp.getParameterMap(request);
+        Map<String, Object> paramMap = UtilHttp.getParameterMap(request);
         String catalogId = CatalogWorker.getCurrentCatalogId(request);
         result = cartHelper.addToCartBulkRequirements(catalogId, paramMap);
         controlDirective = processResult(result, request);
