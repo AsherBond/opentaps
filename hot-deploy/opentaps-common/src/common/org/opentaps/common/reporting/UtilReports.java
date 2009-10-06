@@ -13,7 +13,6 @@
  * along with this program; if not, write to Funambol,
  * 643 Bair Island Road, Suite 305 - Redwood City, CA 94063, USA
  */
-
 package org.opentaps.common.reporting;
 
 import java.awt.print.PrinterJob;
@@ -28,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
 import javax.print.PrintService;
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,6 +57,7 @@ import net.sf.jasperreports.engine.export.oasis.JROdtExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.engine.util.JRProperties;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
+
 import org.ofbiz.base.crypto.HashCrypt;
 import org.ofbiz.base.location.ComponentLocationResolver;
 import org.ofbiz.base.util.Debug;
@@ -82,7 +83,7 @@ public final class UtilReports {
 
     private static final String MODULE = UtilReports.class.getName();
 
-    private static UtilCache jasperReportsCompiledCache = null;
+    private static UtilCache<String, JasperReport> jasperReportsCompiledCache = null;
 
     public static String OUT_PATH = "runtime/output/";
 
@@ -126,7 +127,7 @@ public final class UtilReports {
     }
 
     static {
-        jasperReportsCompiledCache = new UtilCache(
+        jasperReportsCompiledCache = new UtilCache<String, JasperReport>(
                 "webapp.JasperReportsOpentaps",
                 JRProperties.getIntegerProperty("webapp.JasperReportsCompiled.maxSize", 0),
                 0,
@@ -144,7 +145,6 @@ public final class UtilReports {
      * @return a list of <code>MimeType</code> <code>GenericValue</code>
      * @throws GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static List<GenericValue> getJRSupportedMimeType(GenericDelegator delegator) throws GenericEntityException {
         List<String> supportedTypes = new ArrayList<String>();
         supportedTypes.add(ContentType.CSV.toString());
@@ -348,7 +348,8 @@ public final class UtilReports {
     }
 
     /**
-     * use jasper exporter to generate pdf.
+     * Use JasperReports exporter to generate pdf.
+     * 
      * @param jrParameters a <code>Map<String, Object></code> instance
      * @param jrDataSource a <code>JRMapCollectionDataSource</code> instance
      * @param locale a <code>Locale</code> instance
@@ -420,12 +421,11 @@ public final class UtilReports {
         exporter.exportReport();
     }
 
-    @SuppressWarnings("unchecked")
     public static List<Map<String, Object>>getManagedReports(String componentName, GenericDelegator delegator, Locale locale) {
         try {
             EntityCondition conditions = EntityCondition.makeCondition(EntityOperator.AND,
-                            EntityCondition.makeCondition("application", componentName),
-                            EntityCondition.makeCondition("showInSelect", "Y"));
+                    EntityCondition.makeCondition("application", componentName),
+                    EntityCondition.makeCondition("showInSelect", "Y"));
 
             List<GenericValue> applicationGroups = delegator.findByCondition("ReportGroup", conditions, null, null , UtilMisc.toList("sequenceNum", "description"), null); 
             if (UtilValidate.isEmpty(applicationGroups)) {
