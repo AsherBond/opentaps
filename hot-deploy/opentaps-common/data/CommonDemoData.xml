@@ -16,6 +16,9 @@
  *
 -->
 
+    <!-- Set up opentaps logo for company -->
+    <PartyGroup partyId="Company" groupName="Your Company Name Here" logoImageUrl="http://www.opentaps.org/images/opentaps_logo.png"/>
+
     <!-- Set up supplemental data for company, which is required for some features such as PDF printing to work. -->
     <PartySupplementalData partyId="Company" companyName="Your Company Name Here" currencyUomId="USD" primaryPostalAddressId="9000" />
 
