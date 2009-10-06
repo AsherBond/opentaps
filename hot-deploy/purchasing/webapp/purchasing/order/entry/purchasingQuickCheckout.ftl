@@ -20,7 +20,7 @@
  <script type="text/javascript">
   function updateAgreement(oldValue) {
     var newValue = document.getElementById('newAgreementId').value;
-     if (confirm('${uiLabelMap.PurchOrderConfirmChangeAgreement}')) {
+     if (confirm('${StringUtil.wrapString(uiLabelMap.PurchOrderConfirmChangeAgreement)}')) {
       document.orderOptionForm.agreementId.value = newValue;
       document.orderOptionForm.optionType.value = 'updateAgreement';
       document.orderOptionForm.submit();
