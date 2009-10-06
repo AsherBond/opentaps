@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import javax.print.PrintService;
 import javax.servlet.http.HttpServletRequest;
@@ -431,7 +432,12 @@ public final class UtilReports {
                 return null;
             }
 
-            ResourceBundle analyticsLabels = ResourceBundle.getBundle("org/opentaps/analytics/locale/messages", locale);
+            ResourceBundle analyticsLabels = null;
+            try {
+                analyticsLabels= ResourceBundle.getBundle("org/opentaps/analytics/locale/messages", locale);
+            } catch (MissingResourceException e) {
+                // do nothing
+            }
 
             List<Map<String, Object>> reportsGroupedList = FastList.<Map<String, Object>>newInstance();
 

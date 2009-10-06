@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2006 - 2007 Open Source Strategies, Inc.
+ * Copyright (c) 2006 - 2009 Open Source Strategies, Inc.
  * 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the Honest Public License.
@@ -54,7 +54,7 @@ if (location.indexOf("analytics") > 0) {
 }
 // get the jasper report file
 filePath = UtilValidate.isUrl(location) ? ComponentLocationResolver.getBaseLocation(location).toString() : location;
-    
+
 // parse the jasper report and put the parameters into the context for rendering as input fields
 /*JasperDesign*/ design = JRXmlLoader.load(filePath);     
 if (design != null) {
@@ -86,7 +86,7 @@ if (design != null) {
 
 if (UtilValidate.isNotEmpty(reportParameters)) {
     context{"reportParameters"} = reportParameters;
-    context{"parametersTypeJSON"} = JSONObject.fromMap(parametersType);
+    context{"parametersTypeJSON"} = JSONObject.fromObject(parametersType);
 }
 
 context{"reportTypes"} = UtilReports.getJRSupportedMimeType(delegator);
