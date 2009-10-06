@@ -34,16 +34,21 @@
  *******************************************************************************/
 
 /* This file has been modified by Open Source Strategies, Inc. */
-
 package org.opentaps.common;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import javolution.util.FastMap;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -68,6 +73,7 @@ import org.opentaps.common.util.UtilCommon;
 import org.opentaps.common.util.UtilMessage;
 import org.opentaps.common.widget.screen.ScreenHelper;
 
+
 /**
  * Common services for Opentaps-Common.
  *
@@ -79,9 +85,6 @@ public final class CommonServices {
     private CommonServices() { }
 
     private static final String MODULE = CommonServices.class.getName();
-    private static final String resource = "OpentapsUiLabels";
-    private static final String errorResource = "OpentapsErrorLabels";
-
     /**
      * Save a rendered FO screen to a PDF file.
      * @param dctx a <code>DispatchContext</code> value

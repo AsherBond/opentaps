@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -55,6 +56,7 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import net.sf.jasperreports.engine.data.JRMapCollectionDataSource;
+
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.UtilDateTime;
@@ -614,8 +616,8 @@ public final class OrderEvents {
      */
     @SuppressWarnings("unchecked")
     public static String updateShipGroup(LocalDispatcher dispatcher, GenericDelegator delegator, ShoppingCart cart, int shipGroupSeqId, String contactMechId, String carrierPartyId, String shipmentMethodTypeId,
-                                         Boolean maySplit, Boolean isGift, String shippingInstructions, String giftMessage, String shipBeforeDateString,
-                                         String thirdPartyAccountNumber, String thirdPartyPostalCode, String thirdPartyCountryCode, Boolean isCOD, OpentapsShippingEstimateWrapper shipWrapper, TimeZone timeZone, Locale locale) throws GenericEntityException {
+            Boolean maySplit, Boolean isGift, String shippingInstructions, String giftMessage, String shipBeforeDateString,
+            String thirdPartyAccountNumber, String thirdPartyPostalCode, String thirdPartyCountryCode, Boolean isCOD, OpentapsShippingEstimateWrapper shipWrapper, TimeZone timeZone, Locale locale) throws GenericEntityException {
 
         if (UtilValidate.isEmpty(cart)) {
             Debug.logWarning("updateShipGroup: empty cart, nothing to do", MODULE);
@@ -942,7 +944,6 @@ public final class OrderEvents {
      * @return a <code>String</code> value
      * @exception GenericEntityException if an error occurs
      */
-    @SuppressWarnings("unchecked")
     public static String validateOrderShippingOptions(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
         GenericDelegator delegator = (GenericDelegator) request.getAttribute("delegator");
 
@@ -1366,7 +1367,7 @@ public final class OrderEvents {
             reportData.add(reportLine);
         }
 
-       // retrieve supplier postal address for purchasing order and pass it to JR
+        // retrieve supplier postal address for purchasing order and pass it to JR
         if (order.isPurchaseOrder() && order.getBillFromVendor() != null) {
             PostalAddress supplierAddress = partyRepository.getSupplierPostalAddress(order.getBillFromVendor());
             if (supplierAddress != null) {
@@ -1388,7 +1389,7 @@ public final class OrderEvents {
             }
         }
         if (UtilValidate.isNotEmpty(orderContactMechList)) {
-         // if orderContactMechList not empty, then pass it to JR
+            // if orderContactMechList not empty, then pass it to JR
             jrParameters.put("orderContactMechList", new JRMapCollectionDataSource(orderContactMechList));
         }
         // retrieve shipping group info and pass it to JR
@@ -1420,7 +1421,7 @@ public final class OrderEvents {
             orderTermList.add(orderTermLine);
         }
         if (UtilValidate.isNotEmpty(orderTermList)) {
-         // if orderTermList not empty, then pass it to JR
+            // if orderTermList not empty, then pass it to JR
             jrParameters.put("orderTermList", new JRMapCollectionDataSource(orderTermList));
         }
         // retrieve shipping adjustment info and pass it to JR
@@ -1456,7 +1457,7 @@ public final class OrderEvents {
             }
         }
         if (UtilValidate.isNotEmpty(otherAdjustmentList)) {
-         // if otherAdjustmentList not empty, then pass it to JR
+            // if otherAdjustmentList not empty, then pass it to JR
             jrParameters.put("otherAdjustmentList", new JRMapCollectionDataSource(otherAdjustmentList));
         }
         // retrieve order notes information and pass it to JR
@@ -1502,7 +1503,7 @@ public final class OrderEvents {
             paymentsList.add(paymentLine);
         }
         if (UtilValidate.isNotEmpty(paymentsList)) {
-         // if paymentsList not empty, then pass it to JR
+            // if paymentsList not empty, then pass it to JR
             jrParameters.put("paymentsList", new JRMapCollectionDataSource(paymentsList));
         }
         JRMapCollectionDataSource jrDataSource = new JRMapCollectionDataSource(reportData);
@@ -1596,9 +1597,9 @@ public final class OrderEvents {
         boolean isCod = false;
         try {
             List<GenericValue> codPaymentPrefs = delegator.findByAnd("OrderPaymentPreference",
-                                                                     UtilMisc.toList(EntityCondition.makeCondition("orderId", orh.getOrderId()),
-                                                                                     EntityCondition.makeCondition("paymentMethodTypeId", "EXT_COD"),
-                                                                                     EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")));
+                    UtilMisc.toList(EntityCondition.makeCondition("orderId", orh.getOrderId()),
+                            EntityCondition.makeCondition("paymentMethodTypeId", "EXT_COD"),
+                            EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")));
 
             isCod = UtilValidate.isNotEmpty(codPaymentPrefs);
         } catch (GeneralException e) {
@@ -1608,8 +1609,8 @@ public final class OrderEvents {
         Debug.logInfo("getShipEstimate: order [" + orh.getOrderId() + "] isCod = " + isCod, MODULE);
 
         return getShipGroupEstimate(dispatcher, delegator, orh.getOrderTypeId(), shipmentMethodTypeId, carrierPartyId, carrierRoleTypeId,
-                                    contactMechId, orh.getProductStoreId(), supplierPartyId, orh.getShippableItemInfo(shipGroupSeqId), orh.getShippableWeight(shipGroupSeqId),
-                                    orh.getShippableQuantity(shipGroupSeqId), orh.getShippableTotal(shipGroupSeqId), isCod);
+                contactMechId, orh.getProductStoreId(), supplierPartyId, orh.getShippableItemInfo(shipGroupSeqId), orh.getShippableWeight(shipGroupSeqId),
+                orh.getShippableQuantity(shipGroupSeqId), orh.getShippableTotal(shipGroupSeqId), isCod);
     }
 
     /**
@@ -1634,8 +1635,8 @@ public final class OrderEvents {
         String carrierPartyId = cart.getCarrierPartyId(groupNo);
 
         return getShipGroupEstimate(dispatcher, delegator, cart.getOrderType(), shipmentMethodTypeId, carrierPartyId, null,
-                                    cart.getShippingContactMechId(groupNo), cart.getProductStoreId(), cart.getSupplierPartyId(groupNo), cart.getShippableItemInfo(groupNo),
-                                    cart.getShippableWeight(groupNo), cart.getShippableQuantity(groupNo), cart.getShippableTotal(groupNo), cart.getCOD(groupNo));
+                cart.getShippingContactMechId(groupNo), cart.getProductStoreId(), cart.getSupplierPartyId(groupNo), cart.getShippableItemInfo(groupNo),
+                cart.getShippableWeight(groupNo), cart.getShippableQuantity(groupNo), cart.getShippableTotal(groupNo), cart.getCOD(groupNo));
     }
 
     /**
