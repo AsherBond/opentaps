@@ -52,6 +52,8 @@ access. For a detailed description see the core/docs/entityconfig.html file.
     <delegator name="default" entity-model-reader="main" entity-group-reader="main" entity-eca-reader="main" distributed-cache-clear-enabled="false">
         <group-map group-name="org.ofbiz" datasource-name="localpostgres"/>
         <group-map group-name="org.ofbiz.olap" datasource-name="localderbyolap"/>
+        <group-map group-name="org.opentaps.analytics" datasource-name="analytics"/>
+        <group-map group-name="org.opentaps.testing" datasource-name="testing"/>
     </delegator>
     <delegator name="default-no-eca" entity-model-reader="main" entity-group-reader="main" entity-eca-reader="main" entity-eca-enabled="false" distributed-cache-clear-enabled="false">
         <group-map group-name="org.ofbiz" datasource-name="localpostgres"/>
@@ -326,6 +328,58 @@ access. For a detailed description see the core/docs/entityconfig.html file.
                 isolation-level="ReadCommitted"
                 pool-minsize="2"
                 pool-maxsize="250"/>
+        <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/MySqlDataSource" isolation-level="Serializable"/> -->
+    </datasource>
+    <datasource name="analytics"
+            helper-class="org.ofbiz.entity.datasource.GenericHelperDAO"
+            field-type-name="mysql"
+            check-on-start="true"
+            add-missing-on-start="true"
+            check-pks-on-start="false"
+            use-foreign-keys="true"
+            join-style="ansi-no-parenthesis"
+            alias-view-columns="false"
+            drop-fk-use-foreign-key-keyword="true"
+            table-type="InnoDB"
+            character-set="latin1"
+            collate="latin1_general_cs">
+        <read-data reader-name="seed"/>
+        <read-data reader-name="demo"/>
+        <read-data reader-name="ext"/>
+        <inline-jdbc
+                jdbc-driver="com.mysql.jdbc.Driver"
+                jdbc-uri="jdbc:mysql://127.0.0.1/opentaps_analytics?autoReconnect=true"
+                jdbc-username="opentaps"
+                jdbc-password="opentaps"
+                isolation-level="ReadCommitted"
+                pool-minsize="2"
+                pool-maxsize="20"/>
+        <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/MySqlDataSource" isolation-level="Serializable"/> -->
+    </datasource>
+    <datasource name="testing"
+            helper-class="org.ofbiz.entity.datasource.GenericHelperDAO"
+            field-type-name="mysql"
+            check-on-start="true"
+            add-missing-on-start="true"
+            check-pks-on-start="false"
+            use-foreign-keys="true"
+            join-style="ansi-no-parenthesis"
+            alias-view-columns="false"
+            drop-fk-use-foreign-key-keyword="true"
+            table-type="InnoDB"
+            character-set="latin1"
+            collate="latin1_general_cs">
+        <read-data reader-name="seed"/>
+        <read-data reader-name="demo"/>
+        <read-data reader-name="ext"/>
+        <inline-jdbc
+                jdbc-driver="com.mysql.jdbc.Driver"
+                jdbc-uri="jdbc:mysql://127.0.0.1/opentaps_analytics_testing?autoReconnect=true"
+                jdbc-username="opentaps"
+                jdbc-password="opentaps"
+                isolation-level="ReadCommitted"
+                pool-minsize="2"
+                pool-maxsize="20"/>
         <!-- <jndi-jdbc jndi-server-name="localjndi" jndi-name="java:/MySqlDataSource" isolation-level="Serializable"/> -->
     </datasource>
 
