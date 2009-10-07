@@ -23,7 +23,7 @@ under the License.
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/bizznesstime/css/style.css" sequenceId="01"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/bizznesstime/js/application.js" sequenceId="01"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/images/ofbiz.ico" sequenceId="01"/>
-    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/images/ofbiz_logo.gif" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_IMAGE_URL" resourceValue="/opentaps_images/opentaps_logo.png" sequenceId="01"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_HDR_TMPLT_LOC" resourceValue="component://bizznesstime/includes/header.ftl" sequenceId="01"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_FTR_TMPLT_LOC" resourceValue="component://bizznesstime/includes/footer.ftl" sequenceId="01"/>
     <VisualThemeResource visualThemeId="BIZZNESS_TIME" resourceTypeEnumId="VT_NAV_TMPLT_LOC" resourceValue="component://bizznesstime/includes/appbar.ftl" sequenceId="01"/>

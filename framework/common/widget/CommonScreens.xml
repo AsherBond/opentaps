@@ -284,7 +284,7 @@ under the License.
                 <set field="layoutSettings.shortcutIcon" value="/images/ofbiz.ico" global="true"/>
                 <!-- The settings below are used for xsl-fo screens -->
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
-                <set field="logoImageUrl" value="/images/ofbiz_logo.gif"/>
+                <set field="logoImageUrl" value="/opentaps_images/opentaps_logo.png"/>
                 <!--<set field="defaultFontFamily" value="Arial"/>-->
             </actions>
             <widgets>
@@ -303,7 +303,7 @@ under the License.
         <section>
             <actions>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
-                <set field="logoImageUrl" value="/images/ofbiz_logo.gif"/>
+                <set field="logoImageUrl" value="/opentaps_images/opentaps_logo.png"/>
                 <!--<set field="defaultFontFamily" value="Arial"/>-->
             </actions>
             <widgets>
@@ -316,7 +316,7 @@ under the License.
     <screen name="GlobalFoDecorator">
         <section>
             <actions>
-                <set field="layoutSettings.commonHeaderImageUrl" value="/images/ofbiz_logo.gif"/>
+                <set field="layoutSettings.commonHeaderImageUrl" value="/opentaps_images/opentaps_logo.png"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -337,7 +337,7 @@ under the License.
         <section>
             <actions>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
-                <set field="logoImageUrl" value="/images/ofbiz_logo.gif"/>
+                <set field="logoImageUrl" value="/opentaps_images/opentaps_logo.png"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
