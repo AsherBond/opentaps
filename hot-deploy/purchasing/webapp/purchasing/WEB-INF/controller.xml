@@ -20,7 +20,7 @@
     <include location="component://opentaps-common/webapp/common/WEB-INF/common-controller.xml"/>
 
     <!-- Special controller containing the legacy order requests -->
-    <include location="component://purchasing/webapp/purchasing/WEB-INF/ordermgr-controller.xml"/>
+    <include location="component://purchasing/webapp/purchasing/WEB-INF/legacy-controller.xml"/>
 
     <description>Purchasing Module Site Configuration File</description>
     <owner>Open Source Strategies, Inc. (c) 2007 </owner>
@@ -913,7 +913,7 @@
     <view-map name="addBackupWarehouseForm" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#addBackupWarehouseForm"/>
     <view-map name="createBackupWarehouseForm" type="screen" page="component://purchasing/widget/purchasing/screens/planning/PlanningScreens.xml#createBackupWarehouseForm"/>
 
-    <!-- Create Order Views (replaces those from ordermgr, delete the ones in ordermgr-controller.xml as we go) -->
+    <!-- Create Order Views (replaces those from ordermgr, delete the ones in lefacy-controller.xml as we go) -->
     <view-map name="InitPurchaseOrder" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#InitPurchaseOrder"/>
     <view-map name="checkinits" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#CheckInits"/>
     <view-map name="orderagreements" type="screen" page="component://purchasing/widget/purchasing/screens/order/CreateOrderScreens.xml#OrderAgreements"/>
